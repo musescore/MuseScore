@@ -3261,15 +3261,15 @@ void Score::cmdMirrorNoteHead()
             HairpinType st = h->hairpinType();
             switch (st) {
             case HairpinType::CRESC_HAIRPIN:
-                st = HairpinType::DECRESC_HAIRPIN;
+                st = HairpinType::DIM_HAIRPIN;
                 break;
-            case HairpinType::DECRESC_HAIRPIN:
+            case HairpinType::DIM_HAIRPIN:
                 st = HairpinType::CRESC_HAIRPIN;
                 break;
             case HairpinType::CRESC_LINE:
-                st = HairpinType::DECRESC_LINE;
+                st = HairpinType::DIM_LINE;
                 break;
-            case HairpinType::DECRESC_LINE:
+            case HairpinType::DIM_LINE:
                 st = HairpinType::CRESC_LINE;
                 break;
             case HairpinType::INVALID:

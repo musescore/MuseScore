@@ -1104,7 +1104,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     } else {
                         Hairpin* hp = Factory::createHairpin(score->dummy()->segment());
                         if (wdgo->decresc) {
-                            hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);
+                            hp->setHairpinType(HairpinType::DIM_HAIRPIN);
                         } else {
                             hp->setHairpinType(HairpinType::CRESC_HAIRPIN);
                         }

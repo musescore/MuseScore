@@ -1677,7 +1677,7 @@ void fillHairpinVelocities(const Hairpin* h, std::unordered_map<track_idx_t, Vel
     // Make the change negative when the hairpin is a diminuendo
     HairpinType htype = h->hairpinType();
     ChangeDirection direction = ChangeDirection::INCREASING;
-    if (htype == HairpinType::DECRESC_HAIRPIN || htype == HairpinType::DECRESC_LINE) {
+    if (htype == HairpinType::DIM_HAIRPIN || htype == HairpinType::DIM_LINE) {
         veloChange *= -1;
         direction = ChangeDirection::DECREASING;
     }
