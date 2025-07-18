@@ -1092,7 +1092,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
-        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_note/note_entry_playback_note.mscx");
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback/note_entry_playback_note.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
@@ -1130,18 +1130,23 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
+                                                                         const DynamicLevelLayers& triggeredDynamics,
                                                                          const PlaybackParamList&) {
-        EXPECT_EQ(triggeredEvents.size(), 1);
-
+        ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
 
-        EXPECT_EQ(eventList.size(), 1);
-
+        ASSERT_EQ(eventList.size(), 1);
         const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(eventList.front());
 
         EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
         EXPECT_FALSE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
         EXPECT_TRUE(noteEvent.pitchCtx() == expectedEvent.pitchCtx());
+
+        // Use the score dynamics for offstream playback by default
+        ASSERT_EQ(triggeredDynamics.size(), 1);
+        const mpe::DynamicLevelMap& dynamicsMap = triggeredDynamics.at(0);
+        ASSERT_EQ(dynamicsMap.size(), 1);
+        EXPECT_EQ(dynamicsMap.begin()->second, dynamicLevelFromType(mpe::DynamicType::ppp));
     });
 
     // [WHEN] User has clicked on the first note
@@ -1159,7 +1164,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
-        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_chord/note_entry_playback_chord.mscx");
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback/note_entry_playback_chord.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
@@ -1194,11 +1199,12 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
 
     // [THEN] Triggered events map will match our expectations
-    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents, const PlaybackParamList&) {
-        EXPECT_EQ(triggeredEvents.size(), 1);
-
+    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents,
+                                                      const DynamicLevelLayers& triggeredDynamics,
+                                                      const PlaybackParamList&) {
+        ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& actualEvents = triggeredEvents.at(0);
-        EXPECT_EQ(actualEvents.size(), expectedEvents.size());
+        ASSERT_EQ(actualEvents.size(), expectedEvents.size());
 
         for (size_t i = 0; i < expectedEvents.size(); ++i) {
             const mpe::NoteEvent expectedNoteEvent = std::get<mpe::NoteEvent>(expectedEvents.at(i));
@@ -1207,8 +1213,12 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
             EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == 0);
             EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
             EXPECT_TRUE(actualNoteEvent.pitchCtx() == expectedNoteEvent.pitchCtx());
+            EXPECT_TRUE(triggeredDynamics.empty());
         }
     });
+
+    // [WHEN] Don't use the score dynamics
+    model.setUseScoreDynamicsForOffstreamPlayback(false);
 
     // [WHEN] User has clicked on the first note
     model.triggerEventsForItems({ thirdChord });

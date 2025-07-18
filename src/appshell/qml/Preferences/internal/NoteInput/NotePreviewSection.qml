@@ -34,6 +34,7 @@ BaseSection {
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
     property alias playPreviewNotesInInputByDuration: playPreviewNotesInInputByDurationBox.checked
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
+    property alias playNotesWithScoreDynamics: playNotesWithScoreDynamicsBox.checked
 
     property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
     property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
@@ -43,6 +44,7 @@ BaseSection {
     signal playChordSymbolWhenEditingChangeRequested(bool play)
     signal playPreviewNotesInInputByDurationChangeRequested(bool play)
     signal notePlayDurationChangeRequested(int duration)
+    signal playNotesWithScoreDynamicsChangeRequested(bool play)
 
     signal playNotesOnMidiInputChangeRequested(bool play)
 
@@ -153,6 +155,23 @@ BaseSection {
     }
 
     CheckBox {
+        id: playNotesWithScoreDynamicsBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Play preview notes with score dynamics")
+
+        enabled: root.playNotesWhenEditing
+
+        navigation.name: "PlayNotesWithScoreDynamics"
+        navigation.panel: root.navigation
+        navigation.row: 5
+
+        onClicked: {
+            root.playNotesWithScoreDynamicsChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
         id: playNotesOnMidiInputBox
         width: parent.width
 
@@ -160,7 +179,7 @@ BaseSection {
 
         navigation.name: "PlayNotesOnMidiInputBox"
         navigation.panel: root.navigation
-        navigation.row: 5
+        navigation.row: 6
 
         onClicked: {
             root.playNotesOnMidiInputChangeRequested(!checked)

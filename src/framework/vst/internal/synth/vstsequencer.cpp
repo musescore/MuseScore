@@ -57,10 +57,16 @@ void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
     updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics, m_playbackData.params);
 }
 
-void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList&)
+void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                         const mpe::PlaybackParamList&)
 {
     flushOffstream();
     updatePlaybackEvents(m_offStreamEvents, events);
+
+    if (m_useDynamicEvents) {
+        updateDynamicEvents(m_offStreamEvents, dynamics);
+    }
+
     updateOffSequenceIterator();
 }
 
@@ -72,19 +78,18 @@ void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, 
     }
 
     m_mainStreamEvents.clear();
-    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
     updatePlaybackEvents(m_mainStreamEvents, events);
-    updateMainSequenceIterator();
 
     if (m_useDynamicEvents) {
-        updateDynamicEvents(m_dynamicEvents, dynamics);
-        updateDynamicChangesIterator();
+        updateDynamicEvents(m_mainStreamEvents, dynamics);
     }
+
+    updateMainSequenceIterator();
 }
 
 muse::audio::gain_t VstSequencer::currentGain() const

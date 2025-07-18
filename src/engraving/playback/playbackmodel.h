@@ -68,6 +68,9 @@ public:
     bool isPlayChordSymbolsEnabled() const;
     void setPlayChordSymbols(const bool isEnabled);
 
+    bool useScoreDynamicsForOffstreamPlayback() const;
+    void setUseScoreDynamicsForOffstreamPlayback(bool use);
+
     bool isMetronomeEnabled() const;
     void setIsMetronomeEnabled(const bool isEnabled);
 
@@ -157,6 +160,7 @@ private:
     Score* m_score = nullptr;
     bool m_expandRepeats = true;
     bool m_playChordSymbols = true;
+    bool m_useScoreDynamicsForOffstreamPlayback = true;
     bool m_metronomeEnabled = true;
 
     PlaybackEventsRenderer m_renderer;

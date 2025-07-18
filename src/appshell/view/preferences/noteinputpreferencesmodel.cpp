@@ -69,6 +69,10 @@ void NoteInputPreferencesModel::load()
         emit playNotesOnMidiInputChanged(value);
     });
 
+    notationConfiguration()->playPreviewNotesWithScoreDynamicsChanged().onNotify(this, [this]() {
+        emit playPreviewNotesWithScoreDynamicsChanged(playPreviewNotesWithScoreDynamics());
+    });
+
     notationConfiguration()->isPlayPreviewNotesInInputByDurationChanged().onNotify(this, [this]() {
         emit playPreviewNotesInInputByDurationChanged(playPreviewNotesInInputByDuration());
     });
@@ -184,6 +188,11 @@ bool NoteInputPreferencesModel::playChordWhenEditing() const
 bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
 {
     return playbackConfiguration()->playHarmonyWhenEditing();
+}
+
+bool NoteInputPreferencesModel::playPreviewNotesWithScoreDynamics() const
+{
+    return notationConfiguration()->playPreviewNotesWithScoreDynamics();
 }
 
 bool NoteInputPreferencesModel::playNotesOnMidiInput() const
@@ -312,6 +321,15 @@ void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
     }
 
     playbackConfiguration()->setPlayHarmonyWhenEditing(value);
+}
+
+void NoteInputPreferencesModel::setPlayPreviewNotesWithScoreDynamics(bool play)
+{
+    if (play == playPreviewNotesWithScoreDynamics()) {
+        return;
+    }
+
+    notationConfiguration()->setPlayPreviewNotesWithScoreDynamics(play);
 }
 
 void NoteInputPreferencesModel::setPlayNotesOnMidiInput(bool value)

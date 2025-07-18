@@ -76,6 +76,7 @@ void NotationPlayback::init()
 
     m_playbackModel.setPlayRepeats(configuration()->isPlayRepeatsEnabled());
     m_playbackModel.setPlayChordSymbols(configuration()->isPlayChordSymbolsEnabled());
+    m_playbackModel.setUseScoreDynamicsForOffstreamPlayback(configuration()->playPreviewNotesWithScoreDynamics());
     m_playbackModel.setIsMetronomeEnabled(configuration()->isMetronomeEnabled());
 
     m_playbackModel.load(score());
@@ -98,6 +99,13 @@ void NotationPlayback::init()
         if (playChordSymbols != m_playbackModel.isPlayChordSymbolsEnabled()) {
             m_playbackModel.setPlayChordSymbols(playChordSymbols);
             m_playbackModel.reload();
+        }
+    });
+
+    configuration()->playPreviewNotesWithScoreDynamicsChanged().onNotify(this, [this]() {
+        bool useScoreDynamics = configuration()->playPreviewNotesWithScoreDynamics();
+        if (useScoreDynamics != m_playbackModel.useScoreDynamicsForOffstreamPlayback()) {
+            m_playbackModel.setUseScoreDynamicsForOffstreamPlayback(useScoreDynamics);
         }
     });
 

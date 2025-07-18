@@ -59,10 +59,16 @@ int FluidSequencer::naturalExpressionLevel() const
     return NATURAL_EXP_LVL;
 }
 
-void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const PlaybackParamList&)
+void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                           const PlaybackParamList&)
 {
     flushOffstream();
     updatePlaybackEvents(m_offStreamEvents, events);
+
+    if (m_useDynamicEvents) {
+        updateDynamicEvents(m_offStreamEvents, dynamics);
+    }
+
     updateOffSequenceIterator();
 }
 
@@ -70,19 +76,18 @@ void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events
                                             const mpe::PlaybackParamLayers&)
 {
     m_mainStreamEvents.clear();
-    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
     updatePlaybackEvents(m_mainStreamEvents, events);
-    updateMainSequenceIterator();
 
     if (m_useDynamicEvents) {
-        updateDynamicEvents(m_dynamicEvents, dynamics);
-        updateDynamicChangesIterator();
+        updateDynamicEvents(m_mainStreamEvents, dynamics);
     }
+
+    updateMainSequenceIterator();
 }
 
 muse::async::Channel<channel_t, Program> FluidSequencer::channelAdded() const

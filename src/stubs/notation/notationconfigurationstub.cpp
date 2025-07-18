@@ -428,6 +428,20 @@ muse::async::Notification NotationConfigurationStub::isPlayPreviewNotesInInputBy
     return n;
 }
 
+bool NotationConfigurationStub::playPreviewNotesWithScoreDynamics() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setPlayPreviewNotesWithScoreDynamics(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::playPreviewNotesWithScoreDynamicsChanged() const
+{
+    return {};
+}
+
 bool NotationConfigurationStub::isMetronomeEnabled() const
 {
     return false;

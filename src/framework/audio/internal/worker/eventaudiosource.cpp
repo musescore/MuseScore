@@ -39,7 +39,9 @@ EventAudioSource::EventAudioSource(const TrackId trackId,
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_playbackData.offStream.onReceive(this, [onOffStreamReceived, trackId](const PlaybackEventsMap&, const PlaybackParamList&) {
+    m_playbackData.offStream.onReceive(this, [onOffStreamReceived, trackId](const PlaybackEventsMap&,
+                                                                            const DynamicLevelLayers&,
+                                                                            const PlaybackParamList&) {
         onOffStreamReceived(trackId);
     });
 }

@@ -151,6 +151,10 @@ public:
     void setIsPlayPreviewNotesInInputByDuration(bool play) override;
     muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const override;
 
+    bool playPreviewNotesWithScoreDynamics() const override;
+    void setPlayPreviewNotesWithScoreDynamics(bool use) override;
+    muse::async::Notification playPreviewNotesWithScoreDynamicsChanged() const override;
+
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled)  override;
     muse::async::Notification isMetronomeEnabledChanged() const override;

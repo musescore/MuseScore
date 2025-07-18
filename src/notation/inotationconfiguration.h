@@ -165,6 +165,10 @@ public:
     virtual void setIsPlayPreviewNotesInInputByDuration(bool play) = 0;
     virtual muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const = 0;
 
+    virtual bool playPreviewNotesWithScoreDynamics() const = 0;
+    virtual void setPlayPreviewNotesWithScoreDynamics(bool use) = 0;
+    virtual muse::async::Notification playPreviewNotesWithScoreDynamicsChanged() const = 0;
+
     virtual bool isMetronomeEnabled() const = 0;
     virtual void setIsMetronomeEnabled(bool enabled) = 0;
     virtual muse::async::Notification isMetronomeEnabledChanged() const = 0;

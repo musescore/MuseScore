@@ -81,6 +81,7 @@ static const Settings::Key IS_PLAY_REPEATS_ENABLED(module_name, "application/pla
 static const Settings::Key IS_PLAY_CHORD_SYMBOLS_ENABLED(module_name, "application/playback/playChordSymbols");
 static const Settings::Key IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED(module_name,
                                                                               "application/playback/playPreviewNotesInInputByDuration");
+static const Settings::Key PLAY_PREVIEW_NOTES_WITH_SCORE_DYNAMICS(module_name, "application/playback/playPreviewNotesWithScoreDynamics");
 static const Settings::Key IS_METRONOME_ENABLED(module_name, "application/playback/metronomeEnabled");
 static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playback/countInEnabled");
 
@@ -279,6 +280,11 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED, Val(true));
     settings()->valueChanged(IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED).onReceive(nullptr, [this](const Val&) {
         m_isPlayNotesPreviewInInputByDurationChanged.notify();
+    });
+
+    settings()->setDefaultValue(PLAY_PREVIEW_NOTES_WITH_SCORE_DYNAMICS, Val(true));
+    settings()->valueChanged(PLAY_PREVIEW_NOTES_WITH_SCORE_DYNAMICS).onReceive(nullptr, [this](const Val&) {
+        m_playPreviewNotesWithScoreDynamicsChanged.notify();
     });
 
     settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
@@ -906,6 +912,21 @@ void NotationConfiguration::setIsPlayPreviewNotesInInputByDuration(bool play)
 muse::async::Notification NotationConfiguration::isPlayPreviewNotesInInputByDurationChanged() const
 {
     return m_isPlayNotesPreviewInInputByDurationChanged;
+}
+
+bool NotationConfiguration::playPreviewNotesWithScoreDynamics() const
+{
+    return settings()->value(PLAY_PREVIEW_NOTES_WITH_SCORE_DYNAMICS).toBool();
+}
+
+void NotationConfiguration::setPlayPreviewNotesWithScoreDynamics(bool use)
+{
+    settings()->setSharedValue(PLAY_PREVIEW_NOTES_WITH_SCORE_DYNAMICS, Val(use));
+}
+
+muse::async::Notification NotationConfiguration::playPreviewNotesWithScoreDynamicsChanged() const
+{
+    return m_playPreviewNotesWithScoreDynamicsChanged;
 }
 
 bool NotationConfiguration::isMetronomeEnabled() const
