@@ -38,10 +38,12 @@ FlatRadioButton {
 
     signal closeRequested()
 
-    width: Math.min(200, implicitContentWidth)
+    implicitWidth: Math.min(200, implicitContentWidth)
+    implicitHeight: ListView.view.height
 
-    RowLayout {
-        id: contentRow
+    padding: 0
+
+    contentItem: RowLayout {
         anchors.fill: parent
         spacing: 4
 

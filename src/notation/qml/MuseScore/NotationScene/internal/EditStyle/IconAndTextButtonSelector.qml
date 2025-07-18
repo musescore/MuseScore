@@ -43,25 +43,24 @@ StyleControlRowWithReset {
         delegate: FlatRadioButton {
             height: root.buttonHeight
 
-            navigation.accessible.name: modelData.title ? modelData.title : (modelData.text ? modelData.text : "")
+            navigation.accessible.name: modelData.title || modelData.text || ""
 
             checked: styleItem.value === modelData.value
             onToggled: styleItem.value = modelData.value
 
             Column {
                 anchors.centerIn: parent
-                height: childrenRect.height
                 spacing: 8
 
                 StyledIconLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    iconCode: modelData.iconCode ? modelData.iconCode : IconCode.NONE
-                    font.pixelSize: modelData.iconSize ? modelData.iconSize : 28
+                    iconCode: modelData.iconCode ?? IconCode.NONE
+                    font.pixelSize: modelData.iconSize ?? 28
                 }
 
                 StyledTextLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: modelData.text ? modelData.text : ""
+                    text: modelData.text ?? ""
                 }
             }
         }

@@ -449,7 +449,6 @@ StyledFlickable {
 
                                         Column {
                                             anchors.centerIn: parent
-                                            height: childrenRect.height
                                             spacing: 8
 
                                             StyledIconLabel {

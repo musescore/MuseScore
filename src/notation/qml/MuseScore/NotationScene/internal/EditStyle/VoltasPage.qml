@@ -30,7 +30,7 @@ import Muse.Ui 1.0
 StyledFlickable {
     id: root
 
-    contentWidth: parent.width
+    contentWidth: Math.max(column.implicitWidth, width)
     contentHeight: column.height
 
     VoltasPageModel {
