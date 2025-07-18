@@ -16,6 +16,7 @@
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
       <hideEmptyStaves>1</hideEmptyStaves>
       <dontHideStavesInFirstSystem>0</dontHideStavesInFirstSystem>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <tupletFontSize>10</tupletFontSize>
       <fingeringFontSize>10</fingeringFontSize>
       <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
