@@ -83,7 +83,7 @@ void GuiApp::perform()
     }
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
-    SplashScreen* splashScreen = nullptr;
+    static SplashScreen* splashScreen = nullptr;
     if (multiInstancesProvider()->isMainInstance()) {
         splashScreen = new SplashScreen(SplashScreen::Default);
     } else {
@@ -212,7 +212,7 @@ void GuiApp::perform()
     }, Qt::DirectConnection);
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                     qApp, [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
+                     qApp, [this, url](QObject* obj, const QUrl& objUrl) {
         if (url != objUrl) {
             return;
         }
@@ -232,19 +232,29 @@ void GuiApp::perform()
             m->onDelayedInit();
         }
 
-        startupScenario()->runOnSplashScreen();
+        const auto finalizeStartup = [this, obj]() {
+            if (splashScreen) {
+                splashScreen->close();
+                delete splashScreen;
+            }
 
-        if (splashScreen) {
-            splashScreen->close();
-            delete splashScreen;
+            // The main window must be shown at this point so KDDockWidgets can read its size correctly
+            // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
+            QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
+            w->setVisible(true);
+
+            startupScenario()->runAfterSplashScreen();
+        };
+
+        const muse::ProgressPtr progress = startupScenario()->splashScreenProgress();
+        IF_ASSERT_FAILED(progress && !progress->isStarted()) {
+            finalizeStartup();
+            return;
         }
-
-        // The main window must be shown at this point so KDDockWidgets can read its size correctly
-        // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
-        QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
-        w->setVisible(true);
-
-        startupScenario()->runAfterSplashScreen();
+        progress->finished().onReceive(nullptr, [finalizeStartup](const ProgressResult&) {
+            finalizeStartup();
+        });
+        progress->start();
     }, Qt::QueuedConnection);
 
     QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {

@@ -108,5 +108,6 @@
         <file>qml/DevTools/Extensions/ExtensionsListView.qml</file>
         <file>qml/platform/PlatformMenuBar.qml</file>
         <file>qml/Preferences/PercussionPreferencesPage.qml</file>
+        <file>qml/WelcomeDialog.qml</file>
     </qresource>
 </RCC>
