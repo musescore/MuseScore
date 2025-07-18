@@ -357,6 +357,7 @@ const mpe::PlaybackData& FluidSynth::playbackData() const
 
 void FluidSynth::revokePlayingNotes()
 {
+    m_sequencer.flushOffstream();
     m_allNotesOffRequested = true;
 }
 
