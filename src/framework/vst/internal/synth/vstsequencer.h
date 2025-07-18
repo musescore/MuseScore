@@ -62,16 +62,17 @@ public:
     muse::audio::gain_t currentGain() const;
 
 private:
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                const mpe::PlaybackParamLayers& params) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
 
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events);
     void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers);
 
+    void appendControlChangeEvent(EventSequenceMap& destination, const mpe::timestamp_t timestamp, const mpe::ControllerChangeEvent& event);
+
     void appendParamChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp, const ControlIdx controlIdx,
                            const PluginParamValue value);
-    void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta);
+    void appendPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta);
 
     using SostenutoTimeAndDurations = std::vector<mpe::TimestampAndDuration>;
     void appendSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations);

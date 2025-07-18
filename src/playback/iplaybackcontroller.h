@@ -75,9 +75,20 @@ public:
     virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
                                        const notation::INotationSoloMuteState::SoloMuteState& state) = 0;
 
-    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi = false) = 0;
-    virtual void playNotes(const notation::NoteValList& notes, const notation::staff_idx_t staffIdx, const notation::Segment* segment) = 0;
+    struct PlayParams {
+        PlayParams() {}
+
+        std::optional<muse::mpe::duration_t> duration; // no duration -> use default
+        bool flushSound = true;
+    };
+
+    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements,
+                              const PlayParams& params = PlayParams(), bool isMidi = false) = 0;
+    virtual void playNotes(const notation::NoteValList& notes, notation::staff_idx_t staffIdx, const notation::Segment* segment,
+                           const PlayParams& params = PlayParams()) = 0;
     virtual void playMetronome(int tick) = 0;
+
+    virtual void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) = 0;
 
     virtual void seekElement(const notation::EngravingItem* element) = 0;
     virtual void seekBeat(int measureIndex, int beatIndex) = 0;

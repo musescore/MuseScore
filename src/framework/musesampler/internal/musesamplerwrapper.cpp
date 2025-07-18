@@ -415,6 +415,16 @@ void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventT
         m_samplerLib->stopAuditionNote(m_sampler, noteOff.msTrack, noteOff.msEvent);
         return;
     }
+
+    if (std::holds_alternative<AuditionCCEvent>(event)) {
+        const AuditionCCEvent& ccEvent = std::get<AuditionCCEvent>(event);
+        IF_ASSERT_FAILED(ccEvent.msTrack) {
+            return;
+        }
+
+        m_samplerLib->addAuditionCCEvent(m_sampler, ccEvent.msTrack, ccEvent.cc, ccEvent.value);
+        return;
+    }
 }
 
 void MuseSamplerWrapper::setCurrentPosition(const samples_t samples)

@@ -164,49 +164,111 @@ ArticulationType PlaybackContext::persistentArticulationType(const int nominalPo
     return it->second;
 }
 
-PlaybackParamList PlaybackContext::playbackParams(const track_idx_t trackIdx, const int nominalPositionTick) const
+std::map<timestamp_t, SoundPresetChangeEventList> PlaybackContext::soundPresets(const Score* score) const
 {
-    PlaybackParamList result;
+    std::map<timestamp_t, SoundPresetChangeEventList> result;
 
-    auto addParams = [&result](const PlaybackParamList& params, bool startAtNominalTick) {
-        if (params.empty()) {
-            return;
+    for (const auto& trackPair : m_soundPresetsByTrack) {
+        if (shouldSkipTrack(trackPair.first)) {
+            continue;
         }
 
-        result.insert(result.end(), params.begin(), params.end());
-
-        bool persistent = !startAtNominalTick;
-        for (size_t i = result.size() - params.size(); i < result.size(); ++i) {
-            result.at(i).flags.setFlag(PlaybackParam::IsPersistent, persistent);
+        for (const auto& pair : trackPair.second) {
+            const timestamp_t timestamp = timestampFromTicks(score, pair.first);
+            SoundPresetChangeEventList& list = result[timestamp];
+            list.insert(list.end(), pair.second.begin(), pair.second.end());
         }
-    };
-
-    bool startAtNominalTick = false;
-    const PlaybackParamList& sfParams = findParams(m_soundFlagParamsByTrack, trackIdx, nominalPositionTick, &startAtNominalTick);
-    addParams(sfParams, startAtNominalTick);
-
-    const PlaybackParamList& textParams = findParams(m_textParamsByTrack, trackIdx, nominalPositionTick, &startAtNominalTick);
-    addParams(textParams, startAtNominalTick);
+    }
 
     return result;
 }
 
-PlaybackParamLayers PlaybackContext::playbackParamLayers(const Score* score) const
+SoundPresetChangeEventList PlaybackContext::soundPresets(const track_idx_t trackIdx, const int nominalPositionTick) const
 {
-    PlaybackParamLayers result;
+    auto presetsIt = m_soundPresetsByTrack.find(trackIdx);
+    if (presetsIt == m_soundPresetsByTrack.end()) {
+        return {};
+    }
 
-    auto addParams = [score, &result](const ParamsByTrack& paramsByTrack) {
-        for (const auto& params : paramsByTrack) {
-            PlaybackParamMap& paramMap = result[static_cast<layer_idx_t>(params.first)];
-            for (const auto& pair : params.second) {
-                PlaybackParamList& list = paramMap[timestampFromTicks(score, pair.first)];
-                list.insert(list.end(), pair.second.begin(), pair.second.end());
-            }
+    const SoundPresetsMap& map = presetsIt->second;
+    auto it = muse::findLessOrEqual(map, nominalPositionTick);
+    if (it == map.end()) {
+        return {};
+    }
+
+    return it->second;
+}
+
+std::map<timestamp_t, TextArticulationEventList> PlaybackContext::textArticulations(const Score* score) const
+{
+    std::map<timestamp_t, TextArticulationEventList> result;
+
+    for (const auto& trackPair : m_textArticulationsByTrack) {
+        if (shouldSkipTrack(trackPair.first)) {
+            continue;
         }
-    };
 
-    addParams(m_soundFlagParamsByTrack);
-    addParams(m_textParamsByTrack);
+        for (const auto& pair : trackPair.second) {
+            const timestamp_t timestamp = timestampFromTicks(score, pair.first);
+            result[timestamp].push_back(pair.second);
+        }
+    }
+
+    return result;
+}
+
+TextArticulationEvent PlaybackContext::textArticulation(const track_idx_t trackIdx, const int nominalPositionTick) const
+{
+    auto articulationsIt = m_textArticulationsByTrack.find(trackIdx);
+    if (articulationsIt == m_textArticulationsByTrack.end()) {
+        return {};
+    }
+
+    const TextArticulationMap& map = articulationsIt->second;
+    auto it = muse::findLessOrEqual(map, nominalPositionTick);
+    if (it == map.end()) {
+        return {};
+    }
+
+    TextArticulationEvent result = it->second;
+    result.flags.setFlag(TextArticulationEvent::StartsAtPlaybackPosition, it->first == nominalPositionTick);
+
+    return result;
+}
+
+std::map<timestamp_t, SyllableEventList> PlaybackContext::syllables(const Score* score) const
+{
+    std::map<timestamp_t, SyllableEventList> result;
+
+    for (const auto& trackPair : m_syllablesByTrack) {
+        if (shouldSkipTrack(trackPair.first)) {
+            continue;
+        }
+
+        for (const auto& pair : trackPair.second) {
+            const timestamp_t timestamp = timestampFromTicks(score, pair.first);
+            result[timestamp].push_back(pair.second);
+        }
+    }
+
+    return result;
+}
+
+SyllableEvent PlaybackContext::syllable(const track_idx_t trackIdx, const int nominalPositionTick) const
+{
+    auto syllablesIt = m_syllablesByTrack.find(trackIdx);
+    if (syllablesIt == m_syllablesByTrack.end()) {
+        return {};
+    }
+
+    const SyllableMap& map = syllablesIt->second;
+    auto it = muse::findLessOrEqual(map, nominalPositionTick);
+    if (it == map.end()) {
+        return {};
+    }
+
+    SyllableEvent result = it->second;
+    result.flags.setFlag(SyllableEvent::StartsAtPlaybackPosition, it->first == nominalPositionTick);
 
     return result;
 }
@@ -242,12 +304,6 @@ void PlaybackContext::update(const ID partId, const Score* score, bool expandRep
         return;
     }
 
-    const size_t ntracks = m_partEndTrack - m_partStartTrack;
-    m_dynamicsByTrack.reserve(ntracks);
-    m_soundFlagParamsByTrack.reserve(ntracks);
-    m_textParamsByTrack.reserve(ntracks);
-    m_currentVerseNumByChordRest.clear();
-
     for (const RepeatSegment* repeatSegment : score->repeatList(expandRepeats)) {
         std::vector<const MeasureRepeat*> measureRepeats;
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
@@ -279,16 +335,18 @@ void PlaybackContext::clear()
 {
     m_partStartTrack = 0;
     m_partEndTrack = 0;
+    m_usedVoices.clear();
     m_dynamicsByTrack.clear();
     m_playTechniquesMap.clear();
-    m_soundFlagParamsByTrack.clear();
-    m_textParamsByTrack.clear();
+    m_soundPresetsByTrack.clear();
+    m_textArticulationsByTrack.clear();
+    m_syllablesByTrack.clear();
     m_currentVerseNumByChordRest.clear();
 }
 
 bool PlaybackContext::hasSoundFlags() const
 {
-    return !m_soundFlagParamsByTrack.empty();
+    return !m_soundPresetsByTrack.empty() || !m_textArticulationsByTrack.empty();
 }
 
 dynamic_level_t PlaybackContext::nominalDynamicLevel(const track_idx_t trackIdx, const int positionTick) const
@@ -365,16 +423,18 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
 
     bool cancelPlayTechniques = type == PlayingTechniqueType::Natural || type == PlayingTechniqueType::Open;
 
-    if (cancelPlayTechniques && !m_soundFlagParamsByTrack.empty()) {
-        PlaybackParam ordTechnique(PlaybackParam::PlayingTechnique, mpe::ORDINARY_PLAYING_TECHNIQUE_CODE);
+    if (cancelPlayTechniques && !m_textArticulationsByTrack.empty()) {
+        TextArticulationEvent textArticulation;
+        textArticulation.text = mpe::ORDINARY_PLAYING_TECHNIQUE_CODE;
 
         for (track_idx_t idx = m_partStartTrack; idx < m_partEndTrack; ++idx) {
-            m_soundFlagParamsByTrack[idx][segmentPositionTick].push_back(ordTechnique);
+            textArticulation.layerIdx = static_cast<layer_idx_t>(idx);
+            m_textArticulationsByTrack[idx][segmentPositionTick] = textArticulation;
         }
     }
 }
 
-void PlaybackContext::updatePlaybackParamsForSoundFlags(const SoundFlagMap& flagsOnSegment, const int segmentPositionTick)
+void PlaybackContext::updateSoundPresetAndTextArticulationMap(const SoundFlagMap& flagsOnSegment, const int segmentPositionTick)
 {
     auto trackAccepted = [&flagsOnSegment](const SoundFlag* flag, track_idx_t trackIdx) {
         staff_idx_t staffIdx = track2staff(trackIdx);
@@ -398,16 +458,22 @@ void PlaybackContext::updatePlaybackParamsForSoundFlags(const SoundFlagMap& flag
                 continue;
             }
 
-            mpe::PlaybackParamList& params = m_soundFlagParamsByTrack[trackIdx][segmentPositionTick];
-
             for (const String& soundPreset : flag->soundPresets()) {
-                if (!soundPreset.empty()) {
-                    params.emplace_back(PlaybackParam::SoundPreset, soundPreset);
+                if (soundPreset.empty()) {
+                    continue;
                 }
+
+                SoundPresetChangeEvent event;
+                event.code = soundPreset;
+                event.layerIdx = static_cast<layer_idx_t>(trackIdx);
+                m_soundPresetsByTrack[trackIdx][segmentPositionTick].emplace_back(std::move(event));
             }
 
             if (!flag->playingTechnique().empty()) {
-                params.emplace_back(PlaybackParam::PlayingTechnique, flag->playingTechnique());
+                TextArticulationEvent event;
+                event.text = flag->playingTechnique();
+                event.layerIdx = static_cast<layer_idx_t>(trackIdx);
+                m_textArticulationsByTrack[trackIdx][segmentPositionTick] = std::move(event);
             }
         }
 
@@ -417,16 +483,18 @@ void PlaybackContext::updatePlaybackParamsForSoundFlags(const SoundFlagMap& flag
     }
 }
 
-void PlaybackContext::updatePlaybackParamsForText(const TextBase* text, const int segmentPositionTick)
+void PlaybackContext::updateSyllableMap(const TextBase* text, const int segmentPositionTick)
 {
     IF_ASSERT_FAILED(text->isLyrics() || text->isSticking()) {
         return;
     }
 
-    PlaybackParam param(PlaybackParam::Syllable, text->plainText());
-    if (param.val.empty()) {
+    if (text->empty()) {
         return;
     }
+
+    SyllableEvent syllable;
+    syllable.text = text->plainText();
 
     if (text->isLyrics()) {
         const Lyrics* lyrics = toLyrics(text);
@@ -434,7 +502,7 @@ void PlaybackContext::updatePlaybackParamsForText(const TextBase* text, const in
         switch (lyrics->syllabic()) {
         case LyricsSyllabic::BEGIN:
         case LyricsSyllabic::MIDDLE:
-            param.flags.setFlag(PlaybackParam::HyphenedToNext);
+            syllable.flags.setFlag(SyllableEvent::HyphenedToNext);
             break;
         case LyricsSyllabic::SINGLE:
         case LyricsSyllabic::END:
@@ -442,11 +510,12 @@ void PlaybackContext::updatePlaybackParamsForText(const TextBase* text, const in
         }
     }
 
-    staff_idx_t staffIdx = text->staffIdx();
+    const staff_idx_t staffIdx = text->staffIdx();
 
     for (voice_idx_t voiceIdx = 0; voiceIdx < VOICES; ++voiceIdx) {
         track_idx_t trackIdx = staff2track(staffIdx, voiceIdx);
-        m_textParamsByTrack[trackIdx][segmentPositionTick].push_back(param);
+        syllable.layerIdx = static_cast<layer_idx_t>(trackIdx);
+        m_syllablesByTrack[trackIdx][segmentPositionTick] = syllable;
     }
 }
 
@@ -582,7 +651,7 @@ void PlaybackContext::handleSegmentAnnotations(const ID partId, const Segment* s
         }
 
         if (annotation->isSticking()) {
-            updatePlaybackParamsForText(toTextBase(annotation), segmentPositionTick);
+            updateSyllableMap(toTextBase(annotation), segmentPositionTick);
             continue;
         }
 
@@ -596,7 +665,7 @@ void PlaybackContext::handleSegmentAnnotations(const ID partId, const Segment* s
     }
 
     if (!soundFlagsOnSegment.empty()) {
-        updatePlaybackParamsForSoundFlags(soundFlagsOnSegment, segmentPositionTick);
+        updateSoundPresetAndTextArticulationMap(soundFlagsOnSegment, segmentPositionTick);
     }
 }
 
@@ -615,6 +684,8 @@ void PlaybackContext::handleSegmentElements(const Segment* segment, const int se
         }
 
         if (item->isChordRest()) {
+            m_usedVoices.insert(item->voice());
+
             const ChordRest* chordRest = toChordRest(item);
             const std::vector<Lyrics*>& lyricsList = chordRest->lyrics();
             if (lyricsList.empty()) {
@@ -637,9 +708,37 @@ void PlaybackContext::handleSegmentElements(const Segment* segment, const int se
             }
 
             if (lyrics) {
-                updatePlaybackParamsForText(lyrics, segmentPositionTick);
+                updateSyllableMap(lyrics, segmentPositionTick);
             }
         }
+    }
+}
+
+template<typename ItemsMap>
+static void copyItemsInRange(ItemsMap& source, const int rangeStartTick, const int rangeEndTick, const int newItemsOffsetTick)
+{
+    auto startIt = source.lower_bound(rangeStartTick);
+    if (startIt == source.end()) {
+        return;
+    }
+
+    auto endIt = source.lower_bound(rangeEndTick);
+
+    ItemsMap newItems;
+    for (auto it = startIt; it != endIt; ++it) {
+        int tick = it->first + newItemsOffsetTick;
+        newItems.insert_or_assign(tick, it->second);
+    }
+
+    source.merge(std::move(newItems));
+}
+
+template<typename ItemsMap>
+static void copyItemsInRange(std::map<track_idx_t, ItemsMap>& source, const int rangeStartTick, const int rangeEndTick,
+                             const int newItemsOffsetTick)
+{
+    for (auto& pair : source) {
+        copyItemsInRange(pair.second, rangeStartTick, rangeEndTick, newItemsOffsetTick);
     }
 }
 
@@ -664,10 +763,11 @@ void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat
             int startTick = referringMeasure->tick().ticks() + tickPositionOffset;
             int endTick = referringMeasure->endTick().ticks() + tickPositionOffset;
 
-            copyDynamicsInRange(m_dynamicsByTrack, startTick, endTick, newItemsOffsetTick);
-            copyPlaybackParamsInRange(m_soundFlagParamsByTrack, startTick, endTick, newItemsOffsetTick);
-            copyPlaybackParamsInRange(m_textParamsByTrack, startTick, endTick, newItemsOffsetTick);
-            copyPlayTechniquesInRange(m_playTechniquesMap, startTick, endTick, newItemsOffsetTick);
+            copyItemsInRange(m_dynamicsByTrack, startTick, endTick, newItemsOffsetTick);
+            copyItemsInRange(m_soundPresetsByTrack, startTick, endTick, newItemsOffsetTick);
+            copyItemsInRange(m_textArticulationsByTrack, startTick, endTick, newItemsOffsetTick);
+            copyItemsInRange(m_syllablesByTrack, startTick, endTick, newItemsOffsetTick);
+            copyItemsInRange(m_playTechniquesMap, startTick, endTick, newItemsOffsetTick);
 
             currMeasure = currMeasure->nextMeasure();
             if (!currMeasure) {
@@ -716,92 +816,7 @@ void PlaybackContext::applyDynamic(const EngravingItem* dynamicItem, const dynam
     }
 }
 
-void PlaybackContext::copyDynamicsInRange(DynamicsByTrack& source, const int rangeStartTick, const int rangeEndTick,
-                                          const int newDynamicsOffsetTick)
+bool PlaybackContext::shouldSkipTrack(const track_idx_t trackIdx) const
 {
-    for (auto& pair : source) {
-        DynamicMap& dynamics = pair.second;
-        auto startIt = dynamics.lower_bound(rangeStartTick);
-        if (startIt == dynamics.end()) {
-            return;
-        }
-
-        auto endIt = dynamics.lower_bound(rangeEndTick);
-
-        DynamicMap newDynamics;
-        for (auto it = startIt; it != endIt; ++it) {
-            int tick = it->first + newDynamicsOffsetTick;
-            newDynamics.insert_or_assign(tick, it->second);
-        }
-
-        dynamics.merge(std::move(newDynamics));
-    }
-}
-
-void PlaybackContext::copyPlaybackParamsInRange(ParamsByTrack& source, const int rangeStartTick, const int rangeEndTick,
-                                                const int newParamsOffsetTick)
-{
-    for (auto& pair : source) {
-        ParamMap& params = pair.second;
-        auto startIt = params.lower_bound(rangeStartTick);
-        if (startIt == params.end()) {
-            return;
-        }
-
-        auto endIt = params.lower_bound(rangeEndTick);
-
-        ParamMap newParams;
-        for (auto it = startIt; it != endIt; ++it) {
-            int tick = it->first + newParamsOffsetTick;
-            newParams.insert_or_assign(tick, it->second);
-        }
-
-        params.merge(std::move(newParams));
-    }
-}
-
-void PlaybackContext::copyPlayTechniquesInRange(PlayTechniquesMap& source, const int rangeStartTick, const int rangeEndTick,
-                                                const int newPlayTechOffsetTick)
-{
-    auto startIt = source.lower_bound(rangeStartTick);
-    if (startIt == source.end()) {
-        return;
-    }
-
-    auto endIt = source.lower_bound(rangeEndTick);
-
-    PlayTechniquesMap newPlayTechniques;
-    for (auto it = startIt; it != endIt; ++it) {
-        int tick = it->first + newPlayTechOffsetTick;
-        newPlayTechniques.insert_or_assign(tick, it->second);
-    }
-
-    source.merge(std::move(newPlayTechniques));
-}
-
-const PlaybackParamList& PlaybackContext::findParams(const ParamsByTrack& allParams, const track_idx_t trackIdx,
-                                                     const int nominalPositionTick, bool* startAtNominalTick)
-{
-    static const PlaybackParamList dummyList;
-
-    if (allParams.empty()) {
-        return dummyList;
-    }
-
-    auto paramsIt = allParams.find(trackIdx);
-    if (paramsIt == allParams.end()) {
-        return dummyList;
-    }
-
-    const ParamMap& params = paramsIt->second;
-    auto it = muse::findLessOrEqual(params, nominalPositionTick);
-    if (it == params.end()) {
-        return dummyList;
-    }
-
-    if (startAtNominalTick) {
-        *startAtNominalTick = it->first == nominalPositionTick;
-    }
-
-    return it->second;
+    return !muse::contains(m_usedVoices, track2voice(trackIdx));
 }

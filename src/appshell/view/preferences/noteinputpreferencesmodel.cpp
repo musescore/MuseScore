@@ -69,6 +69,10 @@ void NoteInputPreferencesModel::load()
         emit playNotesOnMidiInputChanged(value);
     });
 
+    notationConfiguration()->playMidiNotesWithVelocityAndDurationDuringNoteInputChanged().onReceive(this, [this](bool value) {
+        emit playMidiNotesWithVelocityAndDurationDuringNoteInputChanged(value);
+    });
+
     notationConfiguration()->isPlayPreviewNotesInInputByDurationChanged().onNotify(this, [this]() {
         emit playPreviewNotesInInputByDurationChanged(playPreviewNotesInInputByDuration());
     });
@@ -189,6 +193,11 @@ bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
 bool NoteInputPreferencesModel::playNotesOnMidiInput() const
 {
     return playbackConfiguration()->playNotesOnMidiInput();
+}
+
+bool NoteInputPreferencesModel::playMidiNotesWithVelocityAndDurationDuringNoteInput() const
+{
+    return notationConfiguration()->playMidiNotesWithVelocityAndDurationDuringNoteInput();
 }
 
 bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
@@ -321,6 +330,15 @@ void NoteInputPreferencesModel::setPlayNotesOnMidiInput(bool value)
     }
 
     playbackConfiguration()->setPlayNotesOnMidiInput(value);
+}
+
+void NoteInputPreferencesModel::setPlayMidiNotesWithVelocityAndDurationDuringNoteInput(bool value)
+{
+    if (value == playMidiNotesWithVelocityAndDurationDuringNoteInput()) {
+        return;
+    }
+
+    notationConfiguration()->setPlayMidiNotesWithVelocityAndDurationDuringNoteInput(value);
 }
 
 void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)

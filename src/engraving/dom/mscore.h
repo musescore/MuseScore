@@ -203,7 +203,6 @@ public:
     static double nudgeStep;
     static double nudgeStep10;
     static double nudgeStep50;
-    static int defaultPlayDuration;
 
 // #ifndef NDEBUG
     static bool noHorizontalStretch;
