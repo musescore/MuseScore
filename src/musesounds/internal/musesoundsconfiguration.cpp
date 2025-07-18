@@ -22,12 +22,14 @@
 #include "musesoundsconfiguration.h"
 
 #include "settings.h"
+#include "translation.h"
 
 using namespace mu::musesounds;
 using namespace muse;
 using namespace muse::network;
 
 static const std::string module_name("musesounds");
+static const Settings::Key CHECK_FOR_UPDATE_KEY(module_name, "musesounds/checkForUpdate");
 static const Settings::Key GET_SOUNDS_TESTING_MODE_KEY(module_name, "musesounds/getSoundsTestingMode");
 static const Settings::Key LAST_MUSESOUNDS_SHOWN_VERSION_KEY(module_name, "application/lastShownMuseSoundsReleaseVersion");
 
@@ -35,7 +37,16 @@ static const muse::String OPEN_SOUND_URL("https://www.musehub.com/muse-sounds/")
 
 void MuseSoundsConfiguration::init()
 {
+    settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(true));
+    settings()->setCanBeManuallyEdited(CHECK_FOR_UPDATE_KEY, true);
+    settings()->setDescription(CHECK_FOR_UPDATE_KEY, muse::trc("musesounds", "Show occasional MuseHub promotions"));
+
     settings()->setDefaultValue(GET_SOUNDS_TESTING_MODE_KEY, Val(false));
+}
+
+bool MuseSoundsConfiguration::needCheckForUpdate() const
+{
+    return settings()->value(CHECK_FOR_UPDATE_KEY).toBool();
 }
 
 RequestHeaders MuseSoundsConfiguration::headers() const
