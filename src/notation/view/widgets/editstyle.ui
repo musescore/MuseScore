@@ -6,41 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>933</width>
-    <height>824</height>
+    <width>962</width>
+    <height>812</height>
    </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>0</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>16777215</width>
-    <height>16777215</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Style</string>
   </property>
-  <layout class="QVBoxLayout" name="mmRestWidthSection_2">
-   <property name="spacing">
-    <number>12</number>
-   </property>
-   <property name="leftMargin">
-    <number>4</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>6</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="editStyleBase_layout">
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -268,6 +241,9 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
         <item>
@@ -301,8 +277,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>598</width>
-                <height>523</height>
+                <width>650</width>
+                <height>705</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -984,11 +960,23 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>421</width>
-             <height>1122</height>
+             <width>654</width>
+             <height>1560</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_72">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_74">
               <property name="spacing">
@@ -3275,8 +3263,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>685</width>
-             <height>298</height>
+             <width>737</width>
+             <height>734</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -4425,8 +4413,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>371</width>
-             <height>282</height>
+             <width>654</width>
+             <height>708</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_631">
@@ -4627,8 +4615,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>269</width>
-             <height>533</height>
+             <width>654</width>
+             <height>708</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -5430,8 +5418,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>401</width>
-             <height>585</height>
+             <width>654</width>
+             <height>787</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_67">
@@ -6077,18 +6065,6 @@
       </widget>
       <widget class="QWidget" name="PageMeasureRepeats">
        <layout class="QGridLayout" name="gridLayout_58">
-        <property name="leftMargin">
-         <number>10</number>
-        </property>
-        <property name="topMargin">
-         <number>10</number>
-        </property>
-        <property name="rightMargin">
-         <number>10</number>
-        </property>
-        <property name="bottomMargin">
-         <number>10</number>
-        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_measure_repeats">
           <property name="title">
@@ -6344,8 +6320,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>367</width>
-                <height>386</height>
+                <width>650</width>
+                <height>698</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -7215,8 +7191,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>424</width>
-             <height>409</height>
+             <width>654</width>
+             <height>708</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_70">
@@ -7971,8 +7947,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>459</width>
-             <height>496</height>
+             <width>654</width>
+             <height>708</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -11476,8 +11452,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>483</width>
-             <height>543</height>
+             <width>725</width>
+             <height>777</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -11943,9 +11919,6 @@
                 <layout class="QVBoxLayout" name="verticalLayout_632">
                  <item>
                   <layout class="QGridLayout" name="gridLayout_23">
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
                    <item row="4" column="0">
                     <widget class="QLabel" name="label_195">
                      <property name="text">
@@ -12221,9 +12194,6 @@ text x-height):</string>
                  </item>
                  <item>
                   <layout class="QGridLayout" name="gridLayout_57">
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
                    <item row="4" column="1">
                     <widget class="QToolButton" name="resetLyricsDashStartSystemPlacement">
                      <property name="toolTip">
@@ -13045,8 +13015,8 @@ followed by dashes</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>678</width>
+             <height>732</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -13152,8 +13122,8 @@ followed by dashes</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>363</width>
-                <height>550</height>
+                <width>648</width>
+                <height>696</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -14277,21 +14247,6 @@ followed by dashes</string>
    </item>
    <item>
     <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="leftMargin">
-      <number>10</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>10</number>
-     </property>
-     <property name="bottomMargin">
-      <number>10</number>
-     </property>
      <item>
       <widget class="QPushButton" name="buttonTogglePagelist">
        <property name="maximumSize">
@@ -14391,10 +14346,89 @@ followed by dashes</string>
   <tabstop>resetAutoplaceVerticalAlignRange</tabstop>
   <tabstop>minVerticalDistance</tabstop>
   <tabstop>resetMinVerticalDistance</tabstop>
+  <tabstop>spacingScrollArea</tabstop>
+  <tabstop>staffUpperBorder</tabstop>
+  <tabstop>resetStaffUpperBorder</tabstop>
+  <tabstop>staffLowerBorder</tabstop>
+  <tabstop>resetStaffLowerBorder</tabstop>
+  <tabstop>enableVerticalSpread</tabstop>
+  <tabstop>spreadSystem</tabstop>
+  <tabstop>resetSpreadSystem</tabstop>
+  <tabstop>spreadSquareBracket</tabstop>
+  <tabstop>resetSpreadSquareBracket</tabstop>
+  <tabstop>spreadCurlyBracket</tabstop>
+  <tabstop>resetSpreadCurlyBracket</tabstop>
+  <tabstop>minSystemSpread</tabstop>
+  <tabstop>resetMinSystemSpread</tabstop>
+  <tabstop>maxSystemSpread</tabstop>
+  <tabstop>resetMaxSystemSpread</tabstop>
+  <tabstop>minStaffSpread</tabstop>
+  <tabstop>resetMinStaffSpread</tabstop>
+  <tabstop>maxStaffSpread</tabstop>
+  <tabstop>resetMaxStaffSpread</tabstop>
+  <tabstop>maxAkkoladeDistance</tabstop>
+  <tabstop>resetMaxAkkoladeDistance</tabstop>
+  <tabstop>maxPageFillSpread</tabstop>
+  <tabstop>resetMaxPageFillSpread</tabstop>
+  <tabstop>disableVerticalSpread</tabstop>
+  <tabstop>staffDistance</tabstop>
+  <tabstop>resetStaffDistance</tabstop>
+  <tabstop>akkoladeDistance</tabstop>
+  <tabstop>resetAkkoladeDistance</tabstop>
+  <tabstop>minSystemDistance</tabstop>
+  <tabstop>resetMinSystemDistance</tabstop>
+  <tabstop>maxSystemDistance</tabstop>
+  <tabstop>resetMaxSystemDistance</tabstop>
+  <tabstop>systemFrameDistance</tabstop>
+  <tabstop>resetSystemFrameDistance</tabstop>
+  <tabstop>frameSystemDistance</tabstop>
+  <tabstop>resetFrameSystemDistance</tabstop>
+  <tabstop>spacingDensity</tabstop>
+  <tabstop>resetSpacingDensity</tabstop>
+  <tabstop>measureSpacing</tabstop>
+  <tabstop>resetMeasureSpacing</tabstop>
+  <tabstop>minMeasureWidth_2</tabstop>
+  <tabstop>resetMinMeasureWidth</tabstop>
+  <tabstop>lastSystemFillThreshold</tabstop>
+  <tabstop>resetLastSystemFillThreshold</tabstop>
+  <tabstop>clefKeyDistance</tabstop>
+  <tabstop>resetClefKeyDistance</tabstop>
+  <tabstop>clefTimesigDistance</tabstop>
+  <tabstop>resetClefTimesigDistance</tabstop>
+  <tabstop>keyTimesigDistance</tabstop>
+  <tabstop>resetKeyTimesigDistance</tabstop>
+  <tabstop>clefKeyRightMargin</tabstop>
+  <tabstop>resetClefKeyRightMargin</tabstop>
+  <tabstop>minNoteDistance</tabstop>
+  <tabstop>resetMinNoteDistance</tabstop>
+  <tabstop>noteBarDistance</tabstop>
+  <tabstop>resetNoteBarDistance</tabstop>
+  <tabstop>barNoteDistance</tabstop>
+  <tabstop>resetBarNoteDistance</tabstop>
+  <tabstop>barAccidentalDistance</tabstop>
+  <tabstop>resetBarAccidentalDistance</tabstop>
+  <tabstop>barGraceDistance</tabstop>
+  <tabstop>resetBarGraceDistance</tabstop>
+  <tabstop>clefLeftMargin</tabstop>
+  <tabstop>resetClefLeftMargin</tabstop>
+  <tabstop>clefBarlineDistance</tabstop>
+  <tabstop>resetClefBarlineDistance</tabstop>
+  <tabstop>keysigLeftMargin</tabstop>
+  <tabstop>resetKeysigLeftMargin</tabstop>
+  <tabstop>keyBarlineDistance</tabstop>
+  <tabstop>resetKeyBarlineDistance</tabstop>
+  <tabstop>timesigLeftMargin</tabstop>
+  <tabstop>resetTimesigLeftMargin</tabstop>
+  <tabstop>timesigBarlineDistance</tabstop>
+  <tabstop>resetTimesigBarlineDistance</tabstop>
+  <tabstop>systemHeaderDistance</tabstop>
+  <tabstop>resetSystemHeaderDistance</tabstop>
+  <tabstop>systemHeaderTimeSigDistance</tabstop>
+  <tabstop>resetSystemHeaderTimeSigDistance</tabstop>
+  <tabstop>systemHeaderMinStartOfSystemDistance</tabstop>
+  <tabstop>resetSystemHeaderMinStartOfSystemDistance</tabstop>
   <tabstop>maskBarlines</tabstop>
-  <tabstop>partialSlursAngleNormal</tabstop>
   <tabstop>resetMaskBarlines</tabstop>
-  <tabstop>partialSlursAngleWeird</tabstop>
   <tabstop>smallStaffSize</tabstop>
   <tabstop>resetSmallStaffSize</tabstop>
   <tabstop>smallClefSize</tabstop>
@@ -14568,6 +14602,8 @@ followed by dashes</string>
   <tabstop>resetSlurDottedLineWidth</tabstop>
   <tabstop>slurMinDistance</tabstop>
   <tabstop>resetSlurMinDistance</tabstop>
+  <tabstop>partialSlursAngleNormal</tabstop>
+  <tabstop>partialSlursAngleWeird</tabstop>
   <tabstop>tieEndLineWidth</tabstop>
   <tabstop>resetTieEndLineWidth</tabstop>
   <tabstop>tieMidLineWidth</tabstop>
@@ -14740,6 +14776,8 @@ followed by dashes</string>
   <tabstop>resetLyricsPosBelow</tabstop>
   <tabstop>lyricsLineHeight</tabstop>
   <tabstop>resetLyricsLineHeight</tabstop>
+  <tabstop>lyricsAvoidBarlines</tabstop>
+  <tabstop>resetLyricsAvoidBarlines</tabstop>
   <tabstop>lyricsMinTopDistance</tabstop>
   <tabstop>resetLyricsMinTopDistance</tabstop>
   <tabstop>lyricsMinBottomDistance</tabstop>
@@ -14754,12 +14792,19 @@ followed by dashes</string>
   <tabstop>resetLyricsDashMaxLength</tabstop>
   <tabstop>lyricsDashLineThickness</tabstop>
   <tabstop>resetLyricsDashLineThickness</tabstop>
+  <tabstop>lyricsDashYposRatio</tabstop>
+  <tabstop>resetLyricsDashYposRatio</tabstop>
   <tabstop>lyricsDashPad</tabstop>
   <tabstop>resetLyricsDashPad</tabstop>
   <tabstop>lyricsDashMaxDistance</tabstop>
   <tabstop>resetLyricsDashMaxDistance</tabstop>
+  <tabstop>limitDashCount</tabstop>
+  <tabstop>lyricsMaxDashCount</tabstop>
+  <tabstop>resetLyricsMaxDashCount</tabstop>
   <tabstop>lyricsDashForce</tabstop>
   <tabstop>resetLyricsDashForce</tabstop>
+  <tabstop>lyricsCenterDashedSyllables</tabstop>
+  <tabstop>lyricsResetCenterDashedSyllables</tabstop>
   <tabstop>lyricsShowDashIfSyllableOnFirstNote</tabstop>
   <tabstop>resetLyricsShowDashIfSyllableOnFirstNote</tabstop>
   <tabstop>lyricsDashStartSystemPlacement</tabstop>
@@ -14862,96 +14907,6 @@ followed by dashes</string>
   <tabstop>resetTextStyleFrameBorderRadius</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
-  <tabstop>spacingScrollArea</tabstop>
-  <tabstop>staffUpperBorder</tabstop>
-  <tabstop>resetStaffUpperBorder</tabstop>
-  <tabstop>staffLowerBorder</tabstop>
-  <tabstop>resetStaffLowerBorder</tabstop>
-  <tabstop>enableVerticalSpread</tabstop>
-  <tabstop>spreadSystem</tabstop>
-  <tabstop>resetSpreadSystem</tabstop>
-  <tabstop>spreadSquareBracket</tabstop>
-  <tabstop>resetSpreadSquareBracket</tabstop>
-  <tabstop>spreadCurlyBracket</tabstop>
-  <tabstop>resetSpreadCurlyBracket</tabstop>
-  <tabstop>minSystemSpread</tabstop>
-  <tabstop>resetMinSystemSpread</tabstop>
-  <tabstop>maxSystemSpread</tabstop>
-  <tabstop>resetMaxSystemSpread</tabstop>
-  <tabstop>minStaffSpread</tabstop>
-  <tabstop>resetMinStaffSpread</tabstop>
-  <tabstop>maxStaffSpread</tabstop>
-  <tabstop>resetMaxStaffSpread</tabstop>
-  <tabstop>maxAkkoladeDistance</tabstop>
-  <tabstop>resetMaxAkkoladeDistance</tabstop>
-  <tabstop>maxPageFillSpread</tabstop>
-  <tabstop>resetMaxPageFillSpread</tabstop>
-  <tabstop>disableVerticalSpread</tabstop>
-  <tabstop>staffDistance</tabstop>
-  <tabstop>resetStaffDistance</tabstop>
-  <tabstop>akkoladeDistance</tabstop>
-  <tabstop>resetAkkoladeDistance</tabstop>
-  <tabstop>minSystemDistance</tabstop>
-  <tabstop>resetMinSystemDistance</tabstop>
-  <tabstop>maxSystemDistance</tabstop>
-  <tabstop>resetMaxSystemDistance</tabstop>
-  <tabstop>systemFrameDistance</tabstop>
-  <tabstop>resetSystemFrameDistance</tabstop>
-  <tabstop>frameSystemDistance</tabstop>
-  <tabstop>resetFrameSystemDistance</tabstop>
-  <tabstop>spacingDensity</tabstop>
-  <tabstop>resetSpacingDensity</tabstop>
-  <tabstop>measureSpacing</tabstop>
-  <tabstop>resetMeasureSpacing</tabstop>
-  <tabstop>minMeasureWidth_2</tabstop>
-  <tabstop>resetMinMeasureWidth</tabstop>
-  <tabstop>lastSystemFillThreshold</tabstop>
-  <tabstop>resetLastSystemFillThreshold</tabstop>
-  <tabstop>clefKeyDistance</tabstop>
-  <tabstop>resetClefKeyDistance</tabstop>
-  <tabstop>clefTimesigDistance</tabstop>
-  <tabstop>resetClefTimesigDistance</tabstop>
-  <tabstop>keyTimesigDistance</tabstop>
-  <tabstop>resetKeyTimesigDistance</tabstop>
-  <tabstop>clefKeyRightMargin</tabstop>
-  <tabstop>resetClefKeyRightMargin</tabstop>
-  <tabstop>minNoteDistance</tabstop>
-  <tabstop>resetMinNoteDistance</tabstop>
-  <tabstop>noteBarDistance</tabstop>
-  <tabstop>resetNoteBarDistance</tabstop>
-  <tabstop>barNoteDistance</tabstop>
-  <tabstop>resetBarNoteDistance</tabstop>
-  <tabstop>barAccidentalDistance</tabstop>
-  <tabstop>resetBarAccidentalDistance</tabstop>
-  <tabstop>barGraceDistance</tabstop>
-  <tabstop>resetBarGraceDistance</tabstop>
-  <tabstop>clefLeftMargin</tabstop>
-  <tabstop>resetClefLeftMargin</tabstop>
-  <tabstop>clefBarlineDistance</tabstop>
-  <tabstop>resetClefBarlineDistance</tabstop>
-  <tabstop>keysigLeftMargin</tabstop>
-  <tabstop>resetKeysigLeftMargin</tabstop>
-  <tabstop>keyBarlineDistance</tabstop>
-  <tabstop>resetKeyBarlineDistance</tabstop>
-  <tabstop>timesigLeftMargin</tabstop>
-  <tabstop>resetTimesigLeftMargin</tabstop>
-  <tabstop>timesigBarlineDistance</tabstop>
-  <tabstop>resetTimesigBarlineDistance</tabstop>
-  <tabstop>systemHeaderDistance</tabstop>
-  <tabstop>resetSystemHeaderDistance</tabstop>
-  <tabstop>systemHeaderTimeSigDistance</tabstop>
-  <tabstop>resetSystemHeaderTimeSigDistance</tabstop>
-  <tabstop>systemHeaderMinStartOfSystemDistance</tabstop>
-  <tabstop>resetSystemHeaderMinStartOfSystemDistance</tabstop>
-  <tabstop>lyricsAvoidBarlines</tabstop>
-  <tabstop>resetLyricsAvoidBarlines</tabstop>
-  <tabstop>limitDashCount</tabstop>
-  <tabstop>lyricsDashYposRatio</tabstop>
-  <tabstop>resetLyricsMaxDashCount</tabstop>
-  <tabstop>resetLyricsDashYposRatio</tabstop>
-  <tabstop>lyricsMaxDashCount</tabstop>
-  <tabstop>lyricsCenterDashedSyllables</tabstop>
-  <tabstop>lyricsResetCenterDashedSyllables</tabstop>
  </tabstops>
  <resources/>
  <connections/>

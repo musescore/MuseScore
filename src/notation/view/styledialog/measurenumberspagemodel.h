@@ -47,7 +47,7 @@ class MeasureNumbersPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * mmRestRangeVPlacement READ mmRestRangeVPlacement CONSTANT)
     Q_PROPERTY(StyleItem * mmRestRangeHPlacement READ mmRestRangeHPlacement CONSTANT)
 
-    Q_PROPERTY(QVariantList textStyles READ textStyles)
+    Q_PROPERTY(QVariantList textStyles READ textStyles CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberTextStyle READ measureNumberTextStyle CONSTANT)
     Q_PROPERTY(StyleItem * mmRestRangeTextStyle READ mmRestRangeTextStyle CONSTANT)
 
