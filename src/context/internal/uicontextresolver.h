@@ -53,8 +53,12 @@ public:
     bool isShortcutContextAllowed(const std::string& scContext) const override;
 
 private:
+    void updateCurrentUiContext();
+    void setCurrentUiContext(const muse::ui::UiContext& context);
+
     void notifyAboutContextChanged();
 
+    muse::ui::UiContext m_currentUiContext = context::UiCtxUnknown;
     muse::async::Notification m_currentUiContextChanged;
 };
 }
