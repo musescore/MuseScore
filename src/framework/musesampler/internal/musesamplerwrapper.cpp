@@ -486,5 +486,6 @@ bool MuseSamplerWrapper::readyToPlay() const
 
 void MuseSamplerWrapper::revokePlayingNotes()
 {
+    m_sequencer.flushOffstream();
     m_allNotesOffRequested = true;
 }
