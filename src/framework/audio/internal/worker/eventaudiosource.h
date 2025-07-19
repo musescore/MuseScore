@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_EVENTAUDIOSOURCE_H
-#define MUSE_AUDIO_EVENTAUDIOSOURCE_H
+#pragma once
 
 #include "global/async/asyncable.h"
 #include "global/modularity/ioc.h"
@@ -32,14 +31,15 @@
 #include "track.h"
 
 namespace muse::audio {
-class EventAudioSource : public ITrackAudioInput, public async::Asyncable
+class EventAudioSource : public ITrackAudioInput, public muse::Injectable, public async::Asyncable
 {
-    Inject<synth::ISynthResolver> synthResolver;
+    Inject<synth::ISynthResolver> synthResolver = { this };
 
 public:
     using OnOffStreamEventsReceived = std::function<void (const TrackId)>;
 
-    explicit EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData, OnOffStreamEventsReceived onOffStreamReceived);
+    explicit EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData, OnOffStreamEventsReceived onOffStreamReceived,
+                              const muse::modularity::ContextPtr& iocCtx);
 
     ~EventAudioSource() override;
 
@@ -52,10 +52,17 @@ public:
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
     void seek(const msecs_t newPositionMsecs) override;
+    void flush() override;
 
     const AudioInputParams& inputParams() const override;
     void applyInputParams(const AudioInputParams& requiredParams) override;
     async::Channel<AudioInputParams> inputParamsChanged() const override;
+
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+    async::Notification readyToPlayChanged() const override;
+
+    InputProcessingProgress inputProcessingProgress() const override;
 
 private:
     struct SynthCtx
@@ -71,7 +78,7 @@ private:
 
     void setupSource();
     SynthCtx currentSynthCtx() const;
-    void restoreSynthCtx(SynthCtx&& ctx);
+    void restoreSynthCtx(const SynthCtx& ctx);
 
     TrackId m_trackId = -1;
     mpe::PlaybackData m_playbackData;
@@ -84,5 +91,3 @@ private:
 
 using EventAudioSourcePtr = std::shared_ptr<EventAudioSource>;
 }
-
-#endif // EVENTAUDIOSOURCE_H

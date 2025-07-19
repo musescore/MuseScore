@@ -31,9 +31,11 @@
 using namespace muse;
 using namespace muse::workspace;
 
-Workspace::Workspace(const io::path_t& filePath)
-    : m_file(filePath)
+Workspace::Workspace(const io::path_t& filePath, const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx)
 {
+    m_file = std::make_shared<WorkspaceFile>(filePath);
+
     multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName){
         if (resourceName == fileResourceName()) {
             reload();
@@ -41,44 +43,102 @@ Workspace::Workspace(const io::path_t& filePath)
     });
 }
 
+Workspace::Workspace(const io::path_t& filePath, const Workspace* other, const modularity::ContextPtr& iocCtx)
+    : Workspace(filePath, iocCtx)
+{
+    m_file = std::make_shared<WorkspaceFile>(filePath, other->m_file.get());
+}
+
 std::string Workspace::name() const
 {
-    return io::completeBasename(m_file.filePath()).toStdString();
+    return io::completeBasename(m_file->filePath()).toStdString();
 }
 
-std::string Workspace::title() const
+bool Workspace::isBuiltin() const
 {
-    return name();
+    io::path_t builtinWorkspacePath = this->builtinWorkspacePath();
+    return !builtinWorkspacePath.empty();
 }
 
-bool Workspace::isManaged(const DataKey& key) const
+bool Workspace::isEdited() const
 {
-    return m_file.meta(key).toBool();
+    if (!isBuiltin()) {
+        return false;
+    }
+
+    if (m_file->isNeedSave()) {
+        return true;
+    }
+
+    return io::absoluteDirpath(filePath()) == configuration()->userWorkspacesPath();
 }
 
-void Workspace::setIsManaged(const DataKey& key, bool val)
+bool Workspace::isNeedSave() const
 {
-    m_file.setMeta(key, Val(val));
+    return m_file ? m_file->isNeedSave() : false;
 }
 
 RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(m_file.isLoaded()) {
+    IF_ASSERT_FAILED(m_file->isLoaded()) {
         return RetVal<QByteArray>(make_ret(Err::NotLoaded));
     }
 
     RetVal<QByteArray> rv;
     rv.ret = make_ret(Ret::Code::Ok);
-    rv.val = m_file.data(key);
+    rv.val = m_file->data(key);
     return rv;
 }
 
 Ret Workspace::setRawData(const DataKey& key, const QByteArray& data)
 {
-    m_file.setData(key, data);
+    m_file->setData(key, data);
     return make_ret(Ret::Code::Ok);
+}
+
+void Workspace::reset()
+{
+    if (!isEdited()) {
+        return;
+    }
+
+    io::path_t builtinWorkspacePath = this->builtinWorkspacePath();
+
+    if (builtinWorkspacePath == filePath()) {
+        //! if the user made changes and they were not saved, then just reload file
+        reload();
+        return;
+    }
+
+    //! remove current file
+    fileSystem()->remove(filePath());
+
+    //! redirect to builtin workspace file
+    m_file = std::make_shared<WorkspaceFile>(builtinWorkspacePath);
+
+    reload();
+}
+
+void Workspace::assignNewName(const std::string& newName)
+{
+    io::path_t filePath = m_file->filePath();
+    io::path_t newPath = io::absoluteDirpath(filePath) + "/" + newName + "." + io::suffix(filePath);
+
+    if (filePath == newPath) {
+        return;
+    }
+
+    Ret ret = doSave();
+    if (!ret) {
+        LOGE() << "Failed to save workspace, error: " << ret.toString();
+    }
+
+    fileSystem()->move(filePath, newPath);
+
+    m_file = std::make_shared<WorkspaceFile>(newPath);
+    load();
 }
 
 async::Notification Workspace::reloadNotification()
@@ -88,25 +148,38 @@ async::Notification Workspace::reloadNotification()
 
 bool Workspace::isLoaded() const
 {
-    return m_file.isLoaded();
+    return m_file->isLoaded();
 }
 
 io::path_t Workspace::filePath() const
 {
-    return m_file.filePath();
+    return m_file->filePath();
 }
 
 Ret Workspace::load()
 {
     mi::ReadResourceLockGuard resource_guard(multiInstancesProvider.get(), fileResourceName());
-    return m_file.load();
+    return m_file->load();
 }
 
 Ret Workspace::save()
 {
+    if (!m_file->isNeedSave()) {
+        return true;
+    }
+
+    if (isBuiltin()) {
+        copyBuiltinWorkspaceToUserDir();
+    }
+
+    return doSave();
+}
+
+Ret Workspace::doSave()
+{
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider.get(), fileResourceName());
-    m_file.setMeta("app_version", Val(application()->version().toStdString()));
-    return m_file.save();
+    m_file->setMeta("app_version", Val(application()->version().toStdString()));
+    return m_file->save();
 }
 
 void Workspace::reload()
@@ -118,4 +191,34 @@ void Workspace::reload()
 std::string Workspace::fileResourceName() const
 {
     return filePath().toStdString();
+}
+
+io::path_t Workspace::builtinWorkspacePath() const
+{
+    std::string currentWorkspaceName = name();
+
+    io::paths_t builtinWorkspacesPaths = configuration()->builtinWorkspacesFilePaths();
+    for (const io::path_t& builtinWorkspacePath : builtinWorkspacesPaths) {
+        std::string builtinWorkspaceName = io::completeBasename(builtinWorkspacePath).toStdString();
+        if (builtinWorkspaceName == currentWorkspaceName) {
+            return builtinWorkspacePath;
+        }
+    }
+
+    return {};
+}
+
+void Workspace::copyBuiltinWorkspaceToUserDir()
+{
+    io::path_t userFilePath = configuration()->userWorkspacesPath() + "/" + io::filename(filePath());
+
+    fileSystem()->copy(m_file->filePath(), userFilePath);
+    m_file->redirect(userFilePath);
+
+    Ret ret = doSave();
+    if (!ret) {
+        LOGE() << "Failed to save workspace: " << ret.toString();
+    }
+
+    load();
 }

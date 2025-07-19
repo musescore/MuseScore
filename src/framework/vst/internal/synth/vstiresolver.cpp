@@ -49,7 +49,7 @@ VstSynthPtr VstiResolver::createSynth(const muse::audio::TrackId trackId, const 
         return nullptr;
     }
 
-    auto synth = std::make_shared<VstSynthesiser>(trackId, params);
+    auto synth = std::make_shared<VstSynthesiser>(trackId, params, iocContext());
     synth->init();
 
     return synth;
@@ -67,5 +67,5 @@ SoundPresetList VstiResolver::resolveSoundPresets(const muse::audio::AudioResour
 
 void VstiResolver::clearSources()
 {
-    pluginsRegister()->unregisterAllInstrPlugin();
+    instancesRegister()->unregisterAllInstrPlugin();
 }

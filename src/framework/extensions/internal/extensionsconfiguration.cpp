@@ -26,6 +26,7 @@
 #include "global/io/file.h"
 #include "global/io/dir.h"
 #include "multiinstances/resourcelockguard.h"
+#include "legacy/extpluginsloader.h"
 
 #include "log.h"
 
@@ -46,6 +47,8 @@ void ExtensionsConfiguration::init()
     if (!pluginsUserPath().empty()) {
         io::Dir::mkpath(pluginsUserPath());
     }
+
+    io::Dir::mkpath(userPath());
 }
 
 io::path_t ExtensionsConfiguration::defaultPath() const
@@ -84,8 +87,16 @@ Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Co
     for (const auto& p : configs) {
         JsonObject obj;
         obj["uri"] = p.first.toString();
-        obj["enabled"] = p.second.enabled;
-        obj["shortcuts"] = p.second.shortcuts;
+
+        const Manifest::Config& c = p.second;
+        JsonArray acts;
+        for (const auto& a : c.actions) {
+            JsonObject act;
+            act["code"] = a.first;
+            act["exec_point"] = a.second.execPoint;
+            acts.append(act);
+        }
+        obj["actions"] = acts;
 
         arr.append(obj);
     }
@@ -94,7 +105,7 @@ Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Co
     ByteArray data = JsonDocument(arr).toJson();
     {
         mi::WriteResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
-        ret = io::File::writeFile(pluginsUserPath() + "/config.json", data);
+        ret = io::File::writeFile(userPath() + "/config.json", data);
     }
 
     if (!ret) {
@@ -106,53 +117,115 @@ Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Co
 
 std::map<muse::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs() const
 {
-    ByteArray data;
-    {
-        TRACEFUNC;
+    const io::path_t configPath = userPath() + "/config.json";
+    const io::path_t oldPluginsConfigPath = globalConfiguration()->userAppDataPath() + "/plugins/plugins.json";
 
-        io::path_t configPath = pluginsUserPath() + "/config.json";
+    //! NOTE Load current config
+    if (io::File::exists(configPath)) {
+        ByteArray data;
         mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
         Ret ret = io::File::readFile(configPath, data);
         if (!ret) {
-            LOGE() << "failed read config data, err: " << ret.toString()
-                   << ", file: " << configPath;
+            LOGE() << "failed read config data, err: " << ret.toString() << ", file: " << configPath;
             return {};
         }
-    }
 
-    std::string err;
-    JsonDocument doc = JsonDocument::fromJson(data, &err);
-    if (!err.empty()) {
-        LOGE() << "failed parse json, err: " << err;
-        return {};
-    }
-
-    if (!doc.isArray()) {
-        LOGE() << "bad format of config file";
-        return {};
-    }
-
-    JsonArray arr = doc.rootArray();
-
-    std::map<Uri, Manifest::Config> result;
-    for (size_t i = 0; i < arr.size(); ++i) {
-        JsonObject obj = arr.at(i).toObject();
-
-        Uri uri;
-        Manifest::Config c;
-        if (obj.contains("uri")) {
-            uri = Uri(obj.value("uri").toStdString());
-        } else {
-            uri = Uri("muse://extensions/v1/" + obj.value("codeKey").toStdString());
+        std::string err;
+        JsonDocument doc = JsonDocument::fromJson(data, &err);
+        if (!err.empty()) {
+            LOGE() << "failed parse json, err: " << err;
+            return {};
         }
 
-        c.enabled = obj.value("enabled").toBool();
-        c.shortcuts = obj.value("shortcuts").toStdString();
-
-        if (uri.isValid()) {
-            result[uri] = c;
+        if (!doc.isArray()) {
+            LOGE() << "bad format of config file";
+            return {};
         }
-    }
 
-    return result;
+        std::map<Uri, Manifest::Config> result;
+        JsonArray arr = doc.rootArray();
+        for (size_t i = 0; i < arr.size(); ++i) {
+            JsonObject obj = arr.at(i).toObject();
+
+            Manifest::Config c;
+            Uri uri = Uri(obj.value("uri").toStdString());
+
+            JsonValue actsVal = obj.value("actions");
+            if (!actsVal.isArray()) {
+                LOGE() << "bad format, field `actions` does not exist or is not an array";
+                continue;
+            }
+            JsonArray acts = actsVal.toArray();
+            for (size_t ai = 0; ai < acts.size(); ++ai) {
+                JsonObject ao = acts.at(ai).toObject();
+
+                std::string code = ao.value("code").toStdString();
+                Action::Config ac;
+                ac.execPoint = ao.value("exec_point").toStdString();
+
+                c.actions[code] = ac;
+            }
+
+            result.insert({ uri, c });
+        }
+
+        return result;
+    }
+    //! NOTE Load old plugins config
+    else {
+        ByteArray data;
+        mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
+        Ret ret = io::File::readFile(oldPluginsConfigPath, data);
+        if (!ret) {
+            LOGE() << "failed read config data, err: " << ret.toString() << ", file: " << oldPluginsConfigPath;
+            return {};
+        }
+
+        std::string err;
+        JsonDocument doc = JsonDocument::fromJson(data, &err);
+        if (!err.empty()) {
+            LOGE() << "failed parse json, err: " << err;
+            return {};
+        }
+
+        if (!doc.isArray()) {
+            LOGE() << "bad format of config file";
+            return {};
+        }
+
+        std::map<std::string /*codeKey*/, Uri> uris;
+        {
+            legacy::ExtPluginsLoader pluginsLoader;
+            uris = pluginsLoader.loadCodekeyUriMap(pluginsDefaultPath(), pluginsUserPath());
+        }
+
+        std::map<Uri, Manifest::Config> result;
+        JsonArray arr = doc.rootArray();
+        for (size_t i = 0; i < arr.size(); ++i) {
+            JsonObject obj = arr.at(i).toObject();
+
+            Manifest::Config c;
+            std::string codeKey = obj.value("codeKey").toStdString();
+            Uri uri = muse::value(uris, codeKey);
+            if (!uri.isValid()) {
+                LOGW() << "not found plugin with codeKey: " << codeKey;
+                continue;
+            }
+
+            bool enabled = obj.value("enabled").toBool();
+            Action::Config ac;
+            ac.execPoint = enabled ? EXEC_MANUALLY : EXEC_DISABLED;
+
+            //! NOTE Special case
+            if (codeKey == "addCourtesyAccidentals") {
+                c.actions["add"] = ac;
+            } else {
+                c.actions["main"] = ac;
+            }
+
+            result.insert({ uri, c });
+        }
+
+        return result;
+    }
 }

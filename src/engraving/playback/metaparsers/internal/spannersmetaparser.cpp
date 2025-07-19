@@ -58,6 +58,9 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     }
 
     const Spanner* spanner = toSpanner(item);
+    if (!spanner->playSpanner()) {
+        return;
+    }
 
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
@@ -75,7 +78,7 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         break;
     }
     case ElementType::LET_RING:
-        type = mpe::ArticulationType::LaissezVibrer;
+        type = mpe::ArticulationType::LetRing;
         break;
     case ElementType::PALM_MUTE: {
         type = mpe::ArticulationType::PalmMute;
@@ -92,10 +95,6 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     case ElementType::TRILL: {
         const Trill* trill = toTrill(spanner);
 
-        if (!trill->playArticulation()) {
-            return;
-        }
-
         if (trill->trillType() == TrillType::TRILL_LINE) {
             type = mpe::ArticulationType::Trill;
         } else if (trill->trillType() == TrillType::UPPRALL_LINE) {
@@ -109,10 +108,6 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     }
     case ElementType::GLISSANDO: {
         const Glissando* glissando = toGlissando(spanner);
-        if (!glissando->playGlissando()) {
-            break;
-        }
-
         const Note* startNote = toNote(glissando->startElement());
         const Note* endNote = toNote(glissando->endElement());
 
@@ -158,18 +153,10 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     articulationMeta.timestamp = spannerCtx.nominalTimestamp;
     articulationMeta.overallPitchChangesRange = overallPitchRange;
     articulationMeta.overallDynamicChangesRange = overallDynamicRange;
-    articulationMeta.overallDuration = spannerDuration(spanner->score(),
-                                                       spannerCtx.nominalPositionStartTick,
-                                                       overallDurationTicks);
+    articulationMeta.overallDuration = durationFromStartAndTicks(spannerCtx.score,
+                                                                 spannerCtx.nominalPositionStartTick,
+                                                                 overallDurationTicks,
+                                                                 spannerCtx.positionTickOffset);
 
     appendArticulationData(std::move(articulationMeta), result);
-}
-
-mpe::duration_t SpannersMetaParser::spannerDuration(const Score* score, const int positionTick, const int durationTicks)
-{
-    if (!score) {
-        return 0;
-    }
-
-    return durationFromStartAndTicks(score, positionTick, durationTicks, 0);
 }

@@ -27,6 +27,7 @@
 
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
+#include "global/async/asyncable.h"
 
 namespace muse::extensions::apiv1 {
 class StandardButton
@@ -40,7 +41,7 @@ public:
     Q_ENUM(Button)
 };
 
-class MessageDialog : public QObject
+class MessageDialog : public QObject, public Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
@@ -49,7 +50,7 @@ class MessageDialog : public QObject
     Q_PROPERTY(QVariantList standardButtons READ standardButtons WRITE setStandardButtons NOTIFY standardButtonsChanged FINAL)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged FINAL)
 
-    Inject<IInteractive> interactive;
+    Inject<IInteractive> interactive = { this };
 
 public:
 
@@ -85,7 +86,7 @@ signals:
 
 private:
 
-    void doOpen(const QString& title, const QString& text, const QString& detailed, const QVariantList& buttons);
+    void doOpen(const QString& contentTitle, const QString& text, const QString& detailed, const QVariantList& buttons);
 
     QString m_text;
     bool m_visible = false;

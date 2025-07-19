@@ -70,7 +70,7 @@ Item {
             sourceSize: Qt.size(width, height)
             fillMode: Image.PreserveAspectCrop
 
-            layer.enabled: true
+            layer.enabled: ui.isEffectsAllowed
             layer.effect: EffectOpacityMask {
                 maskSource: Rectangle {
                     width: root.side

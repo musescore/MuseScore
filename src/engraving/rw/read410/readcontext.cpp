@@ -170,7 +170,7 @@ void ReadContext::addSpanner(Spanner* s)
 
 bool ReadContext::undoStackActive() const
 {
-    return m_score->undoStack()->active();
+    return m_score->undoStack()->hasActiveCommand();
 }
 
 bool ReadContext::isSameScore(const EngravingObject* obj) const
@@ -593,15 +593,18 @@ void ReadContext::doReconnectBrokenConnectors()
         }
     }
     std::sort(brokenPairs.begin(), brokenPairs.end(), distanceSort);
+    std::set<ConnectorInfoReader*> processed;
     for (auto& distPair : brokenPairs) {
         if (distPair.first == INT_MAX) {
             continue;
         }
         auto& pair = distPair.second;
-        if (pair.first->next() || pair.second->prev()) {
+        if (processed.count(pair.first) || processed.count(pair.second)) {
             continue;
         }
         pair.first->forceConnect(pair.second);
+        processed.insert(pair.first);
+        processed.insert(pair.second);
     }
     std::set<ConnectorInfoReader*> reconnected;
     for (auto& conn : _connectors) {

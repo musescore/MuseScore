@@ -34,10 +34,6 @@ Rectangle {
         id: tiePlacementSelector
     }
 
-    Component.onCompleted: {
-        tiePlacementSelector.load()
-    }
-
     Column {
         spacing: 8
 
@@ -90,6 +86,35 @@ Rectangle {
                     tiePlacementSelector.placementChords.value = modelData.value
                 }
             }
+        }
+
+        StyledTextLabel {
+            text: qsTrc("notation", "Placement of inner ties with respect to augmentation dots:")
+        }
+
+
+        RoundedRadioButton {
+            id: autoButton
+            width: parent.width
+            checked: tiePlacementSelector.placementDots.value === 0
+            onToggled: tiePlacementSelector.placementDots.value = 0
+            text: qsTrc("notation", "Auto")
+        }
+
+        RoundedRadioButton {
+            id: beforeButton
+            width: parent.width
+            checked: tiePlacementSelector.placementDots.value === 1
+            onToggled: tiePlacementSelector.placementDots.value = 1
+            text: qsTrc("notation", "Always before dots")
+        }
+
+        RoundedRadioButton {
+            id: afterButton
+            width: parent.width
+            checked: tiePlacementSelector.placementDots.value === 2
+            onToggled: tiePlacementSelector.placementDots.value = 2
+            text: qsTrc("notation", "Always after dots")
         }
     }
 }

@@ -26,8 +26,6 @@
 
 #include <AudioToolbox/AudioToolbox.h>
 
-#include <QTimer>
-
 #include "translation.h"
 #include "log.h"
 
@@ -35,7 +33,6 @@ typedef AudioDeviceID OSXAudioDeviceID;
 
 using namespace muse;
 using namespace muse::audio;
-static constexpr char DEFAULT_DEVICE_ID[] = "Systems default";
 
 struct OSXAudioDriver::Data {
     Spec format;
@@ -143,8 +140,8 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    // Allocate 3 audio buffers. At the same time one used for writing, one for reading and one for reserve
-    for (unsigned int i = 0; i < 3; ++i) {
+    // Allocate 2 audio buffers. At the same time one used for writing, one for reading
+    for (unsigned int i = 0; i < 2; ++i) {
         AudioQueueBufferRef buffer;
         result = AudioQueueAllocateBuffer(m_data->audioQueue, spec.samples * audioFormat.mBytesPerFrame, &buffer);
         if (result != noErr) {
@@ -166,7 +163,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    LOGD() << "Connected to " << outputDevice() << " with bufferSize " << bufferSizeOut << ", sampleRate " << spec.sampleRate;
+    LOGI() << "Connected to " << outputDevice() << " with bufferSize " << bufferSizeOut << ", sampleRate " << spec.sampleRate;
 
     return true;
 }
@@ -183,6 +180,11 @@ void OSXAudioDriver::close()
 bool OSXAudioDriver::isOpened() const
 {
     return m_data->audioQueue != nullptr;
+}
+
+const OSXAudioDriver::Spec& OSXAudioDriver::activeSpec() const
+{
+    return m_data->format;
 }
 
 AudioDeviceList OSXAudioDriver::availableOutputDevices() const
@@ -351,10 +353,11 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
         return {};
     }
 
-    unsigned int minimum = std::max(static_cast<int>(range.mMinimum), MINIMUM_BUFFER_SIZE);
+    unsigned int minimum = std::max(static_cast<size_t>(range.mMinimum), MINIMUM_BUFFER_SIZE);
+    unsigned int maximum = std::min(static_cast<size_t>(range.mMaximum), MAXIMUM_BUFFER_SIZE);
 
     std::vector<unsigned int> result;
-    for (unsigned int bufferSize = range.mMaximum; bufferSize >= minimum;) {
+    for (unsigned int bufferSize = maximum; bufferSize >= minimum;) {
         result.push_back(bufferSize);
         bufferSize /= 2;
     }
@@ -362,6 +365,52 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
     std::sort(result.begin(), result.end());
 
     return result;
+}
+
+unsigned int OSXAudioDriver::outputDeviceSampleRate() const
+{
+    if (!isOpened()) {
+        return 0;
+    }
+
+    return m_data->format.sampleRate;
+}
+
+bool OSXAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
+{
+    if (m_data->format.sampleRate == sampleRate) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    m_data->format.sampleRate = sampleRate;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(m_data->format, &m_data->format);
+    }
+
+    if (ok) {
+        m_sampleRateChanged.notify();
+    }
+
+    return ok;
+}
+
+async::Notification OSXAudioDriver::outputDeviceSampleRateChanged() const
+{
+    return m_sampleRateChanged;
+}
+
+std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceSampleRates() const
+{
+    return {
+        44100,
+        48000,
+        88200,
+        96000,
+    };
 }
 
 bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)

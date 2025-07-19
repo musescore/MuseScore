@@ -79,9 +79,6 @@ Column {
                 let  modelType = root.model ? root.model.modelType : -1
 
                 switch (modelType) {
-                case Inspector.TYPE_HAIRPIN: return hairpinStyleSettings
-                case Inspector.TYPE_CRESCENDO: return crescendoDiminuendoSettings
-                case Inspector.TYPE_DIMINUENDO: return crescendoDiminuendoSettings
                 case Inspector.TYPE_VOLTA: return voltaStyleSettings
                 case Inspector.TYPE_OTTAVA: return ottavaStyleSettings
                 case Inspector.TYPE_PEDAL: return pedalStyleSettings
@@ -98,28 +95,6 @@ Column {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 2000
-        }
-    }
-
-    Component {
-        id: hairpinStyleSettings
-
-        HairpinStyleSettings {
-            model: root.model
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart + 1000
-        }
-    }
-
-    Component {
-        id: crescendoDiminuendoSettings
-
-        CrescDimLineStyleSettings {
-            model: root.model
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart + 1000
         }
     }
 

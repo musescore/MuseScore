@@ -23,6 +23,14 @@
 
 #include "modularity/ioc.h"
 #include "internal/networkmanagercreator.h"
+#include "internal/networkconfiguration.h"
+
+#include "global/api/iapiregister.h"
+
+#ifdef MUSE_MODULE_NETWORK_WEBSOCKET
+#include "api/websocketapi.h"
+#include "api/websocketserverapi.h"
+#endif
 
 using namespace muse::network;
 
@@ -33,5 +41,26 @@ std::string NetworkModule::moduleName() const
 
 void NetworkModule::registerExports()
 {
+    m_configuration = std::make_shared<NetworkConfiguration>(iocContext());
+
     ioc()->registerExport<INetworkManagerCreator>(moduleName(), new NetworkManagerCreator());
+    ioc()->registerExport<INetworkConfiguration>(moduleName(), m_configuration);
+}
+
+void NetworkModule::registerApi()
+{
+    using namespace muse::api;
+
+    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    if (api) {
+#ifdef MUSE_MODULE_NETWORK_WEBSOCKET
+        api->regApiCreator(moduleName(), "api.websocket", new ApiCreator<api::WebSocketApi>());
+        api->regApiCreator(moduleName(), "api.websocketserver", new ApiCreator<api::WebSocketServerApi>());
+#endif
+    }
+}
+
+void NetworkModule::onInit(const IApplication::RunMode&)
+{
+    m_configuration->init();
 }

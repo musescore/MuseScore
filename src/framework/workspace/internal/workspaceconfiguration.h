@@ -22,28 +22,41 @@
 #ifndef MUSE_WORKSPACE_WORKSPACECONFIGURATION_H
 #define MUSE_WORKSPACE_WORKSPACECONFIGURATION_H
 
-#include "../iworkspaceconfiguration.h"
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "global/types/config.h"
 #include "async/asyncable.h"
 
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+#include "io/ifilesystem.h"
+
+#include "../iworkspaceconfiguration.h"
+
 namespace muse::workspace {
-class WorkspaceConfiguration : public IWorkspaceConfiguration, public async::Asyncable
+class WorkspaceConfiguration : public IWorkspaceConfiguration, public Injectable, public async::Asyncable
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
 
 public:
+    WorkspaceConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     io::paths_t workspacePaths() const override;
 
+    io::paths_t builtinWorkspacesFilePaths() const override;
     io::path_t userWorkspacesPath() const override;
+
+    std::string defaultWorkspaceName() const override;
 
     std::string currentWorkspaceName() const override;
     void setCurrentWorkspaceName(const std::string& workspaceName) override;
     async::Channel<std::string> currentWorkspaceNameChanged() const override;
 
 private:
+    Config m_config;
+
     async::Channel<std::string> m_currentWorkspaceNameChanged;
 };
 }

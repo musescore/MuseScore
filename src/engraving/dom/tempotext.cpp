@@ -267,6 +267,7 @@ void TempoText::updateTempo()
     s.replace(u"≈", u"=");
     s.replace(u"~", u"=");
     s.replace(u"ca.", u"");
+    s.replace(u"c.", u"");
     s.replace(u"approx.", u"");
     std::string su8 = s.toStdString();
     for (const TempoPattern& pa : tp) {
@@ -329,34 +330,20 @@ void TempoText::setTempo(BeatsPerSecond v)
 }
 
 //---------------------------------------------------------
-//   undoSetTempo
-//---------------------------------------------------------
-
-void TempoText::undoSetTempo(double v)
-{
-    undoChangeProperty(Pid::TEMPO, v, propertyFlags(Pid::TEMPO));
-}
-
-//---------------------------------------------------------
-//   undoSetFollowText
-//---------------------------------------------------------
-
-void TempoText::undoSetFollowText(bool v)
-{
-    undoChangeProperty(Pid::TEMPO_FOLLOW_TEXT, v, propertyFlags(Pid::TEMPO));
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 PropertyValue TempoText::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        return m_playTempoText;
     case Pid::TEMPO:
         return m_tempo;
     case Pid::TEMPO_FOLLOW_TEXT:
         return m_followText;
+    case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
+        return m_alignRightOfRehearsalMark;
     default:
         return TextBase::getProperty(propertyId);
     }
@@ -369,12 +356,19 @@ PropertyValue TempoText::getProperty(Pid propertyId) const
 bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        setPlayTempoText(v.toBool());
+        score()->setUpTempoMapLater();
+        break;
     case Pid::TEMPO:
         setTempo(v.value<BeatsPerSecond>());
         score()->setUpTempoMapLater();
         break;
     case Pid::TEMPO_FOLLOW_TEXT:
-        m_followText = v.toBool();
+        setFollowText(v.toBool());
+        break;
+    case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
+        m_alignRightOfRehearsalMark = v.toBool();
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -393,12 +387,16 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue TempoText::propertyDefault(Pid id) const
 {
     switch (id) {
+    case Pid::PLAY:
+        return true;
     case Pid::TEXT_STYLE:
         return TextStyleType::TEMPO;
     case Pid::TEMPO:
         return BeatsPerSecond(2.0);
     case Pid::TEMPO_FOLLOW_TEXT:
         return false;
+    case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
+        return true;
     default:
         return TextBase::propertyDefault(id);
     }

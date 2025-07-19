@@ -29,6 +29,9 @@ namespace mu::iex::audioexport {
 class FlacWriter : public AbstractAudioWriter
 {
 public:
+    FlacWriter(const muse::modularity::ContextPtr& iocCtx)
+        : AbstractAudioWriter(iocCtx) {}
+
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& destinationDevice, const Options& options = Options()) override;
 };
 }

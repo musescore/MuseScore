@@ -34,7 +34,7 @@ Item {
     id: root
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: palettesPanelHeader.navigation // first panel
+    property int navigationOrderStart: 1
 
     property alias contextMenuModel: contextMenuModel
 
@@ -93,7 +93,7 @@ Item {
             popupAnchorItem: root
 
             navigation.section: root.navigationSection
-            navigation.order: 2
+            navigation.order: root.navigationOrderStart
 
             onAddCustomPaletteRequested: function(paletteName) {
                 paletteTree.insertCustomPalette(0, paletteName)
@@ -127,7 +127,7 @@ Item {
             verticalAlignment: Qt.AlignTop
             wrapMode: Text.WordWrap
 
-            visible: !paletteTree.isResultFound
+            visible: !searchHint.visible && !paletteTree.isResultFound
         }
 
         PaletteTree {

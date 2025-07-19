@@ -101,6 +101,9 @@ Code IpcChannel::syncRequestToAll(const QString& method, const QStringList& args
 
     int total = m_selfSocket->instances().count();
     total -= 1;     //! NOTE Exclude itself
+    if (total <= 0) {
+        return Code::AllAnswered;
+    }
     int received = 0;
 
     m_msgCallback = [method, total, &received, &loop, onReceived](const Msg& msg) {
@@ -109,7 +112,7 @@ Code IpcChannel::syncRequestToAll(const QString& method, const QStringList& args
         }
 
         ++received;
-        bool success = onReceived(msg.args);
+        bool success = onReceived(msg.args, msg.srcID);
         if (success) {
             loop.exit(Code::Success);
             return;

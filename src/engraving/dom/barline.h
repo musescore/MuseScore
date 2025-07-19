@@ -52,7 +52,20 @@ static constexpr int BARLINE_SPAN_SHORT2_TO         = -1;
 
 struct BarLineTableItem {
     BarLineType type;
-    const char* userName;         // user name, translatable
+    const muse::TranslatableString& userName;
+};
+
+//---------------------------------------------------------
+//   BarLineEditData
+//---------------------------------------------------------
+
+class BarLineEditData : public ElementEditData
+{
+    OBJECT_ALLOCATOR(engraving, BarLineEditData)
+public:
+    double yoff1;
+    double yoff2;
+    virtual EditDataType type() override { return EditDataType::BarLineEditData; }
 };
 
 //---------------------------------------------------------
@@ -120,6 +133,7 @@ public:
     bool isBottom() const;
 
     int subtype() const override { return int(m_barLineType); }
+    TranslatableString subtypeUserName() const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -155,8 +169,6 @@ private:
     friend class Factory;
     BarLine(Segment* parent);
     BarLine(const BarLine&);
-
-    void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
     int m_spanStaff = 0;         // span barline to next staff if true, values > 1 are used for importing from 2.x
     int m_spanFrom = 0;         // line number on start and end staves

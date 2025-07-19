@@ -37,7 +37,7 @@ DialogView::DialogView(QQuickItem* parent)
     : PopupView(parent)
 {
     setObjectName("DialogView");
-    setClosePolicies(NoAutoClose);
+    setClosePolicies(ClosePolicy::NoAutoClose);
 }
 
 bool DialogView::isDialog() const
@@ -47,11 +47,10 @@ bool DialogView::isDialog() const
 
 void DialogView::beforeOpen()
 {
-    //! NOTE: Ideally we would change appName in App::run and the following would not be necessary. However, this would
-    //! also change various paths (something we want to avoid outside of major releases).
-#ifndef Q_OS_MAC
-    setTitle(application()->unstable() ? "MuseScore Studio Development" : "MuseScore Studio");
-#endif
+    //! NOTE Set default title
+    if (m_title.isEmpty()) {
+        setTitle(application()->title());
+    }
 }
 
 void DialogView::onHidden()

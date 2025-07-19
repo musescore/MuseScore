@@ -24,9 +24,9 @@
 #include "style.h"
 
 namespace mu::engraving {
-const std::set<Sid>& pageStyles()
+const std::vector<Sid>& pageStyles()
 {
-    static const std::set<Sid> styles {
+    static const std::vector<Sid> styles {
         Sid::pageWidth,
         Sid::pageHeight,
         Sid::pagePrintableWidth,

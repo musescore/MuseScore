@@ -89,8 +89,8 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
     }
 
     RetVal<muse::io::path_t> exportPath;
-    exportPath.val = interactive()->selectSavingFile(muse::qtrc("project/export", "Export"), defaultPath,
-                                                     exportType.filter(), isCreatingOnlyOneFile);
+    exportPath.val = interactive()->selectSavingFileSync(muse::trc("project/export", "Export"), defaultPath,
+                                                         exportType.filter(), isCreatingOnlyOneFile);
     exportPath.ret = !exportPath.val.empty();
 
     return exportPath;
@@ -148,14 +148,14 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
 
     if (writerProgress) {
         showExportProgress(isAudioExport(suffix));
-        m_exportProgress.started.notify();
+        m_exportProgress.start();
 
-        writerProgress->progressChanged.onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
-                                                                                           const std::string& status) {
-            m_exportProgress.progressChanged.send(currentFileNum * total + current, fileCount * total, status);
+        writerProgress->progressChanged().onReceive(this, [this, &currentFileNum, fileCount](int64_t current, int64_t total,
+                                                                                             const std::string& status) {
+            m_exportProgress.progress(currentFileNum * total + current, fileCount * total, status);
         });
 
-        m_exportProgress.cancelRequested.onNotify(this, [writer]() {
+        m_exportProgress.canceled().onNotify(this, [writer]() {
             writer->abort();
         });
     }
@@ -165,9 +165,9 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
         setViewModes(notations, viewModes);
 
         if (writerProgress) {
-            m_exportProgress.finished.send(muse::make_ok());
-            writerProgress->progressChanged.resetOnReceive(this);
-            m_exportProgress.finished.resetOnReceive(this);
+            m_exportProgress.finish(muse::make_ok());
+            writerProgress->progressChanged().resetOnReceive(this);
+            m_exportProgress.finished().resetOnReceive(this);
         }
     };
 
@@ -359,7 +359,7 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
         constexpr int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
         constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
-        IInteractive::Result result = interactive()->question(
+        IInteractive::Result result = interactive()->questionSync(
             muse::trc("project/export", "File already exists"),
             muse::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
             .arg(filename).toStdString(), {
@@ -388,7 +388,7 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
 
 bool ExportProjectScenario::askForRetry(const QString& filename) const
 {
-    IInteractive::Result result = interactive()->question(
+    IInteractive::Result result = interactive()->questionSync(
         muse::trc("project/export", "Error"),
         muse::qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
         .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
@@ -444,10 +444,7 @@ void ExportProjectScenario::showExportProgress(bool isAudioExport) const
 {
     std::string title = isAudioExport ? muse::trc("project/export", "Exporting audio…") : muse::trc("project/export", "Exporting…");
 
-    Ret ret = interactive()->showProgress(title, &m_exportProgress);
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+    interactive()->showProgress(title, &m_exportProgress);
 }
 
 void ExportProjectScenario::openFolder(const muse::io::path_t& path) const

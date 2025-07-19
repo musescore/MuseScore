@@ -40,7 +40,7 @@ static muse::testing::SuiteEnvironment musicxml_se(
 {
     new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule(),
-    new mu::iex::musicxml::MusicXmlModule() // needs for init resources
+    new mu::iex::musicxml::MusicXmlModule() // necessary for initialising resources
 },
     nullptr,
     []() {
@@ -51,6 +51,6 @@ static muse::testing::SuiteEnvironment musicxml_se(
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;
 
-    loadInstrumentTemplates(":/data/instruments.xml");
+    loadInstrumentTemplates(":/engraving/instruments/instruments.xml");
 }
     );

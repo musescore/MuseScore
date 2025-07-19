@@ -22,6 +22,7 @@
 #include "cloudscoresmodel.h"
 
 #include "dataformatter.h"
+#include "types/datetime.h"
 
 #include "log.h"
 

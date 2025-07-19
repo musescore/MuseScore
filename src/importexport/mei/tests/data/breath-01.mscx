@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -21,7 +22,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -39,7 +41,8 @@
         </Instrument>
       </Part>
     <Part id="2">
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -57,150 +60,191 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>E_E</eid>
         <Text>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Breaths and caesuras</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure len="1/4">
+        <eid>I_I</eid>
         <voice>
           <Clef>
             <concertClefType>C3</concertClefType>
             <transposingClefType>C3</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>J_J</eid>
             </Clef>
           <TimeSig>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>L_L</eid>
             <BeamMode>auto</BeamMode>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <voice>
           <Chord>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>O_O</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>breathMarkComma</symbol>
+            <eid>P_P</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>R_R</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>T_T</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>V_V</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>breathMarkUpbow</symbol>
+            <eid>W_W</eid>
             <placement>below</placement>
             </Breath>
           </voice>
         </Measure>
       <Measure>
+        <eid>X_X</eid>
         <voice>
           <Chord>
+            <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>caesuraCurved</symbol>
+            <eid>a_a</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>c_c</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>caesura</symbol>
+            <eid>d_d</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>f_f</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>g_g</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>h_h</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>caesuraShort</symbol>
+            <eid>i_i</eid>
             <placement>below</placement>
             </Breath>
           </voice>
         </Measure>
       <Measure>
+        <eid>j_j</eid>
         <voice>
           <Chord>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>l_l</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>m_m</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>n_n</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>chantCaesura</symbol>
+            <eid>o_o</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>p_p</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>q_q</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>r_r</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>s_s</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
@@ -208,57 +252,72 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>t_t</eid>
         <voice>
           <TimeSig>
+            <eid>u_u</eid>
             <sigN>6</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Chord>
+            <eid>v_v</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>w_w</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>chantCaesura</symbol>
+            <eid>x_x</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>y_y</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>z_z</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>caesuraThick</symbol>
+            <eid>0_0</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>1_1</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>2_2</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>caesuraThick</symbol>
+            <eid>3_3</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>4_4</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>5_5</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>caesuraThick</symbol>
+            <eid>6_6</eid>
             <placement>below</placement>
             </Breath>
           <BarLine>
             <subtype>end</subtype>
+            <eid>7_7</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -270,12 +329,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>8_8</eid>
             </Clef>
           <TimeSig>
+            <eid>9_9</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>+_+</eid>
             <BeamMode>auto</BeamMode>
             <durationType>quarter</durationType>
             </Rest>
@@ -284,19 +346,24 @@
       <Measure>
         <voice>
           <Chord>
+            <eid>/_/</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>AB_AB</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>breathMarkComma</symbol>
+            <eid>BB_BB</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>CB_CB</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>DB_DB</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
@@ -306,19 +373,24 @@
       <Measure>
         <voice>
           <Chord>
+            <eid>EB_EB</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>FB_FB</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>caesura</symbol>
+            <eid>GB_GB</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>HB_HB</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>IB_IB</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
@@ -328,15 +400,19 @@
       <Measure>
         <voice>
           <Chord>
+            <eid>JB_JB</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>KB_KB</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>LB_LB</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>MB_MB</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
@@ -346,31 +422,38 @@
       <Measure>
         <voice>
           <TimeSig>
+            <eid>NB_NB</eid>
             <sigN>6</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Chord>
+            <eid>OB_OB</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
+              <eid>PB_PB</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Breath>
             <symbol>caesuraThick</symbol>
+            <eid>QB_QB</eid>
             <placement>below</placement>
             </Breath>
           <Chord>
+            <eid>RB_RB</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
+              <eid>SB_SB</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>TB_TB</eid>
             </BarLine>
           </voice>
         </Measure>

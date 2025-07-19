@@ -47,9 +47,9 @@ std::string MuseSamplerModule::moduleName() const
 
 void MuseSamplerModule::registerExports()
 {
-    m_configuration = std::make_shared<MuseSamplerConfiguration>();
-    m_actionController = std::make_shared<MuseSamplerActionController>();
-    m_resolver = std::make_shared<MuseSamplerResolver>();
+    m_configuration = std::make_shared<MuseSamplerConfiguration>(iocContext());
+    m_actionController = std::make_shared<MuseSamplerActionController>(iocContext());
+    m_resolver = std::make_shared<MuseSamplerResolver>(iocContext());
 
     ioc()->registerExport<IMuseSamplerConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IMuseSamplerInfo>(moduleName(), m_resolver);
@@ -76,12 +76,11 @@ void MuseSamplerModule::onInit(const IApplication::RunMode& mode)
     }
 
     m_configuration->init();
-    m_actionController->init();
     m_resolver->init();
+    m_actionController->init(m_resolver);
 
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("musesampler", m_configuration->userLibraryPath());
-        pr->reg("musesampler fallback", m_configuration->fallbackLibraryPath());
+        pr->reg("musesampler", m_configuration->libraryPath());
     }
 }

@@ -37,8 +37,13 @@ namespace muse::audio::synth  {
 class SynthResolver;
 }
 
+namespace muse::audio::worker  {
+class WorkerPlayback;
+}
+
 namespace muse::audio {
 class AudioConfiguration;
+class AudioEngine;
 class AudioThread;
 class AudioBuffer;
 class AudioOutputDeviceController;
@@ -58,7 +63,6 @@ public:
     void registerUiTypes() override;
     void resolveImports() override;
     void onInit(const IApplication::RunMode& mode) override;
-    void onDelayedInit() override;
     void onDeinit() override;
     void onDestroy() override;
 
@@ -67,6 +71,7 @@ private:
     void setupAudioWorker(const IAudioDriver::Spec& activeSpec);
 
     std::shared_ptr<AudioConfiguration> m_configuration;
+    std::shared_ptr<AudioEngine> m_audioEngine;
     std::shared_ptr<AudioThread> m_audioWorker;
     std::shared_ptr<AudioBuffer> m_audioBuffer;
     std::shared_ptr<AudioOutputDeviceController> m_audioOutputController;
@@ -74,12 +79,10 @@ private:
     std::shared_ptr<fx::FxResolver> m_fxResolver;
     std::shared_ptr<synth::SynthResolver> m_synthResolver;
 
-    std::shared_ptr<Playback> m_playbackFacade;
+    std::shared_ptr<Playback> m_mainPlayback; // facade
+    std::shared_ptr<worker::WorkerPlayback> m_workerPlayback;
 
     std::shared_ptr<SoundFontRepository> m_soundFontRepository;
-
-    std::shared_ptr<KnownAudioPluginsRegister> m_knownAudioPluginsRegister;
-    std::shared_ptr<RegisterAudioPluginsScenario> m_registerAudioPluginsScenario;
 
     std::shared_ptr<IAudioDriver> m_audioDriver;
 };

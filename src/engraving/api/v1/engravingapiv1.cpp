@@ -61,13 +61,13 @@ void EngravingApiV1::setup(QJSValue globalObj)
 
     QJSValue self = engine()->newQObject(this);
 
-    static QSet<QString> ignote = { "objectName", "objectNameChanged" };
+    static const QSet<QString> ignore = { "objectName", "objectNameChanged" };
 
     QJSValueIterator it(self);
     while (it.hasNext()) {
         it.next();
 
-        if (ignote.contains(it.name())) {
+        if (ignore.contains(it.name())) {
             continue;
         }
 

@@ -36,6 +36,10 @@ Rectangle {
 
     visible: false
 
+    Component.onCompleted: {
+        runModel.init()
+    }
+
     function run(path) {
         root.visible = true
 

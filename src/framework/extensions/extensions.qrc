@@ -8,5 +8,10 @@
         <file>qml/Muse/Extensions/internal/resources/placeholder.png</file>
         <file>qml/Muse/Extensions/internal/ExtensionItem.qml</file>
         <file>qml/Muse/Extensions/internal/ExtensionsListView.qml</file>
+        <file>api/MuseApi/Extensions/ExtensionBlank.qml</file>
+        <file>api/MuseApi/Extensions/qmldir</file>
+        <file>qml/Muse/Extensions/ExtensionsApiDumpDialog.qml</file>
+        <file>qml/Muse/Extensions/ExtensionsApiDump.qml</file>
+        <file>qml/Muse/Extensions/ExtensionsToolBar.qml</file>
     </qresource>
 </RCC>

@@ -323,9 +323,10 @@ void TextLineSettingsModel::setPossibleEndHookTypes(const QList<HookTypeInfo>& t
     m_possibleEndHookTypes = hookTypesToObjList(types);
 }
 
-void TextLineSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
+void TextLineSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& styleIdSet)
 {
     loadProperties(changedPropertyIdSet);
+    InspectorModelWithVoiceAndPositionOptions::onNotationChanged(changedPropertyIdSet, styleIdSet);
 }
 
 void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)

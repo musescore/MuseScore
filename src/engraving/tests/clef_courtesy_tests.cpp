@@ -55,7 +55,7 @@ static void dropClef(EngravingItem* m, ClefType t)
     EditData dropData(0);
     dropData.pos = m->pagePos();
     dropData.dropElement = clef;
-    m->score()->startCmd();
+    m->score()->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
     if (m->isMeasure()) {
         toMeasure(m)->drop(dropData);
     } else {
@@ -108,7 +108,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy01)
     EXPECT_TRUE(seg) << "No SegClef in measure 4.";
 
     clef = static_cast<Clef*>(seg->element(0));
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
     clef->undoChangeProperty(Pid::SHOW_COURTESY, false);
     Clef* otherClef = clef->otherClef();
     if (otherClef) {
@@ -318,7 +318,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
     seg = m1->findSegment(SegmentType::HeaderClef, m1->tick());
     EXPECT_TRUE(seg) << "No SegClef in measure 4.";
     clef = toClef(seg->element(0));
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
     clef->undoChangeProperty(Pid::SHOW_COURTESY, false);
     Clef* otherClef = clef->otherClef();
     if (otherClef) {
@@ -350,7 +350,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
     clef = toClef(seg->element(4));
     EXPECT_TRUE(clef) << "No Clef in measure 8, track 4.";
     dropClef(clef, ClefType::G8_VA);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
     clef->undoChangeProperty(Pid::SHOW_COURTESY, false);
     otherClef = clef->otherClef();
     if (otherClef) {
@@ -388,7 +388,7 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
     clef = toClef(seg->element(0));
     EXPECT_TRUE(clef) << "No Clef change in measure 8, track 0.";
     EXPECT_GT(clef->ldata()->bbox().width(), 0) << "Clef change in measure 8, track 0, is hidden.";
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Courtesy clef tests"));
     clef->undoChangeProperty(Pid::SHOW_COURTESY, false);
     otherClef = clef->otherClef();
     if (otherClef) {

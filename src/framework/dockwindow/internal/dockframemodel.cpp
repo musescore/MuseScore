@@ -25,6 +25,7 @@
 #include <QQuickItem>
 #include <QApplication>
 
+#include "private/TitleBar_p.h"
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 #include "uicomponents/view/abstractmenumodel.h"
 
@@ -54,7 +55,8 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
         return QObject::eventFilter(watched, event);
     }
 
-    if (propertyChangeEvent->propertyName() == CONTEXT_MENU_MODEL_PROPERTY) {
+    if (propertyChangeEvent->propertyName() == CONTEXT_MENU_MODEL_PROPERTY
+        || propertyChangeEvent->propertyName() == TOOLBAR_COMPONENT_PROPERTY) {
         emit tabsChanged();
 
         if (watched == currentDockWidget()) {
@@ -78,7 +80,7 @@ QVariantList DockFrameModel::tabs() const
 {
     QVariantList result;
 
-    if (!m_frame || m_frame->hasSingleDockWidget()) {
+    if (!m_frame) {
         return result;
     }
 
@@ -86,6 +88,7 @@ QVariantList DockFrameModel::tabs() const
         QVariantMap tab;
         tab["title"] = dock->title();
         tab[CONTEXT_MENU_MODEL_PROPERTY] = dock->property(CONTEXT_MENU_MODEL_PROPERTY);
+        tab[TOOLBAR_COMPONENT_PROPERTY] = dock->property(TOOLBAR_COMPONENT_PROPERTY);
 
         result << tab;
     }
@@ -93,9 +96,14 @@ QVariantList DockFrameModel::tabs() const
     return result;
 }
 
-bool DockFrameModel::titleBarVisible() const
+QQmlComponent* DockFrameModel::titleBar() const
 {
-    return m_titleBarVisible;
+    return m_titleBar;
+}
+
+bool DockFrameModel::titleBarAllowed() const
+{
+    return m_titleBarAllowed;
 }
 
 bool DockFrameModel::isHorizontalPanel() const
@@ -130,7 +138,7 @@ void DockFrameModel::listenChangesInFrame()
 
         auto allDocks = m_frame->dockWidgets();
         if (allDocks.isEmpty()) {
-            setTitleBarVisible(false);
+            setTitleBarAllowed(false);
             return;
         }
 
@@ -139,8 +147,10 @@ void DockFrameModel::listenChangesInFrame()
                                  && (properties.location == Location::Top || properties.location == Location::Bottom);
         setIsHorizontalPanel(isHorizontalPanel);
 
-        bool visible = (allDocks.size() == 1) && (properties.type == DockType::Panel) && (properties.floatable || properties.closable);
-        setTitleBarVisible(visible);
+        updateTitleBar();
+
+        bool titleBarAllowed = (properties.type == DockType::Panel) && (properties.floatable || properties.closable);
+        setTitleBarAllowed(titleBarAllowed);
 
         updateNavigationSection();
     });
@@ -152,14 +162,14 @@ void DockFrameModel::listenChangesInFrame()
     });
 }
 
-void DockFrameModel::setTitleBarVisible(bool visible)
+void DockFrameModel::setTitleBarAllowed(bool allowed)
 {
-    if (visible == m_titleBarVisible) {
+    if (allowed == m_titleBarAllowed) {
         return;
     }
 
-    m_titleBarVisible = visible;
-    emit titleBarVisibleChanged(visible);
+    m_titleBarAllowed = allowed;
+    emit titleBarAllowedChanged(allowed);
 }
 
 void DockFrameModel::setIsHorizontalPanel(bool is)
@@ -187,6 +197,21 @@ void DockFrameModel::updateNavigationSection()
     }
 }
 
+QQmlComponent* DockFrameModel::currentTitleBar() const
+{
+    QQmlComponent* titleBar = currentDockProperty(TITLEBAR_PROPERTY).value<QQmlComponent*>();
+    return titleBar;
+}
+
+void DockFrameModel::updateTitleBar()
+{
+    QQmlComponent* tb = currentTitleBar();
+    if (m_titleBar != tb) {
+        m_titleBar = tb;
+        emit titleBarChanged();
+    }
+}
+
 QObject* DockFrameModel::navigationSection() const
 {
     return m_navigationSection;
@@ -201,6 +226,11 @@ QString DockFrameModel::currentDockUniqueName() const
 QVariant DockFrameModel::currentDockContextMenuModel() const
 {
     return currentDockProperty(CONTEXT_MENU_MODEL_PROPERTY);
+}
+
+QVariant DockFrameModel::currentDockToolbarComponent() const
+{
+    return currentDockProperty(TOOLBAR_COMPONENT_PROPERTY);
 }
 
 bool DockFrameModel::highlightingVisible() const

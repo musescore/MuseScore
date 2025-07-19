@@ -40,7 +40,7 @@ function get_staged_files()
         if ! path_under_any_of_dirs "${file}" "${untidy_dirs[@]}"; then
             STAGED_FILES+=("${file}")
         fi
-    done < <(git diff -z --name-only --cached -- "${tidy_globs[@]}")
+    done < <(git diff -z --name-only --cached --diff-filter=d -- "${tidy_globs[@]}")
 
     NUM_STAGED="${#STAGED_FILES[@]}"
 }

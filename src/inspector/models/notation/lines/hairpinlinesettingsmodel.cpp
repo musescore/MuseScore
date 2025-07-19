@@ -50,13 +50,42 @@ HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepo
     createProperties();
 }
 
+PropertyItem* HairpinLineSettingsModel::snapBefore() const
+{
+    return m_snapBefore;
+}
+
+PropertyItem* HairpinLineSettingsModel::snapAfter() const
+{
+    return m_snapAfter;
+}
+
 void HairpinLineSettingsModel::createProperties()
 {
     TextLineSettingsModel::createProperties();
 
+    m_snapBefore = buildPropertyItem(mu::engraving::Pid::SNAP_BEFORE);
+    m_snapAfter = buildPropertyItem(mu::engraving::Pid::SNAP_AFTER);
+
     isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(false);
     placement()->setIsVisible(true);
+}
+
+void HairpinLineSettingsModel::loadProperties()
+{
+    TextLineSettingsModel::loadProperties();
+
+    loadPropertyItem(m_snapBefore);
+    loadPropertyItem(m_snapAfter);
+}
+
+void HairpinLineSettingsModel::resetProperties()
+{
+    TextLineSettingsModel::resetProperties();
+
+    m_snapBefore->resetToDefault();
+    m_snapAfter->resetToDefault();
 }
 
 void HairpinLineSettingsModel::requestElements()

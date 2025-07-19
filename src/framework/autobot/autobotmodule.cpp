@@ -46,16 +46,26 @@
 using namespace muse::autobot;
 using namespace muse::api;
 
+static void autobot_init_qrc()
+{
+    Q_INIT_RESOURCE(autobot);
+}
+
 std::string AutobotModule::moduleName() const
 {
     return "autobot";
 }
 
+void AutobotModule::registerResources()
+{
+    autobot_init_qrc();
+}
+
 void AutobotModule::registerExports()
 {
-    m_configuration = std::make_shared<AutobotConfiguration>();
+    m_configuration = std::make_shared<AutobotConfiguration>(iocContext());
     m_autobot = std::make_shared<Autobot>(iocContext());
-    m_actionsController = std::make_shared<AutobotActionsController>();
+    m_actionsController = std::make_shared<AutobotActionsController>(iocContext());
 
     ioc()->registerExport<IAutobot>(moduleName(), m_autobot);
     ioc()->registerExport<IAutobotConfiguration>(moduleName(), m_configuration);
@@ -68,8 +78,8 @@ void AutobotModule::resolveImports()
 {
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("muse://autobot/batchtests"), "Muse/Autobot/BatchTestsDialog.qml");
-        ir->registerQmlUri(Uri("muse://autobot/scripts"), "Muse/Autobot/ScriptsDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/autobot/batchtests"), "Muse/Autobot/BatchTestsDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/autobot/scripts"), "Muse/Autobot/ScriptsDialog.qml");
         ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse/Autobot/AutobotSelectFileDialog.qml");
     }
 

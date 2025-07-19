@@ -27,7 +27,7 @@ using namespace muse::draw;
 
 bool Font::g_disableFontMerging = false;
 
-Font::Font(const String& family, Type type)
+Font::Font(const FontFamily& family, Type type)
     : m_family(family), m_type(type)
 {
 }
@@ -47,13 +47,13 @@ bool Font::operator ==(const Font& other) const
            && m_hinting == other.m_hinting;
 }
 
-void Font::setFamily(const String& family, Type type)
+void Font::setFamily(const FontFamily& family, Type type)
 {
     m_family = family;
     m_type = type;
 }
 
-String Font::family() const
+Font::FontFamily Font::family() const
 {
     return m_family;
 }
@@ -161,7 +161,7 @@ void Font::setHinting(Hinting hinting)
 #ifndef NO_QT_SUPPORT
 QFont Font::toQFont() const
 {
-    QFont qf(family());
+    QFont qf(family().id());
 
     if (pointSizeF() > 0) {
         qf.setPointSizeF(pointSizeF());
@@ -183,7 +183,7 @@ QFont Font::toQFont() const
 
 Font Font::fromQFont(const QFont& qf, Font::Type type)
 {
-    Font f(qf.family(), type);
+    Font f(String::fromQString(qf.family()), type);
     if (qf.pointSizeF() > 0) {
         f.setPointSizeF(qf.pointSizeF());
     } else if (qf.pixelSize() > 0) {

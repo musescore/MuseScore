@@ -1,0 +1,1250 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="4.0">
+  <identification>
+    <encoding>
+      <software>Finale v27.4 for Windows</software>
+      <encoding-date>2024-06-13</encoding-date>
+      <supports attribute="new-system" element="print" type="yes" value="yes"/>
+      <supports attribute="new-page" element="print" type="yes" value="yes"/>
+      <supports element="accidental" type="yes"/>
+      <supports element="beam" type="yes"/>
+      <supports element="stem" type="yes"/>
+    </encoding>
+  </identification>
+  <defaults>
+    <scaling>
+      <millimeters>5.2493</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+    <page-layout>
+      <page-height>2323</page-height>
+      <page-width>1742</page-width>
+      <page-margins type="both">
+        <left-margin>97</left-margin>
+        <right-margin>97</right-margin>
+        <top-margin>97</top-margin>
+        <bottom-margin>97</bottom-margin>
+      </page-margins>
+    </page-layout>
+    <system-layout>
+      <system-margins>
+        <left-margin>105</left-margin>
+        <right-margin>0</right-margin>
+      </system-margins>
+      <system-distance>110</system-distance>
+      <top-system-distance>72</top-system-distance>
+    </system-layout>
+    <staff-layout>
+      <staff-distance>60</staff-distance>
+    </staff-layout>
+    <appearance>
+      <line-width type="stem">0.957</line-width>
+      <line-width type="beam">5.0391</line-width>
+      <line-width type="staff">0.957</line-width>
+      <line-width type="light barline">0.957</line-width>
+      <line-width type="heavy barline">5.0391</line-width>
+      <line-width type="leger">0.957</line-width>
+      <line-width type="ending">0.957</line-width>
+      <line-width type="wedge">0.7487</line-width>
+      <line-width type="enclosure">0.7682</line-width>
+      <line-width type="tuplet bracket">0.7682</line-width>
+      <note-size type="grace">65</note-size>
+      <note-size type="cue">65</note-size>
+      <distance type="hyphen">20</distance>
+      <distance type="beam">7.5</distance>
+      <glyph type="percussion-clef">unpitchedPercussionClef1</glyph>
+    </appearance>
+    <music-font font-family="Leonardo II,engraved" font-size="14.9"/>
+    <word-font font-family="Times" font-size="7.4"/>
+  </defaults>
+  <part-list>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-8">bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="P1">
+      <part-name>Flute/Piccolo</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Flute/Piccolo</display-text>
+      </part-name-display>
+      <part-abbreviation>Fl./Picc.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Fl./Picc.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P1-I1">
+        <instrument-name>Grand Piano</instrument-name>
+        <instrument-sound>wind.flutes.flute</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P1-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P2">
+      <part-name>Oboe</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Oboe</display-text>
+      </part-name-display>
+      <part-abbreviation>Ob.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Ob.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P2-I1">
+        <instrument-name>Grand Piano</instrument-name>
+        <instrument-sound>wind.reed.oboe</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P2-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P3">
+      <part-name>Bassoon</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Bassoon</display-text>
+      </part-name-display>
+      <part-abbreviation>Bsn.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Bsn.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P3-I1">
+        <instrument-name>Grand Piano</instrument-name>
+        <instrument-sound>wind.reed.bassoon</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P3-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <part-group number="1" type="stop"/>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-8">bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="P4">
+      <part-name>Bb Clarinet 1</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Bb Clarinet 1</display-text>
+      </part-name-display>
+      <part-abbreviation>Cl. 1</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Cl. 1</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P4-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P4-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P5">
+      <part-name>Bb Clarinet 2, 3</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Bb Clarinet 2, 3</display-text>
+      </part-name-display>
+      <part-abbreviation>Cl. 2, 3</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Cl. 2, 3</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P5-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P5-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P6">
+      <part-name>Eb Alto Clarinet</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Eb Alto Clarinet</display-text>
+      </part-name-display>
+      <part-abbreviation>A. Cl.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">A. Cl.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P6-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P6-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P7">
+      <part-name>Bb Bass Clarinet</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Bb Bass Clarinet</display-text>
+      </part-name-display>
+      <part-abbreviation>Bs. Cl.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Bs. Cl.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P7-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P7-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <part-group number="1" type="stop"/>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-8">bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="P8">
+      <part-name>Eb Alto Sax. 1, 2</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Eb Alto Sax. 1, 2</display-text>
+      </part-name-display>
+      <part-abbreviation>A. Sx. 1, 2</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">A. Sx. 1, 2</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P8-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P8-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P9">
+      <part-name>Bb Tenor Sax.</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Bb Tenor Sax.</display-text>
+      </part-name-display>
+      <part-abbreviation>T. Sx.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">T. Sx.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P9-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P9-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P10">
+      <part-name>Eb Bari. Sax.</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Eb Bari. Sax.</display-text>
+      </part-name-display>
+      <part-abbreviation>B. Sx.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">B. Sx.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P10-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P10-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <part-group number="1" type="stop"/>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-8">bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="P11">
+      <part-name>Bb Trumpet 1</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Bb Trumpet 1</display-text>
+      </part-name-display>
+      <part-abbreviation>Tpt. 1</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Tpt. 1</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P11-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P11-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P12">
+      <part-name>Bb Trumpet 2, 3</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Bb Trumpet 2, 3</display-text>
+      </part-name-display>
+      <part-abbreviation>Tpt. 2, 3</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Tpt. 2, 3</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P12-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P12-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P13">
+      <part-name>F Horn 1, 2</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">F Horn 1, 2</display-text>
+      </part-name-display>
+      <part-abbreviation>Horn 1, 2</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Horn 1, 2</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P13-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P13-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <part-group number="1" type="stop"/>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-8">bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="P14">
+      <part-name>Trombone 1, 2</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Trombone 1, 2</display-text>
+      </part-name-display>
+      <part-abbreviation>Tbn. 1, 2</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Tbn. 1, 2</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P14-I1">
+        <instrument-name>Grand Piano</instrument-name>
+        <instrument-sound>brass.trombone</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P14-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P15">
+      <part-name>Baritone</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Baritone</display-text>
+      </part-name-display>
+      <part-abbreviation>Bar.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Bar.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P15-I1">
+        <instrument-name>Grand Piano</instrument-name>
+        <instrument-sound>voice.baritone</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P15-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P16">
+      <part-name>Tuba (String Bass)</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes" xml:space="preserve">Tuba
+(String Bass)</display-text>
+      </part-name-display>
+      <part-abbreviation>Tuba</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Tuba</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P16-I1">
+        <instrument-name>Grand Piano</instrument-name>
+        <instrument-sound>brass.tuba</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P16-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <part-group number="1" type="stop"/>
+    <part-group number="1" type="start">
+      <group-symbol default-x="-8">bracket</group-symbol>
+      <group-barline>yes</group-barline>
+    </part-group>
+    <score-part id="P17">
+      <part-name>Percussion 1</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Percussion 1</display-text>
+      </part-name-display>
+      <part-abbreviation>Perc. 1</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Perc. 1</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P17-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P17-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P18">
+      <part-name>Percussion 2</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Percussion 2</display-text>
+      </part-name-display>
+      <part-abbreviation>Perc. 2</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Perc. 2</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P18-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P18-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P19">
+      <part-name>Mallet Perc.</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Mallet Perc.</display-text>
+      </part-name-display>
+      <part-abbreviation>Mllt. Perc.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Mllt. Perc.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P19-I1">
+        <instrument-name>Grand Piano</instrument-name>
+      </score-instrument>
+      <midi-instrument id="P19-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <score-part id="P20">
+      <part-name>Timpani</part-name>
+      <part-name-display>
+        <display-text font-family="MetTimes">Timpani</display-text>
+      </part-name-display>
+      <part-abbreviation>Timp.</part-abbreviation>
+      <part-abbreviation-display>
+        <display-text font-family="MetTimes">Timp.</display-text>
+      </part-abbreviation-display>
+      <group>score</group>
+      <score-instrument id="P20-I1">
+        <instrument-name>Grand Piano</instrument-name>
+        <instrument-sound>drum.timpani</instrument-sound>
+      </score-instrument>
+      <midi-instrument id="P20-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>80</volume>
+        <pan>0</pan>
+      </midi-instrument>
+    </score-part>
+    <part-group number="1" type="stop"/>
+  </part-list>
+  <!--=========================================================-->
+  
+  <part id="P1">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+    <print>
+      <system-layout>
+        <system-margins>
+          <left-margin>50</left-margin>
+          <right-margin>831.82</right-margin>
+        </system-margins>
+        <top-system-distance>170</top-system-distance>
+      </system-layout>
+    </print>
+    <attributes>
+      <divisions>1</divisions>
+      <key>
+        <fifths>0</fifths>
+      </key>
+      <time>
+        <beats>4</beats>
+        <beat-type>4</beat-type>
+      </time>
+      <clef>
+        <sign>G</sign>
+        <line>2</line>
+      </clef>
+    </attributes>
+    <note default-x="91.72" default-y="-10">
+      <rest measure="yes"/>
+      <duration>4</duration>
+      <voice>1</voice>
+    </note>
+    <barline location="right">
+      <bar-style>light-heavy</bar-style>
+    </barline>
+  </measure>
+  </part>
+  <!--=========================================================-->
+  
+  <part id="P2">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+    <print>
+      <system-layout>
+        <system-margins>
+          <left-margin>50</left-margin>
+          <right-margin>831.82</right-margin>
+        </system-margins>
+        <top-system-distance>170</top-system-distance>
+      </system-layout>
+    </print>
+    <attributes>
+      <divisions>1</divisions>
+      <key>
+        <fifths>0</fifths>
+      </key>
+      <time>
+        <beats>4</beats>
+        <beat-type>4</beat-type>
+      </time>
+      <clef>
+        <sign>G</sign>
+        <line>2</line>
+      </clef>
+    </attributes>
+    <note default-x="91.72" default-y="-10">
+      <rest measure="yes"/>
+      <duration>4</duration>
+      <voice>1</voice>
+    </note>
+    <barline location="right">
+      <bar-style>light-heavy</bar-style>
+    </barline>
+  </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P3">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+    <print>
+      <system-layout>
+        <system-margins>
+          <left-margin>50</left-margin>
+          <right-margin>831.82</right-margin>
+        </system-margins>
+        <top-system-distance>170</top-system-distance>
+      </system-layout>
+    </print>
+    <attributes>
+      <divisions>1</divisions>
+      <key>
+        <fifths>0</fifths>
+      </key>
+      <time>
+        <beats>4</beats>
+        <beat-type>4</beat-type>
+      </time>
+      <clef>
+        <sign>G</sign>
+        <line>2</line>
+      </clef>
+    </attributes>
+    <note default-x="91.72" default-y="-10">
+      <rest measure="yes"/>
+      <duration>4</duration>
+      <voice>1</voice>
+    </note>
+    <barline location="right">
+      <bar-style>light-heavy</bar-style>
+    </barline>
+  </measure>
+  </part>
+  <!--=========================================================-->
+  
+  <part id="P4">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+    <print>
+      <system-layout>
+        <system-margins>
+          <left-margin>50</left-margin>
+          <right-margin>831.82</right-margin>
+        </system-margins>
+        <top-system-distance>170</top-system-distance>
+      </system-layout>
+    </print>
+    <attributes>
+      <divisions>1</divisions>
+      <key>
+        <fifths>0</fifths>
+      </key>
+      <time>
+        <beats>4</beats>
+        <beat-type>4</beat-type>
+      </time>
+      <clef>
+        <sign>G</sign>
+        <line>2</line>
+      </clef>
+    </attributes>
+    <note default-x="91.72" default-y="-10">
+      <rest measure="yes"/>
+      <duration>4</duration>
+      <voice>1</voice>
+    </note>
+    <barline location="right">
+      <bar-style>light-heavy</bar-style>
+    </barline>
+  </measure>
+
+  </part>
+  <!--=========================================================-->
+  
+  <part id="P5">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+    <print>
+      <system-layout>
+        <system-margins>
+          <left-margin>50</left-margin>
+          <right-margin>831.82</right-margin>
+        </system-margins>
+        <top-system-distance>170</top-system-distance>
+      </system-layout>
+    </print>
+    <attributes>
+      <divisions>1</divisions>
+      <key>
+        <fifths>0</fifths>
+      </key>
+      <time>
+        <beats>4</beats>
+        <beat-type>4</beat-type>
+      </time>
+      <clef>
+        <sign>G</sign>
+        <line>2</line>
+      </clef>
+    </attributes>
+    <note default-x="91.72" default-y="-10">
+      <rest measure="yes"/>
+      <duration>4</duration>
+      <voice>1</voice>
+    </note>
+    <barline location="right">
+      <bar-style>light-heavy</bar-style>
+    </barline>
+  </measure>
+  </part>
+  <!--=========================================================-->
+  
+  <part id="P6">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+    <print>
+      <system-layout>
+        <system-margins>
+          <left-margin>50</left-margin>
+          <right-margin>831.82</right-margin>
+        </system-margins>
+        <top-system-distance>170</top-system-distance>
+      </system-layout>
+    </print>
+    <attributes>
+      <divisions>1</divisions>
+      <key>
+        <fifths>0</fifths>
+      </key>
+      <time>
+        <beats>4</beats>
+        <beat-type>4</beat-type>
+      </time>
+      <clef>
+        <sign>G</sign>
+        <line>2</line>
+      </clef>
+    </attributes>
+    <note default-x="91.72" default-y="-10">
+      <rest measure="yes"/>
+      <duration>4</duration>
+      <voice>1</voice>
+    </note>
+    <barline location="right">
+      <bar-style>light-heavy</bar-style>
+    </barline>
+  </measure>
+  </part>
+  <!--=========================================================-->
+  
+  <part id="P7">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+    <print>
+      <system-layout>
+        <system-margins>
+          <left-margin>50</left-margin>
+          <right-margin>831.82</right-margin>
+        </system-margins>
+        <top-system-distance>170</top-system-distance>
+      </system-layout>
+    </print>
+    <attributes>
+      <divisions>1</divisions>
+      <key>
+        <fifths>0</fifths>
+      </key>
+      <time>
+        <beats>4</beats>
+        <beat-type>4</beat-type>
+      </time>
+      <clef>
+        <sign>G</sign>
+        <line>2</line>
+      </clef>
+    </attributes>
+    <note default-x="91.72" default-y="-10">
+      <rest measure="yes"/>
+      <duration>4</duration>
+      <voice>1</voice>
+    </note>
+    <barline location="right">
+      <bar-style>light-heavy</bar-style>
+    </barline>
+  </measure>
+  </part>
+  <!--=========================================================-->
+  
+  <part id="P8">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P9">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P10">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P11">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P12">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P13">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P14">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P15">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P16">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P17">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P18">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P19">
+    <?SmartMusic maxVoice=2?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+  <part id="P20">
+    <?SmartMusic maxVoice=1?>
+    <measure number="1" width="147.22">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>50</left-margin>
+            <right-margin>831.82</right-margin>
+          </system-margins>
+          <top-system-distance>170</top-system-distance>
+        </system-layout>
+      </print>
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note default-x="91.72" default-y="-10">
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>

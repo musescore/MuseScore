@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONSMODULE_H
-#define MUSE_EXTENSIONS_EXTENSIONSMODULE_H
+#pragma once
 
 #include <memory>
 #include <string>
@@ -31,6 +30,7 @@ namespace muse::extensions {
 class ExtensionsProvider;
 class ExtensionsActionController;
 class ExtensionsConfiguration;
+class ExtensionsExecPointsRegister;
 class ExtensionsModule : public modularity::IModuleSetup
 {
 public:
@@ -49,7 +49,7 @@ private:
     std::shared_ptr<ExtensionsConfiguration> m_configuration;
     std::shared_ptr<ExtensionsProvider> m_provider;
     std::shared_ptr<ExtensionsActionController> m_actionController;
+    std::shared_ptr<ExtensionsExecPointsRegister> m_execPointsRegister;
+    bool m_extensionsLoaded = false;
 };
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONSMODULE_H

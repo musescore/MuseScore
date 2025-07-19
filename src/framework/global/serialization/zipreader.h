@@ -24,8 +24,9 @@
 
 #include <vector>
 
-#include "io/path.h"
-#include "io/iodevice.h"
+#include "global/types/ret.h"
+#include "global/io/path.h"
+#include "global/io/iodevice.h"
 
 namespace muse {
 class ZipReader
@@ -59,6 +60,13 @@ private:
     struct Impl;
     Impl* m_impl = nullptr;
     io::path_t m_filePath;
+};
+
+class ZipUnpack
+{
+public:
+
+    Ret unpack(const io::path_t& zipPath, const io::path_t& dirPath);
 };
 }
 

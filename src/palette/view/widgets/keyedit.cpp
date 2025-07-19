@@ -128,9 +128,10 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 
     RectF background = RectF::fromQRectF(imatrix.mapRect(QRectF(0, 0, ww, wh)));
-    painter.fillRect(background, muse::draw::Color::WHITE);
+    painter.fillRect(background, notationConfiguration()->foregroundColor());
 
-    muse::draw::Pen pen(engravingConfiguration()->defaultColor());
+    muse::draw::Pen pen(engravingConfiguration()->scoreInversionEnabled() ? engravingConfiguration()->scoreInversionColor()
+                        : engravingConfiguration()->defaultColor());
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * gpaletteScore->style().spatium());
     painter.setPen(pen);
 
@@ -167,7 +168,7 @@ void KeyCanvas::mousePressEvent(QMouseEvent* event)
     startMove = imatrix.map(QPointF(event->pos() - base));
     moveElement = 0;
     foreach (Accidental* a, accidentals) {
-        QRectF r = a->abbox().toQRectF();
+        QRectF r = a->pageBoundingRect().toQRectF();
         if (r.contains(startMove)) {
             a->setSelected(true);
             moveElement = a;

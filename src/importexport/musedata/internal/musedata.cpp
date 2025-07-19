@@ -22,27 +22,27 @@
 
 #include "musedata.h"
 
-#include "engraving/dom/factory.h"
-#include "engraving/dom/masterscore.h"
-#include "engraving/dom/part.h"
-#include "engraving/dom/staff.h"
-#include "engraving/dom/barline.h"
-#include "engraving/dom/clef.h"
-#include "engraving/dom/key.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/chord.h"
-#include "engraving/dom/rest.h"
-#include "engraving/dom/text.h"
-#include "engraving/dom/bracket.h"
-#include "engraving/dom/tuplet.h"
-#include "engraving/dom/slur.h"
-#include "engraving/dom/dynamic.h"
-#include "engraving/dom/lyrics.h"
+#include <QFile>
+
 #include "engraving/dom/articulation.h"
-#include "engraving/dom/sig.h"
+#include "engraving/dom/barline.h"
+#include "engraving/dom/bracket.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/clef.h"
+#include "engraving/dom/dynamic.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/key.h"
+#include "engraving/dom/lyrics.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
-#include "engraving/dom/timesig.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/slur.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/timesig.h"
+#include "engraving/dom/tuplet.h"
 
 #include "log.h"
 
@@ -208,7 +208,7 @@ void MuseData::readChord(Part*, QStringView s)
 //   openSlur
 //---------------------------------------------------------
 
-void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
+void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc, EngravingItem* startChord)
 {
     staff_idx_t staffIdx = staff->idx();
     if (slur[idx]) {
@@ -218,6 +218,7 @@ void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
     slur[idx] = Factory::createSlur(score->dummy());
     slur[idx]->setTick(tick);
     slur[idx]->setTrack(staffIdx * VOICES + voc);
+    slur[idx]->setStartElement(startChord);
     score->addElement(slur[idx]);
 }
 
@@ -225,12 +226,13 @@ void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
 //   closeSlur
 //---------------------------------------------------------
 
-void MuseData::closeSlur(int idx, const Fraction& tick, Staff* staff, int voc)
+void MuseData::closeSlur(int idx, const Fraction& tick, Staff* staff, int voc, engraving::EngravingItem* endChord)
 {
     staff_idx_t staffIdx = staff->idx();
     if (slur[idx]) {
         slur[idx]->setTick2(tick);
         slur[idx]->setTrack2(staffIdx * VOICES + voc);
+        slur[idx]->setEndElement(endChord);
         slur[idx] = 0;
     } else {
         LOGD("%06d: slur %d not open", tick.ticks(), idx + 1);
@@ -356,21 +358,21 @@ void MuseData::readNote(Part* part, QStringView s)
     QStringView an = s.mid(31, 11);
     for (int i = 0; i < an.size(); ++i) {
         if (an[i] == '(') {
-            openSlur(0, tick, staff, voice);
+            openSlur(0, tick, staff, voice, chord);
         } else if (an[i] == ')') {
-            closeSlur(0, tick, staff, voice);
+            closeSlur(0, tick, staff, voice, chord);
         } else if (an[i] == '[') {
-            openSlur(1, tick, staff, voice);
+            openSlur(1, tick, staff, voice, chord);
         } else if (an[i] == ']') {
-            closeSlur(1, tick, staff, voice);
+            closeSlur(1, tick, staff, voice, chord);
         } else if (an[i] == '{') {
-            openSlur(2, tick, staff, voice);
+            openSlur(2, tick, staff, voice, chord);
         } else if (an[i] == '}') {
-            closeSlur(2, tick, staff, voice);
+            closeSlur(2, tick, staff, voice, chord);
         } else if (an[i] == 'z') {
-            openSlur(3, tick, staff, voice);
+            openSlur(3, tick, staff, voice, chord);
         } else if (an[i] == 'x') {
-            closeSlur(3, tick, staff, voice);
+            closeSlur(3, tick, staff, voice, chord);
         } else if (an[i] == '.') {
             Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::articStaccatoAbove);
@@ -565,7 +567,7 @@ Measure* MuseData::createMeasure()
     Measure* mes  = Factory::createMeasure(score->dummy()->system());
     mes->setTick(curTick);
 
-    score->measures()->add(mes);
+    score->measures()->append(mes);
     return mes;
 }
 

@@ -46,8 +46,8 @@ using namespace mu::engraving;
 using namespace muse::draw;
 
 namespace mu::engraving {
-SlurSegment::SlurSegment(System* parent)
-    : SlurTieSegment(ElementType::SLUR_SEGMENT, parent)
+SlurSegment::SlurSegment(System* parent, ElementType type)
+    : SlurTieSegment(type, parent)
 {
 }
 
@@ -62,7 +62,6 @@ SlurSegment::SlurSegment(const SlurSegment& ss)
 
 static ChordRest* searchCR(Segment* segment, track_idx_t startTrack, track_idx_t endTrack)
 {
-    // for (Segment* s = segment; s; s = s->next1MM(SegmentType::ChordRest)) {
     for (Segment* s = segment; s; s = s->next(SegmentType::ChordRest)) {       // restrict search to measure
         if (startTrack > endTrack) {
             for (int t = static_cast<int>(startTrack) - 1; t >= static_cast<int>(endTrack); --t) {
@@ -83,7 +82,7 @@ static ChordRest* searchCR(Segment* segment, track_idx_t startTrack, track_idx_t
 
 bool SlurSegment::isEditAllowed(EditData& ed) const
 {
-    if (ed.key == Key_Home && !ed.modifiers) {
+    if (SlurTieSegment::isEditAllowed(ed)) {
         return true;
     }
 
@@ -116,21 +115,17 @@ bool SlurSegment::edit(EditData& ed)
         return false;
     }
 
-    Slur* sl = slur();
-
-    if (ed.key == Key_Home && !ed.modifiers) {
-        if (ed.hasCurrentGrip()) {
-            ups(ed.curGrip).off = PointF();
-            renderer()->layoutItem(sl);
-            triggerLayout();
-        }
+    if (SlurTieSegment::edit(ed)) {
         return true;
     }
 
-    ChordRest* cr = 0;
+    Slur* sl = slur();
+
+    ChordRest* cr = nullptr;
     ChordRest* e;
     ChordRest* e1;
-    if (ed.curGrip == Grip::START) {
+    const bool start = ed.curGrip == Grip::START;
+    if (start) {
         e  = sl->startCR();
         e1 = sl->endCR();
     } else {
@@ -138,10 +133,58 @@ bool SlurSegment::edit(EditData& ed)
         e1 = sl->startCR();
     }
 
+    const bool altMod = ed.modifiers & AltModifier;
+    const bool shiftMod = ed.modifiers & ShiftModifier;
+    const bool extendToBarLine = shiftMod && altMod;
+    const bool isPartialSlur = sl->isIncoming() || sl->isOutgoing();
+
+    ChordRestNavigateOptions options;
+    options.disableOverRepeats = true;
+
     if (ed.key == Key_Left) {
-        cr = prevChordRest(e);
+        if (extendToBarLine) {
+            const Measure* measure = e->measure();
+            if (start) {
+                cr = measure->firstChordRest(e->track());
+                if (!cr->hasPrecedingJumpItem()) {
+                    return false;
+                }
+                sl->undoSetIncoming(true);
+            } else if (e->hasFollowingJumpItem()) {
+                sl->undoSetOutgoing(false);
+            }
+        } else {
+            if (start && sl->isIncoming()) {
+                sl->undoSetIncoming(false);
+                cr = prevChordRest(e, options);
+            } else if (!start && sl->isOutgoing()) {
+                sl->undoSetOutgoing(false);
+            } else {
+                cr = prevChordRest(e, options);
+            }
+        }
     } else if (ed.key == Key_Right) {
-        cr = nextChordRest(e);
+        if (extendToBarLine) {
+            const Measure* measure = e->measure();
+            if (start && e->hasPrecedingJumpItem()) {
+                sl->undoSetIncoming(false);
+            } else if (!start) {
+                cr = measure->lastChordRest(e->track());
+                if (!cr->hasFollowingJumpItem()) {
+                    return false;
+                }
+                sl->undoSetOutgoing(true);
+            }
+        } else {
+            if (start && sl->isIncoming()) {
+                sl->undoSetIncoming(false);
+            } else if (!start && sl->isOutgoing()) {
+                sl->undoSetOutgoing(false);
+                cr = nextChordRest(e, options);
+            } else {
+                cr = nextChordRest(e, options);
+            }
+        }
     } else if (ed.key == Key_Up) {
         Part* part     = e->part();
         track_idx_t startTrack = part->startTrack();
@@ -155,7 +198,13 @@ bool SlurSegment::edit(EditData& ed)
     } else {
         return false;
     }
-    if (cr && cr != e1) {
+    if (cr && (cr != e1 || isPartialSlur)) {
+        if (cr->staff() != e->staff() && (cr->staffType()->isTabStaff() || e->staffType()->isTabStaff())) {
+            return false; // Cross-staff slurs don't make sense for TAB staves
+        }
+        if (cr->staff()->isLinked(e->staff())) {
+            return false; // Don't allow slur to cross into staff that's linked to this
+        }
         changeAnchor(ed, cr);
     }
     return true;
@@ -177,7 +226,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
     // save current start/end elements
     for (EngravingObject* e : spanner()->linkList()) {
         Spanner* sp = toSpanner(e);
-        score()->undoStack()->push1(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
+        score()->undoStack()->pushWithoutPerforming(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
     }
 
     if (ed.curGrip == Grip::START) {
@@ -202,37 +251,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
     }
 
     // update start/end elements (which could be grace notes)
-    for (EngravingObject* lsp : spanner()->linkList()) {
-        Spanner* sp = static_cast<Spanner*>(lsp);
-        if (sp == spanner()) {
-            score()->undo(new ChangeSpannerElements(sp, scr, ecr));
-        } else {
-            EngravingItem* se = 0;
-            EngravingItem* ee = 0;
-            if (scr) {
-                std::list<EngravingObject*> sel = scr->linkList();
-                for (EngravingObject* lcr : sel) {
-                    EngravingItem* le = toEngravingItem(lcr);
-                    if (le->score() == sp->score() && le->track() == sp->track()) {
-                        se = le;
-                        break;
-                    }
-                }
-            }
-            if (ecr) {
-                std::list<EngravingObject*> sel = ecr->linkList();
-                for (EngravingObject* lcr : sel) {
-                    EngravingItem* le = toEngravingItem(lcr);
-                    if (le->score() == sp->score() && le->track() == sp->track2()) {
-                        ee = le;
-                        break;
-                    }
-                }
-            }
-            score()->undo(new ChangeStartEndSpanner(sp, se, ee));
-            renderer()->layoutItem(sp);
-        }
-    }
+    slur()->undoChangeStartEndElements(scr, ecr);
 
     const size_t segments  = spanner()->spannerSegments().size();
     ups(ed.curGrip).off = PointF();
@@ -248,7 +267,11 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 
 void SlurSegment::editDrag(EditData& ed)
 {
-    Grip g     = ed.curGrip;
+    Grip g = ed.curGrip;
+    if (g == Grip::NO_GRIP) {
+        return;
+    }
+
     ups(g).off += ed.delta;
 
     PointF delta;
@@ -296,13 +319,9 @@ void SlurSegment::editDrag(EditData& ed)
     case Grip::GRIPS:
         break;
     }
-    renderer()->computeBezier(this, delta);
 
-    System* startSys = slur()->startCR()->measure()->system();
-    System* endSys = slur()->endCR()->measure()->system();
-    if (startSys && endSys && startSys == endSys) {
-        renderer()->layoutItem(slur());
-    }
+    renderer()->computeBezier(this, delta);
+    triggerLayout();
 }
 
 //---------------------------------------------------------
@@ -324,101 +343,41 @@ bool SlurSegment::isEndPointsEdited() const
     return !(m_ups[int(Grip::START)].off.isNull() && m_ups[int(Grip::END)].off.isNull());
 }
 
+double SlurSegment::endWidth() const
+{
+    return style().styleMM(Sid::slurEndWidth);
+}
+
+double SlurSegment::midWidth() const
+{
+    return style().styleMM(Sid::slurMidWidth);
+}
+
+double SlurSegment::dottedWidth() const
+{
+    return style().styleMM(Sid::slurDottedWidth);
+}
+
+Color SlurSegment::curColor() const
+{
+    return EngravingItem::curColor(getProperty(Pid::VISIBLE).toBool(), getProperty(Pid::COLOR).value<Color>());
+}
+
 Slur::Slur(const Slur& s)
     : SlurTie(s)
 {
-    m_sourceStemArrangement = s.m_sourceStemArrangement;
-    m_connectedElement = s.m_connectedElement;
-}
-
-//---------------------------------------------------------
-//   slurPos
-//    Calculate position of start- and endpoint of slur
-//    relative to System() position.
-//---------------------------------------------------------
-
-void Slur::slurPosChord(SlurTiePos* sp)
-{
-    Chord* stChord;
-    Chord* enChord;
-    if (startChord()->isGraceAfter()) {      // grace notes after, coming in reverse order
-        stChord = endChord();
-        enChord = startChord();
-        m_up = false;
-    } else {
-        stChord = startChord();
-        enChord = endChord();
-    }
-    Note* _startNote = stChord->downNote();
-    Note* _endNote   = enChord->downNote();
-    double hw         = _startNote->bboxRightPos();
-    double __up       = m_up ? -1.0 : 1.0;
-    double _spatium = spatium();
-
-    Measure* measure = endChord()->measure();
-    sp->system1 = measure->system();
-    if (!sp->system1) {               // DEBUG
-        LOGD("no system1");
-        return;
-    }
-    assert(sp->system1);
-    sp->system2 = sp->system1;
-    PointF pp(sp->system1->pagePos());
-
-    double xo;
-    double yo;
-
-    //------p1
-    if (m_up) {
-        xo = _startNote->x() + hw * 1.12;
-        yo = _startNote->pos().y() + hw * .3 * __up;
-    } else {
-        xo = _startNote->x() + hw * 0.4;
-        yo = _startNote->pos().y() + _spatium * .75 * __up;
-    }
-    sp->p1 = stChord->pagePos() - pp + PointF(xo, yo);
-
-    //------p2
-    if ((enChord->notes().size() > 1) || (enChord->stem() && !enChord->up() && !m_up)) {
-        xo = _endNote->x() - hw * 0.12;
-        yo = _endNote->pos().y() + hw * .3 * __up;
-    } else {
-        xo = _endNote->x() + hw * 0.15;
-        yo = _endNote->pos().y() + _spatium * .75 * __up;
-    }
-    sp->p2 = enChord->pagePos() - pp + PointF(xo, yo);
+    _connectedElement = s._connectedElement;
+    _partialSpannerDirection = s._partialSpannerDirection;
 }
 
 //---------------------------------------------------------
 //   Slur
 //---------------------------------------------------------
 
-Slur::Slur(EngravingItem* parent)
-    : SlurTie(ElementType::SLUR, parent)
+Slur::Slur(EngravingItem* parent, ElementType type)
+    : SlurTie(type, parent)
 {
     setAnchor(Anchor::CHORD);
-}
-
-//---------------------------------------------------------
-//   calcStemArrangement
-//---------------------------------------------------------
-
-int Slur::calcStemArrangement(EngravingItem* start, EngravingItem* end)
-{
-    return (start && start->isChord() && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
-           + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
-}
-
-//---------------------------------------------------------
-//   directionMixture
-//---------------------------------------------------------
-
-bool Slur::isDirectionMixture(Chord* c1, Chord* c2)
-{
-    UNUSED(c1);
-    UNUSED(c2);
-    UNREACHABLE;
-    return false;
 }
 
 double Slur::scalingFactor() const
@@ -445,6 +404,121 @@ double Slur::scalingFactor() const
     return 0.5 * (startC->intrinsicMag() + endC->intrinsicMag());
 }
 
+void Slur::undoSetIncoming(bool incoming)
+{
+    if (incoming == isIncoming()) {
+        return;
+    }
+
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, calcIncomingDirection(incoming), PropertyFlags::UNSTYLED);
+}
+
+void Slur::undoSetOutgoing(bool outgoing)
+{
+    if (outgoing == isOutgoing()) {
+        return;
+    }
+
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, calcOutgoingDirection(outgoing), PropertyFlags::UNSTYLED);
+}
+
+void Slur::setIncoming(bool incoming)
+{
+    if (incoming == isIncoming()) {
+        return;
+    }
+
+    _partialSpannerDirection = calcIncomingDirection(incoming);
+}
+
+void Slur::setOutgoing(bool outgoing)
+{
+    if (outgoing == isOutgoing()) {
+        return;
+    }
+
+    _partialSpannerDirection = calcOutgoingDirection(outgoing);
+}
+
+PartialSpannerDirection Slur::calcIncomingDirection(bool incoming)
+{
+    PartialSpannerDirection dir = PartialSpannerDirection::INCOMING;
+    if (incoming) {
+        SlurSegment* firstSeg = nsegments() > 0 ? frontSegment() : nullptr;
+        if (firstSeg) {
+            firstSeg->setSlurOffset(Grip::START, PointF(0, 0));
+        }
+        dir = _partialSpannerDirection
+              == PartialSpannerDirection::OUTGOING ? PartialSpannerDirection::BOTH : PartialSpannerDirection::INCOMING;
+    } else {
+        dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::OUTGOING : PartialSpannerDirection::NONE;
+    }
+    return dir;
+}
+
+PartialSpannerDirection Slur::calcOutgoingDirection(bool outgoing)
+{
+    PartialSpannerDirection dir = PartialSpannerDirection::OUTGOING;
+    if (outgoing) {
+        SlurSegment* lastSeg = nsegments() > 0 ? backSegment() : nullptr;
+        if (lastSeg) {
+            lastSeg->setSlurOffset(Grip::END, PointF(0, 0));
+        }
+        dir = _partialSpannerDirection
+              == PartialSpannerDirection::INCOMING ? PartialSpannerDirection::BOTH : PartialSpannerDirection::OUTGOING;
+    } else {
+        dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::INCOMING : PartialSpannerDirection::NONE;
+    }
+    return dir;
+}
+
+bool Slur::isIncoming() const
+{
+    return _partialSpannerDirection == PartialSpannerDirection::BOTH || _partialSpannerDirection == PartialSpannerDirection::INCOMING;
+}
+
+bool Slur::isOutgoing() const
+{
+    return _partialSpannerDirection == PartialSpannerDirection::BOTH || _partialSpannerDirection == PartialSpannerDirection::OUTGOING;
+}
+
+void Slur::undoChangeStartEndElements(ChordRest* scr, ChordRest* ecr)
+{
+    for (EngravingObject* lsp : linkList()) {
+        Spanner* sp = static_cast<Spanner*>(lsp);
+        if (sp == this) {
+            score()->undo(new ChangeSpannerElements(this, scr, ecr));
+        } else {
+            EngravingItem* se = 0;
+            EngravingItem* ee = 0;
+            if (scr) {
+                std::list<EngravingObject*> sel = scr->linkList();
+                for (EngravingObject* lcr : sel) {
+                    EngravingItem* le = toEngravingItem(lcr);
+                    if (le->score() == sp->score() && le->track() == sp->track()) {
+                        se = le;
+                        break;
+                    }
+                }
+            }
+            if (ecr) {
+                std::list<EngravingObject*> sel = ecr->linkList();
+                for (EngravingObject* lcr : sel) {
+                    EngravingItem* le = toEngravingItem(lcr);
+                    if (le->score() == sp->score() && le->track() == sp->track2()) {
+                        ee = le;
+                        break;
+                    }
+                }
+            }
+            if (se && ee) {
+                score()->undo(new ChangeStartEndSpanner(sp, se, ee));
+                renderer()->layoutItem(sp);
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   setTrack
 //---------------------------------------------------------
@@ -464,75 +538,36 @@ bool Slur::isCrossStaff()
                || startCR()->vStaffIdx() != endCR()->vStaffIdx());
 }
 
-//---------------------------------------------------------
-//   stemSideForBeam
-//    determines if the anchor point is exempted from the stem inset
-//    due to beams or tremolos.
-//---------------------------------------------------------
-
-bool Slur::stemSideForBeam(bool start)
+PropertyValue Slur::getProperty(Pid propertyId) const
 {
-    ChordRest* cr = start ? startCR() : endCR();
-    Chord* c = toChord(cr);
-    bool adjustForBeam = cr && cr->beam() && cr->up() == up();
-    if (start) {
-        adjustForBeam = adjustForBeam && cr->beam()->elements().back() != cr;
-    } else {
-        adjustForBeam = adjustForBeam && cr->beam()->elements().front() != cr;
+    switch (propertyId) {
+    case Pid::PARTIAL_SPANNER_DIRECTION:
+        return partialSpannerDirection();
+    default:
+        return SlurTie::getProperty(propertyId);
     }
-    if (adjustForBeam) {
-        return true;
-    }
-
-    bool adjustForTrem = false;
-    TremoloTwoChord* trem = c ? c->tremoloTwoChord() : nullptr;
-    adjustForTrem = trem && trem->up() == up();
-    if (start) {
-        adjustForTrem = adjustForTrem && trem->chord2() != c;
-    } else {
-        adjustForTrem = adjustForTrem && trem->chord1() != c;
-    }
-    return adjustForTrem;
 }
 
-//---------------------------------------------------------
-//   isOverBeams
-//    returns true if all the chords spanned by the slur are
-//    beamed, and all beams are on the same side of the slur
-//---------------------------------------------------------
-bool Slur::isOverBeams()
+PropertyValue Slur::propertyDefault(Pid id) const
 {
-    if (!startCR() || !endCR()) {
-        return false;
+    switch (id) {
+    case Pid::PARTIAL_SPANNER_DIRECTION:
+        return PartialSpannerDirection::NONE;
+    default:
+        return SlurTie::propertyDefault(id);
     }
-    if (startCR()->track() != endCR()->track()
-        || startCR()->tick() >= endCR()->tick()) {
-        return false;
+}
+
+bool Slur::setProperty(Pid propertyId, const PropertyValue& v)
+{
+    switch (propertyId) {
+    case Pid::PARTIAL_SPANNER_DIRECTION:
+        setPartialSpannerDirection(v.value<PartialSpannerDirection>());
+        break;
+    default:
+        return SlurTie::setProperty(propertyId, v);
     }
-    size_t track = startCR()->track();
-    Segment* seg = startCR()->segment();
-    while (seg && seg->tick() <= endCR()->tick()) {
-        if (!seg->isChordRestType()
-            || !seg->elist().at(track)
-            || !seg->elist().at(track)->isChordRest()) {
-            return false;
-        }
-        ChordRest* cr = toChordRest(seg->elist().at(track));
-        bool hasBeam = cr->beam() && cr->up() == up();
-        bool hasTrem = false;
-        if (cr->isChord()) {
-            Chord* c = toChord(cr);
-            hasTrem = c->tremoloTwoChord() && c->up() == up();
-        }
-        if (!(hasBeam || hasTrem)) {
-            return false;
-        }
-        if ((!seg->next() || seg->next()->isEndBarLineType()) && seg->measure()->nextMeasure()) {
-            seg = seg->measure()->nextMeasure()->first();
-        } else {
-            seg = seg->next();
-        }
-    }
+    triggerLayout();
     return true;
 }
 }

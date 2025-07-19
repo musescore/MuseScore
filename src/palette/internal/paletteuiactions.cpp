@@ -35,38 +35,38 @@ static const muse::actions::ActionCode MASTERPALETTE_CODE("masterpalette");
 
 const UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Master palette"),
              TranslatableString("action", "Open master palette…"),
              Checkable::Yes
              ),
     UiAction("palette-search",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Palette search"),
              TranslatableString("action", "Search palettes")
              ),
     UiAction("time-signature-properties",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Time signature properties…"),
              TranslatableString("action", "Time signature properties…")
              ),
-    UiAction("edit-drumset",
-             mu::context::UiCtxNotationOpened,
+    UiAction("customize-kit",
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Edit drumset…"),
-             TranslatableString("action", "Edit drumset…")
+             TranslatableString("action", "Customize kit…"),
+             TranslatableString("action", "Customize kit…")
              ),
     UiAction("apply-current-palette-element",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Apply current palette element"),
              TranslatableString("action", "Apply current palette element")
              ),
     UiAction("show-keys",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_TEXT_EDITING,
              TranslatableString("action", "Insert special characters"),
              TranslatableString("action", "Insert special characters…")

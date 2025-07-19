@@ -35,9 +35,9 @@ using namespace muse::audio::encode;
 
 size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
 {
-    m_progress.progressChanged.send(0, 100, "");
+    m_progress.progress(0, 100);
     int code = ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel + m_format.sampleRate * 2);
-    m_progress.progressChanged.send(100, 100, "");
+    m_progress.progress(100, 100);
 
     return code == OPE_OK ? samplesPerChannel : 0;
 }

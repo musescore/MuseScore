@@ -28,6 +28,7 @@ df -h .
 BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
 CRASH_REPORT_URL=""
+BUILD_NUMBER=""
 BUILD_MODE=""
 SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscoredev`)
 
@@ -48,10 +49,10 @@ if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env
 MUSE_APP_BUILD_MODE=dev
 
 case "${BUILD_MODE}" in
-"devel_build")   MUSE_APP_BUILD_MODE=dev; SUFFIX=dev;;
-"nightly_build") MUSE_APP_BUILD_MODE=dev; SUFFIX=nightly;;
-"testing_build") MUSE_APP_BUILD_MODE=testing; SUFFIX=testing;;
-"stable_build")  MUSE_APP_BUILD_MODE=release; SUFFIX="";;
+"devel")   MUSE_APP_BUILD_MODE=dev; SUFFIX=dev;;
+"nightly") MUSE_APP_BUILD_MODE=dev; SUFFIX=nightly;;
+"testing") MUSE_APP_BUILD_MODE=testing; SUFFIX=testing;;
+"stable")  MUSE_APP_BUILD_MODE=release; SUFFIX="";;
 esac
 
 echo "MUSE_APP_BUILD_MODE: $MUSE_APP_BUILD_MODE"
@@ -69,16 +70,6 @@ if [ "$PACKARCH" == "aarch64" ] || [ "$PACKARCH" == "armv7l" ]; then
   MUSESCORE_BUILD_UPDATE_MODULE="OFF"
 fi
 
-# TODO: https://github.com/musescore/MuseScore/issues/11689
-#echo "VST3_SDK_PATH: $VST3_SDK_PATH"
-#if [ -z "$VST3_SDK_PATH" ]; then
-#    echo "warning: not set VST3_SDK_PATH, build VST module disabled"
-#    BUILD_VST=OFF
-#else
-#    BUILD_VST=ON
-#fi
-BUILD_VST=OFF
-
 echo "=== BUILD ==="
 
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
@@ -89,10 +80,10 @@ MUSE_APP_INSTALL_SUFFIX=$SUFFIX \
 MUSESCORE_BUILD_NUMBER=$BUILD_NUMBER \
 MUSESCORE_REVISION=$MUSESCORE_REVISION \
 MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
-MUSESCORE_BUILD_VST_MODULE=$BUILD_VST \
-MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
 MUSESCORE_BUILD_CRASHPAD_CLIENT=${MUSESCORE_BUILD_CRASHPAD_CLIENT:-"ON"} \
 MUSESCORE_BUILD_UPDATE_MODULE=${MUSESCORE_BUILD_UPDATE_MODULE:-"ON"} \
+MUSESCORE_BUILD_VST_MODULE="ON" \
+MUSESCORE_BUILD_WEBSOCKET="ON" \
 bash ./ninja_build.sh -t appimage
 
 

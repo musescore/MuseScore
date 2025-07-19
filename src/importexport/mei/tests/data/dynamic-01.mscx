@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -21,7 +22,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -33,33 +35,41 @@
         <trackName></trackName>
         <instrumentId>wind.reed.oboe</instrumentId>
         <Channel>
+          <program value="68"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Dynamics</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>I_I</eid>
             </Clef>
           <TimeSig>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -67,10 +77,13 @@
             <subtype>p</subtype>
             <velocity>49</velocity>
             <direction>up</direction>
+            <eid>K_K</eid>
             </Dynamic>
           <Chord>
+            <eid>L_L</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>M_M</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -78,14 +91,18 @@
           <Dynamic>
             <subtype>mp</subtype>
             <velocity>64</velocity>
+            <eid>N_N</eid>
             </Dynamic>
           <Beam>
+            <eid>O_O</eid>
             <l1>-20</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
+            <eid>P_P</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -93,10 +110,13 @@
           <Dynamic>
             <subtype>sffz</subtype>
             <velocity>126</velocity>
+            <eid>R_R</eid>
             </Dynamic>
           <Chord>
+            <eid>S_S</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>T_T</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -104,17 +124,23 @@
           <Dynamic>
             <subtype>sfz</subtype>
             <velocity>112</velocity>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
+            <eid>U_U</eid>
             </Dynamic>
           <Chord>
+            <eid>V_V</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>W_W</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>X_X</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Y_Y</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -124,10 +150,14 @@
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
+            <direction>down</direction>
+            <eid>Z_Z</eid>
             </Dynamic>
           <Chord>
+            <eid>a_a</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>b_b</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -135,16 +165,20 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>c_c</eid>
         <voice>
           <Dynamic>
             <subtype>mp</subtype>
             <velocity>64</velocity>
+            <eid>d_d</eid>
             <text>sempre <sym>dynamicMezzo</sym><sym>dynamicPiano</sym> e 
 dolce</text>
             </Dynamic>
           <Chord>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>f_f</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -152,20 +186,25 @@ dolce</text>
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
+            <eid>g_g</eid>
             <text><sym>dynamicPiano</sym> e sempre
 dolce</text>
             </Dynamic>
           <Chord>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>i_i</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>j_j</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>k_k</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
@@ -173,25 +212,31 @@ dolce</text>
           <Dynamic>
             <subtype>ff</subtype>
             <velocity>112</velocity>
+            <eid>l_l</eid>
             <text>molto <sym>dynamicForte</sym><sym>dynamicForte</sym></text>
             </Dynamic>
           <Chord>
+            <eid>m_m</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>n_n</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>o_o</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>p_p</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>q_q</eid>
             </BarLine>
           </voice>
         </Measure>

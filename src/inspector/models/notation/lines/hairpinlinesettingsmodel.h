@@ -29,6 +29,9 @@ class HairpinLineSettingsModel : public TextLineSettingsModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(PropertyItem * snapBefore READ snapBefore CONSTANT)
+    Q_PROPERTY(PropertyItem * snapAfter READ snapAfter CONSTANT)
+
 public:
     enum HairpinLineType {
         Crescendo,
@@ -37,11 +40,19 @@ public:
 
     explicit HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType);
 
+    PropertyItem* snapBefore() const;
+    PropertyItem* snapAfter() const;
+
 private:
     engraving::HairpinType m_hairpinType = engraving::HairpinType::CRESC_LINE;
 
     void createProperties() override;
+    void loadProperties() override;
+    void resetProperties() override;
     void requestElements() override;
+
+    PropertyItem* m_snapBefore = nullptr;
+    PropertyItem* m_snapAfter = nullptr;
 };
 }
 

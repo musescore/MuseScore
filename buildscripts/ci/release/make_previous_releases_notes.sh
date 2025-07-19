@@ -44,12 +44,12 @@ done
 
 echo "=== Get release info ==="
 
-sudo bash ./buildscripts/ci/release/get_file_from_s3.sh \
-            --s3_key "${S3_KEY}" \
-            --s3_secret "${S3_SECRET}" \
-            --s3_url "${S3_URL}" \
-            --s3_bucket "${S3_BUCKET}" \
-            --local_file_name "${PREVIOUS_FILE_NAME}"
+bash ./buildscripts/ci/release/get_file_from_s3.sh \
+    --s3_key "${S3_KEY}" \
+    --s3_secret "${S3_SECRET}" \
+    --s3_url "${S3_URL}" \
+    --s3_bucket "${S3_BUCKET}" \
+    --local_file_name "${PREVIOUS_FILE_NAME}"
 
 echo "=== Append release info to previous releases ==="
 

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_FONTSENGINE_H
-#define MUSE_DRAW_FONTSENGINE_H
+#pragma once
 
 #include <vector>
 #include <functional>
@@ -34,12 +33,13 @@
 
 namespace muse::draw {
 class IFontFace;
-class FontsEngine : public IFontsEngine
+class FontsEngine : public IFontsEngine, public Injectable
 {
-    Inject<IFontsDatabase> fontsDatabase;
+    Inject<IFontsDatabase> fontsDatabase = { this };
 
 public:
-    FontsEngine() = default;
+    FontsEngine(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
     ~FontsEngine();
 
     void init();
@@ -47,6 +47,7 @@ public:
     double lineSpacing(const Font& f) const override;
     double xHeight(const Font& f) const override;
     double height(const Font& f) const override;
+    double capHeight(const Font& f) const override;
     double ascent(const Font& f) const override;
     double descent(const Font& f) const override;
 
@@ -100,5 +101,3 @@ private:
     //mutable FontRenderCache m_renderCache;
 };
 }
-
-#endif // MUSE_DRAW_FONTSENGINE_H

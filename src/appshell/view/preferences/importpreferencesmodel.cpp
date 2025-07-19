@@ -30,12 +30,47 @@
 using namespace mu::appshell;
 
 ImportPreferencesModel::ImportPreferencesModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
 void ImportPreferencesModel::load()
 {
+    notationConfiguration()->styleFileImportPathChanged().onReceive(this, [this](const std::string& val) {
+        emit styleFileImportPathChanged(QString::fromStdString(val));
+    });
+
+    oveConfiguration()->importOvertureCharsetChanged().onReceive(this, [this](const std::string& val) {
+        emit currentOvertureCharsetChanged(QString::fromStdString(val));
+    });
+
+    musicXmlConfiguration()->importLayoutChanged().onReceive(this, [this](bool val) {
+        emit importLayoutChanged(val);
+    });
+
+    musicXmlConfiguration()->importBreaksChanged().onReceive(this, [this](bool val) {
+        emit importBreaksChanged(val);
+    });
+
+    musicXmlConfiguration()->needUseDefaultFontChanged().onReceive(this, [this](bool val) {
+        emit needUseDefaultFontChanged(val);
+    });
+
+    musicXmlConfiguration()->inferTextTypeChanged().onReceive(this, [this](bool val) {
+        emit inferTextTypeChanged(val);
+    });
+
+    midiImportExportConfiguration()->midiShortestNoteChanged().onReceive(this, [this](int val) {
+        emit currentShortestNoteChanged(val);
+    });
+
+    meiConfiguration()->meiImportLayoutChanged().onReceive(this, [this](bool val) {
+        emit meiImportLayoutChanged(val);
+    });
+
+    musicXmlConfiguration()->needAskAboutApplyingNewStyleChanged().onReceive(this, [this](bool val) {
+        emit needAskAboutApplyingNewStyleChanged(val);
+    });
 }
 
 QVariantList ImportPreferencesModel::charsets() const
@@ -97,12 +132,12 @@ QString ImportPreferencesModel::currentOvertureCharset() const
 
 bool ImportPreferencesModel::importLayout() const
 {
-    return musicXmlConfiguration()->musicxmlImportLayout();
+    return musicXmlConfiguration()->importLayout();
 }
 
 bool ImportPreferencesModel::importBreaks() const
 {
-    return musicXmlConfiguration()->musicxmlImportBreaks();
+    return musicXmlConfiguration()->importBreaks();
 }
 
 bool ImportPreferencesModel::needUseDefaultFont() const
@@ -156,7 +191,7 @@ void ImportPreferencesModel::setImportLayout(bool import)
         return;
     }
 
-    musicXmlConfiguration()->setMusicxmlImportLayout(import);
+    musicXmlConfiguration()->setImportLayout(import);
     emit importLayoutChanged(import);
 }
 
@@ -166,7 +201,7 @@ void ImportPreferencesModel::setImportBreaks(bool import)
         return;
     }
 
-    musicXmlConfiguration()->setMusicxmlImportBreaks(import);
+    musicXmlConfiguration()->setImportBreaks(import);
     emit importBreaksChanged(import);
 }
 

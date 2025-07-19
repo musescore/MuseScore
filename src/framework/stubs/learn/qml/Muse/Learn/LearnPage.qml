@@ -19,14 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
 
-import Muse.UiComponents 1.0
+import Muse.Ui
+import Muse.UiComponents
 
 Rectangle {
     color: ui.theme.backgroundPrimaryColor
 
-    property var section
+    property NavigationSection section
 
     StyledTextLabel {
         anchors.centerIn: parent

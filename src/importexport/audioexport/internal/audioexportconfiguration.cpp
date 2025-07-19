@@ -27,6 +27,7 @@
 using namespace muse;
 using namespace mu;
 using namespace mu::iex::audioexport;
+using namespace muse::audio;
 
 static const Settings::Key EXPORT_SAMPLE_RATE_KEY("iex_audioexport", "export/audio/sampleRate");
 static const Settings::Key EXPORT_MP3_BITRATE("iex_audioexport", "export/audio/mp3Bitrate");
@@ -72,4 +73,9 @@ const std::vector<int>& AudioExportConfiguration::availableSampleRates() const
 {
     static const std::vector<int> rates { 32000, 44100, 48000 };
     return rates;
+}
+
+samples_t AudioExportConfiguration::exportBufferSize() const
+{
+    return 4096;
 }

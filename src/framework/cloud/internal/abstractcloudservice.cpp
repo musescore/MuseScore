@@ -33,6 +33,7 @@
 #include "multiinstances/resourcelockguard.h"
 #include "network/networkerrors.h"
 #include "global/iapplication.h"
+#include "draw/types/color.h"
 
 #include "oauthhttpserverreplyhandler.h"
 
@@ -49,30 +50,13 @@ static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
 static const std::string STATUS_KEY("status");
 
-QString muse::cloud::userAgent()
-{
-    static const QStringList systemInfo {
-        QSysInfo::kernelType(),
-        QSysInfo::kernelVersion(),
-        QSysInfo::productType(),
-        QSysInfo::productVersion(),
-        QSysInfo::currentCpuArchitecture()
-    };
-
-    static Inject<IApplication> app;
-
-    return QString("MS_EDITOR/%1.%2 (%3)")
-           .arg(app()->version().toString(), app()->build())
-           .arg(systemInfo.join(' ')).toLatin1();
-}
-
 int muse::cloud::generateFileNameNumber()
 {
     return QRandomGenerator::global()->generate() % 100000;
 }
 
-AbstractCloudService::AbstractCloudService(QObject* parent)
-    : QObject(parent)
+AbstractCloudService::AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent)
+    : QObject(parent), Injectable(iocCtx)
 {
     m_userAuthorized.val = false;
 }
@@ -105,11 +89,16 @@ void AbstractCloudService::initOAuthIfNecessary()
 
     m_oauth2 = new QOAuth2AuthorizationCodeFlow(this);
 
-    m_replyHandler = new OAuthHttpServerReplyHandler(this);
+    m_replyHandler = new OAuthHttpServerReplyHandler(iocContext(), this);
     m_replyHandler->setRedirectUrl(m_serverConfig.signInSuccessUrl);
 
     m_oauth2->setAuthorizationUrl(m_serverConfig.authorizationUrl);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    m_oauth2->setTokenUrl(m_serverConfig.accessTokenUrl);
+    m_oauth2->setPkceMethod(QOAuth2AuthorizationCodeFlow::PkceMethod::None);
+#else
     m_oauth2->setAccessTokenUrl(m_serverConfig.accessTokenUrl);
+#endif
     m_oauth2->setModifyParametersFunction([this](QAbstractOAuth::Stage, QMultiMap<QString, QVariant>* parameters) {
         for (const QString& key : m_serverConfig.authorizationParameters.keys()) {
             parameters->replace(key, m_serverConfig.authorizationParameters.value(key));
@@ -121,9 +110,16 @@ void AbstractCloudService::initOAuthIfNecessary()
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, &AbstractCloudService::openUrl);
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &AbstractCloudService::onUserAuthorized);
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::serverReportedErrorOccurred,
+            [](const QString& error, const QString& errorDescription, const QUrl& uri) {
+        LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
+    });
+#else
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::error, [](const QString& error, const QString& errorDescription, const QUrl& uri) {
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
+#endif
 }
 
 bool AbstractCloudService::readTokens()
@@ -144,7 +140,13 @@ bool AbstractCloudService::readTokens()
         return false;
     }
 
-    QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val.toQByteArrayNoCopy());
+    QJsonParseError err;
+    QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val.toQByteArrayNoCopy(), &err);
+    if (err.error != QJsonParseError::NoError || !tokensDoc.isObject()) {
+        LOGE() << "Error on parse tokens file: " << err.errorString();
+        return false;
+    }
+
     QJsonObject saveObject = tokensDoc.object();
 
     m_accessToken = saveObject[ACCESS_TOKEN_KEY].toString();
@@ -214,6 +216,11 @@ void AbstractCloudService::onUserAuthorized()
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+RequestHeaders AbstractCloudService::defaultHeaders() const
+{
+    return configuration()->headers();
 }
 
 RetVal<QUrl> AbstractCloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
@@ -303,7 +310,7 @@ RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, cons
     query.addParam("text", Val(text));
     query.addParam("cloudCode", Val(cloudInfo().code));
     query.addParam("publishingScore", Val(publishingScore));
-    return interactive()->open(query);
+    return interactive()->openSync(query);
 }
 
 ValCh<bool> AbstractCloudService::userAuthorized() const
@@ -456,10 +463,17 @@ void AbstractCloudService::openUrl(const QUrl& url)
     }
 }
 
-QString AbstractCloudService::logoColorForTheme(const ui::ThemeInfo& theme) const
+QString AbstractCloudService::logoColor() const
 {
-    if (ui::isDarkTheme(theme.codeKey)) {
-        return "#FFFFFF";
+    const ui::ThemeList& themens = uiConfig()->themes();
+    bool isDarkMode = uiConfig()->isDarkMode();
+
+    for (const ui::ThemeInfo& theme : themens) {
+        if ((isDarkMode && theme.codeKey == ui::DARK_THEME_CODE)
+            || (!isDarkMode && theme.codeKey == ui::LIGHT_THEME_CODE)) {
+            return theme.values[ui::FONT_PRIMARY_COLOR].toString();
+        }
     }
-    return "#000000";
+
+    return QString::fromStdString(draw::Color::BLACK.toString());
 }

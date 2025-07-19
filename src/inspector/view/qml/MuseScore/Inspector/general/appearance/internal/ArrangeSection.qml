@@ -71,7 +71,7 @@ Column {
                 navigation.row: root.resetButtonNavigationRow
                 navigation.accessible.name: qsTrc("inspector", "Reset stacking order to default")
 
-                enabled: root.arrangeOrderProperty.isModified
+                enabled: root.arrangeOrderProperty.isEnabled && root.arrangeOrderProperty.isModified
 
                 onClicked: {
                     root.arrangeOrderProperty.resetToDefault()
@@ -93,6 +93,8 @@ Column {
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 1
 
+                enabled: root.arrangeOrderProperty.isEnabled
+
                 text: qsTrc("inspector", "Forwards")
 
                 onClicked: {
@@ -109,6 +111,8 @@ Column {
                 navigation.name: "To front"
                 navigation.panel: root.navigationPanel
                 navigation.row: forwardsButton.navigation.row + 1
+
+                enabled: root.arrangeOrderProperty.isEnabled
 
                 text: qsTrc("inspector", "To front")
 
@@ -132,6 +136,8 @@ Column {
                 navigation.panel: root.navigationPanel
                 navigation.row: toFrontButton.navigation.row + 1
 
+                enabled: root.arrangeOrderProperty.isEnabled
+
                 text: qsTrc("inspector", "Backwards")
 
                 onClicked: {
@@ -148,6 +154,8 @@ Column {
                 navigation.name: "To back"
                 navigation.panel: root.navigationPanel
                 navigation.row: backwardsButton.navigation.row + 1
+
+                enabled: root.arrangeOrderProperty.isEnabled
 
                 text: qsTrc("inspector", "To back")
 

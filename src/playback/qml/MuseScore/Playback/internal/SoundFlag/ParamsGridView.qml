@@ -42,9 +42,16 @@ Column {
         name: "SoundFlagParams" + title
         direction: NavigationPanel.Vertical
         accessible.name: title
+
+        onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.Escape) {
+                root.closeRequested()
+            }
+        }
     }
 
     signal toggleParamRequested(string paramCode)
+    signal closeRequested()
 
     spacing: 8
 

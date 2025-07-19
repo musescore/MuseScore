@@ -47,13 +47,10 @@ void InstrumentsActionsController::selectInstruments()
         return;
     }
 
-    RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments();
-    if (!selectedInstruments.ret) {
-        LOGE() << selectedInstruments.ret.toString();
-        return;
-    }
-
-    master->parts()->setParts(selectedInstruments.val.instruments, selectedInstruments.val.scoreOrder);
+    async::Promise<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments();
+    selectedInstruments.onResolve(this, [master](const PartInstrumentListScoreOrder& sel) {
+        master->parts()->setParts(sel.instruments, sel.scoreOrder);
+    });
 }
 
 void InstrumentsActionsController::changeInstrument()
@@ -74,11 +71,9 @@ void InstrumentsActionsController::changeInstrument()
     key.partId = instrumentChange->part()->id();
     key.tick = instrumentChange->tick();
 
-    RetVal<Instrument> instrument = selectInstrumentsScenario()->selectInstrument(key);
-    if (!instrument.ret) {
-        LOGE() << instrument.ret.toString();
-        return;
-    }
-
-    master->parts()->replaceInstrument(key, instrument.val);
+    async::Promise<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(key);
+    templ.onResolve(this, [master, key](const InstrumentTemplate& val) {
+        Instrument instrument = Instrument::fromTemplate(&val);
+        master->parts()->replaceInstrument(key, instrument);
+    });
 }

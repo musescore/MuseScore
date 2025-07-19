@@ -36,6 +36,8 @@
 #include <QOperatingSystemVersion>
 #endif
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -55,8 +57,12 @@ static const QString WINDOW_GEOMETRY_KEY("window");
 
 static const int FLICKABLE_MAX_VELOCITY = 1500;
 
+static const int TOOLTIP_DELAY = 500;
+
 void UiConfiguration::init()
 {
+    m_config = ConfigReader::read(":/configs/ui.cfg");
+
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val(defaultFontFamily()));
@@ -105,6 +111,8 @@ void UiConfiguration::init()
         m_windowGeometryChanged.notify();
     });
 
+    correctUserFontIfNeeded();
+
     initThemes();
 }
 
@@ -134,6 +142,17 @@ void UiConfiguration::initThemes()
 
     updateThemes();
     updateCurrentTheme();
+}
+
+void UiConfiguration::correctUserFontIfNeeded()
+{
+    QString userFontFamily = QString::fromStdString(fontFamily());
+    if (!QFontDatabase::hasFamily(userFontFamily)) {
+        std::string fallbackFontFamily = defaultFontFamily();
+        LOGI() << "The user font " << userFontFamily << " is missing, we will use the fallback font " << fallbackFontFamily;
+
+        setFontFamily(fallbackFontFamily);
+    }
 }
 
 void UiConfiguration::updateCurrentTheme()
@@ -226,6 +245,7 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
         { BACKGROUND_PRIMARY_COLOR, config.value("background_primary_color").toQString() },
         { BACKGROUND_SECONDARY_COLOR, config.value("background_secondary_color").toQString() },
         { BACKGROUND_TERTIARY_COLOR, config.value("background_tertiary_color").toQString() },
+        { BACKGROUND_QUARTERNARY_COLOR, config.value("background_quarternary_color").toQString() },
         { POPUP_BACKGROUND_COLOR, config.value("popup_background_color").toQString() },
         { PROJECT_TAB_COLOR, config.value("project_tab_color").toQString() },
         { TEXT_FIELD_COLOR, config.value("text_field_color").toQString() },
@@ -234,7 +254,7 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
         { STROKE_SECONDARY_COLOR, config.value("stroke_secondary_color").toQString() },
         { BUTTON_COLOR, config.value("button_color").toQString() },
         { FONT_PRIMARY_COLOR, config.value("font_primary_color").toQString() },
-        { FONT_SECONDARY_COLOR, config.value("font_primary_color").toQString() },
+        { FONT_SECONDARY_COLOR, config.value("font_secondary_color").toQString() },
         { LINK_COLOR, config.value("link_color").toQString() },
         { FOCUS_COLOR, config.value("focus_color").toQString() },
         { WHITE_COLOR, config.value("white_color").toQString() },
@@ -311,17 +331,6 @@ ThemeList UiConfiguration::themes() const
     return m_themes;
 }
 
-QStringList UiConfiguration::possibleFontFamilies() const
-{
-    QStringList allFonts = QFontDatabase::families();
-    QStringList smuflFonts
-        = { "Bravura", "Campania", "Edwin", "Finale Broadway", "Finale Maestro", "Gootville", "Leland", "MScore", "MuseJazz", "Petaluma" };
-    for (const QString& font : smuflFonts) {
-        allFonts.removeAll(font);
-    }
-    return allFonts;
-}
-
 QStringList UiConfiguration::possibleAccentColors() const
 {
     static const QStringList lightAccentColors {
@@ -349,6 +358,20 @@ QStringList UiConfiguration::possibleAccentColors() const
     }
 
     return lightAccentColors;
+}
+
+QStringList UiConfiguration::possibleFontFamilies() const
+{
+    QStringList allFonts = QFontDatabase::families();
+    for (const QString& fontFamily : m_nonTextFonts) {
+        allFonts.removeAll(fontFamily);
+    }
+    return allFonts;
+}
+
+void UiConfiguration::setNonTextFonts(const QStringList& fontFamilies)
+{
+    m_nonTextFonts = fontFamilies;
 }
 
 void UiConfiguration::resetThemes()
@@ -510,6 +533,11 @@ muse::async::Notification UiConfiguration::iconsFontChanged() const
     return m_iconsFontChanged;
 }
 
+io::path_t UiConfiguration::appIconPath() const
+{
+    return m_config.value("appIconPath").toPath();
+}
+
 std::string UiConfiguration::musicalFontFamily() const
 {
     return settings()->value(UI_MUSICAL_FONT_FAMILY_KEY).toString();
@@ -636,6 +664,15 @@ bool UiConfiguration::isGlobalMenuAvailable() const
     return platformTheme()->isGlobalMenuAvailable();
 }
 
+bool UiConfiguration::isSystemDragSupported() const
+{
+#ifdef MUSE_MODULE_UI_SYSTEMDRAG_SUPPORTED
+    return true;
+#else
+    return false;
+#endif
+}
+
 void UiConfiguration::applyPlatformStyle(QWindow* window)
 {
     platformTheme()->applyPlatformStyleOnWindowForTheme(window, currentThemeCodeKey());
@@ -657,6 +694,21 @@ void UiConfiguration::setIsVisible(const QString& key, bool val)
 async::Notification UiConfiguration::isVisibleChanged(const QString& key) const
 {
     return m_uiArrangement.valueChanged(key);
+}
+
+QString UiConfiguration::uiItemState(const QString& itemName) const
+{
+    return m_uiArrangement.value(itemName);
+}
+
+void UiConfiguration::setUiItemState(const QString& itemName, const QString& value)
+{
+    m_uiArrangement.setValue(itemName, value);
+}
+
+Notification UiConfiguration::uiItemStateChanged(const QString& itemName) const
+{
+    return m_uiArrangement.valueChanged(itemName);
 }
 
 ToolConfig UiConfiguration::toolConfig(const QString& toolName, const ToolConfig& defaultConfig) const
@@ -781,4 +833,9 @@ void UiConfiguration::updateToolConfig(const QString& toolName, ToolConfig& user
 int UiConfiguration::flickableMaxVelocity() const
 {
     return FLICKABLE_MAX_VELOCITY;
+}
+
+int UiConfiguration::tooltipDelay() const
+{
+    return TOOLTIP_DELAY;
 }

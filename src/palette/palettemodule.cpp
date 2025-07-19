@@ -46,7 +46,7 @@
 
 #include "view/widgets/masterpalette.h"
 #include "view/widgets/specialcharactersdialog.h"
-#include "view/widgets/editdrumsetdialog.h"
+#include "view/widgets/customizekitdialog.h"
 #include "view/widgets/timesignaturepropertiesdialog.h"
 #include "view/widgets/keyedit.h"
 #include "view/widgets/timedialog.h"
@@ -91,7 +91,7 @@ void PaletteModule::resolveImports()
         ir->registerWidgetUri<MasterPalette>(Uri("musescore://palette/masterpalette"));
         ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
         ir->registerWidgetUri<TimeSignaturePropertiesDialog>(Uri("musescore://palette/timesignatureproperties"));
-        ir->registerWidgetUri<EditDrumsetDialog>(Uri("musescore://palette/editdrumset"));
+        ir->registerWidgetUri<CustomizeKitDialog>(Uri("musescore://palette/customizekit"));
         ir->registerWidgetUri<KeyEditor>(Uri("musescore://notation/keysignatures"));
         ir->registerWidgetUri<TimeDialog>(Uri("musescore://notation/timesignatures"));
 

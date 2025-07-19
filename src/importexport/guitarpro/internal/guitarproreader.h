@@ -27,11 +27,14 @@
 #include "../iguitarproconfiguration.h"
 
 namespace mu::iex::guitarpro {
-class GuitarProReader : public project::INotationReader
+class GuitarProReader : public project::INotationReader, public muse::Injectable
 {
-    INJECT(mu::iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
+    muse::Inject<mu::iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
 
 public:
+    GuitarProReader(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
+
     muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
 };
 } // namespace mu::iex::guitarpro

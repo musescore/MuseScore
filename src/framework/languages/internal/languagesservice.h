@@ -34,14 +34,17 @@
 class QTranslator;
 
 namespace muse::languages {
-class LanguagesService : public ILanguagesService, public async::Asyncable
+class LanguagesService : public ILanguagesService, public Injectable, public async::Asyncable
 {
-    INJECT(ILanguagesConfiguration, configuration)
-    INJECT(network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(io::IFileSystem, fileSystem)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    Inject<ILanguagesConfiguration> configuration = { this };
+    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
+    LanguagesService(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     const LanguagesHash& languages() const override;

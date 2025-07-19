@@ -75,11 +75,6 @@
         </note>
       </measure>
     <measure number="2">
-      <direction placement="below">
-        <direction-type>
-          <words>maj(sub5)</words>
-          </direction-type>
-        </direction>
       <harmony print-frame="no">
         <root>
           <root-step>C</root-step>
@@ -91,6 +86,11 @@
           <degree-type>subtract</degree-type>
           </degree>
         </harmony>
+      <direction placement="below">
+        <direction-type>
+          <words>maj(sub5)</words>
+          </direction-type>
+        </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -113,11 +113,6 @@
         </note>
       </measure>
     <measure number="3">
-      <direction placement="below">
-        <direction-type>
-          <words>maj(add2)</words>
-          </direction-type>
-        </direction>
       <harmony print-frame="no">
         <root>
           <root-step>C</root-step>
@@ -129,6 +124,11 @@
           <degree-type>add</degree-type>
           </degree>
         </harmony>
+      <direction placement="below">
+        <direction-type>
+          <words>maj(add2)</words>
+          </direction-type>
+        </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -151,11 +151,6 @@
         </note>
       </measure>
     <measure number="4">
-      <direction placement="below">
-        <direction-type>
-          <words>maj7(alt#5)</words>
-          </direction-type>
-        </direction>
       <harmony print-frame="no">
         <root>
           <root-step>C</root-step>
@@ -167,6 +162,11 @@
           <degree-type>alter</degree-type>
           </degree>
         </harmony>
+      <direction placement="below">
+        <direction-type>
+          <words>maj7(alt#5)</words>
+          </direction-type>
+        </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -194,7 +194,7 @@
           <root-step>E</root-step>
           <root-alter>-1</root-alter>
           </root>
-        <kind text="sus">suspended-fourth</kind>
+        <kind>suspended-fourth</kind>
         <degree>
           <degree-value>7</degree-value>
           <degree-alter>0</degree-alter>

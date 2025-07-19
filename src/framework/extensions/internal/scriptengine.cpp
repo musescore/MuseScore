@@ -54,7 +54,7 @@ ScriptEngine::ScriptEngine(const modularity::ContextPtr& iocCtx, int apiverion)
 
     globalObj.setProperty("api", m_engine->newQObject(m_api));
 
-    m_moduleLoader = new JsModuleLoader(m_engine);
+    m_moduleLoader = new JsModuleLoader(m_iocContext, m_engine);
     m_moduleLoader->pushEngine(this);
     QJSValue loaderObj = m_engine->newQObject(m_moduleLoader);
     QJSValue requireFn = loaderObj.property("require");

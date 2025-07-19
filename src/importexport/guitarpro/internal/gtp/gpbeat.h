@@ -48,6 +48,9 @@ public:
     enum class Golpe {
         None, Finger, Thumb
     };
+    enum class TappingHand {
+        None, Right, Left
+    };
     enum class Rasgueado {
         None, II_1, MII_1, MII_2, PMP_1, PMP_2, PEI_1, PEI_2, PAI_1, PAI_2, AMI_1,
         AMI_2, PPP_1, AMII_1, AMIP_1, EAMI_1, EAMII_1, PEAMI_1
@@ -133,6 +136,9 @@ public:
     bool harmonicMarkSemi() const { return _harmonicMarkInfo.semi; }
     bool harmonicMarkFeedback() const { return _harmonicMarkInfo.feedback; }
 
+    void setTappingHand(TappingHand hand) { _tappingHand = hand; }
+    TappingHand tappingHand() const { return _tappingHand; }
+
     void setSlapped(bool s) { _slapped = s; }
     bool slapped() const { return _slapped; }
 
@@ -210,15 +216,12 @@ public:
 
     const std::vector<std::shared_ptr<GPNote> >& notes() const { return _notes; }
 
-    //! NOTE В текущей версии GP 6.2.0 (и позднее) в биты записывается уже расставленная лирика,
-    //! поэтому достаточно поля lyrics у бита.
-    //!
-    //! В ранних версиях GP не было расстановки лирики по битам,
-    //! т.е нужно было каждый раз при открытии таба парсить общую лирику
-    //! и расставлять её по битам.
-    //! При этом, может использоваться один и тот же бит в разных тактах,
-    //! даже если у него разная лирика (т.е лирика не участвовала в определении уникальности бита)
-    //! Поэтому, чтобы записать лирику в такие биты, добавлен ключ - номер такта (мастер бара)
+    //! NOTE In GP version 6.2.0+ already arranged lyrics are written into bits, so the lyrics field of the beat is enough.
+    //! In earlier versions of GP, there was no arrangement of lyrics by bits,
+    //! i.e. it was necessary to parse the general lyrics each time a tab was opened and arrange them by bits.
+    //! At the same time, the same beat can be used in different bars, even if it has different lyrics
+    //! (i.e. the lyrics did not participate in determining the uniqueness of the beat).
+    //! Therefore, in order to write lyrics into such bits, a key was added - the bar number (master bar)
 
     struct Key {
         int32_t trackId{ -1 };
@@ -251,7 +254,7 @@ public:
         return _lyrics.at(key);
     }
 
-    //! NOTE Тажа проблема, что с лирикой
+    //! NOTE Same problem as with lyrics
     void setDiagramIdx(int idx) { setDiagramIdx(-1, -1, idx); }
     void setDiagramIdx(int32_t ti, int32_t mi, int idx) { _diagramIdx[Key(ti, mi)] = idx; }
     int diagramIdx(int32_t ti = -1, int32_t mi = -1) const
@@ -279,6 +282,7 @@ private:
     bool _letRing = false;
     bool _palmMute = false;
     bool _trill = false;
+    TappingHand _tappingHand = TappingHand::None;
     bool _slapped = false;
     bool _popped = false;
     HarmonicMarkInfo _harmonicMarkInfo;

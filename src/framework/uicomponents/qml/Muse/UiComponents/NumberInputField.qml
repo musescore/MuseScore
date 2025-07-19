@@ -182,12 +182,10 @@ FocusScope {
 
     MouseArea {
         id: mouseArea
-
         anchors.fill: parent
 
-        hoverEnabled: true
-
         enabled: !textField.readOnly
+        hoverEnabled: true
 
         onPressed: {
             navigation.requestActiveByInteraction()

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <maskBarlinesForText>0</maskBarlinesForText>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
+      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -69,8 +79,8 @@
         </section>
       </Order>
     <Part id="1">
-      <Staff id="1">
-        <linkedTo>3</linkedTo>
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -78,14 +88,15 @@
         <bracket type="2" span="3" col="2" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="3">
-        <linkedTo>1</linkedTo>
+      <Staff>
+        <eid>E_E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -107,21 +118,23 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>F_F</eid>
         <voice>
           <KeySig>
-            <linkedMain/>
+            <eid>G_G</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <linkedMain/>
+            <eid>I_I</eid>
             <staffMove>1</staffMove>
             <durationType>whole</durationType>
             <Note>
-              <linkedMain/>
+              <eid>J_J</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -133,13 +146,16 @@
       <Measure>
         <voice>
           <KeySig>
+            <eid>K_K</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>M_M</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -150,24 +166,20 @@
       <Measure>
         <voice>
           <KeySig>
-            <linked>
-              <indexDiff>-3</indexDiff>
-              </linked>
+            <eid>N_N</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>O_O</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <linked>
-              <indexDiff>-3</indexDiff>
-              </linked>
+            <eid>P_P</eid>
+            <staffMove>-1</staffMove>
             <durationType>whole</durationType>
             <Note>
-              <linked>
-                <indexDiff>-3</indexDiff>
-                </linked>
+              <eid>Q_Q</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>

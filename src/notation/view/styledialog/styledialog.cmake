@@ -16,4 +16,22 @@ set(STYLEDIALOG_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tieplacementselector.h
     ${CMAKE_CURRENT_LIST_DIR}/accidentalgrouppagemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accidentalgrouppagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/fretboardspagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fretboardspagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/glissandosectionmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/glissandosectionmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/notelinesectionmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/notelinesectionmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/clefkeytimesigpagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/clefkeytimesigpagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/hammeronpullofftappingpagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/hammeronpullofftappingpagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/repeatbarlinessectionmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/repeatbarlinessectionmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/chordsymbolspagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/chordsymbolspagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/voltaspagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/voltaspagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/measurenumberspagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/measurenumberspagemodel.h
     )

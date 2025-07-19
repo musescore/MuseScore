@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageHeight>11.6929</pageHeight>
@@ -26,13 +27,13 @@
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
       <footerFontSize>10</footerFontSize>
-      <Spatium>1.75</Spatium>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
+      <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -49,7 +50,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Cue Grace Notes</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -114,43 +116,51 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>12.5</height>
+        <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <offset x="0" y="-0.07525"/>
           <text><font size="22"/>Cue Grace Notes</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <offset x="0" y="9.92425"/>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
-          <align>right,top</align>
-          <offset x="0" y="17.4247"/>
           <text>Henry Ives</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>I_I</eid>
             </Clef>
           <TimeSig>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
+            <eid>K_K</eid>
             <text>Proper cue notes: small and !play</text>
             </StaffText>
           <Chord>
+            <eid>L_L</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <eid>M_M</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -162,79 +172,95 @@
               </Note>
             </Chord>
           <Beam>
+            <eid>N_N</eid>
             <StemDirection>up</StemDirection>
             <l1>10</l1>
             <l2>8</l2>
             </Beam>
           <Chord>
+            <eid>O_O</eid>
             <BeamMode>begin</BeamMode>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>P_P</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>Q_Q</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>R_R</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>T_T</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Beam>
+            <eid>U_U</eid>
             <StemDirection>down</StemDirection>
             <l1>42</l1>
             <l2>42</l2>
             </Beam>
           <Chord>
+            <eid>V_V</eid>
             <BeamMode>begin</BeamMode>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>W_W</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>X_X</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>Y_Y</eid>
             <BeamMode>mid</BeamMode>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>a_a</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>b_b</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <eid>c_c</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -246,19 +272,23 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>d_d</eid>
             <BeamMode>mid</BeamMode>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>e_e</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>f_f</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>g_g</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <play>0</play>
@@ -267,44 +297,54 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>h_h</eid>
         <voice>
           <Beam>
+            <eid>i_i</eid>
             <StemDirection>down</StemDirection>
             <l1>32</l1>
             <l2>30</l2>
             </Beam>
           <Chord>
+            <eid>j_j</eid>
             <BeamMode>begin</BeamMode>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>k_k</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>l_l</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>m_m</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>n_n</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Rest>
+            <eid>o_o</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>p_p</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <eid>q_q</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -316,44 +356,53 @@
               </Note>
             </Chord>
           <Beam>
+            <eid>r_r</eid>
             <StemDirection>down</StemDirection>
             <l1>38</l1>
             <l2>32</l2>
             </Beam>
           <Chord>
+            <eid>s_s</eid>
             <BeamMode>begin</BeamMode>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>t_t</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>u_u</eid>
             <BeamMode>mid</BeamMode>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>v_v</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>w_w</eid>
             <BeamMode>mid</BeamMode>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>x_x</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>y_y</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <Note>
+              <eid>z_z</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <play>0</play>
@@ -362,39 +411,49 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>0_0</eid>
         <voice>
           <Chord>
+            <eid>1_1</eid>
             <BeamMode>no</BeamMode>
             <small>1</small>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>2_2</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Rest>
+            <eid>3_3</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>4_4</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>5_5</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>6_6</eid>
         <voice>
           <StaffText>
+            <eid>7_7</eid>
             <text>Small but play: &lt;type size=&quot;cue&quot;&gt; but no &lt;cue&gt;</text>
             </StaffText>
           <Chord>
+            <eid>8_8</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <eid>9_9</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -405,35 +464,43 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>+_+</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>/_/</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>AB_AB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>BB_BB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>CB_CB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>DB_DB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>EB_EB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>FB_FB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -441,28 +508,35 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>GB_GB</eid>
         <voice>
           <Chord>
+            <eid>HB_HB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>IB_IB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>JB_JB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>KB_KB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>LB_LB</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <Note>
+              <eid>MB_MB</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -473,44 +547,55 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>NB_NB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>OB_OB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>PB_PB</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>QB_QB</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>RB_RB</eid>
         <voice>
           <Chord>
+            <eid>SB_SB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>TB_TB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>UB_UB</eid>
                 </Accidental>
               <pitch>75</pitch>
               <tpc>23</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>VB_VB</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <Note>
+              <eid>WB_WB</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
+                <eid>XB_XB</eid>
                 </Accidental>
               <Events>
                 <Event>
@@ -522,60 +607,74 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>YB_YB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>ZB_ZB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>aB_aB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>bB_bB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>cB_cB</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>dB_dB</eid>
         <voice>
           <Chord>
+            <eid>eB_eB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>fB_fB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>gB_gB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>hB_hB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>iB_iB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>jB_jB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>kB_kB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>lB_lB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
@@ -583,60 +682,73 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>mB_mB</eid>
         <voice>
           <StaffText>
+            <eid>nB_nB</eid>
             <text>Inferred grace cues</text>
             </StaffText>
           <Chord>
+            <eid>oB_oB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>pB_pB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>qB_qB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>rB_rB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>sB_sB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>tB_tB</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>uB_uB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>vB_vB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>wB_wB</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>xB_xB</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>yB_yB</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <play>0</play>
@@ -645,29 +757,36 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>zB_zB</eid>
         <voice>
           <Chord>
+            <eid>0B_0B</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>1B_1B</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>2B_2B</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>3B_3B</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <eid>4B_4B</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>5B_5B</eid>
                 </Accidental>
               <Events>
                 <Event>
@@ -680,23 +799,28 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>6B_6B</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>7B_7B</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>8B_8B</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>9B_9B</eid>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalNatural</subtype>
+                <eid>+B_+B</eid>
                 </Accidental>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -704,15 +828,18 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>/B_/B</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>AC_AC</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>BC_BC</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <play>0</play>
@@ -721,56 +848,69 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>CC_CC</eid>
         <voice>
           <Chord>
+            <eid>DC_DC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>EC_EC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>FC_FC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>GC_GC</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>HC_HC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>IC_IC</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>JC_JC</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Rest>
+            <eid>KC_KC</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>LC_LC</eid>
         <voice>
           <Chord>
+            <eid>MC_MC</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <eid>NC_NC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>OC_OC</eid>
                 </Accidental>
               <Events>
                 <Event>
@@ -783,50 +923,60 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>PC_PC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>QC_QC</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>RC_RC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>SC_SC</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>TC_TC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>UC_UC</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>VC_VC</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>WC_WC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>XC_XC</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>YC_YC</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <play>0</play>
@@ -835,12 +985,15 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>ZC_ZC</eid>
         <voice>
           <Chord>
+            <eid>aC_aC</eid>
             <small>1</small>
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <eid>bC_bC</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -852,45 +1005,54 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>cC_cC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>dC_dC</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>eC_eC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>fC_fC</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Chord>
+            <eid>gC_gC</eid>
             <small>1</small>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>hC_hC</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <play>0</play>
               </Note>
             <Note>
+              <eid>iC_iC</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               <play>0</play>
               </Note>
             </Chord>
           <Rest>
+            <eid>jC_jC</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>kC_kC</eid>
             </BarLine>
           </voice>
         </Measure>

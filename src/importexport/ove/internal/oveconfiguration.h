@@ -23,15 +23,20 @@
 #define MU_IMPORTEXPORT_OVECONFIGURATION_H
 
 #include "../ioveconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::iex::ove {
-class OveConfiguration : public IOveConfiguration
+class OveConfiguration : public IOveConfiguration, public muse::async::Asyncable
 {
 public:
     void init();
 
     std::string importOvertureCharset() const override;
     void setImportOvertureCharset(const std::string& charset) override;
+    muse::async::Channel<std::string> importOvertureCharsetChanged() const override;
+
+private:
+    muse::async::Channel<std::string> m_importOvertureCharsetChanged;
 };
 }
 

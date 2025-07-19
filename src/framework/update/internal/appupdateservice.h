@@ -37,16 +37,21 @@
 #include "../iappupdateservice.h"
 
 namespace muse::update {
-class AppUpdateService : public IAppUpdateService, public async::Asyncable
+class AppUpdateService : public IAppUpdateService, public Injectable, public async::Asyncable
 {
-    Inject<network::INetworkManagerCreator> networkManagerCreator;
-    Inject<io::IFileSystem> fileSystem;
-    Inject<ISystemInfo> systemInfo;
-    Inject<IApplication> application;
-    Inject<IInteractive> interactive;
-    Inject<IUpdateConfiguration> configuration;
+    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
+    Inject<ISystemInfo> systemInfo = { this };
+    Inject<IApplication> application = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<IUpdateConfiguration> configuration = { this };
 
 public:
+    AppUpdateService(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
+    void init();
+
     RetVal<ReleaseInfo> checkForUpdate() override;
 
     RetVal<io::path_t> downloadRelease() override;
@@ -55,6 +60,15 @@ public:
 
 private:
     friend class AppUpdateServiceTests;
+
+    struct UpdateRequestHistory {
+        QDate installedWeekBeginning;
+        QDate previousRequestDay;
+        bool isValid() const { return installedWeekBeginning.isValid() && previousRequestDay.isValid(); }
+    };
+
+    RetVal<UpdateRequestHistory> readUpdateRequestHistory(const io::path_t& path) const;
+    Ret writeUpdateRequestHistory(const io::path_t& path, const UpdateRequestHistory& updateRequestHistory);
 
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
 

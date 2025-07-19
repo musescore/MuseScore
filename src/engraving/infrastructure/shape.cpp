@@ -101,7 +101,7 @@ Shape Shape::translated(const PointF& pt) const
     Shape s;
     s.m_elements.reserve(m_elements.size());
     for (const ShapeElement& r : m_elements) {
-        s.add(r.translated(pt), r.item());
+        s.add(r.translated(pt), r.item(), r.ignoreForLayout());
     }
     return s;
 }
@@ -120,7 +120,7 @@ Shape Shape::scaled(const SizeF& mag) const
     Shape s;
     s.m_elements.reserve(m_elements.size());
     for (const ShapeElement& r : m_elements) {
-        s.add(r.scaled(mag), r.item());
+        s.add(r.scaled(mag), r.item(), r.ignoreForLayout());
     }
     return s;
 }
@@ -141,6 +141,24 @@ Shape Shape::adjusted(double xp1, double yp1, double xp2, double yp2) const
         s.add(element.adjusted(xp1, yp1, xp2, yp2));
     }
 
+    return s;
+}
+
+Shape& Shape::pad(double p)
+{
+    for (ShapeElement& el : m_elements) {
+        el.pad(p);
+    }
+    return *this;
+}
+
+Shape Shape::padded(double p) const
+{
+    Shape s;
+    s.m_elements.reserve(m_elements.size());
+    for (const ShapeElement& el : m_elements) {
+        s.add(el.padded(p));
+    }
     return s;
 }
 
@@ -200,7 +218,7 @@ std::optional<ShapeElement> Shape::get_first() const
 //    Calculates the minimum distance between two shapes.
 //-------------------------------------------------------------------
 
-double Shape::minVerticalDistance(const Shape& a) const
+double Shape::minVerticalDistance(const Shape& a, double minHorizontalClearance) const
 {
     if (empty() || a.empty()) {
         return 0.0;
@@ -219,7 +237,7 @@ double Shape::minVerticalDistance(const Shape& a) const
             }
             double ax1 = r1.left();
             double ax2 = r1.right();
-            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
+            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, minHorizontalClearance)) {
                 dist = std::max(dist, r1.bottom() - r2.top());
             }
         }
@@ -246,15 +264,15 @@ double Shape::verticalClearance(const Shape& a, double minHorizontalDistance) co
         if (r2.height() <= 0.0) {
             continue;
         }
-        double bx1 = r2.left() - minHorizontalDistance;
-        double bx2 = r2.right() + minHorizontalDistance;
+        double bx1 = r2.left();
+        double bx2 = r2.right();
         for (const RectF& r1 : m_elements) {
             if (r1.height() <= 0.0) {
                 continue;
             }
             double ax1 = r1.left();
             double ax2 = r1.right();
-            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
+            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, minHorizontalDistance)) {
                 dist = std::min(dist, r2.top() - r1.bottom());
             }
         }
@@ -272,7 +290,7 @@ bool Shape::clearsVertically(const Shape& a) const
 {
     for (const RectF& r1 : a.m_elements) {
         for (const RectF& r2 : m_elements) {
-            if (mu::engraving::intersects(r1.left(), r1.right(), r2.left(), r2.right(), 0.0)) {
+            if (mu::engraving::intersects(r1.left(), r1.right(), r2.left(), r2.right())) {
                 if (std::min(r1.top(), r1.bottom()) <= std::max(r2.top(), r2.bottom())) {
                     return false;
                 }
@@ -291,8 +309,8 @@ double Shape::left() const
 {
     double dist = DBL_MAX;
     for (const ShapeElement& r : m_elements) {
-        if (!RealIsNull(r.height()) && !(r.item() && r.item()->isTextBase()) && r.left() < dist) {
-            // if (r.left() < dist)
+        // TURBO-HACK: the only purpose of this is to ignore fingering for spacing the first CR segment after the header.
+        if (!RealIsNull(r.height()) && !(r.item() && r.item()->isFingering()) && r.left() < dist) {
             dist = r.left();
         }
     }
@@ -350,6 +368,30 @@ double Shape::bottom() const
     return dist;
 }
 
+double Shape::topAtX(double x) const
+{
+    double localTop = DBL_MAX;
+    for (const ShapeElement& el : m_elements) {
+        if (el.left() < x && el.right() > x) {
+            localTop = std::min(localTop, el.top());
+        }
+    }
+
+    return localTop != DBL_MAX ? localTop : top();
+}
+
+double Shape::bottomAtX(double x) const
+{
+    double localBottom = -DBL_MAX;
+    for (const ShapeElement& el : m_elements) {
+        if (el.left() < x && el.right() > x) {
+            localBottom = std::max(localBottom, el.bottom());
+        }
+    }
+
+    return localBottom != DBL_MAX ? localBottom : bottom();
+}
+
 double Shape::rightMostEdgeAtHeight(double yAbove, double yBelow) const
 {
     double edge = -DBL_MAX;
@@ -367,6 +409,19 @@ double Shape::leftMostEdgeAtHeight(double yAbove, double yBelow) const
     double edge = DBL_MAX;
     for (const ShapeElement& sh : m_elements) {
         if (sh.bottom() > yAbove && sh.top() < yBelow) {
+            edge = std::min(edge, sh.left());
+        }
+    }
+
+    return edge;
+}
+
+double Shape::leftMostEdgeAtTop() const
+{
+    double edge = DBL_MAX;
+    const double shapeTop = top();
+    for (const ShapeElement& sh : m_elements) {
+        if (muse::RealIsEqual(sh.top(), shapeTop)) {
             edge = std::min(edge, sh.left());
         }
     }
@@ -477,6 +532,18 @@ void Shape::remove(const Shape& s)
     }
 
     invalidateBBox();
+}
+
+std::vector<RectF> Shape::toRects() const
+{
+    std::vector<RectF> rects;
+    rects.reserve(m_elements.size());
+
+    for (const RectF& shapeEl : m_elements) {
+        rects.push_back(shapeEl);
+    }
+
+    return rects;
 }
 
 void Shape::removeInvisibles()

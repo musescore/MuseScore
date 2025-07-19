@@ -20,21 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_GLISSANDO_H
-#define MU_ENGRAVING_GLISSANDO_H
+#pragma once
 
 #include "engravingitem.h"
 #include "line.h"
 #include "property.h"
-#include "types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
-// the amount of white space to leave before a system-initial chord with glissando
-static const double GLISS_STARTOFSYSTEM_WIDTH = 4;           // in sp
-
 class Glissando;
 class Note;
-enum class GlissandoType;
+enum class GlissandoType : unsigned char;
 
 //---------------------------------------------------------
 //   @@ GlissandoSegment
@@ -71,7 +67,6 @@ class Glissando final : public SLine
     M_PROPERTY(String, fontFace, setFontFace)
     M_PROPERTY(double, fontSize, setFontSize)
     M_PROPERTY(bool, showText, setShowText)
-    M_PROPERTY(bool, playGlissando, setPlayGlissando)
     M_PROPERTY(FontStyle, fontStyle, setFontStyle)
     M_PROPERTY(int, easeIn, setEaseIn)
     M_PROPERTY(int, easeOut, setEaseOut)
@@ -84,7 +79,6 @@ public:
     Glissando(const Glissando&);
 
     static Note* guessInitialNote(Chord* chord);
-    static Note* guessFinalNote(Chord* chord, Note* startNote);
 
     const TranslatableString& glissandoTypeName() const;
 
@@ -96,12 +90,13 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    bool allowTimeAnchor() const override { return false; }
+
     // property/style methods
     Sid getPropertyStyle(Pid id) const override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-    void addLineAttachPoints();
 
     static bool pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets);
 
@@ -110,5 +105,3 @@ private:
     std::optional<bool> m_isHarpGliss = std::nullopt;
 };
 } // namespace mu::engraving
-
-#endif

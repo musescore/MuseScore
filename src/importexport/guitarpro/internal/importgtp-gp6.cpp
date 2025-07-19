@@ -355,7 +355,7 @@ void GuitarPro6::unhandledNode(String nodeName)
 XmlDomNode GuitarPro6::getNode(const String& id, XmlDomNode currentDomNode)
 {
     while (!(currentDomNode).isNull()) {
-        String currentId = currentDomNode.attribute("id");
+        String currentId = currentDomNode.toElement().attribute("id").value();
         if (currentId == id) {
             return currentDomNode;
         }
@@ -378,7 +378,7 @@ void GuitarPro6::readGpif(ByteArray* data)
     auto builder = createGPDomBuilder();
     builder->buildGPDomModel(&domElem);
 
-    GPConverter scoreBuilder(score, builder->getGPDomModel());
+    GPConverter scoreBuilder(score, builder->getGPDomModel(), iocContext());
     scoreBuilder.convertGP();
 }
 

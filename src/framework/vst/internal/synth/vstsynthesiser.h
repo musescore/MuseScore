@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_VST_VSTSYNTHESISER_H
-#define MUSE_VST_VSTSYNTHESISER_H
+#pragma once
 
 #include <memory>
 
@@ -31,19 +29,20 @@
 #include "modularity/ioc.h"
 #include "mpe/events.h"
 
-#include "internal/vstaudioclient.h"
-#include "ivstpluginsregister.h"
+#include "../vstaudioclient.h"
+#include "../../ivstinstancesregister.h"
 #include "vstsequencer.h"
 #include "vsttypes.h"
 
 namespace muse::vst {
 class VstSynthesiser : public muse::audio::synth::AbstractSynthesizer
 {
-    INJECT(IVstPluginsRegister, pluginsRegister)
-    INJECT(muse::audio::IAudioConfiguration, config)
+    Inject<IVstInstancesRegister> instancesRegister = { this };
+    Inject<muse::audio::IAudioConfiguration> config = { this };
 
 public:
-    explicit VstSynthesiser(const muse::audio::TrackId trackId, const muse::audio::AudioInputParams& params);
+    explicit VstSynthesiser(const muse::audio::TrackId trackId, const muse::audio::AudioInputParams& params,
+                            const modularity::ContextPtr& iocCtx);
     ~VstSynthesiser() override;
 
     void init();
@@ -58,6 +57,7 @@ public:
 
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
 
     bool isActive() const override;
     void setIsActive(const bool isActive) override;
@@ -73,20 +73,20 @@ public:
 
 private:
     void toggleVolumeGain(const bool isActive);
+    audio::samples_t processSequence(const VstSequencer::EventSequence& sequence, const audio::samples_t samples, float* buffer);
 
-    VstPluginPtr m_pluginPtr = nullptr;
-
+    IVstPluginInstancePtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
+    unsigned int m_audioChannelsCount = 2;
     async::Channel<unsigned int> m_streamsCountChanged;
-    muse::audio::samples_t m_samplesPerChannel = 0;
 
     VstSequencer m_sequencer;
 
     muse::audio::TrackId m_trackId = muse::audio::INVALID_TRACK_ID;
+
+    bool m_useDynamicEvents = false;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;
 }
-
-#endif // MUSE_VST_VSTSYNTHESISER_H

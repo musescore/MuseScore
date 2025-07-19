@@ -127,7 +127,7 @@ std::vector<LogLayout::PatternData> LogLayout::patterns(const std::string& forma
 
     std::vector<LogLayout::PatternData> patterns;
     for (const std::string_view& pstr : ps) {
-        PatternData p = parcePattern(format, pstr);
+        PatternData p = parsePattern(format, pstr);
         if (p.index != std::string::npos) {
             patterns.push_back(std::move(p));
         }
@@ -140,7 +140,7 @@ std::vector<LogLayout::PatternData> LogLayout::patterns(const std::string& forma
     return patterns;
 }
 
-LogLayout::PatternData LogLayout::parcePattern(const std::string& format, const std::string_view& pattern)
+LogLayout::PatternData LogLayout::parsePattern(const std::string& format, const std::string_view& pattern)
 {
     PatternData p;
     p.pattern = pattern;
@@ -374,6 +374,11 @@ void Logger::addDest(LogDest* dest)
 {
     assert(dest);
     m_dests.push_back(dest);
+}
+
+void Logger::removeDest(LogDest* dest)
+{
+    m_dests.erase(std::remove(m_dests.begin(), m_dests.end(), dest), m_dests.end());
 }
 
 std::vector<LogDest*> Logger::dests() const

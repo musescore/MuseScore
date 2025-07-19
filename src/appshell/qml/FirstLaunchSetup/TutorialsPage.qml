@@ -55,14 +55,13 @@ Page {
 
                 anchors.centerIn: parent
 
-                // Approx 40% of the image height is empty space
-                height: parent.height * 1.4
+                height: parent.height
                 width: implicitWidth
 
                 fillMode: Image.PreserveAspectFit
                 source: "resources/VideoTutorials.png"
 
-                layer.enabled: true
+                layer.enabled: ui.isEffectsAllowed
                 layer.effect: EffectOpacityMask {
                     maskSource: Rectangle {
                         width: image.width

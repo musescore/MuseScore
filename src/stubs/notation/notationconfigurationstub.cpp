@@ -24,6 +24,11 @@
 using namespace mu;
 using namespace mu::notation;
 
+QColor NotationConfigurationStub::notationColor() const
+{
+    return QColor();
+}
+
 QColor NotationConfigurationStub::backgroundColor() const
 {
     return QColor();
@@ -125,7 +130,7 @@ int NotationConfigurationStub::borderWidth() const
     return 1;
 }
 
-QColor NotationConfigurationStub::anchorLineColor() const
+QColor NotationConfigurationStub::anchorColor() const
 {
     return QColor();
 }
@@ -145,7 +150,17 @@ int NotationConfigurationStub::cursorOpacity() const
     return 1;
 }
 
+bool NotationConfigurationStub::thinNoteInputCursor() const
+{
+    return false;
+}
+
 QColor NotationConfigurationStub::selectionColor(engraving::voice_idx_t) const
+{
+    return QColor();
+}
+
+QColor NotationConfigurationStub::highlightSelectionColor(engraving::voice_idx_t) const
 {
     return QColor();
 }
@@ -155,6 +170,26 @@ QColor NotationConfigurationStub::dropRectColor() const
     return QColor();
 }
 
+muse::draw::Color NotationConfigurationStub::noteInputPreviewColor() const
+{
+    return muse::draw::Color();
+}
+
+bool NotationConfigurationStub::useNoteInputCursorInInputByDuration() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setUseNoteInputCursorInInputByDuration(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::useNoteInputCursorInInputByDurationChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 int NotationConfigurationStub::selectionProximity() const
 {
     return 1;
@@ -162,6 +197,12 @@ int NotationConfigurationStub::selectionProximity() const
 
 void NotationConfigurationStub::setSelectionProximity(int)
 {
+}
+
+muse::async::Channel<int> NotationConfigurationStub::selectionProximityChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
 }
 
 ZoomType NotationConfigurationStub::defaultZoomType() const
@@ -180,6 +221,12 @@ int NotationConfigurationStub::defaultZoom() const
 
 void NotationConfigurationStub::setDefaultZoom(int)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::defaultZoomChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 QList<int> NotationConfigurationStub::possibleZoomPercentageList() const
@@ -204,6 +251,12 @@ int NotationConfigurationStub::mouseZoomPrecision() const
 
 void NotationConfigurationStub::setMouseZoomPrecision(int)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::mouseZoomPrecisionChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 std::string NotationConfigurationStub::fontFamily() const
@@ -240,6 +293,12 @@ void NotationConfigurationStub::setDefaultStyleFilePath(const muse::io::path_t&)
 {
 }
 
+muse::async::Channel<muse::io::path_t> NotationConfigurationStub::defaultStyleFilePathChanged() const
+{
+    static muse::async::Channel<muse::io::path_t> ch;
+    return ch;
+}
+
 muse::io::path_t NotationConfigurationStub::partStyleFilePath() const
 {
     return muse::io::path_t();
@@ -249,6 +308,42 @@ void NotationConfigurationStub::setPartStyleFilePath(const muse::io::path_t&)
 {
 }
 
+muse::async::Channel<muse::io::path_t> NotationConfigurationStub::partStyleFilePathChanged() const
+{
+    static muse::async::Channel<muse::io::path_t> ch;
+    return ch;
+}
+
+NoteInputMethod NotationConfigurationStub::defaultNoteInputMethod() const
+{
+    return NoteInputMethod::UNKNOWN;
+}
+
+void NotationConfigurationStub::setDefaultNoteInputMethod(NoteInputMethod)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::defaultNoteInputMethodChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::addAccidentalDotsArticulationsToNextNoteEntered() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setAddAccidentalDotsArticulationsToNextNoteEntered(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::addAccidentalDotsArticulationsToNextNoteEnteredChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 bool NotationConfigurationStub::isMidiInputEnabled() const
 {
     return false;
@@ -256,6 +351,27 @@ bool NotationConfigurationStub::isMidiInputEnabled() const
 
 void NotationConfigurationStub::setIsMidiInputEnabled(bool)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::isMidiInputEnabledChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 bool NotationConfigurationStub::isAutomaticallyPanEnabled() const
@@ -297,6 +413,35 @@ muse::async::Notification NotationConfigurationStub::isPlayChordSymbolsChanged()
     return n;
 }
 
+bool NotationConfigurationStub::isPlayPreviewNotesInInputByDuration() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setIsPlayPreviewNotesInInputByDuration(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::isPlayPreviewNotesInInputByDurationChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::playPreviewNotesWithScoreDynamics() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setPlayPreviewNotesWithScoreDynamics(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::playPreviewNotesWithScoreDynamicsChanged() const
+{
+    return {};
+}
+
 bool NotationConfigurationStub::isMetronomeEnabled() const
 {
     return false;
@@ -304,6 +449,12 @@ bool NotationConfigurationStub::isMetronomeEnabled() const
 
 void NotationConfigurationStub::setIsMetronomeEnabled(bool)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::isMetronomeEnabledChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 bool NotationConfigurationStub::isCountInEnabled() const
@@ -359,6 +510,12 @@ void NotationConfigurationStub::setColorNotesOutsideOfUsablePitchRange(bool)
 {
 }
 
+muse::async::Channel<bool> NotationConfigurationStub::colorNotesOutsideOfUsablePitchRangeChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
 int NotationConfigurationStub::delayBetweenNotesInRealTimeModeMilliseconds() const
 {
     return 100;
@@ -368,6 +525,12 @@ void NotationConfigurationStub::setDelayBetweenNotesInRealTimeModeMilliseconds(i
 {
 }
 
+muse::async::Channel<int> NotationConfigurationStub::delayBetweenNotesInRealTimeModeMillisecondsChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
+}
+
 int NotationConfigurationStub::notePlayDurationMilliseconds() const
 {
     return 100;
@@ -375,6 +538,12 @@ int NotationConfigurationStub::notePlayDurationMilliseconds() const
 
 void NotationConfigurationStub::setNotePlayDurationMilliseconds(int)
 {
+}
+
+muse::async::Channel<int> NotationConfigurationStub::notePlayDurationMillisecondsChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
 }
 
 void NotationConfigurationStub::setTemplateModeEnabled(std::optional<bool>)
@@ -465,6 +634,91 @@ void NotationConfigurationStub::setPianoKeyboardNumberOfKeys(int)
 {
 }
 
+ValCh<bool> NotationConfigurationStub::midiUseWrittenPitch() const
+{
+    static ValCh<bool> vch;
+    return vch;
+}
+
+void NotationConfigurationStub::setMidiUseWrittenPitch(bool)
+{
+}
+
+bool NotationConfigurationStub::useNewPercussionPanel() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setUseNewPercussionPanel(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::useNewPercussionPanelChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::percussionPanelUseNotationPreview() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setPercussionPanelUseNotationPreview(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::percussionPanelUseNotationPreviewChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::autoShowPercussionPanel() const
+{
+    return true;
+}
+
+void NotationConfigurationStub::setAutoShowPercussionPanel(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::autoShowPercussionPanelChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::showPercussionPanelPadSwapDialog() const
+{
+    return true;
+}
+
+void NotationConfigurationStub::setShowPercussionPanelPadSwapDialog(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::showPercussionPanelPadSwapDialogChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::percussionPanelMoveMidiNotesAndShortcuts() const
+{
+    return true;
+}
+
+void NotationConfigurationStub::setPercussionPanelMoveMidiNotesAndShortcuts(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::percussionPanelMoveMidiNotesAndShortcutsChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 muse::io::path_t NotationConfigurationStub::styleFileImportPath() const
 {
     return muse::io::path_t();
@@ -472,4 +726,10 @@ muse::io::path_t NotationConfigurationStub::styleFileImportPath() const
 
 void NotationConfigurationStub::setStyleFileImportPath(const muse::io::path_t&)
 {
+}
+
+muse::async::Channel<std::string> NotationConfigurationStub::styleFileImportPathChanged() const
+{
+    static muse::async::Channel<std::string> ch;
+    return ch;
 }

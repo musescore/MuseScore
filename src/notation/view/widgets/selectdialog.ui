@@ -34,7 +34,7 @@
         <string>Select</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="1" column="0">
+        <item row="2" column="0">
          <widget class="QCheckBox" name="sameSubtype">
           <property name="text">
            <string>Same subtype:</string>
@@ -42,37 +42,44 @@
          </widget>
         </item>
         <item row="0" column="1" colspan="2">
-         <widget class="QLineEdit" name="type">
-          <property name="readOnly">
-           <bool>true</bool>
+         <widget class="QLabel" name="type">
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
+        <item row="1" column="0" colspan="3">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
          <widget class="QCheckBox" name="sameStaff">
           <property name="text">
            <string>Same staff</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="4" column="0">
          <widget class="QCheckBox" name="sameVoice">
           <property name="text">
            <string>Same voice</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
+        <item row="5" column="0">
          <widget class="QCheckBox" name="sameDuration">
           <property name="text">
            <string>Same duration</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="2">
-         <widget class="QLineEdit" name="subtype">
-          <property name="readOnly">
-           <bool>true</bool>
+        <item row="2" column="1" colspan="2">
+         <widget class="QLabel" name="subtype">
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
           </property>
          </widget>
         </item>
@@ -86,28 +93,28 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
+        <item row="6" column="0">
          <widget class="QCheckBox" name="sameBeat">
           <property name="text">
            <string>Same beat</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="1">
+        <item row="6" column="1">
          <widget class="QCheckBox" name="sameMeasure">
           <property name="text">
            <string>Same measure</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
+        <item row="5" column="1">
          <widget class="QCheckBox" name="sameSystem">
           <property name="text">
            <string>Same system</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="4" column="1">
          <widget class="QCheckBox" name="inSelection">
           <property name="text">
            <string>In selection</string>
@@ -123,7 +130,7 @@
         <string>Action</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
+        <item row="0" column="0" rowspan="2">
          <widget class="QRadioButton" name="replace">
           <property name="text">
            <string>Replace selection</string>

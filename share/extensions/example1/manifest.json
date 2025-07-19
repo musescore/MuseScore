@@ -1,8 +1,10 @@
 {
     "uri": "musescore://extensions/dev/example_1",
     "type": "form",
-    "modal": true,
     "title": "Example 1 (default)",
+    "icon": "CLOCK",
+    "ui_context": "Any",
+    "modal": true,
 
-    "main": "main.qml"
+    "path": "Main.qml"
 }

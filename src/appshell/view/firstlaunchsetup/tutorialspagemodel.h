@@ -30,11 +30,11 @@
 class QUrl;
 
 namespace mu::appshell {
-class TutorialsPageModel : public QObject
+class TutorialsPageModel : public QObject, public muse::Injectable
 {
     Q_OBJECT
 
-    Inject<muse::update::IUpdateConfiguration> updateConfiguration;
+    Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
 
 public:
     explicit TutorialsPageModel(QObject* parent = nullptr);

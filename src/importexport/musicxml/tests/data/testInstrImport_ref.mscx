@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.5</pageWidth>
@@ -16,7 +17,7 @@
       <staffDistance>7.25</staffDistance>
       <minSystemDistance>9.25</minSystemDistance>
       <romanNumeralFontFace>Edwin</romanNumeralFontFace>
-      <Spatium>1.05833</Spatium>
+      <spatium>1.05833</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -33,7 +34,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -98,7 +100,8 @@
         </Instrument>
       </Part>
     <Part id="2">
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -163,7 +166,8 @@
         </Instrument>
       </Part>
     <Part id="3">
-      <Staff id="3">
+      <Staff>
+        <eid>E_E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -229,15 +233,16 @@
         </Instrument>
       </Part>
     <Part id="4">
-      <Staff id="4">
+      <Staff>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
-      <trackName>Bb Clarinet</trackName>
+      <trackName>B♭ Clarinet</trackName>
       <Instrument id="bb-clarinet">
-        <longName>Bb Clarinet</longName>
+        <longName>B♭ Clarinet</longName>
         <shortName>B¯ Clarinet B¯ Bass Clar.</shortName>
         <trackName>Bb Clarinet</trackName>
         <minPitchP>50</minPitchP>
@@ -294,15 +299,16 @@
         </Instrument>
       </Part>
     <Part id="5">
-      <Staff id="5">
+      <Staff>
+        <eid>G_G</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
-      <trackName>Eb Alto Clarinet</trackName>
+      <trackName>E♭ Alto Clarinet</trackName>
       <Instrument id="alto-clarinet">
-        <longName>Eb Alto Clarinet</longName>
+        <longName>E♭ Alto Clarinet</longName>
         <shortName>Alto Cl.</shortName>
         <trackName>Eb Alto Clarinet</trackName>
         <minPitchP>43</minPitchP>
@@ -359,15 +365,16 @@
         </Instrument>
       </Part>
     <Part id="6">
-      <Staff id="6">
+      <Staff>
+        <eid>H_H</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
-      <trackName>Bb Bass Clarinet</trackName>
+      <trackName>B♭ Bass Clarinet</trackName>
       <Instrument id="bb-bass-clarinet">
-        <longName>Bb Bass Clarinet</longName>
+        <longName>B♭ Bass Clarinet</longName>
         <shortName>B. Cl.</shortName>
         <trackName>Bb Bass Clarinet</trackName>
         <minPitchP>34</minPitchP>
@@ -426,15 +433,16 @@
         </Instrument>
       </Part>
     <Part id="7">
-      <Staff id="7">
+      <Staff>
+        <eid>I_I</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
-      <trackName>Eb Alto Sax.</trackName>
+      <trackName>E♭ Alto Sax.</trackName>
       <Instrument id="alto-saxophone">
-        <longName>Eb Alto Sax.</longName>
+        <longName>E♭ Alto Sax.</longName>
         <shortName>E¯ Alto Sax. E¯ Bar. Sax.</shortName>
         <trackName>Eb Alto Sax.</trackName>
         <minPitchP>49</minPitchP>
@@ -491,15 +499,16 @@
         </Instrument>
       </Part>
     <Part id="8">
-      <Staff id="8">
+      <Staff>
+        <eid>J_J</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
-      <trackName> Bb Tenor Sax.</trackName>
+      <trackName> B♭ Tenor Sax.</trackName>
       <Instrument id="tenor-saxophone">
-        <longName> Bb Tenor Sax.</longName>
+        <longName> B♭ Tenor Sax.</longName>
         <shortName>Ten. Sax.</shortName>
         <trackName> Bb Tenor Sax.</trackName>
         <minPitchP>44</minPitchP>
@@ -558,15 +567,16 @@
         </Instrument>
       </Part>
     <Part id="9">
-      <Staff id="9">
+      <Staff>
+        <eid>K_K</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
-      <trackName>Eb Baritone Sax.</trackName>
+      <trackName>E♭ Baritone Sax.</trackName>
       <Instrument id="baritone-saxophone">
-        <longName>Eb Baritone Sax.</longName>
+        <longName>E♭ Baritone Sax.</longName>
         <shortName>Bari. Sax.</shortName>
         <trackName>Eb Baritone Sax.</trackName>
         <minPitchP>36</minPitchP>
@@ -625,15 +635,16 @@
         </Instrument>
       </Part>
     <Part id="10">
-      <Staff id="10">
+      <Staff>
+        <eid>L_L</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
-      <trackName>Bb Trumpet</trackName>
+      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Bb Trumpet</longName>
+        <longName>B♭ Trumpet</longName>
         <shortName>Tpt.</shortName>
         <trackName>Bb Trumpet</trackName>
         <minPitchP>52</minPitchP>
@@ -695,7 +706,8 @@
         </Instrument>
       </Part>
     <Part id="11">
-      <Staff id="11">
+      <Staff>
+        <eid>M_M</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -765,7 +777,8 @@
         </Instrument>
       </Part>
     <Part id="12">
-      <Staff id="12">
+      <Staff>
+        <eid>N_N</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -836,7 +849,8 @@
         </Instrument>
       </Part>
     <Part id="13">
-      <Staff id="13">
+      <Staff>
+        <eid>O_O</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -906,7 +920,8 @@
         </Instrument>
       </Part>
     <Part id="14">
-      <Staff id="14">
+      <Staff>
+        <eid>P_P</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -976,7 +991,8 @@
         </Instrument>
       </Part>
     <Part id="15">
-      <Staff id="15">
+      <Staff>
+        <eid>Q_Q</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -1042,7 +1058,8 @@
         </Instrument>
       </Part>
     <Part id="16">
-      <Staff id="16">
+      <Staff>
+        <eid>R_R</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -1126,7 +1143,8 @@
         </Instrument>
       </Part>
     <Part id="17">
-      <Staff id="17">
+      <Staff>
+        <eid>S_S</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -1139,13 +1157,15 @@
         <trackName>Percussion</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="27">
           <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Closed Hi-Hat</name>
           <stem>1</stem>
-          <shortcut>G</shortcut>
+          <panelRow>4</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="28">
           <head>cross</head>
@@ -1153,145 +1173,388 @@
           <voice>1</voice>
           <name>Pedal Hi-Hat</name>
           <stem>2</stem>
-          <shortcut>F</shortcut>
+          <panelRow>4</panelRow>
+          <panelColumn>7</panelColumn>
           </Drum>
         <Drum pitch="29">
-          <head>cross</head>
-          <line>1</line>
+          <head>xcircle</head>
+          <line>-1</line>
           <voice>0</voice>
           <name>Open Hi-Hat</name>
           <stem>1</stem>
-          <shortcut>E</shortcut>
+          <panelRow>4</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="30">
           <head>cross</head>
           <line>0</line>
           <voice>0</voice>
-          <name>Ride Cymbal 1</name>
+          <name>Ride Cymbal</name>
           <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="31">
+          <head>plus</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Stick Click</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="36">
           <head>normal</head>
           <line>7</line>
           <voice>1</voice>
-          <name>Bass Drum 1</name>
+          <name>Bass Drum</name>
           <stem>2</stem>
-          <shortcut>B</shortcut>
+          <shortcut>A</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="37">
           <head>cross</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Side Stick</name>
+          <name>Snare Rim</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="38">
           <head>normal</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Acoustic Snare</name>
+          <name>Snare</name>
           <stem>1</stem>
-          <shortcut>A</shortcut>
+          <shortcut>B</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="54">
           <head>diamond</head>
-          <line>2</line>
+          <line>6</line>
           <voice>0</voice>
           <name>Tambourine</name>
           <stem>1</stem>
+          <shortcut>G</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="55">
           <head>cross</head>
-          <line>-3</line>
+          <line>-4</line>
           <voice>0</voice>
           <name>Splash Cymbal</name>
           <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="56">
           <head>triangle-down</head>
-          <line>1</line>
+          <line>0</line>
           <voice>0</voice>
           <name>Cowbell</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>7</panelColumn>
           </Drum>
-        <Drum pitch="58">
-          <head>diamond</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Vibraslap</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="59">
+        <Drum pitch="57">
           <head>cross</head>
           <line>-2</line>
           <voice>0</voice>
-          <name>Ride Cymbal 2</name>
+          <name>Suspended Cymbal</name>
           <stem>1</stem>
-          <shortcut>C</shortcut>
+          <shortcut>E</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
-        <Drum pitch="62">
-          <head>cross</head>
-          <line>2</line>
+        <Drum pitch="58">
+          <head>ti</head>
+          <line>0</line>
           <voice>0</voice>
-          <name>Mute High Conga</name>
+          <name>Vibraslap</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
-        <Drum pitch="63">
+        <Drum pitch="59">
           <head>cross</head>
           <line>4</line>
           <voice>0</voice>
-          <name>Open High Conga</name>
+          <name>Hand Cymbals</name>
           <stem>1</stem>
+          <shortcut>F</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="60">
+          <head>normal</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Hi Bongo</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="61">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Lo Bongo</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="62">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadXOrnate</whole>
+            <half>noteheadXOrnate</half>
+            <quarter>noteheadXOrnate</quarter>
+            <breve>noteheadXOrnate</breve>
+            </noteheads>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Mute Hi Conga</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="63">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi Conga</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="64">
-          <head>cross</head>
-          <line>6</line>
-          <voice>0</voice>
-          <name>Low Conga</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="70">
           <head>normal</head>
           <line>2</line>
           <voice>0</voice>
+          <name>Lo Conga</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="65">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Hi Timbale</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="66">
+          <head>normal</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Lo Timbale</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="67">
+          <head>triangle-down</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Hi Agogô</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="68">
+          <head>triangle-down</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Lo Agogô</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="69">
+          <head>diamond</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Cabasa</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="70">
+          <head>diamond</head>
+          <line>4</line>
+          <voice>0</voice>
           <name>Maracas</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="71">
+          <head>ti</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Long Whistle</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="72">
+          <head>cross</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Short Whistle</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="73">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Short Güiro</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="74">
+          <head>slashed1</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Long Güiro</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="75">
-          <head>normal</head>
+          <head>la</head>
           <line>0</line>
           <voice>0</voice>
           <name>Claves</name>
           <stem>1</stem>
+          <shortcut>H</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>7</panelColumn>
           </Drum>
-        <Drum pitch="81">
-          <head>diamond</head>
+        <Drum pitch="76">
+          <head>la</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Hi Woodblock</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="77">
+          <head>la</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Lo Woodblock</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="78">
+          <head>cross</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>Mute Cuica</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="79">
+          <head>slashed2</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>Open Cuica</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="80">
+          <head>cross</head>
           <line>0</line>
           <voice>0</voice>
-          <name>Open Triangle</name>
+          <name>Mute Triangle</name>
           <stem>1</stem>
           <shortcut>D</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="81">
+          <head>triangle-up</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Triangle</name>
+          <stem>1</stem>
+          <shortcut>C</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="82">
-          <head>normal</head>
-          <line>4</line>
+          <head>diamond</head>
+          <line>5</line>
           <voice>0</voice>
           <name>Shaker</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="83">
+          <head>triangle-down</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Sleigh Bells</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="84">
-          <head>cross</head>
+          <head>ti</head>
           <line>2</line>
           <voice>0</voice>
           <name>Mark Tree</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="85">
-          <head>normal</head>
-          <line>1</line>
+          <head>la</head>
+          <line>2</line>
           <voice>0</voice>
           <name>Castanets</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="86">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadSlashX</whole>
+            <half>noteheadSlashX</half>
+            <quarter>noteheadSlashX</quarter>
+            <breve>noteheadSlashX</breve>
+            </noteheads>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Mute Surdo</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="87">
+          <head>slash</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Surdo</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <clef>PERC</clef>
         <Articulation>
@@ -1345,7 +1608,8 @@
         </Instrument>
       </Part>
     <Part id="18">
-      <Staff id="18">
+      <Staff>
+        <eid>T_T</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -1415,24 +1679,30 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>U_U</eid>
         </VBox>
       <Measure len="1/64">
+        <eid>V_V</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>W_W</eid>
             </Clef>
           <TimeSig>
+            <eid>X_X</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>Y_Y</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1444,17 +1714,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>a_a</eid>
             </Clef>
           <TimeSig>
+            <eid>b_b</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>c_c</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>d_d</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1466,17 +1740,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>e_e</eid>
             </Clef>
           <TimeSig>
+            <eid>f_f</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>g_g</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>h_h</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1488,17 +1766,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>i_i</eid>
             </Clef>
           <TimeSig>
+            <eid>j_j</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>k_k</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>l_l</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1510,17 +1792,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>m_m</eid>
             </Clef>
           <TimeSig>
+            <eid>n_n</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>o_o</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>p_p</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1532,17 +1818,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>q_q</eid>
             </Clef>
           <TimeSig>
+            <eid>r_r</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>s_s</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>t_t</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1554,17 +1844,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>u_u</eid>
             </Clef>
           <TimeSig>
+            <eid>v_v</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>w_w</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>x_x</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1576,17 +1870,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>y_y</eid>
             </Clef>
           <TimeSig>
+            <eid>z_z</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>0_0</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>1_1</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1598,17 +1896,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>2_2</eid>
             </Clef>
           <TimeSig>
+            <eid>3_3</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>4_4</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>5_5</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1620,17 +1922,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>6_6</eid>
             </Clef>
           <TimeSig>
+            <eid>7_7</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>8_8</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>9_9</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1642,17 +1948,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>+_+</eid>
             </Clef>
           <TimeSig>
+            <eid>/_/</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>AB_AB</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>BB_BB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1664,17 +1974,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>CB_CB</eid>
             </Clef>
           <TimeSig>
+            <eid>DB_DB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>EB_EB</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>FB_FB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1686,17 +2000,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>GB_GB</eid>
             </Clef>
           <TimeSig>
+            <eid>HB_HB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>IB_IB</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>JB_JB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1708,17 +2026,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>KB_KB</eid>
             </Clef>
           <TimeSig>
+            <eid>LB_LB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>MB_MB</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>NB_NB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1730,17 +2052,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>OB_OB</eid>
             </Clef>
           <TimeSig>
+            <eid>PB_PB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>QB_QB</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>RB_RB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1752,17 +2078,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>SB_SB</eid>
             </Clef>
           <TimeSig>
+            <eid>TB_TB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>UB_UB</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>VB_VB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1774,17 +2104,21 @@
             <concertClefType>PERC</concertClefType>
             <transposingClefType>PERC</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>WB_WB</eid>
             </Clef>
           <TimeSig>
+            <eid>XB_XB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>YB_YB</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>ZB_ZB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -1796,17 +2130,21 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>aB_aB</eid>
             </Clef>
           <TimeSig>
+            <eid>bB_bB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>cB_cB</eid>
             <durationType>measure</durationType>
             <duration>1/64</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>dB_dB</eid>
             </BarLine>
           </voice>
         </Measure>

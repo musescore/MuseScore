@@ -33,10 +33,6 @@ Rectangle {
         id: notesPageModel
     }
 
-    Component.onCompleted: {
-        notesPageModel.load()
-    }
-
     RadioButtonGroup {
         width: 224
         height: 70
@@ -55,7 +51,6 @@ Rectangle {
 
             Column {
                 anchors.centerIn: parent
-                height: childrenRect.height
                 spacing: 8
 
                 StyledIconLabel {

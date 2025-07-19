@@ -40,7 +40,6 @@ LedgerLine::LedgerLine(EngravingItem* s)
 {
     setSelectable(false);
     m_len        = 0.;
-    m_next       = 0;
 }
 
 LedgerLine::~LedgerLine()
@@ -77,6 +76,5 @@ double LedgerLine::measureXPos() const
 void LedgerLine::spatiumChanged(double oldValue, double newValue)
 {
     m_len   = (m_len / oldValue) * newValue;
-    renderer()->layoutItem(this);
 }
 }

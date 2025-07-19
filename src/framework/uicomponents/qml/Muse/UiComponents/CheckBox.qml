@@ -118,7 +118,8 @@ FocusScope {
         anchors.fill: contentRow
         anchors.margins: -4
 
-        hoverEnabled: true
+        hoverEnabled: !label.hoveredLink
+        z: label.z - 1 // enable clicking on links in label text
 
         onClicked: {
             navigation.requestActiveByInteraction()

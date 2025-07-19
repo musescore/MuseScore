@@ -273,7 +273,7 @@ public:
 
     void setSelected(bool f) override;
     void setVisible(bool f) override;
-    void startEdit(EditData&) override;
+    void startEdit(EditData& ed) override;
     bool isEditAllowed(EditData&) const override;
     void endEdit(EditData&) override;
     void regenerateText();
@@ -300,7 +300,7 @@ public:
     // the array of configured fonts
     static const std::vector<FiguredBassFont>& FBFonts();
 
-    bool hasParentheses() const;       // read / write MusicXML support
+    bool parenthesesMode() const;       // read / write MusicXML support
 
     struct LayoutData : public TextBase::LayoutData {
         std::vector<double> lineLengths;               // lengths of duration indicator lines (in raster units)

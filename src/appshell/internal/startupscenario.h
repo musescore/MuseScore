@@ -33,18 +33,23 @@
 #include "iappshellconfiguration.h"
 #include "isessionsmanager.h"
 #include "project/iprojectautosaver.h"
+#include "audioplugins/iregisteraudiopluginsscenario.h"
 
 namespace mu::appshell {
-class StartupScenario : public IStartupScenario, public muse::async::Asyncable
+class StartupScenario : public IStartupScenario, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(ISessionsManager, sessionsManager)
-    INJECT(project::IProjectAutoSaver, projectAutoSaver)
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<ISessionsManager> sessionsManager = { this };
+    muse::Inject<project::IProjectAutoSaver> projectAutoSaver = { this };
+    muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
 
 public:
+
+    StartupScenario(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
     void setStartupType(const std::optional<std::string>& type) override;
 
@@ -53,7 +58,8 @@ public:
     const project::ProjectFile& startupScoreFile() const override;
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
-    void run() override;
+    void runOnSplashScreen() override;
+    void runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
 private:

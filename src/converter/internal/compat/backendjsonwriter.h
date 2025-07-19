@@ -22,7 +22,9 @@
 #ifndef MU_CONVERTER_BACKENDJSONWRITER_H
 #define MU_CONVERTER_BACKENDJSONWRITER_H
 
-#include "io/path.h"
+#include <QByteArray>
+
+class QIODevice;
 
 namespace mu::converter {
 class BackendJsonWriter

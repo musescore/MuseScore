@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -53,64 +55,79 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
+            <eid>E_E</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Tempo>
             <tempo>1.683333</tempo>
+            <eid>G_G</eid>
             <text><sym>metNoteQuarterUp</sym> = 101</text>
             </Tempo>
           <Rest>
+            <eid>H_H</eid>
             <durationType>measure</durationType>
             <duration>12/8</duration>
             </Rest>
           <BarLine>
+            <eid>I_I</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
+        <eid>J_J</eid>
         <voice>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <eid>K_K</eid>
             </Dynamic>
           <Beam>
+            <eid>L_L</eid>
             <l1>-16</l1>
             <l2>-16</l2>
             </Beam>
           <Chord>
+            <eid>M_M</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>N_N</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>O_O</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>P_P</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>R_R</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -118,22 +135,27 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>T_T</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>U_U</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>V_V</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>W_W</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
@@ -141,18 +163,21 @@
               <string>4</string>
               </Note>
             <Note>
+              <eid>X_X</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>Y_Y</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -160,38 +185,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>a_a</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>b_b</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>c_c</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>d_d</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <fret>9</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>e_e</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>f_f</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>g_g</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -199,38 +231,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>h_h</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>i_i</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>j_j</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>k_k</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <fret>9</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>l_l</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>m_m</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>n_n</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -238,42 +277,50 @@
               </Note>
             </Chord>
           <Beam>
+            <eid>o_o</eid>
             <l1>-16</l1>
             <l2>-16</l2>
             </Beam>
           <Chord>
+            <eid>p_p</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>q_q</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>r_r</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>s_s</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <fret>9</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>t_t</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>u_u</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>v_v</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -281,38 +328,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>w_w</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>x_x</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>y_y</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>z_z</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <fret>9</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>0_0</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>1_1</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>2_2</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -320,38 +374,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>3_3</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>4_4</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>5_5</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>6_6</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <fret>9</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>7_7</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>8_8</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>9_9</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -359,38 +420,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>+_+</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>/_/</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>AB_AB</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>BB_BB</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <fret>9</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>CB_CB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>DB_DB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>EB_EB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -398,47 +466,58 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>17</root>
-            <name>sus4</name>
-            <base>18</base>
+            <harmonyInfo>
+              <name>sus4</name>
+              <root>17</root>
+              <bass>18</bass>
+              </harmonyInfo>
+            <eid>FB_FB</eid>
             </Harmony>
           <Beam>
+            <eid>GB_GB</eid>
             <l1>-20</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
+            <eid>HB_HB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>IB_IB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>JB_JB</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>KB_KB</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>LB_LB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>MB_MB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>NB_NB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
@@ -446,38 +525,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>OB_OB</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>PB_PB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>QB_QB</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>RB_RB</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>SB_SB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>TB_TB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>UB_UB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
@@ -485,38 +571,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>VB_VB</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>WB_WB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>XB_XB</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>YB_YB</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>ZB_ZB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>aB_aB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>bB_bB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
@@ -524,38 +617,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>cB_cB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>dB_dB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>eB_eB</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>fB_fB</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>gB_gB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>hB_hB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>iB_iB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
@@ -563,42 +663,50 @@
               </Note>
             </Chord>
           <Beam>
+            <eid>jB_jB</eid>
             <l1>-20</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
+            <eid>kB_kB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>lB_lB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>mB_mB</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>nB_nB</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>oB_oB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>pB_pB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>qB_qB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
@@ -606,38 +714,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>rB_rB</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>sB_sB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>tB_tB</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>uB_uB</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>vB_vB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>wB_wB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>xB_xB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
@@ -645,38 +760,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>yB_yB</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>zB_zB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>0B_0B</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>1B_1B</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>2B_2B</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>3B_3B</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>4B_4B</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
@@ -684,38 +806,45 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>5B_5B</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>6B_6B</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>6</string>
               </Note>
             <Note>
+              <eid>7B_7B</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>8B_8B</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>9B_9B</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>+B_+B</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>/B_/B</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>

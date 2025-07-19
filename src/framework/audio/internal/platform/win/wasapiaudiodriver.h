@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_AUDIO_WASAPIAUDIODRIVER_H
-#define MUSE_AUDIO_WASAPIAUDIODRIVER_H
+#pragma once
 
 #include <memory>
 
@@ -37,20 +35,33 @@ public:
     WasapiAudioDriver();
 
     void init() override;
+
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+
+    const Spec& activeSpec() const override;
+
     AudioDeviceID outputDevice() const override;
     bool selectOutputDevice(const AudioDeviceID& id) override;
     bool resetToDefaultOutputDevice() override;
     async::Notification outputDeviceChanged() const override;
+
     AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
+
     unsigned int outputDeviceBufferSize() const override;
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
+
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+
+    unsigned int outputDeviceSampleRate() const override;
+    bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
+    async::Notification outputDeviceSampleRateChanged() const override;
+    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
+
     void resume() override;
     void suspend() override;
 
@@ -59,6 +70,8 @@ private:
     void reopen();
 
     AudioDeviceID defaultDeviceId() const;
+
+    unsigned int minSupportedBufferSize() const;
 
     bool m_isOpened = false;
 
@@ -69,10 +82,9 @@ private:
     async::Notification m_outputDeviceChanged;
     async::Notification m_availableOutputDevicesChanged;
     async::Notification m_outputDeviceBufferSizeChanged;
+    async::Notification m_outputDeviceSampleRateChanged;
 
     Spec m_desiredSpec;
     Spec m_activeSpec;
 };
 }
-
-#endif // MUSE_AUDIO_WASAPIAUDIODRIVER_H

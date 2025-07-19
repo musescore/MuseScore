@@ -24,28 +24,33 @@
 
 #include <QQuickItem>
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/actionable.h"
+
+#include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "context/iglobalcontext.h"
-#include "iappshellconfiguration.h"
-#include "braille/ibrailleconfiguration.h"
 #include "dockwindow/idockwindowprovider.h"
+#include "extensions/iextensionsprovider.h"
+#include "context/iglobalcontext.h"
+#include "notation/inotationconfiguration.h"
+#include "braille/ibrailleconfiguration.h"
+#include "iappshellconfiguration.h"
 
 namespace mu::appshell {
-class NotationPageModel : public QObject, public muse::async::Asyncable, public muse::actions::Actionable
+class NotationPageModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(braille::IBrailleConfiguration, brailleConfiguration)
-    INJECT(muse::dock::IDockWindowProvider, dockWindowProvider)
-
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
     Q_PROPERTY(bool isBraillePanelVisible READ isBraillePanelVisible NOTIFY isBraillePanelVisibleChanged)
+
+    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    Inject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
+    Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    Inject<context::IGlobalContext> globalContext = { this };
+    Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    Inject<IAppShellConfiguration> configuration = { this };
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);
@@ -59,16 +64,19 @@ public:
     Q_INVOKABLE QString playbackToolBarName() const;
     Q_INVOKABLE QString undoRedoToolBarName() const;
     Q_INVOKABLE QString noteInputBarName() const;
+    Q_INVOKABLE QString extensionsToolBarName() const;
 
     Q_INVOKABLE QString palettesPanelName() const;
-    Q_INVOKABLE QString instrumentsPanelName() const;
+    Q_INVOKABLE QString layoutPanelName() const;
     Q_INVOKABLE QString inspectorPanelName() const;
     Q_INVOKABLE QString selectionFiltersPanelName() const;
+    Q_INVOKABLE QString undoHistoryPanelName() const;
 
     Q_INVOKABLE QString mixerPanelName() const;
     Q_INVOKABLE QString pianoKeyboardPanelName() const;
     Q_INVOKABLE QString timelinePanelName() const;
     Q_INVOKABLE QString drumsetPanelName() const;
+    Q_INVOKABLE QString percussionPanelName() const;
 
     Q_INVOKABLE QString statusBarName() const;
 
@@ -82,6 +90,8 @@ private:
     void toggleDock(const QString& name);
 
     void updateDrumsetPanelVisibility();
+    void updatePercussionPanelVisibility();
+    void updateExtensionsToolBarVisibility();
 };
 }
 

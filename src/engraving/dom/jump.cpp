@@ -237,4 +237,13 @@ String Jump::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), this->jumpTypeUserName());
 }
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Jump::subtypeUserName() const
+{
+    return TConv::userName(jumpType());
+}
 }

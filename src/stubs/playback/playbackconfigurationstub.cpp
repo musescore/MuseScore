@@ -33,6 +33,11 @@ void PlaybackConfigurationStub::setPlayNotesWhenEditing(bool)
 {
 }
 
+muse::async::Notification PlaybackConfigurationStub::playNotesWhenEditingChanged() const
+{
+    return muse::async::Notification();
+}
+
 bool PlaybackConfigurationStub::playChordWhenEditing() const
 {
     return false;
@@ -42,6 +47,12 @@ void PlaybackConfigurationStub::setPlayChordWhenEditing(bool)
 {
 }
 
+muse::async::Channel<bool> PlaybackConfigurationStub::playChordWhenEditingChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
 bool PlaybackConfigurationStub::playHarmonyWhenEditing() const
 {
     return false;
@@ -49,6 +60,27 @@ bool PlaybackConfigurationStub::playHarmonyWhenEditing() const
 
 void PlaybackConfigurationStub::setPlayHarmonyWhenEditing(bool)
 {
+}
+
+muse::async::Channel<bool> PlaybackConfigurationStub::playHarmonyWhenEditingChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
+bool PlaybackConfigurationStub::playNotesOnMidiInput() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setPlayNotesOnMidiInput(bool)
+{
+}
+
+muse::async::Channel<bool> PlaybackConfigurationStub::playNotesOnMidiInputChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
 }
 
 PlaybackCursorType PlaybackConfigurationStub::cursorType() const
@@ -124,10 +156,16 @@ const SoundProfileName& PlaybackConfigurationStub::basicSoundProfileName() const
     return basic;
 }
 
-const SoundProfileName& PlaybackConfigurationStub::museSoundProfileName() const
+const SoundProfileName& PlaybackConfigurationStub::museSoundsProfileName() const
 {
     static const SoundProfileName museSounds;
     return museSounds;
+}
+
+const SoundProfileName& PlaybackConfigurationStub::compatMuseSoundsProfileName() const
+{
+    static const SoundProfileName compatMuseSounds;
+    return compatMuseSounds;
 }
 
 SoundProfileName PlaybackConfigurationStub::defaultProfileForNewProjects() const
@@ -148,20 +186,48 @@ void PlaybackConfigurationStub::setSoundPresetsMultiSelectionEnabled(bool)
 {
 }
 
-bool mu::playback::PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangeSoundWarning() const
+bool PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangeSoundWarning() const
 {
     return false;
 }
 
-void mu::playback::PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangeSoundWarning(bool)
+void PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangeSoundWarning(bool)
 {
 }
 
-bool mu::playback::PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const
+bool PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const
 {
     return false;
 }
 
-void mu::playback::PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool)
+void PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool)
 {
+}
+
+bool PlaybackConfigurationStub::needToShowOnlineSoundsConnectionWarning() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setNeedToShowOnlineSoundsConnectionWarning(bool)
+{
+}
+
+OnlineSoundsShowProgressBarMode PlaybackConfigurationStub::onlineSoundsShowProgressBarMode() const
+{
+    return OnlineSoundsShowProgressBarMode::Never;
+}
+
+void PlaybackConfigurationStub::setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode)
+{
+}
+
+muse::async::Notification PlaybackConfigurationStub::onlineSoundsShowProgressBarModeChanged() const
+{
+    return {};
+}
+
+bool PlaybackConfigurationStub::shouldMeasureInputLag() const
+{
+    return false;
 }

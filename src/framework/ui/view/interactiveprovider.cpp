@@ -25,41 +25,22 @@
 #include <QMetaProperty>
 #include <QDialog>
 #include <QFileDialog>
+#include <QColorDialog>
 #include <QGuiApplication>
 #include <QWindow>
 
-#include "containers.h"
+#include "global/async/async.h"
+#include "diagnostics/diagnosticutils.h"
+
+#include "internal/widgetdialogadapter.h"
+
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse;
 using namespace muse::ui;
-
-class WidgetDialogEventFilter : public QObject
-{
-public:
-    WidgetDialogEventFilter(QObject* parent, const std::function<void()>& onShownCallBack,
-                            const std::function<void()>& onHideCallBack = std::function<void()>())
-        : QObject(parent), m_onShownCallBack(onShownCallBack), m_onHideCallBack(onHideCallBack)
-    {
-    }
-
-private:
-    bool eventFilter(QObject* watched, QEvent* event) override
-    {
-        if (event->type() == QEvent::Show && m_onShownCallBack) {
-            m_onShownCallBack();
-        }
-
-        if (event->type() == QEvent::Hide && m_onHideCallBack) {
-            m_onHideCallBack();
-        }
-
-        return QObject::eventFilter(watched, event);
-    }
-
-    std::function<void()> m_onShownCallBack;
-    std::function<void()> m_onHideCallBack;
-};
+using namespace muse::async;
 
 InteractiveProvider::InteractiveProvider(const modularity::ContextPtr& iocCtx)
     : QObject(), Injectable(iocCtx)
@@ -85,7 +66,7 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
 
     for (int i = 0; i < m_stack.size(); ++i) {
         bool found = m_stack[i].window == newActiveWindow;
-        if (m_stack[i].window->isWidgetType()) {
+        if (m_stack[i].window && m_stack[i].window->isWidgetType()) {
             found = newActiveWindow->objectName() == (m_stack[i].window->objectName() + "Window");
         }
 
@@ -98,142 +79,184 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
     }
 }
 
-RetVal<Val> InteractiveProvider::question(const std::string& title, const IInteractive::Text& text,
-                                          const IInteractive::ButtonDatas& buttons, int defBtn,
-                                          const IInteractive::Options& options)
+async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const std::string& title)
 {
-    return openStandardDialog("QUESTION", title, text, {}, buttons, defBtn, options);
-}
-
-RetVal<Val> InteractiveProvider::info(const std::string& title, const IInteractive::Text& text,
-                                      const IInteractive::ButtonDatas& buttons,
-                                      int defBtn,
-                                      const IInteractive::Options& options)
-{
-    return openStandardDialog("INFO", title, text, {}, buttons, defBtn, options);
-}
-
-RetVal<Val> InteractiveProvider::warning(const std::string& title, const IInteractive::Text& text,
-                                         const std::string& detailedText,
-                                         const IInteractive::ButtonDatas& buttons,
-                                         int defBtn,
-                                         const IInteractive::Options& options)
-{
-    return openStandardDialog("WARNING", title, text, detailedText, buttons, defBtn, options);
-}
-
-RetVal<Val> InteractiveProvider::error(const std::string& title, const IInteractive::Text& text,
-                                       const std::string& detailedText,
-                                       const IInteractive::ButtonDatas& buttons,
-                                       int defBtn,
-                                       const IInteractive::Options& options)
-{
-    return openStandardDialog("ERROR", title, text, detailedText, buttons, defBtn, options);
-}
-
-Ret InteractiveProvider::showProgress(const std::string& title, Progress* progress)
-{
-    IF_ASSERT_FAILED(progress) {
-        return false;
+    if (m_isSelectColorOpened) {
+        LOGW() << "already opened";
+        return async::make_promise<Color>([](auto, auto reject) {
+            Ret ret = muse::make_ret(Ret::Code::UnknownError);
+            return reject(ret.code(), ret.text());
+        });
     }
 
-    QVariantMap params;
-    params["title"] = QString::fromStdString(title);
-    params["progress"] = QVariant::fromValue(progress);
+    m_isSelectColorOpened = true;
 
-    QmlLaunchData* data = new QmlLaunchData();
-    data->setValue("params", params);
+    return async::make_promise<Color>([this, color, title](auto resolve, auto reject) {
+        //! FIX https://github.com/musescore/MuseScore/issues/23208
+        shortcutsRegister()->setActive(false);
 
-    emit fireOpenProgressDialog(data);
-
-    Ret ret = toRet(data->value("ret"));
-    QString objectId = data->value("objectId").toString();
-
-    delete data;
-
-    if (!ret) {
-        return ret;
-    }
-
-    if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
-        if (rv.ret.valid()) {
-            return rv.ret;
+        QColorDialog* dlg = new QColorDialog();
+        if (!title.empty()) {
+            dlg->setWindowTitle(QString::fromStdString(title));
         }
+
+        dlg->setCurrentColor(color.toQColor());
+
+        QObject::connect(dlg, &QFileDialog::finished, [this, dlg, resolve, reject](int result) {
+            dlg->deleteLater();
+
+            m_isSelectColorOpened = false;
+            shortcutsRegister()->setActive(true);
+
+            if (result != QDialog::Accepted) {
+                Ret ret = muse::make_ret(Ret::Code::Cancel);
+                (void)reject(ret.code(), ret.text());
+                return;
+            }
+
+            QColor selectedColor = dlg->selectedColor();
+            (void)resolve(Color::fromQColor(selectedColor));
+        });
+
+        dlg->open();
+
+        return async::Promise<Color>::dummy_result();
+    }, async::PromiseType::AsyncByBody);
+}
+
+bool InteractiveProvider::isSelectColorOpened() const
+{
+    return m_isSelectColorOpened;
+}
+
+RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
+{
+#ifndef MUSE_MODULE_UI_SYNCINTERACTIVE_SUPPORTED
+    NOT_SUPPORTED;
+    std::abort();
+    {
+        RetVal<Val> rv;
+        rv.ret = muse::make_ret(Ret::Code::NotSupported);
+        return rv;
     }
+#endif
 
-    return muse::make_ok();
-}
+    UriQuery q = q_;
 
-RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,
-                                                          const std::vector<std::string>& filter)
-{
-    return openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
-}
+    //! NOTE Disable Dialog.exec()
+    q.set("sync", false);
 
-RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& path,
-                                                         const std::vector<std::string>& filter,
-                                                         bool confirmOverwrite)
-{
-    return openFileDialog(FileDialogType::SelectSavingFile, title, path, filter, confirmOverwrite);
-}
+    RetVal<Val> rv;
+    QEventLoop loop;
+    Promise<Val>::Resolve resolve;
+    Promise<Val>::Reject reject;
+    Promise<Val> promise = make_promise<Val>([&resolve, &reject](auto res, auto rej) {
+        resolve = res;
+        reject = rej;
+        return Promise<Val>::Result::unchecked();
+    }, PromiseType::AsyncByBody);
 
-RetVal<io::path_t> InteractiveProvider::selectDirectory(const std::string& title, const io::path_t& dir)
-{
-    return openFileDialog(FileDialogType::SelectDirectory, title, dir);
-}
+    promise.onResolve(this, [&rv, &loop](const Val& val) {
+        rv = RetVal<Val>::make_ok(val);
+        loop.quit();
+    });
 
-RetVal<Val> InteractiveProvider::open(const UriQuery& q)
-{
-    m_openingUriQuery = q;
-    RetVal<OpenData> openedRet;
+    promise.onReject(this, [&rv, &loop](int code, const std::string& err) {
+        LOGE() << code << " " << err;
+        rv.ret = make_ret(code, err);
+        loop.quit();
+    });
 
-    //! NOTE Currently, extensions do not replace the default functionality
-    //! But in the future, we may allow extensions to replace the current functionality
-    //! (first check for the presence of an extension with this uri,
-    //! and if it is found, then open it)
+    auto func = openFunc(q);
+    func(resolve, reject);
 
     ContainerMeta openMeta = uriRegister()->meta(q.uri());
-    switch (openMeta.type) {
-    case ContainerType::QWidgetDialog:
-        openedRet = openWidgetDialog(q);
-        break;
-    case ContainerType::PrimaryPage:
-    case ContainerType::QmlDialog:
-        openedRet = openQml(q);
-        break;
-    case ContainerType::Undefined: {
-        //! NOTE Not found default, try extension
-        extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
-        if (ext.isValid()) {
-            openedRet = openExtensionDialog(q);
-        } else {
-            openedRet.ret = make_ret(Ret::Code::UnknownError);
+    if (openMeta.type == ContainerType::PrimaryPage) {
+        LOGW() << "Primary pages should not open in synchronous mode, please fix this.";
+        return rv;
+    }
+
+    loop.exec();
+
+    return rv;
+}
+
+Promise<Val> InteractiveProvider::openAsync(const UriQuery& q)
+{
+    return make_promise<Val>(openFunc(q), PromiseType::AsyncByBody);
+}
+
+async::Promise<Val> InteractiveProvider::openAsync(const Uri& uri, const QVariantMap& params)
+{
+    return make_promise<Val>(openFunc(UriQuery(uri), params), PromiseType::AsyncByBody);
+}
+
+Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q)
+{
+    QVariantMap params;
+    const UriQuery::Params& p = q.params();
+    for (auto it = p.cbegin(); it != p.cend(); ++it) {
+        params[QString::fromStdString(it->first)] = it->second.toQVariant();
+    }
+
+    return openFunc(q, params);
+}
+
+Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q, const QVariantMap& params)
+{
+    auto func = [this, q, params](Promise<Val>::Resolve resolve, Promise<Val>::Reject reject) {
+        IF_ASSERT_FAILED(!m_openingObject.objectId.isValid()) {
+            LOGE() << "The opening of the previous object has not been completed"
+                   << ", objectId: " << m_openingObject.objectId.toString()
+                   << ", query: " << m_openingObject.query.toString();
         }
-    }
-    }
 
-    if (!openedRet.ret) {
-        LOGE() << "failed open err: " << openedRet.ret.toString() << ", uri: " << q.toString();
-        return RetVal<Val>(openedRet.ret);
-    }
+        m_openingObject = { q, resolve, reject, QVariant(), nullptr };
 
-    RetVal<Val> returnedRV;
-    returnedRV.ret = make_ret(Ret::Code::Ok);
-    if (openedRet.val.sync && !openedRet.val.objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(openedRet.val.objectId);
-        if (rv.ret.valid()) {
-            returnedRV = rv;
+        RetVal<OpenData> openedRet;
+
+        notifyAboutCurrentUriWillBeChanged();
+
+        //! NOTE Currently, extensions do not replace the default functionality
+        //! But in the future, we may allow extensions to replace the current functionality
+        //! (first check for the presence of an extension with this uri,
+        //! and if it is found, then open it)
+
+        ContainerMeta openMeta = uriRegister()->meta(q.uri());
+        switch (openMeta.type) {
+        case ContainerType::QWidgetDialog:
+            openedRet = openWidgetDialog(q.uri(), params);
+            break;
+        case ContainerType::PrimaryPage:
+        case ContainerType::QmlDialog:
+            openedRet = openQml(q.uri(), params);
+            break;
+        case ContainerType::Undefined: {
+            //! NOTE Not found default, try extension
+            extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
+            if (ext.isValid()) {
+                openedRet = openExtensionDialog(q, params);
+            } else {
+                openedRet.ret = make_ret(Ret::Code::UnknownError);
+            }
         }
-    }
+        }
 
-    return returnedRV;
+        if (!openedRet.ret) {
+            LOGE() << "failed open err: " << openedRet.ret.toString() << ", uri: " << q.toString();
+            return reject(openedRet.ret.code(), openedRet.ret.text());
+        }
+
+        return Promise<Val>::Result::unchecked();
+    };
+
+    return func;
 }
 
 RetVal<bool> InteractiveProvider::isOpened(const Uri& uri) const
 {
     for (const ObjectInfo& objectInfo: allOpenObjects()) {
-        if (objectInfo.uriQuery.uri() == uri) {
+        if (objectInfo.query.uri() == uri) {
             return RetVal<bool>::make_ok(true);
         }
     }
@@ -244,7 +267,7 @@ RetVal<bool> InteractiveProvider::isOpened(const Uri& uri) const
 RetVal<bool> InteractiveProvider::isOpened(const UriQuery& uri) const
 {
     for (const ObjectInfo& objectInfo: allOpenObjects()) {
-        if (objectInfo.uriQuery == uri) {
+        if (objectInfo.query == uri) {
             return RetVal<bool>::make_ok(true);
         }
     }
@@ -260,11 +283,11 @@ async::Channel<Uri> InteractiveProvider::opened() const
 void InteractiveProvider::raise(const UriQuery& uri)
 {
     for (const ObjectInfo& objectInfo: allOpenObjects()) {
-        if (objectInfo.uriQuery != uri) {
+        if (objectInfo.query != uri) {
             continue;
         }
 
-        ContainerMeta openMeta = uriRegister()->meta(objectInfo.uriQuery.uri());
+        ContainerMeta openMeta = uriRegister()->meta(objectInfo.query.uri());
         switch (openMeta.type) {
         case ContainerType::QWidgetDialog: {
             if (auto window = dynamic_cast<QWidget*>(objectInfo.window)) {
@@ -285,7 +308,7 @@ void InteractiveProvider::raise(const UriQuery& uri)
 void InteractiveProvider::close(const Uri& uri)
 {
     for (const ObjectInfo& obj : allOpenObjects()) {
-        if (obj.uriQuery.uri() == uri) {
+        if (obj.query.uri() == uri) {
             closeObject(obj);
         }
     }
@@ -294,7 +317,7 @@ void InteractiveProvider::close(const Uri& uri)
 void InteractiveProvider::close(const UriQuery& uri)
 {
     for (const ObjectInfo& obj : allOpenObjects()) {
-        if (obj.uriQuery == uri) {
+        if (obj.query == uri) {
             closeObject(obj);
         }
     }
@@ -303,7 +326,10 @@ void InteractiveProvider::close(const UriQuery& uri)
 void InteractiveProvider::closeAllDialogs()
 {
     for (const ObjectInfo& objectInfo: allOpenObjects()) {
-        UriQuery uriQuery = objectInfo.uriQuery;
+        UriQuery uriQuery = objectInfo.query;
+        if (muse::diagnostics::isDiagnosticsUri(uriQuery.uri())) {
+            continue;
+        }
         ContainerMeta openMeta = uriRegister()->meta(uriQuery.uri());
         if (openMeta.type == ContainerType::QWidgetDialog || openMeta.type == ContainerType::QmlDialog) {
             closeObject(objectInfo);
@@ -313,7 +339,7 @@ void InteractiveProvider::closeAllDialogs()
 
 void InteractiveProvider::closeObject(const ObjectInfo& obj)
 {
-    ContainerMeta openMeta = uriRegister()->meta(obj.uriQuery.uri());
+    ContainerMeta openMeta = uriRegister()->meta(obj.query.uri());
     switch (openMeta.type) {
     case ContainerType::QWidgetDialog: {
         if (auto window = dynamic_cast<QWidget*>(obj.window)) {
@@ -329,7 +355,7 @@ void InteractiveProvider::closeObject(const ObjectInfo& obj)
     }
 }
 
-void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q) const
+void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q, const QVariantMap& params_) const
 {
     static Uri VIEWER_URI = Uri("muse://extensions/viewer");
 
@@ -337,46 +363,35 @@ void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q) co
     data->setValue("path", meta.qmlPath);
     data->setValue("type", meta.type);
 
-    QVariantMap params;
+    QVariantMap params = params_;
     params["uri"] = QString::fromStdString(q.toString());
 
     //! NOTE Extension dialogs open as non-modal by default
     //! The modal parameter must be present in the uri
     //! But here, just in case, `true` is indicated by default,
     //! since this value is set in the base class of the dialog by default
-    params["modal"] = q.param("modal", Val(true)).toBool();
+    if (!params.contains("modal")) {
+        params["modal"] = q.param("modal", Val(true)).toBool();
+    }
 
     data->setValue("uri", QString::fromStdString(VIEWER_URI.toString()));
     data->setValue("sync", params.value("sync", false));
     data->setValue("params", params);
 }
 
-void InteractiveProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
+void InteractiveProvider::fillData(QmlLaunchData* data, const Uri& uri, const QVariantMap& params) const
 {
-    ContainerMeta meta = uriRegister()->meta(q.uri());
+    ContainerMeta meta = uriRegister()->meta(uri);
     data->setValue("path", meta.qmlPath);
     data->setValue("type", meta.type);
-    data->setValue("uri", QString::fromStdString(q.uri().toString()));
-
-    QVariantMap params;
-    const UriQuery::Params& p = q.params();
-    for (auto it = p.cbegin(); it != p.cend(); ++it) {
-        params[QString::fromStdString(it->first)] = it->second.toQVariant();
-    }
-
+    data->setValue("uri", QString::fromStdString(uri.toString()));
     data->setValue("params", params);
     data->setValue("sync", params.value("sync", false));
     data->setValue("modal", params.value("modal", ""));
 }
 
-void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
+void InteractiveProvider::fillData(QObject* object, const QVariantMap& params) const
 {
-    QVariantMap params;
-    const UriQuery::Params& p = q.params();
-    for (auto it = p.cbegin(); it != p.cend(); ++it) {
-        params[QString::fromStdString(it->first)] = it->second.toQVariant();
-    }
-
     const QMetaObject* metaObject = object->metaObject();
     for (int i = 0; i < metaObject->propertyCount(); i++) {
         QMetaProperty metaProperty = metaObject->property(i);
@@ -386,100 +401,28 @@ void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
     }
 }
 
-void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title,
-                                                 const IInteractive::Text& text, const std::string& detailedText,
-                                                 const IInteractive::ButtonDatas& buttons, int defBtn,
-                                                 const IInteractive::Options& options) const
-{
-    auto format = [](IInteractive::TextFormat f) {
-        switch (f) {
-        case IInteractive::TextFormat::Auto:      return Qt::AutoText;
-        case IInteractive::TextFormat::PlainText: return Qt::PlainText;
-        case IInteractive::TextFormat::RichText:  return Qt::RichText;
-        }
-        return Qt::PlainText;
-    };
-
-    QVariantMap params;
-    params["type"] = type;
-    params["title"] = QString::fromStdString(title);
-    params["text"] = QString::fromStdString(text.text);
-    params["detailedText"] = QString::fromStdString(detailedText);
-    params["textFormat"] = format(text.format);
-    params["defaultButtonId"] = defBtn;
-
-    QVariantList buttonsList;
-    QVariantList customButtonsList;
-    if (buttons.empty()) {
-        buttonsList << static_cast<int>(IInteractive::Button::Ok);
-    } else {
-        for (const IInteractive::ButtonData& buttonData: buttons) {
-            QVariantMap customButton;
-            customButton["text"] = QString::fromStdString(buttonData.text);
-            customButton["buttonId"] = buttonData.btn;
-            customButton["role"] = static_cast<int>(buttonData.role);
-            customButton["isAccent"] = buttonData.accent;
-            customButton["isLeftSide"] = buttonData.leftSide;
-            customButtonsList << QVariant(customButton);
-        }
-    }
-
-    params["buttons"] = buttonsList;
-    params["customButtons"] = customButtonsList;
-
-    if (options.testFlag(IInteractive::Option::WithIcon)) {
-        params["withIcon"] = true;
-    }
-
-    if (options.testFlag(IInteractive::Option::WithDontShowAgainCheckBox)) {
-        params["withDontShowAgainCheckBox"] = true;
-    }
-
-    data->setValue("params", params);
-}
-
-void InteractiveProvider::fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& path,
-                                             const std::vector<std::string>& filter, bool confirmOverwrite) const
-{
-    QVariantMap params;
-    params["title"] = QString::fromStdString(title);
-
-    if (type == FileDialogType::SelectOpenningFile || type == FileDialogType::SelectSavingFile) {
-        QStringList filterList;
-        for (const std::string& nameFilter : filter) {
-            filterList << QString::fromStdString(nameFilter);
-        }
-
-        params["nameFilters"] = filterList;
-        params["selectExisting"] = type == FileDialogType::SelectOpenningFile;
-
-        if (type == FileDialogType::SelectOpenningFile) {
-            // see QQuickPlatformFileDialog::FileMode::OpenFile
-            params["fileMode"] = 0;
-            params["folder"] = QUrl::fromLocalFile(path.toQString());
-        } else {
-            // see QQuickPlatformFileDialog::FileMode::SaveFile
-            params["fileMode"] = 2;
-            params["currentFile"] = QUrl::fromLocalFile(path.toQString());
-
-            if (!confirmOverwrite) {
-                params["options"] = QFileDialog::DontConfirmOverwrite;
-            }
-        }
-    }
-
-    data->setValue("params", params);
-    data->setValue("selectFolder", type == FileDialogType::SelectDirectory);
-}
-
 ValCh<Uri> InteractiveProvider::currentUri() const
 {
     ValCh<Uri> v;
     if (!m_stack.empty()) {
-        v.val = m_stack.last().uriQuery.uri();
+        v.val = m_stack.last().query.uri();
     }
     v.ch = m_currentUriChanged;
     return v;
+}
+
+RetVal<bool> InteractiveProvider::isCurrentUriDialog() const
+{
+    if (m_stack.empty()) {
+        return RetVal<bool>::make_ok(false);
+    }
+
+    const ObjectInfo& last = m_stack.last();
+    if (!last.window) {
+        return RetVal<bool>::make_ok(false);
+    }
+
+    return RetVal<bool>::make_ok(last.window != mainWindow()->qWindow());
 }
 
 async::Notification InteractiveProvider::currentUriAboutToBeChanged() const
@@ -491,7 +434,7 @@ std::vector<Uri> InteractiveProvider::stack() const
 {
     std::vector<Uri> uris;
     for (const ObjectInfo& info : m_stack) {
-        uris.push_back(info.uriQuery.uri());
+        uris.push_back(info.query.uri());
     }
     return uris;
 }
@@ -514,7 +457,8 @@ QWindow* InteractiveProvider::topWindow() const
         return mainWin;
     }
 
-    if (!last.window->parent()) {
+    // TODO/HACK: last.window doesn't seem to have a parent when the top window is a widget....
+    if (!last.window->parent() && !topWindowIsWidget()) {
         ASSERT_X("Window must have a parent!");
     }
 
@@ -548,7 +492,7 @@ QString InteractiveProvider::objectId(const QVariant& val) const
             return QString();
         }
 
-        objectId = QString(obj->metaObject()->className());
+        objectId = QString(obj->metaObject()->className()) + "_" + QString::number(count);
     } else {
         objectId = "unknown_" + QString::number(count);
     }
@@ -586,30 +530,25 @@ RetVal<Val> InteractiveProvider::toRetVal(const QVariant& jsrv) const
     return rv;
 }
 
-RetVal<InteractiveProvider::OpenData> InteractiveProvider::openExtensionDialog(const UriQuery& q)
+RetVal<InteractiveProvider::OpenData> InteractiveProvider::openExtensionDialog(const UriQuery& q, const QVariantMap& params)
 {
-    notifyAboutCurrentUriWillBeChanged();
-
     QmlLaunchData data;
-    fillExtData(&data, q);
+    fillExtData(&data, q, params);
 
     emit fireOpen(&data);
 
     RetVal<OpenData> result;
     result.ret = toRet(data.value("ret"));
-    result.val.sync = data.value("sync").toBool();
     result.val.objectId = data.value("objectId").toString();
 
     return result;
 }
 
-RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(const UriQuery& q)
+RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(const Uri& uri, const QVariantMap& params)
 {
-    notifyAboutCurrentUriWillBeChanged();
-
     RetVal<OpenData> result;
 
-    ContainerMeta meta = uriRegister()->meta(q.uri());
+    ContainerMeta meta = uriRegister()->meta(uri);
     int widgetMetaTypeId = meta.widgetMetaTypeId;
 
     static int count(0);
@@ -623,121 +562,48 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         return result;
     }
 
-    fillData(dialog, q);
+    fillData(dialog, params);
 
-    dialog->installEventFilter(new WidgetDialogEventFilter(dialog,
-                                                           [this, dialog, objectId]() {
-        if (dialog) {
+    //! NOTE Will be deleted with the dialog
+    WidgetDialogAdapter* adapter = new WidgetDialogAdapter(dialog, mainWindow()->qWindow());
+    adapter->onShow([this, objectId, dialog]() {
+        async::Async::call(this, [this, objectId, dialog]() {
             onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
-        }
-    },
-                                                           [this, dialog, objectId]() {
-        if (!dialog) {
-            return;
-        }
-
-        QVariantMap status;
-
+        });
+    })
+    .onHide([this, objectId, dialog]() {
         QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(dialog->result());
         Ret::Code errorCode = dialogCode == QDialog::Accepted ? Ret::Code::Ok : Ret::Code::Cancel;
-        status["errcode"] = static_cast<int>(errorCode);
 
-        onClose(objectId, status);
+        QVariantMap ret;
+        ret["errcode"] = static_cast<int>(errorCode);
+
+        onClose(objectId, ret);
+
         dialog->deleteLater();
-    }));
+    });
 
-    bool sync = q.param("sync", Val(false)).toBool();
-    if (sync) {
-        dialog->exec();
-    } else {
-        dialog->show();
-        dialog->activateWindow(); // give keyboard focus to aid blind users
-    }
+    bool modal = params.value("modal", "true") == "true";
+    dialog->setWindowModality(modal ? Qt::ApplicationModal : Qt::NonModal);
+    dialog->show();
+    dialog->activateWindow();     // give keyboard focus to aid blind users
 
     result.ret = make_ret(Ret::Code::Ok);
-    result.val.sync = sync;
     result.val.objectId = objectId;
 
     return result;
 }
 
-RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuery& q)
+RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const Uri& uri, const QVariantMap& params)
 {
-    notifyAboutCurrentUriWillBeChanged();
+    QmlLaunchData data;
+    fillData(&data, uri, params);
 
-    QmlLaunchData* data = new QmlLaunchData();
-    fillData(data, q);
-
-    emit fireOpen(data);
+    emit fireOpen(&data);
 
     RetVal<OpenData> result;
-    result.ret = toRet(data->value("ret"));
-    result.val.sync = data->value("sync").toBool();
-    result.val.objectId = data->value("objectId").toString();
-
-    delete data;
-
-    return result;
-}
-
-RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const std::string& title, const IInteractive::Text& text,
-                                                    const std::string& detailedText,
-                                                    const IInteractive::ButtonDatas& buttons, int defBtn,
-                                                    const IInteractive::Options& options)
-{
-    notifyAboutCurrentUriWillBeChanged();
-
-    QmlLaunchData* data = new QmlLaunchData();
-    fillStandardDialogData(data, type, title, text, detailedText, buttons, defBtn, options);
-
-    emit fireOpenStandardDialog(data);
-
-    Ret ret = toRet(data->value("ret"));
-    QString objectId = data->value("objectId").toString();
-
-    delete data;
-
-    RetVal<Val> result;
-    if (!ret) {
-        result.ret = ret;
-        return result;
-    }
-
-    if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
-        if (rv.ret.valid()) {
-            result = rv;
-        }
-    }
-
-    return result;
-}
-
-RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                                       const std::vector<std::string>& filter, bool confirmOverwrite)
-{
-    notifyAboutCurrentUriWillBeChanged();
-
-    RetVal<io::path_t> result;
-
-    QmlLaunchData* data = new QmlLaunchData();
-    fillFileDialogData(data, type, title, path, filter, confirmOverwrite);
-
-    emit fireOpenFileDialog(data);
-
-    m_fileDialogEventLoop.exec();
-
-    QString objectId = data->value("objectId").toString();
-
-    delete data;
-
-    if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
-        if (rv.ret.valid()) {
-            result.ret = rv.ret;
-            result.val = QUrl::fromUserInput(rv.val.toQString()).toLocalFile();
-        }
-    }
+    result.ret = toRet(data.value("ret"));
+    result.val.objectId = data.value("objectId").toString();
 
     return result;
 }
@@ -760,63 +626,78 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
         containerType = ContainerType::QmlDialog;
     }
 
-    ObjectInfo objectInfo;
-    objectInfo.uriQuery = m_openingUriQuery;
-    objectInfo.objectId = objectId;
-    objectInfo.window = window;
-    if (!objectInfo.window) {
-        objectInfo.window = (containerType == ContainerType::PrimaryPage) ? mainWindow()->qWindow() : qApp->focusWindow();
+    m_openingObject.objectId = objectId;
+    m_openingObject.window = window;
+    if (!m_openingObject.window) {
+        m_openingObject.window = (containerType == ContainerType::PrimaryPage) ? mainWindow()->qWindow() : qApp->focusWindow();
     }
 
-    if (m_openingUriQuery.param("floating").toBool()) {
-        m_openingUriQuery = UriQuery();
-        m_floatingObjects.push_back(objectInfo);
+    if (m_openingObject.query.param("floating").toBool()) {
+        m_floatingObjects.push_back(m_openingObject);
+        m_openingObject = ObjectInfo(); // clear
         return;
     }
 
     if (ContainerType::PrimaryPage == containerType) {
         m_stack.clear();
-        m_stack.push(objectInfo);
+        m_stack.push(m_openingObject);
     } else if (ContainerType::QmlDialog == containerType) {
-        m_stack.push(objectInfo);
+        m_stack.push(m_openingObject);
     } else if (ContainerType::QWidgetDialog == containerType) {
-        m_stack.push(objectInfo);
+        m_stack.push(m_openingObject);
     } else {
         IF_ASSERT_FAILED_X(false, "unknown page type") {
-            m_stack.push(objectInfo);
+            m_stack.push(m_openingObject);
         }
     }
 
     notifyAboutCurrentUriChanged();
-    m_opened.send(m_openingUriQuery.uri());
 
-    m_openingUriQuery = UriQuery();
+    Uri uri = m_openingObject.query.uri();
+    m_openingObject = ObjectInfo();     // clear
+
+    Async::call(this, [this, uri]() {
+        m_opened.send(uri);
+    });
 }
 
 void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
 {
-    m_retvals[objectId] = toRetVal(jsrv);
+    RetVal<Val> rv = toRetVal(jsrv);
 
-    bool found = false;
+    ObjectInfo obj;
+
+    bool inStack = false;
     for (int i = 0; i < m_stack.size(); ++i) {
-        if (m_stack[i].objectId == objectId) {
+        if (m_stack.at(i).objectId == objectId) {
+            obj = m_stack.at(i);
+            inStack = true;
             m_stack.remove(i);
-            found = true;
             break;
         }
     }
 
-    //! NOTE We may not find an object in the stack if it's,
-    //! for example, a floating dialog (usually diagnostic dialogs)
-    if (found) {
-        notifyAboutCurrentUriChanged();
-    } else {
-        muse::remove_if(m_floatingObjects, [objectId](const ObjectInfo& obj) {
-            return obj.objectId == objectId;
-        });
+    if (!inStack) {
+        for (size_t i = 0; i < m_floatingObjects.size(); ++i) {
+            if (m_floatingObjects.at(i).objectId == objectId) {
+                obj = m_floatingObjects.at(i);
+                m_floatingObjects.erase(m_floatingObjects.begin() + i);
+                break;
+            }
+        }
     }
 
-    m_fileDialogEventLoop.quit();
+    DO_ASSERT(obj.objectId.isValid());
+
+    if (rv.ret) {
+        (void)obj.resolve(rv.val);
+    } else {
+        (void)obj.reject(rv.ret.code(), rv.ret.text());
+    }
+
+    if (inStack) {
+        notifyAboutCurrentUriChanged();
+    }
 }
 
 std::vector<InteractiveProvider::ObjectInfo> InteractiveProvider::allOpenObjects() const

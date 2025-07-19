@@ -24,7 +24,8 @@
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+
+#include "engraving/iengravingconfiguration.h"
 
 #include "../inotation.h"
 #include "igetscore.h"
@@ -37,16 +38,14 @@ class Score;
 namespace mu::notation {
 class NotationInteraction;
 class NotationPlayback;
-class Notation : virtual public INotation, public IGetScore, public muse::async::Asyncable
+class Notation : virtual public INotation, public IGetScore, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT_STATIC(INotationConfiguration, configuration)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
-    explicit Notation(engraving::Score* score = nullptr);
+    explicit Notation(const muse::modularity::ContextPtr& iocCtx, engraving::Score* score = nullptr);
     ~Notation() override;
-
-    static void init();
 
     QString name() const override;
     QString projectName() const override;
@@ -61,6 +60,8 @@ public:
     muse::async::Notification openChanged() const override;
 
     bool hasVisibleParts() const override;
+
+    bool isMaster() const override;
 
     ViewMode viewMode() const override;
     void setViewMode(const ViewMode& viewMode) override;

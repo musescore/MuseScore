@@ -89,6 +89,7 @@ const ClefInfo ClefInfo::clefTable[] = {
     { ClefType::TAB4_SERIF, 5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClefSerif, StaffGroup::TAB },
 
     { ClefType::C4_8VB,  4, 30, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 },  SymId::cClef8vb,         StaffGroup::STANDARD },
+    { ClefType::G8_VB_C, 2, 38, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbCClef,    StaffGroup::STANDARD },
 };
 
 //---------------------------------------------------------
@@ -224,7 +225,6 @@ ClefType Clef::clefType() const
 void Clef::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
-    renderer()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -287,6 +287,7 @@ PropertyValue Clef::getProperty(Pid propertyId) const
     case Pid::SMALL:         return isSmall();
     case Pid::CLEF_TO_BARLINE_POS: return m_clefToBarlinePosition;
     case Pid::IS_HEADER: return m_isHeader;
+    case Pid::IS_COURTESY: return m_isCourtesy;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -326,6 +327,9 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::IS_HEADER:
         m_isHeader = v.toBool();
         break;
+    case Pid::IS_COURTESY:
+        m_isCourtesy = v.toBool();
+        break;
     default:
         return EngravingItem::setProperty(propertyId, v);
     }
@@ -342,7 +346,6 @@ void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
     }
 
     Segment* seg = segment();
-    Measure* meas = seg->measure();
 
     staff_idx_t nStaves = score()->nstaves();
     for (staff_idx_t staffIndex = 0; staffIndex < nStaves; ++staffIndex) {
@@ -350,114 +353,6 @@ void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
         if (clef) {
             clef->m_clefToBarlinePosition = newPos;
         }
-    }
-
-    Segment* endBarlineSeg = nullptr;
-    Segment* endRepeatSeg = nullptr;
-    Segment* startRepeatSeg = nullptr;
-
-    // Search first segment at this tick
-    Segment* firstSegAtThisTick = seg;
-    while (true) {
-        Segment* prev1 = firstSegAtThisTick->prev1();
-        if (prev1 && prev1->tick() == seg->tick()) {
-            firstSegAtThisTick = prev1;
-        } else {
-            break;
-        }
-    }
-    for (Segment* s = firstSegAtThisTick; s && s->tick() == seg->tick(); s = s->next1enabled()) {
-        // Scan all segments at this tick looking for the ones we need
-        if (s->isEndBarLineType() && s->measure()->repeatEnd()) {
-            endRepeatSeg = s;
-        } else if (s->isEndBarLineType()) {
-            endBarlineSeg = s;
-        } else if (s->isStartRepeatBarLineType()) {
-            startRepeatSeg = s;
-        }
-    }
-
-    if (newPos == ClefToBarlinePosition::AFTER) {
-        undoChangeProperty(Pid::SHOW_COURTESY, false, propertyFlags(Pid::SHOW_COURTESY));
-    }
-
-    if (newPos == ClefToBarlinePosition::AUTO) {
-        if (endBarlineSeg) {
-            // Clef before the end bar line
-            Measure* destMeas = endBarlineSeg->measure();
-            meas->segments().remove(seg);
-            destMeas->segments().insert(seg, endBarlineSeg);
-            seg->setRtick(endBarlineSeg->rtick());
-            seg->setParent(destMeas);
-        } else if (endRepeatSeg) {
-            // Clef after the end repeat
-            Measure* destMeas = endRepeatSeg->measure();
-            meas->segments().remove(seg);
-            destMeas->segments().insert(seg, endRepeatSeg->next());
-            seg->setRtick(endRepeatSeg->rtick());
-            seg->setParent(destMeas);
-        } else if (startRepeatSeg) {
-            // End of previous measure
-            Measure* destMeas = startRepeatSeg->measure()->prevMeasure();
-            if (destMeas) {
-                meas->segments().remove(seg);
-                destMeas->segments().push_back(seg);
-                seg->setRtick(destMeas->ticks());
-                seg->setParent(destMeas);
-            }
-        }
-    } else if (newPos == ClefToBarlinePosition::BEFORE) {
-        if (endBarlineSeg || endRepeatSeg) {
-            // Before the bar line
-            Segment* refSeg = endBarlineSeg ? endBarlineSeg : endRepeatSeg;
-            Measure* destMeas = refSeg->measure();
-            meas->segments().remove(seg);
-            destMeas->segments().insert(seg, refSeg);
-            seg->setRtick(refSeg->rtick());
-            seg->setParent(destMeas);
-        } else if (startRepeatSeg) {
-            // End of previous measure
-            Measure* destMeas = startRepeatSeg->measure()->prevMeasure();
-            if (destMeas) {
-                meas->segments().remove(seg);
-                destMeas->segments().push_back(seg);
-                seg->setRtick(destMeas->ticks());
-                seg->setParent(destMeas);
-            }
-        }
-    } else if (newPos == ClefToBarlinePosition::AFTER) {
-        bool isAtMeasureEnd = seg->rtick() == meas->ticks();
-        if (startRepeatSeg) {
-            // After the start repeat
-            Measure* destMeas = startRepeatSeg->measure();
-            meas->segments().remove(seg);
-            destMeas->segments().insert(seg, startRepeatSeg->next());
-            seg->setRtick(startRepeatSeg->rtick());
-            seg->setParent(destMeas);
-        } else if (isAtMeasureEnd) {
-            Measure* destMeas = meas->nextMeasure();
-            if (destMeas && !destMeas->header()) {
-                meas->segments().remove(seg);
-                destMeas->segments().push_front(seg);
-                seg->setRtick(Fraction(0, 1));
-                seg->setParent(destMeas);
-            } else if (destMeas) {
-                Segment* refSeg = destMeas->firstEnabled();
-                while (refSeg && refSeg->header()) {
-                    refSeg = refSeg->nextEnabled();
-                }
-                if (refSeg) {
-                    meas->segments().remove(seg);
-                    destMeas->segments().insert(seg, refSeg);
-                    seg->setRtick(refSeg->rtick());
-                    seg->setParent(destMeas);
-                }
-            }
-        }
-    }
-
-    if ((newPos == ClefToBarlinePosition::AUTO || newPos == ClefToBarlinePosition::BEFORE)) {
-        undoChangeProperty(Pid::SHOW_COURTESY, true, PropertyFlags::STYLED);
     }
 }
 
@@ -477,6 +372,11 @@ void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
     } else {
         EngravingObject::undoChangeProperty(id, v, ps);
     }
+}
+
+bool Clef::isMidMeasureClef() const
+{
+    return segment() && segment()->rtick().isNotZero();
 }
 
 void Clef::manageExclusionFromParts(bool exclude)
@@ -506,6 +406,7 @@ PropertyValue Clef::propertyDefault(Pid id) const
     case Pid::SMALL:         return false;
     case Pid::CLEF_TO_BARLINE_POS: return ClefToBarlinePosition::AUTO;
     case Pid::IS_HEADER: return false;
+    case Pid::IS_COURTESY: return false;
     default:              return EngravingItem::propertyDefault(id);
     }
 }

@@ -28,6 +28,8 @@
 
 #include "appmenumodel.h"
 
+Q_MOC_INCLUDE(< QWindow >)
+
 namespace mu::appshell {
 class NavigableAppMenuModel : public AppMenuModel
 {
@@ -48,6 +50,9 @@ public:
     Q_INVOKABLE void load() override;
     Q_INVOKABLE void handleMenuItem(const QString& itemId) override;
     Q_INVOKABLE void openMenu(const QString& menuId, bool byHover);
+    Q_INVOKABLE void openPrevMenu();
+    Q_INVOKABLE void openNextMenu();
+    Q_INVOKABLE bool menuItemMatchesSymbol(muse::uicomponents::MenuItem* menuItem, const QChar& symbol);
 
     bool isNavigationStarted() const;
     bool isMenuOpened() const;
@@ -71,6 +76,7 @@ signals:
     void openedMenuIdChanged(QString openedMenuId);
     void appMenuAreaRectChanged(QRect appMenuAreaRect);
     void openedMenuAreaRectChanged(QRect openedMenuAreaRect);
+    void navigateWithSymbolRequested(const QChar& symbol);
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
@@ -79,10 +85,8 @@ private:
 
     bool isNavigateKey(int key) const;
     void navigate(const QSet<int>& activatePossibleKeys);
-    void navigateToSubItem(const QString& menuId, const QSet<int>& activatePossibleKeys);
 
     bool hasItem(const QSet<int>& activatePossibleKeys);
-    bool hasSubItem(const QString& menuId, const QSet<int>& activatePossibleKeys);
     void navigate(int scanCode);
 
     void resetNavigation();
@@ -107,7 +111,7 @@ private:
     QString m_highlightedMenuId;
     QString m_openedMenuId;
 
-    bool m_needActivateHighlight = true;
+    bool m_needActivateHighlight = false;
     std::optional<MUNavigationSystemState> m_lastActiveMUNavigationState;
     bool m_needActivateLastMUNavigationControl = false;
 

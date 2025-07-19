@@ -45,7 +45,7 @@ Dial {
     width: implicitWidth
     height: width
 
-    wheelEnabled: true
+    wheelEnabled: false
 
     from: 0
     to: 1

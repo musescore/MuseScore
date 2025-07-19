@@ -52,6 +52,11 @@ static QByteArray generateClientId()
     return QString::number(randId, 16).toLatin1();
 }
 
+CloudConfiguration::CloudConfiguration(const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx)
+{
+}
+
 void CloudConfiguration::init()
 {
     if (settings()->value(CLIENT_ID_KEY).isNull()) {
@@ -72,4 +77,10 @@ QByteArray CloudConfiguration::uploadingLicense() const
 io::path_t CloudConfiguration::tokensFilePath(const std::string& cloudName) const
 {
     return globalConfiguration()->userAppDataPath() + "/" + cloudName + "_cred.dat";
+}
+
+RequestHeaders CloudConfiguration::headers() const
+{
+    static const std::string CLOUD_USER_AGENT = "cloud";
+    return networkConfiguration()->defaultHeaders(CLOUD_USER_AGENT);
 }

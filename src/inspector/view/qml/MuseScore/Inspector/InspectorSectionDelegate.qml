@@ -39,7 +39,6 @@ ExpandableBlank {
     property var sectionModel // Comes from inspectorListModel
     property var anchorItem: null
 
-    signal returnToBoundsRequested()
     signal ensureContentVisibleRequested(int invisibleContentHeight)
     signal popupOpened(var openedPopup, var visualControl)
 
@@ -79,10 +78,6 @@ ExpandableBlank {
         return undefined
     }
 
-    onContentItemComponentChanged: {
-        root.returnToBoundsRequested()
-    }
-
     Component {
         id: generalSection
 
@@ -96,7 +91,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -115,7 +110,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -134,7 +129,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -153,7 +148,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -167,7 +162,7 @@ ExpandableBlank {
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -181,7 +176,7 @@ ExpandableBlank {
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -200,7 +195,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }
@@ -219,7 +214,7 @@ ExpandableBlank {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
 
-            onPopupOpened: {
+            onPopupOpened: function(openedPopup, control) {
                 root.popupOpened(openedPopup, control)
             }
         }

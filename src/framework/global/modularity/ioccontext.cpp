@@ -25,7 +25,8 @@
 #include "log.h"
 
 #ifndef NO_QT_SUPPORT
-#include <QtQml>
+#include <QQmlEngine>
+#include <QWidget>
 
 muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 {
@@ -48,7 +49,12 @@ muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 muse::modularity::ContextPtr muse::iocCtxForQmlEngine(const QQmlEngine* e)
 {
     QmlIoCContext* qmlIoc = e->property("ioc_context").value<QmlIoCContext*>();
-    IF_ASSERT_FAILED(qmlIoc) {
+    // IF_ASSERT_FAILED(qmlIoc) {
+    //     return modularity::ContextPtr();
+    // }
+
+    //! NOTE At the monent, it can be null, need add ioc context to extension qml engine
+    if (!qmlIoc) {
         return modularity::ContextPtr();
     }
 

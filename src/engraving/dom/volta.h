@@ -73,6 +73,8 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    bool allowTimeAnchor() const override { return false; }
+
     void setChannel() const;
     void setTempo() const;
 
@@ -87,6 +89,8 @@ public:
     int lastEnding() const;
     void setVoltaType(Volta::Type);       // deprecated
     Type voltaType() const;               // deprecated
+
+    bool isFirstVolta() const { return m_endings.size() == 1 && hasEnding(1); }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

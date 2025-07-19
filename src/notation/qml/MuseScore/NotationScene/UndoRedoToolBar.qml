@@ -22,90 +22,38 @@
 import QtQuick 2.15
 
 import Muse.UiComponents 1.0
-import Muse.Ui 1.0
+
 import MuseScore.NotationScene 1.0
 
-Item {
+StyledToolBarView {
     id: root
 
-    width: content.width
-    height: content.height
+    navigationPanel.name: "UndoRedoToolBar"
+    navigationPanel.accessible.name: qsTrc("notation", "Undo redo toolbar")
 
-    Component.onCompleted: {
-        model.load()
-    }
+    spacing: 0
+    leftPadding: 6
+    rightPadding: 6
 
-    property NavigationPanel navigationPanel: NavigationPanel {
-        id: navPanel
-        name: "UndoRedoToolBar"
-        enabled: root.enabled && root.visible
-        accessible.name: qsTrc("notation", "Undo redo toolbar")
-    }
+    model: UndoRedoToolbarModel { }
 
-    UndoRedoModel {
-        id: model
-    }
-
-    Row {
-        id: content
-
-        readonly property int margin: 6
-
-        //! NOTE padding - 1 to compensate for the dock separator width.
-        //! The separator is hidden, but the space for it is still allocated.
-        //! That should be solved in KDDW.
-        width: margin - 1 + childrenRect.width + margin
-        height: childrenRect.height
-        x: margin - 1
-
-        spacing: 0
-
-        FlatButton {
-            width: 30
-            height: width
-
-            property var item: Boolean(model) ? model.undoItem : null
-
-            icon: Boolean(item) ? item.icon : IconCode.NONE
-            iconFont: ui.theme.toolbarIconsFont
-
-            toolTipTitle: Boolean(item) ? item.title : ""
-            toolTipDescription: Boolean(item) ? item.description : ""
-            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
-
-            enabled: Boolean(item) ? item.enabled : false
-            transparent: true
-
-            navigation.panel: root.navigationPanel
-            navigation.order: 1
-
-            onClicked: {
-                model.undo()
-            }
+    sourceComponentCallback: function(type) {
+        switch(type) {
+        case ToolBarItemType.ACTION: return controlComp
         }
 
-        FlatButton {
+        return null
+    }
+
+    Component {
+        id: controlComp
+
+        StyledToolBarItem {
             width: 30
             height: width
 
-            property var item: Boolean(model) ? model.redoItem : null
-
-            icon: Boolean(item) ? item.icon : IconCode.NONE
-            iconFont: ui.theme.toolbarIconsFont
-
-            toolTipTitle: Boolean(item) ? item.title : ""
-            toolTipDescription: Boolean(item) ? item.description : ""
-            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
-
-            enabled: Boolean(item) ? item.enabled : false
-            transparent: true
-
             navigation.panel: root.navigationPanel
-            navigation.order: 2
-
-            onClicked: {
-                model.redo()
-            }
+            navigation.order: model.index
         }
     }
 }

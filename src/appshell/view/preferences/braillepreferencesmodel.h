@@ -25,22 +25,25 @@
 
 #include <QObject>
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "braille/ibrailleconfiguration.h"
 
 namespace mu::appshell {
-class BraillePreferencesModel : public QObject
+class BraillePreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(braille::IBrailleConfiguration, brailleConfiguration)
 
     Q_PROPERTY(bool braillePanelEnabled READ braillePanelEnabled WRITE setBraillePanelEnabled NOTIFY braillePanelEnabledChanged)
     Q_PROPERTY(QString brailleTable READ brailleTable WRITE setBrailleTable NOTIFY brailleTableChanged)
     Q_PROPERTY(int intervalDirection READ intervalDirection WRITE setIntervalDirection NOTIFY intervalDirectionChanged)
 
+    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+
 public:
     explicit BraillePreferencesModel(QObject* parent = nullptr);
+
+    Q_INVOKABLE void load();
 
     bool braillePanelEnabled() const;
     QString brailleTable() const;

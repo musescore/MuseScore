@@ -30,22 +30,27 @@
 #include "modularity/ioc.h"
 #include "types/val.h"
 
-class MQZipReader;
-class MQZipWriter;
+namespace muse {
+class ZipReader;
+class ZipWriter;
+}
 
 namespace muse::workspace {
 class WorkspaceFile
 {
-    INJECT(io::IFileSystem, fileSystem)
+    GlobalInject<io::IFileSystem> fileSystem;
 
 public:
     WorkspaceFile(const io::path_t& filePath);
+    WorkspaceFile(const io::path_t& filePath, const WorkspaceFile* other);
 
     io::path_t filePath() const;
+    void redirect(const io::path_t& filePath);
 
     Ret load();
     Ret save();
     bool isLoaded() const;
+    bool isNeedSave() const;
 
     Val meta(const std::string& key) const;
     void setMeta(const std::string& key, const Val& val);
@@ -57,18 +62,22 @@ private:
 
     struct Container
     {
-        static void write(MQZipWriter& zip, const std::vector<std::string>& paths);
+        static void write(ZipWriter& zip, const std::vector<std::string>& paths);
     };
 
     struct Meta
     {
-        static void write(MQZipWriter& zip, const std::map<std::string, Val>& meta);
-        static void read(MQZipReader& zip, std::map<std::string, Val>& meta);
+        static void write(ZipWriter& zip, const std::map<std::string, Val>& meta);
+        static void read(ZipReader& zip, std::map<std::string, Val>& meta);
     };
+
+    void markDirty();
 
     io::path_t m_filePath;
     std::map<std::string, Val> m_meta;
     std::map<std::string, QByteArray> m_data;
+
+    std::atomic<bool> m_needSave = false;
 };
 }
 

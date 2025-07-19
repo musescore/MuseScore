@@ -27,6 +27,8 @@
 
 #include "uicomponents/view/abstractmenumodel.h"
 
+class QQmlComponent;
+
 namespace muse::uicomponents {
 class AbstractMenuModel;
 }
@@ -37,41 +39,51 @@ class DockPanelView : public DockBase
     Q_OBJECT
 
     Q_PROPERTY(QString groupName READ groupName WRITE setGroupName NOTIFY groupNameChanged)
-    Q_PROPERTY(QObject * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(
         muse::uicomponents::AbstractMenuModel
         * contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
+    Q_PROPERTY(QQmlComponent * titleBar READ titleBar WRITE setTitleBar NOTIFY titleBarChanged)
+    Q_PROPERTY(QQmlComponent * toolbarComponent READ toolbarComponent WRITE setToolbarComponent NOTIFY toolbarComponentChanged)
 
 public:
     explicit DockPanelView(QQuickItem* parent = nullptr);
     ~DockPanelView() override;
 
     QString groupName() const;
-    QObject* navigationSection() const;
     uicomponents::AbstractMenuModel* contextMenuModel() const;
+    QQmlComponent* titleBar() const;
+    QQmlComponent* toolbarComponent() const;
 
     bool isTabAllowed(const DockPanelView* tab) const;
     void addPanelAsTab(DockPanelView* tab);
     void setCurrentTabIndex(int index);
 
+    bool isCurrentTabInFrame() const;
+    void makeCurrentTabInFrame();
+
 public slots:
     void setGroupName(const QString& name);
-    void setNavigationSection(QObject* newNavigation);
     void setContextMenuModel(uicomponents::AbstractMenuModel* model);
+    void setTitleBar(QQmlComponent* titleBar);
+    void setToolbarComponent(QQmlComponent* component);
 
 signals:
     void groupNameChanged();
-    void navigationSectionChanged();
     void contextMenuModelChanged();
+    void titleBarChanged();
+    void toolbarComponentChanged();
+
+    void panelShown();
 
 private:
     void componentComplete() override;
 
     QString m_groupName;
-    QObject* m_navigationSection = nullptr;
 
     class DockPanelMenuModel;
     DockPanelMenuModel* m_menuModel = nullptr;
+    QQmlComponent* m_titleBar = nullptr;
+    QQmlComponent* m_toolbarComponent = nullptr;
 };
 }
 

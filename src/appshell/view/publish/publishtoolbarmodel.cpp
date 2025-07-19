@@ -22,24 +22,30 @@
 
 #include "publishtoolbarmodel.h"
 
+#include "uicomponents/view/toolbaritem.h"
+
 using namespace mu::appshell;
 using namespace muse::uicomponents;
-
-PublishToolBarModel::PublishToolBarModel(QObject* parent)
-    : AbstractToolBarModel(parent)
-{
-}
+using namespace muse::actions;
 
 void PublishToolBarModel::load()
 {
     AbstractToolBarModel::load();
 
-    ToolBarItemList items {
-        makeItem("print", true /*showTitle*/),
-        makeItem("file-publish", true /*showTitle*/),
-        makeItem("file-share-audio", true /*showTitle*/),
-        makeItem("file-export", true /*showTitle*/)
+    muse::actions::ActionCodeList itemsCodes = {
+        "print",
+        "file-publish",
+        "file-share-audio",
+        "file-export"
     };
+
+    ToolBarItemList items;
+    for (const ActionCode& code : itemsCodes) {
+        ToolBarItem* item = makeItem(code);
+        item->setShowTitle(true);
+
+        items << item;
+    }
 
     setItems(items);
 }

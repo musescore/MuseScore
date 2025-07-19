@@ -19,13 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_WINMMDRIVER_H
-#define MUSE_AUDIO_WINMMDRIVER_H
+#pragma once
 
 #include "iaudiodriver.h"
 
-namespace mu {
-namespace audio {
+namespace muse::audio {
 class WinmmDriver : public IAudioDriver
 {
 public:
@@ -44,5 +42,3 @@ public:
     void suspend() override;
 };
 }
-}
-#endif // MUSE_AUDIO_WINMMDRIVER_H

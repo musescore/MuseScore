@@ -45,7 +45,6 @@ class LineSegment : public SpannerSegment
     OBJECT_ALLOCATOR(engraving, LineSegment)
 protected:
     virtual void editDrag(EditData&) override;
-    void updateAnchors(EditData& ed) const;
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
     std::vector<LineF> gripAnchorLines(Grip) const override;
@@ -74,7 +73,17 @@ public:
 
     std::vector<LineF> dragAnchorLines() const override;
     RectF drag(EditData& ed) override;
+
+    Spatium lineWidth() const;
+
+    double absoluteFromSpatium(const Spatium& sp) const override;
+
+protected:
+    virtual void rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys);
+
 private:
+    Segment* findNewAnchorSegment(const EditData& ed, const Segment* curSeg);
+    void undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, Segment* s1, Segment* s2);
     PointF leftAnchorPosition(const double& systemPositionY) const;
     PointF rightAnchorPosition(const double& systemPositionY) const;
 
@@ -105,10 +114,10 @@ public:
     bool diagonal() const { return m_diagonal; }
     void setDiagonal(bool v) { m_diagonal = v; }
 
-    Millimetre lineWidth() const { return m_lineWidth; }
+    Spatium lineWidth() const { return m_lineWidth; }
     Color lineColor() const { return m_lineColor; }
     LineType lineStyle() const { return m_lineStyle; }
-    void setLineWidth(const Millimetre& v) { m_lineWidth = v; }
+    void setLineWidth(const Spatium& v) { m_lineWidth = v; }
     void setLineColor(const Color& v) { m_lineColor = v; }
     void setLineStyle(LineType v) { m_lineStyle = v; }
 
@@ -131,11 +140,16 @@ public:
     virtual PointF linePos(Grip grip, System** system) const;
     virtual bool allowTimeAnchor() const override { return true; }
 
+    void undoMoveStart(Fraction tickDiff);
+    void undoMoveEnd(Fraction tickDiff);
+
+    static Note* guessFinalNote(Note* startNote);
+
 private:
 
     friend class LineSegment;
 
-    Millimetre m_lineWidth;
+    Spatium m_lineWidth;
     Color m_lineColor;
     LineType m_lineStyle = LineType::SOLID;
     double m_dashLineLen = 5.0;

@@ -35,27 +35,30 @@ static const String IMPLODEEXP_DATA_DIR("implode_explode_data/");
 
 class Engraving_ImplodeExplodeTests : public ::testing::Test
 {
+public:
+    void testUndoExplode(String fileName);
+    void testUndoImplode(String fileName);
 };
 
-TEST_F(Engraving_ImplodeExplodeTests, undoExplode)
+void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName)
 {
-    String readFile(IMPLODEEXP_DATA_DIR + "undoExplode.mscx");
-    String writeFile1("undoExplode01-test.mscx");
-    String reference1(IMPLODEEXP_DATA_DIR + "undoExplode01-ref.mscx");
-    String writeFile2("undoExplode02-test.mscx");
-    String reference2(IMPLODEEXP_DATA_DIR + "undoExplode02-ref.mscx");
+    String readFile(IMPLODEEXP_DATA_DIR + fileName + ".mscx");
+    String writeFile1(fileName + "01-test.mscx");
+    String reference1(IMPLODEEXP_DATA_DIR + fileName + "01-ref.mscx");
+    String writeFile2(fileName + "02-test.mscx");
+    String reference2(IMPLODEEXP_DATA_DIR + fileName + "02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);
     score->doLayout();
 
     // select all
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Implode/explode select all"));
     score->cmdSelectAll();
     score->endCmd();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Implode/explode tests"));
     score->cmdExplode();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -68,25 +71,25 @@ TEST_F(Engraving_ImplodeExplodeTests, undoExplode)
     delete score;
 }
 
-TEST_F(Engraving_ImplodeExplodeTests, undoImplode)
+void Engraving_ImplodeExplodeTests::testUndoImplode(String filename)
 {
-    String readFile(IMPLODEEXP_DATA_DIR + "undoImplode.mscx");
-    String writeFile1("undoImplode01-test.mscx");
-    String reference1(IMPLODEEXP_DATA_DIR + "undoImplode01-ref.mscx");
-    String writeFile2("undoImplode02-test.mscx");
-    String reference2(IMPLODEEXP_DATA_DIR + "undoImplode02-ref.mscx");
+    String readFile(IMPLODEEXP_DATA_DIR + filename + ".mscx");
+    String writeFile1(filename + "01-test.mscx");
+    String reference1(IMPLODEEXP_DATA_DIR + filename + "01-ref.mscx");
+    String writeFile2(filename + "02-test.mscx");
+    String reference2(IMPLODEEXP_DATA_DIR + filename + "02-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
     EXPECT_TRUE(score);
     score->doLayout();
 
     // select all
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Implode/explode select all"));
     score->cmdSelectAll();
     score->endCmd();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Implode/explode tests"));
     score->cmdImplode();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -97,65 +100,44 @@ TEST_F(Engraving_ImplodeExplodeTests, undoImplode)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
+}
+
+TEST_F(Engraving_ImplodeExplodeTests, undoExplode)
+{
+    testUndoExplode(u"undoExplode");
+}
+
+TEST_F(Engraving_ImplodeExplodeTests, undoImplode)
+{
+    testUndoImplode(u"undoImplode");
 }
 
 TEST_F(Engraving_ImplodeExplodeTests, undoImplodeVoice)
 {
-    String readFile(IMPLODEEXP_DATA_DIR + "undoImplodeVoice.mscx");
-    String writeFile1("undoImplodeVoice01-test.mscx");
-    String reference1(IMPLODEEXP_DATA_DIR + "undoImplodeVoice01-ref.mscx");
-    String writeFile2("undoImplodeVoice02-test.mscx");
-    String reference2(IMPLODEEXP_DATA_DIR + "undoImplodeVoice02-ref.mscx");
-
-    MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
-    score->doLayout();
-
-    // select all
-    score->startCmd();
-    score->cmdSelectAll();
-    score->endCmd();
-
-    // do
-    score->startCmd();
-    score->cmdImplode();
-    score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
-
-    // undo
-    EditData ed;
-    score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
-
-    delete score;
+    testUndoImplode(u"undoImplodeVoice");
 }
 
-TEST_F(Engraving_ImplodeExplodeTests, implode1)
+TEST_F(Engraving_ImplodeExplodeTests, implodeScore)
 {
-    String readFile(IMPLODEEXP_DATA_DIR + "implode1.mscx");
-    String writeFile1("implode1-test1.mscx");
-    String writeFile2("implode1-test2.mscx");
-    String reference(IMPLODEEXP_DATA_DIR + "implode1-ref.mscx");
+    testUndoImplode(u"implodeScore");
+}
 
-    MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
-    score->doLayout();
+TEST_F(Engraving_ImplodeExplodeTests, explodeDynamics)
+{
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
 
-    // select all
-    score->startCmd();
-    score->cmdSelectAll();
-    score->endCmd();
+    testUndoExplode(u"explodeDynamics");
 
-    // do
-    score->startCmd();
-    score->cmdImplode();
-    score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference));
+    MScore::useRead302InTestMode = useRead302;
+}
 
-    // undo
-    EditData ed;
-    score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, readFile));
+TEST_F(Engraving_ImplodeExplodeTests, implodeDynamics)
+{
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
 
-    delete score;
+    testUndoImplode(u"implodeDynamics");
+
+    MScore::useRead302InTestMode = useRead302;
 }

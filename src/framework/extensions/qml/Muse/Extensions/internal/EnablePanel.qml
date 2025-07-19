@@ -30,16 +30,48 @@ InfoPanel {
 
     property bool isEnabled: false
 
+    property var execPointsModel: null
+    property int currentExecPointIndex: 0
+    property bool isRemovable: false
+
     signal editShortcutRequested()
-    signal enabledChanged(bool enabled)
+    signal execPointSelected(int index)
+    signal removeRequest()
 
     buttonsPanel: RowLayout {
         id: buttons
 
         spacing: 19
 
+        // StyledDropdown {
+        //     id: execPoints
+
+        //     property string text: currentText
+
+        //     Component.onCompleted: {
+        //         root.mainButton = execPoints
+        //     }
+
+        //     Layout.alignment: Qt.AlignLeft
+
+        //     width: 280
+
+        //     navigation.name: "ExecPointSelector"
+        //     navigation.panel: root.contentNavigation
+        //     navigation.column: 3
+
+        //     currentIndex: root.currentExecPointIndex
+        //     model: root.execPointsModel
+
+        //     onActivated: function(index, value) {
+        //         currentIndex = index
+        //         root.execPointSelected(index)
+        //     }
+        // }
+
         FlatButton {
             id: neutralButton
+
             Layout.alignment: Qt.AlignLeft
 
             navigation.name: "EditShortcutButton"
@@ -54,28 +86,62 @@ InfoPanel {
             }
         }
 
-        FlatButton {
-            id: mainButton
+        RowLayout {
             Layout.alignment: Qt.AlignRight
+            spacing: 22
 
-            navigation.name: text + "Button"
-            navigation.panel: root.contentNavigation
-            navigation.column: 3
-            accessible.ignored: true
-            navigation.onActiveChanged: {
-                if (!navigation.active) {
-                    accessible.ignored = false
+            FlatButton {
+                id: removeButton
+                
+                visible: root.isRemovable
+                navigation.name: text + "Button"
+                navigation.panel: root.contentNavigation
+                navigation.column: 2
+                accessible.ignored: true
+                navigation.onActiveChanged: {
+                    if (!navigation.active) {
+                        accessible.ignored = false
+                    }
+                }
+
+                text: qsTrc("workspace", "Remove")
+
+                onClicked: {
+                    root.removeRequest()
                 }
             }
 
-            text: !root.isEnabled ? qsTrc("extensions", "Enable") : qsTrc("extensions", "Disable")
 
-            Component.onCompleted: {
-                root.mainButton = mainButton
-            }
 
-            onClicked: {
-                root.enabledChanged(!root.isEnabled)
+            FlatButton {
+                id: mainButton
+
+                navigation.name: text + "Button"
+                navigation.panel: root.contentNavigation
+                navigation.column: 3
+                accessible.ignored: true
+                navigation.onActiveChanged: {
+                    if (!navigation.active) {
+                        accessible.ignored = false
+                    }
+                }
+
+                text: !root.isEnabled ? qsTrc("extensions", "Enable") : qsTrc("extensions", "Disable")
+
+                Component.onCompleted: {
+                    root.mainButton = mainButton
+                }
+
+                onClicked: {
+                    //! NOTE temporary
+                    // The function with the choice of the call point is not ready yet.
+                    // Therefore, here is the previous solution with the button,
+                    // but in fact the choice is made from the list
+                    // 0 - disabled
+                    // 1 - enabled (manual call)
+                    // (here we switch to the opposite state)
+                    root.execPointSelected(root.isEnabled ? 0 : 1)
+                }
             }
         }
     }

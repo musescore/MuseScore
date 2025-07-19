@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_FONTSDATABASE_H
-#define MUSE_DRAW_FONTSDATABASE_H
+#pragma once
 
 #include <vector>
 #include <map>
@@ -34,6 +33,7 @@ public:
     FontsDatabase() = default;
 
     void setDefaultFont(Font::Type type, const FontDataKey& key) override;
+    void insertSubstitution(const String& f1, const String& substituteName) override;
 
     int addFont(const FontDataKey& key, const io::path_t& path) override;
 
@@ -62,4 +62,3 @@ private:
     std::vector<FontInfo> m_fonts;
 };
 }
-#endif // MUSE_DRAW_FONTSDATABASE_H

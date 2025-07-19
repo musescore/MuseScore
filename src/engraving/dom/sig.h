@@ -20,15 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SIG_H
-#define MU_ENGRAVING_SIG_H
+#pragma once
 
 #include <map>
 #include <cassert>
 
 #include "global/allocator.h"
-#include "types/string.h"
-#include "../types/fraction.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 int ticks_beat(int n);
@@ -37,7 +35,7 @@ int ticks_beat(int n);
 //   BeatType
 //-------------------------------------------------------------------
 
-enum class BeatType : char {
+enum class BeatType : unsigned char {
     DOWNBEAT,                 // 1st beat of measure (rtick == 0)
     COMPOUND_STRESSED,        // e.g. eighth-note number 7 in 12/8
     SIMPLE_STRESSED,          // e.g. beat 3 in 4/4
@@ -170,5 +168,4 @@ public:
 
     void normalize();
 };
-} // namespace mu::engraving
-#endif
+}

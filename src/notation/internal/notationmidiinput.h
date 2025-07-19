@@ -39,14 +39,15 @@ class Score;
 }
 
 namespace mu::notation {
-class NotationMidiInput : public INotationMidiInput
+class NotationMidiInput : public INotationMidiInput, public muse::Injectable
 {
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(INotationConfiguration, configuration)
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
-    NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack);
+    NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack,
+                      const muse::modularity::ContextPtr& iocCtx);
 
     void onMidiEventReceived(const muse::midi::Event& event) override;
     muse::async::Channel<std::vector<const Note*> > notesReceived() const override;
@@ -57,8 +58,12 @@ private:
     mu::engraving::Score* score() const;
 
     void doProcessEvents();
+
+    void startNoteInputIfNeed();
+
+    void addNoteEventsToInputState();
     Note* addNoteToScore(const muse::midi::Event& e);
-    Note* makeNote(const muse::midi::Event& e);
+    Note* makePreviewNote(const muse::midi::Event& e);
 
     void enableMetronome();
     void disableMetronome();
@@ -73,6 +78,7 @@ private:
     bool isRealtime() const;
     bool isRealtimeAuto() const;
     bool isRealtimeManual() const;
+    bool isInputByDuration() const;
 
     bool isNoteInputMode() const;
 
@@ -89,6 +95,7 @@ private:
     bool m_allowRealtimeRests = false;
 
     bool m_shouldDisableMetronome = false;
+    bool m_holdingNotes = false;
 };
 }
 

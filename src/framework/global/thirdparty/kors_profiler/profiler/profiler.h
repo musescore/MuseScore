@@ -24,17 +24,16 @@ SOFTWARE.
 #ifndef KORS_PROFILER_H
 #define KORS_PROFILER_H
 
-#include <string>
-#include <string_view>
-#include <list>
-#include <vector>
-#include <set>
-#include <unordered_map>
-#include <thread>
-#include <mutex>
-#include <chrono>
-#include <sstream>
 #include <atomic>
+#include <chrono>
+#include <list>
+#include <mutex>
+#include <set>
+#include <sstream>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <vector>
 
 #include "funcinfo.h"
 
@@ -66,6 +65,30 @@ SOFTWARE.
     { kors::profiler::Profiler::instance()->stepTime(tag, info); }
 #endif
 
+#ifndef TIMER_START
+#define TIMER_START(tag) \
+    if (kors::profiler::Profiler::options().timersEnabled) \
+    { kors::profiler::Profiler::instance()->startTimer(tag); }
+#endif
+
+#ifndef TIMER_STOP
+#define TIMER_STOP(tag) \
+    if (kors::profiler::Profiler::options().timersEnabled) \
+    { kors::profiler::Profiler::instance()->stopTimer(tag); }
+#endif
+
+#ifndef TIMER_STARTED
+#define TIMER_STARTED(tag) \
+    (kors::profiler::Profiler::options().timersEnabled && \
+     kors::profiler::Profiler::instance()->timerStarted(tag))
+#endif
+
+#ifndef TIMER_PRINT
+#define TIMER_PRINT(tag) \
+    if (kors::profiler::Profiler::options().timersEnabled) \
+    { kors::profiler::Profiler::instance()->printTimer(tag); }
+#endif
+
 #ifndef PROFILER_CLEAR
 #define PROFILER_CLEAR kors::profiler::Profiler::instance()->clear();
 #endif
@@ -80,6 +103,10 @@ SOFTWARE.
 #define TRACEFUNC_C(info)
 #define BEGIN_STEP_TIME
 #define STEP_TIME
+#define TIMER_START
+#define TIMER_STOP
+#define TIMER_STARTED
+#define TIMER_PRINT
 #define PROFILER_CLEAR
 #define PROFILER_PRINT
 
@@ -95,6 +122,7 @@ public:
     struct Options {
         Options() {}
         bool stepTimeEnabled = true;
+        bool timersEnabled = true;
         std::atomic<bool> funcsTimeEnabled = true;
         bool funcsTraceEnabled = false;
         size_t funcsMaxThreadCount = 100;
@@ -102,6 +130,7 @@ public:
 
         void assign(const Options& o) {
             stepTimeEnabled = o.stepTimeEnabled;
+            timersEnabled = o.timersEnabled;
             funcsTimeEnabled = o.funcsTimeEnabled.load();
             funcsTraceEnabled = o.funcsTraceEnabled;
             funcsMaxThreadCount = o.funcsMaxThreadCount;
@@ -139,6 +168,7 @@ public:
         virtual void printDebug(const std::string& str);
         virtual void printInfo(const std::string& str);
         virtual void printStep(const std::string& tag, double beginMs, double stepMs, const std::string& info);
+        virtual void printElapsedTime(const std::string& tag, double elapsedTimeMs);
         virtual void printTraceBegin(const std::string& func, size_t stackCounter);
         virtual void printTraceEnd(const std::string& func, double calltimeMs, long callcount, double sumtimeMs, size_t stackCounter);
         virtual void printData(const Data& data, Data::Mode mode, int maxcount);
@@ -153,6 +183,8 @@ public:
     struct ElapsedTimer {
         void start();
         void restart();
+        void stop();
+        bool started() const;
         double mlsecsElapsed() const; //NOTE fractional milliseconds
         void invalidate();
         bool isValid() const;
@@ -177,6 +209,11 @@ public:
     Printer* printer() const;
 
     void stepTime(const std::string& tag, const std::string& info, bool isRestart = false);
+
+    void startTimer(const std::string& tag);
+    void stopTimer(const std::string& tag);
+    void printTimer(const std::string& tag);
+    bool timerStarted(const std::string& tag) const;
 
     FuncTimer* beginFunc(const std::string& func);
     void endFunc(FuncTimer* timer, const std::string& func);
@@ -230,12 +267,19 @@ private:
         int threadIndex(std::thread::id th);
     };
 
+    typedef std::unordered_map<std::string, ElapsedTimer* > Timers;
+    struct TimersData {
+        std::mutex mutex;
+        Timers timers;
+    };
+
     bool save_file(const std::string& path, const std::string& content);
 
     Printer* m_printer = nullptr;
 
     StepsData m_steps;
     mutable FuncsData m_funcs;
+    mutable TimersData m_timersData;
 
     size_t m_stackCounter = 0;
 };

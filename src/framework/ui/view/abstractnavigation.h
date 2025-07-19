@@ -83,6 +83,7 @@ public:
     void onEvent(INavigation::EventPtr e);
 
     QWindow* window() const;
+    QQuickItem* visualItem() const;
 
     // QQmlParserStatus
     void classBegin() override;

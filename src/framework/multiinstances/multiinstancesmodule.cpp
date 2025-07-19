@@ -47,7 +47,7 @@ std::string MultiInstancesModule::moduleName() const
 
 void MultiInstancesModule::registerExports()
 {
-    m_multiInstancesProvider = std::make_shared<MultiInstancesProvider>();
+    m_multiInstancesProvider = std::make_shared<MultiInstancesProvider>(iocContext());
 
     ioc()->registerExport<IMultiInstancesProvider>(moduleName(), m_multiInstancesProvider);
 }

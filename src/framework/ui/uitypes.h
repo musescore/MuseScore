@@ -26,11 +26,24 @@
 #include <QString>
 #include <QMetaType>
 #include <QMap>
+#include <QQuickItem>
 
 #include "view/iconcodes.h" // IWYU pragma: export
 #include "workspace/workspacetypes.h"
 
 namespace muse::ui {
+//! NOTE Same as QSGRendererInterface::Api
+enum class GraphicsApi {
+    Default,
+    Software,
+    OpenVG,
+    OpenGL,
+    Direct3D11,
+    Vulkan,
+    Metal,
+    Null
+};
+
 using ThemeCode = std::string;
 
 inline ThemeCode themeCodeFromString(const QString& str)
@@ -72,6 +85,7 @@ enum ThemeStyleKey
     BACKGROUND_PRIMARY_COLOR = 0,
     BACKGROUND_SECONDARY_COLOR,
     BACKGROUND_TERTIARY_COLOR,
+    BACKGROUND_QUARTERNARY_COLOR,
     POPUP_BACKGROUND_COLOR,
     PROJECT_TAB_COLOR,
     TEXT_FIELD_COLOR,

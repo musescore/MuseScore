@@ -54,13 +54,16 @@ void DockPageView::init()
     TRACEFUNC;
 
     for (DockBase* dock : allDocks()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        dock->setParentItem(this);
+#endif
         dock->init();
 
         connect(dock, &DockBase::floatingChanged, [this](){
             reorderSections();
         });
 
-        connect(dock, &DockBase::reorderNavigationRequested, [this](){
+        connect(dock, &DockBase::visibleChanged, [this](){
             reorderSections();
         });
     }
@@ -177,28 +180,51 @@ DockingHolderView* DockPageView::holder(DockType type, Location location) const
     return nullptr;
 }
 
-QList<DockPanelView*> DockPageView::possiblePanelsForTab(const DockPanelView* tab) const
+QList<DockPanelView*> DockPageView::findPanelsForDropping(const DockPanelView* panel) const
 {
     QList<DockPanelView*> result;
 
-    for (DockPanelView* panel : panels()) {
-        if (panel->isTabAllowed(tab)) {
-            result << panel;
+    for (DockPanelView* destinationPanel : panels()) {
+        if (destinationPanel->isTabAllowed(panel)) {
+            result << destinationPanel;
         }
     }
 
     return result;
 }
 
-bool DockPageView::isDockOpen(const QString& dockName) const
+DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
+{
+    for (DockPanelView* destinationPanel: panels()) {
+        if (destinationPanel->isTabAllowed(tab)
+            && destinationPanel->location() == tab->location()) {
+            return destinationPanel;
+        }
+    }
+
+    return nullptr;
+}
+
+bool DockPageView::isDockOpenAndCurrentInFrame(const QString& dockName) const
 {
     const DockBase* dock = dockByName(dockName);
-    return dock ? dock->isOpen() : false;
+    if (!dock) {
+        return false;
+    }
+
+    const bool isDockOpen = dock && dock->isOpen();
+
+    const DockPanelView* panel = dynamic_cast<const DockPanelView*>(dock);
+    if (panel) {
+        return isDockOpen && panel->isCurrentTabInFrame();
+    }
+
+    return isDockOpen;
 }
 
 void DockPageView::toggleDock(const QString& dockName)
 {
-    setDockOpen(dockName, !isDockOpen(dockName));
+    setDockOpen(dockName, !isDockOpenAndCurrentInFrame(dockName));
 }
 
 void DockPageView::setDockOpen(const QString& dockName, bool open)
@@ -222,15 +248,10 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
     DockPanelView* destinationPanel = findPanelForTab(panel);
     if (destinationPanel) {
         destinationPanel->addPanelAsTab(panel);
+        panel->makeCurrentTabInFrame();
     } else {
         panel->open();
     }
-}
-
-DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
-{
-    QList<DockPanelView*> panels = possiblePanelsForTab(tab);
-    return !panels.isEmpty() ? panels.first() : nullptr;
 }
 
 void DockPageView::reorderSections()
@@ -254,7 +275,7 @@ void DockPageView::doReorderSections()
     QList<DockBase*> docksAvailableForNavigation;
 
     for (DockBase* dock: docks) {
-        if (dock->contentNavigationPanel() && dock->isVisible()) {
+        if (dock->navigationSection() && dock->isVisible()) {
             docksAvailableForNavigation.append(dock);
         }
     }
@@ -264,43 +285,11 @@ void DockPageView::doReorderSections()
 
 void DockPageView::reorderDocksNavigationSections(QList<DockBase*>& docks)
 {
-    std::sort(docks.begin(), docks.end(), [this](DockBase* dock1, DockBase* dock2) {
-        if (!dock1->contentNavigationPanel() || !dock2->contentNavigationPanel()) {
-            return false;
-        }
-
-        QPoint dock1Pos = dock1->globalPosition();
-        QPoint dock2Pos = dock2->globalPosition();
-
-        if (dock1Pos.y() == dock2Pos.y()) {
-            if (dock1 == m_central) {
-                return true;
-            } else if (dock2 == m_central) {
-                return false;
-            }
-
-            return dock1Pos.x() < dock2Pos.x();
-        }
-
-        return dock1Pos.y() < dock2Pos.y();
-    });
-
-    int i = 0;
     QHash<muse::ui::INavigationSection*, QList<DockBase*> > orderedSections;
     for (DockBase* dock: docks) {
-        muse::ui::NavigationPanel* panel = dock->contentNavigationPanel();
-        if (!panel) {
-            continue;
+        if (ui::INavigationSection* section = dock->navigationSection()) {
+            orderedSections[section] << dock;
         }
-
-        muse::ui::INavigationSection* section = panel->section();
-        if (section && !orderedSections.contains(section)) {
-            auto index = section->index();
-            index.setOrder(i++);
-            section->setIndex(index);
-        }
-
-        orderedSections[section] << dock;
     }
 
     for (QList<DockBase*>& panels : orderedSections.values()) {
@@ -311,7 +300,11 @@ void DockPageView::reorderDocksNavigationSections(QList<DockBase*>& docks)
 void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks)
 {
     std::sort(sectionDocks.begin(), sectionDocks.end(), [](DockBase* dock1, DockBase* dock2) {
-        if (!dock1->contentNavigationPanel() || !dock2->contentNavigationPanel()) {
+        if (!dock1->navigationSection() || !dock2->navigationSection()) {
+            return false;
+        }
+
+        if (dock1 == dock2) {
             return false;
         }
 
@@ -341,7 +334,7 @@ void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks
     for (DockBase* dock: sectionDocks) {
         //!NOTE: It is possible that the dock contains multiple panels.
         //! Reserve n panels for each dock.
-        int order = i++ *100;
+        int order = i++ *1000;
 
         //! NOTE: If a panel is inside a frame with another panel,
         //! there is no need to set the order for the frame panel, as it is already set.
@@ -357,7 +350,7 @@ void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks
             dock->setFramePanelOrder(order);
         }
 
-        dock->contentNavigationPanel()->setOrder(order + 1);
+        dock->setContentNavigationPanelOrderStart(order + 1);
     }
 }
 
@@ -445,4 +438,53 @@ void DockPageView::setDefaultNavigationControl(muse::ui::NavigationControl* cont
 {
     muse::ui::INavigationControl* _control = dynamic_cast<muse::ui::INavigationControl*>(control);
     navigationController()->setDefaultNavigationControl(_control);
+}
+
+void DockPageView::forceLayout()
+{
+    emit layoutRequested();
+}
+
+QVariant DockPageView::tours() const
+{
+    return m_tours;
+}
+
+void DockPageView::setTours(const QVariant& newTours)
+{
+    if (m_tours == newTours) {
+        return;
+    }
+
+    for (const QVariant& tourVar: newTours.toList()) {
+        QVariantMap tourMap = tourVar.toMap();
+
+        String eventCode = tourMap.value("eventCode").toString();
+
+        QVariantMap tourInfoMap = tourMap.value("tour").toMap();
+
+        tours::Tour tour;
+
+        tour.id = tourInfoMap.value("id").toString();
+
+        for (const QVariant& stepVar: tourInfoMap.value("steps").toList()) {
+            QVariantMap stepMap = stepVar.toMap();
+
+            tours::TourStep step;
+            step.title = stepMap.value("title").toString();
+            step.description = stepMap.value("description").toString();
+            step.previewImageOrGifUrl = stepMap.value("previewImageOrGifUrl").toString();
+            step.videoExplanationUrl = stepMap.value("videoExplanationUrl").toString();
+            step.controlUri = Uri(stepMap.value("controlUri").toString());
+
+            tour.steps.emplace_back(step);
+        }
+
+        if (!tour.steps.empty()) {
+            toursService()->registerTour(eventCode, tour);
+        }
+    }
+
+    m_tours = newTours;
+    emit toursChanged();
 }

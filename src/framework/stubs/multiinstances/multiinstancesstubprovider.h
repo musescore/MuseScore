@@ -34,7 +34,7 @@ public:
     bool isProjectAlreadyOpened(const io::path_t& projectPath) const override;
     void activateWindowWithProject(const io::path_t& projectPath) override;
     bool isHasAppInstanceWithoutProject() const override;
-    void activateWindowWithoutProject() override;
+    void activateWindowWithoutProject(const QStringList& args) override;
     bool openNewAppInstance(const QStringList& args) override;
 
     // Settings
@@ -43,6 +43,7 @@ public:
     void settingsBeginTransaction() override;
     void settingsCommitTransaction() override;
     void settingsRollbackTransaction() override;
+    void settingsReset() override;
     void settingsSetValue(const std::string& key, const Val& value) override;
 
     // Resources (files)

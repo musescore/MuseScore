@@ -82,10 +82,10 @@ static const Acc ACC_LIST[] = {
     Acc(AccidentalVal::NATURAL,  150,   SymId::accidentalThreeQuarterTonesSharpStein),   // SHARP_SLASH4
 
     // Arel-Ezgi-Uzdilek (AEU)
-    Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalBuyukMucennebFlat),    // FLAT_SLASH2
-    Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalBakiyeFlat),           // FLAT_SLASH
-    Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalKucukMucennebSharp),   // SHARP_SLASH3
-    Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalBuyukMucennebSharp),   // SHARP_SLASH2
+    Acc(AccidentalVal::NATURAL,  -89,   SymId::accidentalBuyukMucennebFlat),    // FLAT_SLASH2
+    Acc(AccidentalVal::NATURAL,  -44,   SymId::accidentalBakiyeFlat),           // FLAT_SLASH
+    Acc(AccidentalVal::NATURAL,   56,   SymId::accidentalKucukMucennebSharp),   // SHARP_SLASH3
+    Acc(AccidentalVal::NATURAL,   89,   SymId::accidentalBuyukMucennebSharp),   // SHARP_SLASH2
 
     // Extended Helmholtz-Ellis accidentals (just intonation)
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalDoubleFlatOneArrowDown),
@@ -252,7 +252,7 @@ Accidental::Accidental(EngravingItem* parent)
 
 TranslatableString Accidental::subtypeUserName() const
 {
-    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
+    return SymNames::userNameForSymId(symId());
 }
 
 //---------------------------------------------------------
@@ -266,7 +266,7 @@ SymId Accidental::symId() const
 
 bool Accidental::parentNoteHasParentheses() const
 {
-    return explicitParent() && parentItem()->isNote() ? toNote(parentItem())->headHasParentheses() : false;
+    return explicitParent() && parentItem()->isNote() ? toNote(parentItem())->bothParentheses() : false;
 }
 
 //---------------------------------------------------------

@@ -27,16 +27,16 @@ using namespace muse;
 using namespace muse::extensions::apiv1;
 
 FileDialog::FileDialog(QObject* parent)
-    : QObject(parent) {}
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this)) {}
 
 QString FileDialog::doOpen(const QString& title, const QString& folder)
 {
     io::path_t path;
     if (m_type == Load) {
-        path = interactive()->selectOpeningFile(title, folder, {});
+        path = interactive()->selectOpeningFileSync(title.toStdString(), folder, {});
         LOGD() << "selectOpeningFile: " << path;
     } else {
-        path = interactive()->selectSavingFile(title, folder, {});
+        path = interactive()->selectSavingFileSync(title.toStdString(), folder, {});
         LOGD() << "selectSavingFile: " << path;
     }
 

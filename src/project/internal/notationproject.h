@@ -39,6 +39,8 @@
 #include "projectaudiosettings.h"
 #include "iprojectmigrator.h"
 
+#include "global/iglobalconfiguration.h"
+
 namespace mu::engraving {
 class MscReader;
 class MscWriter;
@@ -54,6 +56,7 @@ class NotationProject : public INotationProject, public muse::Injectable, public
     muse::Inject<INotationReadersRegister> readers = { this };
     muse::Inject<INotationWritersRegister> writers = { this };
     muse::Inject<IProjectMigrator> migrator = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     NotationProject(const muse::modularity::ContextPtr& iocCtx)
@@ -91,7 +94,10 @@ public:
     bool needAutoSave() const override;
     void setNeedAutoSave(bool val) override;
 
-    muse::Ret save(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save) override;
+    muse::Ret save(
+        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
+    muse::async::Channel<muse::io::path_t, SaveMode> saveComplited() const override;
+
     muse::Ret writeToDevice(QIODevice* device) override;
 
     ProjectMeta metaInfo() const override;
@@ -109,12 +115,14 @@ private:
     muse::Ret doImport(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode);
 
     muse::Ret saveScore(const muse::io::path_t& path, const std::string& fileSuffix, bool generateBackup = true,
-                        bool createThumbnail = true);
+                        bool createThumbnail = true, bool isAutosave = false);
     muse::Ret saveSelectionOnScore(const muse::io::path_t& path = muse::io::path_t());
     muse::Ret exportProject(const muse::io::path_t& path, const std::string& suffix);
-    muse::Ret doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true);
-    muse::Ret makeCurrentFileAsBackup();
+    muse::Ret doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true,
+                     bool isAutosave = false);
+    muse::Ret makeBackup(muse::io::path_t filePath);
     muse::Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection, bool createThumbnail = true);
+    muse::Ret checkSavedFileForCorruption(engraving::MscIoMode ioMode, const muse::io::path_t& path, const muse::io::path_t& scoreFileName);
 
     void listenIfNeedSaveChanges();
     void markAsSaved(const muse::io::path_t& path);
@@ -131,6 +139,8 @@ private:
     muse::async::Notification m_displayNameChanged;
 
     muse::async::Notification m_needSaveNotification;
+
+    muse::async::Channel<muse::io::path_t, SaveMode> m_saved;
 
     bool m_isNewlyCreated = false; /// true if the file has never been saved yet
     bool m_isImported = false;

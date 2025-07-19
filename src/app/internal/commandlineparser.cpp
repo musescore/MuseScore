@@ -26,6 +26,8 @@
 #include "global/io/dir.h"
 #include "global/internal/baseapplication.h"
 
+#include "app_config.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -36,7 +38,7 @@ static QStringList prepareArguments(int argc, char** argv)
     QStringList args;
 
     for (int i = 0; i < argc; ++i) {
-        QString arg = QString::fromLocal8Bit(argv[i]);
+        QString arg = QString::fromUtf8(argv[i]);
 
 #ifndef NDEBUG
         if (arg.startsWith("-qmljsdebugger")) {
@@ -83,8 +85,10 @@ void CommandLineParser::init()
 
     // Converter mode
     m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export", "DPI"));
-    m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
     m_parser.addOption(QCommandLineOption({ "o", "export-to" }, "Export to 'file'. Format depends on file's extension", "file"));
+    m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
+    m_parser.addOption(QCommandLineOption("extension", "Use extension to process a conversion job", "uri"));
+
     m_parser.addOption(QCommandLineOption({ "F", "factory-settings" }, "Use factory settings"));
     m_parser.addOption(QCommandLineOption({ "R", "revert-settings" }, "Revert to factory settings, but keep default preferences"));
     m_parser.addOption(QCommandLineOption({ "M", "midi-operations" }, "Specify MIDI import operations file", "file"));
@@ -108,7 +112,11 @@ void CommandLineParser::init()
 
     m_parser.addOption(QCommandLineOption("sound-profile",
                                           "Use with '-o <file>.mp3' or with '-j <file>', override the sound profile in the given score(s). "
-                                          "Possible values: \"MuseScore Basic\", \"Muse Sounds\"", "sound-profile"));
+                                          "Possible values: \"MuseScore Basic\", \"MuseSounds\"", "sound-profile"));
+
+    m_parser.addOption(QCommandLineOption("transpose",
+                                          "Transpose the given score before executing the '-o' options",
+                                          "options"));
 
     // MusicXML
     m_parser.addOption(QCommandLineOption("musicxml-use-default-font",
@@ -290,6 +298,11 @@ void CommandLineParser::parse(int argc, char** argv)
             }
             m_options.converterTask.inputFile = scorefiles[0];
             m_options.converterTask.outputFile = fromUserInputPath(m_parser.value("o"));
+
+            // Only if "-o" is set "transpose" has some meaning
+            if (m_parser.isSet("transpose")) {
+                m_options.converterTask.params[CmdOptions::ParamKey::ScoreTransposeOptions] = m_parser.value("transpose");
+            }
         }
     }
 
@@ -358,11 +371,11 @@ void CommandLineParser::parse(int argc, char** argv)
 
     // MusicXML
     if (m_parser.isSet("musicxml-use-default-font")) {
-        m_options.importMusicXML.useDefaultFont = true;
+        m_options.importMusicXml.useDefaultFont = true;
     }
 
     if (m_parser.isSet("musicxml-infer-text-type")) {
-        m_options.importMusicXML.inferTextType = true;
+        m_options.importMusicXml.inferTextType = true;
     }
 
     // Video
@@ -417,6 +430,10 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("sound-profile")) {
         m_options.converterTask.params[CmdOptions::ParamKey::SoundProfile] = m_parser.value("sound-profile");
+    }
+
+    if (m_parser.isSet("extension")) {
+        m_options.converterTask.params[CmdOptions::ParamKey::ExtensionUri] = m_parser.value("extension");
     }
 
     if (m_parser.isSet("gp-linked")) {

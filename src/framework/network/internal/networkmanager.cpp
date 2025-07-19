@@ -97,15 +97,20 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
     QNetworkRequest request(url);
     request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
 
-    for (QNetworkRequest::KnownHeaders knownHeader: headers.knownHeaders.keys()) {
-        request.setHeader(knownHeader, headers.knownHeaders[knownHeader]);
+    RequestHeaders _headers = headers;
+    if (_headers.isEmpty()) {
+        _headers = configuration()->defaultHeaders();
     }
 
-    for (const QByteArray& rawHeader: headers.rawHeaders.keys()) {
-        request.setRawHeader(rawHeader, headers.rawHeaders[rawHeader]);
+    for (QNetworkRequest::KnownHeaders knownHeader: _headers.knownHeaders.keys()) {
+        request.setHeader(knownHeader, _headers.knownHeaders[knownHeader]);
     }
 
-    m_progress.started.notify();
+    for (const QByteArray& rawHeader: _headers.rawHeaders.keys()) {
+        request.setRawHeader(rawHeader, _headers.rawHeaders[rawHeader]);
+    }
+
+    m_progress.start();
 
     QNetworkReply* reply = receiveReply(requestType, request, outgoingData);
 
@@ -122,7 +127,7 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
         LOGE() << ret.toString();
     }
 
-    m_progress.finished.send(ret);
+    m_progress.finish(ret);
 
     if (outgoingData && outgoingData->device()) {
         closeDevice(outgoingData->device());
@@ -181,7 +186,7 @@ void NetworkManager::abort()
     }
 
     m_isAborted = true;
-    m_progress.finished.send(make_ret(Err::Abort));
+    m_progress.finish(make_ret(Err::Abort));
 }
 
 bool NetworkManager::openDevice(QIODevice* device, QIODevice::OpenModeFlag flags)
@@ -213,7 +218,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* i
 {
     if (incomingData) {
         connect(reply, &QNetworkReply::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
-            m_progress.progressChanged.send(curr, total, "");
+            m_progress.progress(curr, total);
         });
 
         connect(reply, &QNetworkReply::readyRead, this, [this]() {
@@ -234,7 +239,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* i
 void NetworkManager::prepareReplyTransmit(QNetworkReply* reply)
 {
     connect(reply, &QNetworkReply::uploadProgress, [this](const qint64 curr, const qint64 total) {
-        m_progress.progressChanged.send(curr, total, "");
+        m_progress.progress(curr, total);
     });
 }
 

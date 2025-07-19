@@ -212,9 +212,6 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
     //otherwise checked by RealizedHarmony. This saves us 3 ints of space, but
     //has the added risk
     if (!m_dirty) {
-        assert(
-            m_harmony->harmonyType() != HarmonyType::STANDARD
-            || (m_notes.begin()->second == rootTpc || m_notes.begin()->second == bassTpc));
         return;
     }
 
@@ -324,7 +321,10 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
             if (s.at(c).isDigit()) {
                 int alter = 0;
                 size_t cutoff = c;
-                int deg = s.right(s.size() - c).toInt();
+                String degreeString = s;
+                static const std::wregex NOT_DIGITS = std::wregex(L"[^0-9]+");
+                degreeString.remove(NOT_DIGITS);
+                int deg = degreeString.toInt();
                 //account for if the flat/sharp is stuck to the end of add
                 if (c) {
                     if (s.at(c - 1) == u'#') {

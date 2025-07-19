@@ -98,7 +98,7 @@ Item {
                                                                             : qsTrc("ui", "Choose directory")
 
             onClicked: {
-                switch (pickerType) {
+                switch (root.pickerType) {
                 case FilePicker.PickerType.File: {
                     var selectedFile = filePickerModel.selectFile()
                     if (Boolean(selectedFile)) {

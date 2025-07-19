@@ -26,61 +26,82 @@ import QtQuick.Layouts 1.12
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
-import "qrc:/kddockwidgets/private/quick/qml/" as KDDW
-
 Item {
     id: root
 
     required property QtObject titleBarCpp
 
-    property alias contextMenuModel: contextMenuButton.menuModel
-    property alias heightWhenVisible: titleBar.heightWhenVisible
-    property bool isHorizontalPanel: false
+    property Component titleBarItem: null
+    property var contextMenuModel: null
 
-    property alias navigation: contextMenuButton.navigation
+    property NavigationPanel navigationPanel: null
+    property int navigationOrder: 0
 
     signal handleContextMenuItemRequested(string itemId)
 
     width: parent.width
-    height: visible ? heightWhenVisible : 0
+    implicitHeight: titleBarLoader.implicitHeight
 
     visible: Boolean(titleBarCpp)
 
-    KDDW.TitleBarBase {
-        id: titleBar
+    function doubleClicked(pos) {
+        if (root.titleBarCpp) {
+            root.titleBarCpp.doubleClicked(pos)
+        }
+    }
 
+    Loader {
+        id: titleBarLoader
         anchors.fill: parent
 
-        heightWhenVisible: titleBarContent.implicitHeight
-        color: ui.theme.backgroundPrimaryColor
+        property var titleBarCpp: root.titleBarCpp
 
-        visible: parent.visible
+        sourceComponent: root.titleBarItem ?? defaultTitleBarComponent
 
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            acceptedButtons: Qt.NoButton
-            cursorShape: Qt.SizeAllCursor
+        onLoaded: {
+            if (item) {
+                item.navigationPanel = Qt.binding(function() { return root.navigationPanel})
+                item.navigationOrder = Qt.binding(function() { return root.navigationOrder})
+                item.contextMenuModel = Qt.binding(function() { return root.contextMenuModel})
+            }
         }
+    }
 
-        Column {
-            id: titleBarContent
+    Component {
+        id: defaultTitleBarComponent
+
+        Item {
+            id: titleBar
 
             anchors.fill: parent
-            anchors.leftMargin: 12
-            anchors.rightMargin: 12
+            implicitWidth: rowLayout.implicitWidth
+            implicitHeight: rowLayout.implicitHeight + rowLayout.anchors.topMargin + rowLayout.anchors.bottomMargin
 
-            spacing: 0
+            property NavigationPanel navigationPanel
+            property int navigationOrder
+            property var contextMenuModel
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                cursorShape: Qt.SizeAllCursor
+            }
 
             RowLayout {
-                width: parent.width
-                height: 34
+                id: rowLayout
+                anchors.fill: parent
+                anchors.topMargin: 2
+                anchors.bottomMargin: 2
+                anchors.leftMargin: 12
+                anchors.rightMargin: 12
+
+                spacing: 4
 
                 StyledTextLabel {
                     id: titleLabel
                     Layout.fillWidth: true
 
-                    text: titleBar.title
+                    text: root.titleBarCpp?.title ?? ""
                     font: ui.theme.bodyBoldFont
                     horizontalAlignment: Qt.AlignLeft
                 }
@@ -91,17 +112,14 @@ Item {
                     width: 20
                     height: width
 
+                    navigation.panel: root.navigationPanel
+                    navigation.order: root.navigationOrder
+                    menuModel: root.contextMenuModel
+
                     onHandleMenuItem: function(itemId) {
                         root.handleContextMenuItemRequested(itemId)
                     }
                 }
-            }
-
-            SeparatorLine {
-                id: bottomSeparator
-                orientation: Qt.Horizontal
-                anchors.margins: -12
-                visible: root.isHorizontalPanel
             }
         }
     }

@@ -154,6 +154,7 @@ Item {
         id: mouseArea
         anchors.fill: root
 
+        enabled: root.enabled
         hoverEnabled: true
 
         onContainsMouseChanged: {

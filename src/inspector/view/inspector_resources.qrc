@@ -98,6 +98,9 @@
         <file>qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/AppearanceSettings.qml</file>
         <file>qml/MuseScore/Inspector/text/TextSettings.qml</file>
+        <file>qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml</file>
+        <file>qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml</file>
+        <file>qml/MuseScore/Inspector/text/textstylepopup/FrameSubPopup.qml</file>
         <file>qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/rests/RestBeamSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/rests/RestSettings.qml</file>
@@ -111,5 +114,18 @@
         <file>qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/CrescDimLineStyleSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/HairpinLineSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/GradualTempoChangeSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangeStyleTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/FretFrameSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameScalesSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsView.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml</file>
     </qresource>
 </RCC>

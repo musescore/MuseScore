@@ -37,8 +37,7 @@ class InteractiveApi : public ApiObject
 public:
     explicit InteractiveApi(IApiEngine* e);
 
-    Q_INVOKABLE void info(const QString& title, const QString& text);
-
+    Q_INVOKABLE void info(const QString& contentTitle, const QString& text);
     Q_INVOKABLE void openUrl(const QString& url);
 };
 }

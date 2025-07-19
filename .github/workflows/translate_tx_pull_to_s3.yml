@@ -1,0 +1,128 @@
+name: "Translate: tx pull translations to S3"
+
+on:
+  schedule:
+    # Every 15 minutes, but only on Sunday at 12:00 a PR is created
+    - cron: "*/15 * * * 1-6" # Every 15 minutes, except on Sunday
+    - cron: "*/15 0-11,13-23 * * 0" # Every 15 minutes on Sunday, except between 12:00 and 12:59
+    - cron: "15,30,45 12 * * 0" # At 12:15, 12:30, 12:45 on Sunday
+    - cron: "0 12 * * Sun" # At 12:00 on Sunday
+  workflow_dispatch:
+    inputs:
+      create_pull_request:
+        description: "Create pull request"
+        required: true
+        type: boolean
+        default: true
+      push_to_s3:
+        description: "Push to S3"
+        required: true
+        type: boolean
+        default: false
+      use_qt69:
+        description: "Use Qt 6.9"
+        default: "on"
+        required: false
+
+env:
+  USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}          
+
+jobs:
+  tx_pull:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule' || github.repository == 'musescore/MuseScore'
+    steps:
+      - name: Check preconditions
+        run: |
+          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
+            echo "::error::TRANSIFEX_API_TOKEN is empty"
+            exit 1
+          fi
+          if [ -z "${{ secrets.S3_KEY }}" ]; then
+            echo "::error::S3_KEY is empty"
+            exit 1
+          fi
+          if [ -z "${{ secrets.S3_SECRET }}" ]; then
+            echo "::error::S3_SECRET is empty"
+            exit 1
+          fi
+
+      - name: "Configure workflow"
+        run: |
+          DO_CREATE_PR='false'
+          DO_PUSH_TO_S3='false'
+
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            DO_CREATE_PR="${{ github.event.schedule == '0 12 * * Sun'}}"
+            DO_PUSH_TO_S3='true'
+          else
+            if [[ "${{ inputs.create_pull_request }}" == "true" ]]; then
+              DO_CREATE_PR='true'
+            fi
+            if [[ "${{ inputs.push_to_s3 }}" == "true" ]]; then
+              DO_PUSH_TO_S3='true'
+            fi
+          fi
+
+          if [[ "$DO_CREATE_PR" != "true" && "$DO_PUSH_TO_S3" != "true" ]]; then
+            echo "::warning::Nothing to do"
+            exit 1
+          fi
+
+          echo "DO_CREATE_PR=$DO_CREATE_PR" | tee -a $GITHUB_ENV
+          echo "DO_PUSH_TO_S3=$DO_PUSH_TO_S3" | tee -a $GITHUB_ENV
+
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Install Qt for lrelease
+        if: env.DO_PUSH_TO_S3 == 'true'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.USE_QT69 == 'on' && '6.9.1' || '6.2.4' }}
+          host: "linux"
+          target: "desktop"
+          arch: ${{ env.USE_QT69== 'on' && 'linux_gcc_64' || 'gcc_64' }}
+          archives: "qttools qtbase icu"
+
+      - name: Setup environment for pushing to S3
+        if: env.DO_PUSH_TO_S3 == 'true'
+        run: |
+          bash ./buildscripts/ci/tools/s3_install.sh --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
+
+          bash ./buildscripts/ci/tools/make_build_number.sh
+          BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
+          echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+
+      - name: Update .ts files (tx pull)
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+          args: "pull -f"
+
+      - name: Create Pull Request
+        if: env.DO_CREATE_PR == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          commit-message: "Update in-repo translations from Transifex"
+          branch: "ci_tx_pull${{github.ref_name && format('_{0}', github.ref_name) || ''}}"
+          add-paths: share/locale/*
+          title: "Update in-repo translations from Transifex"
+          body: "Run `tx pull`"
+          labels: strings
+          reviewers: cbjeukendrup
+
+      - name: Pack and send to s3
+        if: env.DO_PUSH_TO_S3 == 'true'
+        run: |
+          bash ./buildscripts/ci/translation/s3_packandsend.sh
+
+      - name: Upload artifacts on GitHub
+        if: env.DO_PUSH_TO_S3 == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MuseScore_Studio_locale_${{ env.BUILD_NUMBER }}
+          path: ./share/locale

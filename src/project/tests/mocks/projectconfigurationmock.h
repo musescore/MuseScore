@@ -124,9 +124,11 @@ public:
 
     MOCK_METHOD(GenerateAudioTimePeriodType, generateAudioTimePeriodType, (), (const, override));
     MOCK_METHOD(void, setGenerateAudioTimePeriodType, (GenerateAudioTimePeriodType), (override));
+    MOCK_METHOD(muse::async::Channel<int>, generateAudioTimePeriodTypeChanged, (), (const, override));
 
     MOCK_METHOD(int, numberOfSavesToGenerateAudio, (), (const, override));
     MOCK_METHOD(void, setNumberOfSavesToGenerateAudio, (int), (override));
+    MOCK_METHOD(muse::async::Channel<int>, numberOfSavesToGenerateAudioChanged, (), (const, override));
 
     MOCK_METHOD(muse::io::path_t, temporaryMp3FilePathTemplate, (), (const, override));
 
@@ -137,6 +139,9 @@ public:
 
     MOCK_METHOD(bool, disableVersionChecking, (), (const, override));
     MOCK_METHOD(void, setDisableVersionChecking, (bool), (override));
+
+    MOCK_METHOD(bool, createBackupBeforeSaving, (), (const, override));
+    MOCK_METHOD(void, setCreateBackupBeforeSaving, (bool), (override));
 };
 }
 

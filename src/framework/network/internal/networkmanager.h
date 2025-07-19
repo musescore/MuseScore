@@ -22,18 +22,23 @@
 #ifndef MUSE_NETWORK_NETWORKMANAGER_H
 #define MUSE_NETWORK_NETWORKMANAGER_H
 
-#include "inetworkmanager.h"
-
 #include <QIODevice>
+
+#include "modularity/ioc.h"
+#include "../inetworkconfiguration.h"
+
+#include "inetworkmanager.h"
 
 class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;
 
 namespace muse::network {
-class NetworkManager : public QObject, public INetworkManager
+class NetworkManager : public QObject, public INetworkManager, public Injectable
 {
     Q_OBJECT
+
+    Inject<INetworkConfiguration> configuration = { this };
 
 public:
     explicit NetworkManager(QObject* parent = nullptr);

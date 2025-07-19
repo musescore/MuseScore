@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_SEQUENCEIO_H
-#define MUSE_AUDIO_SEQUENCEIO_H
+#pragma once
 
 #include "global/async/asyncable.h"
 
@@ -35,7 +34,7 @@ class SequenceIO : public ISequenceIO, public async::Asyncable
 public:
     explicit SequenceIO(IGetTracks* getTracks);
 
-    bool isHasTrack(const TrackId id) const override;
+    bool hasTrack(const TrackId id) const override;
 
     RetVal<AudioInputParams> inputParams(const TrackId id) const override;
     RetVal<AudioOutputParams> outputParams(const TrackId id) const override;
@@ -46,7 +45,9 @@ public:
     async::Channel<TrackId, AudioInputParams> inputParamsChanged() const override;
     async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const override;
 
-    async::Channel<audioch_t, AudioSignalVal> audioSignalChanges(const TrackId id) const override;
+    AudioSignalChanges audioSignalChanges(const TrackId id) const override;
+
+    InputProcessingProgress inputProcessingProgress(const TrackId id) const override;
 
 private:
     IGetTracks* m_getTracks = nullptr;
@@ -55,5 +56,3 @@ private:
     async::Channel<TrackId, AudioOutputParams> m_outputParamsChanged;
 };
 }
-
-#endif // MUSE_AUDIO_SEQUENCEIO_H

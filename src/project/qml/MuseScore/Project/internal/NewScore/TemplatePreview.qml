@@ -50,17 +50,35 @@ Item {
         font: ui.theme.bodyBoldFont
     }
 
-    NotationScrollAndZoomArea {
+    StyledViewScrollAndZoomArea {
         anchors.top: title.bottom
         anchors.topMargin: 16
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
 
+        horizontalScrollbarSize: templateView.horizontalScrollbarSize
+        startHorizontalScrollPosition: templateView.startHorizontalScrollPosition
+
+        verticalScrollbarSize: templateView.verticalScrollbarSize
+        startVerticalScrollPosition: templateView.startVerticalScrollPosition
+
         TemplatePaintView {
             id: templateView
             objectName: "TemplatePreview"
             anchors.fill: parent
+        }
+
+        onPinchToZoom: function(scale, pos) {
+            templateView.pinchToZoom(scale, pos)
+        }
+
+        onScrollHorizontal: function(newPos) {
+            templateView.scrollHorizontal(newPos)
+        }
+
+        onScrollVertical: function(newPos) {
+            templateView.scrollVertical(newPos)
         }
     }
 

@@ -36,16 +36,6 @@ IF ERRORLEVEL 1 ( choco install -y 7zip.install )
 SET TEMP_DIR="c:\TEMP\musescore"
 MKDIR %TEMP_DIR%
 
-:: Install Qt
-ECHO "=== Install Qt ==="
-
-SET "Qt_ARCHIVE=Qt624_msvc2019_64.7z"
-SET "QT_DIR=C:\Qt\6.2.4"
-SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
-
-CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
-CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
-
 :: Install dependencies
 ECHO "=== Install dependencies ==="
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/musescore_dependencies_win32.7z" -O %TEMP_DIR%\musescore_dependencies_win32.7z
@@ -57,21 +47,13 @@ SET PATH=%JACK_DIR%;%PATH%
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dependencies.7z" -O  %TEMP_DIR%\dependencies.7z
 CALL "7z" x -y %TEMP_DIR%\dependencies.7z "-oC:\musescore_dependencies"
 
-CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z" -O  %TEMP_DIR%\VST3_SDK.7z
-CALL "7z" x -y %TEMP_DIR%\VST3_SDK.7z "-oC:\vst"
-
-:: breakpad_tools
-ECHO "=== Install breakpad_tools ==="
-CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/breakpad/windows/x86/dump_syms.7z" -O %TEMP_DIR%\dump_syms.7z
-CALL "7z" x -y %TEMP_DIR%\dump_syms.7z "-oC:\breakpad_tools"
-
 IF %BUILD_WIN_PORTABLE% == ON (
 ECHO "=== Installing PortableApps.com Tools ==="
 :: portableappslauncher is a vanilla installation of PortableApps.com Launcher https://portableapps.com/apps/development/portableapps.com_launcher
 CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/portableappslauncher.zip" -O %TEMP_DIR%\portableappslauncher.zip
 CALL "7z" x -y %TEMP_DIR%\portableappslauncher.zip "-oC:\portableappslauncher"
 
-:: portableappslauncher is a vanilla installation of PortableApps.com Installer https://portableapps.com/apps/development/portableapps.com_launcher
+:: portableappsinstaller is a vanilla installation of PortableApps.com Installer https://portableapps.com/apps/development/portableapps.com_installer
 CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/portableappsinstaller.zip" -O %TEMP_DIR%\portableappsinstaller.zip
 CALL "7z" x -y %TEMP_DIR%\portableappsinstaller.zip "-oC:\portableappsinstaller"
 )

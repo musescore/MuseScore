@@ -21,13 +21,19 @@
 subdirs(autobotscripts icons templates wallpapers locale styles sound manual instruments)
 
 install (DIRECTORY
-      plugins
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
-      PATTERN ".*" EXCLUDE
-      )
+    plugins
+    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+    PATTERN ".*" EXCLUDE
+    )
 
-  install (DIRECTORY
-        extensions
-        DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
-        PATTERN ".*" EXCLUDE
-        )
+install (DIRECTORY
+    extensions
+    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+    PATTERN ".*" EXCLUDE
+    )
+
+install (DIRECTORY
+    workspaces
+    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+    PATTERN ".*" EXCLUDE
+    )

@@ -199,13 +199,15 @@ public:
 
     std::map<int, HarpPedalDiagram*> harpDiagrams;
 
+    const std::map<int, StringTunings*>& stringTunings() const { return m_stringTunings; }
+
 private:
     friend class read206::Read206;
 
     String m_partName;                ///< used in tracklist (mixer)
     InstrumentList m_instruments;
     std::vector<Staff*> m_staves;
-    muse::ID m_id = INVALID_ID;       ///< used for MusicXml import
+    muse::ID m_id = INVALID_ID;       ///< used for MusicXML import
     bool m_show = false;              ///< show part in partitur if true
     bool m_soloist = false;           ///< used in score ordering
     int m_capoFret = 0;

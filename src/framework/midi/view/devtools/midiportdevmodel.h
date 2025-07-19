@@ -31,19 +31,21 @@
 #include "async/asyncable.h"
 
 namespace muse::midi {
-class MidiPortDevModel : public QObject, public async::Asyncable
+class MidiPortDevModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(IMidiOutPort, midiOutPort)
-    INJECT(IMidiInPort, midiInPort)
 
     Q_PROPERTY(QVariantList outputDevices READ outputDevices NOTIFY outputDevicesChanged)
     Q_PROPERTY(QVariantList inputDevices READ inputDevices NOTIFY inputDevicesChanged)
     Q_PROPERTY(QVariantList inputEvents READ inputEvents NOTIFY inputEventsChanged)
 
+    Inject<IMidiOutPort> midiOutPort = { this };
+    Inject<IMidiInPort> midiInPort = { this };
+
 public:
     explicit MidiPortDevModel(QObject* parent = nullptr);
+
+    Q_INVOKABLE void init();
 
     QVariantList outputDevices() const;
     Q_INVOKABLE void outputDeviceAction(const QString& deviceID, const QString& action);

@@ -22,19 +22,23 @@
 
 #include "navigate.h"
 
+#include "box.h"
 #include "chord.h"
 #include "engravingitem.h"
+#include "fret.h"
+#include "guitarbend.h"
+#include "hammeronpulloff.h"
+#include "harmony.h"
 #include "lyrics.h"
 #include "measure.h"
 #include "measurerepeat.h"
 #include "note.h"
-#include "rest.h"
 #include "score.h"
 #include "segment.h"
+#include "soundflag.h"
 #include "spanner.h"
 #include "staff.h"
-#include "soundflag.h"
-#include "guitarbend.h"
+#include "tapping.h"
 
 using namespace mu;
 
@@ -139,7 +143,7 @@ static EngravingItem* prevElementForSpannerSegment(const SpannerSegment* spanner
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
+ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -149,7 +153,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
         const Chord* c  = toChord(cr);
         Chord* pc = toChord(cr->explicitParent());
 
-        if (skipGrace) {
+        if (options.skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
@@ -177,7 +181,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
             cr = pc;
         }
     } else { // cr is not a grace note
-        if (cr->isChord() && !skipGrace) {
+        if (cr->isChord() && !options.skipGrace) {
             const Chord* c = toChord(cr);
             if (!c->graceNotes().empty()) {
                 const GraceNotesGroup& group = c->graceNotesAfter();
@@ -190,14 +194,17 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 
     track_idx_t track = cr->track();
     SegmentType st = SegmentType::ChordRest;
-
-    for (Segment* seg = cr->segment()->next1MM(st); seg; seg = seg->next1MM(st)) {
+    Segment* curSeg = cr->segment();
+    for (Segment* seg = curSeg->next1MM(st); seg; seg = seg->next1MM(st)) {
+        if (options.disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(curSeg, seg)) {
+            return nullptr;
+        }
         ChordRest* e = toChordRest(seg->element(track));
         if (e) {
-            if (skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
+            if (options.skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
                 continue; // these rests are not shown, skip them
             }
-            if (e->isChord() && !skipGrace) {
+            if (e->isChord() && !options.skipGrace) {
                 Chord* c = toChord(e);
                 if (!c->graceNotes().empty()) {
                     const GraceNotesGroup& group = c->graceNotesBefore();
@@ -219,7 +226,7 @@ ChordRest* nextChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 //    if grace is true, include grace notes
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRests)
+ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options)
 {
     if (!cr) {
         return nullptr;
@@ -229,7 +236,7 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
         const Chord* c  = toChord(cr);
         Chord* pc = toChord(cr->explicitParent());
 
-        if (skipGrace) {
+        if (options.skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
             const GraceNotesGroup& group = pc->graceNotesBefore();
@@ -257,7 +264,7 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
     } else {
         //
         // cr is not a grace note
-        if (cr->isChord() && !skipGrace) {
+        if (cr->isChord() && !options.skipGrace) {
             const Chord* c = toChord(cr);
             const GraceNotesGroup& group = c->graceNotesBefore();
             if (!group.empty()) {
@@ -268,13 +275,18 @@ ChordRest* prevChordRest(const ChordRest* cr, bool skipGrace, bool skipMeasureRe
 
     track_idx_t track = cr->track();
     SegmentType st = SegmentType::ChordRest;
+    Segment* curSeg = cr->segment();
     for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
+        if (options.disableOverRepeats && !segmentsAreAdjacentInRepeatStructure(curSeg, seg)) {
+            return nullptr;
+        }
+
         ChordRest* e = toChordRest(seg->element(track));
         if (e) {
-            if (skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
+            if (options.skipMeasureRepeatRests && e->isRest() && e->measure()->isMeasureRepeatGroup(track2staff(track))) {
                 continue; // these rests are not shown, skip them
             }
-            if (e->isChord() && !skipGrace) {
+            if (e->isChord() && !options.skipGrace) {
                 const GraceNotesGroup& group = toChord(e)->graceNotesAfter();
                 if (!group.empty()) {
                     return group.back();
@@ -405,6 +417,10 @@ EngravingItem* Score::lastElement(bool frame)
     if (frame) {
         MeasureBase* mb = measures()->last();
         if (mb && mb->isBox()) {
+            auto boxChildren = toChildPairsSet(mb);
+            if (!boxChildren.empty()) {
+                return boxChildren.rbegin()->first;
+            }
             return mb;
         }
     }
@@ -586,7 +602,7 @@ ChordRest* Score::prevTrack(ChordRest* cr, bool skipMeasureRepeatRests)
 ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRest)
 {
     if (!element) {
-        return 0;
+        return nullptr;
     }
 
     Measure* measure = nullptr;
@@ -596,12 +612,8 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
         measure = element->measure()->nextMeasure();
     }
 
-    if (!measure) {
-        return 0;
-    }
-
     Fraction endTick = element->measure()->last()->nextChordRest(element->track(), true)->tick();
-    bool last   = false;
+    bool last = false;
 
     if (selection().isRange()) {
         if (element->tick() != endTick && selection().tickEnd() <= endTick) {
@@ -631,7 +643,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -641,10 +653,10 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
 ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
 {
     if (!element) {
-        return 0;
+        return nullptr;
     }
 
-    Measure* measure =  0;
+    Measure* measure = nullptr;
     if (mmRest) {
         measure = element->measure()->prevMeasureMM();
     } else {
@@ -677,7 +689,7 @@ ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -696,7 +708,8 @@ EngravingItem* Score::nextElement()
         case ElementType::NOTE:
         case ElementType::REST:
         case ElementType::MMREST:
-        case ElementType::CHORD: {
+        case ElementType::CHORD:
+        case ElementType::TUPLET: {
             EngravingItem* next = e->nextElement();
             if (next) {
                 return next;
@@ -736,6 +749,34 @@ EngravingItem* Score::nextElement()
                 return score()->firstElement();
             }
         }
+        case ElementType::TAPPING:
+        {
+            TappingHalfSlur* halfSlurAbove = toTapping(e)->halfSlurAbove();
+            EngravingItem* selEl = getSelectedElement();
+            if (halfSlurAbove && !(selEl && selEl->isTappingHalfSlurSegment())) {
+                return halfSlurAbove->frontSegment();
+            }
+            break;
+        }
+        case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+            return toHammerOnPullOffText(e)->endChord()->upNote();
+        case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+        {
+            HammerOnPullOffSegment* hopoSeg = toHammerOnPullOffSegment(e);
+            if (!hopoSeg->hopoText().empty()) {
+                return hopoSeg->hopoText().front();
+            }
+            [[fallthrough]];
+        }
+        case ElementType::TAPPING_HALF_SLUR_SEGMENT:
+        {
+            TappingHalfSlur* halfSlur = toTappingHalfSlurSegment(e)->tappingHalfSlur();
+            Tapping* tapping = halfSlur->tapping();
+            if (halfSlur->isHalfSlurAbove() && tapping->halfSlurBelow()) {
+                return tapping->halfSlurBelow()->frontSegment();
+            }
+            [[fallthrough]];
+        }
         case ElementType::VOLTA_SEGMENT:
         case ElementType::SLUR_SEGMENT:
         case ElementType::TEXTLINE_SEGMENT:
@@ -762,8 +803,14 @@ EngravingItem* Score::nextElement()
             if (seg) {
                 Segment* nextSegment = seg->next1();
                 while (nextSegment) {
-                    EngravingItem* nextEl = nextSegment->firstElementOfSegment(nextSegment, staffId);
-                    if (nextEl) {
+                    if (nextSegment->isTimeTickType()) {
+                        if (EngravingItem* annotation = nextSegment->firstAnnotation(staffId)) {
+                            return annotation;
+                        }
+                        if (Spanner* spanner = nextSegment->firstSpanner(staffId)) {
+                            return spanner->spannerSegments().front();
+                        }
+                    } else if (EngravingItem* nextEl = nextSegment->firstElementOfSegment(staffId)) {
                         return nextEl;
                     }
                     nextSegment = nextSegment->next1MM();
@@ -788,6 +835,9 @@ EngravingItem* Score::nextElement()
             break;
         }
         case ElementType::GLISSANDO_SEGMENT:
+        case ElementType::NOTELINE_SEGMENT:
+        case ElementType::LAISSEZ_VIB_SEGMENT:
+        case ElementType::PARTIAL_TIE_SEGMENT:
         case ElementType::TIE_SEGMENT: {
             EngravingItem* next = nextElementForSpannerSegment(toSpannerSegment(e));
             if (next) {
@@ -798,7 +848,8 @@ EngravingItem* Score::nextElement()
         }
         case ElementType::VBOX:
         case ElementType::HBOX:
-        case ElementType::TBOX: {
+        case ElementType::TBOX:
+        case ElementType::FBOX: {
             auto boxChildren = toChildPairsSet(e);
 
             EngravingItem* selectedElement = getSelectedElement();
@@ -807,6 +858,14 @@ EngravingItem* Score::nextElement()
                  || selectedElement->type() == ElementType::HBOX
                  || selectedElement->type() == ElementType::TBOX) && !boxChildren.empty()) {
                 return boxChildren.begin()->first;
+            }
+
+            if (selectedElement->type() == ElementType::FBOX) {
+                for (EngravingItem* child : toFBox(selectedElement)->el()) {
+                    if (child->isFretDiagram() && child->visible()) {
+                        return toFretDiagram(child)->harmony();
+                    }
+                }
             }
 
             for (auto child = boxChildren.begin(); child != boxChildren.end(); child++) {
@@ -836,11 +895,42 @@ EngravingItem* Score::nextElement()
             staffId = 0;             // otherwise it will equal -1, which breaks the navigation
             break;
         }
+        case ElementType::SYSTEM_LOCK_INDICATOR:
+        {
+            staffId = 0;
+            e = toSystemLockIndicator(e)->systemLock()->endMB();
+            continue;
+        }
         case ElementType::SOUND_FLAG:
             if (EngravingItem* parent = toSoundFlag(e)->parentItem()) {
                 return parent;
             }
             break;
+        case ElementType::HARMONY: {
+            if (EngravingItem* parent = toHarmony(e)->parentItem()) {
+                if (parent->isFretDiagram()) {
+                    return parent;
+                }
+            }
+            break;
+        }
+        case ElementType::FRET_DIAGRAM: {
+            FretDiagram* fretDiagram = toFretDiagram(e);
+            if (fretDiagram->isInFretBox()) {
+                const ElementList& diagrams = toFBox(fretDiagram->explicitParent())->el();
+
+                size_t index = muse::indexOf(diagrams, fretDiagram);
+                if (index != muse::nidx) {
+                    while (++index < diagrams.size()) {
+                        FretDiagram* fretDiagramI = toFretDiagram(diagrams[index]);
+                        if (fretDiagramI->visible()) {
+                            return fretDiagramI->harmony();
+                        }
+                    }
+                }
+            }
+            break;
+        }
         default:
             break;
         }
@@ -865,7 +955,8 @@ EngravingItem* Score::prevElement()
         case ElementType::NOTE:
         case ElementType::REST:
         case ElementType::MMREST:
-        case ElementType::CHORD: {
+        case ElementType::CHORD:
+        case ElementType::TUPLET: {
             EngravingItem* prev = e->prevElement();
             if (prev) {
                 return prev;
@@ -896,7 +987,12 @@ EngravingItem* Score::prevElement()
 
             if (previousElement->type() != ElementType::VBOX
                 && previousElement->type() != ElementType::HBOX
-                && previousElement->type() != ElementType::TBOX) {
+                && previousElement->type() != ElementType::TBOX
+                && previousElement->type() == ElementType::FBOX) {
+                return previousElement;
+            }
+
+            if (previousElement->isFretDiagram()) {
                 return previousElement;
             }
 
@@ -908,8 +1004,33 @@ EngravingItem* Score::prevElement()
 
             return previousElement;
         }
+        case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+        {
+            HammerOnPullOffText* hopoText = toHammerOnPullOffText(e);
+            HammerOnPullOffSegment* hopoSegment = toHammerOnPullOffSegment(hopoText->parent());
+            DO_ASSERT(hopoSegment);
+            if (hopoSegment->hopoText().size() > 0 && hopoSegment->hopoText().front() == hopoText) {
+                return hopoSegment;
+            } else {
+                return hopoText->startChord()->downNote();
+            }
+        }
+        case ElementType::TAPPING_HALF_SLUR_SEGMENT:
+        {
+            TappingHalfSlur* halfSlur = toTappingHalfSlurSegment(e)->tappingHalfSlur();
+            Tapping* tapping = halfSlur->tapping();
+            if (!halfSlur->isHalfSlurAbove()) {
+                IF_ASSERT_FAILED(tapping->halfSlurAbove()) {
+                    return tapping;
+                }
+                return tapping->halfSlurAbove()->frontSegment();
+            } else {
+                return tapping;
+            }
+        }
         case ElementType::VOLTA_SEGMENT:
         case ElementType::SLUR_SEGMENT:
+        case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
         case ElementType::TEXTLINE_SEGMENT:
         case ElementType::HAIRPIN_SEGMENT:
         case ElementType::OTTAVA_SEGMENT:
@@ -924,13 +1045,31 @@ EngravingItem* Score::prevElement()
                 return prevSp->spannerSegments().front();
             } else {
                 Segment* startSeg = sp->startSegment();
-                if (!startSeg->annotations().empty()) {
-                    EngravingItem* last = startSeg->lastAnnotation(startSeg, staffId);
-                    if (last) {
-                        return last;
+                if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                    return annotation;
+                }
+                if (startSeg->isTimeTickType()) {
+                    startSeg = startSeg->prev1MMenabled();
+                    for (; startSeg && startSeg->isTimeTickType(); startSeg = startSeg->prev1MMenabled()) {
+                        if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
+                            return spanner->spannerSegments().front();
+                        }
+                        if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                            return annotation;
+                        }
+                    }
+                    if (!startSeg) {
+                        break;
+                    }
+                    // Also check first non-timeTick segment encountered.
+                    if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
+                        return spanner->spannerSegments().front();
+                    }
+                    if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                        return annotation;
                     }
                 }
-                EngravingItem* el = startSeg->lastElementOfSegment(startSeg, staffId);
+                EngravingItem* el = startSeg->lastElementOfSegment(staffId);
                 if (stEl->type() == ElementType::CHORD || stEl->type() == ElementType::REST
                     || stEl->type() == ElementType::MEASURE_REPEAT || stEl->type() == ElementType::MMREST
                     || stEl->type() == ElementType::NOTE) {
@@ -959,6 +1098,9 @@ EngravingItem* Score::prevElement()
             return bend->startNote();
         }
         case ElementType::GLISSANDO_SEGMENT:
+        case ElementType::NOTELINE_SEGMENT:
+        case ElementType::LAISSEZ_VIB_SEGMENT:
+        case ElementType::PARTIAL_TIE_SEGMENT:
         case ElementType::TIE_SEGMENT: {
             EngravingItem* prev = prevElementForSpannerSegment(toSpannerSegment(e));
             if (prev) {
@@ -969,7 +1111,8 @@ EngravingItem* Score::prevElement()
         }
         case ElementType::VBOX:
         case ElementType::HBOX:
-        case ElementType::TBOX: {
+        case ElementType::TBOX:
+        case ElementType::FBOX: {
             auto boxChildren = toChildPairsSet(e);
 
             EngravingItem* selectedElement = getSelectedElement();
@@ -1005,6 +1148,46 @@ EngravingItem* Score::prevElement()
             staffId = 0;             // otherwise it will equal -1, which breaks the navigation
             break;
         }
+        case ElementType::SYSTEM_LOCK_INDICATOR:
+        {
+            staffId = 0;
+            e = toSystemLockIndicator(e)->systemLock()->endMB();
+            continue;
+        }
+        case ElementType::HARMONY: {
+            Harmony* harmony = toHarmony(e);
+            if (harmony->isInFretBox()) {
+                FretDiagram* fretDiagram = toFretDiagram(harmony->explicitParent());
+                FBox* fretBox = toFBox(fretDiagram->explicitParent());
+                const ElementList& diagrams = fretBox->el();
+
+                size_t index = muse::indexOf(diagrams, fretDiagram);
+                while (--index != muse::nidx) {
+                    FretDiagram* fretDiagramI = toFretDiagram(diagrams[index]);
+                    if (fretDiagramI->visible()) {
+                        return fretDiagramI;
+                    }
+                }
+
+                return fretBox;
+            } else if (harmony->explicitParent()->isFretDiagram()) {
+                EngravingItem* prev = harmony->getParentSeg()->prevAnnotation(toFretDiagram(harmony->explicitParent()));
+                if (prev) {
+                    return prev;
+                }
+
+                e = toFretDiagram(harmony->explicitParent());
+            }
+            break;
+        }
+        case ElementType::FRET_DIAGRAM: {
+            FretDiagram* fretDiagram = toFretDiagram(e);
+            EngravingItem* harmony = fretDiagram->harmony();
+            if (harmony) {
+                return harmony;
+            }
+            break;
+        }
         default:
             break;
         }
@@ -1019,21 +1202,58 @@ EngravingItem* Score::prevElement()
 //    - currently used to determine the first lyric of a melisma
 //---------------------------------------------------------
 
+Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement)
+{
+    while (seg) {
+        const track_idx_t strack = staffIdx * VOICES;
+        const track_idx_t etrack = strack + VOICES;
+        for (track_idx_t track = strack; track < etrack; ++track) {
+            EngravingItem* el = seg->element(track);
+            Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(no, placement) : nullptr;
+            if (prevLyrics) {
+                return prevLyrics;
+            }
+        }
+        seg = seg->prev1(mu::engraving::SegmentType::ChordRest);
+    }
+    return nullptr;
+}
+
 Lyrics* prevLyrics(const Lyrics* lyrics)
 {
     Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
     if (!seg) {
         return nullptr;
     }
-    Segment* prevSegment = seg;
-    while ((prevSegment = prevSegment->prev1(mu::engraving::SegmentType::ChordRest))) {
+    while ((seg = seg->prev1(mu::engraving::SegmentType::ChordRest))) {
         const track_idx_t strack = lyrics->staffIdx() * VOICES;
         const track_idx_t etrack = strack + VOICES;
         for (track_idx_t track = strack; track < etrack; ++track) {
-            EngravingItem* el = prevSegment->element(track);
+            EngravingItem* el = seg->element(track);
             Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
             if (prevLyrics) {
                 return prevLyrics;
+            }
+        }
+    }
+    return nullptr;
+}
+
+Lyrics* nextLyrics(const Lyrics* lyrics)
+{
+    Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
+    if (!seg) {
+        return nullptr;
+    }
+    Segment* nextSegment = seg;
+    while ((nextSegment = nextSegment->next1(mu::engraving::SegmentType::ChordRest))) {
+        const track_idx_t strack = lyrics->staffIdx() * VOICES;
+        const track_idx_t etrack = strack + VOICES;
+        for (track_idx_t track = strack; track < etrack; ++track) {
+            EngravingItem* el = nextSegment->element(track);
+            Lyrics* nextLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
+            if (nextLyrics) {
+                return nextLyrics;
             }
         }
     }

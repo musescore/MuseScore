@@ -26,6 +26,7 @@
 #include "engraving/types/fraction.h"
 
 namespace mu::engraving {
+class EngravingItem;
 class Staff;
 class Part;
 class Score;
@@ -60,8 +61,8 @@ class MuseData
     void readBackup(QStringView s);
     engraving::Measure* createMeasure();
     int countStaves(const QStringList& sl);
-    void openSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice);
-    void closeSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice);
+    void openSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice, mu::engraving::EngravingItem* startChord);
+    void closeSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice, engraving::EngravingItem* endChord);
     QString diacritical(QStringView);
 
 public:

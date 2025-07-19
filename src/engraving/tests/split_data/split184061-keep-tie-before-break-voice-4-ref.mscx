@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
@@ -13,14 +14,25 @@
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <maskBarlinesForText>0</maskBarlinesForText>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <pedalPosBelow x="0" y="0"/>
       <trillPosAbove x="0" y="0"/>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <minMMRestWidth>0</minMMRestWidth>
       <dynamicsFontStyle>0</dynamicsFontStyle>
-      <Spatium>1.76389</Spatium>
+      <pageNumberFontSize>9</pageNumberFontSize>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
+      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
+      <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -37,7 +49,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -88,16 +101,21 @@
       </Part>
     <Staff id="1">
       <Measure len="65/128">
+        <eid>D_D</eid>
         <voice>
           <TimeSig>
+            <eid>E_E</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>F_F</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>G_G</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>H_H</eid>
                   </Tie>
                 <next>
                   <location>
@@ -110,8 +128,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>I_I</eid>
             <durationType>128th</durationType>
             <Note>
+              <eid>J_J</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -126,10 +146,13 @@
           </voice>
         <voice>
           <Chord>
+            <eid>K_K</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>L_L</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>M_M</eid>
                   </Tie>
                 <next>
                   <location>
@@ -142,10 +165,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>128th</durationType>
             <Note>
+              <eid>O_O</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>P_P</eid>
                   </Tie>
                 <next>
                   <location>
@@ -169,10 +195,13 @@
         <voice/>
         <voice>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>R_R</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>S_S</eid>
                   </Tie>
                 <next>
                   <location>
@@ -185,10 +214,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>T_T</eid>
             <durationType>128th</durationType>
             <Note>
+              <eid>U_U</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>V_V</eid>
                   </Tie>
                 <next>
                   <location>
@@ -211,35 +243,45 @@
           </voice>
         </Measure>
       <Measure len="63/128">
+        <eid>W_W</eid>
         <voice>
           <Beam>
+            <eid>X_X</eid>
             <l1>-50</l1>
             <l2>-50</l2>
             </Beam>
           <Chord>
+            <eid>Y_Y</eid>
             <dots>1</dots>
             <durationType>64th</durationType>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>a_a</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
+              <eid>b_b</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>c_c</eid>
             <durationType>32nd</durationType>
             </Rest>
           <Chord>
+            <eid>d_d</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>e_e</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>f_f</eid>
                   </Tie>
                 <next>
                   <location>
@@ -256,11 +298,14 @@
           </voice>
         <voice>
           <Chord>
+            <eid>g_g</eid>
             <dots>4</dots>
             <durationType>quarter</durationType>
             <Note>
+              <eid>h_h</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>i_i</eid>
                   </Tie>
                 <next>
                   <location>
@@ -281,8 +326,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>j_j</eid>
             <durationType>128th</durationType>
             <Note>
+              <eid>k_k</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -298,12 +345,15 @@
         <voice/>
         <voice>
           <Beam>
+            <eid>l_l</eid>
             <l1>80</l1>
             <l2>80</l2>
             </Beam>
           <Chord>
+            <eid>m_m</eid>
             <durationType>128th</durationType>
             <Note>
+              <eid>n_n</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -317,37 +367,47 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>o_o</eid>
             <dots>1</dots>
             <durationType>16th</durationType>
             <Note>
+              <eid>p_p</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>q_q</eid>
             <durationType>64th</durationType>
             </Rest>
           <Chord>
+            <eid>r_r</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>s_s</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>t_t</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>u_u</eid>
         <voice>
           <Chord>
+            <eid>v_v</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>w_w</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>x_x</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -362,12 +422,15 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>y_y</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>z_z</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
+            <eid>0_0</eid>
             </BarLine>
           </voice>
         <voice/>
@@ -376,6 +439,7 @@
             <fractions>1/2</fractions>
             </location>
           <Rest>
+            <eid>1_1</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

@@ -29,7 +29,8 @@ import MuseScore.Project 1.0
 import "internal/Migration"
 
 StyledDialogView {
-    id: dialog
+    id: root
+    modal: true
 
     //! TODO: After setting title the accessibility for this dialog on VoiceOver stops working
     //title: qsTrc("project/migration", "Style improvements")
@@ -39,38 +40,37 @@ StyledDialogView {
 
     property bool isApplyLeland: true
     property bool isApplyEdwin: true
+    property bool isRemapPercussion: true
     property bool isAskAgain: true
 
     contentHeight: {
-        switch (dialog.migrationType) {
-        case MigrationType.Pre_3_6: return 556
-        case MigrationType.Ver_3_6: return 208
+        switch (root.migrationType) {
+        case MigrationType.Pre_3_6: return 533 // 517 just fits, then add 16
+        case MigrationType.Ver_3_6: return 271 // 255 just fits, then add 16
         case MigrationType.Unknown: return 0
         }
         return 600
     }
 
-    contentWidth:  {
-        switch (dialog.migrationType) {
-        case MigrationType.Pre_3_6: return 600
-        case MigrationType.Ver_3_6: return 480
+    contentWidth: {
+        switch (root.migrationType) {
+        case MigrationType.Pre_3_6: return 590
+        case MigrationType.Ver_3_6: return 491
         case MigrationType.Unknown: return 0
         }
         return 600
     }
-
-    modal: true
 
     //! NOTE Different dialogs for different migration versions
     onOpened: {
-        switch(dialog.migrationType) {
+        switch(root.migrationType) {
         case MigrationType.Pre_3_6:
-            loader.sourceComponent = migrComp
+            loader.sourceComponent = migrCompPre362
             break;
         case MigrationType.Ver_3_6:
             isApplyLeland = false
             isApplyEdwin = false
-            loader.sourceComponent = noteComp
+            loader.sourceComponent = migrComp362
             break;
         default:
             console.assert(false, "Wrong migration type!")
@@ -82,9 +82,10 @@ StyledDialogView {
             errcode: 0,
             value: {
                 isApplyMigration: isApply,
-                isAskAgain: dialog.isAskAgain,
-                isApplyLeland: dialog.isApplyLeland,
-                isApplyEdwin: dialog.isApplyEdwin,
+                isAskAgain: root.isAskAgain,
+                isApplyLeland: root.isApplyLeland,
+                isApplyEdwin: root.isApplyEdwin,
+                isRemapPercussion: root.isRemapPercussion,
             }
         }
 
@@ -95,77 +96,115 @@ StyledDialogView {
         Qt.openUrlExternally("https://youtu.be/U7dagae87eM")
     }
 
-    Loader {
-        id: loader
+    ColumnLayout {
+        spacing: 0
         anchors.fill: parent
 
-        onLoaded: {
-            item.activateNavigation()
+        Loader {
+            id: loader
+
+            Layout.fillWidth: true
+            Layout.margins: 20
+
+            onLoaded: {
+                item.activateNavigation()
+            }
+        }
+
+        SeparatorLine { }
+
+        RowLayout {
+            id: footer
+
+            Layout.leftMargin: 20
+            Layout.rightMargin: 20
+            Layout.topMargin: 16
+            Layout.bottomMargin: 16
+
+            CheckBox {
+                id: askAgain
+                text: qsTrc("global", "Don’t ask again")
+                checked: !root.isAskAgain
+
+                navigation.panel: buttonBox.navigationPanel
+                navigation.column: 100
+
+                onClicked: {
+                    root.isAskAgain = checked // not `!checked` because the negation is in `checked: !dialog.isAskAgain`
+                }
+            }
+
+            ButtonBox {
+                id: buttonBox
+                buttons: [ ButtonBoxModel.Ok ]
+
+                Layout.fillWidth: true
+
+                navigationPanel.section: root.navigationSection
+                navigationPanel.order: 1
+
+                onStandardButtonClicked: function(buttonId) {
+                    if (buttonId === ButtonBoxModel.Ok) {
+                        root.ret = root.makeRet(true)
+                        root.hide()
+                    }
+                }
+            }
         }
     }
 
     //! NOTE for 3.6.2
     Component {
-        id: noteComp
+        id: migrComp362
 
         MigrationContentFor362 {
+            appVersion: root.appVersion
+            isRemapPercussion: root.isRemapPercussion
+
             anchors.fill: parent
-            anchors.margins: 16
 
-            appVersion: dialog.appVersion
-            isAskAgain: dialog.isAskAgain
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
-            navigationPanel.section: dialog.navigationSection
-
-            onIsAskAgainChangeRequested: function(askAgain) {
-                dialog.isAskAgain = askAgain
+            onIsRemapPercussionChangeRequested: function(remapPercussion) {
+                root.isRemapPercussion = remapPercussion
             }
 
             onWatchVideoRequested: {
-                dialog.watchVideo()
-            }
-
-            onAccess: {
-                dialog.ret = dialog.makeRet(true)
-                dialog.hide()
+                root.watchVideo()
             }
         }
     }
 
     //! NOTE for pre-3.6.2 files
     Component {
-        id: migrComp
+        id: migrCompPre362
 
         MigrationContentForPre362 {
+            appVersion: root.appVersion
+            isApplyLeland: root.isApplyLeland
+            isApplyEdwin: root.isApplyEdwin
+            isRemapPercussion: root.isRemapPercussion
+
             anchors.fill: parent
 
-            appVersion: dialog.appVersion
-            isAskAgain: dialog.isAskAgain
-
-            isApplyLeland: dialog.isApplyLeland
-            isApplyEdwin: dialog.isApplyEdwin
-
-            navigationSection: dialog.navigationSection
-
-            onIsApplyEdwinChangeRequested: function(applyEdwin) {
-                dialog.isApplyEdwin = applyEdwin
-            }
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
             onIsApplyLelandChangeRequested: function(applyLeland) {
-                dialog.isApplyLeland = applyLeland
+                root.isApplyLeland = applyLeland
             }
 
-            onIsAskAgainChangeRequested: function(askAgain) {
-                dialog.isAskAgain = askAgain
+            onIsApplyEdwinChangeRequested: function(applyEdwin) {
+                root.isApplyEdwin = applyEdwin
+            }
+
+            onIsRemapPercussionChangeRequested: function(remapPercussion) {
+                root.isRemapPercussion = remapPercussion
             }
 
             onWatchVideoRequested: {
-                dialog.watchVideo()
-            }
-
-            onAccess: {
-                dialog.ret = dialog.makeRet(true)
-                dialog.hide()
+                root.watchVideo()
             }
         }
     }

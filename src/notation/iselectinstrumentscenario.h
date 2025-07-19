@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleinterface.h"
 #include "notation/notationtypes.h"
-#include "types/retval.h"
+#include "global/async/promise.h"
 
 namespace mu::notation {
 class ISelectInstrumentsScenario : MODULE_EXPORT_INTERFACE
@@ -34,8 +34,9 @@ class ISelectInstrumentsScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISelectInstrumentsScenario() = default;
 
-    virtual muse::RetVal<PartInstrumentListScoreOrder> selectInstruments() const = 0;
-    virtual muse::RetVal<Instrument> selectInstrument(const InstrumentKey& currentInstrumentKey = InstrumentKey()) const = 0;
+    virtual muse::async::Promise<PartInstrumentListScoreOrder> selectInstruments() const = 0;
+    virtual muse::async::Promise<InstrumentTemplate> selectInstrument(
+        const InstrumentKey& currentInstrumentKey = InstrumentKey()) const = 0;
 };
 }
 

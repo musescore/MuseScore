@@ -48,6 +48,18 @@ Expression::Expression(const Expression& expression)
     _snapToDynamics = expression._snapToDynamics;
 }
 
+bool Expression::isEditAllowed(EditData& ed) const
+{
+    bool ctrlPressed  = ed.modifiers & ControlModifier;
+    bool shiftPressed = ed.modifiers & ShiftModifier;
+    bool altPressed = ed.modifiers & AltModifier;
+    if (altPressed && !ctrlPressed && !shiftPressed && (ed.key == Key_Left || ed.key == Key_Right)) {
+        return false;
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
 PropertyValue Expression::propertyDefault(Pid id) const
 {
     switch (id) {
@@ -58,17 +70,17 @@ PropertyValue Expression::propertyDefault(Pid id) const
     }
 }
 
-double Expression::computeDynamicExpressionDistance() const
+double Expression::computeDynamicExpressionDistance(const Dynamic* snappedDyn) const
 {
-    if (!m_snappedDynamic) {
+    IF_ASSERT_FAILED(snappedDyn) {
         return 0.0;
     }
     // We are essentially faking the kerning behaviour of dynamic VS expression text
     // There's no other way to do this because the dynamic is a different font.
-    String dynamicTextString = m_snappedDynamic->xmlText();
+    String dynamicTextString = snappedDyn->xmlText();
     String f = String::fromStdString("<sym>dynamicForte</sym>");
     double distance = (dynamicTextString.endsWith(f) ? 0.2 : 0.5) * spatium();
-    distance *= 0.5 * (m_snappedDynamic->dynamicsSize() + (size() / 10));
+    distance *= 0.5 * (snappedDyn->dynamicsSize() + (size() / 10));
     return distance;
 }
 
@@ -80,17 +92,6 @@ std::unique_ptr<ElementGroup> Expression::getDragGroup(std::function<bool(const 
     return TextBase::getDragGroup(isDragged);
 }
 
-void Expression::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
-{
-    TextBase::undoChangeProperty(id, v, ps);
-    if (m_snappedDynamic) {
-        if ((id == Pid::OFFSET && m_snappedDynamic->offset() != v.value<PointF>())
-            || (id == Pid::PLACEMENT && m_snappedDynamic->placement() != v.value<PlacementV>())) {
-            m_snappedDynamic->undoChangeProperty(id, v, ps);
-        }
-    }
-}
-
 bool Expression::acceptDrop(EditData& ed) const
 {
     return ed.dropElement->type() == ElementType::DYNAMIC || TextBase::acceptDrop(ed);
@@ -100,8 +101,9 @@ EngravingItem* Expression::drop(EditData& ed)
 {
     EngravingItem* item = ed.dropElement;
     if (item->isDynamic()) {
-        if (m_snappedDynamic) {
-            return m_snappedDynamic->drop(ed);
+        Dynamic* snappedDyn = snappedDynamic();
+        if (snappedDyn) {
+            return snappedDyn->drop(ed);
         }
 
         item->setTrack(track());
@@ -165,6 +167,23 @@ void Expression::mapPropertiesFromOldExpressions(StaffText* staffText)
         setFrameColor(staffText->frameColor());
         setBgColor(staffText->bgColor());
         setFrameRound(staffText->frameRound());
+    }
+}
+
+Dynamic* Expression::snappedDynamic() const
+{
+    EngravingItem* item = ldata()->itemSnappedBefore();
+    return item && item->isDynamic() ? toDynamic(item) : nullptr;
+}
+
+void Expression::reset()
+{
+    undoResetProperty(Pid::DIRECTION);
+    undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
+    TextBase::reset();
+    Dynamic* snappedDyn = snappedDynamic();
+    if (snappedDyn && snappedDyn->getProperty(Pid::OFFSET) != snappedDyn->propertyDefault(Pid::OFFSET)) {
+        snappedDyn->reset();
     }
 }
 } // namespace mu::engraving

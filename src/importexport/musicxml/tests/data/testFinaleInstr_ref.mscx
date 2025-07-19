@@ -1,0 +1,3228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>9.00028</pageWidth>
+      <pageHeight>12.0021</pageHeight>
+      <pagePrintableWidth>7.99795</pagePrintableWidth>
+      <pageEvenLeftMargin>0.501163</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.501163</pageOddLeftMargin>
+      <pageEvenTopMargin>0.501163</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.501163</pageEvenBottomMargin>
+      <pageOddTopMargin>0.501163</pageOddTopMargin>
+      <pageOddBottomMargin>0.501163</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
+      <staffDistance>6</staffDistance>
+      <minSystemDistance>11</minSystemDistance>
+      <lyricsOddFontFace>Times</lyricsOddFontFace>
+      <lyricsEvenFontFace>Times</lyricsEvenFontFace>
+      <barWidth>0.0957</barWidth>
+      <endBarWidth>0.50391</endBarWidth>
+      <stemWidth>0.0957</stemWidth>
+      <staffLineWidth>0.0957</staffLineWidth>
+      <ledgerLineWidth>0.0957</ledgerLineWidth>
+      <beamWidth>0.50391</beamWidth>
+      <hairpinLineWidth>0.07487</hairpinLineWidth>
+      <chordSymbolAFontFace>Times</chordSymbolAFontFace>
+      <chordSymbolAFontSize>7.4</chordSymbolAFontSize>
+      <chordSymbolBFontFace>Times</chordSymbolBFontFace>
+      <chordSymbolBFontSize>7.4</chordSymbolBFontSize>
+      <romanNumeralFontFace>Times</romanNumeralFontFace>
+      <nashvilleNumberFontFace>Times</nashvilleNumberFontFace>
+      <nashvilleNumberFontSize>7.4</nashvilleNumberFontSize>
+      <smallNoteMag>0.65</smallNoteMag>
+      <graceNoteMag>0.65</graceNoteMag>
+      <voltaLineWidth>0.0957</voltaLineWidth>
+      <tupletBracketWidth>0.07682</tupletBracketWidth>
+      <tupletFontFace>Times</tupletFontFace>
+      <tupletFontSize>7.4</tupletFontSize>
+      <titleFontFace>Times</titleFontFace>
+      <subTitleFontFace>Times</subTitleFontFace>
+      <composerFontFace>Times</composerFontFace>
+      <lyricistFontFace>Times</lyricistFontFace>
+      <fingeringFontFace>Times</fingeringFontFace>
+      <fingeringFontSize>7.4</fingeringFontSize>
+      <lhGuitarFingeringFontFace>Times</lhGuitarFingeringFontFace>
+      <lhGuitarFingeringFontSize>7.4</lhGuitarFingeringFontSize>
+      <rhGuitarFingeringFontFace>Times</rhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontSize>7.4</rhGuitarFingeringFontSize>
+      <hammerOnPullOffTappingFontFace>Times</hammerOnPullOffTappingFontFace>
+      <stringNumberFontFace>Times</stringNumberFontFace>
+      <stringNumberFontSize>7.4</stringNumberFontSize>
+      <stringTuningsFontSize>7.4</stringTuningsFontSize>
+      <harpPedalDiagramFontFace>Times</harpPedalDiagramFontFace>
+      <harpPedalTextDiagramFontFace>Times</harpPedalTextDiagramFontFace>
+      <longInstrumentFontFace>Times</longInstrumentFontFace>
+      <longInstrumentFontSize>7.4</longInstrumentFontSize>
+      <shortInstrumentFontFace>Times</shortInstrumentFontFace>
+      <shortInstrumentFontSize>7.4</shortInstrumentFontSize>
+      <partInstrumentFontFace>Times</partInstrumentFontFace>
+      <partInstrumentFontSize>7.4</partInstrumentFontSize>
+      <expressionFontFace>Times</expressionFontFace>
+      <expressionFontSize>7.4</expressionFontSize>
+      <tempoFontFace>Times</tempoFontFace>
+      <tempoFontSize>7.4</tempoFontSize>
+      <tempoChangeFontFace>Times</tempoChangeFontFace>
+      <tempoChangeFontSize>7.4</tempoChangeFontSize>
+      <metronomeFontFace>Times</metronomeFontFace>
+      <metronomeFontSize>7.4</metronomeFontSize>
+      <measureNumberFontFace>Times</measureNumberFontFace>
+      <measureNumberFontSize>7.4</measureNumberFontSize>
+      <measureNumberAlternateFontFace>Times</measureNumberAlternateFontFace>
+      <measureNumberAlternateFontSize>7.4</measureNumberAlternateFontSize>
+      <mmRestRangeFontFace>Times</mmRestRangeFontFace>
+      <mmRestRangeFontSize>7.4</mmRestRangeFontSize>
+      <translatorFontFace>Times</translatorFontFace>
+      <translatorFontSize>7.4</translatorFontSize>
+      <systemTextFontFace>Times</systemTextFontFace>
+      <systemTextFontSize>7.4</systemTextFontSize>
+      <staffTextFontFace>Times</staffTextFontFace>
+      <staffTextFontSize>7.4</staffTextFontSize>
+      <staffTextFrameWidth>0.07682</staffTextFrameWidth>
+      <rehearsalMarkFontFace>Times</rehearsalMarkFontFace>
+      <rehearsalMarkFontSize>7.4</rehearsalMarkFontSize>
+      <repeatLeftFontFace>Times</repeatLeftFontFace>
+      <repeatLeftFontSize>7.4</repeatLeftFontSize>
+      <repeatRightFontFace>Times</repeatRightFontFace>
+      <repeatRightFontSize>7.4</repeatRightFontSize>
+      <frameFontFace>Times</frameFontFace>
+      <frameFontSize>7.4</frameFontSize>
+      <noteLineFontFace>Times</noteLineFontFace>
+      <noteLineFontSize>7.4</noteLineFontSize>
+      <glissandoFontFace>Times</glissandoFontFace>
+      <glissandoFontSize>7.4</glissandoFontSize>
+      <bendFontFace>Times</bendFontFace>
+      <bendFontSize>7.4</bendFontSize>
+      <headerFontFace>Times</headerFontFace>
+      <headerFontSize>7.4</headerFontSize>
+      <footerFontFace>Times</footerFontFace>
+      <footerFontSize>7.4</footerFontSize>
+      <copyrightFontFace>Times</copyrightFontFace>
+      <copyrightFontSize>7.4</copyrightFontSize>
+      <pageNumberFontFace>Times</pageNumberFontFace>
+      <pageNumberFontSize>7.4</pageNumberFontSize>
+      <instrumentChangeFontFace>Times</instrumentChangeFontFace>
+      <instrumentChangeFontSize>7.4</instrumentChangeFontSize>
+      <stickingFontFace>Times</stickingFontFace>
+      <stickingFontSize>7.4</stickingFontSize>
+      <user1FontFace>Times</user1FontFace>
+      <user1FontSize>7.4</user1FontSize>
+      <user2FontFace>Times</user2FontFace>
+      <user2FontSize>7.4</user2FontSize>
+      <user3FontFace>Times</user3FontFace>
+      <user3FontSize>7.4</user3FontSize>
+      <user4FontFace>Times</user4FontFace>
+      <user4FontSize>7.4</user4FontSize>
+      <user5FontFace>Times</user5FontFace>
+      <user5FontSize>7.4</user5FontSize>
+      <user6FontFace>Times</user6FontFace>
+      <user6FontSize>7.4</user6FontSize>
+      <user7FontFace>Times</user7FontFace>
+      <user7FontSize>7.4</user7FontSize>
+      <user8FontFace>Times</user8FontFace>
+      <user8FontSize>7.4</user8FontSize>
+      <user9FontFace>Times</user9FontFace>
+      <user9FontSize>7.4</user9FontSize>
+      <user10FontFace>Times</user10FontFace>
+      <user10FontSize>7.4</user10FontSize>
+      <user11FontFace>Times</user11FontFace>
+      <user11FontSize>7.4</user11FontSize>
+      <user12FontFace>Times</user12FontFace>
+      <user12FontSize>7.4</user12FontSize>
+      <spatium>1.31233</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <SystemObjects>
+      <Instance staffId="1"/>
+      <Instance staffId="4"/>
+      <Instance staffId="8"/>
+      <Instance staffId="11"/>
+      <Instance staffId="14"/>
+      <Instance staffId="17"/>
+      </SystemObjects>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <bracket type="0" span="3" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Flute/Piccolo</trackName>
+      <Instrument id="flute">
+        <longName>Flute/Piccolo</longName>
+        <shortName>Fl./Picc.</shortName>
+        <trackName>Flute/Piccolo</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="2">
+      <Staff>
+        <eid>D_D</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Oboe</trackName>
+      <Instrument id="oboe">
+        <longName>Oboe</longName>
+        <shortName>Ob.</shortName>
+        <trackName>Oboe</trackName>
+        <minPitchP>58</minPitchP>
+        <maxPitchP>96</maxPitchP>
+        <minPitchA>58</minPitchA>
+        <maxPitchA>87</maxPitchA>
+        <instrumentId>wind.reed.oboe</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>1</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="3">
+      <Staff>
+        <eid>E_E</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Bassoon</trackName>
+      <Instrument id="bassoon">
+        <longName>Bassoon</longName>
+        <shortName>Bsn.</shortName>
+        <trackName>Bassoon</trackName>
+        <minPitchP>34</minPitchP>
+        <maxPitchP>76</maxPitchP>
+        <minPitchA>34</minPitchA>
+        <maxPitchA>69</maxPitchA>
+        <instrumentId>wind.reed.bassoon</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>2</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="4">
+      <Staff>
+        <eid>F_F</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <bracket type="0" span="4" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>B♭ Clarinet 1</trackName>
+      <Instrument id="bb-clarinet">
+        <longName>B♭ Clarinet 1</longName>
+        <shortName>Cl. 1</shortName>
+        <trackName>Bb Clarinet 1</trackName>
+        <minPitchP>50</minPitchP>
+        <maxPitchP>94</maxPitchP>
+        <minPitchA>50</minPitchA>
+        <maxPitchA>89</maxPitchA>
+        <instrumentId>wind.reed.clarinet.bflat</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>3</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="5">
+      <Staff>
+        <eid>G_G</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>B♭ Clarinet 2, 3</trackName>
+      <Instrument id="bb-clarinet">
+        <longName>B♭ Clarinet 2, 3</longName>
+        <shortName>Cl. 2, 3</shortName>
+        <trackName>Bb Clarinet 2, 3</trackName>
+        <minPitchP>50</minPitchP>
+        <maxPitchP>94</maxPitchP>
+        <minPitchA>50</minPitchA>
+        <maxPitchA>89</maxPitchA>
+        <instrumentId>wind.reed.clarinet.bflat</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>4</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="6">
+      <Staff>
+        <eid>H_H</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>E♭ Alto Clarinet</trackName>
+      <Instrument id="alto-clarinet">
+        <longName>E♭ Alto Clarinet</longName>
+        <shortName>A. Cl.</shortName>
+        <trackName>Eb Alto Clarinet</trackName>
+        <minPitchP>43</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>43</minPitchA>
+        <maxPitchA>80</maxPitchA>
+        <instrumentId>wind.reed.clarinet.alto</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>5</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="7">
+      <Staff>
+        <eid>I_I</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>B♭ Bass Clarinet</trackName>
+      <Instrument id="bb-bass-clarinet">
+        <longName>B♭ Bass Clarinet</longName>
+        <shortName>Bs. Cl.</shortName>
+        <trackName>Bb Bass Clarinet</trackName>
+        <minPitchP>34</minPitchP>
+        <maxPitchP>82</maxPitchP>
+        <minPitchA>37</minPitchA>
+        <maxPitchA>75</maxPitchA>
+        <instrumentId>wind.reed.clarinet.bass</instrumentId>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>6</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="8">
+      <Staff>
+        <eid>J_J</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <bracket type="0" span="3" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>E♭ Alto Sax. 1, 2</trackName>
+      <Instrument id="alto-saxophone">
+        <longName>E♭ Alto Sax. 1, 2</longName>
+        <shortName>A. Sx. 1, 2</shortName>
+        <trackName>Eb Alto Sax. 1, 2</trackName>
+        <minPitchP>49</minPitchP>
+        <maxPitchP>92</maxPitchP>
+        <minPitchA>49</minPitchA>
+        <maxPitchA>80</maxPitchA>
+        <instrumentId>wind.reed.saxophone.alto</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>7</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="9">
+      <Staff>
+        <eid>K_K</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>B♭ Tenor Sax.</trackName>
+      <Instrument id="tenor-saxophone">
+        <longName>B♭ Tenor Sax.</longName>
+        <shortName>T. Sx.</shortName>
+        <trackName>Bb Tenor Sax.</trackName>
+        <minPitchP>44</minPitchP>
+        <maxPitchP>87</maxPitchP>
+        <minPitchA>44</minPitchA>
+        <maxPitchA>75</maxPitchA>
+        <instrumentId>wind.reed.saxophone.tenor</instrumentId>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>8</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="10">
+      <Staff>
+        <eid>L_L</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>E♭ Bari. Sax.</trackName>
+      <Instrument id="baritone-saxophone">
+        <longName>E♭ Bari. Sax.</longName>
+        <shortName>B. Sx.</shortName>
+        <trackName>Eb Bari. Sax.</trackName>
+        <minPitchP>36</minPitchP>
+        <maxPitchP>80</maxPitchP>
+        <minPitchA>36</minPitchA>
+        <maxPitchA>68</maxPitchA>
+        <instrumentId>wind.reed.saxophone.baritone</instrumentId>
+        <concertClef>F</concertClef>
+        <transposingClef>G</transposingClef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>9</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="11">
+      <Staff>
+        <eid>M_M</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <bracket type="0" span="3" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>B♭ Trumpet 1</trackName>
+      <Instrument id="bb-trumpet">
+        <longName>B♭ Trumpet 1</longName>
+        <shortName>Tpt. 1</shortName>
+        <trackName>Bb Trumpet 1</trackName>
+        <minPitchP>52</minPitchP>
+        <maxPitchP>85</maxPitchP>
+        <minPitchA>52</minPitchA>
+        <maxPitchA>80</maxPitchA>
+        <instrumentId>brass.trumpet.bflat</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel name="open">
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>10</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="59"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="12">
+      <Staff>
+        <eid>N_N</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>B♭ Trumpet 2, 3</trackName>
+      <Instrument id="bb-trumpet">
+        <longName>B♭ Trumpet 2, 3</longName>
+        <shortName>Tpt. 2, 3</shortName>
+        <trackName>Bb Trumpet 2, 3</trackName>
+        <minPitchP>52</minPitchP>
+        <maxPitchP>85</maxPitchP>
+        <minPitchA>52</minPitchA>
+        <maxPitchA>80</maxPitchA>
+        <instrumentId>brass.trumpet.bflat</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel name="open">
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>11</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="59"/>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="13">
+      <Staff>
+        <eid>O_O</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>F Horn 1, 2</trackName>
+      <Instrument id="horn">
+        <longName>F Horn 1, 2</longName>
+        <shortName>Horn 1, 2</shortName>
+        <trackName>F Horn 1, 2</trackName>
+        <minPitchP>31</minPitchP>
+        <maxPitchP>77</maxPitchP>
+        <minPitchA>41</minPitchA>
+        <maxPitchA>69</maxPitchA>
+        <instrumentId>brass.french-horn</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel name="open">
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>12</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="59"/>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="14">
+      <Staff>
+        <eid>P_P</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <bracket type="0" span="3" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Trombone 1, 2</trackName>
+      <Instrument id="trombone">
+        <longName>Trombone 1, 2</longName>
+        <shortName>Tbn. 1, 2</shortName>
+        <trackName>Trombone 1, 2</trackName>
+        <minPitchP>36</minPitchP>
+        <maxPitchP>74</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>71</maxPitchA>
+        <instrumentId>brass.trombone</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel name="open">
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>13</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="59"/>
+          <midiPort>0</midiPort>
+          <midiChannel>4</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="15">
+      <Staff>
+        <eid>Q_Q</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Baritone</trackName>
+      <Instrument id="baritone">
+        <longName>Baritone</longName>
+        <shortName>Bar.</shortName>
+        <trackName>Baritone</trackName>
+        <minPitchP>41</minPitchP>
+        <maxPitchP>65</maxPitchP>
+        <minPitchA>43</minPitchA>
+        <maxPitchA>64</maxPitchA>
+        <instrumentId>voice.baritone</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>14</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="16">
+      <Staff>
+        <eid>R_R</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Tuba
+(String Bass)</trackName>
+      <Instrument id="tuba">
+        <longName>Tuba
+(String Bass)</longName>
+        <shortName>Tuba</shortName>
+        <trackName>Tuba
+(String Bass)</trackName>
+        <minPitchP>22</minPitchP>
+        <maxPitchP>72</maxPitchP>
+        <minPitchA>28</minPitchA>
+        <maxPitchA>58</maxPitchA>
+        <instrumentId>brass.tuba</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>15</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="17">
+      <Staff>
+        <eid>S_S</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <bracket type="0" span="4" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Percussion 1</trackName>
+      <Instrument id="percussion-synthesizer">
+        <longName>Percussion 1</longName>
+        <shortName>Perc. 1</shortName>
+        <trackName>Percussion 1</trackName>
+        <instrumentId>drum.group</instrumentId>
+        <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
+        <Drum pitch="27">
+          <head>slash</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>High Q</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="28">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadSlashX</whole>
+            <half>noteheadSlashX</half>
+            <quarter>noteheadSlashX</quarter>
+            <breve>noteheadSlashX</breve>
+            </noteheads>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Slap</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="29">
+          <head>slash</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Scratch Push</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="30">
+          <head>slash</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Scratch Pull</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="31">
+          <head>plus</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Sticks</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="32">
+          <head>plus</head>
+          <line>10</line>
+          <voice>0</voice>
+          <name>Square Click</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="33">
+          <head>cross</head>
+          <line>10</line>
+          <voice>0</voice>
+          <name>Metronome Click</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="34">
+          <head>triangle-up</head>
+          <line>10</line>
+          <voice>0</voice>
+          <name>Metronome Bell</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="35">
+          <head>normal</head>
+          <line>8</line>
+          <voice>1</voice>
+          <name>Acoustic Bass Drum</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="36">
+          <head>normal</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Bass Drum 1</name>
+          <stem>2</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="37">
+          <head>slashed1</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Side Stick</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="38">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Acoustic Snare</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="39">
+          <head>plus</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Hand Clap</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="40">
+          <head>slash</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Electric Snare</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="41">
+          <head>normal</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Low Floor Tom</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="42">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Closed Hi-Hat</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="43">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>High Floor Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="44">
+          <head>cross</head>
+          <line>9</line>
+          <voice>1</voice>
+          <name>Pedal Hi-Hat</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="45">
+          <head>normal</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Low Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="46">
+          <head>xcircle</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Open Hi-Hat</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="47">
+          <head>normal</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Low-Mid Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="48">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi-Mid Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="49">
+          <head>cross</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Crash Cymbal 1</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="50">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>High Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="51">
+          <head>cross</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride Cymbal 1</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="52">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadHeavyXHat</whole>
+            <half>noteheadHeavyXHat</half>
+            <quarter>noteheadHeavyXHat</quarter>
+            <breve>noteheadHeavyXHat</breve>
+            </noteheads>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Chinese Cymbal</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="53">
+          <head>diamond</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride Bell</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="54">
+          <head>diamond</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="55">
+          <head>cross</head>
+          <line>-4</line>
+          <voice>0</voice>
+          <name>Splash Cymbal</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="56">
+          <head>triangle-down</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Cowbell</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="57">
+          <head>cross</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Crash Cymbal 2</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="58">
+          <head>ti</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Vibraslap</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="59">
+          <head>cross</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Ride Cymbal 2</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="60">
+          <head>normal</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Hi Bongo</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="61">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Low Bongo</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="62">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadXOrnate</whole>
+            <half>noteheadXOrnate</half>
+            <quarter>noteheadXOrnate</quarter>
+            <breve>noteheadXOrnate</breve>
+            </noteheads>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Mute Hi Conga</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="63">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Open Hi Conga</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="64">
+          <head>normal</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Low Conga</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="65">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>High Timbale</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="66">
+          <head>normal</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Low Timbale</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="67">
+          <head>triangle-down</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>High Agogo</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="68">
+          <head>triangle-down</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Low Agogo</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="69">
+          <head>diamond</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Cabasa</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="70">
+          <head>diamond</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Maracas</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="71">
+          <head>cross</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Short Whistle</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="72">
+          <head>ti</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Long Whistle</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="73">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Short Güiro</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="74">
+          <head>slashed1</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Long Güiro</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="75">
+          <head>la</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Claves</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="76">
+          <head>la</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Hi Wood Block</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="77">
+          <head>la</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Low Wood Block</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="78">
+          <head>cross</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>Mute Cuica</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="79">
+          <head>slashed2</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>Open Cuica</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="80">
+          <head>cross</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Mute Triangle</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="81">
+          <head>triangle-up</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Open Triangle</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="82">
+          <head>diamond</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Shaker</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="83">
+          <head>triangle-down</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Sleigh Bell</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="84">
+          <head>ti</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Mark Tree</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="85">
+          <head>la</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Castanets</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="86">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadSlashX</whole>
+            <half>noteheadSlashX</half>
+            <quarter>noteheadSlashX</quarter>
+            <breve>noteheadSlashX</breve>
+            </noteheads>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Mute Surdo</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="87">
+          <head>slash</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Open Surdo</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <clef>PERC</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="0"/>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>16</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="18">
+      <Staff>
+        <eid>T_T</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Percussion 2</trackName>
+      <Instrument id="percussion-synthesizer">
+        <longName>Percussion 2</longName>
+        <shortName>Perc. 2</shortName>
+        <trackName>Percussion 2</trackName>
+        <instrumentId>drum.group</instrumentId>
+        <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
+        <Drum pitch="27">
+          <head>slash</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>High Q</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="28">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadSlashX</whole>
+            <half>noteheadSlashX</half>
+            <quarter>noteheadSlashX</quarter>
+            <breve>noteheadSlashX</breve>
+            </noteheads>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Slap</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="29">
+          <head>slash</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Scratch Push</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="30">
+          <head>slash</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Scratch Pull</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="31">
+          <head>plus</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Sticks</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="32">
+          <head>plus</head>
+          <line>10</line>
+          <voice>0</voice>
+          <name>Square Click</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="33">
+          <head>cross</head>
+          <line>10</line>
+          <voice>0</voice>
+          <name>Metronome Click</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="34">
+          <head>triangle-up</head>
+          <line>10</line>
+          <voice>0</voice>
+          <name>Metronome Bell</name>
+          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="35">
+          <head>normal</head>
+          <line>8</line>
+          <voice>1</voice>
+          <name>Acoustic Bass Drum</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="36">
+          <head>normal</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Bass Drum 1</name>
+          <stem>2</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="37">
+          <head>slashed1</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Side Stick</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="38">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Acoustic Snare</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="39">
+          <head>plus</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Hand Clap</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="40">
+          <head>slash</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Electric Snare</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="41">
+          <head>normal</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Low Floor Tom</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="42">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Closed Hi-Hat</name>
+          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="43">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>High Floor Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="44">
+          <head>cross</head>
+          <line>9</line>
+          <voice>1</voice>
+          <name>Pedal Hi-Hat</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="45">
+          <head>normal</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Low Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="46">
+          <head>xcircle</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Open Hi-Hat</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="47">
+          <head>normal</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Low-Mid Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="48">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi-Mid Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="49">
+          <head>cross</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Crash Cymbal 1</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="50">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>High Tom</name>
+          <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="51">
+          <head>cross</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride Cymbal 1</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="52">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadHeavyXHat</whole>
+            <half>noteheadHeavyXHat</half>
+            <quarter>noteheadHeavyXHat</quarter>
+            <breve>noteheadHeavyXHat</breve>
+            </noteheads>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Chinese Cymbal</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="53">
+          <head>diamond</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride Bell</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="54">
+          <head>diamond</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="55">
+          <head>cross</head>
+          <line>-4</line>
+          <voice>0</voice>
+          <name>Splash Cymbal</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="56">
+          <head>triangle-down</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Cowbell</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="57">
+          <head>cross</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Crash Cymbal 2</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="58">
+          <head>ti</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Vibraslap</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="59">
+          <head>cross</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Ride Cymbal 2</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="60">
+          <head>normal</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Hi Bongo</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="61">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Low Bongo</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="62">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadXOrnate</whole>
+            <half>noteheadXOrnate</half>
+            <quarter>noteheadXOrnate</quarter>
+            <breve>noteheadXOrnate</breve>
+            </noteheads>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Mute Hi Conga</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="63">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Open Hi Conga</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="64">
+          <head>normal</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Low Conga</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="65">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>High Timbale</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="66">
+          <head>normal</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Low Timbale</name>
+          <stem>1</stem>
+          <panelRow>4</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="67">
+          <head>triangle-down</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>High Agogo</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="68">
+          <head>triangle-down</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Low Agogo</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="69">
+          <head>diamond</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Cabasa</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="70">
+          <head>diamond</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Maracas</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="71">
+          <head>cross</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Short Whistle</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="72">
+          <head>ti</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Long Whistle</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="73">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Short Güiro</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="74">
+          <head>slashed1</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Long Güiro</name>
+          <stem>1</stem>
+          <panelRow>5</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="75">
+          <head>la</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Claves</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="76">
+          <head>la</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Hi Wood Block</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="77">
+          <head>la</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Low Wood Block</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="78">
+          <head>cross</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>Mute Cuica</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="79">
+          <head>slashed2</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>Open Cuica</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <Drum pitch="80">
+          <head>cross</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Mute Triangle</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>5</panelColumn>
+          </Drum>
+        <Drum pitch="81">
+          <head>triangle-up</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Open Triangle</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>6</panelColumn>
+          </Drum>
+        <Drum pitch="82">
+          <head>diamond</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Shaker</name>
+          <stem>1</stem>
+          <panelRow>6</panelRow>
+          <panelColumn>7</panelColumn>
+          </Drum>
+        <Drum pitch="83">
+          <head>triangle-down</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Sleigh Bell</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>0</panelColumn>
+          </Drum>
+        <Drum pitch="84">
+          <head>ti</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Mark Tree</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>1</panelColumn>
+          </Drum>
+        <Drum pitch="85">
+          <head>la</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Castanets</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>2</panelColumn>
+          </Drum>
+        <Drum pitch="86">
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadSlashX</whole>
+            <half>noteheadSlashX</half>
+            <quarter>noteheadSlashX</quarter>
+            <breve>noteheadSlashX</breve>
+            </noteheads>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Mute Surdo</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>3</panelColumn>
+          </Drum>
+        <Drum pitch="87">
+          <head>slash</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Open Surdo</name>
+          <stem>1</stem>
+          <panelRow>7</panelRow>
+          <panelColumn>4</panelColumn>
+          </Drum>
+        <clef>PERC</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="0"/>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>17</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="19">
+      <Staff>
+        <eid>U_U</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Mallet Perc.</trackName>
+      <Instrument id="grand-piano">
+        <longName>Mallet Perc.</longName>
+        <shortName>Mllt. Perc.</shortName>
+        <trackName>Mallet Perc.</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano.grand</instrumentId>
+        <clef staff="2">F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>18</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="20">
+      <Staff>
+        <eid>V_V</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Timpani</trackName>
+      <Instrument id="timpani">
+        <longName>Timpani</longName>
+        <shortName>Timp.</shortName>
+        <trackName>Timpani</trackName>
+        <minPitchP>36</minPitchP>
+        <maxPitchP>62</maxPitchP>
+        <minPitchA>38</minPitchA>
+        <maxPitchA>60</maxPitchA>
+        <instrumentId>drum.timpani</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>19</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <eid>W_W</eid>
+        </VBox>
+      <Measure>
+        <eid>X_X</eid>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>Y_Y</eid>
+            </Clef>
+          <TimeSig>
+            <eid>Z_Z</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>a_a</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>b_b</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>c_c</eid>
+            </Clef>
+          <TimeSig>
+            <eid>d_d</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>e_e</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>f_f</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>g_g</eid>
+            </Clef>
+          <TimeSig>
+            <eid>h_h</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>i_i</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>j_j</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>k_k</eid>
+            </Clef>
+          <TimeSig>
+            <eid>l_l</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>m_m</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>n_n</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="5">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>o_o</eid>
+            </Clef>
+          <TimeSig>
+            <eid>p_p</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>q_q</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>r_r</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="6">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>s_s</eid>
+            </Clef>
+          <TimeSig>
+            <eid>t_t</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>u_u</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>v_v</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="7">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>w_w</eid>
+            </Clef>
+          <TimeSig>
+            <eid>x_x</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>y_y</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>z_z</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="8">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>0_0</eid>
+            </Clef>
+          <TimeSig>
+            <eid>1_1</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>2_2</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>3_3</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="9">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>4_4</eid>
+            </Clef>
+          <TimeSig>
+            <eid>5_5</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>6_6</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>7_7</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="10">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>8_8</eid>
+            </Clef>
+          <TimeSig>
+            <eid>9_9</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>+_+</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>/_/</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="11">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>AB_AB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>BB_BB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>CB_CB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>DB_DB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="12">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>EB_EB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>FB_FB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>GB_GB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>HB_HB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="13">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>IB_IB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>JB_JB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>KB_KB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>LB_LB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="14">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>MB_MB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>NB_NB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>OB_OB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>PB_PB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="15">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>QB_QB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>RB_RB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>SB_SB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>TB_TB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="16">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>UB_UB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>VB_VB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>WB_WB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>XB_XB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="17">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>YB_YB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>ZB_ZB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>aB_aB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>bB_bB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="18">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>cB_cB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>dB_dB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>eB_eB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>fB_fB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="19">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>gB_gB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>hB_hB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>iB_iB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>jB_jB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="20">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>kB_kB</eid>
+            </Clef>
+          <TimeSig>
+            <eid>lB_lB</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>mB_mB</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>nB_nB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

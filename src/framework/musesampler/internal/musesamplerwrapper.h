@@ -33,12 +33,14 @@
 
 #include "imusesamplertracks.h"
 
+#include "timer.h"
+
 namespace muse::musesampler {
-class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, public IMuseSamplerTracks,
-    public std::enable_shared_from_this<MuseSamplerWrapper>
+class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, public IMuseSamplerTracks
 {
 public:
-    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params);
+    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params,
+                       async::Notification processOnlineSoundsRequested, const modularity::ContextPtr& iocCtx);
     ~MuseSamplerWrapper() override;
 
     void setSampleRate(unsigned int sampleRate) override;
@@ -51,11 +53,16 @@ public:
     void flushSound() override;
     bool isValid() const override;
 
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+
     void revokePlayingNotes() override;
 
 private:
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
+
     void updateRenderingMode(const muse::audio::RenderMode mode) override;
 
     // IMuseSamplerTracks
@@ -65,11 +72,16 @@ private:
     muse::audio::msecs_t playbackPosition() const override;
     void setPlaybackPosition(const muse::audio::msecs_t newPosition) override;
     bool isActive() const override;
-    void setIsActive(bool arg) override;
+    void setIsActive(bool active) override;
+
+    bool initSampler(const muse::audio::sample_rate_t sampleRate, const muse::audio::samples_t blockSize);
+
+    void setupOnlineSound();
 
     InstrumentInfo resolveInstrument(const mpe::PlaybackSetupData& setupData) const;
     std::string resolveDefaultPresetCode(const InstrumentInfo& instrument) const;
 
+    void prepareOutputBuffer(const muse::audio::samples_t samples);
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
     void setCurrentPosition(const muse::audio::samples_t samples);
     void extractOutputSamples(muse::audio::samples_t samples, float* output);
@@ -82,7 +94,10 @@ private:
     TrackList m_tracks;
     ms_OutputBuffer m_bus;
 
+    async::Notification m_processOnlineSoundsRequested;
+
     muse::audio::samples_t m_currentPosition = 0;
+    muse::audio::sample_rate_t m_samplerSampleRate = 0;
 
     std::vector<float> m_leftChannel;
     std::vector<float> m_rightChannel;
@@ -90,8 +105,11 @@ private:
     std::array<float*, 2> m_internalBuffer;
 
     bool m_offlineModeStarted = false;
+    bool m_allNotesOffRequested = false;
 
     MuseSamplerSequencer m_sequencer;
+
+    std::unique_ptr<Timer> m_checkReadyToPlayTimer;
 };
 
 using MuseSamplerWrapperPtr = std::shared_ptr<MuseSamplerWrapper>;

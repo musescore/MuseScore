@@ -69,7 +69,7 @@
 #  Ignored unless KDDockWidgets_DEVELOPER_MODE=True
 #  Default=true
 
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.12)
 
 # Allow using a non-KDAB install location.
 set(KDAB_INSTALL True CACHE INTERNAL "Install to default KDAB Location")
@@ -79,14 +79,10 @@ if(DEFINED CMAKE_INSTALL_PREFIX)
   endif()
 endif()
 
-if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
-  project(KDDockWidgets LANGUAGES CXX)
-else()
-  project(KDDockWidgets
-          DESCRIPTION "An advanced docking system for Qt"
-          HOMEPAGE_URL "https://github.com/KDAB/KDDockWidgets"
-          LANGUAGES CXX)
-endif()
+project(KDDockWidgets
+        DESCRIPTION "An advanced docking system for Qt"
+        HOMEPAGE_URL "https://github.com/KDAB/KDDockWidgets"
+        LANGUAGES CXX)
 
 set(${PROJECT_NAME}_VERSION_MAJOR 1)
 set(${PROJECT_NAME}_VERSION_MINOR 4)
@@ -251,8 +247,7 @@ if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 
   # Generate .pri file for qmake users
   #TODO: ECM does not support Qt6 yet
-  if(Qt_VERSION_MAJOR EQUAL 5 AND
-    CMAKE_VERSION VERSION_GREATER "3.11.99" AND NOT CMAKE_CONFIGURATION_TYPES) # Not working with VS generator or older cmake versions
+  if(Qt_VERSION_MAJOR EQUAL 5 AND NOT CMAKE_CONFIGURATION_TYPES) # Not working with VS generator or older cmake versions
     include(ECMGeneratePriFile)
     set(PROJECT_VERSION_STRING ${${PROJECT_NAME}_VERSION})
     ecm_generate_pri_file(BASE_NAME KDDockWidgets

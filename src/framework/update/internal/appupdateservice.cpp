@@ -39,6 +39,36 @@ using namespace muse;
 using namespace muse::update;
 using namespace muse::network;
 
+const QString INSTALLED_WEEK_BEGINNING_KEY("Installed-Week-Beginning");
+const QString PREVIOUS_REQUEST_DAY_KEY("Previous-Request-Day");
+
+static QDate calculateWeekBeginForDate(const QDate& date)
+{
+    // 1 (Monday) + 6 mod 7 = 0
+    // 2 (Tuesday) + 6 mod 7 = 1
+    // etc...
+    int diffToWeekBegin = (date.dayOfWeek() + 6) % 7;
+    return QDate::currentDate().addDays(-diffToWeekBegin);
+}
+
+void AppUpdateService::init()
+{
+    io::path_t historyPath = configuration()->updateRequestHistoryJsonPath();
+    if (fileSystem()->exists(historyPath)) {
+        return;
+    }
+
+    // If the request history file doesn't exist, perform a first time setup using today's date...
+    UpdateRequestHistory updateRequestHistory;
+    updateRequestHistory.installedWeekBeginning = calculateWeekBeginForDate(QDate::currentDate());
+    updateRequestHistory.previousRequestDay = QDate::currentDate();
+
+    Ret ret = writeUpdateRequestHistory(historyPath, updateRequestHistory);
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+}
+
 muse::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
 {
     RetVal<ReleaseInfo> result;
@@ -48,12 +78,39 @@ muse::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
 
     QBuffer buff;
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForAppUpdateUrl()), &buff,
-                                              configuration()->updateHeaders());
 
-    if (!getUpdateInfo) {
-        result.ret = make_ret(Err::NetworkError);
+    // Read request history file...
+    io::path_t historyPath = configuration()->updateRequestHistoryJsonPath();
+    RetVal<UpdateRequestHistory> rv = readUpdateRequestHistory(historyPath);
+    if (!rv.ret) {
+        LOGE() << rv.ret.toString();
+    }
+    UpdateRequestHistory updateRequestHistory = rv.val;
+
+    RequestHeaders headers = configuration()->updateHeaders();
+
+    if (updateRequestHistory.isValid()) {
+        // Prepare history headers...
+        std::string iwbString = updateRequestHistory.installedWeekBeginning.toString(Qt::ISODate).toStdString();
+        QByteArray iwbKey = QByteArray::fromStdString(INSTALLED_WEEK_BEGINNING_KEY.toStdString());
+        headers.rawHeaders[iwbKey] = QByteArray::fromStdString(iwbString);
+
+        std::string prdString = updateRequestHistory.previousRequestDay.toString(Qt::ISODate).toStdString();
+        QByteArray prdKey = QByteArray::fromStdString(PREVIOUS_REQUEST_DAY_KEY.toStdString());
+        headers.rawHeaders[prdKey] = QByteArray::fromStdString(prdString);
+    }
+
+    Ret getUpdateInfoRet = m_networkManager->get(QString::fromStdString(configuration()->checkForAppUpdateUrl()), &buff, headers);
+    if (!getUpdateInfoRet) {
+        result.ret = getUpdateInfoRet;
         return result;
+    }
+
+    // Successfully performed request, update history file...
+    updateRequestHistory.previousRequestDay = QDate::currentDate();
+    Ret ret = writeUpdateRequestHistory(historyPath, updateRequestHistory);
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 
     QByteArray json = buff.data();
@@ -92,6 +149,46 @@ muse::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
     return result;
 }
 
+RetVal<AppUpdateService::UpdateRequestHistory> AppUpdateService::readUpdateRequestHistory(const io::path_t& path) const
+{
+    RetVal<ByteArray> rv = fileSystem()->readFile(path);
+    if (!rv.ret) {
+        return RetVal<UpdateRequestHistory>(rv.ret);
+    }
+
+    QJsonDocument historyDoc = QJsonDocument::fromJson(rv.val.toQByteArrayNoCopy());
+    QJsonObject historyObject = historyDoc.object();
+
+    UpdateRequestHistory updateRequestHistory;
+
+    QString installedWeekBeginning = historyObject.value(INSTALLED_WEEK_BEGINNING_KEY).toString();
+    updateRequestHistory.installedWeekBeginning = QDate::fromString(installedWeekBeginning, Qt::ISODate);
+
+    QString previousRequestDay = historyObject.value(PREVIOUS_REQUEST_DAY_KEY).toString();
+    updateRequestHistory.previousRequestDay = QDate::fromString(previousRequestDay, Qt::ISODate);
+
+    return RetVal<UpdateRequestHistory>::make_ok(updateRequestHistory);
+}
+
+Ret AppUpdateService::writeUpdateRequestHistory(const io::path_t& path, const UpdateRequestHistory& updateRequestHistory)
+{
+    if (!updateRequestHistory.isValid()) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    QJsonObject historyObject;
+
+    const QDate& iwb = updateRequestHistory.installedWeekBeginning;
+    const QDate& prd = updateRequestHistory.previousRequestDay;
+
+    historyObject[INSTALLED_WEEK_BEGINNING_KEY] = iwb.toString(Qt::ISODate);
+    historyObject[PREVIOUS_REQUEST_DAY_KEY] = prd.toString(Qt::ISODate);
+
+    QByteArray byteArray = QJsonDocument(historyObject).toJson();
+
+    return fileSystem()->writeFile(path, ByteArray::fromQByteArrayNoCopy(byteArray));
+}
+
 muse::RetVal<muse::io::path_t> AppUpdateService::downloadRelease()
 {
     RetVal<io::path_t> result;
@@ -99,11 +196,11 @@ muse::RetVal<muse::io::path_t> AppUpdateService::downloadRelease()
     QBuffer buff;
     QUrl fileUrl = QUrl::fromUserInput(QString::fromStdString(m_lastCheckResult.fileUrl));
 
-    m_updateProgress.started.notify();
+    m_updateProgress.start();
 
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-    m_networkManager->progress().progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
-        m_updateProgress.progressChanged.send(
+    m_networkManager->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
+        m_updateProgress.progress(
             current, total,
 
             //: Means that the download is currently in progress.
@@ -235,8 +332,7 @@ PrevReleasesNotesList AppUpdateService::previousReleasesNotes(const Version& upd
     PrevReleasesNotesList result;
 
     QBuffer buff;
-    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousAppReleasesNotesUrl()), &buff,
-                                                        configuration()->updateHeaders());
+    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousAppReleasesNotesUrl()), &buff);
     if (!getPreviousReleaseNotes) {
         LOGE() << "failed to get previous release notes: " << getPreviousReleaseNotes.toString();
         return result;

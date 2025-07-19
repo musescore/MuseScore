@@ -58,6 +58,10 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 #endif
 
+#ifdef Q_OS_WIN
+#include "platform/win/waitabletimer.h"
+#endif
+
 #include "log.h"
 
 using namespace muse;
@@ -141,10 +145,13 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread|15} | ${tag|15} | ${message}")));
     }
 
+    //! Log file
+    io::path_t logFilePath = "none";
+#ifndef Q_OS_WASM
     io::path_t logPath = m_configuration->userAppDataPath() + "/logs";
     fileSystem()->makePath(logPath);
 
-    io::path_t logFilePath = logPath;
+    logFilePath = logPath;
     String logFileNamePattern;
 
     if (mode == IApplication::RunMode::AudioPluginRegistration) {
@@ -155,12 +162,12 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
                        + QDateTime::currentDateTime().toString("yyMMdd")
                        + ".log";
     } else {
-        logFileNamePattern = u"MuseScore_yyMMdd_HHmmss.log";
+        logFileNamePattern = BaseApplication::appName() + u"_yyMMdd_HHmmss.log";
 
-        //! This creates a file named "data/logs/MuseScore_yyMMdd_HHmmss.log"
-        logFilePath += "/MuseScore_"
-                       + QDateTime::currentDateTime().toString("yyMMdd_HHmmss")
-                       + ".log";
+        //! This creates a file named "data/logs/AppName_yyMMdd_HHmmss.log"
+        logFilePath += u"/" + BaseApplication::appName() + u"_"
+                       + String::fromQString(QDateTime::currentDateTime().toString("yyMMdd_HHmmss"))
+                       + u".log";
     }
 
     //! Remove old logs
@@ -170,6 +177,8 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
                                            LogLayout("${datetime} | ${type|5} | ${thread|15} | ${tag|15} | ${message}"));
 
     logger->addDest(logFile);
+    LOGI() << "log path: " << logFilePath;
+#endif
 
     if (m_loggerLevel) {
         logger->setLevel(m_loggerLevel.value());
@@ -181,8 +190,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 #endif
     }
 
-    LOGI() << "log path: " << logFilePath;
-    LOGI() << "=== Started " << m_application->name()
+    LOGI() << "=== Started " << m_application->title()
            << " " << m_application->fullVersion().toString()
            << ", build: " << m_application->build() << " ===";
 
@@ -190,12 +198,13 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     using namespace muse::profiler;
     struct MyPrinter : public Profiler::Printer
     {
-        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", Color::Magenta)() << str; }
-        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", Color::Magenta)() << str; }
+        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", logger::Color::Magenta)() << str; }
+        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", logger::Color::Magenta)() << str; }
     };
 
     Profiler::Options profOpt;
     profOpt.stepTimeEnabled = true;
+    profOpt.timersEnabled = true;
     profOpt.funcsTimeEnabled = true;
     profOpt.funcsTraceEnabled = false;
     profOpt.funcsMaxThreadCount = 100;
@@ -233,11 +242,32 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
     m_systemInfo->init();
+
+    m_endTimePeriod = false;
+
+#ifdef Q_OS_WIN
+    WaitableTimer timer;
+    if (m_configuration->highResolutionTimers() || !timer.init()) {
+        // Improves the accuracy of Sleep() on Windows
+        // Without it, errors up to 15 ms are possible, which is critical for the audio thread
+        // and can significantly degrade sound quality
+        // However, this approach may result in higher CPU usage as a trade-off
+        LOGI() << "Use timeBeginPeriod(1)";
+        timeBeginPeriod(1);
+        m_endTimePeriod = true;
+    }
+#endif
 }
 
 void GlobalModule::onDeinit()
 {
     invokeQueuedCalls();
+
+#ifdef Q_OS_WIN
+    if (m_endTimePeriod) {
+        timeEndPeriod(1);
+    }
+#endif
 }
 
 void GlobalModule::invokeQueuedCalls()

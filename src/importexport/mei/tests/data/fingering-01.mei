@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">Le Pianiste virtuose (excerpt)</title>
+            <respStmt>
+               <persName role="composer">Charles-Louis Hanon</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2024-11-27T16:14:07" />
+            <availability>Public Domain</availability>
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Le Pianiste virtuose (excerpt)</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Charles-Louis Hanon</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffGrp bar.thru="true" symbol="brace">
+                        <label>Piano</label>
+                        <labelAbbr>Pno.</labelAbbr>
+                        <staffDef n="1" lines="5" meter.sym="common">
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="2" lines="5" meter.sym="common">
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                     </staffGrp>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m1al1yat" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <beam>
+                              <note xml:id="n5lskos" dur="16" staff="2" pname="c" oct="3" />
+                              <note xml:id="nb8nxtf" dur="16" staff="2" pname="d" oct="3" />
+                              <note xml:id="n1va9l6g" dur="16" staff="2" pname="e" oct="3" />
+                              <note xml:id="ne8t7nl" type="mscore-beam-mid" dur="16" staff="2" pname="d" oct="3" breaksec="1" />
+                              <note xml:id="nknvqyo" dur="16" staff="2" pname="c" oct="3" />
+                              <note xml:id="n1qbriam" dur="16" staff="2" pname="e" oct="3" />
+                              <note xml:id="ng1xe16" dur="16" staff="2" pname="f" oct="3" />
+                              <note xml:id="n1donxvz" dur="16" staff="2" pname="g" oct="3" />
+                           </beam>
+                           <beam>
+                              <note xml:id="n3sfath" dur="16" staff="2" pname="a" oct="3" />
+                              <note xml:id="nlu3p47" dur="16" staff="2" pname="g" oct="3" />
+                              <note xml:id="n1gco6xo" dur="16" staff="2" pname="f" oct="3" />
+                              <note xml:id="n79sa4l" dur="16" staff="2" pname="g" oct="3" breaksec="1" />
+                              <note xml:id="n1gd1ndc" dur="16" staff="2" pname="a" oct="3" />
+                              <note xml:id="n11795yr" dur="16" staff="2" pname="g" oct="3" />
+                              <note xml:id="nru8mha" dur="16" staff="2" pname="f" oct="3" />
+                              <note xml:id="n1nzkdx8" dur="16" staff="2" pname="e" oct="3" />
+                           </beam>
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s2" n="2">
+                        <layer xml:id="m1s2l1" n="1">
+                           <beam>
+                              <note xml:id="n144bdf4" dur="16" pname="c" oct="2" />
+                              <note xml:id="n1gwy317" dur="16" pname="d" oct="2" />
+                              <note xml:id="n1hcxxq1" dur="16" pname="e" oct="2" />
+                              <note xml:id="n1v28s23" type="mscore-beam-mid" dur="16" pname="d" oct="2" breaksec="1" />
+                              <note xml:id="n169wzhz" dur="16" pname="c" oct="2" />
+                              <note xml:id="n1sghqxu" dur="16" pname="e" oct="2" />
+                              <note xml:id="nl28frr" dur="16" pname="f" oct="2" />
+                              <note xml:id="nk3age1" dur="16" pname="g" oct="2" />
+                           </beam>
+                           <beam>
+                              <note xml:id="nxrougr" dur="16" pname="a" oct="2" />
+                              <note xml:id="nblbzng" dur="16" pname="g" oct="2" />
+                              <note xml:id="noglxh8" dur="16" pname="f" oct="2" />
+                              <note xml:id="n6woqh3" dur="16" pname="g" oct="2" breaksec="1" />
+                              <note xml:id="n162isiu" dur="16" pname="a" oct="2" />
+                              <note xml:id="n1ybaoxg" dur="16" pname="g" oct="2" />
+                              <note xml:id="n1nag8ft" dur="16" pname="f" oct="2" />
+                              <note xml:id="nunw1ze" dur="16" pname="e" oct="2" />
+                           </beam>
+                        </layer>
+                     </staff>
+                     <fing xml:id="f1ibk4xg" startid="#n5lskos">1</fing>
+                     <fing xml:id="ffo5iha" startid="#nb8nxtf">2</fing>
+                     <fing xml:id="fu47mvr" startid="#n1va9l6g">3</fing>
+                     <fing xml:id="fno4mqs" startid="#ne8t7nl">2</fing>
+                     <fing xml:id="fiuo731" startid="#nknvqyo">1</fing>
+                     <fing xml:id="fs2wiun" startid="#n1qbriam">2</fing>
+                     <fing xml:id="f1q4ped" startid="#ng1xe16">3</fing>
+                     <fing xml:id="fj9luju" startid="#n1donxvz">4</fing>
+                     <fing xml:id="fqethmh" startid="#n3sfath">5</fing>
+                     <fing xml:id="forkepk" startid="#nlu3p47">4</fing>
+                     <fing xml:id="frycp38" startid="#n1gco6xo">3</fing>
+                     <fing xml:id="f1t3cpj1" startid="#n79sa4l">4</fing>
+                     <fing xml:id="f1tnnn62" startid="#n1gd1ndc">5</fing>
+                     <fing xml:id="f1cumicz" startid="#n144bdf4">5</fing>
+                     <fing xml:id="f1nxxeot" startid="#n1gwy317">4</fing>
+                     <fing xml:id="f115ehfz" startid="#n1hcxxq1">3</fing>
+                     <fing xml:id="f147kl1r" startid="#n1v28s23">4</fing>
+                     <fing xml:id="fud3k0c" startid="#n169wzhz">5</fing>
+                     <fing xml:id="f1fil9dt" startid="#n1sghqxu">4</fing>
+                     <fing xml:id="f1onefuz" startid="#nl28frr">3</fing>
+                     <fing xml:id="fizsx7f" startid="#nk3age1">2</fing>
+                     <fing xml:id="fz4jhxt" startid="#nxrougr">1</fing>
+                     <fing xml:id="fwbrq55" startid="#nblbzng">2</fing>
+                     <fing xml:id="fb1j940" startid="#noglxh8">3</fing>
+                     <fing xml:id="f59am1k" startid="#n6woqh3">2</fing>
+                     <fing xml:id="f1mqf0dt" startid="#n162isiu">1</fing>
+                  </measure>
+                  <measure xml:id="m1r45rpd" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <beam>
+                              <note xml:id="n19lcjbr" dur="16" staff="2" pname="d" oct="3" />
+                              <note xml:id="nz8phr2" dur="16" staff="2" pname="e" oct="3" />
+                              <note xml:id="n1a1pcz3" dur="16" staff="2" pname="f" oct="3" />
+                              <note xml:id="nr3zmdj" dur="16" staff="2" pname="e" oct="3" breaksec="1" />
+                              <note xml:id="n73k7h9" dur="16" staff="2" pname="d" oct="3" />
+                              <note xml:id="n12oau1p" dur="16" staff="2" pname="f" oct="3" />
+                              <note xml:id="n18sussv" dur="16" staff="2" pname="g" oct="3" />
+                              <note xml:id="nyxsqn" dur="16" staff="2" pname="a" oct="3" />
+                           </beam>
+                           <beam>
+                              <note xml:id="n1feww03" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="n1xh99ax" dur="16" staff="2" pname="a" oct="3" />
+                              <note xml:id="n14j8dq8" dur="16" staff="2" pname="g" oct="3" />
+                              <note xml:id="ndrx1x7" dur="16" staff="2" pname="a" oct="3" breaksec="1" />
+                              <note xml:id="nmvbcug" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="n1b0vz3d" dur="16" staff="2" pname="a" oct="3" />
+                              <note xml:id="n8ute0m" dur="16" staff="2" pname="g" oct="3" />
+                              <note xml:id="n4jf2so" dur="16" staff="2" pname="f" oct="3" />
+                           </beam>
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s2" n="2">
+                        <layer xml:id="m2s2l1" n="1">
+                           <beam>
+                              <note xml:id="nzrtrby" dur="16" pname="d" oct="2" />
+                              <note xml:id="n1jmhivx" dur="16" pname="e" oct="2" />
+                              <note xml:id="n121m7da" dur="16" pname="f" oct="2" />
+                              <note xml:id="nym436" dur="16" pname="e" oct="2" breaksec="1" />
+                              <note xml:id="np85fs7" dur="16" pname="d" oct="2" />
+                              <note xml:id="n1b2inxu" dur="16" pname="f" oct="2" />
+                              <note xml:id="n9yuu8s" dur="16" pname="g" oct="2" />
+                              <note xml:id="n1li1s8u" dur="16" pname="a" oct="2" />
+                           </beam>
+                           <beam>
+                              <note xml:id="n14owv2c" dur="16" pname="b" oct="2" />
+                              <note xml:id="n1l2xr4a" dur="16" pname="a" oct="2" />
+                              <note xml:id="n65g3lb" dur="16" pname="g" oct="2" />
+                              <note xml:id="n128vj8b" dur="16" pname="a" oct="2" breaksec="1" />
+                              <note xml:id="nld7qm4" dur="16" pname="b" oct="2" />
+                              <note xml:id="nbmdrvz" dur="16" pname="a" oct="2" />
+                              <note xml:id="nar7ct5" dur="16" pname="g" oct="2" />
+                              <note xml:id="n3br5yn" dur="16" pname="f" oct="2" />
+                           </beam>
+                        </layer>
+                     </staff>
+                     <fing xml:id="f1kbvnnl" startid="#n19lcjbr">1</fing>
+                     <fing xml:id="f1v8aa5" startid="#n73k7h9">1</fing>
+                     <fing xml:id="f11xwwda" startid="#n12oau1p">2</fing>
+                     <fing xml:id="fw4mno8" startid="#n18sussv">3</fing>
+                     <fing xml:id="fs2cj61" startid="#nyxsqn">4</fing>
+                     <fing xml:id="fzs8omo" startid="#n1feww03">5</fing>
+                     <fing xml:id="f18jn398" startid="#nzrtrby">5</fing>
+                     <fing xml:id="f1cr5rlz" startid="#np85fs7">5</fing>
+                     <fing xml:id="fa9n4pr" startid="#n1b2inxu">4</fing>
+                     <fing xml:id="fiq0csf" startid="#n9yuu8s">3</fing>
+                     <fing xml:id="f1hmludm" startid="#n1li1s8u">2</fing>
+                     <fing xml:id="f1jf69s4" startid="#n14owv2c">1</fing>
+                  </measure>
+                  <measure xml:id="musi4cp" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <beam>
+                              <note xml:id="nvhbs4a" dur="16" staff="2" pname="e" oct="3" />
+                              <note xml:id="n1s5xwap" dur="16" staff="2" pname="f" oct="3" />
+                              <note xml:id="n3nsy6h" dur="16" staff="2" pname="g" oct="3" />
+                              <note xml:id="n1cyqm8u" dur="16" staff="2" pname="f" oct="3" breaksec="1" />
+                              <note xml:id="n1r8h79r" dur="16" staff="2" pname="e" oct="3" />
+                              <note xml:id="n1ut56pj" dur="16" staff="2" pname="g" oct="3" />
+                              <note xml:id="n1yhkd0a" dur="16" staff="2" pname="a" oct="3" />
+                              <note xml:id="n9hnpbx" dur="16" staff="2" pname="b" oct="3" />
+                           </beam>
+                           <beam>
+                              <note xml:id="n1v21q2n" dur="16" staff="2" pname="c" oct="4" />
+                              <note xml:id="nwbjywp" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="nqhs1zf" dur="16" staff="2" pname="a" oct="3" />
+                              <note xml:id="n1sozks9" dur="16" staff="2" pname="b" oct="3" breaksec="1" />
+                              <note xml:id="nnz1001" dur="16" staff="2" pname="c" oct="4" />
+                              <note xml:id="n1h5zax2" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="n1aswv6u" dur="16" staff="2" pname="a" oct="3" />
+                              <note xml:id="n1xydih1" dur="16" staff="2" pname="g" oct="3" />
+                           </beam>
+                        </layer>
+                     </staff>
+                     <staff xml:id="m3s2" n="2">
+                        <layer xml:id="m3s2l1" n="1">
+                           <beam>
+                              <note xml:id="n1l63yte" dur="16" pname="e" oct="2" stem.dir="down" />
+                              <note xml:id="npnshnp" dur="16" pname="f" oct="2" stem.dir="down" />
+                              <note xml:id="n10r50e8" dur="16" pname="g" oct="2" stem.dir="down" />
+                              <note xml:id="n1muf3b1" dur="16" pname="f" oct="2" stem.dir="down" breaksec="1" />
+                              <note xml:id="n1u570u1" dur="16" pname="e" oct="2" stem.dir="down" />
+                              <note xml:id="n1j0q6c7" dur="16" pname="g" oct="2" stem.dir="down" />
+                              <note xml:id="n1pn2094" dur="16" pname="a" oct="2" stem.dir="down" />
+                              <note xml:id="n16wwqg1" dur="16" pname="b" oct="2" stem.dir="down" />
+                           </beam>
+                           <beam>
+                              <note xml:id="n1mcsgz8" dur="16" pname="c" oct="3" stem.dir="down" />
+                              <note xml:id="n1opvtbi" dur="16" pname="b" oct="2" stem.dir="down" />
+                              <note xml:id="n4waehv" dur="16" pname="a" oct="2" stem.dir="down" />
+                              <note xml:id="nl5uaw7" dur="16" pname="b" oct="2" stem.dir="down" breaksec="1" />
+                              <note xml:id="n1hpy32d" dur="16" pname="c" oct="3" stem.dir="down" />
+                              <note xml:id="nqt6s0u" dur="16" pname="b" oct="2" stem.dir="down" />
+                              <note xml:id="n1lvcqb8" dur="16" pname="a" oct="2" stem.dir="down" />
+                              <note xml:id="n1suk8ys" dur="16" pname="g" oct="2" stem.dir="down" />
+                           </beam>
+                        </layer>
+                     </staff>
+                     <fing xml:id="f1vjxlx1" startid="#nvhbs4a">1</fing>
+                     <fing xml:id="ffjdjdg" startid="#n1r8h79r">1</fing>
+                     <fing xml:id="f12lf3bp" startid="#n1ut56pj">2</fing>
+                     <fing xml:id="f1vb0x2g" startid="#n1yhkd0a">3</fing>
+                     <fing xml:id="f103ggbv" startid="#n9hnpbx">4</fing>
+                     <fing xml:id="f1bryaxn" startid="#n1v21q2n">5</fing>
+                     <fing xml:id="fgype8u" startid="#n1l63yte">5</fing>
+                     <fing xml:id="f12pell6" startid="#n1u570u1">5</fing>
+                     <fing xml:id="f5eq16f" startid="#n1j0q6c7">4</fing>
+                     <fing xml:id="f15bk439" startid="#n1pn2094">3</fing>
+                     <fing xml:id="fap7n4r" startid="#n16wwqg1">2</fing>
+                     <fing xml:id="fkyzigh" startid="#n1mcsgz8">1</fing>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

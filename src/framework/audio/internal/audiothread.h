@@ -28,6 +28,8 @@
 #include <atomic>
 #include <functional>
 
+#include "audiotypes.h"
+
 namespace muse::audio {
 class AudioThread
 {
@@ -39,7 +41,8 @@ public:
 
     using Runnable = std::function<void ()>;
 
-    void run(const Runnable& onStart, const Runnable& loopBody);
+    void run(const Runnable& onStart, const Runnable& loopBody, const msecs_t interval = 1);
+    void setInterval(const msecs_t interval);
     void stop(const Runnable& onFinished = nullptr);
     bool isRunning() const;
 
@@ -49,6 +52,8 @@ private:
     Runnable m_onStart = nullptr;
     Runnable m_mainLoopBody = nullptr;
     Runnable m_onFinished = nullptr;
+    msecs_t m_intervalMsecs = 0;
+    uint64_t m_intervalInWinTime = 0;
 
     std::unique_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;

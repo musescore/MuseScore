@@ -1,0 +1,179 @@
+name: "Build: All"
+run-name: "Build: All - ${{ inputs.build_mode }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'backend linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable'
+        required: true
+      build_mode:
+        description: 'Build mode: devel,nightly,testing,stable'
+        default: 'devel'
+        required: true
+      publish:
+        description: 'Publish to FTP: on - publish'
+        default: 'off'
+        required: false
+      deploy_backend:
+        description: 'Deploy backend: on - deploy'
+        default: 'off'
+        required: false
+      sentry_project:
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        default: ''
+        required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'on'
+        required: false   
+  workflow_call:
+    inputs:
+      platforms:
+        description: 'Platforms to build:'
+        default: 'backend linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable'
+        type: string
+        required: true
+      build_mode:
+        description: 'Build mode: devel,nightly,testing,stable'
+        default: 'devel'
+        type: string
+        required: true
+      publish:
+        description: 'Publish to FTP: on - publish'
+        default: 'off'
+        type: string
+        required: false
+      deploy_backend:
+        description: 'Deploy backend: on - deploy'
+        default: 'off'
+        type: string
+        required: false
+      sentry_project:
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        default: ''
+        type: string
+        required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'on'
+        type: string
+        required: false  
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  backend:
+    name: Backend
+    if: ${{ contains(inputs.platforms, 'backend') }}
+    uses: ./.github/workflows/build_backend.yml
+    secrets: inherit
+    with:
+      build_mode: ${{ inputs.build_mode }}
+      publish: ${{ inputs.publish }}
+      deploy: ${{ inputs.deploy_backend }}
+      use_qt69: ${{ inputs.use_qt69 }}
+
+  linux_arm32:
+    name: Linux ARM32
+    if: ${{ contains(inputs.platforms, 'linux_arm32') }}
+    uses: ./.github/workflows/build_linux_arm32.yml
+    secrets: inherit
+    with:
+      build_mode: ${{ inputs.build_mode }}
+      publish: ${{ inputs.publish }}
+      sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
+
+  linux:
+    name: Linux
+    uses: ./.github/workflows/build_linux.yml
+    secrets: inherit
+    with:
+      platforms: ${{ inputs.platforms }}
+      build_mode: ${{ inputs.build_mode }}
+      publish: ${{ inputs.publish }}
+      sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
+
+  macos:
+    name: macOS
+    if: ${{ contains(inputs.platforms, 'macos') }}
+    uses: ./.github/workflows/build_macos.yml
+    secrets: inherit
+    with:
+      build_mode: ${{ inputs.build_mode }}
+      publish: ${{ inputs.publish }}
+      sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
+
+  windows:
+    name: Windows
+    uses: ./.github/workflows/build_windows.yml
+    secrets: inherit
+    with:
+      platforms: ${{ inputs.platforms }}
+      build_mode: ${{ inputs.build_mode }}
+      publish: ${{ inputs.publish }}
+      sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
+
+  # Dummy build for testing purposes.
+  dummy:
+    if: ${{ contains(inputs.platforms, 'dummy') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Expose edge cases like different command versions, CRLF line endings, etc.
+        # Use same OS versions as used in real build workflows.
+        os:
+        - ubuntu-22.04 # linux_x64, backend, linux_arm32, linux_arm64
+        - macos-latest
+        - windows-2022 # windows_x64, windows_portable
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v4
+    - name: Prepare dummy artifact
+      run: |
+        ARTIFACTS_DIR="build.artifacts"
+        echo "ARTIFACTS_DIR=${ARTIFACTS_DIR}" | tee -a "${GITHUB_ENV}"
+
+        buildscripts/ci/tools/make_build_mode_env.sh -e "${{ github.event_name }}" -m "${{ inputs.build_mode }}"
+        BUILD_MODE="$(<"${ARTIFACTS_DIR}/env/build_mode.env")"
+
+        case "${BUILD_MODE}" in
+        testing)  MUSE_APP_BUILD_MODE=testing;;
+        stable)   MUSE_APP_BUILD_MODE=release;;
+        *)        MUSE_APP_BUILD_MODE=dev;;
+        esac
+
+        buildscripts/ci/tools/make_build_number.sh
+        BUILD_NUMBER="$(<"${ARTIFACTS_DIR}/env/build_number.env")"
+
+        buildscripts/ci/tools/make_version_env.sh "${BUILD_NUMBER}"
+        BUILD_VERSION="$(<"${ARTIFACTS_DIR}/env/build_version.env")"
+
+        buildscripts/ci/tools/make_branch_env.sh
+        BUILD_BRANCH="$(<"${ARTIFACTS_DIR}/env/build_branch.env")"
+
+        buildscripts/ci/tools/make_release_channel_env.sh -c "${MUSE_APP_BUILD_MODE}"
+        buildscripts/ci/tools/make_revision_env.sh "$(git rev-parse --short=7 HEAD)"
+
+        buildscripts/ci/tools/make_artifact_name_env.sh "MuseScore-Dummy-${BUILD_VERSION}-${{ matrix.os }}-${HOSTTYPE}.txt"
+        ARTIFACT_NAME="$(<"${ARTIFACTS_DIR}/env/artifact_name.env")"
+
+        echo "Hello, world!" >"${ARTIFACTS_DIR}/${ARTIFACT_NAME}"
+        buildscripts/ci/tools/checksum.sh
+
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Dummy-${{ matrix.os }}_${BUILD_BRANCH}")"
+        echo "UPLOAD_ARTIFACT_NAME=${UPLOAD_ARTIFACT_NAME}" | tee -a "${GITHUB_ENV}"
+    - name: Upload artifacts to GitHub
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
+        path: ${{ env.ARTIFACTS_DIR }}

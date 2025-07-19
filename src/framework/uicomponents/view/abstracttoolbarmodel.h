@@ -28,10 +28,12 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"
+#include "shortcuts/ishortcutsregister.h"
 #include "actions/iactionsdispatcher.h"
 
 namespace muse::uicomponents {
 class ToolBarItem;
+class MenuItem;
 using ToolBarItemList = QList<ToolBarItem*>;
 class ToolBarItemType
 {
@@ -56,6 +58,7 @@ class AbstractToolBarModel : public QAbstractListModel, public Injectable, publi
 public:
     Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
     Inject<actions::IActionsDispatcher> dispatcher = { this };
+    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit AbstractToolBarModel(QObject* parent = nullptr);
@@ -66,7 +69,7 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    virtual void load();
+    Q_INVOKABLE virtual void load();
 
     QVariantList itemsProperty() const;
     const ToolBarItemList& items() const;
@@ -96,10 +99,11 @@ protected:
     ToolBarItem& item(int index);
 
     ToolBarItem& findItem(const actions::ActionCode& actionCode);
+    ToolBarItem* findItemPtr(const actions::ActionCode& actionCode);
     ToolBarItem& findItem(const QString& itemId);
+    ToolBarItem* findItemPtr(const QString& itemId);
 
     ToolBarItem* makeItem(const actions::ActionCode& actionCode, const TranslatableString& title = {});
-    ToolBarItem* makeItem(const actions::ActionCode& actionCode, bool showTitle);
     ToolBarItem* makeMenuItem(const TranslatableString& title, const actions::ActionCodeList& subitemsActionCodesLists,
                               const QString& menuId = "", bool enabled = true);
     ToolBarItem* makeSeparator();
@@ -110,6 +114,9 @@ protected:
 private:
     ToolBarItem& item(const ToolBarItemList& items, const QString& itemId);
     ToolBarItem& item(const ToolBarItemList& items, const actions::ActionCode& actionCode);
+
+    void updateShortcutsAll();
+    void updateShortcuts(MenuItem* menuItem);
 
     ToolBarItemList m_items;
 };

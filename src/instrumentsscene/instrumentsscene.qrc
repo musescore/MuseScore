@@ -2,15 +2,17 @@
     <qresource prefix="/">
         <file>qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml</file>
         <file>qml/MuseScore/InstrumentsScene/qmldir</file>
-        <file>qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml</file>
+        <file>qml/MuseScore/InstrumentsScene/LayoutPanel.qml</file>
         <file>qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml</file>
-        <file>qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml</file>
-        <file>qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml</file>
-        <file>qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemControl.qml</file>
+        <file>qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml</file>
+        <file>qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml</file>
+        <file>qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml</file>
+        <file>qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemControl.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/FamilyView.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml</file>
+        <file>qml/MuseScore/InstrumentsScene/internal/SystemObjectsLayerSettingsPopup.qml</file>
     </qresource>
 </RCC>

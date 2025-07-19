@@ -52,6 +52,8 @@ StyledPopupView {
     property size cellSize
     property bool drawGrid
 
+    readonly property bool isDragInProgress: masterPalette.state == "drag" || customPalette.state == "drag"
+
     property int maxHeight: 400
     contentHeight: column.implicitHeight
     contentWidth: 300
@@ -84,7 +86,7 @@ StyledPopupView {
             id: addToPaletteButton
             width: parent.width
 
-            text: qsTrc("palette", "Add to %1").arg(paletteName)
+            text: qsTrc("palette", "Add to %1").arg(root.paletteName)
             enabled: root.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
 
             navigation.panel: root.navigationPanel
@@ -109,10 +111,13 @@ StyledPopupView {
                 masterPaletteSelectionModel.clear();
                 customPaletteSelectionModel.clear();
 
-                if (mimeMasterPalette.length)
-                    addElementsRequested(mimeMasterPalette);
-                if (mimeCustomPalette.length)
-                    addElementsRequested(mimeCustomPalette);
+                if (mimeMasterPalette.length) {
+                    root.addElementsRequested(mimeMasterPalette)
+                }
+
+                if (mimeCustomPalette.length) {
+                    root.addElementsRequested(mimeCustomPalette)
+                }
             }
         }
 
@@ -120,7 +125,8 @@ StyledPopupView {
             id: masterIndexControls
             enabled: root.paletteIsCustom && poolPalette && poolPaletteRootIndex
             visible: enabled
-            anchors { left: parent.left; right: parent.right }
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             FlatButton {
                 id: prevButton
@@ -149,7 +155,7 @@ StyledPopupView {
                 }
 
                 onClicked: {
-                    poolPaletteRootIndex = prevIndex
+                    root.poolPaletteRootIndex = prevIndex
                 }
             }
 
@@ -182,7 +188,9 @@ StyledPopupView {
                 navigation.column: 1
                 navigation.row: 3
 
-                onClicked: poolPaletteRootIndex = nextIndex
+                onClicked: {
+                    root.poolPaletteRootIndex = nextIndex
+                }
             }
         }
 
@@ -190,10 +198,17 @@ StyledPopupView {
             id: paletteContainer
             width: parent.width
             height: childrenRect.height
-            border { width: 1; color: ui.theme.strokeColor }
-            color: ui.theme.backgroundPrimaryColor
 
-            readonly property int availableHeight: root.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - (elementEditorButton.visible ? elementEditorButton.height : 0) - 40
+            color: ui.theme.backgroundPrimaryColor
+            border.color: ui.theme.strokeColor
+            border.width: 1
+
+            readonly property int availableHeight: root.maxHeight
+                                                   - addToPaletteButton.height
+                                                   - (masterIndexControls ? masterIndexControls.height : 0)
+                                                   - bottomText.height
+                                                   - (elementEditorButton.visible ? elementEditorButton.height : 0)
+                                                   - 40
 
             Column {
                 padding: 1
@@ -308,7 +323,7 @@ StyledPopupView {
             visible: root.elementEditor && root.elementEditor.valid
             enabled: root.paletteEditingEnabled
             width: parent.width
-            text: root.elementEditor ? root.elementEditor.actionName : ""
+            text: root.elementEditor?.actionName ?? ""
             navigation.panel: root.navigationPanel
             navigation.name: "elementEditorButton"
             navigation.column: 1

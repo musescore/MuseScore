@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -21,7 +22,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -39,66 +41,85 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Untitled score</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>I_I</eid>
             </Clef>
           <TimeSig>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentTurnInverted</subtype>
+              <eid>L_L</eid>
               </Ornament>
             <Note>
+              <eid>M_M</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentTurn</subtype>
+              <eid>O_O</eid>
               </Ornament>
             <Note>
+              <eid>P_P</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentTrill</subtype>
+              <eid>R_R</eid>
               </Ornament>
             <Note>
+              <eid>S_S</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentShortTrill</subtype>
+              <eid>U_U</eid>
               </Ornament>
             <Note>
+              <eid>V_V</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -106,43 +127,56 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>W_W</eid>
         <voice>
           <Chord>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentMordent</subtype>
+              <eid>Y_Y</eid>
               </Ornament>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentTurnSlash</subtype>
+              <eid>b_b</eid>
               </Ornament>
             <Note>
+              <eid>c_c</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>d_d</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentTremblement</subtype>
+              <eid>e_e</eid>
               </Ornament>
             <Note>
+              <eid>f_f</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>g_g</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentPrallMordent</subtype>
+              <eid>h_h</eid>
               </Ornament>
             <Note>
+              <eid>i_i</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -150,67 +184,85 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>j_j</eid>
         <voice>
           <Chord>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>l_l</eid>
                 </Accidental>
               <intervalAbove>second,minor</intervalAbove>
               <subtype>ornamentTurnInverted</subtype>
               <anchor>1</anchor>
+              <eid>m_m</eid>
               </Ornament>
             <Note>
+              <eid>n_n</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>o_o</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>p_p</eid>
                 </Accidental>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
+                <eid>q_q</eid>
                 </Accidental>
               <intervalAbove>second,major</intervalAbove>
               <intervalBelow>second,major</intervalBelow>
               <subtype>ornamentTurn</subtype>
               <anchor>1</anchor>
+              <eid>r_r</eid>
               </Ornament>
             <Note>
+              <eid>s_s</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>t_t</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>u_u</eid>
                 </Accidental>
               <intervalAbove>second,major</intervalAbove>
               <subtype>ornamentTrill</subtype>
               <anchor>0</anchor>
+              <eid>v_v</eid>
               </Ornament>
             <Note>
+              <eid>w_w</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>x_x</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>y_y</eid>
                 </Accidental>
               <intervalAbove>second,minor</intervalAbove>
               <subtype>ornamentShortTrill</subtype>
               <anchor>0</anchor>
+              <eid>z_z</eid>
               </Ornament>
             <Note>
+              <eid>0_0</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -218,57 +270,73 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>1_1</eid>
         <voice>
           <Chord>
+            <eid>2_2</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentShake3</subtype>
+              <eid>3_3</eid>
               </Ornament>
             <Note>
+              <eid>4_4</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>5_5</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentShakeMuffat1</subtype>
+              <eid>6_6</eid>
               </Ornament>
             <Note>
+              <eid>7_7</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>8_8</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>9_9</eid>
                 </Accidental>
               <intervalAbove>second,major</intervalAbove>
               <subtype>ornamentShortTrill</subtype>
+              <eid>+_+</eid>
               </Ornament>
             <Note>
+              <eid>/_/</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>AB_AB</eid>
             <durationType>quarter</durationType>
             <Ornament>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>BB_BB</eid>
                 </Accidental>
               <intervalBelow>second,minor</intervalBelow>
               <subtype>ornamentMordent</subtype>
+              <eid>CB_CB</eid>
               </Ornament>
             <Note>
+              <eid>DB_DB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>EB_EB</eid>
             </BarLine>
           </voice>
         </Measure>

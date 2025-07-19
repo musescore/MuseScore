@@ -33,20 +33,24 @@
 
 namespace muse::extensions {
 class ExtensionsUiActions;
-class ExtensionsActionController : public muse::actions::Actionable, public async::Asyncable
+class ExtensionsActionController : public Injectable, public actions::Actionable, public async::Asyncable
 {
-    Inject<IInteractive> interactive;
-    Inject<muse::actions::IActionsDispatcher> dispatcher;
-    Inject<extensions::IExtensionsProvider> provider;
-    Inject<ui::IUiActionsRegister> uiActionsRegister;
+    Inject<IInteractive> interactive = { this };
+    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    Inject<extensions::IExtensionsProvider> provider = { this };
+    Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
 
 public:
+    ExtensionsActionController(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
 private:
-    void registerPlugins();
+    void registerExtensions();
 
-    void onPluginTriggered(const UriQuery& uri);
+    void onExtensionTriggered(const actions::ActionQuery& actionQuery);
+    void openUri(const UriQuery& uri, bool isSingle = true);
 
     std::shared_ptr<ExtensionsUiActions> m_uiActions;
 };

@@ -89,13 +89,17 @@ public:
     void remove(EngravingItem*) override;
 
     void setTrack(track_idx_t n) override;
+    void setScore(Score* s) override;
+    void computeStartElement() override;
+    static PointF trillLinePos(const SLine* line, Grip grip, System** system);
+    PointF linePos(Grip grip, System** system) const override;
 
     void setTrillType(TrillType tt);
     TrillType trillType() const { return m_trillType; }
+    int subtype() const override { return int(m_trillType); }
+    TranslatableString subtypeUserName() const override;
     void setOrnamentStyle(OrnamentStyle val) { m_ornamentStyle = val; }
     OrnamentStyle ornamentStyle() const { return m_ornamentStyle; }
-    void setPlayArticulation(bool val) { m_playArticulation = val; }
-    bool playArticulation() const { return m_playArticulation; }
     String trillTypeUserName() const;
     Accidental* accidental() const { return m_accidental; }
     void setAccidental(Accidental* a) { m_accidental = a; }
@@ -124,7 +128,6 @@ private:
     Accidental* m_accidental = nullptr;
     Chord* m_cueNoteChord = nullptr;
     OrnamentStyle m_ornamentStyle = OrnamentStyle::DEFAULT;   // for use in ornaments such as trill
-    bool m_playArticulation = true;
     Ornament* m_ornament = nullptr;
 };
 } // namespace mu::engraving

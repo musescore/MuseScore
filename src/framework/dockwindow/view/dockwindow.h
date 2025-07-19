@@ -28,11 +28,11 @@
 #include "framework/uicomponents/view/qmllistproperty.h"
 
 #include "async/asyncable.h"
-#include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "workspace/iworkspacemanager.h"
 #include "ui/iuiconfiguration.h"
+#include "ui/iinteractiveprovider.h"
 #include "idockwindowprovider.h"
 
 #include "idockwindow.h"
@@ -49,20 +49,22 @@ namespace muse::dock {
 class DockToolBarView;
 class DockingHolderView;
 class DockPageView;
+class DockPanelView;
 class DockWindow : public QQuickItem, public IDockWindow, public muse::Injectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString currentPageUri READ currentPageUri NOTIFY currentPageUriChanged)
 
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockPageView> pages READ pagesProperty)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockPageView> pages READ pagesProperty CONSTANT)
 
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
 
-    muse::Inject<ui::IUiConfiguration> uiConfiguration = { this };
-    muse::Inject<muse::workspace::IWorkspaceManager> workspaceManager = { this };
-    muse::Inject<IDockWindowProvider> dockWindowProvider = { this };
+    Inject<ui::IUiConfiguration> uiConfiguration = { this };
+    Inject<ui::IInteractiveProvider> interactiveProvider = { this };
+    Inject<workspace::IWorkspaceManager> workspaceManager = { this };
+    Inject<IDockWindowProvider> dockWindowProvider = { this };
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);
@@ -79,7 +81,7 @@ public:
     Q_INVOKABLE void loadPage(const QString& uri, const QVariantMap& params);
 
     //! IDockWindow
-    bool isDockOpen(const QString& dockName) const override;
+    bool isDockOpenAndCurrentInFrame(const QString& dockName) const override;
     void toggleDock(const QString& dockName) override;
     void setDockOpen(const QString& dockName, bool open) override;
 
@@ -116,7 +118,10 @@ private:
     void alignTopLevelToolBars(const DockPageView* page);
 
     void addDock(DockBase* dock, Location location = Location::Left, const DockBase* relativeTo = nullptr);
+    void addPanelAsTab(DockPanelView* panel, DockPanelView* destinationPanel);
     void registerDock(DockBase* dock);
+
+    void handleUnknownDock(const DockPageView* page, DockBase* unknownDock);
 
     void saveGeometry();
     void restoreGeometry();
@@ -124,12 +129,16 @@ private:
     QByteArray windowState() const;
 
     void savePageState(const QString& pageName);
-    void restorePageState(const QString& pageName);
+    void restorePageState(const DockPageView* page);
 
     void reloadCurrentPage();
     bool restoreLayout(const QByteArray& layout, bool restoreRelativeToMainWindow = false);
+    bool checkLayoutIsCorrupted() const;
+    void forceLayout();
 
     void initDocks(DockPageView* page);
+
+    void adjustContentForAvailableSpace(DockPageView* page);
 
     void notifyAboutDocksOpenStatus();
 
@@ -140,6 +149,9 @@ private:
     uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
     uicomponents::QmlListProperty<DockPageView> m_pages;
     async::Channel<QStringList> m_docksOpenStatusChanged;
+
+    class UniqueConnectionHolder;
+    QHash<DockPageView*, UniqueConnectionHolder*> m_pageConnections;
 
     bool m_hasGeometryBeenRestored = false;
     bool m_reloadCurrentPageAllowed = false;

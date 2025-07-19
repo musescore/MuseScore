@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PALETTE_TIMESIGNATUREPROPERTIESDIALOG_H
-#define MU_PALETTE_TIMESIGNATUREPROPERTIESDIALOG_H
+#pragma once
 
 #include "ui_timesignaturepropertiesdialog.h"
 
@@ -49,6 +48,7 @@ private slots:
     void accept() override;
 
 private:
+    void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
 
     mu::notation::INotationPtr notation() const;
@@ -57,5 +57,3 @@ private:
     engraving::TimeSig* m_editedTimeSig = nullptr;
 };
 }
-
-#endif // MU_PALETTE_TIMESIGNATUREPROPERTIESDIALOG_H

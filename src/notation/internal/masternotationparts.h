@@ -42,11 +42,16 @@ public:
     bool appendStaff(Staff* staff, const muse::ID& destinationPartId) override;
     bool appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId) override;
 
-    void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
+    void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,
+                           const StaffType* newStaffType = nullptr) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) override;
 
+    void addSystemObjects(const muse::IDList& stavesIds) override;
+    void removeSystemObjects(const muse::IDList& stavesIds) override;
+    void moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId) override;
+
 private:
-    void startGlobalEdit();
+    void startGlobalEdit(const muse::TranslatableString& actionName);
     void endGlobalEdit();
 
     void onPartsRemoved(const std::vector<Part*>& parts) override;

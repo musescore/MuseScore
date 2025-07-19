@@ -30,6 +30,10 @@ if (NOT MUSE_MODULE_CLOUD)
     add_subdirectory(cloud)
 endif()
 
+if (NOT MUSE_MODULE_EXTENSIONS)
+    add_subdirectory(extensions)
+endif()
+
 if (NOT MUSE_MODULE_LANGUAGES)
     add_subdirectory(languages)
 endif()
@@ -56,6 +60,10 @@ endif()
 
 if (NOT MUSE_MODULE_SHORTCUTS)
     add_subdirectory(shortcuts)
+endif()
+
+if (NOT MUSE_MODULE_TOURS)
+    add_subdirectory(tours)
 endif()
 
 if (NOT MUSE_MODULE_UPDATE)

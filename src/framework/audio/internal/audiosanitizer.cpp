@@ -23,12 +23,13 @@
 
 #include <thread>
 
-#include "global/concurrency/taskscheduler.h"
+#include "containers.h"
 
 using namespace muse::audio;
 
 static std::thread::id s_as_mainThreadID;
 static std::thread::id s_as_workerThreadID;
+static std::set<std::thread::id> s_mixerThreadIdSet;
 
 void AudioSanitizer::setupMainThread()
 {
@@ -50,6 +51,11 @@ void AudioSanitizer::setupWorkerThread()
     s_as_workerThreadID = std::this_thread::get_id();
 }
 
+void AudioSanitizer::setMixerThreads(const std::set<std::thread::id>& threadIdSet)
+{
+    s_mixerThreadIdSet = threadIdSet;
+}
+
 std::thread::id AudioSanitizer::workerThread()
 {
     return s_as_workerThreadID;
@@ -59,5 +65,5 @@ bool AudioSanitizer::isWorkerThread()
 {
     std::thread::id id = std::this_thread::get_id();
 
-    return TaskScheduler::instance()->containsThread(id) || id == s_as_workerThreadID;
+    return id == s_as_workerThreadID || muse::contains(s_mixerThreadIdSet, id);
 }

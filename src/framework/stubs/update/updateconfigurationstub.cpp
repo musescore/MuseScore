@@ -46,21 +46,18 @@ void UpdateConfigurationStub::setNeedCheckForUpdate(bool)
 {
 }
 
+muse::async::Notification UpdateConfigurationStub::needCheckForUpdateChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 std::string UpdateConfigurationStub::skippedReleaseVersion() const
 {
     return "";
 }
 
 void UpdateConfigurationStub::setSkippedReleaseVersion(const std::string&)
-{
-}
-
-std::string UpdateConfigurationStub::lastShownMuseSoundsReleaseVersion() const
-{
-    return "";
-}
-
-void UpdateConfigurationStub::setLastShownMuseSoundsReleaseVersion(const std::string&)
 {
 }
 
@@ -74,14 +71,9 @@ std::string UpdateConfigurationStub::previousAppReleasesNotesUrl() const
     return "";
 }
 
-std::string UpdateConfigurationStub::checkForMuseSamplerUpdateUrl() const
-{
-    return "";
-}
-
 muse::network::RequestHeaders UpdateConfigurationStub::updateHeaders() const
 {
-    return muse::network::RequestHeaders();
+    return {};
 }
 
 std::string UpdateConfigurationStub::museScoreUrl() const
@@ -95,6 +87,11 @@ std::string UpdateConfigurationStub::museScorePrivacyPolicyUrl() const
 }
 
 muse::io::path_t UpdateConfigurationStub::updateDataPath() const
+{
+    return "";
+}
+
+muse::io::path_t UpdateConfigurationStub::updateRequestHistoryJsonPath() const
 {
     return "";
 }

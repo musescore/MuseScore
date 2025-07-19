@@ -116,7 +116,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -151,7 +151,7 @@ TEST_F(Engraving_PlaybackModelTests, Two_Ending_Repeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -210,7 +210,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -272,7 +272,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_Tempo_Changes_And_Tie)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -320,7 +320,7 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Fine)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -356,7 +356,7 @@ TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Coda)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -391,7 +391,7 @@ TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Fine)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -426,7 +426,7 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Coda)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -465,7 +465,7 @@ TEST_F(Engraving_PlaybackModelTests, Spanners)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -540,14 +540,16 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
-    const DynamicLevelMap& dynamicLevelMap = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).dynamicLevelMap;
+    const DynamicLevelLayers& dynamics = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).dynamics;
+    ASSERT_FALSE(dynamics.empty());
+    const DynamicLevelMap& dynamicLevelMap = dynamics.begin()->second;
 
     // [THEN] Dynamic level map matches expectations
-    EXPECT_EQ(dynamicLevelMap.size(), 51);
+    EXPECT_EQ(dynamicLevelMap.size(), 52);
 
     static constexpr dynamic_level_t piano = dynamicLevelFromType(mpe::DynamicType::p);
     static constexpr dynamic_level_t forte = dynamicLevelFromType(mpe::DynamicType::f);
@@ -577,18 +579,21 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     // Still forte at the start of next crescendo
     EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION), forte);
 
-    // Gradually grow loader than forte after that
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 1 / 24), 5770);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 2 / 24),
+    // Gradually grow louder than forte after that
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 1) / 480.0 * QUARTER_NOTE_DURATION), 5770);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 2) / 480.0 * QUARTER_NOTE_DURATION),
               forte + (fortePlusSomething - forte) * 2 / 24);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 3 / 24), 5812);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 7 / 24), 5895);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 15 / 24),
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 3) / 480.0 * QUARTER_NOTE_DURATION), 5812);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 7) / 480.0 * QUARTER_NOTE_DURATION), 5895);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 15) / 480.0 * QUARTER_NOTE_DURATION),
               forte + (fortePlusSomething - forte) * 15 / 24);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 21 / 24),
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 21) / 480.0 * QUARTER_NOTE_DURATION),
               forte + (fortePlusSomething - forte) * 21 / 24);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 22 / 24), 6208);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 23 / 24), 6229);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 22) / 480.0 * QUARTER_NOTE_DURATION), 6208);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 23) / 480.0 * QUARTER_NOTE_DURATION), 6229);
+
+    // Reach forte plus something, just before the start of the next measure
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + 1919 / 480.0 * QUARTER_NOTE_DURATION), fortePlusSomething);
 
     // Finally, jump to pianissimo
     EXPECT_EQ(dynamicLevelMap.at(16 * QUARTER_NOTE_DURATION), pianissimo);
@@ -626,7 +631,7 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -687,7 +692,7 @@ TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -761,7 +766,7 @@ TEST_F(Engraving_PlaybackModelTests, Single_Measure_Repeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -798,7 +803,7 @@ TEST_F(Engraving_PlaybackModelTests, Multi_Measure_Repeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -829,31 +834,42 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] The articulation profiles repository will be returning profiles for StringsArticulation family
-    ON_CALL(*m_repositoryMock, defaultProfile(ArticulationFamily::Strings)).WillByDefault(Return(m_defaultProfile));
+    ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
 
     // [GIVEN] Expected amount of changed events
     int expectedChangedEventsCount = 24;
 
     // [GIVEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
+    EXPECT_EQ(result.originEvents.size(), expectedChangedEventsCount);
 
     // [THEN] Updated events map will match our expectations
-    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelMap&,
-                                                                   const PlaybackParamMap&) {
+    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&,
+                                                                   const PlaybackParamLayers&) {
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 
-    // [WHEN] Notation has been changed
+    // [WHEN] Score has been changed: the range starts ouside the repeat and ends inside it
     ScoreChangesRange range;
-    range.tickFrom = 480; // 2nd note of the 1st measure
+    range.tickFrom = 480; // 2nd note of the 1st measure (outside the repeat)
     range.tickTo = 3840; // 1st note of the 3rd measure (inside the repeat)
     range.staffIdxFrom = 0;
     range.staffIdxTo = 0;
     range.changedTypes = { ElementType::NOTE };
+
+    score->changesChannel().send(range);
+
+    // [WHEN] Score has been changed: the range is inside the repeat and tickTo == the end tick of the repeat
+    // See: https://github.com/musescore/MuseScore/issues/25899
+    range.tickFrom = 4800; // 3rd note of the 3rd measure (inside the repeat)
+    range.tickTo = 5760; // end tick of the repeat
+    range.staffIdxFrom = 0;
+    range.staffIdxTo = 0;
+    range.changedTypes = { ElementType::PEDAL };
 
     score->changesChannel().send(range);
 }
@@ -880,7 +896,7 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes) {
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -894,7 +910,8 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes) {
         2 * quarterAtTempo(100) + 4 * quarterAtTempo(10) + 2 * quarterAtTempo(100),
 
         // Tied note of two measures long, with ritenuto over it
-        2 * quarterAtTempo(100) + 2 * quarterAtTempo(90) + 2 * quarterAtTempo(80) + 2 * quarterAtTempo(70),
+        quarterAtTempo(100) + quarterAtTempo(95) + quarterAtTempo(90) + quarterAtTempo(85) + quarterAtTempo(80) + quarterAtTempo(75)
+        + quarterAtTempo(70) + quarterAtTempo(65),
 
         // Tied note of two measures long, with tempo changes in the middle of it, with eighth notes tremolo
         static_cast<duration_t>(quarterAtTempo(100) * 0.5),
@@ -917,24 +934,25 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes) {
         // Tied note of two measures long, with ritenuto over it, with eighth notes tremolo
         static_cast<duration_t>(quarterAtTempo(100) * 0.5),
         static_cast<duration_t>(quarterAtTempo(100) * 0.5),
-        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
-        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(95) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(95) * 0.5),
         static_cast<duration_t>(quarterAtTempo(90) * 0.5),
         static_cast<duration_t>(quarterAtTempo(90) * 0.5),
-        static_cast<duration_t>(quarterAtTempo(90) * 0.5),
-        static_cast<duration_t>(quarterAtTempo(90) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(85) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(85) * 0.5),
         static_cast<duration_t>(quarterAtTempo(80) * 0.5),
         static_cast<duration_t>(quarterAtTempo(80) * 0.5),
-        static_cast<duration_t>(quarterAtTempo(80) * 0.5),
-        static_cast<duration_t>(quarterAtTempo(80) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(75) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(75) * 0.5),
         static_cast<duration_t>(quarterAtTempo(70) * 0.5),
         static_cast<duration_t>(quarterAtTempo(70) * 0.5),
-        static_cast<duration_t>(quarterAtTempo(70) * 0.5),
-        static_cast<duration_t>(quarterAtTempo(70) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(65) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(65) * 0.5),
 
         // Same as beginning, but now with pedal
         2 * quarterAtTempo(100) + 4 * quarterAtTempo(10) + 2 * quarterAtTempo(100),
-        2 * quarterAtTempo(100) + 2 * quarterAtTempo(90) + 2 * quarterAtTempo(80) + 2 * quarterAtTempo(70),
+        quarterAtTempo(100) + quarterAtTempo(95) + quarterAtTempo(90) + quarterAtTempo(85) + quarterAtTempo(80) + quarterAtTempo(75)
+        + quarterAtTempo(70) + quarterAtTempo(65),
     };
 
     // Allow slight deviations because of rounding errors
@@ -1003,15 +1021,27 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_4_4)
     // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
-    // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    // [WHEN] The playback model requested to be loaded with Metronome enabled
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
+    model.setIsMetronomeEnabled(true);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
+    const PlaybackEventsMap& eventsWhenMetronomeEnabled = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
-    EXPECT_EQ(result.size(), expectedSize);
+    EXPECT_EQ(eventsWhenMetronomeEnabled.size(), expectedSize);
+
+    // [WHEN] The playback model requested to be loaded with Metronome disabled
+    model.setIsMetronomeEnabled(false);
+    model.reload();
+
+    const PlaybackEventsMap& eventsWhenMetronomeDisabled = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
+
+    // [THEN] No Metronome events
+    EXPECT_TRUE(eventsWhenMetronomeDisabled.empty());
+
+    delete score;
 }
 
 /**
@@ -1039,14 +1069,17 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_6_4_Repeat)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
+    model.setIsMetronomeEnabled(true);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
+
+    delete score;
 }
 
 /**
@@ -1059,7 +1092,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
-        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_note/note_entry_playback_note.mscx");
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback/note_entry_playback_note.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
@@ -1086,7 +1119,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     mpe::timestamp_t firstNoteTimestamp = 0;
 
     // [GIVEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -1097,18 +1130,23 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
-                                                                         const PlaybackParamMap&) {
-        EXPECT_EQ(triggeredEvents.size(), 1);
-
+                                                                         const DynamicLevelLayers& triggeredDynamics,
+                                                                         const PlaybackParamList&) {
+        ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
 
-        EXPECT_EQ(eventList.size(), 1);
-
+        ASSERT_EQ(eventList.size(), 1);
         const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(eventList.front());
 
         EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
         EXPECT_FALSE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
         EXPECT_TRUE(noteEvent.pitchCtx() == expectedEvent.pitchCtx());
+
+        // Use the score dynamics for offstream playback by default
+        ASSERT_EQ(triggeredDynamics.size(), 1);
+        const mpe::DynamicLevelMap& dynamicsMap = triggeredDynamics.at(0);
+        ASSERT_EQ(dynamicsMap.size(), 1);
+        EXPECT_EQ(dynamicsMap.begin()->second, dynamicLevelFromType(mpe::DynamicType::ppp));
     });
 
     // [WHEN] User has clicked on the first note
@@ -1126,7 +1164,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
-        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_chord/note_entry_playback_chord.mscx");
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback/note_entry_playback_chord.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
@@ -1151,7 +1189,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     ASSERT_TRUE(thirdChord->notes().size() == expectedNoteCount);
 
     // [GIVEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 
@@ -1161,11 +1199,12 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
 
     // [THEN] Triggered events map will match our expectations
-    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents, const PlaybackParamMap&) {
-        EXPECT_EQ(triggeredEvents.size(), 1);
-
+    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents,
+                                                      const DynamicLevelLayers& triggeredDynamics,
+                                                      const PlaybackParamList&) {
+        ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& actualEvents = triggeredEvents.at(0);
-        EXPECT_EQ(actualEvents.size(), expectedEvents.size());
+        ASSERT_EQ(actualEvents.size(), expectedEvents.size());
 
         for (size_t i = 0; i < expectedEvents.size(); ++i) {
             const mpe::NoteEvent expectedNoteEvent = std::get<mpe::NoteEvent>(expectedEvents.at(i));
@@ -1174,8 +1213,12 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
             EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == 0);
             EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
             EXPECT_TRUE(actualNoteEvent.pitchCtx() == expectedNoteEvent.pitchCtx());
+            EXPECT_TRUE(triggeredDynamics.empty());
         }
     });
+
+    // [WHEN] Don't use the score dynamics
+    model.setUseScoreDynamicsForOffstreamPlayback(false);
 
     // [WHEN] User has clicked on the first note
     model.triggerEventsForItems({ thirdChord });
@@ -1207,9 +1250,11 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 12);
 
+    constexpr bool supportsSND = true; // supports single note dynamics
+
     // [GIVEN] Expected setup data for each instrument
     std::unordered_map<String, mpe::PlaybackSetupData> expectedSetupData = {
-        { u"sopranissimo-saxophone", { SoundId::Saxophone, SoundCategory::Winds, { SoundSubCategory::Sopranissimo } } },
+        { u"sopranissimo-saxophone", { SoundId::Saxophone, SoundCategory::Winds, { SoundSubCategory::Sopranissimo }, supportsSND } },
         { u"marching-tenor-drums", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Marching,
                                                                                   SoundSubCategory::Snare,
                                                                                   SoundSubCategory::Tenor } } },
@@ -1220,23 +1265,23 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
         { u"bass-steel-drums", { SoundId::SteelDrums, SoundCategory::Percussions, { SoundSubCategory::Metal,
                                                                                     SoundSubCategory::Steel,
                                                                                     SoundSubCategory::Bass } } },
-        { u"alto-viol", { SoundId::Viol, SoundCategory::Strings, { SoundSubCategory::Alto } } },
-        { u"f-wagner-tuba", { SoundId::Tuba, SoundCategory::Winds, { SoundSubCategory::Wagner } } },
+        { u"alto-viol", { SoundId::Viol, SoundCategory::Strings, { SoundSubCategory::Alto }, supportsSND } },
+        { u"f-wagner-tuba", { SoundId::Tuba, SoundCategory::Winds, { SoundSubCategory::Wagner }, supportsSND } },
         { u"bass-harmonica-hohner", { SoundId::Harmonica, SoundCategory::Winds, { SoundSubCategory::Bass,
-                                                                                  SoundSubCategory::Hohner } } },
+                                                                                  SoundSubCategory::Hohner }, supportsSND } },
         { u"chinese-tom-toms", { SoundId::TomToms, SoundCategory::Percussions, { SoundSubCategory::Chinese } } },
         { u"electric-piano", { SoundId::Piano, SoundCategory::Keyboards, { SoundSubCategory::Electric } } },
         { u"crystal-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
-                                                                                SoundSubCategory::FX_Crystal } } },
+                                                                                SoundSubCategory::FX_Crystal }, supportsSND } },
         { u"boy-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano,
-                                                                     SoundSubCategory::Boy } } },
+                                                                     SoundSubCategory::Boy }, supportsSND } },
     };
 
     // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
-    PlaybackModel model;
+    PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
     model.load(score);
 

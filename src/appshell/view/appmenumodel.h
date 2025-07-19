@@ -19,26 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_APPMENUMODEL_H
-#define MU_APPSHELL_APPMENUMODEL_H
-
-Q_MOC_INCLUDE(< QWindow >)
+#pragma once
 
 #include "uicomponents/view/abstractmenumodel.h"
 
+#include "muse_framework_config.h"
+
 #include "modularity/ioc.h"
-#include "ui/imainwindow.h"
-#include "ui/iuiactionsregister.h"
-#include "ui/inavigationcontroller.h"
-#include "ui/iuiconfiguration.h"
 #include "actions/iactionsdispatcher.h"
-#include "workspace/iworkspacemanager.h"
-#include "iappshellconfiguration.h"
-#include "project/irecentfilescontroller.h"
-#include "internal/iappmenumodelhook.h"
+#include "context/iglobalcontext.h"
 #include "extensions/iextensionsprovider.h"
-#include "update/iupdateconfiguration.h"
 #include "global/iglobalconfiguration.h"
+#ifdef MUSE_MODULE_MUSESAMPLER
+#include "musesampler/imusesamplerinfo.h"
+#endif
+#include "project/iprojectconfiguration.h"
+#include "project/irecentfilescontroller.h"
+#include "ui/imainwindow.h"
+#include "ui/inavigationcontroller.h"
+#include "ui/iuiactionsregister.h"
+#include "ui/iuiconfiguration.h"
+#include "update/iupdateconfiguration.h"
+#include "workspace/iworkspacemanager.h"
+
+#include "iappshellconfiguration.h"
+#include "internal/iappmenumodelhook.h"
 
 namespace mu::appshell {
 class AppMenuModel : public muse::uicomponents::AbstractMenuModel
@@ -46,18 +51,23 @@ class AppMenuModel : public muse::uicomponents::AbstractMenuModel
     Q_OBJECT
 
 public:
-    INJECT(muse::ui::IMainWindow, mainWindow)
-    INJECT(muse::ui::IUiActionsRegister, uiActionsRegister)
-    INJECT(muse::ui::INavigationController, navigationController)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(muse::actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(muse::workspace::IWorkspaceManager, workspacesManager)
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(project::IRecentFilesController, recentFilesController)
-    INJECT(IAppMenuModelHook, appMenuModelHook)
-    INJECT(muse::extensions::IExtensionsProvider, extensionsProvider)
-    INJECT(muse::update::IUpdateConfiguration, updateConfiguration)
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
+    muse::Inject<IAppMenuModelHook> appMenuModelHook = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
+    muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+#ifdef MUSE_MODULE_MUSESAMPLER
+    muse::Inject<muse::musesampler::IMuseSamplerInfo> museSamplerInfo = { this };
+#endif
+    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::Inject<muse::ui::INavigationController> navigationController = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
+    muse::Inject<muse::workspace::IWorkspaceManager> workspacesManager = { this };
+    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
+    muse::Inject<project::IRecentFilesController> recentFilesController = { this };
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
@@ -67,6 +77,8 @@ public:
 
 private:
     void setupConnections();
+
+    void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
 
     using muse::uicomponents::AbstractMenuModel::makeMenuItem;
     muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode, muse::uicomponents::MenuItemRole role);
@@ -79,8 +91,8 @@ private:
     muse::uicomponents::MenuItem* makeToolsMenu();
     muse::uicomponents::MenuItem* makePluginsMenu();
     muse::uicomponents::MenuItemList makePluginsMenuSubitems();
-    muse::uicomponents::MenuItem* makeHelpMenu();
-    muse::uicomponents::MenuItem* makeDiagnosticMenu();
+    muse::uicomponents::MenuItem* makeHelpMenu(bool addDiagnosticsSubMenu);
+    muse::uicomponents::MenuItem* makeDiagnosticsMenu();
 
     muse::uicomponents::MenuItemList makeRecentScoresItems();
     muse::uicomponents::MenuItemList appendClearRecentSection(const muse::uicomponents::MenuItemList& recentScores);
@@ -90,13 +102,18 @@ private:
     muse::uicomponents::MenuItemList makeTupletsItems();
     muse::uicomponents::MenuItemList makeMeasuresItems();
     muse::uicomponents::MenuItemList makeFramesItems();
+    muse::uicomponents::MenuItemList makeFramesAppendItems();
     muse::uicomponents::MenuItemList makeTextItems();
     muse::uicomponents::MenuItemList makeLinesItems();
+    muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
     muse::uicomponents::MenuItemList makeToolbarsItems();
     muse::uicomponents::MenuItemList makeWorkspacesItems();
     muse::uicomponents::MenuItemList makeShowItems();
     muse::uicomponents::MenuItemList makePluginsItems();
+
+    mu::notation::INotationUndoStackPtr undoStack() const;
+    void updateUndoRedoItems();
+
+    std::shared_ptr<muse::uicomponents::AbstractMenuModel> m_workspacesMenuModel;
 };
 }
-
-#endif // MU_APPSHELL_APPMENUMODEL_H

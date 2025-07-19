@@ -32,13 +32,15 @@ public:
     explicit LogApi(api::IApiEngine* e);
 
     Q_INVOKABLE void error(const QString& message);
-    Q_INVOKABLE void warn(const QString& message);
-    Q_INVOKABLE void info(const QString& message);
-    Q_INVOKABLE void debug(const QString& message);
-
     Q_INVOKABLE void error(const QString& tag, const QString& message);
+
+    Q_INVOKABLE void warn(const QString& message);
     Q_INVOKABLE void warn(const QString& tag, const QString& message);
+
+    Q_INVOKABLE void info(const QString& message);
     Q_INVOKABLE void info(const QString& tag, const QString& message);
+
+    Q_INVOKABLE void debug(const QString& message);
     Q_INVOKABLE void debug(const QString& tag, const QString& message);
 };
 }

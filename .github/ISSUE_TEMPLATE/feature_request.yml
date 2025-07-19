@@ -1,6 +1,6 @@
 name: Feature request
-description: Request an existing feature to be made better, or a new feature
-labels: ["Feature Request"]
+description: Request new functionality or enhancements to existing features in MuseScore Studio.
+type: Feature
 body:
   - type: textarea
     id: idea
@@ -20,7 +20,7 @@ body:
     id: other
     attributes:
       label: Prior art
-      description: Have you run into this problem with other apps? How did they solve it? You can paste screenshots. 
+      description: Have you run into this problem with other apps? How did they solve it? You can paste screenshots.
     validations:
       required: false
   - type: textarea
@@ -30,3 +30,17 @@ body:
       description: Anything else of note
     validations:
       required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: "Before submitting your bug report, please make sure the following requirements are met:"
+      options:
+        - label: "This request follows the [guidelines](https://github.com/musescore/MuseScore/wiki/Reporting-bugs-and-issues) for reporting issues"
+          required: true
+        - label: "I have verified that this feature request has not been logged before, by searching the [issue tracker](https://github.com/musescore/MuseScore/issues) for similar requests"
+          required: true
+  - type: markdown
+    attributes:
+      value: If a feature request does not meet these requirements, it may be closed without investigation.

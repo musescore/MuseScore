@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <memory>
 #include <mutex>
+#include <string_view>
 
 #include "context.h"
 #include "modulesioc.h"
@@ -37,7 +38,7 @@ void removeIoC(const ContextPtr& ctx = nullptr);
 
 struct StaticMutex
 {
-    static std::mutex mutex;
+    static std::recursive_mutex mutex;
 };
 
 template<class I>
@@ -74,7 +75,10 @@ public:
     const std::shared_ptr<I>& get() const
     {
         if (!m_i) {
-            const std::lock_guard<std::mutex> lock(StaticMutex::mutex);
+            //! NOTE In resolve, a new object can be created using a creator,
+            //! in this object injects can be used in the constructor,
+            //! this will lead to a double mutex lock, so the mutex must be recursive.
+            const std::lock_guard<std::recursive_mutex> lock(StaticMutex::mutex);
             if (!m_i) {
                 static std::string_view module = "";
                 m_i = _ioc(iocContext())->template resolve<I>(module);

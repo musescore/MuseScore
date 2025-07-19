@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -35,11 +35,13 @@
                         <staffDef n="1" lines="5" keysig="1s" meter.sym="cut">
                            <label>Tenor</label>
                            <labelAbbr>T.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="G" line="2" dis="8" dis.place="below" />
                         </staffDef>
                         <staffDef n="2" lines="5" keysig="1s" meter.sym="cut">
                            <label>Bass</label>
                            <labelAbbr>B.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="F" line="4" />
                         </staffDef>
                      </staffGrp>

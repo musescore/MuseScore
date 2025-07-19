@@ -78,6 +78,9 @@ public:
     virtual void setMetricUnit(bool metricUnit) = 0;
 
     virtual std::string museScoreUrl() const = 0;
+    virtual std::string museHubWebUrl() const = 0;
+
+    virtual bool highResolutionTimers() const = 0;
 };
 }
 

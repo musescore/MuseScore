@@ -511,7 +511,7 @@ std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, Fr
     dList.reserve(8);
 
     if (msr->isAnacrusis()) {
-        rtickStart = Fraction::fromTicks(nominal.ticksPerMeasure()) - rtickStart;
+        rtickStart += msr->anacrusisOffset();
     } else if (isRest && l == msr->ticks()) {
         TDuration d = TDuration(DurationType::V_MEASURE);
         dList.push_back(d);
@@ -519,9 +519,9 @@ std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, Fr
     }
 
     if (nominal.isCompound()) {
-        splitCompoundBeatsForList(&dList, l, isRest, rtickStart + msr->anacrusisOffset(), nominal, maxDots);
+        splitCompoundBeatsForList(&dList, l, isRest, rtickStart, nominal, maxDots);
     } else {
-        populateRhythmicList(&dList, l, isRest, rtickStart + msr->anacrusisOffset(), nominal, maxDots);
+        populateRhythmicList(&dList, l, isRest, rtickStart, nominal, maxDots);
     }
 
     return dList;
@@ -595,8 +595,15 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
         // no single TDuration fits so must split anyway
     }
 
+    // Prevent infinite recursion if there is no splitting point other than the start and end ticks
+    IF_ASSERT_FAILED(rtickStart.ticks() < rtickSplit && rtickSplit < rtickEnd.ticks()) {
+        std::vector<TDuration> dList2 = toDurationList(l, maxDots > 0, maxDots, false);
+        dList->insert(dList->end(), dList2.begin(), dList2.end());
+        return;
+    }
+
     // Split on the strongest beat or subbeat crossed
-    Fraction leftSplit   = Fraction::fromTicks(rtickSplit) - rtickStart;
+    Fraction leftSplit = Fraction::fromTicks(rtickSplit) - rtickStart;
     Fraction rightSplit = l - leftSplit;
 
     // Recurse to see if we need to split further before adding to list

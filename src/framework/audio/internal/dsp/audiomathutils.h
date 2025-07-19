@@ -26,22 +26,12 @@
 #include <cstdlib>
 #include <limits>
 
-#include "audiotypes.h"
+#include "../../audiotypes.h"
 
 namespace muse::audio::dsp {
 inline float balanceGain(const balance_t balance, const int audioChannelNumber)
 {
     return (audioChannelNumber * 2 - 1) * balance + 1.f;
-}
-
-inline float linearFromDecibels(const volume_dbfs_t volumeLevelDb)
-{
-    return std::pow(10.0f, volumeLevelDb * 0.05f);
-}
-
-inline volume_dbfs_t dbFromSample(const float signalValue)
-{
-    return 20 * std::log10(std::abs(signalValue));
 }
 
 inline float samplesRootMeanSquare(const float squaredSum, const samples_t sampleCount)

@@ -25,44 +25,70 @@ import QtQuick.Controls 2.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
-Rectangle {
+Item {
     id: root
 
     property alias model: repeater.model
 
     property alias spacing: content.spacing
+
+    property int leftPadding: 0
+    property int rightPadding: 0
+    property int topPadding: 0
+    property int bottomPadding: 0
+
     property int rowHeight: 32
+    property int separatorHeight: rowHeight
+
+    property int maximumWidth: -1
+    property bool isMultiline: height > rowHeight
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: root.objectName !== "" ? root.objectName : "ToolBarView"
         enabled: root.enabled && root.visible
 
-        accessible.role: MUAccessible.List
         accessible.name: "ToolBar"
         accessible.visualItem: root
     }
 
     property var sourceComponentCallback
 
-    width: content.width + prv.padding * 2
-    height: content.height + prv.padding * 2
-
-    color: ui.theme.backgroundPrimaryColor
-
-    QtObject {
-        id: prv
-
-        property int padding: 4
-    }
+    width: content.width + leftPadding + rightPadding
+    height: content.height + topPadding + bottomPadding
 
     Component.onCompleted: {
-        root.model.load()
+        if (root.model) {
+            root.model.load()
+        }
     }
 
     Flow {
         id: content
 
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: root.left
+        anchors.leftMargin: root.leftPadding
+        anchors.top: root.top
+        anchors.topMargin: root.topPadding
+
+        width: {
+            if (root.model.length === 0) {
+                return 0
+            }
+
+            var result = 0
+            var children = content.children
+
+            for (var i = 0; i < children.length; ++i) {
+                result += children[i].width + spacing
+            }
+
+            if (result > 0) {
+                result -= spacing
+            }
+
+            return root.maximumWidth !== -1 ? Math.min(result, root.maximumWidth) : result
+        }
+        height: childrenRect.height
 
         clip: true
         spacing: 4
@@ -70,58 +96,65 @@ Rectangle {
         Repeater {
             id: repeater
 
-            Loader {
-                id: loader
+            Item {
+                width: loader.width
+                height: root.rowHeight
 
-                property var itemData: Boolean(model) ? model.itemRole : null
+                Loader {
+                    id: loader
 
-                sourceComponent: {
-                    if (!Boolean(loader.itemData)) {
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    property var itemData: Boolean(model) ? model.itemRole : null
+
+                    sourceComponent: {
+                        if (!Boolean(loader.itemData)) {
+                            return null
+                        }
+
+                        var type = loader.itemData.type
+
+                        var comp = Boolean(root.sourceComponentCallback) ? root.sourceComponentCallback(type) : null
+                        if (Boolean(comp)) {
+                            return comp
+                        }
+
+                        switch(type) {
+                        case ToolBarItemType.ACTION: return actionComp
+                        case ToolBarItemType.SEPARATOR: return separatorComp
+                        }
+
                         return null
                     }
 
-                    var type = loader.itemData.type
+                    onLoaded: {
+                        loader.item.itemData = loader.itemData
 
-                    var comp = Boolean(root.sourceComponentCallback) ? root.sourceComponentCallback(type) : null
-                    if (Boolean(comp)) {
-                        return comp
+                        if (Boolean(loader.item.navigation)) {
+                            loader.item.navigation.panel = root.navigationPanel
+                            loader.item.navigation.order = model.index
+                        }
                     }
 
-                    switch(type) {
-                    case ToolBarItemType.ACTION: return actionComp
-                    case ToolBarItemType.SEPARATOR: return separatorComp
+                    Component {
+                        id: separatorComp
+
+                        SeparatorLine {
+                            property var itemData: loader.itemData
+
+                            width: 1
+                            height: root.separatorHeight
+
+                            orientation: Qt.Vertical
+                        }
                     }
 
-                    return null
-                }
+                    Component {
+                        id: actionComp
 
-                onLoaded: {
-                    loader.item.itemData = loader.itemData
-                }
-
-                Component {
-                    id: separatorComp
-
-                    SeparatorLine {
-                        property var itemData: loader.itemData
-
-                        width: 1
-                        height: root.rowHeight
-
-                        orientation: Qt.Vertical
-                    }
-                }
-
-                Component {
-                    id: actionComp
-
-                    StyledToolBarItem {
-                        id: btn
-
-                        itemData: loader.itemData
-
-                        navigation.panel: root.navigationPanel
-                        navigation.order: model.index
+                        StyledToolBarItem {
+                            itemData: loader.itemData
+                        }
                     }
                 }
             }

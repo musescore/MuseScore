@@ -22,7 +22,7 @@
 
 #include "focuslistener.h"
 
-#include <QApplication>
+#include <QCoreApplication>
 
 using namespace muse::ui;
 

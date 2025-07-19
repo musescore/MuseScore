@@ -31,19 +31,21 @@
 
 namespace muse::diagnostics {
 class AbstractKeyNavDevItem;
-class DiagnosticNavigationModel : public QObject, public muse::async::Asyncable
+class DiagnosticNavigationModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QVariantList sections READ sections NOTIFY sectionsChanged)
 
-    INJECT(muse::ui::INavigationController, navigationController)
+    Inject<ui::INavigationController> navigationController = { this };
 public:
     explicit DiagnosticNavigationModel(QObject* parent = nullptr);
 
     QVariantList sections() const;
 
     Q_INVOKABLE void reload();
+
+    Q_INVOKABLE void copyToClipboard(const QVariant& section, const QVariant& panel, const QVariant& control);
 
 signals:
     void beforeReload();

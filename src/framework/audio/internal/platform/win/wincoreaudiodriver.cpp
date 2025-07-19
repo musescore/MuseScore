@@ -82,7 +82,6 @@ void copyWavFormat(WAVEFORMATEXTENSIBLE& dest, const WAVEFORMATEX* src) noexcept
 static void logError(HRESULT hr);
 
 static WinCoreData* s_data = nullptr;
-static constexpr char DEFAULT_DEVICE_ID[] = "default";
 static IAudioDriver::Spec s_activeSpec;
 static HRESULT s_lastError = S_OK;
 
@@ -430,7 +429,7 @@ std::vector<unsigned int> CoreAudioDriver::resolveBufferSizes(unsigned int minBu
 
     unsigned int minimum = std::max(static_cast<int>(minBufferSize), MINIMUM_BUFFER_SIZE);
 
-    unsigned int n = 4096;
+    unsigned int n = MAXIMUM_BUFFER_SIZE;
     while (n >= minimum) {
         result.push_back(n);
         n /= 2;

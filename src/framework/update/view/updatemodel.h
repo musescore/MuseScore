@@ -31,15 +31,15 @@
 #include "async/asyncable.h"
 
 namespace muse::update {
-class UpdateModel : public QObject, public async::Asyncable
+class UpdateModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
-
-    Inject<IAppUpdateService> service;
 
     Q_PROPERTY(int currentProgress READ currentProgress NOTIFY currentProgressChanged)
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)
     Q_PROPERTY(QString progressTitle READ progressTitle NOTIFY progressTitleChanged)
+
+    Inject<IAppUpdateService> service = { this };
 
 public:
     explicit UpdateModel(QObject* parent = nullptr);

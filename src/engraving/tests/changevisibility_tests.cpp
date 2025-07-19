@@ -537,7 +537,7 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
     // [WHEN] Select the first measure and call cmdToggleVisible()
     m_score->select(measure);
 
-    m_score->startCmd();
+    m_score->startCmd(TranslatableString::untranslatable("Change visibility tests"));
     m_score->cmdToggleVisible();
     m_score->endCmd();
 
@@ -559,7 +559,7 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
     }
 
     // [WHEN] Call cmdToggleVisible() again
-    m_score->startCmd();
+    m_score->startCmd(TranslatableString::untranslatable("Change visibility tests"));
     m_score->cmdToggleVisible();
     m_score->endCmd();
 
@@ -577,7 +577,7 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
         m_score->select(note, SelectType::ADD);
     }
 
-    m_score->startCmd();
+    m_score->startCmd(TranslatableString::untranslatable("Change visibility tests"));
     m_score->cmdToggleVisible();
     m_score->endCmd();
 
@@ -589,7 +589,7 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
     // [WHEN] Select the first measure and call cmdToggleVisible() again
     m_score->select(measure);
 
-    m_score->startCmd();
+    m_score->startCmd(TranslatableString::untranslatable("Change visibility tests"));
     m_score->cmdToggleVisible();
     m_score->endCmd();
 

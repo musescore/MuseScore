@@ -31,12 +31,13 @@
 class QColor;
 
 namespace mu::notation {
-class PlaybackCursor
+class PlaybackCursor : public muse::Injectable
 {
-    INJECT(INotationConfiguration, configuration)
+    muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
-    PlaybackCursor() = default;
+    PlaybackCursor(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
     void paint(muse::draw::Painter* painter);
 

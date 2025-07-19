@@ -23,12 +23,13 @@
 #ifndef MUSE_VST_VSTPLUGINMETAREADER_H
 #define MUSE_VST_VSTPLUGINMETAREADER_H
 
-#include "audio/iaudiopluginmetareader.h"
+#include "audioplugins/iaudiopluginmetareader.h"
 
 namespace muse::vst {
-class VstPluginMetaReader : public muse::audio::IAudioPluginMetaReader
+class VstPluginMetaReader : public audioplugins::IAudioPluginMetaReader
 {
 public:
+    audio::AudioResourceType metaType() const override;
     bool canReadMeta(const io::path_t& pluginPath) const override;
     RetVal<muse::audio::AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const override;
 };

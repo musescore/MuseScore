@@ -33,7 +33,7 @@ static const ElementStyle tripletFeelStyle {
     { Sid::tempoFontStyle, Pid::FONT_STYLE }
 };
 
-static std::map<TripletFeelType, String> tupletSymbols =
+static const std::map<TripletFeelType, String> tupletSymbols =
 {
     { TripletFeelType::TRIPLET_8TH,     String(u"%1textBlackNoteShortStem%2"
                                                "%1textCont8thBeamShortStem%2"
@@ -101,7 +101,7 @@ static std::map<TripletFeelType, String> tupletSymbols =
                                                "%1textBlackNoteFrac8thShortStem%2") }
 };
 
-static std::map<TripletFeelType, TranslatableString> tripletFeelNames =
+static const std::map<TripletFeelType, TranslatableString> tripletFeelNames =
 {
     { TripletFeelType::TRIPLET_8TH,     TranslatableString("engraving/tripletfeel", "Triplet 8th") },
     { TripletFeelType::TRIPLET_16TH,    TranslatableString("engraving/tripletfeel", "Triplet 16th") },
@@ -154,7 +154,7 @@ void TripletFeel::setTripletProperty()
         break;
     }
 
-    setXmlText(tupletSymbols[m_tripletFeelType].arg(String(u"<sym>staffPosLower3</sym><sym>"), String(u"</sym>")));
+    setXmlText(tupletSymbols.at(m_tripletFeelType).arg(String(u"<sym>staffPosLower3</sym><sym>"), String(u"</sym>")));
 }
 
 //---------------------------------------------------------

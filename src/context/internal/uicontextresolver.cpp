@@ -35,6 +35,10 @@ using namespace muse::ui;
 
 static const muse::Uri HOME_PAGE_URI("musescore://home");
 static const muse::Uri NOTATION_PAGE_URI("musescore://notation");
+static const muse::Uri PUBLISH_PAGE_URI("musescore://publish");
+static const muse::Uri DEVTOOLS_PAGE_URI("musescore://devtools");
+
+static const muse::Uri EXTENSIONS_DIALOG_URI("muse://extensions/viewer");
 
 static const QString NOTATION_NAVIGATION_PANEL("ScoreView");
 
@@ -67,7 +71,7 @@ void UiContextResolver::init()
                 notifyAboutContextChanged();
             });
 
-            notation->interaction()->noteInput()->noteInputStarted().onNotify(this, [this]() {
+            notation->interaction()->noteInput()->noteInputStarted().onReceive(this, [this](bool) {
                 notifyAboutContextChanged();
             });
 
@@ -112,11 +116,26 @@ UiContext UiContextResolver::currentUiContext() const
         INavigationPanel* activePanel = navigationController()->activePanel();
         if (activePanel) {
             if (activePanel->name() == NOTATION_NAVIGATION_PANEL) {
-                return context::UiCtxNotationFocused;
+                return context::UiCtxProjectFocused;
             }
         }
 
-        return context::UiCtxNotationOpened;
+        return context::UiCtxProjectOpened;
+    }
+
+    if (currentUri == PUBLISH_PAGE_URI) {
+        return context::UiCtxPublishOpened;
+    }
+
+    if (currentUri == DEVTOOLS_PAGE_URI) {
+        return context::UiCtxDevToolsOpened;
+    }
+
+    if (interactive()->isCurrentUriDialog().val) {
+        bool isExtensionDialog = currentUri == EXTENSIONS_DIALOG_URI;
+        if (!isExtensionDialog) {
+            return context::UiCtxDialogOpened;
+        }
     }
 
     return context::UiCtxUnknown;
@@ -128,8 +147,10 @@ bool UiContextResolver::match(const muse::ui::UiContext& currentCtx, const muse:
         return true;
     }
 
-    //! NOTE If the current context is `UiCtxNotationFocused`, then we allow `UiCtxNotationOpened` too
-    if (currentCtx == context::UiCtxNotationFocused && actCtx == context::UiCtxNotationOpened) {
+    //! NOTE: Context could be unknown if a plugin is currently open, in which case we should return true under
+    //! the following circumstances (see issue #24673)...
+    if ((currentCtx == context::UiCtxProjectFocused || currentCtx == context::UiCtxUnknown)
+        && actCtx == context::UiCtxProjectOpened && globalContext()->currentNotation()) {
         return true;
     }
 
@@ -162,15 +183,19 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     //! NotationOpened
     //!     NotationFocused
     //!         NotationStaffTab
+    //!
+    //! UPDATE I'm now adding one more context for list VS range selection, but this is
+    //! quite clearly not an optimal solution. In future, we need a general system to
+    //! allow/disallow shortcuts based on any property of the currentNotation. [M.S.]
 
     if (CTX_NOTATION_OPENED == scContext) {
-        return matchWithCurrent(context::UiCtxNotationOpened);
+        return matchWithCurrent(context::UiCtxProjectOpened);
     } else if (CTX_NOTATION_FOCUSED == scContext) {
-        return matchWithCurrent(context::UiCtxNotationFocused);
+        return matchWithCurrent(context::UiCtxProjectFocused);
     } else if (CTX_NOT_NOTATION_FOCUSED == scContext) {
-        return !matchWithCurrent(context::UiCtxNotationFocused);
+        return !matchWithCurrent(context::UiCtxProjectFocused);
     } else if (CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB == scContext) {
-        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
+        if (!matchWithCurrent(context::UiCtxProjectFocused)) {
             return false;
         }
         auto notation = globalContext()->currentNotation();
@@ -178,9 +203,9 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
             return false;
         }
         auto noteInput = notation->interaction()->noteInput();
-        return !noteInput->isNoteInputMode() || noteInput->state().staffGroup != mu::engraving::StaffGroup::TAB;
+        return !noteInput->isNoteInputMode() || noteInput->state().staffGroup() != mu::engraving::StaffGroup::TAB;
     } else if (CTX_NOTATION_NOTE_INPUT_STAFF_TAB == scContext) {
-        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
+        if (!matchWithCurrent(context::UiCtxProjectFocused)) {
             return false;
         }
         auto notation = globalContext()->currentNotation();
@@ -188,9 +213,9 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
             return false;
         }
         auto noteInput = notation->interaction()->noteInput();
-        return noteInput->isNoteInputMode() && noteInput->state().staffGroup == mu::engraving::StaffGroup::TAB;
+        return noteInput->isNoteInputMode() && noteInput->state().staffGroup() == mu::engraving::StaffGroup::TAB;
     } else if (CTX_NOTATION_TEXT_EDITING == scContext) {
-        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
+        if (!matchWithCurrent(context::UiCtxProjectFocused)) {
             return false;
         }
         auto notation = globalContext()->currentNotation();
@@ -198,6 +223,15 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
             return false;
         }
         return notation->interaction()->isTextEditingStarted();
+    } else if (CTX_NOTATION_LIST_SELECTION == scContext) {
+        if (!matchWithCurrent(context::UiCtxProjectFocused)) {
+            return false;
+        }
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            return false;
+        }
+        return !notation->interaction()->selection()->isRange();
     }
 
     IF_ASSERT_FAILED(CTX_ANY == scContext) {

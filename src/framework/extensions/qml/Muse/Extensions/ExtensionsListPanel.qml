@@ -119,7 +119,7 @@ Item {
                 search: root.search
                 pluginIsEnabled: true
                 selectedCategory: root.selectedCategory
-                selectedPluginCodeKey: prv.selectedPlugin ? prv.selectedPlugin.codeKey : ""
+                selectedPluginUri: prv.selectedPlugin?.uri ?? ""
 
                 model: extensionsModel
 
@@ -130,9 +130,7 @@ Item {
                 navigationPanel.order: 4
 
                 onPluginClicked: function(plugin, navigationControl) {
-                    prv.selectedPlugin = plugin
-                    panel.open()
-                    prv.lastNavigatedExtension = navigationControl
+                    root.openInfoPanel(plugin, navigationControl)
                 }
 
                 onNavigationActivated: function(itemRect) {
@@ -150,7 +148,7 @@ Item {
                 search: root.search
                 pluginIsEnabled: false
                 selectedCategory: root.selectedCategory
-                selectedPluginCodeKey: prv.selectedPlugin ? prv.selectedPlugin.codeKey : ""
+                selectedPluginUri: prv.selectedPlugin?.uri ?? ""
 
                 model: extensionsModel
 
@@ -161,9 +159,7 @@ Item {
                 navigationPanel.order: 5
 
                 onPluginClicked: function(plugin, navigationControl) {
-                    prv.selectedPlugin = Object.assign({}, plugin)
-                    panel.open()
-                    prv.lastNavigatedExtension = navigationControl
+                    root.openInfoPanel(plugin, navigationControl)
                 }
 
                 onNavigationActivated: function(itemRect) {
@@ -171,6 +167,14 @@ Item {
                 }
             }
         }
+    }
+
+    function openInfoPanel(plugin, navigationControl) {
+        prv.selectedPlugin = Object.assign({}, plugin)
+        panel.currentExecPointIndex = extensionsModel.currentExecPointIndex(prv.selectedPlugin.uri)
+        panel.execPointsModel = extensionsModel.execPointsModel(prv.selectedPlugin.uri)
+        panel.open()
+        prv.lastNavigatedExtension = navigationControl
     }
 
     EnablePanel {
@@ -183,6 +187,7 @@ Item {
         background: flickable
 
         isEnabled: Boolean(selectedPlugin) ? selectedPlugin.enabled : false
+        isRemovable: Boolean(selectedPlugin) ? selectedPlugin.isRemovable : false
 
         additionalInfoModel: [
             {"title": qsTrc("extensions", "Version:"), "value": Boolean(selectedPlugin) ? selectedPlugin.version : "" },
@@ -190,12 +195,18 @@ Item {
             {"title": qsTrc("extensions", "Shortcut:"), "value": Boolean(selectedPlugin) ? selectedPlugin.shortcuts : ""}
         ]
 
-        onEnabledChanged: function(enabled) {
-            extensionsModel.setEnable(selectedPlugin.codeKey, enabled)
+        onExecPointSelected: function(index) {
+            extensionsModel.selectExecPoint(selectedPlugin.uri, index)
+        }
+
+        onRemoveRequest: function() {
+            extensionsModel.removeExtension(selectedPlugin.uri)
+            prv.resetSelectedPlugin()
+            panel.close()
         }
 
         onEditShortcutRequested: {
-            Qt.callLater(extensionsModel.editShortcut, selectedPlugin.codeKey)
+            Qt.callLater(extensionsModel.editShortcut, selectedPlugin.uri)
             panel.close()
         }
 

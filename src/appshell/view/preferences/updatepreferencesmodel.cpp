@@ -23,13 +23,19 @@
 #include "updatepreferencesmodel.h"
 
 #include "log.h"
-#include "translation.h"
 
 using namespace mu::appshell;
 
 UpdatePreferencesModel::UpdatePreferencesModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
+}
+
+void UpdatePreferencesModel::load()
+{
+    updateConfiguration()->needCheckForUpdateChanged().onNotify(this, [this]() {
+        emit needCheckForNewAppVersionChanged(needCheckForNewAppVersion());
+    });
 }
 
 bool UpdatePreferencesModel::isAppUpdatable() const

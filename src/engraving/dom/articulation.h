@@ -50,6 +50,7 @@ enum class ArticulationCategory : char {
     ACCENT = 0x8,
     MARCATO = 0x10,
     LUTE_FINGERING = 0x20,
+    LAISSEZ_VIB = 0x40,
 };
 DECLARE_FLAGS(ArticulationCategories, ArticulationCategory)
 DECLARE_OPERATORS_FOR_FLAGS(ArticulationCategories)
@@ -83,7 +84,7 @@ constexpr bool operator&(ArticulationShowIn a1, ArticulationShowIn a2)
     return static_cast<unsigned char>(a1) & static_cast<unsigned char>(a2);
 }
 
-enum class ArticulationsUpdateMode {
+enum class ArticulationsUpdateMode : unsigned char {
     Insert,
     Remove
 };
@@ -109,17 +110,17 @@ public:
     Articulation(const Articulation&) = default;
     Articulation& operator=(const Articulation&) = delete;
 
-    Articulation* clone() const override { return new Articulation(*this); }
+    virtual Articulation* clone() const override { return new Articulation(*this); }
 
-    double mag() const override;
+    virtual double mag() const override;
 
     SymId symId() const { return m_symId; }
     void setSymId(SymId id);
-    int subtype() const override;
+    virtual int subtype() const override;
     void setTextType(ArticulationTextType textType);
     ArticulationTextType textType() const { return m_textType; }
     TranslatableString typeUserName() const override;
-    String translatedTypeUserName() const override;
+    TranslatableString subtypeUserName() const override;
     String articulationName() const;    // type-name of articulation; used for midi rendering
     static String symId2ArticulationName(SymId symId);
 
@@ -157,14 +158,15 @@ public:
     String channelName() const { return m_channelName; }
     void setChannelName(const String& s) { m_channelName = s; }
 
-    String accessibleInfo() const override;
+    virtual String accessibleInfo() const override;
 
     bool isDouble() const { return m_categories & ArticulationCategory::DOUBLE; }
     bool isTenuto() const { return m_categories & ArticulationCategory::TENUTO; }
     bool isStaccato() const { return m_categories & ArticulationCategory::STACCATO; }
     bool isAccent() const { return m_categories & ArticulationCategory::ACCENT; }
     bool isMarcato() const { return m_categories & ArticulationCategory::MARCATO; }
-    bool isLuteFingering() { return m_categories & ArticulationCategory::LUTE_FINGERING; }
+    bool isLuteFingering() const { return m_categories & ArticulationCategory::LUTE_FINGERING; }
+    bool isLaissezVib() const { return m_categories & ArticulationCategory::LAISSEZ_VIB; }
 
     bool isBasicArticulation() const;
 
@@ -202,7 +204,7 @@ private:
 
     void setupShowOnTabStyles();
 
-    enum class AnchorGroup {
+    enum class AnchorGroup : unsigned char {
         ARTICULATION,
         LUTE_FINGERING,
         OTHER

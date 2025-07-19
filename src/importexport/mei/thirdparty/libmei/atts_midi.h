@@ -197,8 +197,7 @@ public:
 private:
     /**
      * Captures the General MIDI instrument number.
-     * Use an integer for a 0-based value. An integer preceded by "in" indicates a
-     * 1-based value.
+     * Use an integer for a 0-based value.
      **/
     data_MIDIVALUE m_midiInstrnum;
     /** Provides a General MIDI label for the MIDI instrument. **/

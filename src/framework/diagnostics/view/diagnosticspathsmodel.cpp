@@ -26,7 +26,7 @@
 using namespace muse::diagnostics;
 
 DiagnosticsPathsModel::DiagnosticsPathsModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

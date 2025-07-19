@@ -36,18 +36,16 @@ static constexpr double DPI_F = 5.0;
 static constexpr double DPI = 72.0 * DPI_F;
 
 struct FontDataKey {
-public:
-
     FontDataKey() = default;
-    FontDataKey(const std::string& fa)
-        : m_family(muse::strings::toLower(fa)), m_bold(false), m_italic(false) {}
+    FontDataKey(const Font::FontFamily& fa)
+        : m_family(fa), m_bold(false), m_italic(false) {}
 
-    FontDataKey(const std::string& fa, bool bo, bool it)
-        : m_family(muse::strings::toLower(fa)), m_bold(bo), m_italic(it) {}
+    FontDataKey(const Font::FontFamily& fa, bool bo, bool it)
+        : m_family(fa), m_bold(bo), m_italic(it) {}
 
-    inline bool valid() const { return !m_family.empty(); }
+    inline bool valid() const { return m_family.valid(); }
 
-    const std::string& family() const { return m_family; }
+    const Font::FontFamily& family() const { return m_family; }
     bool bold() const { return m_bold; }
     bool italic() const { return m_italic; }
 
@@ -68,18 +66,18 @@ public:
             return m_italic < o.m_italic;
         }
 
-        return m_family < o.m_family;
+        return m_family.id() < o.m_family.id();
     }
 
 private:
-    std::string m_family;
+    Font::FontFamily m_family;
     bool m_bold = false;
     bool m_italic = false;
 };
 
 inline FontDataKey dataKeyForFont(const Font& f)
 {
-    return FontDataKey(f.family().toStdString(), f.bold(), f.italic());
+    return FontDataKey(f.family(), f.bold(), f.italic());
 }
 
 struct FontData {

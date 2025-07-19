@@ -34,11 +34,11 @@ class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-
     Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
+
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);
@@ -55,8 +55,7 @@ signals:
 
 private:
     enum NoteInputRoles {
-        IsMenuSecondaryRole = AbstractMenuModel::Roles::UserRole + 1,
-        OrderRole,
+        OrderRole = AbstractMenuModel::Roles::UserRole + 1,
         SectionRole
     };
 
@@ -65,7 +64,7 @@ private:
 
     void onNotationChanged();
 
-    void updateItemStateChecked(muse::uicomponents::MenuItem* item, bool checked);
+    void updateItemStateChecked(muse::uicomponents::MenuItem& item, bool checked);
 
     void updateState();
     void updateNoteInputState();
@@ -74,22 +73,17 @@ private:
     void updateNoteDurationState();
     void updateNoteAccidentalState();
     void updateTieState();
+    void updateLvState();
     void updateSlurState();
     void updateVoicesState();
     void updateArticulationsState();
     void updateRestState();
     void updateAddState();
 
-    bool isNoteInputModeAction(const muse::actions::ActionCode& actionCode) const;
-
-    muse::ui::UiAction currentNoteInputModeAction() const;
-
     muse::uicomponents::MenuItem* makeActionItem(const muse::ui::UiAction& action, const QString& section,
                                                  const muse::uicomponents::MenuItemList& subitems = {});
     muse::uicomponents::MenuItem* makeAddItem(const QString& section);
 
-    muse::uicomponents::MenuItemList makeSubitems(const muse::actions::ActionCode& actionCode);
-    muse::uicomponents::MenuItemList makeNoteInputMethodItems();
     muse::uicomponents::MenuItemList makeCrossStaffBeamingItems();
     muse::uicomponents::MenuItemList makeTupletItems();
     muse::uicomponents::MenuItemList makeAddItems();
@@ -97,12 +91,10 @@ private:
     muse::uicomponents::MenuItemList makeIntervalsItems();
     muse::uicomponents::MenuItemList makeMeasuresItems();
     muse::uicomponents::MenuItemList makeFramesItems();
+    muse::uicomponents::MenuItemList makeFramesAppendItems();
     muse::uicomponents::MenuItemList makeTextItems();
     muse::uicomponents::MenuItemList makeLinesItems();
-
-    bool isMenuSecondary(const muse::actions::ActionCode& actionCode) const;
-
-    int findNoteInputModeItemIndex() const;
+    muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
 
     INotationNoteInputPtr noteInput() const;
     INotationInteractionPtr interaction() const;
@@ -115,7 +107,7 @@ private:
     DurationType resolveCurrentDurationType() const;
 
     bool isNoteInputMode() const;
-    NoteInputState noteInputState() const;
+    const NoteInputState& noteInputState() const;
 
     const ChordRest* elementToChordRest(const EngravingItem* element) const;
 };

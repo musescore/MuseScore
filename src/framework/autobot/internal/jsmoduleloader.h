@@ -32,15 +32,15 @@
 
 namespace muse::autobot {
 class ScriptEngine;
-class JsModuleLoader : public QObject
+class JsModuleLoader : public QObject, public Injectable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue exports READ exports WRITE setExports)
 
-    INJECT(IAutobotConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
+    Inject<IAutobotConfiguration> configuration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
 public:
-    explicit JsModuleLoader(QObject* parent = 0);
+    explicit JsModuleLoader(const modularity::ContextPtr& iocCtx, QObject* parent = 0);
 
     void pushEngine(ScriptEngine* engine);
     void popEngine();

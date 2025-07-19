@@ -22,8 +22,9 @@
 
 #include "timesig.h"
 
+#include <functional>
+
 #include "style/style.h"
-#include "translation.h"
 
 #include "score.h"
 #include "segment.h"
@@ -35,8 +36,8 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static const ElementStyle timesigStyle {
-    { Sid::timesigScale,                       Pid::SCALE },
+static const ElementStyle tsStyle {
+    { Sid::timeSigNormalScale, Pid::SCALE },
 };
 
 //---------------------------------------------------------
@@ -48,15 +49,16 @@ static const ElementStyle timesigStyle {
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Segment* parent)
-    : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE | ElementFlag::PLACE_ABOVE)
 {
-    initElementStyle(&timesigStyle);
+    initElementStyle(&tsStyle);
 
     m_showCourtesySig = true;
     m_stretch.set(1, 1);
     m_sig.set(0, 1);                 // initialize to invalid
     m_timeSigType      = TimeSigType::NORMAL;
     m_largeParentheses = false;
+    setMinDistance(Spatium(0.5)); // TODO: style
 }
 
 void TimeSig::setParent(Segment* parent)
@@ -70,7 +72,7 @@ void TimeSig::setParent(Segment* parent)
 
 double TimeSig::mag() const
 {
-    return staff() ? staff()->staffMag(tick()) : 1.0;
+    return timeSigPlacement() == TimeSigPlacement::NORMAL && staff() ? staff()->staffMag(tick()) : 1.0;
 }
 
 //---------------------------------------------------------
@@ -107,11 +109,28 @@ EngravingItem* TimeSig::drop(EditData& data)
         // change timesig applies to all staves, can't simply set subtype
         // for this one only
         // ownership of e is transferred to cmdAddTimeSig
-        score()->cmdAddTimeSig(measure(), staffIdx(), toTimeSig(e), false);
-        return 0;
+
+        if (tick() != measure()->endTick()) {
+            score()->cmdAddTimeSig(measure(), staffIdx(), toTimeSig(e), false);
+            return nullptr;
+        }
+
+        // This is a timesig at the end of a measure.
+        if (*toTimeSig(e) == *this) {
+            delete e;
+            return nullptr;
+        }
+
+        if (!measure()->nextMeasure()) {
+            return nullptr;
+        }
+
+        // Apply change to next measure
+        score()->cmdAddTimeSig(measure()->nextMeasure(), staffIdx(), toTimeSig(e), false);
+        return nullptr;
     }
     delete e;
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -190,14 +209,15 @@ PropertyValue TimeSig::getProperty(Pid propertyId) const
         return groups().nodes();
     case Pid::TIMESIG:
         return PropertyValue::fromValue(m_sig);
-    case Pid::TIMESIG_GLOBAL:
-        return PropertyValue::fromValue(globalSig());
     case Pid::TIMESIG_STRETCH:
         return PropertyValue::fromValue(stretch());
     case Pid::TIMESIG_TYPE:
         return int(m_timeSigType);
     case Pid::SCALE:
         return m_scale;
+    case Pid::IS_COURTESY:
+        return _isCourtesy;
+
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -228,9 +248,6 @@ bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::TIMESIG:
         setSig(v.value<Fraction>());
         break;
-    case Pid::TIMESIG_GLOBAL:
-        setGlobalSig(v.value<Fraction>());
-        break;
     case Pid::TIMESIG_STRETCH:
         setStretch(v.value<Fraction>());
         break;
@@ -239,6 +256,9 @@ bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::SCALE:
         m_scale = v.value<ScaleF>();
+        break;
+    case Pid::IS_COURTESY:
+        _isCourtesy = v.toBool();
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -266,15 +286,25 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
         return String();
     case Pid::TIMESIG:
         return PropertyValue::fromValue(Fraction(4, 4));
-    case Pid::TIMESIG_GLOBAL:
-        return PropertyValue::fromValue(Fraction(1, 1));
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
-    case Pid::SCALE:
-        return style().styleV(Sid::timesigScale);
+    case Pid::PLACEMENT:
+        return PlacementV::ABOVE;
+    case Pid::IS_COURTESY:
+        return false;
     default:
         return EngravingItem::propertyDefault(id);
     }
+}
+
+PointF TimeSig::staffOffset() const
+{
+    const Segment* seg = segment();
+    const Measure* meas = seg ? seg->measure() : nullptr;
+    const Fraction tsTick = meas ? meas->tick() : tick();
+    const StaffType* st = staff()->constStaffType(tsTick);
+    const double yOffset = st ? st->yoffset().val() * spatium() : 0.0;
+    return PointF(0.0, yOffset);
 }
 
 //---------------------------------------------------------
@@ -296,29 +326,128 @@ EngravingItem* TimeSig::prevSegmentElement()
 }
 
 //---------------------------------------------------------
+//   subtype
+//---------------------------------------------------------
+
+int TimeSig::subtype() const
+{
+    size_t h1 = std::hash<int> {}(numerator());
+    size_t h2 = std::hash<int> {}(denominator());
+    size_t h3 = std::hash<TimeSigType> {}(timeSigType());
+
+    return static_cast<int>(h1 ^ (h2 << 1) ^ (h3 << 2));
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString TimeSig::subtypeUserName() const
+{
+    switch (timeSigType()) {
+    case TimeSigType::FOUR_FOUR:
+        return TranslatableString("engraving/timesig", "Common time");
+    case TimeSigType::ALLA_BREVE:
+        return TranslatableString("engraving/timesig", "Cut time");
+    case TimeSigType::CUT_BACH:
+        return TranslatableString("engraving/timesig", "Cut time (Bach)");
+    case TimeSigType::CUT_TRIPLE:
+        return TranslatableString("engraving/timesig", "Cut triple time (9/8)");
+    default:
+        return TranslatableString("engraving/timesig", "%1/%2 time").arg(numerator(), denominator());
+    }
+}
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
 String TimeSig::accessibleInfo() const
 {
-    String timeSigString;
-    switch (timeSigType()) {
-    case TimeSigType::FOUR_FOUR:
-        timeSigString = muse::mtrc("engraving/timesig", "Common time");
-        break;
-    case TimeSigType::ALLA_BREVE:
-        timeSigString = muse::mtrc("engraving/timesig", "Cut time");
-        break;
-    case TimeSigType::CUT_BACH:
-        timeSigString = muse::mtrc("engraving/timesig", "Cut time (Bach)");
-        break;
-    case TimeSigType::CUT_TRIPLE:
-        timeSigString = muse::mtrc("engraving/timesig", "Cut triple time (9/8)");
-        break;
-    default:
-        timeSigString = muse::mtrc("engraving/timesig", "%1/%2 time").arg(numerator(), denominator());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
+}
+
+void TimeSig::initElementStyle(const ElementStyle* elementStype)
+{
+    EngravingItem::initElementStyle(elementStype);
+
+    m_scale = propertyDefault(Pid::SCALE).value<ScaleF>();
+}
+
+void TimeSig::styleChanged()
+{
+    if (isStyled(Pid::SCALE)) {
+        m_scale = propertyDefault(Pid::SCALE).value<ScaleF>();
     }
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
+    EngravingItem::styleChanged();
+}
+
+Sid TimeSig::getPropertyStyle(Pid id) const
+{
+    if (id == Pid::SCALE) {
+        switch (timeSigPlacement()) {
+        case TimeSigPlacement::NORMAL: return Sid::timeSigNormalScale;
+        case TimeSigPlacement::ABOVE_STAVES: return Sid::timeSigAboveScale;
+        case TimeSigPlacement::ACROSS_STAVES: return Sid::timeSigAcrossScale;
+        default:
+            return Sid::NOSTYLE;
+        }
+    }
+
+    return EngravingItem::getPropertyStyle(id);
+}
+
+TimeSigPlacement TimeSig::timeSigPlacement() const
+{
+    return style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
+}
+
+TimeSigStyle TimeSig::timeSigStyle() const
+{
+    switch (timeSigPlacement()) {
+    case TimeSigPlacement::NORMAL: return style().styleV(Sid::timeSigNormalStyle).value<TimeSigStyle>();
+    case TimeSigPlacement::ABOVE_STAVES: return style().styleV(Sid::timeSigAboveStyle).value<TimeSigStyle>();
+    case TimeSigPlacement::ACROSS_STAVES: return style().styleV(Sid::timeSigAcrossStyle).value<TimeSigStyle>();
+    default:
+        return TimeSigStyle::NORMAL;
+    }
+}
+
+double TimeSig::numDist() const
+{
+    switch (timeSigPlacement()) {
+    case TimeSigPlacement::NORMAL: return style().styleMM(Sid::timeSigNormalNumDist);
+    case TimeSigPlacement::ABOVE_STAVES: return style().styleMM(Sid::timeSigAboveNumDist);
+    case TimeSigPlacement::ACROSS_STAVES: return style().styleMM(Sid::timeSigAcrossNumDist);
+    default:
+        return 0.0;
+    }
+}
+
+double TimeSig::yPos() const
+{
+    switch (timeSigPlacement()) {
+    case TimeSigPlacement::NORMAL: return style().styleMM(Sid::timeSigNormalY);
+    case TimeSigPlacement::ABOVE_STAVES: return style().styleMM(Sid::timeSigAboveY);
+    case TimeSigPlacement::ACROSS_STAVES: return style().styleMM(Sid::timeSigAcrossY);
+    default:
+        return 0.0;
+    }
+}
+
+bool TimeSig::showOnThisStaff() const
+{
+    return timeSigPlacement() == TimeSigPlacement::NORMAL || staffIdx() == 0 || score()->isSystemObjectStaff(staff());
+}
+
+bool TimeSig::isAboveStaves() const
+{
+    return timeSigPlacement() == TimeSigPlacement::ABOVE_STAVES;
+}
+
+bool TimeSig::isAcrossStaves() const
+{
+    return timeSigPlacement() == TimeSigPlacement::ACROSS_STAVES;
 }
 
 //---------------------------------------------------------

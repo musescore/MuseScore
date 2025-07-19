@@ -75,7 +75,7 @@ function main()
 
                 // OR
 
-                api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "note-input-steptime")
+                api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "note-input-by-note-name")
                 // wait popup open
                 api.autobot.waitPopup()
                 // First item become automatically current, so just trigger

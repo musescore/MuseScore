@@ -76,6 +76,12 @@ uint8_t* ByteArray::data()
     return m_data->data();
 }
 
+std::vector<uint8_t>& ByteArray::vdata()
+{
+    detach();
+    return *m_data.get();
+}
+
 const uint8_t* ByteArray::constData() const
 {
     if (m_raw.data) {
@@ -88,6 +94,11 @@ const uint8_t* ByteArray::constData() const
 const char* ByteArray::constChar() const
 {
     return reinterpret_cast<const char*>(constData());
+}
+
+const std::vector<uint8_t>& ByteArray::constVData() const
+{
+    return *m_data.get();
 }
 
 size_t ByteArray::size() const

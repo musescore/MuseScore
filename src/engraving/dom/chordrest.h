@@ -87,13 +87,6 @@ public:
     virtual double upPos()   const = 0;
     virtual double downPos() const = 0;
 
-    int line(bool up) const { return up ? upLine() : downLine(); }
-    int line() const { return ldata()->up ? upLine() : downLine(); }
-    virtual int upLine() const = 0;
-    virtual int downLine() const = 0;
-    virtual PointF stemPos() const = 0;
-    virtual double stemPosX() const = 0;
-    virtual PointF stemPosBeam() const = 0;
     virtual double rightEdge() const = 0;
 
     bool isSmall() const { return m_isSmall; }
@@ -128,6 +121,8 @@ public:
     {
         return m_crossMeasure == CrossMeasure::FIRST ? m_crossMeasureTDur.ticks() : m_durationType.ticks();
     }
+
+    Fraction endTick() const { return tick() + actualTicks(); }
 
     String durationUserName() const;
 
@@ -189,7 +184,7 @@ public:
     bool isFullMeasureRest() const { return m_durationType == DurationType::V_MEASURE; }
     virtual void removeMarkings(bool keepTremolo = false);
 
-    bool isBefore(const ChordRest*) const;
+    bool isBefore(const EngravingItem*) const override;
 
     void undoAddAnnotation(EngravingItem*);
 
@@ -199,6 +194,9 @@ public:
     void setTabDur(TabDurationSymbol* s) { m_tabDur = s; }
 
     bool isBelowCrossBeam(const BeamBase* beamBase) const;
+
+    bool hasFollowingJumpItem() const;
+    bool hasPrecedingJumpItem() const;
 
     struct LayoutData : public DurationElement::LayoutData {
         ld_field<bool> up = { "[ChordRest] up", true }; // actual stem direction

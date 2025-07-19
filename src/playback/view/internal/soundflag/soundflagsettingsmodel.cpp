@@ -70,7 +70,7 @@ static QVariantList buildAvailablePlayingTechniquesModel(const std::set<muse::St
     }
 
     QVariantMap ordinaryItem;
-    ordinaryItem["code"] = QString::fromStdString(muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE);
+    ordinaryItem["code"] = muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE.toQString();
     ordinaryItem["name"] = muse::qtrc("playback", "Ord. (default)");
     model << ordinaryItem;
 
@@ -180,7 +180,7 @@ void SoundFlagSettingsModel::togglePreset(const QString& presetCode)
 
     SoundFlag* soundFlag = toSoundFlag(m_item);
 
-    beginCommand();
+    beginCommand(TranslatableString("undoableAction", "Toggle sound flag preset"));
     soundFlag->undoChangeSoundFlag(StringList(newPresetCodes), soundFlag->playingTechnique());
     bool needUpdateNotation = updateStaffText();
     endCommand();
@@ -207,7 +207,7 @@ void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechni
 
     SoundFlag* soundFlag = toSoundFlag(m_item);
 
-    beginCommand();
+    beginCommand(TranslatableString("undoableAction", "Toggle sound flag playing technique"));
     soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), muse::String(playingTechniqueCode));
     bool needUpdateNotation = updateStaffText();
     endCommand();
@@ -330,7 +330,7 @@ void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
     }
 
     if (menuId == RESET_MENU_ID) {
-        beginCommand();
+        beginCommand(TranslatableString("undoableAction", "Reset sound flag"));
 
         const SoundFlag::PresetCodes oldPresetCodes = soundFlag->soundPresets();
         const SoundFlag::PresetCodes newPresetCodes = { defaultPresetCode() };
@@ -356,7 +356,7 @@ void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
         playbackConfiguration()->setSoundPresetsMultiSelectionEnabled(!playbackConfiguration()->soundPresetsMultiSelectionEnabled());
         emit contextMenuModelChanged();
     } else if (menuId == APPLY_TO_ALL_STAVES_MENU_ID) {
-        beginCommand();
+        beginCommand(TranslatableString("undoableAction", "Toggle ‘Apply sound flag to all staves’"));
         soundFlag->undoChangeProperty(Pid::APPLY_TO_ALL_STAVES, !soundFlag->applyToAllStaves());
         endCommand();
 
@@ -389,7 +389,7 @@ bool SoundFlagSettingsModel::updateStaffText()
 
     const SoundFlag::PlayingTechniqueCode& techniqueCode = soundFlag->playingTechnique();
     if (!techniqueCode.empty()) {
-        if (techniqueCode.toStdString() == muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+        if (techniqueCode == muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
             strs << muse::mtrc("playback", "ordinary");
         } else {
             strs << soundFlag->playingTechnique();

@@ -20,29 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_NOTATIONTOOLBARMODEL_H
-#define MU_NOTATION_NOTATIONTOOLBARMODEL_H
-
-#include "uicomponents/view/abstractmenumodel.h"
+#pragma once
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "ui/iuiactionsregister.h"
+
+#include "uicomponents/view/abstracttoolbarmodel.h"
 
 namespace mu::notation {
-class NotationToolBarModel : public muse::uicomponents::AbstractMenuModel
+class NotationToolBarModel : public muse::uicomponents::AbstractToolBarModel
 {
-    Q_OBJECT
-
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
+    muse::Inject<context::IGlobalContext> context;
 
 public:
     Q_INVOKABLE void load() override;
-
-private:
-    muse::uicomponents::MenuItem* makeItem(const muse::actions::ActionCode& actionCode);
 };
 }
-
-#endif // MU_NOTATION_NOTATIONTOOLBARMODEL_H

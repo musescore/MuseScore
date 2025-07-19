@@ -47,6 +47,8 @@ public:
     bool actionChecked(const muse::ui::UiAction& act) const override;
     muse::async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
+    static const muse::ui::UiActionList& midiInputActions();
+    static const muse::ui::UiActionList& midiInputPitchActions();
     static const muse::ui::UiActionList& settingsActions();
     static const muse::ui::UiActionList& loopBoundaryActions();
 
@@ -54,8 +56,11 @@ public:
 
 private:
     static const muse::ui::UiActionList m_mainActions;
+    static const muse::ui::UiActionList m_midiInputActions;
+    static const muse::ui::UiActionList m_midiInputPitchActions;
     static const muse::ui::UiActionList m_settingsActions;
     static const muse::ui::UiActionList m_loopBoundaryActions;
+    static const muse::ui::UiActionList m_diagnosticActions;
 
     std::shared_ptr<PlaybackController> m_controller;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;

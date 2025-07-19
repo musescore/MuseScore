@@ -19,55 +19,167 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <string>
+#include <random>
+
+#include <logger.h>
+
 #include "eid.h"
 
 using namespace mu::engraving;
 
-EID::EID(ElementType type, uint32_t id)
-    : m_type(type), m_id(id)
+static constexpr char SEPARATOR = '_';
+
+static std::string int64ToBase64Str(uint64_t n)
 {
+    static constexpr char CHARS[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    std::stringstream ss;
+    do {
+        ss << CHARS[n & 63];
+        n = n >> 6;
+    } while (n != 0);
+
+    return ss.str();
 }
 
-struct _Data {
-    uint16_t type = 0;
-    uint16_t reserved = 0;
-    uint32_t id = 0;
-};
-
-union _Pack
+static constexpr uint64_t charToInt(char c)
 {
-    uint64_t val;
-    _Data data;
-};
-
-uint64_t EID::toUint64() const
-{
-    _Pack pack = { 0 };
-    pack.data.type = static_cast<uint16_t>(m_type);
-    pack.data.id = m_id;
-    return pack.val;
+    switch (c) {
+    case 'A': return 0;
+    case 'B': return 1;
+    case 'C': return 2;
+    case 'D': return 3;
+    case 'E': return 4;
+    case 'F': return 5;
+    case 'G': return 6;
+    case 'H': return 7;
+    case 'I': return 8;
+    case 'J': return 9;
+    case 'K': return 10;
+    case 'L': return 11;
+    case 'M': return 12;
+    case 'N': return 13;
+    case 'O': return 14;
+    case 'P': return 15;
+    case 'Q': return 16;
+    case 'R': return 17;
+    case 'S': return 18;
+    case 'T': return 19;
+    case 'U': return 20;
+    case 'V': return 21;
+    case 'W': return 22;
+    case 'X': return 23;
+    case 'Y': return 24;
+    case 'Z': return 25;
+    case 'a': return 26;
+    case 'b': return 27;
+    case 'c': return 28;
+    case 'd': return 29;
+    case 'e': return 30;
+    case 'f': return 31;
+    case 'g': return 32;
+    case 'h': return 33;
+    case 'i': return 34;
+    case 'j': return 35;
+    case 'k': return 36;
+    case 'l': return 37;
+    case 'm': return 38;
+    case 'n': return 39;
+    case 'o': return 40;
+    case 'p': return 41;
+    case 'q': return 42;
+    case 'r': return 43;
+    case 's': return 44;
+    case 't': return 45;
+    case 'u': return 46;
+    case 'v': return 47;
+    case 'w': return 48;
+    case 'x': return 49;
+    case 'y': return 50;
+    case 'z': return 51;
+    case '0': return 52;
+    case '1': return 53;
+    case '2': return 54;
+    case '3': return 55;
+    case '4': return 56;
+    case '5': return 57;
+    case '6': return 58;
+    case '7': return 59;
+    case '8': return 60;
+    case '9': return 61;
+    case '+': return 62;
+    case '/': return 63;
+    default:
+        UNREACHABLE;
+        return uint64_t(-1);
+    }
 }
 
-EID EID::fromUint64(uint64_t v)
+static uint64_t base64StrToInt64(const std::string& s)
 {
-    _Pack pack = { 0 };
-    pack.val = v;
-    return EID(static_cast<ElementType>(pack.data.type), pack.data.id);
+    uint64_t result = 0;
+
+    for (auto iter = s.rbegin(); iter != s.rend(); ++iter) {
+        result = result << 6;
+        result |= charToInt(*iter);
+    }
+
+    return result;
 }
 
 std::string EID::toStdString() const
 {
-    return std::to_string(toUint64());
+    std::stringstream ss;
+    ss << int64ToBase64Str(m_first) << SEPARATOR << int64ToBase64Str(m_second);
+    return ss.str();
 }
 
 EID EID::fromStdString(const std::string& s)
 {
-    uint64_t v = std::stoull(s);
-    return fromUint64(v);
+    std::stringstream ss(s);
+    std::string str;
+    std::vector<std::string> strings;
+
+    while (std::getline(ss, str, SEPARATOR)) {
+        strings.push_back(str);
+    }
+
+    if (strings.size() != 2) {
+        return EID::invalid();
+    }
+
+    const std::string& first = strings[0];
+    const std::string& second = strings[1];
+
+    return EID(base64StrToInt64(first), base64StrToInt64(second));
 }
 
 EID EID::fromStdString(const std::string_view& s)
 {
-    uint64_t v = std::stoull(s.data(), nullptr, 10);
-    return fromUint64(v);
+    return fromStdString(std::string(s));
+}
+
+EID EID::newUnique()
+{
+    static std::random_device s_device;
+    static std::mt19937_64 s_engine(s_device());
+    static std::uniform_int_distribution<uint64_t> s_unifDist;
+
+    return EID(s_unifDist(s_engine), s_unifDist(s_engine));
+}
+
+// FOR UNIT TESTING
+// EIDs are creates sequentially instead of randomly for test repeatability
+
+EID EID::newUniqueTestMode(uint64_t& maxVal)
+{
+    ++maxVal;
+    return EID(maxVal, maxVal);
+}
+
+void EID::updateMaxValTestMode(const EID& curEID, uint64_t& maxVal)
+{
+    maxVal = std::max(maxVal, curEID.m_first);
+    maxVal = std::max(maxVal, curEID.m_second);
 }

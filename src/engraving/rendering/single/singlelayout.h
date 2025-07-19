@@ -79,12 +79,14 @@ class LetRing;
 class LetRingSegment;
 class SLine;
 class LineSegment;
+class Lyrics;
 
 class Marker;
 class MeasureNumber;
 class MeasureRepeat;
 
 class NoteHead;
+class NoteLine;
 
 class Ornament;
 class Ottava;
@@ -99,13 +101,14 @@ class PlayTechAnnotation;
 class RehearsalMark;
 
 class Slur;
+class SoundFlag;
 class Spacer;
 class StaffText;
 class StaffTypeChange;
+class Sticking;
 class StringTunings;
 class Symbol;
 class SystemText;
-class SoundFlag;
 
 class TempoText;
 class Text;
@@ -183,6 +186,8 @@ public:
     static void layout(GuitarBend* item, const Context& ctx);
 
     static void layout(Hairpin* item, const Context& ctx);
+    static void layout(HammerOnPullOff* item, const Context& ctx);
+    static void layout(HammerOnPullOffSegment* item, const Context& ctx);
     static void layout(HarpPedalDiagram* item, const Context& ctx);
 
     static void layout(Image* item, const Context& ctx);
@@ -194,8 +199,10 @@ public:
 
     static void layout(LayoutBreak* item, const Context& ctx);
     static void layout(LetRing* item, const Context& ctx);
+    static void layout(Lyrics* item, const Context& ctx);
 
     static void layout(NoteHead* item, const Context& ctx);
+    static void layout(NoteLine* item, const Context& ctx);
 
     static void layout(Marker* item, const Context& ctx);
     static void layout(MeasureNumber* item, const Context& ctx);
@@ -211,15 +218,17 @@ public:
     static void layout(RehearsalMark* item, const Context& ctx);
 
     static void layout(Slur* item, const Context& ctx);
+    static void layout(SoundFlag* item, const Context& ctx);
     static void layout(Spacer* item, const Context&);
     static void layout(StaffText* item, const Context& ctx);
     static void layout(StaffTypeChange* item, const Context& ctx);
+    static void layout(Stem* item, const Context& ctx);
+    static void layout(Sticking* item, const Context& ctx);
     static void layout(StringTunings* item, const Context& ctx);
     static void layout(Symbol* item, const Context& ctx);
     static void layout(SystemText* item, const Context& ctx);
-    static void layout(SoundFlag* item, const Context& ctx);
-    static void layout(Stem* item, const Context& ctx);
 
+    static void layout(Tapping* item, const Context& ctx);
     static void layout(TempoText* item, const Context& ctx);
     static void layout(TextLine* item, const Context& ctx);
     static void layout(TimeSig* item, const Context& ctx);

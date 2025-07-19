@@ -37,7 +37,7 @@
 #include "converter/iconvertercontroller.h"
 #include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
-#include "audio/iregisteraudiopluginsscenario.h"
+#include "audioplugins/iregisteraudiopluginsscenario.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
 #include "ui/iuiconfiguration.h"
@@ -60,7 +60,7 @@ class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_
     muse::Inject<converter::IConverterController> converter;
     muse::Inject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
     muse::Inject<muse::autobot::IAutobot> autobot;
-    muse::Inject<muse::audio::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
+    muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
     muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
     muse::Inject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::Inject<appshell::IAppShellConfiguration> appshellConfiguration;

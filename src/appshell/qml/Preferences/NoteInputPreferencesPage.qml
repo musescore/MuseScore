@@ -25,10 +25,14 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
-import "internal"
+import "internal/NoteInput"
 
 PreferencesPage {
     id: root
+
+    Component.onCompleted: {
+        noteInputModel.load()
+    }
 
     NoteInputPreferencesModel {
         id: noteInputModel
@@ -39,24 +43,48 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         NoteInputSection {
-            advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
-            colorNotes: noteInputModel.colorNotesOutsideOfUsablePitchRange
-            warnGuitarBends: noteInputModel.warnGuitarBends
-            delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
+            noteInputMethods: noteInputModel.noteInputMethods()
+            defaultNoteInputMethod: noteInputModel.defaultNoteInputMethod
+            addAccidentalDotsArticulationsToNextNoteEntered: noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered
+            useNoteInputCursorInInputByDuration: noteInputModel.useNoteInputCursorInInputByDuration
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
+            onDefaultNoteInputMethodChangeRequested: function(method) {
+                noteInputModel.defaultNoteInputMethod = method
+            }
+
+            onAddAccidentalDotsArticulationsToNextNoteEnteredChangeRequested: function(add) {
+                noteInputModel.addAccidentalDotsArticulationsToNextNoteEntered = add
+            }
+
+            onUseNoteInputCursorInInputByDurationChangeRequested: function(use) {
+                noteInputModel.useNoteInputCursorInInputByDuration = use
+            }
+        }
+
+        SeparatorLine {}
+
+        MidiInputSection {
+            midiInputEnabled: noteInputModel.midiInputEnabled
+            startNoteInputWhenPressingKey: noteInputModel.startNoteInputAtSelectedNoteRestWhenPressingMidiKey
+            advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
+            delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+
+            onMidiInputEnabledChangeRequested: function(enabled) {
+                noteInputModel.midiInputEnabled = enabled
+            }
+
+            onStartNoteInputWhenPressingKeyChangeRequested: function(start) {
+                noteInputModel.startNoteInputAtSelectedNoteRestWhenPressingMidiKey = start
+            }
+
             onAdvanceToNextNoteChangeRequested: function(advance) {
                 noteInputModel.advanceToNextNoteOnKeyRelease = advance
-            }
-
-            onColorNotesChangeRequested: function(color) {
-                noteInputModel.colorNotesOutsideOfUsablePitchRange = color
-            }
-
-            onWarnGuitarBendsChangeRequested: function(warn) {
-                noteInputModel.warnGuitarBends = warn
             }
 
             onDelayBetweenNotesChangeRequested: function(delay) {
@@ -66,17 +94,26 @@ PreferencesPage {
 
         SeparatorLine {}
 
-        NoteInputPlaySection {
+        NotePreviewSection {
             playNotesWhenEditing: noteInputModel.playNotesWhenEditing
-            playChordWhenEditing: noteInputModel.playChordWhenEditing
-            playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing
+            playPreviewNotesInInputByDuration: noteInputModel.playPreviewNotesInInputByDuration
+            playChordWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordWhenEditing : false
+            playChordSymbolWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordSymbolWhenEditing : false
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
+            playNotesWithScoreDynamics: noteInputModel.playPreviewNotesWithScoreDynamics
+
+            playNotesOnMidiInput: noteInputModel.playNotesWhenEditing && noteInputModel.midiInputEnabled ? noteInputModel.playNotesOnMidiInput : false
+            playNotesOnMidiInputBoxEnabled: noteInputModel.midiInputEnabled && noteInputModel.playNotesWhenEditing
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 2
+            navigation.order: root.navigationOrderStart + 3
 
             onPlayNotesWhenEditingChangeRequested: function(play) {
                 noteInputModel.playNotesWhenEditing = play
+            }
+
+            onPlayPreviewNotesInInputByDurationChangeRequested: function(play) {
+                noteInputModel.playPreviewNotesInInputByDuration = play
             }
 
             onPlayChordWhenEditingChangeRequested: function(play) {
@@ -90,41 +127,63 @@ PreferencesPage {
             onNotePlayDurationChangeRequested: function(duration) {
                 noteInputModel.notePlayDurationMilliseconds = duration
             }
+
+            onPlayNotesWithScoreDynamicsChangeRequested: function(play) {
+                noteInputModel.playPreviewNotesWithScoreDynamics = play
+            }
+
+            onPlayNotesOnMidiInputChangeRequested: function(play) {
+                noteInputModel.playNotesOnMidiInput = play
+            }
         }
 
         SeparatorLine {}
 
-        BaseSection {
-            id: dynamicsAllVoicesSection
-
+        VoiceAssignmentSection {
             width: parent.width
 
-            title: qsTrc("appshell/preferences", "Dynamics & hairpins")
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
 
-            StyledTextLabel {
-                text: qsTrc("appshell/preferences", "When entered, dynamics and hairpins should affect:")
+            dynamicsApplyToAllVoices: noteInputModel.dynamicsApplyToAllVoices
+
+            onDynamicsApplyToAllVoicesChangeRequested: function(value) {
+                noteInputModel.dynamicsApplyToAllVoices = value
+            }
+        }
+
+        SeparatorLine {}
+
+        FretboardDiagramsSection {
+            width: parent.width
+
+            autoUpdateFretboardDiagrams: noteInputModel.autoUpdateFretboardDiagrams
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 5
+
+            onAutoUpdateFretboardDiagramsChangeRequested: function(update) {
+                noteInputModel.autoUpdateFretboardDiagrams = update
+            }
+        }
+
+        SeparatorLine {}
+
+        NoteColorsSection {
+            width: parent.width
+
+            colorNotes: noteInputModel.colorNotesOutsideOfUsablePitchRange
+            warnGuitarBends: noteInputModel.warnGuitarBends
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 6
+
+            onColorNotesChangeRequested: function(color) {
+                noteInputModel.colorNotesOutsideOfUsablePitchRange = color
             }
 
-            RoundedRadioButton {
-                width: parent.width
-
-                text: qsTrc("appshell/preferences", "All voices on the instrument")
-
-                checked: noteInputModel.dynamicsApplyToAllVoices
-                onToggled: {
-                    noteInputModel.dynamicsApplyToAllVoices = checked
-                }
-            }
-
-            RoundedRadioButton {
-                width: parent.width
-
-                text: qsTrc("appshell/preferences", "Only the voice they are applied to")
-
-                checked: !noteInputModel.dynamicsApplyToAllVoices
-                onToggled: {
-                    noteInputModel.dynamicsApplyToAllVoices = !checked
-                }
+            onWarnGuitarBendsChangeRequested: function(warn) {
+                noteInputModel.warnGuitarBends = warn
             }
         }
     }

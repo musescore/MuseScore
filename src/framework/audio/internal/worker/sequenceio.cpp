@@ -60,7 +60,7 @@ SequenceIO::SequenceIO(IGetTracks* getTracks)
     });
 }
 
-bool SequenceIO::isHasTrack(const TrackId id) const
+bool SequenceIO::hasTrack(const TrackId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -144,7 +144,7 @@ Channel<TrackId, AudioOutputParams> SequenceIO::outputParamsChanged() const
     return m_outputParamsChanged;
 }
 
-Channel<audioch_t, AudioSignalVal> SequenceIO::audioSignalChanges(const TrackId id) const
+AudioSignalChanges SequenceIO::audioSignalChanges(const TrackId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -154,8 +154,24 @@ Channel<audioch_t, AudioSignalVal> SequenceIO::audioSignalChanges(const TrackId 
 
     TrackPtr track = m_getTracks->track(id);
     IF_ASSERT_FAILED(track) {
-        return Channel<audioch_t, AudioSignalVal>();
+        return AudioSignalChanges();
     }
 
     return track->outputHandler->audioSignalChanges();
+}
+
+InputProcessingProgress SequenceIO::inputProcessingProgress(const TrackId id) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_getTracks) {
+        return {};
+    }
+
+    TrackPtr track = m_getTracks->track(id);
+    IF_ASSERT_FAILED(track) {
+        return {};
+    }
+
+    return track->inputHandler->inputProcessingProgress();
 }

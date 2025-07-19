@@ -28,6 +28,7 @@ Rectangle {
     id: root
 
     property int orientation: prv.parentIsHorizontal ? Qt.Vertical : Qt.Horizontal
+    property int thickness: 1
 
     color: ui.theme.strokeColor
 
@@ -46,7 +47,7 @@ Rectangle {
 
             PropertyChanges {
                 target: root
-                height: 1
+                height: root.thickness
                 Layout.fillWidth: true
             }
 
@@ -72,7 +73,7 @@ Rectangle {
 
             PropertyChanges {
                 target: root
-                width: 1
+                width: root.thickness
                 Layout.fillHeight: true
             }
 

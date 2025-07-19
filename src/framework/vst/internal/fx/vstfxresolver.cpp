@@ -42,7 +42,7 @@ void VstFxResolver::refresh()
 
 void VstFxResolver::clearAllFx()
 {
-    pluginsRegister()->unregisterAllFx();
+    instancesRegister()->unregisterAllFx();
 
     AbstractFxResolver::clearAllFx();
 }
@@ -53,10 +53,7 @@ IFxProcessorPtr VstFxResolver::createMasterFx(const AudioFxParams& fxParams) con
         return nullptr;
     }
 
-    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(fxParams.resourceMeta.id);
-    pluginsRegister()->registerMasterFxPlugin(fxParams.resourceMeta.id, fxParams.chainOrder, pluginPtr);
-
-    pluginPtr->load();
+    IVstPluginInstancePtr pluginPtr = instancesRegister()->makeAndRegisterMasterFxPlugin(fxParams.resourceMeta.id, fxParams.chainOrder);
 
     std::shared_ptr<VstFxProcessor> fx = std::make_shared<VstFxProcessor>(std::move(pluginPtr), fxParams);
     fx->init();
@@ -73,10 +70,7 @@ IFxProcessorPtr VstFxResolver::createTrackFx(const TrackId trackId, const AudioF
         return nullptr;
     }
 
-    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(fxParams.resourceMeta.id);
-    pluginsRegister()->registerFxPlugin(trackId, fxParams.resourceMeta.id, fxParams.chainOrder, pluginPtr);
-
-    pluginPtr->load();
+    IVstPluginInstancePtr pluginPtr = instancesRegister()->makeAndRegisterFxPlugin(fxParams.resourceMeta.id, trackId, fxParams.chainOrder);
 
     std::shared_ptr<VstFxProcessor> fx = std::make_shared<VstFxProcessor>(std::move(pluginPtr), fxParams);
     fx->init();
@@ -86,10 +80,10 @@ IFxProcessorPtr VstFxResolver::createTrackFx(const TrackId trackId, const AudioF
 
 void VstFxResolver::removeMasterFx(const AudioResourceId& resoureId, AudioFxChainOrder chainOrder)
 {
-    pluginsRegister()->unregisterMasterFxPlugin(resoureId, chainOrder);
+    instancesRegister()->unregisterMasterFxPlugin(resoureId, chainOrder);
 }
 
 void VstFxResolver::removeTrackFx(const TrackId trackId, const AudioResourceId& resoureId, AudioFxChainOrder chainOrder)
 {
-    pluginsRegister()->unregisterFxPlugin(trackId, resoureId, chainOrder);
+    instancesRegister()->unregisterFxPlugin(resoureId, trackId, chainOrder);
 }

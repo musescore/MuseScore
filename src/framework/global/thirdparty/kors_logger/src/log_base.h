@@ -56,7 +56,7 @@ SOFTWARE.
 //! Useful macros
 #define DO_ASSERT_X(cond, msg) \
     if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
+        LOGE() << "ASSERT FAILED:    " << msg << "    " << __FILE__ << ":" << __LINE__; \
         assert(cond); \
     } \
 
@@ -71,14 +71,14 @@ SOFTWARE.
 
 #define IF_FAILED(cond) \
     if (!(cond)) { \
-        LOGE() << "\"FAILED!\": " << #cond << ", file: " << __FILE__ << ", line: " << __LINE__; \
+        LOGE() << "FAILED:    " << #cond << "    " << __FILE__ << ":" << __LINE__ ; \
     } \
     if (!(cond)) \
 
 #define UNUSED(x) (void)x;
 
 #define UNREACHABLE \
-    LOGE() << "\"UNREACHABLE!\": " << ", file: " << __FILE__ << ", line: " << __LINE__; \
+    LOGE() << "\"UNREACHABLE    " << __FILE__ << ":" << __LINE__; \
     ASSERT_X("UNREACHABLE was reached"); \
 
 #define DEPRECATED LOGD() << "This function deprecated!!"

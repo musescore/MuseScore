@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_GLOBAL_TASKCHEDULER_H
-#define MUSE_GLOBAL_TASKCHEDULER_H
+#pragma once
 
 #include <condition_variable>
 #include <functional>
@@ -34,6 +32,7 @@
 #include <type_traits>
 #include <utility>
 
+#include "threadutils.h"
 #include "log.h"
 
 namespace muse {
@@ -42,14 +41,6 @@ typedef std::invoke_result_t<decltype(std::thread::hardware_concurrency)> thread
 class TaskScheduler
 {
 public:
-
-    //!Note Would be moved into globalmodule.cpp for better lifetime control
-    static TaskScheduler* instance()
-    {
-        static TaskScheduler s;
-        return &s;
-    }
-
     explicit TaskScheduler(const thread_pool_size_t desiredThreadCount = 0)
         : m_threadPoolSize(vaildateThreadPoolCapacity(desiredThreadCount)),
         m_threadPool(std::make_unique<std::thread[]>(vaildateThreadPoolCapacity(desiredThreadCount)))
@@ -66,6 +57,28 @@ public:
     thread_pool_size_t threadPoolSize() const
     {
         return m_threadPoolSize;
+    }
+
+    std::set<std::thread::id> threadIdSet() const
+    {
+        std::set<std::thread::id> result;
+
+        for (thread_pool_size_t i = 0; i < m_threadPoolSize; ++i) {
+            result.insert(m_threadPool[i].get_id());
+        }
+
+        return result;
+    }
+
+    bool setThreadsPriority(ThreadPriority priority)
+    {
+        for (thread_pool_size_t i = 0; i < m_threadPoolSize; ++i) {
+            if (!muse::setThreadPriority(m_threadPool[i], priority)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     template<typename FuncT, typename ... ArgsT>
@@ -112,25 +125,6 @@ public:
         m_isWaitingForAllTasksDone = false;
     }
 
-    const std::set<std::thread::id>& threadIdSet() const
-    {
-        static std::set<std::thread::id> result;
-
-        if (result.empty()) {
-            for (thread_pool_size_t i = 0; i < m_threadPoolSize; ++i) {
-                result.insert(m_threadPool[i].get_id());
-            }
-        }
-
-        return result;
-    }
-
-    bool containsThread(const std::thread::id& id) const
-    {
-        const auto& idSet = threadIdSet();
-        return idSet.find(id) != idSet.cend();
-    }
-
 private:
     void setupThreads()
     {
@@ -138,6 +132,8 @@ private:
         for (thread_pool_size_t i = 0; i < m_threadPoolSize; ++i) {
             m_threadPool[i] = std::thread(&TaskScheduler::th_workerLoop, this);
         }
+
+        LOGD() << "Thread pool size: " << m_threadPoolSize;
     }
 
     void terminateThreads()
@@ -149,7 +145,7 @@ private:
         }
     }
 
-    thread_pool_size_t vaildateThreadPoolCapacity(const thread_pool_size_t desiredThreadCount)
+    thread_pool_size_t vaildateThreadPoolCapacity(const thread_pool_size_t desiredThreadCount) const
     {
         thread_pool_size_t maxCapacity = std::thread::hardware_concurrency();
 
@@ -201,5 +197,3 @@ private:
     std::unique_ptr<std::thread[]> m_threadPool = nullptr;
 };
 }
-
-#endif // MUSE_GLOBAL_TASKCHEDULER_H

@@ -28,6 +28,8 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/undo.h"
 
+#include "io/file.h"
+
 #include "log.h"
 
 using namespace mu::notation;
@@ -71,6 +73,15 @@ void NotationStyle::resetStyleValue(const StyleId& styleId)
     m_styleChanged.notify();
 }
 
+void NotationStyle::resetStyleValues(const std::vector<StyleId>& styleIds)
+{
+    for (StyleId id : styleIds) {
+        score()->resetStyleValue(id);
+    }
+    score()->update();
+    m_styleChanged.notify();
+}
+
 bool NotationStyle::canApplyToAllParts() const
 {
     return !score()->isMaster(); // In parts only
@@ -104,8 +115,9 @@ Notification NotationStyle::styleChanged() const
 
 bool NotationStyle::loadStyle(const muse::io::path_t& path, bool allowAnyVersion)
 {
-    m_undoStack->prepareChanges();
-    bool result = score()->loadStyle(path.toQString(), allowAnyVersion);
+    m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Load style"));
+    muse::io::File styleFile(path);
+    bool result = score()->loadStyle(styleFile, allowAnyVersion);
     m_undoStack->commitChanges();
 
     if (result) {

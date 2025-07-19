@@ -77,8 +77,16 @@ public:
     virtual void insertPart(Part* part, size_t index) = 0;
 
     virtual void replacePart(const muse::ID& partId, Part* newPart) = 0;
-    virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) = 0;
+    virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,
+                                   const StaffType* newStaffType = nullptr) = 0;
     virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) = 0;
+
+    virtual const std::vector<Staff*>& systemObjectStaves() const = 0;
+    virtual muse::async::Notification systemObjectStavesChanged() const = 0;
+
+    virtual void addSystemObjects(const muse::IDList& stavesIds) = 0;
+    virtual void removeSystemObjects(const muse::IDList& stavesIds) = 0;
+    virtual void moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId) = 0;
 
     virtual muse::async::Notification partsChanged() const = 0;
     virtual muse::async::Notification scoreOrderChanged() const = 0;

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_UNDO_H
-#define MU_ENGRAVING_UNDO_H
+#pragma once
 
 /**
  \file
@@ -30,17 +29,16 @@
 
 #include <map>
 
-#include "modularity/ioc.h"
-#include "../iengravingfontsprovider.h"
-
 #include "../style/style.h"
 #include "../compat/midi/midipatch.h"
 
 #include "bend.h"
+#include "box.h"
 #include "bracket.h"
 #include "chord.h"
 #include "drumset.h"
 #include "fret.h"
+#include "harmony.h"
 #include "harppedaldiagram.h"
 #include "input.h"
 #include "instrchange.h"
@@ -55,17 +53,13 @@
 #include "score.h"
 #include "scoreorder.h"
 #include "select.h"
+#include "soundflag.h"
 #include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "stringdata.h"
 #include "stringtunings.h"
-#include "synthesizerstate.h"
-#include "soundflag.h"
-#include "text.h"
-
 #include "tremolotwochord.h"
-#include "tremolobar.h"
 
 namespace mu::engraving {
 class Bend;
@@ -92,14 +86,137 @@ class Segment;
 class Selection;
 class Spanner;
 class Staff;
+class SystemLock;
 class Text;
 class TremoloBar;
 
-enum class PlayEventType : char;
+enum class PlayEventType : unsigned char;
+
+enum class CommandType : signed char {
+    Unknown = -1,
+
+    // Parts
+    InsertPart,
+    RemovePart,
+    AddPartToExcerpt,
+    SetSoloist,
+    ChangePart,
+
+    // Staves
+    InsertStaff,
+    RemoveStaff,
+    AddSystemObjectStaff,
+    RemoveSystemObjectStaff,
+    SortStaves,
+    ChangeStaff,
+    ChangeStaffType,
+
+    // MStaves
+    InsertMStaff,
+    RemoveMStaff,
+    InsertStaves,
+    RemoveStaves,
+    ChangeMStaffProperties,
+
+    // Instruments
+    ChangeInstrumentShort,
+    ChangeInstrumentLong,
+    ChangeInstrument,
+    ChangeDrumset,
+
+    // Measures
+    RemoveMeasures,
+    InsertMeasures,
+    ChangeMeasureLen,
+    ChangeMMRest,
+    ChangeMeasureRepeatCount,
+
+    // Elements
+    AddElement,
+    RemoveElement,
+    Unlink,
+    Link,
+    ChangeElement,
+    ChangeParent,
+
+    // Notes
+    ChangePitch,
+    ChangeFretting,
+    ChangeVelocity,
+
+    // ChordRest
+    ChangeChordStaffMove,
+    SwapCR,
+
+    // Brackets
+    RemoveBracket,
+    AddBracket,
+
+    // Fret
+    FretDataChange,
+    FretDot,
+    FretMarker,
+    FretBarre,
+    FretClear,
+    FretLinkHarmony,
+
+    // FBox
+    ReorderFBox,
+    RenameChordFBox,
+    AddChordFBox,
+    RemoveChordFBox,
+
+    // Harmony
+    TransposeHarmony,
+
+    // KeySig
+    ChangeKeySig,
+
+    // Clef
+    ChangeClefType,
+
+    // Tremolo
+    MoveTremolo,
+
+    // Spanners
+    ChangeSpannerElements,
+    InsertTimeUnmanagedSpanner,
+    ChangeStartEndSpanner,
+
+    // Ties
+    ChangeTieEndPointActive,
+
+    // Style
+    ChangeStyle,
+    ChangeStyleValues,
+
+    // Property
+    ChangeProperty,
+
+    // Voices
+    ExchangeVoice,
+    CloneVoice,
+
+    // Excerpts
+    AddExcerpt,
+    RemoveExcerpt,
+    SwapExcerpt,
+    ChangeExcerptTitle,
+
+    // Meta info
+    ChangeMetaInfo,
+
+    // Text
+    TextEdit,
+
+    // Other
+    InsertTime,
+    ChangeScoreOrder,
+};
 
 #define UNDO_TYPE(t) CommandType type() const override { return t; }
 #define UNDO_NAME(a) const char* name() const override { return a; }
-#define UNDO_CHANGED_OBJECTS(...) std::vector<const EngravingObject*> objectItems() const override { return __VA_ARGS__; }
+#define UNDO_CHANGED_OBJECTS(...) std::vector<EngravingObject*> objectItems() const override { return __VA_ARGS__; }
 
 class UndoCommand
 {
@@ -112,7 +229,7 @@ protected:
     void appendChildren(UndoCommand*);
 
 public:
-    enum class Filter {
+    enum class Filter : unsigned char {
         TextEdit,
         AddElement,
         AddElementLinked,
@@ -130,7 +247,7 @@ public:
     size_t childCount() const { return childList.size(); }
     void unwind();
     const std::list<UndoCommand*>& commands() const { return childList; }
-    virtual std::vector<const EngravingObject*> objectItems() const { return {}; }
+    virtual std::vector<EngravingObject*> objectItems() const { return {}; }
     virtual void cleanup(bool undo);
 // #ifndef QT_NO_DEBUG
     virtual const char* name() const { return "UndoCommand"; }
@@ -163,7 +280,7 @@ public:
         bool isValid() const { return !elements.empty() || staffStart != muse::nidx; }
     };
 
-    UndoMacro(Score* s);
+    UndoMacro(Score* s, const TranslatableString& actionName);
     void undo(EditData*) override;
     void redo(EditData*) override;
     bool empty() const;
@@ -176,12 +293,14 @@ public:
 
     struct ChangesInfo {
         ElementTypeSet changedObjectTypes;
-        std::set<const EngravingItem*> changedItems;
+        std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
         StyleIdSet changedStyleIdSet;
         PropertyIdSet changedPropertyIdSet;
+        bool isTextEditing = false;
     };
 
-    ChangesInfo changesInfo() const;
+    ChangesInfo changesInfo(bool undo = false) const;
+    const TranslatableString& actionName() const;
 
     static bool canRecordSelectedElement(const EngravingItem* e);
 
@@ -192,6 +311,7 @@ private:
     InputState m_redoInputState;
     SelectionInfo m_undoSelectionInfo;
     SelectionInfo m_redoSelectionInfo;
+    TranslatableString m_actionName;
 
     Score* m_score = nullptr;
 
@@ -201,41 +321,60 @@ private:
 
 class UndoStack
 {
-    UndoMacro* curCmd = nullptr;
-    std::vector<UndoMacro*> list;
-    std::vector<int> stateList;
-    int nextState = 0;
-    int cleanState = 0;
-    size_t curIdx = 0;
-    bool isLocked = false;
-
-    void remove(size_t idx);
-
 public:
     UndoStack();
     ~UndoStack();
 
-    bool locked() const;
-    void setLocked(bool val);
-    bool active() const { return curCmd != 0; }
-    void beginMacro(Score*);
+    bool isLocked() const;
+    void setLocked(bool locked);
+
+    bool hasActiveCommand() const { return m_activeCommand != nullptr; }
+
+    void beginMacro(Score*, const TranslatableString& actionName);
     void endMacro(bool rollback);
-    void push(UndoCommand*, EditData*);        // push & execute
-    void push1(UndoCommand*);
+
+    void pushAndPerform(UndoCommand*, EditData*);
+    void pushWithoutPerforming(UndoCommand*);
     void pop();
-    bool canUndo() const { return curIdx > 0; }
-    bool canRedo() const { return curIdx < list.size(); }
-    bool isClean() const { return cleanState == stateList[curIdx]; }
-    size_t getCurIdx() const { return curIdx; }
-    UndoMacro* current() const { return curCmd; }
-    UndoMacro* last() const { return curIdx > 0 ? list[curIdx - 1] : 0; }
-    UndoMacro* prev() const { return curIdx > 1 ? list[curIdx - 2] : 0; }
+
+    bool canUndo() const { return m_currentIndex > 0; }
+    bool canRedo() const { return m_currentIndex < m_macroList.size(); }
+    bool isClean() const { return m_cleanState == m_stateList[m_currentIndex]; }
+
+    size_t size() const { return m_macroList.size(); }
+    size_t currentIndex() const { return m_currentIndex; }
+
+    UndoMacro* activeCommand() const { return m_activeCommand; }
+
+    UndoMacro* last() const { return m_currentIndex > 0 ? m_macroList[m_currentIndex - 1] : nullptr; }
+    UndoMacro* prev() const { return m_currentIndex > 1 ? m_macroList[m_currentIndex - 2] : nullptr; }
+    UndoMacro* next() const { return canRedo() ? m_macroList[m_currentIndex] : nullptr; }
+
+    /// Returns the command that led to the state with the given `idx`.
+    /// For further discussion of the indices involved in UndoStack, see:
+    /// https://github.com/musescore/MuseScore/pull/25389#discussion_r1825782176
+    UndoMacro* lastAtIndex(size_t idx) const
+    {
+        return idx > 0 && idx - 1 < m_macroList.size() ? m_macroList[idx - 1] : nullptr;
+    }
+
     void undo(EditData*);
     void redo(EditData*);
     void reopen();
 
     void mergeCommands(size_t startIdx);
-    void cleanRedoStack() { remove(curIdx); }
+    void cleanRedoStack() { remove(m_currentIndex); }
+
+private:
+    void remove(size_t idx);
+
+    UndoMacro* m_activeCommand = nullptr;
+    std::vector<UndoMacro*> m_macroList;
+    std::vector<int> m_stateList;
+    int m_nextState = 0;
+    int m_cleanState = 0;
+    size_t m_currentIndex = 0;
+    bool m_isLocked = false;
 };
 
 class InsertPart : public UndoCommand
@@ -344,6 +483,38 @@ public:
 
     UNDO_TYPE(CommandType::RemoveStaff)
     UNDO_NAME("RemoveStaff")
+    UNDO_CHANGED_OBJECTS({ staff })
+};
+
+class AddSystemObjectStaff : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddSystemObjectStaff)
+
+    Staff* staff = nullptr;
+
+public:
+    AddSystemObjectStaff(Staff*);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+    UNDO_TYPE(CommandType::AddSystemObjectStaff)
+    UNDO_NAME("AddSystemObjectStaff")
+    UNDO_CHANGED_OBJECTS({ staff })
+};
+
+class RemoveSystemObjectStaff : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveSystemObjectStaff)
+
+    Staff* staff = nullptr;
+
+public:
+    RemoveSystemObjectStaff(Staff*);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+    UNDO_TYPE(CommandType::RemoveSystemObjectStaff)
+    UNDO_NAME("RemoveSystemObjectStaff")
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
@@ -534,18 +705,38 @@ class TransposeHarmony : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmony)
 
-    Harmony* harmony = nullptr;
-    int rootTpc = 0;
-    int baseTpc = 0;
+    Harmony* m_harmony = nullptr;
+
+    Interval m_interval = Interval(0, 0);
+    bool m_useDoubleSharpsFlats = false;
 
     void flip(EditData*) override;
 
 public:
-    TransposeHarmony(Harmony*, int rootTpc, int baseTpc);
+    TransposeHarmony(Harmony*, Interval interval, bool useDoubleSharpsFlats);
 
     UNDO_TYPE(CommandType::TransposeHarmony)
     UNDO_NAME("TransposeHarmony")
-    UNDO_CHANGED_OBJECTS({ harmony })
+    UNDO_CHANGED_OBJECTS({ m_harmony })
+};
+
+class TransposeHarmonyDiatonic : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, TransposeHarmonyDiatonic)
+
+    Harmony* m_harmony = nullptr;
+    int m_interval = 0;
+    bool m_useDoubleSharpsFlats = false;
+    bool m_transposeKeys = false;
+
+    void flip(EditData*) override;
+
+public:
+    TransposeHarmonyDiatonic(Harmony*, int interval, bool useDoubleSharpsFlats, bool transposeKeys);
+
+    UNDO_TYPE(CommandType::TransposeHarmony)
+    UNDO_NAME("TransposeHarmonyDiatonic")
+    UNDO_CHANGED_OBJECTS({ m_harmony })
 };
 
 class ExchangeVoice : public UndoCommand
@@ -571,9 +762,9 @@ class CloneVoice : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, CloneVoice)
 
-    Segment* sf = nullptr;
+    Segment* sourceSeg = nullptr;
     Fraction lTick;
-    Segment* d = nullptr;               //Destination
+    Segment* destSeg = nullptr;               //Destination
     track_idx_t strack = muse::nidx;
     track_idx_t dtrack = muse::nidx;
     track_idx_t otrack;
@@ -588,7 +779,7 @@ public:
 
     UNDO_TYPE(CommandType::CloneVoice)
     UNDO_NAME("CloneVoice")
-    UNDO_CHANGED_OBJECTS({ sf, d })
+    UNDO_CHANGED_OBJECTS({ sourceSeg, destSeg })
 };
 
 class ChangeInstrumentShort : public UndoCommand
@@ -645,7 +836,7 @@ public:
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
 
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 
     UNDO_TYPE(CommandType::AddElement)
 };
@@ -669,6 +860,36 @@ public:
     UNDO_CHANGED_OBJECTS({ element })
 };
 
+class AddSystemLock : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddSystemLock)
+
+    const SystemLock* m_systemLock;
+public:
+    AddSystemLock(const SystemLock* systemLock);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+    void cleanup(bool undo) override;
+
+    UNDO_NAME("AddSystemLock")
+    std::vector<EngravingObject*> objectItems() const override;
+};
+
+class RemoveSystemLock : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveSystemLock)
+
+    const SystemLock* m_systemLock;
+public:
+    RemoveSystemLock(const SystemLock* systemLock);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+    void cleanup(bool undo) override;
+
+    UNDO_NAME("RemoveSystemLock")
+    std::vector<EngravingObject*> objectItems() const override;
+};
+
 class ChangePatch : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePatch)
@@ -680,8 +901,8 @@ class ChangePatch : public UndoCommand
     void flip(EditData*) override;
 
 public:
-    ChangePatch(Score* s, InstrChannel* c, const MidiPatch* pt)
-        : score(s), channel(c), patch(*pt) {}
+    ChangePatch(Score* s, InstrChannel* c, const MidiPatch& pt)
+        : score(s), channel(c), patch(pt) {}
     UNDO_NAME("ChangePatch")
     UNDO_CHANGED_OBJECTS({ score })
 };
@@ -713,12 +934,12 @@ class ChangeStaff : public UndoCommand
 
     bool visible = false;
     ClefTypeList clefType;
-    double userDist = 0.0;
+    Spatium userDist = Spatium(0.0);
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     bool showIfEmpty = false;
     bool cutaway = false;
     bool hideSystemBarLine = false;
-    bool mergeMatchingRests = false;
+    AutoOnOff mergeMatchingRests = AutoOnOff::AUTO;
     bool reflectTranspositionInLinkedTab = false;
 
     void flip(EditData*) override;
@@ -726,8 +947,8 @@ class ChangeStaff : public UndoCommand
 public:
     ChangeStaff(Staff*);
 
-    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, double userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                bool _hideSystemBarLine, bool _mergeRests, bool _reflectTranspositionInLinkedTab);
+    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, Spatium userDist, Staff::HideMode _hideMode, bool _showIfEmpty,
+                bool _cutaway, bool _hideSystemBarLine, AutoOnOff _mergeRests, bool _reflectTranspositionInLinkedTab);
 
     UNDO_TYPE(CommandType::ChangeStaff)
     UNDO_NAME("ChangeStaff")
@@ -947,7 +1168,7 @@ public:
     void undo(EditData*) override;
     void redo(EditData*) override;
 
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 
     UNDO_TYPE(CommandType::AddExcerpt)
     UNDO_NAME("AddExcerpt")
@@ -968,7 +1189,7 @@ public:
     void undo(EditData*) override;
     void redo(EditData*) override;
 
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 
     UNDO_TYPE(CommandType::RemoveExcerpt)
     UNDO_NAME("RemoveExcerpt")
@@ -1131,7 +1352,7 @@ public:
     UNDO_TYPE(CommandType::ChangeProperty)
     UNDO_NAME("ChangeProperty")
 
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
@@ -1453,11 +1674,33 @@ class ChangeDrumset : public UndoCommand
     void flip(EditData*) override;
 
 public:
-    ChangeDrumset(Instrument* i, const Drumset* d, Part* p)
-        : instrument(i), drumset(*d), part(p) {}
+    ChangeDrumset(Instrument* i, const Drumset& d, Part* p)
+        : instrument(i), drumset(d), part(p) {}
 
     UNDO_TYPE(CommandType::ChangeDrumset)
     UNDO_NAME("ChangeDrumset")
+};
+
+class FretDataChange : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, FretDataChange)
+
+    FretDiagram* m_diagram = nullptr;
+    FretUndoData m_undoData;
+    String m_harmonyName;
+
+    void redo(EditData*) override;
+    void undo(EditData*) override;
+
+public:
+    FretDataChange(FretDiagram* d, const String& harmonyName)
+        : m_diagram(d), m_harmonyName(harmonyName) {}
+
+    UNDO_TYPE(CommandType::FretDataChange)
+
+    UNDO_NAME("FretDataChange")
+
+    UNDO_CHANGED_OBJECTS({ m_diagram })
 };
 
 class FretDot : public UndoCommand
@@ -1545,6 +1788,112 @@ public:
     UNDO_CHANGED_OBJECTS({ diagram })
 };
 
+class FretLinkHarmony : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, FretLinkHarmony)
+
+    FretDiagram* m_fretDiagram = nullptr;
+    Harmony* m_harmony = nullptr;
+    bool m_unlink = false;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    FretLinkHarmony(FretDiagram*, Harmony*, bool unlink = false);
+
+    UNDO_TYPE(CommandType::FretLinkHarmony)
+    UNDO_NAME("FretLinkHarmony")
+    UNDO_CHANGED_OBJECTS({ m_fretDiagram })
+};
+
+class ReorderFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ReorderFBox)
+
+    FBox* m_fretBox = nullptr;
+    std::vector<EID> m_orderElementsIds;
+
+    void flip(EditData*) override;
+
+public:
+    ReorderFBox(FBox* fbox, const std::vector<EID>& newOrderElementsIds);
+
+    UNDO_TYPE(CommandType::ReorderFBox)
+    UNDO_NAME("ReorderFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
+class RenameChordFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RenameChordFBox)
+
+    FBox* m_fretBox = nullptr;
+    const Harmony* m_harmony = nullptr;
+    String m_harmonyOldName;
+    bool m_onlyRemove = false;
+
+    std::vector<std::pair<size_t, FretDiagram*> > m_diagramsForRestore;
+    FretDiagram* m_diagramForRemove = nullptr;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    RenameChordFBox(FBox* box, const Harmony* harmony, const String& oldName);
+
+    UNDO_TYPE(CommandType::RenameChordFBox)
+    UNDO_NAME("RenameChordFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
+class AddChordFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddChordFBox)
+
+    FBox* m_fretBox = nullptr;
+    bool m_added = false;
+    Fraction m_tick;
+    String m_chordNewName;
+
+    std::vector<std::pair<size_t, FretDiagram*> > m_diagramsForRestore;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    AddChordFBox(FBox* box, const String& chordNewName, const Fraction& tick);
+
+    UNDO_TYPE(CommandType::AddChordFBox)
+    UNDO_NAME("AddChordFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
+class RemoveChordFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveChordFBox)
+
+    FBox* m_fretBox = nullptr;
+    bool m_removed = false;
+    Fraction m_tick;
+    String m_chordName;
+
+    FretDiagram* m_removedFretDiagram = nullptr;
+    size_t m_removedFretDiagramIndex = 0;
+
+    FretDiagram* m_addedFretDiagram = nullptr;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    RemoveChordFBox(FBox* box, const String& chordName, const Fraction& tick);
+
+    UNDO_TYPE(CommandType::RemoveChordFBox)
+    UNDO_NAME("RemoveChordFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
 class MoveTremolo : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, MoveTremolo)
@@ -1605,7 +1954,7 @@ public:
 
     UNDO_NAME("ChangeHarpPedalState")
 //    UNDO_CHANGED_OBJECTS({ diagram })
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 };
 
 //---------------------------------------------------------
@@ -1632,7 +1981,7 @@ public:
 
     UNDO_NAME("ChangeSingleHarpPedal")
 //    UNDO_CHANGED_OBJECTS({ diagram });
-    std::vector<const EngravingObject*> objectItems() const override;
+    std::vector<EngravingObject*> objectItems() const override;
 };
 
 class ChangeStringData : public UndoCommand
@@ -1681,5 +2030,22 @@ public:
     UNDO_NAME("ChangeSpanArpeggio")
     UNDO_CHANGED_OBJECTS({ m_chord })
 };
+
+class ChangeTieJumpPointActive : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeTieJumpPointActive)
+
+    TieJumpPointList* m_jumpPointList = nullptr;
+    String m_id;
+    bool m_active = false;
+
+    void flip(EditData*) override;
+
+public:
+    ChangeTieJumpPointActive(TieJumpPointList* jumpPointList, String& id, bool active)
+        : m_jumpPointList(jumpPointList), m_id(id), m_active(active) {}
+
+    UNDO_TYPE(CommandType::ChangeTieEndPointActive)
+    UNDO_NAME("ChangeTieEndPointActive")
+};
 } // namespace mu::engraving
-#endif

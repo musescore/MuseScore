@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageHeight>11.6929</pageHeight>
@@ -26,13 +27,13 @@
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
       <footerFontSize>10</footerFontSize>
-      <Spatium>1.75</Spatium>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
+      <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -49,7 +50,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test Text Layout</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -114,145 +116,182 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>12.5</height>
+        <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <offset x="0" y="-0.07525"/>
           <text><font size="22"/>Test Text Layout</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <offset x="0" y="9.92425"/>
           <text><font size="16"/>Musescore Testcase</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
-          <align>right,top</align>
-          <offset x="0" y="17.4247"/>
           <text>Henry Ives</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>I_I</eid>
             </Clef>
           <KeySig>
+            <eid>J_J</eid>
             <concertKey>-2</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>K_K</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
+            <eid>L_L</eid>
             <text>2nd time ad lib.</text>
             </StaffText>
           <StaffText>
+            <eid>M_M</eid>
             <text>3rd time senza Invisalign</text>
             </StaffText>
-          <Tempo>
-            <tempo>2</tempo>
-            <text><font size="12"/><b>Straight</b></text>
-            </Tempo>
           <Expression>
+            <direction>down</direction>
+            <eid>N_N</eid>
             <text><i>Cantabile</i></text>
             </Expression>
+          <Tempo>
+            <tempo>2</tempo>
+            <eid>O_O</eid>
+            <text><font size="12"/><b>Straight</b></text>
+            </Tempo>
           <Beam>
+            <eid>P_P</eid>
             <StemDirection>down</StemDirection>
             <l1>44</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
+            <eid>Q_Q</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>R_R</eid>
               <text>glare</text>
               </Lyrics>
             <Note>
+              <eid>S_S</eid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>T_T</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>U_U</eid>
               <text>The</text>
               </Lyrics>
             <Note>
+              <eid>V_V</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>W_W</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>X_X</eid>
               <text>bombs</text>
               </Lyrics>
             <Note>
+              <eid>Y_Y</eid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>Z_Z</eid>
             <durationType>16th</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <eid>a_a</eid>
               <text>burst</text>
               </Lyrics>
             <Note>
+              <eid>b_b</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Beam>
+            <eid>c_c</eid>
             <StemDirection>up</StemDirection>
             <l1>-4</l1>
             <l2>-8</l2>
             </Beam>
           <Chord>
+            <eid>d_d</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
+              <eid>e_e</eid>
               <text>ing</text>
               </Lyrics>
             <Note>
+              <eid>f_f</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>g_g</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>h_h</eid>
               <text>in</text>
               </Lyrics>
             <Note>
+              <eid>i_i</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>j_j</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>k_k</eid>
               <text>air</text>
               </Lyrics>
             <Note>
+              <eid>l_l</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>m_m</eid>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>n_n</eid>
               <text>gave</text>
               </Lyrics>
             <Note>
+              <eid>o_o</eid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               </Note>
@@ -260,113 +299,144 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>p_p</eid>
         <voice>
           <Beam>
+            <eid>q_q</eid>
             <StemDirection>down</StemDirection>
             <l1>40</l1>
             <l2>40</l2>
             </Beam>
           <Chord>
+            <eid>r_r</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>s_s</eid>
               <text>proof</text>
               </Lyrics>
             <Note>
+              <eid>t_t</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>u_u</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>v_v</eid>
               <text>through</text>
               </Lyrics>
             <Note>
+              <eid>w_w</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
+                <eid>x_x</eid>
                 </Accidental>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>y_y</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>z_z</eid>
               <text>the</text>
               </Lyrics>
             <Note>
+              <eid>0_0</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>1_1</eid>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>2_2</eid>
               <text>night</text>
               </Lyrics>
             <Note>
+              <eid>3_3</eid>
               <pitch>75</pitch>
               <tpc>11</tpc>
               </Note>
             </Chord>
           <PlayTechAnnotation>
             <playTechType>mute</playTechType>
+            <eid>4_4</eid>
             <text>mute</text>
             </PlayTechAnnotation>
           <StaffText>
+            <eid>5_5</eid>
             <text>Staff Text</text>
             </StaffText>
           <Beam>
+            <eid>6_6</eid>
             <StemDirection>up</StemDirection>
             <l1>0</l1>
             <l2>2</l2>
             </Beam>
           <Chord>
+            <eid>7_7</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>8_8</eid>
               <text>that</text>
               </Lyrics>
             <Note>
+              <eid>9_9</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>+_+</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>/_/</eid>
               <text>our</text>
               </Lyrics>
             <Note>
+              <eid>AB_AB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <PlayTechAnnotation>
             <playTechType>open</playTechType>
+            <eid>BB_BB</eid>
             <text>open</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>CB_CB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>DB_DB</eid>
               <text>SWAG</text>
               </Lyrics>
             <Note>
+              <eid>EB_EB</eid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>FB_FB</eid>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>GB_GB</eid>
               <text>was</text>
               </Lyrics>
             <Note>
+              <eid>HB_HB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
@@ -374,142 +444,179 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>IB_IB</eid>
         <voice>
           <Beam>
+            <eid>JB_JB</eid>
             <StemDirection>up</StemDirection>
             <l1>16</l1>
             <l2>18</l2>
             </Beam>
           <Chord>
+            <eid>KB_KB</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>LB_LB</eid>
               <text>still</text>
               </Lyrics>
             <Note>
+              <eid>MB_MB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>NB_NB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>OB_OB</eid>
               <text>there</text>
               </Lyrics>
             <Note>
+              <eid>PB_PB</eid>
               <pitch>58</pitch>
               <tpc>12</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>QB_QB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>RB_RB</eid>
               <text>oh</text>
               </Lyrics>
             <Note>
+              <eid>SB_SB</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>TB_TB</eid>
             <durationType>16th</durationType>
             <Lyrics>
+              <eid>UB_UB</eid>
               <text>say</text>
               </Lyrics>
             <Note>
+              <eid>VB_VB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>WB_WB</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Lyrics>
+              <eid>XB_XB</eid>
               <text>does</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>YB_YB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>ZB_ZB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>aB_aB</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>bB_bB</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>cB_cB</eid>
             <durationType>eighth</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>dB_dB</eid>
         <voice>
           <Chord>
+            <eid>eB_eB</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Lyrics>
+              <eid>fB_fB</eid>
               <text>that</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>gB_gB</eid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               </Note>
             <Note>
+              <eid>hB_hB</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>iB_iB</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>jB_jB</eid>
               <pitch>82</pitch>
               <tpc>12</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>kB_kB</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
+            <eid>lB_lB</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Lyrics>
+              <eid>mB_mB</eid>
               <text>star</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>nB_nB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>oB_oB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>pB_pB</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>qB_qB</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>rB_rB</eid>
             <durationType>eighth</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>sB_sB</eid>
             </BarLine>
           </voice>
         </Measure>

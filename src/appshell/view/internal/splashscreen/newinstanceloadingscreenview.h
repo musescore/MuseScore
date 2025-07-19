@@ -32,12 +32,12 @@
 class QSvgRenderer;
 
 namespace mu::appshell {
-class NewInstanceLoadingScreenView : public QWidget
+class NewInstanceLoadingScreenView : public QWidget, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(muse::languages::ILanguagesService, languagesService)
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<muse::languages::ILanguagesService> languagesService = { this };
 
 public:
     explicit NewInstanceLoadingScreenView(bool forNewScore, const QString& openingFileName, QWidget* parent = nullptr);

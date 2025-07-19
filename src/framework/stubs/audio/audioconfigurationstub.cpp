@@ -71,9 +71,24 @@ async::Notification AudioConfigurationStub::driverBufferSizeChanged() const
     return async::Notification();
 }
 
-samples_t AudioConfigurationStub::renderStep() const
+msecs_t AudioConfigurationStub::audioWorkerInterval(const samples_t, const sample_rate_t) const
 {
     return 0;
+}
+
+samples_t AudioConfigurationStub::minSamplesToReserve(RenderMode) const
+{
+    return 0;
+}
+
+samples_t AudioConfigurationStub::samplesToPreallocate() const
+{
+    return 0;
+}
+
+async::Channel<samples_t> AudioConfigurationStub::samplesToPreallocateChanged() const
+{
+    return async::Channel<samples_t>();
 }
 
 unsigned int AudioConfigurationStub::sampleRate() const
@@ -88,6 +103,11 @@ void AudioConfigurationStub::setSampleRate(unsigned int)
 async::Notification AudioConfigurationStub::sampleRateChanged() const
 {
     return async::Notification();
+}
+
+size_t AudioConfigurationStub::desiredAudioThreadNumber() const
+{
+    return 0;
 }
 
 size_t AudioConfigurationStub::minTrackCountForMultithreading() const
@@ -120,7 +140,21 @@ async::Channel<io::paths_t> AudioConfigurationStub::soundFontDirectoriesChanged(
     return async::Channel<io::paths_t>();
 }
 
-io::path_t AudioConfigurationStub::knownAudioPluginsFilePath() const
+bool AudioConfigurationStub::autoProcessOnlineSoundsInBackground() const
+{
+    return false;
+}
+
+void AudioConfigurationStub::setAutoProcessOnlineSoundsInBackground(bool)
+{
+}
+
+async::Channel<bool> AudioConfigurationStub::autoProcessOnlineSoundsInBackgroundChanged() const
 {
     return {};
+}
+
+bool AudioConfigurationStub::shouldMeasureInputLag() const
+{
+    return false;
 }

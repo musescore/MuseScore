@@ -125,6 +125,61 @@ QString NavigationApi::activeControl() const
     return c ? c->name() : QString();
 }
 
+static QJSValue toQJSValue(const INavigation* n, IApiEngine* e)
+{
+    QJSValue o = e->newObject();
+    o.setProperty("name", n->name());
+
+    QJSValue io = e->newObject();
+    io.setProperty("column", n->index().column);
+    io.setProperty("row", n->index().row);
+    o.setProperty("index", io);
+
+    o.setProperty("enabled", n->enabled());
+    o.setProperty("active", n->active());
+
+    return o;
+}
+
+QJSValue NavigationApi::sections() const
+{
+    const std::set<INavigationSection*>& sects = navigation()->sections();
+    QJSValue arr = engine()->newArray(sects.size());
+    quint32 i = 0;
+    for (const INavigationSection* s : sects) {
+        arr.setProperty(i, toQJSValue(s, engine()));
+        ++i;
+    }
+
+    return arr;
+}
+
+QJSValue NavigationApi::panels(const QString& sectionName) const
+{
+    const INavigationSection* s = navigation()->findSection(sectionName.toStdString());
+    QJSValue arr = engine()->newArray(s->panels().size());
+    quint32 i = 0;
+    for (const INavigationPanel* p : s->panels()) {
+        arr.setProperty(i, toQJSValue(p, engine()));
+        ++i;
+    }
+
+    return arr;
+}
+
+QJSValue NavigationApi::controls(const QString& sectionName, const QString& panelName) const
+{
+    const INavigationPanel* p = navigation()->findPanel(sectionName.toStdString(), panelName.toStdString());
+    QJSValue arr = engine()->newArray(p->controls().size());
+    quint32 i = 0;
+    for (const INavigationControl* c : p->controls()) {
+        arr.setProperty(i, toQJSValue(c, engine()));
+        ++i;
+    }
+
+    return arr;
+}
+
 void NavigationApi::dump() const
 {
     navigation()->dump();

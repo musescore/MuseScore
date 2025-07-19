@@ -38,19 +38,19 @@
 #include "ui/uitypes.h"
 
 namespace muse::shortcuts {
-class MidiDeviceMappingModel : public QAbstractListModel, public async::Asyncable
+class MidiDeviceMappingModel : public QAbstractListModel, public Injectable, public async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(muse::ui::IUiActionsRegister, uiActionsRegister)
-    INJECT(shortcuts::IMidiRemote, midiRemote)
-    INJECT(IShortcutsConfiguration, configuration)
-    INJECT(muse::midi::IMidiConfiguration, midiConfiguration)
 
     Q_PROPERTY(bool useRemoteControl READ useRemoteControl WRITE setUseRemoteControl NOTIFY useRemoteControlChanged)
 
     Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
     Q_PROPERTY(bool canEditAction READ canEditAction NOTIFY selectionChanged)
+
+    Inject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
+    Inject<shortcuts::IMidiRemote> midiRemote = { this };
+    Inject<IShortcutsConfiguration> configuration = { this };
+    Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
 
 public:
     explicit MidiDeviceMappingModel(QObject* parent = nullptr);

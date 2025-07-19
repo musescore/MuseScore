@@ -30,25 +30,12 @@
 using namespace muse;
 using namespace muse::audio;
 
-AudioEngine* AudioEngine::instance()
-{
-    ONLY_AUDIO_WORKER_THREAD;
-
-    static AudioEngine e;
-    return &e;
-}
-
-AudioEngine::AudioEngine()
-{
-    ONLY_AUDIO_WORKER_THREAD;
-}
-
 AudioEngine::~AudioEngine()
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 }
 
-Ret AudioEngine::init(AudioBufferPtr bufferPtr)
+Ret AudioEngine::init(AudioBufferPtr bufferPtr, const RenderConstraints& consts)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -60,9 +47,15 @@ Ret AudioEngine::init(AudioBufferPtr bufferPtr)
         return make_ret(Ret::Code::InternalError);
     }
 
-    m_mixer = std::make_shared<Mixer>();
+    IF_ASSERT_FAILED(consts.minSamplesToReserveWhenIdle != 0
+                     && consts.minSamplesToReserveInRealtime != 0) {
+        return make_ret(Ret::Code::InternalError);
+    }
 
+    m_mixer = std::make_shared<Mixer>(iocContext());
     m_buffer = std::move(bufferPtr);
+    m_renderConsts = consts;
+
     setMode(RenderMode::IdleMode);
 
     m_inited = true;
@@ -81,6 +74,13 @@ void AudioEngine::deinit()
     }
 }
 
+void AudioEngine::setOnReadBufferChanged(const OnReadBufferChanged func)
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    m_onReadBufferChanged = func;
+}
+
 sample_rate_t AudioEngine::sampleRate() const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -88,7 +88,7 @@ sample_rate_t AudioEngine::sampleRate() const
     return m_sampleRate;
 }
 
-void AudioEngine::setSampleRate(unsigned int sampleRate)
+void AudioEngine::setSampleRate(const sample_rate_t sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -100,19 +100,32 @@ void AudioEngine::setSampleRate(unsigned int sampleRate)
         return;
     }
 
+    LOGI() << "Sample rate: " << sampleRate;
+
     m_sampleRate = sampleRate;
     m_mixer->mixedSource()->setSampleRate(sampleRate);
+
+    if (m_onReadBufferChanged) {
+        m_onReadBufferChanged(m_readBufferSize, m_sampleRate);
+    }
 }
 
-void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
+void AudioEngine::setReadBufferSize(const uint16_t readBufferSize)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_buffer) {
+    if (m_readBufferSize == readBufferSize) {
         return;
     }
 
-    m_buffer->setMinSamplesToReserve(readBufferSize);
+    LOGI() << "Read buffer size: " << readBufferSize;
+
+    m_readBufferSize = readBufferSize;
+    updateBufferConstraints();
+
+    if (m_onReadBufferChanged) {
+        m_onReadBufferChanged(m_readBufferSize, m_sampleRate);
+    }
 }
 
 void AudioEngine::setAudioChannelsCount(const audioch_t count)
@@ -122,6 +135,8 @@ void AudioEngine::setAudioChannelsCount(const audioch_t count)
     IF_ASSERT_FAILED(m_mixer) {
         return;
     }
+
+    LOGI() << "Audio channels: " << count;
 
     m_mixer->setAudioChannelsCount(count);
 }
@@ -135,6 +150,8 @@ RenderMode AudioEngine::mode() const
 
 void AudioEngine::setMode(const RenderMode newMode)
 {
+    ONLY_AUDIO_WORKER_THREAD;
+
     if (newMode == m_currentMode) {
         return;
     }
@@ -159,6 +176,8 @@ void AudioEngine::setMode(const RenderMode newMode)
         break;
     }
 
+    updateBufferConstraints();
+
     m_modeChanges.notify();
 }
 
@@ -173,4 +192,26 @@ MixerPtr AudioEngine::mixer() const
 {
     ONLY_AUDIO_WORKER_THREAD;
     return m_mixer;
+}
+
+void AudioEngine::updateBufferConstraints()
+{
+    IF_ASSERT_FAILED(m_buffer) {
+        return;
+    }
+
+    if (m_readBufferSize == 0) {
+        return;
+    }
+
+    samples_t minSamplesToReserve = 0;
+
+    if (m_currentMode == RenderMode::IdleMode) {
+        minSamplesToReserve = std::max(m_readBufferSize, m_renderConsts.minSamplesToReserveWhenIdle);
+    } else {
+        minSamplesToReserve = std::max(m_readBufferSize, m_renderConsts.minSamplesToReserveInRealtime);
+    }
+
+    m_buffer->setMinSamplesPerChannelToReserve(minSamplesToReserve);
+    m_buffer->setRenderStep(minSamplesToReserve);
 }

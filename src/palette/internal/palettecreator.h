@@ -40,7 +40,7 @@ public:
     static PalettePtr newRepeatsPalette(bool defaultPalette = false);
     static PalettePtr newBeamPalette();
     static PalettePtr newDynamicsPalette(bool defaultPalette = false);
-    static PalettePtr newLayoutPalette();
+    static PalettePtr newLayoutPalette(bool defaultPalette = false);
     static PalettePtr newFingeringPalette(bool defaultPalette = false);
     static PalettePtr newTremoloPalette();
     static PalettePtr newNoteHeadsPalette();
@@ -57,7 +57,7 @@ public:
     static PalettePtr newAccidentalsPalette(bool defaultPalette = false);
     static PalettePtr newBarLinePalette(bool defaultPalette = false);
     static PalettePtr newLinesPalette(bool defaultPalette = false);
-    static PalettePtr newFretboardDiagramPalette();
+    static PalettePtr newFretboardDiagramPalette(bool defaultPalette = false);
     static PalettePtr newGuitarPalette(bool defaultPalette = false);
     static PalettePtr newKeyboardPalette();
     static PalettePtr newPitchPalette(bool defaultPalette = false);

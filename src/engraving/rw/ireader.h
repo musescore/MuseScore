@@ -19,14 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_IREADER_H
-#define MU_ENGRAVING_IREADER_H
+#pragma once
 
 #include <memory>
 #include <variant>
 
-#include "engravingerrors.h"
+#include "types/ret.h"
+
 #include "../types/types.h"
 #include "xmlreader.h"
 
@@ -60,7 +59,7 @@ class IReader
 public:
     virtual ~IReader() = default;
 
-    virtual Err readScore(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
+    virtual muse::Ret readScore(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
 
     using Supported = std::variant<std::monostate,
                                    Accidental*,
@@ -107,5 +106,3 @@ private:
 
 using IReaderPtr = std::shared_ptr<IReader>;
 }
-
-#endif // MU_ENGRAVING_IREADER_H

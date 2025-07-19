@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <spatium>1.74978</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Soprano, Staff</trackName>
+      <Instrument id="soprano">
+        <longName>Soprano, Staff</longName>
+        <shortName>S.</shortName>
+        <trackName>Soprano</trackName>
+        <minPitchP>60</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>79</maxPitchA>
+        <instrumentId>voice.soprano</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="52"/>
+          <controller ctrl="7" value="127"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>D_D</eid>
+        <voice>
+          <TimeSig>
+            <eid>E_E</eid>
+            <sigN>6</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>F_F</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Chord>
+            <eid>G_G</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>H_H</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Beam>
+            <eid>I_I</eid>
+            <l1>-6</l1>
+            <l2>-4</l2>
+            </Beam>
+          <Chord>
+            <eid>J_J</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>K_K</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>L_L</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>M_M</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>N_N</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>O_O</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>P_P</eid>
+        <voice>
+          <TimeSig>
+            <eid>Q_Q</eid>
+            <sigN>7</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>R_R</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>S_S</eid>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                <eid>T_T</eid>
+                </Accidental>
+              <pitch>70</pitch>
+              <tpc>12</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>U_U</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>V_V</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>W_W</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>X_X</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>Y_Y</eid>
+                </Accidental>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Beam>
+            <eid>Z_Z</eid>
+            <l1>0</l1>
+            <l2>2</l2>
+            </Beam>
+          <Chord>
+            <eid>a_a</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>b_b</eid>
+              <Accidental>
+                <subtype>accidentalNatural</subtype>
+                <eid>c_c</eid>
+                </Accidental>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>d_d</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>e_e</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>f_f</eid>
+        <voice>
+          <TimeSig>
+            <eid>g_g</eid>
+            <sigN>6</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>h_h</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>i_i</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>j_j</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>k_k</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Beam>
+            <eid>l_l</eid>
+            <l1>42</l1>
+            <l2>38</l2>
+            </Beam>
+          <Chord>
+            <eid>m_m</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>n_n</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>o_o</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>p_p</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>q_q</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>r_r</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <velocity>110</velocity>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

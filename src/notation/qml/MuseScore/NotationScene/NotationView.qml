@@ -27,6 +27,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 import MuseScore.Braille 1.0
+import MuseScore.Playback 1.0
 
 import "internal"
 
@@ -44,7 +45,7 @@ FocusScope {
 
     property alias defaultNavigationControl: fakeNavCtrl
 
-    property NavigationPanel navigationPanel: tabPanel.navigationPanel // first panel
+    readonly property alias navigationSection: navSec
 
     NavigationSection {
         id: navSec
@@ -88,9 +89,15 @@ FocusScope {
 
             orientation: notationNavigator.orientation === Qt.Horizontal ? Qt.Vertical : Qt.Horizontal
 
-            NotationScrollAndZoomArea {
+            StyledViewScrollAndZoomArea {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
+
+                horizontalScrollbarSize: view.horizontalScrollbarSize
+                startHorizontalScrollPosition: view.startHorizontalScrollPosition
+
+                verticalScrollbarSize: view.verticalScrollbarSize
+                startVerticalScrollPosition: view.startVerticalScrollPosition
 
                 NotationPaintView {
                     id: notationView
@@ -116,7 +123,7 @@ FocusScope {
                             if (fakeNavCtrl.active) {
                                 notationView.forceFocusIn()
 
-                                if (navigationPanel.highlight) {
+                                if (notationView.navigationPanel.highlight) {
                                     notationView.selectOnNavigationActive()
                                 }
                             } else {
@@ -128,6 +135,14 @@ FocusScope {
                     NavigationFocusBorder {
                         navigationCtrl: fakeNavCtrl
                         drawOutsideParent: false
+                    }
+
+                    Rectangle {
+                        id: playbackCursor
+
+                        Component.onCompleted: {
+                            notationView.setPlaybackCursorItem(playbackCursor)
+                        }
                     }
 
                     onActiveFocusRequested: {
@@ -172,9 +187,29 @@ FocusScope {
                         notationViewNavigationSection: navSec
                         navigationOrderStart: notationView.navigationPanel.order + 1
 
-                        onOpened: paintView.onElementPopupIsOpenChanged(true)
-                        onClosed: paintView.onElementPopupIsOpenChanged(false)
+                        onOpened: function(popupType) {
+                            paintView.onElementPopupIsOpenChanged(popupType)
+                        }
+
+                        onClosed: paintView.onElementPopupIsOpenChanged()
                     }
+
+                    NotationRegionsBeingProcessedView {
+                        notationViewRect: Qt.rect(notationView.x, notationView.y, notationView.width, notationView.height)
+                        notationViewMatrix: notationView.matrix
+                    }
+                }
+
+                onPinchToZoom: function(scale, pos) {
+                    view.pinchToZoom(scale, pos)
+                }
+
+                onScrollHorizontal: function(newPos) {
+                    view.scrollHorizontal(newPos)
+                }
+
+                onScrollVertical: function(newPos) {
+                    view.scrollVertical(newPos)
                 }
             }
 
@@ -215,7 +250,7 @@ FocusScope {
                     navigationPanel.section: navSec
                     navigationPanel.order: brailleViewLoader.navigationOrder
 
-                    navigationPanel.onActiveChanged: {
+                    navigationPanel.onActiveChanged: function (active) {
                         if (active) {
                             notationView.navigationPanel.setActive(false);
                             fakeNavCtrl.setActive(false);

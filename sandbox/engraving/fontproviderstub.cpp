@@ -32,6 +32,11 @@ qreal FontProviderStub::height(const Font&) const
     return 0.0;
 }
 
+qreal FontProviderStub::capHeight(const Font&) const
+{
+    return 0.0;
+}
+
 qreal FontProviderStub::ascent(const Font&) const
 {
     return 0.0;

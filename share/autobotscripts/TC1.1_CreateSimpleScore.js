@@ -23,6 +23,8 @@
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Navigation = require("steps/Navigation.js")
+var Score = require("steps/Score.js")
+var Home = require("steps/Home.js")
 
 var testCase = {
     name: "TC1.1: Create Simple Score",
@@ -30,15 +32,14 @@ var testCase = {
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
             api.dispatcher.dispatch("file-close")
-            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
-            //api.autobot.pause()
+            Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
         }},
         {name: "Select Instruments", func: function() {
             NewScore.selectTab("instruments")
-            NewScore.chooseInstrument("Woodwinds", "Flute")
+            NewScore.chooseInstrument("Free Reed", "Accordion")
             api.autobot.seeChanges()
             NewScore.chooseInstrument("Keyboards", "Piano")
         }},
@@ -50,21 +51,33 @@ var testCase = {
             NoteInput.chooseNoteDuration("pad-note-8")
         }},
         {name: "Put notes", func: function() {
-            NoteInput.putNote("note-c")
-            NoteInput.putNote("note-d")
-            NoteInput.putNote("note-e")
-            NoteInput.putNote("note-f")
-            NoteInput.putNote("note-g")
-            NoteInput.putNote("note-a")
-            NoteInput.putNote("note-b")
+            for (let i = 0; i < 3; ++i) {
+                NoteInput.putNote("note-c")
+                api.autobot.seeChanges()
+                NoteInput.putNote("note-d")
+                api.autobot.seeChanges()
+                NoteInput.putNote("note-e")
+                api.autobot.seeChanges()
+                NoteInput.putNote("note-f")
+                api.autobot.seeChanges()
+                NoteInput.putNote("note-g")
+                api.autobot.seeChanges()
+                NoteInput.putNote("note-a")
+                api.autobot.seeChanges()
+                NoteInput.putNote("note-b")
+                api.autobot.seeChanges()
+            }
         }},
         {name: "Play", func: function() {
-            api.navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
+            //Navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
+            Score.firstElement()
+            api.dispatcher.dispatch("play")
         }},
         {name: "Stop", func: function() {
             // wait interval + 5 sec
             api.autobot.sleep(5000)
-            api.navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
+            //Navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
+            api.dispatcher.dispatch("play")
         }},
         {name: "Save", func: function() {
             api.autobot.saveProject("TC1.1_CreateSimpleScore.mscz")
@@ -73,13 +86,10 @@ var testCase = {
             api.dispatcher.dispatch("file-close")
         }},
         {name: "Home", func: function() {
-            // Go Home
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Home.goToHome()
         }},
         {name: "Open last", func: function() {
-            api.navigation.goToControl("RecentScores", "RecentScores", "New score")
-            api.navigation.right()
-            api.navigation.trigger()
+            Home.openLastProject()
         }}
     ]
 };

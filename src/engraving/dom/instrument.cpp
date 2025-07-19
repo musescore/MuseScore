@@ -154,7 +154,10 @@ StaffName::StaffName(const String& xmlText, int pos)
 
 String Instrument::recognizeMusicXmlId() const
 {
+    // Return a MusicXML "Sound ID", which is essentially an instrument ID.
+    // See https://github.com/w3c/musicxml/blob/gh-pages/schema/sounds.xml
     static const String defaultMusicXmlId(u"keyboard.piano");
+    static const String defaultMusicXmlPercussionId(u"drum.group"); // our General MIDI Percussion
 
     std::list<String> nameList;
 
@@ -164,8 +167,8 @@ String Instrument::recognizeMusicXmlId() const
 
     const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList, m_useDrumset);
 
-    if (tmplByName && !tmplByName->musicXMLid.isEmpty()) {
-        return tmplByName->musicXMLid;
+    if (tmplByName && !tmplByName->musicXmlId.isEmpty()) {
+        return tmplByName->musicXmlId;
     }
 
     const InstrChannel* channel = this->channel(0);
@@ -177,39 +180,59 @@ String Instrument::recognizeMusicXmlId() const
     const InstrumentTemplate* tmplMidiProgram = mu::engraving::searchTemplateForMidiProgram(channel->bank(), channel->program(),
                                                                                             m_useDrumset);
 
-    if (tmplMidiProgram && !tmplMidiProgram->musicXMLid.isEmpty()) {
-        return tmplMidiProgram->musicXMLid;
+    if (tmplMidiProgram && !tmplMidiProgram->musicXmlId.isEmpty()) {
+        return tmplMidiProgram->musicXmlId;
     }
 
-    if (m_useDrumset) {
-        static const String drumsetId(u"drumset");
-        return drumsetId;
-    }
-
-    return defaultMusicXmlId;
+    return m_useDrumset ? defaultMusicXmlPercussionId : defaultMusicXmlId;
 }
 
 String Instrument::recognizeId() const
 {
-    // When reading a score create with pre-3.6, instruments doesn't
-    // have an id define in the instrument. So try to find the instrumentId
-    // based on MusicXMLid.
-    // This requires a hack for instruments using MusicXMLid "strings.group"
-    // because there are multiple instrument using this same id.
-    // For these instruments, use the value of controller 32 of the "arco"
-    // channel to find the correct instrument.
-    // There are some duplicate MusicXML IDs among other instruments too. In
-    // that case we check the pitch range and use the shortest ID that matches.
+    // When reading a score created with pre-3.6, MuseScore's instrument ID
+    // isn't saved in the score file, so we must try to guess the ID based on
+    // the MusicXML ID, which is saved. However, MusicXML IDs are not unique,
+    // so we must also consider other data to find the best match, preferring
+    // more generic instruments when there's a tie.
+
+    // In these cases, the best and/or most generic match is already known,
+    // and we don't want to risk returning something else.
+    if (m_musicXmlId == u"drum.group") {
+        return u"percussion-synthesizer"; // General MIDI Percussion (most generic kit)
+    } else if (m_musicXmlId == u"drum.group.set") {
+        return u"drumset"; // Large Drum Kit (most generic drum kit)
+    } else if (m_musicXmlId.startsWith(u"mdl.")) {
+        // Use fixed mapping for MDL1 instruments to ensure we get the
+        // marching versions (e.g. "marching-snare" and not "snare-drum").
+        // See https://github.com/musescore/mdl/blob/master/resources/instruments/mdl_1_3_0.xml
+        if (m_musicXmlId == u"mdl.drum.snare-drum") {
+            return u"marching-snare";
+        } else if (m_musicXmlId == u"mdl.drum.tenor-drum") {
+            return u"marching-tenor-drums";
+        } else if (m_musicXmlId == u"mdl.drum.bass-drum") {
+            return u"marching-bass-drums";
+        } else if (m_musicXmlId == u"mdl.metal.cymbal.crash") {
+            return u"marching-cymbals";
+        } else if (m_musicXmlId == u"mdl.drum.group.set") {
+            return u"drumset";
+        }
+    }
+
+    // Several instruments have MusicXML ID "strings.group". Let's use the
+    // value of controller 32 of the "arco" channel to distinguish them.
     const String arco = String(u"arco");
-    const bool groupHack = musicXmlId() == String(u"strings.group");
+    const bool groupHack = m_musicXmlId == String(u"strings.group");
     const int idxref = channelIdx(arco);
     const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
-    String fallback;
-    int bestMatchStrength = 0;     // higher when fallback ID provides better match for instrument data
+
+    // For other instruments, consider how closely the instrument data
+    // matches each of our templates. Use the ID that gives the best match.
+    String fallback; // ID that gave the best match so far
+    int bestMatchStrength = 0; // higher when ID is a better match
 
     for (const InstrumentGroup* g : instrumentGroups) {
         for (const InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->musicXMLid != musicXmlId()) {
+            if (it->musicXmlId != m_musicXmlId) {
                 continue;
             }
             if (groupHack) {
@@ -249,7 +272,13 @@ String Instrument::recognizeId() const
         }
     }
 
-    return fallback.isEmpty() ? String(u"piano") : fallback;
+    if (!fallback.isEmpty()) {
+        return fallback;
+    }
+
+    return m_useDrumset
+           ? u"percussion-synthesizer" // General MIDI Percussion (most generic kit)
+           : u"piano";
 }
 
 int Instrument::recognizeMidiProgram() const
@@ -775,7 +804,11 @@ bool Instrument::isVocalInstrument() const
 bool Instrument::isNormallyMultiStaveInstrument() const
 {
     String instrumentFamily = family();
-    return instrumentFamily == u"keyboards" || instrumentFamily == u"organs" || instrumentFamily == "keyboard-percussion";
+    return instrumentFamily == u"keyboards"
+           || instrumentFamily == u"organs"
+           || instrumentFamily == u"keyboard-percussion"
+           || instrumentFamily == u"harps"
+           || instrumentFamily == u"accordions";
 }
 
 //---------------------------------------------------------
@@ -1151,7 +1184,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
 
     instrument.setTrackName(templ->trackName);
     instrument.setTranspose(templ->transpose);
-    instrument.setMusicXmlId(templ->musicXMLid);
+    instrument.setMusicXmlId(templ->musicXmlId);
     instrument.m_useDrumset = templ->useDrumset;
 
     if (templ->useDrumset) {

@@ -8,15 +8,6 @@ int FontProviderStub::addSymbolFont(const String&, const io::path_t&)
     return -1;
 }
 
-int FontProviderStub::addTextFont(const io::path_t&)
-{
-    return -1;
-}
-
-void FontProviderStub::insertSubstitution(const String&, const String&)
-{
-}
-
 double FontProviderStub::lineSpacing(const Font&) const
 {
     return 0.0;
@@ -28,6 +19,11 @@ double FontProviderStub::xHeight(const Font&) const
 }
 
 double FontProviderStub::height(const Font&) const
+{
+    return 0.0;
+}
+
+double FontProviderStub::capHeight(const Font&) const
 {
     return 0.0;
 }

@@ -34,10 +34,6 @@ Rectangle {
         id: bendStyleSelector
     }
 
-    Component.onCompleted: {
-        bendStyleSelector.load()
-    }
-
     RadioButtonGroup {
         model: [
             { iconCode: IconCode.GUITAR_BEND_STYLE_1, text: "", value: false },
@@ -48,14 +44,10 @@ Rectangle {
             width: 106
             height: 60
 
-            checked: modelData.value === bendStyleSelector.useFull.value
+            iconCode: modelData.iconCode
+            iconFontSize: 28
 
-            StyledIconLabel {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                iconCode: modelData.iconCode
-                font.pixelSize: 28
-            }
+            checked: modelData.value === bendStyleSelector.useFull.value
 
             onToggled: {
                 bendStyleSelector.useFull.value = modelData.value

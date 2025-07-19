@@ -30,14 +30,14 @@
 #include "async/asyncable.h"
 
 namespace muse::mi {
-class MultiInstancesDevModel : public QObject, public async::Asyncable
+class MultiInstancesDevModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString selfID READ selfID CONSTANT)
     Q_PROPERTY(QVariantList instances READ instances NOTIFY instancesChanged)
 
-    INJECT(IMultiInstancesProvider, multiInstancesProvider)
+    Inject<IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
     explicit MultiInstancesDevModel(QObject* parent = nullptr);

@@ -26,7 +26,11 @@
 using namespace muse::midi;
 
 MidiPortDevModel::MidiPortDevModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
+{
+}
+
+void MidiPortDevModel::init()
 {
     midiInPort()->eventReceived().onReceive(this, [this](tick_t tick, const Event& event) {
         QString str = "tick: " + QString::number(tick) + " " + QString::fromStdString(event.to_string());
@@ -155,7 +159,7 @@ void MidiPortDevModel::generateMIDI20()
         case Event::Opcode::NoteOff:
         case Event::Opcode::NoteOn:
             e.setNote(++note);
-            e.setVelocity(++velocity);
+            e.setVelocity7(++velocity);
             e.setPitchNote(note + 12, 0.5);
             break;
         case Event::Opcode::PolyPressure:

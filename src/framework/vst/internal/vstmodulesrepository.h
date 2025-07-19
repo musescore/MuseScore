@@ -29,16 +29,16 @@
 #include "ivstmodulesrepository.h"
 
 #include "modularity/ioc.h"
-#include "audio/iknownaudiopluginsregister.h"
+#include "audioplugins/iknownaudiopluginsregister.h"
 #include "audio/iaudiothreadsecurer.h"
 
-#include "audio/audiotypes.h"
+#include "audioplugins/audiopluginstypes.h"
 #include "vsttypes.h"
 
 namespace muse::vst {
 class VstModulesRepository : public IVstModulesRepository
 {
-    INJECT(muse::audio::IKnownAudioPluginsRegister, knownPlugins)
+    INJECT(audioplugins::IKnownAudioPluginsRegister, knownPlugins)
     INJECT_STATIC(muse::audio::IAudioThreadSecurer, threadSecurer)
 
 public:
@@ -52,17 +52,17 @@ public:
     void addPluginModule(const muse::audio::AudioResourceId& resourceId) override;
     void removePluginModule(const muse::audio::AudioResourceId& resourceId) override;
 
-    muse::audio::AudioResourceMetaList instrumentModulesMeta() const override;
-    muse::audio::AudioResourceMetaList fxModulesMeta() const override;
+    audio::AudioResourceMetaList instrumentModulesMeta() const override;
+    audio::AudioResourceMetaList fxModulesMeta() const override;
     void refresh() override;
 
 private:
-    muse::audio::AudioResourceMetaList modulesMetaList(const muse::audio::AudioPluginType& type) const;
+    audio::AudioResourceMetaList modulesMetaList(const audioplugins::AudioPluginType& type) const;
 
     PluginContext m_pluginContext;
 
     mutable std::mutex m_mutex;
-    mutable std::unordered_map<muse::audio::AudioResourceId, PluginModulePtr> m_modules;
+    mutable std::unordered_map<audio::AudioResourceId, PluginModulePtr> m_modules;
 };
 }
 

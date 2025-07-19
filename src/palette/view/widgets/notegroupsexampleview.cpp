@@ -22,7 +22,6 @@
 
 #include "notegroupsexampleview.h"
 
-#include <cmath>
 #include <QMimeData>
 
 #include "engraving/rw/rwregister.h"
@@ -103,12 +102,12 @@ void NoteGroupsExampleView::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
-    const EngravingItem* newDropTarget = nullptr;
+    EngravingItem* newDropTarget = nullptr;
 
     PointF position = toLogical(event->position());
     std::vector<EngravingItem*> el = elementsAt(position);
 
-    for (const EngravingItem* e : el) {
+    for (EngravingItem* e : el) {
         if (e->type() == ElementType::NOTE) {
             newDropTarget = e;
             break;
@@ -123,7 +122,7 @@ void NoteGroupsExampleView::dragMoveEvent(QDragMoveEvent* event)
     return;
 }
 
-void NoteGroupsExampleView::setDropTarget(const EngravingItem* el)
+void NoteGroupsExampleView::setDropTarget(EngravingItem* el)
 {
     if (m_dropTarget != el) {
         if (m_dropTarget) {
@@ -159,7 +158,7 @@ void NoteGroupsExampleView::dropEvent(QDropEvent* event)
         return;
     }
 
-    foreach (EngravingItem* e, elementsAt(position)) {
+    for (EngravingItem* e : elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {
             ActionIcon* icon = toActionIcon(m_dragElement);
             Chord* chord = toNote(e)->chord();
@@ -180,7 +179,7 @@ void NoteGroupsExampleView::mousePressEvent(QMouseEvent* event)
 
     PointF position = toLogical(event->position());
 
-    foreach (EngravingItem* e, elementsAt(position)) {
+    for (EngravingItem* e : elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {
             emit noteClicked(toNote(e));
             break;

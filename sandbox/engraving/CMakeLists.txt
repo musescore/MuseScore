@@ -1,12 +1,9 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.22)
 
 project(engraving_app LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-# set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -22,33 +19,21 @@ set(CMAKE_MODULE_PATH
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
-set(QT_MIN_VERSION "6.2.4")
-find_package(Qt6Core ${QT_MIN_VERSION} REQUIRED)
-find_package(Qt6Gui ${QT_MIN_VERSION} REQUIRED)
-# find_package(Qt6Svg ${QT_MIN_VERSION} REQUIRED)
-# find_package(Qt6Widgets ${QT_MIN_VERSION} REQUIRED)
-set(QT_LIBRARIES
-    Qt6::Core
-    Qt6::Gui
-    # Qt6::Svg
-    # Qt6::Widgets
-)
+find_package(Qt6 6.3 REQUIRED COMPONENTS Core Gui)
+
+qt_standard_project_setup()
 
 include_directories(
-    ${Qt6Core_INCLUDE_DIRS}
-    ${Qt6Gui_INCLUDE_DIRS}
-    # ${Qt6Svg_INCLUDE_DIRS}
-    # ${Qt6Widgets_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}
     ${MU_ROOT}/thirdparty/dtl
 )
 
 set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 
-add_definitions(
-    -DNO_QT_SUPPORT
-    -DNO_ENGRAVING_INTERACTIVE
-    -DNO_ENGRAVING_QSVGRENDER
+add_compile_definitions(
+    NO_QT_SUPPORT
+    NO_ENGRAVING_INTERACTIVE
+    NO_ENGRAVING_QSVGRENDER
 )
 
 set(NO_ENGRAVING_INTERNAL ON)
@@ -80,7 +65,8 @@ target_include_directories(engraving_app PUBLIC
 )
 
 target_link_libraries(engraving_app
-    ${QT_LIBRARIES}
     global
     engraving
+    Qt6::Core
+    Qt6::Gui
 )

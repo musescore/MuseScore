@@ -481,50 +481,50 @@ public:
      * to the default value)
      **/
     ///@{
-    void SetC(harpPedalLog_C c_) { m_c = c_; }
-    harpPedalLog_C GetC() const { return m_c; }
+    void SetC(data_HARPPEDALPOSITION c_) { m_c = c_; }
+    data_HARPPEDALPOSITION GetC() const { return m_c; }
     bool HasC() const;
     //
-    void SetD(harpPedalLog_D d_) { m_d = d_; }
-    harpPedalLog_D GetD() const { return m_d; }
+    void SetD(data_HARPPEDALPOSITION d_) { m_d = d_; }
+    data_HARPPEDALPOSITION GetD() const { return m_d; }
     bool HasD() const;
     //
-    void SetE(harpPedalLog_E e_) { m_e = e_; }
-    harpPedalLog_E GetE() const { return m_e; }
+    void SetE(data_HARPPEDALPOSITION e_) { m_e = e_; }
+    data_HARPPEDALPOSITION GetE() const { return m_e; }
     bool HasE() const;
     //
-    void SetF(harpPedalLog_F f_) { m_f = f_; }
-    harpPedalLog_F GetF() const { return m_f; }
+    void SetF(data_HARPPEDALPOSITION f_) { m_f = f_; }
+    data_HARPPEDALPOSITION GetF() const { return m_f; }
     bool HasF() const;
     //
-    void SetG(harpPedalLog_G g_) { m_g = g_; }
-    harpPedalLog_G GetG() const { return m_g; }
+    void SetG(data_HARPPEDALPOSITION g_) { m_g = g_; }
+    data_HARPPEDALPOSITION GetG() const { return m_g; }
     bool HasG() const;
     //
-    void SetA(harpPedalLog_A a_) { m_a = a_; }
-    harpPedalLog_A GetA() const { return m_a; }
+    void SetA(data_HARPPEDALPOSITION a_) { m_a = a_; }
+    data_HARPPEDALPOSITION GetA() const { return m_a; }
     bool HasA() const;
     //
-    void SetB(harpPedalLog_B b_) { m_b = b_; }
-    harpPedalLog_B GetB() const { return m_b; }
+    void SetB(data_HARPPEDALPOSITION b_) { m_b = b_; }
+    data_HARPPEDALPOSITION GetB() const { return m_b; }
     bool HasB() const;
     ///@}
 
 private:
     /** Indicates the pedal setting for the harp’s C strings. **/
-    harpPedalLog_C m_c;
+    data_HARPPEDALPOSITION m_c;
     /** Indicates the pedal setting for the harp’s D strings. **/
-    harpPedalLog_D m_d;
+    data_HARPPEDALPOSITION m_d;
     /** Indicates the pedal setting for the harp’s E strings. **/
-    harpPedalLog_E m_e;
+    data_HARPPEDALPOSITION m_e;
     /** Indicates the pedal setting for the harp’s F strings. **/
-    harpPedalLog_F m_f;
+    data_HARPPEDALPOSITION m_f;
     /** Indicates the pedal setting for the harp’s G strings. **/
-    harpPedalLog_G m_g;
+    data_HARPPEDALPOSITION m_g;
     /** Indicates the pedal setting for the harp’s A strings. **/
-    harpPedalLog_A m_a;
+    data_HARPPEDALPOSITION m_a;
     /** Indicates the pedal setting for the harp’s B strings. **/
-    harpPedalLog_B m_b;
+    data_HARPPEDALPOSITION m_b;
 };
 
 //----------------------------------------------------------------------------

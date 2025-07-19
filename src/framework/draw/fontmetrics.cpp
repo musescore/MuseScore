@@ -44,6 +44,11 @@ double FontMetrics::height() const
     return fontProvider()->height(m_font);
 }
 
+double FontMetrics::capHeight() const
+{
+    return fontProvider()->capHeight(m_font);
+}
+
 double FontMetrics::ascent() const
 {
     return fontProvider()->ascent(m_font);
@@ -129,4 +134,9 @@ RectF FontMetrics::tightBoundingRect(const Font& f, const String& string)
 double FontMetrics::ascent(const Font& f)
 {
     return FontMetrics(f).ascent();
+}
+
+double FontMetrics::capHeight(const Font& f)
+{
+    return FontMetrics(f).capHeight();
 }

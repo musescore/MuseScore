@@ -27,6 +27,7 @@
 
 #include "engravingitem.h"
 #include "bsp.h"
+#include "text.h"
 
 namespace mu::engraving {
 class RootItem;
@@ -85,7 +86,7 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    Text* layoutHeaderFooter(int area, const String& ss) const;
+    Text* layoutHeaderFooter(int area, const String& s) const;
 
 private:
 
@@ -93,7 +94,8 @@ private:
     Page(RootItem* parent);
 
     void doRebuildBspTree();
-    String replaceTextMacros(const String&) const;
+    TextBlock replaceTextMacros(const TextBlock&) const;
+    const CharFormat formatForMacro(const String&) const;
 
     std::vector<System*> m_systems;
     page_idx_t m_no = 0;                        // page number

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -49,41 +51,51 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Cemetary Gates</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <text>:)
 Pantera
 Cowboys From Hell</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Music by Pantera</text>
           </Text>
         <Text>
+          <eid>H_H</eid>
           <style>poet</style>
           <text>Words by Pantera</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>I_I</eid>
         <voice>
           <KeySig>
+            <eid>J_J</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <eid>L_L</eid>
             </Dynamic>
           <Tempo>
             <tempo>2.333333</tempo>
+            <eid>M_M</eid>
             <text><sym>metNoteQuarterUp</sym> = 140</text>
             </Tempo>
           <Spanner type="HarmonicMark">
@@ -91,6 +103,7 @@ Cowboys From Hell</text>
               <beginText>AH</beginText>
               <beginTextOffset x="0" y="0"/>
               <continueText>AH</continueText>
+              <eid>N_N</eid>
               </HarmonicMark>
             <next>
               <location>
@@ -99,8 +112,45 @@ Cowboys From Hell</text>
               </next>
             </Spanner>
           <Chord>
+            <eid>O_O</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <noStem>1</noStem>
+            <Note>
+              <eid>P_P</eid>
+              <parentheses>both</parentheses>
+              <Parenthesis>
+                <eid>Q_Q</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>R_R</eid>
+                </Parenthesis>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              <string>3</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>1</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>S_S</eid>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <notes>1</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>U_U</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <play>0</play>
@@ -108,16 +158,19 @@ Cowboys From Hell</text>
               <string>2</string>
               </Note>
             <Note>
-              <Bend>
-                <point time="0" pitch="50" vibrato="0"/>
-                <point time="30" pitch="50" vibrato="0"/>
-                <point time="60" pitch="50" vibrato="0"/>
-                </Bend>
-              <pitch>83</pitch>
-              <tpc>19</tpc>
+              <eid>V_V</eid>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
               <head>diamond</head>
-              <fret>4</fret>
-              <string>2</string>
+              <string>3</string>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <grace>0</grace>
+                    <notes>-1</notes>
+                    </location>
+                  </prev>
+                </Spanner>
               </Note>
             </Chord>
           <Spanner type="HarmonicMark">
@@ -128,6 +181,7 @@ Cowboys From Hell</text>
               </prev>
             </Spanner>
           <Rest>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

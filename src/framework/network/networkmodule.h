@@ -25,11 +25,18 @@
 #include "modularity/imodulesetup.h"
 
 namespace muse::network {
+class NetworkConfiguration;
 class NetworkModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
+
     void registerExports() override;
+    void registerApi() override;
+    void onInit(const IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<NetworkConfiguration> m_configuration;
 };
 }
 

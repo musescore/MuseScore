@@ -30,6 +30,7 @@
 #include "../../dom/chordrest.h"
 #include "../../dom/measure.h"
 #include "../../dom/note.h"
+#include "../../dom/noteline.h"
 #include "../../dom/tie.h"
 #include "../../dom/chord.h"
 #include "../../dom/staff.h"
@@ -128,6 +129,11 @@ void ConnectorInfoReader::readEndpointLocation(Location& l)
             e.unknown();
         }
     }
+}
+
+Fraction ConnectorInfoReader::curTick() const
+{
+    return m_ctx->tick();
 }
 
 //---------------------------------------------------------
@@ -256,7 +262,9 @@ void ConnectorInfoReader::readAddConnector(ChordRest* item, ConnectorInfoReader*
 
         if (info->isStart()) {
             spanner->setTrack(l.track());
-            spanner->setTick(item->tick());
+            // trillCueNotes have unreliable tick() while reading so use instead tick from readContext
+            Fraction startTick = item->isChord() && toChord(item)->isTrillCueNote() ? info->curTick() : item->tick();
+            spanner->setTick(startTick);
             spanner->setStartElement(item);
             if (pasteMode) {
                 item->score()->undoAddElement(spanner);
@@ -326,6 +334,7 @@ void ConnectorInfoReader::readAddConnector(Measure* item, ConnectorInfoReader* i
     case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
+    case ElementType::PARTIAL_LYRICSLINE:
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
@@ -361,6 +370,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
+    case ElementType::NOTELINE:
     {
         Spanner* sp = toSpanner(info->connector());
         if (info->isStart()) {
@@ -386,10 +396,16 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             sp->setTick2(item->tick());
             sp->setEndElement(item);
             if (sp->isTie()) {
-                item->setTieBack(toTie(sp));
+                Tie* tie = toTie(sp);
+                item->setTieBack(tie);
+                if (pasteMode) {
+                    tie->updatePossibleJumpPoints();
+                }
             } else {
-                if ((sp->isGlissando() || sp->isGuitarBend()) && item->explicitParent() && item->explicitParent()->isChord()) {
-                    toChord(item->explicitParent())->setEndsGlissandoOrGuitarBend(true);
+                bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
+                if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->explicitParent()
+                    && item->explicitParent()->isChord()) {
+                    toChord(item->explicitParent())->setEndsNoteAnchoredLine(true);
                 }
                 item->addSpannerBack(sp);
             }
@@ -414,6 +430,11 @@ void ConnectorInfoReader::readAddConnector(Score* item, ConnectorInfoReader* inf
         LOGD("Score::readAddConnector is called not in paste mode.");
         return;
     }
+
+    if (info->connector()->systemFlag()) {
+        return;
+    }
+
     const ElementType type = info->type();
     switch (type) {
     case ElementType::HAIRPIN:
@@ -421,14 +442,13 @@ void ConnectorInfoReader::readAddConnector(Score* item, ConnectorInfoReader* inf
     case ElementType::OTTAVA:
     case ElementType::TRILL:
     case ElementType::TEXTLINE:
-    case ElementType::VOLTA:
     case ElementType::PALM_MUTE:
+    case ElementType::PARTIAL_LYRICSLINE:
     case ElementType::WHAMMY_BAR:
     case ElementType::RASGUEADO:
     case ElementType::HARMONIC_MARK:
     case ElementType::PICK_SCRAPE:
     case ElementType::LET_RING:
-    case ElementType::GRADUAL_TEMPO_CHANGE:
     case ElementType::VIBRATO:
     {
         Spanner* sp = toSpanner(info->connector());

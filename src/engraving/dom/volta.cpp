@@ -28,6 +28,7 @@
 #include "types/typesconv.h"
 
 #include "barline.h"
+#include "keysig.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -326,17 +327,26 @@ PointF Volta::linePos(Grip grip, System** system) const
         return PointF();
     }
 
-    if (start && segment->rtick().isZero()) {
-        Segment* prev = segment->prev1enabled();
-        if (prev && prev->isEndBarLineType()) {
+    const Measure* measure = segment->measure();
+    bool isAtSystemStart = segment->rtick().isZero() && measure && measure->system() && measure->isFirstInSystem();
+    bool searchForPrevBarline = start ? segment->rtick().isZero() && (measure->repeatStart() || !isAtSystemStart) : true;
+
+    if (searchForPrevBarline) {
+        Segment* prev = segment;
+        while (prev && !prev->isType(SegmentType::BarLineType) && prev->tick() == segment->tick()) {
+            prev = prev->prev1MMenabled();
+        }
+        if (prev && prev->isType(SegmentType::BarLineType)) {
             segment = prev;
         }
-    } else if (!start) {
+    }
+
+    if (start && !segment->isType(SegmentType::BarLineType) && style().styleB(Sid::voltaAlignStartBeforeKeySig)) {
         Segment* prev = segment;
-        while (prev && !prev->isEndBarLineType() && prev->tick() == segment->tick()) {
-            prev = prev->prev1enabled();
+        while (prev && !prev->isType(SegmentType::KeySig) && prev->tick() == segment->tick()) {
+            prev = prev->prev1MMenabled();
         }
-        if (prev && prev->isEndBarLineType()) {
+        if (prev && prev->isType(SegmentType::KeySig)) {
             segment = prev;
         }
     }
@@ -345,22 +355,40 @@ PointF Volta::linePos(Grip grip, System** system) const
     double x = segment->x() + segment->measure()->x();
 
     if (start) {
+        bool alignLeftOfRepeatBarLine = false;
         if (segment->isChordRestType()) {
             x -= style().styleMM(Sid::barNoteDistance);
-        } else if (segment->segmentType() & SegmentType::BarLineType) {
+        } else if (segment->isKeySigType()) {
+            KeySig* sig = toKeySig(segment->element(track()));
+            if (sig && !sig->ldata()->keySymbols.empty()) {
+                KeySym keySym = sig->ldata()->keySymbols.front();
+                PointF cutoutNW = score()->engravingFont()->smuflAnchor(keySym.sym, SmuflAnchorId::cutOutNW, 1.0);
+                x += keySym.xPos + cutoutNW.x();
+            }
+        } else if (segment->segmentType() & SegmentType::BarLineType && !isAtSystemStart) {
             x += segment->width();
+            const BarLine* barline = toBarLine(segment->element(track()));
+            alignLeftOfRepeatBarLine = barline && barline->barLineType() == BarLineType::END_REPEAT
+                                       && style().styleB(Sid::voltaAlignEndLeftOfBarline);
+            if (alignLeftOfRepeatBarLine) {
+                x -= style().styleMM(Sid::endBarWidth);
+            }
         }
-        x -= 0.5 * lineWidth();
+        x += (isAtSystemStart || alignLeftOfRepeatBarLine ? 0.5 : -0.5) * absoluteFromSpatium(lineWidth());
     } else {
         if ((*system) && segment->tick() == (*system)->endTick()) {
-            x += segment->staffShape(0).right();
-            x -= 0.5 * lineWidth();
+            staff_idx_t si = backSegment()->effectiveStaffIdx();
+            if (si == muse::nidx) {
+                return PointF(x, 0.0);
+            }
+            x += segment->staffShape(si).right();
+            x -= 0.5 * absoluteFromSpatium(lineWidth());
         } else if (segment->segmentType() & SegmentType::BarLineType) {
             BarLine* barLine = toBarLine(segment->elementAt(track()));
             if (barLine->barLineType() == BarLineType::END_REPEAT || barLine->barLineType() == BarLineType::END_START_REPEAT) {
                 x += symWidth(SymId::repeatDot) + style().styleMM(Sid::repeatBarlineDotSeparation);
             }
-            x += 0.5 * lineWidth();
+            x += 0.5 * absoluteFromSpatium(lineWidth());
         }
     }
 

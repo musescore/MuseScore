@@ -146,7 +146,7 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return style().styleMM(Sid::pedalLineWidth);              // return point, not spatium
+        return style().styleS(Sid::pedalLineWidth);              // return point, not spatium
 
     case Pid::LINE_STYLE:
         return style().styleV(Sid::pedalLineStyle);
@@ -183,10 +183,11 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 
 Pedal* Pedal::findNextInStaff() const
 {
-    auto spanners = score()->spannerMap().findOverlapping(tick2().ticks(), score()->endTick().ticks());
+    Fraction endTick = tick2();
+    auto spanners = score()->spannerMap().findOverlapping(endTick.ticks(), score()->endTick().ticks());
     for (auto element : spanners) {
         Spanner* spanner = element.value;
-        if (spanner->isPedal() && spanner != this && spanner->staffIdx() == staffIdx()) {
+        if (spanner->isPedal() && spanner != this && spanner->staffIdx() == staffIdx() && spanner->tick() == endTick) {
             return toPedal(spanner);
         }
     }
@@ -224,7 +225,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
         if (beginText() == "<sym>keyboardPedalPed</sym>") {
             x -= 0.5 * spatium();
         } else if (beginHookType() == HookType::HOOK_90 || beginHookType() == HookType::HOOK_90T) {
-            x += 0.5 * lineWidth();
+            x += 0.5 * absoluteFromSpatium(lineWidth());
         } else if (beginHookType() == HookType::HOOK_45) {
             EngravingItem* item = startElement();
             if (item && item->isChord()) {
@@ -243,9 +244,8 @@ PointF Pedal::linePos(Grip grip, System** sys) const
     }
 
     Pedal* nextPedal = findNextInStaff();
-    bool hasNextRightAfter = nextPedal && nextPedal->tick() == tick2();
 
-    if (endHookType() == HookType::HOOK_45 && hasNextRightAfter) {
+    if (nextPedal && endHookType() == HookType::HOOK_45) {
         *sys = endSeg->measure()->system();
         double x = endSeg->x() + endSeg->measure()->x();
         EngravingItem* item = endElement();
@@ -268,11 +268,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
     *sys = endSeg->measure()->system();
     double x = endSeg->x() + endSeg->measure()->x();
 
-    if (endText() == "<sym>keyboardPedalUp</sym>") {
-        x -= symWidth(SymId::keyboardPedalUp);
-    }
-
-    x -= (endSeg->isChordRestType() && hasNextRightAfter ? 1.25 : 0.75) * spatium();
+    x -= (endSeg->isChordRestType() && nextPedal ? 1.25 : 0.75) * spatium();
 
     return PointF(x, 0.0);
 }

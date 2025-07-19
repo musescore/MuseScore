@@ -25,6 +25,8 @@
 #include "measure.h"
 #include "score.h"
 #include "segment.h"
+#include "system.h"
+#include "tempotext.h"
 
 #include "log.h"
 
@@ -143,6 +145,8 @@ PropertyValue GradualTempoChange::getProperty(Pid id) const
         return m_tempoEasingMethod;
     case Pid::TEMPO_CHANGE_FACTOR:
         return tempoChangeFactor();
+    case Pid::SNAP_AFTER:
+        return snapToItemAfter();
     default:
         return TextLineBase::getProperty(id);
     }
@@ -159,6 +163,9 @@ bool GradualTempoChange::setProperty(Pid id, const PropertyValue& val)
         break;
     case Pid::TEMPO_CHANGE_FACTOR:
         m_tempoChangeFactor = val.toReal();
+        break;
+    case Pid::SNAP_AFTER:
+        setSnapToItemAfter(val.toBool());
         break;
     default:
         if (!TextLineBase::setProperty(id, val)) {
@@ -210,6 +217,9 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
         return ChangeMethod::NORMAL;
     case Pid::TEMPO_CHANGE_FACTOR:
         return muse::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
+
+    case Pid::SNAP_AFTER:
+        return true;
 
     default:
         return TextLineBase::propertyDefault(propertyId);
@@ -297,6 +307,80 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
         }
     }
     return TextLineBaseSegment::getPropertyStyle(id);
+}
+
+GradualTempoChangeSegment* GradualTempoChangeSegment::findElementToSnapBefore() const
+{
+    const System* sys = system();
+    IF_ASSERT_FAILED(sys) {
+        return nullptr;
+    }
+
+    GradualTempoChange* thisTempoChange = tempoChange();
+    Fraction startTick = thisTempoChange->tick();
+    if (!sys->measures().empty() && startTick == sys->measures().front()->tick()) {
+        return nullptr;
+    }
+
+    auto intervals = score()->spannerMap().findOverlapping(startTick.ticks(), startTick.ticks());
+    for (auto interval : intervals) {
+        Spanner* spanner = interval.value;
+        bool isValidTempoChange = spanner->isGradualTempoChange() && !spanner->segmentsEmpty() && spanner->visible()
+                                  && spanner != thisTempoChange;
+        if (!isValidTempoChange) {
+            continue;
+        }
+
+        GradualTempoChange* precedingTempoChange = toGradualTempoChange(spanner);
+        bool endsMatch = precedingTempoChange->track() == thisTempoChange->track()
+                         && precedingTempoChange->tick2() == startTick
+                         && precedingTempoChange->placeAbove() == thisTempoChange->placeAbove();
+
+        if (endsMatch && precedingTempoChange->snapToItemAfter()) {
+            return toGradualTempoChangeSegment(precedingTempoChange->backSegment());
+        }
+    }
+
+    return nullptr;
+}
+
+TempoText* GradualTempoChangeSegment::findElementToSnapAfter() const
+{
+    if (!tempoChange()->snapToItemAfter()) {
+        return nullptr;
+    }
+
+    System* sys = system();
+    IF_ASSERT_FAILED(sys) {
+        return nullptr;
+    }
+
+    // Note: we don't need to look for a tempoChange after.
+    // It is the next tempoChange which looks for a tempoChange before.
+    Fraction refTick = tempoChange()->tick2();
+    Measure* measure = score()->tick2measureMM(refTick);
+    if (!measure) {
+        return nullptr;
+    }
+
+    for (Segment* segment = measure->last(); segment; segment = segment->prev1()) {
+        if (segment->system() != sys) {
+            continue;
+        }
+        Fraction segmentTick = segment->tick();
+        if (segmentTick > refTick) {
+            continue;
+        }
+        if (segmentTick < refTick) {
+            break;
+        }
+        EngravingItem* tempoText = segment->findAnnotation(ElementType::TEMPO_TEXT, track(), track());
+        if (tempoText && tempoText->placeAbove() == placeAbove() && tempoText->visible()) {
+            return toTempoText(tempoText);
+        }
+    }
+
+    return nullptr;
 }
 
 void GradualTempoChangeSegment::endEdit(EditData& editData)

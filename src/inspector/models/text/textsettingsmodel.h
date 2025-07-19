@@ -125,6 +125,8 @@ private:
     void updateIsDynamicSpecificSettings();
     void updateIsHorizontalAlignmentAvailable();
 
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
+
     PropertyItem* m_fontFamily = nullptr;
     PropertyItem* m_fontStyle = nullptr;
     PropertyItem* m_fontSize = nullptr;

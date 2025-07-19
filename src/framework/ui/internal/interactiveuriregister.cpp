@@ -34,6 +34,11 @@ void InteractiveUriRegister::registerUri(const Uri& uri, const ContainerMeta& me
     m_uriMap[uri] = meta;
 }
 
+void InteractiveUriRegister::unregisterUri(const Uri& uri)
+{
+    m_uriMap.erase(uri);
+}
+
 ContainerMeta InteractiveUriRegister::meta(const Uri& uri) const
 {
     if (!muse::contains(m_uriMap, uri)) {

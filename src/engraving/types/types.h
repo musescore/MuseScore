@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_TYPES_H
-#define MU_ENGRAVING_TYPES_H
+#pragma once
 
 #include <functional>
 #include <map>
@@ -36,12 +34,14 @@
 #include "draw/types/geometry.h"
 #include "draw/types/painterpath.h"
 
+// IWYU pragma: begin_exports
 #include "bps.h"
 #include "dimension.h"
 #include "fraction.h"
 #include "groupnode.h"
 #include "pitchvalue.h"
 #include "symid.h"
+// IWYU pragma: end_exports
 
 namespace mu::engraving {
 using staff_idx_t = size_t;
@@ -64,22 +64,24 @@ using semitone_t = int8_t;
 ///   of elements on the canvas.
 ///   Note: keep in sync with array in TConv
 //-------------------------------------------------------------------
-enum class ElementType {
-    ///.\{
+enum class ElementType : unsigned char {
     INVALID = 0,
     BRACKET_ITEM,
     PART,
     STAFF,
     SCORE,
     TEXT,
+    LAYOUT_BREAK,
     MEASURE_NUMBER,
     MMREST_RANGE,
     INSTRUMENT_NAME,
-    SLUR_SEGMENT,
-    TIE_SEGMENT,
     BAR_LINE,
     STAFF_LINES,
     SYSTEM_DIVIDER,
+    SLUR_SEGMENT,
+    TIE_SEGMENT,
+    LAISSEZ_VIB_SEGMENT,
+    PARTIAL_TIE_SEGMENT,
     STEM_SLASH,
     ARPEGGIO,
     ACCIDENTAL,
@@ -98,6 +100,8 @@ enum class ElementType {
     BREATH,
     MEASURE_REPEAT,
     TIE,
+    LAISSEZ_VIB,
+    PARTIAL_TIE,
     ARTICULATION,
     ORNAMENT,
     FERMATA,
@@ -105,7 +109,6 @@ enum class ElementType {
     DYNAMIC,
     EXPRESSION,
     BEAM,
-    BEAM_SEGMENT,
     LYRICS,
     FIGURED_BASS,
     FIGURED_BASS_ITEM,
@@ -128,7 +131,6 @@ enum class ElementType {
     FRET_DIAGRAM,
     HARP_DIAGRAM,
     BEND,
-    STRETCHED_BEND,
     TREMOLOBAR,
     VOLTA,
     HAIRPIN_SEGMENT,
@@ -146,8 +148,10 @@ enum class ElementType {
     VOLTA_SEGMENT,
     PEDAL_SEGMENT,
     LYRICSLINE_SEGMENT,
+    PARTIAL_LYRICSLINE_SEGMENT,
     GLISSANDO_SEGMENT,
-    LAYOUT_BREAK,
+    NOTELINE_SEGMENT,
+    SYSTEM_LOCK_INDICATOR,
     SPACER,
     STAFF_STATE,
     NOTEHEAD,
@@ -176,27 +180,21 @@ enum class ElementType {
     TEXTLINE_BASE,
     NOTELINE,
     LYRICSLINE,
+    PARTIAL_LYRICSLINE,
     GLISSANDO,
     BRACKET,
     SEGMENT,
     SYSTEM,
-    COMPOUND,
     CHORD,
     SLUR,
-    ELEMENT,
-    ELEMENT_LIST,
-    STAFF_LIST,
-    MEASURE_LIST,
     HBOX,
     VBOX,
     TBOX,
     FBOX,
     ACTION_ICON,
-    OSSIA,
     BAGPIPE_EMBELLISHMENT,
     STICKING,
     GRACE_NOTES_GROUP,
-    FRET_CIRCLE,
     GUITAR_BEND,
     GUITAR_BEND_SEGMENT,
     GUITAR_BEND_HOLD,
@@ -205,12 +203,19 @@ enum class ElementType {
     TREMOLO_TWOCHORD,
     TREMOLO_SINGLECHORD,
     TIME_TICK_ANCHOR,
+    PARENTHESIS,
+    HAMMER_ON_PULL_OFF,
+    HAMMER_ON_PULL_OFF_SEGMENT,
+    HAMMER_ON_PULL_OFF_TEXT,
+    TAPPING,
+    TAPPING_HALF_SLUR,
+    TAPPING_HALF_SLUR_SEGMENT,
+    TAPPING_TEXT,
 
     ROOT_ITEM,
     DUMMY,
 
     MAXTYPE
-    ///\}
 };
 
 constexpr size_t TOT_ELEMENT_TYPES = static_cast<size_t>(ElementType::MAXTYPE);
@@ -243,26 +248,26 @@ using PolygonF = muse::PolygonF;
 // --- Draw ---
 using Color = muse::draw::Color;        // P_TYPE::COLOR
 
-enum class OrnamentStyle : char {
+enum class OrnamentStyle : unsigned char {
     DEFAULT, BAROQUE
 };
 
 // P_TYPE::GLISS_STYLE
-enum class GlissandoStyle {
+enum class GlissandoStyle : unsigned char {
     CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC, PORTAMENTO
 };
 
 // --- Layout ---
 
 // P_TYPE::ALIGN
-enum class AlignV {
+enum class AlignV : unsigned char {
     TOP,
     VCENTER,
     BOTTOM,
     BASELINE
 };
 
-enum class AlignH {
+enum class AlignH : unsigned char {
     LEFT,
     RIGHT,
     HCENTER
@@ -295,27 +300,27 @@ struct Align {
 };
 
 // P_TYPE::PLACEMENT_V
-enum class PlacementV {
+enum class PlacementV : unsigned char {
     ABOVE, BELOW
 };
 
 // P_TYPE::PLACEMENT_H
-enum class PlacementH {
+enum class PlacementH : unsigned char {
     LEFT, CENTER, RIGHT
 };
 
 // P_TYPE::TEXT_PLACE
-enum class TextPlace : char {
+enum class TextPlace : unsigned char {
     AUTO, ABOVE, BELOW, LEFT
 };
 
 // P_TYPE::DIRECTION
-enum class DirectionV {
+enum class DirectionV : unsigned char {
     AUTO, UP, DOWN
 };
 
 // P_TYPE::DIRECTION_H
-enum class DirectionH : char {
+enum class DirectionH : unsigned char {
     AUTO, LEFT, RIGHT
 };
 
@@ -325,13 +330,14 @@ enum class Orientation : signed char {
     HORIZONTAL
 };
 
-enum class AutoOnOff : char {
+enum class AutoOnOff : unsigned char {
     AUTO,
     ON,
     OFF
 };
 
-enum class VoiceApplication {
+//! Note: from lowest to highest priority
+enum class VoiceAssignment : unsigned char {
     ALL_VOICE_IN_INSTRUMENT,
     ALL_VOICE_IN_STAFF,
     CURRENT_VOICE_ONLY
@@ -376,12 +382,12 @@ struct DurationTypeWithDots
 // --- Types ---
 
 // P_TYPE::LAYOUTBREAK_TYPE
-enum class LayoutBreakType {
+enum class LayoutBreakType : unsigned char {
     PAGE, LINE, SECTION, NOBREAK
 };
 
 // P_TYPE::VELO_TYPE
-enum class VeloType : char {
+enum class VeloType : unsigned char {
     OFFSET_VAL, USER_VAL
 };
 
@@ -573,18 +579,19 @@ enum class ClefType : signed char {
     TAB4_SERIF,
     // new clefs to be added between here
     C4_8VB,
+    G8_VB_C,
     // and here in oder to not break TAB clef style
     MAX
 };
 
-enum class ClefToBarlinePosition : char {
+enum class ClefToBarlinePosition : unsigned char {
     AUTO,
     BEFORE,
     AFTER
 };
 
 // P_TYPE::DYNAMIC_TYPE
-enum class DynamicType : char {
+enum class DynamicType : unsigned char {
     OTHER,
     PPPPPP,
     PPPPP,
@@ -606,6 +613,8 @@ enum class DynamicType : char {
     SFZ,
     SFF,
     SFFZ,
+    SFFF,
+    SFFFZ,
     SFP,
     SFPP,
     RFZ,
@@ -619,23 +628,18 @@ enum class DynamicType : char {
     LAST
 };
 
-// P_TYPE::DYNAMIC_RANGE
-enum class DynamicRange : char {
-    STAFF, PART, SYSTEM
-};
-
 // P_TYPE::DYNAMIC_SPEED
-enum class DynamicSpeed : char {
+enum class DynamicSpeed : unsigned char {
     SLOW, NORMAL, FAST
 };
 
 // P_TYPE::LINE_TYPE
-enum class LineType : char {
+enum class LineType : unsigned char {
     SOLID, DASHED, DOTTED
 };
 
 // P_TYPE::HOOK_TYPE
-enum class HookType : char {
+enum class HookType : unsigned char {
     NONE, HOOK_90, HOOK_45, HOOK_90T
 };
 
@@ -659,7 +663,7 @@ enum class ArpeggioType : unsigned char {
     NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
 };
 
-enum class IntervalStep {
+enum class IntervalStep : unsigned char {
     UNISON,
     SECOND,
     THIRD,
@@ -670,7 +674,7 @@ enum class IntervalStep {
     OCTAVE
 };
 
-enum class IntervalType {
+enum class IntervalType : unsigned char {
     AUTO,
     AUGMENTED,
     MAJOR,
@@ -679,7 +683,7 @@ enum class IntervalType {
     DIMINISHED
 };
 
-enum class InstrumentLabelVisibility : char {
+enum class InstrumentLabelVisibility : unsigned char {
     LONG,
     SHORT,
     HIDE
@@ -716,11 +720,56 @@ struct OrnamentInterval
 
 static const OrnamentInterval DEFAULT_ORNAMENT_INTERVAL = OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
 
-enum class OrnamentShowAccidental {
+enum class OrnamentShowAccidental : unsigned char {
     DEFAULT,
     ANY_ALTERATION,
     ALWAYS,
 };
+
+enum class PartialSpannerDirection : signed char {
+    NONE = -1,
+    INCOMING,
+    OUTGOING,
+    BOTH
+};
+
+enum ChordStylePreset : unsigned char {
+    STANDARD,
+    JAZZ,
+    LEGACY,
+    CUSTOM
+};
+
+// P_TYPE::PARENTHESES_MODE
+enum class ParenthesesMode : unsigned char {
+    NONE = 0x0,
+    LEFT = 0x1,
+    RIGHT = 0x2,
+    BOTH = 0x3,
+};
+constexpr bool operator&(const ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    return static_cast<int>(t1) & static_cast<int>(t2);
+}
+
+constexpr bool operator|(const ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    return static_cast<int>(t1) | static_cast<int>(t2);
+}
+
+constexpr void operator|=(ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    int t1i = static_cast<int>(t1);
+    t1i |= static_cast<int>(t2);
+    t1 = ParenthesesMode(t1i);
+}
+
+constexpr void operator&=(ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    int t1i = static_cast<int>(t1);
+    t1i &= static_cast<int>(t2);
+    t1 = ParenthesesMode(t1i);
+}
 
 //-------------------------------------------------------------------
 //   Tid
@@ -729,7 +778,7 @@ enum class OrnamentShowAccidental {
 ///   Must be in sync with textStyles (in textstyle.cpp)
 //-------------------------------------------------------------------
 // P_TYPE::TEXT_STYLE
-enum class TextStyleType {
+enum class TextStyleType : unsigned char {
     DEFAULT,
 
     // Page-oriented styles
@@ -745,9 +794,12 @@ enum class TextStyleType {
     INSTRUMENT_CHANGE,
     HEADER,
     FOOTER,
+    COPYRIGHT,
+    PAGE_NUMBER,
 
     // Measure-oriented styles
     MEASURE_NUMBER,
+    MEASURE_NUMBER_ALTERNATE,
     MMREST_RANGE,
 
     // System-level styles
@@ -775,15 +827,20 @@ enum class TextStyleType {
     TUPLET,
     STICKING,
     FINGERING,
+    TAB_FRET_NUMBER,
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
+    HAMMER_ON_PULL_OFF,
     STRING_NUMBER,
     STRING_TUNINGS,
+    FRET_DIAGRAM_FINGERING,
+    FRET_DIAGRAM_FRET_NUMBER,
     HARP_PEDAL_DIAGRAM,
     HARP_PEDAL_TEXT_DIAGRAM,
 
     // Line-oriented styles
     TEXTLINE,
+    NOTELINE,
     VOLTA,
     OTTAVA,
     GLISSANDO,
@@ -810,14 +867,47 @@ enum class TextStyleType {
     IGNORED_TYPES         // used for types no longer relevant (mainly Figured bass text type)
 };
 
-enum class AnnotationCategory {
+//---------------------------------------------------------
+//   FontStyle
+//---------------------------------------------------------
+
+enum class FontStyle : signed char {
+    Undefined = -1,
+    Normal = 0,
+    Bold = 1 << 0,
+    Italic = 1 << 1,
+    Underline = 1 << 2,
+    Strike = 1 << 3
+};
+
+constexpr FontStyle operator+(FontStyle a1, FontStyle a2)
+{
+    return static_cast<FontStyle>(static_cast<char>(a1) | static_cast<char>(a2));
+}
+
+constexpr FontStyle operator|(FontStyle a1, FontStyle a2)
+{
+    return static_cast<FontStyle>(static_cast<char>(a1) | static_cast<char>(a2));
+}
+
+constexpr FontStyle operator-(FontStyle a1, FontStyle a2)
+{
+    return static_cast<FontStyle>(static_cast<char>(a1) & ~static_cast<char>(a2));
+}
+
+constexpr bool operator&(FontStyle a1, FontStyle a2)
+{
+    return static_cast<bool>(static_cast<char>(a1) & static_cast<char>(a2));
+}
+
+enum class AnnotationCategory : signed char {
     Undefined = -1,
     TempoAnnotation,
     PlayingAnnotation,
     Other,
 };
 
-enum class PlayingTechniqueType {
+enum class PlayingTechniqueType : signed char {
     Undefined = -1,
     Natural,
     Pizzicato,
@@ -837,7 +927,7 @@ enum class PlayingTechniqueType {
     JazzTone,
 };
 
-enum class GradualTempoChangeType {
+enum class GradualTempoChangeType : signed char {
     Undefined = -1,
     Accelerando,
     Allargando,
@@ -867,7 +957,7 @@ enum class ChangeDirection : signed char {
 };
 
 // P_TYPE::ACCIDENTAL_ROLE
-enum class AccidentalRole : char {
+enum class AccidentalRole : unsigned char {
     AUTO,                 // layout created accidental
     USER                  // user created accidental
 };
@@ -884,7 +974,21 @@ enum class AccidentalVal : signed char {
     MAX     = SHARP3
 };
 
-enum class FermataType {
+// Positions of naturals in key sig. changes
+enum class KeySigNatural : char {
+    NONE   = 0,      // no naturals, except for change to CMaj/Amin
+    BEFORE = 1,      // naturals before accidentals
+    AFTER  = 2       // naturals after accidentals (but always before if going sharps <=> flats)
+};
+
+// For barlines before key sig. and time sig. changes
+enum class CourtesyBarlineMode : char {
+    ALWAYS_SINGLE = 0,
+    ALWAYS_DOUBLE = 1,
+    DOUBLE_BEFORE_COURTESY = 2,
+};
+
+enum class FermataType : signed char {
     Undefined = -1,
     VeryShort,
     Short,
@@ -895,17 +999,39 @@ enum class FermataType {
     VeryLong
 };
 
-enum class ChordLineType : char {
+enum class ChordLineType : unsigned char {
     NOTYPE, FALL, DOIT,
     PLOP, SCOOP
 };
 
-enum class SlurStyleType {
+enum class SlurStyleType : signed char {
     Undefined = -1,
     Solid,
     Dotted,
     Dashed,
     WideDashed
+};
+
+enum class TappingHand {
+    INVALID = -1,
+    LEFT,
+    RIGHT,
+};
+
+enum class LHTappingSymbol : unsigned char {
+    DOT,
+    CIRCLED_T,
+};
+
+enum class RHTappingSymbol : unsigned char {
+    T,
+    PLUS,
+};
+
+enum class LHTappingShowItems : unsigned char {
+    HALF_SLUR,
+    SYMBOL,
+    BOTH,
 };
 
 struct InstrumentTrackId {
@@ -954,7 +1080,7 @@ enum class TremoloStyle : signed char {
     DEFAULT = 0, TRADITIONAL, TRADITIONAL_ALTERNATE
 };
 
-enum class TremoloChordType : char {
+enum class TremoloChordType : unsigned char {
     TremoloNone, TremoloSingle, TremoloFirstChord, TremoloSecondChord
 };
 
@@ -965,15 +1091,15 @@ enum class BracketType : signed char {
 using InstrumentTrackIdList = std::vector<InstrumentTrackId>;
 using InstrumentTrackIdSet = std::unordered_set<InstrumentTrackId>;
 
-enum EmbellishmentType {};
+enum EmbellishmentType : unsigned char {};
 
-enum DrumNum {};
+enum DrumNum : unsigned char {};
 
-enum class GlissandoType {
+enum class GlissandoType : unsigned char {
     STRAIGHT, WAVY
 };
 
-enum class JumpType : char {
+enum class JumpType : unsigned char {
     DC,
     DC_AL_FINE,
     DC_AL_CODA,
@@ -989,7 +1115,7 @@ enum class JumpType : char {
     USER
 };
 
-enum class MarkerType : char {
+enum class MarkerType : unsigned char {
     SEGNO,
     VARSEGNO,
     CODA,
@@ -1003,51 +1129,83 @@ enum class MarkerType : char {
     USER
 };
 
-enum class StaffGroup : char {
+enum class StaffGroup : unsigned char {
     STANDARD, PERCUSSION, TAB
 };
 constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoid compiler complains about not handled switch cases
 
-enum class TrillType : char {
+enum class TrillType : unsigned char {
     TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE,
 };
 
-enum class VibratoType : char {
+enum class VibratoType : unsigned char {
     GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
 };
 
-enum class ArticulationTextType {
+enum class ArticulationTextType : unsigned char {
     NO_TEXT,
-    TAP,
     SLAP,
     POP
 };
 
-enum class LyricsSyllabic : char {
+enum class LyricsSyllabic : unsigned char {
     SINGLE, BEGIN, END, MIDDLE
 };
 
-enum class LyricsDashSystemStart {
+enum class LyricsDashSystemStart : unsigned char {
     STANDARD,
     UNDER_HEADER,
     UNDER_FIRST_NOTE
 };
 
-enum class SpannerSegmentType {
+enum class NoteLineEndPlacement : unsigned char {
+    LEFT_EDGE,
+    OFFSET_ENDS,
+};
+
+enum class SpannerSegmentType : unsigned char {
     SINGLE, BEGIN, MIDDLE, END
 };
 
-enum class TiePlacement {
+enum class TiePlacement : unsigned char {
     AUTO,
     INSIDE,
     OUTSIDE,
+};
+
+enum class TieDotsPlacement : unsigned char {
+    AUTO,
+    BEFORE_DOTS,
+    AFTER_DOTS
+};
+
+enum class TimeSigPlacement : unsigned char {
+    NORMAL,
+    ABOVE_STAVES,
+    ACROSS_STAVES
+};
+
+enum class TimeSigStyle : unsigned char {
+    NORMAL,
+    NARROW,
+    LARGE
+};
+
+enum class TimeSigVSMargin : unsigned char {
+    HANG_INTO_MARGIN,
+    RIGHT_ALIGN_TO_BARLINE,
+    CREATE_SPACE,
+};
+
+enum class NoteSpellingType : unsigned char {
+    STANDARD = 0, GERMAN, GERMAN_PURE, SOLFEGGIO, FRENCH
 };
 
 //---------------------------------------------------------
 //   Key
 //---------------------------------------------------------
 
-enum class Key {
+enum class Key : signed char {
     C_B = -7,
     G_B,
     D_B,
@@ -1110,7 +1268,7 @@ struct SettingsCompat {
 //    recreates all.
 //---------------------------------------------------------
 
-enum class UpdateMode {
+enum class UpdateMode : unsigned char {
     DoNothing,
     Update,             // do screen refresh of RectF "refresh"
     UpdateAll,          // do complete screen refresh
@@ -1121,7 +1279,7 @@ enum class UpdateMode {
 //   LayoutFlag bits
 //---------------------------------------------------------
 
-enum class LayoutFlag : char {
+enum class LayoutFlag : unsigned char {
     NO_FLAGS       = 0,
     PLAY_EVENTS    = 2,
     REBUILD_MIDI_MAPPING = 4,
@@ -1148,5 +1306,3 @@ Q_DECLARE_METATYPE(mu::engraving::MarkerType)
 Q_DECLARE_METATYPE(mu::engraving::TrillType)
 Q_DECLARE_METATYPE(mu::engraving::VibratoType)
 #endif
-
-#endif // MU_ENGRAVING_TYPES_H

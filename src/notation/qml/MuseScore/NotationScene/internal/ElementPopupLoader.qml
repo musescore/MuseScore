@@ -24,8 +24,9 @@ import QtQuick.Controls 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import MuseScore.NotationScene 1.0
 
+import MuseScore.Inspector 1.0
+import MuseScore.NotationScene 1.0
 import MuseScore.Playback 1.0
 
 Item {
@@ -41,7 +42,7 @@ Item {
                                         ? loader.item.navigationOrderEnd
                                         : navigationOrderStart
 
-    signal opened()
+    signal opened(var popupType)
     signal closed()
 
     QtObject {
@@ -53,6 +54,10 @@ Item {
             case Notation.TYPE_CAPO: return capoComp
             case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
             case Notation.TYPE_SOUND_FLAG: return soundFlagComp
+            case Notation.TYPE_DYNAMIC: return dynamicComp
+            case Notation.TYPE_TEXT: return textStyleComp
+            case Notation.TYPE_PARTIAL_TIE: return partialTieComp
+            case Notation.TYPE_SHADOW_NOTE: return shadowNoteComp
             }
 
             return null
@@ -68,10 +73,10 @@ Item {
         }
     }
 
-    function show(elementType, elementRect) {
+    function show(popupType, elementRect) {
         close()
 
-        var popup = loader.loadPopup(prv.componentByType(elementType), elementRect)
+        var popup = loader.loadPopup(popupType, elementRect)
         popup.open()
     }
 
@@ -87,8 +92,8 @@ Item {
         anchors.fill: parent
         active: false
 
-        function loadPopup(comp, elementRect) {
-            loader.sourceComponent = comp
+        function loadPopup(popupType, elementRect) {
+            loader.sourceComponent = prv.componentByType(popupType)
             loader.active = true
 
             const popup = loader.item
@@ -97,7 +102,7 @@ Item {
             popup.parent = container
 
             popup.opened.connect(function() {
-                container.opened()
+                container.opened(popupType)
             })
 
             popup.closed.connect(function() {
@@ -114,6 +119,7 @@ Item {
             //        This is necessary so that popups do not activate navigation in the new section,
             //        but at the same time, when clicking on the component (text input), the focus in popup's window should be activated
             popup.navigationSection = null
+            popup.openPolicies = PopupView.NoActivateFocus
 
             popup.notationViewNavigationSection = container.notationViewNavigationSection
             popup.navigationOrderStart = container.navigationOrderStart
@@ -148,6 +154,30 @@ Item {
     Component {
         id: soundFlagComp
         SoundFlagPopup {
+        }
+    }
+
+    Component {
+        id: dynamicComp
+        DynamicPopup {
+        }
+    }
+
+    Component {
+        id: textStyleComp
+        TextStylePopup {
+        }
+    }
+
+    Component {
+        id: partialTieComp
+        PartialTiePopup {
+        }
+    }
+
+    Component {
+        id: shadowNoteComp
+        ShadowNotePopup {
         }
     }
 }

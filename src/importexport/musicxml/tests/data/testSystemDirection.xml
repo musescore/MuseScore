@@ -118,7 +118,7 @@
           <words>Stave text</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Largo</words>
           </direction-type>

@@ -34,9 +34,11 @@ public:
 
     MOCK_METHOD(muse::io::path_t, defaultStyleFilePath, (), (const, override));
     MOCK_METHOD(void, setDefaultStyleFilePath, (const muse::io::path_t&), (override));
+    MOCK_METHOD(muse::async::Channel<muse::io::path_t>, defaultStyleFilePathChanged, (), (const, override));
 
     MOCK_METHOD(muse::io::path_t, partStyleFilePath, (), (const, override));
     MOCK_METHOD(void, setPartStyleFilePath, (const muse::io::path_t&), (override));
+    MOCK_METHOD(muse::async::Channel<muse::io::path_t>, partStyleFilePathChanged, (), (const, override));
 
     MOCK_METHOD(SizeF, defaultPageSize, (), (const, override));
 
@@ -44,19 +46,15 @@ public:
 
     MOCK_METHOD(Color, defaultColor, (), (const, override));
     MOCK_METHOD(Color, scoreInversionColor, (), (const, override));
-    MOCK_METHOD(Color, invisibleColor, (), (const, override));
     MOCK_METHOD(Color, lassoColor, (), (const, override));
     MOCK_METHOD(Color, warningColor, (), (const, override));
     MOCK_METHOD(Color, warningSelectedColor, (), (const, override));
     MOCK_METHOD(Color, criticalColor, (), (const, override));
     MOCK_METHOD(Color, criticalSelectedColor, (), (const, override));
-    MOCK_METHOD(Color, formattingMarksColor, (), (const, override));
     MOCK_METHOD(Color, thumbnailBackgroundColor, (), (const, override));
     MOCK_METHOD(Color, noteBackgroundColor, (), (const, override));
     MOCK_METHOD(Color, fontPrimaryColor, (), (const, override));
-
-    MOCK_METHOD(Color, timeTickAnchorColorLighter, (), (const, override));
-    MOCK_METHOD(Color, timeTickAnchorColorDarker, (), (const, override));
+    MOCK_METHOD(Color, voiceColor, (voice_idx_t), (const, override));
 
     MOCK_METHOD(double, guiScaling, (), (const, override));
 
@@ -66,10 +64,29 @@ public:
 
     MOCK_METHOD(bool, dynamicsApplyToAllVoices, (), (const, override));
     MOCK_METHOD(void, setDynamicsApplyToAllVoices, (bool), (override));
+    MOCK_METHOD((muse::async::Channel<bool>), dynamicsApplyToAllVoicesChanged, (), (const, override));
+
+    MOCK_METHOD(bool, autoUpdateFretboardDiagrams, (), (const, override));
+    MOCK_METHOD(void, setAutoUpdateFretboardDiagrams, (bool), (override));
+    MOCK_METHOD((muse::async::Channel<bool>), autoUpdateFretboardDiagramsChanged, (), (const, override));
 
     MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
     MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));
+
+    MOCK_METHOD(Color, formattingColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<Color>, formattingColorChanged, (), (const, override));
+
+    MOCK_METHOD(Color, frameColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<Color>, frameColorChanged, (), (const, override));
+
+    MOCK_METHOD(Color, scoreGreyColor, (), (const, override));
+
+    MOCK_METHOD(Color, invisibleColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<Color>, invisibleColorChanged, (), (const, override));
+
+    MOCK_METHOD(Color, unlinkedColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<Color>, unlinkedColorChanged, (), (const, override));
 
     MOCK_METHOD(Color, highlightSelectionColor, (engraving::voice_idx_t), (const, override));
 
@@ -79,10 +96,13 @@ public:
 
     MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
 
+    MOCK_METHOD(bool, doNotSaveEIDsForBackCompat, (), (const, override));
+    MOCK_METHOD(void, setDoNotSaveEIDsForBackCompat, (bool), (override));
+
     MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
+    MOCK_METHOD(bool, shouldAddParenthesisOnStandardStaff, (), (const, override));
     MOCK_METHOD(bool, negativeFretsAllowed, (), (const, override));
     MOCK_METHOD(bool, crossNoteHeadAlwaysBlack, (), (const, override));
-    MOCK_METHOD(bool, enableExperimentalFretCircle, (), (const, override));
     MOCK_METHOD(void, setGuitarProMultivoiceEnabled, (bool), (override));
     MOCK_METHOD(bool, guitarProMultivoiceEnabled, (), (const, override));
     MOCK_METHOD(bool, minDistanceForPartialSkylineCalculated, (), (const, override));

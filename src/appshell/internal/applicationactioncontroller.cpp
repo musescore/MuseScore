@@ -23,6 +23,9 @@
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 #include <QFileOpenEvent>
 #include <QWindow>
 #include <QMimeData>
@@ -117,6 +120,21 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
+ApplicationActionController::DragTarget ApplicationActionController::dragTarget(const QUrl& url) const
+{
+    if (projectFilesController()->isUrlSupported(url)) {
+        return DragTarget::ProjectFile;
+    } else if (url.isLocalFile()) {
+        muse::io::path_t filePath = url.toLocalFile();
+        if (muse::audio::synth::isSoundFont(filePath)) {
+            return DragTarget::SoundFont;
+        } else if (extensionInstaller()->isFileSupported(filePath)) {
+            return DragTarget::Extension;
+        }
+    }
+    return DragTarget::Unknown;
+}
+
 bool ApplicationActionController::onDragEnterEvent(QDragEnterEvent* event)
 {
     return onDragMoveEvent(event);
@@ -128,8 +146,8 @@ bool ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
         const QUrl& url = urls.front();
-        if (projectFilesController()->isUrlSupported(url)
-            || (url.isLocalFile() && muse::audio::synth::isSoundFont(muse::io::path_t(url)))) {
+        DragTarget target = dragTarget(url);
+        if (target != DragTarget::Unknown) {
             event->setDropAction(Qt::LinkAction);
             event->acceptProposedAction();
             return true;
@@ -145,30 +163,33 @@ bool ApplicationActionController::onDropEvent(QDropEvent* event)
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
         const QUrl& url = urls.front();
-        LOGD() << url;
 
-        bool shouldBeHandled = false;
-
-        if (projectFilesController()->isUrlSupported(url)) {
+        bool shouldBeHandled = true;
+        DragTarget target = dragTarget(url);
+        switch (target) {
+        case DragTarget::ProjectFile: {
             async::Async::call(this, [this, url]() {
-                Ret ret = projectFilesController()->openProject(url);
-                if (!ret) {
-                    LOGE() << ret.toString();
-                }
-            });
-            shouldBeHandled = true;
-        } else if (url.isLocalFile()) {
-            muse::io::path_t filePath { url };
-
-            if (muse::audio::synth::isSoundFont(filePath)) {
-                async::Async::call(this, [this, filePath]() {
-                    Ret ret = soundFontRepository()->addSoundFont(filePath);
+                    Ret ret = projectFilesController()->openProject(url);
                     if (!ret) {
                         LOGE() << ret.toString();
                     }
                 });
-                shouldBeHandled = true;
-            }
+        } break;
+        case DragTarget::SoundFont: {
+            muse::io::path_t filePath = url.toLocalFile();
+            async::Async::call(this, [this, filePath]() {
+                    soundFontRepository()->addSoundFont(filePath);
+                });
+        } break;
+        case DragTarget::Extension: {
+            muse::io::path_t filePath = url.toLocalFile();
+            async::Async::call(this, [this, filePath]() {
+                    extensionInstaller()->installExtension(filePath);
+                });
+        } break;
+        case DragTarget::Unknown:
+            shouldBeHandled = false;
+            break;
         }
 
         if (shouldBeHandled) {
@@ -194,7 +215,7 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
         m_quiting = false;
     };
 
-    if (!projectFilesController()->closeOpenedProject()) {
+    if (!projectFilesController()->closeOpenedProject(false)) {
         return false;
     }
 
@@ -220,7 +241,7 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
 
 void ApplicationActionController::restart()
 {
-    if (projectFilesController()->closeOpenedProject()) {
+    if (projectFilesController()->closeOpenedProject(false)) {
         if (multiInstancesProvider()->instances().size() == 1) {
             application()->restart();
         } else {
@@ -265,6 +286,25 @@ void ApplicationActionController::openAskForHelpPage()
 
 void ApplicationActionController::openPreferencesDialog()
 {
+    const context::IPlaybackStatePtr state = globalContext()->playbackState();
+    if (state->playbackStatus() == audio::PlaybackStatus::Running) {
+        dispatcher()->dispatch("stop");
+
+        async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();
+        statusChanged.onReceive(this, [statusChanged, this](audio::PlaybackStatus) {
+            auto statusChangedMut = statusChanged;
+            statusChangedMut.resetOnReceive(this);
+            doOpenPreferencesDialog();
+        });
+
+        return;
+    }
+
+    doOpenPreferencesDialog();
+}
+
+void ApplicationActionController::doOpenPreferencesDialog()
+{
     if (multiInstancesProvider()->isPreferencesAlreadyOpened()) {
         multiInstancesProvider()->activateWindowWithOpenedPreferences();
         return;
@@ -280,32 +320,39 @@ void ApplicationActionController::revertToFactorySettings()
                                                  "The list of recent scores will also be cleared.\n\n"
                                                  "This action will not delete any of your scores.");
 
+    IInteractive::ButtonData cancelBtn = interactive()->buttonData(IInteractive::Button::Cancel);
+    cancelBtn.accent = true;
+
     int revertBtn = int(IInteractive::Button::Apply);
-    IInteractive::Result result = interactive()->warning(title, question,
-                                                         { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                           IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert"), true) },
-                                                         revertBtn);
+    auto promise = interactive()->warning(title, question,
+                                          { cancelBtn,
+                                            IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert")) },
+                                          cancelBtn.btn, { muse::IInteractive::Option::WithIcon },
+                                          muse::trc("appshell", "Revert to factory settings"));
 
-    if (result.standardButton() == IInteractive::Button::Cancel) {
-        return;
-    }
+    promise.onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Cancel)) {
+            return;
+        }
 
-    static constexpr bool KEEP_DEFAULT_SETTINGS = false;
-    static constexpr bool NOTIFY_ABOUT_CHANGES = false;
-    configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES);
+        static constexpr bool KEEP_DEFAULT_SETTINGS = false;
+        static constexpr bool NOTIFY_ABOUT_CHANGES = false;
+        static constexpr bool NOTIFY_OTHER_INSTANCES = false;
+        configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES, NOTIFY_OTHER_INSTANCES);
 
-    title = muse::trc("appshell", "Would you like to restart MuseScore Studio now?");
-    question = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
+        std::string title = muse::trc("appshell", "Would you like to restart MuseScore Studio now?");
+        std::string question = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
 
-    int restartBtn = int(IInteractive::Button::Apply);
-    result = interactive()->question(title, question,
-                                     { interactive()->buttonData(IInteractive::Button::Cancel),
-                                       IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
-                                     restartBtn);
+        int restartBtn = int(IInteractive::Button::Apply);
+        auto promise = interactive()->question(title, question,
+                                               { interactive()->buttonData(IInteractive::Button::Cancel),
+                                                 IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
+                                               restartBtn);
 
-    if (result.standardButton() == IInteractive::Button::Cancel) {
-        return;
-    }
-
-    restart();
+        promise.onResolve(this, [this](const IInteractive::Result& res) {
+            if (!res.isButton(IInteractive::Button::Cancel)) {
+                restart();
+            }
+        });
+    });
 }

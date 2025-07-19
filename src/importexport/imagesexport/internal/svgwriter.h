@@ -32,10 +32,13 @@
 namespace mu::iex::imagesexport {
 class SvgWriter : public AbstractImageWriter
 {
-    INJECT(IImagesExportConfiguration, configuration)
-    INJECT(engraving::rendering::IScoreRenderer, scoreRenderer)
+    muse::Inject<IImagesExportConfiguration> configuration = { this };
+    muse::Inject<engraving::rendering::IScoreRenderer> scoreRenderer = { this };
 
 public:
+    SvgWriter(const muse::modularity::ContextPtr& iocCtx)
+        : AbstractImageWriter(iocCtx) {}
+
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
 

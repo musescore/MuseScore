@@ -1,0 +1,36 @@
+name: 'Translate: tx push new strings to Transifex'
+
+on:
+  workflow_dispatch:
+    inputs:
+      retyped_branch_name:
+        description: "Retype branch name to be sure you have selected the correct branch"
+        required: true
+
+jobs:
+  tx_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check preconditions
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          RETYPED_BRANCH_NAME: ${{ inputs.retyped_branch_name }}
+        run: |
+          if [ "${GITHUB_REF}" != "refs/heads/${RETYPED_BRANCH_NAME}" ]; then
+            echo "::error::Retyped branch name does not match actual branch name. Please make sure you have selected the correct branch."
+            exit 1
+          fi
+          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
+            echo "::error::TRANSIFEX_API_TOKEN is empty"
+            exit 1
+          fi
+
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Push strings to Transifex (tx push)
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+          args: "push -s"

@@ -92,15 +92,15 @@ FocusScope {
 
         navigationSection: navSec
 
-        onSignInRequested: {
+        onSignInRequested: function (cloudCode) {
             cloudsModel.signIn(cloudCode)
         }
 
-        onSignOutRequested: {
+        onSignOutRequested: function (cloudCode) {
             cloudsModel.signOut(cloudCode)
         }
 
-        onCreateAccountRequested: {
+        onCreateAccountRequested: function (cloudCode) {
             cloudsModel.createAccount(cloudCode)
         }
     }

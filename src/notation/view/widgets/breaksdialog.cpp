@@ -31,7 +31,7 @@ static constexpr int DEFAULT_INTERVAL = 4;
 //---------------------------------------------------------
 
 BreaksDialog::BreaksDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -40,7 +40,7 @@ BreaksDialog::BreaksDialog(QWidget* parent)
 
     //: `%1` will be replaced with a number input field.
     //: Text before it will appear before that number field, text after will appear after the field.
-    QString text = muse::qtrc("notation/add-remove-system-breaks", "Break systems every %1 measures");
+    QString text = muse::qtrc("notation/add-remove-system-breaks", "Lock layout with %1 measure(s) per system");
     QStringList pieces = text.split(QStringLiteral("%1"));
 
     IF_ASSERT_FAILED(pieces.size() >= 2) {
@@ -67,15 +67,15 @@ void BreaksDialog::accept()
     INotationInteractionPtr interaction = notation->interaction();
 
     int interval = intervalButton->isChecked() ? intervalBox->value() : 0;
-    BreaksSpawnIntervalType intervalType = BreaksSpawnIntervalType::MeasuresInterval;
+    AddRemoveSystemLockType intervalType = AddRemoveSystemLockType::MeasuresInterval;
 
     if (removeButton->isChecked()) {
-        intervalType = BreaksSpawnIntervalType::None;
+        intervalType = AddRemoveSystemLockType::None;
     } else if (lockButton->isChecked()) {
-        intervalType = BreaksSpawnIntervalType::AfterEachSystem;
+        intervalType = AddRemoveSystemLockType::AfterEachSystem;
     }
 
-    interaction->setBreaksSpawnInterval(intervalType, interval);
+    interaction->addRemoveSystemLocks(intervalType, interval);
 
     if (_allSelected) {
         interaction->clearSelection();

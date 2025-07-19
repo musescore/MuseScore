@@ -28,7 +28,7 @@ import MuseScore.AppShell 1.0
 ListView {
     id: root
 
-    height: contentItem.childrenRect.height
+    height: Math.max(1,contentItem.childrenRect.height)
     width: contentWidth
 
     property alias appWindow: appMenuModel.appWindow
@@ -46,7 +46,7 @@ ListView {
             return Qt.rect(menuLoader.menu.x, menuLoader.menu.y, menuLoader.menu.width, menuLoader.menu.height)
         }
         return Qt.rect(0, 0, 0, 0)
-    } 
+    }
 
     AppMenuModel {
         id: appMenuModel
@@ -60,6 +60,12 @@ ListView {
 
         onCloseOpenedMenuRequested: {
             menuLoader.close()
+        }
+
+        onNavigateWithSymbolRequested: function(symbol) {
+            if (menuLoader.isMenuOpened) {
+                menuLoader.menu.navigateWithSymbolRequested(symbol, appMenuModel)
+            }
         }
     }
 
@@ -98,7 +104,9 @@ ListView {
 
                     menuLoader.menuId = menuId
                     menuLoader.parent = item
-                    menuLoader.open(item.item.subitems)
+                    menuLoader.accessibleName = item.title
+
+                    Qt.callLater(menuLoader.open, item.item.subitems)
 
                     return
                 }
@@ -119,16 +127,7 @@ ListView {
         property string titleWithMnemonicUnderline: Boolean(item) ? item.titleWithMnemonicUnderline : ""
 
         property bool isMenuOpened: menuLoader.isMenuOpened && menuLoader.parent === this
-
         property bool highlight: appMenuModel.highlightedMenuId === menuId
-        onHighlightChanged: {
-            if (highlight) {
-                forceActiveFocus()
-                accessibleInfo.readInfo()
-            } else {
-                accessibleInfo.resetFocus()
-            }
-        }
 
         property int viewIndex: index
 
@@ -150,32 +149,33 @@ ListView {
             role: MUAccessible.Button
             name: radioButtonDelegate.title
 
+            property bool active: radioButtonDelegate.highlight && !radioButtonDelegate.isMenuOpened
+            onActiveChanged: {
+                if (active) {
+                    forceActiveFocus()
+                    accessibleInfo.readInfo()
+                } else {
+                    accessibleInfo.resetFocus()
+                }
+            }
+
             function readInfo() {
                 accessibleInfo.ignored = false
                 accessibleInfo.focused = true
             }
 
             function resetFocus() {
-                accessibleInfo.ignored = true
                 accessibleInfo.focused = false
+                accessibleInfo.ignored = true
             }
         }
 
         contentItem: StyledTextLabel {
             id: textLabel
 
-            width: textMetrics.width
-
             text: appMenuModel.isNavigationStarted ? radioButtonDelegate.titleWithMnemonicUnderline : radioButtonDelegate.title
             textFormat: Text.RichText
             font: ui.theme.defaultFont
-
-            TextMetrics {
-                id: textMetrics
-
-                font: textLabel.font
-                text: radioButtonDelegate.title
-            }
         }
 
         backgroundItem: AppButtonBackground {
@@ -205,9 +205,18 @@ ListView {
         id: menuLoader
 
         property string menuId: ""
+        property bool hasSiblingMenus: true
 
         onHandleMenuItem: function(itemId) {
             Qt.callLater(appMenuModel.handleMenuItem, itemId)
+        }
+
+        onOpenPrevMenu: {
+            appMenuModel.openPrevMenu()
+        }
+
+        onOpenNextMenu: {
+            appMenuModel.openNextMenu()
         }
 
         onOpened: {

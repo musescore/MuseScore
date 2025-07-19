@@ -147,9 +147,11 @@ public:
 
     virtual GenerateAudioTimePeriodType generateAudioTimePeriodType() const = 0;
     virtual void setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type) = 0;
+    virtual muse::async::Channel<int> generateAudioTimePeriodTypeChanged() const = 0;
 
     virtual int numberOfSavesToGenerateAudio() const = 0;
     virtual void setNumberOfSavesToGenerateAudio(int number) = 0;
+    virtual muse::async::Channel<int> numberOfSavesToGenerateAudioChanged() const = 0;
 
     virtual muse::io::path_t temporaryMp3FilePathTemplate() const = 0;
 
@@ -160,6 +162,9 @@ public:
 
     virtual bool disableVersionChecking() const = 0;
     virtual void setDisableVersionChecking(bool disable) = 0;
+
+    virtual bool createBackupBeforeSaving() const = 0;
+    virtual void setCreateBackupBeforeSaving(bool create) = 0;
 };
 }
 

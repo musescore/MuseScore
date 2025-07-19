@@ -20,23 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_NOTE_H
-#define MU_ENGRAVING_NOTE_H
-
-/**
- \file
- Definition of classes Note and NoteHead.
-*/
+#pragma once
 
 #include "containers.h"
 
 #include "engravingitem.h"
-
-#include "mscore.h"
 #include "noteevent.h"
+#include "noteval.h"
 #include "pitchspelling.h"
 #include "symbol.h"
-#include "types.h"
+#include "tie.h"
+#include "tiejumppointlist.h"
 
 namespace mu::engraving {
 class Factory;
@@ -49,9 +43,9 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
-class StretchedBend;
 class NoteEditData;
-enum class AccidentalType;
+enum class AccidentalType : unsigned char;
+enum class NoteType : unsigned char;
 
 static constexpr int MAX_DOTS = 4;
 
@@ -64,15 +58,17 @@ static constexpr int MAX_DOTS = 4;
 class LineAttachPoint
 {
 public:
-    LineAttachPoint(EngravingItem* l, double x, double y)
-        : m_line(l), m_pos(PointF(x, y)) {}
+    LineAttachPoint(EngravingItem* l, double x, double y, bool start)
+        : m_line(l), m_pos(PointF(x, y)), m_start(start) {}
 
     const EngravingItem* line() const { return m_line; }
     const PointF pos() const { return m_pos; }
+    bool start() const { return m_start; }
 
 private:
     EngravingItem* m_line = nullptr;
     PointF m_pos = PointF(0.0, 0.0);
+    bool m_start = true;
 };
 
 //---------------------------------------------------------
@@ -91,25 +87,6 @@ public:
     NoteHead* clone() const override { return new NoteHead(*this); }
 
     NoteHeadGroup headGroup() const;
-};
-
-//---------------------------------------------------------
-//   NoteVal
-///    helper structure
-///   \cond PLUGIN_API \private \endcond
-//---------------------------------------------------------
-
-struct NoteVal {
-    int pitch = -1;
-    int tpc1 = Tpc::TPC_INVALID;
-    int tpc2 = Tpc::TPC_INVALID;
-    int fret = INVALID_FRET_INDEX;
-    int string = INVALID_STRING_INDEX;
-    NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
-
-    NoteVal() {}
-    NoteVal(int p)
-        : pitch(p) {}
 };
 
 static const int INVALID_LINE = -10000;
@@ -155,7 +132,7 @@ class Note final : public EngravingItem
     DECLARE_CLASSOF(ElementType::NOTE)
 
 public:
-    enum class SlideType {
+    enum class SlideType : unsigned char {
         Undefined = 0,
         UpToNote,
         DownToNote,
@@ -163,7 +140,7 @@ public:
         DownFromNote
     };
 
-    enum DisplayFretOption {
+    enum DisplayFretOption : signed char {
         Hide = -1,
         NoHarmonic,
         NaturalHarmonic,
@@ -172,7 +149,7 @@ public:
 
     ~Note();
 
-    std::vector<const Note*> compoundNotes() const;
+    std::vector<Note*> compoundNotes() const;
 
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
@@ -272,6 +249,7 @@ public:
     bool negativeFretUsed() const;
     int string() const { return m_string; }
     void setString(int val) { m_string = val; }
+    int stringOrLine() const;
 
     bool ghost() const { return m_ghost; }
     void setGhost(bool val) { m_ghost = val; }
@@ -294,11 +272,16 @@ public:
     GuitarBend* bendBack() const;
     Tie* tieFor() const { return m_tieFor; }
     Tie* tieBack() const { return m_tieBack; }
-    void setTieFor(Tie* t) { m_tieFor = t; }
-    void setTieBack(Tie* t) { m_tieBack = t; }
-    Note* firstTiedNote() const;
-    const Note* lastTiedNote() const;
-    Note* lastTiedNote() { return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote()); }
+    Tie* tieForNonPartial() const;
+    Tie* tieBackNonPartial() const;
+    LaissezVib* laissezVib() const;
+    PartialTie* incomingPartialTie() const;
+    PartialTie* outgoingPartialTie() const;
+    void setTieFor(Tie* t);
+    void setTieBack(Tie* t);
+    Note* firstTiedNote(bool ignorePlayback = true) const;
+    Note* lastTiedNote(bool ignorePlayback = true) const;
+
     int unisonIndex() const;
     void disconnectTiedNotes();
     void connectTiedNotes();
@@ -380,14 +363,12 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+    void styleChanged() override;
 
     bool mark() const { return m_mark; }
     void setMark(bool v) const { m_mark = v; }
     void setScore(Score* s) override;
     void setDotRelativeLine(int);
-
-    void setHeadHasParentheses(bool hasParentheses, bool addToLinked = true, bool generated = false);
-    bool headHasParentheses() const { return m_hasHeadParentheses; }
 
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
@@ -419,15 +400,10 @@ public:
     SlideType slideToType() const { return m_slideToType; }
     SlideType slideFromType() const { return m_slideFromType; }
 
-    void setStretchedBend(StretchedBend* s) { m_stretchedBend = s; }
-    StretchedBend* stretchedBend() const { return m_stretchedBend; }
-    bool isHammerOn() const { return m_isHammerOn; }
-    void setIsHammerOn(bool hammerOn) { m_isHammerOn = hammerOn; }
-
     void setHarmonic(bool val) { m_harmonic = val; }
     bool harmonic() const { return m_harmonic; }
 
-    bool isGrace() const { return noteType() != NoteType::NORMAL; }
+    bool isGrace() const;
 
     bool isPreBendStart() const;
     bool isGraceBendStart() const;
@@ -435,9 +411,10 @@ public:
 
     bool hasAnotherStraightAboveOrBelow(bool above) const;
 
-    void addLineAttachPoint(PointF point, EngravingItem* line);
     std::vector<LineAttachPoint>& lineAttachPoints() { return m_lineAttachPoints; }
     const std::vector<LineAttachPoint>& lineAttachPoints() const { return m_lineAttachPoints; }
+    void addStartLineAttachPoint(PointF point, EngravingItem* line) { addLineAttachPoint(point, line, true); }
+    void addEndLineAttachPoint(PointF point, EngravingItem* line) { addLineAttachPoint(point, line, false); }
 
     PointF posInStaffCoordinates();
 
@@ -452,6 +429,9 @@ public:
     bool shouldForceShowFret() const;
 
     void setVisible(bool v) override;
+
+    TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
+    const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };
@@ -480,11 +460,15 @@ private:
     int concertPitchIdx() const;
     void updateRelLine(int absLine, bool undoable);
 
+    static std::vector<Note*> findTiedNotes(Note* startNote, bool followPartialTies = true);
+
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
 
     static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
 
     void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
+
+    void addLineAttachPoint(PointF point, EngravingItem* line, bool start);
 
     bool m_ghost = false;        // ghost note
     bool m_deadNote = false;     // dead note
@@ -503,7 +487,7 @@ private:
     bool m_play = true;           // note is not played if false
     mutable bool m_mark = false;  // for use in sequencer
     bool m_fixed = false;         // for slash notation
-    StretchedBend* m_stretchedBend = nullptr;
+
     SlideType m_slideToType = SlideType::Undefined;
     SlideType m_slideFromType = SlideType::Undefined;
 
@@ -538,11 +522,6 @@ private:
     Tie* m_tieFor = nullptr;
     Tie* m_tieBack = nullptr;
 
-    Symbol* m_leftParenthesis = nullptr;
-    Symbol* m_rightParenthesis = nullptr;
-    bool m_hasHeadParentheses = false;
-
-    bool m_isHammerOn = false;
     bool m_harmonic = false;
 
     ElementList m_el;          // fingering, other text, symbols or images
@@ -554,6 +533,6 @@ private:
     String m_fretString;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
+    TieJumpPointList m_jumpPoints { this };
 };
 } // namespace mu::engraving
-#endif

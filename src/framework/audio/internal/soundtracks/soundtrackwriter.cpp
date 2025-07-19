@@ -41,6 +41,20 @@ using namespace muse::audio::soundtrack;
 static constexpr int PREPARE_STEP = 0;
 static constexpr int ENCODE_STEP = 1;
 
+static encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType type)
+{
+    switch (type) {
+    case SoundTrackType::MP3: return std::make_unique<encode::Mp3Encoder>();
+    case SoundTrackType::OGG: return std::make_unique<encode::OggEncoder>();
+    case SoundTrackType::FLAC: return std::make_unique<encode::FlacEncoder>();
+    case SoundTrackType::WAV: return std::make_unique<encode::WavEncoder>();
+    case SoundTrackType::Undefined: break;
+    }
+
+    UNREACHABLE;
+    return nullptr;
+}
+
 SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format,
                                    const msecs_t totalDuration, IAudioSourcePtr source,
                                    const modularity::ContextPtr& iocCtx)
@@ -52,7 +66,8 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
 
     samples_t totalSamplesNumber = (totalDuration / 1000000.f) * sizeof(float) * format.sampleRate;
     m_inputBuffer.resize(totalSamplesNumber);
-    m_intermBuffer.resize(config()->renderStep() * config()->audioChannelsCount());
+    m_intermBuffer.resize(format.samplesPerChannel * format.audioChannelsNumber);
+    m_renderStep = format.samplesPerChannel;
 
     m_encoderPtr = createEncoder(format.type);
 
@@ -61,9 +76,16 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
     }
 
     m_encoderPtr->init(destination, format, totalSamplesNumber);
-    m_encoderPtr->progress().progressChanged.onReceive(this, [this](int64_t current, int64_t total, std::string) {
+    m_encoderPtr->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, std::string) {
         sendStepProgress(ENCODE_STEP, current, total);
     });
+}
+
+SoundTrackWriter::~SoundTrackWriter()
+{
+    if (m_encoderPtr) {
+        m_encoderPtr->deinit();
+    }
 }
 
 Ret SoundTrackWriter::write()
@@ -74,7 +96,7 @@ Ret SoundTrackWriter::write()
         return false;
     }
 
-    AudioEngine::instance()->setMode(RenderMode::OfflineMode);
+    audioEngine()->setMode(RenderMode::OfflineMode);
 
     m_source->setSampleRate(m_encoderPtr->format().sampleRate);
     m_source->setIsActive(true);
@@ -82,9 +104,9 @@ Ret SoundTrackWriter::write()
     DEFER {
         m_encoderPtr->flush();
 
-        AudioEngine::instance()->setMode(RenderMode::IdleMode);
+        audioEngine()->setMode(RenderMode::IdleMode);
 
-        m_source->setSampleRate(AudioEngine::instance()->sampleRate());
+        m_source->setSampleRate(audioEngine()->sampleRate());
         m_source->setIsActive(false);
 
         m_isAborted = false;
@@ -118,33 +140,17 @@ Progress SoundTrackWriter::progress()
     return m_progress;
 }
 
-encode::AbstractAudioEncoderPtr SoundTrackWriter::createEncoder(const SoundTrackType& type) const
-{
-    switch (type) {
-    case SoundTrackType::MP3: return std::make_unique<encode::Mp3Encoder>();
-    case SoundTrackType::OGG: return std::make_unique<encode::OggEncoder>();
-    case SoundTrackType::FLAC: return std::make_unique<encode::FlacEncoder>();
-    case SoundTrackType::WAV: return std::make_unique<encode::WavEncoder>();
-    case SoundTrackType::Undefined: break;
-    }
-
-    UNREACHABLE;
-    return nullptr;
-}
-
 Ret SoundTrackWriter::generateAudioData()
 {
     TRACEFUNC;
 
+    const size_t inputBufferMaxOffset = m_inputBuffer.size();
     size_t inputBufferOffset = 0;
-    size_t inputBufferMaxOffset = m_inputBuffer.size();
 
     sendStepProgress(PREPARE_STEP, inputBufferOffset, inputBufferMaxOffset);
 
-    samples_t renderStep = config()->renderStep();
-
     while (inputBufferOffset < inputBufferMaxOffset && !m_isAborted) {
-        m_source->process(m_intermBuffer.data(), renderStep);
+        m_source->process(m_intermBuffer.data(), m_renderStep);
 
         size_t samplesToCopy = std::min(m_intermBuffer.size(), inputBufferMaxOffset - inputBufferOffset);
 
@@ -173,5 +179,5 @@ void SoundTrackWriter::sendStepProgress(int step, int64_t current, int64_t total
     int stepRange = step == PREPARE_STEP ? 80 : 20;
     int stepProgressStart = step == PREPARE_STEP ? 0 : 80;
     int stepCurrentProgress = stepProgressStart + ((current * 100 / total) * stepRange) / 100;
-    m_progress.progressChanged.send(stepCurrentProgress, 100, "");
+    m_progress.progress(stepCurrentProgress, 100);
 }

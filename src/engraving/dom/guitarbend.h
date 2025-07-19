@@ -19,18 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_GUITARBEND_H
-#define MU_ENGRAVING_GUITARBEND_H
+#pragma once
 
 #include "engravingitem.h"
 #include "line.h"
 #include "property.h"
 #include "textbase.h"
-#include "types.h"
 
 namespace mu::engraving {
-enum class QuarterOffset {
+enum class GuitarBendType : unsigned char {
+    BEND,
+    PRE_BEND,
+    GRACE_NOTE_BEND,
+    SLIGHT_BEND,
+};
+
+enum class GuitarBendShowHoldLine : unsigned char {
+    AUTO,
+    SHOW,
+    HIDE,
+};
+
+enum class QuarterOffset : unsigned char {
     QUARTER_FLAT,
     NONE,
     QUARTER_SHARP
@@ -58,6 +68,8 @@ public:
     GuitarBend* clone() const override { return new GuitarBend(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
+
+    bool allowTimeAnchor() const override { return false; }
 
     Note* startNote() const;
     Note* startNoteOfChain() const;
@@ -201,6 +213,8 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    bool allowTimeAnchor() const override { return false; }
+
     Note* startNote() const;
     Note* endNote() const;
 
@@ -247,7 +261,7 @@ class GuitarBendText final : public TextBase
 public:
     GuitarBendText(GuitarBendSegment* parent);
     GuitarBendText* clone() const override { return new GuitarBendText(*this); }
-};
-} // namespace mu::engraving
 
-#endif // MU_ENGRAVING_GUITARBEND_H
+    bool isEditable() const override { return false; }
+};
+}

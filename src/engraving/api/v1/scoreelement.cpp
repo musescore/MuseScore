@@ -22,12 +22,14 @@
 
 #include "scoreelement.h"
 
+#include "engraving/dom/measure.h"
+#include "engraving/dom/range.h"
 #include "engraving/dom/engravingobject.h"
 #include "engraving/dom/score.h"
 
 // api
 #include "apitypes.h"
-#include "fraction.h"
+#include "apistructs.h"
 #include "score.h"
 #include "part.h"
 #include "elements.h"
@@ -36,7 +38,7 @@ using namespace mu::engraving::apiv1;
 
 ScoreElement::~ScoreElement()
 {
-    if (_ownership == Ownership::PLUGIN) {
+    if (m_ownership == Ownership::PLUGIN) {
         delete e;
     }
 }
@@ -86,6 +88,10 @@ QVariant ScoreElement::get(mu::engraving::Pid pid) const
     case P_TYPE::FRACTION: {
         const Fraction f(val.value<Fraction>());
         return QVariant::fromValue(wrap(f));
+    }
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        const OrnamentInterval o(val.value<OrnamentInterval>());
+        return QVariant::fromValue(wrap(o));
     }
     case P_TYPE::POINT:
         return val.value<PointF>().toQPointF() / spatium();
@@ -145,7 +151,28 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
             LOGW() << "trying to assign value of wrong type to fractional property";
             return;
         }
+        // Pid::TIMESIG_ACTUAL is only set when we change the time signature,
+        // aside from that it's read-only. What the user intends to do here is
+        // change the actual length of the measure, so we do that instead.
+        if (pid == Pid::TIMESIG_ACTUAL && e->isMeasure() && m_ownership == Ownership::SCORE) {
+            mu::engraving::Measure* m = toMeasure(e);
+            if (m->ticks() != f->fraction()) {
+                mu::engraving::ScoreRange range;
+                range.read(m->first(), m->last());
+                m->adjustToLen(f->fraction());
+            }
+            return;
+        }
         newValue = f->fraction();
+    }
+    break;
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        OrnamentIntervalWrapper* o = val.value<OrnamentIntervalWrapper*>();
+        if (!o) {
+            LOGW() << "trying to assign value of wrong type to fractional property";
+            return;
+        }
+        newValue = o->ornamentInterval();
     }
     break;
     case P_TYPE::POINT:
@@ -168,11 +195,24 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
     const PropertyFlags f = e->propertyFlags(pid);
     const PropertyFlags newFlags = (f == PropertyFlags::NOSTYLE) ? f : PropertyFlags::UNSTYLED;
 
-    if (_ownership == Ownership::SCORE) {
+    if (m_ownership == Ownership::SCORE) {
         e->undoChangeProperty(pid, newValue, newFlags);
     } else { // not added to a score so no need (and dangerous) to deal with undo stack
         e->setProperty(pid, newValue);
         e->setPropertyFlags(pid, newFlags);
+    }
+}
+
+void ScoreElement::reset(mu::engraving::Pid pid)
+{
+    if (!e) {
+        return;
+    }
+
+    if (m_ownership == Ownership::SCORE) {
+        e->undoResetProperty(pid);
+    } else {
+        e->resetProperty(pid);
     }
 }
 

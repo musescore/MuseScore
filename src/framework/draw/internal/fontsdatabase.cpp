@@ -21,7 +21,12 @@
  */
 #include "fontsdatabase.h"
 
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
 #include <QFontDatabase>
+#include <QFont>
+#endif
 
 #include "global/io/file.h"
 #include "global/io/dir.h"
@@ -29,6 +34,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::draw;
 
 static int s_fontID = -1;
@@ -36,6 +42,15 @@ static int s_fontID = -1;
 void FontsDatabase::setDefaultFont(Font::Type type, const FontDataKey& key)
 {
     m_defaults[type] = key;
+}
+
+void FontsDatabase::insertSubstitution(const String& familyName, const String& substituteName)
+{
+    UNUSED(familyName);
+    UNUSED(substituteName);
+#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
+    QFont::insertSubstitution(familyName, substituteName);
+#endif
 }
 
 const FontDataKey& FontsDatabase::defaultFont(Font::Type type) const
@@ -58,7 +73,9 @@ int FontsDatabase::addFont(const FontDataKey& key, const io::path_t& path)
     s_fontID++;
     m_fonts.push_back(FontInfo { s_fontID, key, path });
 
+#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     QFontDatabase::addApplicationFont(path.toQString());
+#endif
 
     return s_fontID;
 }
@@ -70,7 +87,9 @@ FontDataKey FontsDatabase::actualFont(const FontDataKey& requireKey, Font::Type 
         return requireKey;
     }
 
-    return defaultFont(type);
+    FontDataKey def = defaultFont(type);
+    LOGW() << "not found require font: " << requireKey.family().id() << ", will be use default: " << def.family().id();
+    return def;
 }
 
 std::vector<FontDataKey> FontsDatabase::substitutionFonts(Font::Type type) const
@@ -138,17 +157,17 @@ void FontsDatabase::addAdditionalFonts(const io::path_t& path)
 
     io::path_t absolutePath = io::Dir(path).absolutePath() + "/";
 
-    mu::ByteArray data = f.readAll();
+    ByteArray data = f.readAll();
     std::string err;
-    mu::JsonDocument json = mu::JsonDocument::fromJson(data, &err);
+    JsonDocument json = JsonDocument::fromJson(data, &err);
     if (!err.empty()) {
         LOGE() << "failed parse: " << f.filePath();
         return;
     }
 
-    mu::JsonArray fontInfos = json.rootArray();
+    JsonArray fontInfos = json.rootArray();
     for (size_t i = 0; i < fontInfos.size(); ++i) {
-        mu::JsonObject infoObj = fontInfos.at(i).toObject();
+        JsonObject infoObj = fontInfos.at(i).toObject();
 
         std::string file = infoObj.value("file").toStdString();
         if (file.empty()) {

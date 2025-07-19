@@ -43,6 +43,7 @@ void TextFrameSettingsModel::createProperties()
     m_frameRightMargin = buildPropertyItem(Pid::RIGHT_MARGIN);
     m_frameTopMargin = buildPropertyItem(Pid::TOP_MARGIN);
     m_frameBottomMargin = buildPropertyItem(Pid::BOTTOM_MARGIN);
+    m_isSizeSpatiumDependent = buildPropertyItem(Pid::SIZE_SPATIUM_DEPENDENT);
 }
 
 void TextFrameSettingsModel::requestElements()
@@ -59,6 +60,7 @@ void TextFrameSettingsModel::loadProperties()
         Pid::RIGHT_MARGIN,
         Pid::TOP_MARGIN,
         Pid::BOTTOM_MARGIN,
+        Pid::SIZE_SPATIUM_DEPENDENT
     };
 
     loadProperties(propertyIdSet);
@@ -72,6 +74,7 @@ void TextFrameSettingsModel::resetProperties()
     m_frameRightMargin->resetToDefault();
     m_frameTopMargin->resetToDefault();
     m_frameBottomMargin->resetToDefault();
+    m_isSizeSpatiumDependent->resetToDefault();
 }
 
 void TextFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
@@ -104,6 +107,10 @@ void TextFrameSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& 
     if (muse::contains(propertyIdSet, Pid::BOTTOM_MARGIN)) {
         loadPropertyItem(m_frameBottomMargin);
     }
+
+    if (muse::contains(propertyIdSet, Pid::SIZE_SPATIUM_DEPENDENT)) {
+        loadPropertyItem(m_isSizeSpatiumDependent);
+    }
 }
 
 PropertyItem* TextFrameSettingsModel::gapAbove() const
@@ -134,4 +141,9 @@ PropertyItem* TextFrameSettingsModel::frameTopMargin() const
 PropertyItem* TextFrameSettingsModel::frameBottomMargin() const
 {
     return m_frameBottomMargin;
+}
+
+PropertyItem* TextFrameSettingsModel::isSizeSpatiumDependent() const
+{
+    return m_isSizeSpatiumDependent;
 }

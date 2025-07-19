@@ -66,6 +66,7 @@ StyledListView {
         propertyName: model.propertyName
         propertyValue: model.propertyValue
         isStandardProperty: model.isStandardProperty
+        isMultiLineEdit: model.isMultiLineEdit
         isFileInfoPanelProperty: false
         propertyNameWidth: root.propertyNameWidth
 

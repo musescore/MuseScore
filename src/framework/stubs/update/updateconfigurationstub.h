@@ -35,16 +35,13 @@ public:
 
     bool needCheckForUpdate() const override;
     void setNeedCheckForUpdate(bool needCheck) override;
+    muse::async::Notification needCheckForUpdateChanged() const override;
 
     std::string skippedReleaseVersion() const override;
     void setSkippedReleaseVersion(const std::string& version) override;
 
-    std::string lastShownMuseSoundsReleaseVersion() const override;
-    void setLastShownMuseSoundsReleaseVersion(const std::string& version) override;
-
     std::string checkForAppUpdateUrl() const override;
     std::string previousAppReleasesNotesUrl() const override;
-    std::string checkForMuseSamplerUpdateUrl() const override;
 
     muse::network::RequestHeaders updateHeaders() const override;
 
@@ -52,6 +49,7 @@ public:
     std::string museScorePrivacyPolicyUrl() const override;
 
     io::path_t updateDataPath() const override;
+    io::path_t updateRequestHistoryJsonPath() const override;
 };
 }
 

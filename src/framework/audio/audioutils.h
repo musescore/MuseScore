@@ -38,22 +38,6 @@ inline AudioResourceMeta makeReverbMeta()
     return meta;
 }
 
-inline AudioPluginType audioPluginTypeFromCategoriesString(const String& categoriesStr)
-{
-    static const std::vector<std::pair<String, AudioPluginType> > STRING_TO_PLUGIN_TYPE_LIST = {
-        { u"Instrument", AudioPluginType::Instrument },
-        { u"Fx", AudioPluginType::Fx },
-    };
-
-    for (auto it = STRING_TO_PLUGIN_TYPE_LIST.cbegin(); it != STRING_TO_PLUGIN_TYPE_LIST.cend(); ++it) {
-        if (categoriesStr.contains(it->first)) {
-            return it->second;
-        }
-    }
-
-    return AudioPluginType::Undefined;
-}
-
 inline String audioSourceName(const AudioInputParams& params)
 {
     if (params.type() == AudioSourceType::MuseSampler) {
@@ -75,6 +59,15 @@ inline String audioSourceName(const AudioInputParams& params)
     return String::fromStdString(params.resourceMeta.id);
 }
 
+inline String audioSourcePackName(const AudioInputParams& params)
+{
+    if (params.type() == AudioSourceType::MuseSampler) {
+        return params.resourceMeta.attributeVal(u"musePack");
+    }
+
+    return String();
+}
+
 inline String audioSourceCategoryName(const AudioInputParams& params)
 {
     if (params.type() == AudioSourceType::MuseSampler) {
@@ -86,6 +79,22 @@ inline String audioSourceCategoryName(const AudioInputParams& params)
     }
 
     return String::fromStdString(params.resourceMeta.id);
+}
+
+inline bool isOnlineAudioResource(const AudioResourceMeta& meta)
+{
+    const String& attr = meta.attributeVal(u"isOnline");
+    if (attr.empty()) {
+        return false;
+    }
+
+    bool ok = true;
+    const int val = attr.toInt(&ok);
+    if (!ok) {
+        return false;
+    }
+
+    return val == 1;
 }
 }
 

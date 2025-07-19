@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <defaultsVersion>410</defaultsVersion>
+      <spatium>1.74978</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Componist / arrangeur</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="subtitle">Ondertitel</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Naamloze partituur</metaTag>
+    <Order id="orchestral">
+      <name>Orchestral</name>
+      <instrument id="bb-clarinet">
+        <family id="clarinets">Klarinetten</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      <unsorted/>
+      </Order>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="0" span="2" col="0" visible="1"/>
+        <bracket type="2" span="2" col="2" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff>
+        <eid>D_D</eid>
+        <linkedTo>C_C</linkedTo>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <isStaffVisible>0</isStaffVisible>
+        </Staff>
+      <trackName>Klarinet in B♭</trackName>
+      <Instrument id="bb-clarinet">
+        <longName>Klarinet in B♭</longName>
+        <shortName>Kl. in B♭</shortName>
+        <trackName>Klarinet</trackName>
+        <minPitchP>50</minPitchP>
+        <maxPitchP>94</maxPitchP>
+        <minPitchA>50</minPitchA>
+        <maxPitchA>89</maxPitchA>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>wind.reed.clarinet.bflat</instrumentId>
+        <Channel>
+          <program value="71"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>E_E</eid>
+        <voice>
+          <KeySig>
+            <eid>F_F</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>G_G</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>H_H</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>I_I</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>J_J</eid>
+                </Accidental>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              <tpc2>21</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <eid>K_K</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>L_L</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>M_M</eid>
+                </Accidental>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <tpc2>21</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>N_N</eid>
+            <linkedTo>F_F</linkedTo>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>O_O</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>P_P</eid>
+            <linkedTo>H_H</linkedTo>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>Q_Q</eid>
+              <linkedTo>I_I</linkedTo>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              <tpc2>21</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Chord>
+            <eid>R_R</eid>
+            <linkedTo>K_K</linkedTo>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>S_S</eid>
+              <linkedTo>L_L</linkedTo>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>T_T</eid>
+                </Accidental>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <tpc2>21</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Score>
+      <eid>U_U</eid>
+      <name>Klarinet in B♭</name>
+      <Tracklist sTrack="0" dstTrack="0"/>
+      <Tracklist sTrack="2" dstTrack="1"/>
+      <Tracklist sTrack="3" dstTrack="2"/>
+      <Tracklist sTrack="5" dstTrack="4"/>
+      <Tracklist sTrack="6" dstTrack="5"/>
+      <Tracklist sTrack="7" dstTrack="6"/>
+      <initialPartId>1</initialPartId>
+      <Division>480</Division>
+      <Style>
+        <pageWidth>8.27</pageWidth>
+        <pageHeight>11.69</pageHeight>
+        <pagePrintableWidth>7.0889</pagePrintableWidth>
+        <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
+        <pageOddLeftMargin>0.590551</pageOddLeftMargin>
+        <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+        <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+        <pageOddTopMargin>0.590551</pageOddTopMargin>
+        <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+        <lyricsDashMaxLength>0.8</lyricsDashMaxLength>
+        <lyricsMelismaPad>0.1</lyricsMelismaPad>
+        <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
+        <maskBarlinesForText>0</maskBarlinesForText>
+        <clefKeyDistance>1</clefKeyDistance>
+        <barNoteDistance>1.3</barNoteDistance>
+        <accidentalDistance>0.22</accidentalDistance>
+        <hairpinPosAbove x="0" y="-2"/>
+        <hairpinPosBelow x="0" y="2"/>
+        <hairpinLinePosAbove x="0" y="-3"/>
+        <hairpinLinePosBelow x="0" y="4"/>
+        <pedalFontSize>12</pedalFontSize>
+        <fretFretSpacing>0.8</fretFretSpacing>
+        <barreLineWidth>1</barreLineWidth>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
+        <arpeggioNoteDistance>0.5</arpeggioNoteDistance>
+        <arpeggioAccidentalDistance>0.5</arpeggioAccidentalDistance>
+        <tiePlacementChord>inside</tiePlacementChord>
+        <dynamicsPosAbove x="0" y="-1.5"/>
+        <dynamicsPosBelow x="0" y="2.5"/>
+        <measureNumberPosBelow x="0" y="1"/>
+        <repeatLeftFontSize>18</repeatLeftFontSize>
+        <systemTextLineFontSize>12</systemTextLineFontSize>
+        <defaultsVersion>410</defaultsVersion>
+        <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+        <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
+        <showCourtesiesRepeats>0</showCourtesiesRepeats>
+        <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+        <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+        <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
+        <spatium>1.74978</spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <metaTag name="partName">Klarinet in B♭</metaTag>
+      <Part id="1">
+        <Staff>
+          <eid>V_V</eid>
+          <linkedTo>C_C</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          </Staff>
+        <Staff>
+          <eid>W_W</eid>
+          <linkedTo>C_C</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          </Staff>
+        <trackName>Klarinet in B♭</trackName>
+        <Instrument id="bb-clarinet">
+          <longName>Klarinet in B♭</longName>
+          <shortName>Kl. in B♭</shortName>
+          <trackName>Klarinet</trackName>
+          <minPitchP>50</minPitchP>
+          <maxPitchP>94</maxPitchP>
+          <minPitchA>50</minPitchA>
+          <maxPitchA>89</maxPitchA>
+          <transposeDiatonic>-1</transposeDiatonic>
+          <transposeChromatic>-2</transposeChromatic>
+          <instrumentId>wind.reed.clarinet.bflat</instrumentId>
+          <Channel>
+            <program value="71"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <Measure>
+          <eid>X_X</eid>
+          <voice>
+            <KeySig>
+              <eid>Y_Y</eid>
+              <linkedTo>F_F</linkedTo>
+              <concertKey>0</concertKey>
+              </KeySig>
+            <TimeSig>
+              <eid>Z_Z</eid>
+              <linkedTo>G_G</linkedTo>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Chord>
+              <eid>a_a</eid>
+              <linkedTo>H_H</linkedTo>
+              <durationType>whole</durationType>
+              <Note>
+                <eid>b_b</eid>
+                <linkedTo>I_I</linkedTo>
+                <Accidental>
+                  <subtype>accidentalSharp</subtype>
+                  <eid>c_c</eid>
+                  </Accidental>
+                <pitch>83</pitch>
+                <tpc>19</tpc>
+                <tpc2>21</tpc2>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        </Staff>
+      <Staff id="2">
+        <Measure>
+          <voice>
+            <KeySig>
+              <eid>d_d</eid>
+              <linkedTo>F_F</linkedTo>
+              <concertKey>0</concertKey>
+              </KeySig>
+            <TimeSig>
+              <eid>e_e</eid>
+              <linkedTo>O_O</linkedTo>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Chord>
+              <eid>f_f</eid>
+              <linkedTo>K_K</linkedTo>
+              <durationType>whole</durationType>
+              <Note>
+                <eid>g_g</eid>
+                <linkedTo>L_L</linkedTo>
+                <Accidental>
+                  <subtype>accidentalSharp</subtype>
+                  <eid>h_h</eid>
+                  </Accidental>
+                <pitch>71</pitch>
+                <tpc>19</tpc>
+                <tpc2>21</tpc2>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        </Staff>
+      </Score>
+    </Score>
+  </museScore>

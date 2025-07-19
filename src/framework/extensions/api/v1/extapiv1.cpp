@@ -21,7 +21,7 @@
  */
 #include "extapiv1.h"
 
-#include <QtQml>
+#include <QQmlEngine>
 
 #include "messagedialog.h"
 #include "filedialog.h"
@@ -45,8 +45,17 @@ void ExtApiV1::registerQmlTypes()
 }
 
 ExtApiV1::ExtApiV1(muse::api::IApiEngine* engine, QObject* parent)
-    : QObject(parent), m_engine(engine)
+    : QObject(parent), Injectable(engine->iocContext()), m_engine(engine)
 {
+}
+
+ExtApiV1::~ExtApiV1()
+{
+    for (auto& a : m_apis) {
+        if (a.isNeedDelete) {
+            delete a.obj;
+        }
+    }
 }
 
 void ExtApiV1::setup(QJSValue globalObj)
@@ -82,8 +91,9 @@ QJSValue ExtApiV1::api(const std::string& name) const
     if (!a.jsval.isUndefined()) {
         return a.jsval;
     }
-
-    a.obj = apiRegister()->createApi(name, m_engine);
+    auto api = apiRegister()->createApi(name, m_engine);
+    a.obj = api.first;
+    a.isNeedDelete = api.second;
     if (!a.obj) {
         LOGW() << "Not allowed api: " << name;
         return QJSValue();

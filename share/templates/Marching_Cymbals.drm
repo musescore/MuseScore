@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.20">
+  <Drum pitch="72">
+    <head>normal</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Crash</name>
+    <stem>1</stem>
+    <shortcut>A</shortcut>
+    </Drum>
+  <Drum pitch="79">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadXOrnate</whole>
+      <half>noteheadXOrnate</half>
+      <quarter>noteheadXOrnate</quarter>
+      <breve>noteheadXOrnate</breve>
+      </noteheads>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Punch</name>
+    <stem>1</stem>
+    <shortcut>G</shortcut>
+    </Drum>
+  <Drum pitch="89">
+    <head>plus</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Suc</name>
+    <stem>1</stem>
+    <shortcut>B</shortcut>
+    </Drum>
+  <Drum pitch="81">
+    <head>triangle-up</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Tap</name>
+    <stem>1</stem>
+    <shortcut>D</shortcut>
+    </Drum>
+  <Drum pitch="76">
+    <head>cross</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Crunch (HH)</name>
+    <stem>1</stem>
+    <shortcut>C</shortcut>
+    </Drum>
+  <Drum pitch="84">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadTriangleRoundDownWhite</whole>
+      <half>noteheadTriangleRoundDownWhite</half>
+      <quarter>noteheadTriangleRoundDownBlack</quarter>
+      <breve>noteShapeTriangleRoundDoubleWhole</breve>
+      </noteheads>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Ting</name>
+    <stem>1</stem>
+    <shortcut>E</shortcut>
+    </Drum>
+  <Drum pitch="91">
+    <head>slashed1</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Zing</name>
+    <stem>1</stem>
+    <shortcut>F</shortcut>
+    </Drum>
+  <Drum pitch="77">
+    <head>diamond</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Sizzle</name>
+    <stem>1</stem>
+    </Drum>
+  </museScore>

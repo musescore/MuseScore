@@ -26,6 +26,8 @@
 #include "global/io/buffer.h"
 #include "global/types/retval.h"
 
+#include "../engravingerrors.h"
+
 #include "../types/types.h"
 
 #include "../dom/masterscore.h"
@@ -99,11 +101,27 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
 
     // Read ChordList
     {
+        bool chordListOk = false;
         ByteArray chordListData = mscReader.readChordListFile();
         if (!chordListData.empty()) {
             Buffer buf(&chordListData);
             buf.open(IODevice::ReadOnly);
-            masterScore->chordList()->read(&buf);
+
+            chordListOk = masterScore->chordList()->read(&buf);
+        }
+
+        masterScore->chordList()->setCustomChordList(chordListOk);
+
+        if (!chordListOk) {
+            // See also ReadChordListHook::validate()
+            MStyle& style = masterScore->style();
+            ChordList* chordList = masterScore->chordList();
+
+            bool custom = style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM;
+            chordList->setCustomChordList(custom);
+
+            // Ensure that `checkChordList` loads the default chord list
+            chordList->unload();
         }
     }
 
@@ -168,8 +186,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
                 break;
             }
 
-            Err err = reader.val->readScore(partScore, xml, &partReadInData);
-            ret =  make_ret(err);
+            ret = reader.val->readScore(partScore, xml, &partReadInData);
             if (!ret) {
                 break;
             }
@@ -214,8 +231,8 @@ Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVers
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            const String& version = e.attribute("version");
-            StringList sl = version.split('.');
+            const String version = e.attribute("version");
+            const StringList sl = version.split(u'.');
             score->setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
             RetVal<IReaderPtr> reader = makeReader(score->mscVersion(), ignoreVersionError);
@@ -242,15 +259,15 @@ Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVers
                 score->checkChordList();
             }
 
-            Err err = reader.val->readScore(score, e, out);
+            Ret ret = reader.val->readScore(score, e, out);
 
             score->setExcerptsChanged(false);
 
-            return make_ret(err);
+            return ret;
         } else {
             e.unknown();
         }
     }
 
-    return Ret(static_cast<int>(Err::FileCorrupted), e.errorString().toStdString());
+    return make_ret(Err::FileCriticallyCorrupted, e.errorString());
 }

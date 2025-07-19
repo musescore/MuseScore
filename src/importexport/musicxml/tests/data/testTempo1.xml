@@ -48,7 +48,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Largo </words>
           </direction-type>
@@ -145,7 +145,7 @@
         </note>
       </measure>
     <measure number="3">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Andante</words>
           </direction-type>
@@ -235,20 +235,11 @@
         </note>
       </measure>
     <measure number="5">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Vivace</words>
           </direction-type>
         <sound tempo="120"/>
-        </direction>
-      <direction placement="above">
-        <direction-type>
-          <metronome parentheses="yes">
-            <beat-unit>quarter</beat-unit>
-            <per-minute>126</per-minute>
-            </metronome>
-          </direction-type>
-        <sound tempo="126"/>
         </direction>
       <note>
         <pitch>

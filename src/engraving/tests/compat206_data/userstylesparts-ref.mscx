@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pagePrintableWidth>7.4826</pagePrintableWidth>
@@ -18,6 +19,7 @@
       <user1Align>center,top</user1Align>
       <user1FramePadding>0</user1FramePadding>
       <user1FrameWidth>0</user1FrameWidth>
+      <user1Position>center</user1Position>
       <user2Name>Style2</user2Name>
       <user2FontFace>MuseJazz Text</user2FontFace>
       <user2FontSize>12</user2FontSize>
@@ -25,6 +27,7 @@
       <user2Align>right,top</user2Align>
       <user2FramePadding>0</user2FramePadding>
       <user2FrameWidth>0</user2FrameWidth>
+      <user2Position>right</user2Position>
       <user3Name>Style3</user3Name>
       <user3FontFace>FreeSans</user3FontFace>
       <user3FontSize>12</user3FontSize>
@@ -38,6 +41,7 @@
       <user4Align>center,center</user4Align>
       <user4FramePadding>0</user4FramePadding>
       <user4FrameWidth>0</user4FrameWidth>
+      <user4Position>center</user4Position>
       <user5Name>Style5</user5Name>
       <user5FontSize>15</user5FontSize>
       <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
@@ -51,6 +55,7 @@
       <user6Align>center,bottom</user6Align>
       <user6FramePadding>0</user6FramePadding>
       <user6FrameWidth>0</user6FrameWidth>
+      <user6Position>center</user6Position>
       <user7Name>Style7</user7Name>
       <user7FontSize>12</user7FontSize>
       <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
@@ -58,8 +63,9 @@
       <user7Align>right,bottom</user7Align>
       <user7FramePadding>0</user7FramePadding>
       <user7FrameWidth>0</user7FrameWidth>
+      <user7Position>right</user7Position>
       <defaultsVersion>206</defaultsVersion>
-      <Spatium>1.76389</Spatium>
+      <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -76,7 +82,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -126,7 +133,8 @@
         </Instrument>
       </Part>
     <Part id="2">
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -175,7 +183,8 @@
         </Instrument>
       </Part>
     <Part id="3">
-      <Staff id="3">
+      <Staff>
+        <eid>E_E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -227,76 +236,80 @@
       <VBox>
         <height>36.9323</height>
         <boxAutoSize>0</boxAutoSize>
-        <linkedMain/>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>F_F</eid>
         <Text>
-          <linkedMain/>
+          <eid>G_G</eid>
           <style>user_1</style>
           <text>Title</text>
           </Text>
         <Text>
-          <linkedMain/>
+          <eid>H_H</eid>
           <style>user_7</style>
           <text>Text7</text>
           </Text>
         <Text>
-          <linkedMain/>
+          <eid>I_I</eid>
           <style>user_2</style>
           <text>Text 2</text>
           </Text>
         <Text>
-          <linkedMain/>
+          <eid>J_J</eid>
           <style>user_3</style>
           <text>Text3</text>
           </Text>
         <Text>
-          <linkedMain/>
+          <eid>K_K</eid>
           <style>user_4</style>
           <text>Text4</text>
           </Text>
         <Text>
-          <linkedMain/>
+          <eid>L_L</eid>
           <style>user_5</style>
           <text>Text5</text>
           </Text>
         <Text>
-          <linkedMain/>
+          <eid>M_M</eid>
           <style>user_6</style>
           <text>Text6</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>N_N</eid>
         <voice>
           <TimeSig>
-            <linkedMain/>
+            <eid>O_O</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <linkedMain/>
+            <eid>P_P</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>Q_Q</eid>
         <voice>
           <Rest>
-            <linkedMain/>
+            <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>S_S</eid>
         <voice>
           <Rest>
-            <linkedMain/>
+            <eid>T_T</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <linkedMain/>
+            <eid>U_U</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -305,12 +318,12 @@
       <Measure>
         <voice>
           <TimeSig>
-            <linkedMain/>
+            <eid>V_V</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <linkedMain/>
+            <eid>W_W</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -319,7 +332,7 @@
       <Measure>
         <voice>
           <Rest>
-            <linkedMain/>
+            <eid>X_X</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -328,13 +341,13 @@
       <Measure>
         <voice>
           <Rest>
-            <linkedMain/>
+            <eid>Y_Y</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <linkedMain/>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -343,12 +356,12 @@
       <Measure>
         <voice>
           <TimeSig>
-            <linkedMain/>
+            <eid>a_a</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <linkedMain/>
+            <eid>b_b</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -357,7 +370,7 @@
       <Measure>
         <voice>
           <Rest>
-            <linkedMain/>
+            <eid>c_c</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -366,18 +379,19 @@
       <Measure>
         <voice>
           <Rest>
-            <linkedMain/>
+            <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <linkedMain/>
+            <eid>e_e</eid>
             </BarLine>
           </voice>
         </Measure>
       </Staff>
     <Score>
+      <eid>f_f</eid>
       <name>Piano</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
@@ -398,6 +412,7 @@
         <user1Align>center,top</user1Align>
         <user1FramePadding>0</user1FramePadding>
         <user1FrameWidth>0</user1FrameWidth>
+        <user1Position>center</user1Position>
         <user2Name>Style2</user2Name>
         <user2FontFace>MuseJazz Text</user2FontFace>
         <user2FontSize>12</user2FontSize>
@@ -405,6 +420,7 @@
         <user2Align>right,top</user2Align>
         <user2FramePadding>0</user2FramePadding>
         <user2FrameWidth>0</user2FrameWidth>
+        <user2Position>right</user2Position>
         <user3Name>Style3</user3Name>
         <user3FontFace>FreeSans</user3FontFace>
         <user3FontSize>12</user3FontSize>
@@ -418,6 +434,7 @@
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
+        <user4Position>center</user4Position>
         <user5Name>Style5</user5Name>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
@@ -431,6 +448,7 @@
         <user6Align>center,bottom</user6Align>
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
+        <user6Position>center</user6Position>
         <user7Name>Style7</user7Name>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
@@ -438,8 +456,9 @@
         <user7Align>right,bottom</user7Align>
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
+        <user7Position>right</user7Position>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -447,8 +466,9 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">Piano</metaTag>
       <Part id="1">
-        <Staff id="1">
-          <linkedTo>1</linkedTo>
+        <Staff>
+          <eid>g_g</eid>
+          <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
@@ -501,66 +521,59 @@
         <VBox>
           <height>36.9323</height>
           <boxAutoSize>0</boxAutoSize>
-          <linked>
-            </linked>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+          <eid>h_h</eid>
           <Text>
-            <linked>
-              </linked>
+            <eid>i_i</eid>
             <style>user_1</style>
             <text>Title</text>
             </Text>
           <Text>
-            <linked>
-              </linked>
+            <eid>j_j</eid>
             <style>user_7</style>
             <text>Text7</text>
             </Text>
           <Text>
-            <linked>
-              </linked>
+            <eid>k_k</eid>
             <style>user_2</style>
             <text>Text 2</text>
             </Text>
           <Text>
-            <linked>
-              </linked>
+            <eid>l_l</eid>
             <style>user_3</style>
             <text>Text3</text>
             </Text>
           <Text>
-            <linked>
-              </linked>
+            <eid>m_m</eid>
             <style>user_4</style>
             <text>Text4</text>
             </Text>
           <Text>
-            <linked>
-              </linked>
+            <eid>n_n</eid>
             <style>user_5</style>
             <text>Text5</text>
             </Text>
           <Text>
-            <linked>
-              </linked>
+            <eid>o_o</eid>
             <style>user_6</style>
             <text>Text6</text>
             </Text>
           <Text>
+            <eid>p_p</eid>
             <style>instrument_excerpt</style>
             <text>Piano</text>
             </Text>
           </VBox>
         <Measure>
+          <eid>q_q</eid>
           <voice>
             <TimeSig>
-              <linked>
-                </linked>
+              <eid>r_r</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <linked>
-                </linked>
+              <eid>s_s</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -568,50 +581,54 @@
           </Measure>
         <Measure len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
+          <eid>t_t</eid>
           <voice>
             <TimeSig>
+              <eid>u_u</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
+              <eid>v_v</eid>
+              <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <linked>
-                </linked>
+              <eid>w_w</eid>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
+          <eid>x_x</eid>
           <voice>
             <Rest>
-              <linked>
-                </linked>
+              <eid>y_y</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
+          <eid>z_z</eid>
           <voice>
             <Rest>
-              <linked>
-                </linked>
+              <eid>0_0</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <linked>
-                </linked>
+              <eid>1_1</eid>
+              <linkedTo>w_w</linkedTo>
               </BarLine>
             </voice>
           </Measure>
         </Staff>
       </Score>
     <Score>
+      <eid>2_2</eid>
       <name>Flute 1</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
@@ -632,6 +649,7 @@
         <user1Align>center,top</user1Align>
         <user1FramePadding>0</user1FramePadding>
         <user1FrameWidth>0</user1FrameWidth>
+        <user1Position>center</user1Position>
         <user2Name>Style2</user2Name>
         <user2FontFace>MuseJazz Text</user2FontFace>
         <user2FontSize>12</user2FontSize>
@@ -639,6 +657,7 @@
         <user2Align>right,top</user2Align>
         <user2FramePadding>0</user2FramePadding>
         <user2FrameWidth>0</user2FrameWidth>
+        <user2Position>right</user2Position>
         <user3Name>Style3</user3Name>
         <user3FontFace>FreeSans</user3FontFace>
         <user3FontSize>12</user3FontSize>
@@ -652,6 +671,7 @@
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
+        <user4Position>center</user4Position>
         <user5Name>Style5</user5Name>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
@@ -665,6 +685,7 @@
         <user6Align>center,bottom</user6Align>
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
+        <user6Position>center</user6Position>
         <user7Name>Style7</user7Name>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
@@ -672,8 +693,9 @@
         <user7Align>right,bottom</user7Align>
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
+        <user7Position>right</user7Position>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -681,8 +703,9 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">Flute 1</metaTag>
       <Part id="2">
-        <Staff id="1">
-          <linkedTo>2</linkedTo>
+        <Staff>
+          <eid>3_3</eid>
+          <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
@@ -734,90 +757,59 @@
         <VBox>
           <height>36.9323</height>
           <boxAutoSize>0</boxAutoSize>
-          <linked>
-            <location>
-              <staves>-1</staves>
-              </location>
-            </linked>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+          <eid>4_4</eid>
           <Text>
-            <linked>
-              <location>
-                <staves>-1</staves>
-                </location>
-              </linked>
+            <eid>5_5</eid>
             <style>user_1</style>
             <text>Title</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-1</staves>
-                </location>
-              </linked>
+            <eid>6_6</eid>
             <style>user_7</style>
             <text>Text7</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-1</staves>
-                </location>
-              </linked>
+            <eid>7_7</eid>
             <style>user_2</style>
             <text>Text 2</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-1</staves>
-                </location>
-              </linked>
+            <eid>8_8</eid>
             <style>user_3</style>
             <text>Text3</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-1</staves>
-                </location>
-              </linked>
+            <eid>9_9</eid>
             <style>user_4</style>
             <text>Text4</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-1</staves>
-                </location>
-              </linked>
+            <eid>+_+</eid>
             <style>user_5</style>
             <text>Text5</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-1</staves>
-                </location>
-              </linked>
+            <eid>/_/</eid>
             <style>user_6</style>
             <text>Text6</text>
             </Text>
           <Text>
+            <eid>AB_AB</eid>
             <style>instrument_excerpt</style>
             <text>Flute 1</text>
             </Text>
           </VBox>
         <Measure>
+          <eid>BB_BB</eid>
           <voice>
             <TimeSig>
-              <linked>
-                </linked>
+              <eid>CB_CB</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <linked>
-                </linked>
+              <eid>DB_DB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -825,50 +817,54 @@
           </Measure>
         <Measure len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
+          <eid>EB_EB</eid>
           <voice>
             <TimeSig>
+              <eid>FB_FB</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
+              <eid>GB_GB</eid>
+              <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <linked>
-                </linked>
+              <eid>HB_HB</eid>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
+          <eid>IB_IB</eid>
           <voice>
             <Rest>
-              <linked>
-                </linked>
+              <eid>JB_JB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
+          <eid>KB_KB</eid>
           <voice>
             <Rest>
-              <linked>
-                </linked>
+              <eid>LB_LB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <linked>
-                </linked>
+              <eid>MB_MB</eid>
+              <linkedTo>HB_HB</linkedTo>
               </BarLine>
             </voice>
           </Measure>
         </Staff>
       </Score>
     <Score>
+      <eid>NB_NB</eid>
       <name>Flute 2</name>
       <initialPartId>3</initialPartId>
       <Division>480</Division>
@@ -889,6 +885,7 @@
         <user1Align>center,top</user1Align>
         <user1FramePadding>0</user1FramePadding>
         <user1FrameWidth>0</user1FrameWidth>
+        <user1Position>center</user1Position>
         <user2Name>Style2</user2Name>
         <user2FontFace>MuseJazz Text</user2FontFace>
         <user2FontSize>12</user2FontSize>
@@ -896,6 +893,7 @@
         <user2Align>right,top</user2Align>
         <user2FramePadding>0</user2FramePadding>
         <user2FrameWidth>0</user2FrameWidth>
+        <user2Position>right</user2Position>
         <user3Name>Style3</user3Name>
         <user3FontFace>FreeSans</user3FontFace>
         <user3FontSize>12</user3FontSize>
@@ -909,6 +907,7 @@
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
+        <user4Position>center</user4Position>
         <user5Name>Style5</user5Name>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
@@ -922,6 +921,7 @@
         <user6Align>center,bottom</user6Align>
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
+        <user6Position>center</user6Position>
         <user7Name>Style7</user7Name>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
@@ -929,8 +929,9 @@
         <user7Align>right,bottom</user7Align>
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
+        <user7Position>right</user7Position>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -938,8 +939,9 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">Flute 2</metaTag>
       <Part id="3">
-        <Staff id="1">
-          <linkedTo>3</linkedTo>
+        <Staff>
+          <eid>OB_OB</eid>
+          <linkedTo>E_E</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
@@ -991,90 +993,59 @@
         <VBox>
           <height>36.9323</height>
           <boxAutoSize>0</boxAutoSize>
-          <linked>
-            <location>
-              <staves>-2</staves>
-              </location>
-            </linked>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+          <eid>PB_PB</eid>
           <Text>
-            <linked>
-              <location>
-                <staves>-2</staves>
-                </location>
-              </linked>
+            <eid>QB_QB</eid>
             <style>user_1</style>
             <text>Title</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-2</staves>
-                </location>
-              </linked>
+            <eid>RB_RB</eid>
             <style>user_7</style>
             <text>Text7</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-2</staves>
-                </location>
-              </linked>
+            <eid>SB_SB</eid>
             <style>user_2</style>
             <text>Text 2</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-2</staves>
-                </location>
-              </linked>
+            <eid>TB_TB</eid>
             <style>user_3</style>
             <text>Text3</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-2</staves>
-                </location>
-              </linked>
+            <eid>UB_UB</eid>
             <style>user_4</style>
             <text>Text4</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-2</staves>
-                </location>
-              </linked>
+            <eid>VB_VB</eid>
             <style>user_5</style>
             <text>Text5</text>
             </Text>
           <Text>
-            <linked>
-              <location>
-                <staves>-2</staves>
-                </location>
-              </linked>
+            <eid>WB_WB</eid>
             <style>user_6</style>
             <text>Text6</text>
             </Text>
           <Text>
+            <eid>XB_XB</eid>
             <style>instrument_excerpt</style>
             <text>Flute 2</text>
             </Text>
           </VBox>
         <Measure>
+          <eid>YB_YB</eid>
           <voice>
             <TimeSig>
-              <linked>
-                </linked>
+              <eid>ZB_ZB</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <linked>
-                </linked>
+              <eid>aB_aB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1082,44 +1053,47 @@
           </Measure>
         <Measure len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
+          <eid>bB_bB</eid>
           <voice>
             <TimeSig>
+              <eid>cB_cB</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
+              <eid>dB_dB</eid>
+              <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <linked>
-                </linked>
+              <eid>eB_eB</eid>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
+          <eid>fB_fB</eid>
           <voice>
             <Rest>
-              <linked>
-                </linked>
+              <eid>gB_gB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
+          <eid>hB_hB</eid>
           <voice>
             <Rest>
-              <linked>
-                </linked>
+              <eid>iB_iB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <linked>
-                </linked>
+              <eid>jB_jB</eid>
+              <linkedTo>eB_eB</linkedTo>
               </BarLine>
             </voice>
           </Measure>

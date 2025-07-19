@@ -45,11 +45,11 @@ public:
     virtual bool edit(EditData&) override;
     virtual void startEditDrag(EditData&) override;
     virtual void editDrag(EditData&) override;
-    virtual void endEdit(EditData&) override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
     virtual void add(EngravingItem* e) override;
+    virtual double absoluteFromSpatium(const Spatium& val) const override;
 
     RectF contentRect() const;
     Spatium boxWidth() const { return m_boxWidth; }
@@ -64,13 +64,14 @@ public:
     void setRightMargin(double val) { m_rightMargin = val; }
     void setTopMargin(double val) { m_topMargin = val; }
     void setBottomMargin(double val) { m_bottomMargin = val; }
-    Millimetre topGap() const { return m_topGap; }
-    void setTopGap(Millimetre val) { m_topGap = val; }
-    Millimetre bottomGap() const { return m_bottomGap; }
-    void setBottomGap(Millimetre val) { m_bottomGap = val; }
+    Spatium topGap() const { return m_topGap; }
+    void setTopGap(Spatium val) { m_topGap = val; }
+    Spatium bottomGap() const { return m_bottomGap; }
+    void setBottomGap(Spatium val) { m_bottomGap = val; }
     bool isAutoSizeEnabled() const { return m_isAutoSizeEnabled; }
     void setAutoSizeEnabled(const bool val) { m_isAutoSizeEnabled = val; }
     void copyValues(Box* origin);
+    bool isTitleFrame() const;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -91,9 +92,9 @@ public:
 private:
     Spatium m_boxWidth;         // only valid for HBox
     Spatium m_boxHeight;        // only valid for VBox
-    Millimetre m_topGap;        // distance from previous system (left border for hbox)
+    Spatium m_topGap;           // distance from previous system (left border for hbox)
                                 // initialized with Sid::systemFrameDistance
-    Millimetre m_bottomGap;     // distance to next system (right border for hbox)
+    Spatium m_bottomGap;        // distance to next system (right border for hbox)
                                 // initialized with Sid::frameSystemDistance
     double m_leftMargin = 0.0;
     double m_rightMargin = 0.0; // inner margins in metric mm
@@ -174,12 +175,59 @@ class FBox : public VBox
     DECLARE_CLASSOF(ElementType::FBOX)
 
 public:
-    FBox(System* parent)
-        : VBox(ElementType::FBOX, parent) {}
-
+    FBox(System* parent);
     FBox* clone() const override { return new FBox(*this); }
 
+    void init();
+
     void add(EngravingItem*) override;
+
+    double textScale() const { return m_textScale; }
+    void setTextScale(double scale) { m_textScale = scale; }
+
+    double diagramScale() const { return m_diagramScale; }
+    void setDiagramScale(double scale) { m_diagramScale = scale; }
+
+    Spatium columnGap() const { return m_columnGap; }
+    void setColumnGap(Spatium gap) { m_columnGap = gap; }
+
+    Spatium rowGap() const { return m_rowGap; }
+    void setRowGap(Spatium gap) { m_rowGap = gap; }
+
+    int chordsPerRow() const { return m_chordsPerRow; }
+    void setChordsPerRow(int chords) { m_chordsPerRow = chords; }
+
+    AlignH contentHorizontallAlignment() const { return m_contentAlignmentH; }
+    void setContentHorizontallAlignment(AlignH alignment) { m_contentAlignmentH = alignment; }
+
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& val) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+
+    int gripsCount() const override;
+    Grip initialEditModeGrip() const override;
+    Grip defaultGrip() const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
+
+    void undoReorderElements(const std::vector<EID>& newOrderElementsIds);
+
+    struct LayoutData : public VBox::LayoutData {
+        double totalTableHeight = 0.0;
+        double totalTableWidth = 0.0;
+    };
+
+    DECLARE_LAYOUTDATA_METHODS(FBox)
+
+private:
+    void resolveContentRect();
+
+    double m_textScale = 0.0;
+    double m_diagramScale = 0.0;
+    Spatium m_columnGap;
+    Spatium m_rowGap;
+    int m_chordsPerRow = 0;
+
+    AlignH m_contentAlignmentH = AlignH::HCENTER;
 };
 
 //---------------------------------------------------------

@@ -22,11 +22,20 @@
 
 #include "elements.h"
 
+#include "engraving/dom/chord.h"
+#include "engraving/dom/guitarbend.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/measurenumber.h"
+#include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/property.h"
+#include "engraving/dom/slur.h"
+#include "engraving/dom/spacer.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/undo.h"
 
 // api
-#include "fraction.h"
+#include "apistructs.h"
 #include "part.h"
 
 #include "log.h"
@@ -53,6 +62,11 @@ void EngravingItem::setOffsetY(qreal offY)
     set(mu::engraving::Pid::OFFSET, QPointF(offX, offY));
 }
 
+static QRectF scaleRect(const mu::engraving::RectF& rect, double spatium)
+{
+    return QRectF(rect.x() / spatium, rect.y() / spatium, rect.width() / spatium, rect.height() / spatium);
+}
+
 //---------------------------------------------------------
 //   EngravingItem::bbox
 //   return the element bbox in spatium units, rather than in raster units as stored internally
@@ -60,9 +74,64 @@ void EngravingItem::setOffsetY(qreal offY)
 
 QRectF EngravingItem::bbox() const
 {
-    RectF bbox = element()->ldata()->bbox();
-    qreal spatium = element()->spatium();
-    return QRectF(bbox.x() / spatium, bbox.y() / spatium, bbox.width() / spatium, bbox.height() / spatium);
+    return scaleRect(element()->ldata()->bbox(), element()->spatium());
+}
+
+bool EngravingItem::up() const
+{
+    if (element()->isChordRest()) {
+        return toChordRest(element())->ldata()->up;
+    } else if (element()->isStem()) {
+        return toStem(element())->up();
+    } else if (element()->isSlur()) {
+        return toSlur(element())->up();
+    } else if (element()->isTie()) {
+        return toTie(element())->up();
+    } else if (element()->isSlurTieSegment()) {
+        return toSlurTieSegment(element())->slurTie()->up();
+    } else if (element()->isArticulation()) {
+        return toArticulation(element())->ldata()->up;
+    } else if (element()->isGuitarBend()) {
+        return toGuitarBend(element())->ldata()->up();
+    } else if (element()->isGuitarBendSegment()) {
+        return toGuitarBendSegment(element())->guitarBend()->ldata()->up();
+    } else if (element()->isBeam()) {
+        return toBeam(element())->up();
+    } else if (element()->isTuplet()) {
+        return toTuplet(element())->isUp();
+    } else if (element()->type() == mu::engraving::ElementType::TREMOLO_TWOCHORD) {
+        return item_cast<const TremoloTwoChord*>(element())->up();
+    }
+    return false;
+}
+
+FractionWrapper* EngravingItem::tick() const
+{
+    return wrap(element()->tick());
+}
+
+//---------------------------------------------------------
+//   ChordRest::actualBeamMode
+//---------------------------------------------------------
+
+int ChordRest::actualBeamMode(bool beamRests)
+{
+    if (chordRest()->isRest() && !beamRests && chordRest()->beamMode() == mu::engraving::BeamMode::AUTO) {
+        return int(mu::engraving::BeamMode::NONE);
+    }
+    mu::engraving::ChordRest* prev = nullptr;
+    if (!(chordRest()->isChord() && toChord(chordRest())->isGrace())) {
+        mu::engraving::Segment* seg = chordRest()->segment();
+        mu::engraving::Measure* m = seg->measure();
+        while (seg && seg->measure()->system() == m->system()) {
+            seg = seg->prev1(mu::engraving::SegmentType::ChordRest);
+            if (seg->element(chordRest()->track())) {
+                prev = toChordRest(seg->element(chordRest()->track()));
+                break;
+            }
+        }
+    }
+    return int(mu::engraving::Groups::endBeam(chordRest(), prev));
 }
 
 //---------------------------------------------------------
@@ -76,6 +145,11 @@ EngravingItem* Segment::elementAt(int track)
         return nullptr;
     }
     return wrap(el, Ownership::SCORE);
+}
+
+FractionWrapper* Segment::fraction() const
+{
+    return wrap(segment()->tick());
 }
 
 //---------------------------------------------------------
@@ -113,9 +187,13 @@ bool Note::isChildAllowed(mu::engraving::ElementType elementType)
     case ElementType::TEXT:
     case ElementType::BEND:
     case ElementType::TIE:
+    case ElementType::PARTIAL_TIE:
+    case ElementType::LAISSEZ_VIB:
     case ElementType::ACCIDENTAL:
     case ElementType::TEXTLINE:
+    case ElementType::NOTELINE:
     case ElementType::GLISSANDO:
+    case ElementType::HAMMER_ON_PULL_OFF:
         return true;
     default:
         return false;
@@ -180,6 +258,33 @@ void Note::remove(apiv1::EngravingItem* wrapped)
     } else {
         LOGD("Note::remove() not impl. %s", s->typeName());
     }
+}
+
+//---------------------------------------------------------
+//   DurationElement::ticks
+//---------------------------------------------------------
+
+FractionWrapper* DurationElement::ticks() const
+{
+    return wrap(durationElement()->ticks());
+}
+
+//---------------------------------------------------------
+//   DurationElement::changeCRlen
+//---------------------------------------------------------
+
+void DurationElement::changeCRlen(FractionWrapper* len)
+{
+    if (!durationElement()->isChordRest()) {
+        LOGW("DurationElement::changeCRlen: can only change length for chords or rests");
+        return;
+    }
+    const mu::engraving::Fraction f = len->fraction();
+    if (!f.isValid() || f.isZero() || f.negative()) {
+        LOGW("DurationElement::changeCRlen: invalid parameter values: %s", qPrintable(f.toString()));
+        return;
+    }
+    durationElement()->score()->changeCRlen(toChordRest(durationElement()), f);
 }
 
 //---------------------------------------------------------
@@ -261,15 +366,6 @@ void Chord::addInternal(mu::engraving::Chord* chord, mu::engraving::EngravingIte
 }
 
 //---------------------------------------------------------
-//   Page::pagenumber
-//---------------------------------------------------------
-
-int Page::pagenumber() const
-{
-    return static_cast<int>(page()->no());
-}
-
-//---------------------------------------------------------
 //   Chord::remove
 //---------------------------------------------------------
 
@@ -287,6 +383,126 @@ void Chord::remove(apiv1::EngravingItem* wrapped)
     }
 }
 
+EngravingItem* Measure::vspacerUp(int staffIdx)
+{
+    return wrap(measure()->vspacerUp(static_cast<staff_idx_t>(staffIdx)));
+}
+
+EngravingItem* Measure::vspacerDown(int staffIdx)
+{
+    return wrap(measure()->vspacerDown(static_cast<staff_idx_t>(staffIdx)));
+}
+
+EngravingItem* Measure::measureNumber(int staffIdx)
+{
+    return wrap(measure()->measureNumber(static_cast<staff_idx_t>(staffIdx)));
+}
+
+EngravingItem* Measure::mmRangeText(int staffIdx)
+{
+    return wrap(measure()->mmRangeText(static_cast<staff_idx_t>(staffIdx)));
+}
+
+bool Measure::corrupted(int staffIdx)
+{
+    return measure()->corrupted(static_cast<staff_idx_t>(staffIdx));
+}
+
+bool Measure::visible(int staffIdx)
+{
+    return measure()->visible(static_cast<staff_idx_t>(staffIdx));
+}
+
+bool Measure::stemless(int staffIdx)
+{
+    return measure()->stemless(static_cast<staff_idx_t>(staffIdx));
+}
+
+FractionWrapper* MeasureBase::tick() const
+{
+    return wrap(measureBase()->tick());
+}
+
+FractionWrapper* MeasureBase::ticks() const
+{
+    return wrap(measureBase()->ticks());
+}
+
+void MeasureBase::add(apiv1::EngravingItem* wrapped)
+{
+    mu::engraving::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
+    if (s) {
+        // Ensure that the object has the expected ownership
+        if (wrapped->ownership() == Ownership::SCORE) {
+            LOGW("MeasureBase::add: Cannot add this element. The element is already part of the score.");
+            return;              // Don't allow operation.
+        }
+        // Score now owns the object.
+        wrapped->setOwnership(Ownership::SCORE);
+
+        addInternal(measureBase(), s);
+    }
+}
+
+void MeasureBase::addInternal(mu::engraving::MeasureBase* measureBase, mu::engraving::EngravingItem* s)
+{
+    s->setScore(measureBase->score());
+    s->setParent(measureBase);
+    measureBase->score()->undoAddElement(s);
+}
+
+void MeasureBase::remove(apiv1::EngravingItem* wrapped)
+{
+    mu::engraving::EngravingItem* s = wrapped->element();
+    if (!s) {
+        LOGW("PluginAPI::MeasureBase::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
+    } else if (s->explicitParent() != measureBase()) {
+        LOGW("PluginAPI::MeasureBase::remove: The element is not a child of this measure base. Use removeElement() instead.");
+    } else {
+        measureBase()->score()->deleteItem(s);     // Create undo op and remove the element.
+    }
+}
+
+QRectF System::bbox(int staffIdx)
+{
+    mu::engraving::SysStaff* ss = muse::value(system()->staves(), static_cast<staff_idx_t>(staffIdx));
+    return ss ? scaleRect(ss->bbox(), system()->spatium()) : QRectF();
+}
+
+qreal System::yOffset(int staffIdx)
+{
+    mu::engraving::SysStaff* ss = muse::value(system()->staves(), static_cast<staff_idx_t>(staffIdx));
+    return ss ? ss->yOffset() / system()->spatium() : 0.0;
+}
+
+bool System::show(int staffIdx)
+{
+    mu::engraving::SysStaff* ss = muse::value(system()->staves(), static_cast<staff_idx_t>(staffIdx));
+    return ss ? ss->show() : false;
+}
+
+void System::setIsLocked(bool locked)
+{
+    if (locked == isLocked()) {
+        return;
+    }
+    const mu::engraving::SystemLock* currentLock = system()->systemLock();
+    if (currentLock && !locked) {
+        system()->score()->undoRemoveSystemLock(currentLock);
+    } else if (!currentLock && locked) {
+        system()->score()->undoAddSystemLock(new mu::engraving::SystemLock(system()->first(), system()->last()));
+    }
+}
+
+//---------------------------------------------------------
+//   Page::pagenumber
+//---------------------------------------------------------
+
+int Page::pagenumber() const
+{
+    return static_cast<int>(page()->no());
+}
+
 //---------------------------------------------------------
 //   Staff::part
 //---------------------------------------------------------
@@ -294,6 +510,121 @@ void Chord::remove(apiv1::EngravingItem* wrapped)
 Part* Staff::part()
 {
     return wrap<Part>(staff()->part());
+}
+
+FractionWrapper* Staff::timeStretch(FractionWrapper* tick)
+{
+    return wrap(staff()->timeStretch(tick->fraction()));
+}
+
+EngravingItem* Staff::timeSig(FractionWrapper* tick)
+{
+    return wrap(staff()->timeSig(tick->fraction()));
+}
+
+int Staff::key(FractionWrapper* tick)
+{
+    return int(staff()->key(tick->fraction()));
+}
+
+IntervalWrapper* Staff::transpose(FractionWrapper* tick)
+{
+    return wrap(staff()->transpose(tick->fraction()));
+}
+
+QVariantMap Staff::swing(FractionWrapper* f)
+{
+    mu::engraving::SwingParameters swingParams = staff()->swing(f->fraction());
+    QVariantMap pluginSwingParams;
+    pluginSwingParams["swingUnit"] = swingParams.swingUnit;
+    pluginSwingParams["swingRatio"] = swingParams.swingRatio;
+    pluginSwingParams["isOn"] = swingParams.isOn();
+    return pluginSwingParams;
+}
+
+QVariantMap Staff::capo(FractionWrapper* f)
+{
+    const mu::engraving::CapoParams& capoParams = staff()->capo(f->fraction());
+    QVariantMap pluginCapoParams;
+    pluginCapoParams["active"] = capoParams.active;
+    pluginCapoParams["fretPosition"] = capoParams.fretPosition;
+    QVariantList ignoredStrings;
+    ignoredStrings.reserve(static_cast<int>(capoParams.ignoredStrings.size()));
+    for (size_t string : capoParams.ignoredStrings) {
+        ignoredStrings.append(static_cast<int>(string));
+    }
+    pluginCapoParams["ignoredStrings"] = ignoredStrings;
+    return pluginCapoParams;
+}
+
+bool Staff::stemless(FractionWrapper* tick)
+{
+    return staff()->stemless(tick->fraction());
+}
+
+qreal Staff::staffHeight(FractionWrapper* tick)
+{
+    return staff()->staffHeight(tick->fraction());
+}
+
+bool Staff::isPitchedStaff(FractionWrapper* tick)
+{
+    return staff()->isPitchedStaff(tick->fraction());
+}
+
+bool Staff::isTabStaff(FractionWrapper* tick)
+{
+    return staff()->isTabStaff(tick->fraction());
+}
+
+bool Staff::isDrumStaff(FractionWrapper* tick)
+{
+    return staff()->isDrumStaff(tick->fraction());
+}
+
+int Staff::lines(FractionWrapper* tick)
+{
+    return staff()->lines(tick->fraction());
+}
+
+qreal Staff::lineDistance(FractionWrapper* tick)
+{
+    return staff()->lineDistance(tick->fraction());
+}
+
+bool Staff::isLinesInvisible(FractionWrapper* tick)
+{
+    return staff()->isLinesInvisible(tick->fraction());
+}
+
+int Staff::middleLine(FractionWrapper* tick)
+{
+    return staff()->middleLine(tick->fraction());
+}
+
+int Staff::bottomLine(FractionWrapper* tick)
+{
+    return staff()->bottomLine(tick->fraction());
+}
+
+qreal Staff::staffMag(FractionWrapper* tick)
+{
+    return staff()->staffMag(tick->fraction());
+}
+
+qreal Staff::spatium(FractionWrapper* tick)
+{
+    return staff()->spatium(tick->fraction());
+}
+
+int Staff::pitchOffset(FractionWrapper* tick)
+{
+    return staff()->pitchOffset(tick->fraction());
+}
+
+bool Staff::isVoiceVisible(int voice)
+{
+    return staff()->isVoiceVisible(voice);
 }
 
 //---------------------------------------------------------
@@ -311,6 +642,12 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
 
     using mu::engraving::ElementType;
     switch (e->type()) {
+    case ElementType::TIE:
+    case ElementType::PARTIAL_TIE:
+    case ElementType::LAISSEZ_VIB:
+        return wrap<Tie>(toTie(e), own);
+    case ElementType::ORNAMENT:
+        return wrap<Ornament>(toOrnament(e), own);
     case ElementType::NOTE:
         return wrap<Note>(toNote(e), own);
     case ElementType::CHORD:
@@ -321,6 +658,13 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
         return wrap<Segment>(toSegment(e), own);
     case ElementType::MEASURE:
         return wrap<Measure>(toMeasure(e), own);
+    case ElementType::HBOX:
+    case ElementType::VBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+        return wrap<MeasureBase>(toMeasureBase(e), own);
+    case ElementType::SYSTEM:
+        return wrap<System>(toSystem(e), own);
     case ElementType::PAGE:
         return wrap<Page>(toPage(e), own);
     default:
@@ -329,6 +673,12 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
                 return wrap<ChordRest>(toChordRest(e), own);
             }
             return wrap<DurationElement>(toDurationElement(e), own);
+        }
+        if (e->isSpannerSegment()) {
+            return wrap<SpannerSegment>(toSpannerSegment(e), own);
+        }
+        if (e->isSpanner()) {
+            return wrap<Spanner>(toSpanner(e), own);
         }
         break;
     }

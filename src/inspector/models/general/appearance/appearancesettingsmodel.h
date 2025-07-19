@@ -97,6 +97,7 @@ private:
     bool m_isVerticalOffsetAvailable = true;
 
     QList<engraving::EngravingItem*> m_elementsForOffsetProperty;
+    QList<engraving::EngravingItem*> m_elementsForArrangeProperty;
 };
 }
 

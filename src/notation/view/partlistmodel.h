@@ -20,8 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_PARTLISTMODEL_H
-#define MU_NOTATION_PARTLISTMODEL_H
+#pragma once
+
+#include <QAbstractListModel>
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -32,14 +33,14 @@ class ItemMultiSelectionModel;
 }
 
 namespace mu::notation {
-class PartListModel : public QAbstractListModel
+class PartListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::IInteractive, interactive)
-
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
+
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 
 public:
     explicit PartListModel(QObject* parent = nullptr);
@@ -94,5 +95,3 @@ private:
     INotationPtr m_currentNotation;
 };
 }
-
-#endif // MU_NOTATION_PARTLISTMODEL_H

@@ -48,7 +48,7 @@ class Score;
 class StaffType;
 class TimeSig;
 
-enum class Key;
+enum class Key : signed char;
 
 //---------------------------------------------------------
 //    Staff
@@ -60,7 +60,7 @@ class Staff final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Staff)
 
 public:
-    enum class HideMode {
+    enum class HideMode : unsigned char {
         AUTO, ALWAYS, NEVER, INSTRUMENT
     };
 
@@ -144,8 +144,9 @@ public:
     void setHideSystemBarLine(bool val) { m_hideSystemBarLine = val; }
     HideMode hideWhenEmpty() const { return m_hideWhenEmpty; }
     void setHideWhenEmpty(HideMode v) { m_hideWhenEmpty = v; }
-    bool mergeMatchingRests() const { return m_mergeMatchingRests; }
-    void setMergeMatchingRests(bool val) { m_mergeMatchingRests = val; }
+    AutoOnOff mergeMatchingRests() const { return m_mergeMatchingRests; }
+    void setMergeMatchingRests(AutoOnOff val) { m_mergeMatchingRests = val; }
+    bool shouldMergeMatchingRests() const;
 
     int barLineSpan() const { return m_barLineSpan; }
     int barLineFrom() const { return m_barLineFrom; }
@@ -154,6 +155,7 @@ public:
     void setBarLineFrom(int val) { m_barLineFrom = val; }
     void setBarLineTo(int val) { m_barLineTo = val; }
     double staffHeight() const;
+    double staffHeight(const Fraction& tick) const;
 
     int channel(const Fraction&, voice_idx_t voice) const;
 
@@ -214,10 +216,9 @@ public:
     Staff* primaryStaff() const;
     bool isPrimaryStaff() const;
 
-    Millimetre userDist() const { return m_userDist; }
-    void setUserDist(Millimetre val) { m_userDist = val; }
+    Spatium userDist() const { return m_userDist; }
+    void setUserDist(Spatium val) { m_userDist = val; }
 
-    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
@@ -260,6 +261,12 @@ public:
 
     Staff* findLinkedInScore(const Score* score) const override;
 
+    track_idx_t getLinkedTrackInStaff(const Staff* linkedStaff, const track_idx_t strack) const;
+    bool trackHasLinksInVoiceZero(track_idx_t track);
+
+    void undoSetShowMeasureNumbers(bool show);
+    bool shouldShowMeasureNumbers() const;
+
 private:
 
     friend class Factory;
@@ -292,11 +299,11 @@ private:
     bool m_cutaway = false;
     bool m_showIfEmpty = false;             // show this staff if system is empty and hideEmptyStaves is true
     bool m_hideSystemBarLine = false;       // no system barline if not preceded by staff with barline
-    bool m_mergeMatchingRests = false;      // merge matching rests in multiple voices
+    AutoOnOff m_mergeMatchingRests = AutoOnOff::AUTO;      // merge matching rests in multiple voices
     HideMode m_hideWhenEmpty = HideMode::AUTO;      // hide empty staves
 
     Color m_color;
-    Millimetre m_userDist     { Millimetre(0.0) };           ///< user edited extra distance
+    Spatium m_userDist     { Spatium(0.0) };           ///< user edited extra distance
 
     StaffTypeList m_staffTypeList;
 
@@ -309,6 +316,8 @@ private:
     PitchList m_pitchOffsets;               // cached value
 
     bool m_reflectTranspositionInLinkedTab = true;
+
+    AutoOnOff m_showMeasureNumbers = AutoOnOff::AUTO;
 };
 } // namespace mu::engraving
 #endif

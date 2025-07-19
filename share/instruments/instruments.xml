@@ -1154,36 +1154,18 @@
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
-            <Instrument id="g-soprano-ocarina">
+            <Instrument id="c-soprano-ocarina">
                   <family>ocarinas</family>
                   <trackName>Soprano Ocarina</trackName>
-                  <longName>G Soprano Ocarina</longName>
-                  <shortName>G S. Oc.</shortName>
-                  <traitName type="tuning">G</traitName>
-                  <description>Soprano ocarina pitched in G.</description>
+                  <longName>Soprano Ocarina</longName>
+                  <shortName>S. Oc.</shortName>
+                  <traitName type="transposition">*C</traitName>
+                  <description>Soprano ocarina in C.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>79-93</aPitchRange>
-                  <pPitchRange>79-95</pPitchRange>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
-                        <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="f-soprano-ocarina">
-                  <family>ocarinas</family>
-                  <trackName>Soprano Ocarina</trackName>
-                  <longName>F Soprano Ocarina</longName>
-                  <shortName>F S. Oc.</shortName>
-                  <traitName type="tuning">F</traitName>
-                  <description>Soprano ocarina pitched in F.</description>
-                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>77-91</aPitchRange>
-                  <pPitchRange>77-93</pPitchRange>
+                  <aPitchRange>84-101</aPitchRange>
+                  <pPitchRange>81-101</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1192,30 +1174,12 @@
             </Instrument>
             <Instrument id="ocarina">
                   <family>ocarinas</family>
-                  <description>Soprano ocarina pitched in C.</description>
+                  <description>Soprano ocarina in C.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-86</aPitchRange>
-                  <pPitchRange>72-88</pPitchRange>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
-                        <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="c-soprano-ocarina">
-                  <family>ocarinas</family>
-                  <trackName>Soprano Ocarina</trackName>
-                  <longName>C Soprano Ocarina</longName>
-                  <shortName>C S. Oc.</shortName>
-                  <traitName type="tuning">*C</traitName>
-                  <description>Soprano ocarina pitched in C.</description>
-                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-86</aPitchRange>
-                  <pPitchRange>72-88</pPitchRange>
+                  <aPitchRange>84-101</aPitchRange>
+                  <pPitchRange>81-101</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1225,51 +1189,57 @@
             <Instrument id="bb-soprano-ocarina">
                   <family>ocarinas</family>
                   <trackName>Soprano Ocarina</trackName>
-                  <longName>B♭ Soprano Ocarina</longName>
-                  <shortName>B♭ S. Oc.</shortName>
-                  <traitName type="tuning">B♭</traitName>
-                  <description>Soprano ocarina pitched in B♭.</description>
+                  <longName>Soprano Ocarina</longName>
+                  <shortName>S. Oc.</shortName>
+                  <traitName type="transposition">B♭</traitName>
+                  <description>Soprano ocarina in B♭.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>70-84</aPitchRange>
-                  <pPitchRange>70-86</pPitchRange>
+                  <aPitchRange>82-99</aPitchRange>
+                  <pPitchRange>79-99</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="g-alto-ocarina">
+            <Instrument id="g-soprano-ocarina">
                   <family>ocarinas</family>
-                  <trackName>Alto Ocarina</trackName>
-                  <longName>G Alto Ocarina</longName>
-                  <shortName>G A. Oc.</shortName>
-                  <traitName type="tuning">G</traitName>
-                  <description>Alto ocarina pitched in G.</description>
+                  <trackName>Soprano Ocarina</trackName>
+                  <longName>Soprano Ocarina</longName>
+                  <shortName>S. Oc.</shortName>
+                  <traitName type="transposition">G</traitName>
+                  <description>Soprano ocarina in G.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>67-81</aPitchRange>
-                  <pPitchRange>67-83</pPitchRange>
+                  <aPitchRange>79-96</aPitchRange>
+                  <pPitchRange>76-96</pPitchRange>
+                  <transposeDiatonic>-3</transposeDiatonic>
+                  <transposeChromatic>-5</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="f-alto-ocarina">
+            <Instrument id="f-soprano-ocarina">
                   <family>ocarinas</family>
-                  <trackName>Alto Ocarina</trackName>
-                  <longName>F Alto Ocarina</longName>
-                  <shortName>F A. Oc.</shortName>
-                  <traitName type="tuning">F</traitName>
-                  <description>Alto ocarina pitched in F.</description>
+                  <trackName>Soprano Ocarina</trackName>
+                  <longName>Soprano Ocarina</longName>
+                  <shortName>S. Oc.</shortName>
+                  <traitName type="transposition">F</traitName>
+                  <description>Soprano ocarina in F.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>65-79</aPitchRange>
-                  <pPitchRange>65-81</pPitchRange>
+                  <aPitchRange>77-94</aPitchRange>
+                  <pPitchRange>74-94</pPitchRange>
+                  <transposeDiatonic>-4</transposeDiatonic>
+                  <transposeChromatic>-7</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1279,15 +1249,15 @@
             <Instrument id="c-alto-ocarina">
                   <family>ocarinas</family>
                   <trackName>Alto Ocarina</trackName>
-                  <longName>C Alto Ocarina</longName>
-                  <shortName>C A. Oc.</shortName>
-                  <traitName type="tuning">*C</traitName>
-                  <description>Alto ocarina pitched in C.</description>
+                  <longName>Alto Ocarina</longName>
+                  <shortName>A. Oc.</shortName>
+                  <traitName type="transposition">*C</traitName>
+                  <description>Alto (sometimes called tenor) ocarina in C.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-74</aPitchRange>
-                  <pPitchRange>60-76</pPitchRange>
+                  <aPitchRange>72-89</aPitchRange>
+                  <pPitchRange>69-89</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1297,15 +1267,57 @@
             <Instrument id="bb-alto-ocarina">
                   <family>ocarinas</family>
                   <trackName>Alto Ocarina</trackName>
-                  <longName>B♭ Alto Ocarina</longName>
-                  <shortName>B♭ A. Oc.</shortName>
-                  <traitName type="tuning">B♭</traitName>
-                  <description>Alto ocarina pitched in B♭.</description>
+                  <longName>Alto Ocarina</longName>
+                  <shortName>A. Oc.</shortName>
+                  <traitName type="transposition">B♭</traitName>
+                  <description>Alto (sometimes called tenor) ocarina in B♭.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>58-72</aPitchRange>
-                  <pPitchRange>58-74</pPitchRange>
+                  <aPitchRange>70-87</aPitchRange>
+                  <pPitchRange>67-87</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
+                        <program value="79"/> <!--Ocarina-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="g-alto-ocarina">
+                  <family>ocarinas</family>
+                  <trackName>Alto Ocarina</trackName>
+                  <longName>Alto Ocarina</longName>
+                  <shortName>A. Oc.</shortName>
+                  <traitName type="transposition">G</traitName>
+                  <description>Alto (sometimes called tenor) ocarina in G.</description>
+                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>67-84</aPitchRange>
+                  <pPitchRange>64-84</pPitchRange>
+                  <transposeDiatonic>-3</transposeDiatonic>
+                  <transposeChromatic>-5</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
+                        <program value="79"/> <!--Ocarina-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="f-alto-ocarina">
+                  <family>ocarinas</family>
+                  <trackName>Alto Ocarina</trackName>
+                  <longName>Alto Ocarina</longName>
+                  <shortName>A. Oc.</shortName>
+                  <traitName type="transposition">F</traitName>
+                  <description>Alto (sometimes called tenor) ocarina in F.</description>
+                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>65-82</aPitchRange>
+                  <pPitchRange>62-82</pPitchRange>
+                  <transposeDiatonic>-4</transposeDiatonic>
+                  <transposeChromatic>-7</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1315,15 +1327,15 @@
             <Instrument id="c-bass-ocarina">
                   <family>ocarinas</family>
                   <trackName>Bass Ocarina</trackName>
-                  <longName>C Bass Ocarina</longName>
-                  <shortName>C B. Oc.</shortName>
-                  <traitName type="tuning">*C</traitName>
-                  <description>Bass ocarina pitched in C.</description>
+                  <longName>Bass Ocarina</longName>
+                  <shortName>B. Oc.</shortName>
+                  <traitName type="transposition">*C</traitName>
+                  <description>Bass ocarina in C.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>F</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-62</aPitchRange>
-                  <pPitchRange>48-64</pPitchRange>
+                  <aPitchRange>60-77</aPitchRange>
+                  <pPitchRange>57-77</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -5990,7 +6002,7 @@
                   <family>sousaphones</family>
                   <trackName>Helicon</trackName>
                   <longName>Helicon</longName>
-                  <shortName>Helicon</shortName>
+                  <shortName>Hel.</shortName>
                   <description>Instrument of the tuba family.</description>
                   <musicXMLid>brass.helicon</musicXMLid>
                   <clef>F</clef>
@@ -6974,6 +6986,8 @@
                         <name>Brake Drum</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7001,7 +7015,9 @@
                         <voice>0</voice>
                         <name>High Bongo</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="61"> <!--Low Bongo-->
                         <head>normal</head>
@@ -7009,7 +7025,9 @@
                         <voice>0</voice>
                         <name>Low Bongo</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7042,6 +7060,8 @@
                         <name>Chinese Tom-toms</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7069,6 +7089,8 @@
                         <name>Concert Bass Drum</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7098,7 +7120,9 @@
                         <voice>0</voice>
                         <name>Side Stick</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="38"> <!--Acoustic Snare-->
                         <head>normal</head>
@@ -7106,7 +7130,9 @@
                         <voice>0</voice>
                         <name>Snare</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7137,7 +7163,9 @@
                         <voice>0</voice>
                         <name>Tom 6</name>
                         <stem>1</stem>
-                        <shortcut>F</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="43"> <!--High Floor Tom-->
                         <head>normal</head>
@@ -7145,7 +7173,9 @@
                         <voice>0</voice>
                         <name>Tom 5</name>
                         <stem>1</stem>
-                        <shortcut>E</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="45"> <!--Low Tom-->
                         <head>normal</head>
@@ -7153,7 +7183,9 @@
                         <voice>0</voice>
                         <name>Tom 4</name>
                         <stem>1</stem>
-                        <shortcut>D</shortcut>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="47"> <!--Low-Mid Tom-->
                         <head>normal</head>
@@ -7161,7 +7193,9 @@
                         <voice>0</voice>
                         <name>Tom 3</name>
                         <stem>1</stem>
-                        <shortcut>C</shortcut>
+                        <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="48"> <!--Hi-Mid Tom-->
                         <head>normal</head>
@@ -7169,7 +7203,9 @@
                         <voice>0</voice>
                         <name>Tom 2</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="50"> <!--High Tom-->
                         <head>normal</head>
@@ -7177,7 +7213,9 @@
                         <voice>0</voice>
                         <name>Tom 1</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>F</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7201,12 +7239,20 @@
                   <drumset>1</drumset>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="62"> <!--Mute High Conga-->
-                        <head>cross</head>
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
                         <line>-1</line>
                         <voice>0</voice>
                         <name>Mute High Conga</name>
                         <stem>1</stem>
                         <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="63"> <!--Open High Conga-->
                         <head>normal</head>
@@ -7215,6 +7261,8 @@
                         <name>High Conga</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="64"> <!--Low Conga-->
                         <head>normal</head>
@@ -7223,6 +7271,8 @@
                         <name>Low Conga</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7235,12 +7285,151 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
+            <Instrument id="doumbek">
+                  <family>drums</family>
+                  <trackName>Doumbek</trackName>
+                  <longName>Doumbek</longName>
+                  <shortName>Dbk.</shortName>
+                  <description>A Middle-Eastern goblet drum, also known as chalice drum, tarabuka, tarabaki, darbuka, darabuka, derbake, debuka, dumbec, dumbeg, dumbelek, toumperleki, tumbak, or zerbaghali.</description>
+                  <musicXMLid>drum.dumbek</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Slap</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="63"> <!--Open High Conga-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Open</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="64"> <!--Low Conga-->
+                        <head>la</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Bass</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="djembe">
+                  <family>drums</family>
+                  <trackName>Djembe</trackName>
+                  <longName>Djembe</longName>
+                  <shortName>Djbe.</shortName>
+                  <description>An African, rope-tension goblet drum.</description>
+                  <musicXMLid>drum.djembe</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Slap</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="63"> <!--Open High Conga-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Open</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="64"> <!--Low Conga-->
+                        <head>la</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Bass</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="cajon">
+                  <family>drums</family>
+                  <trackName>Cajón</trackName>
+                  <longName>Cajón</longName>
+                  <shortName>Cjn.</shortName>
+                  <description>Peruvian wooden box drum.</description>
+                  <musicXMLid>drum.cajon</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="38"> <!--Acoustic Snare-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Hit</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 40; MS General: Brush-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="40"/> <!--Brush Kit-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="cuica">
                   <family>drums</family>
-                  <trackName>Cuica</trackName>
-                  <longName>Cuica</longName>
+                  <trackName>Cuíca</trackName>
+                  <longName>Cuíca</longName>
                   <shortName>Cu.</shortName>
-                  <description>Cuica.</description>
+                  <description>Brazilian friction drum played by rubbing a stick permanently fastened to the drum membrane on the inside. Applying pressure to the outside increases the pitch.</description>
                   <musicXMLid>drum.cuica</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -7254,6 +7443,8 @@
                         <name>Mute Cuica</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="79"> <!--Open Cuica-->
                         <head>normal</head>
@@ -7262,6 +7453,8 @@
                         <name>Open Cuica</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7272,87 +7465,71 @@
             </Instrument>
             <Instrument id="drumset">
                   <family>drums</family>
-                  <!--Drums for the basic drumset are hard-coded in instrument.cpp for some reason.-->
-                  <trackName>Large Drum Kit</trackName>
+                  <trackName>Drum Kit (large)</trackName>
                   <longName>Drum Kit</longName>
                   <shortName>D. Kit</shortName>
-                  <description>Drum Kit.</description>
+                  <description>Large drum kit.</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel>
-                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
-                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="0"/> <!--Standard Kit-->
-                  </Channel>
-                  <genre>common</genre>
-                  <genre>popular</genre>
-                  <genre>jazz</genre>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
-                  <genre>marching</genre>
-            </Instrument>
-            <Instrument id="drum-kit-4">
-                  <family>drums</family>
-                  <!--Created as a minimalist version of drumset-->
-                  <trackName>4-Piece Drum Kit</trackName>
-                  <longName>Drum Kit</longName>
-                  <shortName>D. Kit</shortName>
-                  <description>4 piece drum kit.</description>
-                  <musicXMLid>drum.group.set</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="35"> <!--Acoustic Bass Drum-->
+                        <head>normal</head>
+                        <line>8</line>
+                        <voice>1</voice>
+                        <name>Bass Drum 2</name>
+                        <stem>2</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
                   <Drum pitch="36"> <!--Electric Bass Drum-->
                         <head>normal</head>
                         <line>7</line>
                         <voice>1</voice>
-                        <name>Bass Drum</name>
+                        <name>Bass Drum 1</name>
                         <stem>2</stem>
-                        <shortcut>B</shortcut>
-                  </Drum>
-                  <Drum pitch="38"> <!--Acoustic Snare-->
-                        <head>normal</head>
-                        <line>3</line>
-                        <voice>0</voice>
-                        <name>Snare</name>
-                        <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="37"> <!--Side Stick-->
                         <head>slashed1</head>
                         <line>3</line>
                         <voice>0</voice>
-                        <name>Cross-stick</name>
+                        <name>Side Stick</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
-                  <Drum pitch="50"> <!--High Tom-->
+                  <Drum pitch="38"> <!--Acoustic Snare-->
                         <head>normal</head>
-                        <line>1</line>
+                        <line>3</line>
                         <voice>0</voice>
-                        <name>Tom</name>
+                        <name>Acoustic Snare</name>
                         <stem>1</stem>
-                        <shortcut>E</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="40"> <!--Electric Snare-->
+                        <head>slash</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Electric Snare</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="41"> <!--Low Floor Tom-->
                         <head>normal</head>
-                        <line>5</line>
+                        <line>6</line>
                         <voice>0</voice>
-                        <name>Floor Tom</name>
+                        <name>Low Floor Tom</name>
                         <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="44"> <!--Pedal Hi-hat-->
-                        <head>cross</head>
-                        <line>9</line>
-                        <voice>1</voice>
-                        <name>Pedal Hi-Hat</name>
-                        <stem>2</stem>
-                        <shortcut>F</shortcut>
+                        <panelRow>1</panelRow>
+                        <panelColumn>7</panelColumn>
                   </Drum>
                   <Drum pitch="42"> <!--Closed Hi-hat-->
                         <head>cross</head>
@@ -7360,138 +7537,110 @@
                         <voice>0</voice>
                         <name>Closed Hi-Hat</name>
                         <stem>1</stem>
-                        <shortcut>G</shortcut>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="43"> <!--High Floor Tom-->
+                        <head>normal</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>High Floor Tom</name>
+                        <stem>1</stem>
+                        <shortcut>H</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>7</panelColumn>
+                  </Drum>
+                  <Drum pitch="44"> <!--Pedal Hi-hat-->
+                        <head>cross</head>
+                        <line>9</line>
+                        <voice>1</voice>
+                        <name>Pedal Hi-Hat</name>
+                        <stem>2</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="45"> <!--Low Tom-->
+                        <head>normal</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Low Tom</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>6</panelColumn>
                   </Drum>
                   <Drum pitch="46"> <!--Open Hi-hat-->
-                        <head>cross</head>
+                        <head>xcircle</head>
                         <line>-1</line>
                         <voice>0</voice>
                         <name>Open Hi-Hat</name>
                         <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="51"> <!--Ride Cymbal 1-->
-                        <head>cross</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Ride Cymbal</name>
-                        <stem>1</stem>
                         <shortcut>D</shortcut>
-                  </Drum>
-                  <Drum pitch="53"> <!--Ride Bell-->
-                        <head>diamond</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Ride Bell</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="49"> <!--Crash Cymbal 1-->
-                        <head>cross</head>
-                        <line>-2</line>
-                        <voice>0</voice>
-                        <name>Crash Cymbal</name>
-                        <stem>1</stem>
-                        <shortcut>C</shortcut>
-                  </Drum>
-                  <Channel>
-                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
-                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="0"/> <!--Standard Kit-->
-                  </Channel>
-                  <genre>common</genre>
-                  <genre>popular</genre>
-                  <genre>jazz</genre>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
-                  <genre>marching</genre>
-            </Instrument>
-            <Instrument id="drum-kit-5">
-                  <family>drums</family>
-                  <!--Created as a more conventional version of drumset.-->
-                  <trackName>5-Piece Drum Kit</trackName>
-                  <longName>Drum Kit</longName>
-                  <shortName>D. Kit</shortName>
-                  <description>5 piece drum kit.</description>
-                  <musicXMLid>drum.group.set</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <Drum pitch="36"> <!--Electric Bass Drum-->
-                        <head>normal</head>
-                        <line>7</line>
-                        <voice>1</voice>
-                        <name>Bass Drum</name>
-                        <stem>2</stem>
-                        <shortcut>B</shortcut>
-                  </Drum>
-                  <Drum pitch="38"> <!--Acoustic Snare-->
-                        <head>normal</head>
-                        <line>3</line>
-                        <voice>0</voice>
-                        <name>Snare</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                  </Drum>
-                  <Drum pitch="37"> <!--Side Stick-->
-                        <head>slashed1</head>
-                        <line>3</line>
-                        <voice>0</voice>
-                        <name>Cross-stick</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="50"> <!--High Tom-->
-                        <head>normal</head>
-                        <line>1</line>
-                        <voice>0</voice>
-                        <name>High Tom</name>
-                        <stem>1</stem>
-                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="47"> <!--Low-Mid Tom-->
                         <head>normal</head>
                         <line>2</line>
                         <voice>0</voice>
-                        <name>Low Tom</name>
+                        <name>Low-Mid Tom</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
-                  <Drum pitch="41"> <!--Low Floor Tom-->
+                  <Drum pitch="48"> <!--Hi-Mid Tom-->
                         <head>normal</head>
-                        <line>5</line>
+                        <line>1</line>
                         <voice>0</voice>
-                        <name>Floor Tom</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="44"> <!--Pedal Hi-hat-->
-                        <head>cross</head>
-                        <line>9</line>
-                        <voice>1</voice>
-                        <name>Pedal Hi-Hat</name>
-                        <stem>2</stem>
-                        <shortcut>F</shortcut>
-                  </Drum>
-                  <Drum pitch="42"> <!--Closed Hi-hat-->
-                        <head>cross</head>
-                        <line>-1</line>
-                        <voice>0</voice>
-                        <name>Closed Hi-Hat</name>
+                        <name>Hi-Mid Tom</name>
                         <stem>1</stem>
                         <shortcut>G</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>6</panelColumn>
                   </Drum>
-                  <Drum pitch="46"> <!--Open Hi-hat-->
+                  <Drum pitch="49"> <!--Crash Cymbal 1-->
                         <head>cross</head>
-                        <line>-1</line>
+                        <line>-2</line>
                         <voice>0</voice>
-                        <name>Open Hi-Hat</name>
+                        <name>Crash Cymbal 1</name>
                         <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Drum pitch="50"> <!--High Tom-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>High Tom</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="51"> <!--Ride Cymbal 1-->
                         <head>cross</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Ride Cymbal</name>
+                        <name>Ride Cymbal 1</name>
                         <stem>1</stem>
-                        <shortcut>D</shortcut>
+                        <shortcut>F</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>5</panelColumn>
+                  </Drum>
+                  <Drum pitch="52"> <!--Chinese Cymbal-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadHeavyXHat</quarter>
+                              <half>noteheadHeavyXHat</half>
+                              <whole>noteheadHeavyXHat</whole>
+                              <breve>noteheadHeavyXHat</breve>
+                        </noteheads>
+                        <line>-3</line>
+                        <voice>0</voice>
+                        <name>China Cymbal</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="53"> <!--Ride Bell-->
                         <head>diamond</head>
@@ -7499,14 +7648,35 @@
                         <voice>0</voice>
                         <name>Ride Bell</name>
                         <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
-                  <Drum pitch="49"> <!--Crash Cymbal 1-->
-                        <head>cross</head>
-                        <line>-2</line>
+                  <Drum pitch="54"> <!--Tambourine-->
+                        <head>diamond</head>
+                        <line>1</line>
                         <voice>0</voice>
-                        <name>Crash Cymbal</name>
+                        <name>Tambourine</name>
                         <stem>1</stem>
-                        <shortcut>C</shortcut>
+                        <panelRow>2</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="55"> <!--Splash Cymbal-->
+                        <head>cross</head>
+                        <line>-4</line>
+                        <voice>0</voice>
+                        <name>Splash Cymbal</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Drum pitch="56"> <!--Cowbell-->
+                        <head>triangle-down</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Cowbell</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="57"> <!--Crash Cymbal 2-->
                         <head>cross</head>
@@ -7514,20 +7684,17 @@
                         <voice>0</voice>
                         <name>Crash Cymbal 2</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
-                  <Drum pitch="52"> <!--Chinese Cymbal-->
+                  <Drum pitch="59"> <!--Ride Cymbal 2-->
                         <head>cross</head>
-                        <line>-4</line>
+                        <line>2</line>
                         <voice>0</voice>
-                        <name>China Cymbal</name>
+                        <name>Ride Cymbal 2</name>
                         <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="55"> <!--Splash Cymbal-->
-                        <head>cross</head>
-                        <line>-5</line>
-                        <voice>0</voice>
-                        <name>Splash Cymbal</name>
-                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>6</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7536,7 +7703,319 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>popular</genre>
-                  <genre>jazz</genre>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+            </Instrument>
+            <Instrument id="drum-kit-4">
+                  <family>drums</family>
+                  <!--Created as a minimalist version of drumset-->
+                  <trackName>Drum Kit (minimal)</trackName>
+                  <longName>Drum Kit</longName>
+                  <shortName>D. Kit</shortName>
+                  <description>Minimal drum kit, 4-piece.</description>
+                  <musicXMLid>drum.group.set</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="36"> <!--Electric Bass Drum-->
+                        <head>normal</head>
+                        <line>7</line>
+                        <voice>1</voice>
+                        <name>Bass Drum</name>
+                        <stem>2</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="37"> <!--Side Stick-->
+                        <head>slashed1</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Cross-stick</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="38"> <!--Acoustic Snare-->
+                        <head>normal</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Snare</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="41"> <!--Low Floor Tom-->
+                        <head>normal</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Floor Tom</name>
+                        <stem>1</stem>
+                        <shortcut>H</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>7</panelColumn>
+                  </Drum>
+                  <Drum pitch="42"> <!--Closed Hi-hat-->
+                        <head>cross</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Closed Hi-Hat</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="44"> <!--Pedal Hi-hat-->
+                        <head>cross</head>
+                        <line>9</line>
+                        <voice>1</voice>
+                        <name>Pedal Hi-Hat</name>
+                        <stem>2</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="46"> <!--Open Hi-hat-->
+                        <head>xcircle</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Open Hi-Hat</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="49"> <!--Crash Cymbal 1-->
+                        <head>cross</head>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Crash Cymbal</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Drum pitch="50"> <!--High Tom-->
+                        <head>normal</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Tom</name>
+                        <stem>1</stem>
+                        <shortcut>G</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>6</panelColumn>
+                  </Drum>
+                  <Drum pitch="51"> <!--Ride Cymbal 1-->
+                        <head>cross</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ride Cymbal</name>
+                        <stem>1</stem>
+                        <shortcut>F</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>5</panelColumn>
+                  </Drum>
+                  <Drum pitch="53"> <!--Ride Bell-->
+                        <head>diamond</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ride Bell</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+            </Instrument>
+            <Instrument id="drum-kit-5">
+                  <family>drums</family>
+                  <!--Created as a more conventional version of drumset.-->
+                  <trackName>Drum Kit (common)</trackName>
+                  <longName>Drum Kit</longName>
+                  <shortName>D. Kit</shortName>
+                  <description>Common drum kit, 5-piece.</description>
+                  <musicXMLid>drum.group.set</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="35"> <!--Acoustic Bass Drum-->
+                        <head>normal</head>
+                        <line>8</line>
+                        <voice>1</voice>
+                        <name>Bass Drum 2</name>
+                        <stem>2</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="36"> <!--Electric Bass Drum-->
+                        <head>normal</head>
+                        <line>7</line>
+                        <voice>1</voice>
+                        <name>Bass Drum</name>
+                        <stem>2</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="37"> <!--Side Stick-->
+                        <head>slashed1</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Cross-stick</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="38"> <!--Acoustic Snare-->
+                        <head>normal</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Snare</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="41"> <!--Low Floor Tom-->
+                        <head>normal</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Floor Tom</name>
+                        <stem>1</stem>
+                        <shortcut>H</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>7</panelColumn>
+                  </Drum>
+                  <Drum pitch="42"> <!--Closed Hi-hat-->
+                        <head>cross</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Closed Hi-Hat</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="44"> <!--Pedal Hi-hat-->
+                        <head>cross</head>
+                        <line>9</line>
+                        <voice>1</voice>
+                        <name>Pedal Hi-Hat</name>
+                        <stem>2</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="46"> <!--Open Hi-hat-->
+                        <head>xcircle</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Open Hi-Hat</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="47"> <!--Low-Mid Tom-->
+                        <head>normal</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Low Tom</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>6</panelColumn>
+                  </Drum>
+                  <Drum pitch="49"> <!--Crash Cymbal 1-->
+                        <head>cross</head>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Crash Cymbal</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Drum pitch="50"> <!--High Tom-->
+                        <head>normal</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>High Tom</name>
+                        <stem>1</stem>
+                        <shortcut>G</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>6</panelColumn>
+                  </Drum>
+                  <Drum pitch="51"> <!--Ride Cymbal 1-->
+                        <head>cross</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ride Cymbal</name>
+                        <stem>1</stem>
+                        <shortcut>F</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>5</panelColumn>
+                  </Drum>
+                  <Drum pitch="52"> <!--Chinese Cymbal-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadHeavyXHat</quarter>
+                              <half>noteheadHeavyXHat</half>
+                              <whole>noteheadHeavyXHat</whole>
+                              <breve>noteheadHeavyXHat</breve>
+                        </noteheads>
+                        <line>-3</line>
+                        <voice>0</voice>
+                        <name>China Cymbal</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>7</panelColumn>
+                  </Drum>
+                  <Drum pitch="53"> <!--Ride Bell-->
+                        <head>diamond</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ride Bell</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>5</panelColumn>
+                  </Drum>
+                  <Drum pitch="55"> <!--Splash Cymbal-->
+                        <head>cross</head>
+                        <line>-4</line>
+                        <voice>0</voice>
+                        <name>Splash Cymbal</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="57"> <!--Crash Cymbal 2-->
+                        <head>cross</head>
+                        <line>-3</line>
+                        <voice>0</voice>
+                        <name>Crash Cymbal 2</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
@@ -7559,7 +8038,9 @@
                         <voice>0</voice>
                         <name>Side Stick</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="38"> <!--Acoustic Snare-->
                         <head>normal</head>
@@ -7567,7 +8048,9 @@
                         <voice>0</voice>
                         <name>Snare</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7594,6 +8077,8 @@
                         <name>Frame Drum</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7620,7 +8105,9 @@
                         <voice>0</voice>
                         <name>Side Stick</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="40"> <!--Electric Snare-->
                         <head>normal</head>
@@ -7628,7 +8115,9 @@
                         <voice>0</voice>
                         <name>Snare</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7655,6 +8144,8 @@
                         <name>Slit Drum</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7680,7 +8171,9 @@
                         <voice>0</voice>
                         <name>High Tabla</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="64"> <!--Low Conga-->
                         <head>normal</head>
@@ -7688,7 +8181,9 @@
                         <voice>0</voice>
                         <name>Low Tabla</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7715,7 +8210,9 @@
                         <voice>0</voice>
                         <name>High Timbale</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="66"> <!--Low Timbale-->
                         <head>normal</head>
@@ -7723,7 +8220,9 @@
                         <voice>0</voice>
                         <name>Low Timbale</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7733,6 +8232,45 @@
                   <genre>jazz</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
+            </Instrument>
+            <Instrument id="taiko">
+                  <family>drums</family>
+                  <trackName>Taiko</trackName>
+                  <longName>Taiko</longName>
+                  <shortName>Taiko</shortName>
+                  <description>Taiko.</description>
+                  <musicXMLid>drum.taiko</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="86"> <!--Mute Surdo-->
+                        <head>cross</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Taiko Mute</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="87"> <!--Open Surdo-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Taiko</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="anvil">
                   <family>unpitched-metal-percussion</family>
@@ -7753,6 +8291,8 @@
                         <name>Anvil</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7780,6 +8320,8 @@
                         <name>Bell Plate</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7806,6 +8348,8 @@
                         <name>Glissando Down</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7833,6 +8377,8 @@
                         <name>Bowl Gong</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7859,6 +8405,8 @@
                         <name>Chains</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7882,9 +8430,11 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Chinese Cymbal</name>
+                        <name>China Cymbal</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7913,6 +8463,8 @@
                         <name>Cowbell</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -7920,6 +8472,45 @@
                         <program value="0"/> <!--Standard Kit-->
                   </Channel>
                   <genre>classroom</genre>
+            </Instrument>
+            <Instrument id="agogo-bells">
+                  <family>unpitched-metal-percussion</family>
+                  <trackName>Agogô Bells</trackName>
+                  <longName>Agogô Bells</longName>
+                  <shortName>Agogô</shortName>
+                  <description>Agogô bells.</description>
+                  <musicXMLid>metal.bells.agogo</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="68"> <!--Low Agogô-->
+                        <head>normal</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Low Agogô</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="67"> <!--High Agogô-->
+                        <head>normal</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>High Agogô</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="crash-cymbal">
                   <family>unpitched-metal-percussion</family>
@@ -7937,9 +8528,11 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Crash Cymbal 1</name>
+                        <name>Suspended Cymbal</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -7968,9 +8561,11 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Crash Cymbal 2</name>
+                        <name>Hand Cymbals</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -8002,6 +8597,8 @@
                         <name>Finger Cymbals</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8026,9 +8623,11 @@
                         <head>cross</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Closed Hi-hat</name>
+                        <name>Closed Hi-Hat</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="44"> <!--Pedal Hi-hat-->
                         <head>cross</head>
@@ -8036,7 +8635,9 @@
                         <voice>1</voice>
                         <name>Pedal Hi-Hat</name>
                         <stem>2</stem>
-                        <shortcut>F</shortcut>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="46"> <!--Open Hi-hat-->
                         <head>cross</head>
@@ -8044,7 +8645,9 @@
                         <voice>0</voice>
                         <name>Open Hi-Hat</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8070,6 +8673,8 @@
                         <name>Iron Pipes</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8096,6 +8701,8 @@
                         <name>Glissando Down</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8122,6 +8729,8 @@
                         <name>Metal Castanets</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8150,6 +8759,8 @@
                         <name>Metal Wind Chimes</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8176,9 +8787,11 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Ride Cymbal 1</name>
+                        <name>Ride Cymbal</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="53"> <!--Ride Bell-->
                         <head>diamond</head>
@@ -8187,6 +8800,8 @@
                         <name>Ride Bell</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8213,6 +8828,8 @@
                         <name>Sleigh Bell</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8240,6 +8857,8 @@
                         <name>Splash Cymbal</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8268,6 +8887,8 @@
                         <name>Tam-tam</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8297,6 +8918,8 @@
                         <name>Thundersheet</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8323,6 +8946,8 @@
                         <name>Mute Triangle</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="81"> <!--Open Triangle-->
                         <head>normal</head>
@@ -8331,6 +8956,8 @@
                         <name>Open Triangle</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -8362,6 +8989,8 @@
                         <name>Bamboo Wind Chimes</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8388,6 +9017,8 @@
                         <name>Castanets</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8415,6 +9046,8 @@
                         <name>Claves</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8445,7 +9078,19 @@
                         <voice>0</voice>
                         <name>Short Güiro</name>
                         <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="74"> <!--Long Guiro-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Long Güiro</name>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8464,30 +9109,135 @@
                   <description>Temple blocks, sometimes known as Chinese temple blocks or wooden bells.</description>
                   <musicXMLid>wood.temple-block</musicXMLid>
                   <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Drum pitch="76"> <!--High Woodblock-->
+                  <Drum pitch="58"> <!--Vibra Slap-->
                         <head>normal</head>
-                        <line>-1</line>
-                        <voice>0</voice>
-                        <name>High Temple Block</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                  </Drum>
-                  <Drum pitch="77"> <!--Low Woodblock-->
-                        <head>normal</head>
-                        <line>1</line>
+                        <line>8</line>
                         <voice>0</voice>
                         <name>Low Temple Block</name>
                         <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="59"> <!--Ride Cymbal 2-->
+                        <head>normal</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Low-Mid Temple Block</name>
+                        <stem>1</stem>
                         <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>normal</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Mid Temple Block</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="61"> <!--Low Bongo-->
+                        <head>normal</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>High-Mid Temple Block</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>High Temple Block</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Channel>
-                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
-                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="0"/> <!--Standard Kit-->
+                        <!--MIDI: Bank 1, Prog 115; MS General: Temple Blocks-->
+                        <controller ctrl="32" value="1"/> <!--Bank LSB-->
+                        <program value="115"/> <!--Non-GS drum kit-->
+                  </Channel>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+            </Instrument>
+            <Instrument id="log-drum">
+                  <family>unpitched-wooden-percussion</family>
+                  <trackName>Log Drum</trackName>
+                  <longName>Log Drum</longName>
+                  <shortName>Log D.</shortName>
+                  <description>Log drum or slit drum</description>
+                  <musicXMLid>drum.log-drum</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="58"> <!--Vibra Slap-->
+                        <head>normal</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Low Sound</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="59"> <!--Ride Cymbal 2-->
+                        <head>normal</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Low-Mid  Sound</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>normal</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Mid  Sound</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="61"> <!--Low Bongo-->
+                        <head>normal</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>High-Mid  Sound</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>High  Sound</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 1, Prog 115; MS General: Temple Blocks-->
+                        <controller ctrl="32" value="1"/> <!--Bank LSB-->
+                        <program value="115"/> <!--Non-GS drum kit-->
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
@@ -8511,7 +9261,9 @@
                         <voice>0</voice>
                         <name>High Wood Block</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="77"> <!--Low Woodblock-->
                         <head>normal</head>
@@ -8519,7 +9271,9 @@
                         <voice>0</voice>
                         <name>Low Wood Block</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8551,6 +9305,8 @@
                         <name>Wooden Wind Chimes</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8577,6 +9333,8 @@
                         <name>Cabasa</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8604,6 +9362,8 @@
                         <name>Glass Wind Chimes</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8630,6 +9390,8 @@
                         <name>Maracas</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8639,183 +9401,6 @@
                   <genre>orchestra</genre>
                   <genre>world</genre>
                   <genre>classroom</genre>
-            </Instrument>
-            <Instrument id="percussion">
-                  <family>other-percussion</family>
-                  <trackName>Percussion</trackName>
-                  <longName>Percussion</longName>
-                  <shortName>Perc.</shortName>
-                  <description>Orchestral percussion drumset.</description>
-                  <musicXMLid>drum.group.set</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <Drum pitch="27"> <!--High Q-->
-                        <head>cross</head>
-                        <line>-1</line>
-                        <voice>0</voice>
-                        <name>Closed Hi-Hat</name>
-                        <stem>1</stem>
-                        <shortcut>G</shortcut>
-                  </Drum>
-                  <Drum pitch="28"> <!--Slap-->
-                        <head>cross</head>
-                        <line>9</line>
-                        <voice>1</voice>
-                        <name>Pedal Hi-Hat</name>
-                        <stem>2</stem>
-                        <shortcut>F</shortcut>
-                  </Drum>
-                  <Drum pitch="29"> <!--Scratch Push-->
-                        <head>cross</head>
-                        <line>1</line>
-                        <voice>0</voice>
-                        <name>Open Hi-Hat</name>
-                        <stem>1</stem>
-                        <shortcut>E</shortcut>
-                  </Drum>
-                  <Drum pitch="30"> <!--Scratch Pull-->
-                        <head>cross</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Ride Cymbal 1</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="36"> <!--Electric Bass Drum-->
-                        <head>normal</head>
-                        <line>7</line>
-                        <voice>1</voice>
-                        <name>Bass Drum 1</name>
-                        <stem>2</stem>
-                        <shortcut>B</shortcut>
-                  </Drum>
-                  <Drum pitch="37"> <!--Side Stick-->
-                        <head>cross</head>
-                        <line>3</line>
-                        <voice>0</voice>
-                        <name>Side Stick</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="38"> <!--Acoustic Snare-->
-                        <head>normal</head>
-                        <line>3</line>
-                        <voice>0</voice>
-                        <name>Acoustic Snare</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                  </Drum>
-                  <Drum pitch="54"> <!--Tambourine-->
-                        <head>diamond</head>
-                        <line>2</line>
-                        <voice>0</voice>
-                        <name>Tambourine</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="55"> <!--Splash Cymbal-->
-                        <head>cross</head>
-                        <line>-3</line>
-                        <voice>0</voice>
-                        <name>Splash Cymbal</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="56"> <!--Cowbell-->
-                        <head>triangle-down</head>
-                        <line>1</line>
-                        <voice>0</voice>
-                        <name>Cowbell</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="58"> <!--Vibra Slap-->
-                        <head>diamond</head>
-                        <line>1</line>
-                        <voice>0</voice>
-                        <name>Vibraslap</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="59"> <!--Ride Cymbal 2-->
-                        <head>cross</head>
-                        <line>-2</line>
-                        <voice>0</voice>
-                        <name>Ride Cymbal 2</name>
-                        <stem>1</stem>
-                        <shortcut>C</shortcut>
-                  </Drum>
-                  <Drum pitch="62"> <!--Mute High Conga-->
-                        <head>cross</head>
-                        <line>2</line>
-                        <voice>0</voice>
-                        <name>Mute High Conga</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="63"> <!--Open High Conga-->
-                        <head>cross</head>
-                        <line>4</line>
-                        <voice>0</voice>
-                        <name>Open High Conga</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="64"> <!--Low Conga-->
-                        <head>cross</head>
-                        <line>6</line>
-                        <voice>0</voice>
-                        <name>Low Conga</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="70"> <!--Maracas-->
-                        <head>normal</head>
-                        <line>2</line>
-                        <voice>0</voice>
-                        <name>Maracas</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="75"> <!--Claves-->
-                        <head>normal</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Claves</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="81"> <!--Open Triangle-->
-                        <head>diamond</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Open Triangle</name>
-                        <stem>1</stem>
-                        <shortcut>D</shortcut>
-                  </Drum>
-                  <Drum pitch="82"> <!--Shaker-->
-                        <head>normal</head>
-                        <line>4</line>
-                        <voice>0</voice>
-                        <name>Shaker</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="84"> <!--Belltree-->
-                        <head>cross</head>
-                        <line>2</line>
-                        <voice>0</voice>
-                        <name>Mark Tree</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Drum pitch="85"> <!--Castanets-->
-                        <head>normal</head>
-                        <line>1</line>
-                        <voice>0</voice>
-                        <name>Castanets</name>
-                        <stem>1</stem>
-                  </Drum>
-                  <Channel>
-                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
-                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="48"/> <!--Orchestra Kit-->
-                  </Channel>
-                  <genre>popular</genre>
-                  <genre>choral</genre>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
-                  <genre>marching</genre>
             </Instrument>
             <Instrument id="quijada">
                   <family>other-percussion</family>
@@ -8836,6 +9421,8 @@
                         <name>Quijada</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8863,6 +9450,8 @@
                         <name>Ratchet</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8889,6 +9478,8 @@
                         <name>Sandpaper Blocks</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8903,6 +9494,7 @@
                   <longName>Shaker</longName>
                   <shortName>Sh.</shortName>
                   <description>Shaker.</description>
+                  <musicXMLid>rattle.shaker</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
@@ -8914,6 +9506,35 @@
                         <name>Shaker</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="shekere">
+                  <family>other-percussion</family>
+                  <trackName>Shekere</trackName>
+                  <longName>Shekere</longName>
+                  <shortName>Shkre.</shortName>
+                  <description>West African gourd instrument covered with beads woven in a net.</description>
+                  <musicXMLid>rattle.shekere</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Drum pitch="82"> <!--Shaker-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Shake</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8940,6 +9561,8 @@
                         <name>Shell Wind Chimes</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8966,6 +9589,8 @@
                         <name>Stones</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -8990,8 +9615,10 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Tambourine</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -9022,7 +9649,9 @@
                         <voice>0</voice>
                         <name>Mute High Conga</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="63"> <!--Open High Conga-->
                         <head>normal</head>
@@ -9030,7 +9659,9 @@
                         <voice>0</voice>
                         <name>High Conga</name>
                         <stem>1</stem>
-                        <shortcut>C</shortcut>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="64"> <!--Low Conga-->
                         <head>normal</head>
@@ -9038,7 +9669,9 @@
                         <voice>0</voice>
                         <name>Low Conga</name>
                         <stem>1</stem>
-                        <shortcut>D</shortcut>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
@@ -9066,6 +9699,8 @@
                         <name>Vibraslap</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -9094,6 +9729,8 @@
                         <name>Whip</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 56; MS General: Marching Snare-->
@@ -9103,6 +9740,539 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
                   <genre>classroom</genre>
+            </Instrument>
+            <Instrument id="cannon">
+                  <family>other-percussion</family>
+                  <trackName>Cannon</trackName>
+                  <longName>Cannon</longName>
+                  <shortName>Cn.</shortName>
+                  <description>Military cannon or gunshot sound.</description>
+                  <musicXMLid>effect.gunshot</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Cannon</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 127; MS General: Gunshot-->
+                        <program value="127"/> <!--CM-64/CM-32L Kit-->
+                  </Channel>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="bird-call">
+                  <family>other-percussion</family>
+                  <trackName>Bird Call</trackName>
+                  <longName>Bird Call</longName>
+                  <shortName>Bird</shortName>
+                  <description>Bird call.</description>
+                  <musicXMLid>effect.bird</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="50"> <!--High Tom-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Bird Call</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 123; MS General: Bird Tweet-->
+                        <program value="123"/> <!--Non-GS drum kit-->
+                  </Channel>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="ocean-drum">
+                  <family>other-percussion</family>
+                  <trackName>Ocean Drum</trackName>
+                  <longName>Ocean Drum</longName>
+                  <shortName>O.Drm.</shortName>
+                  <description>Ocean drum.</description>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="48"> <!--Hi-Mid Tom-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ocean Sound</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 122; MS General: Seashore-->
+                        <program value="122"/> <!--Non-GS drum kit-->
+                  </Channel>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="percussion-synthesizer">
+                  <family>other-percussion</family>
+                  <!--Drums are hard-coded in drumset.cpp to initialize MIDI and playback systems at startup before instruments.xml is loaded.-->
+                  <trackName>General MIDI Percussion</trackName>
+                  <longName>Percussion</longName>
+                  <shortName>Perc.</shortName>
+                  <description>General MIDI percussion kit with Level 2 extensions.</description>
+                  <musicXMLid>drum.group</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>jazz</genre>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+                  <genre>electronic</genre>
+            </Instrument>
+            <Instrument id="percussion">
+                  <family>other-percussion</family>
+                  <trackName>Mixed Percussion</trackName>
+                  <longName>Percussion</longName>
+                  <shortName>Perc.</shortName>
+                  <description>Orchestral percussion kit.</description>
+                  <musicXMLid>drum.group.set</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="27"> <!--High Q-->
+                        <head>cross</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Closed Hi-Hat</name>
+                        <stem>1</stem>
+                        <panelRow>4</panelRow>
+                        <panelColumn>5</panelColumn>
+                  </Drum>
+                  <Drum pitch="28"> <!--Slap-->
+                        <head>cross</head>
+                        <line>9</line>
+                        <voice>1</voice>
+                        <name>Pedal Hi-Hat</name>
+                        <stem>2</stem>
+                        <panelRow>4</panelRow>
+                        <panelColumn>7</panelColumn>
+                  </Drum>
+                  <Drum pitch="29"> <!--Scratch Push-->
+                        <head>xcircle</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Open Hi-Hat</name>
+                        <stem>1</stem>
+                        <panelRow>4</panelRow>
+                        <panelColumn>6</panelColumn>
+                  </Drum>
+                  <Drum pitch="30"> <!--Scratch Pull-->
+                        <head>cross</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ride Cymbal</name>
+                        <stem>1</stem>
+                        <panelRow>5</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="31"> <!--Sticks-->
+                        <head>plus</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Stick Click</name>
+                        <stem>1</stem>
+                        <panelRow>4</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Drum pitch="36"> <!--Electric Bass Drum-->
+                        <head>normal</head>
+                        <line>7</line>
+                        <voice>1</voice>
+                        <name>Bass Drum</name>
+                        <stem>2</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="37"> <!--Side Stick-->
+                        <head>cross</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Snare Rim</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="38"> <!--Acoustic Snare-->
+                        <head>normal</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Snare</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="54"> <!--Tambourine-->
+                        <head>diamond</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Tambourine</name>
+                        <stem>1</stem>
+                        <shortcut>G</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>6</panelColumn>
+                  </Drum>
+                  <Drum pitch="55"> <!--Splash Cymbal-->
+                        <head>cross</head>
+                        <line>-4</line>
+                        <voice>0</voice>
+                        <name>Splash Cymbal</name>
+                        <stem>1</stem>
+                        <panelRow>5</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="56"> <!--Cowbell-->
+                        <head>triangle-down</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Cowbell</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>7</panelColumn>
+                  </Drum>
+                  <Drum pitch="57"> <!--Crash Cymbal 2-->
+                        <head>cross</head>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Suspended Cymbal</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Drum pitch="58"> <!--Vibra Slap-->
+                        <head>ti</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Vibraslap</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="59"> <!--Ride Cymbal 2-->
+                        <head>cross</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Hand Cymbals</name>
+                        <stem>1</stem>
+                        <shortcut>F</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>5</panelColumn>
+                  </Drum>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>normal</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Hi Bongo</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>6</panelColumn>
+                  </Drum>
+                  <Drum pitch="61"> <!--Low Bongo-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Lo Bongo</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>5</panelColumn>
+                  </Drum>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Mute Hi Conga</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Drum pitch="63"> <!--Open High Conga-->
+                        <head>normal</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Hi Conga</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="64"> <!--Low Conga-->
+                        <head>normal</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Lo Conga</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="65"> <!--High Timbale-->
+                        <head>normal</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Hi Timbale</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="66"> <!--Low Timbale-->
+                        <head>normal</head>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Lo Timbale</name>
+                        <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="67"> <!--High Agogô-->
+                        <head>triangle-down</head>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Hi Agogô</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>7</panelColumn>
+                  </Drum>
+                  <Drum pitch="68"> <!--Low Agogô-->
+                        <head>triangle-down</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Lo Agogô</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>6</panelColumn>
+                  </Drum>
+                  <Drum pitch="69"> <!--Cabasa-->
+                        <head>diamond</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Cabasa</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>6</panelColumn>
+                  </Drum>
+                  <Drum pitch="70"> <!--Maracas-->
+                        <head>diamond</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Maracas</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>5</panelColumn>
+                  </Drum>
+                  <Drum pitch="71"> <!--Short Whistle-->
+                        <head>ti</head>
+                        <line>-3</line>
+                        <voice>0</voice>
+                        <name>Long Whistle</name>
+                        <stem>1</stem>
+                        <panelRow>4</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="72"> <!--Long Whistle-->
+                        <head>cross</head>
+                        <line>-3</line>
+                        <voice>0</voice>
+                        <name>Short Whistle</name>
+                        <stem>1</stem>
+                        <panelRow>4</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="73"> <!--Short Guiro-->
+                        <head>cross</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Short Güiro</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>5</panelColumn>
+                  </Drum>
+                  <Drum pitch="74"> <!--Long Guiro-->
+                        <head>slashed1</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>Long Güiro</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Drum pitch="75"> <!--Claves-->
+                        <head>la</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Claves</name>
+                        <stem>1</stem>
+                        <shortcut>H</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>7</panelColumn>
+                  </Drum>
+                  <Drum pitch="76"> <!--High Woodblock-->
+                        <head>la</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Hi Woodblock</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="77"> <!--Low Woodblock-->
+                        <head>la</head>
+                        <line>7</line>
+                        <voice>0</voice>
+                        <name>Lo Woodblock</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="78"> <!--Mute Cuica-->
+                        <head>cross</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Mute Cuica</name>
+                        <stem>1</stem>
+                        <panelRow>4</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="79"> <!--Open Cuica-->
+                        <head>slashed2</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Open Cuica</name>
+                        <stem>1</stem>
+                        <panelRow>4</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="80"> <!--Mute Triangle-->
+                        <head>cross</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Mute Triangle</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="81"> <!--Open Triangle-->
+                        <head>triangle-up</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Triangle</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="82"> <!--Shaker-->
+                        <head>diamond</head>
+                        <line>5</line>
+                        <voice>0</voice>
+                        <name>Shaker</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Drum pitch="83"> <!--Jingle Bell-->
+                        <head>triangle-down</head>
+                        <line>3</line>
+                        <voice>0</voice>
+                        <name>Sleigh Bells</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="84"> <!--Belltree-->
+                        <head>ti</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Mark Tree</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="85"> <!--Castanets-->
+                        <head>la</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>Castanets</name>
+                        <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>7</panelColumn>
+                  </Drum>
+                  <Drum pitch="86"> <!--Mute Surdo-->
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadSlashX</quarter>
+                              <half>noteheadSlashX</half>
+                              <whole>noteheadSlashX</whole>
+                              <breve>noteheadSlashX</breve>
+                        </noteheads>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Mute Surdo</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="87"> <!--Open Surdo-->
+                        <head>slash</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Surdo</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>jazz</genre>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="marching-percussion">
@@ -9124,6 +10294,8 @@
                         <voice>0</voice>
                         <name>Buzz</name>
                         <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="50"> <!--High Tom-->
                         <head>normal</head>
@@ -9131,13 +10303,23 @@
                         <voice>0</voice>
                         <name>Battery Snare</name>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="52"> <!--Chinese Cymbal-->
-                        <head>xcircle</head>
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
                         <line>1</line>
                         <voice>0</voice>
                         <name>Rim Shot</name>
                         <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="53"> <!--Ride Bell-->
                         <head>cross</head>
@@ -9145,51 +10327,68 @@
                         <voice>0</voice>
                         <name>Rim Click</name>
                         <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="55"> <!--Splash Cymbal-->
                         <head>plus</head>
                         <line>-1</line>
                         <voice>0</voice>
                         <name>Stick Click</name>
-                        <shortcut>E</shortcut>
+                        <shortcut>G</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>6</panelColumn>
                   </Drum>
                   <Drum pitch="57"> <!--Crash Cymbal 2-->
                         <head>slashed1</head>
                         <line>1</line>
                         <voice>0</voice>
                         <name>Stick Shot</name>
-                        <shortcut>F</shortcut>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="59"> <!--Ride Cymbal 2-->
                         <head>cross</head>
                         <line>2</line>
                         <voice>0</voice>
                         <name>Shell</name>
-                        <shortcut>G</shortcut>
+                        <shortcut>H</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>7</panelColumn>
                   </Drum>
                   <Drum pitch="60"> <!--High Bongo-->
                         <head>ti</head>
                         <line>1</line>
                         <voice>0</voice>
-                        <name>Visual (BS,X-Over,Etc)</name>
+                        <name>Backstick</name>
+                        <shortcut>F</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
                   <Drum pitch="72"> <!--Long Whistle-->
                         <head>cross</head>
                         <line>-2</line>
                         <voice>0</voice>
                         <name>Ride Cymbal 1</name>
+                        <panelRow>1</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="74"> <!--Long Guiro-->
-                        <head>cross</head>
+                        <head>xcircle</head>
                         <line>-1</line>
                         <voice>0</voice>
                         <name>Open Hi-Hat</name>
+                        <panelRow>1</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="76"> <!--High Woodblock-->
                         <head>cross</head>
                         <line>-1</line>
                         <voice>0</voice>
                         <name>Closed Hi-Hat</name>
+                        <panelRow>1</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 56; MS General: Marching Snare-->
@@ -9226,6 +10425,8 @@
                         <name>Drum 4</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="37"> <!--Side Stick-->
                         <head>cross</head>
@@ -9233,6 +10434,8 @@
                         <voice>0</voice>
                         <name>Drum 4 Rim</name>
                         <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="38"> <!--Acoustic Snare-->
                         <head>normal</head>
@@ -9240,6 +10443,8 @@
                         <voice>0</voice>
                         <name>Drum 4 Buzz</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="39"> <!--Hand Clap-->
                         <head>plus</head>
@@ -9247,6 +10452,8 @@
                         <voice>0</voice>
                         <name>Drum 4 Muted</name>
                         <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="40"> <!--Electric Snare-->
                         <head>la</head>
@@ -9254,13 +10461,17 @@
                         <voice>0</voice>
                         <name>Drum 4 Shell</name>
                         <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="43"> <!--High Floor Tom-->
-                        <head>diamond</head>
+                        <head>plus</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>sticks</name>
-                        <stem>2</stem>
+                        <name>Stick Click</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>6</panelColumn>
                   </Drum>
                   <Drum pitch="48"> <!--Hi-Mid Tom-->
                         <head>normal</head>
@@ -9269,6 +10480,8 @@
                         <name>Drum 3</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="49"> <!--Crash Cymbal 1-->
                         <head>cross</head>
@@ -9276,6 +10489,8 @@
                         <voice>0</voice>
                         <name>Drum 3 Rim</name>
                         <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="50"> <!--High Tom-->
                         <head>normal</head>
@@ -9283,6 +10498,8 @@
                         <voice>0</voice>
                         <name>Drum 3 Buzz</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="51"> <!--Ride Cymbal 1-->
                         <head>plus</head>
@@ -9290,6 +10507,8 @@
                         <voice>0</voice>
                         <name>Drum 3 Muted</name>
                         <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="52"> <!--Chinese Cymbal-->
                         <head>la</head>
@@ -9297,6 +10516,8 @@
                         <voice>0</voice>
                         <name>Drum 3 Shell</name>
                         <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
                   <Drum pitch="60"> <!--High Bongo-->
                         <head>normal</head>
@@ -9305,6 +10526,8 @@
                         <name>Drum 2</name>
                         <stem>1</stem>
                         <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="61"> <!--Low Bongo-->
                         <head>cross</head>
@@ -9312,6 +10535,8 @@
                         <voice>0</voice>
                         <name>Drum 2 Rim</name>
                         <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="62"> <!--Mute High Conga-->
                         <head>normal</head>
@@ -9319,6 +10544,8 @@
                         <voice>0</voice>
                         <name>Drum 2 Buzz</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="63"> <!--Open High Conga-->
                         <head>plus</head>
@@ -9326,6 +10553,8 @@
                         <voice>0</voice>
                         <name>Drum 2 Muted</name>
                         <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="72"> <!--Long Whistle-->
                         <head>normal</head>
@@ -9334,6 +10563,8 @@
                         <name>Drum 1</name>
                         <stem>1</stem>
                         <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="73"> <!--Short Guiro-->
                         <head>cross</head>
@@ -9341,6 +10572,8 @@
                         <voice>0</voice>
                         <name>Drum 1 Rim</name>
                         <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="74"> <!--Long Guiro-->
                         <head>normal</head>
@@ -9348,6 +10581,8 @@
                         <voice>0</voice>
                         <name>Drum 1 Buzz</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="75"> <!--Claves-->
                         <head>plus</head>
@@ -9355,6 +10590,8 @@
                         <voice>0</voice>
                         <name>Drum 1 Muted</name>
                         <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="84"> <!--Belltree-->
                         <head>normal</head>
@@ -9363,6 +10600,8 @@
                         <name>Spock 1</name>
                         <stem>1</stem>
                         <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="85"> <!--Castanets-->
                         <head>cross</head>
@@ -9370,6 +10609,8 @@
                         <voice>0</voice>
                         <name>Spock 1 Rim</name>
                         <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="86"> <!--Mute Surdo-->
                         <head>normal</head>
@@ -9377,6 +10618,8 @@
                         <voice>0</voice>
                         <name>Spock 1 Buzz</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="96">
                         <head>normal</head>
@@ -9385,6 +10628,8 @@
                         <name>Spock 2</name>
                         <stem>1</stem>
                         <shortcut>F</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
                   <Drum pitch="97">
                         <head>cross</head>
@@ -9392,6 +10637,8 @@
                         <voice>0</voice>
                         <name>Spock 2 Rim</name>
                         <stem>1</stem>
+                        <panelRow>2</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
                   <Drum pitch="98">
                         <head>normal</head>
@@ -9399,6 +10646,8 @@
                         <voice>0</voice>
                         <name>Spock 2 Buzz</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 96; MS General: Marching Tenor-->
@@ -9417,6 +10666,33 @@
                   </Articulation>
                   <genre>marching</genre>
             </Instrument>
+            <Instrument id="marching-show-tenors">
+                  <family>batterie</family>
+                  <trackName>Show-Style Tenors</trackName>
+                  <longName>Show Tenors</longName>
+                  <shortName>T.</shortName>
+                  <description>Marching show-style tenor drum.</description>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="50"> <!--High Tom-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Hit</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+                  <genre>marching</genre>
+            </Instrument>
             <Instrument id="marching-bass-drums">
                   <family>batterie</family>
                   <trackName>Marching Bass Drums</trackName>
@@ -9432,84 +10708,106 @@
                         <head>normal</head>
                         <line>7</line>
                         <voice>0</voice>
-                        <name>Bass Drum 5</name>
+                        <name>Drum 5</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="39"> <!--Hand Clap-->
                         <head>cross</head>
                         <line>7</line>
                         <voice>0</voice>
-                        <name>Bass Drum 5 Rim Knock</name>
+                        <name>Drum 5 Rim</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="49"> <!--Crash Cymbal 1-->
                         <head>normal</head>
                         <line>5</line>
                         <voice>0</voice>
-                        <name>Bass Drum 4</name>
+                        <name>Drum 4</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="51"> <!--Ride Cymbal 1-->
                         <head>cross</head>
                         <line>5</line>
                         <voice>0</voice>
-                        <name>Bass Drum 4 Rim Knock</name>
+                        <name>Drum 4 Rim</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="61"> <!--Low Bongo-->
                         <head>normal</head>
                         <line>3</line>
                         <voice>0</voice>
-                        <name>Bass Drum 3</name>
+                        <name>Drum 3</name>
                         <stem>1</stem>
                         <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="63"> <!--Open High Conga-->
                         <head>cross</head>
                         <line>3</line>
                         <voice>0</voice>
-                        <name>Bass Drum 3 Rim Knock</name>
+                        <name>Drum 3 Rim</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="73"> <!--Short Guiro-->
                         <head>normal</head>
                         <line>1</line>
                         <voice>0</voice>
-                        <name>Bass Drum 2</name>
+                        <name>Drum 2</name>
                         <stem>1</stem>
                         <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="75"> <!--Claves-->
                         <head>cross</head>
                         <line>1</line>
                         <voice>0</voice>
-                        <name>Bass Drum 2 Rim Knock</name>
+                        <name>Drum 2 Rim</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="85"> <!--Castanets-->
                         <head>normal</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>Bass Drum 1</name>
+                        <name>Drum 1</name>
                         <stem>1</stem>
                         <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="87"> <!--Open Surdo-->
                         <head>cross</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>Bass Drum 1 Rim Knock</name>
+                        <name>Drum 1 Rim</name>
                         <stem>1</stem>
+                        <panelRow>1</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="90">
                         <head>slash</head>
                         <line>4</line>
                         <voice>0</voice>
-                        <name>Simultaneous Hit</name>
+                        <name>Unison</name>
                         <stem>1</stem>
                         <shortcut>F</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 59; MS General: Marching Bass-->
@@ -9541,88 +10839,121 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="72"> <!--Long Whistle-->
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Full Crash</name>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="74"> <!--Long Guiro-->
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Half Crash</name>
                         <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="76"> <!--High Woodblock-->
                         <head>cross</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
-                        <name>High Hat</name>
+                        <name>Hi-Hat</name>
                         <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="77"> <!--Low Woodblock-->
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Sizzle</name>
                         <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="79"> <!--Open Cuica-->
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Crash-Choke</name>
                         <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="81"> <!--Open Triangle-->
                         <head>do</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
-                        <name>Normal Tap</name>
+                        <name>Tap</name>
                         <shortcut>F</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
                   <Drum pitch="83"> <!--Jingle Bell-->
                         <head>do</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
-                        <name>Normal Tap-Choke</name>
+                        <name>Tap-Choke</name>
                         <shortcut>G</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>6</panelColumn>
                   </Drum>
                   <Drum pitch="84"> <!--Belltree-->
-                        <head>do</head>
-                        <line>0</line>
+                        <head>diamond</head>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Bell Tap</name>
+                        <panelRow>1</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="86"> <!--Mute Surdo-->
-                        <head>do</head>
-                        <line>0</line>
+                        <head>diamond</head>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Bell Tap-Choke</name>
+                        <panelRow>1</panelRow>
+                        <panelColumn>1</panelColumn>
                   </Drum>
                   <Drum pitch="88">
-                        <head>do</head>
-                        <line>0</line>
+                        <head>plus</head>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Muted Tap</name>
+                        <shortcut>H</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>7</panelColumn>
                   </Drum>
                   <Drum pitch="89">
-                        <head>cross</head>
-                        <line>0</line>
+                        <head>normal</head>
+                        <noteheads>
+                              <quarter>noteheadXOrnate</quarter>
+                              <half>noteheadXOrnate</half>
+                              <whole>noteheadXOrnate</whole>
+                              <breve>noteheadXOrnate</breve>
+                        </noteheads>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Smash</name>
+                        <panelRow>1</panelRow>
+                        <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="91">
                         <head>slashed1</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Zing</name>
+                        <panelRow>1</panelRow>
+                        <panelColumn>3</panelColumn>
                   </Drum>
                   <Drum pitch="93">
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Roll</name>
+                        <panelRow>1</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 58; MS General: Marching Cymbals-->
@@ -9663,6 +10994,8 @@
                         <name>Finger Snap</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -9693,6 +11026,8 @@
                         <name>Hand Clap</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -9723,6 +11058,8 @@
                         <name>Slap</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -9753,6 +11090,8 @@
                         <name>Stamp</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
                   </Drum>
                   <Channel>
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
@@ -10558,26 +11897,6 @@
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>popular</genre>
-                  <genre>marching</genre>
-                  <genre>electronic</genre>
-            </Instrument>
-            <Instrument id="percussion-synthesizer">
-                  <family>synths</family>
-                  <trackName>Percussion Synthesizer</trackName>
-                  <longName>Percussion Synthesizer</longName>
-                  <shortName>Perc. Syn.</shortName>
-                  <description>Percussion synthesizer.</description>
-                  <musicXMLid>drum.snare-drum.electric</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <Channel>
-                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
-                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="0"/> <!--Standard Kit-->
                   </Channel>
                   <genre>popular</genre>
                   <genre>marching</genre>
@@ -13738,7 +15057,7 @@
                   <trackName>Treble Viol</trackName>
                   <longName>Treble Viol</longName>
                   <shortName>Tr. Vl.</shortName>
-                  <description>Treble viol.</description>
+                  <description>Treble viola da gamba. Second highest member of the viol family.</description>
                   <musicXMLid>strings.viol.treble</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -13772,7 +15091,7 @@
                   <trackName>Alto Viol</trackName>
                   <longName>Alto Viol</longName>
                   <shortName>A. Vl.</shortName>
-                  <description>Alto viol.</description>
+                  <description>Alto viola da gamba. Third highest member of the viol family.</description>
                   <musicXMLid>strings.viol.alto</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -13808,10 +15127,18 @@
                   <shortName>Pds. v.</shortName>
                   <description>Highest-pitched member of the viol family.</description>
                   <musicXMLid>strings.viol</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string>55</string>
+                        <string>62</string>
+                        <string>69</string>
+                        <string>74</string>
+                        <string>79</string>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-91</aPitchRange>
-                  <pPitchRange>43-96</pPitchRange>
+                  <pPitchRange>55-96</pPitchRange>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 40; MS General: Violin-->
                         <program value="40"/> <!--Violin-->
@@ -13831,7 +15158,7 @@
                   <trackName>Tenor Viol</trackName>
                   <longName>Tenor Viol</longName>
                   <shortName>T. Vl.</shortName>
-                  <description>Tenor viol.</description>
+                  <description>Tenor viola da gamba. Middle member of the viol family.</description>
                   <musicXMLid>strings.viol.tenor</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -13896,10 +15223,10 @@
             </Instrument>
             <Instrument id="viola-da-gamba">
                   <family>viols</family>
-                  <trackName>Viola da gamba</trackName>
-                  <longName>Viola da gamba</longName>
-                  <shortName>Vla. d. g.</shortName>
-                  <description>Viola da gamba (staff notation).</description>
+                  <trackName>Bass Viol</trackName>
+                  <longName>Bass Viol</longName>
+                  <shortName>B. Vl.</shortName>
+                  <description>Bass viola da gamba (staff notation). Third lowest member of the viol family.</description>
                   <StringData>
                         <frets>13</frets>
                         <string>33</string>
@@ -13931,10 +15258,10 @@
             <Instrument id="viola-da-gamba-tablature">
                   <init>viola-da-gamba</init>
                   <family>viols</family>
-                  <trackName>Viola da gamba (tablature)</trackName>
-                  <longName>Viola da gamba</longName>
-                  <shortName>Vla. d. g.</shortName>
-                  <description>Viola da gamba (tablature).</description>
+                  <trackName>Bass Viol (tablature)</trackName>
+                  <longName>Bass Viol</longName>
+                  <shortName>B. Vl.</shortName>
+                  <description>Bass viola da gamba (tablature). Third lowest member of the viol family.</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -13944,7 +15271,7 @@
                   <longName>G Violone</longName>
                   <shortName>G Vne.</shortName>
                   <traitName type="tuning">*G</traitName>
-                  <description>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol.</description>
+                  <description>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -13979,7 +15306,7 @@
                   <longName>D Violone</longName>
                   <shortName>D Vne.</shortName>
                   <traitName type="tuning">D</traitName>
-                  <description>Large viol with the lowest string tuned to D. Sometimes called the D violone.</description>
+                  <description>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
                   <StringData>
                         <frets>13</frets>

@@ -77,12 +77,21 @@ void AbstractMenuModel::handleMenuItem(const QString& itemId)
 {
     MenuItem& menuItem = findItem(itemId);
 
-    dispatch(menuItem.action().code, menuItem.args());
+    if (menuItem.query().isValid()) {
+        dispatch(menuItem.query());
+    } else {
+        dispatch(menuItem.action().code, menuItem.args());
+    }
 }
 
 void AbstractMenuModel::dispatch(const ActionCode& actionCode, const ActionData& args)
 {
     dispatcher()->dispatch(actionCode, args);
+}
+
+void AbstractMenuModel::dispatch(const muse::actions::ActionQuery& actionQuery)
+{
+    dispatcher()->dispatch(actionQuery);
 }
 
 QVariantMap AbstractMenuModel::get(int index)
@@ -105,6 +114,10 @@ void AbstractMenuModel::load()
 {
     uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
+    });
+
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        updateShortcutsAll();
     });
 }
 
@@ -169,7 +182,22 @@ MenuItem& AbstractMenuModel::findItem(const QString& itemId)
 
 MenuItem& AbstractMenuModel::findItem(const ActionCode& actionCode)
 {
-    return item(m_items, actionCode);
+    MenuItemList list = items(m_items, actionCode);
+    if (list.empty()) {
+        static MenuItem dummy;
+        return dummy;
+    }
+
+    if (list.size() > 1) {
+        LOGD() << "There is more than one item for " << actionCode << ", will return the first one found";
+    }
+
+    return *list.front();
+}
+
+MenuItemList AbstractMenuModel::findItems(const ActionCode& actionCode)
+{
+    return items(m_items, actionCode);
 }
 
 MenuItem& AbstractMenuModel::findMenu(const QString& menuId)
@@ -210,6 +238,11 @@ MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode, const Tr
         item->setTitle(title);
     }
 
+    ActionQuery q(actionCode);
+    if (q.isValid()) {
+        item->setQuery(q);
+    }
+
     return item;
 }
 
@@ -231,9 +264,9 @@ void AbstractMenuModel::onActionsStateChanges(const muse::actions::ActionCodeLis
     }
 
     for (const ActionCode& code : codes) {
-        MenuItem& actionItem = findItem(code);
-        if (actionItem.isValid()) {
-            actionItem.setState(uiActionsRegister()->actionState(code));
+        MenuItemList items = findItems(code);
+        for (MenuItem* item : items) {
+            item->setState(uiActionsRegister()->actionState(code));
         }
     }
 }
@@ -253,6 +286,9 @@ void AbstractMenuModel::setItem(int index, MenuItem* item)
 MenuItem& AbstractMenuModel::item(MenuItemList& items, const QString& itemId)
 {
     for (MenuItem* menuItem : items) {
+        if (!menuItem) {
+            continue;
+        }
         if (menuItem->id() == itemId) {
             return *menuItem;
         }
@@ -270,28 +306,29 @@ MenuItem& AbstractMenuModel::item(MenuItemList& items, const QString& itemId)
     return dummy;
 }
 
-MenuItem& AbstractMenuModel::item(MenuItemList& items, const ActionCode& actionCode)
+MenuItemList AbstractMenuModel::items(MenuItemList& items, const ActionCode& actionCode)
 {
+    MenuItemList result;
+
     for (MenuItem* menuItem : items) {
         if (!menuItem) {
             continue;
         }
 
         if (menuItem->action().code == actionCode) {
-            return *menuItem;
+            result.append(menuItem);
         }
 
         auto subitems = menuItem->subitems();
         if (!subitems.empty()) {
-            MenuItem& subitem = item(subitems, actionCode);
-            if (subitem.action().code == actionCode) {
-                return subitem;
+            MenuItemList list = this->items(subitems, actionCode);
+            if (!list.empty()) {
+                result.append(list);
             }
         }
     }
 
-    static MenuItem dummy;
-    return dummy;
+    return result;
 }
 
 MenuItem& AbstractMenuModel::menu(MenuItemList& items, const QString& menuId)
@@ -314,4 +351,30 @@ MenuItem& AbstractMenuModel::menu(MenuItemList& items, const QString& menuId)
 
     static MenuItem dummy;
     return dummy;
+}
+
+void AbstractMenuModel::updateShortcutsAll()
+{
+    for (MenuItem* menuItem : m_items) {
+        if (!menuItem) {
+            continue;
+        }
+
+        updateShortcuts(menuItem);
+    }
+}
+
+void AbstractMenuModel::updateShortcuts(MenuItem* item)
+{
+    UiAction action = item->action();
+    action.shortcuts = shortcutsRegister()->shortcut(action.code).sequences;
+    item->setAction(action);
+
+    for (MenuItem* subItem : item->subitems()) {
+        if (!subItem) {
+            continue;
+        }
+
+        updateShortcuts(subItem);
+    }
 }

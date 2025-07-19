@@ -22,13 +22,14 @@
 #include "firstlaunchsetupmodel.h"
 
 #include "translation.h"
+#include "global/async/async.h"
 
 using namespace muse;
 using namespace mu;
 using namespace mu::appshell;
 
 FirstLaunchSetupModel::FirstLaunchSetupModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     m_pages = {
         Page { "ThemesPage.qml", "musescore://notation" },
@@ -92,7 +93,9 @@ void FirstLaunchSetupModel::setCurrentPageIndex(int index)
     m_currentPageIndex = index;
     emit currentPageChanged();
 
-    interactive()->open(m_pages.at(m_currentPageIndex).backgroundUri);
+    async::Async::call(this, [this]() {
+        interactive()->open(m_pages.at(m_currentPageIndex).backgroundUri);
+    });
 }
 
 bool FirstLaunchSetupModel::askAboutClosingEarly()
@@ -103,11 +106,12 @@ bool FirstLaunchSetupModel::askAboutClosingEarly()
     };
 
     IInteractive::Result result
-        = interactive()->warning(muse::trc("appshell/gettingstarted", "Are you sure you want to cancel?"),
-                                 muse::trc("appshell/gettingstarted", "If you choose to cancel, then be sure to check out "
-                                                                      "our free Muse Sounds playback library on musescore.org."),
-                                 buttons,
-                                 int(IInteractive::Button::Cancel));
+        = interactive()->warningSync(muse::trc("appshell/gettingstarted", "Are you sure you want to cancel?"),
+                                     muse::trc("appshell/gettingstarted",
+                                               "If you choose to cancel, then be sure to check out "
+                                               "our free MuseSounds playback library on MuseScore.org."),
+                                     buttons,
+                                     int(IInteractive::Button::Cancel));
 
     return result.standardButton() == IInteractive::Button::Cancel;
 }

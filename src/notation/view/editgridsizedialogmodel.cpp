@@ -25,7 +25,7 @@
 using namespace mu::notation;
 
 EditGridSizeDialogModel::EditGridSizeDialogModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

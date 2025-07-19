@@ -240,7 +240,7 @@ void AdditionalInfoModel::setTimeSignature(const notation::Fraction& timeSignatu
 
 QVariantList AdditionalInfoModel::musicSymbolCodes(int number) const
 {
-    static QMap<QChar, MusicalSymbolCode> numeralsMusicSymbolCodes = {
+    static const QMap<QChar, MusicalSymbolCode> numeralsMusicSymbolCodes = {
         { '0', MusicalSymbolCode::ZERO },
         { '1', MusicalSymbolCode::ONE },
         { '2', MusicalSymbolCode::TWO },

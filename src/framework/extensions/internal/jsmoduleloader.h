@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_JSMODULELOADER_H
-#define MUSE_EXTENSIONS_JSMODULELOADER_H
+#ifndef MUSE_EXTENSIONS__H
+#define MUSE_EXTENSIONS__H
 
 #include <QObject>
 #include <QJSValue>
@@ -32,16 +32,16 @@
 
 namespace muse::extensions {
 class ScriptEngine;
-class JsModuleLoader : public QObject
+class JsModuleLoader : public QObject, public muse::Injectable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue exports READ exports WRITE setExports)
 
-    Inject<IExtensionsConfiguration> configuration;
-    Inject<io::IFileSystem> fileSystem;
+    Inject<IExtensionsConfiguration> configuration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
 
 public:
-    explicit JsModuleLoader(QObject* parent = 0);
+    explicit JsModuleLoader(const modularity::ContextPtr& iocCtx, QObject* parent = 0);
 
     void pushEngine(ScriptEngine* engine);
     void popEngine();
@@ -66,4 +66,4 @@ private:
 };
 }
 
-#endif // MUSE_EXTENSIONS_JSMODULELOADER_H
+#endif // MUSE_EXTENSIONS__H

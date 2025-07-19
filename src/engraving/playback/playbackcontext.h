@@ -29,55 +29,87 @@
 #include "../types/types.h"
 
 namespace mu::engraving {
+class EngravingItem;
 class Segment;
 class Dynamic;
+class Hairpin;
 class PlayTechAnnotation;
 class SoundFlag;
 class Score;
 class MeasureRepeat;
+class TextBase;
+class ChordRest;
 
 class PlaybackContext
 {
 public:
-    muse::mpe::dynamic_level_t appliableDynamicLevel(const int nominalPositionTick) const;
+    muse::mpe::dynamic_level_t appliableDynamicLevel(const track_idx_t trackIdx, const int nominalPositionTick) const;
     muse::mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const;
 
-    muse::mpe::PlaybackParamMap playbackParamMap(const Score* score, const int nominalPositionTick, const staff_idx_t staffIdx) const;
-    muse::mpe::PlaybackParamMap playbackParamMap(const Score* score) const;
-    muse::mpe::DynamicLevelMap dynamicLevelMap(const Score* score) const;
+    muse::mpe::PlaybackParamList playbackParams(const track_idx_t trackIdx, const int nominalPositionTick) const;
 
-    void update(const ID partId, const Score* score);
+    muse::mpe::PlaybackParamLayers playbackParamLayers(const Score* score) const;
+    muse::mpe::DynamicLevelLayers dynamicLevelLayers(const Score* score) const;
+
+    void update(const ID partId, const Score* score, bool expandRepeats = true);
     void clear();
 
     bool hasSoundFlags() const;
 
 private:
-    using DynamicMap = std::map<int /*nominalPositionTick*/, muse::mpe::dynamic_level_t>;
-    using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, muse::mpe::ArticulationType>;
-    using ParamMap = std::map<int /*nominalPositionTick*/, muse::mpe::PlaybackParamList>;
-    using SoundFlagMap = std::map<staff_idx_t, const SoundFlag*>;
+    struct DynamicInfo {
+        muse::mpe::dynamic_level_t level = 0;
+        int priority = -1;
+    };
 
-    muse::mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
+    using DynamicMap = std::map<int /*nominalPositionTick*/, DynamicInfo>;
+    using DynamicsByTrack = std::unordered_map<track_idx_t, DynamicMap>;
+
+    using SoundFlagMap = std::unordered_map<staff_idx_t, const SoundFlag*>;
+    using ParamMap = std::map<int /*nominalPositionTick*/, muse::mpe::PlaybackParamList>;
+    using ParamsByTrack = std::unordered_map<track_idx_t, ParamMap>;
+
+    using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, muse::mpe::ArticulationType>;
+
+    muse::mpe::dynamic_level_t nominalDynamicLevel(const track_idx_t trackIdx, const int positionTick) const;
 
     void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
-    void updatePlayTechMap(const ID partId, const Score* score, const PlayTechAnnotation* annotation, const int segmentPositionTick);
-    void updatePlaybackParamMap(const ID partId, const Score* score, const SoundFlagMap& flagsOnSegment, const int segmentPositionTick);
-    void applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
-                                   const muse::mpe::dynamic_level_t dynamicLevel);
+    void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);
+    void updatePlaybackParamsForSoundFlags(const SoundFlagMap& flagsOnSegment, const int segmentPositionTick);
+    void updatePlaybackParamsForText(const TextBase* text, const int segmentPositionTick);
 
     void handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
                         const int tickPositionOffset);
-    void handleAnnotations(const ID partId, const Score* score, const Segment* segment, const int segmentPositionTick);
+    void handleHairpin(const Hairpin* hairpin, const int tickPositionOffset);
+    void handleSegmentAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
+    void handleSegmentElements(const Segment* segment, const int segmentPositionTick,
+                               std::vector<const MeasureRepeat*>& foundMeasureRepeats);
     void handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats, const int tickPositionOffset);
 
-    void copyDynamicsInRange(const int rangeStartTick, const int rangeEndTick, const int newDynamicsOffsetTick);
-    void copyPlaybackParamsInRange(const int rangeStartTick, const int rangeEndTick, const int newParamsOffsetTick);
-    void copyPlayTechniquesInRange(const int rangeStartTick, const int rangeEndTick, const int newPlayTechOffsetTick);
+    void applyDynamic(const EngravingItem* dynamicItem, muse::mpe::dynamic_level_t dynamicLevel, const int positionTick);
 
-    DynamicMap m_dynamicsMap;
+    static void copyDynamicsInRange(DynamicsByTrack& source, const int rangeStartTick, const int rangeEndTick,
+                                    const int newDynamicsOffsetTick);
+    static void copyPlaybackParamsInRange(ParamsByTrack& source, const int rangeStartTick, const int rangeEndTick,
+                                          const int newParamsOffsetTick);
+    static void copyPlayTechniquesInRange(PlayTechniquesMap& source, const int rangeStartTick, const int rangeEndTick,
+                                          const int newPlayTechOffsetTick);
+
+    static const muse::mpe::PlaybackParamList& findParams(const ParamsByTrack& all, const track_idx_t trackIdx,
+                                                          const int nominalPositionTick, bool* startAtNominalTick = nullptr);
+
+    track_idx_t m_partStartTrack = 0;
+    track_idx_t m_partEndTrack = 0;
+
+    DynamicsByTrack m_dynamicsByTrack;
+    ParamsByTrack m_soundFlagParamsByTrack;
+    ParamsByTrack m_textParamsByTrack;
     PlayTechniquesMap m_playTechniquesMap;
-    ParamMap m_playbackParamMap;
+
+    std::unordered_map<const ChordRest*, int> m_currentVerseNumByChordRest;
 };
+
+using PlaybackContextPtr = std::shared_ptr<PlaybackContext>;
 }
 
 #endif // MU_ENGRAVING_PLAYBACKCONTEXT_H

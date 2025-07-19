@@ -48,12 +48,15 @@ class Segment;
 class Instrument;
 class RepeatList;
 
-class PlaybackModel : public muse::async::Asyncable
+class PlaybackModel : public muse::Injectable, public muse::async::Asyncable
 {
 public:
-    INJECT(muse::mpe::IArticulationProfilesRepository, profilesRepository)
+    muse::Inject<muse::mpe::IArticulationProfilesRepository> profilesRepository = { this };
 
 public:
+    PlaybackModel(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
+
     void load(Score* score);
     void reload();
 
@@ -65,11 +68,16 @@ public:
     bool isPlayChordSymbolsEnabled() const;
     void setPlayChordSymbols(const bool isEnabled);
 
+    bool useScoreDynamicsForOffstreamPlayback() const;
+    void setUseScoreDynamicsForOffstreamPlayback(bool use);
+
+    bool isMetronomeEnabled() const;
+    void setIsMetronomeEnabled(const bool isEnabled);
+
     const InstrumentTrackId& metronomeTrackId() const;
     InstrumentTrackId chordSymbolsTrackId(const ID& partId) const;
     bool isChordSymbolsTrack(const InstrumentTrackId& trackId) const;
 
-    bool hasSoundFlags() const;
     bool hasSoundFlags(const InstrumentTrackId& trackId) const;
 
     const muse::mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
@@ -77,6 +85,7 @@ public:
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items);
 
     void triggerMetronome(int tick);
+    void triggerCountIn(int tick, muse::mpe::duration_t& totalCountInDuration);
 
     InstrumentTrackIdSet existingTrackIdSet() const;
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
@@ -112,8 +121,10 @@ private:
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
+    void reloadMetronomeEvents();
+
     void processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
-                        bool isFirstSegmentOfMeasure, ChangedTrackIdSet* trackChanges);
+                        bool isFirstChordRestSegmentOfMeasure, ChangedTrackIdSet* trackChanges);
     void processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat, const Measure* currentMeasure,
                               const staff_idx_t staffIdx, ChangedTrackIdSet* trackChanges);
 
@@ -141,14 +152,21 @@ private:
 
     muse::mpe::ArticulationsProfilePtr defaultActiculationProfile(const InstrumentTrackId& trackId) const;
 
+    PlaybackContextPtr playbackCtx(const InstrumentTrackId& trackId);
+
+    static void applyTiedNotesTickBoundaries(const Note* note, TickBoundaries& tickBoundaries);
+    static void applyTieTickBoundaries(const Tie* tie, TickBoundaries& tickBoundaries);
+
     Score* m_score = nullptr;
     bool m_expandRepeats = true;
     bool m_playChordSymbols = true;
+    bool m_useScoreDynamicsForOffstreamPlayback = true;
+    bool m_metronomeEnabled = true;
 
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;
 
-    std::unordered_map<InstrumentTrackId, PlaybackContext> m_playbackCtxMap;
+    std::unordered_map<InstrumentTrackId, PlaybackContextPtr> m_playbackCtxMap;
     std::unordered_map<InstrumentTrackId, muse::mpe::PlaybackData> m_playbackDataMap;
 
     muse::async::Notification m_dataChanged;

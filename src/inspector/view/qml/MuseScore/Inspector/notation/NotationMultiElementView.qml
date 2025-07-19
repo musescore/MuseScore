@@ -75,7 +75,7 @@ InspectorSectionView {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
 
-                onPopupOpened: {
+                onPopupOpened: function(popup, control) {
                     root.popupOpened(popup, control)
                 }
             }

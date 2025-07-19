@@ -36,7 +36,7 @@ FocusableItem {
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
-    implicitHeight: contentColumn.height
+    implicitHeight: root.model && root.model.areSettingsAvailable ? contentColumn.height : multipleDiagramsError.implicitHeight
     width: parent.width
 
     Column {
@@ -62,7 +62,7 @@ FocusableItem {
 
                 enabled: root.model ? !root.model.isMultipleDotsModeOn : false
                 checked: root.model && enabled ? root.model.isBarreModeOn : false
-                text: qsTrc("inspector", "Barre")
+                text: qsTrc("inspector", "Barré")
 
                 navigation.name: "BarreModeCheckBox"
                 navigation.panel: root.navigationPanel
@@ -132,6 +132,16 @@ FocusableItem {
                 }
             }
         }
+    }
+
+    StyledTextLabel {
+        id: multipleDiagramsError
+
+        width: parent.width
+
+        wrapMode: Text.Wrap
+        text: qsTrc("inspector", "You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.")
+        visible: root.model ? !root.model.areSettingsAvailable : false
     }
 }
 

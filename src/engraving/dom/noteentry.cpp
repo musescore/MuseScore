@@ -25,6 +25,7 @@
 
 #include "accidental.h"
 #include "chord.h"
+#include "chordline.h"
 #include "drumset.h"
 #include "excerpt.h"
 #include "factory.h"
@@ -79,7 +80,14 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
             break;
         }
         const Drumset* ds = instr->drumset();
-        nval.pitch        = m_is.drumNote();
+        nval.pitch = m_is.drumNote();
+        if (!ds->isValid(nval.pitch) || ds->line(nval.pitch) != line) {
+            // Drum note from input state is not valid - fall back to the first valid pitch for this line...
+            const int defaultPitch = ds->defaultPitchForLine(line);
+            if (ds->isValid(defaultPitch)) {
+                nval.pitch = defaultPitch;
+            }
+        }
         if (nval.pitch < 0) {
             error = true;
             return nval;
@@ -149,48 +157,20 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
     return nval;
 }
 
-//---------------------------------------------------------
-//   addPitch
-//---------------------------------------------------------
-
 Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputState)
 {
     InputState& is = externalInputState ? (*externalInputState) : m_is;
 
     if (addFlag) {
         ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
-        if (c == 0 || !c->isChord()) {
+        if (!c || !c->isChord()) {
             LOGD("Score::addPitch: cr %s", c ? c->typeName() : "zero");
-            return 0;
+            return nullptr;
         }
 
-        Chord* chord = toChord(c);
-        auto isTied = [](const Chord* ch) {
-            if (ch->notes().empty()) {
-                return false;
-            }
-            Note* n = ch->notes().at(0);
-            return n->tieFor() || n->tieBack();
-        };
-
-        Note* note = nullptr;
-        if (isTied(chord)) {
-            note = addNoteToTiedChord(chord, nval, /* forceAccidental */ false);
-            if (!note) {
-                note = addNote(chord, nval, /* forceAccidental */ false, /* articulationIds */ {}, externalInputState);
-            }
-        } else {
-            note = addNote(chord, nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
-        }
-
-        if (is.lastSegment() == is.segment()) {
-            NoteEntryMethod entryMethod = is.noteEntryMethod();
-            if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
-                is.moveToNextInputPos();
-            }
-        }
-        return note;
+        return addPitchToChord(nval, toChord(c), externalInputState);
     }
+
     expandVoice(is.segment(), is.track());
 
     // insert note
@@ -198,6 +178,10 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     track_idx_t track = is.track();
     if (is.drumset()) {
         const Drumset* ds = is.drumset();
+        if (!ds->isValid(nval.pitch)) {
+            return nullptr;
+        }
+
         nval.headGroup    = ds->noteHead(nval.pitch);
         stemDirection     = ds->stemDirection(nval.pitch);
         track             = ds->voice(nval.pitch) + (is.track() / VOICES) * VOICES;
@@ -206,8 +190,9 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     }
 
     if (!is.cr()) {
-        return 0;
+        handleOverlappingChordRest(is);
     }
+
     Measure* measure = is.segment()->measure();
     if (measure->isMeasureRepeatGroup(track2staff(track))) {
         MeasureRepeat* mr = measure->measureRepeatElement(track2staff(track));
@@ -296,7 +281,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         select(lastTiedNote);
     } else if (!is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         Segment* seg = setNoteRest(
-            is.segment(), track, nval, duration, stemDirection, /* forceAccidental */ false, {}, /* rhythmic */ false,
+            is.segment(), track, nval, duration, stemDirection, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false,
             externalInputState);
         if (seg) {
             note = toChord(seg->element(track))->upNote();
@@ -342,6 +327,42 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
             is.moveToNextInputPos();
         }
     }
+    return note;
+}
+
+Note* Score::addPitchToChord(NoteVal& nval, Chord* chord, InputState* externalInputState)
+{
+    IF_ASSERT_FAILED(chord) {
+        return nullptr;
+    }
+
+    InputState& is = externalInputState ? (*externalInputState) : m_is;
+
+    auto isTied = [](const Chord* ch) {
+        if (ch->notes().empty()) {
+            return false;
+        }
+        Note* n = ch->notes().at(0);
+        return n->tieFor() || n->tieBack();
+    };
+
+    Note* note = nullptr;
+    if (isTied(chord)) {
+        note = addNoteToTiedChord(chord, nval, /* forceAccidental */ false);
+        if (!note) {
+            note = addNote(chord, nval, /* forceAccidental */ false, /* articulationIds */ {}, externalInputState);
+        }
+    } else {
+        note = addNote(chord, nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
+    }
+
+    if (is.lastSegment() == is.segment()) {
+        NoteEntryMethod entryMethod = is.noteEntryMethod();
+        if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
+            is.moveToNextInputPos();
+        }
+    }
+
     return note;
 }
 
@@ -429,7 +450,12 @@ Ret Score::putNote(const Position& p, bool replace)
     switch (staffGroup) {
     case StaffGroup::PERCUSSION: {
         const Drumset* ds = st->part()->instrument(s->tick())->drumset();
-        stemDirection     = ds->stemDirection(nval.pitch);
+        DO_ASSERT(ds);
+
+        if (ds) {
+            stemDirection = ds->stemDirection(nval.pitch);
+            m_is.setVoice(ds->voice(nval.pitch));
+        }
         break;
     }
     case StaffGroup::TAB:
@@ -443,9 +469,14 @@ Ret Score::putNote(const Position& p, bool replace)
 
     expandVoice();
 
+    // If there's an overlapping ChordRest at the current input position, shorten it...
+    if (!m_is.cr()) {
+        handleOverlappingChordRest(m_is);
+    }
+
     ChordRest* cr = m_is.cr();
 
-    auto checkTied = [&](){
+    auto checkTied = [&]() {
         if (!cr || !cr->isChord()) {
             return false;
         }
@@ -551,6 +582,33 @@ Ret Score::putNote(const Position& p, bool replace)
     return ret;
 }
 
+void Score::handleOverlappingChordRest(InputState& inputState)
+{
+    MasterScore* ms = masterScore();
+    ChordRest* prevCr = inputState.segment()->nextChordRest(inputState.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+    if (prevCr && prevCr->endTick() > inputState.tick()) {
+        const Fraction overlapDuration = prevCr->endTick() - inputState.tick();
+        const Fraction desiredDuration = prevCr->ticks() - overlapDuration;
+
+        const InputState inputStateToRestore = inputState; // because changeCRlen will alter the input state
+        ms->changeCRlen(prevCr, desiredDuration, /*fillWithRest*/ true);
+
+        // Fill the difference with tied notes if necessary...
+        const Fraction difference = desiredDuration - prevCr->ticks();
+        if (prevCr->isChord() && difference.isNotZero()) {
+            Fraction startTick = prevCr->endTick();
+            Chord* prevChord = toChord(prevCr);
+            const std::vector<TDuration> durationList = toDurationList(difference, true);
+            for (const TDuration& dur : durationList) {
+                prevChord = ms->addChord(startTick, dur, prevChord, /*genTie*/ bool(prevChord), prevChord->tuplet());
+                startTick += dur.fraction();
+            }
+        }
+
+        inputState = inputStateToRestore;
+    }
+}
+
 //---------------------------------------------------------
 //   repitchNote
 //---------------------------------------------------------
@@ -617,6 +675,7 @@ Ret Score::repitchNote(const Position& p, bool replace)
 
     Note* firstTiedNote = 0;
     Note* lastTiedNote = note;
+    ChordLine* chordLine = nullptr;
     if (replace) {
         std::vector<Note*> notes = chord->notes();
         // break all ties into current chord
@@ -625,6 +684,14 @@ Ret Score::repitchNote(const Position& p, bool replace)
         for (Note* n : notes) {
             if (n->tieBack()) {
                 undoRemoveElement(n->tieBack());
+            }
+        }
+        // Keep first chordline only
+        chordLine = chord->chordLine() ? chord->chordLine()->clone() : nullptr;
+        std::vector<EngravingItem*> chordEls = chord->el();
+        for (EngravingItem* e : chordEls) {
+            if (e->isChordLine()) {
+                undoRemoveElement(e);
             }
         }
         // for single note chords only, preserve ties by changing pitch of all forward notes
@@ -659,6 +726,12 @@ Ret Score::repitchNote(const Position& p, bool replace)
     }
     // add new note to chord
     undoAddElement(note);
+
+    if (chordLine) {
+        chordLine->setNote(note);
+        undoAddElement(chordLine);
+    }
+
     bool forceAccidental = false;
     if (m_is.accidentalType() != AccidentalType::NONE) {
         NoteVal nval2 = noteValForPosition(p, AccidentalType::NONE, error);
@@ -748,9 +821,9 @@ Ret Score::insertChordByInsertingTime(const Position& pos)
     // The approach is similar to that in Measure::adjustToLen() but does
     // insert time to the middle of the measure rather than to the end.
     undoInsertTime(tick, len);
-    undo(new InsertTime(this, tick, len));
 
     for (Score* score : scoreList()) {
+        score->undo(new InsertTime(score, tick, len));
         Measure* m = score->tick2measure(tick);
         undo(new ChangeMeasureLen(m, targetMeasureLen));
         Segment* scoreSeg = m->tick2segment(tick);

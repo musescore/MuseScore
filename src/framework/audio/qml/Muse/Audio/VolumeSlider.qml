@@ -44,7 +44,7 @@ Slider {
     value: convertor.volumeLevelToLocal(root.volumeLevel)
     stepSize: 0.1
     orientation: Qt.Vertical
-    wheelEnabled: true
+    wheelEnabled: false
 
     signal increaseRequested()
     signal decreaseRequested()

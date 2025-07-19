@@ -30,15 +30,15 @@ using namespace mu::playback;
 using namespace muse;
 using namespace muse::audio;
 
-static constexpr volume_dbfs_t MAX_DISPLAYED_DBFS = 0.f; // 100%
-static constexpr volume_dbfs_t MIN_DISPLAYED_DBFS = -60.f; // 0%
+static constexpr volume_dbfs_t MAX_DISPLAYED_DBFS = volume_dbfs_t::make(0.f);   // 100%
+static constexpr volume_dbfs_t MIN_DISPLAYED_DBFS = volume_dbfs_t::make(-60.f); // 0%
 
 static constexpr float BALANCE_SCALING_FACTOR = 100.f;
 
 static constexpr int OUTPUT_RESOURCE_COUNT_LIMIT = 4;
 
-static const std::string VSTFX_EDITOR_URI("muse://vstfx/editor?sync=false&modal=false&floating=true");
-static const std::string VSTI_EDITOR_URI("muse://vsti/editor?sync=false&modal=false&floating=true");
+static const std::string VSTFX_EDITOR_ACTION("action://vst/fx_editor");
+static const std::string VSTI_EDITOR_ACTION("action://vst/instrument_editor");
 
 static const std::string TRACK_ID_KEY("trackId");
 static const std::string RESOURCE_ID_KEY("resourceId");
@@ -368,7 +368,7 @@ void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges&& audioS
 {
     m_audioSignalChanges = audioSignalChanges;
 
-    m_audioSignalChanges.onReceive(this, [this](const audioch_t audioChNum, const AudioSignalVal& newValue) {
+    m_audioSignalChanges.onReceive(this, [this](const AudioSignalValuesMap& signalValues) {
         //!Note There should be no signal changes when the mixer channel is muted.
         //!     But some audio signal changes still might be "on the way" from the times when the mixer channel wasn't muted
         //!     So that we have to just ignore them
@@ -376,12 +376,17 @@ void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges&& audioS
             return;
         }
 
-        if (newValue.pressure < MIN_DISPLAYED_DBFS) {
-            setAudioChannelVolumePressure(audioChNum, MIN_DISPLAYED_DBFS);
-        } else if (newValue.pressure > MAX_DISPLAYED_DBFS) {
-            setAudioChannelVolumePressure(audioChNum, MAX_DISPLAYED_DBFS);
-        } else {
-            setAudioChannelVolumePressure(audioChNum, newValue.pressure);
+        for (const auto& pair : signalValues) {
+            audioch_t audioChNum = pair.first;
+            volume_dbfs_t newPressure = pair.second.pressure;
+
+            if (newPressure < MIN_DISPLAYED_DBFS) {
+                setAudioChannelVolumePressure(audioChNum, MIN_DISPLAYED_DBFS);
+            } else if (newPressure > MAX_DISPLAYED_DBFS) {
+                setAudioChannelVolumePressure(audioChNum, MAX_DISPLAYED_DBFS);
+            } else {
+                setAudioChannelVolumePressure(audioChNum, newPressure);
+            }
         }
     });
 }
@@ -547,11 +552,11 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
             return;
         }
 
-        UriQuery uri(VSTI_EDITOR_URI);
-        uri.addParam(TRACK_ID_KEY, Val(m_trackId));
-        uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
+        actions::ActionQuery aq(VSTI_EDITOR_ACTION);
+        aq.addParam(TRACK_ID_KEY, Val(m_trackId));
+        aq.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
 
-        openEditor(newItem, uri);
+        openEditor(newItem, aq);
     });
 
     connect(newItem, &InputResourceItem::nativeEditorViewCloseRequested, this, [this, newItem]() {
@@ -572,7 +577,7 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
 
         m_outParams.fxChain.clear();
 
-        for (const OutputResourceItem* item : m_outputResourceItems) {
+        for (const OutputResourceItem* item : std::as_const(m_outputResourceItems)) {
             m_outParams.fxChain.insert({ item->params().chainOrder, item->params() });
         }
 
@@ -584,16 +589,16 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
             return;
         }
 
-        UriQuery uri(VSTFX_EDITOR_URI);
+        actions::ActionQuery aq(VSTFX_EDITOR_ACTION);
 
         if (m_type != Type::Master) {
-            uri.addParam(TRACK_ID_KEY, Val(m_trackId));
+            aq.addParam(TRACK_ID_KEY, Val(m_trackId));
         }
 
-        uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
-        uri.addParam(CHAIN_ORDER_KEY, Val(newItem->params().chainOrder));
+        aq.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
+        aq.addParam(CHAIN_ORDER_KEY, Val(newItem->params().chainOrder));
 
-        openEditor(newItem, uri);
+        openEditor(newItem, aq);
     });
 
     connect(newItem, &OutputResourceItem::nativeEditorViewCloseRequested, this, [this, newItem]() {
@@ -633,24 +638,30 @@ AuxSendItem* MixerChannelItem::buildAuxSendItem(aux_channel_idx_t index, const A
     return newItem;
 }
 
-void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri)
+void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const actions::ActionQuery& action)
 {
-    if (item->editorUri() != editorUri) {
-        interactive()->close(item->editorUri());
-        item->setEditorUri(editorUri);
+    if (item->editorAction() != action) {
+        if (item->editorAction().isValid()) {
+            // make and send close
+            actions::ActionQuery closeAction = item->editorAction();
+            closeAction.addParam("operation", Val("close"));
+            dispatcher()->dispatch(closeAction);
+        }
+        // set new action
+        item->setEditorAction(action);
     }
 
-    if (interactive()->isOpened(editorUri).val) {
-        interactive()->raise(editorUri);
-    } else {
-        interactive()->open(editorUri);
-    }
+    dispatcher()->dispatch(action);
 }
 
 void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
 {
-    interactive()->close(item->editorUri());
-    item->setEditorUri(UriQuery());
+    // make and send close
+    actions::ActionQuery closeAction = item->editorAction();
+    closeAction.addParam("operation", Val("close"));
+    dispatcher()->dispatch(closeAction);
+
+    item->setEditorAction(UriQuery());
 }
 
 bool MixerChannelItem::askAboutChangingSound()
@@ -670,10 +681,10 @@ bool MixerChannelItem::askAboutChangingSound()
         IInteractive::ButtonData(changeBtn, muse::trc("playback", "Change sound"), true /*accent*/)
     };
 
-    IInteractive::Result result = interactive()->warning(muse::trc("playback", "Are you sure you want to change this sound?"),
-                                                         muse::trc("playback",
-                                                                   "Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone."),
-                                                         buttons, changeBtn, options);
+    IInteractive::Result result = interactive()->warningSync(muse::trc("playback", "Are you sure you want to change this sound?"),
+                                                             muse::trc("playback",
+                                                                       "Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone."),
+                                                             buttons, changeBtn, options);
 
     if (result.button() == changeBtn) {
         if (!result.showAgain()) {

@@ -21,14 +21,14 @@
  */
 #include "baseapplication.h"
 
+#include "types/version.h"
+
+#include "muse_framework_config.h"
+
 #ifndef NO_QT_SUPPORT
 #include <QApplication>
 #include <QProcess>
 #endif
-
-#include "types/version.h"
-
-#include "muse_framework_config.h"
 
 #include "log.h"
 
@@ -36,8 +36,21 @@ using namespace muse;
 
 String BaseApplication::appName()
 {
+#ifdef MUSE_APP_NAME
+    return String::fromAscii(MUSE_APP_NAME);
+#else
+    return String();
+#endif
+}
+
+String BaseApplication::appTitle()
+{
 #ifdef MUSE_APP_TITLE
+#ifdef MUSE_APP_UNSTABLE
+    return String::fromAscii(MUSE_APP_TITLE) + u" Development";
+#else
     return String::fromAscii(MUSE_APP_TITLE);
+#endif
 #else
     return String();
 #endif
@@ -134,11 +147,16 @@ bool BaseApplication::notify(QObject* object, QEvent* event)
     return qApp->notify(object, event);
 }
 
+Qt::KeyboardModifiers BaseApplication::keyboardModifiers() const
+{
+    return QApplication::keyboardModifiers();
+}
+
 #endif
 
 void BaseApplication::restart()
 {
-#ifndef NO_QT_SUPPORT
+#ifdef QT_QPROCESS_SUPPORTED
     QString program = qApp->arguments()[0];
 
     // NOTE: remove the first argument - the program name

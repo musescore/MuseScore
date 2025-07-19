@@ -27,6 +27,7 @@
 #include <map>
 
 #include "val.h"
+#include "global/logstream.h"
 
 namespace muse {
 class Uri
@@ -34,6 +35,7 @@ class Uri
 public:
     Uri() = default;
     explicit Uri(const std::string& str);
+    explicit Uri(const muse::String& str);
 
     using Scheme = std::string;
     static const Scheme MuseScore;
@@ -43,6 +45,8 @@ public:
     bool isValid() const;
 
     Scheme scheme() const;
+    void setScheme(const Scheme& scheme);
+
     std::string path() const;
 
     inline bool operator==(const Uri& uri) const { return m_path == uri.m_path && m_scheme == uri.m_scheme; }
@@ -71,14 +75,22 @@ public:
 
     UriQuery() = default;
     explicit UriQuery(const std::string& str);
+    explicit UriQuery(const String& str);
     explicit UriQuery(const Uri& uri);
 
-    const Uri& uri() const;
     bool isValid() const;
+    const Uri& uri() const;
+    void setScheme(const Uri::Scheme& scheme);
 
     const Params& params() const;
     Val param(const std::string& key, const Val& def = Val()) const;
     void addParam(const std::string& key, const Val& val);
+    UriQuery& set(const ValMap& vals);
+    UriQuery& set(const std::string& key, const Val& val);
+    UriQuery& set(const std::string& key, const ValList& vals) { return set(key, Val(vals)); }
+    UriQuery& set(const std::string& key, const std::string& val) { return set(key, Val(val)); }
+    UriQuery& set(const std::string& key, int val) { return set(key, Val(val)); }
+    UriQuery& set(const std::string& key, bool val) { return set(key, Val(val)); }
     UriQuery addingParam(const std::string& key, const Val& val) const;
     bool contains(const std::string& key) const;
 
@@ -89,12 +101,33 @@ public:
 
 private:
 
-    void parceParams(const std::string& str, Params& out) const;
+    void parseParams(const std::string& str, Params& out) const;
     void extractQuotedStrings(const std::string& str, std::vector<std::string>& out) const;
 
     Uri m_uri;
     Params m_params;
 };
 }
+
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::Uri& uri)
+{
+    s << uri.toString();
+    return s;
+}
+
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::UriQuery& q)
+{
+    s << q.toString();
+    return s;
+}
+
+template<>
+struct std::hash<muse::Uri>
+{
+    std::size_t operator()(const muse::Uri& uri) const noexcept
+    {
+        return std::hash<std::string> {}(uri.toString());
+    }
+};
 
 #endif // MUSE_GLOBAL_URI_H

@@ -204,8 +204,15 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::GLISS_STYLE: {
         element(name, TConv::toXml(data.value<GlissandoStyle>()));
     } break;
+    case P_TYPE::GLISS_TYPE: {
+        element(name, TConv::toXml(data.value<GlissandoType>()));
+    } break;
     case P_TYPE::ALIGN: {
         element(name, TConv::toXml(data.value<Align>()));
+    }
+    break;
+    case P_TYPE::ALIGN_H: {
+        element(name, TConv::toXml(data.value<AlignH>()));
     }
     break;
     case P_TYPE::PLACEMENT_V: {
@@ -258,9 +265,6 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::DYNAMIC_TYPE: {
         element(name, TConv::toXml(data.value<DynamicType>()));
     } break;
-    case P_TYPE::DYNAMIC_RANGE: {
-        element(name, TConv::toXml(data.value<DynamicRange>()));
-    } break;
     case P_TYPE::DYNAMIC_SPEED: {
         element(name, TConv::toXml(data.value<DynamicSpeed>()));
     } break;
@@ -294,11 +298,20 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::TIE_PLACEMENT: {
         element(name, TConv::toXml(data.value<TiePlacement>()));
     } break;
-    case P_TYPE::VOICE_APPLICATION: {
-        element(name, TConv::toXml(data.value<VoiceApplication>()));
+    case P_TYPE::VOICE_ASSIGNMENT: {
+        element(name, TConv::toXml(data.value<VoiceAssignment>()));
     } break;
     case P_TYPE::AUTO_ON_OFF: {
         element(name, TConv::toXml(data.value<AutoOnOff>()));
+    } break;
+    case P_TYPE::INT_VEC: {
+        element(name, TConv::toXml(data.value<std::vector<int> >()));
+    } break;
+    case P_TYPE::PARTIAL_SPANNER_DIRECTION: {
+        element(name, TConv::toXml(data.value<PartialSpannerDirection>()));
+    } break;
+    case P_TYPE::PARENTHESES_MODE: {
+        element(name, TConv::toXml(data.value<ParenthesesMode>()));
     } break;
     default: {
         UNREACHABLE; //! TODO

@@ -170,7 +170,7 @@ void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const 
     RectF pageContentRect = page->ldata()->bbox().adjusted(page->lm(), page->tm(), -page->rm(), -page->bm());
 
     painter->setBrush(BrushStyle::NoBrush);
-    painter->setPen(engravingConfiguration()->formattingMarksColor());
+    painter->setPen(engravingConfiguration()->scoreGreyColor());
     painter->drawRect(pageContentRect);
 
     if (!page->isOdd()) {

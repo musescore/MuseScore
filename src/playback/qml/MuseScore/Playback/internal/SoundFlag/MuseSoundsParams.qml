@@ -38,6 +38,8 @@ Item {
 
     height: !noOptions ? content.childrenRect.height : noOptionsLabel.implicitHeight
 
+    signal closeRequested()
+
     Column {
         id: content
 
@@ -66,6 +68,10 @@ Item {
             onToggleParamRequested: {
                 root.model.togglePreset(paramCode)
             }
+
+            onCloseRequested: {
+                root.closeRequested()
+            }
         }
 
         ParamsGridView {
@@ -88,6 +94,10 @@ Item {
 
             onToggleParamRequested: {
                 root.model.togglePlayingTechnique(paramCode)
+            }
+
+            onCloseRequested: {
+                root.closeRequested()
             }
         }
     }

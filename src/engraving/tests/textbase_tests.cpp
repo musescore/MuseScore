@@ -71,7 +71,9 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextBefore)
     Dynamic* dynamic = addDynamic(score);
     EditData ed;
     dynamic->startEdit(ed);
+    score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
     score->undo(new InsertText(dynamic->cursor(), String(u"poco ")), &ed);
+    score->endCmd();
     dynamic->endEdit(ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextBefore.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextBefore-ref.mscx"));
 }
@@ -83,8 +85,10 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextAfter)
     EditData ed;
     ed.s = String(u" ma non troppo");
     dynamic->startEdit(ed);
+    score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
     dynamic->cursor()->moveCursorToEnd();
     dynamic->edit(ed);
+    score->endCmd();
     dynamic->endEdit(ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextAfter.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextAfter-ref.mscx"));
 }
@@ -95,8 +99,10 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextNoItalic)
     Dynamic* dynamic = addDynamic(score);
     EditData ed;
     dynamic->startEdit(ed);
+    score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
     dynamic->setProperty(Pid::FONT_STYLE, PropertyValue::fromValue(0));
     score->undo(new InsertText(dynamic->cursor(), String(u"moderately ")), &ed);
+    score->endCmd();
     dynamic->endEdit(ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextNoItalic.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextNoItalic-ref.mscx"));
 }
@@ -140,11 +146,11 @@ TEST_F(Engraving_TextBaseTests, undoChangeFontStyleProperty)
     StaffText* staffText = addStaffText(score);
     staffText->setXmlText(u"normal <b>bold</b> <u>underline</u> <i>italic</i>");
     score->renderer()->layoutItem(staffText);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), u"normal <b>bold</b> <u>underline</u> <i>italic</i>");
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)),
                                   PropertyFlags::UNSTYLED);
     score->endCmd();
@@ -154,19 +160,19 @@ TEST_F(Engraving_TextBaseTests, undoChangeFontStyleProperty)
     EXPECT_EQ(staffText->xmlText(), u"normal <b>bold</b> <u>underline</u> <i>italic</i>");
     score->undoStack()->redo(&ed);
     EXPECT_EQ(staffText->xmlText(), u"<b>normal bold <u>underline</u> <i>italic</i></b>");
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(
                                       static_cast<int>(FontStyle::Italic + FontStyle::Bold)), PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), u"<b><i>normal bold <u>underline</u> italic</i></b>");
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE,
                                   PropertyValue::fromValue(
                                       static_cast<int>(FontStyle::Italic + FontStyle::Bold + FontStyle::Underline)),
                                   PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), u"<b><i><u>normal bold underline italic</u></i></b>");
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), u"normal bold underline italic");

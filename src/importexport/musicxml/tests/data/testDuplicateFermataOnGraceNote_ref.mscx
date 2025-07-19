@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>8.26774</pageWidth>
+      <pageHeight>11.6929</pageHeight>
+      <pagePrintableWidth>7.48034</pagePrintableWidth>
+      <pageEvenLeftMargin>0.3937</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.3937</pageOddLeftMargin>
+      <pageEvenTopMargin>0.3937</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.787404</pageEvenBottomMargin>
+      <pageOddTopMargin>0.3937</pageOddTopMargin>
+      <pageOddBottomMargin>0.787404</pageOddBottomMargin>
+      <lyricsOddFontFace>FreeSerif</lyricsOddFontFace>
+      <lyricsOddFontSize>11</lyricsOddFontSize>
+      <lyricsEvenFontFace>FreeSerif</lyricsEvenFontFace>
+      <lyricsEvenFontSize>11</lyricsEvenFontSize>
+      <chordSymbolAFontFace>FreeSerif</chordSymbolAFontFace>
+      <chordSymbolBFontFace>FreeSerif</chordSymbolBFontFace>
+      <romanNumeralFontFace>FreeSerif</romanNumeralFontFace>
+      <nashvilleNumberFontFace>FreeSerif</nashvilleNumberFontFace>
+      <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
+      <tupletFontFace>FreeSerif</tupletFontFace>
+      <tupletFontSize>10</tupletFontSize>
+      <titleFontFace>FreeSerif</titleFontFace>
+      <subTitleFontFace>FreeSerif</subTitleFontFace>
+      <composerFontFace>FreeSerif</composerFontFace>
+      <lyricistFontFace>FreeSerif</lyricistFontFace>
+      <fingeringFontFace>FreeSerif</fingeringFontFace>
+      <fingeringFontSize>10</fingeringFontSize>
+      <lhGuitarFingeringFontFace>FreeSerif</lhGuitarFingeringFontFace>
+      <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
+      <rhGuitarFingeringFontFace>FreeSerif</rhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
+      <hammerOnPullOffTappingFontFace>FreeSerif</hammerOnPullOffTappingFontFace>
+      <stringNumberFontFace>FreeSerif</stringNumberFontFace>
+      <stringNumberFontSize>10</stringNumberFontSize>
+      <stringTuningsFontSize>10</stringTuningsFontSize>
+      <harpPedalDiagramFontFace>FreeSerif</harpPedalDiagramFontFace>
+      <harpPedalTextDiagramFontFace>FreeSerif</harpPedalTextDiagramFontFace>
+      <longInstrumentFontFace>FreeSerif</longInstrumentFontFace>
+      <shortInstrumentFontFace>FreeSerif</shortInstrumentFontFace>
+      <partInstrumentFontFace>FreeSerif</partInstrumentFontFace>
+      <partInstrumentFontSize>10</partInstrumentFontSize>
+      <expressionFontFace>FreeSerif</expressionFontFace>
+      <tempoFontFace>FreeSerif</tempoFontFace>
+      <tempoFontSize>10</tempoFontSize>
+      <tempoChangeFontFace>FreeSerif</tempoChangeFontFace>
+      <tempoChangeFontSize>10</tempoChangeFontSize>
+      <metronomeFontFace>FreeSerif</metronomeFontFace>
+      <metronomeFontSize>10</metronomeFontSize>
+      <measureNumberFontFace>FreeSerif</measureNumberFontFace>
+      <measureNumberFontSize>10</measureNumberFontSize>
+      <measureNumberAlternateFontFace>FreeSerif</measureNumberAlternateFontFace>
+      <mmRestRangeFontFace>FreeSerif</mmRestRangeFontFace>
+      <mmRestRangeFontSize>10</mmRestRangeFontSize>
+      <translatorFontFace>FreeSerif</translatorFontFace>
+      <systemTextFontFace>FreeSerif</systemTextFontFace>
+      <staffTextFontFace>FreeSerif</staffTextFontFace>
+      <rehearsalMarkFontFace>FreeSerif</rehearsalMarkFontFace>
+      <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
+      <repeatLeftFontFace>FreeSerif</repeatLeftFontFace>
+      <repeatRightFontFace>FreeSerif</repeatRightFontFace>
+      <frameFontFace>FreeSerif</frameFontFace>
+      <noteLineFontFace>FreeSerif</noteLineFontFace>
+      <glissandoFontFace>FreeSerif</glissandoFontFace>
+      <glissandoFontSize>10</glissandoFontSize>
+      <bendFontFace>FreeSerif</bendFontFace>
+      <bendFontSize>10</bendFontSize>
+      <headerFontFace>FreeSerif</headerFontFace>
+      <headerFontSize>10</headerFontSize>
+      <footerFontFace>FreeSerif</footerFontFace>
+      <footerFontSize>10</footerFontSize>
+      <copyrightFontFace>FreeSerif</copyrightFontFace>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontFace>FreeSerif</pageNumberFontFace>
+      <pageNumberFontSize>10</pageNumberFontSize>
+      <instrumentChangeFontFace>FreeSerif</instrumentChangeFontFace>
+      <stickingFontFace>FreeSerif</stickingFontFace>
+      <user1FontFace>FreeSerif</user1FontFace>
+      <user2FontFace>FreeSerif</user2FontFace>
+      <user3FontFace>FreeSerif</user3FontFace>
+      <user4FontFace>FreeSerif</user4FontFace>
+      <user5FontFace>FreeSerif</user5FontFace>
+      <user6FontFace>FreeSerif</user6FontFace>
+      <user7FontFace>FreeSerif</user7FontFace>
+      <user8FontFace>FreeSerif</user8FontFace>
+      <user9FontFace>FreeSerif</user9FontFace>
+      <user10FontFace>FreeSerif</user10FontFace>
+      <user11FontFace>FreeSerif</user11FontFace>
+      <user12FontFace>FreeSerif</user12FontFace>
+      <spatium>1.764</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source">http://musescore.com/score/658031</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="1" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff>
+        <eid>D_D</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="10" value="63"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <eid>E_E</eid>
+        <Text>
+          <eid>F_F</eid>
+          <style>composer</style>
+          <family>Times New Roman</family>
+          <text><font size="12"/><font face="Times New Roman"/>Franz Liszt
+(1811 - 1886)</text>
+          </Text>
+        <Text>
+          <eid>G_G</eid>
+          <style>title</style>
+          <family>Times New Roman</family>
+          <offset x="0" y="-0.172872"/>
+          <text><font size="24"/><font face="Times New Roman"/>Mephisto Waltz No. 1</text>
+          </Text>
+        <Text>
+          <eid>H_H</eid>
+          <style>subtitle</style>
+          <family>Times New Roman</family>
+          <offset x="0" y="9.82548"/>
+          <text><font size="14"/><font face="Times New Roman"/>S. 514</text>
+          </Text>
+        </VBox>
+      <Measure len="4/8">
+        <eid>I_I</eid>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>J_J</eid>
+            </Clef>
+          <KeySig>
+            <eid>K_K</eid>
+            <concertKey>1</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>L_L</eid>
+            <sigN>3</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <eid>M_M</eid>
+            </Fermata>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <eid>N_N</eid>
+            </Fermata>
+          <Tempo>
+            <tempo>3.233333</tempo>
+            <eid>O_O</eid>
+            <family>Times New Roman</family>
+            <text><font size="12"/><font face="Times New Roman"/><b>Allegro vivace (quasi presto)</b></text>
+            </Tempo>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>16th</durationType>
+            <grace16/>
+            <Note>
+              <eid>Q_Q</eid>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>R_R</eid>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>S_S</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>T_T</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure len="4/8">
+        <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>U_U</eid>
+            </Clef>
+          <KeySig>
+            <eid>V_V</eid>
+            <concertKey>1</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>W_W</eid>
+            <sigN>3</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>X_X</eid>
+            <visible>0</visible>
+            <durationType>measure</durationType>
+            <duration>4/8</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>Y_Y</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

@@ -37,7 +37,10 @@
 #include "internal/crashhandler/crashhandler.h"
 
 #include "view/diagnosticspathsmodel.h"
+#include "view/actionsviewmodel.h"
+
 #include "view/system/profilerviewmodel.h"
+#include "view/system/graphicsinfomodel.h"
 
 #include "view/keynav/diagnosticnavigationmodel.h"
 #include "view/keynav/abstractkeynavdevitem.h"
@@ -57,6 +60,11 @@ using namespace muse::diagnostics;
 using namespace muse;
 using namespace muse::modularity;
 
+static void diagnostics_init_qrc()
+{
+    Q_INIT_RESOURCE(diagnostics);
+}
+
 std::string DiagnosticsModule::moduleName() const
 {
     return "diagnostics";
@@ -64,12 +72,12 @@ std::string DiagnosticsModule::moduleName() const
 
 void DiagnosticsModule::registerExports()
 {
-    m_configuration = std::make_shared<DiagnosticsConfiguration>();
-    m_actionsController = std::make_shared<DiagnosticsActionsController>();
+    m_configuration = std::make_shared<DiagnosticsConfiguration>(iocContext());
+    m_actionsController = std::make_shared<DiagnosticsActionsController>(iocContext());
 
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
     ioc()->registerExport<IDiagnosticsConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario());
+    ioc()->registerExport<ISaveDiagnosticFilesScenario>(moduleName(), new SaveDiagnosticFilesScenario(iocContext()));
 }
 
 void DiagnosticsModule::resolveImports()
@@ -77,9 +85,11 @@ void DiagnosticsModule::resolveImports()
     auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://diagnostics/system/paths"), "Muse/Diagnostics/DiagnosticPathsDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/system/graphicsinfo"), "Muse/Diagnostics/DiagnosticGraphicsInfoDialog.qml");
         ir->registerQmlUri(Uri("muse://diagnostics/system/profiler"), "Muse/Diagnostics/DiagnosticProfilerDialog.qml");
         ir->registerQmlUri(Uri("muse://diagnostics/navigation/tree"), "Muse/Diagnostics/DiagnosticNavigationDialog.qml");
         ir->registerQmlUri(Uri("muse://diagnostics/accessible/tree"), "Muse/Diagnostics/DiagnosticAccessibleDialog.qml");
+        ir->registerQmlUri(Uri("muse://diagnostics/actions/list"), "Muse/Diagnostics/DiagnosticActionsDialog.qml");
     }
 
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
@@ -88,10 +98,17 @@ void DiagnosticsModule::resolveImports()
     }
 }
 
+void DiagnosticsModule::registerResources()
+{
+    diagnostics_init_qrc();
+}
+
 void DiagnosticsModule::registerUiTypes()
 {
     qmlRegisterType<DiagnosticsPathsModel>("Muse.Diagnostics", 1, 0, "DiagnosticsPathsModel");
+    qmlRegisterType<ActionsViewModel>("Muse.Diagnostics", 1, 0, "ActionsViewModel");
     qmlRegisterType<ProfilerViewModel>("Muse.Diagnostics", 1, 0, "ProfilerViewModel");
+    qmlRegisterType<GraphicsInfoModel>("Muse.Diagnostics", 1, 0, "GraphicsInfoModel");
 
     qmlRegisterType<DiagnosticNavigationModel>("Muse.Diagnostics", 1, 0, "DiagnosticNavigationModel");
     qmlRegisterUncreatableType<AbstractKeyNavDevItem>("Muse.Diagnostics", 1, 0, "AbstractKeyNavDevItem", "Cannot create a Abstract");

@@ -22,7 +22,8 @@
 #include "glissandoplaybackmodel.h"
 
 #include "translation.h"
-#include "dom/glissando.h"
+
+#include "engraving/dom/glissando.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;

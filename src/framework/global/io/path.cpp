@@ -25,7 +25,7 @@
 #include <QDir>
 #endif
 
-#include "stringutils.h"
+#include "global/stringutils.h"
 #include "fileinfo.h"
 
 using namespace muse;
@@ -38,6 +38,11 @@ path_t::path_t(const String& s)
 
 path_t::path_t(const std::string& s)
     : m_path(s)
+{
+}
+
+path_t::path_t(std::string&& s)
+    : m_path(std::move(s))
 {
 }
 

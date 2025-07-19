@@ -1,4 +1,4 @@
-﻿/*
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -21,7 +21,7 @@
  */
 #include "accessibilitymodule.h"
 
-#include <QtQml>
+#include <QQmlEngine>
 
 #include "modularity/ioc.h"
 
@@ -45,9 +45,10 @@ std::string AccessibilityModule::moduleName() const
 void AccessibilityModule::registerExports()
 {
     m_configuration = std::make_shared<AccessibilityConfiguration>(iocContext());
+    m_controller = std::make_shared<AccessibilityController>(iocContext());
 
     ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IAccessibilityController>(moduleName(), std::make_shared<AccessibilityController>(iocContext()));
+    ioc()->registerExport<IAccessibilityController>(moduleName(), m_controller);
     ioc()->registerExport<IQAccessibleInterfaceRegister>(moduleName(), new QAccessibleInterfaceRegister());
 }
 
@@ -70,6 +71,15 @@ void AccessibilityModule::registerApi()
     if (api) {
         api->regApiCreator(moduleName(), "api.accessibility", new ApiCreator<api::AccessibilityApi>());
     }
+}
+
+void AccessibilityModule::onPreInit(const IApplication::RunMode& mode)
+{
+    if (mode != IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    m_controller->setAccesibilityEnabled(true);
 }
 
 void AccessibilityModule::onInit(const IApplication::RunMode& mode)

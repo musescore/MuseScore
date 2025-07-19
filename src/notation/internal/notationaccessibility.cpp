@@ -165,15 +165,20 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
         endSegment = endSegment->prev1MM();
     }
 
-    std::pair<int, float> startBarbeat = selection()->startSegment()->barbeat();
-    QString start =  muse::qtrc("notation", "Start measure: %1; Start beat: %2")
-                    .arg(startBarbeat.first)
-                    .arg(startBarbeat.second);
+    EngravingItem::BarBeat startBarbeat = selection()->startSegment()->barbeat();
 
-    std::pair<int, float> endBarbeat = endSegment->barbeat();
-    QString end =  muse::qtrc("notation", "End measure: %1; End beat: %2")
-                  .arg(endBarbeat.first)
-                  .arg(endBarbeat.second);
+    QString start = muse::qtrc("engraving", "Start measure: %1").arg(String::number(startBarbeat.bar));
+    if (startBarbeat.displayedBar != startBarbeat.bar) {
+        start += "; " + muse::qtrc("engraving", "Start displayed measure: %1").arg(startBarbeat.displayedBar);
+    }
+    start += "; " + muse::qtrc("engraving", "Start beat: %1").arg(startBarbeat.beat);
+
+    EngravingItem::BarBeat endBarbeat = endSegment->barbeat();
+    QString end = muse::qtrc("engraving", "End measure: %1").arg(String::number(endBarbeat.bar));
+    if (endBarbeat.displayedBar != endBarbeat.bar) {
+        end += "; " + muse::qtrc("engraving", "End displayed measure: %1").arg(endBarbeat.displayedBar);
+    }
+    end += "; " + muse::qtrc("engraving", "End beat: %1").arg(endBarbeat.beat);
 
     return muse::qtrc("notation", "Range selection; %1; %2")
            .arg(start)

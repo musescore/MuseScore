@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_VST_IVSTCONFIGURATION_H
-#define MUSE_VST_IVSTCONFIGURATION_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
@@ -39,7 +37,9 @@ public:
     virtual io::paths_t userVstDirectories() const = 0;
     virtual void setUserVstDirectories(const io::paths_t& paths) = 0;
     virtual async::Channel<io::paths_t> userVstDirectoriesChanged() const = 0;
+
+    // dev
+    virtual std::string usedVstView() const = 0;
+    virtual void setUsedVstView(const std::string& code) = 0;
 };
 }
-
-#endif // MUSE_VST_IVSTCONFIGURATION_H

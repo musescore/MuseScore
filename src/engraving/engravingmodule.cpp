@@ -41,14 +41,16 @@
 
 #include "engraving/style/defaultstyle.h"
 
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/figuredbass.h"
+#include "engraving/dom/fret.h"
 
-#include "rendering/dev/scorerenderer.h"
-#include "rendering/stable/scorerenderer.h"
+#include "rendering/score/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
+#include "rendering/editmode/editmoderenderer.h"
 
 #include "compat/scoreaccess.h"
 
@@ -114,17 +116,9 @@ void EngravingModule::registerExports()
 #endif
 
     // internal
-/**
-Versions:
-* dev - current working version, use it for modify
-* stable - stable version of layout, don't modify it
-*
-* see layout/README.h
-*/
-    ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::dev::ScoreRenderer());
-    //ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::stable::ScoreRenderer());
-
+    ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::score::ScoreRenderer());
     ioc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());
+    ioc()->registerExport<rendering::IEditModeRenderer>(moduleName(), new rendering::editmode::EditModeRenderer());
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
@@ -177,113 +171,75 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
 #ifndef ENGRAVING_NO_INTERNAL
     // Init fonts
-#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
-    {
-        // Symbols
-        Smufl::init();
-
-        m_engravingfonts->addFont("Leland",     "Leland",      ":/fonts/leland/Leland.otf");
-        m_engravingfonts->addFont("Bravura",    "Bravura",     ":/fonts/bravura/Bravura.otf");
-        m_engravingfonts->addFont("Emmentaler", "MScore",      ":/fonts/mscore/mscore.ttf");
-        m_engravingfonts->addFont("Gonville",   "Gootville",   ":/fonts/gootville/Gootville.otf");
-        m_engravingfonts->addFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/MuseJazz.otf");
-        m_engravingfonts->addFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/Petaluma.otf");
-        m_engravingfonts->addFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/FinaleMaestro.otf");
-        m_engravingfonts->addFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/FinaleBroadway.otf");
-
-        m_engravingfonts->setFallbackFont("Bravura");
-
-        //! NOTE It may be necessary to draw something with these fonts without requesting the fonts themselves
-        //! (for example, simply specifying the family name for painter).
-        //! But if they are not loaded, then they are not added to the font database and,
-        //! accordingly, they are drawn incorrectly
-        m_engravingfonts->loadAllFonts();
-
-        // Text
-        const std::vector<muse::io::path_t> textFonts = {
-            ":/fonts/musejazz/MuseJazzText.otf",
-            ":/fonts/campania/Campania.otf",
-            ":/fonts/edwin/Edwin-Roman.otf",
-            ":/fonts/edwin/Edwin-Bold.otf",
-            ":/fonts/edwin/Edwin-Italic.otf",
-            ":/fonts/edwin/Edwin-BdIta.otf",
-            ":/fonts/FreeSans.ttf",
-            ":/fonts/FreeSerif.ttf",
-            ":/fonts/FreeSerifBold.ttf",
-            ":/fonts/FreeSerifItalic.ttf",
-            ":/fonts/FreeSerifBoldItalic.ttf",
-            ":/fonts/mscoreTab.ttf",
-            ":/fonts/mscore-BC.ttf",
-            ":/fonts/leland/LelandText.otf",
-            ":/fonts/leland/Leland.otf",
-            ":/fonts/bravura/BravuraText.otf",
-            ":/fonts/gootville/GootvilleText.otf",
-            ":/fonts/mscore/MScoreText.ttf",
-            ":/fonts/petaluma/PetalumaText.otf",
-            ":/fonts/petaluma/PetalumaScript.otf",
-            ":/fonts/finalemaestro/FinaleMaestroText.otf",
-            ":/fonts/finalebroadway/FinaleBroadwayText.otf",
-        };
-
-        std::shared_ptr<IFontProvider> fontProvider = ioc()->resolve<IFontProvider>("fonts");
-        for (const muse::io::path_t& font : textFonts) {
-            int loadStatusCode = fontProvider->addTextFont(font);
-            if (loadStatusCode == -1) {
-                LOGE() << "Fatal error: cannot load internal font " << font;
-            }
-        }
-
-        fontProvider->insertSubstitution(u"Leland Text",    u"Bravura Text");
-        fontProvider->insertSubstitution(u"Bravura Text",   u"Leland Text");
-        fontProvider->insertSubstitution(u"MScore Text",    u"Leland Text");
-        fontProvider->insertSubstitution(u"Gootville Text", u"Leland Text");
-        fontProvider->insertSubstitution(u"MuseJazz Text",  u"Leland Text");
-        fontProvider->insertSubstitution(u"Petaluma Text",  u"MuseJazz Text");
-        fontProvider->insertSubstitution(u"Finale Maestro Text", u"Leland Text");
-        fontProvider->insertSubstitution(u"Finale Broadway Text", u"MuseJazz Text");
-        fontProvider->insertSubstitution(u"ScoreFont",      u"Leland Text");// alias for current Musical Text Font
-    }
-#else // MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     {
         using namespace muse::draw;
 
         std::shared_ptr<IFontsDatabase> fdb = ioc()->resolve<IFontsDatabase>(moduleName());
 
         // Text
-        fdb->addFont(FontDataKey("Edwin", false, false), ":/fonts/edwin/Edwin-Roman.otf");
-        fdb->addFont(FontDataKey("Edwin", false, true), ":/fonts/edwin/Edwin-Italic.otf");
-        fdb->addFont(FontDataKey("Edwin", true, false), ":/fonts/edwin/Edwin-Bold.otf");
-        fdb->addFont(FontDataKey("Edwin", true, true), ":/fonts/edwin/Edwin-BdIta.otf");
+        fdb->addFont(FontDataKey(u"Edwin", false, false), ":/fonts/edwin/Edwin-Roman.otf");
+        fdb->addFont(FontDataKey(u"Edwin", false, true), ":/fonts/edwin/Edwin-Italic.otf");
+        fdb->addFont(FontDataKey(u"Edwin", true, false), ":/fonts/edwin/Edwin-Bold.otf");
+        fdb->addFont(FontDataKey(u"Edwin", true, true), ":/fonts/edwin/Edwin-BdIta.otf");
 
         // MusicSymbol[Text]
-        fdb->addFont(FontDataKey("Bravura"), ":/fonts/bravura/Bravura.otf");
-        fdb->addFont(FontDataKey("Bravura Text"), ":/fonts/bravura/BravuraText.otf");
-        fdb->addFont(FontDataKey("Leland"), ":/fonts/leland/Leland.otf");
-        fdb->addFont(FontDataKey("Leland Text"), ":/fonts/leland/LelandText.otf");
+        auto addMusicFont = [this, fdb](const std::string& name, const FontDataKey& fontDataKey, const muse::io::path_t& filePath){
+            fdb->addFont(FontDataKey(fontDataKey), filePath);
+            m_engravingfonts->addInternalFont(name, fontDataKey.family().id().toStdString(), filePath);
+        };
+
+        addMusicFont("Bravura", FontDataKey(u"Bravura"), ":/fonts/bravura/Bravura.otf");
+        fdb->addFont(FontDataKey(u"Bravura Text"), ":/fonts/bravura/BravuraText.otf");
+        addMusicFont("Leland", FontDataKey(u"Leland"), ":/fonts/leland/Leland.otf");
+        fdb->addFont(FontDataKey(u"Leland Text"), ":/fonts/leland/LelandText.otf");
+        addMusicFont("Emmentaler", FontDataKey(u"MScore"), ":/fonts/mscore/MScore.otf");
+        fdb->addFont(FontDataKey(u"MScore Text"), ":/fonts/mscore/MScoreText.otf");
+        addMusicFont("Gonville", FontDataKey(u"Gootville"), ":/fonts/gootville/Gootville.otf");
+        fdb->addFont(FontDataKey(u"Gootville Text"), ":/fonts/gootville/GootvilleText.otf");
+        addMusicFont("MuseJazz", FontDataKey(u"MuseJazz"), ":/fonts/musejazz/MuseJazz.otf");
+        fdb->addFont(FontDataKey(u"MuseJazz Text"), ":/fonts/musejazz/MuseJazzText.otf");
+        addMusicFont("Petaluma", FontDataKey(u"Petaluma"),    ":/fonts/petaluma/Petaluma.otf");
+        fdb->addFont(FontDataKey(u"Petaluma Text"), ":/fonts/petaluma/PetalumaText.otf");
+        addMusicFont("Finale Maestro", FontDataKey(u"Finale Maestro"), ":/fonts/finalemaestro/FinaleMaestro.otf");
+        fdb->addFont(FontDataKey(u"Finale Maestro Text"), ":/fonts/finalemaestro/FinaleMaestroText.otf");
+        addMusicFont("Finale Broadway", FontDataKey(u"Finale Broadway"), ":/fonts/finalebroadway/FinaleBroadway.otf");
+        fdb->addFont(FontDataKey(u"Finale Broadway Text"), ":/fonts/finalebroadway/FinaleBroadwayText.otf");
 
         // Tabulature
-        //fdb->addFont(FontDataKey("MuseScoreTab"), ":/fonts/MuseScoreTab.ttf");
-        fdb->addFont(FontDataKey("FreeSerif"), ":/fonts/FreeSerif.ttf");
+        fdb->addFont(FontDataKey(u"FreeSerif"), ":/fonts/FreeSerif.ttf");
+        fdb->addFont(FontDataKey(u"FreeSerif", true, false), ":/fonts/FreeSerifBold.ttf");
+        fdb->addFont(FontDataKey(u"FreeSerif", false, true), ":/fonts/FreeSerifItalic.ttf");
+        fdb->addFont(FontDataKey(u"FreeSerif", true, true), ":/fonts/FreeSerifBoldItalic.ttf");
+        fdb->addFont(FontDataKey(u"FreeSans"), ":/fonts/FreeSans.ttf");
+        fdb->addFont(FontDataKey(u"MScoreTabulature"), ":/fonts/mscoreTab.ttf");
 
-        fdb->setDefaultFont(Font::Type::Unknown, FontDataKey("Edwin"));
-        fdb->setDefaultFont(Font::Type::Text, FontDataKey("Edwin"));
-        fdb->setDefaultFont(Font::Type::MusicSymbolText, FontDataKey("Bravura Text"));
-        fdb->setDefaultFont(Font::Type::MusicSymbol, FontDataKey("Bravura"));
-        fdb->setDefaultFont(Font::Type::Tablature, FontDataKey("FreeSerif"));
+        // Figured Bass
+        fdb->addFont(FontDataKey(u"MscoreBC"), ":/fonts/mscore-BC.ttf");
+
+        // Roman Numeral Analysis
+        fdb->addFont(FontDataKey(u"Campania"), ":/fonts/campania/Campania.otf");
+
+        // Defaults
+        fdb->setDefaultFont(Font::Type::Unknown, FontDataKey(u"Edwin"));
+        fdb->setDefaultFont(Font::Type::Text, FontDataKey(u"Edwin"));
+        fdb->setDefaultFont(Font::Type::Tablature, FontDataKey(u"FreeSerif"));
+        fdb->setDefaultFont(Font::Type::MusicSymbolText, FontDataKey(u"Bravura Text"));
+        fdb->setDefaultFont(Font::Type::MusicSymbol, FontDataKey(u"Bravura"));
+        m_engravingfonts->setFallbackFont("Bravura");
+
+        //! NOTE Used for Qt font provider
+        fdb->insertSubstitution(u"Leland Text",    u"Bravura Text");
+        fdb->insertSubstitution(u"Bravura Text",   u"Leland Text");
+        fdb->insertSubstitution(u"MScore Text",    u"Leland Text");
+        fdb->insertSubstitution(u"Gootville Text", u"Leland Text");
+        fdb->insertSubstitution(u"MuseJazz Text",  u"Leland Text");
+        fdb->insertSubstitution(u"Petaluma Text",  u"MuseJazz Text");
+        fdb->insertSubstitution(u"Finale Maestro Text", u"Leland Text");
+        fdb->insertSubstitution(u"Finale Broadway Text", u"MuseJazz Text");
+        fdb->insertSubstitution(u"ScoreFont",      u"Leland Text");// alias for current Musical Text Font
 
         // Symbols
         Smufl::init();
-
-        m_engravingfonts->addFont("Leland",     "Leland",      ":/fonts/leland/Leland.otf");
-        m_engravingfonts->addFont("Bravura",    "Bravura",     ":/fonts/bravura/Bravura.otf");
-        m_engravingfonts->addFont("Emmentaler", "MScore",      ":/fonts/mscore/mscore.ttf");
-        m_engravingfonts->addFont("Gonville",   "Gootville",   ":/fonts/gootville/Gootville.otf");
-        m_engravingfonts->addFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/MuseJazz.otf");
-        m_engravingfonts->addFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/Petaluma.otf");
-        m_engravingfonts->addFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/FinaleMaestro.otf");
-        m_engravingfonts->addFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/FinaleBroadway.otf");
-
-        m_engravingfonts->setFallbackFont("Bravura");
 
         //! NOTE It may be necessary to draw something with these fonts without requesting the fonts themselves
         //! (for example, simply specifying the family name for painter).
@@ -291,7 +247,6 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         //! accordingly, they are drawn incorrectly
         m_engravingfonts->loadAllFonts();
     }
-#endif // MUSE_MODULE_DRAW_USE_QTFONTMETRICS
 
     m_configuration->init();
 
@@ -334,7 +289,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
 #ifndef ENGRAVING_NO_INTERNAL
         gpaletteScore->setStyle(DefaultStyle::baseStyle());
-        gpaletteScore->style().set(Sid::MusicalTextFont, String(u"Leland Text"));
+        gpaletteScore->style().set(Sid::musicalTextFont, String(u"Leland Text"));
         IEngravingFontPtr scoreFont = m_engravingfonts->fontByName("Leland");
         gpaletteScore->setEngravingFont(scoreFont);
         gpaletteScore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gpaletteScore->style().spatium()) / SPATIUM20);

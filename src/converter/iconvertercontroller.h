@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONVERTER_ICONVERTERCONTROLLER_H
-#define MU_CONVERTER_ICONVERTERCONTROLLER_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
-#include "types/ret.h"
-#include "io/path.h"
+#include "global/types/ret.h"
+#include "global/types/uri.h"
+#include "global/io/path.h"
+#include "global/progress.h"
 
 namespace mu::converter {
 class IConverterController : MODULE_EXPORT_INTERFACE
@@ -35,10 +36,13 @@ public:
 
     virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
-                                  const muse::String& soundProfile = muse::String()) = 0;
+                                  const muse::String& soundProfile = muse::String(),
+                                  const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {}) = 0;
+
     virtual muse::Ret batchConvert(const muse::io::path_t& batchJobFile,
                                    const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
-                                   const muse::String& soundProfile = muse::String()) = 0;
+                                   const muse::String& soundProfile = muse::String(),
+                                   const muse::UriQuery& extensionUri = muse::UriQuery(), muse::ProgressPtr progress = nullptr) = 0;
 
     virtual muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
                                         const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) = 0;
@@ -60,5 +64,3 @@ public:
     virtual muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) = 0;
 };
 }
-
-#endif // MU_CONVERTER_ICONVERTERCONTROLLER_H

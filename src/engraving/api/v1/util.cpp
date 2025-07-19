@@ -42,7 +42,7 @@ ScoreView::ScoreView(QQuickItem* parent)
     : uicomponents::QuickPaintedView(parent)
 {
     setAcceptedMouseButtons(Qt::LeftButton);
-    score = 0;
+    score = nullptr;
 }
 
 //---------------------------------------------------------
@@ -56,12 +56,12 @@ FileIO::FileIO(QObject* parent)
 
 QString FileIO::read()
 {
-    if (mSource.isEmpty()) {
+    if (m_source.isEmpty()) {
         emit error("source is empty");
         return QString();
     }
-    QUrl url(mSource);
-    QString source(mSource);
+    QUrl url(m_source);
+    QString source(m_source);
     if (url.isValid() && url.isLocalFile()) {
         source = url.toLocalFile();
     }
@@ -84,13 +84,13 @@ QString FileIO::read()
 
 bool FileIO::write(const QString& data)
 {
-    if (mSource.isEmpty()) {
+    if (m_source.isEmpty()) {
         return false;
     }
 
-    QUrl url(mSource);
+    QUrl url(m_source);
 
-    QString source = (url.isValid() && url.isLocalFile()) ? url.toLocalFile() : mSource;
+    QString source = (url.isValid() && url.isLocalFile()) ? url.toLocalFile() : m_source;
 
     QFile file(source);
     if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
@@ -109,28 +109,28 @@ bool FileIO::write(const QString& data)
 
 bool FileIO::remove()
 {
-    if (mSource.isEmpty()) {
+    if (m_source.isEmpty()) {
         return false;
     }
 
-    QFile file(mSource);
+    QFile file(m_source);
     return file.remove();
 }
 
 bool FileIO::exists()
 {
-    QFile file(mSource);
+    QFile file(m_source);
     return file.exists();
 }
 
 int FileIO::modifiedTime()
 {
-    if (mSource.isEmpty()) {
+    if (m_source.isEmpty()) {
         emit error("source is empty");
         return 0;
     }
-    QUrl url(mSource);
-    QString source(mSource);
+    QUrl url(m_source);
+    QString source(m_source);
     if (url.isValid() && url.isLocalFile()) {
         source = url.toLocalFile();
     }
@@ -165,19 +165,19 @@ void ScoreView::setScore(mu::plugins::api::Score* s)
 void ScoreView::setScore(mu::engraving::Score* s)
 {
     MuseScoreView::setScore(s);
-    _currentPage = 0;
+    m_currentPage = 0;
     score = s;
 
     if (score) {
         score->doLayout();
 
-        mu::engraving::Page* page = score->pages()[_currentPage];
-        RectF pr(page->abbox());
+        mu::engraving::Page* page = score->pages()[m_currentPage];
+        RectF pr(page->pageBoundingRect());
         qreal m1 = width() / pr.width();
         qreal m2 = height() / pr.height();
         mag = qMax(m1, m2);
 
-        _boundingRect = QRectF(0.0, 0.0, pr.width() * mag, pr.height() * mag);
+        m_boundingRect = QRectF(0.0, 0.0, pr.width() * mag, pr.height() * mag);
 
         setWidth(pr.width() * mag);
         setHeight(pr.height() * mag);
@@ -193,13 +193,13 @@ void ScoreView::paint(QPainter* qp)
 {
     muse::draw::Painter p(qp, "plugins_scoreview");
     p.setAntialiasing(true);
-    p.fillRect(RectF(0.0, 0.0, width(), height()), _color);
+    p.fillRect(RectF(0.0, 0.0, width(), height()), m_color);
     if (!score) {
         return;
     }
     p.scale(mag, mag);
 
-    mu::engraving::Page* page = score->pages()[_currentPage];
+    mu::engraving::Page* page = score->pages()[m_currentPage];
     QList<const mu::engraving::EngravingItem*> el;
     for (engraving::System* s : page->systems()) {
         for (engraving::MeasureBase* m : s->measures()) {
@@ -222,7 +222,7 @@ void ScoreView::paint(QPainter* qp)
 
 void ScoreView::setCurrentPage(int n)
 {
-    if (score == 0) {
+    if (!score) {
         return;
     }
     if (n < 0) {
@@ -235,7 +235,7 @@ void ScoreView::setCurrentPage(int n)
     if (n >= nn) {
         n = nn - 1;
     }
-    _currentPage = n;
+    m_currentPage = n;
     update();
 }
 
@@ -245,7 +245,7 @@ void ScoreView::setCurrentPage(int n)
 
 void ScoreView::nextPage()
 {
-    setCurrentPage(_currentPage + 1);
+    setCurrentPage(m_currentPage + 1);
 }
 
 //---------------------------------------------------------
@@ -254,6 +254,6 @@ void ScoreView::nextPage()
 
 void ScoreView::prevPage()
 {
-    setCurrentPage(_currentPage - 1);
+    setCurrentPage(m_currentPage - 1);
 }
 } // namespace mu::plugins::api

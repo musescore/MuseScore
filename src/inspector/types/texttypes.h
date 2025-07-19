@@ -74,6 +74,8 @@ public:
         TEXT_TYPE_INSTRUMENT_CHANGE,
         TEXT_TYPE_HEADER,
         TEXT_TYPE_FOOTER,
+        TEXT_TYPE_COPYRIGHT,
+        TEXT_TYPE_PAGE_NUMBER,
         TEXT_TYPE_MEASURE_NUMBER,
         TEXT_TYPE_MMREST_RANGE,
         TEXT_TYPE_TEMPO,
@@ -162,7 +164,8 @@ static const QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
     mu::engraving::ElementType::CAPO,
     mu::engraving::ElementType::STRING_TUNINGS,
     mu::engraving::ElementType::HARP_DIAGRAM,
-    mu::engraving::ElementType::SOUND_FLAG
+    mu::engraving::ElementType::SOUND_FLAG,
+    mu::engraving::ElementType::HAMMER_ON_PULL_OFF_TEXT
 };
 }
 

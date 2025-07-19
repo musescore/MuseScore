@@ -30,9 +30,11 @@ using namespace muse::vst;
 static const std::string module_name("vst");
 
 static const Settings::Key USER_VST_PATHS = Settings::Key(module_name, "application/paths/myVSTs");
+static const Settings::Key USED_VST_VIEW = Settings::Key(module_name, "application/vst/view");
 
 void VstConfiguration::init()
 {
+    settings()->setDefaultValue(USED_VST_VIEW, Val("newview"));
     settings()->setDefaultValue(USER_VST_PATHS, Val(""));
     settings()->valueChanged(USER_VST_PATHS).onReceive(nullptr, [this](const Val&) {
         m_userVstDirsChanged.send(userVstDirectories());
@@ -53,4 +55,14 @@ void VstConfiguration::setUserVstDirectories(const io::paths_t& paths)
 async::Channel<io::paths_t> VstConfiguration::userVstDirectoriesChanged() const
 {
     return m_userVstDirsChanged;
+}
+
+std::string VstConfiguration::usedVstView() const
+{
+    return settings()->value(USED_VST_VIEW).toString();
+}
+
+void VstConfiguration::setUsedVstView(const std::string& code)
+{
+    settings()->setSharedValue(USED_VST_VIEW, Val(code));
 }

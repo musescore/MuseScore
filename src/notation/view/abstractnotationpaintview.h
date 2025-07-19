@@ -42,6 +42,7 @@
 
 #include "notationviewinputcontroller.h"
 #include "noteinputcursor.h"
+#include "notationruler.h"
 #include "playbackcursor.h"
 #include "loopmarker.h"
 #include "continuouspanel.h"
@@ -58,6 +59,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(qreal startVerticalScrollPosition READ startVerticalScrollPosition NOTIFY verticalScrollChanged)
     Q_PROPERTY(qreal verticalScrollbarSize READ verticalScrollbarSize NOTIFY verticalScrollChanged)
 
+    Q_PROPERTY(QVariant matrix READ matrix NOTIFY matrixChanged)
     Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
 
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
@@ -91,7 +93,9 @@ public:
     Q_INVOKABLE void forceFocusIn();
 
     Q_INVOKABLE void onContextMenuIsOpenChanged(bool open);
-    Q_INVOKABLE void onElementPopupIsOpenChanged(bool open);
+    Q_INVOKABLE void onElementPopupIsOpenChanged(const PopupModelType& popupType = PopupModelType::TYPE_UNDEFINED);
+
+    Q_INVOKABLE void setPlaybackCursorItem(QQuickItem* cursor);
 
     qreal width() const override;
     qreal height() const override;
@@ -120,8 +124,10 @@ public:
     void hideContextMenu() override;
 
     void showElementPopup(const ElementType& elementType, const muse::RectF& elementRect) override;
-    void hideElementPopup() override;
+    void hideElementPopup(const ElementType& elementType = ElementType::INVALID) override;
     void toggleElementPopup(const ElementType& elementType, const muse::RectF& elementRect) override;
+
+    bool elementPopupIsOpen(const ElementType& elementType) const override;
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
@@ -132,6 +138,8 @@ public:
     qreal horizontalScrollbarSize() const;
     qreal startVerticalScrollPosition() const;
     qreal verticalScrollbarSize() const;
+
+    QVariant matrix() const;
 
     muse::PointF viewportTopLeft() const override;
     muse::RectF viewport() const;
@@ -155,6 +163,7 @@ signals:
     void verticalScrollChanged();
 
     void backgroundColorChanged(QColor color);
+    void matrixChanged();
     void viewportChanged();
     void publishModeChanged();
 
@@ -165,6 +174,9 @@ signals:
 protected:
     INotationPtr notation() const;
     void setNotation(INotationPtr notation);
+
+    NotationViewInputController* inputController() const;
+
     void setReadonly(bool readonly);
     void setMatrix(const muse::draw::Transform& matrix);
 
@@ -180,6 +192,8 @@ protected:
 
     virtual void onLoadNotation(INotationPtr notation);
     virtual void onUnloadNotation(INotationPtr notation);
+
+    virtual void initZoomAndPosition();
 
     virtual void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix, bool overrideZoomType);
 
@@ -241,6 +255,8 @@ private:
     void movePlaybackCursor(muse::midi::tick_t tick);
     bool needAdjustCanvasVerticallyWhilePlayback(const muse::RectF& cursorRect);
 
+    void onPlaybackCursorRectChanged();
+
     void updateLoopMarkers();
 
     const Page* pageByPoint(const muse::PointF& point) const;
@@ -254,9 +270,11 @@ private:
     INotationPtr m_notation;
     muse::draw::Transform m_matrix;
 
+    bool m_loadCalled = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
+    std::unique_ptr<NotationRuler> m_ruler;
     std::unique_ptr<LoopMarker> m_loopInMarker;
     std::unique_ptr<LoopMarker> m_loopOutMarker;
     std::unique_ptr<ContinuousPanel> m_continuousPanel;
@@ -264,6 +282,7 @@ private:
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;
 
+    bool m_readonly = false;
     bool m_publishMode = false;
     int m_lastAcceptedKey = -1;
     bool m_isMainView = false;
@@ -271,10 +290,12 @@ private:
     bool m_autoScrollEnabled = true;
     QTimer m_enableAutoScrollTimer;
 
-    bool m_isPopupOpen = false;
+    PopupModelType m_currentElementPopupType = PopupModelType::TYPE_UNDEFINED;
     bool m_isContextMenuOpen = false;
 
     muse::RectF m_shadowNoteRect;
+
+    QQuickItem* m_playbackCursorItem = nullptr;
 };
 }
 

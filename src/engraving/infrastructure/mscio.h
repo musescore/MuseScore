@@ -49,7 +49,7 @@ inline bool isMuseScoreFile(const std::string& suffix)
     return suffix == MSCZ || suffix == MSCX || suffix == MSCS;
 }
 
-enum class MscIoMode {
+enum class MscIoMode : unsigned char {
     Unknown = 0,
     Zip,
     Dir,

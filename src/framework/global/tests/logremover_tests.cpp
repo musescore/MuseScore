@@ -23,6 +23,8 @@
 #include <gtest/gtest.h>
 
 #include "logremover.h"
+#include "types/datetime.h"
+#include "types/string.h"
 
 namespace muse {
 class Global_LogRemoverTests : public ::testing::Test

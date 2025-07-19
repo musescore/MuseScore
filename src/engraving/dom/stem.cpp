@@ -60,15 +60,14 @@ bool Stem::up() const
     return chord() ? chord()->up() : true;
 }
 
-void Stem::setBaseLength(Millimetre baseLength)
+void Stem::setBaseLength(Spatium baseLength)
 {
-    m_baseLength = Millimetre(std::abs(baseLength.val()));
+    m_baseLength = Spatium(std::abs(baseLength.val()));
 }
 
-void Stem::spatiumChanged(double oldValue, double newValue)
+double Stem::lineWidthMag() const
 {
-    m_userLength = (m_userLength / oldValue) * newValue;
-    renderer()->layoutItem(this);
+    return absoluteFromSpatium(m_lineWidth) * chord()->intrinsicMag();
 }
 
 //! In chord coordinates
@@ -98,18 +97,18 @@ void Stem::startEditDrag(EditData& ed)
 
 void Stem::editDrag(EditData& ed)
 {
-    double yDelta = ed.delta.y();
-    m_userLength += up() ? Millimetre(-yDelta) : Millimetre(yDelta);
-    renderer()->layoutItem(this);
+    double yDelta = up() ? -ed.delta.y() : ed.delta.y();
+    m_userLength += Spatium::fromMM(yDelta, spatium());
     Chord* c = chord();
     if (c->hook()) {
-        c->hook()->move(PointF(0.0, yDelta));
+        c->hook()->move(PointF(0.0, ed.delta.y()));
     }
+    triggerLayout();
 }
 
 void Stem::reset()
 {
-    undoChangeProperty(Pid::USER_LEN, Millimetre(0.0));
+    undoChangeProperty(Pid::USER_LEN, Spatium(0.0));
     EngravingItem::reset();
 }
 
@@ -163,10 +162,10 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        setLineWidth(v.value<Millimetre>());
+        setLineWidth(v.value<Spatium>());
         break;
     case Pid::USER_LEN:
-        setUserLength(v.value<Millimetre>());
+        setUserLength(v.value<Spatium>());
         break;
     case Pid::STEM_DIRECTION:
         chord()->setStemDirection(v.value<DirectionV>());

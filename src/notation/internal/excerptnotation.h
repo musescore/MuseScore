@@ -30,7 +30,7 @@ namespace mu::notation {
 class ExcerptNotation : public IExcerptNotation, public Notation, public std::enable_shared_from_this<ExcerptNotation>
 {
 public:
-    explicit ExcerptNotation(mu::engraving::Excerpt* excerpt);
+    explicit ExcerptNotation(mu::engraving::Excerpt* excerpt, const muse::modularity::ContextPtr& iocCtx);
 
     ~ExcerptNotation() override;
 
@@ -55,7 +55,6 @@ public:
     IExcerptNotationPtr clone() const override;
 
 private:
-    void fillWithDefaultInfo();
 
     mu::engraving::Excerpt* m_excerpt = nullptr;
     bool m_inited = false;

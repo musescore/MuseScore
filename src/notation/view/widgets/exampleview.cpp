@@ -37,7 +37,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 ExampleView::ExampleView(QWidget* parent)
-    : QFrame(parent)
+    : QFrame(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     m_score = nullptr;
     setFocusPolicy(Qt::StrongFocus);
@@ -134,10 +134,6 @@ void ExampleView::changeEditElement(EngravingItem*)
 }
 
 void ExampleView::setDropRectangle(const RectF&)
-{
-}
-
-void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
 {
 }
 

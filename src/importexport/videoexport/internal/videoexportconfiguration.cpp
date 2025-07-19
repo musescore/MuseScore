@@ -21,15 +21,15 @@
  */
 #include "videoexportconfiguration.h"
 
-static ViewMode DEFAULT_VIEW_MODE = ViewMode::Auto;
-static bool DEFAULT_SHOW_PIANO = false;
-static PianoPosition DEFAULT_PIANO_POSITION = PianoPosition::Bottom;
-static std::string DEFAULT_RESOLUTION = "1080p";
-static int DEFAULT_FPS = 24;
-static double DEFAULT_LEADING_SEC = 3.0;
-static double DEFAULT_TRAILING_SECONDS = 3.0;
-
 using namespace mu::iex::videoexport;
+
+static const ViewMode DEFAULT_VIEW_MODE = ViewMode::Auto;
+static const bool DEFAULT_SHOW_PIANO = false;
+static const PianoPosition DEFAULT_PIANO_POSITION = PianoPosition::Bottom;
+static const std::string DEFAULT_RESOLUTION = "1080p";
+static const int DEFAULT_FPS = 24;
+static const double DEFAULT_LEADING_SEC = 3.0;
+static const double DEFAULT_TRAILING_SECONDS = 3.0;
 
 ViewMode VideoExportConfiguration::viewMode() const
 {

@@ -29,19 +29,21 @@
 #include "async/asyncable.h"
 #include "ui/imainwindow.h"
 #include "view/preferences/braillepreferencesmodel.h"
+#include "notation/inotationconfiguration.h"
 
 #include "dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
-class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::async::Asyncable
+class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::ui::IMainWindow> mainWindow;
-    muse::Inject<muse::dock::IDockWindowProvider> dockWindowProvider;
-    muse::Inject<IAppShellConfiguration> configuration;
-    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration;
+    muse::Inject<muse::ui::IMainWindow> mainWindow = { this };
+    muse::Inject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    muse::Inject<mu::notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
-    ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller);
+    ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller, const muse::modularity::ContextPtr& iocCtx);
 
     void init();
 

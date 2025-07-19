@@ -49,6 +49,22 @@ static const std::map<AudioResourceType, QString> RESOURCE_TYPE_MAP = {
     { AudioResourceType::MusePlugin, "muse_plugin" },
 };
 
+static void doCompatibilityConversions(AudioResourceMeta& meta)
+{
+    if (meta.type == AudioResourceType::MuseSamplerSoundPack) {
+        // MS 4.5: resource name and category have been excluded from ID
+        // Old format: category\\name\\uid
+        if (meta.id.find("\\") == std::string::npos) {
+            return;
+        }
+
+        const String& museUID = meta.attributeVal(u"museUID");
+        if (!museUID.empty()) {
+            meta.id = museUID.toStdString();
+        }
+    }
+}
+
 const AudioOutputParams& ProjectAudioSettings::masterAudioOutputParams() const
 {
     return m_masterOutputParams;
@@ -110,6 +126,7 @@ void ProjectAudioSettings::setTrackInputParams(const InstrumentTrackId& partId, 
     }
 
     m_trackInputParamsMap.insert_or_assign(partId, params);
+    m_trackInputParamsChanged.send(partId);
     m_settingsChanged.notify();
 }
 
@@ -119,8 +136,24 @@ void ProjectAudioSettings::clearTrackInputParams()
         return;
     }
 
-    m_trackInputParamsMap.clear();
+    auto it = m_trackInputParamsMap.begin();
+    while (it != m_trackInputParamsMap.end()) {
+        InstrumentTrackId id = it->first;
+        it = m_trackInputParamsMap.erase(it);
+        m_trackInputParamsChanged.send(id);
+    }
+
     m_settingsChanged.notify();
+}
+
+muse::async::Channel<mu::engraving::InstrumentTrackId> ProjectAudioSettings::trackInputParamsChanged() const
+{
+    return m_trackInputParamsChanged;
+}
+
+bool ProjectAudioSettings::trackHasExistingOutputParams(const InstrumentTrackId& partId) const
+{
+    return muse::contains(m_trackOutputParamsMap, partId);
 }
 
 const AudioOutputParams& ProjectAudioSettings::trackOutputParams(const InstrumentTrackId& partId) const
@@ -187,6 +220,7 @@ void ProjectAudioSettings::removeTrackParams(const InstrumentTrackId& partId)
     auto inSearch = m_trackInputParamsMap.find(partId);
     if (inSearch != m_trackInputParamsMap.end()) {
         m_trackInputParamsMap.erase(inSearch);
+        m_trackInputParamsChanged.send(partId);
         m_settingsChanged.notify();
     }
 
@@ -253,6 +287,8 @@ Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
         AudioInputParams inParams = inputParamsFromJson(trackObject.value("in").toObject());
         AudioOutputParams outParams = outputParamsFromJson(trackObject.value("out").toObject());
 
+        doCompatibilityConversions(inParams.resourceMeta);
+
         m_trackInputParamsMap.emplace(id, std::move(inParams));
         m_trackOutputParamsMap.emplace(id, std::move(outParams));
     }
@@ -260,6 +296,8 @@ Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
     m_activeSoundProfileName = rootObj.value("activeSoundProfile").toString();
     if (m_activeSoundProfileName.empty()) {
         m_activeSoundProfileName = playbackConfig()->defaultProfileForNewProjects();
+    } else if (m_activeSoundProfileName == playbackConfig()->compatMuseSoundsProfileName()) {
+        m_activeSoundProfileName = playbackConfig()->museSoundsProfileName();
     }
 
     return make_ret(Ret::Code::Ok);
@@ -418,7 +456,7 @@ QJsonObject ProjectAudioSettings::outputParamsToJson(const AudioOutputParams& pa
     QJsonObject result;
     result.insert("fxChain", fxChainToJson(params.fxChain));
     result.insert("balance", params.balance);
-    result.insert("volumeDb", params.volume);
+    result.insert("volumeDb", params.volume.raw());
 
     if (!params.auxSends.empty()) {
         result.insert("auxSends", auxSendsToJson(params.auxSends));

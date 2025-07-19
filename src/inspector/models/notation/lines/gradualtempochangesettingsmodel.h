@@ -29,11 +29,22 @@ class GradualTempoChangeSettingsModel : public TextLineSettingsModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(PropertyItem * snapBefore READ snapBefore CONSTANT)
+    Q_PROPERTY(PropertyItem * snapAfter READ snapAfter CONSTANT)
+
 public:
     explicit GradualTempoChangeSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
+    PropertyItem* snapBefore() const;
+    PropertyItem* snapAfter() const;
+
 private:
     void createProperties() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+    PropertyItem* m_snapBefore = nullptr;
+    PropertyItem* m_snapAfter = nullptr;
 };
 }
 

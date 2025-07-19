@@ -37,6 +37,11 @@ StyledFlickable {
         direction: NavigationPanel.Both
     }
 
+    Component.onCompleted: {
+        brailleModel.load()
+        root.visible = brailleModel.enabled
+    }
+
     BrailleModel {
         id: brailleModel
         property int keys_pressed: 0
@@ -67,10 +72,6 @@ StyledFlickable {
                     break;
                 }
             }
-        }
-
-        Component.onCompleted: {
-            root.visible = brailleModel.enabled
         }
     }
 
@@ -211,18 +212,18 @@ StyledFlickable {
         }
 
         Component.onCompleted: {
-            textInputFieldModel.init()
+            textInputModel.init()
         }
 
-        TextInputFieldModel {
-            id: textInputFieldModel
+        TextInputModel {
+            id: textInputModel
         }
 
-        Keys.onPressed: {
+        Keys.onPressed: function(event) {
             if (event.key === Qt.Key_Tab) {
                 //! NOTE: We need to handle Tab key here because https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html#tab-focus
                 //!       and we don't use qt navigation system
-                if (textInputFieldModel.handleShortcut(Qt.Key_Tab, Qt.NoModifier)) {
+                if (textInputModel.handleShortcut(Qt.Key_Tab, Qt.NoModifier)) {
                     brailleTextArea.focus = false;
                     event.accepted = true;
                     return;
@@ -271,7 +272,7 @@ StyledFlickable {
             }
         }
 
-        Keys.onReleased: {
+        Keys.onReleased: function(event) {
             if (event.key !== Qt.Key_Shift
                 && event.key !== Qt.Key_Alt
                 && event.key !== Qt.Key_Control

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,16 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_TRACK_H
-#define MUSE_AUDIO_TRACK_H
+#pragma once
 
 #include <memory>
 
 #include "global/async/asyncable.h"
 #include "global/async/channel.h"
+#include "global/async/notification.h"
 
-#include "iaudiosource.h"
-#include "audiotypes.h"
+#include "../../iaudiosource.h"
+#include "../../audiotypes.h"
 
 namespace muse::audio {
 enum TrackType {
@@ -44,9 +44,17 @@ public:
     virtual ~ITrackAudioInput() = default;
 
     virtual void seek(const msecs_t newPositionMsecs) = 0;
+    virtual void flush() = 0;
+
     virtual const AudioInputParams& inputParams() const = 0;
     virtual void applyInputParams(const AudioInputParams& requiredParams) = 0;
     virtual async::Channel<AudioInputParams> inputParamsChanged() const = 0;
+
+    virtual void prepareToPlay() = 0;
+    virtual bool readyToPlay() const = 0;
+    virtual async::Notification readyToPlayChanged() const = 0;
+
+    virtual InputProcessingProgress inputProcessingProgress() const = 0;
 };
 
 class ITrackAudioOutput : public IAudioSource
@@ -58,7 +66,7 @@ public:
     virtual void applyOutputParams(const AudioOutputParams& requiredParams) = 0;
     virtual async::Channel<AudioOutputParams> outputParamsChanged() const = 0;
 
-    virtual async::Channel<audioch_t, AudioSignalVal> audioSignalChanges() const = 0;
+    virtual AudioSignalChanges audioSignalChanges() const = 0;
 };
 
 using ITrackAudioInputPtr = std::shared_ptr<ITrackAudioInput>;
@@ -214,5 +222,3 @@ using SoundTrackPtr = std::shared_ptr<SoundTrack>;
 
 using TracksMap = std::map<TrackId, TrackPtr>;
 }
-
-#endif // MUSE_AUDIO_TRACK_H

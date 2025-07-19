@@ -36,13 +36,17 @@ void UiActionsRegister::init()
     updateShortcutsAll();
 
     // listen
-    uicontextResolver()->currentUiContextChanged().onNotify(this, [this]() {
-        updateEnabledAll();
-    });
+    if (uicontextResolver()) {
+        uicontextResolver()->currentUiContextChanged().onNotify(this, [this]() {
+            updateEnabledAll();
+        });
+    }
 
-    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
-        updateShortcutsAll();
-    });
+    if (shortcutsRegister()) {
+        shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+            updateShortcutsAll();
+        });
+    }
 }
 
 void UiActionsRegister::reg(const IUiActionsModulePtr& module)
@@ -61,6 +65,10 @@ void UiActionsRegister::reg(const IUiActionsModulePtr& module)
     updateEnabled(newActionCodeList);
     updateChecked(newActionCodeList);
     updateShortcuts(newActionCodeList);
+
+    module->actionsChanged().onReceive(this, [this](const UiActionList& actions) {
+        updateActions(actions);
+    });
 
     module->actionEnabledChanged().onReceive(this, [this](const ActionCodeList& codes) {
         updateEnabled(codes);
@@ -91,16 +99,20 @@ const UiActionsRegister::Info& UiActionsRegister::info(const ActionCode& code) c
         return it->second;
     }
 
+    // is query?
+    ActionQuery q(code);
+    if (q.isValid()) {
+        it = m_actions.find(q.uri().toString());
+        if (it != m_actions.end()) {
+            return it->second;
+        }
+    }
+
     static Info null;
     return null;
 }
 
-const UiAction& UiActionsRegister::action(const ActionCode& code) const
-{
-    return info(code).action;
-}
-
-const std::vector<UiAction> UiActionsRegister::getActions() const
+std::vector<UiAction> UiActionsRegister::actionList() const
 {
     std::vector<UiAction> allActions;
 
@@ -109,6 +121,16 @@ const std::vector<UiAction> UiActionsRegister::getActions() const
     }
 
     return allActions;
+}
+
+const UiAction& UiActionsRegister::action(const ActionCode& code) const
+{
+    return info(code).action;
+}
+
+async::Channel<UiActionList> UiActionsRegister::actionsChanged() const
+{
+    return m_actionsChanged;
 }
 
 UiActionState UiActionsRegister::actionState(const ActionCode& code) const
@@ -124,6 +146,10 @@ UiActionState UiActionsRegister::actionState(const ActionCode& code) const
 
 void UiActionsRegister::updateShortcuts(const ActionCodeList& codes)
 {
+    if (!shortcutsRegister()) {
+        return;
+    }
+
     auto screg = shortcutsRegister();
     for (const ActionCode& code : codes) {
         Info& inf = info(code);
@@ -139,11 +165,35 @@ void UiActionsRegister::updateShortcutsAll()
 {
     TRACEFUNC;
 
+    if (!shortcutsRegister()) {
+        return;
+    }
+
     auto screg = shortcutsRegister();
     for (auto it = m_actions.begin(); it != m_actions.end(); ++it) {
         Info& inf = it->second;
         inf.action.shortcuts = screg->shortcut(inf.action.code).sequences;
     }
+}
+
+void UiActionsRegister::updateActions(const UiActionList& actions)
+{
+    ActionCodeList codes;
+    for (const UiAction& act : actions) {
+        Info& inf = info(act.code);
+        IF_ASSERT_FAILED(inf.isValid()) {
+            continue;
+        }
+
+        inf.action = act;
+
+        codes.push_back(act.code);
+    }
+
+    m_actionsChanged.send(actions);
+
+    updateEnabled(codes);
+    updateChecked(codes);
 }
 
 void UiActionsRegister::doUpdateEnabled(Info& inf,
@@ -167,6 +217,10 @@ void UiActionsRegister::updateEnabled(const ActionCodeList& codes)
 {
     TRACEFUNC;
 
+    if (!uicontextResolver()) {
+        return;
+    }
+
     ActionCodeList changedList;
     auto ctxResolver = uicontextResolver();
     ui::UiContext currentCtx = ctxResolver->currentUiContext();
@@ -187,6 +241,10 @@ void UiActionsRegister::updateEnabled(const ActionCodeList& codes)
 void UiActionsRegister::updateEnabledAll()
 {
     TRACEFUNC;
+
+    if (!uicontextResolver()) {
+        return;
+    }
 
     ActionCodeList changedList;
     auto ctxResolver = uicontextResolver();

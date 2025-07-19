@@ -69,6 +69,8 @@ static mu::engraving::ElementType muTypeFromImportType(ContiniousElementsBuilder
 
     case import_t::TRILL:
         return ElementType::TRILL;
+    case import_t::HAMMER_ON_PULL_OFF:
+        return ElementType::HAMMER_ON_PULL_OFF;
 
     case import_t::HAIRPIN_CRESCENDO:
     case import_t::HAIRPIN_DIMINUENDO:
@@ -89,7 +91,7 @@ static mu::engraving::ElementType muTypeFromImportType(ContiniousElementsBuilder
 
 static String harmonicText(ContiniousElementsBuilder::ImportType type)
 {
-    static std::unordered_map<ContiniousElementsBuilder::ImportType, String> names {
+    static const std::unordered_map<ContiniousElementsBuilder::ImportType, String> names {
         { ContiniousElementsBuilder::ImportType::HARMONIC_ARTIFICIAL, u"AH" },
         { ContiniousElementsBuilder::ImportType::HARMONIC_PINCH, u"PH" },
         { ContiniousElementsBuilder::ImportType::HARMONIC_TAP, u"TH" },
@@ -97,8 +99,9 @@ static String harmonicText(ContiniousElementsBuilder::ImportType type)
         { ContiniousElementsBuilder::ImportType::HARMONIC_FEEDBACK, u"Fdbk" },
     };
 
-    if (names.find(type) != names.end()) {
-        return names[type];
+    auto it = names.find(type);
+    if (it != names.end()) {
+        return it->second;
     }
 
     LOGE() << "wrong harmonic type";
@@ -107,15 +110,16 @@ static String harmonicText(ContiniousElementsBuilder::ImportType type)
 
 static mu::engraving::VibratoType vibratoTypeFromImportType(ContiniousElementsBuilder::ImportType type)
 {
-    static std::unordered_map<ContiniousElementsBuilder::ImportType, VibratoType> names {
+    static const std::unordered_map<ContiniousElementsBuilder::ImportType, VibratoType> names {
         { ContiniousElementsBuilder::ImportType::VIBRATO_LEFT_HAND_SLIGHT, VibratoType::GUITAR_VIBRATO },
         { ContiniousElementsBuilder::ImportType::VIBRATO_LEFT_HAND_WIDE, VibratoType::GUITAR_VIBRATO_WIDE },
         { ContiniousElementsBuilder::ImportType::VIBRATO_W_TREM_BAR_SLIGHT, VibratoType::VIBRATO_SAWTOOTH },
         { ContiniousElementsBuilder::ImportType::VIBRATO_W_TREM_BAR_WIDE, VibratoType::VIBRATO_SAWTOOTH_WIDE }
     };
 
-    if (names.find(type) != names.end()) {
-        return names[type];
+    auto it = names.find(type);
+    if (it != names.end()) {
+        return it->second;
     }
 
     LOGE() << "wrong vibrato type";
@@ -124,15 +128,16 @@ static mu::engraving::VibratoType vibratoTypeFromImportType(ContiniousElementsBu
 
 static std::pair<bool, mu::engraving::OttavaType> ottavaType(ContiniousElementsBuilder::ImportType type)
 {
-    static std::unordered_map<ContiniousElementsBuilder::ImportType, mu::engraving::OttavaType> types {
+    static const std::unordered_map<ContiniousElementsBuilder::ImportType, mu::engraving::OttavaType> types {
         { ContiniousElementsBuilder::ImportType::OTTAVA_VA8,  mu::engraving::OttavaType::OTTAVA_8VA },
         { ContiniousElementsBuilder::ImportType::OTTAVA_VB8,  mu::engraving::OttavaType::OTTAVA_8VB },
         { ContiniousElementsBuilder::ImportType::OTTAVA_MA15, mu::engraving::OttavaType::OTTAVA_15MA },
         { ContiniousElementsBuilder::ImportType::OTTAVA_MB15, mu::engraving::OttavaType::OTTAVA_15MB }
     };
 
-    if (types.find(type) != types.end()) {
-        return { true, types.at(type) };
+    auto it = types.find(type);
+    if (it != types.end()) {
+        return { true, it->second };
     }
 
     return { false, mu::engraving::OttavaType::OTTAVA_8VA };
@@ -146,6 +151,7 @@ static bool shouldSplitByRests(mu::engraving::ElementType muType)
     case ElementType::TRILL:
     case ElementType::HARMONIC_MARK:
     case ElementType::VIBRATO:
+    case ElementType::HAMMER_ON_PULL_OFF:
         return true;
 
     default:
@@ -156,12 +162,12 @@ static bool shouldSplitByRests(mu::engraving::ElementType muType)
 void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementType muType, ImportType importType, bool elemExists,
                                                        sub_type_t subType)
 {
-    auto setStartCR = [](SLine* elem, ChordRest* cr) {
+    auto setStartCR = [](Spanner* elem, ChordRest* cr) {
         elem->setTick(cr->tick());
         elem->setStartElement(cr);
     };
 
-    auto setEndCR = [](SLine* elem, ChordRest* cr) {
+    auto setEndCR = [](Spanner* elem, ChordRest* cr) {
         elem->setTick2(cr->tick() + cr->actualTicks());
         elem->setEndElement(cr);
     };
@@ -214,7 +220,7 @@ void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementTyp
                 /// removing info about the Rest and updating last element's ticks
                 if (lastTypeElementsToAdd.endedOnRest) {
                     lastTypeElementsToAdd.endedOnRest = false;
-                    SLine* prevElem = lastTypeElementsToAdd.elements.back();
+                    Spanner* prevElem = lastTypeElementsToAdd.elements.back();
                     if (!prevElem) {
                         LOGE() << "error while importing";
                         return;
@@ -238,7 +244,7 @@ void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementTyp
     {
         EngravingItem* engItem = Factory::createItem(muType, m_score->dummy());
 
-        SLine* newElem = dynamic_cast<SLine*>(engItem);
+        Spanner* newElem = dynamic_cast<Spanner*>(engItem);
         IF_ASSERT_FAILED(newElem) {
             return;
         }
@@ -277,9 +283,53 @@ void ContiniousElementsBuilder::notifyUncompletedMeasure()
     }
 }
 
+static Chord* searchEndChord(Chord* startChord)
+{
+    ChordRest* nextCr = nullptr;
+    if (startChord->isGrace()) {
+        //! this case when start note is a grace note so end note can be next note in grace notes
+        //! or parent note of grace notes
+        Chord* parentGrace = static_cast<Chord*>(startChord->parent());
+
+        auto it = parentGrace->graceNotes().begin();
+        for (; it != parentGrace->graceNotes().end(); ++it) {
+            if (*it == startChord) {
+                break;
+            }
+        }
+
+        if (it == parentGrace->graceNotes().end()) {
+            nextCr = nullptr;
+        } else if (std::next(it) == parentGrace->graceNotes().end()) {
+            nextCr = parentGrace;
+        } else {
+            nextCr = *(++it);
+        }
+    } else {
+        nextCr = startChord->segment()->next1()->nextChordRest(startChord->track());
+        if (!nextCr) {
+            return nullptr;
+        }
+
+        if (nextCr->isChord() && !static_cast<Chord*>(nextCr)->graceNotes().empty()) {
+            nextCr = static_cast<Chord*>(nextCr)->graceNotes().front();
+        }
+    }
+
+    return (nextCr && nextCr->isChord()) ? toChord(nextCr) : nullptr;
+}
+
 void ContiniousElementsBuilder::addElementsToScore()
 {
-    for (SLine* elem : m_orderedAddedElements) {
+    for (auto& trackMaps: m_spannersWithoutEndElement) {
+        for (auto& typeMaps : trackMaps.second) {
+            for (Spanner* elem : typeMaps.second) {
+                elem->setEndElement(searchEndChord(elem->endChord()));
+            }
+        }
+    }
+
+    for (Spanner* elem : m_orderedAddedElements) {
         m_score->addElement(elem);
     }
 }
@@ -318,7 +368,7 @@ void ContiniousElementsBuilder::setupAddedElement(track_idx_t trackIdx, ImportTy
 {
     ElementType muType = muTypeFromImportType(importType);
 
-    SLine* lineElem = m_elementsByType[importType][trackIdx];
+    Spanner* lineElem = m_elementsByType[importType][trackIdx];
     if (!lineElem) {
         return;
     }
@@ -369,6 +419,9 @@ void ContiniousElementsBuilder::setupAddedElement(track_idx_t trackIdx, ImportTy
             toVibrato(lineElem)->setVibratoType(vibratoTypeFromImportType(importType));
         }
 
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF:
+        m_spannersWithoutEndElement[trackIdx][importType].insert(lineElem);
         break;
     default:
         break;

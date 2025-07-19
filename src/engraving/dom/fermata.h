@@ -58,7 +58,7 @@ public:
     void setSymIdAndTimeStretch(SymId id);
     FermataType fermataType() const;
     int subtype() const override;
-    TranslatableString typeUserName() const override;
+    TranslatableString subtypeUserName() const override;
 
     std::vector<LineF> dragAnchorLines() const override;
 
@@ -67,7 +67,6 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
 
-    ChordRest* chordRest() const;
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const;
     System* system() const;

@@ -190,7 +190,7 @@ QVariant ArticulationPatternItem::data(const QModelIndex& index, int /*role*/) c
 
 QHash<int, QByteArray> ArticulationPatternItem::roleNames() const
 {
-    static QHash<int, QByteArray> roles = {
+    static const QHash<int, QByteArray> roles = {
         { PatternSegmentItem, "patternSegmentItem" }
     };
 

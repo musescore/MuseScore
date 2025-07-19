@@ -67,6 +67,19 @@ using duration_t = usecs_t;
 using duration_percentage_t = percentage_t;
 using voice_layer_idx_t = uint_fast8_t;
 using staff_layer_idx_t = uint_fast16_t;
+using layer_idx_t = size_t;
+
+struct TimestampAndDuration {
+    timestamp_t timestamp = 0;
+    duration_t duration = 0;
+};
+
+static constexpr voice_layer_idx_t MAX_VOICES = 4;
+
+constexpr inline layer_idx_t makeLayerIdx(const staff_layer_idx_t staffIdx, const voice_layer_idx_t voiceIdx)
+{
+    return staffIdx * MAX_VOICES + voiceIdx;
+}
 
 constexpr inline duration_percentage_t occupiedPercentage(const timestamp_t timestamp,
                                                           const duration_t overallDuration)
@@ -120,66 +133,10 @@ struct ValuesCurve : public SharedMap<duration_percentage_t, T>
 
         return (factor + 1.f) / 2.f;
     }
-
-    void amplifyVelocity(const float requiredVelocityFraction)
-    {
-        if (RealIsEqual(requiredVelocityFraction, 0.f)) {
-            return;
-        }
-
-        ValuesCurve result;
-
-        if (RealIsEqualOrMore(requiredVelocityFraction, 0.5f)) {
-            accelerate(requiredVelocityFraction, result);
-        } else {
-            decelerate(requiredVelocityFraction, result);
-        }
-
-        *this = result;
-    }
-
-private:
-    void accelerate(const float requiredVelocityFraction, ValuesCurve& result)
-    {
-        float positionAmplifyFactor = std::pow(10.f, (requiredVelocityFraction * 2.f) - 1.f);
-
-        for (const auto& pair : *this) {
-            if (pair.first == 0 || pair.first == HUNDRED_PERCENT) {
-                result.insert({ pair.first, pair.second });
-                continue;
-            }
-
-            float newPointPositionCoef = (pair.second / static_cast<float>(pair.first)) * positionAmplifyFactor;
-            duration_percentage_t newPointPosition
-                = static_cast<duration_percentage_t>(RealRound(pair.second / newPointPositionCoef, 0));
-
-            result.insert({ newPointPosition, pair.second });
-        }
-    }
-
-    void decelerate(const float requiredVelocityFraction, ValuesCurve& result)
-    {
-        float amplifyFactor = std::pow(10.f, (requiredVelocityFraction * 2.f) - 1.f);
-
-        auto amplitudePoint = amplitudeValuePoint();
-        T oldAmplitudeLevel = amplitudePoint.second;
-        T newAmplitudeLevel = amplitudePoint.first * amplifyFactor;
-
-        float ratio = newAmplitudeLevel / static_cast<float>(oldAmplitudeLevel);
-
-        for (const auto& pair : *this) {
-            if (pair.first == amplitudePoint.first) {
-                result.insert({ pair.first, newAmplitudeLevel });
-                continue;
-            }
-
-            result.insert({ pair.first, pair.second * ratio });
-        }
-    }
 };
 
 // Pitch
-enum class PitchClass {
+enum class PitchClass : signed char {
     Undefined = -1,
     C = 0,
     C_sharp = 1,
@@ -227,7 +184,7 @@ constexpr inline size_t pitchStepsCount(const pitch_level_t pitchRange)
 // Expression
 using ArticulationFamily = mpe::SoundCategory;
 
-enum class ArticulationType {
+enum class ArticulationType : signed char {
     Undefined = -1,
 
     // single note articulations
@@ -240,6 +197,7 @@ enum class ArticulationType {
     SoftAccent,
 
     LaissezVibrer,
+    LetRing,
 
     Subito,
 
@@ -334,12 +292,13 @@ enum class ArticulationType {
     Slap,
     Pop,
 
+    ContinuousGlissando,
+
     // multi-note articulations
     Trill,
     Crescendo,
     Decrescendo,
     DiscreteGlissando,
-    ContinuousGlissando,
     Legato,
     Pedal,
     Multibend,
@@ -361,7 +320,6 @@ inline bool isMultiNoteArticulation(const ArticulationType type)
         ArticulationType::Crescendo,
         ArticulationType::Decrescendo,
         ArticulationType::DiscreteGlissando,
-        ArticulationType::ContinuousGlissando,
         ArticulationType::Legato,
         ArticulationType::Pedal,
         ArticulationType::Multibend,
@@ -390,6 +348,8 @@ inline bool isRangedArticulation(const ArticulationType type)
            || type == ArticulationType::Pedal
            || type == ArticulationType::Multibend;
 }
+
+static const String ORDINARY_PLAYING_TECHNIQUE_CODE(u"ordinary_technique");
 
 using dynamic_level_t = percentage_t;
 constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENT;
@@ -421,8 +381,6 @@ enum class DynamicType {
     fffffffff = MAX_DYNAMIC_LEVEL,
     Last
 };
-
-using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
 
 inline DynamicType approximateDynamicType(const dynamic_level_t dynamicLevel)
 {

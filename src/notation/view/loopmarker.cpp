@@ -28,8 +28,8 @@ using namespace muse;
 using namespace mu;
 using namespace mu::notation;
 
-LoopMarker::LoopMarker(LoopBoundaryType type)
-    : m_type(type)
+LoopMarker::LoopMarker(LoopBoundaryType type, const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_type(type)
 {
 }
 

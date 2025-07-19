@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -34,6 +34,7 @@
                      <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
                         <label>Violin</label>
                         <labelAbbr>Vln.</labelAbbr>
+                        <instrDef midi.instrnum="40" />
                         <clef shape="G" line="2" />
                      </staffDef>
                   </staffGrp>
@@ -82,14 +83,14 @@
                   <measure xml:id="m1yzrkkj" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <note xml:id="nx5z8ek" dur="4" pname="c" oct="5" oct.ges="6" />
-                           <note xml:id="n1p30nx0" dur="4" pname="c" oct="5" oct.ges="6" />
+                           <note xml:id="nx5z8ek" oct.ges="6" dur="4" pname="c" oct="5" />
+                           <note xml:id="n1p30nx0" oct.ges="6" dur="4" pname="c" oct="5" />
                            <note xml:id="n56bk5e" dur="4" pname="c" oct="5" />
                            <note xml:id="n12667r3" dur="4" pname="c" oct="5" />
                         </layer>
                      </staff>
-                     <octave xml:id="oggpsks" dis="8" dis.place="above" startid="#nx5z8ek" color="#0433FF" endid="#n1p30nx0" />
-                     <hairpin xml:id="h1ofeby0" form="cres" startid="#nx5z8ek" color="#0433FF" endid="#n12667r3" />
+                     <octave xml:id="oggpsks" staff="1" dis="8" dis.place="above" startid="#nx5z8ek" color="#0433FF" endid="#n1p30nx0" />
+                     <hairpin xml:id="h1ofeby0" form="cres" staff="1" startid="#nx5z8ek" color="#0433FF" endid="#n12667r3" />
                      <tie xml:id="t1cu6c7m" startid="#n12667r3" color="#0433FF" endid="#n1oshtpn" />
                   </measure>
                   <measure xml:id="m1dsz34o" n="4">

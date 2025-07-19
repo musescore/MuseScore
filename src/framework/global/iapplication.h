@@ -22,10 +22,9 @@
 #ifndef MUSE_GLOBAL_IAPPLICATION_H
 #define MUSE_GLOBAL_IAPPLICATION_H
 
-#include <string>
-
 #include "modularity/imoduleinterface.h"
 
+#include "types/string.h"
 #include "types/version.h"
 #include "modularity/ioc.h"
 
@@ -49,6 +48,7 @@ public:
     };
 
     virtual String name() const = 0;
+    virtual String title() const = 0;
 
     virtual bool unstable() const = 0;
     virtual Version version() const = 0;
@@ -69,6 +69,8 @@ public:
 #ifndef NO_QT_SUPPORT
     virtual QWindow* focusWindow() const = 0;
     virtual bool notify(QObject* object, QEvent* event) = 0;
+
+    virtual Qt::KeyboardModifiers keyboardModifiers() const = 0;
 #endif
 };
 }

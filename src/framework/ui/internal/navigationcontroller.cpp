@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <limits>
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QWindow>
 #include <QTextStream>
 
@@ -646,6 +646,29 @@ INavigationControl* NavigationController::activeControl() const
         return nullptr;
     }
     return findActive(activePanel->controls());
+}
+
+const INavigationSection* NavigationController::findSection(const std::string& sectionName) const
+{
+    const INavigationSection* sec = findByName(m_sections, QString::fromStdString(sectionName));
+    return sec;
+}
+
+const INavigationPanel* NavigationController::findPanel(const std::string& sectionName, const std::string& panelName) const
+{
+    const INavigationSection* sec = findByName(m_sections, QString::fromStdString(sectionName));
+    const INavigationPanel* pnl = sec ? findByName(sec->panels(), QString::fromStdString(panelName)) : nullptr;
+    return pnl;
+}
+
+const INavigationControl* NavigationController::findControl(const std::string& sectionName, const std::string& panelName,
+                                                            const std::string& controlName) const
+{
+    const INavigationSection* sec = findByName(m_sections, QString::fromStdString(sectionName));
+    const INavigationPanel* pnl = sec ? findByName(sec->panels(), QString::fromStdString(panelName)) : nullptr;
+    const INavigationControl* ctrl = pnl ? findByName(pnl->controls(), QString::fromStdString(controlName)) : nullptr;
+
+    return ctrl;
 }
 
 void NavigationController::setDefaultNavigationControl(INavigationControl* control)

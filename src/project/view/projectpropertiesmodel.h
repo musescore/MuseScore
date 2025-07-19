@@ -23,6 +23,11 @@
 #ifndef PROJECTPROPERTIESMODEL_H
 #define PROJECTPROPERTIESMODEL_H
 
+#include <QAbstractListModel>
+#include <QList>
+#include <QString>
+
+#include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "context/iglobalcontext.h"
 
@@ -65,12 +70,14 @@ private:
     enum Roles {
         PropertyName = Qt::UserRole + 1,
         PropertyValue,
-        IsStandardProperty
+        IsStandardProperty,
+        IsMultiLineEdit
     };
 
     struct Property {
         QString key, name, value;
         bool isStandardProperty = false;
+        bool isMultiLineEdit = false;
     };
 
     project::ProjectMeta m_projectMetaInfo;

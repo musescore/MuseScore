@@ -33,7 +33,7 @@ using namespace muse::diagnostics;
 using namespace muse::accessibility;
 
 DiagnosticAccessibleModel::DiagnosticAccessibleModel(QObject* parent)
-    : QAbstractItemModel(parent)
+    : QAbstractItemModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     m_refresher.setInterval(1000);
     m_refresher.setSingleShot(false);
@@ -58,6 +58,7 @@ void DiagnosticAccessibleModel::init()
 #endif
 }
 
+#ifdef MUSE_MODULE_ACCESSIBILITY
 static void debug_dumpItem(QAccessibleInterface* item, QTextStream& stream, QString& level)
 {
     QAccessibleInterface* prn = item->parent();
@@ -87,7 +88,6 @@ static void debug_dumpItem(QAccessibleInterface* item, QTextStream& stream, QStr
     level.chop(2);
 }
 
-#ifdef MUSE_MODULE_ACCESSIBILITY
 static void debug_dumpTree(QAccessibleInterface* item)
 {
     QString str;
@@ -316,7 +316,7 @@ QVariant DiagnosticAccessibleModel::makeData(const QAccessibleInterface* iface) 
 {
     QAccessibleInterface* prn = iface->parent();
 
-    static QMetaEnum roleEnum = QMetaEnum::fromType<QAccessible::Role>();
+    static const QMetaEnum roleEnum = QMetaEnum::fromType<QAccessible::Role>();
 
     QVariantMap itemData;
     itemData["role"] = QString(roleEnum.valueToKey(iface->role()));

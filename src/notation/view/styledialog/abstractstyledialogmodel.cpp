@@ -26,26 +26,27 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
-AbstractStyleDialogModel::AbstractStyleDialogModel(QObject* parent, const std::set<StyleId>& ids)
+AbstractStyleDialogModel::AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_ids(ids)
 {
 }
 
-void AbstractStyleDialogModel::load()
-{
-    for (StyleId mid : m_ids) {
-        m_items.insert_or_assign(mid, buildStyleItem(mid));
-    }
-
-    currentNotationStyle()->styleChanged().onNotify(this, [this]() {
-        for (auto [id, item] : m_items) {
-            item->setValue(toUiValue(id, currentNotationStyle()->styleValue(id)));
-        }
-    });
-}
-
 StyleItem* AbstractStyleDialogModel::styleItem(StyleId id) const
 {
+    if (!m_inited) {
+        for (StyleId mid : m_ids) {
+            m_items.insert_or_assign(mid, buildStyleItem(mid));
+        }
+
+        currentNotationStyle()->styleChanged().onNotify(this, [this]() {
+            for (auto [id, item] : m_items) {
+                item->setValue(toUiValue(id, currentNotationStyle()->styleValue(id)));
+            }
+        });
+
+        m_inited = true;
+    }
+
     return m_items.at(id);
 }
 

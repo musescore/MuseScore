@@ -28,7 +28,7 @@
 
 #include "../docktypes.h"
 #include "uicomponents/view/qmllistproperty.h"
-#include "ui/view/navigationpanel.h"
+#include "ui/view/navigationsection.h"
 
 namespace KDDockWidgets {
 class DockWidgetQuick;
@@ -57,12 +57,16 @@ class DockBase : public QQuickItem
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
     Q_PROPERTY(bool separatorsVisible READ separatorsVisible WRITE setSeparatorsVisible NOTIFY separatorsVisibleChanged)
 
+    Q_PROPERTY(bool isCompact READ isCompact WRITE setIsCompact NOTIFY isCompactChanged FINAL)
+    Q_PROPERTY(int compactPriorityOrder READ compactPriorityOrder WRITE setCompactPriorityOrder NOTIFY compactPriorityOrderChanged FINAL)
+
     Q_PROPERTY(bool floating READ floating NOTIFY floatingChanged)
 
     Q_PROPERTY(bool inited READ inited NOTIFY initedChanged)
 
-    Q_PROPERTY(muse::ui::NavigationPanel * contentNavigationPanel READ contentNavigationPanel
-               WRITE setContentNavigationPanel NOTIFY contentNavigationPanelChanged)
+    Q_PROPERTY(
+        muse::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
+    Q_PROPERTY(int contentNavigationPanelOrderStart READ contentNavigationPanelOrderStart NOTIFY contentNavigationPanelOrderStartChanged)
 
 public:
     DockBase(DockType type, QQuickItem* parent = nullptr);
@@ -89,6 +93,11 @@ public:
     bool closable() const;
     bool resizable() const;
     bool separatorsVisible() const;
+    bool defaultVisibility() const;
+
+    bool isCompact() const;
+    int compactPriorityOrder() const;
+    int nonCompactWidth() const;
 
     bool floating() const;
 
@@ -99,10 +108,6 @@ public:
 
     void deinit();
 
-    bool isOpen() const;
-    void open();
-    void close();
-
     void showHighlighting(const QRect& highlightingRect);
     void hideHighlighting();
 
@@ -111,9 +116,13 @@ public:
     bool isInSameFrame(const DockBase* other) const;
     void setFramePanelOrder(int order);
 
+    Q_INVOKABLE bool isOpen() const;
+    Q_INVOKABLE void open();
+    Q_INVOKABLE void close();
     Q_INVOKABLE void resize(int width, int height);
 
-    ui::NavigationPanel* contentNavigationPanel() const;
+    ui::NavigationSection* navigationSection() const;
+    int contentNavigationPanelOrderStart() const;
 
 public slots:
     void setTitle(const QString& title);
@@ -133,9 +142,13 @@ public slots:
     void setResizable(bool resizable);
     void setSeparatorsVisible(bool visible);
 
+    void setIsCompact(bool compact);
+    void setCompactPriorityOrder(int order);
+
     void setFloating(bool floating);
 
-    void setContentNavigationPanel(ui::NavigationPanel* panel);
+    void setNavigationSection(ui::NavigationSection* section);
+    void setContentNavigationPanelOrderStart(int order);
 
 signals:
     void titleChanged();
@@ -152,13 +165,16 @@ signals:
     void resizableChanged();
     void separatorsVisibleChanged();
 
+    void isCompactChanged();
+    void compactPriorityOrderChanged();
+
     void floatingChanged();
+    void frameCurrentWidgetChanged();
 
     void initedChanged();
 
-    void contentNavigationPanelChanged();
-
-    void reorderNavigationRequested();
+    void navigationSectionChanged();
+    void contentNavigationPanelOrderStartChanged();
 
 protected:
     friend class DockWindow;
@@ -169,6 +185,8 @@ protected:
     DockType type() const;
     KDDockWidgets::DockWidgetQuick* dockWidget() const;
 
+    void doSetFloating(bool floating);
+
 protected slots:
     void applySizeConstraints();
 
@@ -177,8 +195,7 @@ private slots:
     void onIsInMainWindowChanged();
 
 private:
-    void listenFloatingChanges();
-    void doSetFloating(bool floating);
+    void setUpFrameConnections();
 
     void writeProperties();
 
@@ -198,11 +215,17 @@ private:
 
     bool m_defaultVisibility = false;
 
+    bool m_isCompact = false;
+    int m_compactPriorityOrder = -1;
+    int m_nonCompactWidth = 0;
+
     bool m_floating = false;
 
     bool m_inited = false;
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
-    ui::NavigationPanel* m_contentNavigationPanel = nullptr;
+
+    ui::NavigationSection* m_navigationSection = nullptr;
+    int m_contentNavigationPanelOrderStart = 1;
 };
 
 struct DropDestination

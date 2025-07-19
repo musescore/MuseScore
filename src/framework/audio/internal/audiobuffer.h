@@ -48,32 +48,30 @@ class AudioBuffer
 public:
     AudioBuffer() = default;
 
-    void init(const audioch_t audioChannelsCount, const samples_t renderStep);
+    void init(const audioch_t audioChannelsCount);
 
-    void setSource(std::shared_ptr<IAudioSource> source);
+    void setSource(IAudioSourcePtr source);
+    void setMinSamplesPerChannelToReserve(const samples_t samplesPerChannel);
+    void setRenderStep(const samples_t renderStep);
+
     void forward();
-
     void pop(float* dest, size_t sampleCount);
-    void setMinSamplesToReserve(size_t lag);
 
     void reset();
 
+    audioch_t audioChannelCount() const;
+
 private:
-    size_t reservedFrames(const size_t writeIdx, const size_t readIdx) const;
-    size_t incrementWriteIndex(const size_t writeIdx, const samples_t samplesPerChannel);
-
-    size_t m_minSamplesToReserve = 0;
-
     alignas(cache_line_size) std::atomic<size_t> m_writeIndex = 0;
     alignas(cache_line_size) std::atomic<size_t> m_readIndex = 0;
     alignas(cache_line_size) std::vector<float> m_data;
 
     samples_t m_samplesPerChannel = 0;
     audioch_t m_audioChannelsCount = 0;
-
+    samples_t m_minSamplesToReserve = 0;
     samples_t m_renderStep = 0;
 
-    std::shared_ptr<IAudioSource> m_source = nullptr;
+    IAudioSourcePtr m_source = nullptr;
 };
 
 using AudioBufferPtr = std::shared_ptr<AudioBuffer>;

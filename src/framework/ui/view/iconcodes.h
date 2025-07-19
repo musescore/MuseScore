@@ -24,6 +24,7 @@
 #define MUSE_UI_ICONCODE_H
 
 #include <QObject>
+#include <QMetaEnum>
 
 #ifdef WARNING
 #undef WARNING
@@ -48,7 +49,7 @@ namespace muse::ui {
  *
  * @details Each enum value is a UTF-16-like address of the icon in the icon font.
  *          The current icon-font (MusescoreIcon.ttf) is located in the 'MuseScore/fonts/mscore' folder,
- *          The most actual version can be found by this persistent URL: @link https://www.dropbox.com/s/ip59ren10u69hr7/MusescoreIcon.ttf?dl=0
+ *          The most actual version can be found by this persistent URL: @link https://www.dropbox.com/s/srfpt78uy7aazz1/MusescoreIcon.ttf?dl=0
  */
 
 class IconCode
@@ -57,6 +58,7 @@ class IconCode
 
 public:
     enum class Code : char16_t {
+        SMALL_ARROW_LEFT = 0xEF0F,
         SMALL_ARROW_UP = 0xEF10,
         SMALL_ARROW_RIGHT = 0xEF11,
         SMALL_ARROW_DOWN = 0xEF12,
@@ -166,13 +168,6 @@ public:
         SPLIT_VIEW_VERTICAL = 0xEF80,
         KEY_SIGNATURE = 0xEF81,
         LINE_DASHED = 0xEF82,
-        LINE_WIDE_DASHED = 0xF434,
-
-        ZOOM_TOGGLE = 0xF437,
-        FIT_SELECTION = 0xF438,
-        FIT_PROJECT = 0xF439,
-        TRIM_AUDIO_OUTSIDE_SELECTION = 0xF43A,
-        SILENCE_AUDIO_SELECTION = 0xF43B,
 
         LINE_DOTTED = 0xEF83,
         LINE_NORMAL = 0xEF84,
@@ -220,6 +215,7 @@ public:
         NOTE_HEAD_HALF = 0xF342,
         NOTE_HEAD_WHOLE = 0xF343,
         NOTE_HEAD_BREVIS = 0xF344,
+        DOUBLE_BAR_LINE = 0xF347,
         NOTE_HEAD = 0xF42F,
         NOTE_HEAD_PARENTHESES = 0xF430,
 
@@ -328,6 +324,7 @@ public:
         PAN_SCORE = 0xF3B0,
         COUNT_IN = 0xF3B1,
 
+        INSIGHT = 0xF3B5,
         GLOBE = 0xF3B6,
         PRINT = 0xF3B7,
 
@@ -384,10 +381,20 @@ public:
         INSERT_ONE_MEASURE = 0xF432,
         STAFF_TYPE_CHANGE = 0xF433,
 
+        LINE_WIDE_DASHED = 0xF434,
+
         CLOUD = 0xF435,
+
+        ZOOM_TOGGLE = 0xF437,
+        FIT_SELECTION = 0xF438,
+        FIT_PROJECT = 0xF439,
+        SILENCE_AUDIO_SELECTION = 0xF43A,
+        TRIM_AUDIO_OUTSIDE_SELECTION = 0xF43B,
 
         WAVEFORM = 0xF43C,
         CROSS_STAFF_BEAMING = 0xF43D,
+
+        MAGNET = 0xF43E,
 
         TEMPO_CHANGE = 0xF43F,
 
@@ -395,7 +402,7 @@ public:
         LYRICS = 0xF441,
         LEARN = 0xF441,
         SPECTROGRAM = 0xF442,
-
+        SPECTROGRAM_BOX_SELECTION = 0xF443,
         BRUSH = 0xF444,
 
         PLAY_FILL = 0xF446,
@@ -417,7 +424,7 @@ public:
         CLOUD_FILL = 0xF454,
         BRAILLE = 0xF455,
 
-        ENVELOPE = 0xF45C,
+        AUTOMATION = 0xF45C,
 
         GUITAR_BEND_REGULAR = 0xF45F,
         GUITAR_PRE_BEND = 0xF460,
@@ -426,17 +433,92 @@ public:
         GUITAR_BEND_STYLE_1 = 0xF463,
         GUITAR_BEND_STYLE_FULL = 0xF464,
 
+        WORKSPACE = 0xF46B,
+
         TIE_OUTSIDE = 0xF45D,
         TIE_INSIDE = 0xF45E,
         TIE_CHORD_OUTSIDE = 0xF466,
         TIE_CHORD_INSIDE = 0xF467,
 
+        SINGLE_NOTE = 0xF46C,
+
         TRIANGLE_SYMBOL = 0xF46D,
+
+        FRETBOARD_VERTICAL = 0xF46F,
+        FRETBOARD_EXTENDED = 0xF470,
+        FRETBOARD_HORIZONTAL = 0xF471,
+        FRETBOARD_BARRE_LINE = 0xF472,
+        FRETBOARD_BARRE_SLUR = 0xF473,
+
+        BPM = 0xF474,
+        CLOCK = 0xF475,
+
+        TICK_RIGHT_ANGLE_THICK = 0xF477,
+
+        PLAYHEAD = 0xF478,
+        PLAYHEAD_FILLED = 0xF47A,
+
+        NOTE_ANCHORED_LINE = 0xF47B,
+
+        NOTE_LV = 0xF47C,
+
+        LV_OUTSIDE = 0xF47D,
+        LV_INSIDE = 0xF47E,
+        LV_CHORD_OUTSIDE = 0xF47F,
+        LV_CHORD_INSIDE = 0xF480,
+
+        PERCUSSION = 0xF479,
+
+        SYSTEM_LOCK_START = 0xF481,
+        SYSTEM_LOCK_END = 0xF482,
+
+        LINE_BREAK = 0xF483,
+        PAGE_BREAK = 0xF484,
+        SECTION_BREAK2 = 0xF485,
+        NO_BREAK = 0xF486,
+        SYSTEM_LOCK = 0xF487,
+
+        TIMESIG_STANDARD = 0XF488,
+        TIMESIG_NARROW = 0xF489,
+        TIMESIG_SANSSERIF = 0xF48A,
+
+        ALIGN_LEFT = 0xF48B,
+        ALIGN_HORIZONTAL_CENTER = 0xF48C,
+        ALIGN_RIGHT = 0xF48D,
+
+        ALIGN_TOP = 0xF48E,
+        ALIGN_VERTICAL_CENTER = 0xF48F,
+
+        FRET_FRAME = 0xF491,
+        DURATION_CURSOR = 0xF492,
+        WARNING_SMALL = 0xF493,
+
+        NOTE_ALIGN_LEFT = 0xF4A3,
+        NOTE_ALIGN_CENTER = 0xF4A4,
+        NOTE_ALIGN_RIGHT = 0xF4A5,
+
+        CHORD_BASS_ALIGN = 0xF4A6,
+        CHORD_BASS_OFFSET= 0xF4A7,
+
+        TAPPING_ENCIRCLED_T = 0xF49A,
+        TAPPING_DOT = 0xF49B,
+        TAPPING_PLUS = 0xF49C,
+        TAPPING_T = 0xF49D,
+        HP_LOWER_CASE = 0xF49E,
+        HP_UPPER_CASE = 0xF49F,
 
         NONE = 0xFFFF
     };
 
     Q_ENUM(Code)
+
+    static Code fromString(const char* key)
+    {
+        bool ok = false;
+        QMetaEnum me = QMetaEnum::fromType<Code>();
+        int val = me.keyToValue(key, &ok);
+        return ok ? static_cast<Code>(val) : Code::NONE;
+    }
 };
 
 static inline QChar iconCodeToChar(IconCode::Code code)

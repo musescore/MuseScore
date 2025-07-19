@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_GENERALPREFERENCESMODEL_H
-#define MU_APPSHELL_GENERALPREFERENCESMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -34,18 +33,11 @@
 #include "languages/ilanguagesconfiguration.h"
 #include "languages/ilanguagesservice.h"
 #include "shortcuts/ishortcutsconfiguration.h"
-#include "project/iprojectconfiguration.h"
 
 namespace mu::appshell {
-class GeneralPreferencesModel : public QObject, public muse::async::Asyncable
+class GeneralPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(muse::languages::ILanguagesConfiguration, languagesConfiguration)
-    INJECT(muse::languages::ILanguagesService, languagesService)
-    INJECT(muse::shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
 
     Q_PROPERTY(QVariantList languages READ languages NOTIFY languagesChanged)
     Q_PROPERTY(QString currentLanguageCode READ currentLanguageCode WRITE setCurrentLanguageCode NOTIFY currentLanguageCodeChanged)
@@ -58,7 +50,16 @@ class GeneralPreferencesModel : public QObject, public muse::async::Asyncable
 
     Q_PROPERTY(bool isNeedRestart READ isNeedRestart WRITE setIsNeedRestart NOTIFY isNeedRestartChanged)
 
-    Q_PROPERTY(QVariantList startupModes READ startupModes NOTIFY startupModesChanged)
+    Q_PROPERTY(QVariantList startupModes READ startupModes CONSTANT)
+    Q_PROPERTY(int currentStartupMode READ currentStartupMode WRITE setCurrentStartupMode NOTIFY currentStartupModeChanged)
+    Q_PROPERTY(QString startupScorePath READ startupScorePath WRITE setStartupScorePath NOTIFY startupScorePathChanged)
+    Q_PROPERTY(QStringList scorePathFilter READ scorePathFilter CONSTANT)
+
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
+    muse::Inject<muse::languages::ILanguagesService> languagesService = { this };
+    muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
 
 public:
     explicit GeneralPreferencesModel(QObject* parent = nullptr);
@@ -66,22 +67,20 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void checkUpdateForCurrentLanguage();
 
-    Q_INVOKABLE void setCurrentStartupMode(int modeIndex);
-    Q_INVOKABLE void setStartupScorePath(const QString& scorePath);
-
-    Q_INVOKABLE QStringList scorePathFilter() const;
-
     QVariantList languages() const;
     QString currentLanguageCode() const;
 
     QStringList keyboardLayouts() const;
     QString currentKeyboardLayout() const;
 
-    QVariantList startupModes() const;
-
     bool isOSCRemoteControl() const;
     int oscPort() const;
     bool isNeedRestart() const;
+
+    QVariantList startupModes() const;
+    int currentStartupMode() const;
+    QString startupScorePath() const;
+    QStringList scorePathFilter() const;
 
 public slots:
     void setCurrentLanguageCode(const QString& currentLanguageCode);
@@ -89,6 +88,8 @@ public slots:
     void setIsOSCRemoteControl(bool isOSCRemoteControl);
     void setOscPort(int oscPort);
     void setIsNeedRestart(bool newIsNeedRestart);
+    void setCurrentStartupMode(int mode);
+    void setStartupScorePath(const QString& scorePath);
 
 signals:
     void languagesChanged(QVariantList languages);
@@ -100,26 +101,12 @@ signals:
     void receivingUpdateForCurrentLanguage(int current, int total, QString status);
     void isNeedRestartChanged();
 
-    void startupModesChanged();
+    void currentStartupModeChanged();
+    void startupScorePathChanged();
 
 private:
     muse::Progress m_languageUpdateProgress;
 
     bool m_isNeedRestart = false;
-
-    struct StartMode
-    {
-        StartupModeType type = StartupModeType::StartWithNewScore;
-        QString title;
-        bool checked = false;
-        bool canSelectScorePath = false;
-        QString scorePath;
-    };
-
-    using StartModeList = QList<StartMode>;
-
-    StartModeList allStartupModes() const;
 };
 }
-
-#endif // MU_APPSHELL_GENERALPREFERENCESMODEL_H

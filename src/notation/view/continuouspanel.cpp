@@ -23,7 +23,7 @@
 
 #include "continuouspanel.h"
 
-#include "engraving/rendering/dev/tlayout.h"
+#include "engraving/rendering/score/tlayout.h"
 
 #include "engraving/dom/barline.h"
 #include "engraving/dom/factory.h"
@@ -48,7 +48,7 @@
 using namespace muse;
 using namespace muse::draw;
 using namespace mu::notation;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 
 static constexpr bool ACCESSIBILITY_DISABLED = false;
 
@@ -319,7 +319,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
         painter.drawTiledPixmap(bg, wallpaper, bg.topLeft() - PointF(lrint(ctx.xOffset), lrint(ctx.yOffset)));
     }
 
-    Color color = engravingConfiguration()->formattingMarksColor();
+    Color color = engravingConfiguration()->invisibleColor();
 
     // Draw measure text number
     // TODO: simplify (no Text element)
@@ -423,7 +423,10 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
             clef->setColor(color);
             scoreRender()->layoutItem(clef);
             posX += styleMM(mu::engraving::Sid::clefLeftMargin);
-            clef->drawAt(&painter, PointF(posX, clef->pos().y()));
+            const PointF clefPos = PointF(posX, clef->pos().y());
+            painter.translate(clefPos);
+            scoreRender()->drawItem(clef, &painter);
+            painter.translate(-clefPos);
             posX += widthClef;
 
             // Draw the current KeySignature
@@ -438,7 +441,10 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
             newKs->setHideNaturals(true);
             scoreRender()->layoutItem(newKs);
             posX += styleMM(mu::engraving::Sid::keysigLeftMargin);
-            newKs->drawAt(&painter, PointF(posX, 0.0));
+            const PointF ksPos = PointF(posX, 0.0);
+            painter.translate(ksPos);
+            scoreRender()->drawItem(newKs, &painter);
+            painter.translate(-ksPos);
 
             posX += widthKeySig + xPosTimeSig;
 
@@ -454,7 +460,10 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
                 newTs->setColor(color);
                 scoreRender()->layoutItem(newTs);
                 posX += styleMM(mu::engraving::Sid::timesigLeftMargin);
-                newTs->drawAt(&painter, PointF(posX, 0.0));
+                const PointF tsPos = PointF(posX, 0.0);
+                painter.translate(tsPos);
+                scoreRender()->drawItem(newTs, &painter);
+                painter.translate(-tsPos);
             }
 
             delete newKs;

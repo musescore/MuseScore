@@ -22,16 +22,13 @@
 
 #include "tremolosinglechord.h"
 
-#include "draw/types/brush.h"
-#include "draw/types/pen.h"
 #include "draw/types/transform.h"
 
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "style/style.h"
 
-#include "rendering/dev/beamtremololayout.h"
+#include "rendering/score/beamtremololayout.h"
 
 #include "beam.h"
 #include "chord.h"
@@ -75,7 +72,7 @@ double TremoloSingleChord::chordMag() const
 
 double TremoloSingleChord::minHeight() const
 {
-    const double sw = style().styleS(Sid::tremoloStrokeWidth).val() * chordMag();
+    const double sw = style().styleS(Sid::tremoloLineWidth).val() * chordMag();
     const double td = style().styleS(Sid::tremoloDistance).val() * chordMag();
     return (lines() - 1) * td + sw;
 }
@@ -167,7 +164,7 @@ PainterPath TremoloSingleChord::basePath(double /*stretch*/) const
     const double sp = spatium() * chordMag();
 
     double w2  = sp * style().styleS(Sid::tremoloWidth).val() * .5;
-    double lw  = sp * style().styleS(Sid::tremoloStrokeWidth).val();
+    double lw  = sp * style().styleS(Sid::tremoloLineWidth).val();
     double td  = sp * style().styleS(Sid::tremoloDistance).val();
 
     PainterPath ppath;
@@ -266,31 +263,6 @@ Fraction TremoloSingleChord::tremoloLen() const
 void TremoloSingleChord::triggerLayout() const
 {
     EngravingItem::triggerLayout();
-}
-
-bool TremoloSingleChord::needStartEditingAfterSelecting() const
-{
-    return false;
-}
-
-int TremoloSingleChord::gripsCount() const
-{
-    return 0;
-}
-
-Grip TremoloSingleChord::initialEditModeGrip() const
-{
-    return Grip::NO_GRIP;
-}
-
-Grip TremoloSingleChord::defaultGrip() const
-{
-    return Grip::NO_GRIP;
-}
-
-std::vector<PointF> TremoloSingleChord::gripsPositions(const EditData&) const
-{
-    return std::vector<PointF>();
 }
 
 void TremoloSingleChord::endEdit(EditData&)

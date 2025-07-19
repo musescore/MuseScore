@@ -198,7 +198,7 @@ Ret FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
     return ret;
 }
 
-Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
+Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data)
 {
     Ret ret = muse::make_ok();
 
@@ -226,6 +226,23 @@ Ret FileSystem::makePath(const io::path_t& path) const
     }
 
     return make_ret(Err::NoError);
+}
+
+Ret FileSystem::makeLink(const io::path_t& targetPath, const path_t& linkPath) const
+{
+    // On Windows, if targetPath points to a directory rather than a file, the
+    // path must be normalized otherwise the shortcut file won't work. On other
+    // platforms, normalization makes symlink resolution slightly faster.
+    QString target = QDir::cleanPath(targetPath.toQString());
+    QString link = linkPath.toQString();
+
+#if defined(Q_OS_WIN)
+    // Also required to make the shortcut file valid...
+    target = QDir::toNativeSeparators(target);
+    link += ".lnk";
+#endif
+
+    return QFile().link(target, link) ? make_ret(Err::NoError) : make_ret(Err::FSMakingError);
 }
 
 EntryType FileSystem::entryType(const io::path_t& path) const

@@ -31,7 +31,7 @@ source $BUILD_TOOLS/environment.sh
 
 # =========== Build =======================
 
-bash ./buildscripts/ci/tools/make_build_mode_env.sh -m devel_build
+bash ./buildscripts/ci/tools/make_build_mode_env.sh -m devel
 bash ./buildscripts/ci/tools/make_build_number.sh
 BUILD_MODE=$(cat ./$ARTIFACTS_DIR/env/build_mode.env)
 BUILD_NUMBER=$(cat ./$ARTIFACTS_DIR/env/build_number.env)
@@ -50,38 +50,9 @@ bash ./buildscripts/ci/tools/make_branch_env.sh
 
 # =========== Pack ==========================
 
-# Constants
-HERE="$(cd "$(dirname "$0")" && pwd)"
-ORIGIN_DIR=${PWD}
-
 INSTALL_DIR="$(cat $BUILD_DIR/PREFIX.txt)" # MuseScore was installed here
-APP_IMAGE_NAME=MuseScoreTemporary
-ARTIFACT_NAME=app
+APP_IMAGE_NAME=MuseScore-Studio-vtest
 
 # Make AppImage
 bash ./buildscripts/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage"
 mv "${INSTALL_DIR}/../${APP_IMAGE_NAME}.AppImage" "${ARTIFACTS_DIR}/"
-
-cd $ARTIFACTS_DIR
-
-# Unpack AppImage
-APP_DIR="./$ARTIFACT_NAME"
-rm -rf "$APP_DIR"
-rm -rf squashfs-root
-chmod +x "${APP_IMAGE_NAME}.AppImage"
-"./${APP_IMAGE_NAME}.AppImage" --appimage-extract
-
-mv squashfs-root "$APP_DIR"
-
-# Add run file
-cp $HERE/run.in $APP_DIR/run
-chmod 775 $APP_DIR/run
-
-# # Pack to 7z
-# 7z a "$ARTIFACT_NAME.7z" "$APP_DIR/*"
-# chmod a+rw "$ARTIFACT_NAME.7z"
-
-# Clean up
-rm -f "${APP_IMAGE_NAME}.AppImage"
-
-cd $ORIGIN_DIR

@@ -33,6 +33,30 @@ namespace muse::draw {
 class Font
 {
 public:
+    struct FontFamily {
+        FontFamily() = default;
+        FontFamily(const char16_t* id)
+            : m_id(id) {}
+
+        FontFamily(const std::string& id)
+            : m_id(String::fromStdString(id)) {}
+
+        FontFamily(const String& id)
+            : m_id(id) {}
+
+        inline bool valid() const { return !m_id.empty(); }
+        const String& id() const { return m_id; }
+
+        //! NOTE: Case insensitive comparison
+        inline bool operator==(const FontFamily& o) const
+        {
+            return m_id.toLower() == o.id().toLower();
+        }
+
+    private:
+        String m_id;
+    };
+
     enum class Type {
         Undefined = 0,
         Unknown,
@@ -45,7 +69,7 @@ public:
     };
 
     Font() = default;
-    Font(const String& family, Type type);
+    Font(const FontFamily& family, Type type);
 
     enum class Style {
         //Undefined   = -1,
@@ -75,8 +99,8 @@ public:
         Black    = 87    // 900
     };
 
-    void setFamily(const String& family, Type type);
-    String family() const;
+    void setFamily(const FontFamily& family, Type type);
+    FontFamily family() const;
     Type type() const;
 
     double pointSizeF() const;
@@ -115,7 +139,7 @@ public:
 
 private:
 
-    String m_family;
+    FontFamily m_family;
     Type m_type = Type::Undefined;
     double m_pointSizeF = -1.0;
     int m_pixelSize = -1;

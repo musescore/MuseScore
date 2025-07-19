@@ -65,7 +65,7 @@ ListItemBlank {
 
     isSelected: subMenuShowed || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.highlight
 
-    navigation.name: Boolean(itemPrv.id) ? itemPrv.id : titleLabel.text
+    navigation.name: itemPrv.id ?? titleLabel.text
     navigation.accessible.role: MUAccessible.MenuItem
     navigation.accessible.name: {
         var text = itemPrv.title
@@ -95,13 +95,29 @@ ListItemBlank {
         return text
     }
 
+    // https://github.com/musescore/MuseScore/pull/24644#issuecomment-2356235871
+    // Since https://github.com/qt/qtdeclarative/commit/499828b855d125ac236917f6ed01d8f1e7d88505
+    // (cherry-picked to Qt 6.2.5 as https://github.com/qt/qtdeclarative/commit/caf81fefbe3f5b8e2fb7892b40b4748db3230046)
+    // hover events are not propagated anymore between siblings, only to ancestors.
+    // For us, that means that they are not propagated anymore from the StyledTextLabel
+    // with `textFormat: Text.RichText` (which accepts hover events) to the MouseArea,
+    // which is not an ancestor of the StyledTextLabel.
+    // The fact that the StyledTextLabel accepts hover events cannot be changed from
+    // QML (there is no way to call `QQuickItem::setAcceptHoverEvents(false)`).
+    // Making the MouseArea an ancestor of the StyledTextLabel is not possible either,
+    // because the MouseArea is defined far away in FocusableControl (from which
+    // ListItemBlank inherits).
+    // As a workaround, we ensure that the MouseArea is on top of the StyledTextLabel,
+    // so that it takes precedence.
+    mouseArea.z: 1000
+
     QtObject {
         id: itemPrv
 
-        property string id: Boolean(modelData) && Boolean(modelData.id) ? modelData.id : ""
+        property string id: root.modelData?.id ?? ""
 
-        property string title: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
-        property string titleWithMnemonicUnderline: Boolean(modelData) && Boolean(modelData.titleWithMnemonicUnderline) ? modelData.titleWithMnemonicUnderline : title
+        property string title: root.modelData?.title ?? ""
+        property string titleWithMnemonicUnderline: modelData?.titleWithMnemonicUnderline ?? title
 
         property bool hasShortcuts: Boolean(modelData) && Boolean(modelData.shortcuts)
         property string shortcuts: hasShortcuts ? modelData.shortcuts : ""
@@ -109,8 +125,8 @@ ListItemBlank {
         property bool isCheckable: Boolean(modelData) && Boolean(modelData.checkable)
         property bool isChecked: isCheckable && Boolean(modelData.checked)
 
-        property bool isSelectable: Boolean(modelData) && Boolean(modelData.selectable)
-        property bool isSelected: isSelectable && Boolean(modelData.selected)
+        property bool isSelectable: Boolean(root.modelData?.selectable)
+        property bool isSelected: isSelectable && Boolean(root.modelData?.selected)
 
         property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon) && modelData.icon !== IconCode.NONE
     }
@@ -120,12 +136,12 @@ ListItemBlank {
 
         result += rowLayout.anchors.leftMargin
         if (primaryIconLabel.visible) {
-            result += Math.ceil(primaryIconLabel.width)
+            result += Math.ceil(primaryIconLabel.Layout.preferredWidth)
             result += rowLayout.spacing
         }
 
         if (secondaryIconLabel.visible) {
-            result += Math.ceil(secondaryIconLabel.width)
+            result += Math.ceil(secondaryIconLabel.Layout.preferredWidth)
             result += rowLayout.spacing
         }
 
@@ -167,10 +183,10 @@ ListItemBlank {
         StyledIconLabel {
             id: primaryIconLabel
             Layout.alignment: Qt.AlignLeft
-            width: 16
+            Layout.preferredWidth: 16
             iconCode: {
                 if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && itemPrv.hasIcon) {
-                    return itemPrv.hasIcon ? modelData.icon : IconCode.NONE
+                    return root.modelData?.icon ?? IconCode.NONE
                 } else if (itemPrv.isCheckable) {
                     return itemPrv.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
                 } else  if (itemPrv.isSelectable) {
@@ -185,8 +201,9 @@ ListItemBlank {
         StyledIconLabel {
             id: secondaryIconLabel
             Layout.alignment: Qt.AlignLeft
-            width: 16
-            iconCode: itemPrv.hasIcon ? modelData.icon : IconCode.NONE
+            Layout.preferredWidth: 16
+            color: root.modelData?.iconColor || ui.theme.fontPrimaryColor
+            iconCode: root.modelData?.icon ?? IconCode.NONE
             visible: root.iconAndCheckMarkMode === StyledMenuItem.ShowBoth
         }
 
@@ -198,11 +215,6 @@ ListItemBlank {
             text: itemPrv.titleWithMnemonicUnderline
 
             textFormat: Text.RichText
-            //! If the rich text format is set, then the component intercepts the hover state
-            //  The hover state is required to open a submenu(see onHovered)
-            //  So, let's turn off the mouse hovering over the component
-            enabled: false
-            opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
         }
 
         StyledTextLabel {

@@ -324,7 +324,7 @@ QItemSelection  QQuickTreeModelAdaptor1::selectionForRowRange(const QModelIndex 
 
     QItemSelection sel;
     sel.reserve(ranges.count());
-    for (const MIPair &pair : qAsConst(ranges))
+    for (const MIPair &pair : std::as_const(ranges))
        sel.append(QItemSelectionRange(pair.first, pair.second));
 
     return sel;

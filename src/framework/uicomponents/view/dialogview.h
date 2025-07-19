@@ -26,6 +26,7 @@
 #include <QEventLoop>
 
 #include "popupview.h"
+
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
 
@@ -34,7 +35,7 @@ class DialogView : public PopupView
 {
     Q_OBJECT
 
-    Inject<muse::IApplication> application = { this };
+    Inject<IApplication> application;
 
 public:
     explicit DialogView(QQuickItem* parent = nullptr);

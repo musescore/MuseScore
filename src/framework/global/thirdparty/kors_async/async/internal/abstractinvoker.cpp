@@ -24,6 +24,7 @@ SOFTWARE.
 #include "abstractinvoker.h"
 
 #include <cassert>
+#include <iostream>
 
 #include "queuedinvoker.h"
 
@@ -39,6 +40,8 @@ AbstractInvoker::~AbstractInvoker()
     for (QInvoker* qi : m_qInvokers) {
         qi->invalidate();
     }
+
+    m_qInvokers.clear();
 }
 
 void AbstractInvoker::invoke(int type)
@@ -147,9 +150,11 @@ void AbstractInvoker::removeCallBack(int type, Asyncable* receiver)
 
     {
         std::lock_guard<std::mutex> lock(m_qInvokersMutex);
-        for (QInvoker* qi : m_qInvokers) {
+        for (auto iter = m_qInvokers.begin(); iter != m_qInvokers.end(); ++iter) {
+            QInvoker* qi = *iter;
             if (qi->call.call == c.call) {
                 qi->invalidate();
+                m_qInvokers.erase(iter);
                 break;
             }
         }

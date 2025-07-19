@@ -32,32 +32,41 @@ using namespace muse::ui;
 using namespace muse::actions;
 using namespace muse::extensions;
 
-static UiAction MANAGE_ACTION = UiAction(
-    "manage-plugins",
-    ui::UiCtxAny,
-    shortcuts::CTX_ANY,
-    TranslatableString("action", "&Manage plugins…"),
-    TranslatableString("action", "Manage plugins…")
-    );
+static const UiActionList STATIC_ACTIONS = {
+    UiAction("manage-plugins",
+             ui::UiCtxAny,
+             shortcuts::CTX_ANY,
+             TranslatableString("action", "&Manage plugins…"),
+             TranslatableString("action", "Manage plugins…")
+             ),
+    UiAction("extensions-show-apidump",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Show API dump")
+             ),
+};
 
 const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
 {
     UiActionList result;
+    ManifestList manifests = provider()->manifestList();
+    result.reserve(manifests.size() + STATIC_ACTIONS.size());
 
-    for (const Manifest& m : provider()->manifestList()) {
+    for (const Manifest& m : manifests) {
         for (const Action& a : m.actions) {
             UiAction action;
-            action.code = makeUriQuery(m.uri, a.code).toString();
-            action.uiCtx = m.requiresProject ? ui::UiCtxProjectOpened : ui::UiCtxAny;
-            action.scCtx = m.requiresProject ? shortcuts::CTX_PROJECT_OPENED : shortcuts::CTX_ANY;
+            action.code = makeActionCode(m.uri, a.code);
+            action.uiCtx = toUiContext(a.uiCtx);
+            action.scCtx = toScContext(a.uiCtx);
             action.description = TranslatableString("extensions", "Run plugin %1 (%2)").arg(m.title, a.title);
             action.title = action.description;
+            action.iconCode = a.icon;
 
             result.push_back(std::move(action));
         }
     }
 
-    result.push_back(MANAGE_ACTION);
+    result.insert(result.end(), STATIC_ACTIONS.begin(), STATIC_ACTIONS.end());
 
     m_actions = result;
 

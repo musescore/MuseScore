@@ -68,6 +68,32 @@ public:
         Environment::setPostInit(postInit);
         Environment::setDeInit(deInit);
     }
+
+    SuiteEnvironment() = default;
+
+    SuiteEnvironment& setDependencyModules(const Environment::Modules& dependencyModules)
+    {
+        Environment::setDependency(dependencyModules);
+        return *this;
+    }
+
+    SuiteEnvironment& setPreInit(const Environment::PreInit& preInit)
+    {
+        Environment::setPreInit(preInit);
+        return *this;
+    }
+
+    SuiteEnvironment& setPostInit(const Environment::PostInit& postInit)
+    {
+        Environment::setPostInit(postInit);
+        return *this;
+    }
+
+    SuiteEnvironment& setDeInit(const Environment::DeInit& deInit)
+    {
+        Environment::setDeInit(deInit);
+        return *this;
+    }
 };
 }
 

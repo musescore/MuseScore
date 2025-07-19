@@ -31,12 +31,12 @@
 #include "draw/types/geometry.h"
 
 namespace mu::notation {
-class LoopMarker
+class LoopMarker : public muse::Injectable
 {
-    INJECT(INotationConfiguration, configuration)
+    muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
-    LoopMarker(LoopBoundaryType type);
+    LoopMarker(LoopBoundaryType type, const muse::modularity::ContextPtr& iocCtx);
 
     void setNotation(INotationPtr notation);
     void setVisible(bool visible);

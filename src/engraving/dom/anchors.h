@@ -27,27 +27,59 @@
 #include "score.h"
 
 namespace mu::engraving {
+class Factory;
+
 class EditTimeTickAnchors
 {
 public:
-    static void updateAnchors(const EngravingItem* item, Fraction absTick, track_idx_t track);
-
+    static void updateAnchors(const EngravingItem* item);
+    static void updateAnchors(Measure* measure, staff_idx_t staffIdx);
     static TimeTickAnchor* createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx);
+    static void updateLayout(Measure* measure);
+};
+
+class MoveElementAnchors
+{
+public:
+    static void moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod);
+    static void moveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
+    static void checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element);
+
+    static void moveElementAnchorsOnDrag(EngravingItem* element, EditData& ed);
 
 private:
-    static void updateAnchors(Measure* measure, staff_idx_t staffIdx);
+    static bool canAnchorToEndOfPrevious(const EngravingItem* element);
+    static void moveSegment(EngravingItem* element, bool forward);
+    static Segment* getNewSegment(EngravingItem* element, Segment* curSeg, bool forward);
+
+    static void doMoveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
+    static void doMoveSegment(FiguredBass* element, Segment* newSeg, Fraction tickDiff);
+    static void doMoveSegment(Harmony* element, Segment* newSeg, Fraction tickDiff);
+    static void doMoveSegment(FretDiagram* element, Segment* newSeg, Fraction tickDiff);
+
+    static void moveSnappedItems(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
+    static void rebaseOffsetOnMoveSegment(EngravingItem* element, const PointF& curOffset, Segment* newSeg, Segment* oldSeg);
 };
 
 class TimeTickAnchor : public EngravingItem
 {
-public:
     TimeTickAnchor(Segment* parent);
+    friend class Factory;
 
+public:
     Segment* segment() const { return toSegment(parentItem()); }
 
     TimeTickAnchor* clone() const override { return new TimeTickAnchor(*this); }
 
-    bool isDraw() const;
+    enum class DrawRegion : unsigned char {
+        OUT_OF_RANGE,
+        EXTENDED_REGION,
+        MAIN_REGION
+    };
+
+    DrawRegion drawRegion() const;
+
+    voice_idx_t voiceIdx() const;
 
     struct LayoutData : public EngravingItem::LayoutData {
         bool darker() const { return m_darker; }

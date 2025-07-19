@@ -27,11 +27,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Tests the --gtest_repeat=number flag.
 
 #include <stdlib.h>
+
 #include <iostream>
+
 #include "gtest/gtest.h"
 #include "src/gtest-internal-inl.h"
 
@@ -39,19 +40,18 @@ namespace {
 
 // We need this when we are testing Google Test itself and therefore
 // cannot use Google Test assertions.
-#define GTEST_CHECK_INT_EQ_(expected, actual) \
-  do {\
-    const int expected_val = (expected);\
-    const int actual_val = (actual);\
-    if (::testing::internal::IsTrue(expected_val != actual_val)) {\
-      ::std::cout << "Value of: " #actual "\n"\
-                  << "  Actual: " << actual_val << "\n"\
-                  << "Expected: " #expected "\n"\
-                  << "Which is: " << expected_val << "\n";\
-      ::testing::internal::posix::Abort();\
-    }\
+#define GTEST_CHECK_INT_EQ_(expected, actual)                      \
+  do {                                                             \
+    const int expected_val = (expected);                           \
+    const int actual_val = (actual);                               \
+    if (::testing::internal::IsTrue(expected_val != actual_val)) { \
+      ::std::cout << "Value of: " #actual "\n"                     \
+                  << "  Actual: " << actual_val << "\n"            \
+                  << "Expected: " #expected "\n"                   \
+                  << "Which is: " << expected_val << "\n";         \
+      ::testing::internal::posix::Abort();                         \
+    }                                                              \
   } while (::testing::internal::AlwaysFalse())
-
 
 // Used for verifying that global environment set-up and tear-down are
 // inside the --gtest_repeat loop.
@@ -61,7 +61,6 @@ int g_environment_tear_down_count = 0;
 
 class MyEnvironment : public testing::Environment {
  public:
-  MyEnvironment() {}
   void SetUp() override { g_environment_set_up_count++; }
   void TearDown() override { g_environment_tear_down_count++; }
 };
@@ -79,9 +78,7 @@ TEST(FooTest, ShouldFail) {
 
 int g_should_pass_count = 0;
 
-TEST(FooTest, ShouldPass) {
-  g_should_pass_count++;
-}
+TEST(FooTest, ShouldPass) { g_should_pass_count++; }
 
 // A test that contains a thread-safe death test and a fast death
 // test.  It should pass.
@@ -108,8 +105,7 @@ TEST_P(MyParamTest, ShouldPass) {
   GTEST_CHECK_INT_EQ_(g_param_test_count % kNumberOfParamTests, GetParam());
   g_param_test_count++;
 }
-INSTANTIATE_TEST_SUITE_P(MyParamSequence,
-                         MyParamTest,
+INSTANTIATE_TEST_SUITE_P(MyParamSequence, MyParamTest,
                          testing::Range(0, kNumberOfParamTests));
 
 // Resets the count for each test.
@@ -120,6 +116,7 @@ void ResetCounts() {
   g_should_pass_count = 0;
   g_death_test_count = 0;
   g_param_test_count = 0;
+  testing::AddGlobalTestEnvironment(new MyEnvironment);
 }
 
 // Checks that the count for each test is expected.
@@ -142,6 +139,7 @@ void TestRepeatUnspecified() {
 // Tests the behavior of Google Test when --gtest_repeat has the given value.
 void TestRepeat(int repeat) {
   GTEST_FLAG_SET(repeat, repeat);
+  GTEST_FLAG_SET(recreate_environments_when_repeating, true);
 
   ResetCounts();
   GTEST_CHECK_INT_EQ_(repeat > 0 ? 1 : 0, RUN_ALL_TESTS());
@@ -152,6 +150,7 @@ void TestRepeat(int repeat) {
 // set of tests.
 void TestRepeatWithEmptyFilter(int repeat) {
   GTEST_FLAG_SET(repeat, repeat);
+  GTEST_FLAG_SET(recreate_environments_when_repeating, true);
   GTEST_FLAG_SET(filter, "None");
 
   ResetCounts();
@@ -163,6 +162,7 @@ void TestRepeatWithEmptyFilter(int repeat) {
 // successful tests.
 void TestRepeatWithFilterForSuccessfulTests(int repeat) {
   GTEST_FLAG_SET(repeat, repeat);
+  GTEST_FLAG_SET(recreate_environments_when_repeating, true);
   GTEST_FLAG_SET(filter, "*-*ShouldFail");
 
   ResetCounts();
@@ -179,6 +179,7 @@ void TestRepeatWithFilterForSuccessfulTests(int repeat) {
 // failed tests.
 void TestRepeatWithFilterForFailedTests(int repeat) {
   GTEST_FLAG_SET(repeat, repeat);
+  GTEST_FLAG_SET(recreate_environments_when_repeating, true);
   GTEST_FLAG_SET(filter, "*ShouldFail");
 
   ResetCounts();
@@ -195,8 +196,6 @@ void TestRepeatWithFilterForFailedTests(int repeat) {
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
-
-  testing::AddGlobalTestEnvironment(new MyEnvironment);
 
   TestRepeatUnspecified();
   TestRepeat(0);

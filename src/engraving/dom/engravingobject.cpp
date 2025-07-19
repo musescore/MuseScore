@@ -68,17 +68,6 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
         m_score = static_cast<Score*>(this);
     }
 
-    // gen EID
-    if (type != ElementType::SCORE) {
-        Score* s = score();
-        if (s) {
-            MasterScore* ms = s->masterScore();
-            if (ms) {
-                m_eid = ms->getEID()->newEID(m_type);
-            }
-        }
-    }
-
     // reg to debug
     if (type != ElementType::SCORE) {
         if (m_score && m_score->elementsProvider()) {
@@ -103,17 +92,6 @@ EngravingObject::EngravingObject(const EngravingObject& se)
     }
     m_links = 0;
 
-    // gen EID
-    if (m_type != ElementType::SCORE) {
-        Score* s = score();
-        if (s) {
-            MasterScore* ms = s->masterScore();
-            if (ms) {
-                m_eid = ms->getEID()->newEID(m_type);
-            }
-        }
-    }
-
     // reg to debug
     if (m_type != ElementType::SCORE) {
         if (m_score && m_score->elementsProvider()) {
@@ -137,7 +115,7 @@ EngravingObject::~EngravingObject()
         bool canMoveToDummy = !this->isType(ElementType::ROOT_ITEM)
                               && !this->isType(ElementType::DUMMY)
                               && !this->isType(ElementType::SCORE)
-                              && score()->dummy() != nullptr;
+                              && score()->rootItem() && score()->rootItem()->dummy();
 
         EngravingObjectList children = m_children;
         for (EngravingObject* c : children) {
@@ -510,6 +488,10 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
                 toEngravingItem(this)->manageExclusionFromParts(v.toBool());
             }
         }
+    } else if (id == Pid::VOICE_ASSIGNMENT) {
+        if (v.value<VoiceAssignment>() != VoiceAssignment::CURRENT_VOICE_ONLY) {
+            changeProperties(this, Pid::VOICE, 0, ps);
+        }
     }
     changeProperties(this, id, v, ps);
     if (id != Pid::GENERATED) {
@@ -524,7 +506,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
 void EngravingObject::undoPushProperty(Pid id)
 {
     PropertyValue val = getProperty(id);
-    score()->undoStack()->push1(new ChangeProperty(this, id, val));
+    score()->undoStack()->pushWithoutPerforming(new ChangeProperty(this, id, val));
 }
 
 //---------------------------------------------------------
@@ -551,11 +533,7 @@ void EngravingObject::linkTo(EngravingObject* element)
         setLinks(element->m_links);
         assert(m_links->contains(element));
     } else {
-        if (isStaff()) {
-            setLinks(new LinkedObjects(score(), -1));       // don’t use lid
-        } else {
-            setLinks(new LinkedObjects(score()));
-        }
+        setLinks(new LinkedObjects());
         m_links->push_back(element);
         element->setLinks(m_links);
     }
@@ -715,12 +693,27 @@ const char* EngravingObject::typeName() const
 
 TranslatableString EngravingObject::typeUserName() const
 {
-    return TConv::userName(type());
+    return TConv::capitalizedUserName(type());
 }
 
 String EngravingObject::translatedTypeUserName() const
 {
     return typeUserName().translated();
+}
+
+EID EngravingObject::eid() const
+{
+    return masterScore()->eidRegister()->EIDFromItem(this);
+}
+
+void EngravingObject::setEID(EID id) const
+{
+    masterScore()->eidRegister()->registerItemEID(id, this);
+}
+
+EID EngravingObject::assignNewEID() const
+{
+    return masterScore()->eidRegister()->newEIDForItem(this);
 }
 
 //---------------------------------------------------------
@@ -764,7 +757,8 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::MMREST_RANGE
            || type() == ElementType::STICKING
            || type() == ElementType::HARP_DIAGRAM
-           || type() == ElementType::GUITAR_BEND_TEXT;
+           || type() == ElementType::GUITAR_BEND_TEXT
+           || type() == ElementType::HAMMER_ON_PULL_OFF_TEXT;
 }
 
 //---------------------------------------------------------

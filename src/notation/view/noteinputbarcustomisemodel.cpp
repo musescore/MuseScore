@@ -26,7 +26,6 @@
 #include "translation.h"
 
 #include "internal/notationuiactions.h"
-#include "workspace/workspacetypes.h"
 
 #include "log.h"
 
@@ -39,7 +38,7 @@ using namespace muse::actions;
 static const QString NOTE_INPUT_TOOLBAR_NAME("noteInput");
 
 NoteInputBarCustomiseModel::NoteInputBarCustomiseModel(QObject* parent)
-    : SelectableItemListModel(parent)
+    : SelectableItemListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -52,7 +51,7 @@ void NoteInputBarCustomiseModel::load()
     ToolConfig toolConfig = uiConfiguration()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
 
     for (const ToolConfig::Item& item : toolConfig.items) {
-        UiAction action = actionsRegister()->action(item.action);
+        const UiAction& action = actionsRegister()->action(item.action);
         items << makeItem(action, item.show);
     }
 

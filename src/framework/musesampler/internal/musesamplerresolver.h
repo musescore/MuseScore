@@ -30,13 +30,22 @@
 #include "imusesamplerconfiguration.h"
 #include "imusesamplerinfo.h"
 
+#include "async/notification.h"
+
 namespace muse::musesampler {
-class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo
+class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Injectable
 {
-    INJECT(IMuseSamplerConfiguration, configuration)
+    Inject<IMuseSamplerConfiguration> configuration = { this };
 
 public:
+
+    MuseSamplerResolver(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
+
+    bool reloadAllInstruments();
+    void processOnlineSounds();
 
     muse::audio::synth::ISynthesizerPtr resolveSynth(const muse::audio::TrackId trackId,
                                                      const muse::audio::AudioInputParams& params) const override;
@@ -55,13 +64,12 @@ public:
     std::vector<Instrument> instruments() const override;
 
 private:
-    bool doInit(const io::path_t& libPath);
-
     void loadSoundPresetAttributes(muse::audio::SoundPresetAttributes& attributes, int instrumentId, const char* presetCode) const;
 
     String buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const;
 
     MuseSamplerLibHandlerPtr m_libHandler = nullptr;
+    async::Notification m_processOnlineSoundsRequested;
 };
 }
 

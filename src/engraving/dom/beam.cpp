@@ -23,13 +23,10 @@
 #include "beam.h"
 
 #include <cmath>
-#include <set>
 #include <algorithm>
 
 #include "containers.h"
 #include "realfn.h"
-
-#include "draw/types/brush.h"
 
 #include "actionicon.h"
 #include "chord.h"
@@ -74,13 +71,6 @@ Beam::Beam(const Beam& b)
 {
     m_elements     = b.m_elements;
     m_id           = b.m_id;
-    for (const BeamSegment* bs : b.m_beamSegments) {
-        m_beamSegments.push_back(new BeamSegment(*bs));
-    }
-    m_direction       = b.m_direction;
-    m_up              = b.m_up;
-    m_userModified[0] = b.m_userModified[0];
-    m_userModified[1] = b.m_userModified[1];
     m_growLeft           = b.m_growLeft;
     m_growRight           = b.m_growRight;
     m_beamDist        = b.m_beamDist;
@@ -220,6 +210,33 @@ const Chord* Beam::findChordWithCustomStemDirection() const
     return nullptr;
 }
 
+const BeamSegment* Beam::topLevelSegmentForElement(const ChordRest* element) const
+{
+    const std::vector<BeamSegment*>& segments = beamSegments();
+    size_t segmentsSize = segments.size();
+
+    IF_ASSERT_FAILED(segmentsSize > 0) {
+        return nullptr;
+    }
+
+    const BeamSegment* curSegment = segments[0];
+    if (segmentsSize == 1) {
+        return curSegment;
+    }
+
+    for (const BeamSegment* segment : segments) {
+        if (segment->level <= curSegment->level) {
+            continue;
+        }
+        Fraction elementTick = element->tick();
+        if (segment->startTick <= elementTick && segment->endTick >= elementTick) {
+            curSegment = segment;
+        }
+    }
+
+    return curSegment;
+}
+
 //---------------------------------------------------------
 //   move
 //---------------------------------------------------------
@@ -296,7 +313,7 @@ void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int leve
 void Beam::spatiumChanged(double oldValue, double newValue)
 {
     int idx = directionIdx();
-    if (m_userModified[idx]) {
+    if (userModified()) {
         double diff = newValue / oldValue;
         for (BeamFragment* f : m_fragments) {
             f->py1[idx] = f->py1[idx] * diff;
@@ -323,6 +340,10 @@ public:
 
 void Beam::editDrag(EditData& ed)
 {
+    if (ed.curGrip == Grip::NO_GRIP) {
+        return;
+    }
+
     int idx = directionIdx();
     double dy = ed.delta.y();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
@@ -403,16 +424,16 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 //   setBeamDirection
 //---------------------------------------------------------
 
-void Beam::setBeamDirection(DirectionV d)
+void Beam::setDirection(DirectionV d)
 {
-    if (m_direction == d || m_cross) {
+    if (direction() == d || m_cross) {
         return;
     }
 
-    m_direction = d;
+    doSetDirection(d);
 
     if (d != DirectionV::AUTO) {
-        m_up = d == DirectionV::UP;
+        setUp(d == DirectionV::UP);
     }
 
     for (ChordRest* e : elements()) {
@@ -462,15 +483,6 @@ void Beam::reset()
 void Beam::startEdit(EditData& ed)
 {
     initBeamEditData(ed);
-}
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void Beam::endEdit(EditData& ed)
-{
-    EngravingItem::endEdit(ed);
 }
 
 //---------------------------------------------------------
@@ -549,7 +561,7 @@ void Beam::setBeamPos(const PairF& bp)
     }
     BeamFragment* f = m_fragments.back();
     int idx = directionIdx();
-    m_userModified[idx] = true;
+    setUserModified(true);
     setGenerated(false);
 
     double _spatium = spatium();
@@ -568,7 +580,7 @@ void Beam::setNoSlope(bool b)
     // Make flat if usermodified
     if (m_noSlope) {
         int idx = directionIdx();
-        if (m_userModified[idx]) {
+        if (userModified()) {
             BeamFragment* f = m_fragments.back();
             f->py1[idx] = f->py2[idx] = (f->py1[idx] + f->py2[idx]) * 0.5;
         }
@@ -577,8 +589,8 @@ void Beam::setNoSlope(bool b)
 
 void Beam::computeAndSetSlope()
 {
-    double xDiff = endAnchor().x() - startAnchor().x();
-    double yDiff = endAnchor().y() - startAnchor().y();
+    double xDiff = m_endAnchor.x() - m_startAnchor.x();
+    double yDiff = m_endAnchor.y() - m_startAnchor.y();
     if (std::abs(xDiff) < 0.5 * spatium()) {
         // Temporary safeguard: a beam this short is invalid, and exists only as a temporary state,
         // so don't try to compute the slope as it will be wrong. Needs a better solution in future.
@@ -589,36 +601,14 @@ void Beam::computeAndSetSlope()
 }
 
 //---------------------------------------------------------
-//   userModified
-//---------------------------------------------------------
-
-bool Beam::userModified() const
-{
-    int idx = directionIdx();
-    return m_userModified[idx];
-}
-
-//---------------------------------------------------------
-//   setUserModified
-//---------------------------------------------------------
-
-void Beam::setUserModified(bool val)
-{
-    int idx = directionIdx();
-    m_userModified[idx] = val;
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 PropertyValue Beam::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::STEM_DIRECTION: return beamDirection();
     case Pid::GROW_LEFT:      return growLeft();
     case Pid::GROW_RIGHT:     return growRight();
-    case Pid::USER_MODIFIED:  return userModified();
     case Pid::BEAM_POS:       return PropertyValue::fromValue(beamPos());
     case Pid::BEAM_NO_SLOPE:  return noSlope();
     case Pid::POSITION_LINKED_TO_MASTER:
@@ -642,17 +632,11 @@ PropertyValue Beam::getProperty(Pid propertyId) const
 bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
-    case Pid::STEM_DIRECTION:
-        setBeamDirection(v.value<DirectionV>());
-        break;
     case Pid::GROW_LEFT:
         setGrowLeft(v.toDouble());
         break;
     case Pid::GROW_RIGHT:
         setGrowRight(v.toDouble());
-        break;
-    case Pid::USER_MODIFIED:
-        setUserModified(v.toBool());
         break;
     case Pid::BEAM_POS:
         if (userModified()) {
@@ -691,11 +675,8 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue Beam::propertyDefault(Pid id) const
 {
     switch (id) {
-//            case Pid::SUB_STYLE:      return int(TextStyleName::BEAM);
-    case Pid::STEM_DIRECTION: return DirectionV::AUTO;
     case Pid::GROW_LEFT:      return 1.0;
     case Pid::GROW_RIGHT:     return 1.0;
-    case Pid::USER_MODIFIED:  return false;
     case Pid::BEAM_POS:       return PropertyValue::fromValue(beamPos());
     default:                  return BeamBase::propertyDefault(id);
     }
@@ -862,8 +843,7 @@ void Beam::clearBeamSegments()
         chordRest->setBeamlet(nullptr);
     }
 
-    muse::DeleteAll(m_beamSegments);
-    m_beamSegments.clear();
+    BeamBase::clearBeamSegments();
 }
 
 //-------------------------------------------------------

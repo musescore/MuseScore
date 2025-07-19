@@ -23,6 +23,9 @@
 #ifndef MU_NOTATION_TIMELINEVIEW_H
 #define MU_NOTATION_TIMELINEVIEW_H
 
+#include <QImage>
+#include <QTimer>
+
 #include "uicomponents/view/widgetview.h"
 
 #include "modularity/ioc.h"
@@ -39,8 +42,17 @@ class TimelineView : public muse::uicomponents::WidgetView, public muse::Injecta
 public:
     explicit TimelineView(QQuickItem* parent = nullptr);
 
+private slots:
+    void doDraw();
+
 private:
+
+    void paint(QPainter* painter) override;
     void componentComplete() override;
+
+    qreal m_dpr = 1.0; // device pixel ratio
+    QImage m_image;
+    QTimer m_drawTimer;
 };
 }
 

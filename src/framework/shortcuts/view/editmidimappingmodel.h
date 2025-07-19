@@ -31,14 +31,14 @@
 #include "imidiremote.h"
 
 namespace muse::shortcuts {
-class EditMidiMappingModel : public QObject, public async::Asyncable
+class EditMidiMappingModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString mappingTitle READ mappingTitle NOTIFY mappingTitleChanged)
 
-    INJECT(IMidiRemote, midiRemote)
-    INJECT(muse::midi::IMidiInPort, midiInPort)
+    Inject<IMidiRemote> midiRemote = { this };
+    Inject<muse::midi::IMidiInPort> midiInPort = { this };
 
 public:
     explicit EditMidiMappingModel(QObject* parent = nullptr);

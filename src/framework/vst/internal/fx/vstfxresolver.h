@@ -26,14 +26,14 @@
 #include "audio/abstractfxresolver.h"
 
 #include "modularity/ioc.h"
-#include "ivstpluginsregister.h"
-#include "ivstmodulesrepository.h"
+#include "../../ivstinstancesregister.h"
+#include "../../ivstmodulesrepository.h"
 
 namespace muse::vst {
 class VstFxResolver : public muse::audio::fx::AbstractFxResolver
 {
-    INJECT(IVstModulesRepository, pluginModulesRepo)
-    INJECT(IVstPluginsRegister, pluginsRegister)
+    muse::Inject<IVstModulesRepository> pluginModulesRepo;
+    muse::Inject<IVstInstancesRegister> instancesRegister;
 public:
     // IFxResolver::IResolver interface
     muse::audio::AudioResourceMetaList resolveResources() const override;

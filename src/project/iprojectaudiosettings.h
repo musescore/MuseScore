@@ -49,7 +49,9 @@ public:
     virtual const muse::audio::AudioInputParams& trackInputParams(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackInputParams(const engraving::InstrumentTrackId& trackId, const muse::audio::AudioInputParams& params) = 0;
     virtual void clearTrackInputParams() = 0;
+    virtual muse::async::Channel<engraving::InstrumentTrackId> trackInputParamsChanged() const = 0;
 
+    virtual bool trackHasExistingOutputParams(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual const muse::audio::AudioOutputParams& trackOutputParams(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackOutputParams(const engraving::InstrumentTrackId& trackId, const muse::audio::AudioOutputParams& params) = 0;
 

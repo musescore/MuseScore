@@ -66,30 +66,14 @@ inline QList<MixerSectionType> allMixerSectionTypes()
 
 static const QTime ZERO_TIME(0, 0, 0, 0);
 
-inline muse::audio::msecs_t secondsToMilliseconds(float seconds)
+inline QTime timeFromSeconds(muse::audio::secs_t seconds)
 {
-    return seconds * 1000;
+    return ZERO_TIME.addMSecs(muse::audio::secsToMilisecs(seconds));
 }
 
-inline float secondsFromMilliseconds(muse::audio::msecs_t milliseconds)
+inline muse::audio::secs_t timeToSeconds(const QTime& time)
 {
-    return milliseconds / 1000.f;
-}
-
-inline QTime timeFromMilliseconds(muse::audio::msecs_t milliseconds)
-{
-    return ZERO_TIME.addMSecs(milliseconds);
-}
-
-inline QTime timeFromSeconds(float seconds)
-{
-    muse::audio::msecs_t milliseconds = secondsToMilliseconds(seconds);
-    return timeFromMilliseconds(milliseconds);
-}
-
-inline muse::audio::msecs_t timeToMilliseconds(const QTime& time)
-{
-    return ZERO_TIME.msecsTo(time);
+    return muse::audio::milisecsToSecs(ZERO_TIME.msecsTo(time));
 }
 
 enum class SoundProfileType {
@@ -133,6 +117,12 @@ struct SoundProfile {
 };
 
 using SoundProfilesMap = std::map<SoundProfileName, SoundProfile>;
+
+enum OnlineSoundsShowProgressBarMode {
+    Always = 0,
+    DuringPlayback,
+    Never,
+};
 }
 
 #endif // MU_PLAYBACK_PLAYBACKTYPES_H

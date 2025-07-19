@@ -21,15 +21,13 @@
  */
 #include "notationnavigator.h"
 
-#include "engraving/dom/system.h"
-
 #include "log.h"
 
 using namespace muse;
 using namespace mu::notation;
 
 NotationNavigatorCursorView::NotationNavigatorCursorView(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : QQuickPaintedItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -136,7 +134,7 @@ void NotationNavigator::mousePressEvent(QMouseEvent* event)
     double dx = logicPos.x() - (m_cursorRect.x() + (m_cursorRect.width() / 2));
     double dy = logicPos.y() - (m_cursorRect.y() + (m_cursorRect.height() / 2));
 
-    moveNotationRequested(-dx, -dy);
+    emit moveNotationRequested(-dx, -dy);
 }
 
 void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
@@ -145,7 +143,7 @@ void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
 
     PointF logicPos = toLogical(event->pos());
     PointF delta = logicPos - m_startMove;
-    moveNotationRequested(-delta.x(), -delta.y());
+    emit moveNotationRequested(-delta.x(), -delta.y());
 
     m_startMove = logicPos;
 }
@@ -285,13 +283,13 @@ void NotationNavigator::paintPageNumbers(QPainter* painter)
     constexpr int PAGE_NUMBER_FONT_SIZE = 2000;
     QFont font(QString::fromStdString(configuration()->fontFamily()), PAGE_NUMBER_FONT_SIZE);
 
+    painter->setClipping(false);
+    painter->setFont(font);
+    painter->setPen(engravingConfiguration()->scoreGreyColor().toQColor());
+
     for (const Page* page : pages()) {
         painter->translate(page->pos().toQPointF());
-
-        painter->setFont(font);
-        painter->setPen(engravingConfiguration()->formattingMarksColor().toQColor());
         painter->drawText(page->ldata()->bbox().toQRectF(), Qt::AlignCenter, QString("%1").arg(page->no() + 1));
-
         painter->translate(-page->pos().toQPointF());
     }
 }

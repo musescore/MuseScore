@@ -29,52 +29,67 @@
 
 using namespace muse::extensions;
 
+static const muse::UriQuery SHOW_APIDUMP_URI("muse://extensions/apidump?sync=false&modal=false&floating=true");
+
 void ExtensionsActionController::init()
 {
-    m_uiActions = std::make_shared<ExtensionsUiActions>();
-    registerPlugins();
+    m_uiActions = std::make_shared<ExtensionsUiActions>(iocContext());
 
     provider()->manifestListChanged().onNotify(this, [this](){
-        registerPlugins();
+        registerExtensions();
     });
 }
 
-void ExtensionsActionController::registerPlugins()
+void ExtensionsActionController::registerExtensions()
 {
     dispatcher()->unReg(this);
 
     for (const Manifest& m : provider()->manifestList()) {
         for (const Action& a : m.actions) {
-            UriQuery q = makeUriQuery(m.uri, a.code);
-            dispatcher()->reg(this, q.toString(), [this, q]() {
-                onPluginTriggered(q);
+            actions::ActionQuery q = makeActionQuery(m.uri, a.code);
+            dispatcher()->reg(this, q, [this](const actions::ActionQuery& q) {
+                onExtensionTriggered(q);
             });
         }
     }
 
+    dispatcher()->reg(this, "extensions-show-apidump", [this]() { openUri(SHOW_APIDUMP_URI); });
+
     uiActionsRegister()->reg(m_uiActions);
 }
 
-void ExtensionsActionController::onPluginTriggered(const UriQuery& q)
+void ExtensionsActionController::onExtensionTriggered(const actions::ActionQuery& actionQuery)
 {
+    UriQuery q = uriQueryFromActionQuery(actionQuery);
     const Manifest& m = provider()->manifest(q.uri());
     if (!m.isValid()) {
         LOGE() << "Not found extension, uri: " << q.uri().toString();
         return;
     }
 
-    if (m.config.enabled) {
+    if (m.enabled()) {
         provider()->perform(q);
         return;
     }
 
-    IInteractive::Result result = interactive()->warning(
+    auto promise = interactive()->warning(
         muse::qtrc("extensions", "The plugin “%1” is currently disabled. Do you want to enable it now?").arg(m.title).toStdString(),
         muse::trc("extensions", "Alternatively, you can enable it at any time from Home > Plugins."),
         { IInteractive::Button::No, IInteractive::Button::Yes });
 
-    if (result.standardButton() == IInteractive::Button::Yes) {
-        provider()->setEnable(q.uri(), true);
-        provider()->perform(q);
+    promise.onResolve(this, [this, q](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            provider()->setExecPoint(q.uri(), EXEC_MANUALLY);
+            provider()->perform(q);
+        }
+    });
+}
+
+void ExtensionsActionController::openUri(const UriQuery& uri, bool isSingle)
+{
+    if (isSingle && interactive()->isOpened(uri.uri()).val) {
+        return;
     }
+
+    interactive()->open(uri);
 }

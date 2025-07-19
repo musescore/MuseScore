@@ -27,8 +27,6 @@ import Muse.Ui 1.0
 RadioDelegate {
     id: root
 
-    default property Component contentComponent: null
-
     //! NOTE Don't use the `icon` property.
     //!      It's a property of the ancestor of RadioDelegate
     //!      and has the wrong type (QQuickIcon).
@@ -55,7 +53,8 @@ RadioDelegate {
     implicitHeight: ListView.view ? ListView.view.height : ui.theme.defaultButtonSize
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
                                  : ui.theme.defaultButtonSize
-    hoverEnabled: true
+
+    hoverEnabled: root.enabled
 
     onClicked: {
         navigation.requestActiveByInteraction()
@@ -132,18 +131,17 @@ RadioDelegate {
 
     contentItem: Loader {
         id: contentLoader
-        anchors.fill: parent
 
         sourceComponent: {
-            if (root.contentComponent) {
-                return root.contentComponent
-            }
-
             if (root.iconCode && root.iconCode !== IconCode.NONE) {
                 return iconComponent
             }
 
-            return textComponent
+            if (root.text) {
+                return textComponent
+            }
+
+            return null
         }
 
         Component {
@@ -165,5 +163,5 @@ RadioDelegate {
         }
     }
 
-    indicator: Item {}
+    indicator: null
 }

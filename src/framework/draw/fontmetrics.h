@@ -41,6 +41,7 @@ public:
     double lineSpacing() const;
     double xHeight() const;
     double height() const;
+    double capHeight() const;
     double ascent() const;
     double descent() const;
 
@@ -63,6 +64,7 @@ public:
     static RectF boundingRect(const Font& f, const String& string);
     static RectF tightBoundingRect(const Font& f, const String& string);
     static double ascent(const Font& f);
+    static double capHeight(const Font& f);
 
 private:
     Font m_font;

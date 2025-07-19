@@ -56,6 +56,15 @@ void PaletteConfigurationStub::setIsSingleClickToOpenPalette(bool)
 {
 }
 
+ValCh<bool> PaletteConfigurationStub::isPaletteDragEnabled() const
+{
+    return ValCh<bool>();
+}
+
+void PaletteConfigurationStub::setIsPaletteDragEnabled(bool)
+{
+}
+
 QColor PaletteConfigurationStub::elementsBackgroundColor() const
 {
     return QColor();

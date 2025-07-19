@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,28 +31,24 @@ using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace muse::mpe;
 
-EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData,
-                                   OnOffStreamEventsReceived onOffStreamReceived)
-    : m_trackId(trackId), m_playbackData(playbackData)
+EventAudioSource::EventAudioSource(const TrackId trackId,
+                                   const mpe::PlaybackData& playbackData,
+                                   OnOffStreamEventsReceived onOffStreamReceived,
+                                   const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_trackId(trackId), m_playbackData(playbackData)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_playbackData.offStream.onReceive(this, [onOffStreamReceived, trackId](const PlaybackEventsMap&, const PlaybackParamMap&) {
+    m_playbackData.offStream.onReceive(this, [onOffStreamReceived, trackId](const PlaybackEventsMap&,
+                                                                            const DynamicLevelLayers&,
+                                                                            const PlaybackParamList&) {
         onOffStreamReceived(trackId);
-    });
-
-    m_playbackData.mainStream.onReceive(this, [this](const PlaybackEventsMap& events, const DynamicLevelMap& dynamics,
-                                                     const PlaybackParamMap& params) {
-        m_playbackData.originEvents = events;
-        m_playbackData.dynamicLevelMap = dynamics;
-        m_playbackData.paramMap = params;
     });
 }
 
 EventAudioSource::~EventAudioSource()
 {
     m_playbackData.offStream.resetOnReceive(this);
-    m_playbackData.mainStream.resetOnReceive(this);
 }
 
 bool EventAudioSource::isActive() const
@@ -71,6 +67,10 @@ void EventAudioSource::setIsActive(const bool active)
     ONLY_AUDIO_WORKER_THREAD;
 
     IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    if (m_synth->isActive() == active) {
         return;
     }
 
@@ -132,8 +132,23 @@ void EventAudioSource::seek(const msecs_t newPositionMsecs)
         return;
     }
 
+    if (m_synth->playbackPosition() == newPositionMsecs) {
+        return;
+    }
+
     m_synth->setPlaybackPosition(newPositionMsecs);
     m_synth->revokePlayingNotes();
+}
+
+void EventAudioSource::flush()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    m_synth->flushSound();
 }
 
 const AudioInputParams& EventAudioSource::inputParams() const
@@ -148,6 +163,10 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
     }
 
     SynthCtx ctx = currentSynthCtx();
+
+    if (m_synth) {
+        m_playbackData = m_synth->playbackData();
+    }
 
     m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams, m_playbackData.setupData);
 
@@ -166,7 +185,7 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
     setupSource();
 
     if (ctx.isValid()) {
-        restoreSynthCtx(std::move(ctx));
+        restoreSynthCtx(ctx);
     } else {
         m_synth->setIsActive(false);
     }
@@ -180,6 +199,50 @@ async::Channel<AudioInputParams> EventAudioSource::inputParamsChanged() const
     return m_paramsChanges;
 }
 
+void EventAudioSource::prepareToPlay()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    m_synth->prepareToPlay();
+}
+
+bool EventAudioSource::readyToPlay() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return false;
+    }
+
+    return m_synth->readyToPlay();
+}
+
+async::Notification EventAudioSource::readyToPlayChanged() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return {};
+    }
+
+    return m_synth->readyToPlayChanged();
+}
+
+InputProcessingProgress EventAudioSource::inputProcessingProgress() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return {};
+    }
+
+    return m_synth->inputProcessingProgress();
+}
+
 EventAudioSource::SynthCtx EventAudioSource::currentSynthCtx() const
 {
     if (!m_synth) {
@@ -189,7 +252,7 @@ EventAudioSource::SynthCtx EventAudioSource::currentSynthCtx() const
     return { m_synth->isActive(), m_synth->playbackPosition() };
 }
 
-void EventAudioSource::restoreSynthCtx(SynthCtx&& ctx)
+void EventAudioSource::restoreSynthCtx(const SynthCtx& ctx)
 {
     m_synth->setPlaybackPosition(ctx.playbackPosition);
     m_synth->setIsActive(ctx.isActive);

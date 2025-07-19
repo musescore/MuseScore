@@ -48,7 +48,7 @@ struct WavHeader {
         const uint32_t file_length = headerLength + sampleDataLength;
         const uint32_t overallSize = file_length - 8;
         const uint32_t bytesPerFrame = audioChannelsNumber * bytesPerSample;
-        const uint32_t bytesPerSec = sampleRate * bytesPerSample;
+        const uint32_t bytesPerSec = audioChannelsNumber * sampleRate * bytesPerSample;
 
         stream.write("RIFF", 4); // chunk ID
 
@@ -112,7 +112,7 @@ size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
         }
 
         if (progressValues.contains(sampleIdx)) {
-            m_progress.progressChanged.send(sampleIdx, total, "");
+            m_progress.progress(sampleIdx, total);
         }
     }
 

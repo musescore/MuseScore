@@ -47,6 +47,7 @@ static const QString METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES("ACTIVATE_WI
 static const QString METHOD_SETTINGS_BEGIN_TRANSACTION("SETTINGS_BEGIN_TRANSACTION");
 static const QString METHOD_SETTINGS_COMMIT_TRANSACTION("SETTINGS_COMMIT_TRANSACTION");
 static const QString METHOD_SETTINGS_ROLLBACK_TRANSACTION("SETTINGS_ROLLBACK_TRANSACTION");
+static const QString METHOD_SETTINGS_RESET("SETTINGS_RESET");
 static const QString METHOD_SETTINGS_SET_VALUE("SETTINGS_SET_VALUE");
 static const QString METHOD_QUIT("METHOD_QUIT");
 static const QString METHOD_QUIT_WITH_RESTART_LAST_INSTANCE("METHOD_QUIT_WITH_RESTART_LAST_INSTANCE");
@@ -127,7 +128,11 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         }
         if (!isAnyOpened) {
             mainWindow()->requestShowOnFront();
+            if (msg.args.count() > 0 && !msg.args.at(0).isEmpty()) {
+                dispatcher()->dispatch(msg.args.at(0).toStdString(), ActionData::make_arg1<bool>(false));
+            }
         }
+        m_ipcChannel->response(METHOD_ACTIVATE_WINDOW_WITH_PROJECT, { QString::number(!isAnyOpened) }, msg.srcID);
     }
     // Settings
     else if (msg.type == MsgType::Request && msg.method == METHOD_PREFERENCES_IS_OPENED) {
@@ -144,6 +149,8 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         settings()->commitTransaction(false);
     } else if (msg.method == METHOD_SETTINGS_ROLLBACK_TRANSACTION) {
         settings()->rollbackTransaction(false);
+    } else if (msg.method == METHOD_SETTINGS_RESET) {
+        settings()->reset(true, true, false);
     } else if (msg.method == METHOD_SETTINGS_SET_VALUE) {
         CHECK_ARGS_COUNT(3);
         Settings::Key key("", msg.args.at(0).toStdString());
@@ -171,7 +178,7 @@ bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path_t& projectPat
     }
 
     int ret = 0;
-    m_ipcChannel->syncRequestToAll(METHOD_PROJECT_IS_OPENED, { projectPath.toQString() }, [&ret](const QStringList& args) {
+    m_ipcChannel->syncRequestToAll(METHOD_PROJECT_IS_OPENED, { projectPath.toQString() }, [&ret](const QStringList& args, const ID&) {
         IF_ASSERT_FAILED(!args.empty()) {
             return false;
         }
@@ -205,22 +212,21 @@ bool MultiInstancesProvider::isHasAppInstanceWithoutProject() const
         return false;
     }
 
-    int ret = 0;
-    m_ipcChannel->syncRequestToAll(METHOD_IS_WITHOUT_PROJECT, {}, [&ret](const QStringList& args) {
+    bool ret = false;
+    m_ipcChannel->syncRequestToAll(METHOD_IS_WITHOUT_PROJECT, {}, [&ret](const QStringList& args, const ID&) {
         IF_ASSERT_FAILED(!args.empty()) {
             return false;
         }
-        ret = args.at(0).toInt();
-        if (ret) {
+        if (args.at(0).toInt()) {
+            ret = true;
             return true;
         }
-
         return false;
     });
     return ret;
 }
 
-void MultiInstancesProvider::activateWindowWithoutProject()
+void MultiInstancesProvider::activateWindowWithoutProject(const QStringList& args)
 {
     if (!isInited()) {
         return;
@@ -231,7 +237,21 @@ void MultiInstancesProvider::activateWindowWithoutProject()
     mainWindow()->requestShowOnBack();
 #endif
 
-    m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT, {});
+    ID idWithNoProject;
+    m_ipcChannel->syncRequestToAll(METHOD_IS_WITHOUT_PROJECT, {}, [&idWithNoProject](const QStringList& retArgs, const ID& srcId) {
+        IF_ASSERT_FAILED(!retArgs.empty()) {
+            return false;
+        }
+        if (retArgs.at(0).toInt()) {
+            idWithNoProject = srcId;
+            return true;
+        }
+        return false;
+    });
+    if (!idWithNoProject.isEmpty()) {
+        m_ipcChannel->response(METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT, args, idWithNoProject);
+        return;
+    }
 }
 
 bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
@@ -289,7 +309,7 @@ bool MultiInstancesProvider::isPreferencesAlreadyOpened() const
     }
 
     int ret = 0;
-    m_ipcChannel->syncRequestToAll(METHOD_PREFERENCES_IS_OPENED, {}, [&ret](const QStringList& args) {
+    m_ipcChannel->syncRequestToAll(METHOD_PREFERENCES_IS_OPENED, {}, [&ret](const QStringList& args, const ID&) {
         IF_ASSERT_FAILED(!args.empty()) {
             return false;
         }
@@ -342,6 +362,15 @@ void MultiInstancesProvider::settingsRollbackTransaction()
     }
 
     m_ipcChannel->broadcast(METHOD_SETTINGS_ROLLBACK_TRANSACTION);
+}
+
+void MultiInstancesProvider::settingsReset()
+{
+    if (!isInited()) {
+        return;
+    }
+
+    m_ipcChannel->broadcast(METHOD_SETTINGS_RESET);
 }
 
 void MultiInstancesProvider::settingsSetValue(const std::string& key, const Val& value)

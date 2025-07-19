@@ -22,11 +22,13 @@
 
 #include "vstfxprocessor.h"
 
+using namespace muse;
 using namespace muse::vst;
 using namespace muse::audio;
+using namespace muse::audioplugins;
 
-VstFxProcessor::VstFxProcessor(VstPluginPtr&& pluginPtr, const AudioFxParams& params)
-    : m_pluginPtr(pluginPtr),
+VstFxProcessor::VstFxProcessor(IVstPluginInstancePtr&& instance, const AudioFxParams& params)
+    : m_pluginPtr(instance),
     m_vstAudioClient(std::make_unique<VstAudioClient>()),
     m_params(params)
 {
@@ -36,14 +38,18 @@ void VstFxProcessor::init()
 {
     m_vstAudioClient->init(AudioPluginType::Fx, m_pluginPtr);
 
-    if (m_pluginPtr->isLoaded()) {
+    const samples_t blockSize = config()->samplesToPreallocate();
+
+    auto onPluginLoaded = [this, blockSize]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
+        m_vstAudioClient->setMaxSamplesPerBlock(blockSize);
         m_inited = true;
+    };
+
+    if (m_pluginPtr->isLoaded()) {
+        onPluginLoaded();
     } else {
-        m_pluginPtr->loadingCompleted().onNotify(this, [this]() {
-            m_pluginPtr->updatePluginConfig(m_params.configuration);
-            m_inited = true;
-        });
+        m_pluginPtr->loadingCompleted().onNotify(this, onPluginLoaded);
     }
 
     m_pluginPtr->pluginSettingsChanged().onReceive(this, [this](const muse::audio::AudioUnitConfig& newConfig) {
@@ -92,6 +98,5 @@ void VstFxProcessor::process(float* buffer, unsigned int sampleCount)
         return;
     }
 
-    m_vstAudioClient->setBlockSize(sampleCount);
     m_vstAudioClient->process(buffer, sampleCount);
 }

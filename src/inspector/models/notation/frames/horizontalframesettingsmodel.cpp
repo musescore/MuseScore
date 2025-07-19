@@ -39,9 +39,10 @@ HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IEle
 void HorizontalFrameSettingsModel::createProperties()
 {
     m_frameWidth = buildPropertyItem(Pid::BOX_WIDTH);
-    m_leftGap= buildPropertyItem(Pid::TOP_GAP);
+    m_leftGap = buildPropertyItem(Pid::TOP_GAP);
     m_rightGap = buildPropertyItem(Pid::BOTTOM_GAP);
     m_shouldDisplayKeysAndBrackets = buildPropertyItem(Pid::CREATE_SYSTEM_HEADER);
+    m_isSizeSpatiumDependent = buildPropertyItem(Pid::SIZE_SPATIUM_DEPENDENT);
 }
 
 void HorizontalFrameSettingsModel::requestElements()
@@ -56,6 +57,7 @@ void HorizontalFrameSettingsModel::loadProperties()
         Pid::TOP_GAP,
         Pid::BOTTOM_GAP,
         Pid::CREATE_SYSTEM_HEADER,
+        Pid::SIZE_SPATIUM_DEPENDENT
     };
 
     loadProperties(propertyIdSet);
@@ -67,6 +69,7 @@ void HorizontalFrameSettingsModel::resetProperties()
     m_leftGap->resetToDefault();
     m_rightGap->resetToDefault();
     m_shouldDisplayKeysAndBrackets->resetToDefault();
+    m_isSizeSpatiumDependent->resetToDefault();
 }
 
 void HorizontalFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
@@ -91,6 +94,10 @@ void HorizontalFrameSettingsModel::loadProperties(const PropertyIdSet& propertyI
     if (muse::contains(propertyIdSet, Pid::CREATE_SYSTEM_HEADER)) {
         loadPropertyItem(m_shouldDisplayKeysAndBrackets);
     }
+
+    if (muse::contains(propertyIdSet, Pid::SIZE_SPATIUM_DEPENDENT)) {
+        loadPropertyItem(m_isSizeSpatiumDependent);
+    }
 }
 
 PropertyItem* HorizontalFrameSettingsModel::frameWidth() const
@@ -111,4 +118,9 @@ PropertyItem* HorizontalFrameSettingsModel::rightGap() const
 PropertyItem* HorizontalFrameSettingsModel::shouldDisplayKeysAndBrackets() const
 {
     return m_shouldDisplayKeysAndBrackets;
+}
+
+PropertyItem* HorizontalFrameSettingsModel::isSizeSpatiumDependent() const
+{
+    return m_isSizeSpatiumDependent;
 }

@@ -119,7 +119,7 @@ void FxResolver::registerResolver(const AudioFxType type, IResolverPtr resolver)
 
 void FxResolver::clearAllFx()
 {
-    ONLY_AUDIO_MAIN_THREAD;
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
     std::lock_guard lock(m_mutex);
 

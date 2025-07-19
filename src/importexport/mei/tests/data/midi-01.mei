@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">MIDI test</title>
+            <respStmt>
+               <persName role="composer">Klaus Rettinghaus</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2024-11-29T11:17:44" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">MIDI test</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Klaus Rettinghaus</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffGrp bar.thru="true" symbol="brace">
+                        <label>Piano</label>
+                        <labelAbbr>Pno.</labelAbbr>
+                        <instrDef midi.instrnum="0" />
+                        <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="2" lines="5" meter.count="4" meter.unit="4">
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                     </staffGrp>
+                     <staffGrp bar.thru="true" symbol="brace">
+                        <label>Harp</label>
+                        <labelAbbr>Hp.</labelAbbr>
+                        <instrDef midi.instrnum="46" />
+                        <staffDef n="3" lines="5" meter.count="4" meter.unit="4">
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="4" lines="5" meter.count="4" meter.unit="4">
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                     </staffGrp>
+                     <staffDef n="5" lines="5" meter.count="4" meter.unit="4">
+                        <label>Violin</label>
+                        <labelAbbr>Vl.</labelAbbr>
+                        <instrDef midi.instrnum="40" />
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m5wq5im" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <chord xml:id="cnf1nq" dur="1">
+                              <note xml:id="n5ocit8" pname="g" oct="4" />
+                              <note xml:id="n1p15en1" pname="e" oct="5" />
+                           </chord>
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s2" n="2">
+                        <layer xml:id="m1s2l1" n="1">
+                           <chord xml:id="c78oeh8" dur="1">
+                              <note xml:id="nqe3k9" pname="b" oct="2" />
+                              <note xml:id="n6apouv" pname="g" oct="3" />
+                              <note xml:id="nw56njv" pname="f" oct="4" />
+                           </chord>
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s3" n="3">
+                        <layer xml:id="m1s3l1" n="1">
+                           <chord xml:id="c1paf6qk" dur="1">
+                              <note xml:id="n152su8r" pname="e" oct="4" />
+                              <note xml:id="n7lsdj4" pname="g" oct="4" />
+                              <note xml:id="npr0wpq" pname="c" oct="5" />
+                              <note xml:id="n1vdydsx" pname="e" oct="5" />
+                           </chord>
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s4" n="4">
+                        <layer xml:id="m1s4l1" n="1">
+                           <chord xml:id="c10olgvf" dur="1">
+                              <note xml:id="n1id2x3o" pname="d" oct="2" />
+                              <note xml:id="nzjnncn" pname="f" oct="2" />
+                              <note xml:id="njdi3ur" pname="a" oct="2" />
+                              <note xml:id="n3nst0x" pname="b" oct="2" />
+                              <note xml:id="nlz4t4s" pname="f" oct="3" />
+                              <note xml:id="n13jabuc" pname="a" oct="3" />
+                              <note xml:id="n1v2u45z" pname="b" oct="3" />
+                           </chord>
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s5" n="5">
+                        <layer xml:id="m1s5l1" n="1">
+                           <note xml:id="n1pvx4s4" dur="1" pname="a" oct="4" />
+                        </layer>
+                     </staff>
+                     <arpeg xml:id="a197fu5a" order="down" startid="#c1paf6qk" arrow="true" plist="#c10olgvf" />
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

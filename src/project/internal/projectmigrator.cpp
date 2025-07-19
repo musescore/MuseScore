@@ -23,11 +23,15 @@
 
 #include <QVersionNumber>
 
+#include "mdlmigrator.h"
+
 #include "engraving/types/constants.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/undo.h"
 #include "engraving/rw/compat/readstyle.h"
+
+#include "io/file.h"
 
 #include "log.h"
 
@@ -98,7 +102,9 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     query.addParam("migrationType", Val(migrationType));
     query.addParam("isApplyLeland", Val(out.isApplyLeland));
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
-    RetVal<Val> rv = interactive()->open(query);
+    query.addParam("isRemapPercussion", Val(out.isRemapPercussion));
+
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
     }
@@ -109,6 +115,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     out.isAskAgain = vals.value("isAskAgain").toBool();
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
     out.isApplyEdwin = vals.value("isApplyEdwin").toBool();
+    out.isRemapPercussion = vals.value("isRemapPercussion").toBool();
 
     return true;
 }
@@ -149,7 +156,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         return make_ret(Ret::Code::InternalError);
     }
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Migrate project"));
 
     bool ok = true;
     if (opt.isApplyLeland) {
@@ -160,6 +167,10 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     if (ok && opt.isApplyEdwin) {
         ok = applyEdwinStyle(score);
         m_resetStyleSettings = false;
+    }
+
+    if (ok && opt.isRemapPercussion) {
+        MdlMigrator(score).remapPercussion();
     }
 
     if (ok && score->mscVersion() < 300) {
@@ -185,24 +196,26 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
 
 bool ProjectMigrator::applyLelandStyle(mu::engraving::MasterScore* score)
 {
+    muse::io::File styleFile(LELAND_STYLE_PATH);
     for (mu::engraving::Excerpt* excerpt : score->excerpts()) {
-        if (!excerpt->excerptScore()->loadStyle(LELAND_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
+        if (!excerpt->excerptScore()->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }
     }
 
-    return score->loadStyle(LELAND_STYLE_PATH, /*ign*/ false, /*overlap*/ true);
+    return score->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true);
 }
 
 bool ProjectMigrator::applyEdwinStyle(mu::engraving::MasterScore* score)
 {
+    muse::io::File styleFile(EDWIN_STYLE_PATH);
     for (mu::engraving::Excerpt* excerpt : score->excerpts()) {
-        if (!excerpt->excerptScore()->loadStyle(EDWIN_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
+        if (!excerpt->excerptScore()->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }
     }
 
-    return score->loadStyle(EDWIN_STYLE_PATH, /*ign*/ false, /*overlap*/ true);
+    return score->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true);
 }
 
 bool ProjectMigrator::resetAllElementsPositions(mu::engraving::MasterScore* score)

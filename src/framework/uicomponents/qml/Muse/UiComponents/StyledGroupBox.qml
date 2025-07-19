@@ -29,19 +29,25 @@ GroupBox {
     id: root
 
     padding: 12
+    spacing: 4
 
     background: Rectangle {
-        y: root.topPadding - root.bottomPadding
-        width: parent.width
-        height: parent.height - root.topPadding + root.bottomPadding
+        y: root.label && root.label.visible
+           ? root.topInset + root.implicitLabelHeight + root.spacing
+           : root.topInset
 
-        color: "transparent"
+        width: parent.width
+        height: root.height - y
+
+        color: ui.theme.backgroundPrimaryColor
         border.color: ui.theme.strokeColor
-        radius: ui.theme.borderWidth
+        radius: 3
     }
 
     label: StyledTextLabel {
-        x: root.leftPadding
+        x: root.leftInset
+        y: root.topInset
+
         width: root.availableWidth
 
         text: root.title

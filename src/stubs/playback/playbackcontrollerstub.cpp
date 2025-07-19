@@ -48,9 +48,9 @@ void PlaybackControllerStub::reset()
 {
 }
 
-muse::async::Channel<uint32_t> PlaybackControllerStub::midiTickPlayed() const
+muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> PlaybackControllerStub::currentPlaybackPositionChanged() const
 {
-    return muse::async::Channel<uint32_t>();
+    return muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t>();
 }
 
 muse::audio::TrackSequenceId PlaybackControllerStub::currentTrackSequenceId() const
@@ -112,7 +112,11 @@ void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTr
 {
 }
 
-void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&)
+void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&, bool)
+{
+}
+
+void PlaybackControllerStub::playNotes(const notation::NoteValList&, const notation::staff_idx_t, const notation::Segment*)
 {
 }
 
@@ -121,6 +125,10 @@ void PlaybackControllerStub::playMetronome(int)
 }
 
 void PlaybackControllerStub::seekElement(const notation::EngravingItem*)
+{
+}
+
+void PlaybackControllerStub::seekBeat(int, int)
 {
 }
 
@@ -159,7 +167,7 @@ mu::notation::MeasureBeat PlaybackControllerStub::currentBeat() const
     return {};
 }
 
-muse::audio::msecs_t PlaybackControllerStub::beatToMilliseconds(int, int) const
+muse::audio::secs_t PlaybackControllerStub::beatToSecs(int, int) const
 {
     return 0;
 }
@@ -188,4 +196,20 @@ void PlaybackControllerStub::setNotation(notation::INotationPtr)
 
 void PlaybackControllerStub::setIsExportingAudio(bool)
 {
+}
+
+const std::set<muse::audio::TrackId>& PlaybackControllerStub::onlineSounds() const
+{
+    static const std::set<muse::audio::TrackId> dummy;
+    return dummy;
+}
+
+muse::async::Notification PlaybackControllerStub::onlineSoundsChanged() const
+{
+    return {};
+}
+
+muse::Progress PlaybackControllerStub::onlineSoundsProcessingProgress() const
+{
+    return {};
 }

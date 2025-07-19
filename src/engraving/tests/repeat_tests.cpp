@@ -415,3 +415,10 @@ TEST_F(Engraving_RepeatTests, repeat68) {
     // Entire score skipped by volta: gh#14685
     repeat("repeat68.mscx", u"");
 }
+
+// There are 2 instruments (Piano) in this score, and each instrument has a D.S. at the same position (3rd measure)
+// Make sure that we don't repeat the measures twice
+// See: https://github.com/musescore/MuseScore/issues/27647
+TEST_F(Engraving_RepeatTests, repeat69) {
+    repeat("repeat69.mscx", u"1; 2;3; 2;3; 4");
+}

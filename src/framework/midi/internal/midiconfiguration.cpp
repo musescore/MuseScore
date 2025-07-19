@@ -38,8 +38,11 @@ static const Settings::Key USE_MIDI20_OUTPUT_KEY(module_name, "io/midi/useMIDI20
 void MidiConfiguration::init()
 {
     settings()->setDefaultValue(USE_REMOTE_CONTROL_KEY, Val(true));
+    settings()->valueChanged(USE_REMOTE_CONTROL_KEY).onReceive(this, [this](const Val& val) {
+        m_useRemoteControlChanged.send(val.toBool());
+    });
 
-    settings()->setDefaultValue(MIDI_INPUT_DEVICE_ID, Val(""));
+    settings()->setDefaultValue(MIDI_INPUT_DEVICE_ID, Val("")); // "" makes MuseScore select the first available device
     settings()->valueChanged(MIDI_INPUT_DEVICE_ID).onReceive(nullptr, [this](const Val&) {
         m_midiInputDeviceIdChanged.notify();
     });
@@ -50,6 +53,9 @@ void MidiConfiguration::init()
     });
 
     settings()->setDefaultValue(USE_MIDI20_OUTPUT_KEY, Val(true));
+    settings()->valueChanged(USE_MIDI20_OUTPUT_KEY).onReceive(this, [this](const Val& val) {
+        m_useMIDI20OutputChanged.send(val.toBool());
+    });
 }
 
 bool MidiConfiguration::midiPortIsAvalaible() const
@@ -65,6 +71,11 @@ bool MidiConfiguration::useRemoteControl() const
 void MidiConfiguration::setUseRemoteControl(bool value)
 {
     settings()->setSharedValue(USE_REMOTE_CONTROL_KEY, Val(value));
+}
+
+async::Channel<bool> MidiConfiguration::useRemoteControlChanged() const
+{
+    return m_useRemoteControlChanged;
 }
 
 MidiDeviceID MidiConfiguration::midiInputDeviceId() const
@@ -105,4 +116,9 @@ bool MidiConfiguration::useMIDI20Output() const
 void MidiConfiguration::setUseMIDI20Output(bool use)
 {
     settings()->setSharedValue(USE_MIDI20_OUTPUT_KEY, Val(use));
+}
+
+async::Channel<bool> MidiConfiguration::useMIDI20OutputChanged() const
+{
+    return m_useMIDI20OutputChanged;
 }

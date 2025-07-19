@@ -68,9 +68,6 @@
              </property>
             </column>
             <item row="0" column="0">
-             <property name="text">
-              <string>a</string>
-             </property>
              <property name="checkState">
               <enum>Unchecked</enum>
              </property>
@@ -118,7 +115,7 @@
           <item row="0" column="3">
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>/</string>
+             <string notr="true">/</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -154,7 +151,7 @@
           <item row="1" column="3">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>/</string>
+             <string notr="true">/</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -471,7 +468,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>Go to previous measure</string>
+            <string>Apply and go to previous measure</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -487,7 +484,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>Go to next measure</string>
+            <string>Apply and go to next measure</string>
            </property>
            <property name="text">
             <string notr="true"/>

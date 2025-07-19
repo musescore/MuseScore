@@ -24,37 +24,14 @@
 
 #include "dom/glissando.h"
 
+#include "playback/renderingcontext.h"
+#include "playback/utils/expressionutils.h"
+
 using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
 
-const ArticulationTypeSet& GlissandosRenderer::supportedTypes()
-{
-    static const mpe::ArticulationTypeSet types = {
-        mpe::ArticulationType::DiscreteGlissando, mpe::ArticulationType::ContinuousGlissando
-    };
-
-    return types;
-}
-
-void GlissandosRenderer::doRender(const EngravingItem* item, const mpe::ArticulationType type,
-                                  const RenderingContext& context,
-                                  mpe::PlaybackEventList& result)
-{
-    const Note* note = toNote(item);
-
-    IF_ASSERT_FAILED(note) {
-        return;
-    }
-
-    if (type == ArticulationType::DiscreteGlissando) {
-        renderDiscreteGlissando(note, context, result);
-    } else {
-        renderContinuousGlissando(note, context, result);
-    }
-}
-
-void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result)
+static std::vector<int> pitchSteps(const Note* note)
 {
     const Glissando* glissando = nullptr;
     for (const Spanner* spanner : note->spannerFor()) {
@@ -65,51 +42,62 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const Renderi
     }
 
     if (!glissando) {
-        return;
+        return {};
     }
 
     std::vector<int> pitchSteps;
-    if (!Glissando::pitchSteps(glissando, pitchSteps)) {
+    Glissando::pitchSteps(glissando, pitchSteps);
+
+    return pitchSteps;
+}
+
+muse::mpe::duration_t GlissandosRenderer::discreteGlissandoStepDuration(const Note* note, const duration_t noteDuration)
+{
+    const std::vector<int> steps = pitchSteps(note);
+    if (steps.empty()) {
+        return 0;
+    }
+
+    return noteDuration / static_cast<float>(steps.size());
+}
+
+void GlissandosRenderer::renderDiscreteGlissando(const Note* note, NominalNoteCtx& ctx, mpe::PlaybackEventList& result)
+{
+    const std::vector<int> steps = pitchSteps(note);
+    if (steps.empty()) {
         return;
     }
 
-    size_t stepsCount = pitchSteps.size();
+    const size_t stepsCount = steps.size();
+    const float durationStep = ctx.duration / static_cast<float>(stepsCount);
+    size_t firstStep = 0;
 
-    float durationStep = context.nominalDuration / static_cast<float>(stepsCount);
+    if (note->tieBack()) {
+        mpe::ArticulationMeta& meta = ctx.articulations.at(ArticulationType::DiscreteGlissando).meta;
+        meta.timestamp += durationStep;
+        meta.overallDuration -= durationStep;
+        firstStep = 1;
+    }
 
-    for (size_t i = 0; i < stepsCount; ++i) {
-        if (!isNotePlayable(note, context.commonArticulations)) {
-            continue;
-        }
-
-        NominalNoteCtx noteCtx(note, context);
+    for (size_t i = firstStep; i < stepsCount; ++i) {
+        NominalNoteCtx noteCtx(ctx);
         noteCtx.duration = durationStep;
         noteCtx.timestamp += i * durationStep;
-        noteCtx.pitchLevel += pitchSteps.at(i) * mpe::PITCH_LEVEL_STEP;
+        noteCtx.pitchLevel += steps.at(i) * mpe::PITCH_LEVEL_STEP;
+
+        const int utick = timestampToTick(noteCtx.chordCtx.score, noteCtx.timestamp);
+        noteCtx.dynamicLevel = ctx.chordCtx.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
         updateArticulationBoundaries(ArticulationType::DiscreteGlissando,
                                      noteCtx.timestamp,
                                      noteCtx.duration,
-                                     noteCtx.chordCtx.commonArticulations);
+                                     noteCtx.articulations);
 
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     }
 }
 
-void GlissandosRenderer::renderContinuousGlissando(const Note* note, const RenderingContext& context, mpe::PlaybackEventList& result)
+void GlissandosRenderer::renderContinuousGlissando(const Note*, NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result)
 {
-    if (!isNotePlayable(note, context.commonArticulations)) {
-        return;
-    }
-
-    result.emplace_back(buildNoteEvent(note, context));
-}
-
-pitch_level_t GlissandosRenderer::pitchLevelStep(const mpe::ArticulationAppliedData& articulationData)
-{
-    if (articulationData.meta.overallPitchChangesRange < 0) {
-        return -mpe::PITCH_LEVEL_STEP;
-    }
-
-    return mpe::PITCH_LEVEL_STEP;
+    result.emplace_back(buildNoteEvent(ctx));
 }

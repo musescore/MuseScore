@@ -45,6 +45,14 @@ Item {
     property NavigationPanel navigationPanel: null
     property int navigationRow: 0
 
+    function closeContextMenu() {
+        if (!menuButton.isMenuOpened) {
+            return
+        }
+
+        menuButton.toggleMenu(null)
+    }
+
     signal toggleExpandRequested()
     signal enableEditingToggled(bool val)
     signal hideSelectedElementsRequested()
@@ -124,7 +132,17 @@ Item {
         acceptedButtons: Qt.RightButton
 
         onClicked: {
-            menuButton.toggleMenu(this, mouseX, mouseY)
+            contextMenuLoader.show(Qt.point(mouseX, mouseY))
+        }
+
+        ContextMenuLoader {
+            id: contextMenuLoader
+
+            items: menuButton.menuModel
+
+            onHandleMenuItem: function(itemId) {
+                menuButton.menuItemClicked(itemId)
+            }
         }
     }
 
@@ -160,6 +178,10 @@ Item {
         ]
 
         onHandleMenuItem: function(itemId) {
+            menuItemClicked(itemId)
+        }
+
+        function menuItemClicked(itemId) {
             switch(itemId) {
             case "hide": root.hidePaletteRequested(); break
             case "new": root.insertNewPaletteRequested(); break

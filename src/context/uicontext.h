@@ -32,8 +32,14 @@ static constexpr muse::ui::UiContext UiCtxUnknown = muse::ui::UiCtxUnknown;
 static constexpr muse::ui::UiContext UiCtxAny = muse::ui::UiCtxAny;
 
 static constexpr muse::ui::UiContext UiCtxHomeOpened = muse::ui::UiCtxHomeOpened;
-static constexpr muse::ui::UiContext UiCtxNotationOpened = muse::ui::UiCtxProjectOpened;
-static constexpr muse::ui::UiContext UiCtxNotationFocused = muse::ui::UiCtxProjectFocused;
+static constexpr muse::ui::UiContext UiCtxProjectOpened = muse::ui::UiCtxProjectOpened;
+static constexpr muse::ui::UiContext UiCtxProjectFocused = muse::ui::UiCtxProjectFocused;
+
+static constexpr muse::ui::UiContext UiCtxDialogOpened = muse::ui::UiCtxDialogOpened;
+
+// application-specific contexts
+static constexpr muse::ui::UiContext UiCtxPublishOpened = "UiCtxPublishOpened";
+static constexpr muse::ui::UiContext UiCtxDevToolsOpened = "UiCtxDevToolsOpened";
 }
 
 #endif // MU_CONTEXT_UICONTEXT_H

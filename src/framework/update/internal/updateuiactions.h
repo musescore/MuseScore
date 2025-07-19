@@ -30,12 +30,12 @@
 #include "updateactioncontroller.h"
 
 namespace muse::update {
-class UpdateUiActions : public muse::ui::IUiActionsModule
+class UpdateUiActions : public muse::ui::IUiActionsModule, public Injectable
 {
-    INJECT(mu::context::IUiContextResolver, uicontextResolver)
+    Inject<mu::context::IUiContextResolver> uicontextResolver = { this };
 
 public:
-    UpdateUiActions(std::shared_ptr<UpdateActionController> controller);
+    UpdateUiActions(std::shared_ptr<UpdateActionController> controller, const modularity::ContextPtr& iocCtx);
 
     const muse::ui::UiActionList& actionsList() const override;
 

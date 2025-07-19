@@ -47,7 +47,7 @@ TEST_F(Engraving_KeySigTests, keysig)
     String writeFile2("keysig02-test.mscx");
     String reference2(KEYSIG_DATA_DIR + "keysig02-ref.mscx");     // with Eb maj
     String writeFile3("keysig03-test.mscx");
-    String reference3(KEYSIG_DATA_DIR + "keysig.mscx");           // orig
+    String reference3(KEYSIG_DATA_DIR + "keysig03bis-ref.mscx");           // orig
     String writeFile4("keysig04-test.mscx");
     String reference4(KEYSIG_DATA_DIR + "keysig02-ref.mscx");     // with Eb maj
     String writeFile5("keysig05-test.mscx");
@@ -64,7 +64,7 @@ TEST_F(Engraving_KeySigTests, keysig)
     // add a key signature (D major) in measure 2
     KeySigEvent ke2;
     ke2.setConcertKey(Key::D);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Key signature tests"));
     score->undoChangeKeySig(score->staff(0), m2->tick(), ke2);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -72,7 +72,7 @@ TEST_F(Engraving_KeySigTests, keysig)
     // change key signature in measure 2 to E flat major
     KeySigEvent ke_3;
     ke_3.setConcertKey(Key(-3));
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Key signature tests"));
     score->undoChangeKeySig(score->staff(0), m2->tick(), ke_3);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
@@ -83,7 +83,7 @@ TEST_F(Engraving_KeySigTests, keysig)
         s = s->next();
     }
     EngravingItem* e = s->element(0);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Key signature tests"));
     score->undoRemoveElement(e);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile3, reference3));
@@ -158,7 +158,7 @@ TEST_F(Engraving_KeySigTests, preferSharpFlat)
     MasterScore* score2 = ScoreRW::readScore(KEYSIG_DATA_DIR + u"preferSharpFlat-2.mscx");
     EXPECT_TRUE(score2);
     score2->cmdSelectAll();
-    score2->startCmd();
+    score2->startCmd(TranslatableString::untranslatable("Key signature tests"));
     // transpose augmented unison up
     score2->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 1, true, true, true);
     score2->endCmd();

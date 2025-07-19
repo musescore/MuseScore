@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.26997</pageWidth>
@@ -27,13 +28,13 @@
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
       <footerFontSize>10</footerFontSize>
-      <Spatium>1.74978</Spatium>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -50,7 +51,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Dynamics and expression text</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -115,23 +117,29 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Dynamics and expression text</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <text>James M</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -139,19 +147,24 @@
             <subtype>pp</subtype>
             <velocity>33</velocity>
             <direction>down</direction>
+            <eid>J_J</eid>
             </Dynamic>
           <Chord>
+            <eid>K_K</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>L_L</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>M_M</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>N_N</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -159,22 +172,29 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>O_O</eid>
         <voice>
           <Expression>
+            <direction>down</direction>
+            <eid>P_P</eid>
             <text><i>sub.</i></text>
             </Expression>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>R_R</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>T_T</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -182,27 +202,35 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>U_U</eid>
         <voice>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
             <direction>down</direction>
+            <eid>V_V</eid>
             </Dynamic>
           <Expression>
+            <direction>down</direction>
+            <eid>W_W</eid>
             <text><i>sub.</i></text>
             </Expression>
           <Chord>
+            <eid>X_X</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>Y_Y</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>Z_Z</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>a_a</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -210,24 +238,30 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>b_b</eid>
         <voice>
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
             <direction>down</direction>
+            <eid>c_c</eid>
             </Dynamic>
           <Chord>
+            <eid>d_d</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>e_e</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>f_f</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>g_g</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -235,17 +269,20 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>h_h</eid>
         <voice>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
             <direction>down</direction>
+            <eid>i_i</eid>
             </Dynamic>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>2</subtype>
-              <lineVisible>0</lineVisible>
               <direction>down</direction>
+              <lineVisible>0</lineVisible>
+              <eid>j_j</eid>
               </HairPin>
             <next>
               <location>
@@ -259,23 +296,28 @@
               </prev>
             </Spanner>
           <Chord>
+            <eid>k_k</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>l_l</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>m_m</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>n_n</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>o_o</eid>
             </BarLine>
           </voice>
         </Measure>

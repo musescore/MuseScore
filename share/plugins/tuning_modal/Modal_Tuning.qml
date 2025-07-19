@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import QtQuick 2.2
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import MuseScore 3.0
 import FileIO 3.0
@@ -30,7 +30,7 @@ MuseScore {
     thumbnailName: "modal_tuning.png"
 
     width: 860
-    height: 722
+    height: 740
 
     property var offsetTextWidth: 40;
     property var offsetLabelAlignment: 0x02 | 0x40;
@@ -228,7 +228,7 @@ MuseScore {
         var selection = new scoreSelection()
         curScore.startCmd()
         selection.map(filterNotes, reTune(getFinalTuning()))
-        if (annotateValue.checkedState == Qt.Checked) {
+        if (annotateValue.checked) {
             selection.map(filterNotes, annotate)
         }
         curScore.endCmd()
@@ -823,6 +823,13 @@ MuseScore {
     Item {
         anchors.fill: parent
 
+        ButtonGroup { id: temperamentTypeGroup }
+
+        component TuningItem: RadioButton {
+            padding: 2
+            ButtonGroup.group: temperamentTypeGroup
+        }
+
         GridLayout {
             columns: 2
             anchors.fill: parent
@@ -830,156 +837,130 @@ MuseScore {
             GroupBox {
                 title: "Tuning"
                 ColumnLayout {
-                    ButtonGroup { id: tempamentTypeGroup }
-                    RadioButton {
+                    TuningItem {
                         id: equal_button
                         text: "Equal"
                         checked: true
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(equal) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning01_button
                         text: "Melodic 1# 2b"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning01) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning02_button
                         text: "Harmonic 1# 2b"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning02) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning03_button
                         text: "Rast, Sikah"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning03) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning04_button
                         text: "Suznak, Huzam"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning04) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning05_button
                         text: "Nayruz"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning05) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning06_button
                         text: "Bayati, Kurd, Huseyni"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning06) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning07_button
                         text: "Qarjighar"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning07) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning08_button
                         text: "Saba, Basta Nikar, Zanjaran"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning08) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning09_button
                         text: "Hijaz, Nikriz"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning09) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning10_button
                         text: "Nawa'athar, Shad Araban"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning10) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning11_button
                         text: "Shehnaz"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning11) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning12_button
                         text: "Nahawand, Hijaz Kar"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning12) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning13_button
                         text: "Nahawand, Hijaz Kar Kurd"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning13) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning14_button
                         text: "Iraq, Yekah, Nawa"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning14) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning15_button
                         text: "Farahnak, Yekah, Nawa"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning15) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning16_button
                         text: "Jiharkah"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning16) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning17_button
                         text: "Ajam Ashyran, Shawq Afza"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning17) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning18_button
                         text: "Hisar"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning18) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning19_button
                         text: "Nishaburek (Rast in D & A)"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning19) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning20_button
                         text: "Nishaburek (Rast in D, Bayati in A)"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning20) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning21_button
                         text: "Saba Zamzam"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning21) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning22_button
                         text: "Rakb"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning22) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning23_button
                         text: "Sikah Baladi"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning23) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning24_button
                         text: "Iraq (Cadence)"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning24) }
                     }
                 }

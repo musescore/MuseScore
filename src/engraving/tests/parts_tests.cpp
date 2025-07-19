@@ -38,9 +38,11 @@
 #include "dom/part.h"
 #include "dom/segment.h"
 #include "dom/spanner.h"
+#include "dom/staff.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
+#include "utils/testutils.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -50,9 +52,8 @@ static const String PARTS_DATA_DIR("parts_data/");
 class Engraving_PartsTests : public ::testing::Test
 {
 public:
-    Score* createPart(MasterScore* score);
-    void createParts(MasterScore* score);
     void testPartCreation(const String& test);
+    void createLinkedStaff(MasterScore* score);
 
     MasterScore* doAddBreath();
     MasterScore* doRemoveBreath();
@@ -68,67 +69,17 @@ public:
     MasterScore* doRemoveImage();
 };
 
-Score* Engraving_PartsTests::createPart(MasterScore* masterScore)
+void Engraving_PartsTests::createLinkedStaff(MasterScore* masterScore)
 {
-    std::vector<Part*> parts;
-    parts.push_back(masterScore->parts().at(0));
-    Score* nscore = masterScore->createScore();
-
-    Excerpt* ex = new Excerpt(masterScore);
-    ex->setExcerptScore(nscore);
-    ex->setParts(parts);
-    ex->setName(parts.front()->partName());
-    Excerpt::createExcerpt(ex);
-
-    masterScore->excerpts().push_back(ex);
-    masterScore->setExcerptsChanged(true);
-
-    return nscore;
-}
-
-//---------------------------------------------------------
-//   createParts
-//---------------------------------------------------------
-
-void Engraving_PartsTests::createParts(MasterScore* masterScore)
-{
-    //
-    // create first part
-    //
-    std::vector<Part*> parts;
-    parts.push_back(masterScore->parts().at(0));
-    Score* nscore = masterScore->createScore();
-
-    Excerpt* ex = new Excerpt(masterScore);
-    ex->setExcerptScore(nscore);
-    ex->setParts(parts);
-    ex->setName(parts.front()->partName());
-    Excerpt::createExcerpt(ex);
-    masterScore->excerpts().push_back(ex);
-    //ex->setName(parts.front()->longName());
-    EXPECT_TRUE(nscore);
-
-    //nscore->setName(parts.front()->partName());
-
-    //
-    // create second part
-    //
-    parts.clear();
-    parts.push_back(masterScore->parts().at(1));
-    nscore = masterScore->createScore();
-
-    ex = new Excerpt(masterScore);
-    ex->setExcerptScore(nscore);
-    ex->setParts(parts);
-    ex->setName(parts.front()->partName());
-    Excerpt::createExcerpt(ex);
-    masterScore->excerpts().push_back(ex);
-    //ex->setName(parts.front()->longName());
-    EXPECT_TRUE(nscore);
-
-    //nscore->setName(parts.front()->partName());
-
-    masterScore->setExcerptsChanged(true);
+    masterScore->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
+    Staff* sourceStaff = masterScore->staff(0);
+    EXPECT_TRUE(sourceStaff);
+    Staff* linkedStaff = Factory::createStaff(sourceStaff->part());
+    linkedStaff->setPart(sourceStaff->part());
+    masterScore->undoInsertStaff(linkedStaff, 1, false);
+    Excerpt::cloneStaff(sourceStaff, linkedStaff);
+    masterScore->endCmd();
+    EXPECT_TRUE(masterScore->staff(1));
 }
 
 //---------------------------------------------------------
@@ -222,7 +173,7 @@ void Engraving_PartsTests::testPartCreation(const String& test)
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + test + u".mscx");
     ASSERT_TRUE(score);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-1.mscx", PARTS_DATA_DIR + test + u".mscx"));
-    createParts(score);
+    TestUtils::createParts(score, 2);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-parts.mscx", PARTS_DATA_DIR + test + u"-parts.mscx"));
     delete score;
 }
@@ -233,12 +184,15 @@ void Engraving_PartsTests::testPartCreation(const String& test)
 
 TEST_F(Engraving_PartsTests, appendMeasure)
 {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
     ASSERT_TRUE(score);
 
-    createParts(score);
+    TestUtils::createParts(score, 2);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     score->insertMeasure(0);
     score->endCmd();
 
@@ -248,6 +202,7 @@ TEST_F(Engraving_PartsTests, appendMeasure)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-all-uappendmeasures.mscx", PARTS_DATA_DIR + u"part-all-uappendmeasures.mscx"));
     delete score;
+    MScore::useRead302InTestMode = use302;
 }
 
 //---------------------------------------------------------
@@ -256,12 +211,15 @@ TEST_F(Engraving_PartsTests, appendMeasure)
 
 TEST_F(Engraving_PartsTests, insertMeasure)
 {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
     ASSERT_TRUE(score);
 
-    createParts(score);
+    TestUtils::createParts(score, 2);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     Measure* m = score->firstMeasure();
     score->insertMeasure(m);
     score->endCmd();
@@ -272,6 +230,8 @@ TEST_F(Engraving_PartsTests, insertMeasure)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-all-uinsertmeasures.mscx", PARTS_DATA_DIR + u"part-all-uinsertmeasures.mscx"));
     delete score;
+
+    MScore::useRead302InTestMode = use302;
 }
 
 //---------------------------------------------------------
@@ -283,7 +243,7 @@ TEST_F(Engraving_PartsTests, styleScore)
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"partStyle.mscx");
     ASSERT_TRUE(score);
 
-    createParts(score);
+    TestUtils::createParts(score, 2);
     score->style().set(Sid::clefLeftMargin, 4.0);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"partStyle-score-test.mscx", PARTS_DATA_DIR + u"partStyle-score-ref.mscx"));
     delete score;
@@ -353,7 +313,10 @@ TEST_F(Engraving_PartsTests, createPart1)
 
 TEST_F(Engraving_PartsTests, createPart2)
 {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
     testPartCreation(u"part-all");
+    MScore::useRead302InTestMode = use302;
 }
 
 TEST_F(Engraving_PartsTests, createPart3)
@@ -389,7 +352,7 @@ MasterScore* Engraving_PartsTests::doAddBreath()
     b->setSymId(SymId::breathMarkComma);
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
 
@@ -450,7 +413,7 @@ MasterScore* Engraving_PartsTests::doRemoveBreath()
     Breath* b    = toBreath(s->element(0));
 
     score->select(b);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -521,7 +484,7 @@ MasterScore* Engraving_PartsTests::doAddFingering()
     b->setXmlText("3");
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
     return score;
@@ -585,7 +548,7 @@ MasterScore* Engraving_PartsTests::doRemoveFingering()
     }
     score->select(fingering);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -655,7 +618,7 @@ MasterScore* Engraving_PartsTests::doAddSymbol()
     b->setSym(SymId::gClef);
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
     return score;
@@ -719,7 +682,7 @@ MasterScore* Engraving_PartsTests::doRemoveSymbol()
     }
     score->select(se);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -789,7 +752,7 @@ MasterScore* Engraving_PartsTests::doAddChordline()
     b->setChordLineType(ChordLineType::FALL);
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
     return score;
@@ -853,7 +816,7 @@ MasterScore* Engraving_PartsTests::doRemoveChordline()
     }
     score->select(se);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -916,7 +879,7 @@ MasterScore* Engraving_PartsTests::doAddMeasureRepeat()
 
     Measure* m = score->firstMeasure()->nextMeasure();
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     score->cmdAddMeasureRepeat(m, 4, 0); // test with 4-measure repeat in first staff
     score->setLayoutAll();
     score->endCmd();
@@ -977,7 +940,7 @@ MasterScore* Engraving_PartsTests::doRemoveMeasureRepeat()
     MeasureRepeat* mr = m->measureRepeatElement(0);
     score->select(mr);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -1048,7 +1011,7 @@ MasterScore* Engraving_PartsTests::doAddImage()
     b->load(PARTS_DATA_DIR + u"schnee.png");
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
     return score;
@@ -1112,7 +1075,7 @@ MasterScore* Engraving_PartsTests::doRemoveImage()
     }
     score->select(fingering);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -1170,9 +1133,10 @@ TEST_F(Engraving_PartsTests, partExclusion)
 
     EXPECT_TRUE(masterScore);
 
-    Score* partScore = createPart(masterScore);
+    Score* partScore = TestUtils::createPart(masterScore);
     EXPECT_TRUE(partScore);
 
+    ScoreRW::saveScore(masterScore, u"partExclusion.mscx");
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
 
     // Collect the relevant items
@@ -1218,7 +1182,8 @@ TEST_F(Engraving_PartsTests, partExclusion)
         item->undoChangeProperty(Pid::EXCLUDE_FROM_OTHER_PARTS, !exclude);
     }
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
+    // Not applicable anymore because creating new elements creates new EIDs too
+    //EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
 }
 
 TEST_F(Engraving_PartsTests, partPropertyLinking)
@@ -1227,9 +1192,10 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
 
     EXPECT_TRUE(masterScore);
 
-    Score* partScore = createPart(masterScore);
+    Score* partScore = TestUtils::createPart(masterScore);
     EXPECT_TRUE(partScore);
 
+    ScoreRW::saveScore(masterScore, u"partPropertyLinking.mscx");
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-0.mscx",
                                             PARTS_DATA_DIR + u"partPropertyLinking-part-0.mscx"));
 
@@ -1258,6 +1224,129 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
     testItem->undoChangeProperty(Pid::APPEARANCE_LINKED_TO_MASTER, true, PropertyFlags::NOSTYLE);
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-0.mscx",
                                             PARTS_DATA_DIR + u"partPropertyLinking-part-0.mscx"));
+}
+
+TEST_F(Engraving_PartsTests, partSpanners)
+{
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    testPartCreation(u"part-spanners");
+
+    MScore::useRead302InTestMode = useRead302;
+}
+
+TEST_F(Engraving_PartsTests, partTies) {
+    const String test = u"linked-ties";
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + test + u".mscx");
+    ASSERT_TRUE(score);
+    createLinkedStaff(score);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-1.mscx", PARTS_DATA_DIR + test + u"-1.mscx"));
+    TestUtils::createPart(score);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-parts.mscx", PARTS_DATA_DIR + test + u"-parts.mscx"));
+    delete score;
+}
+
+TEST_F(Engraving_PartsTests, partVisibleTracks) {
+    Score* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-visible-tracks.mscx");
+    EXPECT_TRUE(score);
+
+    Score* part = nullptr;
+    for (Score* s : score->scoreList()) {
+        if (!s->isMaster()) {
+            part = s;
+            break;
+        }
+    }
+    EXPECT_TRUE(part);
+    Measure* m = part->firstMeasure();
+    EXPECT_TRUE(m);
+    Chord* c = m->findChord(Fraction(0, 1), 0);
+    EXPECT_TRUE(c);
+    Note* n = c->downNote();
+    EXPECT_TRUE(n);
+
+    part->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
+    part->select(n);
+    part->changeSelectedElementsVoice(1);
+    part->endCmd();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-visible-tracks-score.mscx",
+                                            PARTS_DATA_DIR + u"part-visible-tracks-score-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(part, u"part-visible-tracks-part.mscx",
+                                            PARTS_DATA_DIR + u"part-visible-tracks-part-ref.mscx"));
+}
+
+TEST_F(Engraving_PartsTests, inputFromParts) {
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    // Enter notes *in parts* and check that they are correctly cloned to the score.
+
+    Score* score = ScoreRW::readScore(PARTS_DATA_DIR + u"input-from-parts.mscz");
+    EXPECT_TRUE(score);
+    staff_idx_t fluteStaff = 0;
+    staff_idx_t oboeStaff = 1;
+    staff_idx_t clarinetStaff = 2;
+    staff_idx_t bassoonStaff = 3;
+
+    Score* flutePart = nullptr;
+    Score* oboePart = nullptr;
+    Score* clarinetPart = nullptr;
+    Score* bassoonPart = nullptr;
+    for (Score* part : score->scoreList()) {
+        String partName = part->name();
+        if (partName == u"Flute") {
+            flutePart = part;
+        } else if (partName == u"Oboe") {
+            oboePart = part;
+        } else if (partName == u"Clarinet in B♭") {
+            clarinetPart = part;
+        } else if (partName == u"Bassoon") {
+            bassoonPart = part;
+        }
+    }
+    EXPECT_TRUE(flutePart && oboePart && clarinetPart && bassoonPart);
+
+    track_idx_t voice = 3;
+    Segment* partSegment = flutePart->firstMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    EXPECT_TRUE(partSegment);
+    flutePart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
+    Segment* scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
+    EXPECT_TRUE(scoreSegment);
+    Chord* chord = toChord(scoreSegment->elementAt(staff2track(fluteStaff) + voice));
+    EXPECT_TRUE(chord);
+
+    voice = 2;
+    partSegment = oboePart->firstMeasure()->nextMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    EXPECT_TRUE(partSegment);
+    oboePart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
+    scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
+    EXPECT_TRUE(scoreSegment);
+    chord = toChord(scoreSegment->elementAt(staff2track(oboeStaff) + voice));
+    EXPECT_TRUE(chord);
+
+    voice = 1;
+    partSegment = clarinetPart->firstMeasure()->nextMeasure()->nextMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+    EXPECT_TRUE(partSegment);
+    clarinetPart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
+    scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
+    EXPECT_TRUE(scoreSegment);
+    chord = toChord(scoreSegment->elementAt(staff2track(clarinetStaff) + voice));
+    EXPECT_TRUE(chord);
+
+    voice = 0;
+    partSegment = bassoonPart->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0,
+                                                                                                                                        1));
+    EXPECT_TRUE(partSegment);
+    bassoonPart->setNoteRest(partSegment, voice, NoteVal(60), Fraction(1, 1));
+    scoreSegment = score->tick2segment(partSegment->tick(), true, SegmentType::ChordRest);
+    EXPECT_TRUE(scoreSegment);
+    chord = toChord(scoreSegment->elementAt(staff2track(bassoonStaff) + voice));
+    EXPECT_TRUE(chord);
+
+    MScore::useRead302InTestMode = useRead302;
 }
 
 //---------------------------------------------------------

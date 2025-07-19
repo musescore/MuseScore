@@ -50,7 +50,7 @@ public:
 
     virtual void reset() = 0;
 
-    virtual muse::async::Channel<uint32_t> midiTickPlayed() const = 0;
+    virtual muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const = 0;
 
     virtual muse::audio::TrackSequenceId currentTrackSequenceId() const = 0;
     virtual muse::async::Notification currentTrackSequenceIdChanged() const = 0;
@@ -75,9 +75,12 @@ public:
     virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
                                        const notation::INotationSoloMuteState::SoloMuteState& state) = 0;
 
-    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
+    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi = false) = 0;
+    virtual void playNotes(const notation::NoteValList& notes, const notation::staff_idx_t staffIdx, const notation::Segment* segment) = 0;
     virtual void playMetronome(int tick) = 0;
+
     virtual void seekElement(const notation::EngravingItem* element) = 0;
+    virtual void seekBeat(int measureIndex, int beatIndex) = 0;
 
     virtual bool actionChecked(const muse::actions::ActionCode& actionCode) const = 0;
     virtual muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const = 0;
@@ -89,7 +92,7 @@ public:
     virtual muse::async::Notification currentTempoChanged() const = 0;
 
     virtual notation::MeasureBeat currentBeat() const = 0;
-    virtual muse::audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
+    virtual muse::audio::secs_t beatToSecs(int measureIndex, int beatIndex) const = 0;
 
     virtual double tempoMultiplier() const = 0;
     virtual void setTempoMultiplier(double multiplier) = 0;
@@ -100,6 +103,10 @@ public:
 
     virtual void setNotation(notation::INotationPtr notation) = 0;
     virtual void setIsExportingAudio(bool exporting) = 0;
+
+    virtual const std::set<muse::audio::TrackId>& onlineSounds() const = 0;
+    virtual muse::async::Notification onlineSoundsChanged() const = 0;
+    virtual muse::Progress onlineSoundsProcessingProgress() const = 0;
 };
 }
 

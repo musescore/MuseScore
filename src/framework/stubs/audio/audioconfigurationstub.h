@@ -42,12 +42,18 @@ public:
     unsigned int driverBufferSize() const override; // samples
     void setDriverBufferSize(unsigned int size) override;
     async::Notification driverBufferSizeChanged() const override;
-    samples_t renderStep() const override;
+
+    msecs_t audioWorkerInterval(const samples_t, const sample_rate_t) const override;
+    samples_t minSamplesToReserve(RenderMode mode) const override;
+
+    samples_t samplesToPreallocate() const override;
+    async::Channel<samples_t> samplesToPreallocateChanged() const override;
 
     unsigned int sampleRate() const override;
     void setSampleRate(unsigned int sampleRate) override;
     async::Notification sampleRateChanged() const override;
 
+    size_t desiredAudioThreadNumber() const override;
     size_t minTrackCountForMultithreading() const override;
 
     // synthesizers
@@ -58,7 +64,11 @@ public:
     void setUserSoundFontDirectories(const io::paths_t& paths) override;
     async::Channel<io::paths_t> soundFontDirectoriesChanged() const override;
 
-    io::path_t knownAudioPluginsFilePath() const override;
+    bool autoProcessOnlineSoundsInBackground() const override;
+    void setAutoProcessOnlineSoundsInBackground(bool process) override;
+    async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const override;
+
+    bool shouldMeasureInputLag() const override;
 };
 }
 

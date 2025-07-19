@@ -25,7 +25,9 @@
 #include "timeline.h"
 
 #include <QApplication>
+#include <QQuickWindow>
 #include <QSplitter>
+#include <QTimer>
 
 #include "log.h"
 
@@ -103,6 +105,36 @@ using namespace mu::notation;
 TimelineView::TimelineView(QQuickItem* parent)
     : WidgetView(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
+    m_drawTimer.setSingleShot(true);
+    m_drawTimer.setInterval(32); // 30 fps
+
+    connect(&m_drawTimer, &QTimer::timeout, this, &TimelineView::doDraw);
+
+    doDraw();
+}
+
+void TimelineView::doDraw()
+{
+    if (isVisible()) {
+        m_dpr =  window() ? window()->devicePixelRatio() : 1.0;
+
+        m_image = QImage(width() * m_dpr, height() * m_dpr, QImage::Format_ARGB32_Premultiplied);
+        m_image.setDevicePixelRatio(m_dpr);
+        m_image.fill(Qt::transparent);
+
+        if (qWidget()) {
+            qWidget()->render(&m_image, QPoint(), QRegion(), QWidget::DrawWindowBackground | QWidget::DrawChildren);
+        }
+
+        update();
+    }
+
+    m_drawTimer.start();
+}
+
+void TimelineView::paint(QPainter* painter)
+{
+    painter->drawImage(0, 0, m_image);
 }
 
 void TimelineView::componentComplete()

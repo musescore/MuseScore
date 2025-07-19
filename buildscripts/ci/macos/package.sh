@@ -40,16 +40,8 @@ if [ -z "$SIGN_CERTIFICATE_PASSWORD" ]; then echo "warning: not set SIGN_CERTIFI
 echo "SIGN_CERTIFICATE_ENCRYPT_SECRET: $SIGN_CERTIFICATE_ENCRYPT_SECRET"
 echo "SIGN_CERTIFICATE_PASSWORD: $SIGN_CERTIFICATE_PASSWORD"
 
-mkdir -p applebuild/mscore.app/Contents/Resources/Frameworks
-wget -c --no-check-certificate -nv -O musescore_dependencies_macos.zip  http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_macos.zip
-unzip musescore_dependencies_macos.zip -d applebuild/mscore.app/Contents/Resources/Frameworks
-
-# install Sparkle
-mkdir -p applebuild/mscore.app/Contents/Frameworks
-cp -Rf ~/Library/Frameworks/Sparkle.framework applebuild/mscore.app/Contents/Frameworks
-
 # Setup keychain for code sign
-if [ "$SIGN_CERTIFICATE_ENCRYPT_SECRET" != "''" ]; then 
+if [ "$SIGN_CERTIFICATE_ENCRYPT_SECRET" != "''" ]; then
 
     7z x -y ./buildscripts/ci/macos/resources/mac_musescore.p12.enc -o./buildscripts/ci/macos/resources/ -p${SIGN_CERTIFICATE_ENCRYPT_SECRET}
 
@@ -76,38 +68,34 @@ VERSION_PATCH="$(cut -d'.' -f3 <<<"$BUILD_VERSION")"
 
 APP_LONGER_NAME="MuseScore $VERSION_MAJOR"
 PACKAGE_VERSION="$BUILD_VERSION"
-if [ "$BUILD_MODE" == "devel_build" ]; then
-  APP_LONGER_NAME="MuseScore $BUILD_VERSION Devel"
-  PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
+if [ "$BUILD_MODE" == "devel" ]; then
+    APP_LONGER_NAME="MuseScore $BUILD_VERSION Devel"
+    PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
 fi
-if [ "$BUILD_MODE" == "nightly_build" ]; then
-  APP_LONGER_NAME="MuseScore $BUILD_VERSION Nightly";
-  PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
+if [ "$BUILD_MODE" == "nightly" ]; then
+    APP_LONGER_NAME="MuseScore $BUILD_VERSION Nightly"
+    PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
 fi
-if [ "$BUILD_MODE" == "testing_build" ]; then
-  APP_LONGER_NAME="MuseScore $BUILD_VERSION Testing";
-  PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
+if [ "$BUILD_MODE" == "testing" ]; then
+    APP_LONGER_NAME="MuseScore $BUILD_VERSION Testing"
+    PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
 fi
-if [ "$BUILD_MODE" == "stable_build" ]; then
-  APP_LONGER_NAME="MuseScore $VERSION_MAJOR";
-  PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
+if [ "$BUILD_MODE" == "stable" ]; then
+    APP_LONGER_NAME="MuseScore $VERSION_MAJOR"
+    PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 fi
 
-buildscripts/packaging/MacOS/package_mac --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION"
+buildscripts/packaging/macOS/package.sh --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION"
 
 DMGFILE="$(ls applebuild/*.dmg)"
 echo "DMGFILE: $DMGFILE"
 
-if [ "$BUILD_MODE" == "nightly_build" ]; then
-
-  BUILD_NUMBER=$(cat $ARTIFACTS_DIR/env/build_number.env)
-  BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
-  ARTIFACT_NAME=MuseScore-Studio-Nightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
-
+if [ "$BUILD_MODE" == "nightly" ]; then
+    BUILD_NUMBER=$(cat $ARTIFACTS_DIR/env/build_number.env)
+    BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
+    ARTIFACT_NAME=MuseScore-Studio-Nightly-${BUILD_NUMBER}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
 else
-
-  ARTIFACT_NAME=MuseScore-Studio-${BUILD_VERSION}.dmg
-
+    ARTIFACT_NAME=MuseScore-Studio-${BUILD_VERSION}.dmg
 fi
 
 mv $DMGFILE $ARTIFACTS_DIR/$ARTIFACT_NAME

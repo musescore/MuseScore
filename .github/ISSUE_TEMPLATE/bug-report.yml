@@ -1,5 +1,6 @@
 name: Bug report
-description: File a bug report
+description: Report crashes or incorrect behaviour of existing functionality in MuseScore Studio.
+type: Bug
 body:
   - type: dropdown
     id: label
@@ -14,7 +15,6 @@ body:
         - UI bug (incorrect info or interface appearance)
         - Accessibility issue (e.g. for keyboard-only or screen reader users)
         - VST bug
-        - Muse Sounds bug
         - General playback bug
         - Cloud issue (opening, saving, logging in/out)
         - Opening/saving issue
@@ -24,55 +24,56 @@ body:
     validations:
       required: true
   - type: textarea
-    id: desc
+    id: steps
     attributes:
-      label: Bug description
-      description: A more detailed description of the bug
-      placeholder: Context for the bug that didn't fit in the title
-    validations:
-      required: false
-  - type: textarea
-    id: str
-    attributes:
-      label: Steps to reproduce
-      description: Please provide step-by-step instructions to reproduce this bug 
+      label: Description with steps to reproduce
+      description: Please also describe the actual (current) and expected behaviour
       placeholder: |
         1. go to ...
         2. then click on ...
         3. then ...
+        Actual behaviour:
+        Expected behaviour:
     validations:
       required: true
   - type: textarea
-    id: screenshot
+    id: evidence
     attributes:
-      label: Screenshots/Screen recordings
-      description: | 
-        Especially for longer or more complicated bugs, screen recordings are highly recommended. 
-
-        If you don't have a screen recording tool installed (OBS, Bandicam, QuickTime, etc.), you can also take a video with your phone.
+      label: Supporting files, videos and screenshots
+      description: |
+        * For crashes: a short screen recording (ideally 20sec or less) plus crash logs and [diagnostic files](https://github.com/musescore/MuseScore/wiki/Reporting-bugs-and-issues#33-diagnostic-files)
+        * For engraving issues: one or more screenshots (or a short screen recording, 20sec or less) showing the problem and, where possible, the expected outcome
+        * For playback issues: 
+          * A short screen recording with audio of a minimal reproducible example 
+          * A score containing the problem (please upload as a .zip file)
+          * Examples comparing both MS Basic and MuseSounds (where applicable)
+        * For UI/interaction and all other issues: a short screen recording (ideally 20sec or less) and files (where applicable; please upload as a .zip file).
       placeholder: |
-        Click into this text box and paste your video
+        Click into this text box and paste your files, videos and screenshots here.
     validations:
-      required: false
+      required: true
   - type: input
     id: version
     attributes:
-      label: MuseScore Version
-      description: What version of MuseScore are you running? You can copy the info from the Help > About dialog in MuseScore.
+      label: What is the latest version of MuseScore Studio where this issue is present?
+      description: |
+        You can copy the info from the Help > About dialog in MuseScore Studio. 
+        If you can, please also check whether this issue is still present in the _latest_ [nightly build](https://musescore.org/en/nightly-builds).
     validations:
       required: true
   - type: dropdown
     id: regression
     attributes:
       label: Regression
-      description: Did this work before?
+      description: Did this work before? Older versions of MuseScore Studio can be found [here](https://github.com/musescore/MuseScore/releases).
       options:
         - Choose option...
         - No.
-        - I don't know
-        - Yes, this used to work in MuseScore 3.x and now is broken 
+        - Yes, this used to work in MuseScore 3.x and now is broken
         - Yes, this used to work in a previous version of MuseScore 4.x
-    validations: 
+        - Yes, this works in the latest released version and is broken in the nightly builds
+        - I was unable to check
+    validations:
       required: true
   - type: input
     id: os
@@ -80,21 +81,28 @@ body:
       label: Operating system
       description: What OS does this bug occur on?
       placeholder: Windows 11, macOS 13, Ubuntu 22.04, etc.
-    validations: 
+    validations:
       required: true
   - type: textarea
     id: context
     attributes:
       label: Additional context
       description: Further information which may be relevant to this bug
-      placeholder: Crash log, Screenshots, MuseScore project, build number, etc.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: "Before submitting your bug report, please make sure the following requirements are met:"
+      options:
+        - label: "This report follows the [guidelines](https://github.com/musescore/MuseScore/wiki/Reporting-bugs-and-issues) for reporting bugs and issues"
+          required: true
+        - label: "I have verified that this issue has not been logged before, by searching the [issue tracker](https://github.com/musescore/MuseScore/issues) for similar issues"
+          required: true
+        - label: "I have attached all requested files and information to this report"
+          required: true
+        - label: "I have attempted to identify the root problem as concisely as possible, and have used minimal reproducible examples where possible"
+          required: true
   - type: markdown
     attributes:
-      value: |
-        Useful information to include:
-        * For crashes: crash logs, system information (OS, CPU, GPU, memory, drive type, etc.)
-        * For playback issues: Is it using MS Basic, MuseSounds or VSTs?
-          * For VSTs in particular: Where did you get the VSTs from? (link)
-        * For engraving: sample score (MuseScore project), screenshots
-        * For UI issues: Screenshots, screen recordings, system information, GPU drivers
-        * For regressions: The last MuseScore version (or even better: commit) that worked well. 
+      value: If an issue does not meet these requirements, it may be closed without investigation.

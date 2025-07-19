@@ -81,6 +81,7 @@ static const std::set<OrnamentStyle> any;             // empty set has the speci
 static constexpr int _16th = Constants::DIVISION / 4;
 static constexpr int _32nd = _16th / 2;
 constexpr int SLIDE_DURATION = _32nd;
+constexpr int GRACE_BEND_DURATION = _16th;
 static const std::vector<OrnamentExcursion> excursions = {
     //  articulation type            set of  duration       body         repeatp      suffix
     //                               styles          prefix                    sustainp
@@ -165,9 +166,10 @@ public:
 
         int sndController = CTRL_BREATH;
 
-        std::unordered_map<staff_idx_t, VelocityMap> velocitiesByStaff;
-        std::unordered_map<staff_idx_t, VelocityMap> velocityMultiplicationsByStaff;
+        std::unordered_map<track_idx_t, VelocityMap> velocitiesByTrack;
+        std::unordered_map<track_idx_t, VelocityMap> velocityMultiplicationsByTrack;
         std::unordered_map<String, std::unordered_set<String> > articulationsWithoutValuesByInstrument;
+        std::unordered_set<const Chord*> chordsWithHammerOnPullOff;
 
         std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
         std::shared_ptr<PauseMap> pauseMap = std::make_shared<PauseMap>();
@@ -203,6 +205,7 @@ private:
     void collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier, Staff* st,
                                        int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
     void fillArticulationsInfo();
+    void fillHammerOnPullOffsInfo();
 
     Score* score = nullptr;
     Context m_context;

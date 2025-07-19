@@ -29,12 +29,13 @@
 #include "extensions/iextensionsprovider.h"
 
 namespace muse::extensions {
-class ExtensionsUiActions : public ui::IUiActionsModule, public async::Asyncable
+class ExtensionsUiActions : public ui::IUiActionsModule, public Injectable, public async::Asyncable
 {
-    Inject<extensions::IExtensionsProvider> provider;
+    Inject<extensions::IExtensionsProvider> provider = { this };
 
 public:
-    ExtensionsUiActions() = default;
+    ExtensionsUiActions(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
 
     const ui::UiActionList& actionsList() const override;
 

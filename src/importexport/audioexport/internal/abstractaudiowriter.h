@@ -32,15 +32,18 @@
 #include "project/inotationwriter.h"
 
 namespace mu::iex::audioexport {
-class AbstractAudioWriter : public project::INotationWriter, public muse::async::Asyncable
+class AbstractAudioWriter : public project::INotationWriter, public muse::Injectable, public muse::async::Asyncable
 {
 public:
-    INJECT(muse::audio::IPlayback, playback)
-    INJECT(IAudioExportConfiguration, configuration)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(playback::IPlaybackController, playbackController)
+    muse::Inject<muse::audio::IPlayback> playback = { this };
+    muse::Inject<IAudioExportConfiguration> configuration = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<playback::IPlaybackController> playbackController  = { this };
 
 public:
+    AbstractAudioWriter(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
+
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
@@ -55,6 +58,8 @@ protected:
     muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
 
 private:
+    void doWrite(const QString& path, const muse::audio::SoundTrackFormat& format, bool startProgress = true);
+
     UnitType unitTypeFromOptions(const Options& options) const;
 
     muse::Progress m_progress;

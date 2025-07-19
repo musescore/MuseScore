@@ -31,16 +31,30 @@ DoubleInputValidator::DoubleInputValidator(QObject* parent)
 
 void DoubleInputValidator::fixup(QString& string) const
 {
-    auto zeros = [](int num)->QString {
-        QString s = QString();
-        for (int i = 0; i < num; i++) {
-            s.append("0");
+    auto removeTrailingZeros = [](QString& str) {
+        if (str.isEmpty()) {
+            return;
         }
-        return s;
+
+        if (!str.contains('.')) {
+            return;
+        }
+
+        size_t num = str.size();
+        for (size_t i = num - 1; i > 0; i--) {
+            if (str[i] == '0') {
+                str.remove(i, 1);
+            } else if (str[i] == '.') {
+                str.remove(i, 1);
+                break;
+            } else {
+                break;
+            }
+        }
     };
 
-    if (!string.contains(".")) {
-        string.append("." + zeros(m_decimal));
+    if (string.isEmpty()) {
+        string.append("0");
     }
 
     if (string.startsWith(".")) {
@@ -48,17 +62,13 @@ void DoubleInputValidator::fixup(QString& string) const
     }
 
     if (string.endsWith(".")) {
-        string.append(zeros(m_decimal));
+        string.remove(string.size() - 1, 1);
     }
 
     QStringList strList = string.split(".", Qt::SkipEmptyParts);
 
     QString intPart = strList.at(0);
-    QString floatPart = strList.at(1);
-
-    if (floatPart.length() < m_decimal) {
-        floatPart.append(zeros(m_decimal - floatPart.length()));
-    }
+    QString floatPart = strList.size() > 1 ? strList.at(1) : 0;
 
     if (intPart.contains(QRegularExpression("^0{1,3}$"))) {
         intPart = QString("0");
@@ -66,26 +76,40 @@ void DoubleInputValidator::fixup(QString& string) const
         intPart = QString("-0");
     }
 
-    if (intPart == QString("-0") && floatPart == zeros(m_decimal)) {
+    if (intPart == QString("-0") && floatPart.isEmpty()) {
         intPart = QString("0");
     }
 
-    string = QString("%1.%2").arg(intPart).arg(floatPart);
+    if (floatPart.size() > m_decimal) {
+        floatPart = floatPart.remove(m_decimal, floatPart.size() - m_decimal);
+    }
+
+    string = QString("%1.%2").arg(intPart, floatPart);
 
     if (string.toDouble() > m_top) {
         string = QString::number(m_top, 'f', m_decimal);
     } else if (string.toDouble() < m_bottom) {
         string = QString::number(m_bottom, 'f', m_decimal);
     }
+
+    removeTrailingZeros(string);
 }
 
 QValidator::State DoubleInputValidator::validate(QString& inputStr, int& cursorPos) const
 {
     QValidator::State state = Invalid;
 
-    if (inputStr.contains(QRegularExpression(QString("^\\-?\\d{1,3}\\.\\d{%1}$").arg(m_decimal)))) {
-        if (inputStr.contains(QRegularExpression("^\\-?0{2,3}\\."))
-            || (inputStr.startsWith("-") && muse::RealIsNull(inputStr.toDouble()))) {
+    const QRegularExpression validRegex(QString("^\\-?\\d{1,3}(\\.\\d{1,%1})?$").arg(m_decimal));
+
+    if (inputStr.contains(validRegex)) {
+        static const QRegularExpression invalidZeroRegex("^\\-?0{2,3}\\."); // for '-000.'
+        static const QRegularExpression invalidTrailingZeroRegex("^\\-?\\d+\\.0{1,}$"); // for '1.00'
+        static const QRegularExpression invalidTrailingDotRegex("^\\-?\\d+\\.$"); // for '1.'
+
+        if (inputStr.contains(invalidZeroRegex)
+            || (inputStr.startsWith("-") && muse::RealIsNull(inputStr.toDouble())) // for "-000"
+            || inputStr.contains(invalidTrailingZeroRegex)
+            || inputStr.contains(invalidTrailingDotRegex)) {
             state = Intermediate;
         } else {
             state = Acceptable;

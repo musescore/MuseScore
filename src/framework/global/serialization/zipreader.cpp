@@ -22,6 +22,7 @@
 #include "zipreader.h"
 
 #include "global/io/file.h"
+#include "global/io/dir.h"
 #include "internal/zipcontainer.h"
 
 using namespace muse;
@@ -64,7 +65,11 @@ ZipReader::~ZipReader()
 
 bool ZipReader::exists() const
 {
-    return File::exists(m_filePath);
+    if (!m_filePath.empty()) {
+        return File::exists(m_filePath);
+    }
+
+    return true;
 }
 
 void ZipReader::close()
@@ -104,4 +109,38 @@ bool ZipReader::fileExists(const std::string& fileName) const
 ByteArray ZipReader::fileData(const std::string& fileName) const
 {
     return m_impl->zip->fileData(fileName);
+}
+
+// ===========================
+// ZipUnpack
+// ===========================
+
+Ret ZipUnpack::unpack(const io::path_t& zipPath, const io::path_t& dirPath)
+{
+    Ret ret = io::Dir::mkpath(dirPath);
+    if (!ret) {
+        return ret;
+    }
+
+    ZipReader zip(zipPath);
+    for (const ZipReader::FileInfo& fi : zip.fileInfoList()) {
+        const io::path_t filePath = dirPath + "/" + fi.filePath;
+
+        if (fi.isDir) {
+            ret = io::Dir::mkpath(filePath);
+        } else if (fi.isFile) {
+            ret = io::Dir::mkpath(io::dirpath(filePath));
+
+            if (ret) {
+                const ByteArray data = zip.fileData(fi.filePath.toStdString());
+                ret = io::File::writeFile(filePath, data);
+            }
+        }
+
+        if (!ret) {
+            break;
+        }
+    }
+
+    return ret;
 }

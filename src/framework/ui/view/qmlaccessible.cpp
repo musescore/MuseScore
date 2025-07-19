@@ -154,8 +154,8 @@ void AccessibleItem::accessibleSelection(int selectionIndex, int* startOffset, i
         *startOffset = m_selectionStart;
         *endOffset = m_selectionEnd;
     } else {
-        *startOffset = 0;
-        *endOffset = 0;
+        *startOffset = -1;
+        *endOffset = -1;
     }
 }
 
@@ -382,8 +382,10 @@ void AccessibleItem::classBegin()
 
 void AccessibleItem::componentComplete()
 {
-    accessibilityController()->reg(this);
-    m_registred = true;
+    if (accessibilityController()) {
+        accessibilityController()->reg(this);
+        m_registred = true;
+    }
 }
 
 AccessibleItem* AccessibleItem::accessibleParent_property() const

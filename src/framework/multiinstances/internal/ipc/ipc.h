@@ -29,10 +29,16 @@
 
 #include <functional>
 
+#include "muse_framework_config.h"
+
 class QLocalSocket;
 
 namespace muse::ipc {
-static const QString SERVER_NAME("musescore-app-ipc");
+#ifdef MUSE_APP_UNSTABLE
+static const QString SERVER_NAME("musescore-app-ipc-" MUSE_APP_VERSION_MAJOR "-development");
+#else
+static const QString SERVER_NAME("musescore-app-ipc-" MUSE_APP_VERSION_MAJOR);
+#endif
 
 using ID = QString;
 
@@ -48,6 +54,8 @@ static const QString IPC_INIT("ipc_init");
 static const QString IPC_WHOIS("ipc_whois");
 static const QString IPC_METAINFO("ipc_metainfo");
 static const QString IPC_PING("ipc_ping");
+
+static constexpr uint32_t MAX_PACKAGE_SIZE = 4096;
 
 enum class Code {
     Undefined = -1,

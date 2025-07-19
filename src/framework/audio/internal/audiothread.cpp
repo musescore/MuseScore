@@ -22,15 +22,27 @@
 #include "audiothread.h"
 
 #include "global/runtime.h"
+#include "global/threadutils.h"
 #include "global/async/processevents.h"
+
+#include "internal/audiosanitizer.h"
 
 #ifdef Q_OS_WASM
 #include <emscripten/html5.h>
 #endif
 
+#ifdef Q_OS_WIN
+#include "global/platform/win/waitabletimer.h"
+#endif
+
 #include "log.h"
 
 using namespace muse::audio;
+
+static uint64_t toWinTime(const msecs_t msecs)
+{
+    return msecs * 10000;
+}
 
 std::thread::id AudioThread::ID;
 
@@ -41,22 +53,36 @@ AudioThread::~AudioThread()
     }
 }
 
-void AudioThread::run(const Runnable& onStart, const Runnable& loopBody)
+void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const msecs_t interval)
 {
     m_onStart = onStart;
     m_mainLoopBody = loopBody;
+    m_intervalMsecs = interval;
+    m_intervalInWinTime = toWinTime(interval);
 
 #ifndef Q_OS_WASM
     m_running = true;
     m_thread = std::make_unique<std::thread>([this]() {
         main();
     });
+
+    if (!muse::setThreadPriority(*m_thread, ThreadPriority::High)) {
+        LOGE() << "Unable to change audio thread priority";
+    }
 #else
     emscripten_set_timeout_loop([](double, void* userData) -> EM_BOOL {
         reinterpret_cast<AudioThread*>(userData)->loopBody();
         return EM_TRUE;
     }, 2, this);
 #endif
+}
+
+void AudioThread::setInterval(const msecs_t interval)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_intervalMsecs = interval;
+    m_intervalInWinTime = toWinTime(interval);
 }
 
 void AudioThread::stop(const Runnable& onFinished)
@@ -83,6 +109,14 @@ void AudioThread::main()
         m_onStart();
     }
 
+#ifdef Q_OS_WIN
+    WaitableTimer timer;
+    bool timerValid = timer.init();
+    if (timerValid) {
+        LOGI() << "Waitable timer successfully created, interval: " << m_intervalMsecs << " ms";
+    }
+#endif
+
     while (m_running) {
         async::processEvents();
 
@@ -90,7 +124,13 @@ void AudioThread::main()
             m_mainLoopBody();
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+#ifdef Q_OS_WIN
+        if (!timerValid || !timer.setAndWait(m_intervalInWinTime)) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(m_intervalMsecs));
+        }
+#else
+        std::this_thread::sleep_for(std::chrono::milliseconds(m_intervalMsecs));
+#endif
     }
 
     if (m_onFinished) {

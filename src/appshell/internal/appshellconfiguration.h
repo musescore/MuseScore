@@ -38,19 +38,22 @@
 #include "iappshellconfiguration.h"
 
 namespace mu::appshell {
-class AppShellConfiguration : public IAppShellConfiguration, public muse::async::Asyncable
+class AppShellConfiguration : public IAppShellConfiguration, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<muse::IGlobalConfiguration> globalConfiguration;
-    muse::Inject<muse::IApplication> application;
-    muse::Inject<muse::io::IFileSystem> fileSystem;
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
-    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::Inject<project::IProjectConfiguration> projectConfiguration;
-    muse::Inject<notation::INotationConfiguration> notationConfiguration;
-    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration;
-    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::IApplication> application = { this };
+    muse::Inject<muse::io::IFileSystem> fileSystem = { this };
+    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
+    muse::Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration = { this };
 
 public:
+    AppShellConfiguration(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
+
     void init();
 
     bool hasCompletedFirstLaunchSetup() const override;
@@ -58,9 +61,11 @@ public:
 
     StartupModeType startupModeType() const override;
     void setStartupModeType(StartupModeType type) override;
+    muse::async::Notification startupModeTypeChanged() const override;
 
     muse::io::path_t startupScorePath() const override;
     void setStartupScorePath(const muse::io::path_t& scorePath) override;
+    muse::async::Notification startupScorePathChanged() const override;
 
     muse::io::path_t userDataPath() const override;
 
@@ -82,11 +87,15 @@ public:
     bool needShowSplashScreen() const override;
     void setNeedShowSplashScreen(bool show) override;
 
+    const QString& preferencesDialogLastOpenedPageId() const override;
+    void setPreferencesDialogLastOpenedPageId(const QString& lastOpenedPageId) override;
+
     void startEditSettings() override;
     void applySettings() override;
     void rollbackSettings() override;
 
-    void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) const override;
+    void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true,
+                                 bool notifyOtherInstances = true) const override;
 
     muse::io::paths_t sessionProjectsPaths() const override;
     muse::Ret setSessionProjectsPaths(const muse::io::paths_t& paths) override;
@@ -103,6 +112,11 @@ private:
     muse::Ret writeSessionState(const QByteArray& data);
 
     muse::io::paths_t parseSessionProjectsPaths(const QByteArray& json) const;
+
+    QString m_preferencesDialogCurrentPageId;
+
+    muse::async::Notification m_startupModeTypeChanged;
+    muse::async::Notification m_startupScorePathChanged;
 };
 }
 

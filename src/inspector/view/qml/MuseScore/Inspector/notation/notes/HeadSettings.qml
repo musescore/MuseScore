@@ -56,8 +56,8 @@ FocusableItem {
             navigationRowStart: root.navigationRowStart + 1
 
             model: [
-                { iconCode: IconCode.NOTE_HEAD, value: false, title: qsTrc("inspector", "Normal notehead") },
-                { iconCode: IconCode.NOTE_HEAD_PARENTHESES, value: true, title: qsTrc("inspector", "Notehead with parentheses") }
+                { iconCode: IconCode.NOTE_HEAD, value: NoteHead.PAREN_NONE, title: qsTrc("inspector", "Normal notehead") },
+                { iconCode: IconCode.NOTE_HEAD_PARENTHESES, value: NoteHead.PAREN_BOTH, title: qsTrc("inspector", "Notehead with parentheses") }
             ]
         }
 
@@ -175,25 +175,32 @@ FocusableItem {
                     navigationRowStart: noteDirectionSection.navigationRowEnd + 1
                 }
 
-                StyledTextLabel {
-                    width: parent.width
-
-                    text: qsTrc("inspector", "Alignment in chords")
-                    horizontalAlignment: Text.AlignLeft
-                }
-
-                PropertyToggle {
-                    id: combineVoiceToggle
-
-                    navigation.name: "Combine with voices that share the same stem direction"
-                    navigation.panel: root.navigationPanel
-                    navigation.row: noteOffsetSection.navigationRowEnd + 1
-
-                    label.elide: Text.ElideNone
-                    label.wrapMode: Text.Wrap
-
+                FlatRadioButtonGroupPropertyView {
+                    id: centerStavesSection
                     propertyItem: root.chordModel ? root.chordModel.combineVoice : null
-                    text: qsTrc("inspector", "Combine with voices that share the same stem direction")
+
+                    showTitle: true;
+                    titleLabelComponent: Component {
+                        id: centerStavesTitleLabel
+
+                        StyledTextLabel {
+                            width: parent.width
+                            text: qsTrc("inspector", "Combine with voices that share the same stem direction")
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideNone
+                            wrapMode: Text.Wrap
+                        }
+                    }
+
+                    navigationName: "Combine with voices that share the same stem direction"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: noteOffsetSection.navigationRowEnd + 1
+
+                    model: [
+                        { text: qsTrc("inspector", "Auto"), value: CommonTypes.AUTO_ON_OFF_AUTO },
+                        { text: qsTrc("inspector", "On"), value: CommonTypes.AUTO_ON_OFF_ON },
+                        { text: qsTrc("inspector", "Off"), value: CommonTypes.AUTO_ON_OFF_OFF }
+                    ]
                 }
             }
         }

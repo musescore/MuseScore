@@ -186,6 +186,17 @@ void KeySig::undoSetMode(KeyMode v)
     undoChangeProperty(Pid::KEYSIG_MODE, int(v));
 }
 
+PointF KeySig::staffOffset() const
+{
+    const Segment* seg = segment();
+    const Measure* meas = seg ? seg->measure() : nullptr;
+    if (meas && meas->endTick() == tick()) {
+        // Courtesy key sig should be adjusted by the following staffType's offset
+        return EngravingItem::staffOffset();
+    }
+    return PointF(0.0, 0.0);
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
@@ -201,6 +212,8 @@ PropertyValue KeySig::getProperty(Pid propertyId) const
         return int(showCourtesy());
     case Pid::KEYSIG_MODE:
         return int(mode());
+    case Pid::IS_COURTESY:
+        return _isCourtesy;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -238,6 +251,9 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
         setMode(KeyMode(v.toInt()));
         staff()->setKey(tick(), keySigEvent());
         break;
+    case Pid::IS_COURTESY:
+        _isCourtesy = v.toBool();
+        break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
@@ -264,6 +280,8 @@ PropertyValue KeySig::propertyDefault(Pid id) const
         return true;
     case Pid::KEYSIG_MODE:
         return int(KeyMode::UNKNOWN);
+    case Pid::IS_COURTESY:
+        return false;
     default:
         return EngravingItem::propertyDefault(id);
     }
@@ -295,5 +313,14 @@ String KeySig::accessibleInfo() const
 {
     String keySigType = TConv::translatedUserName(key(), isAtonal(), isCustom());
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
+}
+
+//---------------------------------------------------------
+//   translatedSubtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString KeySig::subtypeUserName() const
+{
+    return TConv::userName(key(), isAtonal(), isCustom());
 }
 }

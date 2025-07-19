@@ -21,8 +21,9 @@
  */
 #include "backendjsonwriter.h"
 
+#include <QIODevice>
+
 using namespace mu::converter;
-using namespace muse::io;
 
 BackendJsonWriter::BackendJsonWriter(QIODevice* destinationDevice)
 {

@@ -30,9 +30,9 @@
 #include "ibrailleconfiguration.h"
 #include "inotationbraille.h"
 #include "modularity/ioc.h"
-#include "notation/inotationconfiguration.h"
 #include "notation/notationtypes.h"
 #include "playback/iplaybackcontroller.h"
+#include "actions/iactionsdispatcher.h"
 
 #include "braille.h"
 #include "brailleinput.h"
@@ -41,15 +41,18 @@ namespace mu::engraving {
 class Score;
 class Selection;
 
-class NotationBraille : public mu::braille::INotationBraille, public muse::async::Asyncable
+class NotationBraille : public mu::braille::INotationBraille, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(braille::IBrailleConfiguration, brailleConfiguration)
-    INJECT(playback::IPlaybackController, playbackController)
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
+    NotationBraille(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
+
     void init();
     void doBraille(bool force = false);
 

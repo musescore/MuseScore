@@ -21,8 +21,6 @@
  */
 #include "commonscenemodule.h"
 
-#include <QtQml>
-
 using namespace mu::commonscene;
 
 static void commonscene_init_qrc()

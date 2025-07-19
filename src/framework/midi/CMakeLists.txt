@@ -83,12 +83,16 @@ elseif (OS_IS_WIN)
     set(MODULE_LINK ${MODULE_LINK} winmm)
 elseif (OS_IS_LIN)
     find_package(ALSA REQUIRED)
-    set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
+    set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${ALSA_INCLUDE_DIRS} )
     set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
 endif()
 
 set(MODULE_QRC midi.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
+
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Qml)
+endif()
 
 setup_module()

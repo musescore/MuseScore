@@ -142,8 +142,11 @@ public:
 
     GenerateAudioTimePeriodType generateAudioTimePeriodType() const override;
     void setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type) override;
+    muse::async::Channel<int> generateAudioTimePeriodTypeChanged() const override;
+
     int numberOfSavesToGenerateAudio() const override;
     void setNumberOfSavesToGenerateAudio(int number) override;
+    muse::async::Channel<int> numberOfSavesToGenerateAudioChanged() const override;
 
     muse::io::path_t temporaryMp3FilePathTemplate() const override;
 
@@ -154,6 +157,9 @@ public:
 
     bool disableVersionChecking() const override;
     void setDisableVersionChecking(bool disable) override;
+
+    bool createBackupBeforeSaving() const override;
+    void setCreateBackupBeforeSaving(bool create) override;
 
 private:
     muse::io::path_t appTemplatesPath() const;
@@ -168,6 +174,9 @@ private:
 
     muse::async::Channel<bool> m_autoSaveEnabledChanged;
     muse::async::Channel<int> m_autoSaveIntervalChanged;
+
+    muse::async::Channel<int> m_generateAudioTimePeriodTypeChanged;
+    muse::async::Channel<int> m_numberOfSavesToGenerateAudioChanged;
 
     muse::async::Channel<bool> m_alsoShareAudioComChanged;
 

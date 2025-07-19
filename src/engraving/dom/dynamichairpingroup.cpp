@@ -34,26 +34,13 @@ using namespace mu;
 namespace mu::engraving {
 static std::pair<Hairpin*, Hairpin*> findAdjacentHairpins(Dynamic* d)
 {
-    Score* score = d->score();
-    const Segment* dSeg = d->segment();
-    Hairpin* leftHairpin = nullptr;
-    Hairpin* rightHairpin = nullptr;
+    EngravingItem* itemSnappedBefore = d->ldata()->itemSnappedBefore();
+    EngravingItem* itemSnappedAfter = d->ldata()->itemSnappedAfter();
 
-    const Fraction tick = dSeg->tick();
-    const int intTick = tick.ticks();
-
-    const auto& nearSpanners = score->spannerMap().findOverlapping(intTick - 1, intTick + 1);
-    for (auto i : nearSpanners) {
-        Spanner* s = i.value;
-        if (s->track() == d->track() && s->isHairpin()) {
-            Hairpin* h = toHairpin(s);
-            if (h->tick() == tick) {
-                rightHairpin = h;
-            } else if (h->tick2() == tick) {
-                leftHairpin = h;
-            }
-        }
-    }
+    Hairpin* leftHairpin = itemSnappedBefore && itemSnappedBefore->isHairpinSegment()
+                           ? toHairpinSegment(itemSnappedBefore)->hairpin() : nullptr;
+    Hairpin* rightHairpin = itemSnappedAfter && itemSnappedAfter->isHairpinSegment()
+                            ? toHairpinSegment(itemSnappedAfter)->hairpin() : nullptr;
 
     return { leftHairpin, rightHairpin };
 }
@@ -65,14 +52,11 @@ std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSeg
         return nullptr;
     }
 
-    Hairpin* hairpin = hs->hairpin();
+    EngravingItem* itemSnappedBefore = hs->ldata()->itemSnappedBefore();
+    EngravingItem* itemSnappedAfter = hs->ldata()->itemSnappedAfter();
 
-    Segment* startSegment = hairpin->startSegment();
-    Segment* endSegment = hairpin->endSegment();
-    const track_idx_t track = hs->track();
-
-    Dynamic* startDynamic = toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, track, track));
-    Dynamic* endDynamic = toDynamic(endSegment->findAnnotation(ElementType::DYNAMIC, track, track));
+    Dynamic* startDynamic = itemSnappedBefore && itemSnappedBefore->isDynamic() ? toDynamic(itemSnappedBefore) : nullptr;
+    Dynamic* endDynamic = itemSnappedAfter && itemSnappedAfter->isDynamic() ? toDynamic(itemSnappedAfter) : nullptr;
 
     // Include only dragged dynamics to this group
     if (!isDragged(startDynamic)) {
@@ -250,19 +234,8 @@ void DynamicExpressionDragGroup::startDrag(EditData& ed)
 
 RectF DynamicExpressionDragGroup::drag(EditData& ed)
 {
-    RectF r = static_cast<EngravingItem*>(m_dynamic)->drag(ed);
-
-    // Dynamic may snap to a different segment upon dragging,
-    // in which case move the expression with it
-    Segment* newSegment = m_dynamic->segment();
-    Segment* oldSegment = toSegment(m_expression->explicitParent());
-    staff_idx_t newStaff = m_dynamic->staffIdx();
-    staff_idx_t oldStaff = m_expression->staffIdx();
-
-    if (newSegment != oldSegment || newStaff != oldStaff) {
-        Score* score = newSegment->score();
-        score->undoChangeParent(m_expression, newSegment, newStaff);
-    }
+    RectF r = m_dynamic->drag(ed);
+    r.unite(m_expression->drag(ed));
 
     m_dynamic->triggerLayout();
     m_expression->triggerLayout();

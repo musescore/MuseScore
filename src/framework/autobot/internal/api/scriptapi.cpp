@@ -26,8 +26,17 @@
 using namespace muse::autobot;
 
 ScriptApi::ScriptApi(muse::api::IApiEngine* engine, QObject* parent)
-    : QObject(parent), m_engine(engine)
+    : QObject(parent), Injectable(engine->iocContext()), m_engine(engine)
 {
+}
+
+ScriptApi::~ScriptApi()
+{
+    for (auto& a : m_apis) {
+        if (a.isNeedDelete) {
+            delete a.obj;
+        }
+    }
 }
 
 QJSValue ScriptApi::api(const std::string& name) const
@@ -41,7 +50,9 @@ QJSValue ScriptApi::api(const std::string& name) const
         return a.jsval;
     }
 
-    a.obj = apiRegister()->createApi(name, m_engine);
+    auto api = apiRegister()->createApi(name, m_engine);
+    a.obj = api.first;
+    a.isNeedDelete = api.second;
     IF_ASSERT_FAILED(a.obj) {
         return QJSValue();
     }

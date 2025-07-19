@@ -23,9 +23,10 @@
 #define MUSE_GLOBAL_DATAFORMATTER_H
 
 #include "types/string.h"
-#include "types/datetime.h"
 
 namespace muse {
+class Date;
+
 class DataFormatter
 {
 public:

@@ -38,7 +38,7 @@ static std::vector<std::string> shortcutsFileFilter()
 }
 
 ShortcutsModel::ShortcutsModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -102,7 +102,7 @@ void ShortcutsModel::load()
     beginResetModel();
     m_shortcuts.clear();
 
-    for (const UiAction& action : uiactionsRegister()->getActions()) {
+    for (const UiAction& action : uiactionsRegister()->actionList()) {
         Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
         if (!shortcut.isValid()) {
             shortcut.action = action.code;
@@ -182,8 +182,8 @@ void ShortcutsModel::setSelection(const QItemSelection& selection)
 
 void ShortcutsModel::importShortcutsFromFile()
 {
-    io::path_t path = interactive()->selectOpeningFile(
-        muse::qtrc("shortcuts", "Import shortcuts"),
+    io::path_t path = interactive()->selectOpeningFileSync(
+        muse::trc("shortcuts", "Import shortcuts"),
         globalConfiguration()->homePath(),
         shortcutsFileFilter());
 
@@ -194,8 +194,8 @@ void ShortcutsModel::importShortcutsFromFile()
 
 void ShortcutsModel::exportShortcutsToFile()
 {
-    io::path_t path = interactive()->selectSavingFile(
-        muse::qtrc("shortcuts", "Export shortcuts"),
+    io::path_t path = interactive()->selectSavingFileSync(
+        muse::trc("shortcuts", "Export shortcuts"),
         globalConfiguration()->homePath(),
         shortcutsFileFilter());
 

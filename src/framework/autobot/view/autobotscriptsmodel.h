@@ -32,14 +32,14 @@
 #include "async/asyncable.h"
 
 namespace muse::autobot {
-class AutobotScriptsModel : public QAbstractListModel, public async::Asyncable
+class AutobotScriptsModel : public QAbstractListModel, public Injectable, public async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(bool isRunAllTCMode READ isRunAllTCMode WRITE setIsRunAllTCMode NOTIFY isRunAllTCModeChanged)
     Q_PROPERTY(QString speedMode READ speedMode WRITE setSpeedMode NOTIFY speedModeChanged)
 
-    INJECT(IAutobotScriptsRepository, scriptsRepository)
-    INJECT(IAutobot, autobot)
+    Inject<IAutobotScriptsRepository> scriptsRepository = { this };
+    Inject<IAutobot> autobot = { this };
 
 public:
     explicit AutobotScriptsModel(QObject* parent = nullptr);

@@ -24,14 +24,13 @@
 
 #include "audio/audiotypes.h"
 
-#include "translation.h"
 #include "log.h"
 
 using namespace mu::appshell;
 using namespace muse::audio;
 
 CommonAudioApiConfigurationModel::CommonAudioApiConfigurationModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -43,7 +42,13 @@ void CommonAudioApiConfigurationModel::load()
 
     audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
         emit currentDeviceIdChanged();
+        emit sampleRateChanged();
+        emit bufferSizeListChanged();
         emit bufferSizeChanged();
+    });
+
+    audioDriver()->outputDeviceSampleRateChanged().onNotify(this, [this]() {
+        emit sampleRateChanged();
     });
 
     audioDriver()->outputDeviceBufferSizeChanged().onNotify(this, [this]() {
@@ -99,4 +104,26 @@ QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
 void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferSizeStr)
 {
     audioConfiguration()->setDriverBufferSize(bufferSizeStr.toInt());
+}
+
+unsigned int CommonAudioApiConfigurationModel::sampleRate() const
+{
+    return audioDriver()->outputDeviceSampleRate();
+}
+
+QList<unsigned int> CommonAudioApiConfigurationModel::sampleRateList() const
+{
+    QList<unsigned int> result;
+    std::vector<unsigned int> sampleRates = audioDriver()->availableOutputDeviceSampleRates();
+
+    for (unsigned int sampleRate : sampleRates) {
+        result << sampleRate;
+    }
+
+    return result;
+}
+
+void CommonAudioApiConfigurationModel::sampleRateSelected(const QString& sampleRateStr)
+{
+    audioConfiguration()->setSampleRate(sampleRateStr.toInt());
 }

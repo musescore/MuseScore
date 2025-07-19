@@ -47,11 +47,11 @@ namespace mu::notation {
 //! NOTE When this class is going to be removed, make sure to
 //! remove the StateMachine dependency from FindQt6.cmake too.
 //! This is the only class that uses it.
-class ExampleView : public QFrame, public engraving::MuseScoreView
+class ExampleView : public QFrame, public engraving::MuseScoreView, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(notation::INotationConfiguration, notationConfiguration)
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
     ExampleView(QWidget* parent = 0);
@@ -66,10 +66,8 @@ public:
 
     void changeEditElement(engraving::EngravingItem*) override;
     void setDropRectangle(const muse::RectF&) override;
-    void cmdAddSlur(engraving::Note* firstNote, Note* lastNote);
     void drawBackground(muse::draw::Painter*, const muse::RectF&) const override;
     void dragExampleView(QMouseEvent* ev);
-    const muse::Rect geometry() const override { return muse::Rect(QFrame::geometry()); }
 
 protected:
     void mousePressEvent(QMouseEvent*) override;

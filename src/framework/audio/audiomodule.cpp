@@ -21,8 +21,6 @@
  */
 #include "audiomodule.h"
 
-#include <QQmlEngine>
-
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
@@ -33,13 +31,10 @@
 #include "internal/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"
 
-#include "internal/plugins/knownaudiopluginsregister.h"
-#include "internal/plugins/audiopluginsscannerregister.h"
-#include "internal/plugins/audiopluginmetareaderregister.h"
-#include "internal/plugins/registeraudiopluginsscenario.h"
-
 #include "internal/worker/audioengine.h"
-#include "internal/worker/playback.h"
+
+#include "internal/playback.h"
+#include "internal/worker/workerplayback.h"
 
 #include "internal/soundfontrepository.h"
 
@@ -51,6 +46,7 @@
 #include "internal/fx/musefxresolver.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
+#include "devtools/inputlag.h"
 
 #include "log.h"
 
@@ -85,6 +81,18 @@ using namespace muse::audio::fx;
 #include "internal/platform/web/webaudiodriver.h"
 #endif
 
+static void measureInputLag(const float* buf, const size_t size)
+{
+    if (INPUT_LAG_TIMER_STARTED) {
+        for (size_t i = 0; i < size; ++i) {
+            if (!RealIsNull(buf[i])) {
+                STOP_INPUT_LAG_TIMER;
+                return;
+            }
+        }
+    }
+}
+
 static void audio_init_qrc()
 {
     Q_INIT_RESOURCE(audio);
@@ -102,15 +110,16 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    m_configuration = std::make_shared<AudioConfiguration>();
+    m_configuration = std::make_shared<AudioConfiguration>(iocContext());
+    m_audioEngine = std::make_shared<AudioEngine>(iocContext());
     m_audioWorker = std::make_shared<AudioThread>();
     m_audioBuffer = std::make_shared<AudioBuffer>();
-    m_audioOutputController = std::make_shared<AudioOutputDeviceController>();
+    m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
-    m_playbackFacade = std::make_shared<Playback>(iocContext());
-    m_soundFontRepository = std::make_shared<SoundFontRepository>();
-    m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
+    m_mainPlayback = std::make_shared<Playback>(iocContext());
+    m_workerPlayback = std::make_shared<worker::WorkerPlayback>(iocContext());
+    m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
@@ -137,19 +146,16 @@ void AudioModule::registerExports()
 #endif // MUSE_MODULE_AUDIO_JACK
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
     ioc()->registerExport<IAudioDriver>(moduleName(), m_audioDriver);
-    ioc()->registerExport<IPlayback>(moduleName(), m_playbackFacade);
+    ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);
+    ioc()->registerExport<worker::IWorkerPlayback>(moduleName(), m_workerPlayback);
 
     ioc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
     ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
 
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
-
-    ioc()->registerExport<IKnownAudioPluginsRegister>(moduleName(), std::make_shared<KnownAudioPluginsRegister>());
-    ioc()->registerExport<IAudioPluginsScannerRegister>(moduleName(), std::make_shared<AudioPluginsScannerRegister>());
-    ioc()->registerExport<IAudioPluginMetaReaderRegister>(moduleName(), std::make_shared<AudioPluginMetaReaderRegister>());
-    ioc()->registerExport<IRegisterAudioPluginsScenario>(moduleName(), m_registerAudioPluginsScenario);
 }
 
 void AudioModule::registerResources()
@@ -201,7 +207,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     // Init configuration
     m_configuration->init();
-    m_registerAudioPluginsScenario->init();
 
     if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
@@ -209,8 +214,7 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     m_soundFontRepository->init();
 
-    m_audioBuffer->init(m_configuration->audioChannelsCount(),
-                        m_configuration->renderStep());
+    m_audioBuffer->init(m_configuration->audioChannelsCount());
 
     m_audioOutputController->init();
 
@@ -224,15 +228,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
         for (const io::path_t& p : paths) {
             pr->reg("soundfonts", p);
         }
-        pr->reg("known_audio_plugins", m_configuration->knownAudioPluginsFilePath());
-    }
-}
-
-void AudioModule::onDelayedInit()
-{
-    Ret ret = m_registerAudioPluginsScenario->registerNewPlugins();
-    if (!ret) {
-        LOGE() << ret.toString();
     }
 }
 
@@ -250,8 +245,9 @@ void AudioModule::onDestroy()
     if (m_audioWorker->isRunning()) {
         m_audioWorker->stop([this]() {
             ONLY_AUDIO_WORKER_THREAD;
-            m_playbackFacade->deinit();
-            AudioEngine::instance()->deinit();
+            m_workerPlayback->deinit();
+            m_mainPlayback->deinitOnWorker();
+            m_audioEngine->deinit();
         });
     }
 }
@@ -263,10 +259,20 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
     requiredSpec.format = IAudioDriver::Format::AudioF32;
     requiredSpec.channels = m_configuration->audioChannelsCount();
     requiredSpec.samples = m_configuration->driverBufferSize();
-    requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
-        auto samplesPerChannel = byteCount / (2 * sizeof(float));
-        m_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
-    };
+
+    if (m_configuration->shouldMeasureInputLag()) {
+        requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
+            auto samplesPerChannel = byteCount / (2 * sizeof(float));  // 2 == m_configuration->audioChannelsCount()
+            float* dest = reinterpret_cast<float*>(stream);
+            m_audioBuffer->pop(dest, samplesPerChannel);
+            measureInputLag(dest, samplesPerChannel * m_audioBuffer->audioChannelCount());
+        };
+    } else {
+        requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
+            auto samplesPerChannel = byteCount / (2 * sizeof(float));
+            m_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
+        };
+    }
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_audioDriver->init();
@@ -285,22 +291,34 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
 void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 {
-    auto workerSetup = [this, activeSpec]() {
+    AudioEngine::RenderConstraints consts;
+    consts.minSamplesToReserveWhenIdle = m_configuration->minSamplesToReserve(RenderMode::IdleMode);
+    consts.minSamplesToReserveInRealtime = m_configuration->minSamplesToReserve(RenderMode::RealTimeMode);
+
+    auto workerSetup = [this, activeSpec, consts]() {
         AudioSanitizer::setupWorkerThread();
         ONLY_AUDIO_WORKER_THREAD;
 
         // Setup audio engine
-        AudioEngine::instance()->init(m_audioBuffer);
-        AudioEngine::instance()->setAudioChannelsCount(activeSpec.channels);
-        AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
-        AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
+        m_audioEngine->init(m_audioBuffer, consts);
+        m_audioEngine->setAudioChannelsCount(m_configuration->audioChannelsCount());
+        m_audioEngine->setSampleRate(activeSpec.sampleRate);
+        m_audioEngine->setReadBufferSize(activeSpec.samples);
 
-        auto fluidResolver = std::make_shared<FluidResolver>();
+        m_audioEngine->setOnReadBufferChanged([this](const samples_t samples, const sample_rate_t rate) {
+            msecs_t interval = m_configuration->audioWorkerInterval(samples, rate);
+            m_audioWorker->setInterval(interval);
+        });
+
+        auto fluidResolver = std::make_shared<FluidResolver>(iocContext());
         m_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
         m_synthResolver->init(m_configuration->defaultAudioInputParams());
 
-        // Initialize IPlayback facade and make sure that it's initialized after the audio-engine
-        m_playbackFacade->init();
+        // Initialize IWorkerPlayback facade and make sure that it's initialized after the audio-engine
+        m_workerPlayback->init();
+
+        // Playback must be inited after the audio thread is created
+        m_mainPlayback->initOnWorker();
     };
 
     auto workerLoopBody = [this]() {
@@ -308,5 +326,6 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         m_audioBuffer->forward();
     };
 
-    m_audioWorker->run(workerSetup, workerLoopBody);
+    msecs_t interval = m_configuration->audioWorkerInterval(activeSpec.samples, activeSpec.sampleRate);
+    m_audioWorker->run(workerSetup, workerLoopBody, interval);
 }

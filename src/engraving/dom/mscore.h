@@ -60,8 +60,6 @@ inline constexpr bool isDownVoice(voice_idx_t voiceIdx)
     return voiceIdx & 1;
 }
 
-static constexpr int MAX_TAGS = 32;
-
 static constexpr int MAX_HEADERS = 3;
 static constexpr int MAX_FOOTERS = 3;
 
@@ -112,26 +110,6 @@ enum class SelectType : char {
 };
 
 //---------------------------------------------------------
-//    KeySigNaturals (positions of naturals in key sig. changes)
-//---------------------------------------------------------
-
-enum class KeySigNatural : char {
-    NONE   = 0,               // no naturals, except for change to CMaj/Amin
-    BEFORE = 1,               // naturals before accidentals
-    AFTER  = 2                // naturals after accidentals (but always before if going sharps <=> flats)
-};
-
-//---------------------------------------------------------
-//    CourtesyBarlineMode (for key sig. and time sig. changes)
-//---------------------------------------------------------
-
-enum class CourtesyBarlineMode : char {
-    ALWAYS_SINGLE = 0,
-    ALWAYS_DOUBLE = 1,
-    DOUBLE_BEFORE_COURTESY = 2,
-};
-
-//---------------------------------------------------------
 //   UpDownMode
 //---------------------------------------------------------
 
@@ -140,10 +118,19 @@ enum class UpDownMode : char {
 };
 
 //---------------------------------------------------------
+//   OffsetType
+//---------------------------------------------------------
+
+enum class OffsetType : unsigned char {
+    ABS,         ///< offset in point units
+    SPATIUM      ///< offset in staff space units
+};
+
+//---------------------------------------------------------
 //   MScoreError
 //---------------------------------------------------------
 
-enum class MsError {
+enum class MsError : unsigned char {
     MS_NO_ERROR,
     NO_NOTE_SELECTED,
     NO_CHORD_REST_SELECTED,
@@ -172,6 +159,7 @@ enum class MsError {
     CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS,
     CORRUPTED_MEASURE,
     CANNOT_REMOVE_KEY_SIG,
+    CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE,
 };
 
 /// \cond PLUGIN_API \private \endcond

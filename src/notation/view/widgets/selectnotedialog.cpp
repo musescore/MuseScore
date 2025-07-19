@@ -57,8 +57,12 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    m_note = dynamic_cast<mu::engraving::Note*>(contextItem(globalContext()->currentNotation()->interaction()));
+    const INotationInteractionPtr interaction = globalContext()->currentNotation()->interaction();
+    IF_ASSERT_FAILED(interaction) {
+        return;
+    }
 
+    m_note = dynamic_cast<mu::engraving::Note*>(interaction->contextItem());
     IF_ASSERT_FAILED(m_note) {
         return;
     }
@@ -93,8 +97,6 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     inSelection->setEnabled(!isSingleSelection);
 
     connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectNoteDialog::buttonClicked);
-
-    WidgetStateStore::restoreGeometry(this);
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
@@ -208,6 +210,16 @@ void SelectNoteDialog::buttonClicked(QAbstractButton* button)
 }
 
 //---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void SelectNoteDialog::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(event);
+}
+
+//---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
@@ -250,7 +262,7 @@ void SelectNoteDialog::apply() const
         return;
     }
 
-    EngravingItem* selectedElement = contextItem(interaction);
+    EngravingItem* selectedElement = interaction->contextItem();
     if (!selectedElement) {
         return;
     }

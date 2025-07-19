@@ -31,22 +31,28 @@
 #include "iaudioconfiguration.h"
 
 namespace muse::audio {
-class SoundFontRepository : public ISoundFontRepository, public async::Asyncable
+class SoundFontRepository : public ISoundFontRepository, public Injectable, public async::Asyncable
 {
-    Inject<IInteractive> interactive;
-    Inject<IAudioConfiguration> configuration;
-    Inject<io::IFileSystem> fileSystem;
+    Inject<IInteractive> interactive = { this };
+    Inject<IAudioConfiguration> configuration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
 
 public:
+    SoundFontRepository(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
     const synth::SoundFontPaths& soundFontPaths() const override;
     const synth::SoundFontsMap& soundFonts() const override;
     async::Notification soundFontsChanged() const override;
 
-    Ret addSoundFont(const synth::SoundFontPath& path) override;
+    void addSoundFont(const synth::SoundFontPath& path) override;
 
 private:
+
+    Ret doAddSoundFont(const synth::SoundFontPath& src, const synth::SoundFontPath& dst);
+
     void loadSoundFonts();
     void loadSoundFont(const synth::SoundFontPath& path, const synth::SoundFontsMap& oldSoundFonts = {});
 

@@ -22,6 +22,8 @@
 
 #include "brailleinputparser.h"
 
+#include <QString>
+
 #include "braillecode.h"
 
 namespace mu::engraving {
@@ -93,7 +95,7 @@ BieSequencePattern::BieSequencePattern(BieSequencePatternType t, std::string seq
     max_cell_length = 0;
 
     size_t len = sequence.length();
-    QString key = QString();
+    QString key;
     bool mandatory = false;
     char openning = ' ';
     for (size_t i = 0; i < len; ++i) {
@@ -216,7 +218,7 @@ BieSequencePattern::~BieSequencePattern()
     // TODO
 }
 
-BieSequencePatternType BieSequencePattern::type()
+BieSequencePatternType BieSequencePattern::type() const
 {
     return _type;
 }
@@ -263,7 +265,7 @@ bool BieSequencePattern::recognize(std::string braille)
     return mandatory_matches == _mandatories && cursor >= braille.length();
 }
 
-std::map<std::string, braille_code*> BieSequencePattern::res()
+const std::map<std::string, braille_code*>& BieSequencePattern::res() const
 {
     return _res;
 }
@@ -273,40 +275,40 @@ braille_code* BieSequencePattern::res(std::string key)
     return _res[key];
 }
 
-bool BieSequencePattern::valid()
+bool BieSequencePattern::valid() const
 {
     return _valid;
 }
 
 BieSequencePattern* BieRecognize(std::string braille, bool tuplet_indicator)
 {
-    //static std::string note_input_seq = "{[accord][long-slur-start][accidental][octave](note)[dot][dot-2][dot-3][fingering][note-slur][long-slur-stop][tie]}";
-    static std::string note_input_seq = "{[accord][long-slur-start][accidental][octave](note)}";
+    //static const std::string note_input_seq = "{[accord][long-slur-start][accidental][octave](note)[dot][dot-2][dot-3][fingering][note-slur][long-slur-stop][tie]}";
+    static const std::string note_input_seq = "{[accord][long-slur-start][accidental][octave](note)}";
     static BieSequencePattern bie_note_input(BieSequencePatternType::Note, note_input_seq);
 
-    //static std::string rest_input_seq = "{[accord](rest)[dot][dot-2][dot-3][slur]}";
-    static std::string rest_input_seq = "{[accord](rest)}";
+    //static const std::string rest_input_seq = "{[accord](rest)[dot][dot-2][dot-3][slur]}";
+    static const std::string rest_input_seq = "{[accord](rest)}";
     static BieSequencePattern bie_rest_input(BieSequencePatternType::Rest, rest_input_seq);
 
-    static std::string interval_input_seq = "{[accidental][octave](interval)}";
+    static const std::string interval_input_seq = "{[accidental][octave](interval)}";
     static BieSequencePattern bie_interval_input(BieSequencePatternType::Interval, interval_input_seq);
 
-    static std::string tuplet3_seq = "{(tuplet3)}";
+    static const std::string tuplet3_seq = "{(tuplet3)}";
     static BieSequencePattern bie_tuplet3(BieSequencePatternType::Tuplet3, tuplet3_seq);
 
-    static std::string tuplet_seq = "{(tuplet-prefix)(tuplet-number)(c-note)(tuplet-suffix)}";
+    static const std::string tuplet_seq = "{(tuplet-prefix)(tuplet-number)(c-note)(tuplet-suffix)}";
     static BieSequencePattern bie_tuplet(BieSequencePatternType::Tuplet, tuplet_seq);
 
-    static std::string dot_seq = "{(dot)}";
+    static const std::string dot_seq = "{(dot)}";
     static BieSequencePattern bie_dot(BieSequencePatternType::Dot, dot_seq);
 
-    static std::string tie_seq = "{(tie)}";
+    static const std::string tie_seq = "{(tie)}";
     static BieSequencePattern bie_tie(BieSequencePatternType::Tie, tie_seq);
 
-    static std::string noteslur_seq = "{(note-slur)}";
+    static const std::string noteslur_seq = "{(note-slur)}";
     static BieSequencePattern bie_noteslur(BieSequencePatternType::NoteSlur, noteslur_seq);
 
-    static std::string longslur_seq = "{(long-slur-stop)}";
+    static const std::string longslur_seq = "{(long-slur-stop)}";
     static BieSequencePattern bie_longslur(BieSequencePatternType::LongSlurStop, longslur_seq);
 
     BieSequencePattern* res = NULL;

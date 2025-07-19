@@ -147,7 +147,7 @@ RectF Rest::drag(EditData& ed)
     }
 
     PointF s(ed.delta);
-    RectF r(abbox());
+    RectF r(pageBoundingRect());
 
     // Limit horizontal drag range
     static const double xDragRange = spatium() * 5;
@@ -159,7 +159,7 @@ RectF Rest::drag(EditData& ed)
     renderer()->layoutItem(this);
 
     score()->rebuildBspTree();
-    return abbox().united(r);
+    return pageBoundingRect().united(r);
 }
 
 //---------------------------------------------------------
@@ -219,6 +219,7 @@ bool Rest::acceptDrop(EditData& data) const
     // prevent 'hanging' slurs, avoid crash on tie
     static const std::set<ElementType> ignoredTypes {
         ElementType::SLUR,
+        ElementType::HAMMER_ON_PULL_OFF,
         ElementType::TIE,
         ElementType::GLISSANDO
     };
@@ -442,7 +443,7 @@ int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
         }
     }
 
-    if (offsetVoices && staff()->mergeMatchingRests()) {
+    if (offsetVoices && staff()->shouldMergeMatchingRests()) {
         // automatically merge matching rests if nothing in any other voice
         // this is not always the right thing to do do, but is useful in choral music
         // and can be enabled via a staff property
@@ -455,9 +456,9 @@ int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
             EngravingItem* e = s->element(baseTrack + v);
             // try to find match in any other voice
             if (e) {
-                if (e->type() == ElementType::REST) {
+                if (e->isRest()) {
                     Rest* r = toRest(e);
-                    if (r->globalTicks() == globalTicks()) {
+                    if (r->globalTicks() == globalTicks() && r->durationType() == durationType()) {
                         matchFound = true;
                         ldata->mergedRests.push_back(r);
                         continue;
@@ -484,19 +485,20 @@ int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
     return voiceLineOffset * upSign;
 }
 
-int Rest::computeWholeRestOffset(int voiceOffset, int lines) const
+int Rest::computeWholeOrBreveRestOffset(int voiceOffset, int lines) const
 {
-    if (!isWholeRest()) {
-        return 0;
-    }
     int lineMove = 0;
-    bool moveToLineAbove = (lines > 5)
-                           || ((lines > 1 || voiceOffset == -1 || voiceOffset == 2) && !(voiceOffset == -2 || voiceOffset == 1));
-    if (moveToLineAbove) {
-        lineMove = -1;
+    if (isWholeRest()) {
+        bool moveToLineAbove = (lines > 5)
+                               || ((lines > 1 || voiceOffset == -1 || voiceOffset == 2) && !(voiceOffset == -2 || voiceOffset == 1));
+        if (moveToLineAbove) {
+            lineMove = -1;
+        }
+    } else if (isBreveRest() && lines == 1) {
+        lineMove = 1;
     }
 
-    if (!isFullMeasureRest()) {
+    if (!isFullMeasureRest() || !measure()) {
         return lineMove;
     }
 
@@ -529,7 +531,7 @@ int Rest::computeWholeRestOffset(int voiceOffset, int lines) const
         }
     }
 
-    if (hasNotesAbove && hasNotesBelow) {
+    if (hasNotesAbove == hasNotesBelow) {
         return lineMove; // Don't do anything
     }
 
@@ -546,6 +548,10 @@ int Rest::computeWholeRestOffset(int voiceOffset, int lines) const
         lineMove = std::min(lineMove, topLine - centerLine);
     }
 
+    if (isBreveRest()) {
+        lineMove++;
+    }
+
     return lineMove;
 }
 
@@ -554,6 +560,13 @@ bool Rest::isWholeRest() const
     TDuration durType = durationType();
     return durType == DurationType::V_WHOLE
            || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() < Fraction(2, 1));
+}
+
+bool Rest::isBreveRest() const
+{
+    TDuration durType = durationType();
+    return durType == DurationType::V_BREVE
+           || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() >= Fraction(2, 1));
 }
 
 int Rest::computeNaturalLine(int lines) const
@@ -633,66 +646,6 @@ double Rest::intrinsicMag() const
         m *= style().styleD(Sid::smallNoteMag);
     }
     return m;
-}
-
-//---------------------------------------------------------
-//   upLine
-//---------------------------------------------------------
-
-int Rest::upLine() const
-{
-    double _spatium = spatium();
-    return lrint((pos().y() + ldata()->bbox().top() + _spatium) * 2 / _spatium);
-}
-
-//---------------------------------------------------------
-//   downLine
-//---------------------------------------------------------
-
-int Rest::downLine() const
-{
-    double _spatium = spatium();
-    return lrint((pos().y() + ldata()->bbox().top() + _spatium) * 2 / _spatium);
-}
-
-//---------------------------------------------------------
-//   stemPos
-//    point to connect stem
-//---------------------------------------------------------
-
-PointF Rest::stemPos() const
-{
-    return pagePos();
-}
-
-//---------------------------------------------------------
-//   stemPosBeam
-//    return stem position of note on beam side
-//    return canvas coordinates
-//---------------------------------------------------------
-
-PointF Rest::stemPosBeam() const
-{
-    PointF p(pagePos());
-    if (ldata()->up) {
-        p.ry() += ldata()->bbox().top() + spatium() * 1.5;
-    } else {
-        p.ry() += ldata()->bbox().bottom() - spatium() * 1.5;
-    }
-    return p;
-}
-
-//---------------------------------------------------------
-//   stemPosX
-//---------------------------------------------------------
-
-double Rest::stemPosX() const
-{
-    if (ldata()->up) {
-        return ldata()->bbox().right();
-    } else {
-        return ldata()->bbox().left();
-    }
 }
 
 //---------------------------------------------------------

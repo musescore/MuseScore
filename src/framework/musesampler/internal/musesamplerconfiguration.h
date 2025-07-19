@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MUSESAMPLER_MUSESAMPLERCONFIGURATION_H
-#define MUSE_MUSESAMPLER_MUSESAMPLERCONFIGURATION_H
+#pragma once
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
@@ -29,22 +28,19 @@
 #include "imusesamplerconfiguration.h"
 
 namespace muse::musesampler {
-class MuseSamplerConfiguration : public IMuseSamplerConfiguration
+class MuseSamplerConfiguration : public IMuseSamplerConfiguration, public Injectable
 {
-    INJECT(IGlobalConfiguration, globalConfig)
+    Inject<IGlobalConfiguration> globalConfig = { this };
 
 public:
+    MuseSamplerConfiguration(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
 
-    // Preferred local user install path; try this first.
-    io::path_t userLibraryPath() const override;
+    io::path_t libraryPath() const override;
 
-    // Backup location for system-wide sampler install
-    io::path_t fallbackLibraryPath() const override;
-
-private:
-    io::path_t defaultPath() const;
+    bool shouldShowBuildNumber() const override;
+    bool useLegacyAudition() const override;
 };
 }
-
-#endif // MUSE_MUSESAMPLER_MUSESAMPLERCONFIGURATION_H

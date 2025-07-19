@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_OTTAVA_H
 #define MU_ENGRAVING_OTTAVA_H
 
+#include "types/translatablestring.h"
+
 #include "textlinebase.h"
 #include "property.h"
 
@@ -41,7 +43,7 @@ struct OttavaE {
 //   OttavaType
 //---------------------------------------------------------
 
-enum class OttavaType : char {
+enum class OttavaType : unsigned char {
     OTTAVA_8VA,
     OTTAVA_8VB,
     OTTAVA_15MA,
@@ -58,16 +60,17 @@ struct OttavaDefault {
     OttavaType type = OttavaType::OTTAVA_8VA;
     int shift = 0;
     const char* name = nullptr;
+    const TranslatableString userName = TranslatableString();
 };
 
 // order is important, should be the same as OttavaType
 static const OttavaDefault ottavaDefault[] = {
-    { OttavaType::OTTAVA_8VA,  12,  "8va" },
-    { OttavaType::OTTAVA_8VB,  -12, "8vb" },
-    { OttavaType::OTTAVA_15MA, 24,  "15ma" },
-    { OttavaType::OTTAVA_15MB, -24, "15mb" },
-    { OttavaType::OTTAVA_22MA, 36,  "22ma" },
-    { OttavaType::OTTAVA_22MB, -36, "22mb" }
+    { OttavaType::OTTAVA_8VA,  12,  "8va",  TranslatableString("engraving/ottavatype", "8va alta") },
+    { OttavaType::OTTAVA_8VB,  -12, "8vb",  TranslatableString("engraving/ottavatype", "8va bassa") },
+    { OttavaType::OTTAVA_15MA, 24,  "15ma", TranslatableString("engraving/ottavatype", "15ma alta") },
+    { OttavaType::OTTAVA_15MB, -24, "15mb", TranslatableString("engraving/ottavatype", "15ma bassa") },
+    { OttavaType::OTTAVA_22MA, 36,  "22ma", TranslatableString("engraving/ottavatype", "22ma alta") },
+    { OttavaType::OTTAVA_22MB, -36, "22mb", TranslatableString("engraving/ottavatype", "22ma bassa") }
 };
 
 class Ottava;
@@ -93,6 +96,9 @@ public:
     EngravingItem* propertyDelegate(Pid) override;
 
     bool canBeExcludedFromOtherParts() const override { return true; }
+
+private:
+    void rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys) override;
 };
 
 //---------------------------------------------------------
@@ -113,6 +119,9 @@ public:
 
     void setOttavaType(OttavaType val);
     OttavaType ottavaType() const { return m_ottavaType; }
+
+    int subtype() const override { return int(ottavaType()); }
+    TranslatableString subtypeUserName() const override;
 
     bool numbersOnly() const { return m_numbersOnly; }
     void setNumbersOnly(bool val);

@@ -28,10 +28,13 @@
 #include "context/iglobalcontext.h"
 #include "inotationconfiguration.h"
 #include "iinteractive.h"
+#include "ui/iuiconfiguration.h"
 #include "ui/iuiengine.h"
 #include "engraving/iengravingfontsprovider.h"
 
 #include "engraving/style/textstyle.h"
+
+class QQuickView;
 
 namespace mu::notation {
 class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Injectable
@@ -44,6 +47,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Inject
     muse::Inject<mu::context::IGlobalContext> globalContext = { this };
     muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
     muse::Inject<muse::ui::IUiEngine> uiEngine = { this };
     muse::Inject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
     muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
@@ -63,6 +67,8 @@ public slots:
 
     void setCurrentPageCode(const QString& code);
     void setCurrentSubPageCode(const QString& code);
+    void goToTextStylePage(const QString& code);
+    void goToTextStylePage(int index);
 
 signals:
     void currentPageChanged();
@@ -77,6 +83,15 @@ private:
     void retranslate();
     void setHeaderFooterToolTip();
     void adjustPagesStackSize(int currentPageIndex);
+
+    bool isBoolStyleRepresentedByButtonGroup(StyleId id);
+
+    struct WidgetAndView {
+        QWidget* widget = nullptr;
+        QQuickView* view = nullptr;
+    };
+
+    WidgetAndView createQmlWidget(QWidget* parent, const QUrl& source);
 
     /// EditStylePage
     /// This is a type for a pointer to any QWidget that is a member of EditStyle.
@@ -97,7 +112,6 @@ private:
     std::vector<LineStyleSelect*> m_lineStyleSelects;
 
     std::vector<QComboBox*> verticalPlacementComboBoxes;
-    std::vector<QComboBox*> horizontalPlacementComboBoxes;
 
     QPushButton* buttonApplyToAllParts = nullptr;
 
@@ -113,8 +127,8 @@ private:
     void setStyleValue(StyleId id, const PropertyValue& value);
 
 private slots:
-    void selectChordDescriptionFile();
-    void setChordStyle(bool);
+    // void selectChordDescriptionFile();
+    // void setChordStyle(bool);
     void enableStyleWidget(const StyleId idx, bool enable);
     void enableVerticalSpreadClicked(bool);
     void disableVerticalSpreadClicked(bool);
@@ -131,7 +145,7 @@ private slots:
     void valueChanged(int);
     void textStyleChanged(int);
     void resetTextStyle(engraving::TextStylePropertyType type);
-    void textStyleValueChanged(engraving::TextStylePropertyType type, QVariant);
+    void textStyleValueChanged(engraving::TextStylePropertyType type, const engraving::PropertyValue& value);
     void on_comboFBFont_currentIndexChanged(int index);
     void on_buttonTogglePagelist_clicked();
     void on_resetStylesButton_clicked();
@@ -140,7 +154,6 @@ private slots:
     void endEditUserStyleName();
     void resetUserStyleName();
     void updateParenthesisIndicatingTiesGroupState();
-    void clefVisibilityChanged(bool);
 
 private:
     QString m_currentPageCode;

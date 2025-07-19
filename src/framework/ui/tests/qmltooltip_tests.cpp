@@ -23,8 +23,12 @@
 
 #include "ui/view/qmltooltip.h"
 
+#include "ui/tests/mocks/uiconfigurationmock.h"
+
 using namespace muse;
 using namespace muse::ui;
+
+using ::testing::Return;
 
 namespace muse::ui {
 class QmlToolTipTests : public ::testing::Test, public QObject
@@ -41,6 +45,12 @@ public:
         QObject::connect(m_tooltip, &QmlToolTip::hideToolTip, this, [this]() {
             m_isToolTipShown = false;
         });
+
+        m_uiConfiguration = std::make_shared<muse::ui::UiConfigurationMock>();
+        m_tooltip->uiConfiguration.set(m_uiConfiguration);
+
+        EXPECT_CALL(*m_uiConfiguration, tooltipDelay())
+        .WillRepeatedly(Return(500));
     }
 
     void TearDown() override
@@ -74,6 +84,7 @@ protected:
     }
 
     QmlToolTip* m_tooltip = nullptr;
+    std::shared_ptr<muse::ui::UiConfigurationMock> m_uiConfiguration;
     bool m_isToolTipShown = false;
 };
 

@@ -113,6 +113,9 @@ public:
     ClefType clefType() const;
     void setClefType(ClefType i);
 
+    bool isCourtesy() const { return m_isCourtesy; }
+    void setIsCourtesy(const bool v) { m_isCourtesy = v; }
+
     int subtype() const override { return int(clefType()); }
     TranslatableString subtypeUserName() const override;
 
@@ -146,6 +149,8 @@ public:
     bool isHeader() const { return m_isHeader; }
     void setIsHeader(bool val) { m_isHeader = val; }
 
+    bool isMidMeasureClef() const;
+
     bool canBeExcludedFromOtherParts() const override { return !isHeader(); }
     void manageExclusionFromParts(bool exclude) override;
 
@@ -163,6 +168,7 @@ private:
     bool m_isSmall = false;
     bool m_forInstrumentChange = false;
     bool m_isHeader = false;
+    bool m_isCourtesy = false;
     ClefToBarlinePosition m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
     ClefTypeList m_clefTypes = ClefType::INVALID;
 };

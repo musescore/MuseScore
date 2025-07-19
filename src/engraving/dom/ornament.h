@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_ORNAMENT_H
-#define MU_ENGRAVING_ORNAMENT_H
+#pragma once
 
 #include "articulation.h"
 
@@ -39,6 +37,8 @@ public:
     Ornament(const Ornament& o);
     ~Ornament();
 
+    TranslatableString typeUserName() const override;
+
     static SymId fromTrillType(TrillType trillType);
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -49,7 +49,7 @@ public:
     bool hasIntervalAbove() const;
     bool hasIntervalBelow() const;
     bool hasFullIntervalChoice() const;
-    bool showCueNote() { return _intervalAbove.step != IntervalStep::SECOND; }
+    bool showCueNote();
 
     void computeNotesAboveAndBelow(AccidentalState* accState);
 
@@ -74,6 +74,8 @@ public:
 
     void setTrack(track_idx_t val) override;
 
+    void setShowCueNote(AutoOnOff show) { m_showCueNote = show; }
+
 private:
     void updateAccidentalsAboveAndBelow();
     void updateCueNote();
@@ -91,8 +93,8 @@ private:
     std::array<Accidental*, 2> m_accidentalsAboveAndBelow { nullptr, nullptr }; // [0] = above, [1] = below
 
     Chord* m_cueNoteChord = nullptr;
+    AutoOnOff m_showCueNote = AutoOnOff::AUTO;
 
     Accidental* m_trillOldCompatAccidental = nullptr; // used temporarily to map old (i.e. pre-4.1) trill accidentals
 };
-} // namespace mu::engraving
-#endif // MU_ENGRAVING_ORNAMENT_H
+}

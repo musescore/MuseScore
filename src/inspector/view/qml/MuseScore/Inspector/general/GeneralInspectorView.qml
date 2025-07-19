@@ -35,6 +35,8 @@ InspectorSectionView {
 
     implicitHeight: contentColumn.height
 
+    enabled: model ? model.areGeneralPropertiesAvailable : true
+
     ColumnLayout {
         id: contentColumn
 
@@ -134,8 +136,8 @@ InspectorSectionView {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
 
-                onPopupOpened: {
-                    root.popupOpened(popup, control)
+                onPopupOpened: function(openedPopup, control) {
+                    root.popupOpened(openedPopup, control)
                 }
             }
 
@@ -164,8 +166,8 @@ InspectorSectionView {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
 
-                onPopupOpened: {
-                    root.popupOpened(popup, control)
+                onPopupOpened: function(openedPopup, control) {
+                    root.popupOpened(openedPopup, control)
                 }
             }
         }

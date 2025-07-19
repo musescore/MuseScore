@@ -39,6 +39,9 @@ public:
     muse::ValCh<bool> isSingleClickToOpenPalette() const override;
     void setIsSingleClickToOpenPalette(bool isSingleClick) override;
 
+    muse::ValCh<bool> isPaletteDragEnabled() const override;
+    void setIsPaletteDragEnabled(bool isSingleClick) override;
+
     QColor elementsBackgroundColor() const override;
     QColor elementsColor() const override;
     QColor gridColor() const override;

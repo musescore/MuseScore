@@ -51,17 +51,17 @@
         </attributes>
       <direction placement="above">
         <direction-type>
+          <words>Swing!</words>
+          </direction-type>
+        </direction>
+      <direction placement="above" system="only-top">
+        <direction-type>
           <metronome parentheses="no">
             <beat-unit>half</beat-unit>
             <per-minute>80</per-minute>
             </metronome>
           </direction-type>
         <sound tempo="160"/>
-        </direction>
-      <direction placement="above">
-        <direction-type>
-          <words>Swing!</words>
-          </direction-type>
         </direction>
       <note>
         <pitch>

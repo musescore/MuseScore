@@ -41,4 +41,33 @@ void GradualTempoChangeSettingsModel::createProperties()
 
     isLineVisible()->setIsVisible(true);
     placement()->setIsVisible(true);
+
+    m_snapBefore = buildPropertyItem(mu::engraving::Pid::SNAP_BEFORE);
+    m_snapAfter = buildPropertyItem(mu::engraving::Pid::SNAP_AFTER);
+}
+
+void GradualTempoChangeSettingsModel::loadProperties()
+{
+    TextLineSettingsModel::loadProperties();
+
+    loadPropertyItem(m_snapBefore);
+    loadPropertyItem(m_snapAfter);
+}
+
+void GradualTempoChangeSettingsModel::resetProperties()
+{
+    TextLineSettingsModel::resetProperties();
+
+    m_snapBefore->resetToDefault();
+    m_snapAfter->resetToDefault();
+}
+
+PropertyItem* GradualTempoChangeSettingsModel::snapBefore() const
+{
+    return m_snapBefore;
+}
+
+PropertyItem* GradualTempoChangeSettingsModel::snapAfter() const
+{
+    return m_snapAfter;
 }

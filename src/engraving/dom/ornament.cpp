@@ -20,19 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "ornament.h"
+
 #include "accidental.h"
 #include "chord.h"
 #include "engravingitem.h"
 #include "factory.h"
 #include "key.h"
 #include "note.h"
-#include "ornament.h"
 #include "score.h"
 #include "shape.h"
 #include "staff.h"
 #include "utils.h"
 
-namespace mu::engraving {
+using namespace mu::engraving;
+
 Ornament::Ornament(ChordRest* parent)
     : Articulation(parent, ElementType::ORNAMENT)
 {
@@ -49,6 +51,7 @@ Ornament::Ornament(const Ornament& o)
     _intervalBelow = o._intervalBelow;
     _showAccidental = o._showAccidental;
     _startOnUpperNote = o._startOnUpperNote;
+    m_showCueNote = o.m_showCueNote;
 
     if (o.m_cueNoteChord) {
         m_cueNoteChord = o.m_cueNoteChord->clone();
@@ -89,6 +92,15 @@ void Ornament::remove(EngravingItem* e)
     }
 }
 
+muse::TranslatableString Ornament::typeUserName() const
+{
+    if (textType() != ArticulationTextType::NO_TEXT) {
+        return TranslatableString("engraving", "Ornament text");
+    }
+
+    return TranslatableString("engraving", "Ornament");
+}
+
 void Ornament::setTrack(track_idx_t val)
 {
     for (Note* note : m_notesAboveAndBelow) {
@@ -124,6 +136,8 @@ PropertyValue Ornament::getProperty(Pid propertyId) const
         return _intervalBelow;
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
         return _showAccidental;
+    case Pid::ORNAMENT_SHOW_CUE_NOTE:
+        return m_showCueNote;
     case Pid::START_ON_UPPER_NOTE:
         return _startOnUpperNote;
     default:
@@ -149,6 +163,8 @@ PropertyValue Ornament::propertyDefault(Pid id) const
         return DEFAULT_ORNAMENT_INTERVAL;
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
         return OrnamentShowAccidental::DEFAULT;
+    case Pid::ORNAMENT_SHOW_CUE_NOTE:
+        return AutoOnOff::AUTO;
     case Pid::START_ON_UPPER_NOTE:
         return false;
     case Pid::ARTICULATION_ANCHOR:
@@ -169,6 +185,9 @@ bool Ornament::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
         setShowAccidental(v.value<OrnamentShowAccidental>());
+        break;
+    case Pid::ORNAMENT_SHOW_CUE_NOTE:
+        setShowCueNote(v.value<AutoOnOff>());
         break;
     case Pid::START_ON_UPPER_NOTE:
         setStartOnUpperNote(v.toBool());
@@ -217,6 +236,15 @@ bool Ornament::hasFullIntervalChoice() const
     return id == SymId::ornamentTrill;
 }
 
+bool Ornament::showCueNote()
+{
+    if (m_showCueNote == AutoOnOff::AUTO) {
+        return (hasFullIntervalChoice() && style().styleB(Sid::trillAlwaysShowCueNote)) || _intervalAbove.step != IntervalStep::SECOND;
+    }
+
+    return m_showCueNote == AutoOnOff::ON;
+}
+
 void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
 {
     Chord* parentChord = explicitParent() ? toChord(parent()) : nullptr;
@@ -256,6 +284,11 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
             note->setPitch(mainNote->pitch());
         }
         note->setTrack(track());
+
+        if (Accidental::isMicrotonal(note->accidentalType())) {
+            // If mainNote has microtonal accidental, don't clone it to the ornament note because microtonal intervals are not supported.
+            note->setAccidentalType(Accidental::value2subtype(tpc2alter(note->tpc())));
+        }
 
         bool autoMode = (above && _intervalAbove.type == IntervalType::AUTO) || (!above && _intervalBelow.type == IntervalType::AUTO);
         if (autoMode) {
@@ -378,7 +411,7 @@ void Ornament::updateCueNote()
     if (!m_cueNoteChord) {
         m_cueNoteChord = Factory::createChord(parentChord->segment());
         m_cueNoteChord->setSmall(true);
-        cueNote->setHeadHasParentheses(true);
+        cueNote->setParenthesesMode(ParenthesesMode::BOTH);
         cueNote->setHeadType(NoteHeadType::HEAD_QUARTER);
         m_cueNoteChord->add(cueNote);
         cueNote->setParent(m_cueNoteChord);
@@ -431,4 +464,3 @@ void Ornament::mapOldTrillAccidental(Note* note, const Note* mainNote)
         break;
     }
 }
-} // namespace mu::engraving

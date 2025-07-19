@@ -47,11 +47,11 @@ using namespace muse::update;
 namespace muse::update {
 class AppUpdateServiceTests : public ::testing::Test
 {
-    muse::Inject<muse::IApplication> application;
+    muse::GlobalInject<muse::IApplication> application;
 public:
     void SetUp() override
     {
-        m_service = new AppUpdateService();
+        m_service = new AppUpdateService(muse::modularity::globalCtx());
 
         m_configuration = std::make_shared<UpdateConfigurationMock>();
         m_service->configuration.set(m_configuration);

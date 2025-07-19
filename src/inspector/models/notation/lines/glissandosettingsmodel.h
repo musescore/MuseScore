@@ -33,6 +33,12 @@ class GlissandoSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * showText READ showText CONSTANT)
     Q_PROPERTY(PropertyItem * text READ text CONSTANT)
 
+    Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
+
+    Q_PROPERTY(PropertyItem * lineStyle READ lineStyle CONSTANT)
+    Q_PROPERTY(PropertyItem * dashLineLength READ dashLineLength CONSTANT)
+    Q_PROPERTY(PropertyItem * dashGapLength READ dashGapLength CONSTANT)
+
 public:
     explicit GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -40,16 +46,29 @@ public:
     PropertyItem* showText() const;
     PropertyItem* text() const;
 
+    PropertyItem* thickness() const;
+
+    PropertyItem* lineStyle() const;
+    PropertyItem* dashLineLength() const;
+    PropertyItem* dashGapLength() const;
+
     Q_INVOKABLE QVariantList possibleLineTypes() const;
 
 private:
     void createProperties() override;
     void loadProperties() override;
     void resetProperties() override;
+    void onUpdateGlissPropertiesAvailability();
 
     PropertyItem* m_lineType = nullptr;
     PropertyItem* m_showText = nullptr;
     PropertyItem* m_text = nullptr;
+
+    PropertyItem* m_thickness = nullptr;
+
+    PropertyItem* m_lineStyle = nullptr;
+    PropertyItem* m_dashLineLength = nullptr;
+    PropertyItem* m_dashGapLength = nullptr;
 };
 }
 

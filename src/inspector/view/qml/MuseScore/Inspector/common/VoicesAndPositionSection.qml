@@ -41,16 +41,15 @@ Column {
     spacing: 12
 
     InspectorPropertyView {
-        id: applyToVoiceSection
+        id: voiceAssignmentSection
 
-        titleText: qsTrc("inspector", "Apply to voice")
+        titleText: qsTrc("inspector", "Voice assignment")
 
-        propertyItem: root.model ? root.model.applyToVoice : null
+        propertyItem: root.model ? root.model.voiceAssignment : null
 
         onRequestResetToDefault: {
             if (root.model) {
                 propertyItem.resetToDefault()
-                root.model.voice.resetToDefault()
             }
         }
 
@@ -70,13 +69,13 @@ Column {
                 Layout.preferredWidth: (parent.width - 2 * parent.spacing) / 3 // One third
 
                 text: qsTrc("inspector", "All")
-                accentButton: applyToVoiceSection.propertyItem
-                              && (applyToVoiceSection.propertyItem.value === VoiceTypes.VOICE_ALL_IN_INSTRUMENT
-                                  || applyToVoiceSection.propertyItem.value === VoiceTypes.VOICE_ALL_IN_STAFF)
+                accentButton: voiceAssignmentSection.propertyItem
+                              && (voiceAssignmentSection.propertyItem.value === VoiceTypes.VOICE_ALL_IN_INSTRUMENT
+                                  || voiceAssignmentSection.propertyItem.value === VoiceTypes.VOICE_ALL_IN_STAFF)
                 backgroundRadius: 2 // match FlatRadioButton
 
                 navigation.panel: root.navigationPanel
-                navigation.row: applyToVoiceSection.navigationRowStart + 1
+                navigation.row: voiceAssignmentSection.navigationRowStart + 1
 
                 mouseArea.acceptedButtons: isMenuButton
                                            ? Qt.LeftButton | Qt.RightButton
@@ -90,8 +89,7 @@ Column {
                     if (isMenuButton) {
                         allVoicesMenu.toggleOpened(allVoicesMenu.model)
                     } else {
-                        applyToVoiceSection.propertyItem.value = VoiceTypes.VOICE_ALL_IN_INSTRUMENT
-                        root.model.voice.value = 0
+                        voiceAssignmentSection.propertyItem.value = VoiceTypes.VOICE_ALL_IN_INSTRUMENT
                     }
                 }
 
@@ -107,29 +105,27 @@ Column {
                             id: "VOICE_ALL_IN_INSTRUMENT",
                             title: qsTrc("inspector", "All voices on instrument"),
                             checkable: true,
-                            checked: applyToVoiceSection.propertyItem?.value === VoiceTypes.VOICE_ALL_IN_INSTRUMENT
+                            checked: voiceAssignmentSection.propertyItem?.value === VoiceTypes.VOICE_ALL_IN_INSTRUMENT
                         },
                         {
                             id: "VOICE_ALL_IN_STAFF",
                             title: qsTrc("inspector", "All voices on this staff only"),
                             checkable: true,
-                            checked: applyToVoiceSection.propertyItem?.value === VoiceTypes.VOICE_ALL_IN_STAFF
+                            checked: voiceAssignmentSection.propertyItem?.value === VoiceTypes.VOICE_ALL_IN_STAFF
                         }
                     ]
 
                     onHandleMenuItem: function (itemId) {
-                        if (!applyToVoiceSection.propertyItem) {
+                        if (!voiceAssignmentSection.propertyItem) {
                             return
                         }
 
-                        root.model.voice.value = 0
-
                         switch (itemId) {
                         case "VOICE_ALL_IN_INSTRUMENT":
-                            applyToVoiceSection.propertyItem.value = VoiceTypes.VOICE_ALL_IN_INSTRUMENT
+                            voiceAssignmentSection.propertyItem.value = VoiceTypes.VOICE_ALL_IN_INSTRUMENT
                             break
                         case "VOICE_ALL_IN_STAFF":
-                            applyToVoiceSection.propertyItem.value = VoiceTypes.VOICE_ALL_IN_STAFF
+                            voiceAssignmentSection.propertyItem.value = VoiceTypes.VOICE_ALL_IN_STAFF
                             break
                         }
                     }
@@ -145,7 +141,7 @@ Column {
                 Layout.fillWidth: true
                 height: 30
 
-                currentValue: applyToVoiceSection.propertyItem && !applyToVoiceSection.propertyItem.isUndefined && applyToVoiceSection.propertyItem.value === VoiceTypes.VOICE_CURRENT_ONLY
+                currentValue: voiceAssignmentSection.propertyItem && !voiceAssignmentSection.propertyItem.isUndefined && voiceAssignmentSection.propertyItem.value === VoiceTypes.VOICE_CURRENT_ONLY
                               ? root.model ? root.model.voice.value : undefined
                               : undefined
 
@@ -158,8 +154,7 @@ Column {
 
                 onToggled: function(newValue) {
                     if (root.model) {
-                        applyToVoiceSection.propertyItem.value = VoiceTypes.VOICE_CURRENT_ONLY
-                        root.model.voice.value = newValue
+                        root.model.changeVoice(newValue)
                     }
                 }
             }
@@ -174,7 +169,7 @@ Column {
         propertyItem: root.model ? root.model.voiceBasedPosition : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: applyToVoiceSection.navigationRowEnd + 1
+        navigationRowStart: voiceAssignmentSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO },

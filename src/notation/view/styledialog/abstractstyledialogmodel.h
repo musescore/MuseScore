@@ -42,22 +42,22 @@ class AbstractStyleDialogModel : public QObject, public muse::Injectable, public
     muse::Inject<context::IGlobalContext> context = { this };
 
 protected:
-    explicit AbstractStyleDialogModel(QObject* parent, const std::set<StyleId>& ids);
-
-    Q_INVOKABLE void load();
-
+    explicit AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids);
     StyleItem* styleItem(StyleId id) const;
 
-private:
     INotationStylePtr currentNotationStyle() const;
 
-    StyleItem* buildStyleItem(StyleId id) const;
+    void addStyleId(StyleId id) { m_ids.insert(id); }
 
+    virtual StyleItem* buildStyleItem(StyleId id) const;
+
+private:
     QVariant toUiValue(StyleId id, const PropertyValue& logicalValue) const;
     PropertyValue fromUiValue(StyleId id, const QVariant& uiValue) const;
 
+    mutable bool m_inited = false;
     std::set<StyleId> m_ids;
-    std::unordered_map<StyleId, StyleItem*> m_items;
+    mutable std::unordered_map<StyleId, StyleItem*> m_items;
 };
 }
 

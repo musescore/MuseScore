@@ -23,8 +23,6 @@
 
 #include <QGuiApplication>
 
-static constexpr int INTERVAL = 500;
-
 using namespace muse::ui;
 
 QmlToolTip::QmlToolTip(QObject* parent, const modularity::ContextPtr& iocCtx)
@@ -60,7 +58,7 @@ void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& des
     }
 
     if (toolTipNotOpened || openTimerStarted) {
-        m_openTimer.start(INTERVAL);
+        m_openTimer.start(uiConfiguration()->tooltipDelay());
     } else {
         doShow();
     }
@@ -79,7 +77,7 @@ void QmlToolTip::hide(QQuickItem* item, bool force)
         return;
     }
 
-    m_closeTimer.start(INTERVAL);
+    m_closeTimer.start(uiConfiguration()->tooltipDelay());
 }
 
 void QmlToolTip::init()

@@ -27,6 +27,11 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::notation;
 
+MScoreErrorsController::MScoreErrorsController(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+}
+
 void MScoreErrorsController::checkAndShowMScoreError()
 {
     TRACEFUNC;
@@ -145,11 +150,17 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = muse::trc("notation", "This key signature cannot be deleted");
         message = muse::trc("notation", "Please replace it with a key signature from the palettes instead.");
         break;
+    case MsError::CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE:
+        title = muse::trc("notation", "These measures cannot be joined");
+        message = muse::trc("notation", "Please remove the staff type change and retry.");
+        break;
     }
 
-    IInteractive::Result result
-        = interactive()->info(title, message, {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
-    if (!result.showAgain()) {
-        configuration()->setNeedToShowMScoreError(MScore::errorToString(err), false);
-    }
+    interactive()->info(title, message, {}, 0,
+                        IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox)
+    .onResolve(this, [this, err](const IInteractive::Result& res) {
+        if (!res.showAgain()) {
+            configuration()->setNeedToShowMScoreError(MScore::errorToString(err), false);
+        }
+    });
 }

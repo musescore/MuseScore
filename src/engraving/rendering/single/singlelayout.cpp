@@ -29,6 +29,8 @@
 
 #include "compat/dummyelement.h"
 
+#include "dom/factory.h"
+
 #include "dom/engravingitem.h"
 #include "dom/score.h"
 
@@ -53,16 +55,19 @@
 #include "dom/gradualtempochange.h"
 #include "dom/guitarbend.h"
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harppedaldiagram.h"
 #include "dom/instrchange.h"
 #include "dom/jump.h"
 #include "dom/keysig.h"
 #include "dom/letring.h"
 #include "dom/line.h"
+#include "dom/lyrics.h"
 #include "dom/marker.h"
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
 #include "dom/note.h"
+#include "dom/noteline.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 #include "dom/palmmute.h"
@@ -70,38 +75,39 @@
 #include "dom/playtechannotation.h"
 #include "dom/rehearsalmark.h"
 #include "dom/slur.h"
+#include "dom/soundflag.h"
 #include "dom/stafftext.h"
 #include "dom/stafftypechange.h"
+#include "dom/sticking.h"
 #include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemtext.h"
-#include "dom/soundflag.h"
+#include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textline.h"
 #include "dom/textlinebase.h"
 #include "dom/timesig.h"
+#include "dom/tremolobar.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
-#include "dom/tremolobar.h"
 #include "dom/trill.h"
 #include "dom/vibrato.h"
 #include "dom/volta.h"
 
 #include "dom/utils.h"
 
-#include "rendering/dev/tlayout.h"
-#include "rendering/dev/tremololayout.h"
-#include "rendering/dev/arpeggiolayout.h"
-#include "rendering/dev/chordlayout.h"
-#include "rendering/dev/slurtielayout.h"
+#include "rendering/score/tlayout.h"
+#include "rendering/score/tremololayout.h"
+#include "rendering/score/chordlayout.h"
+#include "rendering/score/slurtielayout.h"
 
 #include "log.h"
 
 using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 using namespace mu::engraving::rendering::single;
 
 void SingleLayout::layoutItem(EngravingItem* item)
@@ -155,6 +161,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::HAIRPIN:      layout(toHairpin(item), ctx);
         break;
+    case ElementType::HAMMER_ON_PULL_OFF: layout(toHammerOnPullOff(item), ctx);
+        break;
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
         break;
     case ElementType::IMAGE:        layout(toImage(item), ctx);
@@ -169,6 +177,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::LET_RING:     layout(toLetRing(item), ctx);
         break;
+    case ElementType::LYRICS:       layout(toLyrics(item), ctx);
+        break;
     case ElementType::MARKER:       layout(toMarker(item), ctx);
         break;
     case ElementType::MEASURE_NUMBER: layout(toMeasureNumber(item), ctx);
@@ -176,6 +186,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::MEASURE_REPEAT: layout(toMeasureRepeat(item), ctx);
         break;
     case ElementType::NOTEHEAD:     layout(toNoteHead(item), ctx);
+        break;
+    case ElementType::NOTELINE:     layout(toNoteLine(item), ctx);
         break;
     case ElementType::OTTAVA:       layout(toOttava(item), ctx);
         break;
@@ -197,6 +209,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::STAFFTYPE_CHANGE: layout(toStaffTypeChange(item), ctx);
         break;
+    case ElementType::STICKING:     layout(toSticking(item), ctx);
+        break;
     case ElementType::STRING_TUNINGS: layout(toStringTunings(item), ctx);
         break;
     case ElementType::SYMBOL:       layout(toSymbol(item), ctx);
@@ -204,6 +218,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::SYSTEM_TEXT:  layout(toSystemText(item), ctx);
         break;
     case ElementType::SOUND_FLAG:   layout(item_cast<SoundFlag*>(item), ctx);
+        break;
+    case ElementType::TAPPING:      layout(toTapping(item), ctx);
         break;
     case ElementType::TEMPO_TEXT:   layout(toTempoText(item), ctx);
         break;
@@ -332,7 +348,7 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
     layout(item->topAccidental(), ctx);
     layout(item->bottomAccidental(), ctx);
 
-    double accNoteDist = item->point(ctx.style().styleS(Sid::accidentalNoteDistance));
+    double accNoteDist = item->absoluteFromSpatium(ctx.style().styleS(Sid::accidentalNoteDistance));
     double xAccidOffTop = item->topAccidental()->width(LD_ACCESS::BAD) + accNoteDist;
     double xAccidOffBottom = item->bottomAccidental()->width(LD_ACCESS::BAD) + accNoteDist;
 
@@ -450,7 +466,7 @@ void SingleLayout::layout(Arpeggio* item, const Context& ctx)
     } break;
 
     case ArpeggioType::BRACKET: {
-        double w  = ctx.style().styleS(Sid::ArpeggioHookLen).val() * item->spatium();
+        double w  = ctx.style().styleS(Sid::arpeggioHookLen).val() * item->spatium();
         ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
     } break;
     }
@@ -605,7 +621,7 @@ void SingleLayout::layout(Bend* item, const Context&)
 {
     Bend::LayoutData* ldata = item->mutldata();
     double spatium = item->spatium();
-    double lw = item->lineWidth();
+    double lw = item->absoluteFromSpatium(item->lineWidth());
 
     ldata->noteWidth = 0.0;
     ldata->notePos = PointF();
@@ -778,6 +794,7 @@ void SingleLayout::layout(Chord* item, const Context& ctx)
     ChordLayout::computeUp(item, tctx);
     ChordLayout::layout(item, tctx);
     ChordLayout::layoutStem(item, tctx);
+    ChordLayout::layoutLedgerLines({ item }, tctx);
 }
 
 void SingleLayout::layout(ChordLine* item, const Context& ctx)
@@ -822,17 +839,9 @@ void SingleLayout::layout(ChordLine* item, const Context& ctx)
         height = r.height();
         ldata->setBbox(x1, y1, width, height);
     } else {
-        RectF r = ctx.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
-        double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
+        RectF r = ctx.engravingFont()->bbox(item->waveSym(), item->magS());
 
-        r.setHeight(r.height() + r.width() * sin(angle));
-
-        /// TODO: calculate properly the rect for wavy type
-        if (item->chordLineType() == ChordLineType::DOIT) {
-            r.setY(item->y() - r.height() * (item->onTabStaff() ? 1.25 : 1));
-        }
-
-        item->setbbox(r);
+        ldata->setBbox(r);
     }
 }
 
@@ -897,8 +906,8 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
 {
     FretDiagram::LayoutData* ldata = item->mutldata();
     double spatium  = item->spatium();
-    ldata->stringLw = (spatium * 0.08);
-    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? ldata->stringLw : spatium * 0.2);
+    ldata->stringLineWidth = (spatium * 0.08);
+    ldata->nutLineWidth = ((item->fretOffset() || !item->showNut()) ? ldata->stringLineWidth : spatium * 0.2);
     ldata->stringDist = (ctx.style().styleMM(Sid::fretStringSpacing));
     ldata->fretDist = (ctx.style().styleMM(Sid::fretFretSpacing));
     ldata->markerSize = (ldata->stringDist * 0.8);
@@ -910,11 +919,9 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF() * item->userMag());
+        Font scaledFont(item->fretNumFont());
+        scaledFont.setPointSizeF(item->fretNumFont().pointSizeF() * item->userMag());
 
-        double fretNumMag = ctx.style().styleD(Sid::fretNumMag);
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
         FontMetrics fm2(scaledFont);
         double numw = fm2.width(String::number(item->fretOffset() + 1));
         double xdiff = numw + ldata->stringDist * .4;
@@ -963,7 +970,7 @@ void SingleLayout::layout(GlissandoSegment* item, const Context&)
     }
 
     RectF r = RectF(0.0, 0.0, item->pos2().x(), item->pos2().y()).normalized();
-    double lw = item->glissando()->lineWidth() * .5;
+    double lw = item->absoluteFromSpatium(item->lineWidth()) * .5;
     item->setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
@@ -981,7 +988,7 @@ void SingleLayout::layout(GradualTempoChangeSegment* item, const Context& ctx)
 void SingleLayout::layout(GuitarBend*, const Context&)
 {
     NOT_IMPLEMENTED;
-    //! NOTE: Bends can be removed from disallowed elements in NotationInteraction::dragCopyAllowed once this has been implemented
+    //! NOTE: Bends can be removed from disallowed elements in NotationInteraction::isOutgoingDragElementAllowed once this has been implemented
 }
 
 void SingleLayout::layout(GuitarBendSegment*, const Context&)
@@ -993,6 +1000,59 @@ void SingleLayout::layout(Hairpin* item, const Context& ctx)
 {
     item->setPos(0.0, 0.0);
     layoutLine(item, ctx);
+}
+
+void SingleLayout::layout(HammerOnPullOff* item, const Context& ctx)
+{
+    double spatium = item->spatium();
+    HammerOnPullOffSegment* s = nullptr;
+    if (item->spannerSegments().empty()) {
+        s = new HammerOnPullOffSegment(ctx.dummyParent()->system());
+        s->setTrack(item->track());
+        item->add(s);
+    } else {
+        s = toHammerOnPullOffSegment(item->frontSegment());
+    }
+
+    s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+
+    s->setPos(PointF());
+    s->ups(Grip::START).p = PointF(0, 0);
+    s->ups(Grip::END).p   = PointF(spatium * 6, 0);
+    s->setExtraHeight(0.0);
+
+    SlurTieLayout::computeBezier(s);
+
+    layout(s, ctx);
+
+    item->setbbox(s->ldata()->bbox());
+}
+
+void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
+{
+    const std::vector<HammerOnPullOffText*>& hopoTexts = item->hopoText();
+    if (item->hopoText().empty()) {
+        item->addHopoText(new HammerOnPullOffText(item));
+    }
+
+    HammerOnPullOffText* hopoText = hopoTexts.front();
+    hopoText->setParent(item);
+    hopoText->setXmlText("H/P");
+
+    Align align;
+    align.vertical = AlignV::BASELINE;
+    align.horizontal = AlignH::HCENTER;
+    hopoText->setAlign(align);
+    layoutTextBase(hopoText, ctx, hopoText->mutldata());
+
+    RectF bbox = item->ldata()->bbox();
+    double x = 0.5 * (bbox.left() + bbox.right());
+    double y = bbox.top() - 0.5 * item->spatium();
+    hopoText->mutldata()->setPos(x, y);
+
+    Shape itemShape = item->mutldata()->shape();
+    itemShape.add(hopoText->shape().translated(hopoText->pos()));
+    item->mutldata()->setShape(itemShape);
 }
 
 void SingleLayout::layout(HairpinSegment* item, const Context& ctx)
@@ -1103,7 +1163,7 @@ void SingleLayout::layout(HairpinSegment* item, const Context& ctx)
         if (!item->endText()->empty()) {
             r.unite(item->endText()->ldata()->bbox().translated(x + item->endText()->ldata()->bbox().width(), 0.0));
         }
-        double w = item->point(ctx.style().styleS(Sid::hairpinLineWidth));
+        double w = item->absoluteFromSpatium(ctx.style().styleS(Sid::hairpinLineWidth));
         item->setbbox(r.adjusted(-w * .5, -w * .5, w, w));
     }
 
@@ -1263,7 +1323,9 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
 
 void SingleLayout::layout(LayoutBreak* item, const Context&)
 {
-    UNUSED(item);
+    FontMetrics metrics(item->font());
+    RectF bbox = metrics.boundingRect(item->iconCode());
+    item->mutldata()->setShape(Shape(bbox, item));
 }
 
 void SingleLayout::layout(LetRing* item, const Context& ctx)
@@ -1276,9 +1338,20 @@ void SingleLayout::layout(LetRingSegment* item, const Context& ctx)
     layoutTextLineBaseSegment(item, ctx);
 }
 
+void SingleLayout::layout(Lyrics* item, const Context& ctx)
+{
+    layoutTextBase(static_cast<TextBase*>(item), ctx, item->mutldata());
+}
+
 void SingleLayout::layout(NoteHead* item, const Context& ctx)
 {
     layout(static_cast<Symbol*>(item), ctx);
+}
+
+void SingleLayout::layout(NoteLine*, const Context&)
+{
+    NOT_IMPLEMENTED;
+    //! NOTE: NoteLines can be removed from disallowed elements in NotationInteraction::isOutgoingDragElementAllowed once this has been implemented
 }
 
 void SingleLayout::layout(Marker* item, const Context& ctx)
@@ -1484,6 +1557,26 @@ void SingleLayout::layout(SystemText* item, const Context& ctx)
     layoutTextBase(item, ctx, item->mutldata());
 }
 
+void SingleLayout::layout(Tapping* item, const Context& ctx)
+{
+    TappingText* text = item->text();
+
+    if (!text) {
+        text = new TappingText(item);
+    }
+
+    text->setParent(item);
+    item->setText(text);
+    text->setTrack(item->track());
+    DO_ASSERT(item->hand() != TappingHand::INVALID);
+    text->setXmlText(item->hand() == TappingHand::LEFT ? "l.h. tap" : "r.h. tap");
+    text->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
+
+    layoutTextBase(text, ctx, text->mutldata());
+
+    item->setbbox(text->ldata()->bbox());
+}
+
 void SingleLayout::layout(SoundFlag* item, const Context& ctx)
 {
     UNUSED(item);
@@ -1494,6 +1587,11 @@ void SingleLayout::layout(Stem* item, const Context& ctx)
 {
     LayoutContext tctx(ctx.dontUseScore());
     TLayout::layoutStem(item, item->mutldata(), tctx.conf());
+}
+
+void SingleLayout::layout(Sticking* item, const Context& ctx)
+{
+    layoutTextBase(static_cast<TextBase*>(item), ctx, item->mutldata());
 }
 
 void SingleLayout::layout(TempoText* item, const Context& ctx)
@@ -1647,7 +1745,7 @@ void SingleLayout::layout(TremoloBar* item, const Context&)
     }
     ldata->polygon = polygon;
 
-    double w = item->lineWidth().val();
+    const double w = item->absoluteFromSpatium(item->lineWidth());
     ldata->setBbox(ldata->polygon.boundingRect().adjusted(-w, -w, w, w));
 }
 
@@ -1855,7 +1953,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
     }
 
     auto alignBaseLine = [tl](Text* text, PointF& pp1, PointF& pp2) {
-        PointF widthCorrection(0.0, tl->lineWidth() / 2);
+        PointF widthCorrection(0.0, tl->absoluteFromSpatium(tl->lineWidth()) / 2);
         switch (text->align().vertical) {
         case AlignV::TOP:
             pp1 += widthCorrection;
@@ -1929,7 +2027,8 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         item->pointsRef()[1] = pp2;
         item->setLineLength(sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1)));
 
-        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->lineWidth() / 2, tl->lineStyle() == LineType::DOTTED));
+        item->setbbox(TextLineBaseSegment::boundingBoxOfLine(pp1, pp2, tl->absoluteFromSpatium(tl->lineWidth()) / 2,
+                                                             tl->lineStyle() == LineType::DOTTED));
         return;
     }
 
@@ -1937,7 +2036,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 
     double x1 = std::min(0.0, pp2.x());
     double x2 = std::max(0.0, pp2.x());
-    double y0 = -tl->lineWidth();
+    double y0 = -tl->absoluteFromSpatium(tl->lineWidth());
     double y1 = std::min(0.0, pp2.y()) + y0;
     double y2 = std::max(0.0, pp2.y()) - y0;
 
@@ -2065,7 +2164,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
                     bool checkAngle = tl->beginHookType() == HookType::HOOK_45 || tl->diagonal();
-                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->lineWidth() * item->mag(), checkAngle);
+                    extendLines(beginHookEndpoint, beginHookStartpoint, pp1, pp2, tl->absoluteFromSpatium(tl->lineWidth()), checkAngle);
                 }
             }
         }
@@ -2089,7 +2188,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 
                     // For dashes lines, we extend the lines somewhat,
                     // so that the corner between them gets filled
-                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->lineWidth() * item->mag(), checkAngle);
+                    extendLines(pp1, pp22, endHookStartpoint, endHookEndpoint, tl->absoluteFromSpatium(tl->lineWidth()), checkAngle);
                 }
             }
 

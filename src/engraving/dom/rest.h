@@ -106,14 +106,10 @@ public:
     void setAccent(bool flag);
 
     bool isWholeRest() const;
+    bool isBreveRest() const;
 
     DeadSlapped* deadSlapped() const { return m_deadSlapped; }
 
-    int upLine() const override;
-    int downLine() const override;
-    PointF stemPos() const override;
-    double stemPosX() const override;
-    PointF stemPosBeam() const override;
     double rightEdge() const override;
     double centerX() const;
 
@@ -142,7 +138,7 @@ public:
 
     int computeNaturalLine(int lines) const; // Natural rest vertical position
     int computeVoiceOffset(int lines, LayoutData* ldata) const; // Vertical displacement in multi-voice cases
-    int computeWholeRestOffset(int voiceOffset, int lines) const;
+    int computeWholeOrBreveRestOffset(int voiceOffset, int lines) const;
 
     SymId getSymbol(DurationType type, int line, int lines) const;
     void updateSymbol(int line, int lines, LayoutData* ldata) const;

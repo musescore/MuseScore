@@ -31,9 +31,12 @@
 namespace mu::iex::imagesexport {
 class PngWriter : public AbstractImageWriter
 {
-    INJECT(IImagesExportConfiguration, configuration)
+    muse::Inject<IImagesExportConfiguration> configuration = { this };
 
 public:
+    PngWriter(const muse::modularity::ContextPtr& iocCtx)
+        : AbstractImageWriter(iocCtx) {}
+
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
 };

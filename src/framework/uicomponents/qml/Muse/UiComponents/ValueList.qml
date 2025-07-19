@@ -241,7 +241,7 @@ Item {
                     }
                     break
                 case NavigationEvent.Down:
-                    if (model.index === view.model.rowCount() - 1) {
+                    if (model.index === view.model.rowCount - 1) {
                         event.accepted = true
                     }
                     break

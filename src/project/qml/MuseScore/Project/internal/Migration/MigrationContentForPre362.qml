@@ -24,35 +24,35 @@ import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import MuseScore.Project 1.0
 
-Item {
+ColumnLayout {
     id: root
+    spacing: 24
 
     property string appVersion: ""
-    property bool isAskAgain: false
-
     property bool isApplyLeland: true
     property bool isApplyEdwin: true
+    property bool isRemapPercussion: true
 
-    property NavigationSection navigationSection: null
-
-    function activateNavigation() {
+    function activateNavigation()   {
         applyBtn.navigation.requestActive()
         accessibleInfo.readInfo()
     }
 
-    signal isAskAgainChangeRequested(bool askAgain)
     signal isApplyLelandChangeRequested(bool applyLeland)
     signal isApplyEdwinChangeRequested(bool applyEdwin)
-
+    signal isRemapPercussionChangeRequested(bool remapPercussion)
     signal watchVideoRequested()
-    signal access()
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "MigrationContentPanel"
+        accessible.role: MUAccessible.Dialog
+    }
 
     AccessibleItem {
         id: accessibleInfo
 
-        accessibleParent: footer.navigationPanel.accessible
+        accessibleParent: root.navigationPanel.accessible
         visualItem: root
         role: MUAccessible.Button
         name: headerTitle.text + ". " + headerSubtitle.text + " " + applyBtn.text
@@ -68,71 +68,51 @@ Item {
         }
     }
 
-    Column {
-        id: mainContent
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: 16
-        height: childrenRect.height
-
-        property NavigationPanel navigationPanel: NavigationPanel {
-            name: "MigrationContentPanel"
-            section: root.navigationSection
-            accessible.role: MUAccessible.Dialog
-            order: 2
-        }
+    ColumnLayout {
+        id: header
+        spacing: 8
 
         StyledTextLabel {
             id: headerTitle
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 32
-
             font: ui.theme.tabBoldFont
-
-            horizontalAlignment: Qt.AlignLeft
-            verticalAlignment: Qt.AlignVCenter
-
             text: qsTrc("project/migration", "This file was last saved in MuseScore %1").arg(root.appVersion)
         }
 
         StyledTextLabel {
             id: headerSubtitle
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 24
-
-            horizontalAlignment: Qt.AlignLeft
-            verticalAlignment: Qt.AlignVCenter
-
             text: qsTrc("project/migration", "Select the engraving improvements you would like to apply to your score")
         }
+    }
 
-        Item {
-            id: imageItem
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 264
+    Rectangle {
+        id: imageRect
+        color: "#F9F9F9"
+        height: 178
+        radius: 10
 
-            Image {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                height: 200
-                fillMode: Image.PreserveAspectFit
-                source: "migration.png"
-            }
+        border.width: 1
+        border.color: ui.theme.strokeColor
+
+        Layout.fillWidth: true
+
+        Image {
+            source: "migration.png"
+            height: 158
+            fillMode: Image.PreserveAspectFit
+            anchors.centerIn: parent
         }
+    }
+
+    ColumnLayout {
+        id: checkboxes
+        spacing: 8
 
         CheckBox {
             id: lelandOption
-            anchors.left: parent.left
-            height: 32
             text: qsTrc("project/migration", "Our new notation font, Leland")
             checked: root.isApplyLeland
 
-            navigation.panel: mainContent.navigationPanel
+            navigation.panel: root.navigationPanel
             navigation.row: 1
 
             onClicked: {
@@ -142,12 +122,10 @@ Item {
 
         CheckBox {
             id: edwinOption
-            anchors.left: parent.left
-            height: 32
             text: qsTrc("project/migration", "Our new text font, Edwin")
             checked: root.isApplyEdwin
 
-            navigation.panel: mainContent.navigationPanel
+            navigation.panel: root.navigationPanel
             navigation.row: 2
 
             onClicked: {
@@ -155,96 +133,39 @@ Item {
             }
         }
 
-        Item {
-            width: 1
-            height: 16
-        }
+        CheckBox {
+            id: percussionOption
+            text: qsTrc("project/migration", "Our new notation and sound mapping for <a href=\"%1\">MDL percussion</a>")
+                  .arg("https://musescore.org/node/367337") // non-'/en' URL should redirect to translated version, if available
+            checked: root.isRemapPercussion
 
-        StyledTextLabel {
-            id: noteLabel
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 32
-
-            horizontalAlignment: Qt.AlignLeft
-            verticalAlignment: Qt.AlignVCenter
-
-            text: qsTrc("project/migration", "Please note: score layouts will be affected by improvements to MuseScore Studio")
-        }
-
-        FlatButton {
-            id: watchVideo
-
-            text: qsTrc("project/migration", "Watch video")
-
-            navigation.panel: mainContent.navigationPanel
-            navigation.row: 4
+            navigation.panel: root.navigationPanel
+            navigation.row: 3
 
             onClicked: {
-                root.watchVideoRequested()
+                root.isRemapPercussionChangeRequested(!checked)
             }
         }
     }
 
-    Item {
-        id: footer
+    ColumnLayout {
+        id: info
+        spacing: 12
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.leftMargin: 16
-        anchors.rightMargin: 16
-        height: 56
-
-        property NavigationPanel navigationPanel: NavigationPanel {
-            name: "MigrationFooterPanel"
-            section: root.navigationSection
-            accessible.role: MUAccessible.Dialog
-            order: 1
-        }
-
-        Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.margins: -16
-            height: 2
-            color: ui.theme.buttonColor
-        }
-
-        CheckBox {
-            id: askAgain
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            text: qsTrc("global", "Don’t ask again")
-            checked: !root.isAskAgain
-
-            navigation.panel: footer.navigationPanel
-            navigation.row: 2
-
-            onClicked: {
-                root.isAskAgainChangeRequested(checked) // not `!checked` because the negation is in `checked: !root.isAskAgain`
-            }
+        StyledTextLabel {
+            id: affectedLabel
+            text: qsTrc("project/migration", "Please note: score layouts will be affected by improvements to MuseScore Studio")
         }
 
         FlatButton {
-            id: applyBtn
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            text: qsTrc("global", "OK")
+            id: videoButton
+            text: qsTrc("project/migration", "Watch video")
 
-            navigation.panel: footer.navigationPanel
-            navigation.row: 1
-            navigation.accessible.ignored: true
-            navigation.onActiveChanged: {
-                if (!navigation.active) {
-                    accessible.ignored = false
-                    accessible.focused = true
-                    accessibleInfo.resetFocus()
-                }
-            }
+            navigation.panel: root.navigationPanel
+            navigation.row: 4
 
             onClicked: {
-                root.access()
+                root.watchVideoRequested()
             }
         }
     }

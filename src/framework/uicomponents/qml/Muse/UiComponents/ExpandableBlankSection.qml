@@ -105,9 +105,9 @@ FocusScope {
 
     MouseArea {
         id: mouseArea
-
         anchors.fill: expandSectionRow
 
+        enabled: root.enabled
         hoverEnabled: true
 
         onClicked: {

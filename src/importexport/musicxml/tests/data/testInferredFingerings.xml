@@ -101,6 +101,13 @@
           <line>4</line>
           </clef>
         </attributes>
+    <direction placement="above">
+        <direction-type>
+            <words default-y="16" font-size="7.2" relative-x="3">–</words>
+            <words font-size="2.9"> </words>
+            <words font-size="7.2">1</words>
+        </direction-type>
+    </direction>
       <note default-x="83.49" default-y="-15.00">
         <pitch>
           <step>C</step>
@@ -112,11 +119,6 @@
         <stem>up</stem>
         <staff>1</staff>
         <beam number="1">begin</beam>
-        <notations>
-          <technical>
-            <fingering>0</fingering>
-            </technical>
-          </notations>
         </note>
       <note default-x="136.85" default-y="-15.00">
         <pitch>

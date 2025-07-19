@@ -29,10 +29,6 @@ namespace mu::engraving {
 BrailleModel::BrailleModel(QObject* parent)
     : QObject(parent)
 {
-    if (notationBraille()) {
-        notationBraille()->setMode(BrailleMode::Navigation);
-    }
-    load();
 }
 
 QString BrailleModel::brailleInfo() const
@@ -143,6 +139,10 @@ QString BrailleModel::cursorColor() const
 void BrailleModel::load()
 {
     TRACEFUNC;
+
+    if (notationBraille()) {
+        notationBraille()->setMode(BrailleMode::Navigation);
+    }
 
     onCurrentNotationChanged();
     context()->currentNotationChanged().onNotify(this, [this]() {

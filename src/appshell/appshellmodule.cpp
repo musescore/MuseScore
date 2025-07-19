@@ -55,7 +55,8 @@
 #include "view/preferences/saveandpublishpreferencesmodel.h"
 #include "view/preferences/scorepreferencesmodel.h"
 #include "view/preferences/importpreferencesmodel.h"
-#include "view/preferences/playbackpreferencesmodel.h"
+#include "view/preferences/audiomidipreferencesmodel.h"
+#include "view/preferences/percussionpreferencesmodel.h"
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
 #include "view/preferences/braillepreferencesmodel.h"
 #include "view/framelesswindow/framelesswindowmodel.h"
@@ -65,7 +66,9 @@
 #ifdef Q_OS_MAC
 #include "view/appmenumodel.h"
 #include "view/internal/platform/macos/macosappmenumodelhook.h"
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
 #include "view/internal/platform/macos/macosscrollinghook.h"
+#endif
 #else
 #include "view/navigableappmenumodel.h"
 #endif
@@ -88,17 +91,17 @@ std::string AppShellModule::moduleName() const
 
 void AppShellModule::registerExports()
 {
-    m_applicationActionController = std::make_shared<ApplicationActionController>();
-    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController);
-    m_appShellConfiguration = std::make_shared<AppShellConfiguration>();
-    m_sessionsManager = std::make_shared<SessionsManager>();
+    m_applicationActionController = std::make_shared<ApplicationActionController>(iocContext());
+    m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, iocContext());
+    m_appShellConfiguration = std::make_shared<AppShellConfiguration>(iocContext());
+    m_sessionsManager = std::make_shared<SessionsManager>(iocContext());
 
-    #ifdef Q_OS_MAC
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0) && defined(Q_OS_MAC)
     m_scrollingHook = std::make_shared<MacOSScrollingHook>();
-    #endif
+#endif
 
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), m_appShellConfiguration);
-    ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
+    ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario(iocContext()));
     ioc()->registerExport<ISessionsManager>(moduleName(), m_sessionsManager);
 
 #ifdef Q_OS_MAC
@@ -149,7 +152,8 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<SaveAndPublishPreferencesModel>("MuseScore.Preferences", 1, 0, "SaveAndPublishPreferencesModel");
     qmlRegisterType<ScorePreferencesModel>("MuseScore.Preferences", 1, 0, "ScorePreferencesModel");
     qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
-    qmlRegisterType<PlaybackPreferencesModel>("MuseScore.Preferences", 1, 0, "PlaybackPreferencesModel");
+    qmlRegisterType<AudioMidiPreferencesModel>("MuseScore.Preferences", 1, 0, "AudioMidiPreferencesModel");
+    qmlRegisterType<PercussionPreferencesModel>("MuseScore.Preferences", 1, 0, "PercussionPreferencesModel");
     qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
     qmlRegisterType<BraillePreferencesModel>("MuseScore.Preferences", 1, 0, "BraillePreferencesModel");
 
@@ -194,7 +198,7 @@ void AppShellModule::onInit(const IApplication::RunMode& mode)
     m_applicationUiActions->init();
     m_sessionsManager->init();
 
-#ifdef Q_OS_MAC
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0) && defined(Q_OS_MAC)
     m_scrollingHook->init();
 #endif
 }

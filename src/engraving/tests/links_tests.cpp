@@ -30,7 +30,10 @@
 #include "dom/measure.h"
 #include "dom/part.h"
 #include "dom/segment.h"
+#include "dom/tempotext.h"
+#include "dom/text.h"
 #include "dom/undo.h"
+#include "utils/scorerw.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -42,6 +45,8 @@ using namespace mu::engraving;
 class Engraving_LinksTests : public ::testing::Test
 {
 };
+
+static const String LINKS_DATA_DIR("links_data/");
 
 //---------------------------------------------------------
 //   addTitleText
@@ -93,7 +98,7 @@ TEST_F(Engraving_LinksTests, test3LinkedSameScore_99796)
     EXPECT_TRUE(e->links() == nullptr);
 
     // add a linked staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     Staff* oStaff = score->staff(0);
     Staff* staff  = Factory::createStaff(oStaff->part());
     staff->setPart(oStaff->part());
@@ -124,7 +129,7 @@ TEST_F(Engraving_LinksTests, test3LinkedSameScore_99796)
     EXPECT_TRUE(e->links()->size() == 3);
 
     // delete staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     score->cmdRemoveStaff(0);
     score->endCmd();
 
@@ -197,7 +202,7 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
     Score* nscore = score->createScore();
@@ -211,7 +216,7 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     score->endCmd();
 
     // add a linked staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     Staff* oStaff = score->staff(0);
     Staff* staff  = Factory::createStaff(oStaff->part());
     staff->setPart(oStaff->part());
@@ -229,7 +234,7 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     EXPECT_TRUE(e->links()->size() == 3);
 
     // delete part
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     score->deleteExcerpt(&ex);
     score->undo(new RemoveExcerpt(&ex));
 
@@ -278,7 +283,7 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(e->links() == nullptr);
 
     // add a linked staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     Staff* oStaff = score->staff(0);
     Staff* staff  = Factory::createStaff(oStaff->part());
     staff->setPart(oStaff->part());
@@ -296,7 +301,7 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(e->links()->size() == 2);
 
     // create parts
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
     Score* nscore = score->createScore();
@@ -323,7 +328,7 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(score->excerpts().size() == 1);
 
     // delete second staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     score->cmdRemoveStaff(1);
     for (Excerpt* excerpt : score->excerpts()) {
         std::vector<Staff*> sl = nscore->staves();
@@ -401,7 +406,7 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts//
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
     Score* nscore = score->createScore();
@@ -421,7 +426,7 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(e->links()->size() == 2);
 
     // add a linked staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     Staff* oStaff = score->staff(0);
     Staff* staff  = Factory::createStaff(oStaff->part());
     staff->setPart(oStaff->part());
@@ -463,4 +468,46 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(e->type() == ElementType::REST);
     EXPECT_TRUE(e->links()->size() == 3);
     EXPECT_TRUE(score->excerpts().size() == 1);
+}
+
+TEST_F(Engraving_LinksTests, DISABLED_testMMRestLink)
+{
+    // NOTE: Temporarily disabling this test because it assumes that the loaded score has multiMeasureRests active,
+    // but that is not the case because the mscx file *doesn't contain the style information*, so this
+    // score gets actually loaded *without* mmRest, making the test invalid. [M.S.]
+
+    MasterScore* score = ScoreRW::readScore(LINKS_DATA_DIR + u"testMMRestLink.mscx");
+    ASSERT_TRUE(score);
+
+    // Get item
+    MeasureBase* measureBase2 = score->measure(2);
+    Measure* measure2 = measureBase2->isMeasure() ? toMeasure(measureBase2) : nullptr;
+
+    EXPECT_TRUE(measure2);
+
+    Segment* seg = measure2->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+    EXPECT_TRUE(seg);
+
+    TempoText* tempoText = nullptr;
+    for (EngravingItem* el : seg->annotations()) {
+        if (el->isTempoText()) {
+            tempoText = toTempoText(el);
+        }
+    }
+    EXPECT_TRUE(tempoText);
+
+    // Make element invisible
+    if (tempoText) {
+        tempoText->undoSetVisible(false);
+    }
+
+    // Check we have a linked item in the MMR
+    EXPECT_EQ(tempoText->linkList().size(), 2);
+
+    // Make sure all linked items are invisible
+    for (EngravingObject* linkedObj : tempoText->linkList()) {
+        EngravingItem* linkedItem = toEngravingItem(linkedObj);
+        EXPECT_FALSE(linkedItem->visible());
+    }
+    delete score;
 }

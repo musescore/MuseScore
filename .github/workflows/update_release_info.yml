@@ -1,0 +1,79 @@
+name: 'Update: Release Info'
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Mode: stable, testing(alpha, beta, rc)'
+        default: 'testing'
+        required: true
+      tag:
+        description: 'Release tag (latest stable by default)'
+        required: false
+  workflow_call:
+    inputs:
+      mode:
+        description: 'Mode: stable, testing(alpha, beta, rc)'
+        default: 'testing'
+        type: string
+        required: true
+      tag:
+        description: 'Release tag (latest stable by default)'
+        type: string
+        required: false
+      environment:
+        description: "Environment: use 'production' to prompt for approval"
+        default: ''
+        type: string
+        required: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  update-release-info:
+    runs-on: ubuntu-22.04
+    environment:
+      name: ${{ inputs.environment }} # can be empty/blank (if so, URL will not be shown)
+      url: ${{ github.server_url }}/${{ github.repository }}/releases/${{ inputs.tag && format('tag/{0}', inputs.tag) || 'latest' }} # show on run page
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Update info about the release in musescore-updates
+        run: |
+          S3_URL="s3://musescore-updates/feed/latest.xml"
+          S3_ALL_URL="s3://musescore-updates/feed/all.xml"
+
+          if [ ${{ inputs.mode }} == "testing" ]; then
+            S3_URL="s3://musescore-updates/feed/latest.test.xml"
+            S3_ALL_URL="s3://musescore-updates/feed/all.test.xml"
+          fi
+
+          bash ./buildscripts/ci/release/make_release_info_file.sh \
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --repo ${{ github.repository }} \
+            --release_tag ${{ inputs.tag }}
+
+          bash ./buildscripts/ci/release/push_file_to_s3.sh \
+            --s3_key ${{ secrets.S3_KEY_UPDATE }} \
+            --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
+            --s3_url ${S3_URL} \
+            --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
+            --file_name "release_info.json"
+
+          bash ./buildscripts/ci/release/make_previous_releases_notes.sh \
+            --s3_key ${{ secrets.S3_KEY_UPDATE }} \
+            --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
+            --s3_url ${S3_ALL_URL} \
+            --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
+            --current_file_name "release_info.json" \
+            --previous_file_name "previous_releases_notes.json"
+
+          bash ./buildscripts/ci/release/push_file_to_s3.sh \
+            --s3_key ${{ secrets.S3_KEY_UPDATE }} \
+            --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
+            --s3_url ${S3_ALL_URL} \
+            --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
+            --file_name "previous_releases_notes.json"

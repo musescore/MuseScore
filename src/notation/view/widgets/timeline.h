@@ -262,7 +262,7 @@ private:
 
     unsigned nmetas() const;
 
-    bool collapsed() { return _collapsedMeta; }
+    bool collapsed() const { return _collapsedMeta; }
     void setCollapsed(bool st) { _collapsedMeta = st; }
 
     engraving::Staff* numToStaff(int staff);

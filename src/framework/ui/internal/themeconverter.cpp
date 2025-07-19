@@ -38,6 +38,7 @@ static const std::vector<std::pair<ThemeStyleKey, QString > > s_keys = {
     { BACKGROUND_PRIMARY_COLOR, "backgroundPrimaryColor" },
     { BACKGROUND_SECONDARY_COLOR, "backgroundSecondaryColor" },
     { BACKGROUND_TERTIARY_COLOR, "backgroundTertiaryColor" },
+    { BACKGROUND_QUARTERNARY_COLOR, "backgroundQuarternaryColor" },
     { POPUP_BACKGROUND_COLOR, "popupBackgroundColor" },
     { PROJECT_TAB_COLOR, "projectTabColor" },
     { TEXT_FIELD_COLOR, "textFieldColor" },

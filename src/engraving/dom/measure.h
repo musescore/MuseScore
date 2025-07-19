@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_MEASURE_H
-#define MU_ENGRAVING_MEASURE_H
+#pragma once
 
 /**
  \file
@@ -37,6 +36,10 @@ class MeasureRead;
 }
 
 namespace mu::engraving::read410 {
+class MeasureRead;
+}
+
+namespace mu::engraving::read460 {
 class MeasureRead;
 }
 
@@ -84,8 +87,8 @@ public:
     void setScore(Score*);
     void setTrack(track_idx_t);
 
-    MeasureNumber* noText() const { return m_noText; }
-    void setNoText(MeasureNumber* t) { m_noText = t; }
+    MeasureNumber* measureNumber() const { return m_measureNumber; }
+    void setMeasureNumber(MeasureNumber* t) { m_measureNumber = t; }
 
     MMRestRange* mmRangeText() const { return m_mmRangeText; }
     void setMMRangeText(MMRestRange* r) { m_mmRangeText = r; }
@@ -107,16 +110,14 @@ public:
     bool stemless() const { return m_stemless; }
     void setStemless(bool val) { m_stemless = val; }
 
-#ifndef NDEBUG
     bool corrupted() const { return m_corrupted; }
     void setCorrupted(bool val) { m_corrupted = val; }
-#endif
 
     int measureRepeatCount() const { return m_measureRepeatCount; }
     void setMeasureRepeatCount(int n) { m_measureRepeatCount = n; }
 
 private:
-    MeasureNumber* m_noText = nullptr;      // Measure number text object
+    MeasureNumber* m_measureNumber = nullptr;      // Measure number text object
     MMRestRange* m_mmRangeText = nullptr;   // Multi measure rest range text object
     StaffLines* m_lines = nullptr;
     Spacer* m_vspacerUp = nullptr;
@@ -125,9 +126,7 @@ private:
                                             // this changes some layout rules
     bool m_visible = true;
     bool m_stemless = false;
-#ifndef NDEBUG
     bool m_corrupted = false;
-#endif
     int m_measureRepeatCount = 0;
 };
 
@@ -176,12 +175,10 @@ public:
     Spacer* vspacerUp(staff_idx_t staffIdx) const;
     void setStaffVisible(staff_idx_t staffIdx, bool visible);
     void setStaffStemless(staff_idx_t staffIdx, bool stemless);
-#ifndef NDEBUG
     bool corrupted(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
     void setCorrupted(staff_idx_t staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
-#endif
-    MeasureNumber* noText(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->noText(); }
-    void setNoText(staff_idx_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setNoText(t); }
+    MeasureNumber* measureNumber(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->measureNumber(); }
+    void setMeasureNumber(staff_idx_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setMeasureNumber(t); }
 
     const std::vector<MStaff*>& mstaves() const { return m_mstaves; }
     std::vector<MStaff*>& mstaves() { return m_mstaves; }
@@ -197,15 +194,17 @@ public:
     Fraction timesig() const { return m_timesig; }
     void setTimesig(const Fraction& f) { m_timesig = f; }
 
-    Fraction stretchedLen(Staff*) const;
+    Fraction stretchedLen(const Staff*) const;
     bool isIrregular() const { return m_timesig != m_len; }
 
     int size() const { return m_segments.size(); }
     Segment* first() const { return m_segments.first(); }
     Segment* first(SegmentType t) const { return m_segments.first(t); }
     Segment* firstEnabled() const { return m_segments.first(ElementFlag::ENABLED); }
+    Segment* firstActive() const { return m_segments.firstActive(); }
 
     Segment* last() const { return m_segments.last(); }
+    Segment* last(SegmentType t) const { return m_segments.last(t); }
     Segment* lastEnabled() const { return m_segments.last(ElementFlag::ENABLED); }
     SegmentList& segments() { return m_segments; }
     const SegmentList& segments() const { return m_segments; }
@@ -213,19 +212,15 @@ public:
     double userStretch() const;
     void setUserStretch(double v) { m_userStretch = v; }
 
-    void setLayoutStretch(double stretchCoeff) { m_layoutStretch = stretchCoeff; }
-    double layoutStretch() const { return m_layoutStretch; }
-
-    Fraction computeTicks();
+    void computeTicks();
     Fraction anacrusisOffset() const;
-    Fraction shortestChordRest() const;
     Fraction maxTicks() const;
 
     bool showsMeasureNumber();
     bool showsMeasureNumberInAutoMode();
 
-    Chord* findChord(Fraction tick, track_idx_t track);
-    ChordRest* findChordRest(Fraction tick, track_idx_t track);
+    Chord* findChord(Fraction tick, track_idx_t track) const;
+    ChordRest* findChordRest(Fraction tick, track_idx_t track) const;
     Fraction snap(const Fraction& tick, const PointF p) const;
     Fraction snapNote(const Fraction& tick, const PointF p, int staff) const;
 
@@ -263,6 +258,7 @@ public:
     Segment* findSegment(SegmentType st,    const Fraction& f) const { return findSegmentR(st, f - tick()); }
     Segment* undoGetSegment(SegmentType st, const Fraction& f) { return undoGetSegmentR(st, f - tick()); }
     Segment* getSegment(SegmentType st,     const Fraction& f) { return getSegmentR(st, f - tick()); }
+    Segment* undoGetChordRestOrTimeTickSegment(const Fraction& f);
     Segment* getChordRestOrTimeTickSegment(const Fraction& f);
 
     void connectTremolo();
@@ -284,8 +280,10 @@ public:
     bool visible(staff_idx_t staffIdx) const;
     bool stemless(staff_idx_t staffIdx) const;
     bool isFinalMeasureOfSection() const;
+    LayoutBreak* sectionBreakElement(bool includeNextFrames = true) const;
     bool isAnacrusis() const;
     bool isFirstInSystem() const;
+    bool isLastInSystem() const;
     bool isFirstInSection() const;
 
     bool breakMultiMeasureRest() const { return m_breakMultiMeasureRest; }
@@ -297,7 +295,7 @@ public:
 
     int playbackCount() const { return m_playbackCount; }
     void setPlaybackCount(int val) { m_playbackCount = val; }
-    RectF staffabbox(staff_idx_t staffIdx) const;
+    RectF staffPageBoundingRect(staff_idx_t staffIdx) const;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -306,9 +304,10 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue& newValue);
     void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 
-    bool hasMMRest() const { return m_mmRest != 0; }
+    bool hasMMRest() const { return m_mmRest != nullptr; }
     bool isMMRest() const { return m_mmRestCount > 0; }
     Measure* mmRest() const { return m_mmRest; }
+    Measure* coveringMMRestOrThis();
     const Measure* coveringMMRestOrThis() const;
     void setMMRest(Measure* m) { m_mmRest = m; }
     int mmRestCount() const { return m_mmRestCount; }            // number of measures m_mmRest spans
@@ -329,8 +328,14 @@ public:
     bool nextIsOneMeasureRepeat(staff_idx_t staffidx) const;
     bool prevIsOneMeasureRepeat(staff_idx_t staffIdx) const;
 
-    EngravingItem* nextElementStaff(staff_idx_t staff);
-    EngravingItem* prevElementStaff(staff_idx_t staff);
+    ChordRest* lastChordRest(track_idx_t track) const;
+    ChordRest* firstChordRest(track_idx_t track) const;
+
+    EngravingItem* nextElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
+    EngravingItem* prevElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
+
+    double firstNoteRestSegmentX(bool leading = false) const;
+    double endingXForOpenEndedLines() const;
 
     String accessibleInfo() const override;
 
@@ -341,30 +346,24 @@ public:
     const BarLine* endBarLine() const;
     BarLineType endBarLineType() const;
     bool endBarLineVisible() const;
+    const BarLine* startBarLine() const;
     void triggerLayout() const override;
-    double basicStretch() const;
-    double basicWidth() const;
-    void stretchToTargetWidth(double targetWidth);
+
     void checkHeader();
     void checkTrailer();
-
-    bool isWidthLocked() const { return m_isWidthLocked; }
-    // A measure is widthLocked if its width has been locked by the minMeasureWidth (or minMMRestWidth)
-    // parameter, meaning it can't be any narrower than it currently is.
-    void setWidthLocked(bool b) { m_isWidthLocked = b; }
-
-    double squeezableSpace() const { return m_squeezableSpace; }
-    void setSqueezableSpace(double val) { m_squeezableSpace = val; }
+    void checkEndOfMeasureChange();
 
     void respaceSegments();
 
     bool canAddStringTunings(staff_idx_t staffIdx) const;
+    bool canAddStaffTypeChange(staff_idx_t staffIdx) const;
 
 private:
 
     friend class Factory;
     friend class read400::MeasureRead;
     friend class read410::MeasureRead;
+    friend class read460::MeasureRead;
     friend class write::MeasureWrite;
 
     Measure(System* parent = 0);
@@ -376,8 +375,6 @@ private:
     void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
 
     MStaff* mstaff(staff_idx_t staffIndex) const;
-
-    double m_squeezableSpace = 0.0;
 
     std::vector<MStaff*> m_mstaves;
     SegmentList m_segments;
@@ -398,9 +395,5 @@ private:
 
     MeasureNumberMode m_noMode = MeasureNumberMode::AUTO;
     bool m_breakMultiMeasureRest = false;
-
-    double m_layoutStretch = 1.0;
-    bool m_isWidthLocked = false;
 };
 } // namespace mu::engraving
-#endif

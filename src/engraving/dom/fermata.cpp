@@ -78,24 +78,12 @@ int Fermata::subtype() const
 }
 
 //---------------------------------------------------------
-//   typeUserName
+//   subtypeUserName
 //---------------------------------------------------------
 
-TranslatableString Fermata::typeUserName() const
+muse::TranslatableString Fermata::subtypeUserName() const
 {
-    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
-}
-
-//---------------------------------------------------------
-//   chordRest
-//---------------------------------------------------------
-
-ChordRest* Fermata::chordRest() const
-{
-    if (explicitParent() && explicitParent()->isChordRest()) {
-        return toChordRest(explicitParent());
-    }
-    return 0;
+    return SymNames::userNameForSymId(symId());
 }
 
 //---------------------------------------------------------
@@ -263,7 +251,11 @@ Sid Fermata::getPropertyStyle(Pid pid) const
 
 double Fermata::mag() const
 {
-    return staff() ? staff()->staffMag(tick()) * style().styleD(Sid::articulationMag) : 1.0;
+    double m = staff() ? staff()->staffMag(tick()) * style().styleD(Sid::articulationMag) : 1.0;
+    if (segment() && segment()->isChordRestType() && segment()->element(track())) {
+        m *= toChordRest(segment()->element(track()))->mag();
+    }
+    return m;
 }
 
 void Fermata::setSymIdAndTimeStretch(SymId id)
@@ -306,7 +298,7 @@ FermataType Fermata::fermataType() const
 
 String Fermata::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedTypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), SymNames::translatedUserNameForSymId(symId()));
 }
 
 void Fermata::added()

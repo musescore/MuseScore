@@ -61,8 +61,7 @@ public:
     BeatsPerSecond tempo() const { return m_tempo; }
     double tempoBpm() const;
     void setTempo(BeatsPerSecond v);
-    void undoSetTempo(double v);
-    bool isRelative() { return m_isRelative; }
+    bool isRelative() const { return m_isRelative; }
     void setRelative(double v) { m_isRelative = true; m_relative = v; }
 
     bool isNormal() const { return m_tempoTextType == TempoTextType::NORMAL; }
@@ -74,9 +73,11 @@ public:
     bool isTempoPrimo() const { return m_tempoTextType == TempoTextType::TEMPO_PRIMO; }
     void setTempoPrimo() { setTempoTextType(TempoTextType::TEMPO_PRIMO); }
 
+    bool playTempoText() const { return m_playTempoText; }
+    void setPlayTempoText(bool v) { m_playTempoText = v; }
+
     bool followText() const { return m_followText; }
     void setFollowText(bool v) { m_followText = v; }
-    void undoSetFollowText(bool v);
 
     void updateTempo();
     void updateRelative();
@@ -104,8 +105,10 @@ protected:
     TempoTextType m_tempoTextType;
     BeatsPerSecond m_tempo;             // beats per second
     bool m_followText = false;          // parse text to determine tempo
+    bool m_playTempoText = true;
     double m_relative = 0.0;
     bool m_isRelative = false;
+    bool m_alignRightOfRehearsalMark = true;
 };
 } // namespace mu::engraving
 #endif

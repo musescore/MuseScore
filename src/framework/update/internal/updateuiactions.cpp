@@ -37,8 +37,8 @@ const UiActionList UpdateUiActions::m_actions = {
              )
 };
 
-UpdateUiActions::UpdateUiActions(std::shared_ptr<UpdateActionController> controller)
-    : m_controller(controller)
+UpdateUiActions::UpdateUiActions(std::shared_ptr<UpdateActionController> controller, const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_controller(controller)
 {
 }
 

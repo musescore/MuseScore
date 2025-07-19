@@ -1,5 +1,4 @@
-
-declare_module(beatroot)
+declare_thirdparty_module(beatroot)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/Agent.cpp
@@ -13,6 +12,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/Induction.h
     )
 
+set(MODULE_USE_COVERAGE OFF)
+
 setup_module()
 
 target_no_warning(${MODULE} -Wno-conversion)
+target_no_warning(${MODULE} -Wno-unused-but-set-variable)

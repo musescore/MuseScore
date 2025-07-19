@@ -43,12 +43,14 @@ using namespace mu::engraving;
 // ScoreFont
 // =============================================
 
-EngravingFont::EngravingFont(const std::string& name, const std::string& family, const path_t& filePath,
+EngravingFont::EngravingFont(const std::string& name, const std::string& family,
+                             const path_t& filePath, const path_t& metadataPath,
                              const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx),  m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
     m_name(name),
     m_family(family),
-    m_fontPath(filePath)
+    m_fontPath(filePath),
+    m_metadataPath(metadataPath)
 {
 }
 
@@ -60,6 +62,7 @@ EngravingFont::EngravingFont(const EngravingFont& other)
     m_name     = other.m_name;
     m_family   = other.m_family;
     m_fontPath = other.m_fontPath;
+    m_metadataPath = other.m_metadataPath;
 }
 
 // =============================================
@@ -116,7 +119,7 @@ void EngravingFont::ensureLoad()
         computeMetrics(sym, code);
     }
 
-    File metadataFile(FileInfo(m_fontPath).path() + u"/metadata.json");
+    File metadataFile(m_metadataPath);
     if (!metadataFile.open(IODevice::ReadOnly)) {
         LOGE() << "Failed to open glyph metadata file: " << metadataFile.filePath();
         return;
@@ -373,7 +376,304 @@ void EngravingFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternat
         { std::string("flag8thUp"),
           std::string("flag8thUpStraight"),
           SymId::flag8thUpStraight
-        }
+        },
+        // Time sig variants
+        { std::string("timeSig0"),
+          std::string("timeSig0Large"),
+          SymId::timeSig0Large
+        },
+        { std::string("timeSig0"),
+          std::string("timeSig0Small"),
+          SymId::timeSig0Small
+        },
+        { std::string("timeSig0"),
+          std::string("timeSig0Narrow"),
+          SymId::timeSig0Narrow
+        },
+        { std::string("timeSig1"),
+          std::string("timeSig1Large"),
+          SymId::timeSig1Large
+        },
+        { std::string("timeSig1"),
+          std::string("timeSig1Small"),
+          SymId::timeSig1Small
+        },
+        { std::string("timeSig1"),
+          std::string("timeSig1Narrow"),
+          SymId::timeSig1Narrow
+        },
+        { std::string("timeSig2"),
+          std::string("timeSig2Large"),
+          SymId::timeSig2Large
+        },
+        { std::string("timeSig2"),
+          std::string("timeSig2Small"),
+          SymId::timeSig2Small
+        },
+        { std::string("timeSig2"),
+          std::string("timeSig2Narrow"),
+          SymId::timeSig2Narrow
+        },
+        { std::string("timeSig3"),
+          std::string("timeSig3Large"),
+          SymId::timeSig3Large
+        },
+        { std::string("timeSig3"),
+          std::string("timeSig3Small"),
+          SymId::timeSig3Small
+        },
+        { std::string("timeSig3"),
+          std::string("timeSig3Narrow"),
+          SymId::timeSig3Narrow
+        },
+        { std::string("timeSig4"),
+          std::string("timeSig4Large"),
+          SymId::timeSig4Large
+        },
+        { std::string("timeSig4"),
+          std::string("timeSig4Small"),
+          SymId::timeSig4Small
+        },
+        { std::string("timeSig4"),
+          std::string("timeSig4Narrow"),
+          SymId::timeSig4Narrow
+        },
+        { std::string("timeSig5"),
+          std::string("timeSig5Large"),
+          SymId::timeSig5Large
+        },
+        { std::string("timeSig5"),
+          std::string("timeSig5Small"),
+          SymId::timeSig5Small
+        },
+        { std::string("timeSig5"),
+          std::string("timeSig5Narrow"),
+          SymId::timeSig5Narrow
+        },
+        { std::string("timeSig6"),
+          std::string("timeSig6Large"),
+          SymId::timeSig6Large
+        },
+        { std::string("timeSig6"),
+          std::string("timeSig6Small"),
+          SymId::timeSig6Small
+        },
+        { std::string("timeSig6"),
+          std::string("timeSig6Narrow"),
+          SymId::timeSig6Narrow
+        },
+        { std::string("timeSig7"),
+          std::string("timeSig7Large"),
+          SymId::timeSig7Large
+        },
+        { std::string("timeSig7"),
+          std::string("timeSig7Small"),
+          SymId::timeSig7Small
+        },
+        { std::string("timeSig7"),
+          std::string("timeSig7Narrow"),
+          SymId::timeSig7Narrow
+        },
+        { std::string("timeSig8"),
+          std::string("timeSig8Large"),
+          SymId::timeSig8Large
+        },
+        { std::string("timeSig8"),
+          std::string("timeSig8Small"),
+          SymId::timeSig8Small
+        },
+        { std::string("timeSig8"),
+          std::string("timeSig8Narrow"),
+          SymId::timeSig8Narrow
+        },
+        { std::string("timeSig9"),
+          std::string("timeSig9Large"),
+          SymId::timeSig9Large
+        },
+        { std::string("timeSig9"),
+          std::string("timeSig9Small"),
+          SymId::timeSig9Small
+        },
+        { std::string("timeSig9"),
+          std::string("timeSig9Narrow"),
+          SymId::timeSig9Narrow
+        },
+        { std::string("timeSigCommon"),
+          std::string("timeSigCommonLarge"),
+          SymId::timeSigCommonLarge
+        },
+        { std::string("timeSigCommon"),
+          std::string("timeSigCommonNarrow"),
+          SymId::timeSigCommonNarrow
+        },
+        { std::string("timeSigCutCommon"),
+          std::string("timeSigCutCommonLarge"),
+          SymId::timeSigCutCommonLarge
+        },
+        { std::string("timeSigCutCommon"),
+          std::string("timeSigCutCommonNarrow"),
+          SymId::timeSigCutCommonNarrow
+        },
+        { std::string("timeSigPlus"),
+          std::string("timeSigPlusLarge"),
+          SymId::timeSigPlusLarge
+        },
+        { std::string("timeSigPlus"),
+          std::string("timeSigPlusNarrow"),
+          SymId::timeSigPlusNarrow
+        },
+        { std::string("timeSigPlusSmall"),
+          std::string("timeSigPlusSmallLarge"),
+          SymId::timeSigPlusSmallLarge
+        },
+        { std::string("timeSigPlusSmall"),
+          std::string("timeSigPlusSmallNarrow"),
+          SymId::timeSigPlusSmallNarrow
+        },
+        { std::string("timeSigFractionalSlash"),
+          std::string("timeSigFractionalSlashLarge"),
+          SymId::timeSigFractionalSlashLarge
+        },
+        { std::string("timeSigFractionalSlash"),
+          std::string("timeSigFractionalSlashNarrow"),
+          SymId::timeSigFractionalSlashNarrow
+        },
+        { std::string("timeSigEquals"),
+          std::string("timeSigEqualsLarge"),
+          SymId::timeSigEqualsLarge
+        },
+        { std::string("timeSigEquals"),
+          std::string("timeSigEqualsNarrow"),
+          SymId::timeSigEqualsNarrow
+        },
+        { std::string("timeSigMinus"),
+          std::string("timeSigMinusLarge"),
+          SymId::timeSigMinusLarge
+        },
+        { std::string("timeSigMinus"),
+          std::string("timeSigMinusNarrow"),
+          SymId::timeSigMinusNarrow
+        },
+        { std::string("timeSigMultiply"),
+          std::string("timeSigMultiplyLarge"),
+          SymId::timeSigMultiplyLarge
+        },
+        { std::string("timeSigMultiply"),
+          std::string("timeSigMultiplyNarrow"),
+          SymId::timeSigMultiplyNarrow
+        },
+        { std::string("timeSigParensLeftSmall"),
+          std::string("timeSigParensLeftSmallLarge"),
+          SymId::timeSigParensLeftSmallLarge
+        },
+        { std::string("timeSigParensLeftSmall"),
+          std::string("timeSigParensLeftSmallNarrow"),
+          SymId::timeSigParensLeftSmallNarrow
+        },
+        { std::string("timeSigParensRightSmall"),
+          std::string("timeSigParensRightSmallLarge"),
+          SymId::timeSigParensRightSmallLarge
+        },
+        { std::string("timeSigParensRightSmall"),
+          std::string("timeSigParensRightSmallNarrow"),
+          SymId::timeSigParensRightSmallNarrow
+        },
+        { std::string("timeSigParensLeft"),
+          std::string("timeSigParensLeftLarge"),
+          SymId::timeSigParensLeftLarge
+        },
+        { std::string("timeSigParensLeft"),
+          std::string("timeSigParensLeftNarrow"),
+          SymId::timeSigParensLeftNarrow
+        },
+        { std::string("timeSigParensRight"),
+          std::string("timeSigParensRightLarge"),
+          SymId::timeSigParensRightLarge
+        },
+        { std::string("timeSigParensRight"),
+          std::string("timeSigParensRightNarrow"),
+          SymId::timeSigParensRightNarrow
+        },
+        { std::string("timeSigCommaEquals"),
+          std::string("timeSigCommaEqualsLarge"),
+          SymId::timeSigCommaEqualsLarge
+        },
+        { std::string("timeSigCommaEquals"),
+          std::string("timeSigCommaEqualsNarrow"),
+          SymId::timeSigCommaEqualsNarrow
+        },
+        { std::string("timeSigFractionQuarter"),
+          std::string("timeSigFractionQuarterLarge"),
+          SymId::timeSigFractionQuarterLarge
+        },
+        { std::string("timeSigFractionQuarter"),
+          std::string("timeSigFractionQuarterNarrow"),
+          SymId::timeSigFractionQuarterNarrow
+        },
+        { std::string("timeSigFractionHalf"),
+          std::string("timeSigFractionHalfLarge"),
+          SymId::timeSigFractionHalfLarge
+        },
+        { std::string("timeSigFractionHalf"),
+          std::string("timeSigFractionHalfNarrow"),
+          SymId::timeSigFractionHalfNarrow
+        },
+        { std::string("timeSigFractionThreeQuarters"),
+          std::string("timeSigFractionThreeQuartersLarge"),
+          SymId::timeSigFractionThreeQuartersLarge
+        },
+        { std::string("timeSigFractionThreeQuarters"),
+          std::string("timeSigFractionThreeQuartersNarrow"),
+          SymId::timeSigFractionThreeQuartersNarrow
+        },
+        { std::string("timeSigFractionOneThird"),
+          std::string("timeSigFractionOneThirdLarge"),
+          SymId::timeSigFractionOneThirdLarge
+        },
+        { std::string("timeSigFractionOneThird"),
+          std::string("timeSigFractionOneThirdNarrow"),
+          SymId::timeSigFractionOneThirdNarrow
+        },
+        { std::string("timeSigFractionTwoThirds"),
+          std::string("timeSigFractionTwoThirdsLarge"),
+          SymId::timeSigFractionTwoThirdsLarge
+        },
+        { std::string("timeSigFractionTwoThirds"),
+          std::string("timeSigFractionTwoThirdsNarrow"),
+          SymId::timeSigFractionTwoThirdsNarrow
+        },
+        { std::string("timeSigX"),
+          std::string("timeSigXLarge"),
+          SymId::timeSigXLarge
+        },
+        { std::string("timeSigX"),
+          std::string("timeSigXNarrow"),
+          SymId::timeSigXNarrow
+        },
+        { std::string("timeSigOpenPenderecki"),
+          std::string("timeSigOpenPendereckiLarge"),
+          SymId::timeSigOpenPendereckiLarge
+        },
+        { std::string("timeSigOpenPenderecki"),
+          std::string("timeSigOpenPendereckiNarrow"),
+          SymId::timeSigOpenPendereckiNarrow
+        },
+        { std::string("timeSigCut2"),
+          std::string("timeSigCut2Large"),
+          SymId::timeSigCut2Large
+        },
+        { std::string("timeSigCut2"),
+          std::string("timeSigCut2Narrow"),
+          SymId::timeSigCut2Narrow
+        },
+        { std::string("timeSigCut3"),
+          std::string("timeSigCut3Large"),
+          SymId::timeSigCut3Large
+        },
+        { std::string("timeSigCut3"),
+          std::string("timeSigCut3Narrow"),
+          SymId::timeSigCut3Narrow
+        },
     };
 
     bool ok;
@@ -439,10 +739,10 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
         // "beamSpacing" handled separately
         { "legerLineThickness",         { { Sid::ledgerLineWidth } } },
         { "legerLineExtension",         { { Sid::ledgerLineLength } } },
-        { "slurEndpointThickness",      { { Sid::SlurEndWidth } } },
-        { "slurMidpointThickness",      { { Sid::SlurMidWidth } } },
-        { "tieEndpointThickness",       { { Sid::TieEndWidth } } },
-        { "tieMidpointThickness",       { { Sid::TieMidWidth } } },
+        { "slurEndpointThickness",      { { Sid::slurEndWidth } } },
+        { "slurMidpointThickness",      { { Sid::slurMidWidth } } },
+        { "tieEndpointThickness",       { { Sid::tieEndWidth } } },
+        { "tieMidpointThickness",       { { Sid::tieMidWidth } } },
         { "thinBarlineThickness",       { { Sid::barWidth, Sid::doubleBarWidth } } },
         { "thickBarlineThickness",      { { Sid::endBarWidth } } },
         // "dashedBarlineThickness" not supported
@@ -496,7 +796,7 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
         applyEngravingDefault(key, engravingDefaultsObject.value(key).toDouble());
     }
 
-    m_engravingDefaults.insert({ Sid::MusicalTextFont, String(u"%1 Text").arg(String::fromStdString(m_family)) });
+    m_engravingDefaults.insert({ Sid::musicalTextFont, String(u"%1 Text").arg(String::fromStdString(m_family)) });
 }
 
 void EngravingFont::computeMetrics(EngravingFont::Sym& sym, const Smufl::Code& code)

@@ -29,8 +29,8 @@ StyledPopupView {
 
     property int popupAvailableWidth: 0
 
-    contentHeight: contentColumn.childrenRect.height
-    contentWidth: popupAvailableWidth - 2 * margins
+    contentWidth: contentColumn.width
+    contentHeight: contentColumn.height
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "CreateCustomPalettePopup"
@@ -48,7 +48,10 @@ StyledPopupView {
 
     Column {
         id: contentColumn
-        width: parent.width
+
+        width: root.popupAvailableWidth - 2 * root.margins
+        height: childrenRect.height
+
         spacing: 12
 
         StyledTextLabel {

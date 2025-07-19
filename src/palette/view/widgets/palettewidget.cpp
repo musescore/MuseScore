@@ -58,13 +58,15 @@
 #include "engraving/dom/factory.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
-#include "engraving/compat/dummyelement.h"
+
+#include "notation/utilities/engravingitempreviewpainter.h"
 
 #include "internal/palettecelliconengine.h"
 
 #include "log.h"
 
 using namespace mu;
+using namespace muse;
 using namespace muse::io;
 using namespace mu::palette;
 using namespace mu::engraving;
@@ -284,12 +286,12 @@ bool PaletteWidget::setFilterText(const QString& text)
     m_filteredCells.clear();
     // if palette name is searched for, display all elements in the palette
     if (name().startsWith(t, Qt::CaseInsensitive)) {
-        PaletteCellPtr c = cells().front();
-        for (PaletteCellPtr cell : cells()) {
+        const PaletteCellPtr& c = cells().front();
+        for (const PaletteCellPtr& cell : cells()) {
             m_filteredCells.push_back(cell);
         }
 
-        bool contains = t.isEmpty() || c;
+        const bool contains = t.isEmpty() || c;
         if (!contains) {
             m_isFilterActive = true;
         }
@@ -298,12 +300,12 @@ bool PaletteWidget::setFilterText(const QString& text)
         }
     }
 
-    for (PaletteCellPtr cell : cells()) {
-        QStringList h = cell->name.toLower().split(" ");
-        bool c        = false;
-        QStringList n = t.split(" ");
-        for (QString hs : h) {
-            for (QString ns : n) {
+    for (const PaletteCellPtr& cell : cells()) {
+        const QStringList h = cell->name.toLower().split(" ");
+        const QStringList n = t.split(" ");
+        bool c = false;
+        for (const QString& hs : h) {
+            for (const QString& ns : n) {
                 if (!ns.trimmed().isEmpty()) {
                     c = hs.trimmed().startsWith(ns.trimmed());
                 }
@@ -315,7 +317,7 @@ bool PaletteWidget::setFilterText(const QString& text)
         if (t.isEmpty() || c) {
             m_filteredCells.push_back(cell);
         }
-        bool contains = t.isEmpty() || c;
+        const bool contains = t.isEmpty() || c;
         if (!contains) {
             m_isFilterActive = true;
         }
@@ -609,10 +611,11 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 
     painter.setPen(Pen(color));
 
-    PaletteCellIconEngine::PaintContext ctx;
-    ctx.painter = &painter;
+    notation::EngravingItemPreviewPainter::PaintParams params;
+    params.painter = &painter;
+    params.color = configuration()->elementsColor();
 
-    element->scanElements(&ctx, PaletteCellIconEngine::paintPaletteItem);
+    notation::EngravingItemPreviewPainter::paintItem(element.get(), params);
 
     element->setPos(pos);
     return pm;
@@ -1089,12 +1092,15 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
 
         painter.setPen(Pen(color));
 
-        PaletteCellIconEngine::PaintContext ctx;
-        ctx.painter = &painter;
-        ctx.useElementColors = m_paintOptions.useElementColors;
-        ctx.colorsInversionEnabled = m_paintOptions.colorsInverionsEnabled;
+        notation::EngravingItemPreviewPainter::PaintParams params;
+        params.painter = &painter;
+        params.color = configuration()->elementsColor();
 
-        el->scanElements(&ctx, PaletteCellIconEngine::paintPaletteItem);
+        params.useElementColors = m_paintOptions.useElementColors;
+        params.colorsInversionEnabled = m_paintOptions.colorsInverionsEnabled;
+
+        notation::EngravingItemPreviewPainter::paintItem(el.get(), params);
+
         painter.restore();
     }
 }
@@ -1133,31 +1139,32 @@ void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
             std::string question = muse::qtrc("palette", "Are you sure you want to delete palette cell “%1”?")
                                    .arg(cell->name).toStdString();
 
-            muse::IInteractive::Result result = interactive()->question(title, question, {
+            auto promise = interactive()->question(title, question, {
                 muse::IInteractive::Button::Yes,
                 muse::IInteractive::Button::No
             }, muse::IInteractive::Button::Yes);
 
-            if (result.standardButton() != muse::IInteractive::Button::Yes) {
-                return;
+            promise.onResolve(this, [this, i](const IInteractive::Result& res) {
+                if (res.isButton(IInteractive::Button::Yes)) {
+                    m_palette->takeCell(i);
+                    emit changed();
+                }
+            });
+        }
+    } else {
+        bool sizeChanged = false;
+        for (size_t j = 0; j < cells().size(); ++j) {
+            if (!cellAt(j)) {
+                m_palette->takeCells(i, 1);
+                sizeChanged = true;
             }
-            m_palette->takeCell(i);
-            emit changed();
         }
-    }
-
-    bool sizeChanged = false;
-    for (size_t j = 0; j < cells().size(); ++j) {
-        if (!cellAt(j)) {
-            m_palette->takeCells(i, 1);
-            sizeChanged = true;
+        if (sizeChanged) {
+            setFixedHeight(heightForWidth(width()));
+            updateGeometry();
         }
+        update();
     }
-    if (sizeChanged) {
-        setFixedHeight(heightForWidth(width()));
-        updateGeometry();
-    }
-    update();
 }
 
 // ====================================================

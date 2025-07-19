@@ -31,15 +31,16 @@
 #include "ui/inavigationcontroller.h"
 
 namespace mu::context {
-class UiContextResolver : public IUiContextResolver, public muse::async::Asyncable
+class UiContextResolver : public IUiContextResolver, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(muse::IInteractive, interactive)
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(IGlobalContext, globalContext)
-    INJECT(muse::ui::INavigationController, navigationController)
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<IGlobalContext> globalContext = { this };
+    muse::Inject<muse::ui::INavigationController> navigationController = { this };
 
 public:
-    UiContextResolver() = default;
+    UiContextResolver(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
     void init();
 

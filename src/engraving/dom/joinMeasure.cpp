@@ -26,6 +26,7 @@
 #include "range.h"
 #include "score.h"
 #include "spanner.h"
+#include "stafftypechange.h"
 #include "timesig.h"
 #include "undo.h"
 
@@ -66,6 +67,10 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
             MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
             return;
         }
+        if (staves().at(staffIdx)->staffTypeRange(tick2).first > tick1.ticks()) {
+            MScore::setError(MsError::CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE);
+            return;
+        }
     }
 
     if (m1->isMMRest()) {
@@ -88,7 +93,9 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
         doUndoRemoveElement(i.value);
     }
 
-    for (auto i : spanner()) {
+    std::map<Spanner*, Fraction> spannersEndingInRange;
+    std::multimap<int, Spanner*> spannerMap = spanner();
+    for (std::pair<int, Spanner*> i : spannerMap) {
         Spanner* s = i.second;
         if (s->tick() >= startTick && s->tick() < endTick) {
             s->setStartElement(0);
@@ -96,19 +103,43 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
         if (s->tick2() >= startTick && s->tick2() < endTick) {
             s->setEndElement(0);
         }
+        // Maintain length of spanners starting outside and ending within join range
+        if (s->tick() < startTick && s->tick2() < endTick) {
+            spannersEndingInRange.emplace(s, s->tick2());
+        }
+        // Remove spanners starting within join range and ending outside
+        // These will be replaced on range.write
+        if (s->tick() > startTick && s->tick() < endTick && s->tick2() > endTick) {
+            doUndoRemoveElement(s);
+        }
     }
 
     MeasureBase* next = m2->next();
+    Measure* deleteStart = tick2measure(startTick);
+    Measure* deleteEnd = tick2measure(m2->tick());
+    deleteMeasures(deleteStart, deleteEnd, true);
     InsertMeasureOptions options;
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
     options.moveStaffTypeChanges = false;
-    insertMeasure(next, options);
+    options.ignoreBarLines = true;
+    Measure* joinedMeasure = toMeasure(insertMeasure(next, options));
 
-    for (Score* s : scoreList()) {
-        Measure* sM1 = s->tick2measure(startTick);
-        Measure* sM2 = s->tick2measure(m2->tick());
-        s->undoRemoveMeasures(sM1, sM2, true, false);
+    for (auto spannerToFixup : spannersEndingInRange) {
+        Spanner* sp = spannerToFixup.first;
+        Fraction spEndTick = spannerToFixup.second;
+
+        sp->setTick2(spEndTick);
+    }
+
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        Staff* staff = staves().at(staffIdx);
+        if (staff->isStaffTypeStartFrom(tick1)) {
+            StaffTypeChange* stc = engraving::Factory::createStaffTypeChange(joinedMeasure);
+            stc->setParent(joinedMeasure);
+            stc->setTrack(staffIdx * VOICES);
+            addElement(stc);
+        }
     }
 
     const Fraction newTimesig = m1->timesig();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -37,45 +37,53 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <measure xml:id="m10rbt48" n="1">
+                  <measure xml:id="mwjfcm7" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <note xml:id="n19cl3ph" dur="2" pname="c" oct="5">
-                              <artic xml:id="a1cjn40" />
-                           </note>
+                           <note xml:id="n1kvn8aw" dur="2" pname="c" oct="5" />
                         </layer>
                      </staff>
-                     <lv xml:id="l1g1b4bt" startid="#n19cl3ph" curvedir="above" />
+                     <lv xml:id="l1q0hlwb" startid="#n1kvn8aw" />
                   </measure>
-                  <measure xml:id="m1lruvx2" n="2">
+                  <measure xml:id="m1hcgqm4" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <note xml:id="n19s9szz" dur="2" pname="c" oct="5">
-                              <artic xml:id="aj10287" place="below" />
-                           </note>
+                           <note xml:id="n1o1midf" dur="2" pname="c" oct="5" />
                         </layer>
                      </staff>
-                     <lv xml:id="l4vz2tp" startid="#n19s9szz" curvedir="below" />
+                     <lv xml:id="l1qt9mja" startid="#n1o1midf" curvedir="above" />
                   </measure>
-                  <measure xml:id="m1i0jnoo" n="3">
+                  <measure xml:id="m5as46v" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <note xml:id="n154mkwr" dur="2" pname="c" oct="5">
-                              <artic xml:id="a1sen8gz" place="above" />
-                           </note>
+                           <note xml:id="n1v7z2h8" dur="2" pname="c" oct="5" />
                         </layer>
                      </staff>
-                     <lv xml:id="l1wv85md" startid="#n154mkwr" curvedir="above" />
+                     <lv xml:id="lhpy42f" startid="#n1v7z2h8" curvedir="below" />
                   </measure>
-                  <measure xml:id="mucnjps" right="end" n="4">
+                  <measure xml:id="m1ix040x" n="4">
                      <staff xml:id="m4s1" n="1">
                         <layer xml:id="m4s1l1" n="1">
-                           <note xml:id="ne85xiy" dur="2" pname="c" oct="5">
-                              <artic xml:id="a1klgotp" color="#FF2600" />
-                           </note>
+                           <note xml:id="n10e2lyb" dur="2" pname="c" oct="5" />
                         </layer>
                      </staff>
-                     <lv xml:id="l41525" startid="#ne85xiy" color="#FF2600" curvedir="above" />
+                     <lv xml:id="l1mzx2qb" startid="#n10e2lyb" lform="dashed" />
+                  </measure>
+                  <measure xml:id="mqhynsl" n="5">
+                     <staff xml:id="m5s1" n="1">
+                        <layer xml:id="m5s1l1" n="1">
+                           <note xml:id="n1xma3cv" dur="2" pname="c" oct="5" />
+                        </layer>
+                     </staff>
+                     <lv xml:id="l1qliva8" startid="#n1xma3cv" lform="dotted" />
+                  </measure>
+                  <measure xml:id="m3jjxmx" right="end" n="6">
+                     <staff xml:id="m6s1" n="1">
+                        <layer xml:id="m6s1l1" n="1">
+                           <note xml:id="npahpgt" dur="2" pname="c" oct="5" />
+                        </layer>
+                     </staff>
+                     <lv xml:id="l1k9en4w" startid="#npahpgt" color="#FF2600" />
                   </measure>
                </section>
             </score>

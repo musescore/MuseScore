@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MEASUREPROPERTIES_H__
-#define __MEASUREPROPERTIES_H__
+#pragma once
 
 #include <QDialog>
 
@@ -63,6 +62,7 @@ private:
     bool stemless(int staffIdx);
     void setMeasure(mu::engraving::Measure* measure);
 
+    void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
 
     mu::engraving::Measure* m_measure = nullptr;
@@ -71,4 +71,3 @@ private:
     std::shared_ptr<INotation> m_notation;
 };
 }
-#endif

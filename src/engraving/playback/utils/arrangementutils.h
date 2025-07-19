@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_ARRANGEMENTUTILS_H
-#define MU_ENGRAVING_ARRANGEMENTUTILS_H
+#pragma once
 
 #include "global/realfn.h"
 #include "mpe/mpetypes.h"
@@ -29,9 +27,6 @@
 #include "dom/score.h"
 #include "dom/repeatlist.h"
 #include "dom/tempo.h"
-#include "dom/chord.h"
-#include "dom/note.h"
-#include "dom/tie.h"
 
 #include "types/constants.h"
 
@@ -68,14 +63,9 @@ inline muse::mpe::duration_t durationFromStartAndTicks(const Score* score, const
     return durationFromStartAndEndTick(score, startTick, startTick + durationTicks, tickPositionOffset);
 }
 
-struct TimestampAndDuration {
-    muse::mpe::timestamp_t timestamp = 0;
-    muse::mpe::duration_t duration = 0;
-};
-
-inline TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const Score* score,
-                                                                          const int startTick, const int durationTicks,
-                                                                          const int tickPositionOffset)
+inline muse::mpe::TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const Score* score,
+                                                                                     const int startTick, const int durationTicks,
+                                                                                     const int tickPositionOffset)
 {
     int startTickWithOffset = startTick + tickPositionOffset;
     muse::mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTickWithOffset);
@@ -100,26 +90,6 @@ inline int ticksFromTempoAndDuration(const double beatsPerSecond, const muse::mp
     return (duration * beatsPerSecond * ticksPerBeat) / 1000000;
 }
 
-inline muse::mpe::duration_t tiedNotesTotalDuration(const Score* score, const Note* firstNote, muse::mpe::duration_t firstNoteDuration,
-                                                    const int tickPositionOffset)
-{
-    //! NOTE: calculate the duration from the 2nd note, since the duration of the 1st note is already known
-    const Note* secondNote = firstNote->tieFor()->endNote();
-    IF_ASSERT_FAILED(secondNote) {
-        return firstNoteDuration;
-    }
-
-    int startTick = secondNote->tick().ticks();
-
-    const Note* lastNote = firstNote->lastTiedNote();
-
-    int endTick = lastNote
-                  ? lastNote->tick().ticks() + lastNote->chord()->actualTicks().ticks()
-                  : startTick + secondNote->chord()->actualTicks().ticks();
-
-    return firstNoteDuration + durationFromStartAndEndTick(score, startTick, endTick, tickPositionOffset);
-}
-
 static constexpr int CROTCHET_TICKS = Constants::DIVISION;
 static constexpr int QUAVER_TICKS = Constants::DIVISION / 2;
 static constexpr int SEMIQUAVER_TICKS = Constants::DIVISION / 4;
@@ -134,5 +104,3 @@ static const double ADAGIO_BPS_BOUND = muse::RealRound(66 /*bpm*/ / 60.f /*secs*
 static const double LENTO_BPS_BOUND = muse::RealRound(40 /*bpm*/ / 60.f /*secs*/, 2);
 static const double GRAVE_BPS_BOUND = muse::RealRound(20 /*bpm*/ / 60.f /*secs*/, 2);
 }
-
-#endif // MU_ENGRAVING_ARRANGEMENTUTILS_H

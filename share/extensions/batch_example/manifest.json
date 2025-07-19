@@ -1,0 +1,21 @@
+{
+    "uri": "musescore://extensions/dev/batch_example",
+    "type": "composite",
+    "title": "Batch example (default)",
+    "ui_context": "Any",
+
+    "actions": [
+        {
+            "code": "configure",
+            "type": "form",
+            "title": "Configure and run",
+            "path": "configure.qml"
+        },
+        {
+            "code": "processing",
+            "type": "macros",
+            "show_on_appmenu": false,
+            "path": "processing.js"
+        }
+    ]
+}

@@ -42,12 +42,16 @@ set(MODULE_BIG_QRC
 
 include(${CMAKE_CURRENT_LIST_DIR}/dom/dom.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/rendering/dev/rendering.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/rendering/stable/rendering.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/score/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/single/single.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/editmode/editmode.cmake)
 
 if (MUE_BUILD_ENGRAVING_DEVTOOLS)
     include(${CMAKE_CURRENT_LIST_DIR}/devtools/devtools.cmake)
+endif()
+
+if (MUE_BUILD_ENGRAVING_PLAYBACK)
+    include(${CMAKE_CURRENT_LIST_DIR}/playback/playback.cmake)
 endif()
 
 set(MODULE_SRC
@@ -84,8 +88,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/skyline.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eid.h
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/geteid.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/geteid.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eidregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eidregister.h
 
     ${DOM_SRC}
 
@@ -152,6 +156,23 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/tread.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/connectorinforeader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/connectorinforeader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/harmonytodiagramreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/harmonytodiagramreader.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/staffread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/staffread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/measureread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/measureread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/readcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/tread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/tread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/connectorinforeader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/connectorinforeader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/harmonytodiagramreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/harmonytodiagramreader.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
@@ -203,83 +224,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/README.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/ieditmoderenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h
 
-    ${RENDERING_DEV_SRC}
-    ${RENDERING_STABLE_SRC}
+    ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}
+    ${RENDERING_EDITMODE_SRC}
 
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackeventsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackeventsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbacksetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbacksetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/renderbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/ornamentsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/ornamentsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/glissandosrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/glissandosrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/arpeggiorenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/arpeggiorenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/gracechordsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/gracechordsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/tremolorenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/tremolorenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/bendsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/bendsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/symbolsmetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/symbolsmetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/annotationsmetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/annotationsmetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/spannersmetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/spannersmetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/tremolometaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/tremolometaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/arpeggiometaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/arpeggiometaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/gracenotesmetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/gracenotesmetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/chordlinemetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/chordlinemetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/notearticulationsparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/notearticulationsparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/chordarticulationsparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/chordarticulationsparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/metaparserbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/setupresolverbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/keyboardssetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/keyboardssetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/stringssetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/stringssetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/windssetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/windssetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/percussionssetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/percussionssetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/voicessetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/voicessetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/filterbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/chordfilter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/chordfilter.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/spannerfilter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/spannerfilter.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/internal/tremolofilter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/internal/tremolofilter.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/playback/utils/pitchutils.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/utils/expressionutils.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/utils/arrangementutils.h
-
+    ${PLAYBACK_SRC}
     ${DEVTOOLS_SRC}
     )
 
@@ -326,16 +282,22 @@ set_source_files_properties( # For these files, Unity Build does not work
     )
 
 set(MODULE_INCLUDE
-    ${PROJECT_SOURCE_DIR}/thirdparty/dtl
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure
-    )
-
-set(MODULE_DEF ${MODULE_DEF} ${ENGRAVING_INFRASTRUCTURE_DEF})
-set(MODULE_LINK
-    ${ENGRAVING_INFRASTRUCTURE_LINK}
-    muse::draw
+    # Many other modules include files from subfolders of this module;
+    # when included from another module, these files can't find their
+    # own includes, unless `engraving` is an include directory.
+    # Therefore, in the case of the `engraving` module, we include its
+    # root directory publicly, rather than privately as with most modules.
+    ${CMAKE_CURRENT_LIST_DIR}
 )
 
+set(MODULE_INCLUDE_PRIVATE
+    ${PROJECT_SOURCE_DIR}/thirdparty/dtl
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure
+)
+
+set(MODULE_LINK
+    muse::draw
+)
 
 if (MUE_ENABLE_ENGRAVING_RENDER_DEBUG)
     set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_ENGRAVING_RENDER_DEBUG)
@@ -353,8 +315,12 @@ if (MUE_BUILD_ENGRAVING_DEVTOOLS)
     set(MODULE_DEF ${MODULE_DEF} -DMUE_BUILD_ENGRAVING_DEVTOOLS)
 endif()
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick)
+endif()
+
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
-set(MODULE_USE_UNITY_NONE ON)
+set(MODULE_USE_UNITY OFF)
 setup_module()
 
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")

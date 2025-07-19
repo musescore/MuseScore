@@ -34,18 +34,20 @@ class ZipWriter;
 }
 
 namespace muse::diagnostics {
-class DiagnosticFilesWriter
+class DiagnosticFilesWriter : public Injectable
 {
-    INJECT_STATIC(muse::io::IFileSystem, fileSystem)
-    INJECT_STATIC(muse::IGlobalConfiguration, globalConfiguration)
+    Inject<io::IFileSystem> fileSystem = { this };
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
-    static muse::Ret writeDiagnosticFiles(const muse::io::path_t& destinationZipPath);
+    DiagnosticFilesWriter(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
+    muse::Ret writeDiagnosticFiles(const muse::io::path_t& destinationZipPath);
 
 private:
-    static muse::RetVal<muse::io::paths_t> scanDir(const std::string& dirName);
-    static muse::Ret addFileToZip(const muse::io::path_t& filePath, muse::ZipWriter& zip,
-                                  const std::string& destinationDirName = std::string());
+    muse::RetVal<muse::io::paths_t> scanDir(const std::string& dirName);
+    muse::Ret addFileToZip(const muse::io::path_t& filePath, muse::ZipWriter& zip, const std::string& destinationDirName = std::string());
 };
 }
 

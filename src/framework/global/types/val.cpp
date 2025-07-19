@@ -24,6 +24,12 @@
 #include <sstream>
 #include <iomanip>
 
+#ifndef NO_QT_SUPPORT
+#include <QMetaType>
+#endif
+
+#include "../ptrutils.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -191,6 +197,7 @@ std::string Val::toString() const
     switch (valueType()) {
     case Type::Bool: return toBool() ? VAL_TRUE : VAL_FALSE;
     case Type::Int: return std::to_string(toInt());
+    case Type::Int64: return std::to_string(toInt64());
     case Type::Double: return doubleToString(toDouble());
     case Type::String: return std::get<std::string>(m_val);
     default:

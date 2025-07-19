@@ -64,6 +64,11 @@ QAccessibleInterface* AccessibilityController::accessibleInterface(QObject*)
     return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
 }
 
+void AccessibilityController::setAccesibilityEnabled(bool enabled)
+{
+    m_enabled = enabled;
+}
+
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
     if (!accessibleInterfaceRegister) {
@@ -92,7 +97,13 @@ void AccessibilityController::init()
 
 void AccessibilityController::reg(IAccessible* item)
 {
+    if (!m_enabled) {
+        return;
+    }
+
     if (!m_inited) {
+        //! This needed to be done here, because we need to init controller (register factory) after UI is start loaded,
+        //! thus we register the factory after qt registers its factory so that our factory is called first
         m_inited = true;
         init();
     }
@@ -199,14 +210,25 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
     case IAccessible::Property::Parent: etype = QAccessible::ParentChanged;
         break;
     case IAccessible::Property::Name: {
+        bool triggerRevoicing = false;
+
 #ifdef Q_OS_MAC
-        m_needToVoicePanelInfo = false;
-        etype = QAccessible::NameChanged;
-        break;
+        triggerRevoicing = false;
+#elif defined(Q_OS_WIN)
+        triggerRevoicing = true;
 #else
-        triggerRevoicingOfChangedName(item);
-        return;
+        //! if it is one character than we can send NameChange and don't use hack with revoicing
+        triggerRevoicing = item->accessibleName().size() > 1;
 #endif
+
+        if (triggerRevoicing) {
+            triggerRevoicingOfChangedName(item);
+            return;
+        } else {
+            m_needToVoicePanelInfo = false;
+            etype = QAccessible::NameChanged;
+            break;
+        }
     }
     case IAccessible::Property::Description: etype = QAccessible::DescriptionChanged;
         break;
@@ -337,8 +359,6 @@ void AccessibilityController::savePanelAccessibleName(const IAccessible* oldItem
     m_needToVoicePanelInfo = oldItemPanelName != newItemPanelName;
 }
 
-#ifndef Q_OS_MAC
-
 void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
 {
     if (!configuration()->active()) {
@@ -379,8 +399,6 @@ void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
         m_ignorePanelChangingVoice = false;
     });
 }
-
-#endif
 
 const IAccessible* AccessibilityController::panel(const IAccessible* item) const
 {

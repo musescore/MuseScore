@@ -33,7 +33,7 @@ class Chord;
 //   @@ Arpeggio
 //---------------------------------------------------------
 
-enum class AnchorRebaseDirection : char {
+enum class AnchorRebaseDirection : unsigned char {
     UP,
     DOWN
 };
@@ -51,6 +51,9 @@ public:
     ArpeggioType arpeggioType() const { return m_arpeggioType; }
     void setArpeggioType(ArpeggioType v) { m_arpeggioType = v; }
     const TranslatableString& arpeggioTypeName() const;
+
+    int subtype() const override { return int(m_arpeggioType); }
+    TranslatableString subtypeUserName() const override;
 
     Chord* chord() const { return (Chord*)explicitParent(); }
 

@@ -37,18 +37,21 @@ namespace muse::audio::synth {
 struct Fluid;
 class FluidSynth : public AbstractSynthesizer
 {
-    Inject<midi::IMidiOutPort> midiOutPort;
+    Inject<midi::IMidiOutPort> midiOutPort = { this };
 
 public:
-    FluidSynth(const audio::AudioSourceParams& params);
+    FluidSynth(const audio::AudioSourceParams& params, const modularity::ContextPtr& iocCtx);
 
     Ret addSoundFonts(const std::vector<io::path_t>& sfonts);
     void setPreset(const std::optional<midi::Program>& preset);
 
     std::string name() const override;
     AudioSourceType type() const override;
+
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
+
     void flushSound() override;
 
     bool isActive() const override;
@@ -97,6 +100,9 @@ private:
     Ret init();
     void createFluidInstance();
 
+    void allNotesOff();
+
+    bool processSequence(const FluidSequencer::EventSequence& sequence, const samples_t samples, float* buffer);
     bool handleEvent(const midi::Event& event);
 
     void toggleExpressionController();
@@ -114,6 +120,8 @@ private:
     std::optional<midi::Program> m_preset;
 
     KeyTuning m_tuning;
+
+    bool m_allNotesOffRequested = false;
 };
 
 using FluidSynthPtr = std::shared_ptr<FluidSynth>;

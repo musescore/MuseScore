@@ -19,8 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef IMPORTMIDI_INNER_H
-#define IMPORTMIDI_INNER_H
+#pragma once
+
+#include <vector>
+#include <utility>
+
+#include "importexport/midi/internal/midishared/generalmidi.h"
 
 #include "importmidi_chord.h"
 #include "importmidi_fraction.h"
@@ -29,17 +33,13 @@
 
 #include "engraving/types/types.h"
 
-#include <vector>
-#include <cstddef>
-#include <utility>
-
 // ---------------------------------------------------------------------------------------
 // These inner classes definitions are used in cpp files only
 // Include this header to link tests
 // ---------------------------------------------------------------------------------------
 
 namespace mu::engraving {
-enum class Key;
+enum class Key : signed char;
 class Staff;
 class Score;
 class TDuration;
@@ -54,7 +54,7 @@ struct MidiTimeSig;
 namespace Meter {
 // max level for tuplets: duration cannot go over the tuplet boundary
 // this level should be greater than any other level
-const int TUPLET_BOUNDARY_LEVEL = 10;
+inline constexpr int TUPLET_BOUNDARY_LEVEL = 10;
 
 struct MaxLevel
 {
@@ -92,19 +92,19 @@ class MidiEvent;
 class MTrack
 {
 public:                 // chords store tuplet iterators, so we need to copy class explicitly
-    MTrack();
+    MTrack() = default;
     MTrack(const MTrack& other);
     MTrack& operator=(MTrack other);
 
-    int program;
-    engraving::Staff* staff;
-    const MidiTrack* mtrack;
+    GM1Program program = GM1Program::AcousticGrandPiano;
+    engraving::Staff* staff = nullptr;
+    const MidiTrack* mtrack = nullptr;
     QString name;
-    bool hasKey;
-    int indexOfOperation;
-    int division;
-    bool isDivisionInTps;         // ticks per second
-    bool hadInitialNotes;
+    bool hasKey = false;
+    int indexOfOperation = 0;
+    int division = 0;
+    bool isDivisionInTps = false;         // ticks per second
+    bool hadInitialNotes = false;
 
     std::multimap<ReducedFraction, int> volumes;
     std::multimap<ReducedFraction, MidiChord> chords;
@@ -163,5 +163,3 @@ namespace MidiDuration {
 double durationCount(const QList<std::pair<ReducedFraction, engraving::TDuration> >& durations);
 } // namespace MidiDuration
 } // namespace mu::iex::midi
-
-#endif // IMPORTMIDI_INNER_H

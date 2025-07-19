@@ -67,7 +67,7 @@ Item {
 
             sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
 
-            layer.enabled: true
+            layer.enabled: ui.isEffectsAllowed
             layer.effect: EffectOpacityMask {
                 maskSource: Rectangle {
                     width: thumbnail.width
@@ -135,6 +135,7 @@ Item {
         id: mouseArea
         anchors.fill: parent
 
+        enabled: root.enabled
         hoverEnabled: true
 
         onClicked: {

@@ -81,8 +81,8 @@ Item {
         Loader {
             id: activityLoader
 
-            Layout.preferredWidth: activityLoader.active ? root.height : 0
-            Layout.preferredHeight: root.height
+            Layout.fillHeight: true
+            Layout.preferredWidth: root.height
             Layout.alignment: Qt.AlignLeft
 
             visible: root.supportsByPassing && root.showAdditionalButtons
@@ -161,7 +161,7 @@ Item {
             id: titleLoader
 
             Layout.fillWidth: true
-            Layout.preferredHeight: root.height
+            Layout.fillHeight: true
 
             visible: root.supportsTitle
             active: visible
@@ -169,8 +169,7 @@ Item {
             sourceComponent: FlatButton {
                 id: titleButton
 
-                height: root.height
-                width: titleLoader.width
+                anchors.fill: parent
 
                 enabled: root.showAdditionalButtons
                          ? (root.resourceItemModel ? root.resourceItemModel.hasNativeEditorSupport : false)
@@ -230,9 +229,8 @@ Item {
                 }
 
                 contentItem: StyledTextLabel {
-                    // To do: this causes a binding loop warning
-                    width: titleLoader.width - 8 // 4px padding on each side
-                    height: root.height
+                    width: titleButton.width - 8 // 4px padding on each side
+                    height: titleButton.height
 
                     text: root.title
                 }
@@ -247,8 +245,8 @@ Item {
             id: selectorLoader
 
             Layout.fillWidth: !titleLoader.visible
+            Layout.fillHeight: true
             Layout.preferredWidth: root.height
-            Layout.preferredHeight: root.height
             Layout.alignment: Qt.AlignRight
 
             visible: root.showAdditionalButtons && root.supportsMenu
@@ -268,12 +266,12 @@ Item {
                 }
 
                 contentItem: Item {
-                    width: titleLoader.visible ? root.height : root.width
-                    height: root.height
+                    width: menuButton.width
+                    height: menuButton.height
 
                     StyledIconLabel {
                         anchors.right: parent.right
-                        width: selectorLoader.Layout.preferredWidth
+                        width: titleLoader.visible ? parent.width : parent.height
                         height: parent.height
                         iconCode: IconCode.SMALL_ARROW_DOWN
                     }
@@ -368,8 +366,9 @@ Item {
 
     MouseArea {
         id: rootMouseArea
-
         anchors.fill: parent
+
+        enabled: parent.enabled
         acceptedButtons: Qt.NoButton
         hoverEnabled: true
     }

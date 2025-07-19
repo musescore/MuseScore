@@ -21,7 +21,7 @@
  */
 #include "uri.h"
 
-#include "../stringutils.h"
+#include "global/stringutils.h"
 
 #include "log.h"
 
@@ -50,6 +50,11 @@ Uri::Uri(const std::string& str)
     m_path = str.substr(pathPos, pathN);
 }
 
+Uri::Uri(const String& str)
+    : Uri(str.toStdString())
+{
+}
+
 bool Uri::isValid() const
 {
     if (m_scheme.empty()) {
@@ -68,6 +73,11 @@ Uri::Scheme Uri::scheme() const
     return m_scheme;
 }
 
+void Uri::setScheme(const Scheme& scheme)
+{
+    m_scheme = scheme;
+}
+
 std::string Uri::path() const
 {
     return m_path;
@@ -83,7 +93,12 @@ std::string Uri::toString() const
 UriQuery::UriQuery(const std::string& str)
     : m_uri(str)
 {
-    parceParams(str, m_params);
+    parseParams(str, m_params);
+}
+
+UriQuery::UriQuery(const String& str)
+    : UriQuery(str.toStdString())
+{
 }
 
 UriQuery::UriQuery(const Uri& uri)
@@ -91,7 +106,7 @@ UriQuery::UriQuery(const Uri& uri)
 {
 }
 
-void UriQuery::parceParams(const std::string& uri, Params& out) const
+void UriQuery::parseParams(const std::string& uri, Params& out) const
 {
     auto paramsPos = uri.find('?');
     if (paramsPos == std::string::npos) {
@@ -181,14 +196,19 @@ std::string UriQuery::toString() const
     return str;
 }
 
+bool UriQuery::isValid() const
+{
+    return m_uri.isValid();
+}
+
 const Uri& UriQuery::uri() const
 {
     return m_uri;
 }
 
-bool UriQuery::isValid() const
+void UriQuery::setScheme(const Uri::Scheme& scheme)
 {
-    return m_uri.isValid();
+    m_uri.setScheme(scheme);
 }
 
 const UriQuery::Params& UriQuery::params() const
@@ -208,6 +228,18 @@ Val UriQuery::param(const std::string& key, const Val& def) const
 void UriQuery::addParam(const std::string& key, const Val& val)
 {
     m_params[key] = val;
+}
+
+UriQuery& UriQuery::set(const ValMap& vals)
+{
+    m_params = vals;
+    return *this;
+}
+
+UriQuery& UriQuery::set(const std::string& key, const Val& val)
+{
+    m_params[key] = val;
+    return *this;
 }
 
 UriQuery UriQuery::addingParam(const std::string& key, const Val& val) const

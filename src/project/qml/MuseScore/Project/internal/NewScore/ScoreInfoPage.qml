@@ -56,26 +56,20 @@ Item {
         additionalInfo.focusOnFirst()
     }
 
-    StyledTextLabel {
-        id: title
-
-        anchors.top: parent.top
-        anchors.topMargin: 8
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        font: ui.theme.largeBodyBoldFont
-        text: qsTrc("project/newscore", "Additional score information")
-    }
-
     ColumnLayout {
-        anchors.top: title.bottom
-        anchors.left: parent.left
-        anchors.leftMargin: 8
-        anchors.right: parent.right
-        anchors.rightMargin: 8
-        anchors.bottom: parent.bottom
+        anchors.fill: parent
+        anchors.margins: 8
 
         spacing: 30
+
+        StyledTextLabel {
+            id: title
+
+            Layout.fillWidth: true
+
+            font: ui.theme.largeBodyBoldFont
+            text: qsTrc("project/newscore", "Additional score information")
+        }
 
         AdditionalInfoView {
             id: additionalInfo
@@ -88,8 +82,6 @@ Item {
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 1
         }
-
-        SeparatorLine {}
 
         GeneralInfoView {
             id: generalInfo

@@ -77,7 +77,7 @@ volume_db_t Compressor::computeGain(const volume_db_t& logarithmSample) const
 
 void Compressor::process(const float linearRms, float* buffer, const audioch_t& audioChannelsCount, const samples_t samplesPerChannel)
 {
-    float dbGain = dbFromSample(linearRms);
+    float dbGain = muse::linear_to_db(linearRms);
 
     if (dbGain <= m_filterConfig.minimumOperableLevel()) {
         return;
@@ -89,7 +89,7 @@ void Compressor::process(const float linearRms, float* buffer, const audioch_t& 
     float dbDiff = computeGain(dbGain) - dbGain;
 
     m_feedbackGain = dbDiff;
-    float gainFact = linearFromDecibels(dbDiff * (1.f + m_feedbackFactor));
+    float gainFact = muse::db_to_linear(dbDiff * (1.f + m_feedbackFactor));
 
     float currentGainReduction = std::min(gainFact, m_previousGainReduction);
 

@@ -49,26 +49,23 @@
           </clef>
         </attributes>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
         </note>
       </measure>
     <measure number="2">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
         </note>
       </measure>
     <measure number="3">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
         </note>
       </measure>
     <measure number="4">
@@ -87,10 +84,9 @@
       </measure>
     <measure number="5">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

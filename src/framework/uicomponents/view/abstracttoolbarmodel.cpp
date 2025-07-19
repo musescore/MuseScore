@@ -102,6 +102,10 @@ void AbstractToolBarModel::load()
     uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
     });
+
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        updateShortcutsAll();
+    });
 }
 
 QVariantList AbstractToolBarModel::itemsProperty() const
@@ -125,7 +129,28 @@ void AbstractToolBarModel::setItems(const ToolBarItemList& items)
     TRACEFUNC;
 
     beginResetModel();
-    m_items = items;
+
+    qDeleteAll(m_items);
+    m_items.clear();
+
+    //! NOTE: make sure that we don't have two separators sequentially
+    bool isPreviousSeparator = false;
+
+    for (ToolBarItem* item : items) {
+        if (item->type() == ToolBarItemType::SEPARATOR) {
+            if (isPreviousSeparator) {
+                delete item;
+                continue;
+            }
+
+            isPreviousSeparator = true;
+        } else {
+            isPreviousSeparator = false;
+        }
+
+        m_items << item;
+    }
+
     endResetModel();
 
     emit itemsChanged();
@@ -163,9 +188,31 @@ ToolBarItem& AbstractToolBarModel::findItem(const ActionCode& actionCode)
     return item(m_items, actionCode);
 }
 
+ToolBarItem* AbstractToolBarModel::findItemPtr(const actions::ActionCode& actionCode)
+{
+    for (ToolBarItem* toolBarItem : m_items) {
+        if (toolBarItem->action().code == actionCode) {
+            return toolBarItem;
+        }
+    }
+
+    return nullptr;
+}
+
 ToolBarItem& AbstractToolBarModel::findItem(const QString& itemId)
 {
     return item(m_items, itemId);
+}
+
+ToolBarItem* AbstractToolBarModel::findItemPtr(const QString& itemId)
+{
+    for (ToolBarItem* toolBarItem : m_items) {
+        if (toolBarItem->id() == itemId) {
+            return toolBarItem;
+        }
+    }
+
+    return nullptr;
 }
 
 ToolBarItem* AbstractToolBarModel::makeItem(const ActionCode& actionCode, const TranslatableString& title)
@@ -183,13 +230,6 @@ ToolBarItem* AbstractToolBarModel::makeItem(const ActionCode& actionCode, const 
         item->setTitle(title);
     }
 
-    return item;
-}
-
-ToolBarItem* AbstractToolBarModel::makeItem(const actions::ActionCode& actionCode, bool showTitle)
-{
-    ToolBarItem* item = makeItem(actionCode);
-    item->setShowTitle(showTitle);
     return item;
 }
 
@@ -285,4 +325,40 @@ ToolBarItem& AbstractToolBarModel::item(const ToolBarItemList& items, const Acti
 
     static ToolBarItem dummy;
     return dummy;
+}
+
+void AbstractToolBarModel::updateShortcutsAll()
+{
+    for (ToolBarItem* toolBarItem : m_items) {
+        if (!toolBarItem) {
+            continue;
+        }
+
+        UiAction action = toolBarItem->action();
+        action.shortcuts = shortcutsRegister()->shortcut(action.code).sequences;
+        toolBarItem->setAction(action);
+
+        for (MenuItem* menuItem : toolBarItem->menuItems()) {
+            if (!menuItem) {
+                continue;
+            }
+
+            updateShortcuts(menuItem);
+        }
+    }
+}
+
+void AbstractToolBarModel::updateShortcuts(MenuItem* menuItem)
+{
+    UiAction action = menuItem->action();
+    action.shortcuts = shortcutsRegister()->shortcut(action.code).sequences;
+    menuItem->setAction(action);
+
+    for (MenuItem* subItem : menuItem->subitems()) {
+        if (!subItem) {
+            continue;
+        }
+
+        updateShortcuts(subItem);
+    }
 }

@@ -1,30 +1,27 @@
 crash:
-    - "Crash or freeze"
+  - "Crash or freeze"
 engraving:
-    - "Engraving bug \\(incorrect score rendering\\)"
+  - "Engraving bug \\(incorrect score rendering\\)"
 "UX/interaction":
-    - "UX/Interaction bug \\(incorrect behaviour\\)"
+  - "UX/Interaction bug \\(incorrect behaviour\\)"
 UI:
-    - "UI bug \\(incorrect info or interface appearance\\)"
+  - "UI bug \\(incorrect info or interface appearance\\)"
 accessibility:
-    - "Accessibility issue \\(e\\.g\\. for keyboard-only or screen reader users\\)"
+  - "Accessibility issue \\(e\\.g\\. for keyboard-only or screen reader users\\)"
 VST:
-    - "VST bug"
-"Muse Sounds":
-    - "Muse Sounds bug"
+  - "VST bug"
 playback:
-    - "General playback bug"
+  - "General playback bug"
 cloud:
-    - "Cloud issue \\(opening, saving, logging in/out\\)"
+  - "Cloud issue \\(opening, saving, logging in/out\\)"
 corruption:
-    - "File corruption"
+  - "File corruption"
 "needs review":
-    - "Other type of issue"
+  - "Other type of issue"
 
-regression:
-    - "Yes, this used to work in a previous version of MuseScore 4.x"
-regression_ms3:
-    - "Yes, this used to work in MuseScore 3.x and now is broken"
-
-"feature request":
-    - "Problem to be solved"
+"regression MS3":
+  - "Yes, this used to work in MuseScore 3.x and now is broken"
+"regression MS4":
+  - "Yes, this used to work in a previous version of MuseScore 4.x"
+"regression nightly":
+  - "Yes, this works in the latest released version and is broken in the nightly builds"

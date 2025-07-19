@@ -60,7 +60,7 @@ static QVariantMap makeCloudInfoMap(const QString& title, const AccountInfo& acc
 }
 
 CloudsModel::CloudsModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -184,22 +184,28 @@ QVariant CloudsModel::dialogText(const QString& cloudCode, const QString& existi
     if (cloudCode == cloud::MUSESCORE_COM_CLOUD_CODE) {
         dialogTextMap[prv::DIALOG_TITLE_TEXT] = muse::qtrc("project/save", "Publish to MuseScore.com");
 
-        //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online score in question
-        dialogTextMap[prv::REPLACE_BUTTON_TEXT] = muse::qtrc("project/save", "Replace the existing <a href=\"%1\">online score</a>")
-                                                  .arg(existingScoreOrAudioUrl);
+        if (!existingScoreOrAudioUrl.isEmpty()) {
+            //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online score in question
+            dialogTextMap[prv::REPLACE_BUTTON_TEXT] = muse::qtrc("project/save", "Replace the existing <a href=\"%1\">online score</a>")
+                                                      .arg(existingScoreOrAudioUrl);
 
-        dialogTextMap[prv::NEW_BUTTON_TEXT] = muse::qtrc("project/save", "Publish as new online score");
+            dialogTextMap[prv::NEW_BUTTON_TEXT] = muse::qtrc("project/save", "Publish as new online score");
+        }
+
         dialogTextMap[prv::SAVE_BUTTON_TEXT] = muse::qtrc("project/save", "Publish");
 
         return dialogTextMap;
     } else if (cloudCode == cloud::AUDIO_COM_CLOUD_CODE) {
         dialogTextMap[prv::DIALOG_TITLE_TEXT] = muse::qtrc("project/save", "Share on Audio.com");
 
-        //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online audio in question
-        dialogTextMap[prv::REPLACE_BUTTON_TEXT] = muse::qtrc("project/save", "Replace the <a href=\"%1\">existing audio</a>")
-                                                  .arg(existingScoreOrAudioUrl);
+        if (!existingScoreOrAudioUrl.isEmpty()) {
+            //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online audio in question
+            dialogTextMap[prv::REPLACE_BUTTON_TEXT] = muse::qtrc("project/save", "Replace the <a href=\"%1\">existing audio</a>")
+                                                      .arg(existingScoreOrAudioUrl);
 
-        dialogTextMap[prv::NEW_BUTTON_TEXT] = muse::qtrc("project/save", "Upload as new audio file");
+            dialogTextMap[prv::NEW_BUTTON_TEXT] = muse::qtrc("project/save", "Upload as new audio file");
+        }
+
         dialogTextMap[prv::SAVE_BUTTON_TEXT] = muse::qtrc("project/save", "Share");
 
         return dialogTextMap;

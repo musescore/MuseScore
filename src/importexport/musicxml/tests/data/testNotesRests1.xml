@@ -232,10 +232,9 @@
       </measure>
     <measure number="3">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>64</duration>
         <voice>1</voice>
-        <type>whole</type>
         </note>
       <backup>
         <duration>64</duration>

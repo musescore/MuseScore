@@ -23,8 +23,9 @@
 #define MU_NOTATION_INOTATIONNOTEINPUT_H
 
 #include "async/notification.h"
+#include "types/ret.h"
+
 #include "notationtypes.h"
-#include "types/retval.h"
 
 namespace mu::notation {
 class INotationNoteInput
@@ -34,17 +35,21 @@ public:
 
     virtual bool isNoteInputMode() const = 0;
 
-    virtual NoteInputState state() const = 0;
+    virtual const NoteInputState& state() const = 0;
 
-    virtual void startNoteInput() = 0;
-    virtual void endNoteInput() = 0;
-    virtual void toggleNoteInputMethod(NoteInputMethod method) = 0;
-    virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
+    virtual void startNoteInput(NoteInputMethod method = NoteInputMethod::BY_NOTE_NAME, bool focusNotation = true) = 0;
+    virtual void endNoteInput(bool resetState = false) = 0;
+
+    virtual muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const = 0;
+    virtual muse::async::Notification noteInputEnded() const = 0;
+
+    virtual bool usingNoteInputMethod(NoteInputMethod method) const = 0;
+    virtual void setNoteInputMethod(NoteInputMethod method) = 0;
+
+    virtual void addNote(const NoteInputParams& params, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
     virtual muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) = 0;
     virtual void removeNote(const muse::PointF& pos) = 0;
-    virtual muse::async::Notification noteInputStarted() const = 0;
-    virtual muse::async::Notification noteInputEnded() const = 0;
 
     virtual void addTuplet(const TupletOptions& options) = 0;
 
@@ -56,13 +61,19 @@ public:
 
     virtual void addTie() = 0;
 
+    virtual void addLaissezVib() = 0;
+
+    // Used in the input-by-duration mode
+    virtual void setInputNote(const NoteInputParams& params) = 0;
+    virtual void setInputNotes(const NoteValList& notes) = 0;
+    virtual void moveInputNotes(bool up, PitchMode mode) = 0;
+
+    virtual void setRestMode(bool rest) = 0;
     virtual void setAccidental(AccidentalType accidentalType) = 0;
     virtual void setArticulation(SymbolId articulationSymbolId) = 0;
     virtual void setDrumNote(int note) = 0;
     virtual void setCurrentVoice(voice_idx_t voiceIndex) = 0;
     virtual void setCurrentTrack(track_idx_t trackIndex) = 0;
-
-    virtual void resetInputPosition() = 0;
 
     virtual muse::RectF cursorRect() const = 0;
 

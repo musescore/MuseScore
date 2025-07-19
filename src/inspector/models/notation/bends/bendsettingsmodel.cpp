@@ -20,13 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "bendsettingsmodel.h"
-#include "dom/guitarbend.h"
 
 #include "translation.h"
-#include "dataformatter.h"
 #include "types/bendtypes.h"
 
 #include "dom/bend.h"
+#include "dom/guitarbend.h"
 
 using namespace mu::engraving;
 using namespace mu::inspector;
@@ -34,7 +33,7 @@ using namespace mu::inspector;
 static constexpr int START_POINT_INDEX = 1;
 static constexpr int END_POINT_INDEX = 2;
 
-static std::set<ElementType> ELEMENTS_TYPES = {
+static const std::set<ElementType> ELEMENTS_TYPES = {
     ElementType::GUITAR_BEND,
     ElementType::GUITAR_BEND_SEGMENT,
     ElementType::GUITAR_BEND_HOLD,
@@ -275,7 +274,7 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
 
     bool pitchChanged = endTimePoint.pitch != m_bendCurve.at(END_POINT_INDEX).pitch;
 
-    beginCommand();
+    beginCommand(muse::TranslatableString("undoableAction", "Edit bend curve"));
 
     if (pitchChanged) {
         int bendAmount = curvePitchToBendAmount(endTimePoint.pitch);

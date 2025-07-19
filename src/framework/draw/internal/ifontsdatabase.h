@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_IFONTSDATABASE_H
-#define MUSE_DRAW_IFONTSDATABASE_H
+#pragma once
 
 #include "global/modularity/imoduleinterface.h"
 #include "global/io/path.h"
@@ -35,6 +34,8 @@ public:
     virtual ~IFontsDatabase() = default;
 
     virtual void setDefaultFont(Font::Type type, const FontDataKey& key) = 0;
+    //! NOTE Used for Qt font provider
+    virtual void insertSubstitution(const String& f1, const String& substituteName) = 0;
 
     virtual int addFont(const FontDataKey& key, const io::path_t& path) = 0;
 
@@ -46,5 +47,3 @@ public:
     virtual void addAdditionalFonts(const io::path_t& path) = 0;
 };
 }
-
-#endif // MUSE_DRAW_IFONTSDATABASE_H

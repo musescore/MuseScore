@@ -42,6 +42,8 @@ static const std::string CTX_NOTATION_NOTE_INPUT_STAFF_TAB("notation-note-input-
 
 static const std::string CTX_NOTATION_TEXT_EDITING("notation-text-editing");
 
+static const std::string CTX_NOTATION_LIST_SELECTION("notation-list-selection");
+
 class ShortcutContextPriority : public muse::shortcuts::IShortcutContextPriority
 {
 public:

@@ -65,6 +65,8 @@ public:
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
 
+    virtual const Spec& activeSpec() const = 0;
+
     virtual AudioDeviceID outputDevice() const = 0;
     virtual bool selectOutputDevice(const AudioDeviceID& id) = 0;
     virtual bool resetToDefaultOutputDevice() = 0;
@@ -78,6 +80,12 @@ public:
     virtual async::Notification outputDeviceBufferSizeChanged() const = 0;
 
     virtual std::vector<unsigned int> availableOutputDeviceBufferSizes() const = 0;
+
+    virtual unsigned int outputDeviceSampleRate() const = 0;
+    virtual bool setOutputDeviceSampleRate(unsigned int bufferSize) = 0;
+    virtual async::Notification outputDeviceSampleRateChanged() const = 0;
+
+    virtual std::vector<unsigned int> availableOutputDeviceSampleRates() const = 0;
 
     virtual void resume() = 0;
     virtual void suspend() = 0;

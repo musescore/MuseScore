@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_STAFFTEXTPROPERTIESDIALOG_H
-#define MU_NOTATION_STAFFTEXTPROPERTIESDIALOG_H
+#pragma once
 
 #include "ui_stafftextpropertiesdialog.h"
 
@@ -47,6 +46,7 @@ private slots:
     void setSwingControls(bool);
 
 private:
+    void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
 
     INotationUndoStackPtr undoStack() const;
@@ -55,5 +55,3 @@ private:
     engraving::StaffTextBase* m_staffText = nullptr;
 };
 }
-
-#endif // MU_NOTATION_STAFFTEXTPROPERTIESDIALOG_H

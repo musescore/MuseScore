@@ -20,18 +20,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TUPLET_H
-#define MU_ENGRAVING_TUPLET_H
+#pragma once
 
 #include <set>
 
 #include "durationelement.h"
 #include "property.h"
-#include "types.h"
 
 namespace mu::engraving {
 class Text;
 class Spanner;
+
+enum class TupletNumberType : unsigned char {
+    SHOW_NUMBER, SHOW_RELATION, NO_TEXT
+};
+enum class TupletBracketType : unsigned char {
+    AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
+};
 
 //------------------------------------------------------------------------
 //   @@ Tuplet
@@ -84,8 +89,8 @@ public:
     void setBracketType(TupletBracketType val) { m_bracketType = val; }
     bool hasBracket() const { return m_hasBracket; }
     void setHasBracket(bool b) { m_hasBracket = b; }
-    Millimetre bracketWidth() const { return m_bracketWidth; }
-    void setBracketWidth(Millimetre s) { m_bracketWidth = s; }
+    Spatium bracketWidth() const { return m_bracketWidth; }
+    void setBracketWidth(Spatium s) { m_bracketWidth = s; }
 
     const Fraction& ratio() const { return m_ratio; }
     void setRatio(const Fraction& r) { m_ratio = r; }
@@ -158,6 +163,10 @@ public:
 
     PointF bracketL[4];
     PointF bracketR[3];
+
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
+
 private:
 
     friend class DurationElement;
@@ -178,7 +187,7 @@ private:
     DirectionV m_direction = DirectionV::AUTO;
     TupletNumberType m_numberType = TupletNumberType::SHOW_NUMBER;
     TupletBracketType m_bracketType = TupletBracketType::AUTO_BRACKET;
-    Millimetre m_bracketWidth;
+    Spatium m_bracketWidth;
 
     bool m_hasBracket = false;
     Fraction m_ratio;
@@ -195,5 +204,4 @@ private:
 
     Text* m_number = nullptr;
 };
-} // namespace mu::engraving
-#endif
+}

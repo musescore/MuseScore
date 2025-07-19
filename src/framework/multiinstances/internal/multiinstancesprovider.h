@@ -38,17 +38,18 @@
 #include "../iprojectprovider.h"
 
 namespace muse::mi {
-class MultiInstancesProvider : public IMultiInstancesProvider, public muse::actions::Actionable, public async::Asyncable
+class MultiInstancesProvider : public IMultiInstancesProvider, public Injectable, public actions::Actionable, public async::Asyncable
 {
-    Inject<muse::actions::IActionsDispatcher> dispatcher;
-    Inject<IInteractive> interactive;
-    Inject<muse::ui::IMainWindow> mainWindow;
+    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<muse::ui::IMainWindow> mainWindow = { this };
 
     //! NOTE May be missing because it must be implemented outside the framework
-    Inject<IProjectProvider> projectProvider;
+    Inject<IProjectProvider> projectProvider = { this };
 
 public:
-    MultiInstancesProvider() = default;
+    MultiInstancesProvider(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
     ~MultiInstancesProvider();
 
     void init();
@@ -57,7 +58,7 @@ public:
     bool isProjectAlreadyOpened(const io::path_t& projectPath) const override;
     void activateWindowWithProject(const io::path_t& projectPath) override;
     bool isHasAppInstanceWithoutProject() const override;
-    void activateWindowWithoutProject() override;
+    void activateWindowWithoutProject(const QStringList& args) override;
     bool openNewAppInstance(const QStringList& args) override;
 
     // Settings
@@ -66,6 +67,7 @@ public:
     void settingsBeginTransaction() override;
     void settingsCommitTransaction() override;
     void settingsRollbackTransaction() override;
+    void settingsReset() override;
     void settingsSetValue(const std::string& key, const Val& value) override;
 
     // Resources (files)

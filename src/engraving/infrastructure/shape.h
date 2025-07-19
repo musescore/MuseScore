@@ -68,7 +68,7 @@ class Shape
 {
 public:
 
-    enum class Type {
+    enum class Type : unsigned char {
         Fixed,      // fixed size, like just bbox
 //        FixedX,     // not implemented (reserved)
 //        FixedY,     // not implemented (reserved)
@@ -128,6 +128,7 @@ public:
 
     const std::vector<ShapeElement>& elements() const { return m_elements; }
     std::vector<ShapeElement>& elements() { return m_elements; }
+    std::vector<RectF> toRects() const;
 
     std::optional<ShapeElement> find_if(const std::function<bool(const ShapeElement&)>& func) const;
     std::optional<ShapeElement> find_first(ElementType type) const;
@@ -146,18 +147,23 @@ public:
     Shape scaled(const SizeF&) const;
     Shape& adjust(double xp1, double yp1, double xp2, double yp2);
     Shape adjusted(double xp1, double yp1, double xp2, double yp2) const;
+    Shape& pad(double p);
+    Shape padded(double p) const;
 
     const RectF& bbox() const;
-    double minVerticalDistance(const Shape&) const;
-    double verticalClearance(const Shape&, double minHorizontalDistance = 0) const;
+    double minVerticalDistance(const Shape&, double minHorizontalClearance = 0.0) const;
+    double verticalClearance(const Shape&, double minHorizontalDistance = 0.0) const;
     double topDistance(const PointF&) const;
     double bottomDistance(const PointF&) const;
     double left() const;
     double right() const;
     double top() const;
     double bottom() const;
+    double topAtX(double x) const;
+    double bottomAtX(double x) const;
     double rightMostEdgeAtHeight(double yAbove, double yBelow) const;
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
+    double leftMostEdgeAtTop() const;
 
     bool contains(const PointF&) const;
     bool intersects(const RectF& rr) const;
@@ -183,15 +189,12 @@ std::string dump(const Shape& sh);
 //   intersects
 //---------------------------------------------------------
 
-inline static bool intersects(double a, double b, double c, double d, double verticalClearance)
+inline static bool intersects(double a, double b, double c, double d, double minClearance = 0.0)
 {
-    // return (a >= c && a < d) || (b >= c && b < d) || (a < c && b >= b);
-    // return (std::max(a,b) > std::min(c,d)) && (std::min(a,b) < std::max(c,d));
-    // if we can assume a <= b and c <= d
-    if (a == b || c == d) {   // zero height
+    if (a == b || c == d) {
         return false;
     }
-    return (b + verticalClearance > c) && (a < d + verticalClearance);
+    return (b + minClearance > c) && (a < d + minClearance);
 }
 } // namespace mu::engraving
 

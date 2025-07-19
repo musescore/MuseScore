@@ -24,70 +24,86 @@
 #include "log.h"
 
 using namespace muse;
+using namespace muse::async;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
-RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments() const
+muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments() const
 {
-    StringList params {
-        u"canSelectMultipleInstruments=true"
+    ValMap params {
+        { "canSelectMultipleInstruments", Val(true) }
     };
 
     return selectInstruments(params);
 }
 
-RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
+muse::async::Promise<InstrumentTemplate> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
 {
-    StringList params {
-        u"canSelectMultipleInstruments=false",
-        u"currentInstrumentId=" + currentInstrumentKey.instrumentId
+    ValMap params {
+        { "canSelectMultipleInstruments", Val(false) },
+        { "currentInstrumentId", Val(currentInstrumentKey.instrumentId.toStdString()) }
     };
 
-    RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
-    if (!selectedInstruments.ret) {
-        return selectedInstruments.ret;
-    }
+    return async::make_promise<InstrumentTemplate>([this, params](auto resolve, auto reject) {
+        Promise<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
+        selectedInstruments.onResolve(this, [resolve](const PartInstrumentListScoreOrder& selectedInstruments) {
+            const InstrumentTemplate& tpl = selectedInstruments.instruments.first().instrumentTemplate;
+            (void)resolve(tpl);
+        });
+        selectedInstruments.onReject(this, [reject](int code, const std::string& msg) {
+            (void)reject(code, msg);
+        });
 
-    const InstrumentTemplate& templ = selectedInstruments.val.instruments.first().instrumentTemplate;
-
-    return RetVal<Instrument>::make_ok(Instrument::fromTemplate(&templ));
+        return Promise<InstrumentTemplate>::dummy_result();
+    });
 }
 
-RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const StringList& params) const
+muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const ValMap& params) const
 {
-    String uri = String("musescore://instruments/select?%1").arg(params.join(u"&"));
-    RetVal<Val> retVal = interactive()->open(uri.toStdString());
-    if (!retVal.ret) {
-        return retVal.ret;
-    }
+    return async::make_promise<PartInstrumentListScoreOrder>([this, params](auto resolve, auto reject) {
+        static const Uri SELECT_INSTRUMENT_URI = Uri("musescore://instruments/select");
+        if (interactive()->isOpened(SELECT_INSTRUMENT_URI).val) {
+            Ret ret = muse::make_ret(Ret::Code::Cancel);
+            return reject(ret.code(), ret.text());
+        }
 
-    ValMap content = retVal.val.toMap();
+        UriQuery q(SELECT_INSTRUMENT_URI);
+        q.set(params);
 
-    ValList instruments = content["instruments"].toList();
+        auto promise = interactive()->open(q);
+        promise.onResolve(this, [this, resolve, reject](const Val& val) {
+            ValMap content = val.toMap();
+            ValList instruments = content["instruments"].toList();
 
-    IF_ASSERT_FAILED(!instruments.empty()) {
-        return make_ret(Ret::Code::UnknownError);
-    }
+            IF_ASSERT_FAILED(!instruments.empty()) {
+                Ret ret = muse::make_ret(Ret::Code::UnknownError);
+                (void)reject(ret.code(), ret.text());
+                return;
+            }
 
-    PartInstrumentListScoreOrder result;
+            PartInstrumentListScoreOrder result;
 
-    for (const Val& obj: instruments) {
-        ValMap map = obj.toMap();
-        PartInstrument pi;
+            for (const Val& obj: instruments) {
+                ValMap map = obj.toMap();
+                PartInstrument pi;
 
-        pi.partId = ID(map["partId"].toString());
-        pi.isExistingPart = map["isExistingPart"].toBool();
-        pi.isSoloist = map["isSoloist"].toBool();
+                pi.partId = ID(map["partId"].toString());
+                pi.isExistingPart = map["isExistingPart"].toBool();
+                pi.isSoloist = map["isSoloist"].toBool();
 
-        String instrumentId = String::fromStdString(map["instrumentId"].toString());
-        pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
+                String instrumentId = String::fromStdString(map["instrumentId"].toString());
+                pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
 
-        result.instruments << pi;
-    }
+                result.instruments << pi;
+            }
 
-    ValMap order = content["scoreOrder"].toMap();
-    result.scoreOrder = instrumentsRepository()->order(String::fromStdString(order["id"].toString()));
-    result.scoreOrder.customized = order["customized"].toBool();
+            ValMap order = content["scoreOrder"].toMap();
+            result.scoreOrder = instrumentsRepository()->order(String::fromStdString(order["id"].toString()));
+            result.scoreOrder.customized = order["customized"].toBool();
 
-    return RetVal<PartInstrumentListScoreOrder>::make_ok(result);
+            (void)resolve(result);
+        });
+
+        return Promise<PartInstrumentListScoreOrder>::dummy_result();
+    }, PromiseType::AsyncByBody);
 }

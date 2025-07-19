@@ -154,7 +154,7 @@ TEST_F(Engraving_BarlineTests, barline03)
     Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline03.mscx");
     EXPECT_TRUE(score);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving barline tests"));
     score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN, 1));
     score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN_FROM, 2));
     score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN_TO, -2));
@@ -189,7 +189,7 @@ TEST_F(Engraving_BarlineTests, barline04)
 
     score->doLayout();
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving barline tests"));
     // 'go' to 5th measure
     Measure* msr = score->firstMeasure();
     for (int i=0; i < 4; i++) {
@@ -239,7 +239,7 @@ TEST_F(Engraving_BarlineTests, barline05)
     // create and add a LineBreak element
     LayoutBreak* lb = Factory::createLayoutBreak(msr);
     lb->setLayoutBreakType(LayoutBreakType::LINE);
-    lb->setTrack(muse::nidx);               // system-level element
+    lb->setTrack(0);
     lb->setParent(msr);
     score->undoAddElement(lb);
     score->doLayout();
@@ -322,7 +322,7 @@ void dropNormalBarline(EngravingItem* e)
     barLine->setBarLineType(BarLineType::NORMAL);
     dropData.dropElement = barLine;
 
-    e->score()->startCmd();
+    e->score()->startCmd(TranslatableString::untranslatable("Drop normal barline test"));
     e->drop(dropData);
     e->score()->endCmd();
 }
@@ -419,7 +419,7 @@ TEST_F(Engraving_BarlineTests, deleteSkipBarlines)
     Measure* m1 = score->firstMeasure();
     EXPECT_TRUE(m1);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving barline tests"));
     score->cmdSelectAll();
     score->cmdDeleteSelection();
     score->endCmd();

@@ -34,8 +34,7 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
-
-    property bool isGeneralTabOpen: tabBar.currentIndex == 0
+    readonly property int navigationRowEnd: navigationRowStart + 10000
 
     width: parent.width
     spacing: 12

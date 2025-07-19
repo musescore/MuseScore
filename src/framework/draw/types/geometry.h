@@ -356,6 +356,9 @@ public:
     inline void adjust(double xp1, double yp1, double xp2, double yp2) { m_x += xp1; m_y += yp1; m_w += xp2 - xp1; m_h += yp2 - yp1; }
     inline RectX<T> adjusted(T xp1, T yp1, T xp2, T yp2) const { return RectX<T>(m_x + xp1, m_y + yp1, m_w + xp2 - xp1, m_h + yp2 - yp1); }
 
+    inline void pad(double p) { adjust(-p, -p, p, p); }
+    inline RectX<T> padded(double p) const { return adjusted(-p, -p, p, p); }
+
     inline RectX<T>& scale(const SizeX<T>& mag)
     {
         m_x *= mag.width();
@@ -372,6 +375,8 @@ public:
 
     bool contains(const PointX<T>& p) const;
     bool contains(const RectX<T>& r) const;
+
+    T distanceTo(const PointX<T>& p) const;
 
     bool intersects(const RectX<T>& r) const;
 
@@ -444,10 +449,15 @@ class PolygonX : public std::vector<PointX<T> >
 {
 public:
 
-    inline PolygonX<T>() = default;
-    inline PolygonX<T>(const std::vector<PointX<T> >& v) : std::vector<PointX<T> >(v) {
+    inline PolygonX() = default;
+    inline PolygonX(const std::vector<PointX<T> >& v)
+        : std::vector<PointX<T> >(v)
+    {
     }
-    inline PolygonX<T>(size_t size) : std::vector<PointX<T> >(size) {
+
+    inline PolygonX(size_t size)
+        : std::vector<PointX<T> >(size)
+    {
     }
 
     inline PolygonX<T>& operator<<(const PointX<T>& p)
@@ -743,6 +753,14 @@ bool RectX<T>::contains(const RectX<T>& r) const
         return false;
     }
     return true;
+}
+
+template<typename T>
+T RectX<T>::distanceTo(const PointX<T>& p) const
+{
+    T dx = std::max({ bottomLeft().x() - p.x(), 0.0, p.x() - bottomRight().x() });
+    T dy = std::max({ bottomLeft().y() - p.y(), 0.0, p.y() - topLeft().y() });
+    return std::sqrt(dx * dx + dy * dy);
 }
 
 template<typename T>

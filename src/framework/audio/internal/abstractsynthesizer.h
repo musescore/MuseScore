@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_ISYNTHESIZER_H
-#define MUSE_AUDIO_ISYNTHESIZER_H
+#pragma once
 
 #include "global/async/channel.h"
 #include "global/async/asyncable.h"
@@ -31,25 +30,33 @@
 #include "../audiotypes.h"
 #include "../isynthesizer.h"
 #include "../iaudioconfiguration.h"
+#include "worker/iaudioengine.h"
 
 namespace muse::audio::synth {
-class AbstractSynthesizer : public ISynthesizer, public async::Asyncable
+class AbstractSynthesizer : public ISynthesizer, public Injectable, public async::Asyncable
 {
 public:
-    static inline Inject<IAudioConfiguration> config;
+    muse::Inject<IAudioConfiguration> config = { this };
+    muse::Inject<IAudioEngine> audioEngine = { this };
 
 public:
-    AbstractSynthesizer(const audio::AudioInputParams& params);
+    AbstractSynthesizer(const audio::AudioInputParams& params, const modularity::ContextPtr& iocCtx);
     virtual ~AbstractSynthesizer() = default;
 
     const audio::AudioInputParams& params() const override;
     async::Channel<audio::AudioInputParams> paramsChanged() const override;
 
     void setup(const mpe::PlaybackData& playbackData) override;
+
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+    async::Notification readyToPlayChanged() const override;
+
     void revokePlayingNotes() override;
 
-protected:
+    InputProcessingProgress inputProcessingProgress() const override;
 
+protected:
     virtual void setupSound(const mpe::PlaybackSetupData& setupData) = 0;
     virtual void setupEvents(const mpe::PlaybackData& playbackData) = 0;
     virtual void updateRenderingMode(const RenderMode mode);
@@ -64,8 +71,10 @@ protected:
     audio::AudioInputParams m_params;
     async::Channel<audio::AudioInputParams> m_paramsChanges;
 
+    async::Notification m_readyToPlayChanged;
+
     samples_t m_sampleRate = 0;
+
+    InputProcessingProgress m_inputProcessingProgress;
 };
 }
-
-#endif // MUSE_AUDIO_ISYNTHESIZER_H

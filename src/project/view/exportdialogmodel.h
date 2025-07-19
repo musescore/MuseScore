@@ -67,12 +67,16 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     Q_PROPERTY(int selectedUnitType READ selectedUnitType WRITE setUnitType NOTIFY selectedUnitTypeChanged)
 
     Q_PROPERTY(int pdfResolution READ pdfResolution WRITE setPdfResolution NOTIFY pdfResolutionChanged)
+    Q_PROPERTY(
+        bool pdfTransparentBackground READ pdfTransparentBackground WRITE setPdfTransparentBackground NOTIFY pdfTransparentBackgroundChanged)
+
     Q_PROPERTY(int pngResolution READ pngResolution WRITE setPngResolution NOTIFY pngResolutionChanged)
     Q_PROPERTY(
         bool pngTransparentBackground READ pngTransparentBackground WRITE setPngTransparentBackground NOTIFY pngTransparentBackgroundChanged)
 
     Q_PROPERTY(
         bool svgTransparentBackground READ svgTransparentBackground WRITE setSvgTransparentBackground NOTIFY svgTransparentBackgroundChanged)
+    Q_PROPERTY(bool svgIllustratorCompat READ svgIllustratorCompat WRITE setSvgIllustratorCompat NOTIFY svgIllustratorCompatChanged FINAL)
 
     Q_PROPERTY(int sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(int bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
@@ -83,6 +87,7 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     Q_PROPERTY(MusicXmlLayoutType musicXmlLayoutType READ musicXmlLayoutType WRITE setMusicXmlLayoutType NOTIFY musicXmlLayoutTypeChanged)
 
     Q_PROPERTY(int meiExportLayout READ meiExportLayout WRITE setMeiExportLayout NOTIFY meiExportLayoutChanged)
+    Q_PROPERTY(int meiUseMuseScoreIds READ meiUseMuseScoreIds WRITE setMeiUseMuseScoreIds NOTIFY meiUseMuseScoreIdsChanged)
 
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
@@ -117,6 +122,9 @@ public:
     int pdfResolution() const;
     void setPdfResolution(const int& resolution);
 
+    bool pdfTransparentBackground() const;
+    void setPdfTransparentBackground(const bool& transparent);
+
     int pngResolution() const;
     void setPngResolution(const int& resolution);
 
@@ -125,6 +133,9 @@ public:
 
     bool svgTransparentBackground() const;
     void setSvgTransparentBackground(const bool& transparent);
+
+    bool svgIllustratorCompat() const;
+    void setSvgIllustratorCompat(bool compat);
 
     Q_INVOKABLE QList<int> availableSampleRates() const;
     int sampleRate() const;
@@ -142,6 +153,9 @@ public:
 
     bool meiExportLayout() const;
     void setMeiExportLayout(bool exportLayout);
+
+    bool meiUseMuseScoreIds() const;
+    void setMeiUseMuseScoreIds(bool useMuseScoreIds);
 
     enum class MusicXmlLayoutType {
         AllLayout,
@@ -167,10 +181,13 @@ signals:
     void selectedUnitTypeChanged(project::INotationWriter::UnitType newUnitType);
 
     void pdfResolutionChanged(int resolution);
+    void pdfTransparentBackgroundChanged(bool transparent);
+
     void pngResolutionChanged(int resolution);
     void pngTransparentBackgroundChanged(bool transparent);
 
     void svgTransparentBackgroundChanged(bool transparent);
+    void svgIllustratorCompatChanged(bool compat);
 
     void availableSampleRatesChanged();
     void sampleRateChanged(int sampleRate);
@@ -183,6 +200,7 @@ signals:
     void musicXmlLayoutTypeChanged(MusicXmlLayoutType layoutType);
 
     void meiExportLayoutChanged(bool exportLayout);
+    void meiUseMuseScoreIdsChanged(bool useMuseScoreIds);
 
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 

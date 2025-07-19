@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_UICOMPONENTS_POPUPVIEW_H
-#define MUSE_UICOMPONENTS_POPUPVIEW_H
+#pragma once
 
 #include <QQuickItem>
 #include <QQmlParserStatus>
@@ -65,6 +63,7 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
 
     Q_PROPERTY(bool showArrow READ showArrow WRITE setShowArrow NOTIFY showArrowChanged)
     Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
+    Q_PROPERTY(PlacementPolicies placementPolicies READ placementPolicies WRITE setPlacementPolicies NOTIFY placementPoliciesChanged)
 
     Q_PROPERTY(QQuickItem * anchorItem READ anchorItem WRITE setAnchorItem NOTIFY anchorItemChanged)
     Q_PROPERTY(bool opensUpward READ opensUpward NOTIFY opensUpwardChanged)
@@ -80,6 +79,8 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
     Q_PROPERTY(
         bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose NOTIFY activateParentOnCloseChanged)
 
+    Q_PROPERTY(FocusPolicies focusPolicies READ focusPolicies WRITE setFocusPolicies NOTIFY focusPoliciesChanged)
+
     //! NOTE Used for dialogs, but be here so that dialogs and just popups have one api
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString objectId READ objectId WRITE setObjectId NOTIFY objectIdChanged)
@@ -92,14 +93,14 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
 public:
     Inject<ui::IMainWindow> mainWindow = { this };
     Inject<ui::IUiConfiguration> uiConfiguration = { this };
-    Inject<ui::INavigationController> navigationController= { this };
+    Inject<ui::INavigationController> navigationController = { this };
 
 public:
 
     explicit PopupView(QQuickItem* parent = nullptr);
     ~PopupView() override;
 
-    enum OpenPolicy {
+    enum class OpenPolicy {
         Default = 0x00000000,
         NoActivateFocus = 0x00000001,
         OpenOnContentReady = 0x00000002
@@ -107,12 +108,30 @@ public:
     Q_DECLARE_FLAGS(OpenPolicies, OpenPolicy)
     Q_FLAG(OpenPolicies)
 
-    enum ClosePolicy {
+    enum class ClosePolicy {
         NoAutoClose = 0x00000000,
         CloseOnPressOutsideParent = 0x00000001,
     };
     Q_DECLARE_FLAGS(ClosePolicies, ClosePolicy)
     Q_FLAG(ClosePolicies)
+
+    enum class FocusPolicy {
+        TabFocus = 0x00000001,
+        ClickFocus = 0x00000002,
+        DefaultFocus = FocusPolicy::TabFocus | FocusPolicy::ClickFocus,
+        NoFocus = 0
+    };
+    Q_DECLARE_FLAGS(FocusPolicies, FocusPolicy)
+    Q_FLAG(FocusPolicies)
+
+    enum class PlacementPolicy {
+        Default = 0x00000000,
+        PreferBelow = 0x00000001,
+        PreferAbove = 0x00000002,
+        IgnoreFit = 0x00000003
+    };
+    Q_DECLARE_FLAGS(PlacementPolicies, PlacementPolicy)
+    Q_FLAG(PlacementPolicies)
 
     QQuickItem* parentItem() const;
 
@@ -134,14 +153,14 @@ public:
     Q_INVOKABLE void close(bool force = false);
     Q_INVOKABLE void toggleOpened();
 
-    Q_INVOKABLE void setParentWindow(QWindow* window);
-
     Q_INVOKABLE QRectF anchorGeometry() const;
 
     OpenPolicies openPolicies() const;
     ClosePolicies closePolicies() const;
+    PlacementPolicies placementPolicies() const;
 
     bool activateParentOnClose() const;
+    FocusPolicies focusPolicies() const;
 
     ui::INavigationControl* navigationParentControl() const;
 
@@ -175,7 +194,8 @@ public slots:
     void setLocalY(qreal y);
     void setOpenPolicies(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void setClosePolicies(muse::uicomponents::PopupView::ClosePolicies closePolicies);
-    void setNavigationParentControl(ui::INavigationControl* parentNavigationControl);
+    void setPlacementPolicies(muse::uicomponents::PopupView::PlacementPolicies placementPolicies);
+    void setNavigationParentControl(muse::ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
     void setModal(bool modal);
@@ -191,6 +211,7 @@ public slots:
     void setAnchorItem(QQuickItem* anchorItem);
 
     void setActivateParentOnClose(bool activateParentOnClose);
+    void setFocusPolicies(const muse::uicomponents::PopupView::FocusPolicies& policies);
 
 signals:
     void parentItemChanged();
@@ -202,7 +223,8 @@ signals:
     void yChanged(qreal y);
     void openPoliciesChanged(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
-    void navigationParentControlChanged(ui::INavigationControl* navigationParentControl);
+    void placementPoliciesChanged(muse::uicomponents::PopupView::PlacementPolicies placementPolicies);
+    void navigationParentControlChanged(muse::ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
     void modalChanged(bool modal);
@@ -223,6 +245,7 @@ signals:
     void anchorItemChanged(QQuickItem* anchorItem);
 
     void activateParentOnCloseChanged(bool activateParentOnClose);
+    void focusPoliciesChanged();
 
     void isContentReadyChanged();
 
@@ -248,6 +271,10 @@ protected:
     void repositionWindowIfNeed();
 
     void setErrCode(Ret::Code code);
+
+    QWindow* parentWindow() const;
+    void setParentWindow(QWindow* window);
+    void resolveParentWindow();
 
     virtual QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
@@ -280,6 +307,9 @@ protected:
     bool m_isContentReady = false;
 
     ClosePolicies m_closePolicies = { ClosePolicy::CloseOnPressOutsideParent };
+    FocusPolicies m_focusPolicies = { FocusPolicy::DefaultFocus };
+
+    PlacementPolicies m_placementPolicies = { PlacementPolicy::Default };
 
     bool m_activateParentOnClose = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
@@ -299,5 +329,3 @@ protected:
     bool m_forceClosed = false;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_POPUPVIEW_H

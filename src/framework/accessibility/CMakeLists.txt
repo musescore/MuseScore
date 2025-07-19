@@ -48,12 +48,16 @@ set(MODULE_SRC
 
 if (OS_IS_LIN)
     # it needed to send a spontaneous event by activating navigation
-    set(MODULE_INCLUDE ${Qt6Core_PRIVATE_INCLUDE_DIRS} )
+    set(MODULE_INCLUDE_PRIVATE ${Qt6Core_PRIVATE_INCLUDE_DIRS})
 endif()
 
 
 if (MUSE_MODULE_ACCESSIBILITY_TRACE)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_ACCESSIBILITY_TRACE )
+endif()
+
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick)
 endif()
 
 setup_module()

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,10 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_TRACKSEQUENCE_H
-#define MUSE_AUDIO_TRACKSEQUENCE_H
+#pragma once
 
 #include "global/async/asyncable.h"
+#include "modularity/ioc.h"
+#include "iaudioengine.h"
 
 #include "itracksequence.h"
 #include "igettracks.h"
@@ -33,11 +34,13 @@
 
 namespace muse::audio {
 class Mixer;
-class TrackSequence : public ITrackSequence, public IGetTracks, public async::Asyncable
+class TrackSequence : public ITrackSequence, public IGetTracks, public muse::Injectable, public async::Asyncable
 {
+    Inject<IAudioEngine> audioEngine = { this };
+
 public:
-    TrackSequence(const TrackSequenceId id);
-    ~TrackSequence();
+    TrackSequence(const TrackSequenceId id, const muse::modularity::ContextPtr& iocCtx);
+    ~TrackSequence() override;
 
     // ITrackSequence
     TrackSequenceId id() const override;
@@ -90,5 +93,3 @@ private:
     TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
 };
 }
-
-#endif // MUSE_AUDIO_TRACKSEQUENCE_H

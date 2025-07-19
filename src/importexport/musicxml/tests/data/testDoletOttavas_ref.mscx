@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>8.50197</pageWidth>
+      <pageHeight>11.003</pageHeight>
+      <pagePrintableWidth>7.50197</pagePrintableWidth>
+      <pageEvenLeftMargin>0.5</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.5</pageOddLeftMargin>
+      <pageEvenTopMargin>0.5</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.5</pageEvenBottomMargin>
+      <pageOddTopMargin>0.5</pageOddTopMargin>
+      <pageOddBottomMargin>0.5</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
+      <minSystemDistance>12</minSystemDistance>
+      <lyricsOddFontFace>Times New Roman</lyricsOddFontFace>
+      <lyricsEvenFontFace>Times New Roman</lyricsEvenFontFace>
+      <barWidth>0.15625</barWidth>
+      <endBarWidth>0.5</endBarWidth>
+      <stemWidth>0.125</stemWidth>
+      <staffLineWidth>0.09375</staffLineWidth>
+      <ledgerLineWidth>0.15625</ledgerLineWidth>
+      <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
+      <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
+      <romanNumeralFontFace>Times New Roman</romanNumeralFontFace>
+      <nashvilleNumberFontFace>Times New Roman</nashvilleNumberFontFace>
+      <smallNoteMag>0.75</smallNoteMag>
+      <graceNoteMag>0.6</graceNoteMag>
+      <slurEndWidth>0.0625</slurEndWidth>
+      <slurMidWidth>0.21875</slurMidWidth>
+      <tieEndWidth>0.0625</tieEndWidth>
+      <tieMidWidth>0.21875</tieMidWidth>
+      <tupletFontFace>Times New Roman</tupletFontFace>
+      <titleFontFace>Times New Roman</titleFontFace>
+      <subTitleFontFace>Times New Roman</subTitleFontFace>
+      <composerFontFace>Times New Roman</composerFontFace>
+      <lyricistFontFace>Times New Roman</lyricistFontFace>
+      <fingeringFontFace>Times New Roman</fingeringFontFace>
+      <lhGuitarFingeringFontFace>Times New Roman</lhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontFace>Times New Roman</rhGuitarFingeringFontFace>
+      <hammerOnPullOffTappingFontFace>Times New Roman</hammerOnPullOffTappingFontFace>
+      <stringNumberFontFace>Times New Roman</stringNumberFontFace>
+      <harpPedalDiagramFontFace>Times New Roman</harpPedalDiagramFontFace>
+      <harpPedalTextDiagramFontFace>Times New Roman</harpPedalTextDiagramFontFace>
+      <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
+      <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
+      <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
+      <expressionFontFace>Times New Roman</expressionFontFace>
+      <tempoFontFace>Times New Roman</tempoFontFace>
+      <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
+      <metronomeFontFace>Times New Roman</metronomeFontFace>
+      <measureNumberFontFace>Times New Roman</measureNumberFontFace>
+      <measureNumberAlternateFontFace>Times New Roman</measureNumberAlternateFontFace>
+      <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
+      <translatorFontFace>Times New Roman</translatorFontFace>
+      <systemTextFontFace>Times New Roman</systemTextFontFace>
+      <staffTextFontFace>Times New Roman</staffTextFontFace>
+      <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
+      <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
+      <repeatRightFontFace>Times New Roman</repeatRightFontFace>
+      <frameFontFace>Times New Roman</frameFontFace>
+      <noteLineFontFace>Times New Roman</noteLineFontFace>
+      <glissandoFontFace>Times New Roman</glissandoFontFace>
+      <bendFontFace>Times New Roman</bendFontFace>
+      <headerFontFace>Times New Roman</headerFontFace>
+      <footerFontFace>Times New Roman</footerFontFace>
+      <copyrightFontFace>Times New Roman</copyrightFontFace>
+      <pageNumberFontFace>Times New Roman</pageNumberFontFace>
+      <instrumentChangeFontFace>Times New Roman</instrumentChangeFontFace>
+      <stickingFontFace>Times New Roman</stickingFontFace>
+      <user1FontFace>Times New Roman</user1FontFace>
+      <user2FontFace>Times New Roman</user2FontFace>
+      <user3FontFace>Times New Roman</user3FontFace>
+      <user4FontFace>Times New Roman</user4FontFace>
+      <user5FontFace>Times New Roman</user5FontFace>
+      <user6FontFace>Times New Roman</user6FontFace>
+      <user7FontFace>Times New Roman</user7FontFace>
+      <user8FontFace>Times New Roman</user8FontFace>
+      <user9FontFace>Times New Roman</user9FontFace>
+      <user10FontFace>Times New Roman</user10FontFace>
+      <user11FontFace>Times New Roman</user11FontFace>
+      <user12FontFace>Times New Roman</user12FontFace>
+      <spatium>1.75</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>[Unnamed (treble staff)]</trackName>
+      <Instrument id="grand-piano">
+        <trackName></trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano.grand</instrumentId>
+        <clef staff="2">F</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="10" value="63"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <eid>D_D</eid>
+        </VBox>
+      <HBox>
+        <width>5</width>
+        <eid>E_E</eid>
+        </HBox>
+      <Measure>
+        <eid>F_F</eid>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>G_G</eid>
+            </Clef>
+          <TimeSig>
+            <eid>H_H</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              <eid>I_I</eid>
+              </Ottava>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>J_J</eid>
+            <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>K_K</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>L_L</eid>
+            <dots>1</dots>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>M_M</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8vb</subtype>
+              <eid>N_N</eid>
+              </Ottava>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>O_O</eid>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>P_P</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>Q_Q</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    <fractions>-1/2</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>R_R</eid>
+        <voice>
+          <Chord>
+            <eid>S_S</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>T_T</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    <fractions>1/2</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>U_U</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>V_V</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <eid>W_W</eid>
+            <durationType>half</durationType>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>X_X</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

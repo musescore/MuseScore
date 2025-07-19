@@ -24,6 +24,8 @@
 
 #include "../ivideoexportconfiguration.h"
 
+#include "../videoexporttypes.h"
+
 namespace mu::iex::videoexport {
 class VideoExportConfiguration : public IVideoExportConfiguration
 {

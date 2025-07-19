@@ -32,13 +32,16 @@
 class QJsonDocument;
 
 namespace muse::learn {
-class LearnService : public ILearnService
+class LearnService : public ILearnService, public Injectable
 {
-    INJECT(ILearnConfiguration, configuration)
-    INJECT(network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(IInteractive, interactive)
+    Inject<ILearnConfiguration> configuration = { this };
+    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    Inject<IInteractive> interactive = { this };
 
 public:
+    LearnService(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void refreshPlaylists() override;
 
     Playlist startedPlaylist() const override;
@@ -52,9 +55,11 @@ private:
 
     Playlist parsePlaylist(const QJsonDocument& playlistDoc) const;
 
+    mutable std::mutex m_startedPlaylistMutex;
     Playlist m_startedPlaylist;
     async::Channel<Playlist> m_startedPlaylistChannel;
 
+    mutable std::mutex m_advancedPlaylistMutex;
     Playlist m_advancedPlaylist;
     async::Channel<Playlist> m_advancedPlaylistChannel;
 };

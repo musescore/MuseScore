@@ -39,13 +39,20 @@ const UiActionList WorkspaceUiActions::m_actions = {
     UiAction("configure-workspaces",
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
-             TranslatableString("action", "Configure workspace"),
-             TranslatableString("action", "Configure workspace…")
-             )
+             TranslatableString("action", "Edit workspaces"),
+             TranslatableString("action", "Edit workspaces…"),
+             IconCode::Code::EDIT
+             ),
+    UiAction("create-workspace",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Create new workspace"),
+             IconCode::Code::PLUS
+             ),
 };
 
-WorkspaceUiActions::WorkspaceUiActions(std::shared_ptr<WorkspaceActionController> controller)
-    : m_controller(controller)
+WorkspaceUiActions::WorkspaceUiActions(std::shared_ptr<WorkspaceActionController> controller, const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_controller(controller)
 {
 }
 

@@ -48,24 +48,23 @@ static constexpr int FORBIDDEN_CODE = 403;
 static constexpr int NOT_FOUND_STATUS_CODE = 404;
 static constexpr int CONFLICT_STATUS_CODE = 409;
 
-QString userAgent();
 int generateFileNameNumber();
 
 class OAuthHttpServerReplyHandler;
 
-class AbstractCloudService : public QObject, public IAuthorizationService, public async::Asyncable
+class AbstractCloudService : public QObject, public IAuthorizationService, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 public:
-    INJECT(ICloudConfiguration, configuration)
-    INJECT(ui::IUiConfiguration, uiConfig)
-    INJECT(io::IFileSystem, fileSystem)
-    INJECT(network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(IInteractive, interactive)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    muse::Inject<ICloudConfiguration> configuration = { this };
+    muse::Inject<ui::IUiConfiguration> uiConfig = { this };
+    muse::Inject<io::IFileSystem> fileSystem = { this };
+    muse::Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    muse::Inject<IInteractive> interactive = { this };
+    muse::Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
-    explicit AbstractCloudService(QObject* parent = nullptr);
+    explicit AbstractCloudService(const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
 
     void init();
 
@@ -108,13 +107,15 @@ protected:
 
     virtual Ret downloadAccountInfo() = 0;
 
-    virtual QString logoColorForTheme(const ui::ThemeInfo& theme) const;
+    network::RequestHeaders defaultHeaders() const;
+
+    QString logoColor() const;
 
     void setAccountInfo(const AccountInfo& info);
 
     RetVal<QUrl> prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
 
-    using RequestCallback = std::function<Ret()>;
+    using RequestCallback = std::function<Ret ()>;
     Ret executeRequest(const RequestCallback& requestCallback);
 
     Ret uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
@@ -140,8 +141,6 @@ private:
     io::path_t tokensFilePath() const;
 
     void openUrl(const QUrl& url);
-
-    network::RequestHeaders headers() const;
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     OAuthHttpServerReplyHandler* m_replyHandler = nullptr;

@@ -63,6 +63,8 @@ public:
     bool valid() const;
     QString actionName() const;
 
+    void setPaletteIndex(QPersistentModelIndex paletteIndex);
+
     Q_INVOKABLE void open();
 
 private:
@@ -127,6 +129,9 @@ public:
     }
 
     Q_INVOKABLE mu::palette::PaletteElementEditor* elementEditor(const QModelIndex& index);
+
+private:
+    QMap<Palette::Type, PaletteElementEditor*> m_paletteElementEditorMap;
 };
 
 // ========================================================
@@ -215,6 +220,7 @@ class PaletteProvider : public QObject, public IPaletteProvider, public muse::as
 
     Q_PROPERTY(bool isSinglePalette READ isSinglePalette NOTIFY isSinglePaletteChanged)
     Q_PROPERTY(bool isSingleClickToOpenPalette READ isSingleClickToOpenPalette NOTIFY isSingleClickToOpenPaletteChanged)
+    Q_PROPERTY(bool isPaletteDragEnabled READ isPaletteDragEnabled NOTIFY isPaletteDragEnabledChanged)
 
 public:
     void init() override;
@@ -237,14 +243,14 @@ public:
 
     Q_INVOKABLE QAbstractItemModel* availableExtraPalettesModel() const;
     Q_INVOKABLE bool addPalette(const QPersistentModelIndex&);
-    Q_INVOKABLE bool removeCustomPalette(const QPersistentModelIndex&);
 
-    Q_INVOKABLE bool resetPalette(const QModelIndex&);
+    Q_INVOKABLE void resetPalette(const QModelIndex&);
 
     Q_INVOKABLE bool savePalette(const QModelIndex&);
     Q_INVOKABLE bool loadPalette(const QModelIndex&);
 
     Q_INVOKABLE void setSearching(bool searching);
+    Q_INVOKABLE void setFilter(const QString&);
 
     bool paletteChanged() const { return m_userPaletteModel->paletteTreeChanged(); }
 
@@ -261,6 +267,7 @@ public:
 
     bool isSinglePalette() const;
     bool isSingleClickToOpenPalette() const;
+    bool isPaletteDragEnabled() const;
 
 signals:
     void userPaletteChanged();
@@ -268,6 +275,7 @@ signals:
 
     void isSinglePaletteChanged();
     void isSingleClickToOpenPaletteChanged();
+    void isPaletteDragEnabledChanged();
 
 private slots:
     void notifyAboutUserPaletteChanged()
@@ -289,6 +297,8 @@ private:
     AbstractPaletteController* customElementsPaletteController();
 
     QString getPaletteFilename(bool open, const QString& name = "") const;
+
+    void doResetPalette(const QModelIndex& index);
 
     PaletteTreeModel* m_userPaletteModel;
     PaletteTreeModel* m_masterPaletteModel;

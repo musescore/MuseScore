@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_AUDIO_WASAPIAUDIOCLIENT_H
-#define MUSE_AUDIO_WASAPIAUDIOCLIENT_H
+#pragma once
 
 #include "wasapitypes.h"
 
@@ -43,6 +41,7 @@ public:
 
     unsigned int sampleRate() const;
     unsigned int channelCount() const;
+    unsigned int minPeriodInFrames() const;
 
     void setFallbackDevice(const hstring& deviceId);
 
@@ -69,6 +68,8 @@ private:
     void getSamples(uint32_t framesAvailable);
     void setState(const DeviceState newState);
     void setStateAndNotify(const DeviceState newState, hresult resultCode);
+
+    std::vector<uint8_t> m_surroundAudioBuffer; //! NOTE: See #17648
 
     hstring m_deviceIdString;
     hstring m_fallbackDeviceIdString;
@@ -105,5 +106,3 @@ private:
     bool m_useClosestSupportedFormat = false;
 };
 }
-
-#endif // MUSE_AUDIO_WASAPIAUDIOCLIENT_H

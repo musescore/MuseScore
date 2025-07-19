@@ -22,7 +22,7 @@
 
 #include "inspectorpopupcontroller.h"
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QWindow>
 
 #include "uicomponents/view/popupview.h"
@@ -33,7 +33,7 @@ using namespace mu::inspector;
 using namespace muse::uicomponents;
 
 InspectorPopupController::InspectorPopupController(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -44,8 +44,15 @@ InspectorPopupController::~InspectorPopupController()
 
 void InspectorPopupController::load()
 {
-    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
+    connect(qApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
         if (state != Qt::ApplicationActive) {
+            //! NOTE If the application became inactive
+            //! due to opening a color selection dialog,
+            //! then we do not need to close a popup
+            if (interactive()->isSelectColorOpened()) {
+                return;
+            }
+
             closePopup();
         }
     });
@@ -178,7 +185,8 @@ void InspectorPopupController::closePopupIfNeed(const QPointF& mouseGlobalPos)
     }
 
     QRectF globalNotationViewRect = globalRect(m_notationView);
-    if (globalNotationViewRect.contains(mouseGlobalPos)) {
+    QWindow* windowUnderCursor = qGuiApp->topLevelAt(mouseGlobalPos.toPoint());
+    if (windowUnderCursor == mainWindow()->qWindow() && globalNotationViewRect.contains(mouseGlobalPos)) {
         return;
     }
 

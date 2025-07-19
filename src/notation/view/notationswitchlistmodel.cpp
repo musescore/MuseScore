@@ -28,7 +28,7 @@ using namespace mu::notation;
 using namespace mu::project;
 
 NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     m_notationChangedReceiver = std::make_unique<muse::async::Asyncable>();
 }
@@ -93,7 +93,7 @@ void NotationSwitchListModel::loadNotations()
     m_notations << masterNotation->notation();
     listenNotationOpeningStatus(masterNotation->notation());
 
-    for (IExcerptNotationPtr excerpt: masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt: masterNotation->excerpts()) {
         if (excerpt->notation()->isOpen()) {
             m_notations << excerpt->notation();
         }
@@ -269,7 +269,10 @@ void NotationSwitchListModel::closeOtherNotations(int index)
     INotationPtr notationToKeepOpen = m_notations[index];
     context()->setCurrentNotation(notationToKeepOpen);
 
-    for (INotationPtr notation : m_notations) {
+    // Copy the list to avoid modifying it while iterating
+    QList<INotationPtr> notations = m_notations;
+
+    for (const INotationPtr& notation : notations) {
         if (!isMasterNotation(notation) && notation != notationToKeepOpen) {
             currentMasterNotation()->setExcerptIsOpen(notation, false);
         }

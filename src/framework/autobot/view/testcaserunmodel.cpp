@@ -28,6 +28,10 @@ using namespace muse::autobot;
 TestCaseRunModel::TestCaseRunModel(QObject* parent)
     : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
+}
+
+void TestCaseRunModel::init()
+{
     autobot()->statusChanged().onReceive(this, [this](const io::path_t&, const IAutobot::Status&) {
         emit statusChanged();
     });

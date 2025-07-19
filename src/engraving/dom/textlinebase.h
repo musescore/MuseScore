@@ -27,7 +27,6 @@
 
 #include "line.h"
 #include "property.h"
-#include "types.h"
 
 namespace mu::engraving {
 class EngravingItem;

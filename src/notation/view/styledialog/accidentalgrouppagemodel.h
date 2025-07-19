@@ -33,7 +33,7 @@ class AccidentalGroupPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * accidFollowNoteOffset READ accidFollowNoteOffset CONSTANT)
     Q_PROPERTY(StyleItem * alignAccidentalOctavesAcrossSubChords READ alignAccidentalOctavesAcrossSubChords CONSTANT)
     Q_PROPERTY(StyleItem * keepAccidentalSecondsTogether READ keepAccidentalSecondsTogether CONSTANT)
-    Q_PROPERTY(StyleItem * alignOffsetOctaveAccidentals READ alignOffsetOctaveAccidentals)
+    Q_PROPERTY(StyleItem * alignOffsetOctaveAccidentals READ alignOffsetOctaveAccidentals CONSTANT)
 public:
     explicit AccidentalGroupPageModel(QObject* parent = nullptr);
 

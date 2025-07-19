@@ -18,7 +18,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-echo "Notarize MacOS .dmg"
+echo "Notarize macOS .dmg"
 trap 'echo Notarize failed; exit 1' ERR
 
 ARTIFACTS_DIR="build.artifacts"
@@ -45,7 +45,22 @@ echo "ARTIFACT_NAME: $ARTIFACT_NAME"
 
 echo "Uploading to Apple to notarize..."
 
-xcrun notarytool submit --apple-id $APPLE_USERNAME --team-id $APPLE_TEAM_ID --password $APPLE_PASSWORD --wait $ARTIFACTS_DIR/$ARTIFACT_NAME
+for i in 1 2 3; do
+    c=0
+    xcrun notarytool submit \
+        --apple-id $APPLE_USERNAME \
+        --team-id $APPLE_TEAM_ID \
+        --password $APPLE_PASSWORD \
+        --wait $ARTIFACTS_DIR/$ARTIFACT_NAME \
+        || c=$?
+    if [ $c -eq 0 ]; then break; fi
+    if [ $i -eq 3 ]; then
+        echo "notarytool failed; exiting after 3 retries."
+        exit 1
+    fi
+    echo "notarytool failed; retrying in 30s"
+    sleep 30
+done
 
 echo "Stapling and running packaging up"
 xcrun stapler staple $ARTIFACTS_DIR/$ARTIFACT_NAME

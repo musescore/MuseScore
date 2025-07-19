@@ -88,7 +88,7 @@ Rectangle {
 
             navigation.panel: root.navigationPanel
             navigation.order: 2
-            navigation.accessible.name: qsTrc("notation", "Close Search")
+            navigation.accessible.name: qsTrc("notation", "Close search")
             navigation.enabled: root.visible
 
             onClicked: {
@@ -118,7 +118,7 @@ Rectangle {
                 Qt.callLater(privateProperties.hide)
             }
 
-            onEscapted: {
+            onEscaped: {
                 Qt.callLater(privateProperties.hide)
             }
         }

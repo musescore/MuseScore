@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_MIDI_MIDITYPES_H
-#define MUSE_MIDI_MIDITYPES_H
+#pragma once
 
 #include <string>
 #include <cstdint>
@@ -45,6 +43,7 @@ using Events = std::map<tick_t, std::vector<Event> >;
 
 static constexpr int EXPRESSION_CONTROLLER = 11;
 static constexpr int SUSTAIN_PEDAL_CONTROLLER = 64;
+static constexpr int SOSTENUTO_PEDAL_CONTROLLER = 66;
 
 struct Program {
     Program(bank_t b = 0, program_t p = 0)
@@ -162,5 +161,3 @@ inline std::vector<int> splitDeviceId(const MidiDeviceID& deviceId)
     return result;
 }
 }
-
-#endif // MUSE_MIDI_MIDITYPES_H

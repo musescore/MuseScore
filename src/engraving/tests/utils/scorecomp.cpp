@@ -59,18 +59,39 @@ bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
 
     QProcess p;
     p.start(cmd, args);
+    if (!p.waitForStarted()) {
+        QTextStream err(stderr);
+        err << p.program() << " failed to start:\n";
+        err << "| " << p.errorString() << "\n";
+
+        return false;
+    }
     if (!p.waitForFinished()) {
-        QTextStream outputText(stdout);
-        outputText << "diff failed finished";
+        QTextStream err(stderr);
+        err << p.program() << " failed to finish:\n";
+        err << "| " << p.errorString() << "\n";
+
         return false;
     }
 
-    int code = p.exitCode();
-    if (code) {
-        QByteArray ba = p.readAll();
-        QTextStream outputText(stdout);
-        outputText << String(ba);
-        outputText << String("   <diff -u %1 %2 failed, code: %3 \n").arg(fullPath1, fullPath2).arg(code);
+    // QProcess::exitCode() is only valid when QProcess::exitStatus() == NormalExit
+    if (p.exitStatus() != QProcess::NormalExit) {
+        QTextStream err(stderr);
+        err << p.program() << " exited abnormally\n";
+        err << "| " << p.errorString() << "\n";
+
+        return false;
+    }
+
+    if (const int code = p.exitCode()) {
+        QTextStream err(stderr);
+        QTextStream out(stdout);
+        out << p.readAllStandardOutput();
+        err << p.readAllStandardError();
+
+        err << String("%1 %2 failed with code: %3 \n")
+            .arg(p.program(), p.arguments().join(' '))
+            .arg(code);
         return false;
     }
 

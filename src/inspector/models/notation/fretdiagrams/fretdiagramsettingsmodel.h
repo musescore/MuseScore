@@ -42,6 +42,7 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * isNutVisible READ isNutVisible CONSTANT)
     Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
     Q_PROPERTY(PropertyItem * orientation READ orientation CONSTANT)
+    Q_PROPERTY(PropertyItem * verticalAlign READ verticalAlign CONSTANT)
 
     Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
     Q_PROPERTY(bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)
@@ -50,6 +51,8 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
 
     Q_PROPERTY(QVariant fretDiagram READ fretDiagram NOTIFY fretDiagramChanged)
+    Q_PROPERTY(PropertyItem * showFingerings READ showFingerings CONSTANT)
+    Q_PROPERTY(QStringList fingerings READ fingerings NOTIFY fingeringsChanged)
 
 public:
     explicit FretDiagramSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -66,6 +69,12 @@ public:
     PropertyItem* isNutVisible() const;
     PropertyItem* placement() const;
     PropertyItem* orientation() const;
+    PropertyItem* verticalAlign() const;
+    PropertyItem* showFingerings() const;
+    QStringList fingerings() const;
+
+    Q_INVOKABLE void setFingering(int string, int finger);
+    Q_INVOKABLE void resetFingerings();
 
     QVariant fretDiagram() const;
 
@@ -88,6 +97,7 @@ signals:
     void currentFretDotTypeChanged(int currentFretDotType);
 
     void areSettingsAvailableChanged(bool areSettingsAvailable);
+    void fingeringsChanged(QStringList fingerings);
 
 private:
     PropertyItem* m_scale = nullptr;
@@ -97,6 +107,9 @@ private:
     PropertyItem* m_isNutVisible = nullptr;
     PropertyItem* m_placement = nullptr;
     PropertyItem* m_orientation = nullptr;
+    PropertyItem* m_verticalAlign = nullptr;
+    PropertyItem* m_showFingerings = nullptr;
+    PropertyItem* m_fingerings = nullptr;
 
     mu::engraving::FretDiagram* m_fretDiagram = nullptr;
 

@@ -30,20 +30,28 @@ using namespace mu::iex::musicxml;
 
 static const std::string module_name("iex_musicxml");
 
-static const Settings::Key MUSICXML_IMPORT_BREAKS_KEY(module_name, "import/musicXML/importBreaks");
-static const Settings::Key MUSICXML_IMPORT_LAYOUT_KEY(module_name, "import/musicXML/importLayout");
-static const Settings::Key MUSICXML_EXPORT_LAYOUT_KEY(module_name, "export/musicXML/exportLayout");
-static const Settings::Key MUSICXML_EXPORT_MU3_COMPAT_KEY(module_name, "export/musicXML/exportMu3Compat");
-static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/musicXML/exportBreaks");
-static const Settings::Key MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY(module_name, "export/musicXML/exportInvisibleElements");
+static const Settings::Key MUSICXML_IMPORT_BREAKS_KEY(module_name, "import/musicXml/importBreaks");
+static const Settings::Key MUSICXML_IMPORT_LAYOUT_KEY(module_name, "import/musicXml/importLayout");
+static const Settings::Key MUSICXML_EXPORT_LAYOUT_KEY(module_name, "export/musicXml/exportLayout");
+static const Settings::Key MUSICXML_EXPORT_MU3_COMPAT_KEY(module_name, "export/musicXml/exportMu3Compat");
+static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/musicXml/exportBreaks");
+static const Settings::Key MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY(module_name, "export/musicXml/exportInvisibleElements");
 static const Settings::Key MIGRATION_APPLY_EDWIN_FOR_XML(module_name, "import/compatibility/apply_edwin_for_xml");
 static const Settings::Key MIGRATION_NOT_ASK_AGAIN_KEY(module_name, "import/compatibility/do_not_ask_me_again");
-static const Settings::Key MUSICXML_IMPORT_INFER_TEXT_TYPE(module_name, "import/musicXML/importInferTextType");
+static const Settings::Key MUSICXML_IMPORT_INFER_TEXT_TYPE(module_name, "import/musicXml/importInferTextType");
 
 void MusicXmlConfiguration::init()
 {
     settings()->setDefaultValue(MUSICXML_IMPORT_BREAKS_KEY, Val(true));
+    settings()->valueChanged(MUSICXML_IMPORT_BREAKS_KEY).onReceive(this, [this](const Val& val) {
+        m_importBreaksChanged.send(val.toBool());
+    });
+
     settings()->setDefaultValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
+    settings()->valueChanged(MUSICXML_IMPORT_LAYOUT_KEY).onReceive(this, [this](const Val& val) {
+        m_importLayoutChanged.send(val.toBool());
+    });
+
     settings()->setDefaultValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_MU3_COMPAT_KEY, Val(false));
     settings()->setDescription(MUSICXML_EXPORT_MU3_COMPAT_KEY,
@@ -51,72 +59,94 @@ void MusicXmlConfiguration::init()
                                //: to prevent errors when importing them into MuseScore 3
                                muse::trc("iex_musicxml", "Limit MusicXML export for compatibility with MuseScore 3"));
     settings()->setCanBeManuallyEdited(MUSICXML_EXPORT_MU3_COMPAT_KEY, true);
-    settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(MusicxmlExportBreaksType::All));
+    settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(MusicXmlExportBreaksType::All));
     settings()->setDefaultValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(false));
     settings()->setDescription(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY,
                                muse::trc("iex_musicxml", "Export invisible elements to MusicXML"));
     settings()->setCanBeManuallyEdited(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, true);
+
     settings()->setDefaultValue(MIGRATION_APPLY_EDWIN_FOR_XML, Val(false));
+    settings()->valueChanged(MIGRATION_APPLY_EDWIN_FOR_XML).onReceive(this, [this](const Val& val) {
+        m_needUseDefaultFontChanged.send(val.toBool());
+    });
+
     settings()->setDefaultValue(MIGRATION_NOT_ASK_AGAIN_KEY, Val(false));
+    settings()->valueChanged(MIGRATION_NOT_ASK_AGAIN_KEY).onReceive(this, [this](const Val& val) {
+        m_needAskAboutApplyingNewStyleChanged.send(val.toBool());
+    });
+
     settings()->setDefaultValue(MUSICXML_IMPORT_INFER_TEXT_TYPE, Val(false));
+    settings()->valueChanged(MUSICXML_IMPORT_INFER_TEXT_TYPE).onReceive(this, [this](const Val& val) {
+        m_inferTextTypeChanged.send(val.toBool());
+    });
 }
 
-bool MusicXmlConfiguration::musicxmlImportBreaks() const
+bool MusicXmlConfiguration::importBreaks() const
 {
     return settings()->value(MUSICXML_IMPORT_BREAKS_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlImportBreaks(bool value)
+void MusicXmlConfiguration::setImportBreaks(bool value)
 {
     settings()->setSharedValue(MUSICXML_IMPORT_BREAKS_KEY, Val(value));
 }
 
-bool MusicXmlConfiguration::musicxmlImportLayout() const
+async::Channel<bool> MusicXmlConfiguration::importBreaksChanged() const
+{
+    return m_importBreaksChanged;
+}
+
+bool MusicXmlConfiguration::importLayout() const
 {
     return settings()->value(MUSICXML_IMPORT_LAYOUT_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlImportLayout(bool value)
+void MusicXmlConfiguration::setImportLayout(bool value)
 {
     settings()->setSharedValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(value));
 }
 
-bool MusicXmlConfiguration::musicxmlExportLayout() const
+async::Channel<bool> MusicXmlConfiguration::importLayoutChanged() const
+{
+    return m_importLayoutChanged;
+}
+
+bool MusicXmlConfiguration::exportLayout() const
 {
     return settings()->value(MUSICXML_EXPORT_LAYOUT_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlExportLayout(bool value)
+void MusicXmlConfiguration::setExportLayout(bool value)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(value));
 }
 
-bool MusicXmlConfiguration::musicxmlExportMu3Compat() const
+bool MusicXmlConfiguration::exportMu3Compat() const
 {
     return settings()->value(MUSICXML_EXPORT_MU3_COMPAT_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlExportMu3Compat(bool value)
+void MusicXmlConfiguration::setExportMu3Compat(bool value)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_MU3_COMPAT_KEY, Val(value));
 }
 
-MusicXmlConfiguration::MusicxmlExportBreaksType MusicXmlConfiguration::musicxmlExportBreaksType() const
+MusicXmlConfiguration::MusicXmlExportBreaksType MusicXmlConfiguration::exportBreaksType() const
 {
-    return settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toEnum<MusicxmlExportBreaksType>();
+    return settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toEnum<MusicXmlExportBreaksType>();
 }
 
-void MusicXmlConfiguration::setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType)
+void MusicXmlConfiguration::setExportBreaksType(MusicXmlExportBreaksType breaksType)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(breaksType));
 }
 
-bool MusicXmlConfiguration::musicxmlExportInvisibleElements() const
+bool MusicXmlConfiguration::exportInvisibleElements() const
 {
     return settings()->value(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlExportInvisibleElements(bool value)
+void MusicXmlConfiguration::setExportInvisibleElements(bool value)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(value));
 }
@@ -135,6 +165,11 @@ void MusicXmlConfiguration::setNeedUseDefaultFont(bool value)
     settings()->setSharedValue(MIGRATION_APPLY_EDWIN_FOR_XML, Val(value));
 }
 
+async::Channel<bool> MusicXmlConfiguration::needUseDefaultFontChanged() const
+{
+    return m_needUseDefaultFontChanged;
+}
+
 void MusicXmlConfiguration::setNeedUseDefaultFontOverride(std::optional<bool> value)
 {
     m_needUseDefaultFontOverride = value;
@@ -150,6 +185,11 @@ void MusicXmlConfiguration::setNeedAskAboutApplyingNewStyle(bool value)
     settings()->setSharedValue(MIGRATION_NOT_ASK_AGAIN_KEY, Val(!value));
 }
 
+async::Channel<bool> MusicXmlConfiguration::needAskAboutApplyingNewStyleChanged() const
+{
+    return m_needAskAboutApplyingNewStyleChanged;
+}
+
 bool MusicXmlConfiguration::inferTextType() const
 {
     if (m_inferTextTypeOverride.has_value()) {
@@ -162,6 +202,11 @@ bool MusicXmlConfiguration::inferTextType() const
 void MusicXmlConfiguration::setInferTextType(bool value)
 {
     settings()->setSharedValue(MUSICXML_IMPORT_INFER_TEXT_TYPE, Val(value));
+}
+
+async::Channel<bool> MusicXmlConfiguration::inferTextTypeChanged() const
+{
+    return m_inferTextTypeChanged;
 }
 
 void MusicXmlConfiguration::setInferTextTypeOverride(std::optional<bool> value)

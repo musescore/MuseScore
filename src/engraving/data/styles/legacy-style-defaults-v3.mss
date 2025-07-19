@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="3.01">
   <Style>
     <pageWidth>8.27</pageWidth>
     <pageHeight>11.69</pageHeight>
@@ -213,6 +213,7 @@
     <chordSymbolAFrameRound>0</chordSymbolAFrameRound>
     <chordSymbolAFrameFgColor r="0" g="0" b="0" a="255"/>
     <chordSymbolAFrameBgColor r="255" g="255" b="255" a="0"/>
+    <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
     <chordSymbolBFontFace>FreeSerif</chordSymbolBFontFace>
     <chordSymbolBFontSize>12</chordSymbolBFontSize>
     <chordSymbolBFontSpatiumDependent>1</chordSymbolBFontSpatiumDependent>
@@ -224,6 +225,7 @@
     <chordSymbolBFrameRound>0</chordSymbolBFrameRound>
     <chordSymbolBFrameFgColor r="0" g="0" b="0" a="255"/>
     <chordSymbolBFrameBgColor r="255" g="255" b="255" a="0"/>
+    <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
     <romanNumeralFontFace>Campania</romanNumeralFontFace>
     <romanNumeralFontSize>12</romanNumeralFontSize>
     <romanNumeralFontSpatiumDependent>1</romanNumeralFontSpatiumDependent>
@@ -290,9 +292,9 @@
     <lowerCaseMinorChords>0</lowerCaseMinorChords>
     <lowerCaseBassNotes>0</lowerCaseBassNotes>
     <allCapsNoteNames>0</allCapsNoteNames>
-    <chordStyle>std</chordStyle>
+    <chordStyle>legacy</chordStyle>
     <chordsXmlFile>0</chordsXmlFile>
-    <chordDescriptionFile>chords_std.xml</chordDescriptionFile>
+    <chordDescriptionFile>chords_legacy.xml</chordDescriptionFile>
     <chordExtensionMag>1</chordExtensionMag>
     <chordExtensionAdjust>0</chordExtensionAdjust>
     <chordModifierMag>1</chordModifierMag>
@@ -834,6 +836,31 @@
     <footerFrameRound>0</footerFrameRound>
     <footerFrameFgColor r="0" g="0" b="0" a="255"/>
     <footerFrameBgColor r="255" g="255" b="255" a="0"/>
+    <copyrightFontFace>FreeSerif</copyrightFontFace>
+    <copyrightFontSize>8</copyrightFontSize>
+    <copyrightFontSpatiumDependent>0</copyrightFontSpatiumDependent>
+    <copyrightFontStyle>0</copyrightFontStyle>
+    <copyrightColor r="0" g="0" b="0" a="255"/>
+    <copyrightOffset x="0" y="5"/>
+    <copyrightFrameType>0</copyrightFrameType>
+    <copyrightFramePadding>0.2</copyrightFramePadding>
+    <copyrightFrameWidth>0.1</copyrightFrameWidth>
+    <copyrightFrameRound>0</copyrightFrameRound>
+    <copyrightFrameFgColor r="0" g="0" b="0" a="255"/>
+    <copyrightFrameBgColor r="255" g="255" b="255" a="0"/>
+    <pageNumberFontFace>FreeSerif</pageNumberFontFace>
+    <pageNumberFontSize>8</pageNumberFontSize>
+    <pageNumberFontSpatiumDependent>0</pageNumberFontSpatiumDependent>
+    <pageNumberFontStyle>0</pageNumberFontStyle>
+    <pageNumberAlign>center,bottom</pageNumberAlign>
+    <pageNumberColor r="0" g="0" b="0" a="255"/>
+    <pageNumberOffset x="0" y="5"/>
+    <pageNumberFrameType>0</pageNumberFrameType>
+    <pageNumberFramePadding>0.2</pageNumberFramePadding>
+    <pageNumberFrameWidth>0.1</pageNumberFrameWidth>
+    <pageNumberFrameRound>0</pageNumberFrameRound>
+    <pageNumberFrameFgColor r="0" g="0" b="0" a="255"/>
+    <pageNumberFrameBgColor r="255" g="255" b="255" a="0"/>
     <instrumentChangeFontFace>FreeSerif</instrumentChangeFontFace>
     <instrumentChangeFontSize>12</instrumentChangeFontSize>
     <instrumentChangeFontSpatiumDependent>1</instrumentChangeFontSpatiumDependent>

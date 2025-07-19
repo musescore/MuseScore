@@ -71,11 +71,12 @@ void FretCanvas::draw(QPainter* painter)
     painter->setPen(pen);
     painter->setBrush(pen.color());
     double x2 = (_strings - 1) * stringDist;
-    painter->drawLine(QLineF(-lw1 * .5, 0.0, x2 + lw1 * .5, 0.0));
+    double yNut = -0.5 * (lw2 - lw1);
+    painter->drawLine(QLineF(-lw1 * .5, yNut, x2 + lw1 * .5, yNut));
 
     pen.setWidthF(lw1);
     painter->setPen(pen);
-    double y2 = (_frets + 1) * fretDist - fretDist * .5;
+    double y2 = _frets * fretDist + 0.5 * lw1;
 
     QPen symPen(pen);
     symPen.setCapStyle(Qt::RoundCap);
@@ -84,7 +85,7 @@ void FretCanvas::draw(QPainter* painter)
     // Draw strings and frets
     for (int i = 0; i < _strings; ++i) {
         double x = stringDist * i;
-        painter->drawLine(QLineF(x, fretOffset ? -_spatium * .2 : 0.0, x, y2));
+        painter->drawLine(QLineF(x, 0.0, x, y2));
     }
     for (int i = 1; i <= _frets; ++i) {
         double y = fretDist * i;
@@ -123,14 +124,43 @@ void FretCanvas::draw(QPainter* painter)
         int startString = i.second.startString;
         int endString   = i.second.endString;
 
-        qreal x1   = stringDist * startString;
-        qreal newX2 = endString == -1 ? x2 : stringDist * endString;
+        if (m_diagram->score()->style().styleB(mu::engraving::Sid::barreAppearanceSlur)) {
+            // Copy-pasted from TLayout and TDraw, like most of the other code in this class.
+            // This probably needs a better solution in the future. (M.S.)
+            double insetX = 2 * lw1;
+            double insetY = fret == 1 ? lw2 + lw1 : insetX;
+            double startX = startString * stringDist + insetX;
+            double endX = (endString == -1 ? x2 : stringDist * (endString - 1)) - insetX;
+            double shoulderXoffset = 0.2 * (endX - startX);
+            double startEndY = (fret - 1) * fretDist - insetY;
+            double shoulderY = startEndY - 0.5 * fretDist;
+            double slurThickness = 0.1 * _spatium;
+            double shoulderYfor = shoulderY - slurThickness;
+            double shoulderYback = shoulderY + slurThickness;
+            QPointF bezier1for = QPointF(startX + shoulderXoffset, shoulderYfor);
+            QPointF bezier2for = QPointF(endX - shoulderXoffset, shoulderYfor);
+            QPointF bezier1back = QPointF(startX + shoulderXoffset, shoulderYback);
+            QPointF bezier2back = QPointF(endX - shoulderXoffset, shoulderYback);
+            QPainterPath slurPath = QPainterPath();
+            slurPath.moveTo(startX, startEndY);
+            slurPath.cubicTo(bezier1for, bezier2for, QPointF(endX, startEndY));
+            slurPath.cubicTo(bezier2back, bezier1back, QPointF(startX, startEndY));
+            pen.setWidthF(0.25 * lw1);
+            pen.setCapStyle(Qt::RoundCap);
+            pen.setJoinStyle(Qt::RoundJoin);
+            painter->setPen(pen);
+            painter->setBrush(pen.color());
+            painter->drawPath(slurPath);
+        } else {
+            qreal x1   = stringDist * startString;
+            qreal newX2 = endString == -1 ? x2 : stringDist * endString;
 
-        qreal y    = fretDist * (fret - 1) + fretDist * .5;
-        pen.setWidthF(dotd * m_diagram->score()->style().styleD(mu::engraving::Sid::barreLineWidth));          // don't use style barreLineWidth - why not?
-        pen.setCapStyle(Qt::RoundCap);
-        painter->setPen(pen);
-        painter->drawLine(QLineF(x1, y, newX2, y));
+            qreal y    = fretDist * (fret - 1) + fretDist * .5;
+            pen.setWidthF(dotd * m_diagram->score()->style().styleD(mu::engraving::Sid::barreLineWidth));      // don't use style barreLineWidth - why not?
+            pen.setCapStyle(Qt::RoundCap);
+            painter->setPen(pen);
+            painter->drawLine(QLineF(x1, y, newX2, y));
+        }
     }
 
     // Draw 'hover' dot
@@ -154,17 +184,34 @@ void FretCanvas::draw(QPainter* painter)
         paintDotSymbol(painter, symPen, x, y, dotd, dtype);
     }
 
-    if (fretOffset > 0) {
-        qreal fretNumMag = 2.0;     // TODO: get the value from Sid::fretNumMag
-        QFont scaledFont(font);
-        scaledFont.setPixelSize(font.pixelSize() * fretNumMag);
-        painter->setFont(scaledFont);
+    if (fretOffset > 0) {  // TODO: get the value from Sid::fretNumMag
+        painter->setFont(font);
         painter->setPen(pen);
         // Todo: make dependent from Sid::fretNumPos
         painter->drawText(QRectF(-stringDist * .4, 0.0, 0.0, fretDist),
                           Qt::AlignVCenter | Qt::AlignRight | Qt::TextDontClip,
                           QString("%1").arg(fretOffset + 1));
-        painter->setFont(font);
+    }
+
+    if (m_diagram->showFingering()) {
+        // Copy-pasted from layout and drawing code. Needs cleanup in future. (M.S.)
+        const double padding = 0.2 * _spatium;
+        muse::draw::FontMetrics fontMetrics(muse::draw::Font::fromQFont(font, muse::draw::Font::Type::Text));
+        double fontHeight = fontMetrics.capHeight();
+        for (size_t i = 0; i < m_diagram->fingering().size(); ++i) {
+            int finger = m_diagram->fingering()[i];
+            if (finger == 0) {
+                continue;
+            }
+            QString fingerS = QString::number(finger);
+            double width = fontMetrics.width(fingerS);
+            double xOff = -0.5 * width;
+            double fingerX = (m_diagram->strings() - i - 1) * stringDist + xOff;
+            double fingerY = (m_diagram->frets() * fretDist) + fontHeight + padding;
+            painter->setPen(pen);
+            painter->setFont(font);
+            painter->drawText(QPointF(fingerX, fingerY), fingerS);
+        }
     }
 }
 
@@ -222,7 +269,7 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
         return;
     }
 
-    globalContext()->currentNotation()->undoStack()->prepareChanges();
+    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit fretboard diagram"));
 
     // Click above the fret diagram, so change the open/closed string marker
     if (fret == 0) {
@@ -331,7 +378,7 @@ void FretCanvas::setFretDiagram(QVariant fd)
 
 void FretCanvas::clear()
 {
-    globalContext()->currentNotation()->undoStack()->prepareChanges();
+    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Clear fretboard diagram"));
     m_diagram->undoFretClear();
     globalContext()->currentNotation()->undoStack()->commitChanges();
     update();

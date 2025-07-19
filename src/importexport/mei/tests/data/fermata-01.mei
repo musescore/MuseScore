@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -35,11 +35,13 @@
                         <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
                            <label>Viola</label>
                            <labelAbbr>Vla.</labelAbbr>
+                           <instrDef midi.instrnum="41" />
                            <clef shape="C" line="3" />
                         </staffDef>
                         <staffDef n="2" lines="5" meter.count="4" meter.unit="4">
                            <label>Violoncello</label>
                            <labelAbbr>Vc.</labelAbbr>
+                           <instrDef midi.instrnum="42" />
                            <clef shape="F" line="4" />
                         </staffDef>
                      </staffGrp>
@@ -57,7 +59,7 @@
                            <rest xml:id="r18d58nb" dur="4" />
                         </layer>
                      </staff>
-                     <fermata xml:id="fzo78nu" staff="1" tstamp="2.000000" />
+                     <fermata xml:id="fzo78nu" staff="1" tstamp="2" />
                   </measure>
                   <measure xml:id="m1qulie6" n="2">
                      <staff xml:id="m2s1" n="1">
@@ -150,7 +152,7 @@
                      <fermata xml:id="ffflrtn" startid="#n1blhh1z" glyph.auth="smufl" glyph.name="fermataLongHenzeAbove" />
                      <fermata xml:id="f1guncru" startid="#ng6v427" glyph.auth="smufl" glyph.name="fermataShortHenzeAbove" />
                      <fermata xml:id="fp4mpiu" startid="#n1n0uak2" glyph.auth="smufl" glyph.name="fermataShortHenzeAbove" />
-                     <fermata xml:id="fkv7j99" staff="1" tstamp="5.000000" shape="angular" />
+                     <fermata xml:id="fkv7j99" staff="1" tstamp="5" shape="angular" />
                   </measure>
                   <measure xml:id="m13kw3nr" n="7">
                      <staff xml:id="m7s1" n="1">
@@ -168,8 +170,8 @@
                         </layer>
                      </staff>
                      <fermata xml:id="f1dqs1if" startid="#n19spk43" glyph.auth="smufl" glyph.name="fermataVeryShortAbove" />
-                     <fermata xml:id="f9edv42" staff="1" tstamp="5.000000" />
-                     <fermata xml:id="fu09pdz" staff="2" tstamp="5.000000" place="below" />
+                     <fermata xml:id="f9edv42" staff="1" tstamp="5" />
+                     <fermata xml:id="fu09pdz" staff="2" tstamp="5" place="below" />
                   </measure>
                   <scoreDef meter.count="6" meter.unit="8" />
                   <measure xml:id="m1a4wupt" n="8">
@@ -188,7 +190,7 @@
                         </layer>
                      </staff>
                      <fermata xml:id="fpgie99" startid="#n1ypjqfq" />
-                     <fermata xml:id="fy27rdt" staff="1" tstamp="7.000000" shape="square" />
+                     <fermata xml:id="fy27rdt" staff="1" tstamp="7" shape="square" />
                   </measure>
                   <measure xml:id="mzfndk8" right="end" n="9">
                      <staff xml:id="m9s1" n="1">
@@ -206,7 +208,7 @@
                         </layer>
                      </staff>
                      <fermata xml:id="feb84zc" startid="#n14f18vf" />
-                     <fermata xml:id="f103qszv" staff="1" tstamp="7.000000" />
+                     <fermata xml:id="f103qszv" staff="1" tstamp="7" />
                   </measure>
                </section>
             </score>

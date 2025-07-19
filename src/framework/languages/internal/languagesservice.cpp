@@ -21,10 +21,10 @@
  */
 #include "languagesservice.h"
 
-#include <QApplication>
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QDir>
+#include <QGuiApplication>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QQmlEngine>
@@ -64,9 +64,14 @@ void LanguagesService::init()
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
     setCurrentLanguage(languageCode.val);
 
-    languageCode.ch.onReceive(this, [this](const QString&) {
+    // Remember the active language code so the "Restart required" text can go away if the language
+    // is changed and later reverted in the same session. Cannot use m_currentLanguage.code
+    // because m_currentLanguage holds the effective language: if the language code is "system",
+    // m_currentLanguage will hold "en-us" for example (whatever the system is set to).
+    QString activeLanguageCode = languageCode.val;
+    languageCode.ch.onReceive(this, [this, activeLanguageCode](const QString& newLanguageCode) {
         //! NOTE To change the language at the moment, a restart is required
-        m_needRestartToApplyLanguageChange = true;
+        m_needRestartToApplyLanguageChange = newLanguageCode != activeLanguageCode;
         m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
     });
 
@@ -297,16 +302,12 @@ Ret LanguagesService::loadLanguage(Language& lang)
         lang.files[resourceName] = useUserPath ? userFilePath : appFilePath;
     }
 
-    assert([&lang]() {
-        for (const QString& resourceName : LANGUAGE_RESOURCE_NAMES) {
-            if (!lang.files.contains(resourceName)) {
-                LOGE() << "Could not find resource " << resourceName << " for language " << lang.code;
-                return false;
-            }
+    for (const QString& resourceName : LANGUAGE_RESOURCE_NAMES) {
+        if (!lang.files.contains(resourceName)) {
+            LOGE() << "Could not find resource " << resourceName << " for language " << lang.code;
+            return muse::make_ret(muse::Ret::Code::InternalError);
         }
-
-        return true;
-    }());
+    }
 
     return muse::make_ok();
 }
@@ -332,7 +333,7 @@ Progress LanguagesService::update(const QString& languageCode)
 
     m_updateOperationsHash.insert(effectiveLanguageCode, progress);
 
-    progress.finished.onReceive(this, [this, effectiveLanguageCode](const ProgressResult& res) {
+    progress.finished().onReceive(this, [this, effectiveLanguageCode](const ProgressResult& res) {
         if (!res.ret && res.ret.code() != static_cast<int>(Err::AlreadyUpToDate)) {
             LOGE() << res.ret.toString();
         }
@@ -357,25 +358,25 @@ async::Channel<bool> LanguagesService::needRestartToApplyLanguageChangeChanged()
 
 void LanguagesService::th_update(const QString& languageCode, Progress progress)
 {
-    progress.started.notify();
+    progress.start();
 
-    progress.progressChanged.send(0, 0, muse::trc("languages", "Checking for updates…"));
+    progress.progress(0, 0, muse::trc("languages", "Checking for updates…"));
 
     if (!canUpdate(languageCode)) {
-        progress.finished.send(make_ret(Err::AlreadyUpToDate));
+        progress.finish(make_ret(Err::AlreadyUpToDate));
         return;
     }
 
     Ret ret = downloadLanguage(languageCode, progress);
     if (!ret) {
-        progress.finished.send(ret);
+        progress.finish(ret);
         return;
     }
 
     m_needRestartToApplyLanguageChange = true;
     m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
 
-    progress.finished.send(make_ret(Err::NoError));
+    progress.finish(make_ret(Err::NoError));
 }
 
 bool LanguagesService::canUpdate(const QString& languageCode)
@@ -414,14 +415,14 @@ bool LanguagesService::canUpdate(const QString& languageCode)
 Ret LanguagesService::downloadLanguage(const QString& languageCode, Progress progress) const
 {
     std::string downloadingStatusTitle = muse::trc("languages", "Downloading…");
-    progress.progressChanged.send(0, 0, downloadingStatusTitle);
+    progress.progress(0, 0, downloadingStatusTitle);
 
     QBuffer qbuff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    networkManagerPtr->progress().progressChanged.onReceive(
+    networkManagerPtr->progress().progressChanged().onReceive(
         this, [&progress, &downloadingStatusTitle](int64_t current, int64_t total, const std::string&) {
-        progress.progressChanged.send(current, total, downloadingStatusTitle);
+        progress.progress(current, total, downloadingStatusTitle);
     });
 
     Ret ret = networkManagerPtr->get(configuration()->languageFileServerUrl(languageCode), &qbuff);
@@ -430,7 +431,7 @@ Ret LanguagesService::downloadLanguage(const QString& languageCode, Progress pro
         return make_ret(Err::ErrorDownloadLanguage);
     }
 
-    progress.progressChanged.send(0, 0, muse::trc("languages", "Unpacking…"));
+    progress.progress(0, 0, muse::trc("languages", "Unpacking…"));
 
     ByteArray ba = ByteArray::fromQByteArrayNoCopy(qbuff.data());
     io::Buffer buff(&ba);

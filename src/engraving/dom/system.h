@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SYSTEM_H
-#define MU_ENGRAVING_SYSTEM_H
+#pragma once
 
 /**
  \file
@@ -37,6 +36,7 @@ class InstrumentName;
 class MeasureBase;
 class Page;
 class SpannerSegment;
+class SystemLock;
 
 //---------------------------------------------------------
 //   SysStaff
@@ -140,6 +140,8 @@ public:
     std::vector<MeasureBase*>& measures() { return m_ml; }
 
     MeasureBase* measure(int idx) { return m_ml[idx]; }
+    MeasureBase* first() const { return m_ml.front(); }
+    MeasureBase* last() const { return m_ml.back(); }
     Measure* firstMeasure() const;
     Measure* lastMeasure() const;
     Fraction endTick() const;
@@ -174,16 +176,17 @@ public:
     Spacer* upSpacer(staff_idx_t staffIdx, Spacer* prevDownSpacer) const;
     Spacer* downSpacer(staff_idx_t staffIdx) const;
 
-    double firstNoteRestSegmentX(bool leading = false);
+    double firstNoteRestSegmentX(bool leading = false) const;
     double endingXForOpenEndedLines() const;
-    ChordRest* lastChordRest(track_idx_t track);
-    ChordRest* firstChordRest(track_idx_t track);
+    ChordRest* lastChordRest(track_idx_t track) const;
+    ChordRest* firstChordRest(track_idx_t track) const;
 
     bool hasFixedDownDistance() const { return m_fixedDownDistance; }
     void setFixedDownDistance(bool val) const { m_fixedDownDistance = val; }
 
     staff_idx_t firstVisibleStaff() const;
     staff_idx_t nextVisibleStaff(staff_idx_t) const;
+    staff_idx_t prevVisibleStaff(staff_idx_t) const;
     double distance() const { return m_distance; }
     void setDistance(double d) { m_distance = d; }
 
@@ -192,18 +195,21 @@ public:
     staff_idx_t lastSysStaffOfPart(const Part* part) const;
     staff_idx_t lastVisibleSysStaffOfPart(const Part* part) const;
 
-    Fraction minSysTicks() const;
-    Fraction maxSysTicks() const;
-
-    double squeezableSpace() const;
-    bool hasCrossStaffOrModifiedBeams();
-
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
 
     void setBracketsXPosition(const double xOffset);
     size_t getBracketsColumnsCount();
+
+    void resetShortestLongestChordRest();
+
+    bool isLocked() const;
+    const SystemLock* systemLock() const;
+
+    const std::vector<SystemLockIndicator*> lockIndicators() const { return m_lockIndicators; }
+    void addLockIndicator(SystemLockIndicator* sli);
+    void deleteLockIndicators();
 
 private:
     friend class Factory;
@@ -222,6 +228,7 @@ private:
     std::vector<SysStaff*> m_staves;
     std::vector<Bracket*> m_brackets;
     std::list<SpannerSegment*> m_spannerSegments;
+    std::vector<SystemLockIndicator*> m_lockIndicators;
 
     double m_leftMargin = 0.0;      // left margin for instrument name, brackets etc.
     mutable bool m_fixedDownDistance = false;
@@ -232,4 +239,3 @@ private:
 typedef std::vector<System*>::iterator iSystem;
 typedef std::vector<System*>::const_iterator ciSystem;
 } // namespace mu::engraving
-#endif

@@ -22,6 +22,8 @@
 
 #include "marker.h"
 
+#include "dom/staff.h"
+#include "dom/system.h"
 #include "types/typesconv.h"
 
 #include "measure.h"
@@ -56,7 +58,6 @@ Marker::Marker(EngravingItem* parent, TextStyleType tid)
 {
     initElementStyle(&markerStyle);
     m_markerType = MarkerType::FINE;
-    setLayoutToParentWidth(true);
 }
 
 //---------------------------------------------------------
@@ -183,6 +184,10 @@ PropertyValue Marker::getProperty(Pid propertyId) const
         return label();
     case Pid::MARKER_TYPE:
         return int(markerType());
+    case Pid::MARKER_SYMBOL_SIZE:
+        return symbolSize();
+    case Pid::MARKER_CENTER_ON_SYMBOL:
+        return centerOnSymbol();
     default:
         break;
     }
@@ -201,6 +206,12 @@ bool Marker::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::MARKER_TYPE:
         setMarkerType(MarkerType(v.toInt()));
+        break;
+    case Pid::MARKER_SYMBOL_SIZE:
+        setSymbolSize(v.toDouble());
+        break;
+    case Pid::MARKER_CENTER_ON_SYMBOL:
+        setCenterOnSymbol(v.toBool());
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -225,6 +236,10 @@ PropertyValue Marker::propertyDefault(Pid propertyId) const
         return int(MarkerType::FINE);
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
+    case Pid::MARKER_SYMBOL_SIZE:
+        return 18.0;
+    case Pid::MARKER_CENTER_ON_SYMBOL:
+        return true;
     default:
         break;
     }
@@ -267,5 +282,53 @@ EngravingItem* Marker::prevSegmentElement()
 String Marker::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
+}
+
+std::vector<LineF> Marker::dragAnchorLines() const
+{
+    Measure* measure = parentItem() ? toMeasure(parentItem()) : nullptr;
+
+    std::vector<LineF> lines(TextBase::dragAnchorLines());
+
+    if (!measure || !isRightMarker()) {
+        return lines;
+    }
+
+    for (LineF& l : lines) {
+        l.setP1(l.p1() + PointF(measure->width(), 0.0));
+    }
+
+    return lines;
+}
+
+String Marker::symbolString() const
+{
+    // Returns the coda/segno symbol if present
+    constexpr static std::array REPEAT_SYMBOL_NAMES {
+        u"<sym>coda</sym>",
+        u"<sym>codaSquare</sym>",
+        u"<sym>codaJapanes</sym>",
+        u"<sym>segno</sym>",
+        u"<sym>segnoSerpent1</sym>",
+        u"<sym>segnoSerpent2</sym>",
+        u"<sym>segnoJapanese</sym>",
+    };
+
+    for (const String& sym : REPEAT_SYMBOL_NAMES) {
+        if (xmlText().contains(sym)) {
+            return sym;
+        }
+    }
+
+    return String();
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Marker::subtypeUserName() const
+{
+    return TConv::userName(m_markerType);
 }
 }

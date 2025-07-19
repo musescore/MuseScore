@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_FONTENGINEFT_H
-#define MUSE_DRAW_FONTENGINEFT_H
+#pragma once
 
 #include <QRectF>
 
@@ -47,5 +46,3 @@ private:
     FTData* m_data = nullptr;
 };
 }
-
-#endif // MUSE_DRAW_FONTENGINEFT_H

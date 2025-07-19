@@ -24,7 +24,6 @@
 #include "global/async/async.h"
 
 #include "audiothread.h"
-#include "worker/audioengine.h"
 
 #include "log.h"
 
@@ -35,20 +34,40 @@ void AudioOutputDeviceController::init()
     checkConnection();
 
     audioDriver()->availableOutputDevicesChanged().onNotify(this, [this]() {
+        LOGI() << "Available output devices changed, checking connection...";
         checkConnection();
     });
 
     configuration()->audioOutputDeviceIdChanged().onNotify(this, [this]() {
         AudioDeviceID deviceId = configuration()->audioOutputDeviceId();
-        audioDriver()->selectOutputDevice(deviceId);
+        LOGI() << "Trying to change output device: " << deviceId;
+
+        bool ok = audioDriver()->selectOutputDevice(deviceId);
+        if (ok) {
+            onOutputDeviceChanged();
+        }
     });
 
     configuration()->driverBufferSizeChanged().onNotify(this, [this]() {
         unsigned int bufferSize = configuration()->driverBufferSize();
+        LOGI() << "Trying to change buffer size: " << bufferSize;
+
         bool ok = audioDriver()->setOutputDeviceBufferSize(bufferSize);
         if (ok) {
-            async::Async::call(this, [bufferSize](){
-                AudioEngine::instance()->setReadBufferSize(bufferSize);
+            async::Async::call(this, [this, bufferSize](){
+                audioEngine()->setReadBufferSize(bufferSize);
+            }, AudioThread::ID);
+        }
+    });
+
+    configuration()->sampleRateChanged().onNotify(this, [this]() {
+        unsigned int sampleRate = configuration()->sampleRate();
+        LOGI() << "Trying to change sample rate: " << sampleRate;
+
+        bool ok = audioDriver()->setOutputDeviceSampleRate(sampleRate);
+        if (ok) {
+            async::Async::call(this, [this, sampleRate](){
+                audioEngine()->setSampleRate(sampleRate);
             }, AudioThread::ID);
         }
     });
@@ -70,12 +89,28 @@ void AudioOutputDeviceController::checkConnection()
     AudioDeviceID currentDeviceId = audioDriver()->outputDevice();
     AudioDeviceList devices = audioDriver()->availableOutputDevices();
 
+    bool deviceChanged = false;
+
     if (!preferredDeviceId.empty() && preferredDeviceId != currentDeviceId && containsDevice(devices, preferredDeviceId)) {
-        audioDriver()->selectOutputDevice(preferredDeviceId);
-        return;
+        LOGI() << "Changing output device: " << preferredDeviceId;
+        deviceChanged = audioDriver()->selectOutputDevice(preferredDeviceId);
+    } else if (!containsDevice(devices, currentDeviceId)) {
+        LOGW() << "Device " << currentDeviceId << " not found, resetting to default";
+        deviceChanged = audioDriver()->resetToDefaultOutputDevice();
     }
 
-    if (!containsDevice(devices, currentDeviceId)) {
-        audioDriver()->resetToDefaultOutputDevice();
+    if (deviceChanged) {
+        onOutputDeviceChanged();
     }
+}
+
+void AudioOutputDeviceController::onOutputDeviceChanged()
+{
+    IAudioDriver::Spec activeSpec = audioDriver()->activeSpec();
+
+    async::Async::call(this, [this, activeSpec]() {
+        // TODO: audioEngine()->setAudioChannelsCount(activeSpec.channels);
+        audioEngine()->setSampleRate(activeSpec.sampleRate);
+        audioEngine()->setReadBufferSize(activeSpec.samples);
+    }, AudioThread::ID);
 }

@@ -21,9 +21,14 @@
  */
 #include "datetime.h"
 
-#include <chrono>
-#include <iomanip>
+#include <algorithm>
 #include <cassert>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
+
+#include "string.h"
 
 using namespace muse;
 // ==================================

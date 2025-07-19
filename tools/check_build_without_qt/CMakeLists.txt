@@ -14,7 +14,7 @@ set(CMAKE_MODULE_PATH
     ${MU_ROOT}/buildscripts
     ${MU_ROOT}/buildscripts/cmake
     ${CMAKE_MODULE_PATH}
-    )
+)
 
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
@@ -26,9 +26,9 @@ include_directories(
 
 set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 
-add_definitions(
-    -DNO_QT_SUPPORT
-    -DGLOBAL_NO_INTERNAL
+add_compile_definitions(
+    NO_QT_SUPPORT
+    GLOBAL_NO_INTERNAL
 )
 
 configure_file(${MU_ROOT}/src/framework/cmake/muse_framework_config.h.in muse_framework_config.h )
@@ -62,9 +62,10 @@ set_target_properties(muse_global PROPERTIES COMPILE_FLAGS "-fPIC")
 set_target_properties(engraving_app PROPERTIES COMPILE_FLAGS "-fPIC")
 
 target_include_directories(engraving_app PUBLIC
+    ${MU_ROOT}
+    ${MU_ROOT}/src
     ${MU_ROOT}/src/framework
     ${MU_ROOT}/src/framework/global
-    ${MU_ROOT}/src
     ${MU_ROOT}/src/engraving
 )
 

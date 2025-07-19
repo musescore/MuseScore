@@ -34,16 +34,16 @@
 #include "iappshellconfiguration.h"
 
 namespace mu::appshell {
-class FoldersPreferencesModel : public QAbstractListModel, public muse::async::Asyncable
+class FoldersPreferencesModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    Inject<project::IProjectConfiguration> projectConfiguration;
-    Inject<notation::INotationConfiguration> notationConfiguration;
-    Inject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration;
-    Inject<muse::audio::IAudioConfiguration> audioConfiguration;
-    Inject<muse::vst::IVstConfiguration> vstConfiguration;
-    Inject<IAppShellConfiguration> configuration;
+    Inject<project::IProjectConfiguration> projectConfiguration = { this };
+    Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    Inject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration = { this };
+    Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    Inject<muse::vst::IVstConfiguration> vstConfiguration = { this };
+    Inject<IAppShellConfiguration> configuration = { this };
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);
@@ -72,6 +72,7 @@ private:
         Templates,
         Plugins,
         SoundFonts,
+        MusicFonts,
         VST3
     };
 

@@ -21,7 +21,7 @@
  */
 #include "uicomponentsmodule.h"
 
-#include <QtQml>
+#include <QQmlEngine>
 #include "view/sampleobject.h"
 #include "view/validators/doubleinputvalidator.h"
 #include "view/validators/intinputvalidator.h"
@@ -34,7 +34,7 @@
 #include "view/filepickermodel.h"
 #include "view/colorpickermodel.h"
 #include "view/itemmultiselectionmodel.h"
-#include "view/textinputfieldmodel.h"
+#include "view/textinputmodel.h"
 #include "view/selectmultipledirectoriesmodel.h"
 #include "view/buttonboxmodel.h"
 #include "view/abstracttoolbarmodel.h"
@@ -110,7 +110,7 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<ColorPickerModel>("Muse.UiComponents", 1, 0, "ColorPickerModel");
     qmlRegisterType<ItemMultiSelectionModel>("Muse.UiComponents", 1, 0, "ItemMultiSelectionModel");
 
-    qmlRegisterType<TextInputFieldModel>("Muse.UiComponents", 1, 0, "TextInputFieldModel");
+    qmlRegisterType<TextInputModel>("Muse.UiComponents", 1, 0, "TextInputModel");
     qmlRegisterType<SelectMultipleDirectoriesModel>("Muse.UiComponents", 1, 0, "SelectMultipleDirectoriesModel");
     qmlRegisterType<ButtonBoxModel>("Muse.UiComponents", 1, 0, "ButtonBoxModel");
 

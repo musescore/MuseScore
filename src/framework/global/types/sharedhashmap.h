@@ -123,6 +123,12 @@ public:
         return m_dataPtr->find(key);
     }
 
+    iterator find(const KeyType& key) noexcept
+    {
+        ensureDetach();
+        return m_dataPtr->find(key);
+    }
+
     bool contains(const KeyType& key) const noexcept
     {
         return find(key) != end();
@@ -160,6 +166,12 @@ public:
     {
         ensureDetach();
         m_dataPtr->insert(std::forward<PairType>(pair));
+    }
+
+    void insert(iterator first, iterator last)
+    {
+        ensureDetach();
+        m_dataPtr->insert(first, last);
     }
 
     void insert_or_assign(const KeyType& key, ValType&& val)

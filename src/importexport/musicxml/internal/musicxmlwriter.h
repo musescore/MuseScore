@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_IMPORTEXPORT_MUSICXMLWRITER_H
-#define MU_IMPORTEXPORT_MUSICXMLWRITER_H
+#pragma once
 
 #include "project/inotationwriter.h"
 
@@ -38,5 +36,3 @@ public:
                         const Options& options = Options()) override;
 };
 }
-
-#endif // MU_IMPORTEXPORT_MUSICXMLWRITER_H

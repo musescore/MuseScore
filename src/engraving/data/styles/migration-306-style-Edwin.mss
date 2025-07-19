@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="3.02">
   <Style>
     <lyricsMinDistance>0.25</lyricsMinDistance>
     <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
@@ -66,7 +66,7 @@
     <rehearsalMarkFrameWidth>0.16</rehearsalMarkFrameWidth>
     <rehearsalMarkFrameRound>0</rehearsalMarkFrameRound>
     <repeatLeftFontFace>Edwin</repeatLeftFontFace>
-    <repeatLeftFontSize>11</repeatLeftFontSize>
+    <repeatLeftFontSize>18</repeatLeftFontSize>
     <repeatRightFontFace>Edwin</repeatRightFontFace>
     <repeatRightFontSize>11</repeatRightFontSize>
     <frameFontFace>Edwin</frameFontFace>

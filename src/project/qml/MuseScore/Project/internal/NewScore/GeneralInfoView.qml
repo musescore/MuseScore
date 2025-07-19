@@ -67,10 +67,10 @@ Column {
 
             title: qsTrc("project", "Title")
 
-            info: qsTrc("project", "Untitled score")
+            defaultText: qsTrc("project", "Untitled score")
 
-            navigation.panel: root.navigationPanel
-            navigation.column: 0
+            navigationPanel: root.navigationPanel
+            navigationColumn: 0
         }
         GeneralInfoItem {
             id: composerInfo
@@ -81,10 +81,10 @@ Column {
 
             title: qsTrc("project", "Composer")
 
-            info: qsTrc("project", "Composer / arranger")
+            defaultText: qsTrc("project", "Composer / arranger")
 
-            navigation.panel: root.navigationPanel
-            navigation.column: 1
+            navigationPanel: root.navigationPanel
+            navigationColumn: 1
         }
     }
 
@@ -94,7 +94,7 @@ Column {
 
         height: 60
 
-        property real childWidth: (width - (spacing * 2)) / 3
+        property real childWidth: (width - spacing) / 2
 
         spacing: 20
 
@@ -107,10 +107,10 @@ Column {
 
             title: qsTrc("project", "Subtitle")
 
-            info: qsTrc("project", "Subtitle")
+            defaultText: qsTrc("project", "Subtitle")
 
-            navigation.panel: root.navigationPanel
-            navigation.column: 2
+            navigationPanel: root.navigationPanel
+            navigationColumn: 2
         }
 
         GeneralInfoItem {
@@ -122,22 +122,23 @@ Column {
 
             title: qsTrc("project", "Lyricist")
 
-            navigation.panel: root.navigationPanel
-            navigation.column: 3
+            navigationPanel: root.navigationPanel
+            navigationColumn: 3
         }
+    }
 
-        GeneralInfoItem {
-            id: copyrightInfo
+    GeneralInfoItem {
+        id: copyrightInfo
 
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: parent.childWidth
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-            //: The caption of a field to specify copyright information
-            title: qsTrc("project", "Copyright")
+        isMultiLineEdit: true
 
-            navigation.panel: root.navigationPanel
-            navigation.column: 4
-        }
+        //: The caption of a field to specify copyright information
+        title: qsTrc("project", "Copyright")
+
+        navigationPanel: root.navigationPanel
+        navigationColumn: 4
     }
 }

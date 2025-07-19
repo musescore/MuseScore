@@ -22,15 +22,14 @@
 
 #include "chordarticulationsrenderer.h"
 
-#include "dom/tempo.h"
-#include "dom/staff.h"
-#include "dom/swing.h"
-
-#include "playback/metaparsers/notearticulationsparser.h"
+#include "bendsrenderer.h"
+#include "noterenderer.h"
+#include "gracechordcontext.h"
 #include "ornamentsrenderer.h"
 #include "tremolorenderer.h"
 #include "arpeggiorenderer.h"
-#include "glissandosrenderer.h"
+
+#include "playback/utils/expressionutils.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -41,6 +40,8 @@ const mpe::ArticulationTypeSet& ChordArticulationsRenderer::supportedTypes()
     static mpe::ArticulationTypeSet SUPPORTED_TYPES;
 
     if (SUPPORTED_TYPES.empty()) {
+        SUPPORTED_TYPES = GRACE_NOTE_ARTICULATION_TYPES;
+
         SUPPORTED_TYPES.insert(OrnamentsRenderer::supportedTypes().cbegin(),
                                OrnamentsRenderer::supportedTypes().cend());
         SUPPORTED_TYPES.insert(TremoloRenderer::supportedTypes().cbegin(),
@@ -59,17 +60,48 @@ void ChordArticulationsRenderer::doRender(const EngravingItem* item, const mpe::
         return;
     }
 
-    const Chord* chord = toChord(item);
+    for (const auto& type : ctx.commonArticulations) {
+        if (muse::contains(GRACE_NOTE_ARTICULATION_TYPES, type.first)) {
+            renderChordWithGraceChords(toChord(item), type.first, ctx, result);
+            return;
+        }
+    }
 
+    renderChord(toChord(item), ctx, result);
+}
+
+void ChordArticulationsRenderer::renderChord(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result)
+{
     if (renderChordArticulations(chord, ctx, result)) {
         return;
     }
 
-    for (const Note* note: chord->notes()) {
-        NominalNoteCtx noteCtx = buildNominalNoteCtx(note, ctx);
+    const bool supportsMultibend = ctx.profile->contains(ArticulationType::Multibend);
 
-        if (isNotePlayable(note, noteCtx.chordCtx.commonArticulations)) {
-            doRenderNote(chord, note, std::move(noteCtx), result);
+    for (const Note* note: chord->notes()) {
+        if (supportsMultibend && BendsRenderer::isMultibendPart(note)) {
+            BendsRenderer::render(note, ctx, result);
+        } else {
+            NoteRenderer::render(note, ctx, result);
+        }
+    }
+}
+
+void ChordArticulationsRenderer::renderChordWithGraceChords(const Chord* chord, const muse::mpe::ArticulationType type,
+                                                            const RenderingContext& ctx,
+                                                            muse::mpe::PlaybackEventList& result)
+{
+    const GraceChordCtx graceChordCtx = GraceChordCtx::buildCtx(chord, type, ctx);
+
+    if (isGraceNotePlacedBeforePrincipalNote(type)) {
+        for (const auto& pair : graceChordCtx.graceChordCtxList) {
+            renderChord(pair.first, pair.second, result);
+        }
+        renderChord(chord, graceChordCtx.principalChordCtx, result);
+    } else {
+        renderChord(chord, graceChordCtx.principalChordCtx, result);
+        for (const auto& pair : graceChordCtx.graceChordCtxList) {
+            renderChord(pair.first, pair.second, result);
         }
     }
 }
@@ -97,68 +129,4 @@ bool ChordArticulationsRenderer::renderChordArticulations(const Chord* chord, co
     }
 
     return false;
-}
-
-void ChordArticulationsRenderer::renderNote(const Chord* chord, const Note* note, const RenderingContext& ctx,
-                                            mpe::PlaybackEventList& result)
-{
-    NominalNoteCtx noteCtx = buildNominalNoteCtx(note, ctx);
-
-    doRenderNote(chord, note, std::move(noteCtx), result);
-}
-
-void ChordArticulationsRenderer::doRenderNote(const Chord* chord, const Note* note, NominalNoteCtx&& noteCtx,
-                                              mpe::PlaybackEventList& result)
-{
-    Swing::ChordDurationAdjustment swingDurationAdjustment;
-
-    if (!chord->tuplet()) {
-        SwingParameters swing = chord->staff()->swing(chord->tick());
-
-        if (swing.isOn()) {
-            swingDurationAdjustment = Swing::applySwing(chord, swing);
-        }
-    }
-
-    const RenderingContext& ctx = noteCtx.chordCtx;
-
-    auto applySwingToNoteCtx = [&swingDurationAdjustment, &ctx](NominalNoteCtx& noteCtx) {
-        if (swingDurationAdjustment.isNull()) {
-            return;
-        }
-
-        //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)
-        duration_t additionalDuration = noteCtx.duration - ctx.nominalDuration;
-        noteCtx.timestamp = noteCtx.timestamp + ctx.nominalDuration * swingDurationAdjustment.remainingDurationMultiplier;
-        noteCtx.duration = ctx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
-    };
-
-    if (note->tieFor()) {
-        noteCtx.duration = tiedNotesTotalDuration(note->score(), note, noteCtx.duration, ctx.positionTickOffset);
-        applySwingToNoteCtx(noteCtx);
-        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
-        return;
-    }
-
-    applySwingToNoteCtx(noteCtx);
-
-    if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::DiscreteGlissando)) {
-        GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, noteCtx.chordCtx, result);
-        return;
-    }
-
-    if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::ContinuousGlissando)) {
-        GlissandosRenderer::render(note, ArticulationType::ContinuousGlissando, noteCtx.chordCtx, result);
-        return;
-    }
-
-    result.emplace_back(buildNoteEvent(std::move(noteCtx)));
-}
-
-NominalNoteCtx ChordArticulationsRenderer::buildNominalNoteCtx(const Note* note, const RenderingContext& ctx)
-{
-    NominalNoteCtx noteCtx(note, ctx);
-    NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
-
-    return noteCtx;
 }

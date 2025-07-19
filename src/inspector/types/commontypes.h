@@ -70,7 +70,21 @@ public:
         PLACEMENT_TYPE_BELOW
     };
 
+    enum class AlignmentH {
+        LEFT,
+        RIGHT,
+        HCENTER
+    };
+
+    enum class AutoOnOff {
+        AUTO_ON_OFF_AUTO,
+        AUTO_ON_OFF_ON,
+        AUTO_ON_OFF_OFF,
+    };
+
+    Q_ENUM(AutoOnOff);
     Q_ENUM(Placement)
+    Q_ENUM(AlignmentH)
 };
 
 inline double formatDoubleFunc(const QVariant& elementPropertyValue)

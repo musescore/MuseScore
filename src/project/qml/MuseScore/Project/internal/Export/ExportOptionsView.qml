@@ -134,7 +134,7 @@ Column {
 
             var properties = {
                 model: Qt.binding(() => root.exportModel),
-                navigationPanel: root.navPanel,
+                navigationPanel: navPanel,
                 navigationOrder: 3
             }
 
@@ -161,6 +161,8 @@ Column {
         model: exportModel.availableUnitTypes
 
         delegate: RoundedRadioButton {
+            width: ListView.view.width
+
             text: modelData["text"]
 
             navigation.name: "ExportType_" + text

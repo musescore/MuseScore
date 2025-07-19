@@ -22,10 +22,10 @@
 #ifndef MUSE_DOCK_IDOCKWINDOW_H
 #define MUSE_DOCK_IDOCKWINDOW_H
 
-#include "internal/dockbase.h"
-#include "async/channel.h"
-
+#include <QQuickItem>
 #include <QString>
+
+#include "async/channel.h"
 
 class QPoint;
 
@@ -36,7 +36,7 @@ class IDockWindow
 public:
     virtual ~IDockWindow() = default;
 
-    virtual bool isDockOpen(const QString& dockName) const = 0;
+    virtual bool isDockOpenAndCurrentInFrame(const QString& dockName) const = 0;
     virtual void setDockOpen(const QString& dockName, bool open) = 0;
     virtual void toggleDock(const QString& dockName) = 0;
 

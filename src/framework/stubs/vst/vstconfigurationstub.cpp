@@ -39,3 +39,12 @@ async::Channel<io::paths_t> VstConfigurationStub::userVstDirectoriesChanged() co
     static async::Channel<io::paths_t> stub;
     return stub;
 }
+
+std::string VstConfigurationStub::usedVstView() const
+{
+    return std::string();
+}
+
+void VstConfigurationStub::setUsedVstView(const std::string&)
+{
+}

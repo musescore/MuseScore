@@ -30,15 +30,15 @@
 #include "project/iprojectconfiguration.h"
 
 namespace mu::appshell {
-class SaveAndPublishPreferencesModel : public QObject, public muse::async::Asyncable
+class SaveAndPublishPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(project::IProjectConfiguration, projectConfiguration)
 
     Q_PROPERTY(bool isAutoSaveEnabled READ isAutoSaveEnabled WRITE setAutoSaveEnabled NOTIFY autoSaveEnabledChanged)
     Q_PROPERTY(int autoSaveInterval READ autoSaveInterval WRITE setAutoSaveInterval NOTIFY autoSaveIntervalChanged)
     Q_PROPERTY(int alsoShareAudioCom READ alsoShareAudioCom WRITE setAlsoShareAudioCom NOTIFY alsoShareAudioComChanged)
+
+    muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
 
 public:
     explicit SaveAndPublishPreferencesModel(QObject* parent = nullptr);

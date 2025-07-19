@@ -22,11 +22,7 @@
 #include "scorecallbacks.h"
 
 #include "engraving/dom/engravingitem.h"
-#include "engraving/dom/lyrics.h"
-#include "engraving/dom/system.h"
-
 #include "inotationinteraction.h"
-#include "igetscore.h"
 
 #include "log.h"
 
@@ -47,12 +43,6 @@ void ScoreCallbacks::drawBackground(muse::draw::Painter*, const muse::RectF&) co
     NOT_IMPLEMENTED;
 }
 
-const muse::Rect ScoreCallbacks::geometry() const
-{
-    NOT_IMPLEMENTED;
-    return muse::Rect();
-}
-
 qreal ScoreCallbacks::selectionProximity() const
 {
     return m_selectionProximity;
@@ -63,7 +53,7 @@ void ScoreCallbacks::setSelectionProximity(qreal proximity)
     m_selectionProximity = proximity;
 }
 
-void ScoreCallbacks::setDropTarget(const mu::engraving::EngravingItem* dropTarget)
+void ScoreCallbacks::setDropTarget(mu::engraving::EngravingItem* dropTarget)
 {
     IF_ASSERT_FAILED(m_interaction) {
         return;

@@ -96,6 +96,11 @@ unsigned int WasapiAudioClient::channelCount() const
     return m_mixFormat.get()->nChannels;
 }
 
+unsigned int WasapiAudioClient::minPeriodInFrames() const
+{
+    return m_minPeriodInFrames;
+}
+
 void WasapiAudioClient::setFallbackDevice(const hstring& deviceId)
 {
     m_fallbackDeviceIdString = deviceId;
@@ -184,6 +189,7 @@ HRESULT WasapiAudioClient::ActivateCompleted(IActivateAudioInterfaceAsyncOperati
 
         // Get the maximum size of the AudioClient Buffer
         check_hresult(m_audioClient->GetBufferSize(&m_bufferFrames));
+        LOGI() << "Buffer size: " << m_bufferFrames;
 
         // Get the render client
         m_audioRenderClient.capture(m_audioClient, &IAudioClient::GetService);
@@ -554,11 +560,34 @@ void WasapiAudioClient::getSamples(uint32_t framesAvailable)
     uint8_t* data;
 
     uint32_t actualFramesToRead = framesAvailable;
-    uint32_t actualBytesToRead = actualFramesToRead * m_mixFormat->nBlockAlign;
+
+    // WASAPI: "nBlockAlign must be equal to the product of nChannels and wBitsPerSample divided by 8 (bits per byte)"
+    const uint32_t clientFrameSize = m_mixFormat->nBlockAlign;
+
+    // MuseScore assumes only 2 audio channels (same calculation as above to determine frame size)
+    const uint32_t muFrameSize = 2 * m_mixFormat->wBitsPerSample / 8;
 
     check_hresult(m_audioRenderClient->GetBuffer(actualFramesToRead, &data));
-    if (actualBytesToRead > 0) {
-        m_sampleRequestCallback(nullptr, data, actualBytesToRead);
+    if (actualFramesToRead > 0) {
+        // Based on the previous calculations, the only way that clientFrameSize will be larger than muFrameSize is
+        // if the client specifies more than 2 channels. MuseScore doesn't support this (yet), so we use a workaround
+        // where the missing channels are padded with zeroes...
+        if (clientFrameSize > muFrameSize) {
+            const size_t surroundBufferDesiredSize = actualFramesToRead * muFrameSize;
+            if (m_surroundAudioBuffer.size() < surroundBufferDesiredSize) {
+                m_surroundAudioBuffer.resize(surroundBufferDesiredSize, 0);
+            }
+
+            m_sampleRequestCallback(nullptr, m_surroundAudioBuffer.data(), (int)surroundBufferDesiredSize);
+
+            for (uint32_t i = 0; i < actualFramesToRead; ++i) {
+                uint8_t* frameStartPos = data + i * clientFrameSize;
+                std::memcpy(frameStartPos, m_surroundAudioBuffer.data() + i * muFrameSize, muFrameSize);
+                std::memset(frameStartPos + muFrameSize, 0, clientFrameSize - muFrameSize);
+            }
+        } else {
+            m_sampleRequestCallback(nullptr, data, actualFramesToRead * clientFrameSize);
+        }
     }
     check_hresult(m_audioRenderClient->ReleaseBuffer(actualFramesToRead, 0));
 }
@@ -668,7 +697,9 @@ void WasapiAudioClient::setStateAndNotify(const DeviceState newState, hresult re
         break;
     }
 
-    LOGE() << errMsg;
+    if (!errMsg.empty()) {
+        LOGE() << errMsg;
+    }
 
     m_deviceState = newState;
 }

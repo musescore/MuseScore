@@ -39,6 +39,8 @@
 #include "playback/iplaybackcontroller.h"
 
 #include "global/iglobalconfiguration.h"
+#include "ui/idragcontroller.h"
+#include "ui/iuiconfiguration.h"
 
 class QQuickItem;
 
@@ -74,8 +76,10 @@ public:
     virtual void hideContextMenu() = 0;
 
     virtual void showElementPopup(const ElementType& elementType, const muse::RectF& elementRect) = 0;
-    virtual void hideElementPopup() = 0;
+    virtual void hideElementPopup(const ElementType& elementType = ElementType::INVALID) = 0;
     virtual void toggleElementPopup(const ElementType& elementType, const muse::RectF& elementRect) = 0;
+
+    virtual bool elementPopupIsOpen(const ElementType& elementType) const = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
@@ -83,21 +87,24 @@ public:
     virtual QQuickItem* asItem() = 0;
 };
 
-class NotationViewInputController : public muse::actions::Actionable, public muse::async::Asyncable
+class NotationViewInputController : public muse::actions::Actionable, public muse::Injectable, public muse::async::Asyncable
 {
 public:
-    INJECT(INotationConfiguration, configuration)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(playback::IPlaybackController, playbackController)
-    INJECT(context::IGlobalContext, globalContext)
-    INJECT(muse::IGlobalConfiguration, globalConfiguration)
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::ui::IDragController> dragController = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
-    NotationViewInputController(IControlledView* view);
+    NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx);
 
     void init();
 
     void initZoom();
+    void initCanvasPos();
     void updateZoomAfterSizeChange();
     void zoomIn();
     void zoomOut();
@@ -165,6 +172,7 @@ private:
     void startDragElements(ElementType elementsType, const muse::PointF& elementsOffset);
 
     void togglePopupForItemIfSupports(const EngravingItem* item);
+    void updateShadowNotePopupVisibility(bool forceHide = false);
 
     float hitWidth() const;
 
@@ -172,16 +180,26 @@ private:
         muse::PointF logicClickPos;
         const QMouseEvent* event = nullptr;
         mu::engraving::EngravingItem* hitElement = nullptr;
+        mu::engraving::staff_idx_t hitStaff = muse::nidx;
         bool isHitGrip = false;
     };
 
-    bool needSelect(const ClickContext& ctx) const;
+    void handleClickInNoteInputMode(QMouseEvent* event);
+    bool mousePress_considerGrip(const ClickContext& ctx); // returns true if event is consumed
+    bool mousePress_considerDragOutgoingElement(const ClickContext& ctx);
+    void mousePress_considerSelect(const ClickContext& ctx);
+    void cycleOverlappingHitElements(const std::vector<EngravingItem*>& hitElements, staff_idx_t hitStaffIndex);
+    bool mousePress_considerDragOutgoingRange(const ClickContext& ctx);
     void handleLeftClick(const ClickContext& ctx);
     void handleRightClick(const ClickContext& ctx);
     void handleLeftClickRelease(const QPointF& releasePoint);
 
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
+
+    bool anchorEditingKeysFound(QKeyEvent* event) const;
+
+    bool tryPercussionShortcut(QKeyEvent* event);
 
     EngravingItem* resolveStartPlayableElement() const;
 
@@ -193,11 +211,31 @@ private:
     bool m_isCanvasDragged = false;
     bool m_tripleClickPending = false;
 
-    QPointF m_physicalBeginPoint;
-    muse::PointF m_logicalBeginPoint;
+    struct MouseDownInfo {
+        enum DragAction {
+            DragOutgoingElement,
+            DragOutgoingRange,
+            Other,
+            Nothing
+        } dragAction = Other;
 
-    mu::engraving::EngravingItem* m_prevHitElement = nullptr;
-    mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
+        QPointF physicalBeginPoint;
+        muse::PointF logicalBeginPoint;
+    } m_mouseDownInfo;
+
+    struct DragMoveEvent {
+        QPointF position;
+        Qt::KeyboardModifiers modifiers;
+        Qt::DropAction dropAction = Qt::DropAction::CopyAction;
+        QObject* source = nullptr;
+    };
+    bool dropEvent(const DragMoveEvent& event, const QMimeData* mimeData = nullptr);
+    DragMoveEvent m_lastDragMoveEvent;
+
+    const mu::engraving::EngravingItem* m_prevHitElement = nullptr;
+    const mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
+
+    bool m_shouldStartEditOnLeftClickRelease = false;
     bool m_shouldTogglePopupOnLeftClickRelease = false;
 };
 }

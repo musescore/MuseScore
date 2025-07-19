@@ -24,6 +24,7 @@
 #include "rw/write/twrite.h"
 
 #include "dom/factory.h"
+#include "dom/box.h"
 #include "dom/measure.h"
 #include "dom/score.h"
 
@@ -62,7 +63,7 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 MeasureRead::readMeasure(measure, e, ctx, staff);
                 measure->checkMeasure(staff);
                 if (!measure->isMMRest()) {
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                     if (m && m->mmRest()) {
                         m->mmRest()->setNext(measure);
                     }
@@ -82,9 +83,9 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                 MeasureBase* mb = toMeasureBase(Factory::createItemByName(tag, ctx.dummy()));
-                TRead::readItem(mb, e, ctx);
                 mb->setTick(ctx.tick());
-                score->measures()->add(mb);
+                score->measures()->append(mb);
+                TRead::readItem(mb, e, ctx);
             } else if (tag == "tick") {
                 ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             } else {
@@ -101,7 +102,7 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                     LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(ctx.dummy()->system());
                     measure->setTick(ctx.tick());
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                 }
                 ctx.setTick(measure->tick());
                 ctx.setCurrentMeasureIndex(measureIdx++);

@@ -33,7 +33,7 @@
 using namespace muse::extensions;
 
 ExtensionBuilder::ExtensionBuilder(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {}
 
 void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
@@ -55,9 +55,9 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     //! NOTE We create extension UI using a separate engine to control what we provide,
     //! making it easier to maintain backward compatibility and stability.
-    QQmlComponent component = QQmlComponent(engin, a.main.toQString());
+    QQmlComponent component = QQmlComponent(engin, a.path.toQString());
     if (!component.isReady()) {
-        LOGE() << "Failed to load QML file: " << a.main << ", from extension: " << uri;
+        LOGE() << "Failed to load QML file: " << a.path << ", from extension: " << uri;
         LOGE() << component.errorString();
         return;
     }
@@ -66,7 +66,7 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     m_contentItem = qobject_cast<QQuickItem*>(obj);
     if (!m_contentItem) {
-        LOGE() << "Component not QuickItem, file: " << a.main << ", from extension: " << uri;
+        LOGE() << "Component not QuickItem, file: " << a.path << ", from extension: " << uri;
     }
 
     if (m_contentItem) {
@@ -99,7 +99,7 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
         //! NOTE For version 1 plugins we need to call run
         async::Async::call(this, [plugin, a, uri]() {
             if (!plugin) {
-                LOGE() << "Qml Object not MuseScore plugin: " << a.main
+                LOGE() << "Qml Object not MuseScore plugin: " << a.path
                        << ", from extension: " << uri;
                 return;
             }

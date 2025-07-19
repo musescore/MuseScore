@@ -29,7 +29,7 @@ BrailleInputState brailleInputState;
 
 QString parseBrailleKeyInput(QString keys)
 {
-    static std::map<std::string, std::string > braille_input_keys = {
+    static const std::map<std::string, std::string > braille_input_keys = {
         { "S", "3" }, { "D", "2" }, { "F", "1" },
         { "J", "4" }, { "K", "5" }, { "L", "6" }
     };
@@ -40,8 +40,9 @@ QString parseBrailleKeyInput(QString keys)
     for (int i = 0; i < lst.size(); i++) {
         std::string key = lst.at(i).toStdString();
 
-        if (braille_input_keys.find(key) != braille_input_keys.end()) {
-            nlst.push_back(braille_input_keys[key]);
+        auto it = braille_input_keys.find(key);
+        if (it != braille_input_keys.end()) {
+            nlst.push_back(it->second);
         }
     }
     std::sort(nlst.begin(), nlst.end());
@@ -142,7 +143,7 @@ int getInterval(const braille_code* code)
 
 bool isNoteName(const braille_code* code)
 {
-    static std::vector<std::string> note_names = {
+    static const std::vector<std::string> note_names = {
         "aMaxima", "aLonga", "aBreve", "aWhole", "aHalf",
         "aQuarter", "a8th", "a16th", "a32nd", "a64th", "a128th",
         "a256th", "a512th", "a128th", "a2048th", "aBreveAlt",
@@ -216,7 +217,7 @@ AccidentalType getAccidentalType(const braille_code* code)
 
 SymbolId getArticulation(const braille_code* code)
 {
-    static std::map<std::string, SymbolId> articulations = {
+    static const std::map<std::string, SymbolId> articulations = {
         { "Finger0", SymbolId::fingering0 },
         { "Finger1", SymbolId::fingering1 },
         { "Finger2", SymbolId::fingering2 },
@@ -225,8 +226,9 @@ SymbolId getArticulation(const braille_code* code)
         { "Finger5", SymbolId::fingering5 },
     };
 
-    if (articulations.find(code->tag) != articulations.end()) {
-        return articulations[code->tag];
+    auto it = articulations.find(code->tag);
+    if (it != articulations.end()) {
+        return it->second;
     }
 
     return SymbolId::noSym;
@@ -234,13 +236,14 @@ SymbolId getArticulation(const braille_code* code)
 
 int getOctave(const braille_code* code)
 {
-    static std::map<std::string, int> octaves = {
+    static const std::map<std::string, int> octaves = {
         { "Octave1", 1 }, { "Octave2", 2 }, { "Octave3", 3 }, { "Octave4", 4 },
         { "Octave5", 5 }, { "Octave6", 6 }, { "Octave7", 7 },
     };
 
-    if (octaves.find(code->tag) != octaves.end()) {
-        return octaves[code->tag];
+    auto it = octaves.find(code->tag);
+    if (it != octaves.end()) {
+        return it->second;
     }
     return -1;
 }

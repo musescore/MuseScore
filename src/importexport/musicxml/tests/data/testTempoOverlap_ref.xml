@@ -74,15 +74,6 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no">
-            <beat-unit>quarter</beat-unit>
-            <per-minute>81</per-minute>
-            </metronome>
-          </direction-type>
-        <sound tempo="81"/>
-        </direction>
-      <direction placement="above">
-        <direction-type>
           <words>Voice</words>
           </direction-type>
         </direction>
@@ -91,6 +82,15 @@
           <words>Direction metronome with sound tempo</words>
           </direction-type>
         </direction>
+      <direction placement="above" system="only-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -98,7 +98,7 @@
         </note>
       </measure>
     <measure number="2">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -114,7 +114,7 @@
         </note>
       </measure>
     <measure number="3">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -130,7 +130,7 @@
         </note>
       </measure>
     <measure number="4">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -149,17 +149,17 @@
       <print new-system="yes"/>
       <direction placement="above">
         <direction-type>
+          <words>Voice</words>
+          </direction-type>
+        </direction>
+      <direction placement="above" system="only-top">
+        <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>85</per-minute>
             </metronome>
           </direction-type>
         <sound tempo="85"/>
-        </direction>
-      <direction placement="above">
-        <direction-type>
-          <words>Voice</words>
-          </direction-type>
         </direction>
       <note>
         <rest measure="yes"/>
@@ -168,7 +168,7 @@
         </note>
       </measure>
     <measure number="6">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -186,17 +186,17 @@
     <measure number="7">
       <direction placement="above">
         <direction-type>
+          <words>Voice</words>
+          </direction-type>
+        </direction>
+      <direction placement="above" system="only-top">
+        <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>87</per-minute>
             </metronome>
           </direction-type>
         <sound tempo="87"/>
-        </direction>
-      <direction placement="above">
-        <direction-type>
-          <words>Voice</words>
-          </direction-type>
         </direction>
       <note>
         <rest measure="yes"/>
@@ -211,7 +211,7 @@
           <words>Direction words (empty) with sound tempo</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -227,7 +227,7 @@
         </note>
       </measure>
     <measure number="9">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -246,15 +246,6 @@
       <print new-system="yes"/>
       <direction placement="above">
         <direction-type>
-          <metronome parentheses="no" print-object="no">
-            <beat-unit>quarter</beat-unit>
-            <per-minute>81</per-minute>
-            </metronome>
-          </direction-type>
-        <sound tempo="81"/>
-        </direction>
-      <direction placement="above">
-        <direction-type>
           <words>Voice</words>
           </direction-type>
         </direction>
@@ -263,6 +254,15 @@
           <words>Sound tempo only</words>
           </direction-type>
         </direction>
+      <direction placement="above" system="only-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -270,7 +270,7 @@
         </note>
       </measure>
     <measure number="11">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -286,7 +286,7 @@
         </note>
       </measure>
     <measure number="12">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -302,7 +302,7 @@
         </note>
       </measure>
     <measure number="13">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -321,17 +321,17 @@
       <print new-system="yes"/>
       <direction placement="above">
         <direction-type>
+          <words>Voice</words>
+          </direction-type>
+        </direction>
+      <direction placement="above" system="only-top">
+        <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>85</per-minute>
             </metronome>
           </direction-type>
         <sound tempo="85"/>
-        </direction>
-      <direction placement="above">
-        <direction-type>
-          <words>Voice</words>
-          </direction-type>
         </direction>
       <note>
         <rest measure="yes"/>
@@ -340,7 +340,7 @@
         </note>
       </measure>
     <measure number="15">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -358,17 +358,17 @@
     <measure number="16">
       <direction placement="above">
         <direction-type>
+          <words>Voice</words>
+          </direction-type>
+        </direction>
+      <direction placement="above" system="only-top">
+        <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
             <per-minute>87</per-minute>
             </metronome>
           </direction-type>
         <sound tempo="87"/>
-        </direction>
-      <direction placement="above">
-        <direction-type>
-          <words>Voice</words>
-          </direction-type>
         </direction>
       <note>
         <rest measure="yes"/>
@@ -401,6 +401,16 @@
           <line>4</line>
           </clef>
         </attributes>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -410,6 +420,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -424,6 +444,16 @@
           </direction-type>
         <staff>1</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>82</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="82"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -433,6 +463,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>82</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="82"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -441,6 +481,16 @@
         </note>
       </measure>
     <measure number="3">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>83</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="83"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -456,6 +506,16 @@
           </direction-type>
         <staff>2</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>83</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="83"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -464,6 +524,16 @@
         </note>
       </measure>
     <measure number="4">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>84</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="84"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -473,6 +543,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>84</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="84"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -482,6 +562,16 @@
       </measure>
     <measure number="5">
       <print new-system="yes"/>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>85</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="85"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -491,6 +581,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>85</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="85"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -505,6 +605,16 @@
           </direction-type>
         <staff>1</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>86</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="86"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -519,6 +629,16 @@
           <words>Piano lower</words>
           </direction-type>
         <staff>2</staff>
+        </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>86</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="86"/>
         </direction>
       <note>
         <rest measure="yes"/>
@@ -534,6 +654,16 @@
           </direction-type>
         <staff>1</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>87</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="87"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -543,6 +673,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>87</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="87"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -558,6 +698,16 @@
           </direction-type>
         <staff>1</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -567,6 +717,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -581,6 +741,16 @@
           </direction-type>
         <staff>1</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>82</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="82"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -596,6 +766,16 @@
           </direction-type>
         <staff>2</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>82</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="82"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -605,6 +785,16 @@
       </measure>
     <measure number="10">
       <print new-system="yes"/>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -614,6 +804,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -628,6 +828,16 @@
           </direction-type>
         <staff>1</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>82</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="82"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -637,6 +847,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>82</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="82"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -645,6 +865,16 @@
         </note>
       </measure>
     <measure number="12">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>83</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="83"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -660,6 +890,16 @@
           </direction-type>
         <staff>2</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>83</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="83"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -668,6 +908,16 @@
         </note>
       </measure>
     <measure number="13">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>84</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="84"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -677,6 +927,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>84</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="84"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -686,6 +946,16 @@
       </measure>
     <measure number="14">
       <print new-system="yes"/>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>85</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="85"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -695,6 +965,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>85</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="85"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -709,6 +989,16 @@
           </direction-type>
         <staff>1</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>86</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="86"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -723,6 +1013,16 @@
           <words>Piano lower</words>
           </direction-type>
         <staff>2</staff>
+        </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>86</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="86"/>
         </direction>
       <note>
         <rest measure="yes"/>
@@ -738,6 +1038,16 @@
           </direction-type>
         <staff>1</staff>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>87</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>1</staff>
+        <sound tempo="87"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -747,6 +1057,16 @@
       <backup>
         <duration>4</duration>
         </backup>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>87</per-minute>
+            </metronome>
+          </direction-type>
+        <staff>2</staff>
+        <sound tempo="87"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -779,6 +1099,15 @@
           <octave-change>-1</octave-change>
           </transpose>
         </attributes>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -786,6 +1115,15 @@
         </note>
       </measure>
     <measure number="2">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>82</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="82"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -793,6 +1131,15 @@
         </note>
       </measure>
     <measure number="3">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>83</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="83"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -804,6 +1151,15 @@
         <direction-type>
           <words>Bass</words>
           </direction-type>
+        </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>84</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="84"/>
         </direction>
       <note>
         <rest measure="yes"/>
@@ -818,6 +1174,15 @@
           <words>Bass</words>
           </direction-type>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>85</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="85"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -825,6 +1190,15 @@
         </note>
       </measure>
     <measure number="6">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>86</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="86"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -837,6 +1211,15 @@
           <words>Bass</words>
           </direction-type>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>87</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="87"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -845,6 +1228,15 @@
       </measure>
     <measure number="8">
       <print new-system="yes"/>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -852,6 +1244,15 @@
         </note>
       </measure>
     <measure number="9">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>82</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="82"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -860,6 +1261,15 @@
       </measure>
     <measure number="10">
       <print new-system="yes"/>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>81</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="81"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -867,6 +1277,15 @@
         </note>
       </measure>
     <measure number="11">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>82</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="82"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -874,6 +1293,15 @@
         </note>
       </measure>
     <measure number="12">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>83</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="83"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -885,6 +1313,15 @@
         <direction-type>
           <words>Bass</words>
           </direction-type>
+        </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>84</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="84"/>
         </direction>
       <note>
         <rest measure="yes"/>
@@ -899,6 +1336,15 @@
           <words>Bass</words>
           </direction-type>
         </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>85</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="85"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -906,6 +1352,15 @@
         </note>
       </measure>
     <measure number="15">
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>86</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="86"/>
+        </direction>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -917,6 +1372,15 @@
         <direction-type>
           <words>Bass</words>
           </direction-type>
+        </direction>
+      <direction placement="above" system="also-top">
+        <direction-type>
+          <metronome parentheses="no" print-object="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>87</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="87"/>
         </direction>
       <note>
         <rest measure="yes"/>

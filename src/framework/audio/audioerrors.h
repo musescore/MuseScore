@@ -62,11 +62,19 @@ enum class Err {
 
     // clock
     InvalidTimeLoop = 360,
+
+    // online sounds
+    OnlineSoundsNetworkError = 361,
 };
 
 inline Ret make_ret(Err e)
 {
     return Ret(static_cast<int>(e));
+}
+
+inline Ret make_ret(Err e, const std::string& text)
+{
+    return Ret(static_cast<int>(e), text);
 }
 }
 

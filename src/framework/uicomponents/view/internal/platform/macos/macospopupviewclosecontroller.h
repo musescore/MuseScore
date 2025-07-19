@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_UICOMPONENTS_MACOSPOPUPVIEWCLOSECONTROLLER_H
-#define MUSE_UICOMPONENTS_MACOSPOPUPVIEWCLOSECONTROLLER_H
+#pragma once
 
 #include <QAbstractNativeEventFilter>
 
@@ -44,5 +42,3 @@ private:
     void initWindowMinimizedObserver();
 };
 }
-
-#endif // MUSE_UICOMPONENTS_MACOSPOPUPVIEWCLOSECONTROLLER_H

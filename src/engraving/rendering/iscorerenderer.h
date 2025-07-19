@@ -19,15 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ISCORERENDERER_H
-#define MU_ENGRAVING_ISCORERENDERER_H
+#pragma once
 
 #include <variant>
 
 #include "modularity/imoduleinterface.h"
-#include "draw/types/geometry.h"
 
-#include "../types/fraction.h"
+#include "../types/types.h"
 
 namespace muse::draw {
 class Painter;
@@ -56,11 +54,13 @@ class EngravingItem;
 
 class FiguredBassItem;
 
+class FretDiagram;
+
 class Harmony;
 
 class Image;
 
-enum class KerningType;
+enum class KerningType : unsigned char;
 class KeySig;
 
 class LedgerLine;
@@ -70,6 +70,8 @@ class Lyrics;
 
 class NoteDot;
 
+class Parenthesis;
+
 class Rest;
 
 class ShadowNote;
@@ -77,8 +79,10 @@ class Spanner;
 class Slur;
 class SlurSegment;
 class SlurTie;
+class Spacer;
 class StaffText;
 class Stem;
+class SystemLockIndicator;
 
 class TextBase;
 class Text;
@@ -132,6 +136,7 @@ public:
                                    Clef*,
                                    Dynamic*,
                                    FiguredBassItem*,
+                                   FretDiagram*,
                                    Harmony*,
                                    Image*,
                                    KeySig*,
@@ -140,13 +145,16 @@ public:
                                    LineSegment*,
                                    Lyrics*,
                                    NoteDot*,
+                                   Parenthesis*,
                                    Rest*,
                                    ShadowNote*,
                                    Spanner*,
                                    Slur*,
                                    SlurTie*,
+                                   Spacer*,
                                    StaffText*,
                                    Stem*,
+                                   SystemLockIndicator*,
                                    TextBase*,
                                    Text*,
                                    TimeSig*
@@ -196,5 +204,3 @@ private:
     virtual void doDrawItem(const EngravingItem* item, muse::draw::Painter* p) = 0;
 };
 }
-
-#endif // MU_ENGRAVING_ISCORERENDERER_H

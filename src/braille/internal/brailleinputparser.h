@@ -23,7 +23,9 @@
 #ifndef MU_BRAILLE_BRAILLEINPUTPARSER_H
 #define MU_BRAILLE_BRAILLEINPUTPARSER_H
 
+#include <map>
 #include <string>
+#include <vector>
 
 namespace mu::engraving {
 class braille_code;
@@ -53,11 +55,11 @@ public:
     BieSequencePattern(BieSequencePatternType t, std::string sequence);
     ~BieSequencePattern();
 
-    BieSequencePatternType type();
+    BieSequencePatternType type() const;
     bool recognize(std::string braille);
-    std::map<std::string, braille_code*> res();
+    const std::map<std::string, braille_code*>& res() const;
     braille_code* res(std::string key);
-    bool valid();
+    bool valid() const;
 private:
     BieSequencePatternType _type;
     std::vector<BiePattern> patterns;

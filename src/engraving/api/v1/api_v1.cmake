@@ -7,11 +7,11 @@ set(API_V1_SRC
     ${CMAKE_CURRENT_LIST_DIR}/enums.cpp
     ${CMAKE_CURRENT_LIST_DIR}/enums.h
     ${CMAKE_CURRENT_LIST_DIR}/apitypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/apistructs.h
     ${CMAKE_CURRENT_LIST_DIR}/scoreelement.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreelement.h
     ${CMAKE_CURRENT_LIST_DIR}/elements.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elements.h
-    ${CMAKE_CURRENT_LIST_DIR}/fraction.h
     ${CMAKE_CURRENT_LIST_DIR}/score.cpp
     ${CMAKE_CURRENT_LIST_DIR}/score.h
     ${CMAKE_CURRENT_LIST_DIR}/style.cpp
@@ -28,6 +28,4 @@ set(API_V1_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playevent.h
     ${CMAKE_CURRENT_LIST_DIR}/selection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selection.h
-    ${CMAKE_CURRENT_LIST_DIR}/tie.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tie.h
 )

@@ -63,6 +63,9 @@ public:
 
     String accessibleInfo() const override;
 
+    int subtype() const override { return m_numMeasures; }
+    muse::TranslatableString subtypeUserName() const override;
+
     bool placeMultiple() const override { return numMeasures() == 1; }     // prevent overlapping additions with range selection
 
     RectF numberRect() const override;
@@ -78,6 +81,9 @@ public:
         void setNumberSym(int n) { numberSym = timeSigSymIdsFromString(String::number(n)); }
         void setNumberSym(const String& s) { numberSym = timeSigSymIdsFromString(s); }
         void clearNumberSym() { numberSym.clear(); }
+
+        LineF extenderLineLeft = LineF();
+        LineF extenderLineRight = LineF();
     };
     DECLARE_LAYOUTDATA_METHODS(MeasureRepeat)
 

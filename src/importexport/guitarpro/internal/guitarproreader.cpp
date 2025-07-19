@@ -27,14 +27,18 @@
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::guitarpro {
-extern mu::engraving::Err importGTP(mu::engraving::MasterScore*, muse::io::IODevice* io, bool createLinkedTabForce = false,
-                                    bool experimental = false);
+extern mu::engraving::Err importGTP(mu::engraving::MasterScore*, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx,
+                                    bool createLinkedTabForce = false, bool experimental = false);
 
 muse::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options&)
 {
     muse::io::File file(path);
-    mu::engraving::Err err = importGTP(score, &file, guitarProConfiguration()->linkedTabStaffCreated(),
+    mu::engraving::Err err = importGTP(score, &file, iocContext(), guitarProConfiguration()->linkedTabStaffCreated(),
                                        guitarProConfiguration()->experimental());
+
+    muse::io::File styleFile(":/engraving/styles/gp-style.mss");
+    score->loadStyle(styleFile);
+
     return mu::engraving::make_ret(err, path);
 }
 } // namespace mu::iex::guitarpro

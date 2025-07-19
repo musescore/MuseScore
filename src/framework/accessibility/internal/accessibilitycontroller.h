@@ -63,6 +63,8 @@ public:
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
 
+    void setAccesibilityEnabled(bool enabled);
+
     // IAccessibilityController
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;
@@ -152,9 +154,7 @@ private:
 
     void cancelPreviousReading();
     void savePanelAccessibleName(const IAccessible* oldItem, const IAccessible* newItem);
-#ifndef Q_OS_MAC
     void triggerRevoicingOfChangedName(IAccessible* item);
-#endif
 
     const IAccessible* panel(const IAccessible* item) const;
 
@@ -168,6 +168,7 @@ private:
     IAccessible* m_itemForRestoreFocus = nullptr;
 
     bool m_inited = false;
+    bool m_enabled = false;
 
     bool m_ignorePanelChangingVoice = false;
     bool m_needToVoicePanelInfo = false;

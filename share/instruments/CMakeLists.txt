@@ -18,10 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-install(FILES
-      instruments.xml
-      orders.xml
-      string_tunings_presets.json
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}instruments
-      )
+#!! NOTE Added to notationscene.qrc
+# install(FILES
+#       instruments.xml
+#       orders.xml
+#       string_tunings_presets.json
+#       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}instruments
+#       )
 

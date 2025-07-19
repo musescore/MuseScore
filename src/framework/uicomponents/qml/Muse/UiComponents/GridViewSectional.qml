@@ -52,7 +52,7 @@ Item {
     QtObject {
         id: privateProperties
 
-        property int spacingBeforeSection: isHorizontal ? columnSpacing : rowSpacing
+        property int spacingBeforeSection: root.isHorizontal ? root.columnSpacing : root.rowSpacing
         property int spacingAfterSection: spacingBeforeSection
 
         function modelSections() {
@@ -61,7 +61,7 @@ Item {
             for (var i = 0; i < root.model.length; i++) {
                 var element = root.model.get(i)
 
-                var section = element[sectionRole]
+                var section = element[root.sectionRole]
                 if (!_sections.includes(section)) {
                     _sections.push(section)
                 }
@@ -103,7 +103,7 @@ Item {
                     GridViewDelegate {
                         anchors.verticalCenter: parent.verticalCenter
 
-                        model: Boolean(root.model) ? root.model : null
+                        model: root.model
 
                         itemDelegate: root.itemDelegate
                         sectionRole: root.sectionRole
@@ -147,7 +147,7 @@ Item {
                     GridViewDelegate {
                         anchors.horizontalCenter: parent.horizontalCenter
 
-                        model: Boolean(root.model) ? root.model : null
+                        model: root.model
 
                         itemDelegate: root.itemDelegate
                         sectionRole: root.sectionRole

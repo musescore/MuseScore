@@ -297,6 +297,12 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
     }
     t->setOffset(PointF());       // ignore user offsets
     t->setAutoplace(true);
+
+    t->setPosition(t->align().horizontal);
+    if (t->position() != t->propertyDefault(Pid::POSITION).value<AlignH>()) {
+        t->setPropertyFlags(Pid::POSITION, PropertyFlags::UNSTYLED);
+    }
+
     return true;
 }
 
@@ -436,7 +442,7 @@ static void readAccidental(Accidental* a, XmlReader& e, ReadContext& ctx)
                 }
                 a->setAccidentalType(at);
             } else {
-                const static std::map<String, AccidentalType> accMap = {
+                static const std::map<String, AccidentalType> accMap = {
                     { u"none", AccidentalType::NONE }, { u"sharp", AccidentalType::SHARP },
                     { u"flat", AccidentalType::FLAT }, { u"natural", AccidentalType::NATURAL },
                     { u"double sharp", AccidentalType::SHARP2 }, { u"double flat", AccidentalType::FLAT2 },
@@ -1144,13 +1150,18 @@ static void readVolta114(XmlReader& e, ReadContext& ctx, Volta* volta)
                 volta->endings().push_back(i);
             }
         } else if (tag == "subtype") {
-            e.readInt();
+            volta->setVoltaType(e.readInt() == 1 ? Volta::Type::CLOSED : Volta::Type::OPEN);
         } else if (tag == "lineWidth") {
-            volta->setLineWidth(Millimetre(e.readDouble() * volta->spatium()));
+            volta->setLineWidth(Spatium(e.readDouble()));
             volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (!readTextLineProperties114(e, ctx, volta)) {
             e.unknown();
         }
+    }
+    if (volta->anchor() != Volta::VOLTA_ANCHOR) {
+        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
+        LOGW("Correcting volta anchor type from %d to %d", int(volta->anchor()), int(Volta::VOLTA_ANCHOR));
+        volta->setAnchor(Volta::VOLTA_ANCHOR);
     }
     volta->setOffset(PointF());          // ignore offsets
     volta->setAutoplace(true);
@@ -1295,7 +1306,7 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
             pedal->setEndHookHeight(Spatium(e.readDouble()));
             pedal->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
         } else if (tag == "lineWidth") {
-            pedal->setLineWidth(Millimetre(e.readDouble()));
+            pedal->setLineWidth(Spatium(e.readDouble()));
             pedal->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (tag == "lineStyle") {
             read400::TRead::readProperty(pedal, e, ctx, Pid::LINE_STYLE);
@@ -1381,25 +1392,27 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19
     };
 
+    HarmonyInfo* info = new HarmonyInfo(ctx.score());
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {
             if (ctx.mscVersion() >= 106) {
-                h->setBaseTpc(e.readInt());
+                info->setBassTpc(e.readInt());
             } else {
-                h->setBaseTpc(table[e.readInt() - 1]);
+                info->setBassTpc(table[e.readInt() - 1]);
             }
         } else if (tag == "baseCase") {
-            h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
+            h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
-            h->setId(e.readInt());
+            info->setId(e.readInt());
         } else if (tag == "name") {
-            h->setTextName(e.readText());
+            info->setTextName(e.readText());
         } else if (tag == "root") {
             if (ctx.mscVersion() >= 106) {
-                h->setRootTpc(e.readInt());
+                info->setRootTpc(e.readInt());
             } else {
-                h->setRootTpc(table[e.readInt() - 1]);
+                info->setRootTpc(table[e.readInt() - 1]);
             }
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
@@ -1434,50 +1447,19 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
                 }
             }
         } else if (tag == "leftParen") {
-            h->setLeftParen(true);
+            h->setParenthesesMode(ParenthesesMode::LEFT, true, true);
             e.readNext();
         } else if (tag == "rightParen") {
-            h->setRightParen(true);
+            h->setParenthesesMode(ParenthesesMode::RIGHT, true, true);
             e.readNext();
         } else if (!readTextProperties(e, ctx, h, h)) {
             e.unknown();
         }
     }
 
-    // TODO: now that we can render arbitrary chords,
-    // we could try to construct a full representation from a degree list.
-    // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
-    // or constructed in the Chord Symbol Properties dialog.
+    h->addChord(info);
 
-    if (h->rootTpc() != Tpc::TPC_INVALID) {
-        if (h->id() > 0) {
-            // positive id will happen only for scores that were created with explicit chord lists
-            // lookup id in chord list and generate new description if necessary
-            h->getDescription();
-        } else {
-            // default case: look up by name
-            // description will be found for any chord already read in this score
-            // and we will generate a new one if necessary
-            h->getDescription(h->hTextName());
-        }
-    } else if (h->hTextName() == "") {
-        // unrecognized chords prior to 2.0 were stored as text with markup
-        // we need to strip away the markup
-        // this removes any user-applied formatting,
-        // but we no longer support user-applied formatting for chord symbols anyhow
-        // with any luck, the resulting text will be parseable now, so give it a shot
-//            h->createLayout();
-        String s = h->plainText();
-        if (!s.isEmpty()) {
-            h->setHarmony(s);
-            return;
-        }
-        // empty text could also indicate a root-less slash chord ("/E")
-        // we'll fall through and render it normally
-    }
-
-    // render chord from description (or _textName)
-    h->render();
+    h->afterRead();
 }
 
 //---------------------------------------------------------
@@ -1487,7 +1469,6 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
 static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
 {
     Segment* segment = 0;
-    double _spatium = m->spatium();
 
     std::vector<Chord*> graceNotes;
 
@@ -1819,6 +1800,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 staff->clefList().insert(std::pair<int, ClefType>(ctx.tick().ticks(), ClefType::G));
             }
 
+            // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
+            if (ctx.tick() != Fraction(0, 1) && ctx.tick() == m->tick()
+                && !(m->prevMeasure() && m->prevMeasure()->repeatEnd()) && !header) {
+                clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+            }
+
             segment->add(clef);
         } else if (tag == "TimeSig") {
             // if time sig not at beginning of measure => courtesy time sig
@@ -1865,7 +1852,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 if (t == "no") {
                     l->setNo(e.readInt());
                     if (l->isEven()) {
-                        l->setEven(true);
                         l->initTextStyleType(TextStyleType::LYRICS_EVEN);
                     }
                 } else if (t == "syllabic") {
@@ -1990,14 +1976,34 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                     j->setPlayUntil(e.readText());
                 } else if (t == "continueAt") {
                     j->setContinueAt(e.readText());
-                } else if (t == "playRepeats") {
-                    j->setPlayRepeats(e.readBool());
                 } else if (t == "subtype") {
-                    e.readInt();
+                    e.skipCurrentElement(); // obsolete, always "Repeat"
                 } else if (!TRead::readTextProperties(j, e, ctx)) {
                     e.unknown();
                 }
             }
+
+            // infer jump type
+            String jumpTo = j->jumpTo();
+            String playUntil = j->playUntil();
+            if (jumpTo == "start") {
+                if (playUntil == "end") {
+                    j->setJumpType(JumpType::DC);
+                } else if (playUntil == "fine") {
+                    j->setJumpType(JumpType::DC_AL_FINE);
+                } else {
+                    j->setJumpType(JumpType::DC_AL_CODA);
+                }
+            } else {
+                if (playUntil == "end") {
+                    j->setJumpType(JumpType::DS);
+                } else if (playUntil == "fine") {
+                    j->setJumpType(JumpType::DS_AL_FINE);
+                } else {
+                    j->setJumpType(JumpType::DS_AL_CODA);
+                }
+            }
+
             m->add(j);
         } else if (tag == "Marker") {
             Marker* a = Factory::createMarker(m);
@@ -2006,7 +2012,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             MarkerType mt = MarkerType::SEGNO;
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
-                if (t == "subtype") {
+                if (t == "subtype" || t == "label") {
                     AsciiStringView s(e.readAsciiText());
                     a->setLabel(String::fromAscii(s.ascii()));
                     mt = TConv::fromXml(s, MarkerType::USER);
@@ -2021,6 +2027,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 // force the marker type for correct display
                 a->setXmlText(u"");
                 a->setMarkerType(a->markerType());
+                a->setTextStyleType(TextStyleType::REPEAT_LEFT);
             }
             m->add(a);
         } else if (tag == "Image") {
@@ -2041,7 +2048,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else if (tag == "measureNumberMode") {
             m->setMeasureNumberMode(MeasureNumberMode(e.readInt()));
         } else if (tag == "irregular") {
-            m->setIrregular(e.readBool());
+            m->setIrregular(true);
+            e.skipCurrentElement();
         } else if (tag == "breakMultiMeasureRest") {
             m->setBreakMultiMeasureRest(e.readBool());
         } else if (tag == "sysInitBarLineType") {
@@ -2070,7 +2078,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerDown(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
+            m->vspacerDown(staffIdx)->setGap(Spatium(e.readDouble()));
         } else if (tag == "vspacer" || tag == "vspacerUp") {
             if (!m->vspacerUp(staffIdx)) {
                 Spacer* spacer = Factory::createSpacer(m);
@@ -2078,7 +2086,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerUp(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
+            m->vspacerUp(staffIdx)->setGap(Spatium(e.readDouble()));
         } else if (tag == "visible") {
             m->setStaffVisible(staffIdx, e.readInt());
         } else if (tag == "slashStyle") {
@@ -2107,7 +2115,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             readText114(e, ctx, noText, m);
             noText->setTrack(ctx.track());
             noText->setParent(m);
-            m->setNoText(noText->staffIdx(), noText);
+            m->setMeasureNumber(noText->staffIdx(), noText);
         } else if (tag == "multiMeasureRest") {
             m->setMMRestCount(e.readInt());
             // set tick to previous measure
@@ -2232,13 +2240,11 @@ static bool readBoxProperties(XmlReader& e, ReadContext& ctx, Box* b)
 
 static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
 {
-    b->setLeftMargin(0.0);
-    b->setRightMargin(0.0);
-    b->setTopMargin(0.0);
-    b->setBottomMargin(0.0);
+    b->setAutoSizeEnabled(false);      // didn't exist in Mu1
+
     b->setBoxHeight(Spatium(0));       // override default set in constructor
     b->setBoxWidth(Spatium(0));
-    b->setAutoSizeEnabled(false);
+    bool keepMargins = false;          // whether original margins have to be kept when reading old file
     System* bSystem = b->system() ? b->system() : ctx.dummy()->system();
 
     while (e.readNextStartElement()) {
@@ -2247,13 +2253,25 @@ static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
             HBox* hb = Factory::createHBox(bSystem);
             readBox(e, ctx, hb);
             b->add(hb);
+            keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
             VBox* vb = Factory::createVBox(bSystem);
             readBox(e, ctx, vb);
             b->add(vb);
+            keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (!readBoxProperties(e, ctx, b)) {
             e.unknown();
         }
+    }
+
+    // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
+    // for backward compatibility set them to 0.0 in all other cases, the Mu1 defaults of 5.0 just look horrible in Mu3 and Mu4
+
+    if (ctx.mscVersion() <= 114 && (b->isHBox() || b->isVBox()) && !keepMargins) {
+        b->setLeftMargin(0.0);
+        b->setRightMargin(0.0);
+        b->setTopMargin(0.0); // 2.0 would look closest to Mu1 and Mu2, but 0.0 is the default since Mu2
+        b->setBottomMargin(0.0); // 1.0 would look closest to Mu1 and Mu2, but 0.0 is the default since Mu2
     }
 }
 
@@ -2283,7 +2301,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                 measure->checkMeasure(staff);
 
                 if (!measure->isMMRest()) {
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                     ctx.setLastMeasure(measure);
                     ctx.setTick(measure->tick() + measure->ticks());
                 } else {
@@ -2301,7 +2319,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                     LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(score->dummy()->system());
                     measure->setTick(ctx.tick());
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                 }
                 ctx.setTick(measure->tick());
 
@@ -2323,7 +2341,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
             Box* mb = toBox(Factory::createItemByName(tag, score->dummy()));
             readBox(e, ctx, mb);
             mb->setTick(ctx.tick());
-            score->measures()->add(mb);
+            score->measures()->append(mb);
         } else if (tag == "tick") {
             ctx.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
         } else {
@@ -2398,7 +2416,7 @@ static void readDrumset(Drumset* ds, XmlReader& e)
         const AsciiStringView tag(e.name());
         if (tag == "head") {
             ds->drum(pitch).notehead = Read206::convertHeadGroup(e.readInt());
-        } else if (ds->readProperties(e, pitch)) {
+        } else if (ds->readDrumProperties(e, pitch)) {
         } else {
             e.unknown();
         }
@@ -2583,7 +2601,7 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
 //   readPageFormat
 //---------------------------------------------------------
 
-static void readPageFormat(PageFormat* pf, XmlReader& e)
+static void readPageFormat(PageFormat* pf, int& pageNumberOffset, XmlReader& e)
 {
     double _oddRightMargin  = 0.0;
     double _evenRightMargin = 0.0;
@@ -2633,7 +2651,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
             const PaperSize* s = getPaperSize114(e.readText());
             pf->setSize(SizeF(s->w, s->h));
         } else if (tag == "page-offset") {
-            e.readInt();
+            pageNumberOffset = e.readInt();
         } else {
             e.unknown();
         }
@@ -2708,16 +2726,20 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     IF_ASSERT_FAILED(score->isMaster()) {
-        return Err::FileUnknownError;
+        return make_ret(Err::FileUnknownError);
     }
 
     ReadContext ctx(score);
-    if (out && out->overriddenSpatium.has_value()) {
-        ctx.setSpatium(out->overriddenSpatium.value());
-        ctx.setOverrideSpatium(true);
+    if (out) {
+        if (out->overriddenSpatium.has_value()) {
+            ctx.setSpatium(out->overriddenSpatium.value());
+            ctx.setOverrideSpatium(true);
+        }
+
+        ctx.setPropertiesToSkip(out->propertiesToSkip);
     }
 
     DEFER {
@@ -2798,12 +2820,6 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             double sp = masterScore->style().spatium();
             compat::ReadChordListHook clhook(masterScore);
             readStyle(&masterScore->style(), e, clhook);
-            //style()->load(e);
-            // adjust this now so chords render properly on read
-            // other style adjustments can wait until reading is finished
-            if (masterScore->style().styleB(Sid::useGermanNoteNames)) {
-                masterScore->style().set(Sid::useStandardNoteNames, false);
-            }
             if (ctx.overrideSpatium()) {
                 masterScore->style().setSpatium(sp);
             }
@@ -2811,7 +2827,11 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             e.skipCurrentElement();
         } else if (tag == "page-layout") {
             compat::PageFormat pf;
-            readPageFormat(&pf, e);
+            int pageNumberOffset = 0;
+            initPageFormat(&masterScore->style(), &pf);
+            readPageFormat(&pf, pageNumberOffset, e);
+            setPageFormat(&masterScore->style(), pf);
+            masterScore->setPageNumberOffset(pageNumberOffset);
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(masterScore->dummy(), TextStyleType::DEFAULT, false);
             readText114(e, ctx, text, text);
@@ -2901,7 +2921,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     if (e.error() != muse::XmlStreamReader::NoError) {
         LOGD() << e.lineNumber() << " " << e.columnNumber() << ": " << e.errorString();
-        return Err::FileBadFormat;
+        return make_ret(Err::FileBadFormat, e.errorString());
     }
 
     for (Staff* s : masterScore->staves()) {
@@ -3049,7 +3069,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     for (MeasureBase* mb = masterScore->first(); mb; mb = mb->next()) {
         if (mb->isVBox()) {
             VBox* b  = toVBox(mb);
-            Millimetre y = masterScore->style().styleMM(Sid::staffUpperBorder);
+            Spatium y = masterScore->style().styleS(Sid::staffUpperBorder);
             b->setBottomGap(y);
         }
     }
@@ -3158,7 +3178,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         score->removeElement(invalidSpanner);
     }
 
-    return Err::NoError;
+    return muse::make_ok();
 }
 
 bool Read114::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)

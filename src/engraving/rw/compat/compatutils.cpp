@@ -26,7 +26,10 @@
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/expression.h"
+#include "dom/harmony.h"
+#include "dom/laissezvib.h"
 #include "dom/masterscore.h"
+#include "dom/note.h"
 #include "dom/score.h"
 #include "dom/excerpt.h"
 #include "dom/part.h"
@@ -40,6 +43,11 @@
 #include "dom/stafftextbase.h"
 #include "dom/playtechannotation.h"
 #include "dom/capo.h"
+#include "dom/noteline.h"
+#include "dom/textline.h"
+#include "style/styledef.h"
+
+#include "engraving/style/textstyle.h"
 
 #include "types/string.h"
 
@@ -72,6 +80,71 @@ const std::set<SymId> CompatUtils::ORNAMENT_IDS {
     SymId::ornamentPinceCouperin
 };
 
+const std::map<Sid, Sid> CompatUtils::ALIGN_VALS_TO_CONVERT {
+    { Sid::defaultAlign, Sid::defaultPosition },
+    { Sid::titleAlign, Sid::titlePosition },
+    { Sid::subTitleAlign, Sid::subTitlePosition },
+    { Sid::composerAlign, Sid::composerPosition },
+    { Sid::lyricistAlign, Sid::lyricistPosition },
+    { Sid::lyricsEvenAlign, Sid::lyricsEvenPosition },
+    { Sid::lyricsOddAlign, Sid::lyricsOddPosition },
+    { Sid::fingeringAlign, Sid::fingeringPosition },
+    { Sid::lhGuitarFingeringAlign, Sid::lhGuitarFingeringPosition },
+    { Sid::rhGuitarFingeringAlign, Sid::rhGuitarFingeringPosition },
+    { Sid::hammerOnPullOffTappingAlign, Sid::hammerOnPullOffTappingPosition },
+    { Sid::stringNumberAlign, Sid::stringNumberPosition },
+    { Sid::staffTextAlign, Sid::staffTextPosition },
+    { Sid::fretDiagramFingeringAlign, Sid::fretDiagramFingeringPosition },
+    { Sid::fretDiagramFretNumberAlign, Sid::fretDiagramFretNumberPosition },
+    { Sid::harpPedalDiagramAlign, Sid::harpPedalDiagramPosition },
+    { Sid::harpPedalTextDiagramAlign, Sid::harpPedalTextDiagramPosition },
+    { Sid::longInstrumentAlign, Sid::longInstrumentPosition },
+    { Sid::shortInstrumentAlign, Sid::shortInstrumentPosition },
+    { Sid::partInstrumentAlign, Sid::partInstrumentPosition },
+    { Sid::dynamicsAlign, Sid::dynamicsPosition },
+    { Sid::expressionAlign, Sid::expressionPosition },
+    { Sid::tempoAlign, Sid::tempoPosition },
+    { Sid::tempoChangeAlign, Sid::tempoChangePosition },
+    { Sid::metronomeAlign, Sid::metronomePosition },
+    { Sid::measureNumberAlign, Sid::measureNumberPosition },
+    { Sid::mmRestRangeAlign, Sid::mmRestRangePosition },
+    { Sid::translatorAlign, Sid::translatorPosition },
+    { Sid::tupletAlign, Sid::tupletPosition },
+    { Sid::systemTextAlign, Sid::systemTextPosition },
+    { Sid::chordSymbolAAlign, Sid::chordSymPosition },
+    { Sid::repeatLeftAlign, Sid::repeatLeftPosition },
+    { Sid::repeatRightAlign, Sid::repeatRightPosition },
+    { Sid::frameAlign, Sid::framePosition },
+    { Sid::textLineTextAlign, Sid::textLinePosition },
+    { Sid::noteLineAlign, Sid::noteLinePosition },
+    { Sid::glissandoAlign, Sid::glissandoPosition },
+    { Sid::ottavaTextAlignAbove, Sid::ottavaPosition },
+    { Sid::voltaAlign, Sid::voltaPosition },
+    { Sid::pedalTextAlign, Sid::pedalPosition },
+    { Sid::letRingTextAlign, Sid::letRingPosition },
+    { Sid::palmMuteTextAlign, Sid::palmMutePosition },
+    { Sid::hairpinTextAlign, Sid::hairpinPosition },
+    { Sid::bendAlign, Sid::bendPosition },
+    { Sid::headerAlign, Sid::headerPosition },
+    { Sid::footerAlign, Sid::footerPosition },
+    { Sid::copyrightAlign, Sid::copyrightPosition },
+    { Sid::pageNumberAlign, Sid::pageNumberPosition },
+    { Sid::instrumentChangeAlign, Sid::instrumentChangePosition },
+    { Sid::stickingAlign, Sid::stickingPosition },
+    { Sid::user1Align, Sid::user1Position },
+    { Sid::user2Align, Sid::user2Position },
+    { Sid::user3Align, Sid::user3Position },
+    { Sid::user4Align, Sid::user4Position },
+    { Sid::user5Align, Sid::user5Position },
+    { Sid::user6Align, Sid::user6Position },
+    { Sid::user7Align, Sid::user7Position },
+    { Sid::user8Align, Sid::user8Position },
+    { Sid::user9Align, Sid::user9Position },
+    { Sid::user10Align, Sid::user10Position },
+    { Sid::user11Align, Sid::user11Position },
+    { Sid::user12Align, Sid::user12Position },
+};
+
 void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
 {
     TRACEFUNC;
@@ -97,6 +170,14 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
     if (masterScore->mscVersion() < 420) {
         addMissingInitKeyForTransposingInstrument(masterScore);
         resetFramesExclusionFromParts(masterScore);
+    }
+    if (masterScore->mscVersion() < 440) {
+        mapHeaderFooterStyles(masterScore);
+    }
+
+    if (masterScore->mscVersion() < 450) {
+        convertTextLineToNoteAnchoredLine(masterScore);
+        convertLaissezVibArticToTie(masterScore);
     }
 }
 
@@ -401,7 +482,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
             newArtic->setPlayArticulation(combinedArtic->playArticulation());
             newArtic->setVisible(combinedArtic->visible());
             newArtic->setOrnamentStyle(combinedArtic->ornamentStyle());
-            LinkedObjects* links = new LinkedObjects(masterScore);
+            LinkedObjects* links = new LinkedObjects();
             links->push_back(newArtic);
             newArtic->setLinks(links);
             parentChord->add(newArtic);
@@ -496,6 +577,19 @@ ArticulationAnchor CompatUtils::translateToNewArticulationAnchor(int anchor)
     }
 }
 
+double CompatUtils::convertChordExtModUnits(double val)
+{
+    // Pre 4.6 this value was in 1/5 of a spatium
+    // After 4.6 this is in % of root cap height
+    // The best we can do for conversion of old files is to assume a default spatium of 1.75mm and a default font size of 10pt
+    // The height value is calculated from Edwin at 10pt using FontMetrics::capHeight
+    constexpr double DEFAULT_STAVE_SPACE_MM = 1.75;
+    constexpr double DEFAULT_SPATIUM = DEFAULT_STAVE_SPACE_MM * DPMM;
+    constexpr double DEFAULT_FONT_CAP_HEIGHT = 35.3795;
+
+    return ((val / 5) * DEFAULT_SPATIUM) / DEFAULT_FONT_CAP_HEIGHT;
+}
+
 void CompatUtils::resetRestVerticalOffset(MasterScore* masterScore)
 {
     for (Score* score : masterScore->scoreList()) {
@@ -560,8 +654,8 @@ void CompatUtils::resetStemLengthsForTwoNoteTrems(MasterScore* masterScore)
                     TremoloTwoChord* trem = chord->tremoloTwoChord();
                     Stem* stem = chord->stem();
                     if (stem && trem) {
-                        if (stem->userLength() != Millimetre(0)) {
-                            stem->setUserLength(Millimetre(0));
+                        if (!stem->userLength().isZero()) {
+                            stem->setUserLength(Spatium(0));
                         }
                     }
                 }
@@ -667,4 +761,201 @@ void CompatUtils::resetFramesExclusionFromParts(MasterScore* masterScore)
             }
         }
     }
+}
+
+void CompatUtils::mapHeaderFooterStyles(MasterScore* score)
+{
+    // Copyright and page numbers used header/footer styling before 4.4 - after 4.4 these have their own styles. To ensure nothing
+    // changes visually when loading a pre-4.4 score for the first time, we must search the header/footer strings for copyright/page
+    // number macros and set the "defaults" for copyright/page number styles based on where the macros were inserted...
+    const auto doMap = [score](const TextStyleType type, const std::vector<Sid>& headerFooterStringSids) {
+        const TextStyle* headerFooterTextStyle = textStyle(type);
+        const TextStyle* copyrightTextStyle = textStyle(TextStyleType::COPYRIGHT);
+        const TextStyle* pageNumberTextStyle = textStyle(TextStyleType::PAGE_NUMBER);
+
+        //! NOTE: Keep in sync with Page::replaceTextMacros
+        const std::wregex copyrightSearch(LR"(\$[cC])");
+        const std::wregex pageNumberSearch(LR"(\$[pPnN])");
+
+        bool haveMappedCopyright = false;
+        bool haveMappedPageNumber = false;
+        for (const Sid sid : headerFooterStringSids) {
+            const String s = score->style().styleSt(sid);
+            if (!haveMappedCopyright && s.contains(copyrightSearch)) {
+                for (size_t i = 0; i < TEXT_STYLE_SIZE; ++i) {
+                    const Sid headerFooterSid = headerFooterTextStyle->at(i).sid;
+                    const PropertyValue pv = score->style().styleV(headerFooterSid);
+                    const Sid copyrightSid = copyrightTextStyle->at(i).sid;
+                    score->style().set(copyrightSid, pv);
+                }
+                haveMappedCopyright = true;
+            }
+            if (!haveMappedPageNumber && s.contains(pageNumberSearch)) {
+                for (size_t i = 0; i < TEXT_STYLE_SIZE; ++i) {
+                    const Sid headerFooterSid = headerFooterTextStyle->at(i).sid;
+                    const Sid pageNumberSid = pageNumberTextStyle->at(i).sid;
+                    const PropertyValue pv = score->style().styleV(headerFooterSid);
+                    score->style().set(pageNumberSid, pv);
+                }
+                haveMappedPageNumber = true;
+            }
+        }
+    };
+
+    doMap(TextStyleType::HEADER, { Sid::oddHeaderL,  Sid::oddHeaderC,  Sid::oddHeaderR,
+                                   Sid::evenHeaderL, Sid::evenHeaderC, Sid::evenHeaderR });
+    doMap(TextStyleType::FOOTER, { Sid::oddFooterL,  Sid::oddFooterC,  Sid::oddFooterR,
+                                   Sid::evenFooterL, Sid::evenFooterC, Sid::evenFooterR });
+}
+
+NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
+{
+    assert(textLine->anchor() == Spanner::Anchor::NOTE);
+    Note* startNote = toNote(textLine->startElement());
+    Note* endNote = toNote(textLine->endElement());
+
+    NoteLine* noteLine = Factory::createNoteLine(startNote);
+    noteLine->setParent(startNote);
+    noteLine->setStartElement(startNote);
+    noteLine->setTrack(textLine->track());
+    noteLine->setTick(textLine->tick());
+    noteLine->setEndElement(endNote);
+    noteLine->setTick2(textLine->tick2());
+    noteLine->setVisible(textLine->visible());
+
+    // Preserve old layout style
+    noteLine->setLineEndPlacement(NoteLineEndPlacement::LEFT_EDGE);
+
+    for (Pid pid : textLine->textLineBasePropertyIds()) {
+        noteLine->setProperty(pid, textLine->getProperty(pid));
+    }
+
+    for (const SpannerSegment* oldSeg : textLine->spannerSegments()) {
+        LineSegment* newSeg = noteLine->createLineSegment(toSystem(oldSeg->parent()));
+        newSeg->setOffset(oldSeg->offset());
+        newSeg->setUserOff2(oldSeg->userOff2());
+
+        noteLine->add(newSeg);
+    }
+
+    LinkedObjects* links = textLine->links();
+    noteLine->setLinks(links);
+    if (links) {
+        links->push_back(noteLine);
+    }
+
+    return noteLine;
+}
+
+void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
+{
+    std::set<TextLine*> oldLines; // NoteLines used to be TextLines
+
+    for (Measure* measure = masterScore->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment& segment : measure->segments()) {
+            if (!segment.isChordRestType()) {
+                continue;
+            }
+            for (track_idx_t track = 0; track <= masterScore->ntracks(); track++) {
+                EngravingItem* el = segment.elementAt(track);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+                Chord* chord = toChord(el);
+                for (Note* note : chord->notes()) {
+                    for (Spanner* spanner : note->spannerFor()) {
+                        if (!spanner->isTextLine() || spanner->anchor() != Spanner::Anchor::NOTE) {
+                            continue;
+                        }
+
+                        oldLines.insert(toTextLine(spanner));
+
+                        LinkedObjects* links = spanner->links();
+                        if (!links || links->empty()) {
+                            continue;
+                        }
+
+                        for (EngravingObject* linked : *links) {
+                            if (linked != spanner && linked && linked->isTextLine()
+                                && toTextLine(linked)->anchor() == Spanner::Anchor::NOTE) {
+                                oldLines.insert(toTextLine(linked));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (TextLine* oldLine : oldLines) {
+        NoteLine* newLine = createNoteLineFromTextLine(oldLine);
+        EngravingItem* parent = newLine->parentItem();
+
+        parent->remove(oldLine);
+        parent->add(newLine);
+
+        delete oldLine;
+    }
+}
+
+void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
+{
+    std::set<Articulation*> oldArtics; // NoteLines used to be TextLines
+
+    for (Measure* meas = masterScore->firstMeasure(); meas; meas = meas->nextMeasure()) {
+        for (Segment& seg : meas->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* item : seg.elist()) {
+                if (!item || !item->isChord()) {
+                    continue;
+                }
+                Chord* chord = toChord(item);
+                for (Articulation* a : chord->articulations()) {
+                    if (!a->isLaissezVib()) {
+                        continue;
+                    }
+                    oldArtics.insert(a);
+
+                    LinkedObjects* links = a->links();
+                    if (!links || links->empty()) {
+                        continue;
+                    }
+
+                    for (EngravingObject* linked : *links) {
+                        if (linked != a && linked && linked->isLaissezVib()) {
+                            oldArtics.insert(toArticulation(linked));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (Articulation* oldArtic : oldArtics) {
+        Chord* parentChord = toChord(oldArtic->parentItem());
+        Note* parentNote = oldArtic->up() ? parentChord->upNote() : parentChord->downNote();
+
+        parentChord->remove(oldArtic);
+
+        LaissezVib* lv = Factory::createLaissezVib(parentNote);
+        lv->setParent(parentNote);
+        parentNote->add(lv);
+
+        delete oldArtic;
+    }
+}
+
+void CompatUtils::setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s)
+{
+    Key key = Key::INVALID;
+    const Staff* st = h->staff();
+    key = st ? st->key(h->tick()) : Key::INVALID;
+    info->setRootTpc(function2Tpc(s, key));
+}
+
+Sid CompatUtils::positionStyleFromAlign(Sid align)
+{
+    return muse::value(ALIGN_VALS_TO_CONVERT, align, Sid::NOSTYLE);
 }

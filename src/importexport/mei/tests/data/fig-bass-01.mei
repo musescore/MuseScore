@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -34,6 +34,7 @@
                      <staffGrp bar.thru="true" symbol="brace">
                         <label>Piano</label>
                         <labelAbbr>Pno.</labelAbbr>
+                        <instrDef midi.instrnum="0" />
                         <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
                            <clef shape="G" line="2" />
                         </staffDef>
@@ -57,18 +58,18 @@
                            <note xml:id="nyk80vv" dur="4" pname="c" oct="3" />
                         </layer>
                      </staff>
-                     <harm startid="#n1i43w58">
+                     <harm staff="2" startid="#n1i43w58">
                         <fb xml:id="ffz7y2q">
                            <f xml:id="fuej3fi">6</f>
                            <f xml:id="fj4gnll">5</f>
                         </fb>
                      </harm>
-                     <harm startid="#n1rjye5l">
+                     <harm staff="2" startid="#n1rjye5l">
                         <fb xml:id="f1522aas">
                            <f xml:id="f1dnqorw">6#</f>
                         </fb>
                      </harm>
-                     <harm startid="#nyk80vv">
+                     <harm staff="2" startid="#nyk80vv">
                         <fb xml:id="fzp6izt">
                            <f xml:id="f1rg3br9">6b__</f>
                         </fb>
@@ -88,17 +89,17 @@
                            <note xml:id="nmw9hng" dur="4" pname="c" oct="3" />
                         </layer>
                      </staff>
-                     <harm startid="#n1l35gbb">
+                     <harm staff="2" startid="#n1l35gbb">
                         <fb xml:id="fct3c8g">
                            <f xml:id="f1dwv9vp">5bb</f>
                         </fb>
                      </harm>
-                     <harm startid="#nenmw8s">
+                     <harm staff="2" startid="#nenmw8s">
                         <fb xml:id="f16wulbx">
                            <f xml:id="f1so57zl">5##</f>
                         </fb>
                      </harm>
-                     <harm startid="#nmw9hng">
+                     <harm staff="2" startid="#nmw9hng">
                         <fb xml:id="f5kj22w">
                            <f xml:id="f19f8t1u">5h</f>
                         </fb>
@@ -118,7 +119,7 @@
                            <note xml:id="n45ov2a" dur="4" pname="c" oct="3" />
                         </layer>
                      </staff>
-                     <harm startid="#n1kwtmew">
+                     <harm staff="2" startid="#n1kwtmew">
                         <fb xml:id="f1aiqtpi">
                            <f xml:id="f1g0tln2">4+</f>
                         </fb>

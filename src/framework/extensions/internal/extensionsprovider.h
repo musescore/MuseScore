@@ -22,36 +22,46 @@
 #ifndef MUSE_EXTENSIONS_EXTENSIONSPROVIDER_H
 #define MUSE_EXTENSIONS_EXTENSIONSPROVIDER_H
 
+#include "global/async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "../iextensionsconfiguration.h"
 #include "../iextensionsprovider.h"
+#include "../iextensionsexecpointsregister.h"
 #include "global/iinteractive.h"
+#include "io/ifilesystem.h"
 
 namespace muse::extensions {
-class ExtensionsProvider : public IExtensionsProvider, public Injectable
+class ExtensionsProvider : public IExtensionsProvider, public Injectable, public async::Asyncable
 {
-    Inject<IExtensionsConfiguration> configuration;
-    Inject<IInteractive> interactive;
+    Inject<IExtensionsConfiguration> configuration = { this };
+    Inject<IExtensionsExecPointsRegister> execPointsRegister = { this };
+    Inject<IInteractive> interactive = { this };
+    Inject<io::IFileSystem> fileSystem  = { this };
 
 public:
     ExtensionsProvider(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void reloadPlugins() override;
+    void reloadExtensions() override;
 
     ManifestList manifestList(Filter filter = Filter::All) const override;
     async::Notification manifestListChanged() const override;
 
+    bool exists(const Uri& uri) const override;
     const Manifest& manifest(const Uri& uri) const override;
     async::Channel<Manifest> manifestChanged() const override;
     Action action(const UriQuery& q) const override;
 
     KnownCategories knownCategories() const override;
 
-    Ret setEnable(const Uri& uri, bool enable) override;
-
     Ret perform(const UriQuery& uri) override;
     Ret run(const UriQuery& uri) override;
+
+    Ret setExecPoint(const Uri& uri, const ExecPointName& name) override;
+    std::vector<ExecPoint> execPoints(const Uri& uri) const override;
+    Ret performPoint(const ExecPointName& name) override;
+    void performPointAsync(const ExecPointName& name) override;
 
 private:
 

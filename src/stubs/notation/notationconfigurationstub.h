@@ -30,6 +30,8 @@ class NotationConfigurationStub : public INotationConfiguration
 public:
     NotationConfigurationStub() = default;
 
+    QColor notationColor() const override;
+
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color)  override;
 
@@ -63,24 +65,36 @@ public:
     QColor borderColor() const override;
     int borderWidth() const override;
 
-    QColor anchorLineColor() const override;
+    QColor anchorColor() const override;
 
     QColor playbackCursorColor() const override;
     QColor loopMarkerColor() const override;
     int cursorOpacity() const override;
 
+    bool thinNoteInputCursor() const override;
+
     QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
+    QColor highlightSelectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
     QColor dropRectColor() const override;
 
+    muse::draw::Color noteInputPreviewColor() const override;
+
+    bool useNoteInputCursorInInputByDuration() const override;
+    void setUseNoteInputCursorInInputByDuration(bool use) override;
+    muse::async::Notification useNoteInputCursorInInputByDurationChanged() const override;
+
     int selectionProximity() const override;
     void setSelectionProximity(int proximity)  override;
+    muse::async::Channel<int> selectionProximityChanged() const override;
 
     ZoomType defaultZoomType() const override;
     void setDefaultZoomType(ZoomType zoomType)  override;
 
     int defaultZoom() const override;
     void setDefaultZoom(int zoomPercentage)  override;
+
+    muse::async::Notification defaultZoomChanged() const override;
 
     QList<int> possibleZoomPercentageList() const override;
 
@@ -89,6 +103,7 @@ public:
 
     int mouseZoomPrecision() const override;
     void setMouseZoomPrecision(int precision)  override;
+    muse::async::Notification mouseZoomPrecisionChanged() const override;
 
     std::string fontFamily() const override;
     int fontSize() const override;
@@ -99,12 +114,27 @@ public:
 
     muse::io::path_t defaultStyleFilePath() const override;
     void setDefaultStyleFilePath(const muse::io::path_t& path)  override;
+    muse::async::Channel<muse::io::path_t> defaultStyleFilePathChanged() const override;
 
     muse::io::path_t partStyleFilePath() const override;
     void setPartStyleFilePath(const muse::io::path_t& path)  override;
+    muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const override;
+
+    NoteInputMethod defaultNoteInputMethod() const override;
+    void setDefaultNoteInputMethod(NoteInputMethod method) override;
+    muse::async::Notification defaultNoteInputMethodChanged() const override;
+
+    bool addAccidentalDotsArticulationsToNextNoteEntered() const override;
+    void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) override;
+    muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const override;
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled)  override;
+    muse::async::Notification isMidiInputEnabledChanged() const override;
+
+    bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const override;
+    void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value) override;
+    muse::async::Notification startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const override;
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled)  override;
@@ -117,8 +147,17 @@ public:
     void setIsPlayChordSymbolsEnabled(bool enabled)  override;
     muse::async::Notification isPlayChordSymbolsChanged() const override;
 
+    bool isPlayPreviewNotesInInputByDuration() const override;
+    void setIsPlayPreviewNotesInInputByDuration(bool play) override;
+    muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const override;
+
+    bool playPreviewNotesWithScoreDynamics() const override;
+    void setPlayPreviewNotesWithScoreDynamics(bool use) override;
+    muse::async::Notification playPreviewNotesWithScoreDynamicsChanged() const override;
+
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled)  override;
+    muse::async::Notification isMetronomeEnabledChanged() const override;
 
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled)  override;
@@ -135,12 +174,15 @@ public:
 
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value)  override;
+    muse::async::Channel<bool> colorNotesOutsideOfUsablePitchRangeChanged() const override;
 
     int delayBetweenNotesInRealTimeModeMilliseconds() const override;
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs)  override;
+    muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const override;
 
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs)  override;
+    muse::async::Channel<int> notePlayDurationMillisecondsChanged() const override;
 
     void setTemplateModeEnabled(std::optional<bool> enabled) override;
     void setTestModeEnabled(std::optional<bool> enabled) override;
@@ -171,8 +213,32 @@ public:
     ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number)  override;
 
+    ValCh<bool> midiUseWrittenPitch() const override;
+    void setMidiUseWrittenPitch(bool value)  override;
+
+    bool useNewPercussionPanel() const override;
+    void setUseNewPercussionPanel(bool use) override;
+    muse::async::Notification useNewPercussionPanelChanged() const override;
+
+    bool percussionPanelUseNotationPreview() const override;
+    void setPercussionPanelUseNotationPreview(bool use);
+    muse::async::Notification percussionPanelUseNotationPreviewChanged() const override;
+
+    PercussionPanelAutoShowMode percussionPanelAutoShowMode() const override;
+    void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode) override;
+    muse::async::Notification percussionPanelAutoShowModeChanged() const override;
+
+    bool showPercussionPanelPadSwapDialog() const override;
+    void setShowPercussionPanelPadSwapDialog(bool show);
+    muse::async::Notification showPercussionPanelPadSwapDialogChanged() const override;
+
+    bool percussionPanelMoveMidiNotesAndShortcuts() const override;
+    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move);
+    muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const override;
+
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path)  override;
+    muse::async::Channel<std::string> styleFileImportPathChanged() const override;
 };
 }
 

@@ -33,6 +33,7 @@ muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice&
     const SoundTrackFormat format {
         SoundTrackType::FLAC,
         static_cast<sample_rate_t>(configuration()->exportSampleRate()),
+        configuration()->exportBufferSize(),
         2 /* audioChannelsNumber */,
         128 /* bitRate */
     };

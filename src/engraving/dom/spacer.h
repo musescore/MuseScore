@@ -55,15 +55,17 @@ public:
     SpacerType spacerType() const { return m_spacerType; }
     void setSpacerType(SpacerType t) { m_spacerType = t; }
 
+    int subtype() const override { return int(m_spacerType); }
+    TranslatableString subtypeUserName() const override;
+
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
-    void spatiumChanged(double, double) override;
 
-    void setGap(Millimetre sp);
-    Millimetre gap() const { return m_gap; }
+    void setGap(Spatium sp);
+    Spatium gap() const { return m_gap; }
 
-    const muse::draw::PainterPath& path() const { return m_path; }
+    double absoluteGap() const { return absoluteFromSpatium(m_gap); }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
@@ -75,7 +77,10 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    void layout0();
+    struct LayoutData : public EngravingItem::LayoutData {
+        PainterPath path;
+    };
+    DECLARE_LAYOUTDATA_METHODS(Spacer)
 
 private:
 
@@ -84,8 +89,7 @@ private:
     Spacer(const Spacer&);
 
     SpacerType m_spacerType = SpacerType::UP;
-    Millimetre m_gap;
-    muse::draw::PainterPath m_path;
+    Spatium m_gap;
 };
 } // namespace mu::engraving
 #endif

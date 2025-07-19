@@ -24,8 +24,9 @@
 
 #include <memory>
 
-#include "io/path.h"
-#include "types/ret.h"
+#include "global/io/path.h"
+#include "global/types/ret.h"
+#include "global/async/channel.h"
 
 #include "iprojectaudiosettings.h"
 #include "notation/imasternotation.h"
@@ -69,7 +70,10 @@ public:
     virtual bool needAutoSave() const = 0;
     virtual void setNeedAutoSave(bool val) = 0;
 
-    virtual muse::Ret save(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save) = 0;
+    virtual muse::Ret save(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save,
+                           bool createBackup = true) = 0;
+    virtual muse::async::Channel<muse::io::path_t, SaveMode> saveComplited() const = 0;
+
     virtual muse::Ret writeToDevice(QIODevice* device) = 0;
 
     virtual ProjectMeta metaInfo() const = 0;

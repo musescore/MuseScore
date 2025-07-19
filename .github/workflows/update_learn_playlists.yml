@@ -1,0 +1,61 @@
+name: 'Update: Learn playlists'
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Mode: stable, testing'
+        default: 'testing'
+        required: true
+  workflow_call:
+    inputs:
+      mode:
+        description: 'Mode: stable, testing'
+        default: 'testing'
+        type: string
+        required: true
+      environment:
+        description: "Environment: use 'production' to prompt for approval"
+        default: ''
+        type: string
+        required: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  update_playlists:
+    strategy:
+      fail-fast: false
+      matrix:
+        playlist:
+          - filename: started_playlist
+            id: PLTYuWi2LmaPEhcwZJwFZqoyQ2xXx_maPa
+          # - filename: advanced_playlist # old playlist no longer used
+          #   id: PL24C760637A625BB6
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }} # can be empty/blank (if so, URL will not be shown)
+      url: https://www.youtube.com/playlist?list=${{ matrix.playlist.id }} # show on run page
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Update playlist info on s3
+        run: |
+          if [ '${{ inputs.mode }}' == 'stable' ]; then
+            S3_URL='s3://extensions.musescore.org/4.0/learn/${{ matrix.playlist.filename }}.json'
+          else
+            S3_URL='s3://extensions.musescore.org/4.0/learn/${{ matrix.playlist.filename }}.test.json'
+          fi
+
+          bash ./buildscripts/ci/learn/make_playlists_info_file.sh \
+            --youtube_api_key '${{ secrets.YOUTUBE_API_KEY }}' \
+            --youtube_playlist_id '${{ matrix.playlist.id }}'
+
+          bash ./buildscripts/ci/tools/s3_push_file.sh \
+            --s3_key '${{ secrets.S3_KEY }}' \
+            --s3_secret '${{ secrets.S3_SECRET }}' \
+            --s3_url "${S3_URL}" \
+            --file_path 'build.artifacts/playlist.json'

@@ -41,7 +41,7 @@ MStyle* mu::engraving::apiv1::styleWrap(mu::engraving::MStyle* style, mu::engrav
 
 mu::engraving::Sid MStyle::keyToSid(const QString& key)
 {
-    static QMetaEnum sidEnum = QMetaEnum::fromType<Sid>();
+    static const QMetaEnum sidEnum = QMetaEnum::fromType<Sid>();
 
     QByteArray ba = key.toLatin1();
     bool ok;
@@ -71,7 +71,7 @@ QVariant MStyle::value(const QString& key) const
         return QVariant();
     }
 
-    const PropertyValue val = _style->value(sid);
+    const PropertyValue val = m_style->value(sid);
     return val.toQVariant();
 }
 
@@ -89,11 +89,11 @@ void MStyle::setValue(const QString& key, QVariant value)
         return;
     }
 
-    if (_score) {
+    if (m_score) {
         // Style belongs to actual score: change style value in undoable way
-        _score->undoChangeStyleVal(sid, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(sid)));
+        m_score->undoChangeStyleVal(sid, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(sid)));
     } else {
         // Style is not bound to a score: change the value directly
-        _style->set(sid, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(sid)));
+        m_style->set(sid, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(sid)));
     }
 }

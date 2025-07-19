@@ -82,7 +82,7 @@ QString Palette::translatedName() const
 
 void Palette::retranslate()
 {
-    for (PaletteCellPtr cell : m_cells) {
+    for (const PaletteCellPtr& cell : m_cells) {
         cell->retranslate();
     }
 }
@@ -165,7 +165,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const muse::Translatab
 PaletteCellPtr Palette::appendActionIcon(ActionIconType type, ActionCode code, double mag)
 {
     const muse::ui::UiAction& action = actionsRegister()->action(code);
-    QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
+    const QString name = !action.description.isEmpty() ? action.description.str : action.title.raw().str;
     auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
@@ -377,7 +377,7 @@ void Palette::write(XmlWriter& xml, bool pasteMode) const
         xml.tag("expanded", m_isExpanded, false);
     }
 
-    for (PaletteCellPtr cell : m_cells) {
+    for (const PaletteCellPtr& cell : m_cells) {
         if (!cell) { // from old palette, not sure if it is still needed
             xml.tag("Cell");
             continue;
@@ -554,7 +554,7 @@ Palette::Type Palette::guessType() const
     }
 
     const EngravingItem* e = nullptr;
-    for (PaletteCellPtr cell : m_cells) {
+    for (const PaletteCellPtr& cell : m_cells) {
         if (cell->element) {
             e = cell->element.get();
             break;

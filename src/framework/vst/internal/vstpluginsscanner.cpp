@@ -26,6 +26,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::vst;
 
 /**

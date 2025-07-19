@@ -28,7 +28,6 @@
 #include "ui/iuiactionsregister.h"
 #include "project/inotationwritersregister.h"
 
-#include "internal/notation.h"
 #include "internal/notationactioncontroller.h"
 #include "internal/notationconfiguration.h"
 #include "internal/midiinputoutputcontroller.h"
@@ -37,6 +36,7 @@
 #include "internal/mscnotationwriter.h"
 #include "internal/instrumentsrepository.h"
 #include "internal/notationcreator.h"
+#include "internal/engravingfontscontroller.h"
 
 #include "view/notationpaintview.h"
 #include "view/notationswitchlistmodel.h"
@@ -45,17 +45,23 @@
 #include "view/noteinputbarmodel.h"
 #include "view/noteinputbarcustomisemodel.h"
 #include "view/noteinputbarcustomiseitem.h"
-#include "view/internal/undoredomodel.h"
+#include "view/internal/undoredotoolbarmodel.h"
+#include "view/internal/undohistorymodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
-#include "view/selectionfiltermodel.h"
+
+#include "view/selectionfilter/voicesselectionfiltermodel.h"
+#include "view/selectionfilter/notesinchordselectionfiltermodel.h"
+#include "view/selectionfilter/elementsselectionfiltermodel.h"
+
 #include "view/editgridsizedialogmodel.h"
+#include "view/editpercussionshortcutmodel.h"
+#include "view/paintedengravingitem.h"
 
 #include "view/pianokeyboard/pianokeyboardview.h"
 #include "view/pianokeyboard/pianokeyboardpanelcontextmenumodel.h"
 
 #include "ui/iinteractiveuriregister.h"
-#include "ui/uitypes.h"
 #include "view/widgets/editstyle.h"
 #include "view/widgets/measureproperties.h"
 #include "view/widgets/editstaff.h"
@@ -71,10 +77,16 @@
 #include "view/widgets/realizeharmonydialog.h"
 #include "view/notationcontextmenumodel.h"
 #include "view/abstractelementpopupmodel.h"
-#include "view/internal/undoredomodel.h"
 #include "view/internal/harppedalpopupmodel.h"
 #include "view/internal/caposettingsmodel.h"
 #include "view/internal/stringtuningssettingsmodel.h"
+#include "view/internal/dynamicpopupmodel.h"
+#include "view/internal/partialtiepopupmodel.h"
+
+#include "view/internal/shadownotepopupmodel.h"
+#include "view/internal/percussionnotepopupcontentmodel.h"
+
+#include "view/percussionpanel/percussionpanelmodel.h"
 
 #include "view/styledialog/styleitem.h"
 #include "view/styledialog/notespagemodel.h"
@@ -83,6 +95,15 @@
 #include "view/styledialog/bendstyleselector.h"
 #include "view/styledialog/tieplacementselector.h"
 #include "view/styledialog/accidentalgrouppagemodel.h"
+#include "view/styledialog/fretboardspagemodel.h"
+#include "view/styledialog/glissandosectionmodel.h"
+#include "view/styledialog/notelinesectionmodel.h"
+#include "view/styledialog/clefkeytimesigpagemodel.h"
+#include "view/styledialog/hammeronpullofftappingpagemodel.h"
+#include "view/styledialog/repeatbarlinessectionmodel.h"
+#include "view/styledialog/chordsymbolspagemodel.h"
+#include "view/styledialog/voltaspagemodel.h"
+#include "view/styledialog/measurenumberspagemodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -110,6 +131,10 @@ void NotationModule::registerExports()
     m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController);
     m_midiInputOutputController = std::make_shared<MidiInputOutputController>();
     m_instrumentsRepository = std::make_shared<InstrumentsRepository>();
+
+#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
+    m_engravingFontsController = std::make_shared<EngravingFontsController>();
+#endif
 
     ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
@@ -149,6 +174,9 @@ void NotationModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://notation/parts"), "MuseScore/NotationScene/PartsDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/selectmeasurescount"), "MuseScore/NotationScene/SelectMeasuresCountDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/editgridsize"), "MuseScore/NotationScene/EditGridSizeDialog.qml");
+        ir->registerQmlUri(Uri("musescore://notation/percussionpanelpadswap"), "MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml");
+
+        ir->registerQmlUri(Uri("musescore://notation/editpercussionshortcut"), "MuseScore/NotationScene/EditPercussionShortcutDialog.qml");
     }
 }
 
@@ -170,17 +198,33 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NoteInputBarCustomiseModel>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseModel");
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
-    qmlRegisterType<UndoRedoModel>("MuseScore.NotationScene", 1, 0, "UndoRedoModel");
+    qmlRegisterType<UndoRedoToolbarModel>("MuseScore.NotationScene", 1, 0, "UndoRedoToolbarModel");
+    qmlRegisterType<UndoHistoryModel>("MuseScore.NotationScene", 1, 0, "UndoHistoryModel");
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
-    qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
+    qmlRegisterType<ElementsSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "ElementsSelectionFilterModel");
+    qmlRegisterType<VoicesSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "VoicesSelectionFilterModel");
+    qmlRegisterType<NotesInChordSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "NotesInChordSelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
+    qmlRegisterType<EditPercussionShortcutModel>("MuseScore.NotationScene", 1, 0, "EditPercussionShortcutModel");
     qmlRegisterType<PianoKeyboardView>("MuseScore.NotationScene", 1, 0, "PianoKeyboardView");
     qmlRegisterType<PianoKeyboardPanelContextMenuModel>("MuseScore.NotationScene", 1, 0, "PianoKeyboardPanelContextMenuModel");
+
     qmlRegisterUncreatableType<AbstractElementPopupModel>("MuseScore.NotationScene", 1, 0, "Notation",
                                                           "Not creatable as it is an enum type");
     qmlRegisterType<HarpPedalPopupModel>("MuseScore.NotationScene", 1, 0, "HarpPedalPopupModel");
     qmlRegisterType<CapoSettingsModel>("MuseScore.NotationScene", 1, 0, "CapoSettingsModel");
     qmlRegisterType<StringTuningsSettingsModel>("MuseScore.NotationScene", 1, 0, "StringTuningsSettingsModel");
+    qmlRegisterType<DynamicPopupModel>("MuseScore.NotationScene", 1, 0, "DynamicPopupModel");
+    qmlRegisterType<PartialTiePopupModel>("MuseScore.NotationScene", 1, 0, "PartialTiePopupModel");
+
+    qmlRegisterUncreatableType<ShadowNotePopupContent>("MuseScore.NotationScene", 1, 0, "ShadowNotePopupContent", "Cannot create");
+    qmlRegisterType<ShadowNotePopupModel>("MuseScore.NotationScene", 1, 0, "ShadowNotePopupModel");
+    qmlRegisterType<PercussionNotePopupContentModel>("MuseScore.NotationScene", 1, 0, "PercussionNotePopupContentModel");
+
+    qmlRegisterType<PaintedEngravingItem>("MuseScore.NotationScene", 1, 0, "PaintedEngravingItem");
+
+    qmlRegisterType<PercussionPanelModel>("MuseScore.NotationScene", 1, 0, "PercussionPanelModel");
+    qmlRegisterUncreatableType<PanelMode>("MuseScore.NotationScene", 1, 0, "PanelMode", "Cannot create");
 
     qmlRegisterUncreatableType<StyleItem>("MuseScore.NotationScene", 1, 0, "StyleItem", "Cannot create StyleItem from QML");
     qmlRegisterType<NotesPageModel>("MuseScore.NotationScene", 1, 0, "NotesPageModel");
@@ -189,6 +233,15 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<BendStyleSelector>("MuseScore.NotationScene", 1, 0, "BendStyleSelector");
     qmlRegisterType<TiePlacementSelectorModel>("MuseScore.NotationScene", 1, 0, "TiePlacementSelectorModel");
     qmlRegisterType<AccidentalGroupPageModel>("MuseScore.NotationScene", 1, 0, "AccidentalGroupPageModel");
+    qmlRegisterType<FretboardsPageModel>("MuseScore.NotationScene", 1, 0, "FretboardsPageModel");
+    qmlRegisterType<GlissandoSectionModel>("MuseScore.NotationScene", 1, 0, "GlissandoSectionModel");
+    qmlRegisterType<NoteLineSectionModel>("MuseScore.NotationScene", 1, 0, "NoteLineSectionModel");
+    qmlRegisterType<ClefKeyTimeSigPageModel>("MuseScore.NotationScene", 1, 0, "ClefKeyTimeSigPageModel");
+    qmlRegisterType<HammerOnPullOffTappingPageModel>("MuseScore.NotationScene", 1, 0, "HammerOnPullOffTappingPageModel");
+    qmlRegisterType<RepeatBarlinesSectionModel>("MuseScore.NotationScene", 1, 0, "RepeatBarlinesSectionModel");
+    qmlRegisterType<ChordSymbolsPageModel>("MuseScore.NotationScene", 1, 0, "ChordSymbolsPageModel");
+    qmlRegisterType<VoltasPageModel>("MuseScore.NotationScene", 1, 0, "VoltasPageModel");
+    qmlRegisterType<MeasureNumbersPageModel>("MuseScore.NotationScene", 1, 0, "MeasureNumbersPageModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 
@@ -209,11 +262,16 @@ void NotationModule::onInit(const IApplication::RunMode& mode)
     m_actionController->init();
     m_notationUiActions->init();
 
+#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
+    m_engravingFontsController->init();
+#endif
+
     if (mode == IApplication::RunMode::GuiApp) {
         m_midiInputOutputController->init();
     }
 
-    Notation::init();
+    bool isVertical = m_configuration->canvasOrientation().val == muse::Orientation::Vertical;
+    mu::engraving::MScore::setVerticalOrientation(isVertical);
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {

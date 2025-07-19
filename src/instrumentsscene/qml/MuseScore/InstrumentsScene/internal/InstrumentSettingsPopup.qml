@@ -30,6 +30,9 @@ StyledPopupView {
 
     property bool needActiveFirstItem: false
 
+    signal replaceInstrumentRequested()
+    signal resetAllFormattingRequested()
+
     contentHeight: contentColumn.childrenRect.height
 
     onOpened: {
@@ -113,8 +116,8 @@ StyledPopupView {
             visible: settingsModel.isMainScore
 
             onClicked: {
+                root.replaceInstrumentRequested()
                 root.close()
-                Qt.callLater(settingsModel.replaceInstrument)
             }
         }
 
@@ -129,8 +132,8 @@ StyledPopupView {
             visible: !settingsModel.isMainScore
 
             onClicked: {
+                root.resetAllFormattingRequested()
                 root.close()
-                Qt.callLater(settingsModel.resetAllFormatting)
             }
         }
     }

@@ -35,7 +35,7 @@ Rectangle {
 
     signal newColorSelected(var newColor)
 
-    height: 30
+    implicitHeight: 30
     width: parent.width
 
     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
@@ -50,14 +50,17 @@ Rectangle {
 
     ColorPickerModel {
         id: colorPickerModel
+
+        onColorSelected: function(color) {
+            root.newColorSelected(color)
+        }
     }
 
     QtObject {
         id: prv
 
         function selectColor() {
-            var selectedColor = colorPickerModel.selectColor(root.color)
-            root.newColorSelected(selectedColor)
+            colorPickerModel.selectColor(root.color)
         }
     }
 
@@ -81,9 +84,11 @@ Rectangle {
 
     MouseArea {
         id: clickableArea
-
         anchors.fill: parent
+
+        enabled: root.enabled
         hoverEnabled: true
+
         onClicked: {
             navigation.requestActiveByInteraction()
 

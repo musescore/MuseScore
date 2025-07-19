@@ -33,12 +33,9 @@
 
 namespace mu::notation {
 class PianoKeyboardController;
-class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public muse::async::Asyncable
+class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(INotationConfiguration, configuration)
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(int numberOfKeys READ numberOfKeys WRITE setNumberOfKeys NOTIFY numberOfKeysChanged)
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setScaling NOTIFY keyWidthScalingChanged)
@@ -46,9 +43,14 @@ class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public mu
     Q_PROPERTY(qreal scrollBarPosition READ scrollBarPosition WRITE setScrollBarPosition NOTIFY scrollBarChanged)
     Q_PROPERTY(qreal scrollBarSize READ scrollBarSize NOTIFY scrollBarChanged)
 
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+
 public:
     explicit PianoKeyboardView(QQuickItem* parent = nullptr);
     ~PianoKeyboardView() override;
+
+    Q_INVOKABLE void init();
 
     void paint(QPainter* painter) override;
 
@@ -93,6 +95,8 @@ private:
 
     static constexpr piano_key_t MIN_KEY = 0;
     static constexpr piano_key_t MAX_NUM_KEYS = 128;
+
+    bool m_isInitialized = false;
 
     piano_key_t m_lowestKey = MIN_KEY;
     piano_key_t m_numberOfKeys = MAX_NUM_KEYS;

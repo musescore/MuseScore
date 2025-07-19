@@ -49,12 +49,19 @@ private:
     muse::uicomponents::MenuItemList makeTimeSignatureItems();
     muse::uicomponents::MenuItemList makeInstrumentNameItems();
     muse::uicomponents::MenuItemList makeHarmonyItems();
+    muse::uicomponents::MenuItemList makeFretboardDiagramItems();
+    muse::uicomponents::MenuItemList makeElementInFretBoxItems();
     muse::uicomponents::MenuItemList makeSelectItems();
     muse::uicomponents::MenuItemList makeElementItems();
     muse::uicomponents::MenuItemList makeInsertMeasuresItems();
+    muse::uicomponents::MenuItemList makeMoveMeasureItems();
     muse::uicomponents::MenuItemList makeChangeInstrumentItems();
     muse::uicomponents::MenuItemList makeVerticalBoxItems();
     muse::uicomponents::MenuItemList makeHorizontalBoxItems();
+    muse::uicomponents::MenuItemList makeHairpinItems();
+    muse::uicomponents::MenuItemList makeGradualTempoChangeItems();
+
+    muse::uicomponents::MenuItem* makeEditStyle(const EngravingItem* element);
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;
@@ -63,6 +70,8 @@ private:
 
     INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
+
+    const EngravingItem* currentElement() const;
 
     const INotationInteraction::HitElementContext& hitElementContext() const;
 };

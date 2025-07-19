@@ -30,7 +30,7 @@ FocusScope {
     id: root
 
     property bool isIndeterminate: false
-    readonly property string indeterminateText: "--"
+    property string indeterminateText: "--"
     property var currentText: ""
     property alias validator: valueInput.validator
     property alias maximumLength: valueInput.maximumLength
@@ -64,7 +64,7 @@ FocusScope {
     signal textCleared()
     signal textEditingFinished(var newTextValue)
     signal accepted()
-    signal escapted()
+    signal escaped()
 
     function selectAll() {
         valueInput.selectAll()
@@ -103,7 +103,8 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.EditableText
-        accessible.name: Boolean(valueInput.text) ? valueInput.text + " " + measureUnitsLabel.text : valueInput.placeholderText
+        accessible.name: Boolean(valueInput.text) ? valueInput.text + (measureUnitsLabel.text !== "" ? " " + measureUnitsLabel.text : "")
+                                                  : valueInput.placeholderText
         accessible.visualItem: root
         accessible.text: valueInput.text
         accessible.selectedText: valueInput.selectedText
@@ -166,17 +167,17 @@ FocusScope {
             selectByMouse: true
             selectionColor: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.accentOpacityNormal)
             selectedTextColor: ui.theme.fontPrimaryColor
-            placeholderTextColor: ui.theme.fontPrimaryColor
+            placeholderTextColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.3)
             visible: !root.isIndeterminate || activeFocus
 
             text: root.currentText === undefined ? "" : root.currentText
 
-            TextInputFieldModel {
-                id: textInputFieldModel
+            TextInputModel {
+                id: textInputModel
             }
 
             Component.onCompleted: {
-                textInputFieldModel.init()
+                textInputModel.init()
             }
 
             Keys.onShortcutOverride: function(event) {
@@ -190,30 +191,29 @@ FocusScope {
                     return
                 }
 
-                if (textInputFieldModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
+                if (textInputModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
                     event.accepted = true
                 } else {
                     event.accepted = false
 
                     root.focus = false
-                    root.textEditingFinished(valueInput.text)
                 }
             }
 
             Keys.onPressed: function(event) {
                 var isAcceptKey = event.key === Qt.Key_Enter || event.key === Qt.Key_Return
                 var isEscapeKey = event.key === Qt.Key_Escape
-                if (isAcceptKey || isEscapeKey) {
-                    root.focus = false
-                    root.textEditingFinished(valueInput.text)
-                }
 
                 if (isAcceptKey) {
                     root.accepted()
                 }
 
                 if (isEscapeKey) {
-                    root.escapted()
+                    root.escaped()
+                }
+
+                if (isAcceptKey || isEscapeKey) {
+                    root.focus = false
                 }
             }
 
@@ -223,7 +223,6 @@ FocusScope {
                     selectAll()
                 } else {
                     deselect()
-                    root.textEditingFinished(valueInput.text)
                 }
             }
 
@@ -241,6 +240,10 @@ FocusScope {
                 }
 
                 root.textEdited(text)
+            }
+
+            onEditingFinished: {
+                root.textEditingFinished(valueInput.text)
             }
         }
 
@@ -316,6 +319,7 @@ FocusScope {
         height: parent.height
         width: clearTextButtonItem.visible ? parent.width - clearTextButtonItem.width : parent.width
 
+        enabled: root.enabled
         propagateComposedEvents: true
         hoverEnabled: true
         cursorShape: root.readOnly ? Qt.ArrowCursor : Qt.IBeamCursor

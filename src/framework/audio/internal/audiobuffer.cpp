@@ -21,7 +21,8 @@
  */
 #include "audiobuffer.h"
 
-#include "audiosanitizer.h"
+#include <iostream>
+
 #include "log.h"
 
 using namespace muse::audio;
@@ -37,6 +38,18 @@ static const std::vector<float> SILENT_FRAMES(DEFAULT_SIZE, 0.f);
 #else
 #define LOG_AUDIO LOGN
 #endif
+
+inline size_t reservedFrames(const size_t writeIdx, const size_t readIdx)
+{
+    size_t result = 0;
+    if (readIdx <= writeIdx) {
+        result = writeIdx - readIdx;
+    } else {
+        result = writeIdx + DEFAULT_SIZE - readIdx;
+    }
+
+    return result;
+}
 
 struct BaseBufferProfiler {
     size_t reservedFramesMax = 0;
@@ -107,16 +120,17 @@ struct BaseBufferProfiler {
 static BaseBufferProfiler READ_PROFILE("READ_PROFILE", 3000);
 static BaseBufferProfiler WRITE_PROFILE("WRITE_PROFILE", 0);
 
-void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t renderStep)
+void AudioBuffer::init(const audioch_t audioChannelsCount)
 {
-    m_samplesPerChannel = DEFAULT_SIZE_PER_CHANNEL;
     m_audioChannelsCount = audioChannelsCount;
-    m_renderStep = renderStep;
+    m_samplesPerChannel = DEFAULT_SIZE_PER_CHANNEL;
+    m_minSamplesToReserve = DEFAULT_SIZE_PER_CHANNEL / 2;
+    m_renderStep = m_minSamplesToReserve;
 
     m_data.resize(m_samplesPerChannel * m_audioChannelsCount, 0.f);
 }
 
-void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
+void AudioBuffer::setSource(IAudioSourcePtr source)
 {
     if (m_source == source) {
         return;
@@ -129,6 +143,24 @@ void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
     m_source = source;
 }
 
+void AudioBuffer::setMinSamplesPerChannelToReserve(const samples_t samplesPerChannel)
+{
+    IF_ASSERT_FAILED(samplesPerChannel > 0 && samplesPerChannel < DEFAULT_SIZE_PER_CHANNEL) {
+        return;
+    }
+
+    m_minSamplesToReserve = samplesPerChannel * m_audioChannelsCount;
+}
+
+void AudioBuffer::setRenderStep(const samples_t renderStep)
+{
+    IF_ASSERT_FAILED(renderStep > 0 && renderStep < DEFAULT_SIZE_PER_CHANNEL) {
+        return;
+    }
+
+    m_renderStep = renderStep;
+}
+
 void AudioBuffer::forward()
 {
     if (!m_source) {
@@ -139,12 +171,24 @@ void AudioBuffer::forward()
     const auto currentReadIdx = m_readIndex.load(std::memory_order_acquire);
     size_t nextWriteIdx = currentWriteIdx;
 
-    samples_t framesToReserve = DEFAULT_SIZE / 2;
+    while (reservedFrames(nextWriteIdx, currentReadIdx) < m_minSamplesToReserve) {
+        samples_t renderStep = m_renderStep;
+        samples_t samplesToRender = renderStep * m_audioChannelsCount;
 
-    while (reservedFrames(nextWriteIdx, currentReadIdx) < framesToReserve) {
-        m_source->process(m_data.data() + nextWriteIdx, m_renderStep);
+        if (nextWriteIdx + samplesToRender > DEFAULT_SIZE) {
+            renderStep = (DEFAULT_SIZE - nextWriteIdx) / m_audioChannelsCount;
+            samplesToRender = renderStep * m_audioChannelsCount;
+            IF_ASSERT_FAILED(renderStep > 0) {
+                break;
+            }
+        }
 
-        nextWriteIdx = incrementWriteIndex(nextWriteIdx, m_renderStep);
+        m_source->process(m_data.data() + nextWriteIdx, renderStep);
+
+        nextWriteIdx += samplesToRender;
+        if (nextWriteIdx >= DEFAULT_SIZE) {
+            nextWriteIdx = 0;
+        }
     }
 
     m_writeIndex.store(nextWriteIdx, std::memory_order_release);
@@ -159,26 +203,30 @@ void AudioBuffer::pop(float* dest, size_t sampleCount)
         return;
     }
 
-    if (reservedFrames(currentWriteIdx, currentReadIdx) < (sampleCount * 2)) {
+#ifdef DEBUG_AUDIO
+    if (reservedFrames(currentWriteIdx, currentReadIdx) < (sampleCount * m_audioChannelsCount)) {
         static size_t missingFramesTotal = 0;
-        missingFramesTotal += (sampleCount * 2);
-        LOG_AUDIO() << "\n FRAMES MISSED " << sampleCount * 2 << ", reserve: " <<
+        missingFramesTotal += (sampleCount * m_audioChannelsCount);
+        LOG_AUDIO() << "\n FRAMES MISSED " << sampleCount * m_audioChannelsCount << ", reserve: " <<
             reservedFrames(currentWriteIdx, currentReadIdx) << ", total: " << missingFramesTotal;
     }
+#endif
 
     size_t newReadIdx = currentReadIdx;
+    const size_t totalSampleCount = sampleCount * m_audioChannelsCount;
 
     size_t from = newReadIdx;
     auto memStep = sizeof(float);
-    size_t to = from + sampleCount * m_audioChannelsCount;
+    size_t to = from + totalSampleCount;
     if (to > DEFAULT_SIZE) {
         to = DEFAULT_SIZE;
     }
+
     auto count = to - from;
     std::memcpy(dest, m_data.data() + from, count * memStep);
     newReadIdx += count;
 
-    size_t left = sampleCount * m_audioChannelsCount - count;
+    size_t left = totalSampleCount - count;
     if (left > 0) {
         std::memcpy(dest + count, m_data.data(), left * memStep);
         newReadIdx = left;
@@ -191,14 +239,6 @@ void AudioBuffer::pop(float* dest, size_t sampleCount)
     m_readIndex.store(newReadIdx, std::memory_order_release);
 }
 
-void AudioBuffer::setMinSamplesToReserve(size_t lag)
-{
-    IF_ASSERT_FAILED(lag < DEFAULT_SIZE) {
-        lag = DEFAULT_SIZE;
-    }
-    m_minSamplesToReserve = lag;
-}
-
 void AudioBuffer::reset()
 {
     m_readIndex.store(0, std::memory_order_release);
@@ -207,33 +247,7 @@ void AudioBuffer::reset()
     m_data = SILENT_FRAMES;
 }
 
-size_t AudioBuffer::incrementWriteIndex(const size_t writeIdx, const samples_t samplesPerChannel)
+audioch_t AudioBuffer::audioChannelCount() const
 {
-    size_t result = writeIdx;
-    size_t from = writeIdx;
-
-    auto to = writeIdx + samplesPerChannel * m_audioChannelsCount;
-    if (to > DEFAULT_SIZE) {
-        to = DEFAULT_SIZE - 1;
-    }
-    auto count = to - from;
-    result += count;
-
-    if (result >= DEFAULT_SIZE) {
-        result -= DEFAULT_SIZE;
-    }
-
-    return result;
-}
-
-size_t AudioBuffer::reservedFrames(const size_t writeIdx, const size_t readIdx) const
-{
-    size_t result = 0;
-    if (readIdx <= writeIdx) {
-        result = writeIdx - readIdx;
-    } else {
-        result = writeIdx + DEFAULT_SIZE - readIdx;
-    }
-
-    return result;
+    return m_audioChannelsCount;
 }

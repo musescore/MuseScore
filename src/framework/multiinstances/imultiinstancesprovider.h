@@ -43,7 +43,7 @@ public:
     virtual bool isProjectAlreadyOpened(const io::path_t& projectPath) const = 0;
     virtual void activateWindowWithProject(const io::path_t& projectPath) = 0;
     virtual bool isHasAppInstanceWithoutProject() const = 0;
-    virtual void activateWindowWithoutProject() = 0;
+    virtual void activateWindowWithoutProject(const QStringList& args = { }) = 0;
     virtual bool openNewAppInstance(const QStringList& args) = 0;
 
     // Settings
@@ -52,6 +52,7 @@ public:
     virtual void settingsBeginTransaction() = 0;
     virtual void settingsCommitTransaction() = 0;
     virtual void settingsRollbackTransaction() = 0;
+    virtual void settingsReset() = 0;
     virtual void settingsSetValue(const std::string& key, const Val& value) = 0;
 
     // Resources (files)

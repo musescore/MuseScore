@@ -37,16 +37,13 @@ public:
 
     MOCK_METHOD(bool, needCheckForUpdate, (), (const, override));
     MOCK_METHOD(void, setNeedCheckForUpdate, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, needCheckForUpdateChanged, (), (const, override));
 
     MOCK_METHOD(std::string, skippedReleaseVersion, (), (const, override));
     MOCK_METHOD(void, setSkippedReleaseVersion, (const std::string&), (override));
 
-    MOCK_METHOD(std::string, lastShownMuseSoundsReleaseVersion, (), (const, override));
-    MOCK_METHOD(void, setLastShownMuseSoundsReleaseVersion, (const std::string&), (override));
-
     MOCK_METHOD(std::string, checkForAppUpdateUrl, (), (const, override));
     MOCK_METHOD(std::string, previousAppReleasesNotesUrl, (), (const, override));
-    MOCK_METHOD(std::string, checkForMuseSamplerUpdateUrl, (), (const, override));
 
     MOCK_METHOD(muse::network::RequestHeaders, updateHeaders, (), (const, override));
 
@@ -54,6 +51,7 @@ public:
     MOCK_METHOD(std::string, museScorePrivacyPolicyUrl, (), (const, override));
 
     MOCK_METHOD(muse::io::path_t, updateDataPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, updateRequestHistoryJsonPath, (), (const, override));
 };
 }
 

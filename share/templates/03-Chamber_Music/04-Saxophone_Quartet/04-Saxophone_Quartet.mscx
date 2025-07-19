@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
+<museScore version="4.60">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -332,6 +332,10 @@
         <voice>
           <BarLine>
             </BarLine>
+          <KeySig>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -493,6 +497,10 @@
         <voice>
           <BarLine>
             </BarLine>
+          <KeySig>
+            <concertKey>0</concertKey>
+            <actualKey>3</actualKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -648,6 +656,10 @@
         <voice>
           <BarLine>
             </BarLine>
+          <KeySig>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -804,6 +816,10 @@
           <BarLine>
             <span>1</span>
             </BarLine>
+          <KeySig>
+            <concertKey>0</concertKey>
+            <actualKey>3</actualKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>

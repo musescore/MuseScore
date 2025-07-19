@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 
-# If you get Unicode errors on Windows, try setting the environment variable
-# PYTHONIOENCODING=utf-8. More info at https://stackoverflow.com/a/12834315
+import sys
+def eprint(*args, **kwargs):
+    print(*args, **kwargs, file=sys.stderr)
+
+import locale
+if locale.getpreferredencoding().lower() != 'utf-8':
+    encoding = locale.getpreferredencoding()
+    eprint(f"Error: Encoding is '{encoding}': Python is not running in UTF-8 mode.")
+    eprint('  Please set environment variable PYTHONUTF8=1 to enable UTF-8 mode.')
+    raise SystemExit(1)
 
 import csv
 import os
@@ -43,25 +51,11 @@ def find_text(element, tagName, default='[null]'):
     tag = element.find(tagName)
     return default if tag is None else tag.text
 
-os.chdir(sys.path[0]) # make all paths relative to this script's directory
+os.chdir(os.path.dirname(os.path.realpath(__file__))) # make all paths relative to this script's directory
 os.makedirs('tsv', exist_ok=True)
 
 # InstrumentsXML
 root = ET.parse('instruments.xml').getroot()
-
-# Roman's InstrumentsXML
-roman = {}
-if os.path.exists('tsv/instruments_roman.xml'):
-    for instrument in ET.parse('tsv/instruments_roman.xml').getroot().findall('InstrumentGroup/Instrument'):
-        instrument_id = instrument.attrib['id']
-        roman[instrument_id] = {
-            'id':           instrument_id,
-            'trackName':    find_text(instrument, 'trackName'),
-            'longName':     find_text(instrument, 'longName'),
-            'shortName':    find_text(instrument, 'shortName'),
-    'transpositionName':    find_text(instrument, 'transpositionName'),
-            'description':  find_text(instrument, 'description'),
-        }
 
 # Translations
 italian = load_translations('../locale/instruments_it.ts')
@@ -112,20 +106,6 @@ for group in root.findall('InstrumentGroup'):
         trackName = find_text(instrument, 'trackName')
         longName = find_text(instrument, 'longName')
         shortName = find_text(instrument, 'shortName')
-
-        if instrument_id in roman:
-            instrument_roman = roman.pop(instrument_id)
-            trackName_roman = instrument_roman['trackName']
-            longName_roman = instrument_roman['longName']
-            shortName_roman = instrument_roman['shortName']
-            transpositionName_roman = instrument_roman['transpositionName']
-            description_roman = instrument_roman['description']
-        else:
-            longName_roman = null
-            shortName_roman = null
-            transpositionName_roman = null
-            description_roman = null
-
         stringdata = instrument.find('StringData')
         strings_open = []
         strings_fretted = []
@@ -177,21 +157,16 @@ for group in root.findall('InstrumentGroup'):
             'id':           instrument_id,
             'group':        group_id,
             'family':       find_text(instrument, 'family'),
-        'longName_roman':   longName_roman,
             'longName':     longName,
             'longName_it':  italian[longName] if longName in italian else null,
             'longName_de':  german[longName] if longName in german else null,
-        'shortName_roman':  shortName_roman,
             'shortName':    shortName,
             'shortName_it': italian[shortName] if shortName in italian else null,
             'shortName_de': german[shortName] if shortName in german else null,
-        'trackName_roman':  trackName_roman,
             'trackName':    trackName,
             'trackName_it': italian[trackName] if trackName in italian else null,
             'trackName_de': german[trackName] if trackName in german else null,
-    'transpositionName':    transpositionName_roman,
             'init':         find_text(instrument, 'init'),
-    'description_roman':    description_roman,
             'description':  find_text(instrument, 'description'),
             'musicXMLid':   find_text(instrument, 'musicXMLid'),
             'frets':        frets,
@@ -259,6 +234,3 @@ create_tsv('tsv/instruments.tsv', instruments)
 create_tsv('tsv/articulations.tsv', articulations)
 create_tsv('tsv/channels.tsv', channels)
 create_tsv('tsv/drumsets.tsv', drumsets)
-
-for inst in roman.values():
-    print(inst) # these had IDs changed

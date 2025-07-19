@@ -37,12 +37,15 @@ using namespace muse;
 static const Settings::Key BACKUP_KEY("global", "application/backup/subfolder");
 static const Settings::Key DEV_MODE_ENABLED_KEY("global", "application/devModeEnabled");
 static const Settings::Key METRIC_UNIT_KEY("global", "application/metricUnit");
+static const Settings::Key HIGH_RESOLUTION_TIMERS("global", "application/highResolutionTimers");
 
 static const std::string MUSESCORE_URL("https://www.musescore.org/");
+static const std::string MUSEHUB_WEB_URL("https://www.musehub.com/");
 
 void GlobalConfiguration::init()
 {
     settings()->setDefaultValue(DEV_MODE_ENABLED_KEY, Val(application()->unstable()));
+    settings()->setDefaultValue(HIGH_RESOLUTION_TIMERS, Val(false));
 }
 
 io::path_t GlobalConfiguration::appBinPath() const
@@ -170,4 +173,14 @@ void GlobalConfiguration::setMetricUnit(bool metricUnit)
 std::string GlobalConfiguration::museScoreUrl() const
 {
     return MUSESCORE_URL;
+}
+
+std::string GlobalConfiguration::museHubWebUrl() const
+{
+    return MUSEHUB_WEB_URL;
+}
+
+bool GlobalConfiguration::highResolutionTimers() const
+{
+    return settings()->value(HIGH_RESOLUTION_TIMERS).toBool();
 }

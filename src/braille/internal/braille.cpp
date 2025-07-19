@@ -62,7 +62,6 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/types.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
 
@@ -1408,7 +1407,9 @@ void Braille::brailleMeasureItems(BrailleEngravingItemList* beiz, Measure* measu
 
     //Render the barline
     BarLine* bl = lastBarline(measure, staffCount * VOICES);
-    beiz->addEngravingItem(bl, brailleBarline(bl));
+    if (bl) {
+        beiz->addEngravingItem(bl, brailleBarline(bl));
+    }
 
     //Render repeats and jumps that are on the right
     for (EngravingItem* el : measure->el()) {
@@ -2840,9 +2841,10 @@ QString Braille::brailleVolta(Measure* measure, Volta* volta, int staffCount)
 
     // 17.1.1. Page 121. Music Braille Code 2015.
     resetOctave(staffCount);
-    QStringList voltaNumbers = volta->text().toQString().split(QRegularExpression("(,|\\.| )"));
+    static const QRegularExpression regex("(,|\\.| )");
+    const QStringList voltaNumbers = volta->text().toQString().split(regex);
     QString result = QString();
-    for (QString voltaNumber : voltaNumbers) {
+    for (const QString& voltaNumber : voltaNumbers) {
         if (voltaNumber.isEmpty()) {
             continue;
         }

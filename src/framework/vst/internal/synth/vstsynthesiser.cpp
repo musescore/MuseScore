@@ -23,23 +23,23 @@
 
 #include "log.h"
 
-#include "internal/vstplugin.h"
-
 using namespace muse;
 using namespace muse::vst;
 using namespace muse::audio::synth;
 using namespace muse::audio;
+using namespace muse::audioplugins;
 
 static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
     Steinberg::Vst::kCtrlVolume,
     Steinberg::Vst::kCtrlExpression,
     Steinberg::Vst::kCtrlSustainOnOff,
+    Steinberg::Vst::kCtrlSustenutoOnOff,
     Steinberg::Vst::kPitchBend,
 };
 
-VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioInputParams& params)
-    : AbstractSynthesizer(params),
-    m_pluginPtr(std::make_shared<VstPlugin>(params.resourceMeta.id)),
+VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioInputParams& params,
+                               const modularity::ContextPtr& iocCtx)
+    : AbstractSynthesizer(params, iocCtx),
     m_vstAudioClient(std::make_unique<VstAudioClient>()),
     m_trackId(trackId)
 {
@@ -47,22 +47,23 @@ VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioIn
 
 VstSynthesiser::~VstSynthesiser()
 {
-    pluginsRegister()->unregisterInstrPlugin(m_trackId, m_params.resourceMeta.id);
+    instancesRegister()->unregisterInstrPlugin(m_params.resourceMeta.id, m_trackId);
 }
 
 void VstSynthesiser::init()
 {
-    pluginsRegister()->registerInstrPlugin(m_trackId, m_pluginPtr);
-    m_pluginPtr->load();
+    m_pluginPtr = instancesRegister()->makeAndRegisterInstrPlugin(m_params.resourceMeta.id, m_trackId);
 
-    m_samplesPerChannel = config()->driverBufferSize();
+    m_audioChannelsCount = config()->audioChannelsCount();
+    m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr, m_audioChannelsCount);
 
-    m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr);
+    const samples_t blockSize = config()->samplesToPreallocate();
 
-    auto onPluginLoaded = [this]() {
+    auto onPluginLoaded = [this, blockSize]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
-        m_vstAudioClient->setBlockSize(m_samplesPerChannel);
-        m_sequencer.init(m_vstAudioClient->paramsMapping(SUPPORTED_CONTROLLERS));
+        m_vstAudioClient->setMaxSamplesPerBlock(blockSize);
+        m_vstAudioClient->loadSupportedParams();
+        m_sequencer.init(m_vstAudioClient->paramsMapping(SUPPORTED_CONTROLLERS), m_useDynamicEvents);
     };
 
     if (m_pluginPtr->isLoaded()) {
@@ -102,7 +103,7 @@ bool VstSynthesiser::isValid() const
         return false;
     }
 
-    return m_pluginPtr->isValid();
+    return m_pluginPtr->isLoaded();
 }
 
 muse::audio::AudioSourceType VstSynthesiser::type() const
@@ -122,24 +123,32 @@ std::string VstSynthesiser::name() const
 void VstSynthesiser::revokePlayingNotes()
 {
     if (m_vstAudioClient) {
-        m_vstAudioClient->flush();
+        m_vstAudioClient->allNotesOff();
     }
 }
 
 void VstSynthesiser::flushSound()
 {
-    revokePlayingNotes();
+    m_sequencer.flushOffstream();
+
+    if (m_vstAudioClient) {
+        m_vstAudioClient->flush();
+    }
 }
 
-void VstSynthesiser::setupSound(const mpe::PlaybackSetupData& /*setupData*/)
+void VstSynthesiser::setupSound(const mpe::PlaybackSetupData& setupData)
 {
-    NOT_SUPPORTED;
-    return;
+    m_useDynamicEvents = setupData.supportsSingleNoteDynamics;
 }
 
 void VstSynthesiser::setupEvents(const mpe::PlaybackData& playbackData)
 {
     m_sequencer.load(playbackData);
+}
+
+const mpe::PlaybackData& VstSynthesiser::playbackData() const
+{
+    return m_sequencer.playbackData();
 }
 
 bool VstSynthesiser::isActive() const
@@ -175,7 +184,7 @@ void VstSynthesiser::setSampleRate(unsigned int sampleRate)
 
 unsigned int VstSynthesiser::audioChannelsCount() const
 {
-    return config()->audioChannelsCount();
+    return m_audioChannelsCount;
 }
 
 async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
@@ -183,25 +192,58 @@ async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
     return m_streamsCountChanged;
 }
 
-muse::audio::samples_t VstSynthesiser::process(float* buffer, muse::audio::samples_t samplesPerChannel)
+samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
 {
     if (!buffer) {
         return 0;
     }
 
-    muse::audio::msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
-    VstSequencer::EventSequence sequence = m_sequencer.eventsToBePlayed(nextMsecs);
+    if (samplesPerChannel > m_vstAudioClient->maxSamplesPerBlock()) {
+        m_vstAudioClient->setMaxSamplesPerBlock(samplesPerChannel);
+    }
 
+    const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
+    const VstSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
+
+    samples_t sampleOffset = 0;
+    samples_t processedSamples = 0;
+
+    for (auto it = sequences.cbegin(); it != sequences.cend(); ++it) {
+        samples_t durationInSamples = samplesPerChannel - sampleOffset;
+
+        auto nextIt = std::next(it);
+        if (nextIt != sequences.cend()) {
+            msecs_t duration = nextIt->first - it->first;
+            durationInSamples = microSecsToSamples(duration, m_sampleRate);
+        }
+
+        IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {
+            break;
+        }
+
+        processedSamples += processSequence(it->second, durationInSamples, buffer + sampleOffset * m_audioChannelsCount);
+        sampleOffset += durationInSamples;
+    }
+
+    return processedSamples;
+}
+
+samples_t VstSynthesiser::processSequence(const VstSequencer::EventSequence& sequence, const samples_t samples, float* buffer)
+{
     for (const VstSequencer::EventType& event : sequence) {
         if (std::holds_alternative<VstEvent>(event)) {
             m_vstAudioClient->handleEvent(std::get<VstEvent>(event));
-        } else if (std::holds_alternative<PluginParamInfo>(event)) {
-            m_vstAudioClient->handleParamChange(std::get<PluginParamInfo>(event));
+        } else if (std::holds_alternative<ParamChangeEvent>(event)) {
+            m_vstAudioClient->handleParamChange(std::get<ParamChangeEvent>(event));
         } else {
             muse::audio::gain_t newGain = std::get<muse::audio::gain_t>(event);
             m_vstAudioClient->setVolumeGain(newGain);
         }
     }
 
-    return m_vstAudioClient->process(buffer, samplesPerChannel);
+    if (samples == 0) {
+        return 0;
+    }
+
+    return m_vstAudioClient->process(buffer, samples, m_sequencer.playbackPosition());
 }

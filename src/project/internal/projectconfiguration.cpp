@@ -63,6 +63,7 @@ static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "pro
 static const Settings::Key NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY(module_name, "project/numberOfSavesToGenerateAudio");
 static const Settings::Key SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING(module_name, "project/showCloudIsNotAvailableWarning");
 static const Settings::Key DISABLE_VERSION_CHECKING(module_name, "project/disableVersionChecking");
+static const Settings::Key CREATE_BACKUP_BEFORE_SAVING(module_name, "project/createBackupBeforeSaving");
 
 static const std::string DEFAULT_FILE_SUFFIX(".mscz");
 static const std::string DEFAULT_FILE_FILTER("*.mscz");
@@ -113,10 +114,21 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(true));
     settings()->setDefaultValue(HAS_ASKED_AUDIO_GENERATION_SETTINGS, Val(false));
     settings()->setDefaultValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(GenerateAudioTimePeriodType::Never)));
+    settings()->valueChanged(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY).onReceive(nullptr, [this](const Val& val) {
+        m_generateAudioTimePeriodTypeChanged.send(val.toInt());
+    });
     settings()->setDefaultValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(10));
+    settings()->valueChanged(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY).onReceive(nullptr, [this](const Val& val) {
+        m_numberOfSavesToGenerateAudioChanged.send(val.toInt());
+    });
     settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
 
     settings()->setDefaultValue(DISABLE_VERSION_CHECKING, Val(false));
+
+    settings()->setDefaultValue(CREATE_BACKUP_BEFORE_SAVING, Val(true));
+    settings()->setDescription(CREATE_BACKUP_BEFORE_SAVING, muse::trc("project",
+                                                                      "Create backup of file on disk before saving new changes"));
+    settings()->setCanBeManuallyEdited(CREATE_BACKUP_BEFORE_SAVING, true);
 
     if (!userTemplatesPath().empty()) {
         fileSystem()->makePath(userTemplatesPath());
@@ -455,6 +467,7 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
         opt.isAskAgain = optionsObj["isAskAgain"].toBool();
         opt.isApplyLeland = optionsObj["isApplyLeland"].toBool();
         opt.isApplyEdwin = optionsObj["isApplyEdwin"].toBool();
+        opt.isRemapPercussion = optionsObj["isRemapPercussion"].toBool();
 
         m_migrationOptions[migrationType] = opt;
 
@@ -498,6 +511,7 @@ void ProjectConfiguration::setMigrationOptions(MigrationType type, const Migrati
         options["isAskAgain"] = o.isAskAgain;
         options["isApplyLeland"] = o.isApplyLeland;
         options["isApplyEdwin"] = o.isApplyEdwin;
+        options["isRemapPercussion"] = o.isRemapPercussion;
 
         QJsonObject obj;
         obj["migrationType"] = migrationTypeToString(it->first);
@@ -637,6 +651,11 @@ void ProjectConfiguration::setGenerateAudioTimePeriodType(GenerateAudioTimePerio
     settings()->setSharedValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(type)));
 }
 
+muse::async::Channel<int> ProjectConfiguration::generateAudioTimePeriodTypeChanged() const
+{
+    return m_generateAudioTimePeriodTypeChanged;
+}
+
 int ProjectConfiguration::numberOfSavesToGenerateAudio() const
 {
     return settings()->value(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY).toInt();
@@ -645,6 +664,11 @@ int ProjectConfiguration::numberOfSavesToGenerateAudio() const
 void ProjectConfiguration::setNumberOfSavesToGenerateAudio(int number)
 {
     settings()->setSharedValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(number));
+}
+
+muse::async::Channel<int> ProjectConfiguration::numberOfSavesToGenerateAudioChanged() const
+{
+    return m_numberOfSavesToGenerateAudioChanged;
 }
 
 muse::io::path_t ProjectConfiguration::temporaryMp3FilePathTemplate() const
@@ -668,6 +692,16 @@ bool ProjectConfiguration::showCloudIsNotAvailableWarning() const
 void ProjectConfiguration::setShowCloudIsNotAvailableWarning(bool show)
 {
     settings()->setSharedValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(show));
+}
+
+bool ProjectConfiguration::createBackupBeforeSaving() const
+{
+    return settings()->value(CREATE_BACKUP_BEFORE_SAVING).toBool();
+}
+
+void ProjectConfiguration::setCreateBackupBeforeSaving(bool create)
+{
+    settings()->setSharedValue(CREATE_BACKUP_BEFORE_SAVING, Val(create));
 }
 
 bool ProjectConfiguration::disableVersionChecking() const

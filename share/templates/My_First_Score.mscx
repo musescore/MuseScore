@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
+<museScore version="4.60">
   <programVersion>3.6.0</programVersion>
   <programRevision></programRevision>
   <Score>
@@ -9,7 +9,7 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <lastSystemFillLimit>0</lastSystemFillLimit>
-      <Spatium>1.75</Spatium>
+      <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

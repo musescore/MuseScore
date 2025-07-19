@@ -33,8 +33,6 @@
 #include "log.h"
 #include "runtime.h"
 
-static constexpr char JACK_DEFAULT_DEVICE_ID[] = "default";
-
 using namespace muse::audio;
 
 struct JackData
@@ -88,7 +86,7 @@ void jackCleanup()
 
 JackAudioDriver::JackAudioDriver()
 {
-    m_deviceId = JACK_DEFAULT_DEVICE_ID;
+    m_deviceId = DEFAULT_DEVICE_ID;
 }
 
 JackAudioDriver::~JackAudioDriver()
@@ -192,6 +190,11 @@ bool JackAudioDriver::isOpened() const
     return s_jackData != nullptr;
 }
 
+const JackAudioDriver::Spec& JackAudioDriver::activeSpec() const
+{
+    return s_format2;
+}
+
 AudioDeviceID JackAudioDriver::outputDevice() const
 {
     return m_deviceId;
@@ -221,7 +224,7 @@ bool JackAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 
 bool JackAudioDriver::resetToDefaultOutputDevice()
 {
-    return selectOutputDevice(JACK_DEFAULT_DEVICE_ID);
+    return selectOutputDevice(DEFAULT_DEVICE_ID);
 }
 
 async::Notification JackAudioDriver::outputDeviceChanged() const
@@ -232,7 +235,7 @@ async::Notification JackAudioDriver::outputDeviceChanged() const
 AudioDeviceList JackAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-    devices.push_back({ JACK_DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
+    devices.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
 
     return devices;
 }
@@ -278,7 +281,7 @@ std::vector<unsigned int> JackAudioDriver::availableOutputDeviceBufferSizes() co
 {
     std::vector<unsigned int> result;
 
-    unsigned int n = 4096;
+    unsigned int n = MAXIMUM_BUFFER_SIZE;
     while (n >= MINIMUM_BUFFER_SIZE) {
         result.push_back(n);
         n /= 2;
@@ -287,6 +290,48 @@ std::vector<unsigned int> JackAudioDriver::availableOutputDeviceBufferSizes() co
     std::sort(result.begin(), result.end());
 
     return result;
+}
+
+unsigned int JackAudioDriver::outputDeviceSampleRate() const
+{
+    return s_format2.sampleRate;
+}
+
+bool JackAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
+{
+    if (s_format2.sampleRate == sampleRate) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    s_format2.sampleRate = sampleRate;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(s_format2, &s_format2);
+    }
+
+    if (ok) {
+        m_sampleRateChanged.notify();
+    }
+
+    return ok;
+}
+
+async::Notification JackAudioDriver::outputDeviceSampleRateChanged() const
+{
+    return m_sampleRateChanged;
+}
+
+std::vector<unsigned int> JackAudioDriver::availableOutputDeviceSampleRates() const
+{
+    return {
+        44100,
+        48000,
+        88200,
+        96000,
+    };
 }
 
 void JackAudioDriver::resume()

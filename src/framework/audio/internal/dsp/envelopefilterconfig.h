@@ -23,7 +23,7 @@
 #ifndef MUSE_AUDIO_DSP_ENVELOPEFILTERCONFIG_H
 #define MUSE_AUDIO_DSP_ENVELOPEFILTERCONFIG_H
 
-#include "audiotypes.h"
+#include "../../audiotypes.h"
 #include "audiomathutils.h"
 
 namespace muse::audio::dsp {
@@ -50,19 +50,19 @@ struct EnvelopeFilterConfig
 
         m_minimumOperableLevel = minimumOperableLevel;
 
-        m_softThresholdLower = m_logarithmicThreshold - (m_kneeWidth / 2);
-        m_softThresholdUpper = m_logarithmicThreshold + (m_kneeWidth / 2);
+        m_softThresholdLower = m_logarithmicThreshold - (m_kneeWidth / 2.f);
+        m_softThresholdUpper = m_logarithmicThreshold + (m_kneeWidth / 2.f);
 
         m_makeUpGain = makeUpGain;
     }
 
     static constexpr float DEFAULT_KNEE_WIDTH = 6.f; // [0, 20.f]
     static constexpr float DEFAULT_RATIO = 4.f; // [1, 50.f]
-    static constexpr volume_db_t DEFAULT_THRESHOLD_DB = -10.f;
+    static constexpr volume_db_t DEFAULT_THRESHOLD_DB = volume_dbfs_t::make(-10.f);
     static constexpr float DEFAULT_ATTACK_TIME = 0.005f; // [0, 4.f]
     static constexpr float DEFAULT_RELEASE_TIME = 0.02f; // [0, 4.f]
-    static constexpr volume_db_t DEFAULT_MINIMUM_OPERABLE_LEVEL = -60.f;
-    static constexpr volume_db_t DEFAULT_MAKE_UP_GAIN = -10.f; // [-10.f, 12.f]
+    static constexpr volume_db_t DEFAULT_MINIMUM_OPERABLE_LEVEL = volume_dbfs_t::make(-60.f);
+    static constexpr volume_db_t DEFAULT_MAKE_UP_GAIN = volume_dbfs_t::make(-10.f); // [-10.f, 12.f]
 
     unsigned int sampleRate() const
     {

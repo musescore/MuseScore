@@ -176,8 +176,9 @@
       <Measure>
         <voice>
           <HarpPedalDiagram>
+            <isDiagram>0</isDiagram>
             <pedalState>
-              <string name="0">1</string>
+              <string name="0">0</string>
               <string name="1">2</string>
               <string name="2">1</string>
               <string name="3">1</string>
@@ -185,7 +186,9 @@
               <string name="5">2</string>
               <string name="6">1</string>
               </pedalState>
-            <text><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym><sym>harpPedalDivider</sym><sym>harpPedalCentered</sym><sym>harpPedalLowered</sym><sym>harpPedalLowered</sym><sym>harpPedalCentered</sym></text>
+            <style>harp_pedal_text_diagram</style>
+            <text>G<sym>csymAccidentalSharp</sym> 
+D<sym>csymAccidentalFlat</sym> </text>
             </HarpPedalDiagram>
           <Rest>
             <durationType>measure</durationType>

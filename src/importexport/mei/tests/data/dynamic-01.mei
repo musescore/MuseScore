@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -34,6 +34,7 @@
                      <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
                         <label>Oboe</label>
                         <labelAbbr>Ob.</labelAbbr>
+                        <instrDef midi.instrnum="68" />
                         <clef shape="G" line="2" />
                      </staffDef>
                   </staffGrp>
@@ -54,11 +55,11 @@
                            <note xml:id="ns8t4tw" dur="1" pname="c" oct="4" />
                         </layer>
                      </staff>
-                     <dynam xml:id="dvuqhls" label="p" startid="#nrgzdcj" place="above">p</dynam>
-                     <dynam xml:id="d1hg5le3" label="mp" startid="#n6si3n7">mp</dynam>
-                     <dynam xml:id="d1n0kf96" label="sffz" startid="#n7c44ti">sffz</dynam>
-                     <dynam xml:id="d1btxom9" label="sfz" startid="#nvtsktx">sfz</dynam>
-                     <dynam xml:id="d1rbma6l" label="pp" startid="#ns8t4tw">pp</dynam>
+                     <dynam xml:id="dvuqhls" label="p" staff="1" startid="#nrgzdcj" place="above">p</dynam>
+                     <dynam xml:id="d1hg5le3" label="mp" staff="1" startid="#n6si3n7">mp</dynam>
+                     <dynam xml:id="d1n0kf96" label="sffz" staff="1" startid="#n7c44ti">sffz</dynam>
+                     <dynam xml:id="d1btxom9" label="sfz" layer="1" staff="1" startid="#nvtsktx">sfz</dynam>
+                     <dynam xml:id="d1rbma6l" label="pp" staff="1" startid="#ns8t4tw" place="below">pp</dynam>
                   </measure>
                   <measure xml:id="m428gem" right="end" n="2">
                      <staff xml:id="m2s1" n="1">
@@ -76,9 +77,9 @@
                            </chord>
                         </layer>
                      </staff>
-                     <dynam xml:id="d1pv19cd" label="mp" startid="#noxjpqs">sempre mp e <lb />dolce</dynam>
-                     <dynam xml:id="da76h31" label="p" startid="#c1bio1o2">p e sempre<lb />dolce</dynam>
-                     <dynam xml:id="dqa2pt" label="ff" startid="#c19y1p0c">molto ff</dynam>
+                     <dynam xml:id="d1pv19cd" label="mp" staff="1" startid="#noxjpqs">sempre mp e <lb />dolce</dynam>
+                     <dynam xml:id="da76h31" label="p" staff="1" startid="#c1bio1o2">p e sempre<lb />dolce</dynam>
+                     <dynam xml:id="dqa2pt" label="ff" staff="1" startid="#c19y1p0c">molto ff</dynam>
                   </measure>
                </section>
             </score>

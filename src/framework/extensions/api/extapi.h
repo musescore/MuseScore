@@ -31,19 +31,25 @@
 
 namespace muse::extensions::api {
 //! NOTE Used for qml and scripts
-class ExtApi : public QObject
+class ExtApi : public QObject, public Injectable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)
-    Q_PROPERTY(QJSValue context READ context CONSTANT)
     Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
     Q_PROPERTY(QJSValue theme READ theme CONSTANT)
+
+    Q_PROPERTY(QJSValue engraving READ engraving CONSTANT)
+
+    Q_PROPERTY(QJSValue converter READ converter CONSTANT)
 
     //! NOTE Providing these APIs requires approval
     //Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
     //Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
     //Q_PROPERTY(QJSValue keyboard READ keyboard CONSTANT)
     //Q_PROPERTY(QJSValue accessibility READ accessibility CONSTANT)
+
+    //! NOTE This is autobot context, should be rework and make general context
+    //Q_PROPERTY(QJSValue context READ context CONSTANT)
 
     //! ATTENTION
     //! Don't add these APIs here.
@@ -52,15 +58,23 @@ class ExtApi : public QObject
     //Q_PROPERTY(QJSValue process READ process CONSTANT)
     //Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
-    Inject<muse::api::IApiRegister> apiRegister;
+    Q_PROPERTY(QJSValue websocket READ websocket CONSTANT)
+    Q_PROPERTY(QJSValue websocketserver READ websocketserver CONSTANT)
+
+    Inject<muse::api::IApiRegister> apiRegister = { this };
 
 public:
     ExtApi(muse::api::IApiEngine* engine, QObject* parent);
+    ~ExtApi();
 
     QJSValue log() const { return api("api.log"); }
     QJSValue context() const { return api("api.context"); }
     QJSValue interactive() const { return api("api.interactive"); }
     QJSValue theme() const { return api("api.theme"); }
+
+    QJSValue engraving() const { return api("api.engraving.v1"); }
+
+    QJSValue converter() const { return api("api.converter"); }
 
     QJSValue dispatcher() const { return api("api.dispatcher"); }
     QJSValue navigation() const { return api("api.navigation"); }
@@ -68,12 +82,16 @@ public:
     QJSValue keyboard() const { return api("api.keyboard"); }
     QJSValue accessibility() const { return api("api.accessibility"); }
 
+    QJSValue websocket() const { return api("api.websocket"); }
+    QJSValue websocketserver() const { return api("api.websocketserver"); }
+
 private:
     QJSValue api(const std::string& name) const;
 
     struct Api
     {
         muse::api::ApiObject* obj = nullptr;
+        bool isNeedDelete = false;
         QJSValue jsval;
     };
 

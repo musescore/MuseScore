@@ -59,8 +59,6 @@ public:
     bool vertical() const { return m_vertical; }
 
     double measureXPos() const;
-    LedgerLine* next() const { return m_next; }
-    void setNext(LedgerLine* l) { m_next = l; }
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
@@ -72,7 +70,6 @@ public:
 private:
 
     double m_len = 0.0;
-    LedgerLine* m_next = nullptr;
     bool m_vertical = false;
 };
 } // namespace mu::engraving

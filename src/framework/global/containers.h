@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_CONTAINERS_H
-#define MUSE_GLOBAL_CONTAINERS_H
+#pragma once
 
 #include <algorithm>
 #include <vector>
@@ -227,6 +226,15 @@ inline bool contains(const std::unordered_set<T>& s, const T& v)
 }
 
 // ===========================
+// Array
+// ===========================
+template<typename T, size_t size>
+inline bool contains(const std::array<T, size>& s, const T& v)
+{
+    return std::find(s.begin(), s.end(), v) != s.cend();
+}
+
+// ===========================
 // General
 // ===========================
 
@@ -331,6 +339,20 @@ inline bool remove(Map& c, const T& k)
         return true;
     }
     return false;
+}
+
+template<typename Map, typename Predicate>
+inline size_t remove_if(Map& c, Predicate pred)
+{
+    auto old_size = c.size();
+    for (auto first = c.begin(), last = c.end(); first != last;) {
+        if (pred(*first)) {
+            first = c.erase(first);
+        } else {
+            ++first;
+        }
+    }
+    return old_size - c.size();
 }
 
 template<typename Map, typename K>
@@ -449,5 +471,3 @@ inline std::set<T>& operator<<(std::set<T>& s, const T& v)
     s.insert(v);
     return s;
 }
-
-#endif // MUSE_GLOBAL_CONTAINERS_H

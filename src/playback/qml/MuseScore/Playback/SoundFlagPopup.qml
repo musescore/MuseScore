@@ -32,9 +32,9 @@ import "internal/SoundFlag"
 StyledPopupView {
     id: root
 
-    property NavigationSection notationViewNavigationSection: null
-    property int navigationOrderStart: 0
-    property int navigationOrderEnd: museSoundsParams.navigationPanelOrderEnd
+    property alias notationViewNavigationSection: navPanel.section
+    property alias navigationOrderStart: navPanel.order
+    readonly property alias navigationOrderEnd: museSoundsParams.navigationPanelOrderEnd
 
     contentWidth: content.width
     contentHeight: content.childrenRect.height
@@ -50,8 +50,15 @@ StyledPopupView {
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        var popupHeight = root.contentHeight + root.margins * 2 + root.padding * 2
-        root.y = -popupHeight
+        let popupHeight = root.contentHeight + root.margins * 2 + root.padding * 2
+        let yUp = -popupHeight
+
+        let globPos = root.parent.mapToItem(ui.rootItem, Qt.point(root.x, yUp))
+        if (globPos.y < 0) {
+            yUp = yUp + (0 - globPos.y)
+        }
+
+        root.y = yUp
         root.x = (root.parent.width / 2) - (root.width / 2) + root.margins
 
         root.setOpensUpward(true)
@@ -88,6 +95,12 @@ StyledPopupView {
                 section: root.notationViewNavigationSection
                 order: root.navigationOrderStart
                 accessible.name: qsTrc("playback", "Sound flag settings")
+
+                onNavigationEvent: function(event) {
+                    if (event.type === NavigationEvent.Escape) {
+                        root.close()
+                    }
+                }
             }
 
             StyledIconLabel {
@@ -153,6 +166,10 @@ StyledPopupView {
 
             navigationPanelSection: root.notationViewNavigationSection
             navigationPanelOrderStart: navPanel.order + 1
+
+            onCloseRequested: {
+                root.close()
+            }
         }
     }
 }

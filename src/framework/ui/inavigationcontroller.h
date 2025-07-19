@@ -37,8 +37,6 @@ public:
     virtual void reg(INavigationSection* section) = 0;
     virtual void unreg(INavigationSection* section) = 0;
 
-    virtual const std::set<INavigationSection*>& sections() const = 0;
-
     virtual bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& controlName) = 0;
     virtual bool requestActivateByIndex(const std::string& section, const std::string& panel, const INavigation::Index& controlIndex) = 0;
 
@@ -47,6 +45,12 @@ public:
     virtual INavigationSection* activeSection() const = 0;
     virtual INavigationPanel* activePanel() const = 0;
     virtual INavigationControl* activeControl() const = 0;
+
+    virtual const std::set<INavigationSection*>& sections() const = 0;
+    virtual const INavigationSection* findSection(const std::string& sectionName) const = 0;
+    virtual const INavigationPanel* findPanel(const std::string& sectionName, const std::string& panelName) const = 0;
+    virtual const INavigationControl* findControl(const std::string& sectionName, const std::string& panelName,
+                                                  const std::string& controlName) const = 0;
 
     virtual void setDefaultNavigationControl(INavigationControl* control) = 0;
 

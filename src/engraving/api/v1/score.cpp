@@ -31,7 +31,10 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/text.h"
 
+#include "engraving/types/typesconv.h"
+
 // api
+#include "apistructs.h"
 #include "cursor.h"
 #include "elements.h"
 
@@ -44,36 +47,26 @@ Cursor* Score::newCursor()
 
 //---------------------------------------------------------
 //   Score::addText
-///   \brief Adds a header text to the score.
-///   \param type One of the following values:
+///   \brief Adds a header text to the score, and a title frame if needed.
+///   \param type The text style for the text, for example:
 ///   - "title"
 ///   - "subtitle"
 ///   - "composer"
 ///   - "lyricist"
-///   - Any other value corresponds to default text style.
 ///   \param txt Text to be added.
 //---------------------------------------------------------
 
 void Score::addText(const QString& type, const QString& txt)
 {
-    MeasureBase* measure = score()->first();
-    if (!measure || !measure->isVBox()) {
-        score()->insertBox(ElementType::VBOX, measure);
-        measure = score()->first();
+    mu::engraving::MeasureBase* mb = score()->first();
+    if (!mb || !mb->isVBox()) {
+        score()->insertBox(ElementType::VBOX, mb);
+        mb = score()->first();
     }
-    mu::engraving::TextStyleType tid = mu::engraving::TextStyleType::DEFAULT;
-    if (type == "title") {
-        tid = mu::engraving::TextStyleType::TITLE;
-    } else if (type == "subtitle") {
-        tid = mu::engraving::TextStyleType::SUBTITLE;
-    } else if (type == "composer") {
-        tid = mu::engraving::TextStyleType::COMPOSER;
-    } else if (type == "lyricist") {
-        tid = mu::engraving::TextStyleType::LYRICIST;
-    }
-
-    mu::engraving::Text* text = mu::engraving::Factory::createText(measure, tid);
-    text->setParent(measure);
+    AsciiStringView t(String::fromQString(type).toStdString());
+    mu::engraving::TextStyleType tid = mu::engraving::TConv::fromXml(t, mu::engraving::TextStyleType::DEFAULT);
+    mu::engraving::Text* text = mu::engraving::Factory::createText(mb, tid);
+    text->setParent(mb);
     text->setXmlText(txt);
     score()->undoAddElement(text);
 }
@@ -119,8 +112,7 @@ mu::notation::INotationPtr Score::notation() const
 
 mu::notation::INotationUndoStackPtr Score::undoStack() const
 {
-    mu::notation::INotationPtr notation = context()->currentNotation();
-    return notation ? notation->undoStack() : nullptr;
+    return notation() ? notation()->undoStack() : nullptr;
 }
 
 //---------------------------------------------------------
@@ -159,9 +151,29 @@ void Score::appendPartByMusicXmlId(const QString& instrumentMusicXmlId)
 //   Score::firstSegment
 //---------------------------------------------------------
 
-Segment* Score::firstSegment()
+Segment* Score::firstSegment(int segmentType)
 {
-    return wrap<Segment>(score()->firstSegment(mu::engraving::SegmentType::All), Ownership::SCORE);
+    return wrap<Segment>(score()->firstSegment(engraving::SegmentType(segmentType)), Ownership::SCORE);
+}
+
+Measure* Score::tick2measure(FractionWrapper* f)
+{
+    const mu::engraving::Fraction tick = f->fraction();
+    if (!tick.isValid() || tick.negative()) {
+        return nullptr;
+    }
+    return wrap<Measure>(score()->tick2measure(tick));
+}
+
+Segment* Score::findSegmentAtTick(int segmentTypes, FractionWrapper* f)
+{
+    const mu::engraving::Fraction tick = f->fraction();
+    if (!tick.isValid() || tick.negative()) {
+        return nullptr;
+    }
+    mu::engraving::Measure* measure = score()->tick2measure(tick);
+    mu::engraving::Segment* segment = measure->findSegment(engraving::SegmentType(segmentTypes), tick);
+    return segment ? wrap<Segment>(segment, Ownership::SCORE) : nullptr;
 }
 
 //---------------------------------------------------------
@@ -234,16 +246,41 @@ QQmlListProperty<Staff> Score::staves()
 }
 
 //---------------------------------------------------------
+//   Score::pages
+//---------------------------------------------------------
+
+QQmlListProperty<Page> Score::pages()
+{
+    return wrapContainerProperty<Page>(this, score()->pages());
+}
+
+//---------------------------------------------------------
+//   Score::systems
+//---------------------------------------------------------
+
+QQmlListProperty<System> Score::systems()
+{
+    return wrapContainerProperty<System>(this, score()->systems());
+}
+
+//---------------------------------------------------------
 //   Score::startCmd
 //---------------------------------------------------------
 
-void Score::startCmd()
+void Score::startCmd(const QString& qActionName)
 {
     IF_ASSERT_FAILED(undoStack()) {
         return;
     }
 
-    undoStack()->prepareChanges();
+    muse::TranslatableString actionName = qActionName.isEmpty()
+                                          ? TranslatableString("undoableAction", "Plugin edit")
+                                          : TranslatableString::untranslatable(qActionName);
+
+    undoStack()->prepareChanges(actionName);
+    // Lock the undo stack, so that all changes made by the plugin,
+    // including PluginAPI::cmd(), are committed as a single command.
+    undoStack()->lock();
 }
 
 void Score::endCmd(bool rollback)
@@ -252,6 +289,8 @@ void Score::endCmd(bool rollback)
         return;
     }
 
+    undoStack()->unlock();
+
     if (rollback) {
         undoStack()->rollbackChanges();
     } else {
@@ -259,4 +298,22 @@ void Score::endCmd(bool rollback)
     }
 
     notation()->notationChanged().notify();
+}
+
+void Score::doLayout(FractionWrapper* startTick, FractionWrapper* endTick)
+{
+    score()->doLayoutRange(startTick->fraction(), endTick->fraction());
+}
+
+void Score::makeIntoSystem(apiv1::MeasureBase* first, apiv1::MeasureBase* last)
+{
+    score()->makeIntoSystem(first->measureBase(), last->measureBase());
+}
+
+void Score::showElementInScore(apiv1::EngravingItem* wrappedElement, int staffIdx)
+{
+    if (!wrappedElement->element()) {
+        return;
+    }
+    notation()->interaction()->showItem(wrappedElement->element(), staffIdx);
 }

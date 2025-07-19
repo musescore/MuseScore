@@ -22,17 +22,16 @@
 
 #include "timeline.h"
 
+#include <QApplication>
 #include <QGraphicsTextItem>
 #include <QMenu>
+#include <QMouseEvent>
 #include <QScrollBar>
 #include <QTextDocument>
-#include <QMouseEvent>
 
 #include "translation.h"
 
-#include "engraving/types/typesconv.h"
 #include "engraving/dom/barline.h"
-#include "engraving/dom/chord.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/keysig.h"
@@ -43,14 +42,12 @@
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/rehearsalmark.h"
-#include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
-#include "engraving/dom/tempo.h"
 #include "engraving/dom/tempotext.h"
-#include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/types/typesconv.h"
 
 #include "log.h"
 
@@ -1080,16 +1077,7 @@ void Timeline::drawGrid(int globalRows, int globalCols, int startMeasure, int en
     int xPos = 0;
 
     // Create stagger array if _collapsedMeta is false
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    int staggerArr[numMetas];
-    for (unsigned row = 0; row < numMetas; row++) {
-        staggerArr[row] = 0;
-    }
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    // heap allocation is slow, an optimization might be used.
     std::vector<int> staggerArr(numMetas, 0);    // Default initialized, loop not required
-#endif
 
     bool noKey = true;
     std::get<4>(_repeatInfo) = false;
@@ -1978,6 +1966,7 @@ void Timeline::drawSelection()
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE:
             case ElementType::SLUR:
+            case ElementType::HAMMER_ON_PULL_OFF:
                 continue;
                 break;
             default: break;
@@ -3033,13 +3022,21 @@ void Timeline::toggleShow(int staff)
     }
 
     QList<Part*> parts = getParts();
-    if (parts.size() > staff && staff >= 0) {
-        m_notation->undoStack()->prepareChanges();
-        parts.at(staff)->setShow(!parts.at(staff)->show());
-        parts.at(staff)->undoChangeProperty(Pid::VISIBLE, parts.at(staff)->show());
-        m_notation->undoStack()->commitChanges();
-        m_notation->notationChanged().notify();
+    if (staff < 0 || staff >= parts.size()) {
+        return;
     }
+
+    Part* part = parts.at(staff);
+
+    bool newShow = !part->show();
+    TranslatableString actionName = newShow
+                                    ? TranslatableString("undoableAction", "Show instrument")
+                                    : TranslatableString("undoableAction", "Hide instrument");
+
+    m_notation->undoStack()->prepareChanges(actionName);
+    part->undoChangeProperty(Pid::VISIBLE, newShow);
+    m_notation->undoStack()->commitChanges();
+    m_notation->notationChanged().notify();
 }
 
 //---------------------------------------------------------

@@ -35,7 +35,7 @@ FocusScope {
     property real value: 0.0
 
     property string navigationName: ""
-    property var navigationPanel: null
+    property NavigationPanel navigationPanel: null
     property int navigationColumn: 0
 
     signal clicked()

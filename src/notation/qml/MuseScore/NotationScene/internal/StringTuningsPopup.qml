@@ -29,9 +29,9 @@ import MuseScore.NotationScene 1.0
 StyledPopupView {
     id: root
 
-    property NavigationSection notationViewNavigationSection: null
-    property int navigationOrderStart: 0
-    property int navigationOrderEnd: navPanel.order
+    property alias notationViewNavigationSection: navPanel.section
+    property alias navigationOrderStart: navPanel.order
+    readonly property alias navigationOrderEnd: navPanel.order
 
     contentWidth: content.width
     contentHeight: content.height
@@ -72,6 +72,12 @@ StyledPopupView {
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "String tunings settings")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
         }
 
         StyledTextLabel {
@@ -132,6 +138,12 @@ StyledPopupView {
             section: root.notationViewNavigationSection
             order: navPanel.order + 1
             accessible.name: qsTrc("notation", "Strings")
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
         }
 
         GridLayout {

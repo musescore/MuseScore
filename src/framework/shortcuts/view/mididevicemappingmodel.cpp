@@ -56,6 +56,7 @@ inline ActionCodeList allMidiActions()
         "pad-note-32",
         "pad-note-64",
         "undo",
+        "rest",
         "pad-rest",
         "tie",
         "pad-dot",
@@ -65,7 +66,7 @@ inline ActionCodeList allMidiActions()
 }
 
 MidiDeviceMappingModel::MidiDeviceMappingModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -124,6 +125,10 @@ QHash<int, QByteArray> MidiDeviceMappingModel::roleNames() const
 
 void MidiDeviceMappingModel::load()
 {
+    midiConfiguration()->useRemoteControlChanged().onReceive(this, [this](bool val) {
+        emit useRemoteControlChanged(val);
+    });
+
     beginResetModel();
     m_midiMappings.clear();
 
@@ -140,7 +145,7 @@ void MidiDeviceMappingModel::load()
     };
 
     for (const ActionCode& actionCode : allMidiActions()) {
-        UiAction action = uiActionsRegister()->action(actionCode);
+        const UiAction& action = uiActionsRegister()->action(actionCode);
 
         if (action.isValid()) {
             MidiControlsMapping midiMapping(actionCode);

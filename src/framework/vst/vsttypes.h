@@ -44,8 +44,9 @@
 #include "log.h"
 
 namespace muse::vst {
-class VstPlugin;
-using VstPluginPtr = std::shared_ptr<VstPlugin>;
+class IVstPluginInstance;
+using IVstPluginInstancePtr = std::shared_ptr<IVstPluginInstance>;
+using VstPluginInstanceId = int;
 using ClassInfo = VST3::Hosting::ClassInfo;
 
 using PluginId = std::string;
@@ -63,7 +64,7 @@ using PluginParamInfo = Steinberg::Vst::ParameterInfo;
 using PluginParamId = Steinberg::Vst::ParamID;
 using PluginParamValue = Steinberg::Vst::ParamValue;
 using PluginPreset = Steinberg::Vst::PresetFile;
-using ControllIdx = Steinberg::Vst::CtrlNumber;
+using ControlIdx = Steinberg::Vst::CtrlNumber;
 using IAudioProcessorPtr = Steinberg::FUnknownPtr<Steinberg::Vst::IAudioProcessor>;
 using IComponentHandler = Steinberg::Vst::IComponentHandler;
 using IAdvancedComponentHandler = Steinberg::Vst::IComponentHandler2;
@@ -74,7 +75,7 @@ using BusDirection = Steinberg::Vst::BusDirections;
 using BusType = Steinberg::Vst::BusTypes;
 using BusMediaType = Steinberg::Vst::MediaTypes;
 using PluginMidiMappingPtr = Steinberg::IPtr<Steinberg::Vst::IMidiMapping>;
-using ParamsMapping = std::unordered_map<ControllIdx, PluginParamId>;
+using ParamsMapping = std::unordered_map<ControlIdx, PluginParamId>;
 
 //@see https://developer.steinberg.help/pages/viewpage.action?pageId=9798275
 static const std::string VST3_PACKAGE_EXTENSION = "vst3";
@@ -129,16 +130,21 @@ inline PluginModulePtr createModule(const io::path_t& path)
 
     return result;
 }
+
+struct ParamChangeEvent {
+    PluginParamId paramId;
+    PluginParamValue value = 0.;
+};
 }
 
 template<>
-struct std::less<muse::vst::PluginParamInfo>
+struct std::less<muse::vst::ParamChangeEvent>
 {
-    bool operator()(const muse::vst::PluginParamInfo& first,
-                    const muse::vst::PluginParamInfo& second) const
+    bool operator()(const muse::vst::ParamChangeEvent& first,
+                    const muse::vst::ParamChangeEvent& second) const
     {
-        return first.id < second.id
-               && first.defaultNormalizedValue < second.defaultNormalizedValue;
+        return first.paramId < second.paramId
+               && first.value < second.value;
     }
 };
 

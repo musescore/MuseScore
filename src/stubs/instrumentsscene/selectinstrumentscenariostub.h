@@ -28,10 +28,9 @@ namespace mu::instrumentsscene {
 class SelectInstrumentsScenarioStub : public notation::ISelectInstrumentsScenario
 {
 public:
-    muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
-    muse::RetVal<notation::Instrument> selectInstrument(const notation::InstrumentKey& currentInstrumentKey = notation::InstrumentKey())
-    const
-    override;
+    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
+    muse::async::Promise<notation::InstrumentTemplate> selectInstrument(
+        const notation::InstrumentKey& currentInstrumentKey = notation::InstrumentKey()) const override;
 };
 }
 

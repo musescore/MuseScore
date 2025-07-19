@@ -30,11 +30,9 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::appshell {
-class CanvasPreferencesModel : public QObject, public muse::async::Asyncable
+class CanvasPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(QVariantMap defaultZoom READ defaultZoom NOTIFY defaultZoomChanged)
     Q_PROPERTY(int mouseZoomPrecision READ mouseZoomPrecision WRITE setMouseZoomPrecision NOTIFY mouseZoomPrecisionChanged)
@@ -43,6 +41,8 @@ class CanvasPreferencesModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(bool limitScrollArea READ limitScrollArea WRITE setLimitScrollArea NOTIFY limitScrollAreaChanged)
 
     Q_PROPERTY(int selectionProximity READ selectionProximity WRITE setSelectionProximity NOTIFY selectionProximityChanged)
+
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
 
 public:
     explicit CanvasPreferencesModel(QObject* parent = nullptr);

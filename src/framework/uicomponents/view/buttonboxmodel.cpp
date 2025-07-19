@@ -22,6 +22,8 @@
 
 #include "buttonboxmodel.h"
 
+#include "containers.h"
+
 #include "log.h"
 
 using namespace muse::uicomponents;
@@ -37,7 +39,7 @@ QList<int> ButtonBoxModel::load()
     std::unordered_map <int, std::vector <LayoutButton*> > sortedButtons;
     int maxCustomRole = static_cast<int>(ButtonRole::CustomRole);
 
-    QList<QQuickItem*> buttonsItems = m_buttonsItems.list();
+    const QList<QQuickItem*> buttonsItems = m_buttonsItems.list();
     for (const QQuickItem* item : buttonsItems) {
         QVariant buttonTypeVar = item->property("buttonId");
         int type = static_cast<int>(ButtonType::CustomButton);
@@ -108,7 +110,7 @@ const std::vector <ButtonBoxModel::ButtonRole>& ButtonBoxModel::chooseButtonLayo
     if (m_buttonLayout != ButtonLayout::UnknownLayout) {
         index = static_cast<size_t>(m_buttonLayout);
     } else {
-#if defined (Q_OS_OSX)
+#if defined (Q_OS_MACOS)
         index = 1;
 #elif defined (Q_OS_LINUX) || defined (Q_OS_UNIX) || defined(Q_OS_FREEBSD)
         index = 2;

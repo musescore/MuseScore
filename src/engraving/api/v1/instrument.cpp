@@ -23,6 +23,7 @@
 #include "instrument.h"
 
 #include "engraving/compat/midi/midipatch.h"
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/undo.h"
@@ -35,13 +36,13 @@ using namespace mu::engraving::apiv1;
 
 mu::engraving::InstrChannel* Channel::activeChannel()
 {
-    mu::engraving::Score* score = _part->score();
+    mu::engraving::Score* score = m_part->score();
     mu::engraving::MasterScore* masterScore = score->masterScore();
 
     if (masterScore->playbackScore() == score) {
-        return masterScore->playbackChannel(_channel);
+        return masterScore->playbackChannel(m_channel);
     }
-    return _channel;
+    return m_channel;
 }
 
 //---------------------------------------------------------
@@ -58,8 +59,8 @@ void Channel::setMidiBankAndProgram(int bank, int program, bool setUserBankContr
     patch.bank = bank;
     patch.prog = program;
 
-    mu::engraving::Score* score = _part->score();
-    score->undo(new ChangePatch(score, ch, &patch));
+    mu::engraving::Score* score = m_part->score();
+    score->undo(new ChangePatch(score, ch, patch));
 
     if (setUserBankController) {
         score->undo(new SetUserBankController(ch, true));
@@ -93,13 +94,30 @@ void Channel::setMidiBank(int bank)
 QVariantList StringData::stringList() const
 {
     QVariantList pluginStringsList;
-    for (instrString str : _data.stringList()) {
+    for (instrString str : m_data.stringList()) {
         QVariantMap pluginStringData;
         pluginStringData["pitch"] = str.pitch;
         pluginStringData["open"] = str.open;
         pluginStringsList.append(pluginStringData);
     }
     return pluginStringsList;
+}
+
+//---------------------------------------------------------
+//   Drumset::variants
+//---------------------------------------------------------
+
+QVariantList Drumset::variants(int pitch)
+{
+    QVariantList drumInstrumentVariantList;
+    for (DrumInstrumentVariant div : m_drumset->variants(pitch)) {
+        QVariantMap pluginDivData;
+        pluginDivData["pitch"] = div.pitch;
+        pluginDivData["tremolo"] = int(div.tremolo);
+        pluginDivData["articulationName"] = div.articulationName.toQString();
+        drumInstrumentVariantList.append(pluginDivData);
+    }
+    return drumInstrumentVariantList;
 }
 
 //---------------------------------------------------------

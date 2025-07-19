@@ -43,10 +43,12 @@ void AnnotationsMetaParser::doParse(const EngravingItem* item, const RenderingCo
         if (dynamicType == DynamicType::S
             || dynamicType == DynamicType::SF
             || dynamicType == DynamicType::SFF
+            || dynamicType == DynamicType::SFFF
+            || dynamicType == DynamicType::SFZ
             || dynamicType == DynamicType::SFFZ
+            || dynamicType == DynamicType::SFFFZ
             || dynamicType == DynamicType::SFP
-            || dynamicType == DynamicType::SFPP
-            || dynamicType == DynamicType::SFZ) {
+            || dynamicType == DynamicType::SFPP) {
             type = mpe::ArticulationType::Subito;
         }
     }

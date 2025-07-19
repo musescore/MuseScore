@@ -28,7 +28,7 @@
 
 #include "async/channel.h"
 #include "realfn.h"
-#include "types/val.h"
+#include "types/flags.h"
 
 #include "mpetypes.h"
 #include "playbacksetupdata.h"
@@ -40,12 +40,16 @@ using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
 
+using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
+using DynamicLevelLayers = std::map<layer_idx_t, DynamicLevelMap>;
+
 struct PlaybackParam;
 using PlaybackParamList = std::vector<PlaybackParam>;
 using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
+using PlaybackParamLayers = std::map<layer_idx_t, PlaybackParamMap>;
 
-using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelMap, PlaybackParamMap>;
-using OffStreamChanges = async::Channel<PlaybackEventsMap, PlaybackParamMap>;
+using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamLayers>;
+using OffStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamList>;
 
 struct ArrangementContext
 {
@@ -86,12 +90,14 @@ struct ExpressionContext
     ArticulationMap articulations;
     dynamic_level_t nominalDynamicLevel = MIN_DYNAMIC_LEVEL;
     ExpressionCurve expressionCurve;
+    std::optional<float> velocityOverride;
 
     bool operator==(const ExpressionContext& other) const
     {
         return articulations == other.articulations
                && nominalDynamicLevel == other.nominalDynamicLevel
-               && expressionCurve == other.expressionCurve;
+               && expressionCurve == other.expressionCurve
+               && velocityOverride == velocityOverride;
     }
 };
 
@@ -220,12 +226,14 @@ private:
 
     void calculateExpressionCurve(const ArticulationMap& articulationsApplied, const float requiredVelocityFraction)
     {
-        const ExpressionPattern::DynamicOffsetMap& appliedOffsetMap = articulationsApplied.averageDynamicOffsetMap();
+        m_expressionCtx.expressionCurve = articulationsApplied.averageDynamicOffsetMap();
+
+        if (!RealIsNull(requiredVelocityFraction)) {
+            m_expressionCtx.velocityOverride = requiredVelocityFraction;
+        }
 
         dynamic_level_t articulationDynamicLevel = articulationsApplied.averageMaxAmplitudeLevel();
         dynamic_level_t nominalDynamicLevel = m_expressionCtx.nominalDynamicLevel;
-
-        m_expressionCtx.expressionCurve = appliedOffsetMap;
 
         constexpr dynamic_level_t naturalDynamicLevel = dynamicLevelFromType(DynamicType::Natural);
 
@@ -244,10 +252,6 @@ private:
 
         for (auto& pair : m_expressionCtx.expressionCurve) {
             pair.second = static_cast<dynamic_level_t>(RealRound(pair.second * ratio, 0));
-        }
-
-        if (!RealIsNull(requiredVelocityFraction)) {
-            m_expressionCtx.expressionCurve.amplifyVelocity(requiredVelocityFraction);
         }
     }
 
@@ -287,27 +291,41 @@ private:
 };
 
 struct PlaybackParam {
-    String code;
-    Val val;
+    enum Type : signed char {
+        Undefined = -1,
+        SoundPreset,
+        PlayingTechnique,
+        Syllable,
+    };
 
-    staff_layer_idx_t staffLayerIndex = 0;
+    enum FlagType : signed char {
+        NoFlags = 0,
+        IsPersistent,
+        HyphenedToNext,
+    };
+
+    using Value = String;
+
+    Type type = Undefined;
+    Value val;
+    Flags<FlagType> flags;
+
+    PlaybackParam(Type t, Value v, const Flags<FlagType>& f = {})
+        : type(t), val(std::move(v)), flags(f)
+    {
+    }
 
     bool operator==(const PlaybackParam& other) const
     {
-        return code == other.code && val == other.val;
+        return type == other.type && val == other.val && flags == other.flags;
     }
 };
-
-static const String SOUND_PRESET_PARAM_CODE(u"sound_preset");
-static const String PLAY_TECHNIQUE_PARAM_CODE(u"playing_technique");
-
-static const std::string ORDINARY_PLAYING_TECHNIQUE_CODE("ordinary_technique");
 
 struct PlaybackData {
     PlaybackEventsMap originEvents;
     PlaybackSetupData setupData;
-    DynamicLevelMap dynamicLevelMap;
-    PlaybackParamMap paramMap;
+    DynamicLevelLayers dynamics;
+    PlaybackParamLayers params;
 
     MainStreamChanges mainStream;
     OffStreamChanges offStream;
@@ -316,8 +334,8 @@ struct PlaybackData {
     {
         return originEvents == other.originEvents
                && setupData == other.setupData
-               && dynamicLevelMap == other.dynamicLevelMap
-               && paramMap == other.paramMap;
+               && dynamics == other.dynamics
+               && params == other.params;
     }
 
     bool isValid() const

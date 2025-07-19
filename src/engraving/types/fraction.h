@@ -19,15 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_FRACTION_H
-#define MU_ENGRAVING_FRACTION_H
+#pragma once
 
 #include <cstdint>
+#include <cmath>
 #include <limits>
 #include <numeric>
 
-#include "../types/types.h"
+#include "global/types/string.h"
 
 #include "constants.h"
 
@@ -258,10 +257,24 @@ public:
     static constexpr Fraction eps() { return Fraction(1, Constants::DIVISION * 4); }
 
     muse::String toString() const { return muse::String(u"%1/%2").arg(m_numerator, m_denominator); }
-    static Fraction fromString(const muse::String& str)
+    static Fraction fromString(const muse::String& str, bool* ok = nullptr)
     {
         const size_t i = str.indexOf(u'/');
-        return (i == muse::nidx) ? Fraction(str.toInt(), 1) : Fraction(str.left(i).toInt(), str.mid(i + 1).toInt());
+        if (i == muse::nidx) {
+            return Fraction(str.toInt(ok), 1);
+        }
+
+        int numerator = str.left(i).toInt(ok);
+        if (ok && !*ok) {
+            return Fraction();
+        }
+
+        int denominator = str.mid(i + 1).toInt(ok);
+        if (ok && !*ok) {
+            return Fraction();
+        }
+
+        return Fraction(numerator, denominator);
     }
 
     constexpr double toDouble() const { return static_cast<double>(m_numerator) / static_cast<double>(m_denominator); }
@@ -270,5 +283,3 @@ public:
 constexpr Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
 constexpr Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
 }
-
-#endif // MU_ENGRAVING_FRACTION_H

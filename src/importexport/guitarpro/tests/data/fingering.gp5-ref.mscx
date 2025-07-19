@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -47,26 +49,34 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
+            <eid>E_E</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>5</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>G_G</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
+            <eid>H_H</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>J_J</eid>
               <Fingering>
+                <eid>K_K</eid>
                 <text>T</text>
                 </Fingering>
               <pitch>62</pitch>
@@ -76,9 +86,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>M_M</eid>
               <Fingering>
+                <eid>N_N</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>53</pitch>
@@ -88,9 +101,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>P_P</eid>
               <Fingering>
+                <eid>Q_Q</eid>
                 <text>2</text>
                 </Fingering>
               <pitch>47</pitch>
@@ -100,9 +116,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>R_R</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>S_S</eid>
               <Fingering>
+                <eid>T_T</eid>
                 <text>3</text>
                 </Fingering>
               <pitch>55</pitch>
@@ -114,11 +133,15 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>U_U</eid>
         <voice>
           <Chord>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>W_W</eid>
               <Fingering>
+                <eid>X_X</eid>
                 <text>4</text>
                 </Fingering>
               <pitch>59</pitch>
@@ -128,12 +151,16 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>Z_Z</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>a_a</eid>
                 </Accidental>
               <Fingering>
+                <eid>b_b</eid>
                 <text>T</text>
                 </Fingering>
               <pitch>51</pitch>
@@ -143,12 +170,16 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>d_d</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>e_e</eid>
                 </Accidental>
               <Fingering>
+                <eid>f_f</eid>
                 <text>I</text>
                 </Fingering>
               <pitch>61</pitch>
@@ -158,9 +189,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>g_g</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>h_h</eid>
               <Fingering>
+                <eid>i_i</eid>
                 <text>M</text>
                 </Fingering>
               <pitch>52</pitch>
@@ -172,11 +206,15 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>j_j</eid>
         <voice>
           <Chord>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>l_l</eid>
               <Fingering>
+                <eid>m_m</eid>
                 <text>A</text>
                 </Fingering>
               <pitch>55</pitch>
@@ -186,12 +224,16 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>n_n</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>o_o</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>p_p</eid>
                 </Accidental>
               <Fingering>
+                <eid>q_q</eid>
                 <text>O</text>
                 </Fingering>
               <pitch>56</pitch>
@@ -201,9 +243,11 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>r_r</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>s_s</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

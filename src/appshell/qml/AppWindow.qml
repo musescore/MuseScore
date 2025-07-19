@@ -26,6 +26,8 @@ import Muse.Ui 1.0
 import Muse.Shortcuts 1.0
 import MuseScore.AppShell 1.0
 
+import Muse.Tours 1.0
+
 ApplicationWindow {
     id: root
 
@@ -65,7 +67,11 @@ ApplicationWindow {
         fileModified: titleProvider.fileModified
     }
 
+    GraphicsTestObject {}
+
     ToolTipProvider { }
+
+    ToursProvider { }
 
     //! NOTE Need only create
     Shortcuts { }

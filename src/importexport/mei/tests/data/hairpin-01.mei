@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -58,7 +58,7 @@
                            <mRest xml:id="mfs9r97" />
                         </layer>
                      </staff>
-                     <hairpin xml:id="h1dor5os" form="cres" startid="#n1n2q0nd" endid="#n14xf1ls" />
+                     <hairpin xml:id="h1dor5os" form="cres" staff="1" startid="#n1n2q0nd" endid="#n14xf1ls" />
                   </measure>
                   <measure xml:id="mcatpri" n="2">
                      <staff xml:id="m2s1" n="1">
@@ -74,8 +74,8 @@
                            <mRest xml:id="m1sz0e05" />
                         </layer>
                      </staff>
-                     <dynam xml:id="d1eogas6" label="f" startid="#nspxw9k">f</dynam>
-                     <hairpin xml:id="hniw3gu" form="dim" startid="#nspxw9k" endid="#n1w9pjbk" />
+                     <dynam xml:id="d1eogas6" label="f" staff="1" startid="#nspxw9k">f</dynam>
+                     <hairpin xml:id="hniw3gu" form="dim" staff="1" startid="#nspxw9k" endid="#n1w9pjbk" />
                   </measure>
                   <measure xml:id="mzs8qux" n="3">
                      <staff xml:id="m3s1" n="1">
@@ -121,7 +121,7 @@
                            <note xml:id="naukxk7" dur="4" pname="g" oct="2" />
                         </layer>
                      </staff>
-                     <dynam xml:id="d16couhq" label="f" startid="#n1h73eje">f</dynam>
+                     <dynam xml:id="d16couhq" label="f" staff="2" startid="#n1h73eje">f</dynam>
                      <dir xml:id="dxfp0cj" type="mscore-hairpin mscore-decresc" startid="#n1h73eje" extender="true" endid="#n4ihxav">dim.</dir>
                   </measure>
                   <measure xml:id="m1suce6e" n="6">
@@ -166,7 +166,7 @@
                            <mRest xml:id="mks294k" />
                         </layer>
                      </staff>
-                     <hairpin xml:id="hjs1sym" form="cres" startid="#n9ff3t1" lform="dashed" place="above" endid="#n2tj1jf" />
+                     <hairpin xml:id="hjs1sym" form="cres" staff="1" startid="#n9ff3t1" lform="dashed" place="above" endid="#n2tj1jf" />
                   </measure>
                   <measure xml:id="moaa1gv" n="9">
                      <staff xml:id="m9s1" n="1">
@@ -182,7 +182,7 @@
                            <mRest xml:id="m1okzahl" />
                         </layer>
                      </staff>
-                     <hairpin xml:id="hhnn0kt" form="dim" startid="#nq8sgb7" lform="dotted" place="above" endid="#n19df3r8" />
+                     <hairpin xml:id="hhnn0kt" form="dim" staff="1" startid="#nq8sgb7" lform="dotted" place="above" endid="#n19df3r8" />
                   </measure>
                   <measure xml:id="m1vhuhz5" n="10">
                      <staff xml:id="m10s1" n="1">
@@ -212,7 +212,7 @@
                            <note xml:id="ntcvrux" dur="4" pname="d" oct="3" />
                         </layer>
                      </staff>
-                     <hairpin xml:id="heiz76k" form="cres" startid="#n1ahnf5i" place="above" endid="#nsqyndt" />
+                     <hairpin xml:id="heiz76k" form="cres" niente="true" staff="2" startid="#n1ahnf5i" place="above" endid="#nsqyndt" />
                   </measure>
                   <measure xml:id="mjmh4f6" n="12">
                      <staff xml:id="m12s1" n="1">

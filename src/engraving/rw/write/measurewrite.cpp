@@ -55,6 +55,7 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         xml.tag("multiMeasureRest", measure->m_mmRestCount);
     }
     if (writeSystemElements) {
+        TWrite::writeItemEid(measure, xml, ctx);
         if (measure->repeatStart()) {
             xml.tag("startRepeat");
         }
@@ -67,10 +68,9 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         TWrite::writeProperty(measure, xml, Pid::NO_OFFSET);
         TWrite::writeProperty(measure, xml, Pid::MEASURE_NUMBER_MODE);
     }
-    double _spatium = measure->spatium();
     MStaff* mstaff = measure->m_mstaves[staff];
-    if (mstaff->noText() && !mstaff->noText()->generated()) {
-        TWrite::write(mstaff->noText(), xml, ctx);
+    if (mstaff->measureNumber() && !mstaff->measureNumber()->generated()) {
+        TWrite::write(mstaff->measureNumber(), xml, ctx);
     }
 
     if (mstaff->mmRangeText() && !mstaff->mmRangeText()->generated()) {
@@ -78,20 +78,19 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
     }
 
     if (mstaff->vspacerUp()) {
-        xml.tag("vspacerUp", mstaff->vspacerUp()->gap().val() / _spatium);
+        xml.tag("vspacerUp", mstaff->vspacerUp()->gap().val());
     }
     if (mstaff->vspacerDown()) {
         if (mstaff->vspacerDown()->spacerType() == SpacerType::FIXED) {
-            xml.tag("vspacerFixed", mstaff->vspacerDown()->gap().val() / _spatium);
+            xml.tag("vspacerFixed", mstaff->vspacerDown()->gap().val());
         } else {
-            xml.tag("vspacerDown", mstaff->vspacerDown()->gap().val() / _spatium);
+            xml.tag("vspacerDown", mstaff->vspacerDown()->gap().val());
         }
     }
     if (!mstaff->visible()) {
         xml.tag("visible", mstaff->visible());
     }
     if (mstaff->stemless()) {
-        xml.tag("slashStyle", mstaff->stemless());     // for backwards compatibility
         xml.tag("stemless", mstaff->stemless());
     }
     if (mstaff->measureRepeatCount()) {

@@ -37,7 +37,7 @@ DockPage {
     objectName: "Publish"
     uri: "musescore://publish"
 
-    property var topToolKeyNavSec
+    required property NavigationSection topToolbarKeyNavSec
 
     property NavigationSection publishToolBarKeyNavSec: NavigationSection {
         id: keynavSec
@@ -62,15 +62,11 @@ DockPage {
             alignment: DockToolBarAlignment.Center
             contentBottomPadding: 2
 
-            NotationToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
-                navigationPanel.order: 2
+            navigationSection: root.topToolbarKeyNavSec
 
-                onActiveFocusRequested: {
-                    if (navigationPanel.active) {
-                        notationToolBar.forceActiveFocus()
-                    }
-                }
+            NotationToolBar {
+                navigationPanel.section: notationToolBar.navigationSection
+                navigationPanel.order: 2
             }
         },
 
@@ -84,8 +80,10 @@ DockPage {
             alignment: DockToolBarAlignment.Right
             contentBottomPadding: 2
 
+            navigationSection: root.topToolbarKeyNavSec
+
             PlaybackToolBar {
-                navigationPanelSection: root.topToolKeyNavSec
+                navigationPanelSection: playbackToolBar.navigationSection
                 navigationPanelOrder: 3
 
                 floating: playbackToolBar.floating
@@ -106,8 +104,10 @@ DockPage {
             alignment: DockToolBarAlignment.Right
             contentBottomPadding: 2
 
+            navigationSection: root.topToolbarKeyNavSec
+
             UndoRedoToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.section: undoRedoToolBar.navigationSection
                 navigationPanel.order: 4
             }
         }
@@ -115,12 +115,17 @@ DockPage {
 
     toolBars: [
         DockToolBar {
+            id: publishToolBar
+
             objectName: "publishToolBar"
+            title: qsTrc("appshell", "Publish toolbar")
 
             floatable: false
 
+            navigationSection: root.publishToolBarKeyNavSec
+
             PublishToolBar {
-                navigationPanel.section: root.publishToolBarKeyNavSec
+                navigationPanel.section: publishToolBar.navigationSection
                 navigationPanel.order: 1
             }
         }
@@ -134,6 +139,10 @@ DockPage {
     statusBar: DockStatusBar {
         objectName: "publishStatusBar"
 
-        NotationStatusBar {}
+        navigationSection: content.navigationSection
+
+        NotationStatusBar {
+            id: content
+        }
     }
 }

@@ -34,7 +34,7 @@ Item {
 
     property bool floating: false
 
-    width: content.width
+    width: content.width + (floating ? 12 : 0)
     height: content.height
 
     property NavigationPanel navigationPanel: NavigationPanel {
@@ -48,12 +48,12 @@ Item {
     property alias navigationPanelOrder: navPanel.order
 
     PlaybackToolBarModel {
-        id: playbackModel
+        id: thePlaybackModel
         isToolbarFloating: root.floating
     }
 
     Component.onCompleted: {
-        playbackModel.load()
+        thePlaybackModel.load()
     }
 
     Column {
@@ -63,35 +63,35 @@ Item {
 
         width: childrenRect.width
 
-        enabled: playbackModel.isPlayAllowed
+        enabled: thePlaybackModel.isPlayAllowed
 
         PlaybackToolBarActions {
             id: playbackActions
 
-            playbackModel: playbackModel
+            playbackModel: thePlaybackModel
             floating: root.floating
 
             navPanel: root.navigationPanel
         }
 
         StyledSlider {
-            width: playbackActions.width - 12
+            width: playbackActions.width
             visible: root.floating
-            value: playbackModel.playPosition
+            value: thePlaybackModel.playPosition
 
             onMoved: {
-                playbackModel.playPosition = value
+                thePlaybackModel.playPosition = value
             }
         }
 
-        TempoSlider {
-            width: playbackActions.width - 12
+        PlaybackSpeedSlider {
+            width: playbackActions.width
             visible: root.floating
-            value: playbackModel.tempoMultiplier
 
-            onMoved: function(newValue) {
-                playbackModel.tempoMultiplier = newValue
-            }
+            playbackModel: thePlaybackModel
+
+            navigationPanel: navPanel
+            navigationOrderStart: playbackActions.navigationOrderEnd + 1
         }
     }
 }

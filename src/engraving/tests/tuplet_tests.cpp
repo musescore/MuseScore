@@ -88,7 +88,7 @@ bool Engraving_TupletTests::createTuplet(int n, ChordRest* cr)
     if (ot) {
         tuplet->setTuplet(ot);
     }
-    cr->score()->startCmd();
+    cr->score()->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
     cr->score()->cmdCreateTuplet(cr, tuplet);
     cr->score()->endCmd();
     return true;
@@ -127,7 +127,7 @@ void Engraving_TupletTests::split(const char16_t* p1, const char16_t* p2)
     TimeSig* ts        = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving tuplet tests"));
     EditData dd(0);
     dd.dropElement = ts;
     dd.modifiers = {};

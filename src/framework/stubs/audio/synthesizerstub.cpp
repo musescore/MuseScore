@@ -63,6 +63,12 @@ void SynthesizerStub::setup(const mpe::PlaybackData&)
 {
 }
 
+const mpe::PlaybackData& SynthesizerStub::playbackData() const
+{
+    static const mpe::PlaybackData dummyData;
+    return dummyData;
+}
+
 const AudioInputParams& SynthesizerStub::params() const
 {
     return m_params;
@@ -81,6 +87,20 @@ msecs_t SynthesizerStub::playbackPosition() const
 
 void SynthesizerStub::setPlaybackPosition(const msecs_t)
 {
+}
+
+void SynthesizerStub::prepareToPlay()
+{
+}
+
+bool SynthesizerStub::readyToPlay() const
+{
+    return false;
+}
+
+async::Notification SynthesizerStub::readyToPlayChanged() const
+{
+    return async::Notification();
 }
 
 void SynthesizerStub::revokePlayingNotes()
@@ -103,4 +123,9 @@ bool SynthesizerStub::isActive() const
 
 void SynthesizerStub::setIsActive(bool)
 {
+}
+
+InputProcessingProgress SynthesizerStub::inputProcessingProgress() const
+{
+    return InputProcessingProgress();
 }

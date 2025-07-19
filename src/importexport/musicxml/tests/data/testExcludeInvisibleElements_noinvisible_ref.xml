@@ -144,7 +144,7 @@
         </note>
       </measure>
     <measure number="3">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -173,6 +173,7 @@
         <type>quarter</type>
         <stem>up</stem>
         </note>
+      <sound tempo="90"/>
       <note>
         <pitch>
           <step>D</step>

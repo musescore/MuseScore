@@ -109,6 +109,8 @@ public:
     size_t size() const;
     void resize(size_t i);
 
+    bool empty() const;
+
     JsonValue at(size_t i) const;
 
     JsonArray& set(size_t i, bool v);

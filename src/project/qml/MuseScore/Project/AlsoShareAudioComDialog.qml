@@ -142,7 +142,7 @@ StyledDialogView {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignLeft
 
-            text: qsTrc("project/cloud", "You can change this setting in Preferences at any time.")
+            text: qsTrc("global", "You can change this setting in Preferences at any time.")
             font: ui.theme.bodyFont
         }
 
@@ -162,7 +162,7 @@ StyledDialogView {
                 navigation.row: 1
                 navigation.accessible.name: text + "; " + preferenceInfo.text
 
-                text: qsTrc("project/cloud", "Remember my choice")
+                text: qsTrc("global", "Remember my choice")
 
                 checked: root.rememberChoice
 

@@ -23,9 +23,14 @@
 
 #include <algorithm>
 
+#include <QGuiApplication>
+#include <QClipboard>
+
 #include "keynavdevsection.h"
 #include "keynavdevsubsection.h"
 #include "keynavdevcontrol.h"
+
+#include "log.h"
 
 using namespace muse::diagnostics;
 using namespace muse::ui;
@@ -53,7 +58,7 @@ static void sortByIndex(QList<T*>& list)
 }
 
 DiagnosticNavigationModel::DiagnosticNavigationModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
 {
     connect(&m_reloadDelayer, &QTimer::timeout, this, &DiagnosticNavigationModel::reload);
     m_reloadDelayer.setInterval(500);
@@ -71,7 +76,7 @@ void DiagnosticNavigationModel::reload()
     QList<INavigationSection*> sectionsList = toQList(sectionsSet);
     sortByIndex(sectionsList);
 
-    for (INavigationSection* s : sectionsList) {
+    for (INavigationSection* s : std::as_const(sectionsList)) {
         m_sections << toWrap(s);
     }
 
@@ -88,7 +93,7 @@ QVariant DiagnosticNavigationModel::toWrap(INavigationSection* s)
     const std::set<INavigationPanel*>& subsectionsSet = s->panels();
     QList<INavigationPanel*> subsectionsList = toQList(subsectionsSet);
     sortByIndex(subsectionsList);
-    for (INavigationPanel* sub : subsectionsList) {
+    for (INavigationPanel* sub : std::as_const(subsectionsList)) {
         subVarList << toWrap(sub);
     }
 
@@ -110,7 +115,7 @@ QVariant DiagnosticNavigationModel::toWrap(INavigationPanel* sub)
     const std::set<INavigationControl*>& controlsSet = sub->controls();
     QList<INavigationControl*> controlsList = toQList(controlsSet);
     sortByIndex(controlsList);
-    for (INavigationControl* ctrl : controlsList) {
+    for (INavigationControl* ctrl : std::as_const(controlsList)) {
         conVarList << toWrap(ctrl);
     }
 
@@ -133,4 +138,28 @@ QVariant DiagnosticNavigationModel::toWrap(INavigationControl* ctrl)
 QVariantList DiagnosticNavigationModel::sections() const
 {
     return m_sections;
+}
+
+void DiagnosticNavigationModel::copyToClipboard(const QVariant& section, const QVariant& panel, const QVariant& control)
+{
+    KeyNavDevSection* sec = section.value<KeyNavDevSection*>();
+    IF_ASSERT_FAILED(sec) {
+        return;
+    }
+
+    KeyNavDevSubSection* pan = panel.value<KeyNavDevSubSection*>();
+    IF_ASSERT_FAILED(pan) {
+        return;
+    }
+
+    KeyNavDevControl* ctrl = control.value<KeyNavDevControl*>();
+    IF_ASSERT_FAILED(ctrl) {
+        return;
+    }
+
+    QString text = "\"" + sec->name() + "\", \"" + pan->name() + "\", \"" + ctrl->name() + "\"";
+    LOGD() << text;
+
+    QClipboard* clipboard = QGuiApplication::clipboard();
+    clipboard->setText(text);
 }

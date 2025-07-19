@@ -74,12 +74,11 @@ public:
     Vibrato* clone() const override { return new Vibrato(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
+    PointF linePos(Grip grip, System** system) const override;
 
     void undoSetVibratoType(VibratoType val);
     void setVibratoType(VibratoType tt) { m_vibratoType = tt; }
     VibratoType vibratoType() const { return m_vibratoType; }
-    void setPlayArticulation(bool val) { m_playArticulation = val; }
-    bool playArticulation() const { return m_playArticulation; }
     String vibratoTypeUserName() const;
 
     Segment* segment() const { return (Segment*)explicitParent(); }
@@ -89,12 +88,14 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     String accessibleInfo() const override;
 
+    int subtype() const override { return int(m_vibratoType); }
+    TranslatableString subtypeUserName() const override;
+
 private:
 
     Sid getPropertyStyle(Pid) const override;
 
     VibratoType m_vibratoType = VibratoType::GUITAR_VIBRATO;
-    bool m_playArticulation = false;
 };
 } // namespace mu::engraving
 

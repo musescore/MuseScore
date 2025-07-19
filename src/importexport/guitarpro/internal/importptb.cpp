@@ -851,8 +851,10 @@ void PowerTab::addToScore(ptSection& sec)
 
         t = new RehearsalMark(seg);
         t->setFrameType(FrameType::NO_FRAME);
-        t->setPlainText(String::fromStdString(sec.partName));
-        t->setOffset(muse::PointF(10.0, 0.0));
+        std::string valid;
+        muse::UtfCodec::replaceInvalid(sec.partName, valid);
+        t->setPlainText(String::fromStdString(valid));
+        t->setOffset(PointF(10.0, 0.0));
         t->setTrack(0);
         seg->add(t);
     }
@@ -1170,7 +1172,7 @@ Measure* PowerTab::createMeasure(ptBar* bar, const Fraction& tick)
     measure->setTimesig(nts);
     measure->setTicks(nts);
 
-    score->measures()->add(measure);
+    score->measures()->append(measure);
 
     return measure;
 }
@@ -1266,14 +1268,12 @@ Err PowerTab::read()
 
     MeasureBase* m;
     if (!score->measures()->first()) {
-        m = Factory::createVBox(score->dummy()->system());
-        m->setTick(Fraction(0, 1));
-        score->addMeasure(m, 0);
+        m = Factory::createTitleVBox(score->dummy()->system());
+        score->measures()->append(m);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {
-            MeasureBase* mb = Factory::createVBox(score->dummy()->system());
-            mb->setTick(Fraction(0, 1));
+            MeasureBase* mb = Factory::createTitleVBox(score->dummy()->system());
             score->addMeasure(mb, m);
             m = mb;
         }
@@ -1282,7 +1282,9 @@ Err PowerTab::read()
     std::string name = song.info.name;
     if (!name.empty()) {
         Text* s = Factory::createText(m, TextStyleType::TITLE);
-        s->setPlainText(String::fromStdString(name));
+        std::string valid;
+        muse::UtfCodec::replaceInvalid(name, valid);
+        s->setPlainText(String::fromStdString(valid));
         m->add(s);
     }
     return Err::NoError;

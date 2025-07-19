@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
-#define MUSE_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
@@ -33,7 +32,7 @@
 namespace muse::extensions {
 class IExtensionsConfiguration : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IExtensionsConfiguration);
+    INTERFACE_ID(IExtensionsConfiguration)
 public:
 
     virtual ~IExtensionsConfiguration() = default;
@@ -51,5 +50,3 @@ public:
     virtual async::Channel<io::path_t> pluginsUserPathChanged() const = 0;
 };
 }
-
-#endif // MUSE_EXTENSIONS_IEXTENSIONSCONFIGURATION_H

@@ -20,28 +20,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTGTP_H__
-#define __IMPORTGTP_H__
+#pragma once
 
-#include <vector>
 #include <map>
+#include <vector>
 
-#include "io/file.h"
-
-#include "gtp/gp67dombuilder.h"
-#include "continiouselementsbuilder.h"
-#include "engraving/dom/score.h"
-#include "engraving/dom/vibrato.h"
-#include "engraving/dom/articulation.h"
-#include "engraving/dom/instrument.h"
-#include "engraving/engravingerrors.h"
-
+#include "io/iodevice.h"
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+#include "types/bytearray.h"
+#include "types/string.h"
+
+#include "engraving/dom/measurebase.h"
+#include "engraving/engravingerrors.h"
+#include "engraving/iengravingconfiguration.h"
+#include "engraving/types/types.h"
+
+#include "continiouselementsbuilder.h"
+#include "gtp/igpdombuilder.h"
+#include "guitarbendimport/guitarbendimporter.h"
 
 namespace mu::engraving {
 class Chord;
 class ChordRest;
+class Drumset;
+class Instrument;
 class LetRing;
 class Measure;
 class Note;
@@ -55,7 +57,6 @@ class MasterScore;
 class Ottava;
 class Hairpin;
 class Bend;
-class StretchedBend;
 class Slur;
 } // namespace mu::engraving
 
@@ -71,45 +72,6 @@ static constexpr int GP_VOLTA_FLAGS = 2;
 mu::engraving::Err importGTP(mu::engraving::Score* score, const muse::String& filename, const char* data, unsigned int data_len);
 
 enum class Repeat : char;
-
-enum class DrumSetType : uint16_t {
-    DRUMS = 0, AGOGO, HAND_CLAP, TAMBOURINE,
-    COWBELL, VIBRASLAP, BONGOS, CONGAS,
-    TIMBALE, CABASA, MARACAS, WHISTLE,
-    GUIRO, CLAVES, WOODBLOCK, CUICA,
-    TRIANGLE, SHAKER, JINGLE_BELL, BELL_TREE,
-    CASTANETS, SURDO
-};
-
-struct GpDrumSet {
-    std::string_view name;
-    DrumSetType idx;
-    uint8_t numLines;
-};
-
-static const std::unordered_map<std::string_view, GpDrumSet> PERC_STAFF_LINES_FROM_INSTRUMENT = {
-    { "Agogo", { "Agogo", DrumSetType::AGOGO, 2 } },
-    { "Hand Clap", { "Hand Clap", DrumSetType::HAND_CLAP, 1 } },
-    { "Tambourine", { "Tambourine", DrumSetType::TAMBOURINE, 1 } },
-    { "Cowbell", { "Cowbell", DrumSetType::COWBELL, 3 } },
-    { "Vibraslap", { "Vibraslap", DrumSetType::VIBRASLAP, 1 } },
-    { "Bongos", { "Bongos", DrumSetType::BONGOS, 2 } },
-    { "Congas", { "Congas", DrumSetType::CONGAS, 2 } },
-    { "Timbale", { "Timbale", DrumSetType::TIMBALE, 2 } },
-    { "Cabasa", { "Cabasa", DrumSetType::CABASA, 1 } },
-    { "Maracas", { "Maracas", DrumSetType::MARACAS, 2 } },
-    { "Whistle", { "Whistle", DrumSetType::WHISTLE, 2 } },
-    { "Guiro", { "Guiro", DrumSetType::GUIRO, 2 } },
-    { "Claves", { "Claves", DrumSetType::CLAVES, 1 } },
-    { "Woodblock", { "Woodblock", DrumSetType::WOODBLOCK, 2 } },
-    { "Cuica", { "Cuica", DrumSetType::CUICA, 1 } },
-    { "Triangle", { "Triangle", DrumSetType::TRIANGLE, 1 } },
-    { "Shaker", { "Shaker", DrumSetType::SHAKER, 1 } },
-    { "Jingle Bell", { "Jingle Bell", DrumSetType::JINGLE_BELL, 1 } },
-    { "Bell Tree", { "Bell Tree", DrumSetType::BELL_TREE, 1 } },
-    { "Castanets", { "Castanets", DrumSetType::CASTANETS, 1 } },
-    { "Surdo",  { "Surdo", DrumSetType::SURDO, 1 } },
-};
 
 struct GpTrack {
     int patch;
@@ -162,37 +124,14 @@ struct GpBar {
     std::vector<muse::String> directions;
 };
 
-inline mu::engraving::Drumset* gpDrumset = nullptr;
-inline mu::engraving::Drumset* gpAgogoSet = nullptr;
-inline mu::engraving::Drumset* gpHandClapSet = nullptr;
-inline mu::engraving::Drumset* gpTambourineSet = nullptr;
-inline mu::engraving::Drumset* gpCowbellSet = nullptr;
-inline mu::engraving::Drumset* gpVibraslapSet = nullptr;
-inline mu::engraving::Drumset* gpBongosSet = nullptr;
-inline mu::engraving::Drumset* gpCongasSet = nullptr;
-inline mu::engraving::Drumset* gpTimbalesSet = nullptr;
-inline mu::engraving::Drumset* gpCabasaSet = nullptr;
-inline mu::engraving::Drumset* gpMaracasSet = nullptr;
-inline mu::engraving::Drumset* gpWhistleSet = nullptr;
-inline mu::engraving::Drumset* gpGuiroSet = nullptr;
-inline mu::engraving::Drumset* gpClavesSet = nullptr;
-inline mu::engraving::Drumset* gpWoodblockSet = nullptr;
-inline mu::engraving::Drumset* gpCuicaSet = nullptr;
-inline mu::engraving::Drumset* gpTriangleSet = nullptr;
-inline mu::engraving::Drumset* gpShakerSet = nullptr;
-inline mu::engraving::Drumset* gpJingleBellSet = nullptr;
-inline mu::engraving::Drumset* gpBellTreeSet = nullptr;
-inline mu::engraving::Drumset* gpCastanetsSet = nullptr;
-inline mu::engraving::Drumset* gpSurdoSet = nullptr;
-
 //---------------------------------------------------------
 //   GuitarPro
 //---------------------------------------------------------
 
-class GuitarPro
+class GuitarPro : public muse::Injectable
 {
 public:
-    INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 protected:
 
@@ -201,6 +140,7 @@ protected:
     using Fraction = mu::engraving::Fraction;
     using Measure = mu::engraving::Measure;
     using ChordRest = mu::engraving::ChordRest;
+    using Chord = mu::engraving::Chord;
     using Note = mu::engraving::Note;
 
     enum class TabImportOption {
@@ -215,6 +155,7 @@ protected:
 
     struct ReadNoteResult {
         bool slur = false;
+        bool hammerOnPullOff = false;
         bool letRing = false;
         bool palmMute = false;
         bool trill = false;
@@ -326,8 +267,7 @@ protected:
     GPLyrics gpLyrics;
     int slide = 0;
     int voltaSequence = 0;
-    mu::engraving::Slur** slurs = nullptr;
-    std::vector<mu::engraving::StretchedBend*> m_stretchedBends;
+    std::vector<mu::engraving::Slur*> slurs;
 
     void skip(int64_t len);
     void read(void* p, int64_t len);
@@ -363,11 +303,12 @@ protected:
     void addPalmMute(ChordRest* cr, bool hasPalmMute);
     void addLetRing(ChordRest* cr, bool hasPalmMute);
     void addTrill(ChordRest* cr, bool hasTrill);
+    void addHammerOnPullOff(ChordRest* cr, bool hasHammerOnPullOff);
     void addRasgueado(ChordRest* cr, bool hasRasgueado);
     void addVibratoLeftHand(ChordRest* cr, bool hasVibratoLeftHand);
     void addVibratoWTremBar(ChordRest* cr, bool hasVibratoWTremBar);
     void addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool hasHarmonicPinch, bool hasHarmonicTap, bool hasHarmonicSemi);
-    void addTap(Note*);
+    void addTap(Chord*);
     void addSlap(Note*);
     void addPop(Note*);
     bool createTuningString(int strings, int tuning[]); // returns useFlats
@@ -377,11 +318,7 @@ protected:
 public:
     std::vector<std::string> tunings;
 
-    static int harmonicOvertone(Note* note, float harmonicValue, int harmonicType);
     void setTempo(int n, Measure* measure);
-    static void initGuitarProDrumset();
-    static void initGuitarProPercussionSet(const GpDrumSet&);
-    static void setInstrumentDrumset(mu::engraving::Instrument*, const GpDrumSet&);
     muse::String title, subtitle, artist, album, composer;
     muse::StringList comments;
     GpTrack channelDefaults[GP_MAX_TRACK_NUMBER * 2];
@@ -389,14 +326,15 @@ public:
     size_t measures = 0;
     std::vector<GpBar> bars;
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
+    std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
 
     enum class GuitarProError : char {
         GP_NO_ERROR, GP_UNKNOWN_FORMAT,
         GP_EOF, GP_BAD_NUMBER_OF_STRINGS
     };
 
-    GuitarPro(mu::engraving::MasterScore*, int v);
-    virtual ~GuitarPro();
+    GuitarPro(mu::engraving::MasterScore*, int v, const muse::modularity::ContextPtr& iocCtx);
+    virtual ~GuitarPro() {}
     virtual bool read(muse::io::IODevice*) = 0;
     muse::String error(GuitarProError n) const { return muse::String::fromUtf8(errmsg[int(n)]); }
 };
@@ -412,8 +350,8 @@ protected:
     int readBeatEffects(int track, mu::engraving::Segment*) override;
 
 public:
-    GuitarPro1(mu::engraving::MasterScore* s, int v)
-        : GuitarPro(s, v) {}
+    GuitarPro1(mu::engraving::MasterScore* s, int v, const muse::modularity::ContextPtr& iocCtx)
+        : GuitarPro(s, v, iocCtx) {}
     bool read(muse::io::IODevice*) override;
 };
 
@@ -424,8 +362,8 @@ public:
 class GuitarPro2 : public GuitarPro1
 {
 public:
-    GuitarPro2(mu::engraving::MasterScore* s, int v)
-        : GuitarPro1(s, v) {}
+    GuitarPro2(mu::engraving::MasterScore* s, int v, const muse::modularity::ContextPtr& iocCtx)
+        : GuitarPro1(s, v, iocCtx) {}
     bool read(muse::io::IODevice*) override;
 };
 
@@ -438,8 +376,8 @@ class GuitarPro3 : public GuitarPro1
     int readBeatEffects(int track, mu::engraving::Segment* segment) override;
 
 public:
-    GuitarPro3(mu::engraving::MasterScore* s, int v)
-        : GuitarPro1(s, v) {}
+    GuitarPro3(mu::engraving::MasterScore* s, int v, const muse::modularity::ContextPtr& iocCtx)
+        : GuitarPro1(s, v, iocCtx) {}
     bool read(muse::io::IODevice*) override;
 };
 
@@ -458,8 +396,8 @@ class GuitarPro4 : public GuitarPro
     int convertGP4SlideNum(int slide);
 
 public:
-    GuitarPro4(mu::engraving::MasterScore* s, int v)
-        : GuitarPro(s, v) {}
+    GuitarPro4(mu::engraving::MasterScore* s, int v, const muse::modularity::ContextPtr& iocCtx)
+        : GuitarPro(s, v, iocCtx) {}
     bool read(muse::io::IODevice*) override;
 };
 
@@ -481,7 +419,7 @@ class GuitarPro5 : public GuitarPro
     int readBeatEffects(int track, mu::engraving::Segment* segment) override;
     ReadNoteResult readNote(int string, Note* note);
     bool readMixChange(Measure* measure) override;
-    void readMeasure(Measure* measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
+    void readMeasure(Measure * measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
     bool readTracks();
     void readMeasures(int startingTempo);
     Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, mu::engraving::Tuplet** tuplets, bool mixChange);
@@ -489,8 +427,8 @@ class GuitarPro5 : public GuitarPro
     float naturalHarmonicFromFret(int fret);
 
 public:
-    GuitarPro5(mu::engraving::MasterScore* s, int v)
-        : GuitarPro(s, v) {}
+    GuitarPro5(mu::engraving::MasterScore* s, int v, const muse::modularity::ContextPtr& iocCtx)
+        : GuitarPro(s, v, iocCtx) {}
     bool read(muse::io::IODevice*) override;
 };
 
@@ -543,10 +481,10 @@ protected:
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 
 public:
-    GuitarPro6(mu::engraving::MasterScore* s)
-        : GuitarPro(s, 6) {}
-    GuitarPro6(mu::engraving::MasterScore* s, int v)
-        : GuitarPro(s, v) {}
+    GuitarPro6(mu::engraving::MasterScore* s, const muse::modularity::ContextPtr& iocCtx)
+        : GuitarPro(s, 6, iocCtx) {}
+    GuitarPro6(mu::engraving::MasterScore* s, int v, const muse::modularity::ContextPtr& iocCtx)
+        : GuitarPro(s, v, iocCtx) {}
     bool read(muse::io::IODevice*) override;
 };
 
@@ -555,10 +493,9 @@ class GuitarPro7 : public GuitarPro6
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 
 public:
-    GuitarPro7(mu::engraving::MasterScore* s)
-        : GuitarPro6(s, 7) {}
+    GuitarPro7(mu::engraving::MasterScore* s, const muse::modularity::ContextPtr& iocCtx)
+        : GuitarPro6(s, 7, iocCtx) {}
     bool read(muse::io::IODevice*) override;
     GPProperties readProperties(muse::ByteArray* data);
 };
-} // namespace mu::iex::guitarpro
-#endif
+}

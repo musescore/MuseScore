@@ -54,6 +54,7 @@
           <line>5</line>
           </clef>
         <staff-details number="2">
+          <staff-type>alternate</staff-type>
           <staff-lines>6</staff-lines>
           <staff-tuning line="1">
             <tuning-step>E</tuning-step>

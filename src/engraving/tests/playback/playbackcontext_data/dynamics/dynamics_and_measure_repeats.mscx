@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
-  <programVersion>4.3.0</programVersion>
+<museScore version="4.30">
+  <programVersion>4.3.2</programVersion>
   <programRevision></programRevision>
-  <LastEID>1169</LastEID>
+  <LastEID>1703</LastEID>
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -28,6 +28,9 @@
     <metaTag name="workTitle">Untitled score</metaTag>
     <Order id="orchestral">
       <name>Orchestral</name>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+        </instrument>
       <instrument id="piano">
         <family id="keyboards">Keyboards</family>
         </instrument>
@@ -46,21 +49,25 @@
         <family>flugelhorns</family>
         <family>trombones</family>
         <family>tubas</family>
+        <unsorted group="brass"/>
         </section>
       <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
         <family>timpani</family>
         </section>
       <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
         <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
         <family>drums</family>
         <family>unpitched-metal-percussion</family>
         <family>unpitched-wooden-percussion</family>
         <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
         </section>
       <family>keyboards</family>
       <family>harps</family>
       <family>organs</family>
       <family>synths</family>
+      <unsorted/>
       <soloists/>
       <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
         <family>voices</family>
@@ -69,7 +76,6 @@
       <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
         <family>orchestral-strings</family>
         </section>
-      <unsorted/>
       </Order>
     <Part id="1">
       <Staff id="1">
@@ -132,6 +138,28 @@
           </Articulation>
         <Channel>
           <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="2">
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
           <synti>Fluid</synti>
           </Channel>
         </Instrument>
@@ -278,6 +306,227 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>5025111736343</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>5029406703641</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <eid>5033701670948</eid>
+            </Dynamic>
+          <Chord>
+            <eid>5037996638324</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5042291605525</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5046586572916</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5050881540117</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5055176507508</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5059471474709</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5063766442100</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5068061409301</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>5076651343988</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5080946311189</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5106716115060</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5111011082261</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5115306049652</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5119601016853</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5123895984244</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5128190951445</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Dynamic>
+            <subtype>ff</subtype>
+            <velocity>112</velocity>
+            <eid>7284264534052</eid>
+            </Dynamic>
+          <Chord>
+            <eid>5132485918836</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5136780886037</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5141075853428</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5145370820629</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5149665788020</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5153960755221</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5158255722612</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5162550689813</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>5166845657204</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5171140624405</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5175435591796</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5179730558997</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5184025526388</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5188320493589</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5192615460980</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5196910428181</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>5201205395572</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5205500362773</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5209795330164</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5214090297365</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5218385264756</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5222680231957</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5226975199348</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5231270166549</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>

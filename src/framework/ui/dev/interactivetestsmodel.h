@@ -42,15 +42,23 @@ public:
 
     QString currentUri() const;
 
-    Q_INVOKABLE void openSampleDialog();
+    Q_INVOKABLE void init();
+
+    Q_INVOKABLE void selectOpeningFile();
+    Q_INVOKABLE void selectSavingFile();
+    Q_INVOKABLE void selectDirectory();
+
+    Q_INVOKABLE void openSampleDialogSync();
     Q_INVOKABLE void openSampleDialogAsync();
     Q_INVOKABLE void closeSampleDialog();
+    Q_INVOKABLE void openSampleDialogAsyncWithPromise();
 
     Q_INVOKABLE void openWidgetDialog();
     Q_INVOKABLE void openWidgetDialogAsync();
     Q_INVOKABLE void closeWidgetDialog();
 
     Q_INVOKABLE void question();
+    Q_INVOKABLE void questionByUri();
     Q_INVOKABLE void customQuestion();
 
     Q_INVOKABLE void information();
@@ -59,6 +67,8 @@ public:
     Q_INVOKABLE void criticalWithDetailedText();
 
     Q_INVOKABLE void require();
+
+    Q_INVOKABLE void showProgress();
 
 signals:
     void currentUriChanged(QString currentUri);

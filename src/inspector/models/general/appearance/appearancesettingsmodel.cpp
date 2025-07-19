@@ -75,8 +75,15 @@ void AppearanceSettingsModel::requestElements()
         ElementType::HOOK,
     };
 
-    QSet<EngravingItem*> elementsForOffsetProperty;
+    QSet<EngravingItem*> elementsForArrangeProperty;
+    for (EngravingItem* element : m_elementList) {
+        if (element->findAncestor(ElementType::PAGE)) {
+            elementsForArrangeProperty.insert(element);
+        }
+    }
+    m_elementsForArrangeProperty = elementsForArrangeProperty.values();
 
+    QSet<EngravingItem*> elementsForOffsetProperty;
     for (EngravingItem* element : m_elementList) {
         if (!muse::contains(applyOffsetToChordTypes, element->type())) {
             elementsForOffsetProperty.insert(element);
@@ -88,7 +95,6 @@ void AppearanceSettingsModel::requestElements()
             elementsForOffsetProperty.insert(parent);
         }
     }
-
     m_elementsForOffsetProperty = elementsForOffsetProperty.values();
 }
 
@@ -142,7 +148,7 @@ void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (muse::contains(propertyIdSet, Pid::Z)) {
-        loadPropertyItem(m_arrangeOrder);
+        loadPropertyItem(m_arrangeOrder, m_elementsForArrangeProperty);
     }
 
     if (muse::contains(propertyIdSet, Pid::OFFSET)) {
@@ -154,7 +160,7 @@ void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 
 Page* AppearanceSettingsModel::page() const
 {
-    return toPage(m_elementList.first()->findAncestor(ElementType::PAGE));
+    return toPage(m_elementsForArrangeProperty.first()->findAncestor(ElementType::PAGE));
 }
 
 std::vector<EngravingItem*> AppearanceSettingsModel::allElementsInPage() const
@@ -164,9 +170,9 @@ std::vector<EngravingItem*> AppearanceSettingsModel::allElementsInPage() const
 
 std::vector<EngravingItem*> AppearanceSettingsModel::allOverlappingElements() const
 {
-    RectF bbox = m_elementList.first()->abbox();
-    for (EngravingItem* element : m_elementList) {
-        bbox |= element->abbox();
+    RectF bbox = m_elementsForArrangeProperty.first()->pageBoundingRect();
+    for (EngravingItem* element : m_elementsForArrangeProperty) {
+        bbox |= element->pageBoundingRect();
     }
     if (bbox.width() == 0 || bbox.height() == 0) {
         LOGD() << "Bounding box appears to have a size of 0, so we'll get all the elements in the page";
@@ -180,7 +186,7 @@ void AppearanceSettingsModel::pushBackwardsInOrder()
     std::vector<EngravingItem*> elements = allOverlappingElements();
     std::sort(elements.begin(), elements.end(), elementLessThan);
 
-    int minZ = (*std::min_element(m_elementList.begin(), m_elementList.end(), elementLessThan))->z();
+    int minZ = (*std::min_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(), elementLessThan))->z();
     int i;
     for (i = 0; i < static_cast<int>(elements.size()); i++) {
         if (elements[i]->z() == minZ) {
@@ -197,7 +203,7 @@ void AppearanceSettingsModel::pushForwardsInOrder()
     std::vector<EngravingItem*> elements = allOverlappingElements();
     std::sort(elements.begin(), elements.end(), elementLessThan);
 
-    int maxZ = (*std::max_element(m_elementList.begin(), m_elementList.end(), elementLessThan))->z();
+    int maxZ = (*std::max_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(), elementLessThan))->z();
     int elementsCount = static_cast<int>(elements.size());
     int i;
     for (i = elementsCount - 1; i > 0; i--) {
@@ -215,7 +221,7 @@ void AppearanceSettingsModel::pushToBackInOrder()
     std::vector<EngravingItem*> elements = allElementsInPage();
     EngravingItem* minElement = *std::min_element(elements.begin(), elements.end(), elementLessThan);
 
-    if (m_elementList.contains(minElement)) {
+    if (m_elementsForArrangeProperty.contains(minElement)) {
         m_arrangeOrder->setValue(minElement->z());
     } else {
         m_arrangeOrder->setValue(minElement->z() - REARRANGE_ORDER_STEP);
@@ -227,7 +233,7 @@ void AppearanceSettingsModel::pushToFrontInOrder()
     std::vector<EngravingItem*> elements = allElementsInPage();
     EngravingItem* maxElement = *std::max_element(elements.begin(), elements.end(), elementLessThan);
 
-    if (m_elementList.contains(maxElement)) {
+    if (m_elementsForArrangeProperty.contains(maxElement)) {
         m_arrangeOrder->setValue(maxElement->z());
     } else {
         m_arrangeOrder->setValue(maxElement->z() + REARRANGE_ORDER_STEP);

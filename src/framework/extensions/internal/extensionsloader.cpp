@@ -58,7 +58,7 @@ ManifestList ExtensionsLoader::loadManifestList(const io::path_t& defPath, const
         retList.push_back(m);
     }
 
-    for (const Manifest& m : externalManifests) {
+    for (Manifest& m : externalManifests) {
         if (!m.isValid()) {
             continue;
         }
@@ -67,6 +67,7 @@ ManifestList ExtensionsLoader::loadManifestList(const io::path_t& defPath, const
             continue;
         }
 
+        m.isRemovable = true;
         retList.push_back(m);
     }
 
@@ -78,7 +79,9 @@ ManifestList ExtensionsLoader::manifestList(const io::path_t& rootPath) const
     ManifestList manifests;
     io::paths_t paths = manifestPaths(rootPath);
     for (const io::path_t& path : paths) {
+        LOGD() << "parsing manifest: " << path;
         Manifest manifest = parseManifest(path);
+        manifest.path = path;
         resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
     }
@@ -104,6 +107,11 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
         return Manifest();
     }
 
+    return parseManifest(data);
+}
+
+Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
+{
     std::string jsonErr;
     JsonObject obj = JsonDocument::fromJson(data, &jsonErr).rootObject();
     if (!jsonErr.empty()) {
@@ -118,18 +126,26 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
     m.description = obj.value("description").toString();
     m.category = obj.value("category").toString();
     m.thumbnail = obj.value("thumbnail").toStdString();
+    m.version = obj.value("version").toString();
     m.apiversion = obj.value("apiversion", DEFAULT_API_VERSION).toInt();
 
+    String uiCtx = obj.value("ui_context", String(DEFAULT_UI_CONTEXT)).toString();
     if (obj.contains("actions")) {
         JsonArray arr = obj.value("actions").toArray();
         for (size_t i = 0; i < arr.size(); ++i) {
             JsonObject ao = arr.at(i).toObject();
             Action a;
             a.code = ao.value("code").toStdString();
-            a.type = typeFromString(ao.value("type").toStdString());
+            a.type = ao.contains("type") ? typeFromString(ao.value("type").toStdString()) : m.type;
             a.modal = ao.value("modal", DEFAULT_MODAL).toBool();
             a.title = ao.value("title").toString();
-            a.main = ao.value("main").toStdString();
+            std::string icon = ao.value("icon").toStdString();
+            a.icon = ui::IconCode::fromString(icon.c_str());
+            a.uiCtx = ao.value("ui_context", uiCtx).toString();
+            a.showOnAppmenu = ao.value("show_on_appmenu", true).toBool();
+            a.showOnToolbar = ao.value("show_on_toolbar", false).toBool();
+            a.path = ao.value("path").toStdString();
+            a.func = ao.value("func", "main").toString();
             a.apiversion = m.apiversion;
             m.actions.push_back(std::move(a));
         }
@@ -139,7 +155,9 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
         a.type = m.type;
         a.modal = obj.value("modal", DEFAULT_MODAL).toBool();
         a.title = m.title;
-        a.main = obj.value("main").toStdString();
+        a.uiCtx = uiCtx;
+        a.path = obj.value("path").toStdString();
+        a.func = u"main";
         a.apiversion = m.apiversion;
         m.actions.push_back(std::move(a));
     }
@@ -154,6 +172,6 @@ void ExtensionsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) 
     }
 
     for (Action& a : m.actions) {
-        a.main = rootDirPath + "/" + a.main;
+        a.path = rootDirPath + "/" + a.path;
     }
 }

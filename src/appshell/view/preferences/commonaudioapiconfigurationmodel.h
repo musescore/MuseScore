@@ -31,18 +31,21 @@
 #include "audio/iaudiodriver.h"
 
 namespace mu::appshell {
-class CommonAudioApiConfigurationModel : public QObject, public muse::async::Asyncable
+class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString currentDeviceId READ currentDeviceId NOTIFY currentDeviceIdChanged)
     Q_PROPERTY(QVariantList deviceList READ deviceList NOTIFY deviceListChanged)
 
+    Q_PROPERTY(unsigned int sampleRate READ sampleRate NOTIFY sampleRateChanged)
+    Q_PROPERTY(QList<unsigned int> sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
+
     Q_PROPERTY(unsigned int bufferSize READ bufferSize NOTIFY bufferSizeChanged)
     Q_PROPERTY(QList<unsigned int> bufferSizeList READ bufferSizeList NOTIFY bufferSizeListChanged)
 
-    INJECT(muse::audio::IAudioConfiguration, audioConfiguration)
-    INJECT(muse::audio::IAudioDriver, audioDriver)
+    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    muse::Inject<muse::audio::IAudioDriver> audioDriver = { this };
 
 public:
     explicit CommonAudioApiConfigurationModel(QObject* parent = nullptr);
@@ -57,9 +60,16 @@ public:
     QList<unsigned int> bufferSizeList() const;
     Q_INVOKABLE void bufferSizeSelected(const QString& bufferSizeStr);
 
+    unsigned int sampleRate() const;
+    QList<unsigned int> sampleRateList() const;
+    Q_INVOKABLE void sampleRateSelected(const QString& sampleRateStr);
+
 signals:
     void currentDeviceIdChanged();
     void deviceListChanged();
+
+    void sampleRateChanged();
+    void sampleRateListChanged();
 
     void bufferSizeChanged();
     void bufferSizeListChanged();

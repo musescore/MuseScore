@@ -30,42 +30,12 @@ import MuseScore.InstrumentsScene 1.0
 Item {
     id: root
 
-    readonly property bool hasInstruments: instrumentsOnScoreModel.count > 0
-    readonly property alias isMovingUpAvailable: instrumentsOnScoreModel.isMovingUpAvailable
-    readonly property alias isMovingDownAvailable: instrumentsOnScoreModel.isMovingDownAvailable
+    required property InstrumentsOnScoreListModel instrumentsOnScoreModel
 
     property alias navigation: instrumentsView.navigation
 
-    function instruments() {
-        return instrumentsOnScoreModel.instruments()
-    }
-
-    function currentOrder() {
-        return instrumentsOnScoreModel.currentOrder()
-    }
-
-    function addInstruments(instruments) {
-        instrumentsOnScoreModel.addInstruments(instruments)
-    }
-
-    function moveSelectedInstrumentsUp() {
-        instrumentsOnScoreModel.moveSelectionUp()
-    }
-
-    function moveSelectedInstrumentsDown() {
-        instrumentsOnScoreModel.moveSelectionDown()
-    }
-
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()
-    }
-
-    InstrumentsOnScoreListModel {
-        id: instrumentsOnScoreModel
-    }
-
-    Component.onCompleted: {
-        instrumentsOnScoreModel.load()
     }
 
     StyledTextLabel {
@@ -96,14 +66,14 @@ Item {
             navigation.row: 0
             navigation.column: 0
 
-            model: instrumentsOnScoreModel.orders
+            model: root.instrumentsOnScoreModel.orders
 
-            currentIndex: instrumentsOnScoreModel.currentOrderIndex
+            currentIndex: root.instrumentsOnScoreModel.currentOrderIndex
 
             displayText: qsTrc("instruments", "Order:") + " " + currentText
 
             onActivated: function(index, value) {
-                instrumentsOnScoreModel.currentOrderIndex = index
+                root.instrumentsOnScoreModel.currentOrderIndex = index
             }
         }
 
@@ -118,10 +88,10 @@ Item {
             icon: IconCode.DELETE_TANK
             toolTipTitle: qsTrc("instruments", "Remove selected instruments from score")
 
-            enabled: instrumentsOnScoreModel.isRemovingAvailable
+            enabled: root.instrumentsOnScoreModel.isRemovingAvailable
 
             onClicked: {
-                instrumentsOnScoreModel.removeSelection()
+                root.instrumentsOnScoreModel.removeSelection()
             }
         }
     }
@@ -135,7 +105,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        model: instrumentsOnScoreModel
+        model: root.instrumentsOnScoreModel
 
         accessible.name: instrumentsLabel.text
 
@@ -187,15 +157,15 @@ Item {
             }
 
             onClicked: {
-                instrumentsOnScoreModel.selectRow(model.index)
+                root.instrumentsOnScoreModel.selectRow(model.index)
             }
 
             onDoubleClicked: {
-                instrumentsOnScoreModel.removeSelection()
+                root.instrumentsOnScoreModel.removeSelection()
             }
 
             onRemoveSelectionRequested: {
-                instrumentsOnScoreModel.removeSelection()
+                root.instrumentsOnScoreModel.removeSelection()
             }
         }
     }

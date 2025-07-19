@@ -22,6 +22,7 @@
 #ifndef MUSE_UPDATE_IUPDATECONFIGURATION_H
 #define MUSE_UPDATE_IUPDATECONFIGURATION_H
 
+#include "async/notification.h"
 #include "io/path.h"
 #include "network/networktypes.h"
 
@@ -42,16 +43,13 @@ public:
 
     virtual bool needCheckForUpdate() const = 0;
     virtual void setNeedCheckForUpdate(bool needCheck) = 0;
+    virtual muse::async::Notification needCheckForUpdateChanged() const = 0;
 
     virtual std::string skippedReleaseVersion() const = 0;
     virtual void setSkippedReleaseVersion(const std::string& version) = 0;
 
-    virtual std::string lastShownMuseSoundsReleaseVersion() const = 0;
-    virtual void setLastShownMuseSoundsReleaseVersion(const std::string& version) = 0;
-
     virtual std::string checkForAppUpdateUrl() const = 0;
     virtual std::string previousAppReleasesNotesUrl() const = 0;
-    virtual std::string checkForMuseSamplerUpdateUrl() const = 0;
 
     virtual muse::network::RequestHeaders updateHeaders() const = 0;
 
@@ -59,6 +57,7 @@ public:
     virtual std::string museScorePrivacyPolicyUrl() const = 0;
 
     virtual muse::io::path_t updateDataPath() const = 0;
+    virtual muse::io::path_t updateRequestHistoryJsonPath() const = 0;
 };
 }
 

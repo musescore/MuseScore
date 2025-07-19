@@ -58,7 +58,7 @@ bool AdvancedPreferencesModel::setData(const QModelIndex& index, const QVariant&
 
     switch (role) {
     case ValueRole:
-        changeVal(index.row(), value);
+        changeVal(index.row(), Val::fromQVariant(value));
         emit dataChanged(index, index, { ValueRole });
         return true;
     default:
@@ -96,20 +96,48 @@ void AdvancedPreferencesModel::load()
     for (auto it = items.cbegin(); it != items.cend(); ++it) {
         if (it->second.canBeManuallyEdited) {
             m_items << it->second;
+
+            muse::Settings::Key key = it->second.key;
+            settings()->valueChanged(key).onReceive(this, [this, key](const Val& val) {
+                QModelIndex index = findIndex(key);
+                if (!index.isValid() || m_items[index.row()].value == val) {
+                    return;
+                }
+
+                changeModelVal(m_items[index.row()], val);
+                emit dataChanged(index, index, { ValueRole });
+            });
         }
     }
 
     endResetModel();
 }
 
-void AdvancedPreferencesModel::changeVal(int index, QVariant newVal)
+QModelIndex AdvancedPreferencesModel::findIndex(const muse::Settings::Key& key)
+{
+    for (int i = 0; i < m_items.size(); ++i) {
+        if (m_items[i].key == key) {
+            return index(i, 0);
+        }
+    }
+    return QModelIndex();
+}
+
+void AdvancedPreferencesModel::changeVal(int index, const Val& newVal)
 {
     Settings::Item& item = m_items[index];
-    Val::Type type = item.value.type();
-    item.value = Val::fromQVariant(newVal);
-    item.value.setType(type);
-
+    changeModelVal(item, newVal);
     settings()->setSharedValue(item.key, item.value);
+}
+
+void AdvancedPreferencesModel::changeModelVal(Settings::Item& item, const Val& newVal)
+{
+    if (item.value == newVal) {
+        return;
+    }
+    Val::Type type = item.value.type();
+    item.value = newVal;
+    item.value.setType(type);
 }
 
 void AdvancedPreferencesModel::resetToDefault()
@@ -117,7 +145,7 @@ void AdvancedPreferencesModel::resetToDefault()
     beginResetModel();
 
     for (int i = 0; i < m_items.size(); ++i) {
-        changeVal(i, m_items[i].defaultValue.toQVariant());
+        changeVal(i, m_items[i].defaultValue);
     }
 
     endResetModel();

@@ -34,6 +34,7 @@ public:
 
     bool useRemoteControl() const override;
     void setUseRemoteControl(bool value) override;
+    async::Channel<bool> useRemoteControlChanged() const override;
 
     MidiDeviceID midiInputDeviceId() const override;
     void setMidiInputDeviceId(const MidiDeviceID& deviceId) override;
@@ -45,6 +46,7 @@ public:
 
     bool useMIDI20Output() const override;
     void setUseMIDI20Output(bool use) override;
+    async::Channel<bool> useMIDI20OutputChanged() const override;
 };
 }
 

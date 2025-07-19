@@ -63,6 +63,9 @@ private:
 
     void findItems(std::list<EngravingItem*>* foundItems, const RectF& rect, int index);
     void findItems(std::list<EngravingItem*>* foundItems, const PointF& pos, int index);
+
+    void nearestNeighbor(const PointF& pos, EngravingItem** bestItem, double& bestDistance, int nodeIndex = 0);
+
     RectF rectForIndex(int index) const;
 
     unsigned int m_depth = 0;
@@ -82,6 +85,8 @@ public:
 
     std::vector<EngravingItem*> items(const RectF& rect);
     std::vector<EngravingItem*> items(const PointF& pos);
+
+    EngravingItem* nearestNeighbor(const PointF& pos);
 
     int leafCount() const { return m_leafCnt; }
     inline int firstChildIndex(int index) const { return index * 2 + 1; }

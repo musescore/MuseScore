@@ -27,6 +27,7 @@
 #include "internal/qfontprovider.h"
 #include "internal/qimageprovider.h"
 
+#include "internal/fontproviderdispatcher.h"
 #include "internal/fontprovider.h"
 #include "internal/fontsengine.h"
 #include "internal/fontsdatabase.h"
@@ -48,14 +49,14 @@ void DrawModule::registerExports()
 
     ioc()->registerExport<draw::IImageProvider>(moduleName(), new QImageProvider());
 
-#ifdef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
-    ioc()->registerExport<draw::IFontProvider>(moduleName(), new QFontProvider());
-#else
-    m_fontsEngine = std::make_shared<FontsEngine>();
-    ioc()->registerExport<draw::IFontProvider>(moduleName(), new FontProvider());
+    auto mainFProvider = std::make_shared<FontProvider>(iocContext());
+    auto qtFProvider = std::make_shared<QFontProvider>();
+    auto fdispatcher = std::make_shared<FontProviderDispatcher>(mainFProvider, qtFProvider);
+
+    m_fontsEngine = std::make_shared<FontsEngine>(iocContext());
+    ioc()->registerExport<draw::IFontProvider>(moduleName(), fdispatcher);
     ioc()->registerExport<draw::IFontsEngine>(moduleName(), m_fontsEngine);
     ioc()->registerExport<draw::IFontsDatabase>(moduleName(), new FontsDatabase());
-#endif // MUSE_MODULE_DRAW_USE_QTFONTMETRICS
 
 #endif // DRAW_NO_INTERNAL
 }
@@ -63,8 +64,6 @@ void DrawModule::registerExports()
 void DrawModule::onInit(const IApplication::RunMode&)
 {
 #ifndef DRAW_NO_INTERNAL
-#ifndef MUSE_MODULE_DRAW_USE_QTFONTMETRICS
     m_fontsEngine->init();
-#endif
 #endif // DRAW_NO_INTERNAL
 }

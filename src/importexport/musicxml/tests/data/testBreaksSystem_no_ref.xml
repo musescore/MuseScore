@@ -71,6 +71,11 @@
         </note>
       </measure>
     <measure number="2">
+      <print>
+        <measure-layout>
+          <measure-distance>50</measure-distance>
+          </measure-layout>
+        </print>
       <direction placement="above" system="only-top">
         <direction-type>
           <words>After system break in horizontal frame</words>
@@ -83,6 +88,11 @@
         </note>
       </measure>
     <measure number="1">
+      <print>
+        <measure-layout>
+          <measure-distance>50</measure-distance>
+          </measure-layout>
+        </print>
       <attributes>
         <divisions>1</divisions>
         </attributes>
@@ -98,6 +108,11 @@
         </note>
       </measure>
     <measure number="2">
+      <print>
+        <measure-layout>
+          <measure-distance>50</measure-distance>
+          </measure-layout>
+        </print>
       <direction placement="above" system="only-top">
         <direction-type>
           <words>After page break in horizontal frame</words>
@@ -139,6 +154,11 @@
         </note>
       </measure>
     <measure number="5">
+      <print>
+        <measure-layout>
+          <measure-distance>50</measure-distance>
+          </measure-layout>
+        </print>
       <direction placement="above" system="only-top">
         <direction-type>
           <words>After system break in hframe</words>

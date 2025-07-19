@@ -39,13 +39,25 @@ static const ElementStyle defaultStyle {
     { Sid::defaultSystemFlag, Pid::SYSTEM_FLAG },
 };
 
+static bool styleIsSelectable(TextStyleType style)
+{
+    switch (style) {
+    case TextStyleType::HEADER:
+    case TextStyleType::FOOTER:
+    case TextStyleType::COPYRIGHT:
+    case TextStyleType::PAGE_NUMBER:
+        return false;
+    default: break;
+    }
+    return true;
+}
+
 //---------------------------------------------------------
 //   Text
 //---------------------------------------------------------
 
 Text::Text(EngravingItem* parent, TextStyleType tid)
-    : TextBase(ElementType::TEXT, parent, tid,
-               tid == TextStyleType::HEADER || tid == TextStyleType::FOOTER ? ElementFlag::NOT_SELECTABLE : ElementFlag::NOTHING)
+    : TextBase(ElementType::TEXT, parent, tid, styleIsSelectable(tid) ? ElementFlag::NOTHING : ElementFlag::NOT_SELECTABLE)
 {
     initElementStyle(&defaultStyle);
 }
@@ -64,10 +76,32 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
     }
 }
 
+PropertyValue Text::getProperty(Pid id) const
+{
+    switch (id) {
+    case Pid::VOICE_ASSIGNMENT:
+        if (hasVoiceAssignmentProperties()) {
+            return parentItem()->getProperty(id);
+        }
+    // fallthrough
+    default:
+        return TextBase::getProperty(id);
+    }
+}
+
 String Text::readXmlText(XmlReader& xml, Score* score)
 {
     Text t(score->dummy());
     rw::RWRegister::reader()->readItem(&t, xml);
     return t.xmlText();
+}
+
+bool Text::hasVoiceAssignmentProperties() const
+{
+    const EngravingItem* parent = parentItem();
+    if (parent && parent->isTextLineBaseSegment()) {
+        return parent->hasVoiceAssignmentProperties();
+    }
+    return false;
 }
 }

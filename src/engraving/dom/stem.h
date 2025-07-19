@@ -40,7 +40,6 @@ public:
 
     Stem* clone() const override { return new Stem(*this); }
 
-    void spatiumChanged(double oldValue, double newValue) override;
     EngravingItem* elementBase() const override;
 
     bool isEditable() const override { return true; }
@@ -61,18 +60,18 @@ public:
     Chord* chord() const { return toChord(explicitParent()); }
     bool up() const;
 
-    Millimetre baseLength() const { return m_baseLength; }
-    void setBaseLength(Millimetre baseLength);
+    Spatium baseLength() const { return m_baseLength; }
+    void setBaseLength(Spatium baseLength);
 
-    Millimetre userLength() const { return m_userLength; }
-    void setUserLength(Millimetre userLength) { m_userLength = userLength; }
+    Spatium userLength() const { return m_userLength; }
+    void setUserLength(Spatium userLength) { m_userLength = userLength; }
 
-    Millimetre lineWidth() const { return m_lineWidth; }
-    double lineWidthMag() const { return m_lineWidth * mag(); }
-    void setLineWidth(Millimetre lineWidth) { m_lineWidth = lineWidth; }
+    Spatium lineWidth() const { return m_lineWidth; }
+    double lineWidthMag() const;
+    void setLineWidth(Spatium lineWidth) { m_lineWidth = lineWidth; }
 
     PointF flagPosition() const;
-    double length() const { return m_baseLength + m_userLength; }
+    double length() const { return absoluteFromSpatium(m_baseLength + m_userLength); }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
@@ -82,6 +81,7 @@ public:
 
     struct LayoutData : public EngravingItem::LayoutData {
         LineF line;
+        double beamCorrection = 0.0;
     };
     DECLARE_LAYOUTDATA_METHODS(Stem)
 
@@ -89,10 +89,10 @@ private:
     friend class Factory;
     Stem(Chord* parent = 0);
 
-    Millimetre m_baseLength = Millimetre(0.0);
-    Millimetre m_userLength = Millimetre(0.0);
+    Spatium m_baseLength = Spatium(0.0);
 
-    Millimetre m_lineWidth = Millimetre(0.0);
+    Spatium m_userLength = Spatium(0.0);
+    Spatium m_lineWidth = Spatium(0.0);
 };
 }
 #endif

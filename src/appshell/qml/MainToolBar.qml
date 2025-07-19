@@ -70,8 +70,8 @@ Item {
 
         model: toolBarModel
 
-        width: contentItem.childrenRect.width
-        height: contentItem.childrenRect.height
+        width: Math.max(1, contentItem.childrenRect.width)
+        height: Math.max(1, contentItem.childrenRect.height)
 
         delegate: PageTabButton {
             id: radioButtonDelegate

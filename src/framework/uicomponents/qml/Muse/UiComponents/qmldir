@@ -16,7 +16,6 @@ FocusableControl 1.0 FocusableControl.qml
 FocusableItem 1.0 FocusableItem.qml
 GradientRectangle 1.0 GradientRectangle.qml
 GridViewSectional 1.0 GridViewSectional.qml
-Icon 1.0 Icon.qml
 IncrementalPropertyControl 1.0 IncrementalPropertyControl.qml
 InfoPanel 1.0 InfoPanel.qml
 ItemWithDropShadow 1.0 ItemWithDropShadow.qml
@@ -32,6 +31,7 @@ ProgressButton 1.0 ProgressButton.qml
 RadioButtonGroup 1.0 RadioButtonGroup.qml
 RoundedRadioButton 1.0 RoundedRadioButton.qml
 RoundedRectangle 1.0 RoundedRectangle.qml
+RealInputField 1.0 RealInputField.qml
 SearchField 1.0 SearchField.qml
 SelectMultipleDirectoriesDialog 1.0 SelectMultipleDirectoriesDialog.qml
 SeparatorLine 1.0 SeparatorLine.qml
@@ -54,6 +54,7 @@ StyledTextLabel 1.0 StyledTextLabel.qml
 StyledToolTip 1.0 StyledToolTip.qml
 TableViewColumn 1.0 treeview/TableViewColumn.qml
 TextInputField 1.0 TextInputField.qml
+TextInputArea 1.0 TextInputArea.qml
 TimeInputField 1.0 TimeInputField.qml
 ToggleButton 1.0 ToggleButton.qml
 TreeView 1.0 treeview/TreeView.qml
@@ -64,3 +65,4 @@ ValueList 1.0 ValueList.qml
 VisibilityBox 1.0 VisibilityBox.qml
 StyledToolBarView 1.0 StyledToolBarView.qml
 StyledToolBarItem 1.0 StyledToolBarItem.qml
+StyledViewScrollAndZoomArea 1.0 StyledViewScrollAndZoomArea.qml

@@ -26,6 +26,7 @@
 
 #include "actionicon.h"
 #include "factory.h"
+#include "harmony.h"
 #include "layoutbreak.h"
 #include "masterscore.h"
 #include "mscore.h"
@@ -61,7 +62,7 @@ Box::Box(const ElementType& type, System* parent)
 
 void HBox::computeMinWidth()
 {
-    setWidth(point(boxWidth()) + topGap() + bottomGap());    // top/bottom is really left/right
+    setWidth(absoluteFromSpatium(boxWidth() + topGap() + bottomGap()));    // top/bottom is really left/right
 }
 
 bool Box::isEditAllowed(EditData&) const
@@ -94,32 +95,25 @@ void Box::startEditDrag(EditData& ed)
 
 void Box::editDrag(EditData& ed)
 {
+    const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isVBox()) {
-        m_boxHeight += Spatium(ed.delta.y() / spatium());
+        m_boxHeight += Spatium(ed.delta.y() / sp);
         if (ed.vRaster) {
             double vRaster = 1.0 / MScore::vRaster();
             int n = lrint(m_boxHeight.val() / vRaster);
             m_boxHeight = Spatium(vRaster * n);
         }
-        mutldata()->setBbox(0.0, 0.0, system()->width(), point(boxHeight()));
+        mutldata()->setBbox(0.0, 0.0, system()->width(), absoluteFromSpatium(boxHeight()));
         system()->setHeight(height());
-        triggerLayout();
     } else {
-        m_boxWidth += Spatium(ed.delta.x() / spatium());
+        m_boxWidth += Spatium(ed.delta.x() / sp);
         if (ed.hRaster) {
             double hRaster = 1.0 / MScore::hRaster();
             int n = lrint(m_boxWidth.val() / hRaster);
             m_boxWidth = Spatium(hRaster * n);
         }
-        triggerLayout();
     }
-
-    renderer()->layoutItem(this);
-}
-
-void Box::endEdit(EditData&)
-{
-    renderer()->layoutItem(this);
+    triggerLayout();
 }
 
 //---------------------------------------------------------
@@ -128,13 +122,13 @@ void Box::endEdit(EditData&)
 
 std::vector<PointF> HBox::gripsPositions(const EditData&) const
 {
-    RectF r(abbox());
+    RectF r(pageBoundingRect());
     return { PointF(r.right(), r.top() + r.height() * .5) };
 }
 
 std::vector<PointF> VBox::gripsPositions(const EditData&) const
 {
-    RectF r(abbox());
+    RectF r(pageBoundingRect());
     return { PointF(r.x() + r.width() * .5, r.bottom()) };
 }
 
@@ -149,6 +143,12 @@ void Box::add(EngravingItem* e)
         toText(e)->setLayoutToParentWidth(true);
     }
     MeasureBase::add(e);
+}
+
+double Box::absoluteFromSpatium(const Spatium& val) const
+{
+    const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
+    return val.val() * sp;
 }
 
 RectF Box::contentRect() const
@@ -198,7 +198,6 @@ PropertyValue Box::getProperty(Pid propertyId) const
 
 bool Box::setProperty(Pid propertyId, const PropertyValue& v)
 {
-    score()->addRefresh(canvasBoundingRect(LD_ACCESS::BAD));
     switch (propertyId) {
     case Pid::BOX_HEIGHT:
         m_boxHeight = v.value<Spatium>();
@@ -207,10 +206,10 @@ bool Box::setProperty(Pid propertyId, const PropertyValue& v)
         m_boxWidth = v.value<Spatium>();
         break;
     case Pid::TOP_GAP:
-        m_topGap = v.value<Millimetre>();
+        m_topGap = v.value<Spatium>();
         break;
     case Pid::BOTTOM_GAP:
-        m_bottomGap = v.value<Millimetre>();
+        m_bottomGap = v.value<Spatium>();
         break;
     case Pid::LEFT_MARGIN:
         m_leftMargin = v.toDouble();
@@ -246,9 +245,9 @@ PropertyValue Box::propertyDefault(Pid id) const
         return Spatium(0.0);
 
     case Pid::TOP_GAP:
-        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::systemFrameDistance);
+        return isHBox() ? Spatium(0.0) : style().styleS(Sid::systemFrameDistance);
     case Pid::BOTTOM_GAP:
-        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::frameSystemDistance);
+        return isHBox() ? Spatium(0.0) : style().styleS(Sid::frameSystemDistance);
 
     case Pid::LEFT_MARGIN:
     case Pid::RIGHT_MARGIN:
@@ -257,9 +256,16 @@ PropertyValue Box::propertyDefault(Pid id) const
         return 0.0;
     case Pid::BOX_AUTOSIZE:
         return true;
+    case Pid::SIZE_SPATIUM_DEPENDENT:
+        return !isTitleFrame();
     default:
         return MeasureBase::propertyDefault(id);
     }
+}
+
+bool Box::isTitleFrame() const
+{
+    return this == score()->first() && type() == ElementType::VBOX;
 }
 
 //---------------------------------------------------------
@@ -278,6 +284,8 @@ void Box::copyValues(Box* origin)
     m_topMargin    = origin->topMargin() * factor;
     m_leftMargin   = origin->leftMargin() * factor;
     m_rightMargin  = origin->rightMargin() * factor;
+
+    setSizeIsSpatiumDependent(origin->sizeIsSpatiumDependent());
 }
 
 //---------------------------------------------------------
@@ -368,7 +376,7 @@ EngravingItem* Box::drop(EditData& data)
             }
             break;
         }
-        lb->setTrack(muse::nidx);                 // these are system elements
+        lb->setTrack(0);
         lb->setParent(this);
         score()->undoAddElement(lb);
         return lb;
@@ -426,7 +434,7 @@ void Box::manageExclusionFromParts(bool exclude)
         toEngravingItem(sectionBreak)->manageExclusionFromParts(true);
     }
 
-    bool titleFrame = this == score()->first() && type() == ElementType::VBOX;
+    bool titleFrame = isTitleFrame();
     if (exclude) {
         const std::list<EngravingObject*> links = linkList();
         for (EngravingObject* linkedObject : links) {
@@ -469,6 +477,12 @@ void Box::manageExclusionFromParts(bool exclude)
             options.cloneBoxToAllParts = false;
             MeasureBase* newFrame = score->insertBox(type(), newMB, options);
             newFrame->setExcludeFromOtherParts(false);
+            // newFrame->setSizeIsSpatiumDependent(!titleFrame);
+
+            // Clear auto generated diagrams inside fret box
+            if (newFrame->isFBox()) {
+                toFBox(newFrame)->clearElements();
+            }
 
             for (EngravingItem* item : el()) {
                 // Don't add instrument name from current part
@@ -485,7 +499,7 @@ void Box::manageExclusionFromParts(bool exclude)
                 toTBox(newFrame)->resetText(newText);
             }
 
-            if (!score->isMaster() && newFrame == score->first() && newFrame->type() == ElementType::VBOX) {
+            if (!score->isMaster() && titleFrame) {
                 // Title frame - add part name
                 String partLabel = score->name();
                 if (!partLabel.empty()) {
@@ -600,12 +614,12 @@ VBox::VBox(System* parent)
 
 double VBox::minHeight() const
 {
-    return point(Spatium(10));
+    return absoluteFromSpatium(Spatium(10));
 }
 
 double VBox::maxHeight() const
 {
-    return point(Spatium(30));
+    return absoluteFromSpatium(Spatium(30));
 }
 
 PropertyValue VBox::getProperty(Pid propertyId) const
@@ -638,9 +652,10 @@ PropertyValue VBox::propertyDefault(Pid id) const
 
 void VBox::startEditDrag(EditData& ed)
 {
+    const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isAutoSizeEnabled()) {
         setAutoSizeEnabled(false);
-        setBoxHeight(Spatium(height() / spatium()));
+        setBoxHeight(Spatium(height() / sp));
     }
     Box::startEditDrag(ed);
 }
@@ -650,18 +665,183 @@ void VBox::startEditDrag(EditData& ed)
 ///   Add new EngravingItem \a e to fret diagram box
 //---------------------------------------------------------
 
+FBox::FBox(System* parent)
+    : VBox(ElementType::FBOX, parent)
+{
+    init();
+
+    resetProperty(Pid::FRET_FRAME_TEXT_SCALE);
+    resetProperty(Pid::FRET_FRAME_DIAGRAM_SCALE);
+    resetProperty(Pid::FRET_FRAME_COLUMN_GAP);
+    resetProperty(Pid::FRET_FRAME_ROW_GAP);
+    resetProperty(Pid::FRET_FRAME_CHORDS_PER_ROW);
+    resetProperty(Pid::FRET_FRAME_H_ALIGN);
+
+    resetProperty(Pid::LEFT_MARGIN);
+    resetProperty(Pid::RIGHT_MARGIN);
+    resetProperty(Pid::TOP_MARGIN);
+    resetProperty(Pid::BOTTOM_MARGIN);
+    resetProperty(Pid::TOP_GAP);
+    resetProperty(Pid::BOTTOM_GAP);
+}
+
+void FBox::init()
+{
+    clearElements();
+
+    std::set<String> usedDiagrams;
+
+    for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
+         segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
+        for (EngravingItem* item : segment->annotations()) {
+            if (!item || !item->part()) {
+                continue;
+            }
+
+            FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(item);
+            if (!fretDiagram) {
+                continue;
+            }
+
+            String harmonyName = fretDiagram->harmony()->harmonyName().toLower();
+            if (muse::contains(usedDiagrams, harmonyName)) {
+                delete fretDiagram;
+                fretDiagram = nullptr;
+
+                continue;
+            }
+
+            add(fretDiagram);
+
+            usedDiagrams.insert(harmonyName);
+        }
+    }
+}
+
 void FBox::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isFretDiagram()) {
-//            FretDiagram* fd = toFretDiagram(e);
-//            fd->setFlag(ElementFlag::MOVABLE, false);
+        FretDiagram* fretDiagram = toFretDiagram(e);
+        fretDiagram->setFlag(ElementFlag::MOVABLE, false);
+        fretDiagram->setFlag(ElementFlag::ON_STAFF, false);
+
+        Harmony* harmony = fretDiagram->harmony();
+        harmony->setFlag(ElementFlag::MOVABLE, false);
+        harmony->setFlag(ElementFlag::ON_STAFF, false);
+
+        if (!e->eid().isValid()) {
+            e->assignNewEID();
+        }
+
+        VBox::add(e);
     } else {
         LOGD("FBox::add: element not allowed");
         return;
     }
-    el().push_back(e);
     e->added();
+}
+
+PropertyValue FBox::getProperty(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::FRET_FRAME_TEXT_SCALE:
+        return m_textScale;
+    case Pid::FRET_FRAME_DIAGRAM_SCALE:
+        return m_diagramScale;
+    case Pid::FRET_FRAME_COLUMN_GAP:
+        return m_columnGap;
+    case Pid::FRET_FRAME_ROW_GAP:
+        return m_rowGap;
+    case Pid::FRET_FRAME_CHORDS_PER_ROW:
+        return m_chordsPerRow;
+    case Pid::FRET_FRAME_H_ALIGN:
+        return static_cast<int>(m_contentAlignmentH);
+    case Pid::LEFT_MARGIN:
+        return m_contentAlignmentH == AlignH::LEFT ? VBox::getProperty(propertyId) : PropertyValue();
+    case Pid::RIGHT_MARGIN:
+        return m_contentAlignmentH == AlignH::RIGHT ? VBox::getProperty(propertyId) : PropertyValue();
+    default:
+        return VBox::getProperty(propertyId);
+    }
+}
+
+bool FBox::setProperty(Pid propertyId, const PropertyValue& val)
+{
+    switch (propertyId) {
+    case Pid::FRET_FRAME_TEXT_SCALE:
+        m_textScale = val.toDouble();
+        break;
+    case Pid::FRET_FRAME_DIAGRAM_SCALE:
+        m_diagramScale = val.toDouble();
+        break;
+    case Pid::FRET_FRAME_COLUMN_GAP:
+        m_columnGap = val.value<Spatium>();
+        break;
+    case Pid::FRET_FRAME_ROW_GAP:
+        m_rowGap = val.value<Spatium>();
+        break;
+    case Pid::FRET_FRAME_CHORDS_PER_ROW:
+        m_chordsPerRow = val.toInt();
+        break;
+    case Pid::FRET_FRAME_H_ALIGN:
+        m_contentAlignmentH = static_cast<AlignH>(val.toInt());
+        resetProperty(Pid::LEFT_MARGIN);
+        resetProperty(Pid::RIGHT_MARGIN);
+        break;
+    default:
+        return VBox::setProperty(propertyId, val);
+    }
+
+    triggerLayout();
+    return true;
+}
+
+PropertyValue FBox::propertyDefault(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::FRET_FRAME_TEXT_SCALE:
+    case Pid::FRET_FRAME_DIAGRAM_SCALE:
+        return 1.0;
+    case Pid::FRET_FRAME_COLUMN_GAP:
+    case Pid::FRET_FRAME_ROW_GAP:
+        return Spatium(3.0);
+    case Pid::FRET_FRAME_CHORDS_PER_ROW:
+        return 8;
+    case Pid::FRET_FRAME_H_ALIGN:
+        return static_cast<int>(AlignH::HCENTER);
+    case Pid::TOP_GAP:
+    case Pid::BOTTOM_GAP:
+        return 4.0;
+    default:
+        return VBox::propertyDefault(propertyId);
+    }
+}
+
+int FBox::gripsCount() const
+{
+    return 0;
+}
+
+Grip FBox::initialEditModeGrip() const
+{
+    return Grip::NO_GRIP;
+}
+
+Grip FBox::defaultGrip() const
+{
+    return Grip::NO_GRIP;
+}
+
+std::vector<PointF> FBox::gripsPositions(const EditData&) const
+{
+    return {};
+}
+
+void FBox::undoReorderElements(const std::vector<EID>& newOrderElementsIds)
+{
+    score()->undo(new ReorderFBox(this, newOrderElementsIds));
+    triggerLayout();
 }
 
 //---------------------------------------------------------

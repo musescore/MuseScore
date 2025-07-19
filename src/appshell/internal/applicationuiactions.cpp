@@ -39,6 +39,7 @@ using namespace muse::dock;
 static const ActionCode FULL_SCREEN_CODE("fullscreen");
 static const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
 static const ActionCode TOGGLE_BRAILLE_ACTION_CODE("toggle-braille-panel");
+static const ActionCode TOGGLE_PERCUSSION_PANEL_ACTION_CODE("toggle-percussion-panel");
 
 const UiActionList ApplicationUiActions::m_actions = {
     UiAction("quit",
@@ -102,14 +103,14 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Toolbars
     UiAction("toggle-transport",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Playback controls"),
              TranslatableString("action", "Show/hide playback controls"),
              Checkable::Yes
              ),
     UiAction("toggle-noteinput",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Note input"),
              TranslatableString("action", "Show/hide note input toolbar"),
@@ -118,37 +119,44 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Vertical panels
     UiAction("toggle-palettes",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Palettes"),
              TranslatableString("action", "Show/hide palettes"),
              Checkable::Yes
              ),
     UiAction("toggle-instruments",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Instr&uments"),
-             TranslatableString("action", "Open instruments dialog…"),
+             TranslatableString("action", "&Layout"),
+             TranslatableString("action", "Show/hide layout panel"),
              Checkable::Yes
              ),
     UiAction("inspector",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Propert&ies"),
              TranslatableString("action", "Show/hide properties"),
              Checkable::Yes
              ),
     UiAction("toggle-selection-filter",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Se&lection filter"),
+             TranslatableString("action", "S&election filter"),
              TranslatableString("action", "Show/hide selection filter"),
+             Checkable::Yes
+             ),
+    UiAction("toggle-undo-history-panel",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "&History"),
+             TranslatableString("action", "Show/hide undo history"),
              Checkable::Yes
              ),
 
     // Navigator
     UiAction(TOGGLE_NAVIGATOR_ACTION_CODE,
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Navigator"),
              TranslatableString("action", "Show/hide navigator"),
@@ -157,7 +165,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Braille panel
     UiAction(TOGGLE_BRAILLE_ACTION_CODE,
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Braille"),
              TranslatableString("action", "Show/hide braille panel"),
@@ -166,14 +174,14 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Horizontal panels
     UiAction("toggle-timeline",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Tim&eline"),
              TranslatableString("action", "Show/hide timeline"),
              Checkable::Yes
              ),
     UiAction("toggle-mixer",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Mixer"),
              TranslatableString("action", "Show/hide mixer"),
@@ -181,14 +189,21 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-piano-keyboard",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Piano &keyboard"),
              TranslatableString("action", "Show/hide piano keyboard"),
              Checkable::Yes
              ),
+    UiAction(TOGGLE_PERCUSSION_PANEL_ACTION_CODE,
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Percussion"),
+             TranslatableString("action", "Show/hide percussion panel"),
+             Checkable::Yes
+             ),
     UiAction("toggle-scorecmp-tool",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Score comparison tool"),
              Checkable::Yes
@@ -196,7 +211,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Status bar
     UiAction("toggle-statusbar",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Status bar"),
              TranslatableString("action", "Show/hide status bar"),
@@ -211,8 +226,8 @@ const UiActionList ApplicationUiActions::m_actions = {
              )
 };
 
-ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller)
-    : m_controller(controller)
+ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller, const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_controller(controller)
 {
 }
 
@@ -232,6 +247,10 @@ void ApplicationUiActions::init()
 
     dockWindowProvider()->windowChanged().onNotify(this, [this]() {
         listenOpenedDocksChanged(dockWindowProvider()->window());
+    });
+
+    notationConfiguration()->useNewPercussionPanelChanged().onNotify(this, [this]() {
+        m_actionEnabledChanged.send({ TOGGLE_PERCUSSION_PANEL_ACTION_CODE });
     });
 }
 
@@ -265,11 +284,11 @@ const muse::ui::UiActionList& ApplicationUiActions::actionsList() const
 
 bool ApplicationUiActions::actionEnabled(const UiAction& act) const
 {
-    if (!m_controller->canReceiveAction(act.code)) {
-        return false;
+    if (act.code == TOGGLE_PERCUSSION_PANEL_ACTION_CODE) {
+        return notationConfiguration()->useNewPercussionPanel();
     }
 
-    return true;
+    return m_controller->canReceiveAction(act.code);
 }
 
 bool ApplicationUiActions::actionChecked(const UiAction& act) const
@@ -294,7 +313,7 @@ bool ApplicationUiActions::actionChecked(const UiAction& act) const
     }
 
     const IDockWindow* window = dockWindowProvider()->window();
-    return window ? window->isDockOpen(dockName) : false;
+    return window ? window->isDockOpenAndCurrentInFrame(dockName) : false;
 }
 
 muse::async::Channel<ActionCodeList> ApplicationUiActions::actionEnabledChanged() const
@@ -314,9 +333,10 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
         { "toggle-noteinput", NOTE_INPUT_BAR_NAME },
 
         { "toggle-palettes", PALETTES_PANEL_NAME },
-        { "toggle-instruments", INSTRUMENTS_PANEL_NAME },
+        { "toggle-instruments", LAYOUT_PANEL_NAME },
         { "inspector", INSPECTOR_PANEL_NAME },
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
+        { "toggle-undo-history-panel", UNDO_HISTORY_PANEL_NAME },
 
         { TOGGLE_NAVIGATOR_ACTION_CODE, NOTATION_NAVIGATOR_PANEL_NAME },
         { TOGGLE_BRAILLE_ACTION_CODE, NOTATION_BRAILLE_PANEL_NAME },
@@ -324,6 +344,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
         { "toggle-timeline", TIMELINE_PANEL_NAME },
         { "toggle-mixer", MIXER_PANEL_NAME },
         { "toggle-piano-keyboard", PIANO_KEYBOARD_PANEL_NAME },
+        { TOGGLE_PERCUSSION_PANEL_ACTION_CODE, PERCUSSION_PANEL_NAME },
 
         { "toggle-statusbar", NOTATION_STATUSBAR_NAME },
     };

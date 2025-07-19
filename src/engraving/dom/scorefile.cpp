@@ -22,6 +22,7 @@
 
 #include <cmath>
 
+#include "io/buffer.h"
 #include "io/file.h"
 #include "io/fileinfo.h"
 
@@ -77,7 +78,7 @@ std::shared_ptr<Pixmap> Score::createThumbnail()
     switchToPageMode();
 
     Page* page = pages().at(0);
-    RectF fr = page->abbox();
+    RectF fr = page->pageBoundingRect();
     double mag = 256.0 / std::max(fr.width(), fr.height());
     int w = int(fr.width() * mag);
     int h = int(fr.height() * mag);
@@ -110,23 +111,26 @@ std::shared_ptr<Pixmap> Score::createThumbnail()
 //   loadStyle
 //---------------------------------------------------------
 
-bool Score::loadStyle(const String& fn, bool ign, const bool overlap)
+bool Score::loadStyle(muse::io::IODevice& dev, bool ign, bool overlap)
 {
     TRACEFUNC;
 
-    File f(fn);
-    if (f.open(IODevice::ReadOnly)) {
-        MStyle st = style();
-        if (st.read(&f, ign)) {
-            undo(new ChangeStyle(this, st, overlap));
-            return true;
-        } else {
-            LOGE() << "The style file is not compatible with this version of MuseScore Studio.";
-            return false;
-        }
+    bool success = false;
+    if (!dev.open(IODevice::ReadOnly)) {
+        LOGE() << "The style data is not available.";
+        return false;
     }
 
-    return false;
+    MStyle st = style();
+    if (st.read(&dev, ign)) {
+        undo(new ChangeStyle(this, st, overlap));
+        success = true;
+    } else {
+        LOGE() << "The style data is not compatible with this version of MuseScore Studio.";
+    }
+
+    dev.close();
+    return success;
 }
 
 //---------------------------------------------------------
@@ -165,7 +169,7 @@ void Score::print(Painter* painter, int pageNo)
     m_printing  = true;
     MScore::pdfPrinting = true;
     Page* page = pages().at(pageNo);
-    RectF fr  = page->abbox();
+    RectF fr  = page->pageBoundingRect();
 
     std::vector<EngravingItem*> ell = page->items(fr);
     std::sort(ell.begin(), ell.end(), elementLessThan);

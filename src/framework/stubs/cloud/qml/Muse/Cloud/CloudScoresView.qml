@@ -1,20 +1,22 @@
-import QtQuick 2.15
+import QtQuick
 
-import Muse.UiComponents 1.0
+import Muse.Ui
+import Muse.UiComponents
 
 Rectangle {
     id: stub
 
     color: ui.theme.backgroundPrimaryColor
 
-    property var viewType
-    property var searchText
+    property string searchText
+
+    property int viewType
 
     property alias backgroundColor: stub.color
-    property var sideMargin
+    property real sideMargin
 
-    property var navigationSection
-    property var navigationOrder
+    property NavigationSection navigationSection
+    property int navigationOrder
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)

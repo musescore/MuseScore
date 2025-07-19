@@ -31,6 +31,8 @@ class ExtPluginsLoader
 public:
     ExtPluginsLoader() = default;
 
+    std::map<std::string /*codeKey*/, Uri> loadCodekeyUriMap(const io::path_t& defPath, const io::path_t& extPath) const;
+
     ManifestList loadManifestList(const io::path_t& defPath, const io::path_t& extPath) const;
 
 private:

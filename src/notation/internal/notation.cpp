@@ -30,7 +30,6 @@
 #include "notationviewstate.h"
 #include "notationsolomutestate.h"
 #include "notationinteraction.h"
-#include "notationplayback.h"
 #include "notationundostack.h"
 #include "notationstyle.h"
 #include "notationelements.h"
@@ -44,14 +43,15 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
-Notation::Notation(mu::engraving::Score* score)
+Notation::Notation(const muse::modularity::ContextPtr& iocCtx, mu::engraving::Score* score)
+    : muse::Injectable(iocCtx)
 {
     m_painting = std::make_shared<NotationPainting>(this);
     m_viewState = std::make_shared<NotationViewState>(this);
     m_soloMuteState = std::make_shared<NotationSoloMuteState>();
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
-    m_midiInput = std::make_shared<NotationMidiInput>(this, m_interaction, m_undoStack);
+    m_midiInput = std::make_shared<NotationMidiInput>(this, m_interaction, m_undoStack, iocContext());
     m_accessibility = std::make_shared<NotationAccessibility>(this);
     m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
     m_style = std::make_shared<NotationStyle>(this, m_undoStack);
@@ -114,12 +114,6 @@ Notation::~Notation()
     //! NOTE: The master score will be deleted later from ~EngravingProject()
     //! Its excerpts will be deleted directly in ~MasterScore()
     m_score = nullptr;
-}
-
-void Notation::init()
-{
-    bool isVertical = configuration()->canvasOrientation().val == muse::Orientation::Vertical;
-    mu::engraving::MScore::setVerticalOrientation(isVertical);
 }
 
 void Notation::setScore(Score* score)
@@ -242,6 +236,11 @@ bool Notation::hasVisibleParts() const
     }
 
     return false;
+}
+
+bool Notation::isMaster() const
+{
+    return m_score->isMaster();
 }
 
 void Notation::notifyAboutNotationChanged()

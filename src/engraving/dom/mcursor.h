@@ -24,7 +24,7 @@
 #define MU_ENGRAVING_MCURSOR_H
 
 #include "types/string.h"
-#include "../types/fraction.h"
+#include "../types/types.h"
 
 #include "modularity/ioc.h"
 
@@ -33,7 +33,7 @@ class MasterScore;
 class TDuration;
 class TimeSig;
 class Chord;
-enum class Key;
+enum class Key : signed char;
 
 //---------------------------------------------------------
 //   MCursor

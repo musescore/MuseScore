@@ -26,8 +26,17 @@
 using namespace muse::extensions::api;
 
 ExtApi::ExtApi(muse::api::IApiEngine* engine, QObject* parent)
-    : QObject(parent), m_engine(engine)
+    : QObject(parent), Injectable(engine->iocContext()), m_engine(engine)
 {
+}
+
+ExtApi::~ExtApi()
+{
+    for (auto& a : m_apis) {
+        if (a.isNeedDelete) {
+            delete a.obj;
+        }
+    }
 }
 
 QJSValue ExtApi::api(const std::string& name) const
@@ -41,7 +50,9 @@ QJSValue ExtApi::api(const std::string& name) const
         return a.jsval;
     }
 
-    a.obj = apiRegister()->createApi(name, m_engine);
+    auto api = apiRegister()->createApi(name, m_engine);
+    a.obj = api.first;
+    a.isNeedDelete = api.second;
     if (!a.obj) {
         LOGW() << "Not allowed api: " << name;
         return QJSValue();

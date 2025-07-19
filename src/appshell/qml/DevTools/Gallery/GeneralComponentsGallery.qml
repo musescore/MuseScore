@@ -76,6 +76,8 @@ Rectangle {
                     { textRole: "ToggleButton", componentRole: toggleButtonSample },
                     { textRole: "RoundedRectangle (which allows to round the particular corners)", componentRole: roundedRectangleSample },
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
+                    { textRole: "RealInputField", componentRole: realInputFieldSample },
+                    { textRole: "TextInputArea", componentRole: textInputAreaSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
                     { textRole: "FilePicker", componentRole: filePickerSample },
                     { textRole: "DirectoriesPicker", componentRole: directoriesPickerSample },
@@ -780,6 +782,35 @@ Rectangle {
         TextInputField {
             height: 40
             width: 200
+        }
+    }
+
+    Component {
+        id: realInputFieldSample
+
+        RealInputField {
+            height: 40
+            width: 200
+
+            currentValue: 0.123456
+            decimals: 4
+            min: -100.0
+            max: 100.0
+
+            onCurrentValueChanged: {
+                console.info("onCurrentValueChanged: " + currentValue)
+            }
+        }
+    }
+
+    Component {
+        id: textInputAreaSample
+
+        TextInputArea {
+            height: 200
+            width: 200
+
+            hint: "This is a text area..."
         }
     }
 

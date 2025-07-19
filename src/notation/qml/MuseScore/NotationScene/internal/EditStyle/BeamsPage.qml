@@ -33,10 +33,6 @@ StyleDialogPage {
         id: beamsPageModel
     }
 
-    Component.onCompleted: {
-        beamsPageModel.load()
-    }
-
     ItemWithTitle {
         title: qsTrc("notation", "Beam distance")
 
@@ -58,7 +54,6 @@ StyleDialogPage {
 
                 Column {
                     anchors.centerIn: parent
-                    height: childrenRect.height
                     spacing: 8
 
                     StyledIconLabel {
@@ -131,10 +126,9 @@ StyleDialogPage {
 
     StyledGroupBox {
         width: parent.width
-        height: 120
+        height: Math.max(120, implicitHeight)
 
         title: qsTrc("notation", "Beam style")
-        label.x: 0
 
         RowLayout {
             anchors.fill: parent
@@ -142,7 +136,6 @@ StyleDialogPage {
 
             RadioButtonGroup {
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
                 spacing: 12
                 orientation: ListView.Vertical
@@ -151,39 +144,22 @@ StyleDialogPage {
                     { title: qsTrc("notation", "Draw inner stems through beams"), value: false },
                     { title: qsTrc("notation", "Draw inner stems to nearest beam (“French” style)"), value: true }
                 ]
+
                 delegate: RoundedRadioButton {
-                    leftPadding: 0
-                    spacing: 6
-
+                    width: ListView.view.width
                     text: modelData.title
-
                     checked: modelData.value === beamsPageModel.frenchStyleBeams.value
-
                     onToggled: {
                         beamsPageModel.frenchStyleBeams.value = modelData.value
                     }
                 }
             }
 
-            Rectangle {
-                id: frenchStyleBeamFrame
-                width: 200
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-
-                color: "#ffffff"
-                border.color: ui.theme.strokeColor
-                radius: ui.theme.borderWidth
-
-                Image {
-                    width: Math.min(62, parent.width)
-                    mipmap: true
-                    sourceSize.width: 240
-                    sourceSize.height: 240
-                    anchors.centerIn: parent
-                    fillMode: Image.PreserveAspectFit
-                    source: beamsPageModel.frenchStyleBeams.value ? "beam_style_french.svg" : "beam_style_regular.svg"
-                }
+            StyledImage {
+                forceWidth: 140
+                forceHeight: 52
+                verticalPadding: 12
+                source: beamsPageModel.frenchStyleBeams.value ? "beam_style_french.svg" : "beam_style_regular.svg"
             }
         }
     }

@@ -90,7 +90,7 @@ QString BrailleConfiguration::brailleTable() const
     return settings()->value(BRAILLE_TABLE).toQString();
 }
 
-void BrailleConfiguration::setBrailleTable(const QString table)
+void BrailleConfiguration::setBrailleTable(const QString& table)
 {
     settings()->setSharedValue(BRAILLE_TABLE, Val(table));
 }

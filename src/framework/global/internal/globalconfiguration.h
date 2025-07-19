@@ -61,6 +61,9 @@ public:
     void setMetricUnit(bool metricUnit) override;
 
     std::string museScoreUrl() const override;
+    std::string museHubWebUrl() const override;
+
+    bool highResolutionTimers() const override;
 
 private:
     QString resolveAppDataPath() const;

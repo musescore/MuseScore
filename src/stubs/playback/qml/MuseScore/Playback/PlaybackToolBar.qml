@@ -19,18 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
 
-import Muse.UiComponents 1.0
+import Muse.Ui
+import Muse.UiComponents
 
 Rectangle {
 
     property bool floating: false
 
-    property var navigationPanelSection: navigationPanel.section
-    property var navigationPanelOrder: navigationPanel.order
+    property NavigationSection navigationPanelSection: navigationPanel.section
+    property int navigationPanelOrder: navigationPanel.order
 
     color: ui.theme.backgroundPrimaryColor
+
+    visible: false
 
     StyledTextLabel {
         anchors.centerIn: parent

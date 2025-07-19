@@ -921,30 +921,240 @@ int step2pitchInterval(int step, int alter)
     return intervals[(step - 1) % 7] + alter;
 }
 
+void tpc2Function(int tpc, Key key, String& accName, String& stepName)
+{
+    if (key == Key::INVALID) {
+        LOGD() << "Invalid key";
+        return;
+    }
+    int step = tpc2degree(tpc, key);
+    static const String stepNames = u"1234567";
+    assert(step < (int)stepNames.size());
+    stepName = stepNames.at(step);
+
+    int alter = tpc2alterByKey(tpc, key);
+    int accidentalNo = std::abs(alter);
+    accName = String();
+    bool flat = alter < 0;
+    for (int i = 0; i < accidentalNo; i++) {
+        accName.append(flat ? u"b" : u"#");
+    }
+}
+
+String tpc2Function(int tpc, Key key)
+{
+    String accStr;
+    String stepStr;
+    tpc2Function(tpc, key, accStr, stepStr);
+    return accStr + stepStr;
+}
+
 //----------------------------------------------
 //   function2Tpc
 ///   might be temporary, just used to parse nashville notation now
 ///
 //----------------------------------------------
+
 int function2Tpc(const String& s, Key key)
 {
-    //TODO - PHV: allow for alternate spellings
+    size_t idx = 0;
+    return function2Tpc(s, key, idx);
+}
+
+int function2Tpc(const String& s, Key key, size_t& idx)
+{
+    // TODO - PHV: allow for alternate spellings
     int alter = 0;
     int step;
+
     if (!s.isEmpty() && s.at(0).isDigit()) {
         step = s.at(0).digitValue();
-    } else if (s.size() > 1 && s.at(1).isDigit()) {
-        step = s.at(1).digitValue();
-        if (s.at(0) == u'b') {
+        idx = 1;
+    } else if (s.size() > 1) {
+        constexpr int NUM_LEN = 1;
+        size_t accIdx = s.size() - NUM_LEN;
+        String acc = s.left(accIdx);
+        String num = s.right(NUM_LEN);
+        if (num.size() > NUM_LEN || num.empty() || !num.at(0).isDigit()) {
+            return Tpc::TPC_INVALID;
+        }
+
+        step = num.at(0).digitValue();
+        idx = NUM_LEN;
+        if (acc.startsWith(u"bb")) {
+            alter = -2;
+            idx += 2;
+        } else if (acc.startsWith(u"b")) {
             alter = -1;
-        } else if (s.at(0) == u'#') {
+            idx += 1;
+        } else if (acc.startsWith(u"#")) {
             alter = 1;
+            idx += 1;
+        } else if (acc.startsWith(u"##")) {
+            alter = 2;
+            idx += 2;
         }
     } else {
         return Tpc::TPC_INVALID;
     }
 
     int keyTpc = int(key) + 14;   //tpc of key (ex. F# major would be Tpc::F_S)
-    return tpcInterval(keyTpc, step, alter);
+    int tpc = tpcInterval(keyTpc, step, alter);
+    return tpc;
+}
+
+//---------------------------------------------------------
+//   convertNote
+//    convert something like "C#" into tpc 21
+//---------------------------------------------------------
+int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& noteCase, size_t& idx)
+{
+    bool useGerman = false;
+    bool useSolfeggio = false;
+    static const int spellings[] = {
+        // bb  b   -   #  ##
+        0,  7, 14, 21, 28,      // C
+        2,  9, 16, 23, 30,      // D
+        4, 11, 18, 25, 32,      // E
+        -1,  6, 13, 20, 27,     // F
+        1,  8, 15, 22, 29,      // G
+        3, 10, 17, 24, 31,      // A
+        5, 12, 19, 26, 33,      // B
+    };
+    if (s.empty()) {
+        return Tpc::TPC_INVALID;
+    }
+    noteCase = s.at(0).isLower() ? NoteCaseType::LOWER : NoteCaseType::CAPITAL;
+    int acci;
+    switch (noteSpelling) {
+    case NoteSpellingType::SOLFEGGIO:
+    case NoteSpellingType::FRENCH:
+        useSolfeggio = true;
+        if (s.startsWith(u"sol", muse::CaseInsensitive)) {
+            acci = 3;
+        } else {
+            acci = 2;
+        }
+        break;
+    case NoteSpellingType::GERMAN:
+    case NoteSpellingType::GERMAN_PURE:
+        useGerman = true;
+    // fall through
+    default:
+        acci = 1;
+    }
+    idx = acci;
+    int alter = 0;
+    size_t n = s.size();
+    String acc = s.right(n - acci);
+    if (!acc.empty()) {
+        if (acc.startsWith(u"bb")) {
+            alter = -2;
+            idx += 2;
+        } else if (acc.startsWith(u"b")) {
+            alter = -1;
+            idx += 1;
+        } else if (useGerman && acc.startsWith(u"eses")) {
+            alter = -2;
+            idx += 4;
+        } else if (useGerman && (acc.startsWith(u"ses") || acc.startsWith(u"sas"))) {
+            alter = -2;
+            idx += 3;
+        } else if (useGerman && acc.startsWith(u"es")) {
+            alter = -1;
+            idx += 2;
+        } else if (useGerman && acc.startsWith(u"s") && !acc.startsWith(u"su")) {
+            alter = -1;
+            idx += 1;
+        } else if (acc.startsWith(u"##")) {
+            alter = 2;
+            idx += 2;
+        } else if (acc.startsWith(u"x")) {
+            alter = 2;
+            idx += 1;
+        } else if (acc.startsWith(u"#")) {
+            alter = 1;
+            idx += 1;
+        } else if (useGerman && acc.startsWith(u"isis")) {
+            alter = 2;
+            idx += 4;
+        } else if (useGerman && acc.startsWith(u"is")) {
+            alter = 1;
+            idx += 2;
+        }
+    }
+    int r;
+    if (useGerman) {
+        switch (s.at(0).toLower().toAscii()) {
+        case 'c':   r = 0;
+            break;
+        case 'd':   r = 1;
+            break;
+        case 'e':   r = 2;
+            break;
+        case 'f':   r = 3;
+            break;
+        case 'g':   r = 4;
+            break;
+        case 'a':   r = 5;
+            break;
+        case 'h':   r = 6;
+            break;
+        case 'b':
+            if (alter && alter != -1) {
+                return Tpc::TPC_INVALID;
+            }
+            r = 6;
+            alter = -1;
+            break;
+        default:
+            return Tpc::TPC_INVALID;
+        }
+    } else if (useSolfeggio) {
+        if (s.size() < 2) {
+            return Tpc::TPC_INVALID;
+        }
+        if (s.at(1).isUpper()) {
+            noteCase = NoteCaseType::UPPER;
+        }
+        String ss = s.toLower().left(2);
+        if (ss == "do") {
+            r = 0;
+        } else if (ss == "re" || ss == "ré") {
+            r = 1;
+        } else if (ss == "mi") {
+            r = 2;
+        } else if (ss == "fa") {
+            r = 3;
+        } else if (ss == "so") {    // sol, but only check first 2 characters
+            r = 4;
+        } else if (ss == "la") {
+            r = 5;
+        } else if (ss == "si") {
+            r = 6;
+        } else {
+            return Tpc::TPC_INVALID;
+        }
+    } else {
+        switch (s.at(0).toLower().toAscii()) {
+        case 'c':   r = 0;
+            break;
+        case 'd':   r = 1;
+            break;
+        case 'e':   r = 2;
+            break;
+        case 'f':   r = 3;
+            break;
+        case 'g':   r = 4;
+            break;
+        case 'a':   r = 5;
+            break;
+        case 'b':   r = 6;
+            break;
+        default:    return Tpc::TPC_INVALID;
+        }
+    }
+    r = spellings[r * 5 + alter + 2];
+    return r;
 }
 }
