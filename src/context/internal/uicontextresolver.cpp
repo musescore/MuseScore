@@ -45,100 +45,59 @@ static const QString NOTATION_NAVIGATION_PANEL("ScoreView");
 void UiContextResolver::init()
 {
     interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
-        notifyAboutContextChanged();
+        updateCurrentUiContext();
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        notifyAboutContextChanged();
+        updateCurrentUiContext();
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
         if (notation) {
             notation->interaction()->selectionChanged().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->interaction()->textEditingStarted().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->interaction()->textEditingEnded().onReceive(this, [this](engraving::TextBase*) {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->undoStack()->stackChanged().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->interaction()->noteInput()->noteInputStarted().onReceive(this, [this](bool) {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
 
             notation->interaction()->noteInput()->noteInputEnded().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                updateCurrentUiContext();
             });
         }
-        notifyAboutContextChanged();
+
+        updateCurrentUiContext();
     });
 
     navigationController()->navigationChanged().onNotify(this, [this]() {
-        notifyAboutContextChanged();
+        updateCurrentUiContext();
     });
 }
 
 void UiContextResolver::notifyAboutContextChanged()
 {
-    m_currentUiContextChanged.notify();
+    QTimer::singleShot(1000, [this](){ // todo
+        m_currentUiContextChanged.notify();
+    });
 }
 
 UiContext UiContextResolver::currentUiContext() const
 {
-    TRACEFUNC;
-    Uri currentUri = interactive()->currentUri().val;
-
-#ifdef MUSE_MODULE_DIAGNOSTICS
-    currentUri = diagnostics::diagnosticCurrentUri(interactive()->stack());
-#endif
-
-    if (currentUri == HOME_PAGE_URI) {
-        return context::UiCtxHomeOpened;
-    }
-
-    if (currentUri == NOTATION_PAGE_URI) {
-        auto notation = globalContext()->currentNotation();
-        if (!notation) {
-            //! NOTE The notation page is open, but the notation itself is not loaded - we consider that the notation is not open.
-            //! We need to think, maybe we need a separate value for this case.
-            return context::UiCtxUnknown;
-        }
-
-        INavigationPanel* activePanel = navigationController()->activePanel();
-        if (activePanel) {
-            if (activePanel->name() == NOTATION_NAVIGATION_PANEL) {
-                return context::UiCtxProjectFocused;
-            }
-        }
-
-        return context::UiCtxProjectOpened;
-    }
-
-    if (currentUri == PUBLISH_PAGE_URI) {
-        return context::UiCtxPublishOpened;
-    }
-
-    if (currentUri == DEVTOOLS_PAGE_URI) {
-        return context::UiCtxDevToolsOpened;
-    }
-
-    if (interactive()->isCurrentUriDialog().val) {
-        bool isExtensionDialog = currentUri == EXTENSIONS_DIALOG_URI;
-        if (!isExtensionDialog) {
-            return context::UiCtxDialogOpened;
-        }
-    }
-
-    return context::UiCtxUnknown;
+    return m_currentUiContext;
 }
 
 bool UiContextResolver::match(const muse::ui::UiContext& currentCtx, const muse::ui::UiContext& actCtx) const
@@ -238,4 +197,71 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
         return true;
     }
     return true;
+}
+
+void UiContextResolver::updateCurrentUiContext()
+{
+    TRACEFUNC;
+
+    Uri currentUri = interactive()->currentUri().val;
+
+#ifdef MUSE_MODULE_DIAGNOSTICS
+    currentUri = diagnostics::diagnosticCurrentUri(interactive()->stack());
+#endif
+
+    if (currentUri == HOME_PAGE_URI) {
+        setCurrentUiContext(context::UiCtxHomeOpened);
+        return;
+    }
+
+    if (currentUri == NOTATION_PAGE_URI) {
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            //! NOTE The notation page is open, but the notation itself is not loaded - we consider that the notation is not open.
+            //! We need to think, maybe we need a separate value for this case.
+            setCurrentUiContext(context::UiCtxUnknown);
+            return;
+        }
+
+        INavigationPanel* activePanel = navigationController()->activePanel();
+        if (activePanel) {
+            if (activePanel->name() == NOTATION_NAVIGATION_PANEL) {
+                setCurrentUiContext(context::UiCtxProjectFocused);
+                return;
+            }
+        }
+
+        setCurrentUiContext(context::UiCtxProjectOpened);
+        return;
+    }
+
+    if (currentUri == PUBLISH_PAGE_URI) {
+        setCurrentUiContext(context::UiCtxPublishOpened);
+        return;
+    }
+
+    if (currentUri == DEVTOOLS_PAGE_URI) {
+        setCurrentUiContext(context::UiCtxDevToolsOpened);
+        return;
+    }
+
+    if (interactive()->isCurrentUriDialog().val) {
+        bool isExtensionDialog = currentUri == EXTENSIONS_DIALOG_URI;
+        if (!isExtensionDialog) {
+            setCurrentUiContext(context::UiCtxDialogOpened);
+            return;
+        }
+    }
+
+    setCurrentUiContext(context::UiCtxUnknown);
+}
+
+void UiContextResolver::setCurrentUiContext(const muse::ui::UiContext& context)
+{
+    if (m_currentUiContext == context) {
+        return;
+    }
+
+    m_currentUiContext = context;
+    notifyAboutContextChanged();
 }

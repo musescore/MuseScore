@@ -25,7 +25,7 @@ import QtQuick.Layouts 1.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
-RowLayout {
+Row {
     id: root
 
     property string type: "INFO" // "QUESTION", "INFO", "WARNING", "ERROR"
@@ -146,9 +146,9 @@ RowLayout {
     StyledIconLabel {
         id: icon
 
-        Layout.alignment: Qt.AlignTop
-        Layout.preferredWidth: 48
-        Layout.preferredHeight: 48
+        anchors.top: parent.top
+        width: 48
+        height: 48
 
         font.pixelSize: 48
         iconCode: root.standardIcon(root.type)
@@ -166,7 +166,7 @@ RowLayout {
         readonly property real textsImplicitWidthBounded: Math.min(420, textsImplicitWidth)
 
         // But if the buttons need more space, then the dialog becomes as wide as necessary
-        Layout.preferredWidth: Math.max(buttons.implicitWidth, textsImplicitWidthBounded)
+        width: Math.max(buttons.implicitWidth, textsImplicitWidthBounded)
 
         spacing: 18
 
