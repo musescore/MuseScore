@@ -28,11 +28,14 @@
 
 #include "modularity/ioc.h"
 #include "worker/iworkerplayback.h"
+#include "rpc/irpcchannel.h"
 
 namespace muse::audio {
 class Player : public IPlayer, public async::Asyncable
 {
     Inject<worker::IWorkerPlayback> workerPlayback;
+    Inject<rpc::IRpcChannel> channel;
+
 public:
     Player(const TrackSequenceId sequenceId);
 

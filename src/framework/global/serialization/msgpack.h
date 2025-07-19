@@ -25,6 +25,8 @@
 #include "../types/bytearray.h"
 #include "../types/string.h"
 #include "../types/number.h"
+#include "../types/retval.h"
+#include "../io/path.h"
 
 void pack_custom(std::vector<uint8_t>& data, const muse::String& value);
 bool unpack_custom(muse::msgpack::Cursor& cursor, muse::String& value);
@@ -33,6 +35,22 @@ template<typename T>
 void pack_custom(std::vector<uint8_t>& data, const muse::number_t<T>& value);
 template<typename T>
 bool unpack_custom(muse::msgpack::Cursor& cursor, muse::number_t<T>& value);
+
+// Ret[Val]
+void pack_custom(std::vector<uint8_t>& data, const muse::Ret& value);
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Ret& value);
+template<typename T>
+void pack_custom(std::vector<uint8_t>& data, const muse::RetVal<T>& value);
+template<typename T>
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal<T>& value);
+template<typename T1, typename T2>
+void pack_custom(std::vector<uint8_t>& data, const muse::RetVal2<T1, T2>& value);
+template<typename T1, typename T2>
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal2<T1, T2>& value);
+
+// path_t
+void pack_custom(std::vector<uint8_t>& data, const muse::io::path_t& value);
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::io::path_t& value);
 
 #include "../thirdparty/kors_msgpack/msgpack/msgpack.h"
 
@@ -62,6 +80,59 @@ inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::number_t<T>& valu
     T val = {};
     bool ok = muse::msgpack::UnPacker::unpack(cursor, val);
     value = muse::number_t<T>(val);
+    return ok;
+}
+
+// Ret[Val]
+inline void pack_custom(std::vector<uint8_t>& data, const muse::Ret& value)
+{
+    muse::msgpack::Packer::pack(data, value.code(), value.text());
+}
+
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Ret& value)
+{
+    int code = 0;
+    std::string text;
+    bool ok = muse::msgpack::UnPacker::unpack(cursor, code, text);
+    value = muse::Ret(code, text);
+    return ok;
+}
+
+template<typename T>
+inline void pack_custom(std::vector<uint8_t>& data, const muse::RetVal<T>& value)
+{
+    muse::msgpack::Packer::pack(data, value.ret, value.val);
+}
+
+template<typename T>
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal<T>& value)
+{
+    return muse::msgpack::UnPacker::unpack(cursor, value.ret, value.val);
+}
+
+template<typename T1, typename T2>
+inline void pack_custom(std::vector<uint8_t>& data, const muse::RetVal2<T1, T2>& value)
+{
+    muse::msgpack::Packer::pack(data, value.ret, value.val1, value.val2);
+}
+
+template<typename T1, typename T2>
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal2<T1, T2>& value)
+{
+    return muse::msgpack::UnPacker::unpack(cursor, value.ret, value.val1, value.val2);
+}
+
+// path_t
+inline void pack_custom(std::vector<uint8_t>& data, const muse::io::path_t& value)
+{
+    muse::msgpack::Packer::pack(data, value.toStdString());
+}
+
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::io::path_t& value)
+{
+    std::string str;
+    bool ok = muse::msgpack::UnPacker::unpack(cursor, str);
+    value = muse::io::path_t(str);
     return ok;
 }
 
