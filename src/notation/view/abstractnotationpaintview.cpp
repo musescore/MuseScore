@@ -79,10 +79,14 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
 void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
-
     m_loadCalled = true;
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
+    QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate(double,double,double,double)),
+                     this, SLOT(handleLingeringCursorUpdate(double,double,double,double)));
+    QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate1()),
+                     this, SLOT(handleLingeringCursorUpdate1()));
+
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(configuration()->thinNoteInputCursor());
     m_ruler = std::make_unique<NotationRuler>(iocContext());
@@ -116,6 +120,24 @@ void AbstractNotationPaintView::load()
     });
 
     scheduleRedraw();
+}
+
+void AbstractNotationPaintView::handleLingeringCursorUpdate(double x, double y, double width, double height)
+{
+    if (playbackController()->isPlaying()) {
+        if (x <= 1) {
+            scheduleRedraw();
+        } else {
+            scheduleRedraw(muse::RectF(x, y, width, height));
+        }
+    }
+}
+
+void AbstractNotationPaintView::handleLingeringCursorUpdate1()
+{
+    if (playbackController()->isPlaying()) {
+        scheduleRedraw();
+    }
 }
 
 void AbstractNotationPaintView::initBackground()
@@ -609,6 +631,8 @@ bool AbstractNotationPaintView::elementPopupIsOpen(const ElementType& elementTyp
     return m_currentElementPopupType == modelType;
 }
 
+// first - UiContextResolver::matchWithCurrent, get target notationpaintview
+// second - invoke target notationpaintview::paint
 void AbstractNotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
@@ -948,6 +972,66 @@ bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, boo
     }
 
     pos = alignToCurrentPageBorder(showRect, pos);
+
+    if (pos == oldPos) {
+        return false;
+    }
+
+    return moveCanvasToPosition(pos);
+}
+
+bool AbstractNotationPaintView::adjustCanvasPosition1(const RectF& logicRect, const RectF& logicRect1, bool adjustVertically)
+{
+    TRACEFUNC;
+
+    RectF viewRect = viewport();
+
+    double viewArea = viewRect.width() * viewRect.height();
+    double logicRectArea = logicRect1.width() * logicRect1.height();
+
+    if (viewArea < logicRectArea) {
+        return false;
+    }
+
+    if (viewRect.contains(logicRect1)) {
+        return false;
+    }
+
+    constexpr int BORDER_SPACING_RATIO = 3;
+
+    double _spatium = notationStyle()->styleValue(StyleId::spatium).toDouble();
+    qreal border = _spatium * BORDER_SPACING_RATIO;
+    qreal _scale = currentScaling();
+    if (qFuzzyIsNull(_scale)) {
+        _scale = 1;
+    }
+
+    PointF pos = viewRect.topLeft();
+    PointF oldPos = pos;
+
+    RectF showRect = logicRect1;
+
+    bool adjust = false;
+
+    if (adjustVertically) {
+        if (showRect.top() > viewRect.bottom()) {
+            pos.setY(logicRect.bottom() - height() / _scale + border);
+            adjust = true;
+        } else if (viewRect.height() >= showRect.height() && showRect.bottom() > viewRect.bottom()) {
+            pos.setY(logicRect.top() - border);
+            adjust = true;
+        }
+    }
+
+    pos = alignToCurrentPageBorder(logicRect, pos);
+
+    if (adjust) {
+        if (pos.y() - oldPos.y() < showRect.bottom() - viewRect.bottom()) {
+            if (logicRect.top() - viewRect.top() > showRect.bottom() - viewRect.bottom()) {
+                pos.setY(showRect.bottom() - viewRect.bottom() + oldPos.y() - border);
+            }
+        }
+    }
 
     if (pos == oldPos) {
         return false;
@@ -1397,6 +1481,8 @@ void AbstractNotationPaintView::onPlayingChanged()
     m_autoScrollEnabled = true;
     m_enableAutoScrollTimer.stop();
 
+    notation()->interaction()->playingChang(isPlaying);
+
     if (isPlaying) {
         audio::secs_t pos = globalContext()->playbackState()->playbackPosition();
         muse::midi::tick_t tick = notationPlayback()->secToTick(pos);
@@ -1415,7 +1501,7 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
     }
 
     RectF oldCursorRect = m_playbackCursor->rect();
-    m_playbackCursor->move(tick);
+    m_playbackCursor->move(tick, playbackController()->isPlaying());
     const RectF& newCursorRect = m_playbackCursor->rect();
 
     if (newCursorRect != oldCursorRect) {
@@ -1436,6 +1522,14 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
             bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(newCursorRect);
             if (adjustCanvasPosition(newCursorRect, adjustVertically)) {
                 return;
+            }
+            const bool m_adjust_nm_rect = m_playbackCursor->adjust_nm_rect();
+            const RectF& newNMCursorRect = m_playbackCursor->nm_rect();
+            if (m_adjust_nm_rect) {
+                adjustVertically = needAdjustCanvasVerticallyWhilePlayback(newNMCursorRect);
+                if (adjustCanvasPosition1(newCursorRect, newNMCursorRect, adjustVertically)) {
+                    return;
+                }
             }
         }
     }
@@ -1554,7 +1648,6 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
         m_playbackCursorItem->setVisible(playbackController()->isPlaying());
         m_playbackCursorItem->setEnabled(false); // ignore mouse & keyboard events
         m_playbackCursorItem->setProperty("color", configuration()->playbackCursorColor());
-
         connect(m_playbackCursorItem, &QObject::destroyed, this, [this]() {
             m_playbackCursorItem = nullptr;
         });
