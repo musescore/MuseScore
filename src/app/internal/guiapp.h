@@ -43,6 +43,12 @@ private:
     muse::GlobalModule m_globalModule;
 
     std::vector<muse::modularity::IModuleSetup*> m_modules;
+
+    // Helper methods
+
+    void setupModules();
+    void deinitModules();
+    void loadWindowContents(QQmlApplicationEngine engine, SplashScreen *splashScreen);
 };
 }
 
