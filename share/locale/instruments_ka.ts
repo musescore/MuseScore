@@ -5907,7 +5907,7 @@
         <source>open</source>
         <comment>c-horn-alto channel</comment>
         <extracomment>channel for Horn; transposition: C alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2101"/>
@@ -5956,7 +5956,7 @@
         <source>open</source>
         <comment>bb-horn-alto channel</comment>
         <extracomment>channel for Horn; transposition: B♭ alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2116"/>
@@ -6005,7 +6005,7 @@
         <source>open</source>
         <comment>a-horn channel</comment>
         <extracomment>channel for Horn; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2131"/>
@@ -6054,7 +6054,7 @@
         <source>open</source>
         <comment>ab-horn channel</comment>
         <extracomment>channel for Horn; transposition: A♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2146"/>
@@ -6103,7 +6103,7 @@
         <source>open</source>
         <comment>g-horn channel</comment>
         <extracomment>channel for Horn; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2161"/>
@@ -6152,7 +6152,7 @@
         <source>open</source>
         <comment>e-horn channel</comment>
         <extracomment>channel for Horn; transposition: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2176"/>
@@ -6201,7 +6201,7 @@
         <source>open</source>
         <comment>eb-horn channel</comment>
         <extracomment>channel for Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2191"/>
@@ -6250,7 +6250,7 @@
         <source>open</source>
         <comment>d-horn channel</comment>
         <extracomment>channel for Horn; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2206"/>
@@ -6299,7 +6299,7 @@
         <source>open</source>
         <comment>horn channel</comment>
         <extracomment>channel for Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2221"/>
@@ -6348,7 +6348,7 @@
         <source>open</source>
         <comment>c-horn channel</comment>
         <extracomment>channel for Horn; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2236"/>
@@ -6397,7 +6397,7 @@
         <source>open</source>
         <comment>c-horn-bass channel</comment>
         <extracomment>channel for Horn (bass clef); transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2251"/>
@@ -6446,7 +6446,7 @@
         <source>open</source>
         <comment>bb-horn-basso channel</comment>
         <extracomment>channel for Horn; transposition: B♭ basso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2266"/>
@@ -6488,7 +6488,7 @@
         <source>open</source>
         <comment>vienna-horn channel</comment>
         <extracomment>channel for Vienna Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2279"/>
@@ -6635,7 +6635,7 @@
         <source>open</source>
         <comment>eb-cornet channel</comment>
         <extracomment>channel for Cornet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2325"/>
@@ -6684,7 +6684,7 @@
         <source>open</source>
         <comment>c-cornet channel</comment>
         <extracomment>channel for Cornet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2340"/>
@@ -6733,7 +6733,7 @@
         <source>open</source>
         <comment>bb-cornet channel</comment>
         <extracomment>channel for Cornet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2355"/>
@@ -6782,7 +6782,7 @@
         <source>open</source>
         <comment>a-cornet channel</comment>
         <extracomment>channel for Cornet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2370"/>
@@ -6824,7 +6824,7 @@
         <source>open</source>
         <comment>saxhorn channel</comment>
         <extracomment>channel for Saxhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2383"/>
@@ -6873,7 +6873,7 @@
         <source>open</source>
         <comment>f-alto-horn channel</comment>
         <extracomment>channel for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2398"/>
@@ -6922,7 +6922,7 @@
         <source>open</source>
         <comment>eb-alto-horn channel</comment>
         <extracomment>channel for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2413"/>
@@ -6964,7 +6964,7 @@
         <source>open</source>
         <comment>baritone-horn channel</comment>
         <extracomment>channel for Baritone Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2426"/>
@@ -7006,7 +7006,7 @@
         <source>open</source>
         <comment>baritone-horn-treble channel</comment>
         <extracomment>channel for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2439"/>
@@ -7048,7 +7048,7 @@
         <source>open</source>
         <comment>baritone-horn-central-europe-treble channel</comment>
         <extracomment>channel for Baritone Horn (Central European, treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2452"/>
@@ -7090,7 +7090,7 @@
         <source>open</source>
         <comment>baritone-horn-central-europe channel</comment>
         <extracomment>channel for Baritone Horn (Central European); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2465"/>
@@ -7132,7 +7132,7 @@
         <source>open</source>
         <comment>posthorn channel</comment>
         <extracomment>channel for Posthorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2478"/>
@@ -7181,7 +7181,7 @@
         <source>open</source>
         <comment>bb-piccolo-trumpet channel</comment>
         <extracomment>channel for Piccolo Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2493"/>
@@ -7223,7 +7223,7 @@
         <source>open</source>
         <comment>piccolo-trumpet channel</comment>
         <extracomment>channel for Piccolo Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2506"/>
@@ -7272,7 +7272,7 @@
         <source>open</source>
         <comment>a-piccolo-trumpet channel</comment>
         <extracomment>channel for Piccolo Trumpet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2521"/>
@@ -7321,7 +7321,7 @@
         <source>open</source>
         <comment>f-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2536"/>
@@ -7370,7 +7370,7 @@
         <source>open</source>
         <comment>e-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2551"/>
@@ -7419,7 +7419,7 @@
         <source>open</source>
         <comment>eb-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2566"/>
@@ -7468,7 +7468,7 @@
         <source>open</source>
         <comment>d-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2581"/>
@@ -7510,7 +7510,7 @@
         <source>open</source>
         <comment>c-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2596"/>
@@ -7552,7 +7552,7 @@
         <source>open</source>
         <comment>trumpet channel</comment>
         <extracomment>channel for Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2609"/>
@@ -7587,7 +7587,7 @@
         <source>open</source>
         <comment>bb-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2624"/>
@@ -7636,7 +7636,7 @@
         <source>open</source>
         <comment>a-trumpet channel</comment>
         <extracomment>channel for Trumpet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2639"/>
@@ -7678,7 +7678,7 @@
         <source>open</source>
         <comment>pocket-trumpet channel</comment>
         <extracomment>channel for Pocket Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2652"/>
@@ -7720,7 +7720,7 @@
         <source>open</source>
         <comment>slide-trumpet channel</comment>
         <extracomment>channel for Slide Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2665"/>
@@ -7762,7 +7762,7 @@
         <source>open</source>
         <comment>tenor-trumpet channel</comment>
         <extracomment>channel for Tenor Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2678"/>
@@ -7811,7 +7811,7 @@
         <source>open</source>
         <comment>eb-bass-trumpet channel</comment>
         <extracomment>channel for Bass Trumpet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2693"/>
@@ -7860,7 +7860,7 @@
         <source>open</source>
         <comment>c-bass-trumpet channel</comment>
         <extracomment>channel for Bass Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2708"/>
@@ -7902,7 +7902,7 @@
         <source>open</source>
         <comment>bass-trumpet channel</comment>
         <extracomment>channel for Bass Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2721"/>
@@ -7951,7 +7951,7 @@
         <source>open</source>
         <comment>bb-bass-trumpet channel</comment>
         <extracomment>channel for Bass Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2736"/>
@@ -8000,7 +8000,7 @@
         <source>open</source>
         <comment>f-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2751"/>
@@ -8049,7 +8049,7 @@
         <source>open</source>
         <comment>eb-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2766"/>
@@ -8098,7 +8098,7 @@
         <source>open</source>
         <comment>d-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2781"/>
@@ -8147,7 +8147,7 @@
         <source>open</source>
         <comment>c-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2796"/>
@@ -8196,7 +8196,7 @@
         <source>open</source>
         <comment>bb-baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2811"/>
@@ -8238,7 +8238,7 @@
         <source>open</source>
         <comment>baroque-trumpet channel</comment>
         <extracomment>channel for Baroque Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2824"/>
@@ -8504,7 +8504,7 @@
         <source>open</source>
         <comment>fiscorn channel</comment>
         <extracomment>channel for Fiscorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2909"/>
@@ -8546,7 +8546,7 @@
         <source>open</source>
         <comment>flugelhorn channel</comment>
         <extracomment>channel for Flugelhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2922"/>
@@ -8588,7 +8588,7 @@
         <source>open</source>
         <comment>kuhlohorn channel</comment>
         <extracomment>channel for Kuhlohorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2935"/>
@@ -9001,7 +9001,7 @@
         <source>open</source>
         <comment>soprano-trombone channel</comment>
         <extracomment>channel for Soprano Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3066"/>
@@ -9043,7 +9043,7 @@
         <source>open</source>
         <comment>alto-trombone channel</comment>
         <extracomment>channel for Alto Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3079"/>
@@ -9085,7 +9085,7 @@
         <source>open</source>
         <comment>tenor-trombone channel</comment>
         <extracomment>channel for Tenor Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3092"/>
@@ -9127,7 +9127,7 @@
         <source>open</source>
         <comment>trombone channel</comment>
         <extracomment>channel for Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3105"/>
@@ -9169,7 +9169,7 @@
         <source>open</source>
         <comment>trombone-treble channel</comment>
         <extracomment>channel for Trombone (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3118"/>
@@ -9211,7 +9211,7 @@
         <source>open</source>
         <comment>contrabass-trombone channel</comment>
         <extracomment>channel for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3144"/>
@@ -9253,7 +9253,7 @@
         <source>open</source>
         <comment>bass-trombone channel</comment>
         <extracomment>channel for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3131"/>
@@ -9988,7 +9988,7 @@
         <source>open</source>
         <comment>rag-dung channel</comment>
         <extracomment>channel for Rag Dung; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3380"/>
@@ -12053,14 +12053,14 @@
         <source>Mark Tree</source>
         <comment>mark-tree trackName</comment>
         <extracomment>trackName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>მარკ ტრი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4077"/>
         <source>Mark Tree</source>
         <comment>mark-tree longName</comment>
         <extracomment>longName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>მარკ ტრი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4079"/>
@@ -12193,14 +12193,14 @@
         <source>Splash Cymbal</source>
         <comment>splash-cymbal trackName</comment>
         <extracomment>trackName for Splash Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>სპლეშ ციმბალი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4122"/>
         <source>Splash Cymbal</source>
         <comment>splash-cymbal longName</comment>
         <extracomment>longName for Splash Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>სპლეშ ციმბალი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4124"/>
@@ -12319,14 +12319,14 @@
         <source>Castanets</source>
         <comment>castanets trackName</comment>
         <extracomment>trackName for Castanets; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>კასტანეტები</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4167"/>
         <source>Castanets</source>
         <comment>castanets longName</comment>
         <extracomment>longName for Castanets; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>კასტანეტები</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4169"/>
@@ -12347,14 +12347,14 @@
         <source>Claves</source>
         <comment>claves trackName</comment>
         <extracomment>trackName for Claves; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>კლავესი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4176"/>
         <source>Claves</source>
         <comment>claves longName</comment>
         <extracomment>longName for Claves; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>კლავესი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4178"/>
@@ -12487,14 +12487,14 @@
         <source>Cabasa</source>
         <comment>cabasa trackName</comment>
         <extracomment>trackName for Cabasa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>კაბასა</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4221"/>
         <source>Cabasa</source>
         <comment>cabasa longName</comment>
         <extracomment>longName for Cabasa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>კაბასა</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4223"/>
@@ -12669,14 +12669,14 @@
         <source>Shaker</source>
         <comment>shaker trackName</comment>
         <extracomment>trackName for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>შეიკერი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4275"/>
         <source>Shaker</source>
         <comment>shaker longName</comment>
         <extracomment>longName for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>შეიკერი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4277"/>
@@ -12809,14 +12809,14 @@
         <source>Vibraslap</source>
         <comment>vibraslap trackName</comment>
         <extracomment>trackName for Vibraslap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ვიბრასლეპი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4320"/>
         <source>Vibraslap</source>
         <comment>vibraslap longName</comment>
         <extracomment>longName for Vibraslap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ვიბრასლეპი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4322"/>
@@ -15119,7 +15119,7 @@
         <source>open</source>
         <comment>soprano-guitar channel</comment>
         <extracomment>channel for Soprano Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5100"/>
@@ -15161,7 +15161,7 @@
         <source>open</source>
         <comment>alto-guitar channel</comment>
         <extracomment>channel for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5113"/>
@@ -15203,7 +15203,7 @@
         <source>open</source>
         <comment>electric-guitar channel</comment>
         <extracomment>channel for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5126"/>
@@ -15651,7 +15651,7 @@
         <source>open</source>
         <comment>guitar-steel channel</comment>
         <extracomment>channel for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5156"/>
@@ -15714,7 +15714,7 @@
         <source>open</source>
         <comment>guitar-nylon channel</comment>
         <extracomment>channel for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5180"/>
@@ -15749,7 +15749,7 @@
         <source>open</source>
         <comment>guitar-nylon-treble-clef channel</comment>
         <extracomment>channel for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5193"/>
@@ -15854,7 +15854,7 @@
         <source>open</source>
         <comment>pedal-steel-guitar channel</comment>
         <extracomment>channel for Pedal Steel Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5227"/>
@@ -15931,7 +15931,7 @@
         <source>open</source>
         <comment>contra-guitar channel</comment>
         <extracomment>channel for Contra Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5251"/>
@@ -16022,7 +16022,7 @@
         <source>open</source>
         <comment>11-string-alto-guitar channel</comment>
         <extracomment>channel for 11-string Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5280"/>
@@ -16064,7 +16064,7 @@
         <source>open</source>
         <comment>12-string-guitar channel</comment>
         <extracomment>channel for 12-string Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>ღია</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5293"/>

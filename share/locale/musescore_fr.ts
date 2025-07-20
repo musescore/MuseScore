@@ -9731,7 +9731,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="968"/>
         <source>S&amp;ixth below</source>
-        <translation>Sixte au-dessous</translation>
+        <translation>Si&amp;xte au-dessous</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="974"/>
@@ -26805,22 +26805,22 @@ a échoué.</translation>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="101"/>
         <source>Basic Latin</source>
         <extracomment>For strings in the &quot;palette/unicodeRanges&quot; context, it may help to refer to https://en.wikipedia.org/wiki/Unicode_block or translated versions of this resource.</extracomment>
-        <translation>Latin</translation>
+        <translation>Latin de base</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="102"/>
         <source>Latin-1 Supplement</source>
-        <translation>Latin-1 - Supplément</translation>
+        <translation>Latin 1 - Supplément</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="103"/>
         <source>Latin Extended-A</source>
-        <translation>Latin Etendu A</translation>
+        <translation>Latin Etendu - A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="104"/>
         <source>Latin Extended-B</source>
-        <translation>Latin Etendu B</translation>
+        <translation>Latin Etendu - B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="105"/>
@@ -26830,12 +26830,12 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="106"/>
         <source>Spacing Modifier Letters</source>
-        <translation>Lettres Modificatrices d&apos;Espacements</translation>
+        <translation>Lettres modificatrices d&apos;espacements</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="107"/>
         <source>Combining Diacritical Marks</source>
-        <translation>Marques Diacritiques à Combiner</translation>
+        <translation>Signes diacritiques à combiner</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="108"/>
@@ -26885,7 +26885,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="117"/>
         <source>NKo</source>
-        <translation>Nko</translation>
+        <translation>NKo</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="118"/>
@@ -26905,7 +26905,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="121"/>
         <source>Arabic Extended-A</source>
-        <translation>Arabe Etendu A</translation>
+        <translation>Arabe Etendu - A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="122"/>
@@ -26925,7 +26925,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="125"/>
         <source>Gujarati</source>
-        <translation>Gujarati</translation>
+        <translation>Goudjarati</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="126"/>
@@ -27005,12 +27005,12 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="141"/>
         <source>Unified Canadian Aboriginal Syllabics</source>
-        <translation>Syllabaires Aborigènes Canadiens Unifiés</translation>
+        <translation>Syllabes Aborigènes Canadiens unifiées</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="142"/>
         <source>Ogham</source>
-        <translation>Ogam</translation>
+        <translation>Ogham</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="143"/>
@@ -27030,12 +27030,12 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="146"/>
         <source>Buhid</source>
-        <translation>Bouhid</translation>
+        <translation>Buhid</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="147"/>
         <source>Tagbanwa</source>
-        <translation>Tagbanoua</translation>
+        <translation>Tagbanwa</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="148"/>
@@ -27050,7 +27050,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="150"/>
         <source>Unified Canadian Aboriginal Syllabics Extended</source>
-        <translation>Syllabaires Aborigènes Canadiens Unifiés Etendus</translation>
+        <translation>Syllabes Aborigènes Canadiens unifiées Etendu</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="151"/>
@@ -27060,22 +27060,22 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="152"/>
         <source>Tai Le</source>
-        <translation>Taï lü</translation>
+        <translation>Tai Le</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="153"/>
         <source>New Tai Lue</source>
-        <translation>Nouveau Taï Lü</translation>
+        <translation>Taï Lü Nouveau</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="154"/>
         <source>Khmer Symbols</source>
-        <translation>Symboles Khmers</translation>
+        <translation>Khmer - Symboles</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="155"/>
         <source>Buginese</source>
-        <translation>Bougui</translation>
+        <translation>Bouguinais</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="156"/>
@@ -27085,7 +27085,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="157"/>
         <source>Combining Diacritical Marks Extended</source>
-        <translation>Marques Diacritiques à Combiner Etendues</translation>
+        <translation>Signes diacritiques à combiner Etendus</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="158"/>
@@ -27130,22 +27130,22 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="166"/>
         <source>Vedic Extensions</source>
-        <translation>Védique Etendu</translation>
+        <translation>Védique - Extensions</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="167"/>
         <source>Phonetic Extensions</source>
-        <translation>Extensions Phonétiques</translation>
+        <translation>Phonétiques - Extensions</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="168"/>
         <source>Phonetic Extensions Supplement</source>
-        <translation>Extensions Phonétiques - Supplément</translation>
+        <translation>Phonétiques - Extensions - Supplément</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="169"/>
         <source>Combining Diacritical Marks Supplement</source>
-        <translation>Marques Diacritiques à Combiner - Supplément</translation>
+        <translation>Signes diacritiques à combiner - Supplément</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="170"/>
@@ -27175,7 +27175,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="175"/>
         <source>Combining Diacritical Marks for Symbols</source>
-        <translation>Combinaison de signes diacritiques des symboles</translation>
+        <translation>Signes diacritiques à combiner des symboles</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="176"/>
@@ -27185,7 +27185,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="177"/>
         <source>Number Forms</source>
-        <translation>Nombres</translation>
+        <translation>Formes numériques</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="178"/>
@@ -27220,12 +27220,12 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="184"/>
         <source>Box Drawing</source>
-        <translation>Boîtes</translation>
+        <translation>Dessin de boîte</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="185"/>
         <source>Block Elements</source>
-        <translation>Blocs</translation>
+        <translation>Éléments de bloc</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="186"/>
@@ -27380,7 +27380,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="216"/>
         <source>Enclosed CJK Letters and Months</source>
-        <translation>CJK - Lettres et Mois enclos</translation>
+        <translation>CJK - Lettres et Mois inclus</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="217"/>
@@ -27525,7 +27525,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="245"/>
         <source>Cherokee Supplement</source>
-        <translation>Supplément Cherokee</translation>
+        <translation>Cherokee - Supplément</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="246"/>
@@ -27545,17 +27545,17 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="249"/>
         <source>High Surrogates</source>
-        <translation>Hauts substituts</translation>
+        <translation>High Surrogates</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="250"/>
         <source>High Private Use Surrogates</source>
-        <translation>Substituts à usage privé élevé</translation>
+        <translation>High Private Use Surrogates</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="251"/>
         <source>Low Surrogates</source>
-        <translation>Bas substituts</translation>
+        <translation>Low Surrogates</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="252"/>
@@ -27620,12 +27620,12 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="264"/>
         <source>Linear B Syllabary</source>
-        <translation>Syllabaire linéaire B</translation>
+        <translation>Syllabaire linéaire - B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="265"/>
         <source>Linear B Ideograms</source>
-        <translation>Idéogrammes linéraires B</translation>
+        <translation>Idéogrammes linéaires - B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="266"/>
@@ -27720,7 +27720,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="284"/>
         <source>Linear A</source>
-        <translation>Linéaire A</translation>
+        <translation>Linéaire - A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="285"/>
@@ -27745,7 +27745,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="289"/>
         <source>Hatran</source>
-        <translation>Hatra</translation>
+        <translation>Hatran</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="290"/>
