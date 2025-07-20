@@ -60,6 +60,8 @@ void PlaybackCursor::setNotation(INotationPtr notation)
             if (score->nstaves() > 6) {
                 preProcessScore = true;
                 processOttava(score, false);
+            } else {
+                processOttava(score, false);
             }
         }
     }
