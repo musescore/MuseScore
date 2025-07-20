@@ -32,21 +32,7 @@ void GuiApp::addModule(muse::modularity::IModuleSetup* module)
     m_modules.push_back(module);
 }
 
-void GuiApp::perform()
-{
-    const CmdOptions& options = m_options;
-
-    IApplication::RunMode runMode = options.runMode;
-    IF_ASSERT_FAILED(runMode == IApplication::RunMode::GuiApp) {
-        return;
-    }
-
-    setRunMode(runMode);
-
-#ifdef MUE_BUILD_APPSHELL_MODULE
-    // ====================================================
-    // Setup modules: Resources, Exports, Imports, UiTypes
-    // ====================================================
+void GuiApp::setupModules() {
     m_globalModule.setApplication(shared_from_this());
     m_globalModule.registerResources();
     m_globalModule.registerExports();
@@ -68,48 +54,6 @@ void GuiApp::perform()
         m->resolveImports();
         m->registerApi();
     }
-
-    // ====================================================
-    // Setup modules: apply the command line options
-    // ====================================================
-    applyCommandLineOptions(options);
-
-    // ====================================================
-    // Setup modules: onPreInit
-    // ====================================================
-    m_globalModule.onPreInit(runMode);
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onPreInit(runMode);
-    }
-
-#ifdef MUE_ENABLE_SPLASHSCREEN
-    SplashScreen* splashScreen = nullptr;
-    if (multiInstancesProvider()->isMainInstance()) {
-        splashScreen = new SplashScreen(SplashScreen::Default);
-    } else {
-        const project::ProjectFile& file = startupScenario()->startupScoreFile();
-        if (file.isValid()) {
-            if (file.hasDisplayName()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
-            } else {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
-            }
-        } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
-            splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
-        } else {
-            splashScreen = new SplashScreen(SplashScreen::Default);
-        }
-    }
-
-    if (splashScreen) {
-        splashScreen->show();
-    }
-#else
-    struct SplashScreen {
-        void close() {}
-    };
-    SplashScreen* splashScreen = nullptr;
-#endif
 
     // ====================================================
     // Setup modules: onInit
@@ -136,55 +80,31 @@ void GuiApp::perform()
             m->onStartApp();
         }
     }, Qt::QueuedConnection);
+};
 
-    // ====================================================
-    // Run
-    // ====================================================
+void GuiApp::deinitModules() {
+m_globalModule.invokeQueuedCalls();
 
-    // ====================================================
-    // Setup Qml Engine
-    // ====================================================
-    //! Needs to be set because we use transparent windows for PopupView.
-    //! Needs to be called before any QQuickWindows are shown.
-    QQuickWindow::setDefaultAlphaBuffer(true);
-
-    //! NOTE Adjust GS Api
-    //! We can hide this algorithm in GSApiProvider,
-    //! but it is intentionally left here to illustrate what is happening.
-    {
-        GraphicsApiProvider* gApiProvider = new GraphicsApiProvider(BaseApplication::appVersion());
-
-        GraphicsApi required = gApiProvider->requiredGraphicsApi();
-        if (required != GraphicsApi::Default) {
-            LOGI() << "Setting required graphics api: " << GraphicsApiProvider::apiName(required);
-            GraphicsApiProvider::setGraphicsApi(required);
-        }
-
-        LOGI() << "Using graphics api: " << GraphicsApiProvider::graphicsApiName();
-        LOGI() << "Gui platform: " << QGuiApplication::platformName();
-
-        if (GraphicsApiProvider::graphicsApi() == GraphicsApi::Software) {
-            gApiProvider->destroy();
-        } else {
-            LOGI() << "Detecting problems with graphics api";
-            gApiProvider->listen([this, gApiProvider, required](bool res) {
-                if (res) {
-                    LOGI() << "No problems detected with graphics api";
-                    gApiProvider->setGraphicsApiStatus(required, GraphicsApiProvider::Status::Checked);
-                } else {
-                    GraphicsApi next = gApiProvider->switchToNextGraphicsApi(required);
-                    LOGE() << "Detected problems with graphics api; switching from " << GraphicsApiProvider::apiName(required)
-                           << " to " << GraphicsApiProvider::apiName(next);
-
-                    this->restart();
-                }
-                gApiProvider->destroy();
-            });
-        }
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onDeinit();
     }
 
-    QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    m_globalModule.onDeinit();
 
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onDestroy();
+    }
+
+    m_globalModule.onDestroy();
+
+    // Delete modules
+    qDeleteAll(m_modules);
+    m_modules.clear();
+
+    removeIoC();
+};
+
+void GuiApp::loadWindowContents(QQmlApplicationEngine engine, SplashScreen *splashScreen) {
 #ifdef MUE_CONFIGURATION_IS_APPWEB
     const QString mainQmlFile = "/Main.qml";
 #elif defined(Q_OS_MACOS)
@@ -258,6 +178,116 @@ void GuiApp::perform()
     // ====================================================
 
     engine->load(url);
+}
+
+void GuiApp::perform()
+{
+    const CmdOptions& options = m_options;
+
+    IApplication::RunMode runMode = options.runMode;
+    IF_ASSERT_FAILED(runMode == IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    setRunMode(runMode);
+
+#ifdef MUE_BUILD_APPSHELL_MODULE
+    // ====================================================
+    // Setup modules: Resources, Exports, Imports, UiTypes
+    // ====================================================
+    setupModules();
+
+    // ====================================================
+    // Setup modules: apply the command line options
+    // ====================================================
+    applyCommandLineOptions(options);
+
+    // ====================================================
+    // Setup modules: onPreInit
+    // ====================================================
+    m_globalModule.onPreInit(runMode);
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onPreInit(runMode);
+    }
+
+#ifdef MUE_ENABLE_SPLASHSCREEN
+    SplashScreen* splashScreen = nullptr;
+    if (multiInstancesProvider()->isMainInstance()) {
+        splashScreen = new SplashScreen(SplashScreen::Default);
+    } else {
+        const project::ProjectFile& file = startupScenario()->startupScoreFile();
+        if (file.isValid()) {
+            if (file.hasDisplayName()) {
+                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
+            } else {
+                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
+            }
+        } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
+            splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
+        } else {
+            splashScreen = new SplashScreen(SplashScreen::Default);
+        }
+    }
+
+    if (splashScreen) {
+        splashScreen->show();
+    }
+#else
+    struct SplashScreen {
+        void close() {}
+    };
+    SplashScreen* splashScreen = nullptr;
+#endif
+
+    // ====================================================
+    // Run
+    // ====================================================
+
+    // ====================================================
+    // Setup Qml Engine
+    // ====================================================
+    //! Needs to be set because we use transparent windows for PopupView.
+    //! Needs to be called before any QQuickWindows are shown.
+    QQuickWindow::setDefaultAlphaBuffer(true);
+
+    //! NOTE Adjust GS Api
+    //! We can hide this algorithm in GSApiProvider,
+    //! but it is intentionally left here to illustrate what is happening.
+    {
+        GraphicsApiProvider* gApiProvider = new GraphicsApiProvider(BaseApplication::appVersion());
+
+        GraphicsApi required = gApiProvider->requiredGraphicsApi();
+        if (required != GraphicsApi::Default) {
+            LOGI() << "Setting required graphics api: " << GraphicsApiProvider::apiName(required);
+            GraphicsApiProvider::setGraphicsApi(required);
+        }
+
+        LOGI() << "Using graphics api: " << GraphicsApiProvider::graphicsApiName();
+        LOGI() << "Gui platform: " << QGuiApplication::platformName();
+
+        if (GraphicsApiProvider::graphicsApi() == GraphicsApi::Software) {
+            gApiProvider->destroy();
+        } else {
+            LOGI() << "Detecting problems with graphics api";
+            gApiProvider->listen([this, gApiProvider, required](bool res) {
+                if (res) {
+                    LOGI() << "No problems detected with graphics api";
+                    gApiProvider->setGraphicsApiStatus(required, GraphicsApiProvider::Status::Checked);
+                } else {
+                    GraphicsApi next = gApiProvider->switchToNextGraphicsApi(required);
+                    LOGE() << "Detected problems with graphics api; switching from " << GraphicsApiProvider::apiName(required)
+                           << " to " << GraphicsApiProvider::apiName(next);
+
+                    this->restart();
+                }
+                gApiProvider->destroy();
+            });
+        }
+    }
+
+    QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+
+    loadWindowContents(engine, splashScreen);
 
 #endif // MUE_BUILD_APPSHELL_MODULE
 }
@@ -280,25 +310,7 @@ void GuiApp::finish()
 
     // Deinit
 
-    m_globalModule.invokeQueuedCalls();
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onDeinit();
-    }
-
-    m_globalModule.onDeinit();
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onDestroy();
-    }
-
-    m_globalModule.onDestroy();
-
-    // Delete modules
-    qDeleteAll(m_modules);
-    m_modules.clear();
-
-    removeIoC();
+    deinitModules();
 }
 
 void GuiApp::applyCommandLineOptions(const CmdOptions& options)
