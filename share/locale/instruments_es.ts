@@ -6839,28 +6839,28 @@ Afinada en Do.</translation>
         <source>Alto horn in F. (Known as ‘tenor horn’ in British English.)</source>
         <comment>f-alto-horn description</comment>
         <extracomment>description for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompa alto en Fa.</translation>
+        <translation>Corno alto en Fa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2388"/>
         <source>Alto Horn</source>
         <comment>f-alto-horn trackName</comment>
         <extracomment>trackName for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompa alto</translation>
+        <translation>Corno alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2390"/>
         <source>Alto Horn</source>
         <comment>f-alto-horn longName</comment>
         <extracomment>longName for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompa alto</translation>
+        <translation>Corno alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2392"/>
         <source>A. Hn.</source>
         <comment>f-alto-horn shortName</comment>
         <extracomment>shortName for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tmpa. A</translation>
+        <translation>Corn. A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2394"/>
@@ -6888,28 +6888,28 @@ Afinada en Do.</translation>
         <source>Alto horn in E♭. (Known as ‘tenor horn’ in British English.)</source>
         <comment>eb-alto-horn description</comment>
         <extracomment>description for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompa alta en Mi♭.</translation>
+        <translation>Corno alto en Mi♭.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2403"/>
         <source>Alto Horn</source>
         <comment>eb-alto-horn trackName</comment>
         <extracomment>trackName for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompa alto</translation>
+        <translation>Corno alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2405"/>
         <source>Alto Horn</source>
         <comment>eb-alto-horn longName</comment>
         <extracomment>longName for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompa alto</translation>
+        <translation>Corno alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2407"/>
         <source>A. Hn.</source>
         <comment>eb-alto-horn shortName</comment>
         <extracomment>shortName for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tmpa. A</translation>
+        <translation>Corn. A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2409"/>
@@ -7105,7 +7105,7 @@ Afinada en Do.</translation>
         <source>Valveless cylindrical horn with cupped mouthpiece.</source>
         <comment>posthorn description</comment>
         <extracomment>description for Posthorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompa cilíndrica sin válvulas con boquilla ahuecada.</translation>
+        <translation>Corno cilíndrico sin válvulas con boquilla ahuecada.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2470"/>
@@ -7287,7 +7287,7 @@ Afinada en Do.</translation>
         <source>Trumpet in F.</source>
         <comment>f-trumpet description</comment>
         <extracomment>description for Trumpet; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumpeta en Fa.</translation>
+        <translation>Trompeta en Fa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2526"/>
@@ -7784,14 +7784,14 @@ Afinada en Do.</translation>
         <source>Bass Trumpet</source>
         <comment>eb-bass-trumpet trackName</comment>
         <extracomment>trackName for Bass Trumpet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompeta bajo</translation>
+        <translation>Trompeta Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2685"/>
         <source>Bass Trumpet</source>
         <comment>eb-bass-trumpet longName</comment>
         <extracomment>longName for Bass Trumpet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompeta bajo</translation>
+        <translation>Trompeta Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2687"/>
@@ -7826,21 +7826,21 @@ Afinada en Do.</translation>
         <source>Bass trumpet in C. The most common bass trumpet in use today.</source>
         <comment>c-bass-trumpet description</comment>
         <extracomment>description for Bass Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompeta baja en Do. La trompeta baja más común utilizada en la actualidad.</translation>
+        <translation>Trompeta Bajo en Do. La trompeta baja más común utilizada en la actualidad.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2698"/>
         <source>Bass Trumpet</source>
         <comment>c-bass-trumpet trackName</comment>
         <extracomment>trackName for Bass Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompeta bajo</translation>
+        <translation>Trompeta Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2700"/>
         <source>Bass Trumpet</source>
         <comment>c-bass-trumpet longName</comment>
         <extracomment>longName for Bass Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompeta bajo</translation>
+        <translation>Trompeta Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2702"/>
@@ -7882,14 +7882,14 @@ Afinada en Do.</translation>
         <source>Bass Trumpet</source>
         <comment>bass-trumpet trackName</comment>
         <extracomment>trackName for Bass Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompeta bajo</translation>
+        <translation>Trompeta Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2715"/>
         <source>Bass Trumpet</source>
         <comment>bass-trumpet longName</comment>
         <extracomment>longName for Bass Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompeta bajo</translation>
+        <translation>Trompeta Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2717"/>
@@ -7924,14 +7924,14 @@ Afinada en Do.</translation>
         <source>Bass Trumpet</source>
         <comment>bb-bass-trumpet trackName</comment>
         <extracomment>trackName for Bass Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompeta bajo</translation>
+        <translation>Trompeta Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2728"/>
         <source>Bass Trumpet</source>
         <comment>bb-bass-trumpet longName</comment>
         <extracomment>longName for Bass Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trompeta bajo</translation>
+        <translation>Trompeta Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2730"/>
@@ -8981,21 +8981,21 @@ Afinada en Do.</translation>
         <source>Soprano Trombone</source>
         <comment>soprano-trombone trackName</comment>
         <extracomment>trackName for Soprano Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón soprano</translation>
+        <translation>Trombón Soprano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3060"/>
         <source>Soprano Trombone</source>
         <comment>soprano-trombone longName</comment>
         <extracomment>longName for Soprano Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón soprano</translation>
+        <translation>Trombón Soprano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3062"/>
         <source>S. Tbn.</source>
         <comment>soprano-trombone shortName</comment>
         <extracomment>shortName for Soprano Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tbn. sop.</translation>
+        <translation>Tbn. Sop.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3064"/>
@@ -9016,21 +9016,21 @@ Afinada en Do.</translation>
         <source>Alto trombone (pitched in E♭ or F).</source>
         <comment>alto-trombone description</comment>
         <extracomment>description for Alto Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón alto (afinado en Mi♭ o Fa)</translation>
+        <translation>Trombón Alto (afinado en Mi♭ o Fa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3071"/>
         <source>Alto Trombone</source>
         <comment>alto-trombone trackName</comment>
         <extracomment>trackName for Alto Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón contralto</translation>
+        <translation>Trombón Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3073"/>
         <source>Alto Trombone</source>
         <comment>alto-trombone longName</comment>
         <extracomment>longName for Alto Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón contralto</translation>
+        <translation>Trombón Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3075"/>
@@ -9058,21 +9058,21 @@ Afinada en Do.</translation>
         <source>Tenor trombone (pitched in B♭).</source>
         <comment>tenor-trombone description</comment>
         <extracomment>description for Tenor Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón tenor (afinado en Si♭)</translation>
+        <translation>Trombón Tenor (afinado en Si♭)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3084"/>
         <source>Tenor Trombone</source>
         <comment>tenor-trombone trackName</comment>
         <extracomment>trackName for Tenor Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón tenor</translation>
+        <translation>Trombón Tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3086"/>
         <source>Tenor Trombone</source>
         <comment>tenor-trombone longName</comment>
         <extracomment>longName for Tenor Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón tenor</translation>
+        <translation>Trombón Tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3088"/>
@@ -9226,21 +9226,21 @@ Afinada en Do.</translation>
         <source>Bass trombone (pitched in B♭).</source>
         <comment>bass-trombone description</comment>
         <extracomment>description for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón bajo (afinado en Si♭).</translation>
+        <translation>Trombón Bajo (afinado en Si♭).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3123"/>
         <source>Bass Trombone</source>
         <comment>bass-trombone trackName</comment>
         <extracomment>trackName for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón bajo</translation>
+        <translation>Trombón Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3125"/>
         <source>Bass Trombone</source>
         <comment>bass-trombone longName</comment>
         <extracomment>longName for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombón bajo</translation>
+        <translation>Trombón Bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3127"/>
@@ -11543,7 +11543,7 @@ Afinada en Do.</translation>
         <source>Military field drum.</source>
         <comment>military-drum description</comment>
         <extracomment>description for Field Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tambor de campo militar.</translation>
+        <translation>Tambor Militar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3904"/>
@@ -11914,21 +11914,21 @@ Afinada en Do.</translation>
         <source>Suspended Cymbal.</source>
         <comment>crash-cymbal description</comment>
         <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Platillo suspendido.</translation>
+        <translation>Platillo Suspendido.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4030"/>
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal trackName</comment>
         <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Platillo suspendido</translation>
+        <translation>Platillo Suspendido</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4032"/>
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal longName</comment>
         <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Platillo suspendido</translation>
+        <translation>Platillo Suspendido</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4034"/>
@@ -11998,21 +11998,21 @@ Afinada en Do.</translation>
         <source>Hi-hat</source>
         <comment>hi-hat trackName</comment>
         <extracomment>trackName for Hi-hat; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Charles</translation>
+        <translation>Hi-hat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4059"/>
         <source>Hi-hat</source>
         <comment>hi-hat longName</comment>
         <extracomment>longName for Hi-hat; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Charles</translation>
+        <translation>Hi-hat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4061"/>
         <source>Hi-hat</source>
         <comment>hi-hat shortName</comment>
         <extracomment>shortName for Hi-hat; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Charles</translation>
+        <translation>Hi-hat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4064"/>
@@ -12859,7 +12859,7 @@ Afinada en Do.</translation>
         <source>Marching snare drum.</source>
         <comment>marching-snare description</comment>
         <extracomment>description for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tambor de marcha.</translation>
+        <translation>Tambor de Marcha</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4359"/>

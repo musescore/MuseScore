@@ -9160,7 +9160,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="225"/>
         <source>Preferences…</source>
-        <translation>偏好设置…</translation>
+        <translation>偏好…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="93"/>
@@ -9341,7 +9341,7 @@ text x-height):</source>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="52"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="53"/>
         <source>Rewind</source>
-        <translation>重播</translation>
+        <translation>倒带</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="85"/>
@@ -10638,9 +10638,9 @@ text x-height):</source>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation>此操作将重置所有应用程序设置，并删除所有自定义面板和自定义快捷键。最近乐谱列表也将被清除。
+        <translation>此动作将会重置您的所有应用程序偏好与删除所有自定义面板与自定义快捷键。最近总谱列表还将会被清除。
 
-此操作不会删除您的任何乐谱。</translation>
+此动作将不会删除您的任何总谱。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="335"/>
@@ -10747,21 +10747,21 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="212"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation>您确定要重置偏好设置吗？</translation>
+        <translation>您确定您想要重置偏好吗？</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="213"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation>此操作将重置您的所有应用偏好设置并删除所有自定义快捷方式。它不会删除您的任何乐谱。
+        <translation>此动作将会重置您的所有应用偏好与删除所有自定义快捷键。它将不会删除您的任何总谱。
 
-此操作无法撤消。</translation>
+此动作无法撤消。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="223"/>
         <source>Reset preferences</source>
-        <translation>重置偏好设置</translation>
+        <translation>重置偏好</translation>
     </message>
 </context>
 <context>
@@ -10893,7 +10893,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="117"/>
         <source>Further high contrast settings are available in Preferences.</source>
-        <translation>更多高对比设置可在首选项中找到。</translation>
+        <translation>进一步的高对比度设置在偏好中可获得。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="123"/>
@@ -10930,7 +10930,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
         <source>If you choose to cancel, then be sure to check out our free MuseSounds playback library on MuseScore.org.</source>
-        <translation>倘若您选择取消，请务必在MuseScore.org上查看我们的免费MuseSounds播放库。</translation>
+        <translation>如果您挑选了取消，那么请确定来 MuseScore.org 上检查我们的免费 MuseSounds 回放库。</translation>
     </message>
 </context>
 <context>
@@ -11120,7 +11120,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/AdvancedPreferencesPage.qml" line="67"/>
         <source>Preference</source>
-        <translation>设置</translation>
+        <translation>偏好</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AdvancedPreferencesPage.qml" line="69"/>
@@ -11135,7 +11135,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="145"/>
         <source>Choose background wallpaper</source>
-        <translation>选择背景壁纸</translation>
+        <translation>挑选背景壁纸</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="184"/>
@@ -11145,7 +11145,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="185"/>
         <source>Choose notepaper</source>
-        <translation>选择乐谱纸底图</translation>
+        <translation>挑选乐谱纸底图</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AccentColorsSection.qml" line="63"/>
@@ -11254,7 +11254,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/FoldersSection.qml" line="63"/>
         <source>Choose %1 folder</source>
-        <translation>选择%1文件夹</translation>
+        <translation>挑选%1文件夹</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="30"/>
@@ -11446,7 +11446,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="79"/>
         <source>Choose starting score</source>
-        <translation>选择启动时显示的乐谱</translation>
+        <translation>挑选开始时的总谱</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/RemoteControlSection.qml" line="31"/>
@@ -11557,7 +11557,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/PreferencesDialog.qml" line="34"/>
         <source>Preferences</source>
-        <translation>偏好设置</translation>
+        <translation>偏好</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="167"/>
@@ -11779,7 +11779,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="204"/>
         <source>Choose score order list</source>
-        <translation>选择乐谱顺序列表</translation>
+        <translation>挑选总谱顺序列表</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="209"/>
@@ -11789,7 +11789,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="214"/>
         <source>Choose default style for parts</source>
-        <translation>为分谱选择默认样式</translation>
+        <translation>挑选分谱的默认样式</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/SaveToCloudSection.qml" line="31"/>
@@ -19525,12 +19525,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="203"/>
         <source>This setting can be changed at any time in Preferences</source>
-        <translation>可以随时在“偏好设置”中更改此设置</translation>
+        <translation>随时可以在偏好中更改此设置</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
         <source>You can change this setting in Preferences at any time.</source>
-        <translation>您可以在“设置”中修改这项偏好设置</translation>
+        <translation>您随时可以在偏好中更改此设置。</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="56"/>
@@ -22865,13 +22865,13 @@ pickup measure</source>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Layout panel (LayoutControlPanel.qml)</extracomment>
-        <translation>您的乐谱中尚无乐器。请按下 &lt;b&gt;添加&lt;/b&gt;以选择或使用快捷键%1来添加。</translation>
+        <translation>您的总谱中没有乐器。欲挑选一些，请按下 &lt;b&gt;添加&lt;/b&gt;，或者使用快捷键%1。</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="138"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Layout panel (LayoutControlPanel.qml)</extracomment>
-        <translation>您的乐谱中没有乐器。要选择乐器，请按&lt;b&gt;添加&lt;/b&gt;.</translation>
+        <translation>您的总谱中没有乐器。要挑选一些，请按下&lt;b&gt;添加&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/layoutpanelcontextmenumodel.cpp" line="182"/>
@@ -30275,7 +30275,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
-        <translation>每次保存可能需要几分钟，具体取决于您的乐谱大小。这些设置始终可以在首选项中更改。</translation>
+        <translation>每一次保存可能占用若干分，取决于您的总谱的文件尺寸。这些设置总是可以在偏好中更改。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1375"/>
@@ -31914,7 +31914,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="312"/>
         <source>Set sharps/flats no preference</source>
-        <translation>设升/降号为无偏好</translation>
+        <translation>将升号/降号设置为无偏好</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="313"/>
@@ -31934,7 +31934,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="317"/>
         <source>Set sharps/flats preference</source>
-        <translation>设置升/降号偏好</translation>
+        <translation>设置偏好的升号/降号</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="429"/>

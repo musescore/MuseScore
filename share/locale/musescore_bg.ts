@@ -4,37 +4,37 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="51"/>
         <source>Align left edge of text to reference point</source>
-        <translation>Подравни лявата страна на текста спрямо отправната точка</translation>
+        <translation>Подравняване лявата страна на текста спрямо отправната точка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="76"/>
         <source>Center text on reference point</source>
-        <translation>Центрирай текста спрямо отправната точка</translation>
+        <translation>Центриране на текста върху отправната точка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="101"/>
         <source>Align right edge of text to reference point</source>
-        <translation>Подравни дясната страна на текста спрямо отправната точка</translation>
+        <translation>Подравняване дясната страна на текста спрямо отправната точка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="139"/>
         <source>Align top edge of text to reference point</source>
-        <translation>Подравни горната страна на текста спрямо отправната точка</translation>
+        <translation>Подравняване горната страна на текста спрямо референтната точка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="164"/>
         <source>Center text vertical to reference point</source>
-        <translation>Центрирай вертикално текста спрямо отправната точка</translation>
+        <translation>Центриране на текста върху отправната точка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="189"/>
         <source>Align bottom edge of text to reference point</source>
-        <translation>Подравни долната страна на текста спрямо отправната точка</translation>
+        <translation>Подравняване долната страна на текста спрямо отправната точка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="214"/>
         <source>Align baseline of text to reference point</source>
-        <translation>Подравни основата на текста спрямо отправната точка</translation>
+        <translation>Подравняване основната линия на текста спрямо отправната точка</translation>
     </message>
 </context>
 <context>
@@ -42,12 +42,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Свойства на такта</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Lock layout with X measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Заключи оформлението с X такта на система</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -58,13 +58,13 @@
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="72"/>
         <source>Add system locks to each system</source>
-        <translation type="unfinished"/>
+        <translation>Добави заключване на всяка нотна система</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="79"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="82"/>
         <source>Remove current system locks</source>
-        <translation type="unfinished"/>
+        <translation>Премахни текущите заключвания на системи</translation>
     </message>
 </context>
 <context>
@@ -72,13 +72,13 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="14"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>Персонализиране на комплекта</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="50"/>
         <source>No.</source>
         <extracomment>Number</extracomment>
-        <translation>No.</translation>
+        <translation>Номер</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="55"/>
@@ -108,22 +108,22 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="109"/>
         <source>Notehead group:</source>
-        <translation type="unfinished"/>
+        <translation>Групиране на нотни глави:</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="125"/>
         <source>Edit noteheads</source>
-        <translation type="unfinished"/>
+        <translation>Редактиране на нотни глави</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="137"/>
         <source>Quarter note</source>
-        <translation>Четвъртинка нота</translation>
+        <translation>Четвъртина нота</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="150"/>
         <source>Half note</source>
-        <translation>Полувинка нота</translation>
+        <translation>Половина нота</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="163"/>
@@ -133,7 +133,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="176"/>
         <source>Double whole note</source>
-        <translation>Двойна цяла нота</translation>
+        <translation>Бревис</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="238"/>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="57"/>
         <source>Octave 9</source>
-        <translation type="unfinished"/>
+        <translation>Октава 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="62"/>
@@ -281,7 +281,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="117"/>
         <source>C♯</source>
-        <translation>До диез</translation>
+        <translation>До♯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="122"/>
@@ -291,7 +291,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="127"/>
         <source>E♭</source>
-        <translation>Ми бемол</translation>
+        <translation>Ми♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="132"/>
@@ -306,7 +306,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="142"/>
         <source>F♯</source>
-        <translation>Фа диез</translation>
+        <translation>Фа♯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="147"/>
@@ -316,7 +316,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="152"/>
         <source>A♭</source>
-        <translation>Ла бемол</translation>
+        <translation>Ла♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="157"/>
@@ -326,7 +326,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="162"/>
         <source>B♭</source>
-        <translation>Си бемол</translation>
+        <translation>Си♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="167"/>
@@ -347,37 +347,37 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="182"/>
         <source>C♯ 9</source>
-        <translation>До диез 9</translation>
+        <translation>До♯ 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="187"/>
         <source>D 9</source>
-        <translation type="unfinished"/>
+        <translation>Ре 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="192"/>
         <source>E♭ 9</source>
-        <translation type="unfinished"/>
+        <translation>Ми♭ 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="197"/>
         <source>E 9</source>
-        <translation type="unfinished"/>
+        <translation>Ми 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="202"/>
         <source>F 9</source>
-        <translation type="unfinished"/>
+        <translation>Фа 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="207"/>
         <source>F♯ 9</source>
-        <translation type="unfinished"/>
+        <translation>Фа♯ 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="212"/>
         <source>G 9</source>
-        <translation type="unfinished"/>
+        <translation>Сол 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="242"/>
@@ -981,7 +981,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1318"/>
         <source>B♭ -1</source>
-        <translation>Си♭ -1</translation>
+        <translation>B♭ -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1326"/>
@@ -994,7 +994,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="26"/>
         <source>Staff/Part properties</source>
-        <translation type="unfinished"/>
+        <translation>Свойства на петолиние/партия</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="44"/>
@@ -1112,17 +1112,17 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="354"/>
         <source>Merge matching rests:</source>
-        <translation type="unfinished"/>
+        <translation>Обединяване на съвпадащи паузи:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="367"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>Вкл.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="372"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Изкл.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="393"/>
@@ -1132,7 +1132,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="416"/>
         <source>Replace instrument…</source>
-        <translation type="unfinished"/>
+        <translation>Смени инструмент...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="438"/>
@@ -1242,7 +1242,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="823"/>
         <source>9 - Diminished seventh</source>
-        <translation>9 - Намалена септима</translation>
+        <translation>9 - Умалена септима</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="828"/>
@@ -1262,7 +1262,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="843"/>
         <source>11 - Diminished octave</source>
-        <translation>11 - Намалена октава</translation>
+        <translation>11 - Умалена октава</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="848"/>
@@ -1278,13 +1278,13 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1034"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1037"/>
         <source>Apply and go to previous staff</source>
-        <translation type="unfinished"/>
+        <translation>Приложи и премини към предходното петолиние</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1053"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1056"/>
         <source>Apply and go to next staff</source>
-        <translation type="unfinished"/>
+        <translation>Приложи и премини към следващото петолиние</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="458"/>
@@ -1322,27 +1322,27 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="680"/>
         <source>Interval from written to sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>Интервал от изписаната до звучащата височина</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="683"/>
         <source>Transposition:</source>
-        <translation type="unfinished"/>
+        <translation>Транспозиция:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="693"/>
         <source>Octave</source>
-        <translation type="unfinished"/>
+        <translation>Октава</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="703"/>
         <source>Octave(s) +</source>
-        <translation type="unfinished"/>
+        <translation>Октава(и) +</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="719"/>
         <source>Interval</source>
-        <translation>интервал</translation>
+        <translation>Интервал</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="856"/>
@@ -1357,7 +1357,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="903"/>
         <source>Prefer sharps or flats for transposed key signatures:</source>
-        <translation type="unfinished"/>
+        <translation>Предпочитание към диези или бемоли при транспонирана тоналност</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="914"/>
@@ -1367,12 +1367,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="919"/>
         <source>Sharps</source>
-        <translation type="unfinished"/>
+        <translation>Диези</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="924"/>
         <source>Flats</source>
-        <translation type="unfinished"/>
+        <translation>Бемоли</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="973"/>
@@ -1382,7 +1382,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="997"/>
         <source>Don’t reflect transposition in linked tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>Не прилагай транспониране към табулатурата</translation>
     </message>
 </context>
 <context>
@@ -1428,7 +1428,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="244"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="360"/>
         <source>Show key signature</source>
-        <translation>Покажи тоналноста</translation>
+        <translation>Покажи тоналността</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="251"/>
@@ -1445,7 +1445,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="268"/>
         <source>Notehead scheme:</source>
-        <translation type="unfinished"/>
+        <translation>Стил на нотните глави</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="292"/>
@@ -1530,12 +1530,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="686"/>
         <source>Show fingering in tablature</source>
-        <translation type="unfinished"/>
+        <translation>Показване на апликатура в табулатурата</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="20"/>
         <source>Edit staff type</source>
-        <translation type="unfinished"/>
+        <translation>Промяна на типа петолиние</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="437"/>
@@ -1561,7 +1561,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="858"/>
         <source>Note symbols</source>
-        <translation type="unfinished"/>
+        <translation>Нотни символи</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="865"/>
@@ -1571,7 +1571,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="915"/>
         <source>Repeat:</source>
-        <translation type="unfinished"/>
+        <translation>Повторение:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="931"/>
@@ -1581,12 +1581,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="944"/>
         <source>At new system</source>
-        <translation type="unfinished"/>
+        <translation>В нова нотна система</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="957"/>
         <source>At new meas.</source>
-        <translation type="unfinished"/>
+        <translation>В нов такт</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="964"/>
@@ -1647,27 +1647,27 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1233"/>
         <source>Show rests</source>
-        <translation type="unfinished"/>
+        <translation>Покажи паузите</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1314"/>
         <source>Template:</source>
-        <translation type="unfinished"/>
+        <translation>Шаблон:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1330"/>
         <source>&lt; Reset to template</source>
-        <translation type="unfinished"/>
+        <translation>Възстанови според шаблона</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1356"/>
         <source>Add to templates</source>
-        <translation type="unfinished"/>
+        <translation>Добавяне към шаблоните</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1353"/>
         <source>Create a new staff type of current group.</source>
-        <translation type="unfinished"/>
+        <translation>Създайте ново петолиние за текущата група.</translation>
     </message>
 </context>
 <context>
@@ -1675,32 +1675,32 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="6"/>
         <source>String data</source>
-        <translation type="unfinished"/>
+        <translation>Данни за струнните</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="14"/>
         <source>Default strings tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Настройка на струните по подразбиране:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="51"/>
         <source>New string…</source>
-        <translation type="unfinished"/>
+        <translation>Нова струна...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="58"/>
         <source>Edit string…</source>
-        <translation type="unfinished"/>
+        <translation>Редактирай струна...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="65"/>
         <source>Delete string</source>
-        <translation type="unfinished"/>
+        <translation>Изтрий струна</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="81"/>
         <source>Number of frets:</source>
-        <translation type="unfinished"/>
+        <translation>Брой прагчета:</translation>
     </message>
 </context>
 <context>
@@ -1717,17 +1717,17 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14446"/>
         <source>Edit text style</source>
-        <translation type="unfinished"/>
+        <translation>Редактиране стила на текста</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14564"/>
         <source>Padding:</source>
-        <translation type="unfinished"/>
+        <translation>Подложка</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14610"/>
         <source>Reset &apos;Padding&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Нулиране на стойността „Допълване“</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="64"/>
@@ -1775,7 +1775,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="119"/>
         <source>Rests</source>
-        <translation type="unfinished"/>
+        <translation>Нулиране</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="129"/>
@@ -1805,7 +1805,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11076"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14115"/>
         <source>Fermatas</source>
-        <translation type="unfinished"/>
+        <translation>Фермати</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="219"/>
@@ -1821,22 +1821,22 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="302"/>
         <source>Musical symbols font:</source>
-        <translation type="unfinished"/>
+        <translation>Шрифт за музикални символи:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="365"/>
         <source>Automatically load style settings based on font</source>
-        <translation type="unfinished"/>
+        <translation>Автоматично зареждане на настройките за стил според шрифта</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="388"/>
         <source>Musical text font:</source>
-        <translation type="unfinished"/>
+        <translation>Шрифт на музикалния текст:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="432"/>
         <source>Staff line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Дебелина на петолинието:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="448"/>
@@ -2182,12 +2182,12 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14935"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14976"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Върни по подразбиране</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="461"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Нулиране стойността на „Дебелина на петолинието“</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="473"/>
@@ -2197,22 +2197,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="480"/>
         <source>Enable indentation on first system</source>
-        <translation type="unfinished"/>
+        <translation>Разреши отстъп в първата нотна система</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="498"/>
         <source>First system indentation:</source>
-        <translation type="unfinished"/>
+        <translation>Отстъп на първата нотна система:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="530"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Нулиране на стойността „Първи системен отстъп“</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="556"/>
         <source>Hide empty staves within systems</source>
-        <translation type="unfinished"/>
+        <translation>Скриване на празни петолиния в рамките на системите</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="575"/>
@@ -2232,7 +2232,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="738"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Изкл.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
@@ -2572,7 +2572,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3119"/>
         <source>Every system</source>
-        <translation>всяка система</translation>
+        <translation>Всяка система</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3139"/>
@@ -2675,7 +2675,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="647"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="682"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Скриване</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="654"/>
@@ -3062,7 +3062,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12102"/>
         <source>Dash</source>
-        <translation>пунктирна</translation>
+        <translation>Пунктирна</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12151"/>
@@ -3512,7 +3512,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6457"/>
         <source>measures</source>
-        <translation>такта</translation>
+        <translation>тактове</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6491"/>
@@ -3582,7 +3582,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6893"/>
         <source>Number</source>
-        <translation>стойност</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6898"/>
@@ -3664,7 +3664,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="104"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4064"/>
         <source>Measures</source>
-        <translation>Такт…</translation>
+        <translation>Тактове</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
@@ -4823,7 +4823,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14297"/>
         <source>Staccato</source>
-        <translation>стакато</translation>
+        <translation>Стакато</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13992"/>
@@ -5053,7 +5053,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14738"/>
         <source>Color:</source>
-        <translation>Цвят</translation>
+        <translation>Цвят:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14754"/>
@@ -5074,7 +5074,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14793"/>
         <source>Offset:</source>
-        <translation>Изместване</translation>
+        <translation>Изместване:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14803"/>
@@ -5278,12 +5278,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="111"/>
         <source>Nominal:</source>
-        <translation>Номинален</translation>
+        <translation>Номинален:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="134"/>
         <source>Actual:</source>
-        <translation>Актуален</translation>
+        <translation>Актуален:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="184"/>
@@ -5333,7 +5333,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="280"/>
         <source>Do not count</source>
-        <translation>не пресмятай</translation>
+        <translation>Не пресмятай</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="283"/>
@@ -5358,7 +5358,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="351"/>
         <source>Layout stretch:</source>
-        <translation>свиване</translation>
+        <translation>Разтягане на оформлението:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="386"/>
@@ -5518,7 +5518,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="180"/>
         <source>Width:</source>
-        <translation>Дебелина</translation>
+        <translation>Дебелина:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="193"/>
@@ -5825,7 +5825,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="67"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Off</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="80"/>
@@ -5876,7 +5876,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="41"/>
         <source>Create time signature</source>
-        <translation type="unfinished"/>
+        <translation>Създай размер</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="57"/>
@@ -5995,77 +5995,77 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="53"/>
         <source>C♭ major / A♭ minor</source>
-        <translation>до♭ мажор / ла♭ минор</translation>
+        <translation>До♭ мажор / ла♭ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="58"/>
         <source>G♭ major / E♭ minor</source>
-        <translation>сол♭ мажор / ми♭ минор</translation>
+        <translation>Сол♭ мажор / ми♭ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="63"/>
         <source>D♭ major / B♭ minor</source>
-        <translation>ре♭ мажор / си♭ минор</translation>
+        <translation>Ре♭ мажор / си♭ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="68"/>
         <source>A♭ major / F minor</source>
-        <translation>ла♭ мажор / фа минор</translation>
+        <translation>Ла♭ мажор / фа минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="73"/>
         <source>E♭ major / C minor</source>
-        <translation>ми♭ мажор / до минор</translation>
+        <translation>Ми♭ мажор / до минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="78"/>
         <source>B♭ major / G minor</source>
-        <translation>си♭ мажор / сол минор</translation>
+        <translation>Си♭ мажор / сол минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="83"/>
         <source>F major / D minor</source>
-        <translation>фа мажор / ре минор</translation>
+        <translation>Фа мажор / ре минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="88"/>
         <source>C major / A minor</source>
-        <translation>до мажор / ла минор</translation>
+        <translation>До мажор / ла минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="93"/>
         <source>G major / E minor</source>
-        <translation>сол мажор / ми минор</translation>
+        <translation>Сол мажор / ми минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="98"/>
         <source>D major / B minor</source>
-        <translation>ре мажор / си минор</translation>
+        <translation>Ре мажор / си минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="103"/>
         <source>A major / F♯ minor</source>
-        <translation>ла мажор / фа♯ минор</translation>
+        <translation>Ла мажор / фа♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="108"/>
         <source>E major / C♯ minor</source>
-        <translation>ми мажор / до♯ минор</translation>
+        <translation>Ми мажор / до♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="113"/>
         <source>B major / G♯ minor</source>
-        <translation>си мажор / сол♯ минор</translation>
+        <translation>Си мажор / сол♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="118"/>
         <source>F♯ major / D♯ minor</source>
-        <translation>фа♯ мажор / ре♯ минор</translation>
+        <translation>Фа♯ мажор / ре♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="123"/>
         <source>C♯ major / A♯ minor</source>
-        <translation>до♯ мажор / ла♯ минор</translation>
+        <translation>До♯ мажор / ла♯ минор</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="161"/>
@@ -6341,7 +6341,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="152"/>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="170"/>
         <source>Number</source>
-        <translation>стойност</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="180"/>
@@ -6358,7 +6358,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="197"/>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="225"/>
         <source>Bracket</source>
-        <translation>скоба</translation>
+        <translation>Скоба</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="215"/>
@@ -6777,7 +6777,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="271"/>
         <source>Down octave</source>
-        <translation>Намали на октава</translation>
+        <translation>Намали с октава</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="277"/>
@@ -7031,7 +7031,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2428"/>
         <source>Tuplet</source>
-        <translation>Особено разделени нотни стойности</translation>
+        <translation>Особено деление</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1111"/>
@@ -7293,18 +7293,18 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="227"/>
         <source>Add previous chord to selection</source>
-        <translation>добави предидущия акорд към селекцията</translation>
+        <translation>Добави предходен акорд към избрания</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1521"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1522"/>
         <source>Select to beginning of measure</source>
-        <translation>избери в началото  на такта</translation>
+        <translation>Избери в началото  на такта</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="221"/>
         <source>Add next chord to selection</source>
-        <translation>добави следващ акорд към селекцията</translation>
+        <translation>Добави следващ акорд до избрания</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="239"/>
@@ -7880,12 +7880,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1233"/>
         <source>Add hairpin: crescendo</source>
-        <translation>Постави знак за крешендо</translation>
+        <translation>Постави знак за крешчендо</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1239"/>
         <source>Add hairpin: decrescendo</source>
-        <translation>Постави знак за декрешендо</translation>
+        <translation>Постави знак за декрешчендо</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1244"/>
@@ -8147,13 +8147,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1545"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1546"/>
         <source>Select to beginning of score</source>
-        <translation>избери в началото на нотния лист</translation>
+        <translation>Избери в началото на нотния лист</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1551"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1552"/>
         <source>Select to end of score</source>
-        <translation>избери в края на нотния лист</translation>
+        <translation>Избери в края на нотния лист</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1557"/>
@@ -8731,7 +8731,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2130"/>
         <source>Double whole note</source>
-        <translation>Двойна цяла нота</translation>
+        <translation>Бревис</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2137"/>
@@ -8743,13 +8743,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2144"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2221"/>
         <source>Half note</source>
-        <translation>Полувинка нота</translation>
+        <translation>Половина нота</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2151"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2228"/>
         <source>Quarter note</source>
-        <translation>Четвъртинка нота</translation>
+        <translation>Четвъртина нота</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2165"/>
@@ -8803,12 +8803,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="757"/>
         <source>Acciaccatura</source>
-        <translation>къс форшлаг</translation>
+        <translation>Къс форшлаг</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="764"/>
         <source>Appoggiatura</source>
-        <translation>дълъг форшлаг</translation>
+        <translation>Дълъг форшлаг</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="771"/>
@@ -8878,7 +8878,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2434"/>
         <source>Voice 1</source>
-        <translation>глас 1</translation>
+        <translation>Глас 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2435"/>
@@ -8888,7 +8888,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2441"/>
         <source>Voice 2</source>
-        <translation>глас 2</translation>
+        <translation>Глас 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2442"/>
@@ -8898,7 +8898,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2448"/>
         <source>Voice 3</source>
-        <translation>глас 3</translation>
+        <translation>Глас 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2449"/>
@@ -8908,7 +8908,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2455"/>
         <source>Voice 4</source>
-        <translation>глас 4</translation>
+        <translation>Глас 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2556"/>
@@ -8992,7 +8992,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="820"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="821"/>
         <source>No beam</source>
-        <translation>без ребро</translation>
+        <translation>Без ребро</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="813"/>
@@ -10270,7 +10270,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2388"/>
         <source>Add slur</source>
-        <translation>въведи легато</translation>
+        <translation>Въведи легато</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2462"/>
@@ -10706,7 +10706,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="54"/>
         <source>Loading…‎</source>
-        <translation type="unfinished"/>
+        <translation>Зареждане...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="99"/>
@@ -10721,17 +10721,17 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="40"/>
         <source>Loading new score…‎</source>
-        <translation type="unfinished"/>
+        <translation>Зареждане на нова партитура...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="44"/>
         <source>Loading “%1”…‎</source>
-        <translation type="unfinished"/>
+        <translation>Зареждане “%1”…‎</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="50"/>
         <source>Loading score…‎</source>
-        <translation type="unfinished"/>
+        <translation>Зареждане на партитура...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
@@ -11149,7 +11149,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="44"/>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemeAdditionalOptionsSection.qml" line="50"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Върни по подразбиране</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="67"/>
@@ -11605,7 +11605,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="94"/>
         <source>Quarter</source>
-        <translation>Четвъртинка</translation>
+        <translation>Четвъртина</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="95"/>
@@ -11855,7 +11855,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/view/preferences/braillepreferencesmodel.cpp" line="85"/>
         <source>Down</source>
         <extracomment>Braille chord interval direction: down (descending)</extracomment>
-        <translation>Надолу</translation>
+        <translation>Down</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="30"/>
@@ -12296,12 +12296,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2312"/>
         <source>Acciaccatura</source>
-        <translation>къс форшлаг</translation>
+        <translation>Къс форшлаг</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2314"/>
         <source>Appoggiatura</source>
-        <translation>дълъг форшлаг</translation>
+        <translation>Дълъг форшлаг</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2318"/>
@@ -12420,13 +12420,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="1517"/>
         <source>♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>Бемол</translation>
+        <translation>♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1507"/>
         <source>♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>Диез</translation>
+        <translation>♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1502"/>
@@ -12615,7 +12615,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="166"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1585"/>
         <source>Invalid</source>
-        <translation>невалидено</translation>
+        <translation>Невалидно</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="167"/>
@@ -12750,7 +12750,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
         <source>Breath</source>
-        <translation>Дишане</translation>
+        <translation>Цезури</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="198"/>
@@ -13300,7 +13300,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="1512"/>
         <source>♮</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>Бекар</translation>
+        <translation>♮</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1580"/>
@@ -13310,17 +13310,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1579"/>
         <source>Half</source>
-        <translation>Половинка</translation>
+        <translation>Половина</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1570"/>
         <source>Quarter</source>
-        <translation>Четвъртинка</translation>
+        <translation>Четвъртина</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1582"/>
         <source>Breve</source>
-        <translation>Бреве</translation>
+        <translation>Бревис</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="294"/>
@@ -13340,7 +13340,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1221"/>
         <source>Default</source>
-        <translation>по подразбиране</translation>
+        <translation>По подразбиране</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1222"/>
@@ -13849,7 +13849,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2558"/>
         <source>D.S.</source>
-        <translation>D.S</translation>
+        <translation>D.S.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2589"/>
@@ -13884,7 +13884,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2587"/>
         <source>To coda</source>
-        <translation>To Coda</translation>
+        <translation>To coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2588"/>
@@ -13894,7 +13894,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2829"/>
         <source>G major, E minor</source>
-        <translation>G мажор, E минор</translation>
+        <translation>Сол мажор, ми минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2821"/>
@@ -13904,7 +13904,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2830"/>
         <source>D major, B minor</source>
-        <translation>D мажор, B минор</translation>
+        <translation>Ре мажор, си минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2822"/>
@@ -14004,7 +14004,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2828"/>
         <source>C major, A minor</source>
-        <translation>C мажор, A минор</translation>
+        <translation>До мажор, ла минор</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2836"/>
@@ -15320,7 +15320,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="811"/>
         <source>Bass clef</source>
-        <translation>басов ключ</translation>
+        <translation>Басов ключ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="812"/>
@@ -15443,7 +15443,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2450"/>
         <source>Acoustic Bass Drum</source>
-        <translation>Акустична Каса</translation>
+        <translation>Акустична каса</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2451"/>
@@ -15986,7 +15986,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/instrument.cpp" line="38"/>
         <source>normal</source>
         <extracomment>Channel name for otherwise unnamed channels</extracomment>
-        <translation>нормална</translation>
+        <translation>Нормална</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
@@ -16454,17 +16454,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="612"/>
         <source>Half</source>
-        <translation>Половинка</translation>
+        <translation>Половина</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="613"/>
         <source>Quarter</source>
-        <translation>Четвъртинка</translation>
+        <translation>Четвъртина</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="614"/>
         <source>Breve</source>
-        <translation>Бреве</translation>
+        <translation>Бревис</translation>
     </message>
 </context>
 <context>
@@ -17911,7 +17911,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3867"/>
         <source>Open</source>
-        <translation>Отвори…</translation>
+        <translation>Отвори</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3872"/>
@@ -17997,7 +17997,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4056"/>
         <source>Piano</source>
-        <translation>пиано</translation>
+        <translation>Пиано</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4057"/>
@@ -19055,7 +19055,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="48"/>
         <location filename="../../src/framework/global/utils.cpp" line="30"/>
         <source>C♯</source>
-        <translation>До диез</translation>
+        <translation>До♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="49"/>
@@ -19071,7 +19071,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="51"/>
         <location filename="../../src/framework/global/utils.cpp" line="45"/>
         <source>D♭</source>
-        <translation>Ре бемол</translation>
+        <translation>Ре♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="52"/>
@@ -19100,7 +19100,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="56"/>
         <location filename="../../src/framework/global/utils.cpp" line="47"/>
         <source>E♭</source>
-        <translation>Ми бемол</translation>
+        <translation>Ми♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="57"/>
@@ -19140,7 +19140,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="63"/>
         <location filename="../../src/framework/global/utils.cpp" line="35"/>
         <source>F♯</source>
-        <translation>Фа диез</translation>
+        <translation>Фа♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="64"/>
@@ -19185,7 +19185,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="71"/>
         <location filename="../../src/framework/global/utils.cpp" line="52"/>
         <source>A♭</source>
-        <translation>Ла бемол</translation>
+        <translation>Ла♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="72"/>
@@ -19214,7 +19214,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="76"/>
         <location filename="../../src/framework/global/utils.cpp" line="54"/>
         <source>B♭</source>
-        <translation>Си бемол</translation>
+        <translation>Си♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="77"/>
@@ -19356,7 +19356,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
         <source>Open</source>
-        <translation>Отвори…</translation>
+        <translation>Отвори</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
@@ -19462,7 +19462,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="127"/>
         <source>On</source>
         <extracomment>as opposed to Off</extracomment>
-        <translation type="unfinished"/>
+        <translation>Вкл.</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
@@ -19471,7 +19471,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="127"/>
         <source>Off</source>
         <extracomment>as opposed to On</extracomment>
-        <translation type="unfinished"/>
+        <translation>Изкл.</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="126"/>
@@ -19531,7 +19531,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="83"/>
         <source>Minutes</source>
-        <translation>минути</translation>
+        <translation>Минути</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="110"/>
@@ -19641,7 +19641,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="314"/>
         <source>Quarter</source>
-        <translation>Четвъртинка</translation>
+        <translation>Четвъртина</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="315"/>
@@ -19711,7 +19711,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="391"/>
         <source>Tuplets</source>
-        <translation>Особено разделени нотни стойности</translation>
+        <translation>Особено деление</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="556"/>
@@ -20238,7 +20238,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="52"/>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="34"/>
         <source>General</source>
-        <translation>Основни:</translation>
+        <translation>Основни</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="58"/>
@@ -20486,7 +20486,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="188"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="56"/>
         <source>Default</source>
-        <translation>по подразбиране</translation>
+        <translation>По подразбиране</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="192"/>
@@ -20537,7 +20537,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="75"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Скриване</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
@@ -20860,7 +20860,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="66"/>
         <source>Staff/Part properties</source>
-        <translation type="unfinished"/>
+        <translation>Свойства на петолиние/партия</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="49"/>
@@ -21013,7 +21013,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="101"/>
         <source>Dash</source>
-        <translation>пунктирна</translation>
+        <translation>Пунктирна</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="123"/>
@@ -21252,7 +21252,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
         <source>No beam</source>
-        <translation>без ребро</translation>
+        <translation>Без ребро</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="62"/>
@@ -21287,12 +21287,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="40"/>
         <source>Quarter</source>
-        <translation>Четвъртинка</translation>
+        <translation>Четвъртина</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="41"/>
         <source>Half</source>
-        <translation>Половинка</translation>
+        <translation>Половина</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="42"/>
@@ -21313,7 +21313,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="77"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="65"/>
         <source>Stem direction</source>
-        <translation>посока на опашката</translation>
+        <translation>Посока на опашката</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="92"/>
@@ -21661,7 +21661,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="206"/>
         <source>Align left</source>
-        <translation>подравни вляво</translation>
+        <translation>Подравни вляво</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="207"/>
@@ -21832,7 +21832,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/fermataplaybackmodel.cpp" line="33"/>
         <source>Fermatas</source>
-        <translation type="unfinished"/>
+        <translation>Фермати</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/glissandoplaybackmodel.cpp" line="33"/>
@@ -21958,7 +21958,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinlinesettingsmodel.cpp" line="44"/>
         <source>Crescendo</source>
-        <translation>крешчендо</translation>
+        <translation>Крешчендо</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/letringsettingsmodel.cpp" line="31"/>
@@ -22189,12 +22189,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="37"/>
         <source>Tuplet</source>
-        <translation>Особено разделени нотни стойности</translation>
+        <translation>Особено деление</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="67"/>
         <source>Number</source>
-        <translation>стойност</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="68"/>
@@ -22266,7 +22266,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="87"/>
         <source>Interval</source>
-        <translation>интервал</translation>
+        <translation>Интервал</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="123"/>
@@ -22337,7 +22337,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="165"/>
         <source>Octave</source>
-        <translation type="unfinished"/>
+        <translation>Октава</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="181"/>
@@ -22416,7 +22416,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="106"/>
         <source>Minimum length</source>
-        <translation>Минимална дължина:</translation>
+        <translation>Минимална дължина</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
@@ -22503,14 +22503,14 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="201"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="206"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>Вкл.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="197"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="202"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="207"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Изкл.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml" line="82"/>
@@ -22546,7 +22546,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/measures/measuressettingsmodel.cpp" line="37"/>
         <source>Measures</source>
-        <translation>Такт…</translation>
+        <translation>Такт</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAccessibilityInspectorView.qml" line="44"/>
@@ -22674,7 +22674,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="191"/>
         <source>All instruments</source>
-        <translation type="unfinished"/>
+        <translation>Всички инструменти</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/instrumentsrepository.cpp" line="42"/>
@@ -22687,32 +22687,32 @@ pickup measure</source>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="367"/>
         <source>Checking for updates…</source>
-        <translation type="unfinished"/>
+        <translation>Проверка за актуализации...</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="421"/>
         <source>Downloading…</source>
-        <translation type="unfinished"/>
+        <translation>Изтегляне...</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="438"/>
         <source>Unpacking…</source>
-        <translation type="unfinished"/>
+        <translation>Разопаковане...</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/languageserrors.h" line="51"/>
         <source>Up to date</source>
-        <translation type="unfinished"/>
+        <translation>Актуален</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/languageserrors.h" line="52"/>
         <source>Error while parsing response from server</source>
-        <translation type="unfinished"/>
+        <translation>Грешка при анализа на отговора от сървъра</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/languageserrors.h" line="53"/>
         <source>Error while downloading language</source>
-        <translation type="unfinished"/>
+        <translation>Грешка при изтегляне на език</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/languageserrors.h" line="54"/>
@@ -22821,7 +22821,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="143"/>
         <source>Small staff</source>
-        <translation>Умалено петолиние</translation>
+        <translation>Малко петолиние</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="159"/>
@@ -22983,7 +22983,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="97"/>
         <source>Mastering MuseScore</source>
-        <translation>овладяване на MuseScore</translation>
+        <translation>Овладяване на MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/learnerrors.h" line="45"/>
@@ -23541,7 +23541,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="570"/>
         <source>Measures</source>
-        <translation>Такт…</translation>
+        <translation>Тактове</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="571"/>
@@ -23775,7 +23775,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="81"/>
         <source>Small</source>
-        <translation>Умален размер</translation>
+        <translation>Малък размер</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="101"/>
@@ -24768,7 +24768,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="791"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1313"/>
         <source>Number</source>
-        <translation>стойност</translation>
+        <translation>Стойност</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="792"/>
@@ -25377,7 +25377,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="253"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>Персонализиране на комплекта</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="413"/>
@@ -25562,7 +25562,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3067"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3102"/>
         <source>Measures</source>
-        <translation>Такт…</translation>
+        <translation>Тактове</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1023"/>
@@ -25868,7 +25868,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="500"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1191"/>
         <source>Seconda volta</source>
-        <translation>Секунда волта</translation>
+        <translation>Секонда волта</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="509"/>
@@ -25941,7 +25941,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="853"/>
         <source>Accordion</source>
         <extracomment>The name of a palette</extracomment>
-        <translation>акордеон</translation>
+        <translation>Акордеон</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="932"/>
@@ -26358,7 +26358,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1584"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1846"/>
         <source>normal</source>
-        <translation>нормална</translation>
+        <translation>Нормална</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1604"/>
@@ -26526,12 +26526,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
         <source>Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Китара</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1862"/>
         <source>Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Клавир</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1927"/>
@@ -26542,12 +26542,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="71"/>
         <source>Create key signature</source>
-        <translation>Създай нова тоналност</translation>
+        <translation>Създаване на тоналност</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="73"/>
         <source>Create time signature</source>
-        <translation type="unfinished"/>
+        <translation>Създаване на размер</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="104"/>
@@ -26557,7 +26557,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="348"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Скриване</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="349"/>
@@ -26765,7 +26765,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/DrumsetPanel.qml" line="66"/>
         <source>Customize kit</source>
-        <translation type="unfinished"/>
+        <translation>Персонализиране на комплекта</translation>
     </message>
 </context>
 <context>
@@ -28694,7 +28694,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="354"/>
         <source>New</source>
-        <translation>Нова</translation>
+        <translation>Нов</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="366"/>
@@ -28758,7 +28758,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1510"/>
         <source>Save as…</source>
-        <translation>Запиши като…</translation>
+        <translation>Запиши като</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1515"/>
@@ -28940,7 +28940,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1879"/>
         <source>Open</source>
-        <translation>Отвори…</translation>
+        <translation>Отвори</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="129"/>
@@ -29255,7 +29255,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="35"/>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="92"/>
         <source>Export</source>
-        <translation>Експорт</translation>
+        <translation>Извлечи</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="67"/>
@@ -29681,7 +29681,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="199"/>
         <source>Measures</source>
-        <translation>Такт…</translation>
+        <translation>Такт</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="120"/>
@@ -29948,7 +29948,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
         <source>Quarter note</source>
-        <translation>Четвъртинка нота</translation>
+        <translation>Четвъртина нота</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
@@ -29958,7 +29958,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
         <source>Half note</source>
-        <translation>Полувинка нота</translation>
+        <translation>Половина нота</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="338"/>
@@ -30514,7 +30514,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsBottomPanel.qml" line="89"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Върни по подразбиране</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="31"/>
@@ -31048,7 +31048,7 @@ failed.</source>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="743"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="2618"/>
         <source>Add slur</source>
-        <translation>въведи легато</translation>
+        <translation>Добави легато</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="788"/>
@@ -31581,7 +31581,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5490"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Брой тактове в нотна система</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5497"/>
@@ -32168,17 +32168,17 @@ failed.</source>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="114"/>
         <source>Select the options you want remembered in your new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Изберете опциите, които искате да бъдат запомнени в новото ви работно пространство</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="133"/>
         <source>UI preferences (colors, canvas style, etc.)</source>
-        <translation type="unfinished"/>
+        <translation>Предпочитания за ПИ (цветове, стил на платното и др.)</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="150"/>
         <source>UI arrangement</source>
-        <translation type="unfinished"/>
+        <translation>Подредба на ПИ</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="166"/>
@@ -32188,27 +32188,27 @@ failed.</source>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="182"/>
         <source>Toolbar customizations</source>
-        <translation type="unfinished"/>
+        <translation>Персонализиране на лентата с инструменти</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="44"/>
         <source>My new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Моето ново работно пространство</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="102"/>
         <source>A workspace with the name “%1” already exists. Please choose a different name.</source>
-        <translation type="unfinished"/>
+        <translation>Вече съществува работно пространство с име „%1“. Моля, изберете друго име.</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="109"/>
         <source>“%1” cannot be used as a workspace name. Please choose a different name.</source>
-        <translation type="unfinished"/>
+        <translation>„%1“ не може да се използва като име на работно пространство. Моля, изберете друго име.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="101"/>
         <source>Workspace:</source>
-        <translation type="unfinished"/>
+        <translation>Работно пространство:</translation>
     </message>
 </context>
 </TS>

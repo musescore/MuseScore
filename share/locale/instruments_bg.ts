@@ -41,28 +41,28 @@
         <source>Piccolo</source>
         <comment>eb-piccolo trackName</comment>
         <extracomment>trackName for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>пиколо</translation>
+        <translation>Пиколо</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="219"/>
         <source>Piccolo</source>
         <comment>eb-piccolo longName</comment>
         <extracomment>longName for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>пиколо</translation>
+        <translation>Пиколо</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="221"/>
         <source>Picc.</source>
         <comment>eb-piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>пик.</translation>
+        <translation>Пик.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="223"/>
         <source>E♭</source>
         <comment>eb-piccolo traitName</comment>
         <extracomment>traitName for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ми бемол</translation>
+        <translation>Ми♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="226"/>
@@ -76,14 +76,14 @@
         <source>Piccolo</source>
         <comment>db-piccolo trackName</comment>
         <extracomment>trackName for Piccolo; transposition: D♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>пиколо</translation>
+        <translation>Пиколо</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="230"/>
         <source>Piccolo</source>
         <comment>db-piccolo longName</comment>
         <extracomment>longName for Piccolo; transposition: D♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>пиколо</translation>
+        <translation>Пиколо</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="232"/>
@@ -15679,7 +15679,7 @@
         <source>Guitar</source>
         <comment>guitar-steel-treble-clef longName</comment>
         <extracomment>longName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Китара</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5167"/>
@@ -15735,7 +15735,7 @@
         <source>Guitar</source>
         <comment>guitar-nylon-treble-clef longName</comment>
         <extracomment>longName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Китара</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5189"/>
@@ -15819,7 +15819,7 @@
         <source>Guitar</source>
         <comment>guitar-steel-tablature longName</comment>
         <extracomment>longName for Acoustic Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Китара</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5217"/>
@@ -19842,7 +19842,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="48"/>
         <source>Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Китара</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="49"/>
