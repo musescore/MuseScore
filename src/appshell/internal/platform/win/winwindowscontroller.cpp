@@ -108,26 +108,57 @@ bool WinWindowsController::nativeEventFilter(const QByteArray& eventType, void* 
         return false;
     }
 
+    UINT messageType = msg->message;
     HWND hWnd = msg->hwnd;
-
-    if (hWnd != s_hwnd) {
-        return false;
-    }
-
     LPARAM lParam = msg->lParam;
 
-    switch (msg->message) {
+    bool isMainWindow = hWnd == s_hwnd;
+    return isMainWindow ? nativeEventFilterForMainWindow(messageType, hWnd, lParam, result)
+           : nativeEventFilterForNonMainWindow(messageType, hWnd);
+}
+
+bool WinWindowsController::nativeEventFilterForMainWindow(UINT messageType, HWND hWnd, LPARAM lParam, qintptr* result)
+{
+    switch (messageType) {
     case WM_NCCALCSIZE: {
         return removeWindowFrame(hWnd, lParam, result);
     }
     case WM_GETMINMAXINFO: {
         return calculateWindowSize(hWnd, lParam, result);
     }
+    case WM_ERASEBKGND: {
+        return initWindowBackgroundColor(hWnd);
+    }
     case WM_NCHITTEST: {
         return processMouseMove(hWnd, lParam, result);
     }
     case WM_NCRBUTTONDOWN: {
         return processMouseRightClick(hWnd, lParam);
+    }
+    default:
+        break;
+    }
+
+    return false;
+}
+
+bool WinWindowsController::nativeEventFilterForNonMainWindow(UINT messageType, HWND hWnd)
+{
+    switch (messageType) {
+    case WM_ERASEBKGND: {
+        std::wstring title(GetWindowTextLength(hWnd) + 1, L'\0');
+        GetWindowTextW(hWnd, &title[0], (int)title.size());
+
+        if (!title.empty() && title.back() == L'\0') {
+            title.pop_back();
+        }
+
+        if (title == L"PopupWindow") {
+            //! Popups has transparent background, so no need to change it
+            return false;
+        }
+
+        return initWindowBackgroundColor(hWnd);
     }
     default:
         break;
@@ -206,6 +237,31 @@ bool WinWindowsController::calculateWindowSize(HWND hWnd, LPARAM lParam, qintptr
     minMaxInfo->ptMinTrackSize.y =  minMaxInfo->ptMaxSize.y;
 
     *result = 0;
+    return true;
+}
+
+bool WinWindowsController::initWindowBackgroundColor(HWND hWnd)
+{
+    HDC hdc = GetWindowDC(hWnd);
+
+    QColor bgColor = QColor(uiConfiguration()->currentTheme().values.value(muse::ui::BACKGROUND_PRIMARY_COLOR).toString());
+    COLORREF bgRGB = RGB(bgColor.red(), bgColor.green(), bgColor.blue());
+
+    SetClassLongPtr(hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)CreateSolidBrush(bgRGB));
+    SetBkColor(hdc, bgRGB);
+
+    RECT rect;
+    GetClientRect(hWnd, &rect);
+
+    //! NOTE: For some reason, the client area is returned smaller than the actual window area.
+    //! Let's add an extra margin, the size of which was determined experimentally.
+    static constexpr int CLIENT_AREA_EXTRA_MARGIN = 100;
+    rect.bottom = rect.bottom + CLIENT_AREA_EXTRA_MARGIN;
+    rect.right = rect.right + CLIENT_AREA_EXTRA_MARGIN;
+
+    HBRUSH brush = (HBRUSH)GetClassLongPtrW(hWnd, GCLP_HBRBACKGROUND);
+    FillRect(hdc, &rect, brush);
+
     return true;
 }
 

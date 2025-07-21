@@ -46,12 +46,16 @@ public:
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
+
     bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result) override;
+    bool nativeEventFilterForMainWindow(UINT messageType, HWND hWnd, LPARAM lParam, qintptr* result);
+    bool nativeEventFilterForNonMainWindow(UINT messageType, HWND hWnd);
 
     bool removeWindowFrame(HWND hWnd, LPARAM lParam, qintptr* result);
     bool calculateWindowSize(HWND hWnd, LPARAM lParam, qintptr* result);
-    bool processMouseMove(HWND hWnd, LPARAM lParam, qintptr* result) const;
+    bool initWindowBackgroundColor(HWND hWnd);
 
+    bool processMouseMove(HWND hWnd, LPARAM lParam, qintptr* result) const;
     bool processMouseRightClick(HWND hWnd, LPARAM lParam) const;
 
     void updateContextMenuState(HWND hWnd) const;
