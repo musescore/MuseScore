@@ -66,7 +66,7 @@ using namespace muse;
 using namespace muse::audio;
 
 namespace {
-#define DEBUG_PW
+// #define DEBUG_PW
 #ifdef DEBUG_PW
 static constexpr enum spa_log_level PW_LOG_LEVEL = SPA_LOG_LEVEL_TRACE;
 #else
@@ -214,7 +214,6 @@ AudioDeviceList PwRegistry::getDevices() const
     std::unique_lock<std::mutex> lk(m_mutex);
 
     if (!m_devicesDirty) {
-        LOGD() << "devices up-to-date";
         return m_devices;
     }
 
@@ -235,10 +234,8 @@ AudioDeviceList PwRegistry::getDevices() const
     m_cond.wait_for(lk, std::chrono::milliseconds(500), [this] { return m_roundtripped; });
 
     LOGD() << "found " << m_pwNodes.size() + 1 << " devices";
-    LOGD() << m_devices[0].id << ": " << m_devices[0].name;
 
     for (const auto& node : m_pwNodes) {
-        LOGD() << "seeking device " << node.deviceId << " for node " << node.name;
 
         const auto dev = std::find_if(
             m_pwDevices.begin(), m_pwDevices.end(),
@@ -246,18 +243,10 @@ AudioDeviceList PwRegistry::getDevices() const
 
         const auto devFound = dev != m_pwDevices.end();
 
-        if (devFound) {
-            LOGD() << "node with device";
-        } else {
-            LOGD() << "node without device";
-        }
-
         // pipewire identifies node by the "node.name" property
         // (e.g. "alsa_output.pci-0000_04_00.6.analog-stereo")
         // or by the "object.serial" (which we are not using)
         AudioDeviceID id = node.name;
-
-        LOGD() << "id: " << id;
 
         // priority order for human readable name:
         // - device nickname        (e.g. "HD-Audio Generic")
@@ -268,22 +257,16 @@ AudioDeviceList PwRegistry::getDevices() const
         std::string name;
         if (devFound && !dev->nick.empty()) {
             name = dev->nick;
-            LOGD() << "device nick: " << name;
         } else if (!node.nick.empty()) {
             name = node.nick;
-            LOGD() << "node nick: " << name;
         } else if (devFound && !dev->desc.empty()) {
             name = dev->desc;
-            LOGD() << "device desc: " << name;
         } else if (!node.desc.empty()) {
             name = node.desc;
-            LOGD() << "node desc: " << name;
         } else {
             name = node.name;
-            LOGD() << "node name: " << name;
         }
 
-        LOGD() << id << ": " << name;
         m_devices.push_back({ id, name });
     }
 
@@ -492,10 +475,6 @@ PwStream::PwStream(pw_core* core, const IAudioDriver::Spec& spec, const std::str
     auto builder = SPA_POD_BUILDER_INIT(buf, sizeof(buf));
     const spa_pod* param = spa_format_audio_raw_build(&builder, SPA_PARAM_EnumFormat, &formatInfo);
 
-    pw_log_debug("pw_stream_new with props and params");
-    spa_debug_dict(1, &props->dict);
-    spa_debug_pod(1, NULL, param);
-
     m_stream = pw_stream_new(m_core, "MuseScore", props);
 
     pw_stream_add_listener(m_stream, &m_hook, &m_events, this);
@@ -608,7 +587,7 @@ PwAudioDriver::~PwAudioDriver()
     if (m_core) {
         {
             PwLoopLock lk { m_loop };
-        m_registry.reset();
+            m_registry.reset();
             m_stream.reset();
             pw_core_disconnect(m_core);
         }
@@ -631,7 +610,7 @@ void PwAudioDriver::init()
 
     // Nothing to do
     constexpr auto pwVersion = pw_get_headers_version();
-    LOGD() << "Initialized Pipewire";
+    LOGI() << "Initialized Pipewire";
     LOGD() << "Compiled with version " << pwVersion;
     LOGD() << "Running with version " << pw_get_library_version();
 }
@@ -646,7 +625,7 @@ bool PwAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     PwLoopLock lk { m_loop };
 
-    LOGD() << "Connecting to " << m_deviceId << " / " << spec.sampleRate << "Hz / " << spec.samples << " samples";
+    LOGI() << "Connecting to " << m_deviceId << " / " << spec.sampleRate << "Hz / " << spec.samples << " samples";
 
     m_stream = std::make_unique<PwStream>(m_core, spec, m_deviceId);
 
@@ -697,12 +676,10 @@ bool PwAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 
     bool ok = true;
     if (reopen) {
-        LOGD() << "Reopening driver";
         ok = open(m_formatSpec, nullptr);
     }
 
     if (ok) {
-        LOGD() << "Notifying device change";
         m_outputDeviceChanged.notify();
     }
 
