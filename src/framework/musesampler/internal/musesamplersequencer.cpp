@@ -727,6 +727,13 @@ void MuseSamplerSequencer::parseArticulations(const ArticulationMap& articulatio
     for (const auto& pair : articulations) {
         auto artIt = ARTICULATION_TYPES.find(pair.first);
         if (artIt != ARTICULATION_TYPES.cend()) {
+            //! NOTE: skip last note of slur / hopo, sampler requirement
+            if (pair.second.occupiedFrom != 0 && pair.second.occupiedTo == HUNDRED_PERCENT) {
+                if (pair.first == mpe::ArticulationType::Legato) {
+                    continue;
+                }
+            }
+
             artFlag |= convertArticulationType(pair.first);
             continue;
         }
