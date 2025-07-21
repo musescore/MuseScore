@@ -133,6 +133,7 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
                                                const int ticksPositionOffset,
                                                const mpe::ArticulationsProfilePtr profile,
+                                               const PlaybackContextPtr playbackCtx,
                                                mpe::PlaybackEventsMap& result) const
 {
     if (!chordSymbol->isRealizable()) {
@@ -149,12 +150,13 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 
     const Score* score = chordSymbol->score();
     int positionTick = chordSymbol->tick().ticks();
+    int positionTickWithOffset = positionTick + ticksPositionOffset;
 
-    timestamp_t eventTimestamp = timestampFromTicks(score, positionTick + ticksPositionOffset);
+    timestamp_t eventTimestamp = timestampFromTicks(score, positionTickWithOffset);
     PlaybackEventList& events = result[eventTimestamp];
 
-    int durationTicks = realized.getActualDuration(positionTick + ticksPositionOffset).ticks();
-    duration_t duration = timestampFromTicks(score, positionTick + ticksPositionOffset + durationTicks) - eventTimestamp;
+    int durationTicks = realized.getActualDuration(positionTickWithOffset).ticks();
+    duration_t duration = timestampFromTicks(score, positionTickWithOffset + durationTicks) - eventTimestamp;
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
     staff_layer_idx_t staffIdx = static_cast<staff_layer_idx_t>(chordSymbol->staffIdx());
@@ -175,15 +177,15 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
                                            voiceIdx,
                                            staffIdx,
                                            pitchLevel,
-                                           dynamicLevelFromType(mpe::DynamicType::Natural),
+                                           playbackCtx->appliableDynamicLevel(chordSymbol->track(), positionTickWithOffset),
                                            articulations,
                                            bps));
     }
 }
 
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp,
-                                               const mpe::duration_t actualDuration, const ArticulationsProfilePtr profile,
-                                               mpe::PlaybackEventsMap& result) const
+                                               const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
+                                               const ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const
 {
     if (!chordSymbol->isRealizable()) {
         return;
@@ -216,7 +218,7 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
                                            voiceIdx,
                                            staffIdx,
                                            pitchLevel,
-                                           dynamicLevelFromType(mpe::DynamicType::Natural),
+                                           actualDynamicLevel,
                                            articulations,
                                            Constants::DEFAULT_TEMPO.val));
     }

@@ -46,10 +46,10 @@ public:
                 const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result) const;
 
     void renderChordSymbol(const Harmony* chordSymbol, const int ticksPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,
-                           muse::mpe::PlaybackEventsMap& result) const;
+                           const PlaybackContextPtr playbackCtx, muse::mpe::PlaybackEventsMap& result) const;
     void renderChordSymbol(const Harmony* chordSymbol, const muse::mpe::timestamp_t actualTimestamp,
-                           const muse::mpe::duration_t actualDuration, const muse::mpe::ArticulationsProfilePtr profile,
-                           muse::mpe::PlaybackEventsMap& result) const;
+                           const muse::mpe::duration_t actualDuration, const muse::mpe::dynamic_level_t actualDynamicLevel,
+                           const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result) const;
 
     void renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick, const int ticksPositionOffset,
                          const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result) const;
