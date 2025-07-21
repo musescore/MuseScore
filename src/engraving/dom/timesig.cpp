@@ -428,7 +428,8 @@ double TimeSig::yPos() const
 {
     switch (timeSigPlacement()) {
     case TimeSigPlacement::NORMAL: return style().styleMM(Sid::timeSigNormalY);
-    case TimeSigPlacement::ABOVE_STAVES: return style().styleMM(Sid::timeSigAboveY);
+    case TimeSigPlacement::ABOVE_STAVES: return (staff()->systemObjectsBelowBottomStaff() ? -1.0 : 1.0)
+               * style().styleMM(Sid::timeSigAboveY);
     case TimeSigPlacement::ACROSS_STAVES: return style().styleMM(Sid::timeSigAcrossY);
     default:
         return 0.0;

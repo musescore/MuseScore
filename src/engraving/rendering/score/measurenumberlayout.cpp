@@ -137,6 +137,10 @@ void MeasureNumberLayout::layoutMeasureNumberBase(const MeasureNumberBase* item,
 
         ldata->setPosY(yoff);
     }
+
+    if (item->isStyled(Pid::OFFSET)) {
+        const_cast<MeasureNumberBase*>(item)->setOffset(item->propertyDefault(Pid::OFFSET).value<PointF>());
+    }
 }
 
 const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item, bool alignToBarline, AlignH hPlacement)
