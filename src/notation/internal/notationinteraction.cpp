@@ -5237,6 +5237,8 @@ void NotationInteraction::flipSelection()
     startEdit(TranslatableString("undoableAction", "Flip direction"));
     score()->cmdFlip();
     apply();
+
+    updateGripAnchorLines();
 }
 
 void NotationInteraction::flipSelectionHorizontally()
