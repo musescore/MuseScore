@@ -32,9 +32,12 @@ function download_github_release()
   else
     local -r url="https://github.com/${repo_slug}/releases/download/${release_tag}/${file}"
   fi
+
+  echo "try download: ${url}"
   # use curl instead of wget which fails on armhf
-  curl "${url}" -O -L
+  curl "${url}" -O -L -v
   chmod +x "${file}"
+  echo "downloaded: ${file}"
 }
 
 function extract_appimage()
@@ -49,7 +52,9 @@ function extract_appimage()
     "./${appimage}" --appimage-extract >/dev/null # dest folder "squashfs-root"
   fi
   mv squashfs-root "${appdir}" # rename folder to avoid collisions
-  ln -s "${appdir}/AppRun" "${binary_name}" # symlink for convenience
+  # wrapper script for convenience
+  printf '#!/bin/sh\nexec "%s/AppRun" "$@"\n' "$(readlink -f "${appdir}")" > "${binary_name}"
+  chmod +x "${binary_name}"
   rm -f "${appimage}"
 }
 
@@ -65,7 +70,7 @@ function download_appimage_release()
 if [[ ! -d $BUILD_TOOLS/appimagetool ]]; then
   mkdir $BUILD_TOOLS/appimagetool
   cd $BUILD_TOOLS/appimagetool
-  download_appimage_release AppImage/AppImageKit appimagetool continuous # use AppImage/appimagetool for the static runtime AppImage
+  download_appimage_release AppImage/appimagetool appimagetool continuous # use AppImage/appimagetool for the static runtime AppImage
   cd $ORIGIN_DIR
 fi
 export PATH="$BUILD_TOOLS/appimagetool:$PATH"
