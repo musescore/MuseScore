@@ -6865,6 +6865,18 @@ void TLayout::layoutVoltaSegment(VoltaSegment* item, LayoutContext& ctx)
     LAYOUT_CALL_ITEM(item);
     VoltaSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
+    if (item->placeBelow()) {
+        if (TextBase* beginText = item->text()) {
+            PointF offset = beginText->offset();
+            offset.setY(-offset.y() + beginText->ldata()->bbox().height());
+            beginText->setOffset(offset);
+        }
+        if (TextBase* endText = item->endText()) {
+            PointF offset = endText->offset();
+            offset.setY(-offset.y() + endText->ldata()->bbox().height());
+            endText->setOffset(offset);
+        }
+    }
     Shape sh = textLineBaseSegmentShape(item);
     ldata->setShape(sh);
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
