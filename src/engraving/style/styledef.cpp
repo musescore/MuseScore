@@ -315,7 +315,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(pedalLineStyle,                             PropertyValue(LineType::SOLID)),
     styleDef(pedalDashLineLen,                           4.0),
     styleDef(pedalDashGapLen,                            4.0),
-    styleDef(pedalHookHeight,                            Spatium(-1.2)),
+    styleDef(pedalHookHeight,                            Spatium(1.2)),
     styleDef(pedalFontFace,                              "Edwin"),
     styleDef(pedalFontSize,                              10.0),
     styleDef(pedalLineSpacing,                           1.0),

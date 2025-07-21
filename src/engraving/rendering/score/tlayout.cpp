@@ -6281,8 +6281,11 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         x2 = std::max(x2, item->text()->width());
     }
 
+    double beginHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->beginHookHeight().val() * _spatium;
+    double endHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->endHookHeight().val() * _spatium;
+
     if (tl->endHookType() != HookType::NONE) {
-        double h = pp2.y() + tl->endHookHeight().val() * _spatium;
+        double h = pp2.y() + endHookHeight;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -6291,7 +6294,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 
     if (tl->beginHookType() != HookType::NONE) {
-        double h = tl->beginHookHeight().val() * _spatium;
+        double h = beginHookHeight;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -6332,8 +6335,6 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
             alignBaseLine(item->endText(), pp1, pp2);
         }
 
-        double beginHookHeight = tl->beginHookHeight().val() * _spatium;
-        double endHookHeight = tl->endHookHeight().val() * _spatium;
         double beginHookWidth = 0.0;
         double endHookWidth = 0.0;
 
