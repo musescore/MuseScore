@@ -236,7 +236,6 @@ AudioDeviceList PwRegistry::getDevices() const
     LOGD() << "found " << m_pwNodes.size() + 1 << " devices";
 
     for (const auto& node : m_pwNodes) {
-
         const auto dev = std::find_if(
             m_pwDevices.begin(), m_pwDevices.end(),
             [node](const Device& device) { return device.id == node.deviceId; });
@@ -702,7 +701,7 @@ AudioDeviceList PwAudioDriver::availableOutputDevices() const
         return AudioDeviceList{};
     }
 
-    PwLoopLock lk {m_loop};
+    PwLoopLock lk { m_loop };
 
     return m_registry->getDevices();
 }
@@ -713,14 +712,14 @@ async::Notification PwAudioDriver::availableOutputDevicesChanged() const
         return async::Notification();
     }
 
-    PwLoopLock lk {m_loop};
+    PwLoopLock lk { m_loop };
 
     return m_registry->availableOutputDevicesChanged();
 }
 
 unsigned int PwAudioDriver::outputDeviceBufferSize() const
 {
-    PwLoopLock lk {m_loop};
+    PwLoopLock lk { m_loop };
 
     return m_stream ? m_stream->spec().samples : 0;
 }
@@ -771,7 +770,7 @@ PwAudioDriver::availableOutputDeviceBufferSizes() const
 
 unsigned int PwAudioDriver::outputDeviceSampleRate() const
 {
-    PwLoopLock lk {m_loop};
+    PwLoopLock lk { m_loop };
 
     return m_stream ? m_stream->spec().sampleRate : 0;
 }
@@ -818,7 +817,7 @@ PwAudioDriver::availableOutputDeviceSampleRates() const
 void PwAudioDriver::resume()
 {
     if (m_stream) {
-        PwLoopLock lk {m_loop};
+        PwLoopLock lk { m_loop };
         m_stream->resume();
     }
 }
@@ -826,7 +825,7 @@ void PwAudioDriver::resume()
 void PwAudioDriver::suspend()
 {
     if (m_stream) {
-        PwLoopLock lk {m_loop};
+        PwLoopLock lk { m_loop };
         m_stream->suspend();
     }
 }
