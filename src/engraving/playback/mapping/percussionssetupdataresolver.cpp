@@ -130,6 +130,7 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "bangzi", { SoundId::Bangzi, SoundCategory::Percussions } },
         { "janggu", { SoundId::Janggu, SoundCategory::Percussions } },
         { "buk", { SoundId::Buk, SoundCategory::Percussions } },
+        { "sogo", { SoundId::Sogo, SoundCategory::Percussions } },
         { "kkwaenggwari", { SoundId::Kkwaenggwari, SoundCategory::Percussions } },
         { "jing", { SoundId::Jing, SoundCategory::Percussions } },
         { "djembe", { SoundId::Djembe, SoundCategory::Percussions } },

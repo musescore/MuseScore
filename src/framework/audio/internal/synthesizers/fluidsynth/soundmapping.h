@@ -661,6 +661,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Shoko,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Janggu,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Buk,  {} }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Sogo,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Kkwaenggwari,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Jing,  {} }, { midi::Program(128, 0) } },
 

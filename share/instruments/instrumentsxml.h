@@ -3853,6 +3853,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese Tom-Toms", "chinese-tom-tom
 //: shortName for Chinese Tom-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Ch. Toms", "chinese-tom-toms shortName"),
 
+//: description for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small Korean drum held by an attached stick.", "sogo description"),
+//: trackName for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Sogo", "sogo trackName"),
+//: longName for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Sogo", "sogo longName"),
+//: shortName for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Sogo", "sogo shortName"),
+
 //: description for Bass Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bass drum.", "bass-drum description"),
 //: trackName for Bass Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
