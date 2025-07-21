@@ -33,6 +33,8 @@
 
 #include "io/file.h"
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -104,6 +106,17 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
     query.addParam("isRemapPercussion", Val(out.isRemapPercussion));
 
+#ifndef MUSE_MODULE_UI_SYNCINTERACTIVE_SUPPORTED
+    //! NOTE If there is no support for synchronous interactivity (web)
+    //! Then we will migrate without questions
+
+    out.appVersion = mu::engraving::Constants::MSC_VERSION;
+    out.isApplyMigration = true;
+    out.isAskAgain = false;
+    out.isApplyLeland = true;
+    out.isApplyEdwin = true;
+    out.isRemapPercussion = true;
+#else
     RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
@@ -116,6 +129,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
     out.isApplyEdwin = vals.value("isApplyEdwin").toBool();
     out.isRemapPercussion = vals.value("isRemapPercussion").toBool();
+#endif
 
     return true;
 }
