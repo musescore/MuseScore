@@ -8561,8 +8561,8 @@
             </Instrument>
             <Instrument id="miya-daiko">
                   <family>drums</family>
-                  <trackName>Miya Daiko</trackName>
-                  <longName>Miya Daiko</longName>
+                  <trackName>Miya-Daiko</trackName>
+                  <longName>Miya-Daiko</longName>
                   <shortName>M-Daiko</shortName>
                   <description>Robust, barrel shaped Japanese drum. Also known as nagadou, they are the most common taiko.</description>
                   <musicXMLid>drum.nagado-daiko</musicXMLid>
@@ -9966,7 +9966,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="76"> <!--High Woodblock-->
                         <head>normal</head>
-                        <line>1</line>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Bangzi</name>
                         <stem>1</stem>
