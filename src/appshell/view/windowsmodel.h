@@ -20,28 +20,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "framelesswindowcontroller.h"
+#pragma once
 
-using namespace mu::appshell;
+#include <QObject>
 
-void FramelessWindowController::init()
+class QWindow;
+
+namespace mu::appshell {
+class WindowsController;
+class WindowsModel : public QObject
 {
-}
+    Q_OBJECT
 
-QRect FramelessWindowController::windowTitleBarMoveArea() const
-{
-    return m_windowTitleBarMoveArea;
-}
+    Q_PROPERTY(
+        QRect mainWindowTitleBarMoveArea READ mainWindowTitleBarMoveArea WRITE setMainWindowTitleBarMoveArea NOTIFY mainWindowTitleBarMoveAreaChanged)
 
-void FramelessWindowController::setWindowTitleBarMoveArea(const QRect& area)
-{
-    m_windowTitleBarMoveArea = area;
-}
+public:
+    explicit WindowsModel(QObject* parent = nullptr);
+    ~WindowsModel();
 
-bool FramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result)
-{
-    Q_UNUSED(eventType)
-    Q_UNUSED(message)
-    Q_UNUSED(result)
-    return true;
+    Q_INVOKABLE void init();
+
+    QRect mainWindowTitleBarMoveArea() const;
+
+public slots:
+    void setMainWindowTitleBarMoveArea(const QRect& area);
+
+signals:
+    void mainWindowTitleBarMoveAreaChanged(QRect titleBarMoveArea);
+
+private:
+    WindowsController* m_controller = nullptr;
+};
 }

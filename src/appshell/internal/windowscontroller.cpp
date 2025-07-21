@@ -20,38 +20,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_FREMELESSWINDOWMODEL_H
-#define MU_APPSHELL_FREMELESSWINDOWMODEL_H
+#include "windowscontroller.h"
 
-#include <QObject>
+using namespace mu::appshell;
 
-class QWindow;
-
-namespace mu::appshell {
-class FramelessWindowController;
-class FramelessWindowModel : public QObject
+void WindowsController::init()
 {
-    Q_OBJECT
-
-    Q_PROPERTY(QRect titleBarMoveArea READ titleBarMoveArea WRITE setTitleBarMoveArea NOTIFY titleBarMoveAreaChanged)
-
-public:
-    explicit FramelessWindowModel(QObject* parent = nullptr);
-    ~FramelessWindowModel();
-
-    Q_INVOKABLE void init();
-
-    QRect titleBarMoveArea() const;
-
-public slots:
-    void setTitleBarMoveArea(const QRect& area);
-
-signals:
-    void titleBarMoveAreaChanged(QRect titleBarMoveArea);
-
-private:
-    FramelessWindowController* m_controller = nullptr;
-};
 }
 
-#endif // MU_APPSHELL_FREMELESSWINDOWMODEL_H
+QRect WindowsController::mainWindowTitleBarMoveArea() const
+{
+    return m_mainWindowTitleBarMoveArea;
+}
+
+void WindowsController::setMainWindowTitleBarMoveArea(const QRect& area)
+{
+    m_mainWindowTitleBarMoveArea = area;
+}
+
+bool WindowsController::nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result)
+{
+    Q_UNUSED(eventType)
+    Q_UNUSED(message)
+    Q_UNUSED(result)
+    return true;
+}

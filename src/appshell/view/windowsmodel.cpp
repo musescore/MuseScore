@@ -20,49 +20,49 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "framelesswindowmodel.h"
+#include "windowsmodel.h"
 
 #include <QWindow>
 
 #ifdef Q_OS_WIN
-#include "internal/platform/win/winframelesswindowcontroller.h"
+#include "internal/platform/win/winwindowscontroller.h"
 #else
-#include "internal/framelesswindowcontroller.h"
+#include "internal/windowscontroller.h"
 #endif
 
 using namespace mu::appshell;
 
-FramelessWindowModel::FramelessWindowModel(QObject* parent)
+WindowsModel::WindowsModel(QObject* parent)
     : QObject(parent)
 {
 #ifdef Q_OS_WIN
-    m_controller = new WinFramelessWindowController();
+    m_controller = new WinWindowsController();
 #else
-    m_controller = new FramelessWindowController();
+    m_controller = new WindowsController();
 #endif
 }
 
-FramelessWindowModel::~FramelessWindowModel()
+WindowsModel::~WindowsModel()
 {
     delete m_controller;
 }
 
-void FramelessWindowModel::init()
+void WindowsModel::init()
 {
     m_controller->init();
 }
 
-QRect FramelessWindowModel::titleBarMoveArea() const
+QRect WindowsModel::mainWindowTitleBarMoveArea() const
 {
-    return m_controller->windowTitleBarMoveArea();
+    return m_controller->mainWindowTitleBarMoveArea();
 }
 
-void FramelessWindowModel::setTitleBarMoveArea(const QRect& area)
+void WindowsModel::setMainWindowTitleBarMoveArea(const QRect& area)
 {
-    if (titleBarMoveArea() == area) {
+    if (mainWindowTitleBarMoveArea() == area) {
         return;
     }
 
-    m_controller->setWindowTitleBarMoveArea(area);
-    emit titleBarMoveAreaChanged(area);
+    m_controller->setMainWindowTitleBarMoveArea(area);
+    emit mainWindowTitleBarMoveAreaChanged(area);
 }

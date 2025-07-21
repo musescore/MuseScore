@@ -20,27 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_WINFRAMELESSWINDOWCONTROLLER_H
-#define MU_APPSHELL_WINFRAMELESSWINDOWCONTROLLER_H
+#pragma once
 
 #include <QObject>
 
-#include "internal/framelesswindowcontroller.h"
+#include "internal/windowscontroller.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/imainwindow.h"
 
-#include "windows.h"
+#include <windows.h>
+#include <minwindef.h>
 
 namespace mu::appshell {
-class WinFramelessWindowController : public QObject, public FramelessWindowController
+class WinWindowsController : public QObject, public WindowsController
 {
     INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(muse::ui::IMainWindow, mainWindow)
 
 public:
-    explicit WinFramelessWindowController();
+    explicit WinWindowsController();
 
     void init() override;
 
@@ -48,14 +48,14 @@ private:
     bool eventFilter(QObject* watched, QEvent* event) override;
     bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result) override;
 
-    bool removeWindowFrame(MSG* message, qintptr* result);
-    bool calculateWindowSize(MSG* msg, qintptr* result);
-    bool processMouseMove(MSG* message, qintptr* result) const;
+    bool removeWindowFrame(HWND hWnd, LPARAM lParam, qintptr* result);
+    bool calculateWindowSize(HWND hWnd, LPARAM lParam, qintptr* result);
+    bool processMouseMove(HWND hWnd, LPARAM lParam, qintptr* result) const;
 
-    bool processMouseRightClick(MSG* message) const;
+    bool processMouseRightClick(HWND hWnd, LPARAM lParam) const;
 
-    void updateContextMenuState(MSG* message) const;
-    bool showSystemMenuIfNeed(MSG* message) const;
+    void updateContextMenuState(HWND hWnd) const;
+    bool showSystemMenuIfNeed(HWND hWnd, LPARAM lParam) const;
 
     bool isWindowMaximized(HWND hWnd) const;
 
@@ -71,5 +71,3 @@ private:
     MONITORINFO m_monitorInfo;
 };
 }
-
-#endif // MU_APPSHELL_WINFRAMELESSWINDOWCONTROLLER_H
