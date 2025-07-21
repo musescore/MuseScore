@@ -34,6 +34,8 @@
 #include "translation.h"
 #include "log.h"
 
+#include <QGuiApplication>
+
 using namespace mu;
 using namespace muse;
 using namespace muse::io;

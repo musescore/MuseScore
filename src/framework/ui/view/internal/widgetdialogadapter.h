@@ -22,6 +22,8 @@
 #pragma once
 
 #include <QObject>
+#include <QDialog>
+#include <QWindow>
 
 namespace muse::ui {
 class WidgetDialogAdapter : public QObject
