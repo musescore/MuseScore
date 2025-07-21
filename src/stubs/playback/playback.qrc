@@ -5,5 +5,6 @@
         <file>qml/MuseScore/Playback/PlaybackLoadingInfo.qml</file>
         <file>qml/MuseScore/Playback/MixerPanel.qml</file>
         <file>qml/MuseScore/Playback/SoundFlagPopup.qml</file>
+        <file>qml/MuseScore/Playback/NotationRegionsBeingProcessedView.qml</file>
     </qresource>
 </RCC>
