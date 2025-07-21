@@ -21,6 +21,8 @@
  */
 #include "audiomodule.h"
 
+#include <QtEnvironmentVariables>
+
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
@@ -117,10 +119,12 @@ std::string AudioModule::moduleName() const
 std::shared_ptr<IAudioDriver> makeLinuxAudioDriver()
 {
 #if defined(Q_OS_LINUX) && defined(MUSE_PIPEWIRE_AUDIO_DRIVER)
-    auto driver = std::make_shared<PwAudioDriver>();
-    if (driver->connectedToPwServer()) {
-        LOGI() << "Using audio driver: Pipewire";
-        return driver;
+    if (!qEnvironmentVariableIsSet("MUSESCORE_FORCE_ALSA")) {
+        auto driver = std::make_shared<PwAudioDriver>();
+        if (driver->connectedToPwServer()) {
+            LOGI() << "Using audio driver: Pipewire";
+            return driver;
+        }
     }
 #endif // Q_OS_LINUX && MUSE_PIPEWIRE_AUDIO_DRIVER
     LOGI() << "Using audio driver: ALSA";
