@@ -305,7 +305,9 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
         const int utick = repeats.tick2utick(item->tick().ticks());
 
         if (m_useScoreDynamicsForOffstreamPlayback) {
-            dynamicLevel = ctx->appliableDynamicLevel(item->track(), utick);
+            if (!item->isNote() || toNote(item)->userVelocity() == 0) {
+                dynamicLevel = ctx->appliableDynamicLevel(item->track(), utick);
+            }
             dynamics[static_cast<muse::mpe::layer_idx_t>(item->track())][timestamp] = dynamicLevel;
         }
 
