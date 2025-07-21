@@ -34,6 +34,7 @@ function download_github_release()
   fi
 
   echo "try download: ${url}"
+  
   # use curl instead of wget which fails on armhf
   curl "${url}" -O -L -v
   chmod +x "${file}"
