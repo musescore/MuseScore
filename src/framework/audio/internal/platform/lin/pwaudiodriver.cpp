@@ -27,9 +27,10 @@
  *  - the registry, which is responsible to enumerate devices
  *  - the stream, which is responsible to fetch audio data and send it to the device
  *
- * There are also two additional threads created by this module:
- *  - "pw-driver-loop" thread, which manages the driver event loop (registry callbacks, state changes, etc)
- *  - "pw-data-loop" thread, created by pipewire internals, which deals with low-latency data flow (process function)
+ * An additional thread is created via the pw_thread_loop utility.
+ * Pipewire call all events/listeners of the registry and stream on this thread with the loop lock held.
+ * The main thread must also hold a lock on the loop when calling registry and stream functions
+ * in order to be race safe.
  */
 
 #include "pwaudiodriver.h"
@@ -72,7 +73,7 @@ static constexpr enum spa_log_level PW_LOG_LEVEL = SPA_LOG_LEVEL_TRACE;
 static constexpr enum spa_log_level PW_LOG_LEVEL = SPA_LOG_LEVEL_INFO;
 #endif
 
-static constexpr char PW_THREAD_NAME[] = "pw-driver-loop";
+static constexpr char PW_THREAD_NAME[] = "pw-loop";
 static constexpr char PW_DEFAULT_DEVICE[] = "default"; // symbolic name only, could be anything
 
 class PwLoopLock
@@ -106,7 +107,7 @@ namespace muse::audio {
 class PwRegistry
 {
 public:
-    PwRegistry(pw_thread_loop* loop, pw_core* core);
+    PwRegistry(pw_core* core);
     ~PwRegistry();
 
     PwRegistry() = delete;
@@ -135,13 +136,12 @@ private:
     static void c_roundtrip_done(void* data, uint32_t id, int seq);
     void roundtripDone(uint32_t id, int seq);
 
-    // methods starting with '_' must be called with mutex held
-    bool _initDone() const
+    bool initDone() const
     {
         return m_pending != 0 || m_roundtripped;
     }
 
-    void _devicesDirty();
+    void devicesDirty();
 
     struct SinkNode {
         uint32_t id;
@@ -158,7 +158,6 @@ private:
         std::string desc;
     };
 
-    pw_thread_loop* m_loop = nullptr;
     pw_core* m_core = nullptr;
     pw_registry* m_registry = nullptr;
 
@@ -181,10 +180,9 @@ private:
 };
 }
 
-// Called from main thread
-PwRegistry::PwRegistry(pw_thread_loop* loop, pw_core* core)
-    : m_loop{loop}, m_core{core}
-    , m_registry{pw_core_get_registry(core, PW_VERSION_REGISTRY, 0)}
+PwRegistry::PwRegistry(pw_core* core)
+    : m_core{core}
+    , m_registry{nullptr}
     , m_registryEvents{PW_VERSION_REGISTRY_EVENTS, c_register_global, c_unregister_global}
     , m_roundtripEvents{}
     , m_devicesDirty{true}
@@ -194,28 +192,23 @@ PwRegistry::PwRegistry(pw_thread_loop* loop, pw_core* core)
     m_roundtripEvents.version = PW_VERSION_CORE_EVENTS;
     m_roundtripEvents.done = c_roundtrip_done;
 
-    PwLoopLock lk { m_loop };
+    m_registry = pw_core_get_registry(m_core, PW_VERSION_REGISTRY, 0);
 
     pw_core_add_listener(core, &m_roundtripHook, &m_roundtripEvents, this);
     pw_registry_add_listener(m_registry, &m_registryHook, &m_registryEvents, this);
 }
 
-// Called from main thread
 PwRegistry::~PwRegistry()
 {
-    PwLoopLock lk { m_loop };
-
     pw_proxy_destroy(reinterpret_cast<pw_proxy*>(m_registry));
 }
 
-// Called from main thread
 void PwRegistry::init()
 {
     // core sync method triggers the "done" event after roundtrip
     m_pending = pw_core_sync(m_core, PW_ID_CORE, 0);
 }
 
-// Called from main thread
 AudioDeviceList PwRegistry::getDevices() const
 {
     std::unique_lock<std::mutex> lk(m_mutex);
@@ -230,7 +223,7 @@ AudioDeviceList PwRegistry::getDevices() const
     m_devices.clear();
     m_devices.push_back({ PW_DEFAULT_DEVICE, muse::trc("audio", "System default") });
 
-    if (!_initDone()) {
+    if (!initDone()) {
         // waiting for m_cond before init would deadlock !! (if not for timeout)
         // because this is the main thread, and the thread loop is not yet started
         return m_devices;
@@ -299,14 +292,12 @@ AudioDeviceList PwRegistry::getDevices() const
     return m_devices;
 }
 
-// Called from "pw-driver-loop" thread
 void PwRegistry::c_roundtrip_done(void* data, uint32_t id, int seq)
 {
     auto registry = static_cast<PwRegistry*>(data);
     registry->roundtripDone(id, seq);
 }
 
-// Called from "pw-driver-loop" thread
 void PwRegistry::roundtripDone(uint32_t id, int seq)
 {
     if (id == PW_ID_CORE && seq == m_pending) {
@@ -319,7 +310,6 @@ void PwRegistry::roundtripDone(uint32_t id, int seq)
     }
 }
 
-// Called from "pw-driver-loop" thread
 void PwRegistry::c_register_global(void* data, uint32_t id, uint32_t /* permissions*/, const char* type, uint32_t /*version*/,
                                    const struct spa_dict* props)
 {
@@ -327,7 +317,6 @@ void PwRegistry::c_register_global(void* data, uint32_t id, uint32_t /* permissi
     registry->registerGlobal(id, type, props);
 }
 
-// Called from "pw-driver-loop" thread
 void PwRegistry::registerGlobal(uint32_t id, const char* type, const struct spa_dict* props)
 {
     // For playback, we are interested in Audio/Sink only.
@@ -370,19 +359,17 @@ void PwRegistry::registerGlobal(uint32_t id, const char* type, const struct spa_
                 desc ? desc : "",
                 deviceId
             });
-            _devicesDirty();
+            devicesDirty();
         }
     }
 }
 
-// Called from "pw-driver-loop" thread
 void PwRegistry::c_unregister_global(void* data, uint32_t id)
 {
     auto registry = static_cast<PwRegistry*>(data);
     registry->unregisterGlobal(id);
 }
 
-// Called from "pw-driver-loop" thread
 void PwRegistry::unregisterGlobal(uint32_t id)
 {
     std::scoped_lock<std::mutex> lock(m_mutex);
@@ -397,13 +384,13 @@ void PwRegistry::unregisterGlobal(uint32_t id)
     });
 
     if (numN != m_pwNodes.size()) {
-        _devicesDirty();
+        devicesDirty();
     }
 }
 
-// Called from "pw-driver-loop" thread
+// Called from "pw-loop" thread
 // Must be called with mutex locked
-void PwRegistry::_devicesDirty()
+void PwRegistry::devicesDirty()
 {
     m_devicesDirty = true;
     if (m_roundtripped) {
@@ -416,7 +403,7 @@ namespace muse::audio {
 class PwStream
 {
 public:
-    PwStream(pw_thread_loop* loop, pw_core* core, const IAudioDriver::Spec& spec, const std::string& deviceId);
+    PwStream(pw_core* core, const IAudioDriver::Spec& spec, const std::string& deviceId);
     ~PwStream();
 
     IAudioDriver::Spec spec() const
@@ -433,7 +420,6 @@ private:
     static void c_process(void* userdata);
     void process();
 
-    pw_thread_loop* m_loop = nullptr;
     pw_core* m_core = nullptr;
 
     spa_hook m_hook;  // binds m_events with this
@@ -446,8 +432,8 @@ private:
 }
 
 // Called from main thread
-PwStream::PwStream(pw_thread_loop* loop, pw_core* core, const IAudioDriver::Spec& spec, const std::string& deviceId)
-    : m_loop{loop}, m_core{core}
+PwStream::PwStream(pw_core* core, const IAudioDriver::Spec& spec, const std::string& deviceId)
+    : m_core{core}
     , m_events{}
     , m_spec{spec}
 {
@@ -506,8 +492,6 @@ PwStream::PwStream(pw_thread_loop* loop, pw_core* core, const IAudioDriver::Spec
     auto builder = SPA_POD_BUILDER_INIT(buf, sizeof(buf));
     const spa_pod* param = spa_format_audio_raw_build(&builder, SPA_PARAM_EnumFormat, &formatInfo);
 
-    PwLoopLock lk { m_loop };
-
     pw_log_debug("pw_stream_new with props and params");
     spa_debug_dict(1, &props->dict);
     spa_debug_pod(1, NULL, param);
@@ -526,8 +510,6 @@ PwStream::PwStream(pw_thread_loop* loop, pw_core* core, const IAudioDriver::Spec
 PwStream::~PwStream()
 {
     pw_stream_flush(m_stream, false);
-
-    PwLoopLock lk { m_loop };
     pw_stream_disconnect(m_stream);
     pw_stream_destroy(m_stream);
 }
@@ -544,16 +526,12 @@ void PwStream::resume()
     pw_stream_set_active(m_stream, true);
 }
 
-// If PW_STREAM_FLAG_RT_PROCESS is set, this is called from "pw-data-loop" thread,
-// otherwise it is called from "pw-driver-loop" thread
 void PwStream::c_process(void* userdata)
 {
     PwStream* stream = static_cast<PwStream*>(userdata);
     stream->process();
 }
 
-// If PW_STREAM_FLAG_RT_PROCESS is set, this is called from "pw-data-loop" thread,
-// otherwise it is called from "pw-driver-loop" thread
 void PwStream::process()
 {
     auto b = pw_stream_dequeue_buffer(m_stream);
@@ -609,7 +587,7 @@ PwAudioDriver::PwAudioDriver()
 
     // m_core is valid if we are connected to PipeWire
     if (m_core) {
-        m_registry = std::make_unique<PwRegistry>(m_loop, m_core);
+        m_registry = std::make_unique<PwRegistry>(m_core);
 
         // Actually kick-in the device discovery
         // we do it here rather than in init() in order to have
@@ -628,10 +606,14 @@ PwAudioDriver::PwAudioDriver()
 PwAudioDriver::~PwAudioDriver()
 {
     if (m_core) {
+        {
+            PwLoopLock lk { m_loop };
         m_registry.reset();
+            m_stream.reset();
+            pw_core_disconnect(m_core);
+        }
 
         pw_thread_loop_stop(m_loop);
-        pw_core_disconnect(m_core);
     }
     if (m_context) {
         pw_context_destroy(m_context);
@@ -662,9 +644,11 @@ bool PwAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
+    PwLoopLock lk { m_loop };
+
     LOGD() << "Connecting to " << m_deviceId << " / " << spec.sampleRate << "Hz / " << spec.samples << " samples";
 
-    m_stream = std::make_unique<PwStream>(m_loop, m_core, spec, m_deviceId);
+    m_stream = std::make_unique<PwStream>(m_core, spec, m_deviceId);
 
     m_formatSpec = m_stream->spec();
     if (activeSpec) {
@@ -677,6 +661,8 @@ bool PwAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
 void PwAudioDriver::close()
 {
+    PwLoopLock lk { m_loop };
+
     m_stream.reset();
 }
 
@@ -739,6 +725,8 @@ AudioDeviceList PwAudioDriver::availableOutputDevices() const
         return AudioDeviceList{};
     }
 
+    PwLoopLock lk {m_loop};
+
     return m_registry->getDevices();
 }
 
@@ -748,11 +736,15 @@ async::Notification PwAudioDriver::availableOutputDevicesChanged() const
         return async::Notification();
     }
 
+    PwLoopLock lk {m_loop};
+
     return m_registry->availableOutputDevicesChanged();
 }
 
 unsigned int PwAudioDriver::outputDeviceBufferSize() const
 {
+    PwLoopLock lk {m_loop};
+
     return m_stream ? m_stream->spec().samples : 0;
 }
 
@@ -802,6 +794,8 @@ PwAudioDriver::availableOutputDeviceBufferSizes() const
 
 unsigned int PwAudioDriver::outputDeviceSampleRate() const
 {
+    PwLoopLock lk {m_loop};
+
     return m_stream ? m_stream->spec().sampleRate : 0;
 }
 
@@ -847,6 +841,7 @@ PwAudioDriver::availableOutputDeviceSampleRates() const
 void PwAudioDriver::resume()
 {
     if (m_stream) {
+        PwLoopLock lk {m_loop};
         m_stream->resume();
     }
 }
@@ -854,6 +849,7 @@ void PwAudioDriver::resume()
 void PwAudioDriver::suspend()
 {
     if (m_stream) {
+        PwLoopLock lk {m_loop};
         m_stream->suspend();
     }
 }
