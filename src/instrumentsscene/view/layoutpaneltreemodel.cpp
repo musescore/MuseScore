@@ -495,6 +495,7 @@ void LayoutPanelTreeModel::addSystemMarkings()
     if (const Staff* staff = resolveNewSystemObjectStaff()) {
         m_systemStaffToSelect = staff->id();
         m_masterNotation->parts()->addSystemObjects({ staff->id() });
+        load(); // HACK
     }
 }
 
