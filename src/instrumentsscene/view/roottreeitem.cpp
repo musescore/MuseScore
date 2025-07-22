@@ -160,7 +160,7 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
     const Staff* srcStaff = nullptr;
     const Staff* dstStaff = nullptr;
 
-    if (srcItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER && destinationRow >= children().size()) {
+    if (srcItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER && destinationRow >= childCount()) {
         srcStaff = static_cast<const SystemObjectsLayerTreeItem*>(srcItem)->staff();
         dstStaff = srcStaff->score()->staves().back();
         MoveParams moveParams;
