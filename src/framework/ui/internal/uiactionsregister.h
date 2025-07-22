@@ -77,6 +77,7 @@ private:
 
     void updateEnabled(const actions::ActionCodeList& codes);
     void updateEnabledAll();
+    void requestUpdateEnabledAll();
     void doUpdateEnabled(Info& inf, const IUiContextResolverPtr& ctxResolver, const UiContext& currentCtx,
                          actions::ActionCodeList& changedList);
 
@@ -86,6 +87,8 @@ private:
     std::unordered_map<actions::ActionCode, Info> m_actions;
     async::Channel<UiActionList> m_actionsChanged;
     async::Channel<actions::ActionCodeList> m_actionStateChanged;
+
+    bool m_isUpdateEnabledAllRequested = false;
 };
 }
 
