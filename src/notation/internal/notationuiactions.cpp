@@ -1259,8 +1259,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("add-hairpin-reverse",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "&Decrescendo"),
-             TranslatableString("action", "Add hairpin: decrescendo")
+             TranslatableString("action", "&Diminuendo"),
+             TranslatableString("action", "Add hairpin: diminuendo")
              ),
     UiAction("add-noteline",
              mu::context::UiCtxProjectOpened,

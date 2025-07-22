@@ -2600,7 +2600,7 @@ double Note::playingTuning() const
 //---------------------------------------------------------
 //   customizeVelocity
 //    Input is the global velocity determined by dynamic
-//    signs and crescendo/decrescendo etc.
+//    signs and crescendo/diminuendo etc.
 //    Returns the actual play velocity for this note
 //    modified by veloOffset
 //---------------------------------------------------------

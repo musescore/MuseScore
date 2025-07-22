@@ -2726,8 +2726,8 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                 h->setHairpinType(HairpinType::CRESC_LINE);
-            } else if (h->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
-                h->setHairpinType(HairpinType::DECRESC_LINE);
+            } else if (h->hairpinType() == HairpinType::DIM_HAIRPIN) {
+                h->setHairpinType(HairpinType::DIM_LINE);
             }
         } else if (tag == "singleNoteDynamics") {
             h->setSingleNoteDynamics(e.readBool());

@@ -332,7 +332,7 @@ TEST_F(MPE_MultiNoteArticulationsTest, IsMultiNoteArticulation)
     const ArticulationTypeSet MULTI_TYPES = {
         ArticulationType::Trill,
         ArticulationType::Crescendo,
-        ArticulationType::Decrescendo,
+        ArticulationType::Diminuendo,
         ArticulationType::DiscreteGlissando,
         ArticulationType::Legato,
         ArticulationType::Pedal,

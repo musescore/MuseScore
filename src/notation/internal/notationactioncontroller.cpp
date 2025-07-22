@@ -335,7 +335,7 @@ void NotationActionController::init()
     registerAction("add-8vb", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VB);
     registerAction("add-dynamic", &Interaction::toggleDynamicPopup, &Controller::noteOrRestSelected);
     registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN, &Controller::noteOrRestSelected);
-    registerAction("add-hairpin-reverse", &Interaction::addHairpinsToSelection, HairpinType::DECRESC_HAIRPIN,
+    registerAction("add-hairpin-reverse", &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN,
                    &Controller::noteOrRestSelected);
     registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
 

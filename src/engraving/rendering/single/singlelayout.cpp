@@ -1119,7 +1119,7 @@ void SingleLayout::layout(HairpinSegment* item, const Context& ctx)
             }
         }
         break;
-        case HairpinType::DECRESC_HAIRPIN: {
+        case HairpinType::DIM_HAIRPIN: {
             switch (item->spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
             case SpannerSegmentType::END: {
