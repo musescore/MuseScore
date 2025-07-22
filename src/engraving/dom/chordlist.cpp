@@ -923,7 +923,8 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             addPending = true;
             continue;
         }
-        if (tok1L == "sus") {
+        // When there are no numbers after, default to sus4 further down
+        if (tok1L == "sus" && i != len) {
             addToken(tok1, ChordTokenClass::MODIFIER);
             susPending = true;
             continue;

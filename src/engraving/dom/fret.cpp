@@ -106,18 +106,34 @@ static const String blankPattern(int strings)
     return pattern;
 }
 
-static HarmonyMapKey createHarmonyMapKey(const String& harmony, const ParsedChord& chord, const NoteSpellingType& spellingType)
+static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType, const ChordList* cl)
 {
+    String s = harmony;
     NoteCaseType noteCase;
     size_t idx;
-    int rootTpc = convertNote(harmony, spellingType, noteCase, idx);
+    int rootTpc = convertNote(s, spellingType, noteCase, idx);
 
-    size_t slash = harmony.lastIndexOf(u'/');
     int bassTpc = Tpc::TPC_INVALID;
+    size_t slash = s.lastIndexOf(u'/');
     if (slash != muse::nidx) {
-        String bs = harmony.mid(slash + 1).simplified();
+        String bs = s.mid(slash + 1).simplified();
+        s = s.mid(idx, slash - idx).simplified();
         size_t idx2 = 0;
-        convertNote(bs, spellingType, noteCase, idx2);
+        bassTpc = convertNote(bs, spellingType, noteCase, idx2);
+
+        if (!tpcIsValid(bassTpc)) {
+            // if what follows after slash is not (just) a TPC
+            // then reassemble chord and try to parse with the slash
+            s = s + u"/" + bs;
+        }
+    } else {
+        s = s.mid(idx);
+    }
+
+    ParsedChord chord;
+    HarmonyMapKey mapKey;
+    if (!chord.parse(s, cl)) {
+        LOGE() << "Error parse " << harmony;
     }
 
     int keys = chord.keys();
@@ -214,12 +230,7 @@ void FretDiagram::updateDiagram(const String& harmonyName)
     NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
 
     ParsedChord chord;
-    HarmonyMapKey key;
-    if (chord.parse(_harmonyName, score()->chordList())) {
-        key = createHarmonyMapKey(_harmonyName, chord, spellingType);
-    } else {
-        LOGE() << "Error parse " << _harmonyName;
-    }
+    HarmonyMapKey key = createHarmonyMapKey(_harmonyName, spellingType, score()->chordList());
 
     String diagramXml = muse::value(s_harmonyToDiagramMap, key);
 
@@ -1390,12 +1401,7 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) con
 
     for (auto& [key, value] : harmonyToDiagramMap) {
         ParsedChord chord;
-        HarmonyMapKey mapKey;
-        if (chord.parse(key, chordList)) {
-            mapKey = createHarmonyMapKey(key, chord, spellingType);
-        } else {
-            LOGE() << "Error parse " << key;
-        }
+        HarmonyMapKey mapKey = createHarmonyMapKey(key, spellingType, chordList);
 
         s_harmonyToDiagramMap.insert({ mapKey, value.xml });
         s_diagramPatternToHarmoniesMap[value.pattern].push_back(key);
