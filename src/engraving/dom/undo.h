@@ -1009,6 +1009,8 @@ class ChangeStyle : public UndoCommand
 public:
     ChangeStyle(Score*, const MStyle&, const bool overlapOnly = false);
 
+    StyleIdSet changedIds() const;
+
     UNDO_TYPE(CommandType::ChangeStyle)
     UNDO_NAME("ChangeStyle")
     UNDO_CHANGED_OBJECTS({ score })

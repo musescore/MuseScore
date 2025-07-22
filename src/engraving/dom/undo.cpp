@@ -683,6 +683,10 @@ UndoMacro::ChangesInfo UndoMacro::changesInfo(bool undo) const
             for (const auto& pair : changeStyle->values()) {
                 result.changedStyleIdSet.insert(pair.first);
             }
+        } else if (type == CommandType::ChangeStyle) {
+            auto changeStyle = static_cast<const ChangeStyle*>(command);
+            const StyleIdSet styleIds = changeStyle->changedIds();
+            result.changedStyleIdSet.insert(styleIds.cbegin(), styleIds.cend());
         } else if (type == CommandType::TextEdit) {
             result.isTextEditing |= static_cast<const TextEditUndoCommand*>(command)->cursor().editing();
         }
@@ -2094,6 +2098,18 @@ static void changeChordStyle(Score* score)
 ChangeStyle::ChangeStyle(Score* s, const MStyle& st, const bool overlapOnly)
     : score(s), style(st), overlap(overlapOnly)
 {
+}
+
+StyleIdSet ChangeStyle::changedIds() const
+{
+    StyleIdSet result;
+    for (int _sid = 0; _sid < static_cast<int>(Sid::STYLES); ++_sid) {
+        Sid sid = static_cast<Sid>(_sid);
+        if (score->style().styleV(sid) != style.value(sid)) {
+            result.insert(sid);
+        }
+    }
+    return result;
 }
 
 //---------------------------------------------------------
