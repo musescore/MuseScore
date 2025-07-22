@@ -77,6 +77,7 @@ set(MODULE_SRC
 # --- Crashpad ---
 # Not building with MinGW, so turned off for MinGW
 include(GetCompilerInfo)
+include(GetPaths)
 if (CC_IS_MINGW)
     set(BUILD_CRASHPAD_CLIENT OFF)
 endif(CC_IS_MINGW)
@@ -130,7 +131,7 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
             set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/macos/crashpad_handler)
         endif()
 
-        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION ${INSTALL_SUBDIR})
+        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION ${INSTALL_BIN_DIR})
     endif()
 endif() # MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 # ----------------
