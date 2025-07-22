@@ -97,6 +97,7 @@ Instrument::Instrument(const Instrument& i)
     }
     m_clefType     = i.m_clefType;
     m_trait = i.m_trait;
+    m_glissandoStyle = i.m_glissandoStyle;
 }
 
 void Instrument::operator=(const Instrument& i)
@@ -129,6 +130,7 @@ void Instrument::operator=(const Instrument& i)
     }
     m_clefType     = i.m_clefType;
     m_trait = i.m_trait;
+    m_glissandoStyle = i.m_glissandoStyle;
 }
 
 //---------------------------------------------------------
@@ -799,6 +801,16 @@ bool Instrument::isNormallyMultiStaveInstrument() const
            || instrumentFamily == u"accordions";
 }
 
+GlissandoStyle Instrument::glissandoStyle() const
+{
+    return m_glissandoStyle;
+}
+
+void Instrument::setGlissandoStyle(GlissandoStyle style)
+{
+    m_glissandoStyle = style;
+}
+
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
@@ -1194,6 +1206,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
     instrument.setStringData(templ->stringData);
     instrument.setSingleNoteDynamics(templ->singleNoteDynamics);
     instrument.setTrait(templ->trait);
+    instrument.m_glissandoStyle = templ->glissandoStyle;
 
     return instrument;
 }

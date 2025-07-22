@@ -411,6 +411,9 @@ public:
     bool isVocalInstrument() const;
     bool isNormallyMultiStaveInstrument() const;
 
+    GlissandoStyle glissandoStyle() const;
+    void setGlissandoStyle(GlissandoStyle style);
+
 private:
 
     StaffNameList m_longNames;
@@ -439,6 +442,8 @@ private:
 
     Trait m_trait;
     bool m_isPrimary = false;
+
+    GlissandoStyle m_glissandoStyle = GlissandoStyle::CHROMATIC;
 };
 
 //---------------------------------------------------------

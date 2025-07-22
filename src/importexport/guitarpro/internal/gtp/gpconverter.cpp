@@ -1344,6 +1344,7 @@ void GPConverter::addContinuousSlideHammerOn()
             gl->setText(u"");
             gl->setGlissandoType(GlissandoType::STRAIGHT);
             gl->setGlissandoShift(slide.second == SlideHammerOn::Slide);
+            gl->setGlissandoStyle(startNote->part()->instrument(startTick)->glissandoStyle());
             _score->addElement(gl);
         }
 

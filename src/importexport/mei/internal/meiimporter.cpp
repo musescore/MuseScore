@@ -2638,6 +2638,7 @@ bool MeiImporter::readGliss(pugi::xml_node glissNode, Measure* measure)
     gliss->setStartElement(startNote);
     gliss->setTrack(startNote->track());
     gliss->setParent(startNote);
+    gliss->setGlissandoStyle(startNote->part()->instrument(startNote->tick())->glissandoStyle());
 
     const String glissText = String(glissNode.text().as_string());
     gliss->setText(glissText);

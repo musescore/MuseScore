@@ -1097,6 +1097,7 @@ bool GuitarPro4::read(IODevice* io)
                                             s->setEndElement(last);
                                             s->setTick2(chord->segment()->tick());
                                             s->setTrack2(chord->track());
+                                            s->setGlissandoStyle(n->part()->instrument(n->tick())->glissandoStyle());
                                             score->addElement(s);
                                             if (slide == 2 || effect == SLIDE_OUT_UP) {
                                                 if (!lastSlurAdd) {

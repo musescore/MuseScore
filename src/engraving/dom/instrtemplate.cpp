@@ -254,6 +254,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     sequenceOrder = t.sequenceOrder;
     trait = t.trait;
     groupId = t.groupId;
+    glissandoStyle = t.glissandoStyle;
 
     for (int i = 0; i < MAX_STAVES; ++i) {
         clefTypes[i]   = t.clefTypes[i];
@@ -385,6 +386,8 @@ void InstrumentTemplate::write(XmlWriter& xml) const
         xml.tag("singleNoteDynamics", singleNoteDynamics);
     }
 
+    xml.tag("glissandoStyle", TConv::toXml(glissandoStyle));
+
     for (const NamedEventList& a : midiActions) {
         write::TWrite::write(&a, xml, "MidiAction");
     }
@@ -406,6 +409,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     if (family) {
         xml.tag("family", family->id);
     }
+
     xml.endElement();
 }
 
@@ -586,6 +590,8 @@ void InstrumentTemplate::read(XmlReader& e)
             linkGenre(val);
         } else if (tag == "singleNoteDynamics") {
             singleNoteDynamics = e.readBool();
+        } else if (tag == "glissandoStyle") {
+            glissandoStyle = TConv::fromXml(e.readAsciiText(), GlissandoStyle::CHROMATIC);
         } else {
             e.unknown();
         }
