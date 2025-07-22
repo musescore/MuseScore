@@ -699,7 +699,11 @@ double TupletLayout::computeRhythmicCenter(Tuplet* item, const ChordRest* endCho
             const Chord* chord = toChord(refCR);
             bool chordUp = chord->up();
             bool tupletPlaceAbove = item->isUp();
-            xRef = (chord->stem() && chordUp == tupletPlaceAbove ? 0.75 : 0.5) * chord->upNote()->headWidth();
+            xRef = 0.5 * chord->upNote()->headWidth();
+            if (chordUp == tupletPlaceAbove) {
+                // Stem-side correction
+                xRef += (chordUp ? 0.25 : -0.25) * chord->upNote()->headWidth();
+            }
         } else {
             xRef = 0.5 * refCR->width();
         }
