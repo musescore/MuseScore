@@ -759,11 +759,25 @@ void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
 
     double xResult = refSegment->pagePos().x() + refSegment->width() * tickRatio.toDouble() + item->score()->noteHeadWidth();
 
-    Segment* nextSeg = refSegment->next1WithElemsOnStaff(endCR->vStaffIdx(), ~SegmentType::TimeTick);
-    double leftEdgeOfNextSeg = -nextSeg->staffShape(endCR->vStaffIdx()).left() + nextSeg->pagePos().x();
+    const double padding = 0.6 * item->spatium();
 
-    const double padding = 1.0 * item->spatium();
-    xResult = std::min(xResult, leftEdgeOfNextSeg - padding);
+    Segment* nextSeg = refSegment->next1WithElemsOnStaff(endCR->vStaffIdx(), ~SegmentType::TimeTick);
+    xResult = std::min(xResult, nextSeg->pagePos().x() - padding);
+
+    track_idx_t startTrack = staff2track(endCR->vStaffIdx());
+    track_idx_t endTrack = startTrack + VOICES;
+    if (nextSeg->isChordRestType()) {
+        for (track_idx_t track = startTrack; track < endTrack; ++track) {
+            if (ChordRest* chordRest = toChordRest(nextSeg->element(track))) {
+                if (Tuplet* nextTuplet = chordRest->tuplet()) {
+                    if (nextTuplet->elements().front() == chordRest && nextTuplet->isUp() == item->isUp()) {
+                        double xStartOfNextTuplet = nextTuplet->pagePos().x() + nextTuplet->p1().x();
+                        xResult = std::min(xResult, xStartOfNextTuplet - padding);
+                    }
+                }
+            }
+        }
+    }
 
     double curPos = item->p2().x();
     item->p2().rx() = std::max(curPos, xResult);
