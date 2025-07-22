@@ -607,7 +607,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Carillon,  { mpe::SoundSubCategory::Metal } }, { midi::Program(0, 14) } },
         { { mpe::SoundId::Gong,  { mpe::SoundSubCategory::Metal } }, { midi::Program(0, 14) } },
         { { mpe::SoundId::Gong,  { mpe::SoundSubCategory::Metal,
-                                   mpe::SoundSubCategory::Wind } }, { midi::Program(0, 14) } },
+                                   mpe::SoundSubCategory::Wind } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Gong,  { mpe::SoundSubCategory::Metal,
                                    mpe::SoundSubCategory::Opera } }, { midi::Program(0, 14) } },
 
@@ -662,7 +662,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Janggu,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Buk,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Sogo,  {} }, { midi::Program(128, 48) } },
-        { { mpe::SoundId::Kkwaenggwari,  {} }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Kkwaenggwari,  {} }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Jing,  {} }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Conga,  {} }, { midi::Program(128, 48) } },
