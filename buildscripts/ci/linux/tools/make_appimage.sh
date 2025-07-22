@@ -41,31 +41,12 @@ function download_github_release()
   echo "downloaded: ${file}"
 }
 
-function extract_appimage()
-{
-  # Extract AppImage so we can run it without having to install FUSE
-  local -r appimage="$1" binary_name="$2"
-  local -r appdir="${appimage%.AppImage}.AppDir"
-  # run appimage in docker container with QEMU emulation directly since binfmt fails
-  if [[ "$PACKARCH" == armhf ]]; then
-    /usr/bin/qemu-arm-static "./${appimage}" --appimage-extract >/dev/null # dest folder "squashfs-root"
-  else
-    "./${appimage}" --appimage-extract >/dev/null # dest folder "squashfs-root"
-  fi
-  mv squashfs-root "${appdir}" # rename folder to avoid collisions
-  # wrapper script for convenience
-  printf '#!/bin/sh\nexec "%s/AppRun" "$@"\n' "$(readlink -f "${appdir}")" > "${binary_name}"
-  chmod +x "${binary_name}"
-  rm -f "${appimage}"
-}
-
 function download_appimage_release()
 {
   local -r github_repo_slug="$1" binary_name="$2" tag="$3"
   local -r appimage="${binary_name}-${PACKARCH}.AppImage"
   download_github_release "${github_repo_slug}" "${tag}" "${appimage}"
-  extract_appimage "${appimage}" "${binary_name}"
-  # mv "${appimage}" "${binary_name}" # use this instead of the previous line for the static runtime AppImage
+  mv "${appimage}" "${binary_name}"
 }
 
 if [[ ! -d $BUILD_TOOLS/appimagetool ]]; then
