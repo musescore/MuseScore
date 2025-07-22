@@ -21,11 +21,15 @@
  */
 #include "uiactionsregister.h"
 
+#include <QTimer>
+
 #include "log.h"
 
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
+
+constexpr int REQUEST_UPDATE_TIMEOUT = 500; // msec
 
 void UiActionsRegister::init()
 {
@@ -38,7 +42,7 @@ void UiActionsRegister::init()
     // listen
     if (uicontextResolver()) {
         uicontextResolver()->currentUiContextChanged().onNotify(this, [this]() {
-            updateEnabledAll();
+            requestUpdateEnabledAll();
         });
     }
 
@@ -236,6 +240,19 @@ void UiActionsRegister::updateEnabled(const ActionCodeList& codes)
     if (!changedList.empty()) {
         m_actionStateChanged.send(changedList);
     }
+}
+
+void UiActionsRegister::requestUpdateEnabledAll()
+{
+    if (m_isUpdateEnabledAllRequested) {
+        return;
+    }
+
+    m_isUpdateEnabledAllRequested = true;
+    QTimer::singleShot(REQUEST_UPDATE_TIMEOUT, [this]() {
+        updateEnabledAll();
+        m_isUpdateEnabledAllRequested = false;
+    });
 }
 
 void UiActionsRegister::updateEnabledAll()
