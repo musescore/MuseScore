@@ -93,7 +93,9 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
 void TupletLayout::layoutTupletAndNestedTuplets(Tuplet* t, LayoutContext& ctx)
 {
-    for (DurationElement* d : t->elements()) {
+    const std::vector<DurationElement*> elements = t->elements();
+    for (auto revIter = elements.rbegin(); revIter != elements.rend(); ++revIter) {
+        DurationElement* d = *revIter;
         if (d == t) {
             continue;
         }
