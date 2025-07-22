@@ -1,3 +1,4 @@
+#pragma clang optimize off
 /*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-Studio-CLA-applies
@@ -94,25 +95,14 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
         return nullptr;
     }
 
+    // replaceTextMacros/formatForMacro should handle proper styling of special text
+    // so we can go for the default styling here ...
     bool isHeader = area < MAX_HEADERS;
-
-    //! NOTE: Keep in sync with replaceTextMacros
-    std::wregex copyrightSearch(LR"(\$[cC])");
-    std::wregex pageNumberSearch(LR"(\$[pPnN])");
-    bool containsCopyright = s.contains(copyrightSearch);
-    bool containsPageNumber = s.contains(pageNumberSearch);
-
-    // Slight hack - we'll use copyright/page number styling if the string contains copyright or page number
-    // macros (hack because any non-copyright text in the same block will also adopt these style values)
-    TextStyleType style = containsCopyright ? TextStyleType::COPYRIGHT
-                          : (containsPageNumber ? TextStyleType::PAGE_NUMBER
-                             : (isHeader ? TextStyleType::HEADER : TextStyleType::FOOTER));
-
     Text* text;
     if (isHeader) {
         text = score()->headerText(area);
         if (!text) {
-            text = Factory::createText((Page*)this, style);
+            text = Factory::createText((Page*)this, TextStyleType::HEADER);
             text->setFlag(ElementFlag::MOVABLE, false);
             text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
             text->setLayoutToParentWidth(true);
@@ -121,7 +111,7 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
     } else {
         text = score()->footerText(area - MAX_HEADERS);     // because they are 3 4 5
         if (!text) {
-            text = Factory::createText((Page*)this, style);
+            text = Factory::createText((Page*)this, TextStyleType::FOOTER);
             text->setFlag(ElementFlag::MOVABLE, false);
             text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
             text->setLayoutToParentWidth(true);
@@ -156,6 +146,12 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
             escaped += u"&amp;";
             continue;
         }
+        // opening less-than characters are escaped if they are followed by a space or a digit,
+        // to avoid confusion with XML tags, but not if they are followed by a letter
+        if (c == '<' && (i + 1 < n) && (s.at(i + 1).isSpace() || s.at(i + 1).isDigit())) {
+            escaped += u"&lt;";
+            continue;
+        }
         escaped += c;
     }
 
@@ -164,6 +160,7 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
     text->createBlocks();
 
     // second formatting pass - replace macros and apply their unique formatting (if any)
+    TextStyleType style = (isHeader ? TextStyleType::HEADER : TextStyleType::FOOTER);
     std::vector<TextBlock> newBlocks;
     for (const TextBlock& oldBlock : text->ldata()->blocks) {
         Text* dummyText = Factory::createText(score()->dummy(), style);
@@ -377,10 +374,15 @@ void Page::doRebuildBspTree()
 
 TextBlock Page::replaceTextMacros(const TextBlock& tb) const
 {
-    std::list<TextFragment> newFragments(1);
+    std::list<TextFragment> newFragments(0);
     for (const TextFragment& tf: tb.fragments()) {
         const CharFormat defaultFormat = tf.format;
         const String& s = tf.text;
+
+        // if this is the first fragment, or the current fragment has a different format, we need to start a new fragment
+        if (newFragments.size()==0 || !(newFragments.back().format == defaultFormat) ){
+            newFragments.emplace_back(TextFragment());
+        }
 
         for (size_t i = 0, n = s.size(); i < n; ++i) {
             newFragments.back().format = defaultFormat;
@@ -413,6 +415,7 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                         pageNumberFragment.format = pageNumberFormat;
                         newFragments.emplace_back(pageNumberFragment);
                         newFragments.emplace_back(TextFragment());    // Start next fragment
+                        newFragments.back().format = defaultFormat;   // reset to default for next fragment
                     }
                 }
                 break;
@@ -482,6 +485,7 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                     copyrightFragment.format = copyrightFormat;
                     newFragments.emplace_back(copyrightFragment);
                     newFragments.emplace_back(TextFragment());    // Start next fragment
+                    newFragments.back().format = defaultFormat;   // reset to default for next fragment
                 }
                 break;
                 case 'v':

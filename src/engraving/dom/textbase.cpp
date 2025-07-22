@@ -1,3 +1,4 @@
+#pragma clang optimize off
 /*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-Studio-CLA-applies
@@ -1862,7 +1863,7 @@ void TextBase::createBlocks(LayoutData* ldata) const
             } else if (c == '&') {
                 state = 2;
                 token.clear();
-            } else if (c == '\n') {
+            } else if (c == '\n') { 
                 if (ldata->rows() <= cursor.row()) {
                     ldata->blocks.push_back(TextBlock());
                 }
@@ -2180,6 +2181,8 @@ String TextBase::genText(const LayoutData* ldata) const
     }
 
     String text;
+    XmlNesting xmlNesting(&text);
+
     bool bold_      = false;
     bool italic_    = false;
     bool underline_ = false;
@@ -2204,25 +2207,24 @@ String TextBase::genText(const LayoutData* ldata) const
             if (!f.format.strike() && fmt.strike()) {
                 strike_ = true;
             }
-        }
-    }
+//        }
+//    }
 
-    XmlNesting xmlNesting(&text);
-    if (bold_) {
-        xmlNesting.pushB();
-    }
-    if (italic_) {
-        xmlNesting.pushI();
-    }
-    if (underline_) {
-        xmlNesting.pushU();
-    }
-    if (strike_) {
-        xmlNesting.pushS();
-    }
+            if (bold_) {
+                xmlNesting.pushB();
+            }
+            if (italic_) {
+                xmlNesting.pushI();
+            }
+            if (underline_) {
+                xmlNesting.pushU();
+            }
+            if (strike_) {
+                xmlNesting.pushS();
+            }
 
-    for (const TextBlock& block : ldata->blocks) {
-        for (const TextFragment& f : block.fragments()) {
+//    for (const TextBlock& block : ldata->blocks) {
+//        for (const TextFragment& f : block.fragments()) {
             // don't skip, empty text fragments hold information for empty lines
 //                  if (f.text.isEmpty())                     // skip empty fragments, not to
 //                        continue;                           // insert extra HTML formatting
