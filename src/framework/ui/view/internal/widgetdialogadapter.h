@@ -29,7 +29,7 @@ namespace muse::ui {
 class WidgetDialogAdapter : public QObject
 {
 public:
-    WidgetDialogAdapter(QDialog* parent, QWindow* window, bool staysOnTop = true);
+    WidgetDialogAdapter(QDialog* parent);
 
     WidgetDialogAdapter& onShow(const std::function<void()>& func);
     WidgetDialogAdapter& onHide(const std::function<void()>& func);
@@ -37,13 +37,8 @@ public:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
-#ifdef Q_OS_MAC
-    void updateStayOnTopHint();
-#endif
 
     QDialog* m_dialog = nullptr;
-    QWindow* m_window = nullptr;
-    bool m_staysOnTop = true;
     std::function<void()> m_onShownCallBack;
     std::function<void()> m_onHideCallBack;
 };

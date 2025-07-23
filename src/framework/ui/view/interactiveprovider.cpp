@@ -565,7 +565,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
     fillData(dialog, params);
 
     //! NOTE Will be deleted with the dialog
-    WidgetDialogAdapter* adapter = new WidgetDialogAdapter(dialog, mainWindow()->qWindow());
+    WidgetDialogAdapter* adapter = new WidgetDialogAdapter(dialog);
     adapter->onShow([this, objectId, dialog]() {
         async::Async::call(this, [this, objectId, dialog]() {
             onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
