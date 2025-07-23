@@ -518,10 +518,6 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
         item->p2().rx() = shEl->translated(cr2->pagePos()).right() + noteRight;
     }
 
-    if (style.styleB(Sid::tupletExtendToEndOfDuration)) {
-        extendToEndOfDuration(item, toChordRest(cr2));
-    }
-
     PointF mp(item->parentItem()->pagePos());
     if (item->explicitParent()->isMeasure()) {
         System* s = toMeasure(item->explicitParent())->system();
@@ -544,6 +540,10 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
 
     item->p1().ry() -= yOffset;
     item->p2().ry() -= yOffset;
+
+    if (style.styleB(Sid::tupletExtendToEndOfDuration)) {
+        extendToEndOfDuration(item, toChordRest(cr2));
+    }
 
     // l2l l2r, mp, _p1, _p2 const
 
@@ -779,6 +779,13 @@ void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
         }
     }
 
+    Shape nextSegShape = nextSeg->staffShape(endCR->vStaffIdx());
+    nextSegShape.translate(PointF(nextSeg->pagePos().x(), nextSeg->system()->staff(endCR->vStaffIdx())->y()));
+    double yAbove = item->p2().y() - (item->isUp() ? item->style().styleMM(Sid::tupletBracketHookHeight) : 0.0);
+    double yBelow = item->p2().y() + (item->isUp() ? 0.0 : item->style().styleMM(Sid::tupletBracketHookHeight));
+    double left = nextSegShape.leftMostEdgeAtHeight(yAbove, yBelow);
+    xResult = std::min(xResult, left - padding);
+
     double curPos = item->p2().x();
-    item->p2().rx() = std::max(curPos, xResult);
+    item->p2().rx() = std::max(curPos, xResult - item->measure()->pagePos().x());
 }
