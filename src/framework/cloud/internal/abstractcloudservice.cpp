@@ -409,8 +409,7 @@ Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, b
 
 int AbstractCloudService::statusCode(const Ret& ret) const
 {
-    std::any status = ret.data(STATUS_KEY);
-    return status.has_value() ? std::any_cast<int>(status) : 0;
+    return ret.data<int>(STATUS_KEY, 0).value();
 }
 
 void AbstractCloudService::printServerReply(const QBuffer& reply) const
