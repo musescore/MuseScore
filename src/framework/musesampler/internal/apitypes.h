@@ -348,6 +348,8 @@ typedef bool (* ms_MuseSampler_ready_to_play)(ms_MuseSampler ms);
 // Added in 0.102
 typedef bool (* ms_Instrument_is_online)(ms_InstrumentInfo);
 
+typedef void (* ms_MuseSampler_set_score_id)(ms_MuseSampler ms, const char* score_id);
+
 typedef struct ms_SyllableEvent2
 {
     const char* _text;

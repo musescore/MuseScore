@@ -36,6 +36,8 @@ struct PlaybackSetupData
     StringList subCategories;
 
     bool supportsSingleNoteDynamics = false;
+
+    std::optional<std::string> scoreId;
     std::optional<std::string> musicXmlSoundId;
 
     PlaybackSetupData() = default;

@@ -131,7 +131,6 @@ private:
     bool hasToReloadTracks(const ScoreChangesRange& changesRange) const;
     bool hasToReloadScore(const ScoreChangesRange& changesRange) const;
 
-    bool containsTrack(const InstrumentTrackId& trackId) const;
     void clearExpiredTracks();
     void clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo);
     void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo);
