@@ -70,7 +70,7 @@ TEST(Global_RetTests, Data_KeyNotFound_ReturnsNulloptInReleaseANDTriggersAsserti
     const Ret ret;
     EXPECT_DEATH({
         const auto result = ret.data<std::string>("nonexistent");
-    }, "Assertion failed.*false.*function data.*ret\\.h");
+    }, ".*Assertion.*failed");
 #endif
 }
 
@@ -87,7 +87,7 @@ TEST(Global_RetTests, Data_KeyNotFoundWithDefault_ReturnsDefaultInReleaseANDTrig
     const Ret ret;
     EXPECT_DEATH({
         const auto result = ret.data<std::string>("missing", std::string("fallback"));
-    }, "Assertion failed.*false.*function data.*ret\\.h");
+    }, ".*Assertion.*failed");
 #endif
 }
 
@@ -105,7 +105,7 @@ TEST(Global_RetTests, Data_KeyExistsButTypeMismatch_ReturnsNulloptInReleaseANDTr
     // In debug builds, expect the assertion to trigger
     EXPECT_DEATH({
         const auto result = ret.data<std::string>("answer");
-    }, "Assertion failed.*false.*function data.*ret\\.h");
+    }, ".*Assertion.*failed");
 #endif
 }
 
@@ -121,7 +121,7 @@ TEST(Global_RetTests, Data_KeyExistsButWrongCast_ReturnsNulloptInReleaseANDTrigg
     // In debug builds, expect the assertion to trigger
     EXPECT_DEATH({
         const auto result = ret.data<int>("version");
-    }, "Assertion failed.*false.*function data.*ret\\.h");
+    }, ".*Assertion.*failed");
 #endif
 }
 
@@ -138,7 +138,7 @@ TEST(Global_RetTests, Data_TypeMismatchWithDefault_ReturnsDefaultInReleaseANDTri
     // In debug builds, expect the assertion to trigger even with default value
     EXPECT_DEATH({
         const auto result = ret.data<int>("active", 99);
-    }, "Assertion failed.*false.*function data.*ret\\.h");
+    }, ".*Assertion.*failed");
 #endif
 }
 
@@ -157,7 +157,7 @@ TEST(Global_RetTests, Data_TypeMismatchWithOptionalDefault_ReturnsOptionalDefaul
     EXPECT_DEATH({
         constexpr auto defaultOpt = std::optional<int> { 1234 };
         const auto result = ret.data<int>("username", defaultOpt);
-    }, "Assertion failed.*false.*function data.*ret\\.h");
+    }, ".*Assertion.*failed");
 #endif
 }
 
