@@ -408,15 +408,15 @@ constexpr inline dynamic_level_t dynamicLevelFromType(const DynamicType type)
 
 struct ArrangementPattern
 {
+    duration_percentage_t durationFactor = 0;
+    duration_percentage_t timestampOffset = 0;
+
     ArrangementPattern() = default;
 
     ArrangementPattern(duration_percentage_t _durationFactor, duration_percentage_t _timestampOffset)
         : durationFactor(_durationFactor), timestampOffset(_timestampOffset)
     {
     }
-
-    duration_percentage_t durationFactor = 0;
-    duration_percentage_t timestampOffset = 0;
 
     bool operator==(const ArrangementPattern& other) const
     {
@@ -431,6 +431,8 @@ struct PitchPattern
 {
     using PitchOffsetMap = PitchCurve;
 
+    PitchOffsetMap pitchOffsetMap;
+
     PitchPattern() = default;
 
     PitchPattern(size_t size, percentage_t step, pitch_level_t defaultValue)
@@ -439,8 +441,6 @@ struct PitchPattern
             pitchOffsetMap.emplace(step * static_cast<int>(i), defaultValue);
         }
     }
-
-    PitchOffsetMap pitchOffsetMap;
 
     pitch_level_t maxAmplitudeLevel() const
     {
@@ -461,6 +461,8 @@ struct ExpressionPattern
 {
     using DynamicOffsetMap = ExpressionCurve;
 
+    ExpressionCurve dynamicOffsetMap;
+
     ExpressionPattern() = default;
 
     ExpressionPattern(size_t size, percentage_t step, dynamic_level_t defaultValue)
@@ -469,8 +471,6 @@ struct ExpressionPattern
             dynamicOffsetMap.emplace(step * static_cast<int>(i), defaultValue);
         }
     }
-
-    ExpressionCurve dynamicOffsetMap;
 
     dynamic_level_t maxAmplitudeLevel() const
     {
@@ -487,15 +487,15 @@ using ExpressionPatternList = std::vector<ExpressionPattern>;
 
 struct ArticulationPatternSegment
 {
+    ArrangementPattern arrangementPattern;
+    PitchPattern pitchPattern;
+    ExpressionPattern expressionPattern;
+
     ArticulationPatternSegment() = default;
 
     ArticulationPatternSegment(ArrangementPattern&& arrangement, PitchPattern&& pitch, ExpressionPattern&& expression)
         : arrangementPattern(arrangement), pitchPattern(pitch), expressionPattern(expression)
     {}
-
-    ArrangementPattern arrangementPattern;
-    PitchPattern pitchPattern;
-    ExpressionPattern expressionPattern;
 
     bool operator==(const ArticulationPatternSegment& other) const
     {
@@ -561,6 +561,14 @@ using ArticulationsProfilePtr = std::shared_ptr<ArticulationsProfile>;
 
 struct ArticulationMeta
 {
+    ArticulationType type = ArticulationType::Undefined;
+    ArticulationPattern pattern;
+
+    timestamp_t timestamp = 0;
+    duration_t overallDuration = 0;
+    pitch_level_t overallPitchChangesRange = 0;
+    dynamic_level_t overallDynamicChangesRange = 0;
+
     ArticulationMeta() = default;
 
     ArticulationMeta(const ArticulationType _type)
@@ -581,14 +589,6 @@ struct ArticulationMeta
         overallDynamicChangesRange(overallDynamicRange)
     {}
 
-    ArticulationType type = ArticulationType::Undefined;
-    ArticulationPattern pattern;
-
-    timestamp_t timestamp = 0;
-    duration_t overallDuration = 0;
-    pitch_level_t overallPitchChangesRange = 0;
-    dynamic_level_t overallDynamicChangesRange = 0;
-
     bool operator==(const ArticulationMeta& other) const
     {
         return type == other.type
@@ -603,6 +603,16 @@ struct ArticulationMeta
 using ArticulationMetaMap = SharedHashMap<ArticulationType, ArticulationMeta>;
 
 struct ArticulationAppliedData {
+    ArticulationMeta meta;
+
+    ArticulationPatternSegment appliedPatternSegment;
+
+    duration_percentage_t occupiedFrom = 0;
+    duration_percentage_t occupiedTo = HUNDRED_PERCENT;
+
+    pitch_level_t occupiedPitchChangesRange = 0;
+    dynamic_level_t occupiedDynamicChangesRange = 0;
+
     ArticulationAppliedData() = default;
 
     explicit ArticulationAppliedData(ArticulationMeta&& _meta,
@@ -619,6 +629,16 @@ struct ArticulationAppliedData {
         : meta(_meta)
     {
         updateOccupiedRange(_occupiedFrom, _occupiedTo);
+    }
+
+    bool operator==(const ArticulationAppliedData& other) const
+    {
+        return meta == other.meta
+               && appliedPatternSegment == other.appliedPatternSegment
+               && occupiedFrom == other.occupiedFrom
+               && occupiedTo == other.occupiedTo
+               && occupiedPitchChangesRange == other.occupiedPitchChangesRange
+               && occupiedDynamicChangesRange == other.occupiedDynamicChangesRange;
     }
 
     void updateOccupiedRange(const duration_percentage_t from, const duration_percentage_t to)
@@ -648,26 +668,6 @@ struct ArticulationAppliedData {
         } else {
             appliedPatternSegment = meta.pattern.cbegin()->second;
         }
-    }
-
-    ArticulationMeta meta;
-
-    ArticulationPatternSegment appliedPatternSegment;
-
-    duration_percentage_t occupiedFrom = 0;
-    duration_percentage_t occupiedTo = HUNDRED_PERCENT;
-
-    pitch_level_t occupiedPitchChangesRange = 0;
-    dynamic_level_t occupiedDynamicChangesRange = 0;
-
-    bool operator==(const ArticulationAppliedData& other) const
-    {
-        return meta == other.meta
-               && appliedPatternSegment == other.appliedPatternSegment
-               && occupiedFrom == other.occupiedFrom
-               && occupiedTo == other.occupiedTo
-               && occupiedPitchChangesRange == other.occupiedPitchChangesRange
-               && occupiedDynamicChangesRange == other.occupiedDynamicChangesRange;
     }
 };
 

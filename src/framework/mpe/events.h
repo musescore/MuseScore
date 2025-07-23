@@ -28,6 +28,7 @@
 
 #include "async/channel.h"
 #include "realfn.h"
+#include "global/types/number.h"
 #include "types/flags.h"
 #include "types/number.h"
 
@@ -35,6 +36,26 @@
 #include "playbacksetupdata.h"
 
 namespace muse::mpe {
+    << << << < HEAD
+    ==
+    == ===struct NoteEvent;
+struct RestEvent;
+using PlaybackEvent = std::variant<std::monostate, NoteEvent, RestEvent>;
+using PlaybackEventList = std::vector<PlaybackEvent>;
+using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
+
+using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
+using DynamicLevelLayers = std::map<layer_idx_t, DynamicLevelMap>;
+
+struct PlaybackParam;
+using PlaybackParamList = std::vector<PlaybackParam>;
+using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
+using PlaybackParamLayers = std::map<layer_idx_t, PlaybackParamMap>;
+
+using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamLayers>;
+using OffStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamList>;
+
+>> >> >> > 7e92d 2b21c (added rpc pack for mpe types)
 struct ArrangementContext
 {
     timestamp_t nominalTimestamp = 0;
@@ -63,7 +84,7 @@ struct ArrangementContext
                && actualDuration == other.actualDuration
                && voiceLayerIndex == other.voiceLayerIndex
                && staffLayerIndex == other.staffLayerIndex
-               && bps == other.bps;
+               && muse::is_equal(bps, other.bps);
     }
 };
 
