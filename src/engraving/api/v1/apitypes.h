@@ -1313,9 +1313,13 @@ Q_ENUM_NS(OttavaType);
 enum class HairpinType {
     INVALID         = int(mu::engraving::HairpinType::INVALID),
     CRESC_HAIRPIN   = int(mu::engraving::HairpinType::CRESC_HAIRPIN),
-    DECRESC_HAIRPIN = int(mu::engraving::HairpinType::DECRESC_HAIRPIN),
+    DIM_HAIRPIN     = int(mu::engraving::HairpinType::DIM_HAIRPIN),
     CRESC_LINE      = int(mu::engraving::HairpinType::CRESC_LINE),
-    DECRESC_LINE    = int(mu::engraving::HairpinType::DECRESC_LINE),
+    DIM_LINE        = int(mu::engraving::HairpinType::DIM_LINE),
+
+    // obsolete
+    DECRESC_HAIRPIN = int(mu::engraving::HairpinType::DIM_HAIRPIN),
+    DECRESC_LINE    = int(mu::engraving::HairpinType::DIM_LINE)
 };
 Q_ENUM_NS(HairpinType);
 
