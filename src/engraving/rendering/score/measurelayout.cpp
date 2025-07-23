@@ -574,7 +574,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
     int n = 0;
     for (const Segment* s = m->first(); s; s = s->next()) {
         for (const EngravingItem* e : s->annotations()) {
-            if (!e->staff()->show() || !e->visible()) {
+            if (e->staffIdx() >= nstaves || !e->staff()->show() || !e->visible()) {
                 continue;
             }
             if (muse::contains(BREAK_TYPES, e->type()) && !s->rtick().isZero()) {
@@ -2094,8 +2094,24 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
     const Fraction sigTick = continuation ? Fraction(0, 1) : m->ticks();
 
     auto elShouldHaveParenthesis = [&](const Segment* seg, const track_idx_t track) -> bool {
-        const EngravingItem* el = seg ? seg->element(track) : nullptr;
-        return seg && seg->enabled() && el && el->visible();
+        if (!seg || !seg->enabled() || track > ctx.dom().ntracks()) {
+            return false;
+        }
+
+        const Staff* staff = ctx.dom().staff(track2staff(track));
+        if (!staff) {
+            return false;
+        }
+        const StaffType* st = staff->staffType(seg->tick());
+        const bool noTimesig = st && seg->isType(SegmentType::TimeSigType) && !st->genTimesig();
+        const bool noKeysig = st && seg->isType(SegmentType::KeySigType) && !st->genKeysig();
+        const bool noClef = st && seg->isType(SegmentType::ClefType) && !st->genClef();
+        if (noTimesig || noKeysig || noClef) {
+            return false;
+        }
+
+        const EngravingItem* el = seg->element(track);
+        return el && el->visible();
     };
 
     auto timeSigShouldHaveOwnParentheses = [&](const Segment* seg, const track_idx_t track) -> bool {
