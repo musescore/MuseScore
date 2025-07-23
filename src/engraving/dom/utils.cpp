@@ -107,11 +107,7 @@ Measure* Score::tick2measureMM(const Fraction& t) const
         return nullptr;
     }
 
-    if (measure->hasMMRest()) {
-        return measure->mmRest();
-    }
-
-    return measure;
+    return measure->coveringMMRestOrThis();
 }
 
 //---------------------------------------------------------
