@@ -49,14 +49,17 @@ void GeneralRpcChannel::process()
 
 void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
 {
-    MsgQueue fromMQ;
+    MsgQueue msgQueue;
+    StreamMsgQueue streamMsgQueue;
     {
         std::scoped_lock<std::mutex> lock(from.mutex);
-        fromMQ.swap(from.queue);
+        msgQueue.swap(from.queue);
+        streamMsgQueue.swap(from.streamQueue);
     }
 
-    while (!fromMQ.empty()) {
-        const Msg& m = fromMQ.front();
+    // msgs
+    while (!msgQueue.empty()) {
+        const Msg& m = msgQueue.front();
 
         // all
         if (to.listenerAll) {
@@ -80,7 +83,22 @@ void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
             }
         }
 
-        fromMQ.pop();
+        msgQueue.pop();
+    }
+
+    // streams
+    while (!streamMsgQueue.empty()) {
+        const StreamMsg& m = streamMsgQueue.front();
+
+        // by stream
+        {
+            auto it = to.onStreams.find(m.streamId);
+            if (it != to.onStreams.end() && it->second) {
+                it->second(m);
+            }
+        }
+
+        streamMsgQueue.pop();
     }
 }
 
@@ -118,5 +136,25 @@ void GeneralRpcChannel::listenAll(Handler h)
         m_workerRpcData.listenerAll = h;
     } else {
         m_mainRpcData.listenerAll = h;
+    }
+}
+
+void GeneralRpcChannel::sendStream(const StreamMsg& msg)
+{
+    if (isWorkerThread()) {
+        std::scoped_lock<std::mutex> lock(m_workerRpcData.mutex);
+        m_workerRpcData.streamQueue.push(msg);
+    } else {
+        std::scoped_lock<std::mutex> lock(m_mainRpcData.mutex);
+        m_mainRpcData.streamQueue.push(msg);
+    }
+}
+
+void GeneralRpcChannel::onStream(StreamId id, StreamHandler h)
+{
+    if (isWorkerThread()) {
+        m_workerRpcData.onStreams[id] = h;
+    } else {
+        m_mainRpcData.onStreams[id] = h;
     }
 }

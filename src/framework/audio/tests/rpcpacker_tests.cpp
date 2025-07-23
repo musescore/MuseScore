@@ -22,6 +22,7 @@
 #include <gtest/gtest.h>
 
 #include "audio/internal/rpc/rpcpacker.h"
+#include "audio/internal/rpc/rpcstream.h"
 
 using namespace muse;
 using namespace muse::audio;

@@ -94,6 +94,15 @@ struct Msg {
 
 using Handler = std::function<void (const Msg& msg)>;
 
+// stream
+using StreamId = uint32_t;
+struct StreamMsg {
+    StreamId streamId = 0;
+    ByteArray data;
+};
+
+using StreamHandler = std::function<void (const StreamMsg& msg)>;
+
 class IRpcChannel : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IRpcChannel)
@@ -103,8 +112,13 @@ public:
     virtual void send(const Msg& msg, const Handler& onResponse = nullptr) = 0;
     virtual void onMethod(Method method, Handler h) = 0;
     virtual void listenAll(Handler h) = 0;
+
+    // stream
+    virtual void sendStream(const StreamMsg& msg) = 0;
+    virtual void onStream(StreamId id, StreamHandler h) = 0;
 };
 
+// msgs
 inline CallId new_call_id()
 {
     static CallId lastId = 0;
@@ -130,5 +144,13 @@ inline Msg make_response(const Msg& req, const ByteArray& data = ByteArray())
     msg.type = MsgType::Response;
     msg.data = data;
     return msg;
+}
+
+// streams
+inline StreamId new_stream_id()
+{
+    static StreamId lastId = 0;
+    ++lastId;
+    return lastId;
 }
 }

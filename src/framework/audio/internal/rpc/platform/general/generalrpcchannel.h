@@ -37,20 +37,32 @@ public:
     void process();
 
     // IRpcChannel
+    // msgs
     void send(const Msg& msg, const Handler& onResponse = nullptr) override;
     void onMethod(Method method, Handler h) override;
     void listenAll(Handler h) override;
 
+    // stream
+    void sendStream(const StreamMsg& msg) override;
+    void onStream(StreamId id, StreamHandler h) override;
+
 private:
 
     using MsgQueue = std::queue<Msg>;
+    using StreamMsgQueue = std::queue<StreamMsg>;
 
     struct RpcData {
         std::mutex mutex;
+
+        // msgs
         MsgQueue queue;
         Handler listenerAll;
         std::map<Method, Handler> onMethods;
         std::map<CallId, Handler> onResponses;
+
+        // stream
+        StreamMsgQueue streamQueue;
+        std::map<StreamId, StreamHandler> onStreams;
     };
 
     bool isWorkerThread() const;
