@@ -1254,7 +1254,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
             measureNumber->setSystemFlag(!score->style().styleB(Sid::measureNumberAllStaves));
             TLayout::layoutMeasureNumber(measureNumber, measureNumber->mutldata(), ctx);
         } else if (measureNumber) {
-            ctx.mutDom().doUndoRemoveElement(measureNumber);
+            m->remove(measureNumber);
         }
     }
 }
