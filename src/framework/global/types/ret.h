@@ -133,8 +133,9 @@ public:
 
         const auto it = m_data.find(key);
         if (it == m_data.end()) {
-            LOGE() << "Ret::data<" << typeid(DataType).name() << ">: key not found: '" << key << "'\n";
-            return defaultValue;
+            IF_ASSERT_FAILED_X(false, "Ret::data<" + std::string(typeid(DataType).name()) + ">: key not found: '" + key + "'") {
+                return defaultValue;
+            }
         }
 
         if (it->second.type() == typeid(DataType)) {
@@ -144,14 +145,17 @@ public:
             }
             catch (const std::bad_any_cast& e)
             {
-                LOGE() << "Ret::data<" << typeid(DataType).name()
-                       << ">: bad_any_cast for key '" << key
-                       << "': " << e.what() << "\n";
+                IF_ASSERT_FAILED_X(false, "Ret::data<" + std::string(typeid(DataType).name())
+                                   + ">: bad_any_cast for key '" + key + "': " + e.what()) {
+                    return defaultValue;
+                }
             }
         } else {
-            LOGE() << "Ret::data<" << typeid(DataType).name()
-                   << ">: type mismatch for key '" << key
-                   << "', stored type is " << it->second.type().name() << "\n";
+            IF_ASSERT_FAILED_X(false, "Ret::data<" + std::string(typeid(DataType).name())
+                               + ">: type mismatch for key '" + key
+                               + "', stored type is " + it->second.type().name()) {
+                return defaultValue;
+            }
         }
 
         return defaultValue;
