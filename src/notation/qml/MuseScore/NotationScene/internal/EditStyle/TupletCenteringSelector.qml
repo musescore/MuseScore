@@ -37,7 +37,7 @@ Rectangle {
 
     ColumnLayout {
         width: parent.width
-        spacing: 7
+        spacing: 8
 
         StyledTextLabel {
             horizontalAlignment: Text.AlignLeft
@@ -56,6 +56,7 @@ Rectangle {
             delegate: FlatRadioButton {
                 width: 140
                 height: 65
+                text: modelData.text
 
                 Column {
                     anchors.centerIn: parent

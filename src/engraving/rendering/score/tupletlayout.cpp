@@ -105,7 +105,7 @@ void TupletLayout::layoutTupletAndNestedTuplets(Tuplet* t, LayoutContext& ctx)
         }
     }
     // layout t
-    TLayout::layoutTuplet(t, ctx);
+    layout(t, ctx);
 }
 
 bool TupletLayout::isTopTuplet(ChordRest* cr)

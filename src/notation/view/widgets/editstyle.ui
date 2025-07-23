@@ -280,7 +280,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>618</width>
+                <width>409</width>
                 <height>523</height>
                </rect>
               </property>
@@ -14581,10 +14581,17 @@ followed by dashes</string>
   <tabstop>mrNumberSeriesWithParentheses</tabstop>
   <tabstop>resetMRNumberSeriesWithParentheses</tabstop>
   <tabstop>scrollArea_tuplets</tabstop>
+  <tabstop>tupletDirection</tabstop>
+  <tabstop>resetTupletDirection</tabstop>
+  <tabstop>tupletNumberType</tabstop>
+  <tabstop>resetTupletNumberType</tabstop>
+  <tabstop>tupletBracketType</tabstop>
+  <tabstop>resetTupletBracketType</tabstop>
   <tabstop>tupletBracketWidth</tabstop>
   <tabstop>resetTupletBracketWidth</tabstop>
   <tabstop>tupletBracketHookHeight</tabstop>
   <tabstop>resetTupletBracketHookHeight</tabstop>
+  <tabstop>tupletExtendToEndOfDuration</tabstop>
   <tabstop>tupletMaxSlope</tabstop>
   <tabstop>resetTupletMaxSlope</tabstop>
   <tabstop>tupletVStemDistance</tabstop>
@@ -14600,13 +14607,6 @@ followed by dashes</string>
   <tabstop>resetTupletStemRightDistance</tabstop>
   <tabstop>tupletNoteRightDistance</tabstop>
   <tabstop>resetTupletNoteRightDistance</tabstop>
-  <tabstop>arpeggioNoteDistance</tabstop>
-  <tabstop>arpeggioLineWidth</tabstop>
-  <tabstop>arpeggioHookLen</tabstop>
-  <tabstop>arpeggioHiddenInStdIfTab</tabstop>
-  <tabstop>scrollArea_41</tabstop>
-  <tabstop>slurEndLineWidth</tabstop>
-  <tabstop>resetSlurEndLineWidth</tabstop>
   <tabstop>slurMidLineWidth</tabstop>
   <tabstop>resetSlurMidLineWidth</tabstop>
   <tabstop>slurDottedLineWidth</tabstop>
@@ -14918,6 +14918,13 @@ followed by dashes</string>
   <tabstop>resetTextStyleFrameBorderRadius</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
+  <tabstop>arpeggioLineWidth</tabstop>
+  <tabstop>arpeggioHookLen</tabstop>
+  <tabstop>arpeggioHiddenInStdIfTab</tabstop>
+  <tabstop>scrollArea_41</tabstop>
+  <tabstop>arpeggioNoteDistance</tabstop>
+  <tabstop>resetSlurEndLineWidth</tabstop>
+  <tabstop>slurEndLineWidth</tabstop>
  </tabstops>
  <resources/>
  <connections/>
