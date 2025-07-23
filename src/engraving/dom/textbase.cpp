@@ -1,4 +1,3 @@
-#pragma clang optimize off
 /*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-Studio-CLA-applies
@@ -1863,7 +1862,7 @@ void TextBase::createBlocks(LayoutData* ldata) const
             } else if (c == '&') {
                 state = 2;
                 token.clear();
-            } else if (c == '\n') { 
+            } else if (c == '\n') {
                 if (ldata->rows() <= cursor.row()) {
                     ldata->blocks.push_back(TextBlock());
                 }
@@ -2183,16 +2182,17 @@ String TextBase::genText(const LayoutData* ldata) const
     String text;
     XmlNesting xmlNesting(&text);
 
-    bool bold_      = false;
-    bool italic_    = false;
-    bool underline_ = false;
-    bool strike_    = false;
-
     CharFormat fmt;
     fmt.setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
     fmt.setFontSize(propertyDefault(Pid::FONT_SIZE).toReal());
     fmt.setStyle(static_cast<FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
 
+    // Prepare the initial style tags (if any).
+    // We only need those if there is any fragment in the blocks with a different style than the default one.
+    bool bold_      = false;
+    bool italic_    = false;
+    bool underline_ = false;
+    bool strike_    = false;
     for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             if (!f.format.bold() && fmt.bold()) {
@@ -2207,27 +2207,29 @@ String TextBase::genText(const LayoutData* ldata) const
             if (!f.format.strike() && fmt.strike()) {
                 strike_ = true;
             }
-//        }
-//    }
+        }
+    }
+    if (bold_) {
+        xmlNesting.pushB();
+    }
+    if (italic_) {
+        xmlNesting.pushI();
+    }
+    if (underline_) {
+        xmlNesting.pushU();
+    }
+    if (strike_) {
+        xmlNesting.pushS();
+    }
 
-            if (bold_) {
-                xmlNesting.pushB();
-            }
-            if (italic_) {
-                xmlNesting.pushI();
-            }
-            if (underline_) {
-                xmlNesting.pushU();
-            }
-            if (strike_) {
-                xmlNesting.pushS();
-            }
-
-//    for (const TextBlock& block : ldata->blocks) {
-//        for (const TextFragment& f : block.fragments()) {
+    // And here for the actual formatting of the text.
+    for (const TextBlock& block : ldata->blocks) {
+        for (const TextFragment& f : block.fragments()) {
             // don't skip, empty text fragments hold information for empty lines
-//                  if (f.text.isEmpty())                     // skip empty fragments, not to
-//                        continue;                           // insert extra HTML formatting
+            //    if (f.text.isEmpty())                   // skip empty fragments, not to
+            //        continue;                           // insert extra HTML formatting
+
+            // Push or Pop XML tags according to the current format changes
             const CharFormat& format = f.format;
             if (fmt.bold() != format.bold()) {
                 if (format.bold()) {

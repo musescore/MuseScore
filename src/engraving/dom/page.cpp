@@ -1,4 +1,3 @@
-#pragma clang optimize off
 /*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-Studio-CLA-applies
@@ -95,8 +94,6 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
         return nullptr;
     }
 
-    // replaceTextMacros/formatForMacro should handle proper styling of special text
-    // so we can go for the default styling here ...
     bool isHeader = area < MAX_HEADERS;
     Text* text;
     if (isHeader) {
@@ -138,17 +135,16 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
     text->setAlign(align);
 
     // Hack: we can't use toXmlEscaped on the entire string because this would erase any manual XML
-    // formatting, but we do want to be able to use a plain '&' in favour of XML character entities...
+    // formatting, but we do want to be able to use a plain '&' in favour of XML character entities ...
+    // ... also, opening less-than characters are escaped if they are followed by a space or a digit,
+    // to avoid confusion with XML tags, but not if they are followed by a letter
     String escaped;
     for (size_t i = 0, n = s.size(); i < n; ++i) {
         const Char c = s.at(i);
         if (c == '&') {
             escaped += u"&amp;";
             continue;
-        }
-        // opening less-than characters are escaped if they are followed by a space or a digit,
-        // to avoid confusion with XML tags, but not if they are followed by a letter
-        if (c == '<' && (i + 1 < n) && (s.at(i + 1).isSpace() || s.at(i + 1).isDigit())) {
+        } else if (c == '<' && (i + 1 < n) && (s.at(i + 1).isSpace() || s.at(i + 1).isDigit())) {
             escaped += u"&lt;";
             continue;
         }
@@ -160,7 +156,7 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
     text->createBlocks();
 
     // second formatting pass - replace macros and apply their unique formatting (if any)
-    TextStyleType style = (isHeader ? TextStyleType::HEADER : TextStyleType::FOOTER);
+    const TextStyleType style = isHeader ? TextStyleType::HEADER : TextStyleType::FOOTER;
     std::vector<TextBlock> newBlocks;
     for (const TextBlock& oldBlock : text->ldata()->blocks) {
         Text* dummyText = Factory::createText(score()->dummy(), style);
@@ -374,18 +370,18 @@ void Page::doRebuildBspTree()
 
 TextBlock Page::replaceTextMacros(const TextBlock& tb) const
 {
-    std::list<TextFragment> newFragments(0);
+    std::list<TextFragment> newFragments;
     for (const TextFragment& tf: tb.fragments()) {
         const CharFormat defaultFormat = tf.format;
         const String& s = tf.text;
 
         // if this is the first fragment, or the current fragment has a different format, we need to start a new fragment
-        if (newFragments.size()==0 || !(newFragments.back().format == defaultFormat) ){
+        if (newFragments.size() == 0 || newFragments.back().format != defaultFormat) {
             newFragments.emplace_back(TextFragment());
+            newFragments.back().format = defaultFormat;
         }
 
         for (size_t i = 0, n = s.size(); i < n; ++i) {
-            newFragments.back().format = defaultFormat;
             Char c = s.at(i);
             if (c == '$' && (i < (n - 1))) {
                 Char nc = s.at(i + 1);
