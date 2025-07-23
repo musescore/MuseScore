@@ -152,9 +152,15 @@ public:
     QQmlListProperty<apiv1::Staff> staves();
     /// \endcond
 
-    /// Finds an instrument that is active in this part at the given \p tick.
+    /// The instrument of the part at the given tick in the score.
+    /// \param tick Tick location in the score, as an integer.
     /// \since MuseScore 3.5
     Q_INVOKABLE apiv1::Instrument* instrumentAtTick(int tick);
+
+    /// The instrument of the part at the given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::Instrument* instrumentAtTick(apiv1::FractionWrapper* tick);
 
     /// The long name of the part at a given tick in the score.
     /// \param tick Tick location in the score, as a fraction.

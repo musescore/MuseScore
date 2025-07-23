@@ -79,6 +79,11 @@ Instrument* Part::instrumentAtTick(int tick)
     return customWrap<Instrument>(part()->instrument(mu::engraving::Fraction::fromTicks(tick)), part());
 }
 
+Instrument* Part::instrumentAtTick(FractionWrapper* tick)
+{
+    return customWrap<Instrument>(part()->instrument(tick->fraction()), part());
+}
+
 QQmlListProperty<Staff> Part::staves()
 {
     return wrapContainerProperty<Staff>(this, part()->staves());
