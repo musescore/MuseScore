@@ -64,16 +64,13 @@ using namespace muse::audio::fx;
 #include "internal/platform/jack/jackaudiodriver.h"
 #endif
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 #include "internal/platform/lin/alsaaudiodriver.h"
 #ifdef MUSE_PIPEWIRE_AUDIO_DRIVER
 #include "internal/platform/lin/pwaudiodriver.h"
 #endif
 #endif
 
-#ifdef Q_OS_FREEBSD
-#include "internal/platform/lin/alsaaudiodriver.h"
-#endif
 #ifdef Q_OS_WIN
 //#include "internal/platform/win/winmmdriver.h"
 //#include "internal/platform/win/wincoreaudiodriver.h"
@@ -118,7 +115,7 @@ std::string AudioModule::moduleName() const
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 std::shared_ptr<IAudioDriver> makeLinuxAudioDriver()
 {
-#if defined(Q_OS_LINUX) && defined(MUSE_PIPEWIRE_AUDIO_DRIVER)
+#if defined(MUSE_PIPEWIRE_AUDIO_DRIVER)
     if (!qEnvironmentVariableIsSet("MUSESCORE_FORCE_ALSA")) {
         auto driver = std::make_shared<PwAudioDriver>();
         if (driver->connectedToPwServer()) {
@@ -126,7 +123,7 @@ std::shared_ptr<IAudioDriver> makeLinuxAudioDriver()
             return driver;
         }
     }
-#endif // Q_OS_LINUX && MUSE_PIPEWIRE_AUDIO_DRIVER
+#endif // MUSE_PIPEWIRE_AUDIO_DRIVER
     LOGI() << "Using audio driver: ALSA";
     return std::make_shared<AlsaAudioDriver>();
 }
