@@ -924,6 +924,11 @@ void ProjectActionsController::saveProjectAt(const muse::actions::ActionData& ar
 
 bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode, bool force)
 {
+    INotationInteractionPtr interaction = currentInteraction();
+    if (interaction && interaction->isTextEditingStarted()) {
+        interaction->endEditText();
+    }
+
     if (!force) {
         Ret ret = canSaveProject();
         if (!ret) {
