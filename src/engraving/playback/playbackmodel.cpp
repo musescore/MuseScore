@@ -285,17 +285,17 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     int minTick = std::numeric_limits<int>::max();
 
     for (const EngravingItem* item : playableItems) {
-        if (item->isHarmony()) {
-            m_renderer.renderChordSymbol(toHarmony(item), timestamp, duration, profile, events);
-            continue;
-        }
-
-        int utick = repeats.tick2utick(item->tick().ticks());
+        const int utick = repeats.tick2utick(item->tick().ticks());
         minTick = std::min(utick, minTick);
 
         if (m_useScoreDynamicsForOffstreamPlayback) {
             dynamicLevel = ctx->appliableDynamicLevel(item->track(), utick);
             dynamics[static_cast<muse::mpe::layer_idx_t>(item->track())][timestamp] = dynamicLevel;
+        }
+
+        if (item->isHarmony()) {
+            m_renderer.renderChordSymbol(toHarmony(item), timestamp, duration, dynamicLevel, profile, events);
+            continue;
         }
 
         m_renderer.render(item, timestamp, duration, dynamicLevel, ctx->persistentArticulationType(utick), profile,
@@ -421,7 +421,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
         }
 
         const Harmony* chordSymbol = findChordSymbol(item);
-        if (!chordSymbol) {
+        if (!chordSymbol || !chordSymbol->play()) {
             continue;
         }
 
@@ -438,10 +438,10 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             continue;
         }
 
-        if (chordSymbol->play()) {
-            m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset, profile,
-                                         m_playbackDataMap[trackId].originEvents);
-        }
+        const PlaybackContextPtr ctx = playbackCtx(trackId);
+
+        m_renderer.renderChordSymbol(chordSymbol, tickPositionOffset, profile, ctx,
+                                     m_playbackDataMap[trackId].originEvents);
 
         collectChangesTracks(trackId, trackChanges);
     }
