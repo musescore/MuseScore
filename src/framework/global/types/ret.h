@@ -123,7 +123,6 @@ public:
     void setText(const std::string& s);
     const std::string& text() const;
     void setData(const std::string& key, const std::any& val);
-    std::any data(const std::string& key) const;
 
     template<typename DataType>
     std::optional<DataType> data(const std::string& key, const std::optional<DataType>& defaultValue = std::nullopt) const
