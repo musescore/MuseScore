@@ -21,12 +21,20 @@
  */
 #pragma once
 
+#include <optional>
+
 #include "msgpack_forward.h"
 #include "../types/bytearray.h"
 #include "../types/string.h"
 #include "../types/number.h"
+#include "../types/flags.h"
 #include "../types/retval.h"
 #include "../io/path.h"
+
+template<typename T>
+void pack_custom(std::vector<uint8_t>& data, const std::optional<T>& value);
+template<typename T>
+bool unpack_custom(muse::msgpack::Cursor& cursor, std::optional<T>& value);
 
 void pack_custom(std::vector<uint8_t>& data, const muse::String& value);
 bool unpack_custom(muse::msgpack::Cursor& cursor, muse::String& value);
@@ -35,6 +43,11 @@ template<typename T>
 void pack_custom(std::vector<uint8_t>& data, const muse::number_t<T>& value);
 template<typename T>
 bool unpack_custom(muse::msgpack::Cursor& cursor, muse::number_t<T>& value);
+
+template<typename T>
+void pack_custom(std::vector<uint8_t>& data, const muse::Flags<T>& value);
+template<typename T>
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Flags<T>& value);
 
 // Ret[Val]
 void pack_custom(std::vector<uint8_t>& data, const muse::Ret& value);
@@ -53,6 +66,41 @@ void pack_custom(std::vector<uint8_t>& data, const muse::io::path_t& value);
 bool unpack_custom(muse::msgpack::Cursor& cursor, muse::io::path_t& value);
 
 #include "../thirdparty/kors_msgpack/msgpack/msgpack.h"
+
+// std standart
+template<typename T>
+inline void pack_custom(std::vector<uint8_t>& data, const std::optional<T>& value)
+{
+    bool has_value = value.has_value();
+    muse::msgpack::Packer::pack(data, has_value);
+    if (has_value) {
+        muse::msgpack::Packer::pack(data, value.value());
+    }
+}
+
+template<typename T>
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, std::optional<T>& value)
+{
+    bool has_value = false;
+    bool ok = muse::msgpack::UnPacker::unpack(cursor, has_value);
+    if (!ok) {
+        return false;
+    }
+
+    if (!has_value) {
+        value = std::nullopt;
+        return true;
+    }
+
+    T val = {};
+    ok = muse::msgpack::UnPacker::unpack(cursor, val);
+    if (!ok) {
+        return false;
+    }
+
+    value = std::make_optional<T>(val);
+    return true;
+}
 
 // muse standart types
 inline void pack_custom(std::vector<uint8_t>& data, const muse::String& value)
@@ -80,6 +128,22 @@ inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::number_t<T>& valu
     T val = {};
     bool ok = muse::msgpack::UnPacker::unpack(cursor, val);
     value = muse::number_t<T>(val);
+    return ok;
+}
+
+template<typename T>
+inline void pack_custom(std::vector<uint8_t>& data, const muse::Flags<T>& value)
+{
+    typename muse::Flags<T>::Int val = value;
+    muse::msgpack::Packer::pack(data, val);
+}
+
+template<typename T>
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Flags<T>& value)
+{
+    typename muse::Flags<T>::Int val = 0;
+    bool ok = muse::msgpack::UnPacker::unpack(cursor, val);
+    value = muse::Flags<T>(val);
     return ok;
 }
 

@@ -139,7 +139,7 @@ struct is_map<T, std::void_t<
         typename T::key_type,
         typename T::mapped_type,
         decltype(std::declval<typename T::value_type>().first),
-decltype(std::declval<typename T::value_type>().second)
+        decltype(std::declval<typename T::value_type>().second)
 >> : std::true_type {};
 
 template <typename T, typename = void>

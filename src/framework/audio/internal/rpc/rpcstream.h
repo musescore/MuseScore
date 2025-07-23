@@ -37,11 +37,19 @@ class RpcStream : public async::Asyncable
     Inject<rpc::IRpcChannel> rpc;
 
 public:
-    RpcStream(async::Channel<Types...> ch)
-        : m_ch(ch)
-    {
-        m_streamId = new_stream_id();
 
+    RpcStream(StreamId m_streamId, async::Channel<Types...> ch)
+        : m_streamId(m_streamId), m_ch(ch)
+    {
+        setup();
+    }
+
+    StreamId streamId() const { return m_streamId; }
+    async::Channel<Types...> channel() const { return m_ch; }
+
+private:
+    void setup()
+    {
         m_ch.onReceive(this, [this](const Types... args) {
             ByteArray data = msgpack::pack(args ...);
             rpc()->sendStream(StreamMsg { m_streamId, data });
@@ -61,7 +69,6 @@ public:
         });
     }
 
-private:
     StreamId m_streamId = 0;
     async::Channel<Types...> m_ch;
 };
