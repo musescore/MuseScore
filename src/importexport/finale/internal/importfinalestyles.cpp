@@ -270,7 +270,15 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
         std::string fontName = defaultMusicFont->getName();
         if (context.fontIsEngravingFont(defaultMusicFont)) {
             return String::fromStdString(fontName);
-        } else if (fontName == "Maestro" && context.fontIsEngravingFont("Finale Maestro")) {
+        } else if (fontName == "AshMusic" && context.fontIsEngravingFont("Finale Ash")) {
+            return String("Finale Ash");
+        } else if (fontName == "Broadway Copyist" && context.fontIsEngravingFont("Finale Broadway")) {
+            return String("Finale Broadway");
+        } else if (fontName == "Engraver" && context.fontIsEngravingFont("Finale Engraver")) {
+            return String("Finale Engraver");
+        } else if (fontName == "Jazz" && context.fontIsEngravingFont("Finale Jazz")) {
+            return String("Finale Jazz");
+        } else if ((fontName == "Maestro" || fontName == "Pmusic" || fontName == "Sonata") && context.fontIsEngravingFont("Finale Maestro")) {
             return String("Finale Maestro");
         } else if (fontName == "Petrucci" && context.fontIsEngravingFont("Finale Legacy")) {
             return String("Finale Legacy");
@@ -363,7 +371,7 @@ void writeLineMeasurePrefs(MStyle& style, const FinaleParser& context)
     style.set(Sid::keySigCourtesyBarlineMode,
               int(FinaleTConv::boolToCourtesyBarlineMode(prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges)));
     style.set(Sid::timeSigCourtesyBarlineMode, int(CourtesyBarlineMode::ALWAYS_SINGLE));  // Hard-coded as 0 in Finale
-    style.set(Sid::hideEmptyStaves, context.currentMusxPartId() == SCORE_PARTID); // ???
+    style.set(Sid::hideEmptyStaves, context.musxDocument()->calcHasVaryingSystemStaves(context.currentMusxPartId()));
 }
 
 void writeStemPrefs(MStyle& style, const FinaleParser& context)
