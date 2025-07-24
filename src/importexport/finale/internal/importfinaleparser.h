@@ -139,6 +139,19 @@ private:
     void importParts();
     void importBrackets();
     void importMeasures();
+    void importStaffItems();
+    engraving::Clef* createClef(engraving::Score* score,
+                                const std::shared_ptr<musx::dom::others::Staff>& musxStaff,
+                                engraving::staff_idx_t staffIdx,
+                                musx::dom::ClefIndex musxClef,
+                                engraving::Measure* measure, musx::dom::Edu musxEduPos,
+                                bool afterBarline, bool visible);
+    void importClefs(const std::shared_ptr<musx::dom::others::InstrumentUsed>& musxScrollViewItem,
+                     const std::shared_ptr<musx::dom::others::Measure>& musxMeasure,
+                     engraving::Measure* measure, engraving::staff_idx_t curStaffIdx,
+                     musx::dom::ClefIndex& musxCurrClef,
+                     const std::shared_ptr<musx::dom::others::Measure>& nextMusxMeasure);
+    bool applyStaffSyles(engraving::StaffType* staffType, const std::shared_ptr<const musx::dom::others::StaffComposite>& currStaff);
 
     // styles
     void importStyles();
