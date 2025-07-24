@@ -22,8 +22,6 @@
 #include <gtest/gtest.h>
 
 #include <string>
-#include <optional>
-
 #include "types/ret.h"
 
 using namespace muse;
@@ -38,7 +36,7 @@ public:
 
 // === Valid Retrieval ===
 
-TEST(Global_RetTests, Data_KeyExistsWithMatchingType_ReturnsValue)
+TEST(Global_RetTests, Data_KeyExistsWithMatchingType_ReturnsStoredValue)
 {
     Ret ret;
     ret.setData("title", std::string("My Title"));
@@ -46,7 +44,7 @@ TEST(Global_RetTests, Data_KeyExistsWithMatchingType_ReturnsValue)
     EXPECT_EQ(result, "My Title");
 }
 
-TEST(Global_RetTests, Data_KeyExistsWithMatchingIntType_ReturnsValue)
+TEST(Global_RetTests, Data_KeyExistsWithMatchingIntType_ReturnsStoredValue)
 {
     Ret ret;
     ret.setData("answer", 42);
@@ -56,31 +54,13 @@ TEST(Global_RetTests, Data_KeyExistsWithMatchingIntType_ReturnsValue)
 
 // === Key Not Found ===
 
-TEST(Global_RetTests, Data_KeyNotFound_ReturnsNulloptInReleaseANDTriggersAssertionInDebug)
+TEST(Global_RetTests, Data_KeyNotFound_ReturnsDefaultInReleaseANDTriggersAssertionInDebug)
 {
 #ifdef NDEBUG
-    // In release builds, assertions are disabled, so tests normal behaviour
-    const Ret ret;
-    const auto result = ret.data<std::string>("nonexistent", std::string("Default Value for nonexistent key"));
-    EXPECT_EQ(result, std::string("Default Value for nonexistent key"));
-#else
-    // In debug builds, expect the assertion to trigger
-    const Ret ret;
-    EXPECT_DEATH({
-        const auto result = ret.data<std::string>("nonexistent", std::string("Default Value for nonexistent key"));
-    }, ".*Assertion.*failed");
-#endif
-}
-
-TEST(Global_RetTests, Data_KeyNotFoundWithDefault_ReturnsDefaultInReleaseANDTriggersAssertionInDebug)
-{
-#ifdef NDEBUG
-    // In release builds, assertions are disabled, so tests normal behaviour
     const Ret ret;
     const auto result = ret.data<std::string>("missing", std::string("fallback"));
     EXPECT_EQ(result, "fallback");
 #else
-    // In debug builds, expect the assertion to trigger even with default value
     const Ret ret;
     EXPECT_DEATH({
         const auto result = ret.data<std::string>("missing", std::string("fallback"));
@@ -90,12 +70,11 @@ TEST(Global_RetTests, Data_KeyNotFoundWithDefault_ReturnsDefaultInReleaseANDTrig
 
 // === Type Mismatch ===
 
-TEST(Global_RetTests, Data_KeyExistsButTypeMismatch_ReturnsNulloptInReleaseANDTriggersAssertionInDebug)
+TEST(Global_RetTests, Data_KeyExistsButTypeMismatch_ReturnsDefaultInReleaseANDTriggersAssertionInDebug)
 {
     Ret ret;
-    ret.setData("answer", 42); // int
+    ret.setData("answer", 42); // int stored, but requesting as string
 #ifdef NDEBUG
-    // In release builds, assertions are disabled, so tests normal behaviour
     const auto result = ret.data<std::string>("answer", std::string("0"));
     EXPECT_EQ(result, std::string("0"));
 #else
@@ -106,62 +85,45 @@ TEST(Global_RetTests, Data_KeyExistsButTypeMismatch_ReturnsNulloptInReleaseANDTr
 #endif
 }
 
-TEST(Global_RetTests, Data_KeyExistsButWrongCast_ReturnsNulloptInReleaseANDTriggersAssertionInDebug)
-{
-    Ret ret;
-    ret.setData("version", std::string("1.0.0"));
-#ifdef NDEBUG
-    // In release builds, assertions are disabled, so tests normal behaviour
-    const auto result = ret.data<int>("version", 0);
-    EXPECT_EQ(result, 0);
-#else
-    // In debug builds, expect the assertion to trigger
-    EXPECT_DEATH({
-        const auto result = ret.data<int>("version", 0);
-    }, ".*Assertion.*failed");
-#endif
-}
+// === Bad Any Cast Protection ===
 
-TEST(Global_RetTests, Data_TypeMismatchWithDefault_ReturnsDefaultInReleaseANDTriggersAssertionInDebug)
+TEST(Global_RetTests, Data_BadAnyCast_ReturnsDefaultInReleaseANDTriggersAssertionInDebug)
 {
     Ret ret;
-    ret.setData("active", true);
-#ifdef NDEBUG
-    // In release builds, assertions are disabled, so tests normal behaviour
-    const auto result = ret.data<int>("active", 99);
-    EXPECT_EQ(result, 99);
-#else
-    // In debug builds, expect the assertion to trigger even with default value
-    EXPECT_DEATH({
-        const auto result = ret.data<int>("active", 99);
-    }, ".*Assertion.*failed");
-#endif
-}
+    // This test is harder to trigger since type checking happens first
+    // but the method has protection against std::bad_any_cast
+    ret.setData("value", std::string("text"));
 
-TEST(Global_RetTests, Data_TypeMismatchWithOptionalDefault_ReturnsOptionalDefaultInReleaseANDTriggersAssertionInDebug)
-{
-    Ret ret;
-    ret.setData("username", std::string("admin"));
 #ifdef NDEBUG
-    // In release builds, assertions are disabled, so tests normal behaviour
-    constexpr auto defaultValue = 1234;
-    const auto result = ret.data<int>("username", defaultValue);
-    EXPECT_EQ(result, defaultValue);
+    const auto result = ret.data<int>("value", 999);
+    EXPECT_EQ(result, 999);
 #else
-    // In debug builds, expect the assertion to trigger even with default value
     EXPECT_DEATH({
-        const int defaultValue = 1234;
-        const auto result = ret.data<int>("username", defaultValue);
+        const auto result = ret.data<int>("value", 999);
     }, ".*Assertion.*failed");
 #endif
 }
 
 // === Enum Class Support ===
 
-TEST(Global_RetTests, Data_EnumClassStoredAndRetrievedCorrectly)
+TEST(Global_RetTests, Data_EnumClass_ReturnsStoredValue)
 {
     Ret ret;
     ret.setData("status", Global_RetTests::StatusCode::OK);
     const auto result = ret.data<Global_RetTests::StatusCode>("status", Global_RetTests::StatusCode::Unknown);
     EXPECT_EQ(result, Global_RetTests::StatusCode::OK);
+}
+
+TEST(Global_RetTests, Data_EnumClassKeyNotFound_ReturnsDefaultInReleaseANDTriggersAssertionInDebug)
+{
+#ifdef NDEBUG
+    const Ret ret;
+    const auto result = ret.data<Global_RetTests::StatusCode>("missing", Global_RetTests::StatusCode::Unknown);
+    EXPECT_EQ(result, Global_RetTests::StatusCode::Unknown);
+#else
+    const Ret ret;
+    EXPECT_DEATH({
+        const auto result = ret.data<Global_RetTests::StatusCode>("missing", Global_RetTests::StatusCode::Unknown);
+    }, ".*Assertion.*failed");
+#endif
 }
