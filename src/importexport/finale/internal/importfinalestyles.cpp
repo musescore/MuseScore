@@ -577,6 +577,8 @@ void writeTupletPrefs(MStyle& style, const FinaleParser& context)
     const auto& tupletOptions = prefs.tupletOptions;
 
     style.set(Sid::tupletOutOfStaff, tupletOptions->avoidStaff);
+    style.set(Sid::tupletNumberRythmicCenter, tupletOptions->metricCenter);
+    style.set(Sid::tupletExtendToEndOfDuration, tupletOptions->fullDura);
     writeEvpuSpace(style, Sid::tupletStemLeftDistance, tupletOptions->leftHookExt);
     writeEvpuSpace(style, Sid::tupletStemRightDistance, tupletOptions->rightHookExt);
     writeEvpuSpace(style, Sid::tupletNoteLeftDistance, tupletOptions->leftHookExt);
