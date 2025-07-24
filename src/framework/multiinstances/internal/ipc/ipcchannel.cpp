@@ -157,13 +157,16 @@ void IpcChannel::setupConnection()
         if (!m_selfSocket->connect(SERVER_NAME)) {
             //! NOTE If it was not possible to connect to the server, then it no there or was, but it was closed.
             //! In this case, we will become a server
+            LOGI() << "starting ipc server";
             m_server = new IpcServer();
             m_server->listen(SERVER_NAME);
         }
         lock.unlock();
 
         //! NOTE Connect to self server
-        m_selfSocket->connect(SERVER_NAME);
+        if (!m_selfSocket->connect(SERVER_NAME)) {
+            LOGE() << "failed to connect to ipc server";
+        }
     }
 }
 
