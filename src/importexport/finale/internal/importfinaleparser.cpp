@@ -55,6 +55,9 @@ FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::
 
 void FinaleParser::parse()
 {
+    // styles (first, so that spatium and other defaults are correct)
+    importStyles();
+
     // scoremap
     importParts();
     importBrackets();
