@@ -156,6 +156,7 @@ add_to_link_if_exists(iex_audioexport)
 add_to_link_if_exists(iex_bb)
 add_to_link_if_exists(iex_bww)
 add_to_link_if_exists(iex_capella)
+add_to_link_if_exists(iex_finale)
 add_to_link_if_exists(iex_guitarpro)
 add_to_link_if_exists(iex_imagesexport)
 add_to_link_if_exists(iex_lyricsexport)
@@ -176,8 +177,7 @@ add_to_link_if_exists(palette)
 add_to_link_if_exists(playback)
 add_to_link_if_exists(preferences)
 add_to_link_if_exists(print)
-add_to_link_if_exists(project)     
-
+add_to_link_if_exists(project)
 
 set(MSCORE_APPEND_SRC)
 
