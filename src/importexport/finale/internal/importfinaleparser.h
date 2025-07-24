@@ -242,6 +242,12 @@ private:
 
     // smart shapes
     void importSmartShapes();
+
+    // texts
+    void importPageTexts();
+
+    bool isOnlyPage(const std::shared_ptr<musx::dom::others::PageTextAssign>& pageTextAssign, musx::dom::PageCmper page);
+
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
     FinaleOptions m_finaleOptions;

@@ -238,4 +238,271 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     return endString;
 };
 
+bool FinaleParser::isOnlyPage(const std::shared_ptr<others::PageTextAssign>& pageTextAssign, PageCmper page)
+{
+    const std::optional<PageCmper> startPageNum = pageTextAssign->calcStartPageNumber(m_currentMusxPartId);
+    const std::optional<PageCmper> endPageNum = pageTextAssign->calcEndPageNumber(m_currentMusxPartId); // calcEndPageNumber handles case when endPage is zero
+    return (startPageNum == page && endPageNum == page);
+};
+
+/// @todo Instead of hard-coding page 1 and page 2, we need to find the first page in the Finale file with music on it
+/// and use that as the first page. At least, that is my impression. How to handle blank pages in MuseScore is an open question.
+/// - RGP
+
+void FinaleParser::importPageTexts()
+{
+    FinaleTextConv::init();
+    std::vector<std::shared_ptr<others::PageTextAssign>> pageTextAssignList = m_doc->getOthers()->getArray<others::PageTextAssign>(m_currentMusxPartId);
+
+    // we need to work with real-time positions and pages, so we layout the score.
+    m_score->setLayoutAll();
+    m_score->doLayout();
+
+
+    // code idea:
+    // first, read score metadata
+    // then, handle page text as header/footer vframes where applicable and if not, assign it to a measure
+    // each handled textblock is parsed as possible with fontdata and appended to a list of used fontdata
+    // whenever an element is read, check with Cmper in a map to see if textblock has already been parsed, if so, used it from there, if not, parse and add
+    // measure-anchored-texts: determine text style based on (??? contents? font settings?), add to score, same procedure with text block
+    // if centered or rightmost, create as marking to get correct anchoring???
+    // expressions::
+    // tempo changes
+    // need to create character conversion map for non-smufl fonts???
+
+    struct HeaderFooter {
+        bool show = false;
+        bool showFirstPage = true; // always show first page
+        bool oddEven = true; // always different odd/even pages
+        std::vector<std::shared_ptr<others::PageTextAssign>> oddLeftTexts;
+        std::vector<std::shared_ptr<others::PageTextAssign>> oddMiddleTexts;
+        std::vector<std::shared_ptr<others::PageTextAssign>> oddRightTexts;
+        std::vector<std::shared_ptr<others::PageTextAssign>> evenLeftTexts;
+        std::vector<std::shared_ptr<others::PageTextAssign>> evenMiddleTexts;
+        std::vector<std::shared_ptr<others::PageTextAssign>> evenRightTexts;
+    };
+
+    HeaderFooter header;
+    HeaderFooter footer;
+    std::vector<std::shared_ptr<others::PageTextAssign>> notHF;
+    std::vector<std::shared_ptr<others::PageTextAssign>> remainder;
+
+    // gather texts by position
+    for (std::shared_ptr<others::PageTextAssign> pageTextAssign : pageTextAssignList) {
+        if (pageTextAssign->hidden) {
+            // there may be something we can do with hidden assignments created for Patterson's Copyist Helper plugin,
+            // but generally it means the header is not applicable to this part.
+            continue;
+        }
+        const std::optional<PageCmper> startPage = pageTextAssign->calcStartPageNumber(m_currentMusxPartId);
+        const std::optional<PageCmper> endPage = pageTextAssign->calcEndPageNumber(m_currentMusxPartId);
+        if (!startPage || !endPage) {
+            // this page text does not appear on any page in this musx score/linked part.
+            // it happens
+            //  1) when the assignment is to a leading blank page that does not exist in this score/part
+            //  2) when the start page assignment is beyond the number of pages in this score/part
+            continue;
+        }
+
+        // if text is not at top or bottom, invisible,
+        // not recurring, or not on page 1, don't import as hf
+        // For 2-page scores, we can import text only assigned to page 2 as a regular even hf.
+        // For 3-page scores, we can import text only assigned to page 2 as a regular odd hf if we disable hf on page one.
+        // RGP: I don't think we should do the 3rd option. Disabling hf on page one is a non-starter. We should never do that,
+        //      because it causes far more damage than benefit. I changed it not to.
+        /// @todo add sensible limits for xDisp and such.
+        if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Center
+                                 || pageTextAssign->hidden
+                                 || startPage.value() >= 3 /// @todo must be changed to be first non-blank page + 2
+                                 || endPage.value() < PageCmper(m_score->npages())) {
+            notHF.emplace_back(pageTextAssign);
+            continue;
+        }
+        remainder.emplace_back(pageTextAssign);
+    }
+
+    for (std::shared_ptr<others::PageTextAssign> pageTextAssign : remainder) {
+        HeaderFooter& hf = pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Top ? header : footer;
+        hf.show = true;
+    }
+    for (std::shared_ptr<others::PageTextAssign> pageTextAssign : remainder) {
+        HeaderFooter& hf = pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Top ? header : footer;
+        /// @todo this has got to take into account the page text's hPosLp or hPosRp based on indRpPos.
+        /// @todo Finale bases right/left on the actual page numbers, not the visual page numbers. But MuseScore's
+        /// left/right headers display based on visual page numbers. So the whole calculation must be reversed if
+        /// m_score->pageNumberOffset() is odd.
+        switch (pageTextAssign->hPosLp) {
+        case others::PageTextAssign::HorizontalAlignment::Left:
+            if (pageTextAssign->oddEven != others::PageTextAssign::PageAssignType::Even) {
+                hf.oddLeftTexts.emplace_back(pageTextAssign);
+            }
+            if (pageTextAssign->oddEven != others::PageTextAssign::PageAssignType::Odd) {
+                hf.evenLeftTexts.emplace_back(pageTextAssign);
+            }
+            break;
+        case others::PageTextAssign::HorizontalAlignment::Center:
+            if (pageTextAssign->oddEven != others::PageTextAssign::PageAssignType::Even) {
+                hf.oddMiddleTexts.emplace_back(pageTextAssign);
+            }
+            if (pageTextAssign->oddEven != others::PageTextAssign::PageAssignType::Odd) {
+                hf.evenMiddleTexts.emplace_back(pageTextAssign);
+            }
+            break;
+        case others::PageTextAssign::HorizontalAlignment::Right:
+            if (pageTextAssign->oddEven != others::PageTextAssign::PageAssignType::Even) {
+                hf.oddRightTexts.emplace_back(pageTextAssign);
+            }
+            if (pageTextAssign->oddEven != others::PageTextAssign::PageAssignType::Odd) {
+                hf.evenRightTexts.emplace_back(pageTextAssign);
+            }
+            break;
+        }
+    }
+
+    auto stringFromPageText = [&](const std::shared_ptr<others::PageTextAssign>& pageText, bool isForHeaderFooter = true) {
+        std::optional<PageCmper> startPage = pageText->calcStartPageNumber(m_currentMusxPartId);
+        std::optional<PageCmper> endPage = pageText->calcEndPageNumber(m_currentMusxPartId);
+        HeaderFooterType hfType = isForHeaderFooter ? HeaderFooterType::FirstPage : HeaderFooterType::None;
+        if (isForHeaderFooter && startPage == 2 && endPage.value() == PageCmper(m_score->npages())) {
+            hfType = HeaderFooterType::SecondPageToEnd;
+        }
+        std::optional<PageCmper> forPageId = hfType != HeaderFooterType::SecondPageToEnd ? startPage : std::nullopt;
+        musx::util::EnigmaParsingContext parsingContext = pageText->getRawTextCtx(m_currentMusxPartId, forPageId);
+        EnigmaParsingOptions options(hfType);
+        /// @todo set options.scaleFontSizeBy to per-page scaling if MuseScore can't do per-page scaling directly.
+        return stringFromEnigmaText(parsingContext, hfType);
+    };
+
+    if (header.show) {
+        m_score->style().set(Sid::showHeader,      true);
+        m_score->style().set(Sid::headerFirstPage, header.showFirstPage);
+        m_score->style().set(Sid::headerOddEven,   header.oddEven);
+        m_score->style().set(Sid::evenHeaderL,     header.evenLeftTexts.empty() ? String() : stringFromPageText(header.evenLeftTexts.front())); // for now
+        m_score->style().set(Sid::evenHeaderC,     header.evenMiddleTexts.empty() ? String() : stringFromPageText(header.evenMiddleTexts.front()));
+        m_score->style().set(Sid::evenHeaderR,     header.evenRightTexts.empty() ? String() : stringFromPageText(header.evenRightTexts.front()));
+        m_score->style().set(Sid::oddHeaderL,      header.oddLeftTexts.empty() ? String() : stringFromPageText(header.oddLeftTexts.front()));
+        m_score->style().set(Sid::oddHeaderC,      header.oddMiddleTexts.empty() ? String() : stringFromPageText(header.oddMiddleTexts.front()));
+        m_score->style().set(Sid::oddHeaderR,      header.oddRightTexts.empty() ? String() : stringFromPageText(header.oddRightTexts.front()));
+    }
+
+    if (footer.show) {
+        m_score->style().set(Sid::showFooter,      true);
+        m_score->style().set(Sid::footerFirstPage, footer.showFirstPage);
+        m_score->style().set(Sid::footerOddEven,   footer.oddEven);
+        m_score->style().set(Sid::evenFooterL,     footer.evenLeftTexts.empty() ? String() : stringFromPageText(footer.evenLeftTexts.front())); // for now
+        m_score->style().set(Sid::evenFooterC,     footer.evenMiddleTexts.empty() ? String() : stringFromPageText(footer.evenMiddleTexts.front()));
+        m_score->style().set(Sid::evenFooterR,     footer.evenRightTexts.empty() ? String() : stringFromPageText(footer.evenRightTexts.front()));
+        m_score->style().set(Sid::oddFooterL,      footer.oddLeftTexts.empty() ? String() : stringFromPageText(footer.oddLeftTexts.front()));
+        m_score->style().set(Sid::oddFooterC,      footer.oddMiddleTexts.empty() ? String() : stringFromPageText(footer.oddMiddleTexts.front()));
+        m_score->style().set(Sid::oddFooterR,      footer.oddRightTexts.empty() ? String() : stringFromPageText(footer.oddRightTexts.front()));
+    }
+
+    std::vector<Cmper> pagesWithHeaderFrames;
+    std::vector<Cmper> pagesWithFooterFrames;
+
+    auto getPages = [this](const std::shared_ptr<others::PageTextAssign>& pageTextAssign) -> std::vector<page_idx_t> {
+        std::vector<page_idx_t> pagesWithText;
+        page_idx_t startP = page_idx_t(pageTextAssign->calcStartPageNumber(m_currentMusxPartId).value_or(1) - 1);
+        page_idx_t endP = page_idx_t(pageTextAssign->calcStartPageNumber(m_currentMusxPartId).value_or(PageCmper(m_score->npages())) - 1);
+        for (page_idx_t i = startP; i <= endP; ++i) {
+            pagesWithText.emplace_back(i);
+        }
+        return pagesWithText;
+    };
+
+    auto pagePosOfPageTextAssign = [](Page* page, const std::shared_ptr<others::PageTextAssign>& pageTextAssign) -> PointF {
+        /// @todo e.g. center-aligned text in vframes is also in the center of the page, account for that here
+        RectF pageBox = page->ldata()->bbox(); // height and width definitely work, this hopefully too
+        PointF p;
+
+        switch (pageTextAssign->vPos) {
+        case others::PageTextAssign::VerticalAlignment::Center:
+            p.ry() = pageBox.y() / 2;
+            break;
+        case others::PageTextAssign::VerticalAlignment::Top:
+            p.ry() = pageBox.y();
+            break;
+        case others::PageTextAssign::VerticalAlignment::Bottom:;
+            break;
+        }
+
+        if (pageTextAssign->indRpPos && !(page->no() & 1)) {
+            switch(pageTextAssign->hPosRp) {
+            case others::PageTextAssign::HorizontalAlignment::Center:
+                p.rx() = pageBox.x() / 2;
+                break;
+            case others::PageTextAssign::HorizontalAlignment::Right:;
+                p.rx() = pageBox.x();
+                break;
+            case others::PageTextAssign::HorizontalAlignment::Left:
+                break;
+            }
+            p.rx() += FinaleTConv::doubleFromEvpu(pageTextAssign->rightPgXDisp);
+            p.ry() += FinaleTConv::doubleFromEvpu(pageTextAssign->rightPgYDisp);
+        } else {
+            switch(pageTextAssign->hPosLp) {
+            case others::PageTextAssign::HorizontalAlignment::Center:
+                p.rx() = pageBox.x() / 2;
+                break;
+            case others::PageTextAssign::HorizontalAlignment::Right:;
+                p.rx() = pageBox.x();
+                break;
+            case others::PageTextAssign::HorizontalAlignment::Left:
+                break;
+            }
+            p.rx() += FinaleTConv::doubleFromEvpu(pageTextAssign->xDisp);
+            p.ry() += FinaleTConv::doubleFromEvpu(pageTextAssign->yDisp);
+        }
+        return p;
+    };
+
+    /* auto getMeasureForPageTextAssign = [](Page* page, PointF p, bool allowNonMeasures = true) -> MeasureBase* {
+        MeasureBase* closestMB = nullptr;
+        double prevDist = DBL_MAX;
+        for (System* s : page->systems()) {
+            for (MeasureBase* m : s->measures()) {
+                if (allowNonMeasures || m->isMeasure()) {
+                    if (m->ldata()->bbox().distanceTo(p) < prevDist) {
+                        closestMB = m;
+                        prevDist = m->ldata()->bbox().distanceTo(p);
+                    }
+                }
+            }
+        }
+        return closestMB;
+    };
+
+    auto addPageTextToMeasure = [](const std::shared_ptr<others::PageTextAssign>& pageTextAssign, PointF p, MeasureBase* mb, Page* page) {
+        PointF relativePos = p - mb->pagePos();
+        // if (item->placeBelow()) {
+        // ldata->setPosY(item->staff() ? item->staff()->staffHeight(item->tick()) : 0.0);
+    };
+
+    for (std::shared_ptr<others::PageTextAssign> pageTextAssign : remainder) {
+        //@todo: use sophisticated check for whether to import as frame or not. (i.e. distance to measure is too large, frame would get in the way of music)
+        if (pageTextAssign->vPos == others::PageTextAssign::VerticalAlignment::Center) {
+            std::vector<page_idx_t> pagesWithText = getPages(pageTextAssign);
+            for (page_idx_t i : pagesWithText) {
+                Page* page = m_score->pages().at(i);
+                PointF pagePosOfPageText = pagePosOfPageTextAssign(page, pageTextAssign);
+                MeasureBase* mb = getMeasureForPageTextAssign(page, pagePosOfPageText);
+                IF_ASSERT_FAILED (mb) {
+                    // RGP: Finale pages can be blank, so this will definitely happen on the Finale side. (Check others::Page::isBlank to determine if it is blank)
+                    // XM: We handle blank pages by adding a frame (which inherits MeasureBase*) and a page break. Asserting we find something should.work.
+                    // log error
+                    // this should never happen! all pages need at least one measurebase
+                }
+                addPageTextToMeasure(pageTextAssign, pagePosOfPageText, mb, page);
+            }
+        }
+    } */
+
+    // Don't add frames for text vertically aligned to the center.
+    // if top or bottom, we should hopefully be able to check for distance to surrounding music and work from that
+    // if not enough space, attempt to position based on closest measure
+    //note: text is placed slightly lower than indicated position (line space?)
+    // todo: read text properties but also tempo, swing, etc
+    //  NOTE from RGP: tempo, swing, etc. are text expressions and will be handled separately from page text.
+}
+
 }
