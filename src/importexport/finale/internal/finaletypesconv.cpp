@@ -926,6 +926,17 @@ NoteVal FinaleTConv::notePropertiesToNoteVal(const musx::dom::Note::NoteProperti
     return nval;
 }
 
+Fraction FinaleTConv::musxFractionToFraction(const musx::util::Fraction& fraction)
+{
+    // unlike with time signatures, remainder does not need to be accounted for
+    return Fraction(fraction.numerator(), fraction.denominator());
+}
+
+Fraction FinaleTConv::eduToFraction(Edu edu)
+{
+    return musxFractionToFraction(musx::util::Fraction::fromEdu(edu));
+}
+
 Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger)
 {
     auto [count, noteType] = simpleMusxTimeSig;
@@ -939,6 +950,18 @@ Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fr
         }
     }
     return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
+}
+
+StaffGroup FinaleTConv::staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle)
+{
+    using NotationStyle = musx::dom::others::Staff::NotationStyle;
+    static const std::unordered_map<NotationStyle, StaffGroup> staffGroupMapTable = {
+        { NotationStyle::Standard,          StaffGroup::STANDARD },
+        { NotationStyle::Percussion,        StaffGroup::PERCUSSION },
+        { NotationStyle::Tablature,         StaffGroup::TAB },
+    };
+    return muse::value(staffGroupMapTable, notationStyle, StaffGroup::STANDARD);
+
 }
 
 double FinaleTConv::doubleFromEvpu(double evpuDouble)

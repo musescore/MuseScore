@@ -62,6 +62,7 @@ void FinaleParser::parse()
     importParts();
     importBrackets();
     importMeasures();
+    importStaffItems();
 }
 
 }
