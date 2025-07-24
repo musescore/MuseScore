@@ -1144,8 +1144,18 @@ enum class VibratoType : unsigned char {
 
 enum class ArticulationTextType : unsigned char {
     NO_TEXT,
+    // Guitar
     SLAP,
-    POP
+    POP,
+    // Handbells
+    LV,
+    R,
+    TD,
+    BD,
+    RT,
+    PL,
+    SB,
+    VIB,
 };
 
 enum class LyricsSyllabic : unsigned char {

@@ -62,6 +62,7 @@ public:
     static PalettePtr newKeyboardPalette();
     static PalettePtr newPitchPalette(bool defaultPalette = false);
     static PalettePtr newHarpPalette();
+    static PalettePtr newHandbellsPalette();
 
     static PaletteTreePtr newMasterPaletteTree();
     static PaletteTreePtr newDefaultPaletteTree();

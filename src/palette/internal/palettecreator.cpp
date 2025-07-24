@@ -169,6 +169,7 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newBagpipeEmbellishmentPalette());
     tree->append(newBeamPalette());
     tree->append(newLinesPalette());
+    tree->append(newHandbellsPalette());
 
     return tree;
 }
@@ -2000,6 +2001,51 @@ PalettePtr PaletteCreator::newHarpPalette()
     pedalTextDiagram->setIsDiagram(false);
 
     sp->appendElement(pedalTextDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal text diagram"));
+
+    return sp;
+}
+
+PalettePtr PaletteCreator::newHandbellsPalette()
+{
+    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Handbells);
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Handbells"));
+    sp->setGridSize(42, 25);
+    sp->setDrawGrid(true);
+
+    static const std::vector<SymId> handbellsArticSymbols {
+        SymId::handbellsMartellato,
+        SymId::handbellsMartellatoLift,
+        SymId::handbellsHandMartellato,
+        SymId::handbellsMutedMartellato,
+        SymId::handbellsMalletBellSuspended,
+        SymId::handbellsMalletBellOnTable,
+        SymId::handbellsMalletLft,
+        SymId::handbellsPluckLift,
+        SymId::handbellsGyro,
+    };
+
+    static const std::vector<ArticulationTextType> handbellsTextTypes {
+        ArticulationTextType::LV,
+        ArticulationTextType::R,
+        ArticulationTextType::TD,
+        ArticulationTextType::BD,
+        ArticulationTextType::RT,
+        ArticulationTextType::PL,
+        ArticulationTextType::SB,
+        ArticulationTextType::VIB,
+    };
+
+    for (SymId symId : handbellsArticSymbols) {
+        auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+        artic->setSymId(symId);
+        sp->appendElement(artic, artic->subtypeUserName());
+    }
+
+    for (ArticulationTextType textType : handbellsTextTypes) {
+        auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+        artic->setTextType(textType);
+        sp->appendElement(artic, artic->subtypeUserName());
+    }
 
     return sp;
 }

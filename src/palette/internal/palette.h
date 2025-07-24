@@ -88,6 +88,7 @@ public:
         Harp,
         StringTunings,
         Playback,
+        Handbells,
         Custom
     };
     Q_ENUM(Type)
