@@ -196,11 +196,11 @@ public:
         return muse::async::Notification();
     }
 
-    virtual void addTrillNote(mu::engraving::Note*, int, int, int, int, int, bool) 
+    virtual void addTrillNote(mu::engraving::Note*, int, int, int, int, int, int, bool) 
     {
         
     }
-    virtual void addTrillNote1(mu::engraving::Note*, int, int, int, int, int, bool) 
+    virtual void addTrillNote1(mu::engraving::Note*, int, int, int, int, int, int, bool) 
     {
         
     }
@@ -265,9 +265,17 @@ public:
     {
         return nullptr;
     }
+    virtual int trillType() const
+    {
+        return 0;
+    }
     virtual mu::engraving::Note *trillNote1() const 
     {
         return nullptr;
+    }
+    virtual int trillType1() const
+    {
+        return 0;
     }
     virtual bool trillTick(int) 
     {

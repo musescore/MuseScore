@@ -233,10 +233,32 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
                 }
             } else {
                 int _int_note_key = static_cast<int>(m_trill_note_key);
-                if (ratio < 0.333 || ratio > 0.666) {
-                    _int_note_key -= 2;
+                if (m_trill_type == 2215) {
+                    if (ratio < 0.25) {
+
+                    } else if (ratio >= 0.25 && ratio < 0.5) {
+                        _int_note_key -= 1;
+                    } else if (ratio >= 0.5 && ratio < 0.75) {
+                        _int_note_key -= 2;
+                    } else {
+                        _int_note_key -= 1;
+                    }
+                } else if (m_trill_type == 2216 || m_trill_type == 2217) {
+                    if (ratio < 0.25) {
+                        _int_note_key -= 1;
+                    } else if (ratio >= 0.25 && ratio < 0.5) {
+                        _int_note_key -= 2;
+                    } else if (ratio >= 0.5 && ratio < 0.75) {
+                        
+                    } else {
+                        _int_note_key -= 1;
+                    }
                 } else {
-                    _int_note_key -= 1;
+                    if (ratio < 0.333 || ratio > 0.666) {
+                        _int_note_key -= 2;
+                    } else {
+                        _int_note_key -= 1;
+                    }
                 }
                 if (key == (piano_key_t)_int_note_key) {
                     return KeyState::Trill;
@@ -300,10 +322,32 @@ KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
                 }
             } else {
                 int _int_note_key = static_cast<int>(m_trill_note_key1);
-                if (ratio < 0.333 || ratio > 0.666) {
-                    _int_note_key -= 2;
+                if (m_trill_type1 == 2215) {
+                    if (ratio < 0.25) {
+
+                    } else if (ratio >= 0.25 && ratio < 0.5) {
+                        _int_note_key -= 1;
+                    } else if (ratio >= 0.5 && ratio < 0.75) {
+                        _int_note_key -= 2;
+                    } else {
+                        _int_note_key -= 1;
+                    }
+                } else if (m_trill_type1 == 2216 || m_trill_type1 == 2217) {
+                    if (ratio < 0.25) {
+                        _int_note_key -= 1;
+                    } else if (ratio >= 0.25 && ratio < 0.5) {
+                        _int_note_key -= 2;
+                    } else if (ratio >= 0.5 && ratio < 0.75) {
+                        
+                    } else {
+                        _int_note_key -= 1;
+                    }
                 } else {
-                    _int_note_key -= 1;
+                    if (ratio < 0.333 || ratio > 0.666) {
+                        _int_note_key -= 2;
+                    } else {
+                        _int_note_key -= 1;
+                    }
                 }
                 if (key == (piano_key_t)_int_note_key) {
                     return KeyState::Trill;
@@ -506,6 +550,7 @@ void PianoKeyboardController::onNotationChanged()
             m_trill_trill_duration_ticks = notation->interaction()->trillTrillNoteDurationticks();
             
             Note *receivedNote = notation->interaction()->trillNote();
+            m_trill_type = notation->interaction()->trillType();
 
             receive_note = receivedNote;
             if (receivedNote) {
@@ -557,6 +602,7 @@ void PianoKeyboardController::onNotationChanged()
             m_trill_trill_duration_ticks1 = notation->interaction()->trillTrillNoteDurationticks1();
             
             Note *receivedNote = notation->interaction()->trillNote1();
+            m_trill_type1 = notation->interaction()->trillType1();
 
             receive_note1 = receivedNote;
             if (receivedNote) {
