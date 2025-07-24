@@ -150,6 +150,46 @@ void FinaleParser::importMeasures()
             measure->createStaves(m_score->nstaves() - 1);
         }
 
+        /// @todo choose when to set generated based on default staff barline settings
+        /// (and presence of keysigs for double barlines)
+        auto changeBarline = [&](BarLine* bl, others::Measure::BarlineType type) {
+            switch (type) {
+            case others::Measure::BarlineType::None:
+                bl->setVisible(false);
+                break;
+            case others::Measure::BarlineType::OptionsDefault:
+                // not yet supported
+                break;
+            case others::Measure::BarlineType::Normal:
+                bl->setBarLineType(engraving::BarLineType::NORMAL);
+                break;
+            case others::Measure::BarlineType::Double:
+                bl->setBarLineType(engraving::BarLineType::DOUBLE);
+                break;
+            case others::Measure::BarlineType::Final:
+                bl->setBarLineType(engraving::BarLineType::FINAL);
+                if (measure->nextMeasure()) {
+                    bl->setGenerated(false);
+                }
+                break;
+            case others::Measure::BarlineType::Solid:
+                bl->setBarLineType(engraving::BarLineType::HEAVY);
+                // bl->setGenerated(false);
+                break;
+            case others::Measure::BarlineType::Dashed:
+                bl->setBarLineType(engraving::BarLineType::DASHED);
+                break;
+            case others::Measure::BarlineType::Tick:
+                bl->setSpanFrom(mu::engraving::BARLINE_SPAN_TICK1_FROM);
+                bl->setSpanTo(mu::engraving::BARLINE_SPAN_TICK1_TO);
+                break;
+            case others::Measure::BarlineType::Custom:
+                // unsupported
+                break;
+            }
+        };
+
+        // set repeats after barline type
         measure->setRepeatStart(musxMeasure->forwardRepeatBar);
         measure->setRepeatEnd(musxMeasure->backwardsRepeatBar);
         measure->setBreakMultiMeasureRest(musxMeasure->breakMmRest);

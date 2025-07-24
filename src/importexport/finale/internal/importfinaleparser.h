@@ -209,6 +209,11 @@ private:
     void importMeasures();
     void importPageLayout();
     void importStaffItems();
+
+    engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
+                                  const engraving::InstrumentTemplate* it = nullptr);
+    engraving::ClefType toMuseScoreClefType(const std::shared_ptr<const musx::dom::options::ClefOptions::ClefDef>& clefDef,
+                                            const std::shared_ptr<const musx::dom::others::Staff>& musxStaff);
     engraving::Clef* createClef(engraving::Score* score,
                                 const std::shared_ptr<musx::dom::others::Staff>& musxStaff,
                                 engraving::staff_idx_t staffIdx,

@@ -75,6 +75,7 @@ void FinaleParser::parse()
     importBrackets();
     importMeasures();
     importStaffItems();
+    importPageLayout();
 
     // entries (notes, rests & tuplets)
     mapLayers();
