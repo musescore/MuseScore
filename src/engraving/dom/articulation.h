@@ -117,8 +117,12 @@ public:
     SymId symId() const { return m_symId; }
     void setSymId(SymId id);
     virtual int subtype() const override;
+
     void setTextType(ArticulationTextType textType);
     ArticulationTextType textType() const { return m_textType; }
+    Text* text() const { return m_text; }
+    void setText(Text* t) { m_text = t; }
+
     TranslatableString typeUserName() const override;
     TranslatableString subtypeUserName() const override;
     String articulationName() const;    // type-name of articulation; used for midi rendering
@@ -126,7 +130,6 @@ public:
 
     bool layoutCloseToNote() const;
 
-    const muse::draw::Font& font() const { return m_font; }
     bool isHiddenOnTabStaff() const;
 
     std::vector<LineF> dragAnchorLines() const override;
@@ -220,7 +223,7 @@ private:
     String m_channelName;
 
     ArticulationTextType m_textType = ArticulationTextType::NO_TEXT;
-    muse::draw::Font m_font; // used for drawing text type articulations
+    Text* m_text = nullptr;
 
     ArticulationAnchor m_anchor = ArticulationAnchor::AUTO;
 

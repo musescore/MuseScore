@@ -201,7 +201,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutArpeggio(item_cast<const Arpeggio*>(item), static_cast<Arpeggio::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::ARTICULATION:
-        layoutArticulation(item_cast<const Articulation*>(item), static_cast<Articulation::LayoutData*>(ldata));
+        layoutArticulation(item_cast<Articulation*>(item), static_cast<Articulation::LayoutData*>(ldata));
         break;
     case ElementType::BAR_LINE:
         layoutBarLine(item_cast<const BarLine*>(item), static_cast<BarLine::LayoutData*>(ldata), ctx);
@@ -920,7 +920,7 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
     }
 }
 
-void TLayout::layoutArticulation(const Articulation* item, Articulation::LayoutData* ldata)
+void TLayout::layoutArticulation(Articulation* item, Articulation::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
     if (item->isHiddenOnTabStaff()) {
@@ -932,6 +932,22 @@ void TLayout::layoutArticulation(const Articulation* item, Articulation::LayoutD
 
     //! NOTE Must already be set previously
     LD_CONDITION(ldata->symId.has_value());
+
+    if (item->textType() != ArticulationTextType::NO_TEXT) {
+        if (!item->text()) {
+            Text* text = new Text(item, TextStyleType::DEFAULT);
+            static const ElementStyle elementStyle;
+            text->initElementStyle(&elementStyle);
+            item->setText(text);
+        }
+
+        Text* text = item->text();
+        text->setXmlText(TConv::text(item->textType()));
+        text->setTrack(item->track());
+        text->setParent(item);
+
+        layoutBaseTextBase(item->text(), item->text()->mutldata());
+    }
 
     fillArticulationShape(item, ldata);
 }
@@ -959,10 +975,7 @@ void TLayout::fillArticulationShape(const Articulation* item, Articulation::Layo
     } else if (item->textType() == ArticulationTextType::NO_TEXT) {
         ldata->setShape(Shape(item->symBbox(sym), item));
     } else {
-        Font scaledFont(item->font());
-        FontMetrics fontMetrics(scaledFont);
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->magS() * MScore::pixelRatio);
-        ldata->setShape(Shape(fontMetrics.boundingRect(TConv::text(item->textType())), item));
+        ldata->setShape(Shape(item->text()->ldata()->bbox(), item));
     }
 }
 
@@ -4385,7 +4398,7 @@ void TLayout::layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, 
 
     ldata->setShape(Shape());
 
-    layoutArticulation(static_cast<const Articulation*>(item), ldata);
+    layoutArticulation(const_cast<Ornament*>(item), ldata);
 
     double _spatium = item->spatium();
     double vertMargin = 0.35 * _spatium;
