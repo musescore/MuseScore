@@ -161,6 +161,8 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
         createColumnSubItem(8),
         createColumnSubItem(12),
         createColumnSubItem(16),
+        createColumnSubItem(20),
+        createColumnSubItem(24),
     };
 
     QList<QVariantMap> menuItems = {
