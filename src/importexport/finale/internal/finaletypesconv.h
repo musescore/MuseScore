@@ -47,7 +47,10 @@ public:
     static engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
     static engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
     static engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
+    static engraving::Fraction musxFractionToFraction(const musx::util::Fraction& fraction);
+    static engraving::Fraction eduToFraction(musx::dom::Edu edu);
     static engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger);
+    static engraving::StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle);
     // unit conversion
     static double doubleFromEvpu(double evpu);
     static engraving::PointF evpuToPointF(double xEvpu, double yEvpu);
