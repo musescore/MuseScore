@@ -123,6 +123,9 @@ public:
     Text* text() const { return m_text; }
     void setText(Text* t) { m_text = t; }
 
+    void setSelected(bool f) override;
+    void setVisible(bool f) override;
+
     TranslatableString typeUserName() const override;
     TranslatableString subtypeUserName() const override;
     String articulationName() const;    // type-name of articulation; used for midi rendering

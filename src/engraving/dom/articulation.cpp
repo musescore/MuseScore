@@ -92,6 +92,24 @@ void Articulation::setTextType(ArticulationTextType textType)
     m_textType = textType;
 }
 
+void Articulation::setSelected(bool f)
+{
+    if (m_text) {
+        m_text->setSelected(f);
+    }
+
+    EngravingItem::setSelected(f);
+}
+
+void Articulation::setVisible(bool f)
+{
+    if (m_text) {
+        m_text->setVisible(f);
+    }
+
+    EngravingItem::setVisible(f);
+}
+
 //---------------------------------------------------------
 //   subtype
 //---------------------------------------------------------
