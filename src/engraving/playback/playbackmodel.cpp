@@ -626,7 +626,7 @@ void PlaybackModel::reloadMetronomeEvents()
 
 bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) const
 {
-    static const std::unordered_set<ElementType> REQUIRED_TYPES = {
+    static const std::unordered_set<ElementType> REQUIRED_TYPES {
         ElementType::PLAYTECH_ANNOTATION,
         ElementType::CAPO,
         ElementType::DYNAMIC,
@@ -641,12 +641,10 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
         ElementType::BREATH,
     };
 
-    for (const ElementType type : REQUIRED_TYPES) {
-        if (changesRange.changedTypes.find(type) == changesRange.changedTypes.cend()) {
-            continue;
+    for (const ElementType type : changesRange.changedTypes) {
+        if (muse::contains(REQUIRED_TYPES, type)) {
+            return true;
         }
-
-        return true;
     }
 
     if (changesRange.isValidBoundary()) {
@@ -675,7 +673,7 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
 
 bool PlaybackModel::hasToReloadScore(const ScoreChangesRange& changesRange) const
 {
-    static const std::unordered_set<ElementType> REQUIRED_TYPES = {
+    static const std::unordered_set<ElementType> REQUIRED_TYPES {
         ElementType::SCORE,
         ElementType::GRADUAL_TEMPO_CHANGE,
         ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT,
@@ -688,14 +686,13 @@ bool PlaybackModel::hasToReloadScore(const ScoreChangesRange& changesRange) cons
         ElementType::JUMP,
         ElementType::MARKER,
         ElementType::BREATH,
+        ElementType::INSTRUMENT_CHANGE,
     };
 
-    for (const ElementType type : REQUIRED_TYPES) {
-        if (changesRange.changedTypes.find(type) == changesRange.changedTypes.cend()) {
-            continue;
+    for (const ElementType type : changesRange.changedTypes) {
+        if (muse::contains(REQUIRED_TYPES, type)) {
+            return true;
         }
-
-        return true;
     }
 
     static const std::unordered_set<mu::engraving::Pid> REQUIRED_PROPERTIES {
