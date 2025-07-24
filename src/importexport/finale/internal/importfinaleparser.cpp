@@ -63,6 +63,10 @@ void FinaleParser::parse()
     importBrackets();
     importMeasures();
     importStaffItems();
+
+    // entries (notes, rests & tuplets)
+    mapLayers();
+    importEntries();
 }
 
 }

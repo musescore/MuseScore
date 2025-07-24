@@ -28,6 +28,10 @@
 
 #include "types/string.h"
 
+#include "engraving/dom/accidental.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/noteval.h"
+
 #include "importfinalelogger.h"
 
 #include "log.h"
@@ -46,6 +50,59 @@ ID FinaleTConv::createPartId(int partNumber)
 ID FinaleTConv::createStaffId(musx::dom::InstCmper staffId)
 {
     return std::to_string(staffId);
+}
+
+int FinaleTConv::createFinaleVoiceId(musx::dom::LayerIndex layerIndex, bool forV2)
+{
+    return (layerIndex * 2 + int(forV2));
+}
+
+DurationType FinaleTConv::noteTypeToDurationType(musx::dom::NoteType noteType)
+{
+    static const std::unordered_map<musx::dom::NoteType, DurationType> noteTypeTable = {
+        { musx::dom::NoteType::Maxima,     DurationType::V_INVALID },
+        { musx::dom::NoteType::Longa,      DurationType::V_LONG },
+        { musx::dom::NoteType::Breve,      DurationType::V_BREVE },
+        { musx::dom::NoteType::Whole,      DurationType::V_WHOLE },
+        { musx::dom::NoteType::Half,       DurationType::V_HALF },
+        { musx::dom::NoteType::Quarter,    DurationType::V_QUARTER },
+        { musx::dom::NoteType::Eighth,     DurationType::V_EIGHTH },
+        { musx::dom::NoteType::Note16th,   DurationType::V_16TH },
+        { musx::dom::NoteType::Note32nd,   DurationType::V_32ND },
+        { musx::dom::NoteType::Note64th,   DurationType::V_64TH },
+        { musx::dom::NoteType::Note128th,  DurationType::V_128TH },
+        { musx::dom::NoteType::Note256th,  DurationType::V_256TH },
+        { musx::dom::NoteType::Note512th,  DurationType::V_512TH },
+        { musx::dom::NoteType::Note1024th, DurationType::V_1024TH },
+        { musx::dom::NoteType::Note2048th, DurationType::V_INVALID },
+        { musx::dom::NoteType::Note4096th, DurationType::V_INVALID },
+    };
+    return muse::value(noteTypeTable, noteType, DurationType::V_INVALID);
+}
+
+TDuration FinaleTConv::noteInfoToDuration(std::pair<musx::dom::NoteType, unsigned> noteInfo)
+{
+    TDuration d = FinaleTConv::noteTypeToDurationType(noteInfo.first);
+    int ndots = static_cast<int>(noteInfo.second);
+    if (d.isValid() && ndots <= MAX_DOTS) {
+        d.setDots(ndots);
+        return d;
+    }
+    return TDuration(DurationType::V_INVALID);
+}
+
+engraving::NoteType FinaleTConv::durationTypeToNoteType(DurationType type, bool after)
+{
+    if (int(type) < int(DurationType::V_EIGHTH)) {
+        return after ? engraving::NoteType::GRACE4 : engraving::NoteType::GRACE8_AFTER;
+    }
+    if (int(type) >= int(DurationType::V_32ND)) {
+        return after ? engraving::NoteType::GRACE32_AFTER : engraving::NoteType::GRACE32;
+    }
+    if (type == DurationType::V_16TH) {
+        return after ? engraving::NoteType::GRACE16_AFTER : engraving::NoteType::GRACE16;
+    }
+    return after ? engraving::NoteType::GRACE8_AFTER : engraving::NoteType::APPOGGIATURA;
 }
 
 String FinaleTConv::instrTemplateIdfromUuid(std::string uuid)
@@ -918,7 +975,7 @@ NoteVal FinaleTConv::notePropertiesToNoteVal(const musx::dom::Note::NoteProperti
     int absStep = 35 /*middle C*/ + int(noteType) + (octave - 4) * STEP_DELTA_OCTAVE;
     nval.pitch = absStep2pitchByKey(absStep, Key::C) + alteration; //assume EDO division is semitone
     if (alteration < int(AccidentalVal::MIN) || alteration > int(AccidentalVal::MAX) || !pitchIsValid(nval.pitch)) {
-        nval.pitch = std::clamp(nval.pitch, 0, 127);
+        nval.pitch = clampPitch(nval.pitch);
         nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
     } else {
         nval.tpc1 = step2tpc(int(noteType), AccidentalVal(alteration));
@@ -950,6 +1007,15 @@ Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fr
         }
     }
     return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
+}
+
+SymId FinaleTConv::acciSymbolFromAcciAmount(int acciAmount)
+{
+    /// @todo add support for microtonal symbols (will require access to musx KeySignature instance)
+    /// This code assumes each chromatic halfstep is 1 EDO division, but we cannot make that assumption
+    /// with microtonal symbols.
+    AccidentalType at = Accidental::value2subtype(AccidentalVal(acciAmount));
+    return at != AccidentalType::NONE ? Accidental::subtype2symbol(at) : SymId::noSym;
 }
 
 StaffGroup FinaleTConv::staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle)

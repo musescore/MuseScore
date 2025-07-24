@@ -79,6 +79,14 @@ struct FinaleOptions
     std::shared_ptr<const musx::dom::others::PartGlobals> partGlobals;
 };
 
+struct ReadableTuplet {
+    engraving::Fraction startTick;
+    engraving::Fraction endTick;
+    std::shared_ptr<const musx::dom::details::TupletDef> musxTuplet = nullptr; // actual tuplet object. used for writing properties
+    engraving::Tuplet* scoreTuplet = nullptr; // to be created tuplet object.
+    int layer = 0; // for nested tuplets. 0 = outermost
+};
+
 enum class HeaderFooterType {
     None,
     FirstPage,
@@ -153,6 +161,21 @@ private:
                      const std::shared_ptr<musx::dom::others::Measure>& nextMusxMeasure);
     bool applyStaffSyles(engraving::StaffType* staffType, const std::shared_ptr<const musx::dom::others::StaffComposite>& currStaff);
 
+    // entries
+    void mapLayers();
+    void importEntries();
+
+    std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,
+                                                         musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const;
+    bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Measure* measure, bool graceNotes,
+                          std::vector<engraving::Note*>& notesWithUnmanagedTies,
+                          std::vector<ReadableTuplet>& tupletMap, std::unordered_map<engraving::Rest*, musx::dom::NoteInfoPtr>& fixedRests);
+    bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx);
+    bool positionFixedRests(const std::unordered_map<engraving::Rest*, musx::dom::NoteInfoPtr>& fixedRests);
+    engraving::Note* noteFromEntryInfoAndNumber(const musx::dom::EntryInfoPtr& entryInfoPtr, musx::dom::NoteNumber nn);
+    engraving::Note* noteFromNoteInfoPtr(const musx::dom::NoteInfoPtr& noteInfoPtr);
+    engraving::ChordRest* chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr& entryInfoPtr);
+
     // styles
     void importStyles();
     engraving::Score* m_score;
@@ -160,12 +183,17 @@ private:
     FinaleOptions m_finaleOptions;
     FinaleLoggerPtr m_logger;
     const musx::dom::Cmper m_currentMusxPartId = musx::dom::SCORE_PARTID; // eventually this may be changed per excerpt/linked part
+    bool m_smallNoteMagFound = false;
     std::unordered_map<std::string, const engraving::IEngravingFontPtr> m_engravingFonts;
 
     std::unordered_map<engraving::staff_idx_t, musx::dom::InstCmper> m_staff2Inst;
     std::unordered_map<musx::dom::InstCmper, engraving::staff_idx_t> m_inst2Staff;
     std::unordered_map<musx::dom::MeasCmper, engraving::Fraction> m_meas2Tick;
     std::map<engraving::Fraction, musx::dom::MeasCmper> m_tick2Meas; // use std::map to avoid need for Fraction hash function
+    std::unordered_map<musx::dom::LayerIndex, engraving::voice_idx_t> m_layer2Voice;
+    std::unordered_set<musx::dom::LayerIndex> m_layerForceStems;
+    std::map<std::pair<musx::dom::EntryNumber, musx::dom::NoteNumber>, engraving::Note*> m_entryNoteNumber2Note; // use std::map to avoid need for std::pair hash function
+    std::unordered_map<musx::dom::EntryNumber, engraving::ChordRest*> m_entryNumber2CR;
 };
 
 }
