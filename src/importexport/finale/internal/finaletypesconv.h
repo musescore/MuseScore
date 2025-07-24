@@ -54,6 +54,8 @@ public:
     static engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger);
     static engraving::SymId acciSymbolFromAcciAmount(int acciAmount);
     static engraving::StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle);
+    static engraving::String metaTagFromFileInfo(musx::dom::texts::FileInfoText::TextType textType);
+    static engraving::String metaTagFromTextComponent(const std::string& component);
     static engraving::ElementType elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
     static engraving::OttavaType ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
     static engraving::SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
