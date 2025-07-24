@@ -1,0 +1,52 @@
+{
+	"accidentalFlat": {
+		"codepoint": "U+E260",
+		"legacyCodepoint": "33",
+		"description": ""
+	},
+	"accidentalNatural": {
+		"codepoint": "U+E261",
+		"legacyCodepoint": "34",
+		"description": ""
+	},
+	"accidentalSharp": {
+		"codepoint": "U+E262",
+		"legacyCodepoint": "35",
+		"description": ""
+	},
+	"csymAugmented": {
+		"codepoint": "U+E872",
+		"legacyCodepoint": "43",
+		"description": ""
+	},
+	"csymMinor": {
+		"codepoint": "U+E874",
+		"legacyCodepoint": "45",
+		"description": ""
+	},
+	"csymParensLeftTall": {
+		"codepoint": "U+E875",
+		"legacyCodepoint": "60",
+		"description": ""
+	},
+	"csymParensRightTall": {
+		"codepoint": "U+E876",
+		"legacyCodepoint": "62",
+		"description": ""
+	},
+	"csymMajorSeventh": {
+		"codepoint": "U+E873",
+		"legacyCodepoint": "64",
+		"description": ""
+	},
+	"csymDiminished": {
+		"codepoint": "U+E870",
+		"legacyCodepoint": "181",
+		"description": ""
+	},
+	"csymHalfDiminished": {
+		"codepoint": "U+E871",
+		"legacyCodepoint": "187",
+		"description": ""
+	}
+}
