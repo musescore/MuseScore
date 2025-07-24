@@ -193,6 +193,8 @@ public:
             up.reset();
             symId.reset();
         }
+
+        double opticalCenter() const;
     };
     DECLARE_LAYOUTDATA_METHODS(Articulation)
 

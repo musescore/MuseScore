@@ -934,4 +934,18 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
 
     return result;
 }
+
+double Articulation::LayoutData::opticalCenter() const
+{
+    switch (symId.value()) {
+    case SymId::handbellsMartellatoLift:
+        return 0.5 * m_item->symWidth(SymId::handbellsMartellato);
+    case SymId::handbellsMalletLft:
+        return 0.5 * m_item->symWidth(SymId::handbellsMalletBellOnTable);
+    case SymId::handbellsPluckLift:
+        return 0.5 * m_item->symWidth(SymId::articStaccatoAbove);
+    default:
+        return 0.5 * bbox().width();
+    }
+}
 }
