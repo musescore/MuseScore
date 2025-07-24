@@ -36,6 +36,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/musxxmldom.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinaleentries.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalelogger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalelogger.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalescoremap.cpp
