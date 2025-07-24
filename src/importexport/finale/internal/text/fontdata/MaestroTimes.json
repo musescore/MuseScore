@@ -1,0 +1,62 @@
+{
+	"metNoteDoubleWhole": {
+		"codepoint": "U+ECA0",
+		"legacyCodepoint": "136",
+		"description": "Double whole note (Breve)"
+	},
+	"metNoteDoubleWholeSquare": {
+		"codepoint": "U+ECA1",
+		"legacyCodepoint": "131",
+		"description": "Double whole note (square)"
+	},
+	"metNoteQuarterUp": {
+		"codepoint": "U+ECA5",
+		"legacyCodepoint": "140",
+		"description": "Quarter note (crotchet) stem up"
+	},
+	"metNote8thUp": {
+		"codepoint": "U+ECA7",
+		"legacyCodepoint": "137",
+		"description": "Eighth note (quaver) stem up"
+	},
+	"textTuplet3LongStem": {
+		"codepoint": "U+E202",
+		"legacyCodepoint": "205",
+		"index": 0,
+		"description": "Tuplet number 3 for long stem"
+	},
+	"textBlackNoteFrac8thLongStem": {
+		"codepoint": "U+E1F3",
+		"legacyCodepoint": "205",
+		"index": 1,
+		"description": "Black note, fractional 8th beam, long stem"
+	},
+	"overrideexistingtypes": 0,
+	"textBlackNoteFrac8thLongStem": {
+		"codepoint": "U+E1F3",
+		"legacyCodepoint": "194",
+		"description": "Black note, fractional 8th beam, long stem"
+	},
+	"textBlackNoteFrac32ndLongStem": {
+		"codepoint": "U+E1F6",
+		"legacyCodepoint": "193",
+		"description": "Black note, fractional 32nd beam, long stem"
+	},
+	"textTripletBracketFull": {
+		"nameIsMakeMusic": true,
+		"codepoint": "U+E1F5",
+		"legacyCodepoint": "199",
+		"description": "Startbracket, tuplet 3, endbracket"
+	},
+	"textBlackNoteFrac16thLongStem": {
+		"codepoint": "U+E1F5",
+		"legacyCodepoint": "202",
+		"description": "Black note, fractional 16th beam, long stem"
+	},
+	"textBlackNoteFracSingle16th": {
+		"nameIsMakeMusic": true,
+		"codepoint": "U+F7D6",
+		"legacyCodepoint": "203",
+		"description": ""
+	},
+}
