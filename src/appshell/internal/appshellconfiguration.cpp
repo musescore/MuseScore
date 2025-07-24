@@ -47,6 +47,11 @@ static const std::string MUSESCORE_ONLINE_HANDBOOK_URL("https://handbook.musesco
 static const std::string MUSESCORE_ASK_FOR_HELP_URL_PATH("/redirect/post/question");
 static const std::string MUSESCORE_FORUM_URL_PATH("/forum");
 static const std::string MUSESCORE_CONTRIBUTE_URL_PATH("/contribute");
+static const std::string MUSEHUB_FREE_MUSE_SOUNDS_URL("https://www.musehub.com/free-musesounds"
+                                                      "?utm_source=mss-app-dialog-ms-free"
+                                                      "&utm_medium=mss-app-dialog-ms-free"
+                                                      "&utm_campaign=mss-app-dialog-ms-free"
+                                                      "&utm_id=mss-app-dialog");
 static const std::string MUSICXML_URL("https://w3.org");
 static const std::string MUSICXML_LICENSE_URL(MUSICXML_URL + "/community/about/process/final/");
 static const std::string MUSICXML_LICENSE_DEED_URL(MUSICXML_URL + "/community/about/process/fsa-deed/");
@@ -163,6 +168,11 @@ std::string AppShellConfiguration::museScoreForumUrl() const
 std::string AppShellConfiguration::museScoreContributionUrl() const
 {
     return museScoreUrl() + MUSESCORE_CONTRIBUTE_URL_PATH;
+}
+
+std::string AppShellConfiguration::museHubFreeMuseSoundsUrl() const
+{
+    return MUSEHUB_FREE_MUSE_SOUNDS_URL;
 }
 
 std::string AppShellConfiguration::musicXMLLicenseUrl() const
