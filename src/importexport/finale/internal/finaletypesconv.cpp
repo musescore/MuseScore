@@ -1011,6 +1011,26 @@ Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fr
     return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
 }
 
+Key FinaleTConv::keyFromAlteration(int musxAlteration)
+{
+    return Key(musxAlteration);
+}
+
+KeyMode FinaleTConv::keyModeFromDiatonicMode(music_theory::DiatonicMode diatonicMode)
+{
+    using DiatonicMode = music_theory::DiatonicMode;
+    static const std::unordered_map<DiatonicMode, KeyMode> keyModeTypeTable = {
+        { DiatonicMode::Ionian,             KeyMode::IONIAN },
+        { DiatonicMode::Dorian,             KeyMode::DORIAN },
+        { DiatonicMode::Phrygian,           KeyMode::PHRYGIAN },
+        { DiatonicMode::Lydian,             KeyMode::LYDIAN },
+        { DiatonicMode::Mixolydian,         KeyMode::MIXOLYDIAN },
+        { DiatonicMode::Aeolian,            KeyMode::AEOLIAN },
+        { DiatonicMode::Locrian,            KeyMode::LOCRIAN },
+    };
+    return muse::value(keyModeTypeTable, diatonicMode, KeyMode::UNKNOWN);
+}
+
 SymId FinaleTConv::acciSymbolFromAcciAmount(int acciAmount)
 {
     /// @todo add support for microtonal symbols (will require access to musx KeySignature instance)
