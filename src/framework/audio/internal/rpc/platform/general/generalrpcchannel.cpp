@@ -139,6 +139,33 @@ void GeneralRpcChannel::listenAll(Handler h)
     }
 }
 
+void GeneralRpcChannel::addStream(std::shared_ptr<IStream> s)
+{
+    s->init();
+
+    if (isWorkerThread()) {
+        m_workerRpcData.streams.insert({ s->streamId(), s });
+    } else {
+        m_mainRpcData.streams.insert({ s->streamId(), s });
+    }
+}
+
+void GeneralRpcChannel::removeStream(StreamId id)
+{
+    auto removeStrm = [](std::map<StreamId, std::shared_ptr<IStream> >& streams, StreamId id) {
+        auto it = streams.find(id);
+        if (it != streams.end()) {
+            streams.erase(it);
+        }
+    };
+
+    if (isWorkerThread()) {
+        removeStrm(m_workerRpcData.streams, id);
+    } else {
+        removeStrm(m_mainRpcData.streams, id);
+    }
+}
+
 void GeneralRpcChannel::sendStream(const StreamMsg& msg)
 {
     if (isWorkerThread()) {
