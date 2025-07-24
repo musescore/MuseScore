@@ -126,8 +126,8 @@ public:
     template<typename DataType, typename DefaultType>
     DataType data(const std::string& key, const DefaultType& defaultValue) const
     {
-        static_assert(std::is_same_v<DataType, std::decay_t<DefaultType>>,
-            "defaultValue must be the same type as DataType");
+        static_assert(std::is_same_v<DataType, std::decay_t<DefaultType> >,
+                      "defaultValue must be the same type as DataType");
         static_assert(!std::is_reference_v<DataType>, "DataType must not be a reference");
         static_assert(!std::is_pointer_v<DataType>, "DataType must not be a pointer");
 
