@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "winframelesswindowcontroller.h"
+#include "winwindowscontroller.h"
 
 #if defined(_WIN32_WINNT) && (_WIN32_WINNT < 0x600)
 #undef _WIN32_WINNT // like defined to `0x502` in _mingw.h for Qt 5.15
@@ -43,8 +43,8 @@ static void updateWindowPosition()
     SetWindowPos(s_hwnd, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
 }
 
-WinFramelessWindowController::WinFramelessWindowController()
-    : FramelessWindowController()
+WinWindowsController::WinWindowsController()
+    : WindowsController()
 {
     memset(&m_monitorInfo, 0, sizeof(MONITORINFO));
     m_monitorInfo.cbSize = sizeof(MONITORINFO);
@@ -53,7 +53,7 @@ WinFramelessWindowController::WinFramelessWindowController()
     qApp->installNativeEventFilter(this);
 }
 
-void WinFramelessWindowController::init()
+void WinWindowsController::init()
 {
     QWindow* window = mainWindow()->qWindow();
     IF_ASSERT_FAILED(window) {
@@ -72,7 +72,7 @@ void WinFramelessWindowController::init()
     updateWindowPosition();
 }
 
-bool WinFramelessWindowController::eventFilter(QObject* watched, QEvent* event)
+bool WinWindowsController::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() != QEvent::Move || !watched->isWindowType()) {
         return false;
@@ -97,7 +97,7 @@ bool WinFramelessWindowController::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
-bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result)
+bool WinWindowsController::nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result)
 {
     if (eventType != "windows_generic_MSG") {
         return false;
@@ -108,22 +108,32 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
         return false;
     }
 
-    if (msg->hwnd != s_hwnd) {
-        return false;
-    }
+    UINT messageType = msg->message;
+    HWND hWnd = msg->hwnd;
+    LPARAM lParam = msg->lParam;
 
-    switch (msg->message) {
+    bool isMainWindow = hWnd == s_hwnd;
+    return isMainWindow ? nativeEventFilterForMainWindow(messageType, hWnd, lParam, result)
+           : nativeEventFilterForNonMainWindow(messageType, hWnd);
+}
+
+bool WinWindowsController::nativeEventFilterForMainWindow(UINT messageType, HWND hWnd, LPARAM lParam, qintptr* result)
+{
+    switch (messageType) {
     case WM_NCCALCSIZE: {
-        return removeWindowFrame(msg, result);
+        return removeWindowFrame(hWnd, lParam, result);
     }
     case WM_GETMINMAXINFO: {
-        return calculateWindowSize(msg, result);
+        return calculateWindowSize(hWnd, lParam, result);
+    }
+    case WM_ERASEBKGND: {
+        return initWindowBackgroundColor(hWnd);
     }
     case WM_NCHITTEST: {
-        return processMouseMove(msg, result);
+        return processMouseMove(hWnd, lParam, result);
     }
     case WM_NCRBUTTONDOWN: {
-        return processMouseRightClick(msg);
+        return processMouseRightClick(hWnd, lParam);
     }
     default:
         break;
@@ -132,16 +142,41 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
     return false;
 }
 
-bool WinFramelessWindowController::removeWindowFrame(MSG* message, qintptr* result)
+bool WinWindowsController::nativeEventFilterForNonMainWindow(UINT messageType, HWND hWnd)
 {
-    NCCALCSIZE_PARAMS& params = *reinterpret_cast<NCCALCSIZE_PARAMS*>(message->lParam);
+    switch (messageType) {
+    case WM_ERASEBKGND: {
+        std::wstring title(GetWindowTextLength(hWnd) + 1, L'\0');
+        GetWindowTextW(hWnd, &title[0], (int)title.size());
+
+        if (!title.empty() && title.back() == L'\0') {
+            title.pop_back();
+        }
+
+        if (title == L"PopupWindow") {
+            //! Popups has transparent background, so no need to change it
+            return false;
+        }
+
+        return initWindowBackgroundColor(hWnd);
+    }
+    default:
+        break;
+    }
+
+    return false;
+}
+
+bool WinWindowsController::removeWindowFrame(HWND hWnd, LPARAM lParam, qintptr* result)
+{
+    NCCALCSIZE_PARAMS& params = *reinterpret_cast<NCCALCSIZE_PARAMS*>(lParam);
 
     WINDOWPLACEMENT placement = {};
     placement.length = sizeof(WINDOWPLACEMENT);
     GetWindowPlacement(s_hwnd, &placement);
 
     if (placement.showCmd == SW_SHOWMAXIMIZED) {
-        HMONITOR hMonitor = MonitorFromWindow(message->hwnd, MONITOR_DEFAULTTONULL);
+        HMONITOR hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONULL);
         if (hMonitor != NULL) {
             m_monitorInfo.cbSize = sizeof(MONITORINFO);
             GetMonitorInfoW(hMonitor, &m_monitorInfo);
@@ -172,14 +207,14 @@ bool WinFramelessWindowController::removeWindowFrame(MSG* message, qintptr* resu
     return true;
 }
 
-bool WinFramelessWindowController::calculateWindowSize(MSG* message, qintptr* result)
+bool WinWindowsController::calculateWindowSize(HWND hWnd, LPARAM lParam, qintptr* result)
 {
-    if (!isWindowMaximized(message->hwnd)) {
+    if (!isWindowMaximized(hWnd)) {
         return false;
     }
 
     RECT windowRect;
-    if (!GetWindowRect(message->hwnd, &windowRect)) {
+    if (!GetWindowRect(hWnd, &windowRect)) {
         return false;
     }
 
@@ -192,7 +227,7 @@ bool WinFramelessWindowController::calculateWindowSize(MSG* message, qintptr* re
     RECT monitorRect = m_monitorInfo.rcMonitor;
     RECT monitorWorkAreaRect = m_monitorInfo.rcWork;
 
-    auto minMaxInfo = reinterpret_cast<MINMAXINFO*>(message->lParam);
+    auto minMaxInfo = reinterpret_cast<MINMAXINFO*>(lParam);
 
     minMaxInfo->ptMaxSize.x = monitorWorkAreaRect.right - monitorWorkAreaRect.left;
     minMaxInfo->ptMaxSize.y =  monitorWorkAreaRect.bottom - monitorWorkAreaRect.top;
@@ -205,19 +240,44 @@ bool WinFramelessWindowController::calculateWindowSize(MSG* message, qintptr* re
     return true;
 }
 
-bool WinFramelessWindowController::processMouseMove(MSG* message, qintptr* result) const
+bool WinWindowsController::initWindowBackgroundColor(HWND hWnd)
+{
+    HDC hdc = GetWindowDC(hWnd);
+
+    QColor bgColor = QColor(uiConfiguration()->currentTheme().values.value(muse::ui::BACKGROUND_PRIMARY_COLOR).toString());
+    COLORREF bgRGB = RGB(bgColor.red(), bgColor.green(), bgColor.blue());
+
+    SetClassLongPtr(hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)CreateSolidBrush(bgRGB));
+    SetBkColor(hdc, bgRGB);
+
+    RECT rect;
+    GetClientRect(hWnd, &rect);
+
+    //! NOTE: For some reason, the client area is returned smaller than the actual window area.
+    //! Let's add an extra margin, the size of which was determined experimentally.
+    static constexpr int CLIENT_AREA_EXTRA_MARGIN = 100;
+    rect.bottom = rect.bottom + CLIENT_AREA_EXTRA_MARGIN;
+    rect.right = rect.right + CLIENT_AREA_EXTRA_MARGIN;
+
+    HBRUSH brush = (HBRUSH)GetClassLongPtrW(hWnd, GCLP_HBRBACKGROUND);
+    FillRect(hdc, &rect, brush);
+
+    return true;
+}
+
+bool WinWindowsController::processMouseMove(HWND hWnd, LPARAM lParam, qintptr* result) const
 {
     const LONG borderWidth = this->borderWidth();
     RECT windowRect;
-    if (!GetWindowRect(message->hwnd, &windowRect)) {
+    if (!GetWindowRect(hWnd, &windowRect)) {
         return false;
     }
 
-    long x = GET_X_LPARAM(message->lParam);
-    long y = GET_Y_LPARAM(message->lParam);
+    long x = GET_X_LPARAM(lParam);
+    long y = GET_Y_LPARAM(lParam);
 
     double scaleFactor = uiConfiguration()->guiScaling();
-    QRect moveAreaRect = windowTitleBarMoveArea();
+    QRect moveAreaRect = mainWindowTitleBarMoveArea();
     int moveAreaHeight = static_cast<int>(moveAreaRect.height() * scaleFactor);
     int moveAreaWidth = static_cast<int>(moveAreaRect.width() * scaleFactor);
     int moveAreaX = windowRect.left + static_cast<int>(moveAreaRect.x() * scaleFactor);
@@ -285,14 +345,14 @@ bool WinFramelessWindowController::processMouseMove(MSG* message, qintptr* resul
     return false;
 }
 
-bool WinFramelessWindowController::processMouseRightClick(MSG* message) const
+bool WinWindowsController::processMouseRightClick(HWND hWnd, LPARAM lParam) const
 {
-    return showSystemMenuIfNeed(message);
+    return showSystemMenuIfNeed(hWnd, lParam);
 }
 
-void WinFramelessWindowController::updateContextMenuState(MSG* message) const
+void WinWindowsController::updateContextMenuState(HWND hWnd) const
 {
-    HMENU menu = GetSystemMenu(message->hwnd, false);
+    HMENU menu = GetSystemMenu(hWnd, false);
 
     MENUITEMINFO menuItemInfo;
     menuItemInfo.cbSize = sizeof(MENUITEMINFO);
@@ -330,25 +390,25 @@ void WinFramelessWindowController::updateContextMenuState(MSG* message) const
     }
 }
 
-bool WinFramelessWindowController::showSystemMenuIfNeed(MSG* message) const
+bool WinWindowsController::showSystemMenuIfNeed(HWND hWnd, LPARAM lParam) const
 {
-    updateContextMenuState(message);
+    updateContextMenuState(hWnd);
 
-    HMENU menu = GetSystemMenu(message->hwnd, false);
+    HMENU menu = GetSystemMenu(hWnd, false);
 
-    long x = GET_X_LPARAM(message->lParam);
-    long y = GET_Y_LPARAM(message->lParam);
+    long x = GET_X_LPARAM(lParam);
+    long y = GET_Y_LPARAM(lParam);
 
-    uint command = TrackPopupMenu(menu, TPM_LEFTBUTTON | TPM_RETURNCMD, x, y, 0, message->hwnd, nullptr);
+    uint command = TrackPopupMenu(menu, TPM_LEFTBUTTON | TPM_RETURNCMD, x, y, 0, hWnd, nullptr);
     if (command == 0) {
         return false;
     }
 
-    PostMessage(message->hwnd, WM_SYSCOMMAND, command, 0);
+    PostMessage(hWnd, WM_SYSCOMMAND, command, 0);
     return true;
 }
 
-bool WinFramelessWindowController::isWindowMaximized(HWND hWnd) const
+bool WinWindowsController::isWindowMaximized(HWND hWnd) const
 {
     WINDOWPLACEMENT wp;
     wp.length = sizeof(WINDOWPLACEMENT);
@@ -359,12 +419,12 @@ bool WinFramelessWindowController::isWindowMaximized(HWND hWnd) const
     return wp.showCmd == SW_MAXIMIZE;
 }
 
-HWND WinFramelessWindowController::findTaskbar() const
+HWND WinWindowsController::findTaskbar() const
 {
     return FindWindow(L"Shell_TrayWnd", NULL);
 }
 
-std::optional<UINT> WinFramelessWindowController::taskbarEdge() const
+std::optional<UINT> WinWindowsController::taskbarEdge() const
 {
     APPBARDATA appBarData;
     appBarData.cbSize = sizeof(appBarData);
@@ -380,7 +440,7 @@ std::optional<UINT> WinFramelessWindowController::taskbarEdge() const
     return appBarData.uEdge;
 }
 
-bool WinFramelessWindowController::isTaskbarVisibleOnMonitor(HMONITOR hMonitor) const
+bool WinWindowsController::isTaskbarVisibleOnMonitor(HMONITOR hMonitor) const
 {
     HWND taskbar = findTaskbar();
     if (!taskbar) {
@@ -395,7 +455,7 @@ bool WinFramelessWindowController::isTaskbarVisibleOnMonitor(HMONITOR hMonitor) 
     return hMonitor == hTaskbarMonitor;
 }
 
-bool WinFramelessWindowController::isTaskbarInAutohideState() const
+bool WinWindowsController::isTaskbarInAutohideState() const
 {
     APPBARDATA appBarData;
     appBarData.cbSize = sizeof(appBarData);
@@ -405,7 +465,7 @@ bool WinFramelessWindowController::isTaskbarInAutohideState() const
     return ABS_AUTOHIDE & taskbarState;
 }
 
-int WinFramelessWindowController::borderWidth() const
+int WinWindowsController::borderWidth() const
 {
     NONCLIENTMETRICS nonClientMetrics = {};
     nonClientMetrics.cbSize = sizeof(nonClientMetrics);

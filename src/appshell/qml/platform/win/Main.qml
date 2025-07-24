@@ -38,14 +38,14 @@ AppWindow {
         }
     }
 
-    FramelessWindowModel {
-        id: framelessWindowModel
+    WindowsModel {
+        id: windowsModel
 
-        titleBarMoveArea: appTitleBar.titleMoveAreaRect
+        mainWindowTitleBarMoveArea: appTitleBar.titleMoveAreaRect
     }
 
     Component.onCompleted: {
-        framelessWindowModel.init()
+        windowsModel.init()
         window.init()
     }
 

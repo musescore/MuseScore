@@ -20,27 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_FRAMELESSWINDOWCONTROLLER_H
-#define MU_APPSHELL_FRAMELESSWINDOWCONTROLLER_H
+#pragma once
 
 #include <QAbstractNativeEventFilter>
 #include <QWindow>
 
 namespace mu::appshell {
-class FramelessWindowController : public QAbstractNativeEventFilter
+class WindowsController : public QAbstractNativeEventFilter
 {
 public:
     virtual void init();
 
-    QRect windowTitleBarMoveArea() const;
-    void setWindowTitleBarMoveArea(const QRect& area);
+    QRect mainWindowTitleBarMoveArea() const;
+    void setMainWindowTitleBarMoveArea(const QRect& area);
 
 protected:
     bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result) override;
 
 private:
-    QRect m_windowTitleBarMoveArea;
+    QRect m_mainWindowTitleBarMoveArea;
 };
 }
-
-#endif // MU_APPSHELL_FRAMELESSWINDOWCONTROLLER_H
