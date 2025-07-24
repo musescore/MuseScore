@@ -82,6 +82,8 @@ void FinaleParser::parse()
 
     // smart shapes (lines)
     importSmartShapes(); //WIP
+
+    // importPageTexts(); //WIP
 }
 
 }
