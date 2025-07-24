@@ -57,6 +57,8 @@ public:
     static double doubleFromEfix(double efix);
     static double doubleFromPercent(int percent);
     static double spatiumScaledFontSize(const std::shared_ptr<const musx::dom::FontInfo>& fontInfo);
+    static engraving::Spatium absoluteSpatium(double value, engraving::EngravingItem* e);
+    static engraving::Spatium absoluteSpatiumFromEvpu(musx::dom::Evpu evpu, engraving::EngravingItem* e);
 };
 
 }
