@@ -994,4 +994,16 @@ double FinaleTConv::spatiumScaledFontSize(const std::shared_ptr<const FontInfo>&
     return double(fontInfo->fontSize) * (fontInfo->absolute ? 1.0 : MUSE_FINALE_SCALE_DIFFERENTIAL);
 }
 
+Spatium FinaleTConv::absoluteSpatium(double value, EngravingItem* e)
+{
+    // Returns global spatium value adjusted to preserve value for element scaling
+    // Use style .spatium value or .defaultSpatium ??? or SPATIUM20??
+    return Spatium(value * e->score()->style().defaultSpatium() / e->spatium());
+}
+
+Spatium FinaleTConv::absoluteSpatiumFromEvpu(Evpu evpu, EngravingItem* e)
+{
+    return absoluteSpatium(doubleFromEvpu(evpu), e);
+}
+
 }
