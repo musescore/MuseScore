@@ -31,6 +31,8 @@
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/noteval.h"
+#include "engraving/dom/spanner.h"
+#include "engraving/dom/ottava.h"
 
 #include "importfinalelogger.h"
 
@@ -1028,6 +1030,154 @@ StaffGroup FinaleTConv::staffGroupFromNotationStyle(musx::dom::others::Staff::No
     };
     return muse::value(staffGroupMapTable, notationStyle, StaffGroup::STANDARD);
 
+}
+
+ElementType FinaleTConv::elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+{
+    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    static const std::unordered_map<ShapeType, ElementType> shapeTypeTable = {
+        { ShapeType::SlurDown,            ElementType::SLUR },
+        { ShapeType::SlurUp,              ElementType::SLUR },
+        { ShapeType::Decrescendo,         ElementType::HAIRPIN },
+        { ShapeType::Crescendo,           ElementType::HAIRPIN },
+        { ShapeType::OctaveDown,          ElementType::OTTAVA },
+        { ShapeType::OctaveUp,            ElementType::OTTAVA },
+        // { ShapeType::DashLineUp,          ElementType::TEXTLINE },
+        // { ShapeType::DashLineDown,        ElementType::TEXTLINE },
+        { ShapeType::DashSlurDown,        ElementType::SLUR },
+        { ShapeType::DashSlurUp,          ElementType::SLUR },
+        // { ShapeType::DashLine,            ElementType::TEXTLINE },
+        // { ShapeType::SolidLine,           ElementType::TEXTLINE },
+        // { ShapeType::SolidLineDown,       ElementType::TEXTLINE },
+        // { ShapeType::SolidLineUp,         ElementType::TEXTLINE },
+        { ShapeType::Trill,               ElementType::TRILL },
+        { ShapeType::SlurAuto,            ElementType::SLUR },
+        { ShapeType::DashSlurAuto,        ElementType::SLUR },
+        { ShapeType::TrillExtension,      ElementType::TRILL },
+        // { ShapeType::SolidLineDownBoth,   ElementType::TEXTLINE },
+        // { ShapeType::SolidLineUpBoth,     ElementType::TEXTLINE },
+        { ShapeType::TwoOctaveDown,       ElementType::OTTAVA },
+        { ShapeType::TwoOctaveUp,         ElementType::OTTAVA },
+        // { ShapeType::DashLineDownBoth,    ElementType::TEXTLINE },
+        // { ShapeType::DashLineUpBoth,      ElementType::TEXTLINE },
+        { ShapeType::Glissando,           ElementType::GLISSANDO },
+        { ShapeType::TabSlide,            ElementType::GLISSANDO },
+        { ShapeType::BendHat,             ElementType::GUITAR_BEND },
+        { ShapeType::BendCurve,           ElementType::GUITAR_BEND },
+        { ShapeType::CustomLine,          ElementType::INVALID },
+        // { ShapeType::SolidLineUpLeft,     ElementType::TEXTLINE },
+        // { ShapeType::SolidLineDownLeft,   ElementType::TEXTLINE },
+        // { ShapeType::DashLineUpLeft,      ElementType::TEXTLINE },
+        // { ShapeType::DashLineDownLeft,    ElementType::TEXTLINE },
+        // { ShapeType::SolidLineUpDown,     ElementType::TEXTLINE },
+        // { ShapeType::SolidLineDownUp,     ElementType::TEXTLINE },
+        // { ShapeType::DashLineUpDown,      ElementType::TEXTLINE },
+        // { ShapeType::DashLineDownUp,      ElementType::TEXTLINE },
+        /// { ShapeType::Hyphen,              ElementType::INVALID },
+        /// { ShapeType::WordExtension,       ElementType::LYRICSLINE },
+        { ShapeType::DashContourSlurDown, ElementType::SLUR },
+        { ShapeType::DashContourSlurUp,   ElementType::SLUR },
+        { ShapeType::DashContourSlurAuto, ElementType::SLUR },
+    };
+    return muse::value(shapeTypeTable, shapeType, ElementType::TEXTLINE);
+}
+
+OttavaType FinaleTConv::ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+{
+    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    static const std::unordered_map<ShapeType, OttavaType> ottavaTypeTable = {
+        { ShapeType::OctaveDown,    OttavaType::OTTAVA_8VB },
+        { ShapeType::OctaveUp,      OttavaType::OTTAVA_8VA },
+        { ShapeType::TwoOctaveDown, OttavaType::OTTAVA_15MB },
+        { ShapeType::TwoOctaveUp,   OttavaType::OTTAVA_15MA },
+    };
+    return muse::value(ottavaTypeTable, shapeType, OttavaType::OTTAVA_8VA);
+}
+
+SlurStyleType FinaleTConv::slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+{
+    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    static const std::unordered_map<ShapeType, SlurStyleType> shapeTypeTable = {
+        { ShapeType::SlurDown,            SlurStyleType::Solid },
+        { ShapeType::SlurUp,              SlurStyleType::Solid },
+        { ShapeType::DashSlurDown,        SlurStyleType::Dashed },
+        { ShapeType::DashSlurUp,          SlurStyleType::Dashed },
+        { ShapeType::SlurAuto,            SlurStyleType::Solid },
+        { ShapeType::DashSlurAuto,        SlurStyleType::Dashed },
+        { ShapeType::DashContourSlurDown, SlurStyleType::Dashed },
+        { ShapeType::DashContourSlurUp,   SlurStyleType::Dashed },
+        { ShapeType::DashContourSlurAuto, SlurStyleType::Dashed },
+    };
+    return muse::value(shapeTypeTable, shapeType, SlurStyleType::Solid);
+}
+
+DirectionV FinaleTConv::directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+{
+    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    static const std::unordered_map<ShapeType, DirectionV> shapeTypeTable = {
+        { ShapeType::SlurDown,            DirectionV::DOWN },
+        { ShapeType::SlurUp,              DirectionV::UP },
+        { ShapeType::DashSlurDown,        DirectionV::DOWN },
+        { ShapeType::DashSlurUp,          DirectionV::UP },
+        // { ShapeType::SlurAuto,            DirectionV::AUTO },
+        // { ShapeType::DashSlurAuto,        DirectionV::AUTO },
+        { ShapeType::DashContourSlurDown, DirectionV::DOWN },
+        { ShapeType::DashContourSlurUp,   DirectionV::UP },
+        // { ShapeType::DashContourSlurAuto, DirectionV::AUTO },
+    };
+    return muse::value(shapeTypeTable, shapeType, DirectionV::AUTO);
+}
+
+LineType FinaleTConv::lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+{
+    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    static const std::unordered_map<ShapeType, LineType> shapeTypeTable = {
+        { ShapeType::DashLineUp,          LineType::DASHED },
+        { ShapeType::DashLineDown,        LineType::DASHED },
+        { ShapeType::DashLine,            LineType::DASHED },
+        // { ShapeType::SolidLine,           LineType::SOLID },
+        // { ShapeType::SolidLineDown,       LineType::SOLID },
+        // { ShapeType::SolidLineUp,         LineType::SOLID },
+        // { ShapeType::SolidLineDownBoth,   LineType::SOLID },
+        // { ShapeType::SolidLineUpBoth,     LineType::SOLID },
+        { ShapeType::DashLineDownBoth,    LineType::DASHED },
+        { ShapeType::DashLineUpBoth,      LineType::DASHED },
+        // { ShapeType::SolidLineUpLeft,     LineType::SOLID },
+        // { ShapeType::SolidLineDownLeft,   LineType::SOLID },
+        { ShapeType::DashLineUpLeft,      LineType::DASHED },
+        { ShapeType::DashLineDownLeft,    LineType::DASHED },
+        // { ShapeType::SolidLineUpDown,     LineType::SOLID },
+        // { ShapeType::SolidLineDownUp,     LineType::SOLID },
+        { ShapeType::DashLineUpDown,      LineType::DASHED },
+        { ShapeType::DashLineDownUp,      LineType::DASHED },
+    };
+    return muse::value(shapeTypeTable, shapeType, LineType::SOLID);
+}
+
+std::pair<int, int> FinaleTConv::hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+{
+    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    static const std::unordered_map<ShapeType, std::pair<int, int> > shapeTypeTable = {
+        { ShapeType::DashLineUp,        { 0, -1 } },
+        { ShapeType::DashLineDown,      { 0, 1 } },
+        { ShapeType::DashLine,          { 0, 0 } },
+        { ShapeType::SolidLine,         { 0, 0 } },
+        { ShapeType::SolidLineDown,     { 0, 1 } },
+        { ShapeType::SolidLineUp,       { 0, -1 } },
+        { ShapeType::SolidLineDownBoth, { 1, 1 } },
+        { ShapeType::SolidLineUpBoth,   { -1, -1 } },
+        { ShapeType::DashLineDownBoth,  { 1, 1 } },
+        { ShapeType::DashLineUpBoth,    { -1, -1 } },
+        { ShapeType::SolidLineUpLeft,   { -1, 0 } },
+        { ShapeType::SolidLineDownLeft, { 1, 0 } },
+        { ShapeType::DashLineUpLeft,    { -1, 0 } },
+        { ShapeType::DashLineDownLeft,  { 1, 0 } },
+        { ShapeType::SolidLineUpDown,   { -1, 1 } },
+        { ShapeType::SolidLineDownUp,   { 1, -1 } },
+        { ShapeType::DashLineUpDown,    { -1, 1 } },
+        { ShapeType::DashLineDownUp,    { 1, -1 } },
+    };
+    return muse::value(shapeTypeTable, shapeType, { 0, 0 });
 }
 
 double FinaleTConv::doubleFromEvpu(double evpuDouble)
