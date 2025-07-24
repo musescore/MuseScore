@@ -134,7 +134,6 @@ void MeasuresSettingsModel::toggleSystemLock()
     }
 
     currentNotation()->interaction()->toggleSystemLock();
-    updateAllSystemsAreLocked();
 }
 
 QString MeasuresSettingsModel::shortcutToggleSystemLock() const
