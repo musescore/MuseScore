@@ -26,7 +26,6 @@
 #include <string>
 #include <map>
 #include <any>
-#include <optional>
 
 #ifndef NO_QT_SUPPORT
 #include <QString>
@@ -124,9 +123,11 @@ public:
     const std::string& text() const;
     void setData(const std::string& key, const std::any& val);
 
-    template<typename DataType>
-    std::optional<DataType> data(const std::string& key, const std::optional<DataType>& defaultValue = std::nullopt) const
+    template<typename DataType, typename DefaultType>
+    DataType data(const std::string& key, const DefaultType& defaultValue) const
     {
+        static_assert(std::is_same_v<DataType, std::decay_t<DefaultType>>,
+            "defaultValue must be the same type as DataType");
         static_assert(!std::is_reference_v<DataType>, "DataType must not be a reference");
         static_assert(!std::is_pointer_v<DataType>, "DataType must not be a pointer");
 
@@ -149,15 +150,13 @@ public:
                     return defaultValue;
                 }
             }
-        } else {
-            IF_ASSERT_FAILED_X(false, "Ret::data<" + std::string(typeid(DataType).name())
-                               + ">: type mismatch for key '" + key
-                               + "', stored type is " + it->second.type().name()) {
-                return defaultValue;
-            }
         }
-
-        return defaultValue;
+        IF_ASSERT_FAILED_X(false, "Ret::data<" + std::string(typeid(DataType).name())
+                           + ">: type mismatch for key '" + key
+                           + "', stored type is " + it->second.type().name())
+        {
+            return defaultValue;
+        }
     }
 
     inline Ret& operator=(int c) { m_code = c; return *this; }
