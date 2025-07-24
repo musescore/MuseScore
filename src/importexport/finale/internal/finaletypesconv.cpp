@@ -879,6 +879,53 @@ BracketType FinaleTConv::toMuseScoreBracketType(details::StaffGroup::BracketStyl
     return muse::value(bracketTypeTable, style, BracketType::NO_BRACKET);
 }
 
+TupletNumberType FinaleTConv::toMuseScoreTupletNumberType(options::TupletOptions::NumberStyle numberStyle)
+{
+    using MusxTupletNumberType = options::TupletOptions::NumberStyle;
+    static const std::unordered_map<MusxTupletNumberType, TupletNumberType> tupletNumberTypeTable = {
+        { MusxTupletNumberType::Nothing,                  TupletNumberType::NO_TEXT },
+        { MusxTupletNumberType::Number,                   TupletNumberType::SHOW_NUMBER },
+        { MusxTupletNumberType::UseRatio,                 TupletNumberType::SHOW_RELATION },
+        { MusxTupletNumberType::RatioPlusDenominatorNote, TupletNumberType::SHOW_RELATION }, // not supported
+        { MusxTupletNumberType::RatioPlusBothNotes,       TupletNumberType::SHOW_RELATION }, // not supported
+    };
+    return muse::value(tupletNumberTypeTable, numberStyle, TupletNumberType::SHOW_NUMBER);
+}
+
+Align FinaleTConv::justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
+{
+    static const std::unordered_map<others::NamePositioning::AlignJustify, Align> alignTable = {
+        { others::NamePositioning::AlignJustify::Left,   Align(AlignH::LEFT, AlignV::VCENTER) },
+        { others::NamePositioning::AlignJustify::Right,  Align(AlignH::RIGHT, AlignV::VCENTER) },
+        { others::NamePositioning::AlignJustify::Center, Align(AlignH::HCENTER, AlignV::VCENTER) },
+    };
+    return muse::value(alignTable, alignJustify, Align(AlignH::HCENTER, AlignV::VCENTER));
+}
+
+CourtesyBarlineMode FinaleTConv::boolToCourtesyBarlineMode(bool useDoubleBarlines)
+{
+    static const std::unordered_map<bool, CourtesyBarlineMode> courtesyBarlineModeTable = {
+        { false, CourtesyBarlineMode::ALWAYS_SINGLE },
+        { true,  CourtesyBarlineMode::ALWAYS_DOUBLE },
+    };
+    return muse::value(courtesyBarlineModeTable, useDoubleBarlines, CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY);
+}
+
+NoteVal FinaleTConv::notePropertiesToNoteVal(const musx::dom::Note::NoteProperties& noteProperties, Key key)
+{
+    auto [noteType, octave, alteration, staffLine] = noteProperties;
+    NoteVal nval;
+    int absStep = 35 /*middle C*/ + int(noteType) + (octave - 4) * STEP_DELTA_OCTAVE;
+    nval.pitch = absStep2pitchByKey(absStep, Key::C) + alteration; //assume EDO division is semitone
+    if (alteration < int(AccidentalVal::MIN) || alteration > int(AccidentalVal::MAX) || !pitchIsValid(nval.pitch)) {
+        nval.pitch = std::clamp(nval.pitch, 0, 127);
+        nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+    } else {
+        nval.tpc1 = step2tpc(int(noteType), AccidentalVal(alteration));
+    }
+    return nval;
+}
+
 Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger)
 {
     auto [count, noteType] = simpleMusxTimeSig;
@@ -899,3 +946,29 @@ double FinaleTConv::doubleFromEvpu(double evpuDouble)
     return evpuDouble / EVPU_PER_SPACE;
 }
 
+PointF FinaleTConv::evpuToPointF(double xEvpu, double yEvpu)
+{
+    return PointF(doubleFromEvpu(xEvpu), doubleFromEvpu(yEvpu));
+}
+
+double FinaleTConv::doubleFromEfix(double efix)
+{
+    return double(efix) / EFIX_PER_SPACE;
+}
+
+double FinaleTConv::doubleFromPercent(int percent)
+{
+    return double(percent) / 100.0;
+}
+
+double FinaleTConv::spatiumScaledFontSize(const std::shared_ptr<const FontInfo>& fontInfo)
+{
+    // Finale uses music font size 24 to fill a space.
+    // MuseScore uses music font size 20 to fill a space.
+    // This scaling carries over to any font setting whose font size scales with spatium.
+    constexpr static double MUSE_FINALE_SCALE_DIFFERENTIAL = 20.0 / 24.0;
+
+    return double(fontInfo->fontSize) * (fontInfo->absolute ? 1.0 : MUSE_FINALE_SCALE_DIFFERENTIAL);
+}
+
+}

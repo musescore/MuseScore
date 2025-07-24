@@ -43,6 +43,42 @@ class Staff;
 
 namespace mu::iex::finale {
 
+struct FinaleOptions
+{
+    void init(const FinaleParser& context);
+    // common
+    std::shared_ptr<const musx::dom::FontInfo> defaultMusicFont;
+    musx::util::Fraction combinedDefaultStaffScaling;  // cache this so we don't need to calculate it every time
+    // options
+    std::shared_ptr<const musx::dom::options::AccidentalOptions> accidentalOptions;
+    std::shared_ptr<const musx::dom::options::AlternateNotationOptions> alternateNotationOptions;
+    std::shared_ptr<const musx::dom::options::AugmentationDotOptions> augDotOptions;
+    std::shared_ptr<const musx::dom::options::BarlineOptions> barlineOptions;
+    std::shared_ptr<const musx::dom::options::BeamOptions> beamOptions;
+    std::shared_ptr<const musx::dom::options::ClefOptions> clefOptions;
+    std::shared_ptr<const musx::dom::options::FlagOptions> flagOptions;
+    std::shared_ptr<const musx::dom::options::GraceNoteOptions> graceOptions;
+    std::shared_ptr<const musx::dom::options::KeySignatureOptions> keyOptions;
+    std::shared_ptr<const musx::dom::options::LineCurveOptions> lineCurveOptions;
+    std::shared_ptr<const musx::dom::options::MiscOptions> miscOptions;
+    std::shared_ptr<const musx::dom::options::MultimeasureRestOptions> mmRestOptions;
+    std::shared_ptr<const musx::dom::options::MusicSpacingOptions> musicSpacing;
+    std::shared_ptr<const musx::dom::options::PageFormatOptions::PageFormat> pageFormat;
+    std::shared_ptr<const musx::dom::options::PianoBraceBracketOptions> braceOptions;
+    std::shared_ptr<const musx::dom::options::RepeatOptions> repeatOptions;
+    std::shared_ptr<const musx::dom::options::SmartShapeOptions> smartShapeOptions;
+    std::shared_ptr<const musx::dom::options::StaffOptions> staffOptions;
+    std::shared_ptr<const musx::dom::options::StemOptions> stemOptions;
+    std::shared_ptr<const musx::dom::options::TextOptions> textOptions;
+    std::shared_ptr<const musx::dom::options::TieOptions> tieOptions;
+    std::shared_ptr<const musx::dom::options::TimeSignatureOptions> timeOptions;
+    std::shared_ptr<const musx::dom::options::TupletOptions> tupletOptions;
+    // others that function as options
+    std::shared_ptr<const musx::dom::others::LayerAttributes> layerOneAttributes;
+    std::shared_ptr<const musx::dom::others::MeasureNumberRegion::ScorePartData> measNumScorePart;
+    std::shared_ptr<const musx::dom::others::PartGlobals> partGlobals;
+};
+
 enum class HeaderFooterType {
     None,
     FirstPage,
@@ -93,6 +129,9 @@ public:
     bool fontIsEngravingFont(const std::shared_ptr<const musx::dom::FontInfo>& fontInfo) const { return fontIsEngravingFont(fontInfo->getName()); }
     bool fontIsEngravingFont(const engraving::String& fontName) const { return fontIsEngravingFont(fontName.toStdString()); }
 
+    // Utility
+    musx::dom::EvpuFloat evpuAugmentationDotWidth() const;
+
     FinaleLoggerPtr logger() const { return m_logger; }
 
 private:
@@ -100,10 +139,15 @@ private:
     void importParts();
     void importBrackets();
     void importMeasures();
+
+    // styles
+    void importStyles();
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
+    FinaleOptions m_finaleOptions;
     FinaleLoggerPtr m_logger;
     const musx::dom::Cmper m_currentMusxPartId = musx::dom::SCORE_PARTID; // eventually this may be changed per excerpt/linked part
+    std::unordered_map<std::string, const engraving::IEngravingFontPtr> m_engravingFonts;
 
     std::unordered_map<engraving::staff_idx_t, musx::dom::InstCmper> m_staff2Inst;
     std::unordered_map<musx::dom::InstCmper, engraving::staff_idx_t> m_inst2Staff;
