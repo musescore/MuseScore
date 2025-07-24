@@ -26,6 +26,9 @@
 #include "global/modularity/imoduleinterface.h"
 
 #include "global/types/bytearray.h"
+#include "global/async/channel.h"
+
+#include "rpcpacker.h"
 
 namespace muse::audio::rpc {
 using CallId = uint64_t;
@@ -96,12 +99,53 @@ using Handler = std::function<void (const Msg& msg)>;
 
 // stream
 using StreamId = uint32_t;
+inline StreamId new_stream_id()
+{
+    static StreamId lastId = 0;
+    ++lastId;
+    return lastId;
+}
+
 struct StreamMsg {
     StreamId streamId = 0;
     ByteArray data;
 };
 
 using StreamHandler = std::function<void (const StreamMsg& msg)>;
+
+struct IStream {
+    virtual ~IStream() = default;
+
+    virtual StreamId streamId() const = 0;
+    virtual void init() = 0;
+    virtual bool inited() const = 0;
+};
+
+class IRpcChannel;
+template<typename ... Types>
+class Stream : public IStream
+{
+    Stream(IRpcChannel* rpc, StreamId id, const async::Channel<Types...>& ch)
+        : m_rpc(rpc), m_streamId(id), m_ch(ch) {}
+
+    StreamId streamId() const override
+    {
+        return m_streamId;
+    }
+
+    void init() override;
+
+    bool inited() const
+    {
+        return m_inited;
+    }
+
+private:
+    IRpcChannel* m_rpc = nullptr;
+    StreamId m_streamId = 0;
+    async::Channel<Types...> m_ch;
+    bool m_inited = false;
+};
 
 class IRpcChannel : MODULE_EXPORT_INTERFACE
 {
@@ -113,10 +157,49 @@ public:
     virtual void onMethod(Method method, Handler h) = 0;
     virtual void listenAll(Handler h) = 0;
 
-    // stream
+    // stream (async/channel)
+    template<typename ... Types>
+    StreamId addStream(const async::Channel<Types...>& ch)
+    {
+        StreamId id = new_stream_id();
+        std::shared_ptr<IStream> s = std::shared_ptr<IStream>(new Stream<Types...>(id, ch));
+        addStream(s);
+        return id;
+    }
+
+    virtual void addStream(std::shared_ptr<IStream> s) = 0;
+    virtual void removeStream(StreamId id) = 0;
     virtual void sendStream(const StreamMsg& msg) = 0;
     virtual void onStream(StreamId id, StreamHandler h) = 0;
 };
+
+template<typename ... Types>
+void Stream<Types...>::init()
+{
+    if (m_inited) {
+        return;
+    }
+
+    m_ch.onReceive(this, [this](const Types... args) {
+        ByteArray data = msgpack::pack(args ...);
+        m_rpc->sendStream(StreamMsg { m_streamId, data });
+    });
+
+    m_rpc->onStream(m_streamId, [this](const StreamMsg& msg) {
+        std::tuple<Types...> values;
+        bool success = std::apply([msg](auto&... args) {
+            return msgpack::unpack(msg.data, args ...);
+        }, values);
+
+        if (success) {
+            std::apply([this](const auto&... args) {
+                m_ch.send(args ...);
+            }, values);
+        }
+    });
+
+    m_inited = true;
+}
 
 // msgs
 inline CallId new_call_id()
@@ -144,13 +227,5 @@ inline Msg make_response(const Msg& req, const ByteArray& data = ByteArray())
     msg.type = MsgType::Response;
     msg.data = data;
     return msg;
-}
-
-// streams
-inline StreamId new_stream_id()
-{
-    static StreamId lastId = 0;
-    ++lastId;
-    return lastId;
 }
 }
