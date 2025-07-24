@@ -825,6 +825,7 @@ enum class TextStyleType : unsigned char {
 
     // Note oriented styles
     TUPLET,
+    ARTICULATION,
     STICKING,
     FINGERING,
     TAB_FRET_NUMBER,

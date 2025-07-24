@@ -669,6 +669,10 @@ void Articulation::setupShowOnTabStyles()
 
 void Articulation::styleChanged()
 {
+    if (m_text) {
+        m_text->styleChanged();
+    }
+
     bool isGolpeThumb = m_symId == SymId::guitarGolpe && m_anchor == ArticulationAnchor::BOTTOM;
     EngravingItem::styleChanged();
     if (isGolpeThumb) {

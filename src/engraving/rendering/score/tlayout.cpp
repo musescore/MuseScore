@@ -935,7 +935,7 @@ void TLayout::layoutArticulation(Articulation* item, Articulation::LayoutData* l
 
     if (item->textType() != ArticulationTextType::NO_TEXT) {
         if (!item->text()) {
-            Text* text = new Text(item, TextStyleType::DEFAULT);
+            Text* text = new Text(item, TextStyleType::ARTICULATION);
             static const ElementStyle elementStyle;
             text->initElementStyle(&elementStyle);
             item->setText(text);
