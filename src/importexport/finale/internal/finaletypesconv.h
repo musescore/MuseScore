@@ -23,6 +23,10 @@
 
 #include "musx/musx.h"
 #include "engraving/types/types.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/key.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/noteval.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/tuplet.h"
 
@@ -52,6 +56,8 @@ public:
     static engraving::Fraction musxFractionToFraction(const musx::util::Fraction& fraction);
     static engraving::Fraction eduToFraction(musx::dom::Edu edu);
     static engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger);
+    static engraving::Key keyFromAlteration(int musxAlteration);
+    static engraving::KeyMode keyModeFromDiatonicMode(music_theory::DiatonicMode diatonicMode);
     static engraving::SymId acciSymbolFromAcciAmount(int acciAmount);
     static engraving::StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle);
     static engraving::String metaTagFromFileInfo(musx::dom::texts::FileInfoText::TextType textType);
