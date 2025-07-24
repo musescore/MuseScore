@@ -47,6 +47,7 @@
         <maxPitchA>96</maxPitchA>
         <instrumentId>strings.group.synth</instrumentId>
         <clef staff="2">F</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

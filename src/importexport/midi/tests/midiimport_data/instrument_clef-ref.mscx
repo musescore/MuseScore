@@ -43,6 +43,7 @@
         <instrumentId>pluck.bass.electric</instrumentId>
         <concertClef>F8vb</concertClef>
         <transposingClef>F</transposingClef>
+        <glissandoStyle>portamento</glissandoStyle>
         <StringData>
           <frets>24</frets>
           <string>40</string>
