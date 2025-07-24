@@ -1212,7 +1212,7 @@ PointF FinaleTConv::evpuToPointF(double xEvpu, double yEvpu)
 
 double FinaleTConv::doubleFromEfix(double efix)
 {
-    return double(efix) / EFIX_PER_SPACE;
+    return efix / EFIX_PER_SPACE;
 }
 
 String FinaleTConv::metaTagFromFileInfo(texts::FileInfoText::TextType textType)

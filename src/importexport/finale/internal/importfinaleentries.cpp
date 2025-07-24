@@ -186,19 +186,17 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
         logger->logWarning(String(u"Tuplet: Avoiding staves is supported globally as a style, not for individual elements"));
     }
     if (musxTuplet->metricCenter) {
-        // center number using duration
-        /// @todo will be supported globally as a style
-        logger->logWarning(String(u"Tuplet: Centering number metrically is soon to be supported globally as a style, not for individual elements"));
+        // supported globally as a style: Sid::tupletNumberRythmicCenter
+        logger->logWarning(String(u"Tuplet: Centering number metrically is supported globally as a style, not for individual elements"));
     }
     if (musxTuplet->fullDura) {
-        // extend bracket to full duration
-        /// @todo will be supported globally as a style
-        logger->logWarning(String(u"Tuplet: Bracket filling duration is soon to be supported globally as a style, not for individual elements"));
+        // supported globally as a style: Sid::tupletExtendToEndOfDuration
+        logger->logWarning(String(u"Tuplet: Bracket filling duration is supported globally as a style, not for individual elements"));
     }
     // unsupported: breakBracket, ignoreHorzNumOffset, allowHorz, useBottomNote, leftHookLen / rightHookLen (style for both)
 
     // bracket extensions
-    /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in musescore. See PR and the related issues
+    /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in MuseScore. See #16973
     scoreTuplet->setUserPoint1(FinaleTConv::evpuToPointF(-musxTuplet->leftHookExt, 0));
     scoreTuplet->setUserPoint2(FinaleTConv::evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj));
     if (musxTuplet->alwaysFlat) {
