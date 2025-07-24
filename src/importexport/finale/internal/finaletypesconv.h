@@ -23,6 +23,7 @@
 
 #include "musx/musx.h"
 #include "engraving/types/types.h"
+#include "engraving/dom/ottava.h"
 #include "engraving/dom/tuplet.h"
 
 #include "importfinalelogger.h"
@@ -53,6 +54,12 @@ public:
     static engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger);
     static engraving::SymId acciSymbolFromAcciAmount(int acciAmount);
     static engraving::StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle);
+    static engraving::ElementType elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
+    static engraving::OttavaType ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
+    static engraving::SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
+    static engraving::DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
+    static engraving::LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
+    static std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
     // unit conversion
     static double doubleFromEvpu(double evpu);
     static engraving::PointF evpuToPointF(double xEvpu, double yEvpu);

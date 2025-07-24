@@ -67,6 +67,9 @@ void FinaleParser::parse()
     // entries (notes, rests & tuplets)
     mapLayers();
     importEntries();
+
+    // smart shapes (lines)
+    importSmartShapes(); //WIP
 }
 
 }
