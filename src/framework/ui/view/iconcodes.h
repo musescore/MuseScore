@@ -507,6 +507,9 @@ public:
         HP_LOWER_CASE = 0xF49E,
         HP_UPPER_CASE = 0xF49F,
 
+        TUPLET_GRAPHICAL_CENTER = 0xF4AC,
+        TUPLET_RYTHMIC_CENTER = 0xF4AD,
+
         NONE = 0xFFFF
     };
 

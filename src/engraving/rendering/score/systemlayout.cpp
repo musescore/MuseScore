@@ -1424,7 +1424,8 @@ void SystemLayout::doLayoutTies(System* system, const std::vector<Segment*>& sl,
 void SystemLayout::layoutTuplets(const std::vector<ChordRest*>& chordRests, LayoutContext& ctx)
 {
     std::set<Tuplet*> laidoutTuplets;
-    for (ChordRest* cr : chordRests) {
+    for (auto revIter = chordRests.rbegin(); revIter != chordRests.rend(); ++revIter) {
+        ChordRest* cr = *revIter;
         Tuplet* tuplet = cr->topTuplet();
 
         if (!tuplet || muse::contains(laidoutTuplets, tuplet)) {

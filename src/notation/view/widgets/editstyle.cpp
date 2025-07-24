@@ -566,6 +566,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope },
         { StyleId::tupletOutOfStaff,        false, tupletOutOfStaff,        0 },
         { StyleId::tupletUseSymbols,        false, tupletUseSymbols,        resetTupletUseSymbols },
+        { StyleId::tupletExtendToEndOfDuration, false, tupletExtendToEndOfDuration, 0 },
 
         { StyleId::repeatBarTips,            false, showRepeatBarTips,            resetShowRepeatBarTips },
         { StyleId::startBarlineSingle,       false, showStartBarlineSingle,       resetShowStartBarlineSingle },
@@ -981,6 +982,16 @@ EditStyle::EditStyle(QWidget* parent)
     barNumbersPage.widget->setMinimumSize(224, 400);
     pageMeasureNumbers->layout()->addWidget(barNumbersPage.widget);
     connect(barNumbersPage.view->rootObject(), SIGNAL(goToTextStylePage(int)), this, SLOT(goToTextStylePage(int)));
+
+    // ====================================================
+    // Tuplet centering selector (QML)
+    // ====================================================
+
+    auto tupletCenteringSelector = createQmlWidget(
+        groupBox_tuplets_properties,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TupletCenteringSelector.qml")));
+    tupletCenteringSelector.widget->setMinimumSize(288, 88);
+    groupBox_tuplets_properties->layout()->addWidget(tupletCenteringSelector.widget);
 
     // ====================================================
     // Figured Bass
