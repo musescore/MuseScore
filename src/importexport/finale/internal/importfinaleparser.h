@@ -29,6 +29,7 @@
 
 #include "engraving/iengravingfontsprovider.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/staff.h"
 
 #include "musx/musx.h"
 
@@ -38,7 +39,6 @@ namespace mu::engraving {
 class InstrumentTemplate;
 class Part;
 class Score;
-class Staff;
 }
 
 namespace mu::iex::finale {
@@ -210,7 +210,7 @@ private:
     void importPageLayout();
     void importStaffItems();
 
-    engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
+    engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff, engraving::Staff::HideMode defaultHideMode,
                                   const engraving::InstrumentTemplate* it = nullptr);
     engraving::ClefType toMuseScoreClefType(const std::shared_ptr<const musx::dom::options::ClefOptions::ClefDef>& clefDef,
                                             const std::shared_ptr<const musx::dom::others::Staff>& musxStaff);
