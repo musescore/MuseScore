@@ -9752,11 +9752,7 @@
                         <controller ctrl="0" value="1"/> <!--Bank MSB-->
                         <program value="0"/> <!--Standard Kit-->
                   </Channel>
-                  <genre>common</genre>
-                  <genre>jazz</genre>
-                  <genre>concertband</genre>
-                  <genre>marching</genre>
-                  <genre>classroom</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="guiro">
                   <family>unpitched-wooden-percussion</family>
