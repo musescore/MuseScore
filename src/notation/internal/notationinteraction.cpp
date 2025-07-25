@@ -4145,11 +4145,11 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly)
     step = step * el->spatium();
 
     switch (d) {
-    case MoveDirection::Undefined:
+    case MoveDirection::Undefined: {
         IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
             return;
         }
-        break;
+    } break;
     case MoveDirection::Left:
         el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(step, 0.0), mu::engraving::PropertyFlags::UNSTYLED);
         break;
