@@ -40,12 +40,19 @@ BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositorySe
 void BarlineSettingsModel::createProperties()
 {
     m_type = buildPropertyItem(Pid::BARLINE_TYPE);
+    m_playCount = buildPropertyItem(Pid::REPEAT_COUNT, [this](const mu::engraving::Pid propertyId, const QVariant& newValue) {
+        onPropertyValueChanged(propertyId, newValue);
+        emit requestReloadInspectorListModel();
+    });
+    m_playCountText = buildPropertyItem(Pid::PLAY_COUNT_TEXT);
+    m_playCountTextSetting = buildPropertyItem(Pid::PLAY_COUNT_TEXT_SETTING);
     m_isSpanToNextStaff = buildPropertyItem(Pid::BARLINE_SPAN);
     m_spanFrom = buildPropertyItem(Pid::BARLINE_SPAN_FROM);
     m_spanTo = buildPropertyItem(Pid::BARLINE_SPAN_TO);
     m_hasToShowTips = buildPropertyItem(Pid::BARLINE_SHOW_TIPS);
 
     connect(m_type, &PropertyItem::valueChanged, this, &BarlineSettingsModel::isRepeatStyleChangingAllowedChanged);
+    connect(m_type, &PropertyItem::valueChanged, this, &BarlineSettingsModel::showPlayCountSettingsChanged);
 }
 
 void BarlineSettingsModel::requestElements()
@@ -57,6 +64,9 @@ void BarlineSettingsModel::loadProperties()
 {
     static const PropertyIdSet propertyIdSet {
         Pid::BARLINE_TYPE,
+        Pid::REPEAT_COUNT,
+        Pid::PLAY_COUNT_TEXT,
+        Pid::PLAY_COUNT_TEXT_SETTING,
         Pid::BARLINE_SPAN,
         Pid::BARLINE_SPAN_FROM,
         Pid::BARLINE_SPAN_TO,
@@ -69,6 +79,9 @@ void BarlineSettingsModel::loadProperties()
 void BarlineSettingsModel::resetProperties()
 {
     m_type->resetToDefault();
+    m_playCount->resetToDefault();
+    m_playCountText->resetToDefault();
+    m_playCountTextSetting->resetToDefault();
     m_isSpanToNextStaff->resetToDefault();
     m_spanFrom->resetToDefault();
     m_spanTo->resetToDefault();
@@ -85,6 +98,22 @@ void BarlineSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
 {
     if (muse::contains(propertyIdSet, Pid::BARLINE_TYPE)) {
         loadPropertyItem(m_type, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toInt();
+        });
+    }
+
+    if (muse::contains(propertyIdSet, Pid::REPEAT_COUNT)) {
+        loadPropertyItem(m_playCount, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toInt();
+        });
+    }
+    if (muse::contains(propertyIdSet, Pid::PLAY_COUNT_TEXT)) {
+        loadPropertyItem(m_playCountText, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toString();
+        });
+    }
+    if (muse::contains(propertyIdSet, Pid::PLAY_COUNT_TEXT_SETTING)) {
+        loadPropertyItem(m_playCountTextSetting, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toInt();
         });
     }
@@ -186,6 +215,21 @@ PropertyItem* BarlineSettingsModel::type() const
     return m_type;
 }
 
+PropertyItem* BarlineSettingsModel::playCount() const
+{
+    return m_playCount;
+}
+
+PropertyItem* BarlineSettingsModel::playCountText() const
+{
+    return m_playCountText;
+}
+
+PropertyItem* BarlineSettingsModel::playCountTextSetting() const
+{
+    return m_playCountTextSetting;
+}
+
 PropertyItem* BarlineSettingsModel::isSpanToNextStaff() const
 {
     return m_isSpanToNextStaff;
@@ -212,6 +256,19 @@ bool BarlineSettingsModel::isRepeatStyleChangingAllowed() const
 
     static const QList<LineType> allowedLineTypes {
         LineType::TYPE_START_REPEAT,
+        LineType::TYPE_END_REPEAT,
+        LineType::TYPE_END_START_REPEAT
+    };
+
+    LineType currentType = static_cast<LineType>(m_type->value().toInt());
+    return allowedLineTypes.contains(currentType);
+}
+
+bool BarlineSettingsModel::showPlayCountSettings() const
+{
+    using LineType = BarlineTypes::LineType;
+
+    static const QList<LineType> allowedLineTypes {
         LineType::TYPE_END_REPEAT,
         LineType::TYPE_END_START_REPEAT
     };

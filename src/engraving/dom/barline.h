@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_BARLINE_H
-#define MU_ENGRAVING_BARLINE_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -132,6 +131,9 @@ public:
     bool isTop() const;
     bool isBottom() const;
 
+    void setPlayCountTextSetting(const AutoCustomHide& v) { m_playCountTextSetting = v; }
+    AutoCustomHide playCountTextSetting() const { return m_playCountTextSetting; }
+
     int subtype() const override { return int(m_barLineType); }
     TranslatableString subtypeUserName() const override;
 
@@ -140,6 +142,11 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
+    EngravingItem* propertyDelegate(Pid) override;
+
+    Text* playCountText() const { return m_playCountText; }
+    void setPlayCountText(Text* text);
+    String playCountCustomText() const { return m_playCountCustomText; }
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
@@ -147,11 +154,14 @@ public:
     String accessibleInfo() const override;
     String accessibleExtraInfo() const override;
 
+    void setSelected(bool f) override;
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<PointF> gripsPositions(const EditData&) const override;
+
+    void styleChanged() override;
 
     static const std::vector<BarLineTableItem> barLineTable;
 
@@ -176,7 +186,9 @@ private:
     BarLineType m_barLineType = BarLineType::NORMAL;
 
     ElementList m_el;          ///< fermata or other articulations
+
+    Text* m_playCountText = nullptr;     // Play count text for barlines on system object staves
+    AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
+    String m_playCountCustomText = u"";
 };
 } // namespace mu::engraving
-
-#endif

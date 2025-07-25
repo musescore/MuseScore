@@ -965,6 +965,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
         MeasureLayout::layoutMeasureNumber(measure, ctx);
         MeasureLayout::layoutMMRestRange(measure, ctx);
+        MeasureLayout::layoutPlayCountText(measure, ctx);
         MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 
         collectElementsToLayout(measure, elementsToLayout, ctx);
@@ -1123,6 +1124,12 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
+    for (Text* pt : elementsToLayout.playCountText) {
+        if (pt->autoplace()) {
+            Autoplace::autoplaceSegmentElement(pt, pt->mutldata());
+        }
+    }
+
     AlignmentLayout::alignItemsWithTheirSnappingChain(tempoElementsToAlign, system);
 
     for (RehearsalMark* rehearsMark : elementsToLayout.rehMarks) {
@@ -1191,6 +1198,9 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
             if (s->isType(SegmentType::BarLineType)) {
                 if (BarLine* bl = toBarLine(s->element(track))) {
                     elements.barlines.push_back(bl);
+                    if (Text* pt = toText(bl->playCountText())) {
+                        elements.playCountText.push_back(pt);
+                    }
                 }
                 track += VOICES;
                 continue;

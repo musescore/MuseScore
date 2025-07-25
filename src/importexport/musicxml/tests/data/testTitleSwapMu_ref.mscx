@@ -78,6 +78,8 @@
       <staffTextFontSize>11.9365</staffTextFontSize>
       <rehearsalMarkFontFace>Plantin MT Std</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>11.9365</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Plantin MT Std</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>11.9365</repeatPlayCountFontSize>
       <repeatLeftFontFace>Plantin MT Std</repeatLeftFontFace>
       <repeatLeftFontSize>11.9365</repeatLeftFontSize>
       <repeatRightFontFace>Plantin MT Std</repeatRightFontFace>

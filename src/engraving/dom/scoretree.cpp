@@ -634,7 +634,23 @@ EngravingObjectList BarLine::scanChildren() const
         children.push_back(element);
     }
 
+    if (m_playCountText) {
+        children.push_back(m_playCountText);
+    }
+
     return children;
+}
+
+void BarLine::setSelected(bool f)
+{
+    if (f == selected()) {
+        return;
+    }
+
+    if (m_playCountText) {
+        m_playCountText->setSelected(f);
+    }
+    EngravingItem::setSelected(f);
 }
 
 //---------------------------------------------------------

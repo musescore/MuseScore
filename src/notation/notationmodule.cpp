@@ -105,6 +105,8 @@
 #include "view/styledialog/voltaspagemodel.h"
 #include "view/styledialog/measurenumberspagemodel.h"
 #include "view/styledialog/tupletcenteringselectormodel.h"
+#include "view/styledialog/repeatplaycounttextmodel.h"
+#include "view/styledialog/measurerepeatmodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -244,6 +246,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<VoltasPageModel>("MuseScore.NotationScene", 1, 0, "VoltasPageModel");
     qmlRegisterType<MeasureNumbersPageModel>("MuseScore.NotationScene", 1, 0, "MeasureNumbersPageModel");
     qmlRegisterType<TupletCenteringSelectorModel>("MuseScore.NotationScene", 1, 0, "TupletCenteringSelectorModel");
+    qmlRegisterType<RepeatPlayCountTextModel>("MuseScore.NotationScene", 1, 0, "RepeatPlayCountTextModel");
+    qmlRegisterType<MeasureRepeatModel>("MuseScore.NotationScene", 1, 0, "MeasureRepeatModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 

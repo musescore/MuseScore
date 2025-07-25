@@ -52,6 +52,7 @@
 #include "dom/trill.h"
 #include "dom/undo.h"
 #include "dom/utils.h"
+#include "types/typesconv.h"
 
 #include "tlayout.h"
 #include "layoutcontext.h"
@@ -1223,6 +1224,46 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
     }
 }
 
+void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
+{
+    if (!m->repeatEnd()) {
+        return;
+    }
+
+    Score* score = m->score();
+    const std::vector<MStaff*>& measureStaves = m->mstaves();
+    const int repeatCount = m->repeatCount();
+
+    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        if (staffIdx >= measureStaves.size()) {
+            break;
+        }
+
+        Segment* endBarSeg = m->last(SegmentType::BarLineType);
+        BarLine* bl = endBarSeg ? toBarLine(endBarSeg->element(staff2track(staffIdx))) : nullptr;
+        Text* playCount = bl ? bl->playCountText() : nullptr;
+        if (!playCount) {
+            continue;
+        }
+
+        String text;
+        if (bl->playCountTextSetting() == AutoCustomHide::CUSTOM) {
+            text = bl->playCountCustomText();
+        } else {
+            text = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+                repeatCount);
+        }
+
+        playCount->setXmlText(text);
+
+        TLayout::layoutText(playCount, playCount->mutldata());
+
+        const double barlineWidth = bl->width();
+        const double diff = playCount->width() - barlineWidth;
+        playCount->mutldata()->moveX(-diff);
+    }
+}
+
 void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
 {
     bool showMeasureNumber = m->showsMeasureNumber();
@@ -1634,7 +1675,7 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
                     barLine->setSpanTo(staff->barLineTo());
                     barLine->setBarLineType(blType);
                 } else if (barLine->barLineType() != blType && force) {
-                    barLine->undoChangeProperty(Pid::BARLINE_TYPE, PropertyValue::fromValue(blType));
+                    barLine->setBarLineType(blType);
                     barLine->setGenerated(true);
                 }
             }

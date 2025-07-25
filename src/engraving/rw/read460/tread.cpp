@@ -461,6 +461,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PartialSpannerDirection::OUTGOING));
     case P_TYPE::PARENTHESES_MODE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), ParenthesesMode::NONE));
+    case P_TYPE::AUTO_CUSTOM_HIDE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoCustomHide::AUTO));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -2022,6 +2024,13 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
                 TRead::read(image, e, ctx);
                 b->add(image);
             }
+        } else if (tag == "Text") {
+            Text* p = Factory::createText(b, TextStyleType::REPEAT_PLAY_COUNT);
+            // TODO SET STYLE?
+            TRead::read(p, e, ctx);
+            p->setParent(b);
+            p->setTrack(ctx.track());
+            b->add(p);
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }

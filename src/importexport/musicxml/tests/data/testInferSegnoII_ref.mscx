@@ -59,6 +59,7 @@
       <systemTextFontFace>Times New Roman</systemTextFontFace>
       <staffTextFontFace>Times New Roman</staffTextFontFace>
       <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
+      <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>
       <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
       <repeatRightFontFace>Times New Roman</repeatRightFontFace>
       <frameFontFace>Times New Roman</frameFontFace>

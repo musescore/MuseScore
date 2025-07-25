@@ -22,6 +22,7 @@
 
 #include "barline.h"
 
+#include "dom/text.h"
 #include "translation.h"
 #include "types/symnames.h"
 
@@ -40,6 +41,7 @@
 #include "stafftype.h"
 #include "system.h"
 #include "undo.h"
+#include "types/typesconv.h"
 
 #include "log.h"
 
@@ -49,232 +51,10 @@ using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::read400;
 
-//---------------------------------------------------------
-//   undoChangeBarLineType
-//---------------------------------------------------------
-
-static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves)
-{
-    if (barType == bl->barLineType()) {
-        return;
-    }
-
-    Measure* m = bl->measure();
-    if (!m) {
-        return;
-    }
-
-    bool keepStartRepeat = false;
-
-    if (barType == BarLineType::START_REPEAT && bl->segment()->segmentType() != SegmentType::BeginBarLine) {
-        m = m->nextMeasure();
-        if (!m) {  // we were in last measure
-            return;
-        }
-    } else if (bl->barLineType() == BarLineType::START_REPEAT) {
-        if (m->isFirstInSystem()) {
-            if (barType != BarLineType::END_REPEAT) {
-                for (Score* lscore : m->score()->scoreList()) {
-                    Measure* lmeasure = lscore->tick2measure(m->tick());
-                    if (lmeasure) {
-                        lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
-                    }
-                }
-            }
-            return;
-        }
-
-        m = m->prevMeasureMM();
-        if (!m) {
-            return;
-        }
-
-        bl = const_cast<BarLine*>(m->endBarLine());
-        if (!bl) {
-            return;
-        }
-
-        if (barType == BarLineType::END_REPEAT) {
-            keepStartRepeat = true;
-        }
-    }
-
-    // when setting barline type on mmrest, set for underlying measure (and linked staves)
-    // createMMRest will then set for the mmrest directly
-    Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
-
-    switch (barType) {
-    case BarLineType::END:
-    case BarLineType::NORMAL:
-    case BarLineType::DOUBLE:
-    case BarLineType::BROKEN:
-    case BarLineType::DOTTED:
-    case BarLineType::REVERSE_END:
-    case BarLineType::HEAVY:
-    case BarLineType::DOUBLE_HEAVY: {
-        if (m->nextMeasureMM() && m->nextMeasureMM()->isFirstInSystem()) {
-            keepStartRepeat = true;
-        }
-
-        Segment* segment = bl->segment();
-        SegmentType segmentType = segment->segmentType();
-
-        if (segmentType == SegmentType::EndBarLine) {
-            bool generated = false;
-            if (bl->barLineType() == barType) {
-                generated = bl->generated();                // no change: keep current status
-            } else if (!bl->generated() && (barType == BarLineType::NORMAL)) {
-                generated = true;                           // currently non-generated, changing to normal: assume generated
-            }
-            if (allStaves) {
-                // use all staves of master score; we will take care of parts in loop through linked staves below
-                Score* mScore = bl->masterScore();
-                if (mScore->style().styleB(Sid::createMultiMeasureRests)) {
-                    m2 = mScore->tick2measureMM(m2->tick());
-                    if (!m2) {
-                        return;
-                    }
-                    segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
-                    m2 = m2->isMMRest() ? m2->mmRestLast() : m2;
-                    if (!m2) {
-                        return;
-                    }
-                } else {
-                    m2 = mScore->tick2measure(m2->tick());
-                    if (!m2) {
-                        return;
-                    }
-                    segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
-                }
-            }
-            const std::vector<EngravingItem*>& elist = allStaves ? segment->elist() : std::vector<EngravingItem*> { bl };
-            for (EngravingItem* e : elist) {
-                if (!e || !e->staff() || !e->isBarLine()) {
-                    continue;
-                }
-
-                // handle linked staves/parts:
-                // barlines themselves are not necessarily linked,
-                // so use staffList to find linked staves
-                BarLine* sbl = toBarLine(e);
-                for (Staff* lstaff : sbl->staff()->staffList()) {
-                    Score* lscore = lstaff->score();
-                    track_idx_t ltrack = lstaff->idx() * VOICES;
-
-                    // handle mmrests:
-                    // set the barline on the underlying measure
-                    // this will copied to the mmrest during layout, in createMMRest
-                    Measure* lmeasure = lscore->tick2measure(m2->tick());
-                    if (!lmeasure) {
-                        continue;
-                    }
-
-                    lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
-
-                    Measure* nextMeasure = lmeasure->nextMeasure();
-                    if (nextMeasure && !keepStartRepeat) {
-                        nextMeasure->undoChangeProperty(Pid::REPEAT_START, false);
-                    }
-                    Segment* lsegment = lmeasure->undoGetSegmentR(SegmentType::EndBarLine, lmeasure->ticks());
-                    BarLine* lbl = toBarLine(lsegment->element(ltrack));
-                    if (!lbl) {
-                        lbl = Factory::createBarLine(lsegment);
-                        lbl->setParent(lsegment);
-                        lbl->setTrack(ltrack);
-                        lbl->setSpanStaff(lstaff->barLineSpan());
-                        lbl->setSpanFrom(lstaff->barLineFrom());
-                        lbl->setSpanTo(lstaff->barLineTo());
-                        lbl->setBarLineType(barType);
-                        lbl->setGenerated(generated);
-                        lscore->addElement(lbl);
-                        if (!generated) {
-                            lbl->linkTo(sbl);
-                        }
-                    } else {
-                        lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
-                        lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
-                        // set generated flag before and after so it sticks on type change and also works on undo/redo
-                        lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
-                        if (lbl != sbl && !generated && !lbl->links()) {
-                            lscore->undo(new Link(lbl, sbl));
-                        } else if (lbl != sbl && generated && lbl->isLinked(sbl)) {
-                            lscore->undo(new Unlink(lbl));
-                            while (EngravingItem* linkedOnCoveringMMRest = sbl->findLinkedInScore(lscore)) {
-                                // Edge case: an additional link of this barline exists on the covering mmRest of lbl's measure
-                                lscore->undo(new Unlink(linkedOnCoveringMMRest));
-                                lscore->doUndoRemoveElement(linkedOnCoveringMMRest);
-                            }
-                        }
-                    }
-                }
-            }
-        } else if (segmentType == SegmentType::BeginBarLine) {
-            for (Score* lscore : m2->score()->scoreList()) {
-                Measure* lmeasure = lscore->tick2measure(m2->tick());
-                Segment* segment1 = lmeasure->undoGetSegmentR(SegmentType::BeginBarLine, Fraction(0, 1));
-                for (EngravingItem* e : segment1->elist()) {
-                    if (e) {
-                        lscore->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
-                        lscore->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
-                        // set generated flag before and after so it sticks on type change and also works on undo/redo
-                        lscore->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
-                    }
-                }
-            }
-        }
-    }
-    break;
-    case BarLineType::START_REPEAT: {
-        for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
-            if (m2->isMeasureRepeatGroupWithPrevM(staffIdx)) {
-                MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
-                return;
-            }
-        }
-        for (Score* lscore : m2->score()->scoreList()) {
-            Measure* lmeasure = lscore->tick2measure(m2->tick());
-            if (lmeasure) {
-                lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
-            }
-        }
-    }
-    break;
-    case BarLineType::END_REPEAT: {
-        for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
-            if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
-                MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
-                return;
-            }
-        }
-        for (Score* lscore : m2->score()->scoreList()) {
-            Measure* lmeasure = lscore->tick2measure(m2->tick());
-            if (lmeasure) {
-                lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
-            }
-        }
-    }
-    break;
-    case BarLineType::END_START_REPEAT: {
-        for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
-            if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
-                MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
-                return;
-            }
-        }
-        for (Score* lscore : m2->score()->scoreList()) {
-            Measure* lmeasure = lscore->tick2measure(m2->tick());
-            if (lmeasure) {
-                lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
-                lmeasure = lmeasure->nextMeasure();
-                if (lmeasure) {
-                    lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
-                }
-            }
-        }
-    }
-    break;
-    }
-}
+static ElementStyle playCountStyle {
+    { Sid::repeatPlayCountPlacement, Pid::PLACEMENT },
+    { Sid::repeatPlayCountMinDistance, Pid::MIN_DISTANCE },
+};
 
 //---------------------------------------------------------
 //   BarLineTable
@@ -663,10 +443,10 @@ EngravingItem* BarLine::drop(EditData& data)
             }
             // if drop refers to subtype, update this bar line subtype
             else {
-                undoChangeBarLineType(this, st, false);
+                score()->undoChangeBarLineType(this, st, false);
             }
         } else {
-            undoChangeBarLineType(this, st, true);
+            score()->undoChangeBarLineType(this, st, true);
         }
         delete e;
     } else if (e->isArticulationFamily()) {
@@ -747,6 +527,14 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
         //PointF(lw * .5, y1 + bed->yoff1) + pp,
         PointF(lw * .5, ldata()->y2 + bed->yoff2) + pp
     };
+}
+
+void BarLine::styleChanged()
+{
+    if (explicitParent() && m_barLineType == BarLineType::END_REPEAT) {
+        score()->undoUpdatePlayCountText(measure());
+    }
+    EngravingItem::styleChanged();
 }
 
 //---------------------------------------------------------
@@ -923,6 +711,10 @@ void BarLine::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     for (EngravingItem* e : m_el) {
         e->scanElements(data, func, all);
     }
+
+    if (m_playCountText) {
+        m_playCountText->scanElements(data, func, all);
+    }
 }
 
 //---------------------------------------------------------
@@ -952,6 +744,12 @@ void BarLine::add(EngravingItem* e)
         setGenerated(false);
         e->added();
         break;
+    case ElementType::TEXT: {
+        Text* t = toText(e);
+        t->initElementStyle(&playCountStyle);
+        setPlayCountText(toText(e));
+    }
+    break;
     default:
         LOGD("BarLine::add() not impl. %s", e->typeName());
         delete e;
@@ -975,6 +773,9 @@ void BarLine::remove(EngravingItem* e)
             e->removed();
         }
         break;
+    case ElementType::TEXT:
+        m_playCountText = nullptr;
+        break;
     default:
         LOGD("BarLine::remove() not impl. %s", e->typeName());
         return;
@@ -987,6 +788,10 @@ void BarLine::remove(EngravingItem* e)
 
 PropertyValue BarLine::getProperty(Pid id) const
 {
+    if (EngravingItem* e = const_cast<BarLine*>(this)->propertyDelegate(id)) {
+        return e->getProperty(id);
+    }
+
     switch (id) {
     case Pid::BARLINE_TYPE:
         return PropertyValue::fromValue(m_barLineType);
@@ -998,6 +803,10 @@ PropertyValue BarLine::getProperty(Pid id) const
         return int(spanTo());
     case Pid::BARLINE_SHOW_TIPS:
         return showTips();
+    case Pid::PLAY_COUNT_TEXT_SETTING:
+        return m_playCountTextSetting;
+    case Pid::PLAY_COUNT_TEXT:
+        return m_playCountCustomText;
     default:
         break;
     }
@@ -1010,6 +819,15 @@ PropertyValue BarLine::getProperty(Pid id) const
 
 bool BarLine::setProperty(Pid id, const PropertyValue& v)
 {
+    if (EngravingItem* e = propertyDelegate(id)) {
+        bool success = e->setProperty(id, v);
+
+        if (id == Pid::REPEAT_COUNT) {
+            score()->undoUpdatePlayCountText(measure());
+        }
+        return success;
+    }
+
     switch (id) {
     case Pid::BARLINE_TYPE:
         setBarLineType(v.value<BarLineType>());
@@ -1026,6 +844,14 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
     case Pid::BARLINE_SHOW_TIPS:
         setShowTips(v.toBool());
         break;
+    case Pid::PLAY_COUNT_TEXT_SETTING:
+        m_playCountTextSetting = v.value<AutoCustomHide>();
+        score()->undoUpdatePlayCountText(measure());
+        break;
+    case Pid::PLAY_COUNT_TEXT:
+        m_playCountCustomText = v.value<String>();
+        score()->undoUpdatePlayCountText(measure());
+        break;
     default:
         return EngravingItem::setProperty(id, v);
     }
@@ -1041,20 +867,26 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
 void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::BARLINE_TYPE && segment()) {
-        const BarLine* bl = this;
-        BarLineType blType = v.value<BarLineType>();
-        if (blType == BarLineType::START_REPEAT) {     // change next measures endBarLine
-            if (bl->measure()->nextMeasure()) {
-                bl = bl->measure()->nextMeasure()->endBarLine();
-            } else {
-                bl = 0;
-            }
-        }
-        if (bl) {
-            undoChangeBarLineType(const_cast<BarLine*>(bl), v.value<BarLineType>(), true);
-        }
+        score()->undoChangeBarLineType(this, v.value<BarLineType>(), true, true);
     } else {
         EngravingObject::undoChangeProperty(id, v, ps);
+    }
+}
+
+EngravingItem* BarLine::propertyDelegate(Pid pid)
+{
+    if (pid == Pid::REPEAT_COUNT) {
+        return measure();
+    }
+
+    return EngravingItem::propertyDelegate(pid);
+}
+
+void BarLine::setPlayCountText(Text* text)
+{
+    m_playCountText = text;
+    if (m_playCountText != nullptr) {
+        setGenerated(false);
     }
 }
 
@@ -1064,6 +896,10 @@ void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
 
 PropertyValue BarLine::propertyDefault(Pid propertyId) const
 {
+    if (EngravingItem* e = const_cast<BarLine*>(this)->propertyDelegate(propertyId)) {
+        return e->propertyDefault(propertyId);
+    }
+
     switch (propertyId) {
     case Pid::BARLINE_TYPE:
 // dynamic default values are a bad idea: writing to xml the value maybe omitted resulting in
@@ -1083,6 +919,13 @@ PropertyValue BarLine::propertyDefault(Pid propertyId) const
 
     case Pid::BARLINE_SHOW_TIPS:
         return false;
+
+    case Pid::PLAY_COUNT_TEXT_SETTING:
+        return AutoCustomHide::AUTO;
+
+    case Pid::PLAY_COUNT_TEXT:
+        return String();
+
     default:
         break;
     }

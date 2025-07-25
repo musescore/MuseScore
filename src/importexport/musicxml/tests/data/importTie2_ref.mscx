@@ -84,6 +84,8 @@
       <staffTextFrameWidth>0.13021</staffTextFrameWidth>
       <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10.25</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>10.25</repeatPlayCountFontSize>
       <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
       <repeatLeftFontSize>10.25</repeatLeftFontSize>
       <repeatRightFontFace>Times New Roman</repeatRightFontFace>
