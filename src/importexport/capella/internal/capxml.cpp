@@ -524,6 +524,21 @@ void ChordObj::readCapxNotes(XmlReader& e)
             e.unknown();
         }
     }
+
+    if (count > 0) {
+        // find a BracketObj in the drawObjects list, get the data and delete it
+        // this is used to read Tuplets with mixed durations
+        for (BasicDrawObj* o : objects) {
+            if (o->type == CapellaType::BRACKET) {
+                // BracketObj* bo = static_cast<BracketObj*>(o);
+                tupletStart = true;
+                tupletCount=o->nNotes;
+                objects.removeOne(o);
+                delete o;
+                LOGD("    ==> Tuplet start, plus %d notes till end", tupletCount);
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -548,6 +563,21 @@ void RestObj::readCapx(XmlReader& e)
             readCapxObjectArray(e);
         } else {
             e.unknown();
+        }
+    }
+
+    if (count > 0) {
+        // find a BracketObj in the drawObjects list, get the data and delete it
+        // this is used to read Tuplets with mixed durations
+        for (BasicDrawObj* o : objects) {
+            if (o->type == CapellaType::BRACKET) {
+                // BracketObj* bo = static_cast<BracketObj*>(o);
+                tupletStart = true;
+                tupletCount=o->nNotes;
+                objects.removeOne(o);
+                delete o;
+                LOGD("    ==> Tuplet start, plus %d notes till end", tupletCount);
+            }
         }
     }
 }
@@ -675,6 +705,17 @@ void WedgeObj::readCapx(XmlReader& e)
     e.readNext();
 }
 
+//------------------------------------------------------------
+//   BracketObj::readCapx -- capx equivalent of WedgeObj::read
+//------------------------------------------------------------
+
+void BracketObj::readCapx(XmlReader& e)
+{
+    // TODO: We're actually only interested in the <basic> element following and it's noteRange attribute ...
+    // or to put in another way: Intentionally left empty ...
+    e.skipCurrentElement();
+}
+
 //---------------------------------------------------------
 //   readCapxDrawObjectArray -- capx equivalent of readDrawObjectArray()
 //---------------------------------------------------------
@@ -729,8 +770,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                     LOGD("readCapxDrawObjectArray: found wavyLine (skipping)");
                     e.skipCurrentElement();
                 } else if (tag == "bracket") {
-                    LOGD("readCapxDrawObjectArray: found bracket (skipping)");
-                    e.skipCurrentElement();
+                    BracketObj* o = new BracketObj(this);
+                    bdo = o;           // save o to handle the "basic" tag (which sometimes follows)
+                    o->readCapx(e);
+                    ol.append(o);
                 } else if (tag == "wedge") {
                     WedgeObj* o = new WedgeObj(this);
                     bdo = o;           // save o to handle the "basic" tag (which sometimes follows)
@@ -781,6 +824,7 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
     // v->lyricsFont = 0;
     v->stemDir    = 0;
 
+    int tupletCounter=0;
     while (e.readNextStartElement()) {
         if (e.name() == "lyricsSettings") {
             LOGD("readCapxVoice: found lyricsSettings (skipping)");
@@ -808,10 +852,43 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
                     ChordObj* chord = new ChordObj(this);
                     chord->readCapx(e);
                     v->objects.append(chord);
+                    if (chord->tupletStart) {
+                        tupletCounter=chord->tupletCount;
+                        LOGD("     ==| (C) start of tuplet");
+                    } else if (tupletCounter > 0) {
+                        if (chord->count == 0) {
+                            LOGE("     !!! (C) chord with tupletCounter %d outside tuplet", tupletCounter);
+                        } else {
+                            --tupletCounter;
+                            if (tupletCounter == 0) {
+                                chord->tupletEnd = true;
+                                LOGD("     ==| end of tuplet");
+                            } else {
+                                LOGD("     ==> chord with tupletCounter %d inside tuplet", tupletCounter);
+                            }
+                        }
+                    }
                 } else if (tag == "rest") {
                     RestObj* rest = new RestObj(this);
                     rest->readCapx(e);
                     v->objects.append(rest);
+                    if (rest->tupletStart) {
+                        tupletCounter=rest->tupletCount;
+                        LOGD("     ==| start of tuplet");
+                    } else if (tupletCounter > 0) {
+                        if (rest->count == 0) {
+                            LOGE("     !!! rest with tupletCounter %d outside tuplet", tupletCounter);
+                        } else {
+                            --tupletCounter;
+                            if (tupletCounter == 0) {
+                                // end of tuplet
+                                rest->tupletEnd = true;
+                                LOGD("     ==| end of tuplet");
+                            } else {
+                                LOGD("     ==> rest with tupletCounter %d inside tuplet", tupletCounter);
+                            }
+                        }
+                    }
                 } else {
                     e.unknown();
                 }

@@ -538,6 +538,7 @@ public:
     BracketObj(Capella* c)
         : LineObj(CapellaType::BRACKET, c) {}
     void read();
+    void readCapx(engraving::XmlReader& e);
 
     char orientation, number;
 };
@@ -574,7 +575,10 @@ public:
     QColor color;
     TIMESTEP t;
     int horizontalShift;
-    int count;                // tuplet
+    int count;                // tuplet  --  NOTE that the count is not neccessarily correct!
+    bool tupletStart=false;   // To correctly read Tuplets with mixed durations
+    bool tupletEnd=false;     // we infer from the Capella file start/stop from the brackets.
+    int tupletCount=0;        // Real count of the tuplet notes ...
     bool tripartite;
     bool isProlonging;
 

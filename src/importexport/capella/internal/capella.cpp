@@ -583,6 +583,9 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     Fraction nn = (ticks * tupletCount) / f;
                     tuplet->setTicks(nn);
                 }
+                LOGD("Tuplet(R) at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %lld",
+                     tick.ticks(), o->count, o->tripartite, o->isProlonging, ticks.ticks(),
+                     o->objects.size());
             }
 
             Fraction ft = m->ticks();
@@ -668,7 +671,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     Fraction nn = (ticks * tupletCount) / f;
                     tuplet->setTicks(nn);
                 }
-                LOGD("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %lld",
+                LOGD("Tuplet(C) at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %lld",
                      tick.ticks(), o->count, o->tripartite, o->isProlonging, ticks.ticks(),
                      o->objects.size());
             }
