@@ -81,7 +81,7 @@ MenuItemRole MenuItem::role() const
     return m_role;
 }
 
-QList<MenuItem*> MenuItem::subitems() const
+MenuItemList MenuItem::subitems() const
 {
     return m_subitems;
 }
