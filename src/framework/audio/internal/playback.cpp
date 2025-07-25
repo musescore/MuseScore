@@ -21,10 +21,6 @@
  */
 #include "playback.h"
 
-#include <utility>
-
-#include "global/async/async.h"
-
 #include "rpc/rpcpacker.h"
 #include "audiothread.h"
 #include "audiosanitizer.h"
@@ -39,41 +35,71 @@ using namespace muse::audio;
 using namespace muse::audio::rpc;
 using namespace muse::async;
 
-void Playback::initOnWorker()
+void Playback::init()
 {
-    ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_MAIN_THREAD;
 
-    workerPlayback()->trackAdded().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId) {
-        m_trackAdded.send(sequenceId, trackId);
+    channel()->onMethod(Method::TrackAdded, [this](const Msg& msg) {
+        ONLY_AUDIO_MAIN_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackId trackId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackId)) {
+            return;
+        }
+        m_trackAdded.send(seqId, trackId);
     });
 
-    workerPlayback()->trackRemoved().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId) {
-        m_trackRemoved.send(sequenceId, trackId);
+    channel()->onMethod(Method::TrackRemoved, [this](const Msg& msg) {
+        ONLY_AUDIO_MAIN_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackId trackId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackId)) {
+            return;
+        }
+        m_trackRemoved.send(seqId, trackId);
     });
 
-    workerPlayback()->inputParamsChanged().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId,
-                                                                  const AudioInputParams& params) {
-        m_inputParamsChanged.send(sequenceId, trackId, params);
+    channel()->onMethod(Method::InputParamsChanged, [this](const Msg& msg) {
+        ONLY_AUDIO_MAIN_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackId trackId = 0;
+        AudioInputParams params;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackId, params)) {
+            return;
+        }
+        m_inputParamsChanged.send(seqId, trackId, params);
     });
 
-    workerPlayback()->outputParamsChanged().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId,
-                                                                   const AudioOutputParams& params) {
-        m_outputParamsChanged.send(sequenceId, trackId, params);
+    channel()->onMethod(Method::InputParamsChanged, [this](const Msg& msg) {
+        ONLY_AUDIO_MAIN_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackId trackId = 0;
+        AudioOutputParams params;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackId, params)) {
+            return;
+        }
+        m_outputParamsChanged.send(seqId, trackId, params);
     });
 
-    workerPlayback()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
+    channel()->onMethod(Method::MasterOutputParamsChanged, [this](const Msg& msg) {
+        ONLY_AUDIO_MAIN_THREAD;
+        AudioOutputParams params;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, params)) {
+            return;
+        }
         m_masterOutputParamsChanged.send(params);
     });
 }
 
-void Playback::deinitOnWorker()
+void Playback::deinit()
 {
-    ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_MAIN_THREAD;
 
-    workerPlayback()->trackAdded().resetOnReceive(this);
-    workerPlayback()->trackRemoved().resetOnReceive(this);
-    workerPlayback()->inputParamsChanged().resetOnReceive(this);
-    workerPlayback()->outputParamsChanged().resetOnReceive(this);
+    channel()->onMethod(Method::TrackAdded, nullptr);
+    channel()->onMethod(Method::TrackRemoved, nullptr);
+    channel()->onMethod(Method::InputParamsChanged, nullptr);
+    channel()->onMethod(Method::InputParamsChanged, nullptr);
+    channel()->onMethod(Method::MasterOutputParamsChanged, nullptr);
 }
 
 Promise<TrackSequenceId> Playback::addSequence()

@@ -50,12 +50,17 @@ enum class Method {
     AddTrackWithPlaybackData,
     AddTrackWithIODevice,
     AddAuxTrack,
+    // notification
+    TrackAdded,
+    TrackRemoved,
 
     GetAvailableInputResources,
     GetAvailableSoundPresets,
 
     GetInputParams,
     SetInputParams,
+    // notification
+    InputParamsChanged,
 
     ClearSources,
 
@@ -75,6 +80,9 @@ enum class Method {
     GetMasterOutputParams,
     SetMasterOutputParams,
     ClearMasterOutputParams,
+    // notification
+    OutputParamsChanged,
+    MasterOutputParamsChanged,
 
     GetSignalChanges,
     GetMasterSignalChanges,
@@ -105,12 +113,15 @@ inline std::string to_string(Method m)
     case Method::AddTrackWithPlaybackData: return "AddTrackWithPlaybackData";
     case Method::AddTrackWithIODevice: return "AddTrackWithIODevice";
     case Method::AddAuxTrack: return "AddAuxTrack";
+    case Method::TrackAdded: return "TrackAdded";
+    case Method::TrackRemoved: return "TrackRemoved";
 
     case Method::GetAvailableInputResources: return "GetAvailableInputResources";
     case Method::GetAvailableSoundPresets: return "GetAvailableSoundPresets";
 
     case Method::GetInputParams: return "GetInputParams";
     case Method::SetInputParams: return "SetInputParams";
+    case Method::InputParamsChanged: return "InputParamsChanged";
 
     case Method::ClearSources: return "ClearSources";
 
@@ -130,6 +141,8 @@ inline std::string to_string(Method m)
     case Method::GetMasterOutputParams: return "GetMasterOutputParams";
     case Method::SetMasterOutputParams: return "SetMasterOutputParams";
     case Method::ClearMasterOutputParams: return "ClearMasterOutputParams";
+    case Method::OutputParamsChanged: return "OutputParamsChanged";
+    case Method::MasterOutputParamsChanged: return "MasterOutputParamsChanged";
 
     case Method::GetSignalChanges: return "GetSignalChanges";
     case Method::GetMasterSignalChanges: return "GetMasterSignalChanges";
@@ -148,7 +161,7 @@ inline std::string to_string(Method m)
 
 enum class MsgType {
     Undefined = 0,
-    Notify,
+    Notification,
     Request,
     Response
 };
@@ -157,7 +170,7 @@ inline std::string to_string(MsgType t)
 {
     switch (t) {
     case MsgType::Undefined: return "Undefined";
-    case MsgType::Notify: return "Notify";
+    case MsgType::Notification: return "Notification";
     case MsgType::Request: return "Request";
     case MsgType::Response: return "Response";
     }
@@ -319,6 +332,16 @@ inline Msg make_response(const Msg& req, const ByteArray& data = ByteArray())
     msg.callId = req.callId;
     msg.method = req.method;
     msg.type = MsgType::Response;
+    msg.data = data;
+    return msg;
+}
+
+inline Msg make_notification(Method m, const ByteArray& data = ByteArray())
+{
+    Msg msg;
+    msg.callId = new_call_id();
+    msg.method = m;
+    msg.type = MsgType::Notification;
     msg.data = data;
     return msg;
 }
