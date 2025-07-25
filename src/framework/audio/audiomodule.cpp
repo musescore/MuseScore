@@ -223,11 +223,14 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     m_audioOutputController->init();
 
+    // rpc
     m_rpcTimer.setInterval(16); // corresponding to 60 fps
     QObject::connect(&m_rpcTimer, &QTimer::timeout, [this]() {
         m_rpcChannel->process();
     });
     m_rpcTimer.start();
+
+    m_mainPlayback->init();
 
     // Setup audio driver
     setupAudioDriver(mode);
@@ -244,6 +247,7 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
 void AudioModule::onDeinit()
 {
+    m_mainPlayback->deinit();
     m_rpcTimer.stop();
 
     if (m_audioDriver->isOpened()) {
@@ -260,7 +264,6 @@ void AudioModule::onDestroy()
             ONLY_AUDIO_WORKER_THREAD;
             m_workerChannelController->deinitOnWorker();
             m_workerPlayback->deinit();
-            m_mainPlayback->deinitOnWorker();
             m_audioEngine->deinit();
         });
     }
@@ -330,9 +333,6 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 
         // Initialize IWorkerPlayback facade and make sure that it's initialized after the audio-engine
         m_workerPlayback->init();
-
-        // Playback must be inited after the audio thread is created
-        m_mainPlayback->initOnWorker();
 
         m_rpcChannel->initOnWorker();
         m_workerChannelController->initOnWorker(m_workerPlayback);

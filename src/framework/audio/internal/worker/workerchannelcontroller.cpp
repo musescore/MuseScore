@@ -35,6 +35,29 @@ void WorkerChannelController::initOnWorker(std::shared_ptr<IWorkerPlayback> play
 
     m_playback = playback;
 
+    // Notification
+    m_playback->trackAdded().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId) {
+        channel()->send(rpc::make_notification(Method::TrackAdded, RpcPacker::pack(sequenceId, trackId)));
+    });
+
+    m_playback->trackRemoved().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId) {
+        channel()->send(rpc::make_notification(Method::TrackRemoved, RpcPacker::pack(sequenceId, trackId)));
+    });
+
+    m_playback->inputParamsChanged().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId,
+                                                            const AudioInputParams& params) {
+        channel()->send(rpc::make_notification(Method::InputParamsChanged, RpcPacker::pack(sequenceId, trackId, params)));
+    });
+
+    m_playback->outputParamsChanged().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId,
+                                                             const AudioOutputParams& params) {
+        channel()->send(rpc::make_notification(Method::OutputParamsChanged, RpcPacker::pack(sequenceId, trackId, params)));
+    });
+
+    m_playback->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
+        channel()->send(rpc::make_notification(Method::MasterOutputParamsChanged, RpcPacker::pack(params)));
+    });
+
     // Sequences
     channel()->onMethod(Method::AddSequence, [this](const Msg& msg) {
         ONLY_AUDIO_WORKER_THREAD;
@@ -380,6 +403,11 @@ void WorkerChannelController::initOnWorker(std::shared_ptr<IWorkerPlayback> play
 void WorkerChannelController::deinitOnWorker()
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    m_playback->trackAdded().resetOnReceive(this);
+    m_playback->trackRemoved().resetOnReceive(this);
+    m_playback->inputParamsChanged().resetOnReceive(this);
+    m_playback->outputParamsChanged().resetOnReceive(this);
 
     channel()->onMethod(Method::AddSequence, nullptr);
     channel()->onMethod(Method::RemoveSequence, nullptr);

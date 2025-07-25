@@ -21,13 +21,15 @@
  */
 #pragma once
 
+#include "global/async/asyncable.h"
+
 #include "global/modularity/ioc.h"
 #include "../rpc/irpcchannel.h"
 
 #include "iworkerplayback.h"
 
 namespace muse::audio::worker {
-class WorkerChannelController
+class WorkerChannelController : public async::Asyncable
 {
     Inject<rpc::IRpcChannel> channel;
 
