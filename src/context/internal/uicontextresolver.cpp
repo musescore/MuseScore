@@ -21,6 +21,8 @@
  */
 #include "uicontextresolver.h"
 
+#include <QTimer>
+
 #include "diagnostics/diagnosticutils.h"
 
 #include "shortcutcontext.h"
@@ -42,10 +44,15 @@ static const muse::Uri EXTENSIONS_DIALOG_URI("muse://extensions/viewer");
 
 static const QString NOTATION_NAVIGATION_PANEL("ScoreView");
 
+constexpr int CURRENT_URI_CHANGED_TIMEOUT = 500; // msec
+
 void UiContextResolver::init()
 {
     interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
-        notifyAboutContextChanged();
+        //! NOTE Let the page/dialog open and show itself first
+        QTimer::singleShot(CURRENT_URI_CHANGED_TIMEOUT, [this]() {
+            notifyAboutContextChanged();
+        });
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
