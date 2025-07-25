@@ -82,7 +82,7 @@ void VstSynthesiser::init()
     });
 
     m_sequencer.setOnOffStreamFlushed([this]() {
-        revokePlayingNotes();
+        m_vstAudioClient->allNotesOff();
     });
 }
 
@@ -122,18 +122,13 @@ std::string VstSynthesiser::name() const
 
 void VstSynthesiser::revokePlayingNotes()
 {
-    if (m_vstAudioClient) {
-        m_vstAudioClient->allNotesOff();
-    }
+    m_vstAudioClient->allNotesOff();
 }
 
 void VstSynthesiser::flushSound()
 {
     m_sequencer.flushOffstream();
-
-    if (m_vstAudioClient) {
-        m_vstAudioClient->flush();
-    }
+    m_vstAudioClient->flush();
 }
 
 void VstSynthesiser::setupSound(const mpe::PlaybackSetupData& setupData)
