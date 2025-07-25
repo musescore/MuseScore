@@ -1696,7 +1696,7 @@ String TextBlock::text(int col1, int len, bool withFormat) const
                 if (f.format.fontFamily() == "ScoreText" && withFormat) {
                     s += toSymbolXml(c);
                 } else {
-                    s += XmlWriter::escapeSymbol(c.unicode());
+                    s += String::toXmlEscaped(c.unicode());
                 }
             }
             if (!c.isHighSurrogate()) {

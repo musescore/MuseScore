@@ -113,13 +113,12 @@ TextStream& TextStream::operator<<(unsigned long long val)
 
 TextStream& TextStream::operator<<(const char* s)
 {
-    write(s, std::strlen(s));
-    return *this;
+    return operator<<(std::string_view { s });
 }
 
-TextStream& TextStream::operator<<(const std::string& str)
+TextStream& TextStream::operator<<(const std::string_view str)
 {
-    write(str.c_str(), str.size());
+    write(str.data(), str.size());
     return *this;
 }
 
@@ -136,12 +135,6 @@ TextStream& TextStream::operator<<(const QString& s)
 TextStream& TextStream::operator<<(const ByteArray& b)
 {
     write(reinterpret_cast<const char*>(b.constData()), b.size());
-    return *this;
-}
-
-TextStream& TextStream::operator<<(const AsciiStringView& s)
-{
-    write(s.ascii(), s.size());
     return *this;
 }
 

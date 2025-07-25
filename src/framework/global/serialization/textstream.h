@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_TEXTSTREAM_H
-#define MUSE_GLOBAL_TEXTSTREAM_H
+#pragma once
+
+#include <string_view>
 
 #include "../io/iodevice.h"
 #include "../types/bytearray.h"
@@ -51,9 +52,8 @@ public:
     TextStream& operator<<(signed long long val);
     TextStream& operator<<(unsigned long long val);
     TextStream& operator<<(const char* s);
-    TextStream& operator<<(const std::string& s);
+    TextStream& operator<<(std::string_view);
     TextStream& operator<<(const ByteArray& b);
-    TextStream& operator<<(const AsciiStringView& s);
     TextStream& operator<<(const String& s);
 
 #ifndef NO_QT_SUPPORT
@@ -66,5 +66,3 @@ private:
     ByteArray m_buf;
 };
 }
-
-#endif // MUSE_GLOBAL_TEXTSTREAM_H
