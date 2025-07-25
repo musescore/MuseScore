@@ -1192,6 +1192,7 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
         MStaff* ms = *(m_mstaves.begin() + i);
         score()->undo(new RemoveMStaff(this, ms, i));
     }
+    score()->undoUpdatePlayCountText(this);
 }
 
 //---------------------------------------------------------
@@ -1293,6 +1294,7 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
             }
         }
     }
+    score()->undoUpdatePlayCountText(this);
 }
 
 //---------------------------------------------------------
@@ -2238,6 +2240,8 @@ void Measure::sortStaves(std::vector<staff_idx_t>& dst)
         staff_idx_t idx = muse::indexOf(dst, staffIdx);
         e->setTrack(idx * VOICES + voice);
     }
+
+    score()->undoUpdatePlayCountText(this);
 }
 
 //---------------------------------------------------------

@@ -56,6 +56,7 @@
 #include "tremolotwochord.h"
 #include "tuplet.h"
 #include "drumset.h"
+#include "barline.h"
 
 #include "log.h"
 
@@ -1443,6 +1444,19 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
                         }
                     } else if (item->staffIdx() == 0) {
                         result.push_back(item);
+                    }
+                }
+            }
+
+            if (measure->repeatEnd() && seg.isType(SegmentType::BarLineType)) {
+                for (EngravingItem* item : seg.elist()) {
+                    if (!item || !item->isBarLine()) {
+                        continue;
+                    }
+
+                    BarLine* bl = toBarLine(item);
+                    if (Text* playCount = bl->playCountText()) {
+                        result.push_back(playCount);
                     }
                 }
             }

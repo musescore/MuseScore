@@ -173,30 +173,34 @@ Rectangle {
                     enabled: repeatPlayCountTextModel.repeatPlayCountShow.value === true
                 }
 
-                StyledTextLabel {
-                    text: qsTrc("notation", "Preset")
-                    enabled: repeatPlayCountTextModel.repeatPlayCountShow.value === true
-                }
-
-                RowLayout {
-                    spacing: 6
+                ColumnLayout {
                     Layout.fillWidth: true
-
-                    enabled: repeatPlayCountTextModel.repeatPlayCountShow.value === true
-
-                    ComboBoxDropdown {
-                        Layout.preferredWidth: 290 - editTextStyleButton.width - 6
-                        model: repeatPlayCountTextModel.textPresetOptions()
-
-                        styleItem: repeatPlayCountTextModel.repeatTextPreset
+                    spacing: 8
+                    StyledTextLabel {
+                        text: qsTrc("notation", "Preset")
+                        enabled: repeatPlayCountTextModel.repeatPlayCountShow.value === true
                     }
 
-                    FlatButton {
-                        id: editTextStyleButton
-                        text: qsTrc("notation", "Edit text style")
+                    RowLayout {
+                        spacing: 6
+                        Layout.fillWidth: true
 
-                        onClicked: {
-                            root.goToTextStylePage("repeat-play-count")
+                        enabled: repeatPlayCountTextModel.repeatPlayCountShow.value === true
+
+                        ComboBoxDropdown {
+                            Layout.preferredWidth: 290 - editTextStyleButton.width - 6
+                            model: repeatPlayCountTextModel.textPresetOptions()
+
+                            styleItem: repeatPlayCountTextModel.repeatTextPreset
+                        }
+
+                        FlatButton {
+                            id: editTextStyleButton
+                            text: qsTrc("notation", "Edit text style")
+
+                            onClicked: {
+                                root.goToTextStylePage("repeat-play-count")
+                            }
                         }
                     }
                 }
