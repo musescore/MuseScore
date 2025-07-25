@@ -44,7 +44,7 @@ on:
         required: false   
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_16.3.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_26.0.app/Contents/Developer
   USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}  
 
 jobs:
