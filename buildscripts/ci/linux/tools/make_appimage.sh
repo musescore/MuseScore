@@ -241,7 +241,7 @@ done
 
 for lib in "${additional_libraries[@]}"; do
   if [ -f "${appdir}/lib/${lib}" ]; then
-    echo "Warning: ${file} was already deployed. Skipping."
+    echo "Warning: ${lib} was already deployed. Skipping."
     continue
   fi
   full_path="$(find_library "${lib}")"
@@ -254,13 +254,23 @@ done
 
 for name in "${extracted_appimages[@]}"; do
   symlink="$(which "${name}")"
-  apprun="$(dirname "${symlink}")/$(readlink "${symlink}")"
-  if [[ ! -L "${symlink}" || ! -f "${apprun}" ]]; then
+
+  if [ -z "$symlink" ]; then
     echo "$0: Warning: Unable to find AppImage for '${name}'. Will not bundle." >&2
     continue
   fi
+
+  potential_apprun="$(dirname "${symlink}")/AppRun"
+  if [ -f "${potential_apprun}" ]; then
+    apprun="${potential_apprun}"
+  else
+    echo "$0: Warning: Unable to find AppRun for '${name}'. Will not bundle." >&2
+    continue
+  fi
+
   extracted_appdir_path="$(dirname "${apprun}")"
   extracted_appdir_name="$(basename "${extracted_appdir_path}")"
+
   cp -r "${extracted_appdir_path}" "${appdir}/"
   cat >"${appdir}/bin/${name}" <<EOF
 #!/bin/sh
