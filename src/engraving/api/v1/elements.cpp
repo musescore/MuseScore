@@ -110,6 +110,11 @@ FractionWrapper* EngravingItem::tick() const
     return wrap(element()->tick());
 }
 
+FractionWrapper* EngravingItem::beat() const
+{
+    return wrap(element()->beat());
+}
+
 //---------------------------------------------------------
 //   ChordRest::actualBeamMode
 //---------------------------------------------------------

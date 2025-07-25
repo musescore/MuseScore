@@ -1046,6 +1046,10 @@ class EngravingItem : public apiv1::ScoreElement
     /// \see \ref ticklength
     /// \since MuseScore 4.6
     Q_PROPERTY(apiv1::FractionWrapper * fraction READ tick)
+    /// \brief Current beat of this element
+    /// \returns The beat this element starts on, as a fraction.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::FractionWrapper * beat READ beat)
 
 public:
     /// \cond MS_INTERNAL
@@ -1074,6 +1078,7 @@ public:
     Q_INVOKABLE QString _name() const { return name(); }
 
     FractionWrapper* tick() const;
+    FractionWrapper* beat() const;
 };
 
 //---------------------------------------------------------
