@@ -18,7 +18,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt.labs.platform as QD // Despite Qt 6.9, QtQuick.Dialogs seems not to work
 import Muse.UiComponents 1.0 as MU
 import Muse.Ui 1.0
 
@@ -350,6 +349,7 @@ MuseScore {
                                 id: radioButton
                                 property bool isSeparatorLine: modelData.name == "separatorLine"
                                 Layout.minimumWidth: implicitWidth
+                                Layout.preferredHeight: isSeparatorLine ? implicitHeight + 8 : implicitHeight
                                 Layout.fillWidth: true
                                 text: modelData.displayName
                                 indicator.visible: !isSeparatorLine
@@ -358,12 +358,6 @@ MuseScore {
                                 font: isSeparatorLine ? ui.theme.bodyBoldFont : ui.theme.bodyFont
                                 onToggled: {
                                     temperamentClicked(index)
-                                }
-                                background: Rectangle {
-                                    color: ui.theme.accentColor
-                                    opacity: 0.5
-                                    anchors.fill: parent
-                                    visible: isSeparatorLine
                                 }
                             }
                         }
@@ -380,17 +374,17 @@ MuseScore {
                     RowLayout {
                         MU.StyledGroupBox {
                             title: qsTr("Root note")
-                            Layout.fillWidth: true
                             GridLayout {
                                 columns: 4
                                 anchors.margins: defaultSpacing
 
                                 Repeater {
                                     model: pitchOffsets
-                                    MU.RoundedRadioButton {
+                                    MU.FlatRadioButton {
                                         text: notesStringModel[modelData]
+                                        Layout.preferredWidth: 36
                                         checked: currentRoot == fifthsOffsets[modelData]
-                                        onToggled: {
+                                        onClicked: {
                                             changeRootNote(fifthsOffsets[modelData])
                                         }
                                     }
@@ -400,17 +394,17 @@ MuseScore {
 
                         MU.StyledGroupBox {
                             title: qsTr("Pure tone")
-                            Layout.fillWidth: true
                             GridLayout {
                                 columns: 4
                                 anchors.margins: defaultSpacing
 
                                 Repeater {
                                     model: pitchOffsets
-                                    MU.RoundedRadioButton {
+                                    MU.FlatRadioButton {
                                         text: notesStringModel[modelData]
+                                        Layout.preferredWidth: 36
                                         checked: currentPureTone == fifthsOffsets[modelData]
-                                        onToggled: {
+                                        onClicked: {
                                             changePureTone(fifthsOffsets[modelData])
                                         }
                                     }
@@ -551,11 +545,7 @@ MuseScore {
             MU.FlatButton {
                 text: curScore ? qsTranslate("PrefsDialogBase", "Cancel") : qsTranslate("PrefsDialogBase", "Quit")
                 onClicked: {
-                    if (saveIsAvailable) {
-                        cancelQuitDialog.open()
-                    } else {
-                        quit()
-                    }
+                    quit()
                 }
             }
             MU.FlatButton {
@@ -563,12 +553,8 @@ MuseScore {
                 visible: curScore
                 accentButton: true
                 onClicked: {
-                    if (saveIsAvailable) {
-                        applyQuitDialog.open()
-                    } else {
-                        applyTemperament()
-                        quit()
-                    }
+                    applyTemperament()
+                    quit()
                 }
             }
         }
@@ -580,34 +566,6 @@ MuseScore {
         onAccepted: {
             errorDialog.close()
             quit()
-        }
-    }
-
-    QD.MessageDialog {
-        id: applyQuitDialog
-        title: qsTr("Quit without saving?")
-        text: qsTr("Do you want to quit without saving your changes?") + "\r\n" + qsTr("The changed tuning will still be applied to this score.")
-        buttons: QD.MessageDialog.Ignore | QD.MessageDialog.Cancel
-        // to do add a save option
-        onAccepted: {
-            applyTemperament()
-            quit()
-        }
-        onRejected: {
-            close()
-        }
-    }
-
-    QD.MessageDialog {
-        id: cancelQuitDialog
-        title: qsTr("Quit without saving?")
-        text: qsTr("Do you want to quit without saving your changes?")
-        buttons: QD.MessageDialog.Ignore | QD.MessageDialog.Cancel
-        onAccepted: {
-            quit()
-        }
-        onRejected: {
-            close()
         }
     }
 
