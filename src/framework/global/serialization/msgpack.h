@@ -215,6 +215,7 @@ static inline ByteArray pack(const Types&... args)
     std::vector<uint8_t>& vdata = ba.vdata();
     vdata.clear();
     Packer::pack(vdata, args ...);
+    vdata.emplace_back(0);
     return ba;
 }
 

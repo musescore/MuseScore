@@ -25,6 +25,16 @@
 
 #include "../../../audiosanitizer.h"
 
+#include "log.h"
+
+#define RPC_LOGGING_ENABLED
+
+#ifdef RPC_LOGGING_ENABLED
+#define RPCLOG() LOGDA()
+#else
+#define RPCLOG() LOGN()
+#endif
+
 using namespace muse::audio::rpc;
 
 void GeneralRpcChannel::initOnWorker()
@@ -41,13 +51,13 @@ bool GeneralRpcChannel::isWorkerThread() const
 void GeneralRpcChannel::process()
 {
     if (isWorkerThread()) {
-        doProcessRPC(m_mainRpcData, m_workerRpcData);
+        receive(m_mainRpcData, m_workerRpcData);
     } else {
-        doProcessRPC(m_workerRpcData, m_mainRpcData);
+        receive(m_workerRpcData, m_mainRpcData);
     }
 }
 
-void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
+void GeneralRpcChannel::receive(RpcData& from, RpcData& to) const
 {
     MsgQueue msgQueue;
     StreamMsgQueue streamMsgQueue;
@@ -60,6 +70,11 @@ void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
     // msgs
     while (!msgQueue.empty()) {
         const Msg& m = msgQueue.front();
+
+        RPCLOG() << "callId: " << m.callId
+                 << ", method: " << to_string(m.method)
+                 << ", type: " << to_string(m.type)
+                 << ", data.size: " << m.data.size();
 
         // all
         if (to.listenerAll) {
@@ -90,12 +105,12 @@ void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
     while (!streamMsgQueue.empty()) {
         const StreamMsg& m = streamMsgQueue.front();
 
-        // by stream
-        {
-            auto it = to.onStreams.find(m.streamId);
-            if (it != to.onStreams.end() && it->second) {
-                it->second(m);
-            }
+        RPCLOG() << "received streamId: " << m.streamId
+                 << ", data.size: " << m.data.size();
+
+        auto it = to.onStreams.find(m.streamId);
+        if (it != to.onStreams.end() && it->second) {
+            it->second(m);
         }
 
         streamMsgQueue.pop();
@@ -104,6 +119,11 @@ void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
 
 void GeneralRpcChannel::send(const Msg& msg, const Handler& onResponse)
 {
+    RPCLOG() << "callId: " << msg.callId
+             << ", method: " << to_string(msg.method)
+             << ", type: " << to_string(msg.type)
+             << ", data.size: " << msg.data.size();
+
     if (isWorkerThread()) {
         std::scoped_lock<std::mutex> lock(m_workerRpcData.mutex);
         m_workerRpcData.queue.push(msg);
@@ -139,7 +159,7 @@ void GeneralRpcChannel::listenAll(Handler h)
     }
 }
 
-void GeneralRpcChannel::addStream(std::shared_ptr<IStream> s)
+void GeneralRpcChannel::addStream(std::shared_ptr<IRpcStream> s)
 {
     s->init();
 
@@ -152,7 +172,7 @@ void GeneralRpcChannel::addStream(std::shared_ptr<IStream> s)
 
 void GeneralRpcChannel::removeStream(StreamId id)
 {
-    auto removeStrm = [](std::map<StreamId, std::shared_ptr<IStream> >& streams, StreamId id) {
+    auto removeStrm = [](std::map<StreamId, std::shared_ptr<IRpcStream> >& streams, StreamId id) {
         auto it = streams.find(id);
         if (it != streams.end()) {
             streams.erase(it);
@@ -168,6 +188,9 @@ void GeneralRpcChannel::removeStream(StreamId id)
 
 void GeneralRpcChannel::sendStream(const StreamMsg& msg)
 {
+    RPCLOG() << "streamId: " << msg.streamId
+             << ", data.size: " << msg.data.size();
+
     if (isWorkerThread()) {
         std::scoped_lock<std::mutex> lock(m_workerRpcData.mutex);
         m_workerRpcData.streamQueue.push(msg);

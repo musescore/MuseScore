@@ -80,6 +80,40 @@ void WorkerChannelController::initOnWorker(std::shared_ptr<IWorkerPlayback> play
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 
+    channel()->onMethod(Method::AddTrackWithPlaybackData, [this](const Msg& msg) {
+        ONLY_AUDIO_WORKER_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackName trackName;
+        mpe::PlaybackData playbackData;
+        AudioParams params;
+        rpc::StreamId mainStreamId = 0;
+        rpc::StreamId offStreamId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackName, playbackData, params, mainStreamId, offStreamId)) {
+            return;
+        }
+
+        channel()->addReceiveStream(mainStreamId, playbackData.mainStream);
+        channel()->addReceiveStream(offStreamId, playbackData.offStream);
+
+        RetVal2<TrackId, AudioParams> ret = m_playback->addTrack(seqId, trackName, playbackData, params);
+        channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
+    });
+
+    channel()->onMethod(Method::AddTrackWithIODevice, [this](const Msg& msg) {
+        ONLY_AUDIO_WORKER_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackName trackName;
+        uint64_t devicePtr = 0;
+        AudioParams params;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackName, devicePtr, params)) {
+            return;
+        }
+        io::IODevice* device = reinterpret_cast<io::IODevice*>(devicePtr);
+
+        RetVal2<TrackId, AudioParams> ret = m_playback->addTrack(seqId, trackName, device, params);
+        channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
+    });
+
     channel()->onMethod(Method::AddAuxTrack, [this](const Msg& msg) {
         ONLY_AUDIO_WORKER_THREAD;
         TrackSequenceId seqId = 0;
@@ -317,6 +351,7 @@ void WorkerChannelController::deinitOnWorker()
 
     channel()->onMethod(Method::GetTrackIdList, nullptr);
     channel()->onMethod(Method::GetTrackName, nullptr);
+    channel()->onMethod(Method::AddTrackWithPlaybackData, nullptr);
     channel()->onMethod(Method::AddAuxTrack, nullptr);
     channel()->onMethod(Method::RemoveTrack, nullptr);
     channel()->onMethod(Method::RemoveAllTracks, nullptr);

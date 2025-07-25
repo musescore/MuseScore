@@ -41,14 +41,15 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioFxParams& value
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::AuxSendParams& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AuxSendParams& value);
 
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSourceParams& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSourceParams& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioOutputParams& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioOutputParams& value);
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioParams& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioParams& value);
 
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundPreset& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundPreset& value);
-
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSourceParams& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSourceParams& value);
 
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackType& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackType& value);
@@ -156,6 +157,16 @@ inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioOutput
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioOutputParams& value)
 {
     p(value.fxChain, value.volume, value.balance, value.auxSends, value.solo, value.muted, value.forceMute);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioParams& value)
+{
+    p(value.in, value.out);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioParams& value)
+{
+    p(value.in, value.out);
 }
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundPreset& value)

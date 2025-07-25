@@ -22,7 +22,6 @@
 #include <gtest/gtest.h>
 
 #include "audio/internal/rpc/rpcpacker.h"
-#include "audio/internal/rpc/rpcstream.h"
 
 using namespace muse;
 using namespace muse::audio;
@@ -90,6 +89,10 @@ TEST_F(Audio_RpcPackerTests, AuxSendParams)
 TEST_F(Audio_RpcPackerTests, AudioOutputParams)
 {
     AudioOutputParams origin;
+    origin.fxChain.insert({ 3, {} });
+    origin.volume = 0.6;
+    origin.balance = 0.5;
+    origin.auxSends.push_back({});
     origin.forceMute = true;
     origin.muted = true;
     origin.solo = true;

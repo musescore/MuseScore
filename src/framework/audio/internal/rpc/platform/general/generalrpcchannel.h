@@ -43,7 +43,7 @@ public:
     void listenAll(Handler h) override;
 
     // stream
-    void addStream(std::shared_ptr<IStream> s) override;
+    void addStream(std::shared_ptr<IRpcStream> s) override;
     void removeStream(StreamId id) override;
     void sendStream(const StreamMsg& msg) override;
     void onStream(StreamId id, StreamHandler h) override;
@@ -63,13 +63,13 @@ private:
         std::map<CallId, Handler> onResponses;
 
         // stream
-        std::map<StreamId, std::shared_ptr<IStream>> streams;
+        std::map<StreamId, std::shared_ptr<IRpcStream> > streams;
         StreamMsgQueue streamQueue;
         std::map<StreamId, StreamHandler> onStreams;
     };
 
     bool isWorkerThread() const;
-    void doProcessRPC(RpcData& from, RpcData& to) const;
+    void receive(RpcData& from, RpcData& to) const;
 
     std::thread::id m_workerThreadID;
     RpcData m_workerRpcData;
