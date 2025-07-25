@@ -1605,7 +1605,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
     static const std::wregex SUS_ADD_REGEX = std::wregex(L"sus|add");
     bool stackSusOrAdd = false;
     for (const String& mod : m_modifierList) {
-        if (!mod.contains(SUS_ADD_REGEX)) {
+        if (!stackModifiersEnabled || !mod.contains(SUS_ADD_REGEX)) {
             continue;
         }
         if (!stackSusOrAdd) {
