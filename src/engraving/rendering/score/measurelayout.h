@@ -54,6 +54,7 @@ public:
     static void computePreSpacingItems(Measure* m, LayoutContext& ctx);
 
     static void layoutStaffLines(Measure* m, LayoutContext& ctx);
+    static void layoutPlayCountText(Measure* m, LayoutContext& ctx);
     static void layoutMeasureNumber(Measure* m, LayoutContext& ctx);
     static void layoutMMRestRange(Measure* m, LayoutContext& ctx);
     static void layoutMeasureElements(Measure* m, LayoutContext& ctx);

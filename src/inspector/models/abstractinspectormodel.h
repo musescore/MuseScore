@@ -89,7 +89,6 @@ public:
         TYPE_GLISSANDO,
         TYPE_BARLINE,
         TYPE_BREATH,
-        TYPE_STAFF,
         TYPE_MARKER,
         TYPE_SECTIONBREAK,
         TYPE_JUMP,
@@ -144,7 +143,7 @@ public:
         TYPE_REST_BEAM,
         TYPE_STRING_TUNINGS,
         TYPE_SYMBOL,
-        TYPE_NOTELINE,
+        TYPE_NOTELINE
     };
     Q_ENUM(InspectorModelType)
 
@@ -192,6 +191,8 @@ signals:
     void isEmptyChanged();
 
     void requestReloadPropertyItems();
+
+    void requestReloadInspectorListModel();
 
     void isSystemObjectBelowBottomStaffChanged(bool isSystemObjectBelowBottomStaff);
 

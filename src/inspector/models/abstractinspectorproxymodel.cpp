@@ -128,6 +128,9 @@ void AbstractInspectorProxyModel::setModels(const QList<AbstractInspectorModel*>
             emit isEmptyChanged();
         });
 
+        connect(model, &AbstractInspectorModel::requestReloadInspectorListModel, this,
+                &AbstractInspectorModel::requestReloadInspectorListModel);
+
         m_models[modelType] = model;
     }
 

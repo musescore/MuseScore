@@ -808,7 +808,13 @@ void Measure::add(EngravingItem* e)
         }
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
-                LOGD("there is already a <%s> segment", seg->subTypeName());
+                if (seg->isType(SegmentType::BarLineType)) {
+                    // Barline segments are regenerated every layout
+                    // We need to remove the regenerated segment when undoing to ensure the original element is added back to the score
+                    m_segments.remove(s);
+                    s = s->next();
+                    continue;
+                }
                 /// HACK: REMOVED to prevent crash in 4.4.3.
                 /// Adding multiple identical segments may cause problems, so we should resolve this properly
                 // return;
@@ -3333,6 +3339,14 @@ String Measure::accessibleInfo() const
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::number(no() + 1));
 }
 
+void Measure::styleChanged()
+{
+    if (endBarLineType() == BarLineType::END_REPEAT) {
+        score()->undoUpdatePlayCountText(this);
+    }
+    MeasureBase::styleChanged();
+}
+
 //---------------------------------------------------
 //    computeTicks
 //    set ticks for all segments
@@ -3382,20 +3396,26 @@ Fraction Measure::anacrusisOffset() const
 
 const BarLine* Measure::endBarLine() const
 {
+    return endBarLine(0, true);
+}
+
+const BarLine* Measure::endBarLine(staff_idx_t staffIdx, bool first) const
+{
     // search barline segment:
     Segment* s = last();
     while (s && !s->isEndBarLineType()) {
         s = s->prev();
     }
-    // search first element
+
     if (s) {
         for (const EngravingItem* e : s->elist()) {
-            if (e) {
+            // Return first barline or barline with matching staffIdx
+            if (e && (e->staffIdx() == staffIdx || first)) {
                 return toBarLine(e);
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------

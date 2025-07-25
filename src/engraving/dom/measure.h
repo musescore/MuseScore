@@ -348,11 +348,14 @@ public:
 
     String accessibleInfo() const override;
 
+    void styleChanged() override;
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
 
     const BarLine* endBarLine() const;
+    const BarLine* endBarLine(staff_idx_t staffIdx, bool first = false) const;
     BarLineType endBarLineType() const;
     bool endBarLineVisible() const;
     const BarLine* startBarLine() const;

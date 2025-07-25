@@ -38,7 +38,6 @@
 
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/textline.h"
@@ -121,6 +120,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "tempo",
     "tempo-change",
     "metronome",
+    "repeat-play-count",
     "repeat-text-left",
     "repeat-text-right",
     "rehearsal-mark",
@@ -394,12 +394,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::spacingDensity,          true,  spacingDensity,          resetSpacingDensity },
         { StyleId::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },
         { StyleId::measureSpacing,          false, measureSpacing,          resetMeasureSpacing },
-        { StyleId::measureRepeatNumberPos,  false, measureRepeatNumberPos,  resetMeasureRepeatNumberPos },
-        { StyleId::mrNumberSeries,          false, mrNumberSeries,          0 },
-        { StyleId::mrNumberEveryXMeasures,  false, mrNumberEveryXMeasures,  resetMRNumberEveryXMeasures },
-        { StyleId::mrNumberSeriesWithParentheses, false, mrNumberSeriesWithParentheses, resetMRNumberSeriesWithParentheses },
-        { StyleId::oneMeasureRepeatShow1,   false, oneMeasureRepeatShow1,   resetOneMeasureRepeatShow1 },
-        { StyleId::fourMeasureRepeatShowExtenders, false, fourMeasureRepeatShowExtenders, resetFourMeasureRepeatShowExtenders },
 
         { StyleId::barWidth,                false, barWidth,                resetBarWidth },
         { StyleId::endBarWidth,             false, endBarWidth,             resetEndBarWidth },
@@ -409,21 +403,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::repeatBarlineDotSeparation, false, repeatBarlineDotSeparation, resetRepeatBarlineDotSeparation },
 
         { StyleId::barGraceDistance,        false, barGraceDistance,        resetBarGraceDistance },
-        // { StyleId::chordExtensionMag,       false, extensionMag,            resetExtensionMag },
-        // { StyleId::chordExtensionAdjust,    false, extensionAdjust,         resetExtensionAdjust },
-        // { StyleId::chordModifierMag,        false, modifierMag,             resetModifierMag },
-        // { StyleId::chordModifierAdjust,     false, modifierAdjust,          resetModifierAdjust },
-        // { StyleId::useStandardNoteNames,    false, useStandardNoteNames,    0 },
-        // { StyleId::useGermanNoteNames,      false, useGermanNoteNames,      0 },
-        // { StyleId::useFullGermanNoteNames,  false, useFullGermanNoteNames,  0 },
-        // { StyleId::useSolfeggioNoteNames,   false, useSolfeggioNoteNames,   0 },
-        // { StyleId::useFrenchNoteNames,      false, useFrenchNoteNames,      0 },
-        // { StyleId::automaticCapitalization, false, automaticCapitalization, 0 },
-
-        // { StyleId::lowerCaseMinorChords,    false, lowerCaseMinorChords,    0 },
-
-        // { StyleId::lowerCaseBassNotes,      false, lowerCaseBassNotes,      0 },
-        // { StyleId::allCapsNoteNames,        false, allCapsNoteNames,        0 },
         { StyleId::concertPitch,            false, concertPitch,            0 },
         { StyleId::createMultiMeasureRests, false, multiMeasureRests,       0 },
         { StyleId::minEmptyMeasures,        false, minEmptyMeasures,        0 },
@@ -845,7 +824,6 @@ EditStyle::EditStyle(QWidget* parent)
 
     // Define string here instead of in the .ui file to avoid MSVC compiler warning C4125, which would
     // be triggered by the decimal digit immediately following a non-ASCII character (curly quote).
-    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show ‘1’ on 1-measure repeats"));
     singleMMRestShowNumber->setText(muse::qtrc("EditStyleBase", "Show number ‘1’"));
 
     // ====================================================
@@ -995,6 +973,17 @@ EditStyle::EditStyle(QWidget* parent)
     groupBox_tuplets_properties->layout()->addWidget(tupletCenteringSelector.widget);
 
     // ====================================================
+    // REPEAT PLAY COUNT SECTION (QML)
+    // ====================================================
+
+    auto repeatPlayCountSection = createQmlWidget(
+        PageRepeats,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml")));
+    repeatPlayCountSection.widget->setMinimumSize(224, 500);
+    connect(repeatPlayCountSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    PageRepeats->layout()->addWidget(repeatPlayCountSection.widget);
+
+    // ====================================================
     // Figured Bass
     // ====================================================
 
@@ -1004,31 +993,6 @@ EditStyle::EditStyle(QWidget* parent)
     }
     comboFBFont->setCurrentIndex(0);
     connect(comboFBFont, &QComboBox::currentIndexChanged, this, &EditStyle::on_comboFBFont_currentIndexChanged);
-
-    // ====================================================
-    // Chord Symbols
-    // ====================================================
-
-    // voicingSelectWidget->interpretBox->clear();
-    // voicingSelectWidget->interpretBox->addItem(muse::qtrc("notation/editstyle", "Jazz"), int(0));   // two-item combobox for boolean style variant
-    // voicingSelectWidget->interpretBox->addItem(muse::qtrc("notation/editstyle", "Literal"), int(1));   // true = literal
-
-    // voicingSelectWidget->voicingBox->clear();
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Automatic"), int(Voicing::AUTO));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Root only"), int(Voicing::ROOT_ONLY));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Close"), int(Voicing::CLOSE));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Drop two"), int(Voicing::DROP_2));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Six note"), int(Voicing::SIX_NOTE));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Four note"), int(Voicing::FOUR_NOTE));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Three note"), int(Voicing::THREE_NOTE));
-
-    // voicingSelectWidget->durationBox->clear();
-    // voicingSelectWidget->durationBox->addItem(muse::qtrc("notation/editstyle", "Until next chord symbol"),
-    //                                           int(HDuration::UNTIL_NEXT_CHORD_SYMBOL));
-    // voicingSelectWidget->durationBox->addItem(muse::qtrc("notation/editstyle", "Until end of measure"),
-    //                                           int(HDuration::STOP_AT_MEASURE_END));
-    // voicingSelectWidget->durationBox->addItem(muse::qtrc("notation/editstyle", "Chord/rest duration"),
-    //                                           int(HDuration::SEGMENT_DURATION));
 
     // ====================================================
     // Miscellaneous
@@ -1782,6 +1746,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::METRONOME:
             return "metronome";
+
+        case TextStyleType::REPEAT_PLAY_COUNT:
+            return "repeat-play-count";
 
         case TextStyleType::REPEAT_LEFT:
             return "repeat-text-left";

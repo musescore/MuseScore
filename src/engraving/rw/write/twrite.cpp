@@ -695,6 +695,9 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     for (const EngravingItem* e : *item->el()) {
         writeItem(e, xml, ctx);
     }
+    if (item->playCountText()) {
+        writeItem(item->playCountText(), xml, ctx);
+    }
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }

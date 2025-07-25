@@ -82,16 +82,32 @@ void InspectorListModel::buildModelsForEmptySelection()
     createModelsBySectionType(persistentSections);
 }
 
+bool InspectorListModel::alwaysUpdateModelList(const QList<engraving::EngravingItem*>& selectedElementList)
+{
+    // Force update of the list model where sections are only relevant to the child of the selected element
+    // eg. We need to update the text section of PlayCountText when a BarLine is selected
+    for (EngravingItem* el : selectedElementList) {
+        if (el->isBarLine()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList, SelectionState selectionState)
 {
     TRACEFUNC;
+
+    bool forceUpdate = false;
 
     if (!m_modelList.isEmpty()) {
         if (context()->currentNotation() == nullptr) {
             buildModelsForEmptySelection();
         }
 
-        if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
+        forceUpdate = alwaysUpdateModelList(selectedElementList);
+        if (!m_repository->needUpdateElementList(selectedElementList, selectionState) && !forceUpdate) {
             return;
         }
     }
@@ -109,6 +125,10 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
     }
 
     m_repository->updateElementList(selectedElementList, selectionState);
+
+    if (forceUpdate) {
+        m_repository->elementsUpdated(selectedElementList);
+    }
 }
 
 int InspectorListModel::rowCount(const QModelIndex&) const
@@ -207,6 +227,8 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
         }
 
         if (newModel) {
+            connect(newModel, &AbstractInspectorModel::requestReloadInspectorListModel, this,
+                    &InspectorListModel::updateElementList);
             newModel->init();
             m_modelList << newModel;
         }

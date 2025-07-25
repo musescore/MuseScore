@@ -44,14 +44,24 @@ GroupBox {
         radius: 3
     }
 
-    label: StyledTextLabel {
-        x: root.leftInset
-        y: root.topInset
+    label: Loader {
+        sourceComponent: root.title ? titleLabel : emptyLabel
+    }
 
-        width: root.availableWidth
+    Component {
+        id: titleLabel
+        StyledTextLabel {
+            x: root.leftInset
+            y: root.topInset
+            width: root.availableWidth
+            text: root.title
+            horizontalAlignment: Text.AlignLeft
+            elide: Text.ElideRight
+        }
+    }
 
-        text: root.title
-        horizontalAlignment: Text.AlignLeft
-        elide: Text.ElideRight
+    Component {
+        id: emptyLabel
+        Item {}
     }
 }
