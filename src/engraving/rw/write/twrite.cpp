@@ -454,7 +454,12 @@ void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteCont
     if (!eid.isValid()) {
         eid = item->assignNewEID();
     }
-    xml.tag("eid", eid.toStdString());
+
+    std::array<char, EID::MAX_STR_SIZE> buf{};
+    const char* last = eid.toChars(buf.data(), buf.data() + buf.size());
+    const auto size = static_cast<size_t>(last - buf.data());
+
+    xml.tag("eid", AsciiStringView { buf.data(), size });
 }
 
 void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
@@ -467,7 +472,7 @@ void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteCon
     if (mainElement != item) {
         EID eidOfMainElement = mainElement->eid();
         DO_ASSERT(eidOfMainElement.isValid());
-        xml.tag("linkedTo", mainElement->eid().toStdString());
+        xml.tag("linkedTo", eidOfMainElement.toStdString());
     }
 }
 
