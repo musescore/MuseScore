@@ -122,17 +122,17 @@ void XmlStreamWriter::writeValue(const Value& v)
     switch (v.index()) {
     case 0:
         break;
-    case 1: m_impl->stream << std::get<int>(v);
+    case 1: m_impl->stream << int32_t{ std::get<int>(v) };
         break;
-    case 2: m_impl->stream << std::get<unsigned int>(v);
+    case 2: m_impl->stream << uint32_t{ std::get<unsigned int>(v) };
         break;
-    case 3: m_impl->stream << std::get<signed long int>(v);
+    case 3: m_impl->stream << int64_t{ std::get<signed long int>(v) };
         break;
-    case 4: m_impl->stream << std::get<unsigned long int>(v);
+    case 4: m_impl->stream << uint64_t{ std::get<unsigned long int>(v) };
         break;
-    case 5: m_impl->stream << std::get<signed long long>(v);
+    case 5: m_impl->stream << int64_t{ std::get<signed long long>(v) };
         break;
-    case 6: m_impl->stream << std::get<unsigned long long>(v);
+    case 6: m_impl->stream << uint64_t{ std::get<unsigned long long>(v) };
         break;
     case 7: m_impl->stream << std::get<double>(v);
         break;
