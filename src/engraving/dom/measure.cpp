@@ -1925,6 +1925,23 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
             }
         }
     }
+
+    Selection& sel = score()->selection();
+    if (!sel.isRange()) {
+        return;
+    }
+    // If the selection started and/or ended inside this measure, we should pass it
+    // updated start/end segments...
+    const Segment* oldStart = sel.startSegment();
+    if (oldStart && sel.startMeasureBase() == this) {
+        Segment* newStart = this->tick2segment(oldStart->tick());
+        sel.setStartSegment(newStart ? newStart : first());
+    }
+    const Segment* oldEnd = sel.endSegment();
+    if (oldEnd && sel.endMeasureBase() == this) {
+        Segment* newEnd = this->tick2segment(oldEnd->tick());
+        sel.setEndSegment(newEnd ? newEnd : last()->next1());
+    }
 }
 
 //---------------------------------------------------------
