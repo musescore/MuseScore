@@ -641,18 +641,6 @@ EngravingObjectList BarLine::scanChildren() const
     return children;
 }
 
-void BarLine::setSelected(bool f)
-{
-    if (f == selected()) {
-        return;
-    }
-
-    if (m_playCountText) {
-        m_playCountText->setSelected(f);
-    }
-    EngravingItem::setSelected(f);
-}
-
 //---------------------------------------------------------
 //   Trill
 //---------------------------------------------------------

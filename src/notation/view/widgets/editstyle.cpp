@@ -69,7 +69,7 @@ static const QStringList ALL_PAGE_CODES {
     "barlines",
     "notes",
     "rests",
-    "measure-repeats",
+    "repeats",
     "beams",
     "tuplets",
     "arpeggios",
@@ -1526,6 +1526,8 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
             if (toText(element)->textStyleType() == TextStyleType::FOOTER
                 || toText(element)->textStyleType() == TextStyleType::HEADER) {
                 return "header-and-footer";
+            } else if (element->parentItem() && element->parentItem()->isBarLine()) {
+                return "repeats";
             }
         }
         return "text-styles";
@@ -1567,7 +1569,7 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "rests";
 
     case ElementType::MEASURE_REPEAT:
-        return "measure-repeats";
+        return "repeats";
 
     case ElementType::BEAM:
         return "beams";

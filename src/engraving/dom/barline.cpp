@@ -510,6 +510,18 @@ bool BarLine::showTips() const
     return style().styleB(Sid::repeatBarTips);
 }
 
+void BarLine::setSelected(bool f)
+{
+    if (f == selected()) {
+        return;
+    }
+
+    if (playCountText()) {
+        playCountText()->setSelected(f);
+    }
+    EngravingItem::setSelected(f);
+}
+
 //---------------------------------------------------------
 //   gripsPositions
 //---------------------------------------------------------
@@ -774,7 +786,7 @@ void BarLine::remove(EngravingItem* e)
         }
         break;
     case ElementType::TEXT:
-        m_playCountText = nullptr;
+        setPlayCountText(nullptr);
         break;
     default:
         LOGD("BarLine::remove() not impl. %s", e->typeName());
