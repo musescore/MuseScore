@@ -128,8 +128,6 @@ set(MODULE_SRC
     # Rpc
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/irpcchannel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcpacker.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcstream.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcstreamstore.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/platform/general/generalrpcchannel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/platform/general/generalrpcchannel.h
 

@@ -30,6 +30,8 @@
 #include "audiosanitizer.h"
 #include "player.h"
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -193,31 +195,65 @@ async::Promise<TrackName> Playback::trackName(const TrackSequenceId sequenceId, 
 async::Promise<TrackId, AudioParams> Playback::addTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
                                                         io::IODevice* playbackData, AudioParams&& params)
 {
-    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {
-        ONLY_AUDIO_WORKER_THREAD;
+#ifdef MUE_CONFIGURATION_IS_APPWEB
+    NOT_SUPPORTED;
+    return make_promise<TrackId, AudioParams>([](auto /*resolve*/, auto reject) {
+        Ret ret = muse::make_ret(Ret::Code::NotSupported);
+        return reject(ret.code(), ret.text());
+    });
+#else
+    ONLY_AUDIO_MAIN_THREAD;
+    return make_promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {
+        ONLY_AUDIO_MAIN_THREAD;
 
-        RetVal2<TrackId, AudioParams> ret = workerPlayback()->addTrack(sequenceId, trackName, playbackData, params);
-        if (ret.ret) {
-            return resolve(ret.val1, ret.val2);
-        } else {
-            return reject(ret.ret.code(), ret.ret.text());
-        }
-    }, AudioThread::ID);
+        ByteArray data = RpcPacker::pack(sequenceId, trackName, reinterpret_cast<uint64_t>(playbackData), params);
+
+        Msg msg = rpc::make_request(Method::AddTrackWithIODevice, data);
+        channel()->send(msg, [resolve, reject](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            RetVal2<TrackId, AudioParams> ret;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ret)) {
+                return;
+            }
+            if (ret.ret) {
+                (void)resolve(ret.val1, ret.val2);
+            } else {
+                (void)reject(ret.ret.code(), ret.ret.text());
+            }
+        });
+        return Promise<TrackId, AudioParams>::dummy_result();
+    }, PromiseType::AsyncByBody);
+
+#endif // MUE_CONFIGURATION_IS_APPWEB
 }
 
 async::Promise<TrackId, AudioParams> Playback::addTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
                                                         const mpe::PlaybackData& playbackData, AudioParams&& params)
 {
-    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {
-        ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_MAIN_THREAD;
+    return make_promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {
+        ONLY_AUDIO_MAIN_THREAD;
 
-        RetVal2<TrackId, AudioParams> ret = workerPlayback()->addTrack(sequenceId, trackName, playbackData, params);
-        if (ret.ret) {
-            return resolve(ret.val1, ret.val2);
-        } else {
-            return reject(ret.ret.code(), ret.ret.text());
-        }
-    }, AudioThread::ID);
+        rpc::StreamId mainStreamId = channel()->addSendStream(playbackData.mainStream);
+        rpc::StreamId offStreamId = channel()->addSendStream(playbackData.offStream);
+
+        ByteArray data = RpcPacker::pack(sequenceId, trackName, playbackData, params, mainStreamId, offStreamId);
+
+        Msg msg = rpc::make_request(Method::AddTrackWithPlaybackData, data);
+        channel()->send(msg, [resolve, reject](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            RetVal2<TrackId, AudioParams> ret;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ret)) {
+                return;
+            }
+            if (ret.ret) {
+                (void)resolve(ret.val1, ret.val2);
+            } else {
+                (void)reject(ret.ret.code(), ret.ret.text());
+            }
+        });
+        return Promise<TrackId, AudioParams>::dummy_result();
+    }, PromiseType::AsyncByBody);
 }
 
 async::Promise<TrackId, AudioOutputParams> Playback::addAuxTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
