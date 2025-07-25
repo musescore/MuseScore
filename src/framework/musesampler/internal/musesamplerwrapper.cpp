@@ -165,7 +165,16 @@ bool MuseSamplerWrapper::isValid() const
 
 void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
 {
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
     m_tracks.clear();
+
+    std::string scoreId = setupData.scoreId.value_or(std::string());
+    if (!scoreId.empty()) {
+        m_samplerLib->setScoreId(m_sampler, scoreId.c_str());
+    }
 
     ms_Track track = addTrack();
     if (!track) {

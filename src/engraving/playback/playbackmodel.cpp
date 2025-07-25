@@ -382,24 +382,36 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx
 
 void PlaybackModel::updateSetupData()
 {
+    EID scoreEID = m_score->eid();
+    if (!scoreEID.isValid()) {
+        scoreEID = m_score->assignNewEID();
+    }
+
+    std::string scoreId = scoreEID.toStdString();
+
     for (const Part* part : m_score->parts()) {
         for (const auto& pair : part->instruments()) {
             InstrumentTrackId trackId = idKey(part->id(), pair.second->id());
-
-            if (!trackId.isValid() || containsTrack(trackId)) {
+            if (!trackId.isValid() || muse::contains(m_playbackDataMap, trackId)) {
                 continue;
             }
 
-            m_setupResolver.resolveSetupData(pair.second, m_playbackDataMap[trackId].setupData);
+            PlaybackSetupData& setupData = m_playbackDataMap[trackId].setupData;
+            m_setupResolver.resolveSetupData(pair.second, setupData);
+            setupData.scoreId = scoreId;
         }
 
         if (part->hasChordSymbol()) {
             InstrumentTrackId trackId = chordSymbolsTrackId(part->id());
-            m_setupResolver.resolveChordSymbolsSetupData(part->instrument(), m_playbackDataMap[trackId].setupData);
+            PlaybackSetupData& setupData = m_playbackDataMap[trackId].setupData;
+            m_setupResolver.resolveChordSymbolsSetupData(part->instrument(), setupData);
+            setupData.scoreId = scoreId;
         }
     }
 
-    m_setupResolver.resolveMetronomeSetupData(m_playbackDataMap[METRONOME_TRACK_ID].setupData);
+    PlaybackSetupData& metronomeSetupData = m_playbackDataMap[METRONOME_TRACK_ID].setupData;
+    m_setupResolver.resolveMetronomeSetupData(metronomeSetupData);
+    metronomeSetupData.scoreId = scoreId;
 }
 
 void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t trackTo)
@@ -743,11 +755,6 @@ bool PlaybackModel::hasToReloadScore(const ScoreChangesRange& changesRange) cons
     }
 
     return false;
-}
-
-bool PlaybackModel::containsTrack(const InstrumentTrackId& trackId) const
-{
-    return m_playbackDataMap.find(trackId) != m_playbackDataMap.cend();
 }
 
 void PlaybackModel::clearExpiredTracks()
