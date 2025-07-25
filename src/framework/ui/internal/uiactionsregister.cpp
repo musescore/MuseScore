@@ -29,7 +29,8 @@ using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 
-constexpr int REQUEST_UPDATE_TIMEOUT = 500; // msec
+//! NOTE Prevents repeated updates when it is requested multiple times in a row
+constexpr int REQUEST_UPDATE_TIMEOUT = 16; // msec
 
 void UiActionsRegister::init()
 {
