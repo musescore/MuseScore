@@ -90,6 +90,7 @@ struct MuseSamplerLibHandler
 
     std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4)> startAuditionNote = nullptr;
     ms_MuseSampler_stop_audition_note stopAuditionNote = nullptr;
+    ms_MuseSampler_add_audition_cc_event addAuditionCCEvent = nullptr;
 
     ms_MuseSampler_start_liveplay_mode startLivePlayMode = nullptr;
     ms_MuseSampler_stop_liveplay_mode stopLivePlayMode = nullptr;
@@ -337,12 +338,14 @@ public:
             setAutoRenderInterval = (ms_MuseSampler_set_auto_render_interval)muse::getLibFunc(m_lib,
                                                                                               "ms_MuseSampler_set_auto_render_interval");
             triggerRender = (ms_MuseSampler_trigger_render)muse::getLibFunc(m_lib, "ms_MuseSampler_trigger_render");
+            addAuditionCCEvent = (ms_MuseSampler_add_audition_cc_event)muse::getLibFunc(m_lib, "ms_MuseSampler_add_audition_cc_event");
         } else {
             isOnlineInstrument = [](ms_InstrumentInfo) { return false; };
             getRenderInfo = [](ms_MuseSampler, int*) { return ms_RenderingRangeList(); };
             getNextRenderProgressInfo = [](ms_RenderingRangeList) { return ms_RenderRangeInfo { 0, 0, ms_RenderingState_ErrorRendering }; };
             setAutoRenderInterval = [](ms_MuseSampler, double) {};
             triggerRender = [](ms_MuseSampler) {};
+            addAuditionCCEvent = [](ms_MuseSampler, ms_Track, int, float) { return ms_Result_Error; };
         }
     }
 

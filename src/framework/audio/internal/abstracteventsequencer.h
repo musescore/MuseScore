@@ -57,12 +57,10 @@ public:
         m_playbackData = data;
 
         m_playbackData.mainStream.onReceive(this, [this](const mpe::PlaybackEventsMap& events,
-                                                         const mpe::DynamicLevelLayers& dynamics,
-                                                         const mpe::PlaybackParamLayers& params) {
+                                                         const mpe::DynamicLevelLayers& dynamics) {
             m_playbackData.originEvents = events;
             m_playbackData.dynamics = dynamics;
-            m_playbackData.params = params;
-            m_mainStreamEventsReceived = true;
+            m_shouldUpdateMainStreamEvents = true;
 
             if (m_isActive || m_updateMainStreamWhenInactive) {
                 updateMainStream();
@@ -71,11 +69,15 @@ public:
 
         m_playbackData.offStream.onReceive(this, [this](const mpe::PlaybackEventsMap& events,
                                                         const mpe::DynamicLevelLayers& dynamics,
-                                                        const mpe::PlaybackParamList& params) {
-            updateOffStreamEvents(events, dynamics, params);
+                                                        bool flush) {
+            if (flush) {
+                flushOffstream();
+            }
+
+            updateOffStreamEvents(events, dynamics);
         });
 
-        updateMainStreamEvents(data.originEvents, data.dynamics, data.params);
+        updateMainStreamEvents(data.originEvents, data.dynamics);
     }
 
     const mpe::PlaybackData& playbackData() const
@@ -85,9 +87,9 @@ public:
 
     void updateMainStream()
     {
-        if (m_mainStreamEventsReceived) {
-            updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics, m_playbackData.params);
-            m_mainStreamEventsReceived = false;
+        if (m_shouldUpdateMainStreamEvents) {
+            updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics);
+            m_shouldUpdateMainStreamEvents = false;
         }
     }
 
@@ -205,10 +207,8 @@ public:
     }
 
 protected:
-    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                       const mpe::PlaybackParamList& params) = 0;
-    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                        const mpe::PlaybackParamLayers& params) = 0;
+    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) = 0;
+    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) = 0;
 
     void resetAllIterators()
     {
@@ -274,7 +274,7 @@ protected:
     OnFlushedCallback m_onMainStreamFlushed;
 
 private:
-    bool m_mainStreamEventsReceived = false;
+    bool m_shouldUpdateMainStreamEvents = false;
     bool m_updateMainStreamWhenInactive = false;
 };
 }

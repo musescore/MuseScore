@@ -59,21 +59,18 @@ int FluidSequencer::naturalExpressionLevel() const
     return NATURAL_EXP_LVL;
 }
 
-void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                           const PlaybackParamList&)
+void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics)
 {
-    flushOffstream();
-    updatePlaybackEvents(m_offStreamEvents, events);
+    addPlaybackEvents(m_offStreamEvents, events);
 
     if (m_useDynamicEvents) {
-        updateDynamicEvents(m_offStreamEvents, dynamics);
+        addDynamicEvents(m_offStreamEvents, dynamics);
     }
 
     updateOffSequenceIterator();
 }
 
-void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                            const mpe::PlaybackParamLayers&)
+void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics)
 {
     m_mainStreamEvents.clear();
 
@@ -81,10 +78,10 @@ void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events
         m_onMainStreamFlushed();
     }
 
-    updatePlaybackEvents(m_mainStreamEvents, events);
+    addPlaybackEvents(m_mainStreamEvents, events);
 
     if (m_useDynamicEvents) {
-        updateDynamicEvents(m_mainStreamEvents, dynamics);
+        addDynamicEvents(m_mainStreamEvents, dynamics);
     }
 
     updateMainSequenceIterator();
@@ -105,74 +102,26 @@ int FluidSequencer::lastStaff() const
     return m_lastStaff;
 }
 
-void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
+void FluidSequencer::addPlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events)
 {
     SostenutoTimeAndDurations sostenutoTimeAndDurations;
 
-    for (const auto& pair : changes) {
+    for (const auto& pair : events) {
         for (const mpe::PlaybackEvent& event : pair.second) {
-            if (!std::holds_alternative<mpe::NoteEvent>(event)) {
-                continue;
-            }
-
-            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-
-            timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-            timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
-            // Assumption: 1:1 mapping between staff and instrument and FluidSynth and FluidSequencer instances.
-            // So staffLayerIndex is constant. It changes only when moving staffs.
-            m_lastStaff = noteEvent.arrangementCtx().staffLayerIndex;
-
-            channel_t channelIdx = channel(noteEvent);
-            note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
-            velocity_t velocity = noteVelocity(noteEvent);
-            tuning_t tuning = noteTuning(noteEvent, noteIdx);
-
-            midi::Event noteOn(Event::Opcode::NoteOn, Event::MessageType::ChannelVoice20);
-            noteOn.setChannel(channelIdx);
-            noteOn.setNote(noteIdx);
-            noteOn.setVelocity16(velocity);
-            noteOn.setPitchNote(noteIdx, tuning);
-
-            destination[timestampFrom].emplace(std::move(noteOn));
-
-            midi::Event noteOff(Event::Opcode::NoteOff, Event::MessageType::ChannelVoice20);
-            noteOff.setChannel(channelIdx);
-            noteOff.setNote(noteIdx);
-            noteOff.setPitchNote(noteIdx, tuning);
-
-            destination[timestampTo].emplace(std::move(noteOff));
-
-            for (const auto& artPair : noteEvent.expressionCtx().articulations) {
-                const mpe::ArticulationMeta& meta = artPair.second.meta;
-
-                if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
-                    appendPitchBend(destination, noteEvent, meta, channelIdx);
-                    continue;
-                }
-
-                if (muse::contains(SUSTAIN_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
-                    appendControlChange(destination, meta.timestamp, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx, CTRL_ON);
-                    appendControlChange(destination, meta.timestamp + meta.overallDuration,
-                                        midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx, CTRL_OFF);
-                    continue;
-                }
-
-                if (muse::contains(SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
-                    const mpe::timestamp_t timestamp = timestampFrom + noteEvent.arrangementCtx().actualDuration * 0.1; // add offset for Sostenuto to take effect
-                    sostenutoTimeAndDurations[channelIdx].push_back(TimestampAndDuration { timestamp, meta.overallDuration });
-                    continue;
-                }
+            if (std::holds_alternative<mpe::NoteEvent>(event)) {
+                addNoteEvent(destination, std::get<mpe::NoteEvent>(event), sostenutoTimeAndDurations);
+            } else if (std::holds_alternative<mpe::ControllerChangeEvent>(event)) {
+                addControlChangeEvent(destination, pair.first, std::get<mpe::ControllerChangeEvent>(event));
             }
         }
     }
 
-    appendSostenutoEvents(destination, sostenutoTimeAndDurations);
+    addSostenutoEvents(destination, sostenutoTimeAndDurations);
 }
 
-void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& changes)
+void FluidSequencer::addDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& dynamics)
 {
-    for (const auto& layer : changes) {
+    for (const auto& layer : dynamics) {
         for (const auto& dynamic : layer.second) {
             midi::Event event(muse::midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
             event.setIndex(midi::EXPRESSION_CONTROLLER);
@@ -183,8 +132,89 @@ void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const mp
     }
 }
 
-void FluidSequencer::appendControlChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
-                                         const int midiControlIdx, const channel_t channelIdx, const uint32_t value)
+void FluidSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
+                                  SostenutoTimeAndDurations& sostenutoTimeAndDurations)
+{
+    const ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    const channel_t channelIdx = channel(noteEvent);
+    const note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
+    const velocity_t velocity = noteVelocity(noteEvent);
+    const tuning_t tuning = noteTuning(noteEvent, noteIdx);
+
+    // Assumption: 1:1 mapping between staff and instrument and FluidSynth and FluidSequencer instances.
+    // So staffLayerIndex is constant. It changes only when moving staffs.
+    m_lastStaff = noteEvent.arrangementCtx().staffLayerIndex;
+
+    if (arrangementCtx.hasStart()) {
+        midi::Event noteOn(Event::Opcode::NoteOn, Event::MessageType::ChannelVoice20);
+        noteOn.setChannel(channelIdx);
+        noteOn.setNote(noteIdx);
+        noteOn.setVelocity16(velocity);
+        noteOn.setPitchNote(noteIdx, tuning);
+
+        destination[arrangementCtx.actualTimestamp].emplace(std::move(noteOn));
+    }
+
+    if (arrangementCtx.hasEnd()) {
+        midi::Event noteOff(Event::Opcode::NoteOff, Event::MessageType::ChannelVoice20);
+        noteOff.setChannel(channelIdx);
+        noteOff.setNote(noteIdx);
+        noteOff.setPitchNote(noteIdx, tuning);
+
+        const timestamp_t timestampTo = arrangementCtx.actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+        destination[timestampTo].emplace(std::move(noteOff));
+    }
+
+    for (const auto& artPair : noteEvent.expressionCtx().articulations) {
+        const mpe::ArticulationMeta& meta = artPair.second.meta;
+
+        if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
+            addPitchCurve(destination, noteEvent, meta, channelIdx);
+            continue;
+        }
+
+        if (muse::contains(SUSTAIN_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
+            addControlChange(destination, meta.timestamp, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx, CTRL_ON);
+            addControlChange(destination, meta.timestamp + meta.overallDuration,
+                             midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx, CTRL_OFF);
+            continue;
+        }
+
+        if (muse::contains(SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
+            const mpe::timestamp_t timestamp = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration * 0.1; // add offset for Sostenuto to take effect
+            sostenutoTimeAndDurations[channelIdx].push_back(TimestampAndDuration { timestamp, meta.overallDuration });
+            continue;
+        }
+    }
+}
+
+void FluidSequencer::addControlChangeEvent(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
+                                           const mpe::ControllerChangeEvent& event)
+{
+    const channel_t lastChannelIdx = m_channels.lastIndex();
+
+    for (channel_t channelIdx = 0; channelIdx < lastChannelIdx; ++channelIdx) {
+        switch (event.type) {
+        case mpe::ControllerChangeEvent::Modulation:
+            addControlChange(destination, timestamp, midi::MODWHEEL_CONTROLLER, channelIdx,
+                             static_cast<uint32_t>(event.val * 127.f));
+            break;
+        case mpe::ControllerChangeEvent::SustainPedalOnOff:
+            addControlChange(destination, timestamp, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx,
+                             static_cast<uint32_t>(event.val * 127.f));
+            break;
+        case mpe::ControllerChangeEvent::PitchBend:
+            addPitchBend(destination, timestamp, channelIdx,
+                         static_cast<uint32_t>(event.val * 16383.f));
+            break;
+        case mpe::ControllerChangeEvent::Undefined:
+            break;
+        }
+    }
+}
+
+void FluidSequencer::addControlChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
+                                      const int midiControlIdx, const channel_t channelIdx, const uint32_t value)
 {
     midi::Event cc(Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
     cc.setIndex(midiControlIdx);
@@ -194,8 +224,8 @@ void FluidSequencer::appendControlChange(EventSequenceMap& destination, const mp
     destination[timestamp].emplace(std::move(cc));
 }
 
-void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                     const mpe::ArticulationMeta& artMeta, const channel_t channelIdx)
+void FluidSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
+                                   const mpe::ArticulationMeta& artMeta, const channel_t channelIdx)
 {
     if (noteEvent.pitchCtx().pitchCurve.empty()) {
         return;
@@ -204,10 +234,7 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
     const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
     const timestamp_t pitchBendTimestampTo = std::min(artMeta.timestamp + artMeta.overallDuration, noteTimestampTo);
 
-    midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
-    event.setChannel(channelIdx);
-    event.setData(8192);
-    destination[pitchBendTimestampTo].insert(event);
+    addPitchBend(destination, pitchBendTimestampTo, channelIdx, 8192);
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
     auto nextIt = std::next(currIt);
@@ -240,30 +267,38 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
             int bendValue = static_cast<int>(std::round(point.y));
 
             if (time < pitchBendTimestampTo) {
-                event.setData(bendValue);
-                destination[time].insert(event);
+                addPitchBend(destination, time, channelIdx, bendValue);
             }
         }
     }
 }
 
-void FluidSequencer::appendSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations)
+void FluidSequencer::addPitchBend(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
+                                  const midi::channel_t channelIdx, const uint32_t value)
+{
+    midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
+    event.setChannel(channelIdx);
+    event.setData(value);
+    destination[timestamp].insert(event);
+}
+
+void FluidSequencer::addSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations)
 {
     for (const auto& channelPair : sostenutoTimeAndDurations) {
         for (size_t i = 0; i < channelPair.second.size(); ++i) {
             const TimestampAndDuration& currentTnD = channelPair.second.at(i);
             const timestamp_t timestampTo = currentTnD.timestamp + currentTnD.duration;
 
-            appendControlChange(destination, currentTnD.timestamp, midi::SOSTENUTO_PEDAL_CONTROLLER, channelPair.first, CTRL_ON);
+            addControlChange(destination, currentTnD.timestamp, midi::SOSTENUTO_PEDAL_CONTROLLER, channelPair.first, CTRL_ON);
 
             if (i == channelPair.second.size() - 1) {
-                appendControlChange(destination, timestampTo, midi::SOSTENUTO_PEDAL_CONTROLLER, channelPair.first, CTRL_OFF);
+                addControlChange(destination, timestampTo, midi::SOSTENUTO_PEDAL_CONTROLLER, channelPair.first, CTRL_OFF);
                 continue;
             }
 
             const TimestampAndDuration& nextTnD = channelPair.second.at(i + 1);
             if (timestampTo <= nextTnD.timestamp) { // handle potential overlap
-                appendControlChange(destination, timestampTo, midi::SOSTENUTO_PEDAL_CONTROLLER, channelPair.first, CTRL_OFF);
+                addControlChange(destination, timestampTo, midi::SOSTENUTO_PEDAL_CONTROLLER, channelPair.first, CTRL_OFF);
             }
         }
     }

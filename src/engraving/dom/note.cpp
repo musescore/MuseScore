@@ -2889,6 +2889,7 @@ void Note::updateLine()
 void Note::setNval(const NoteVal& nval, Fraction tick)
 {
     setPitch(nval.pitch);
+    m_userVelocity = nval.velocityOverride;
     m_fret   = nval.fret;
     m_string = nval.string;
 
@@ -3360,19 +3361,17 @@ String Note::accessibleExtraInfo() const
     return rez;
 }
 
-//---------------------------------------------------------
-//   noteVal
-//---------------------------------------------------------
-
 NoteVal Note::noteVal() const
 {
     NoteVal nval;
-    nval.pitch     = pitch();
-    nval.tpc1      = tpc1();
-    nval.tpc2      = tpc2();
-    nval.fret      = fret();
-    nval.string    = string();
+    nval.pitch = pitch();
+    nval.velocityOverride = userVelocity();
+    nval.tpc1 = tpc1();
+    nval.tpc2 = tpc2();
+    nval.fret = fret();
+    nval.string = string();
     nval.headGroup = headGroup();
+
     return nval;
 }
 

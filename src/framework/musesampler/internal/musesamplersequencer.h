@@ -31,8 +31,10 @@
 
 #include "global/timer.h"
 
-typedef typename std::variant<muse::mpe::NoteEvent, muse::musesampler::AuditionStartNoteEvent,
-                              muse::musesampler::AuditionStopNoteEvent> MuseSamplerEvent;
+typedef typename std::variant<muse::mpe::NoteEvent,
+                              muse::musesampler::AuditionStartNoteEvent,
+                              muse::musesampler::AuditionStopNoteEvent,
+                              muse::musesampler::AuditionCCEvent> MuseSamplerEvent;
 
 template<>
 struct std::less<MuseSamplerEvent>
@@ -45,8 +47,8 @@ struct std::less<MuseSamplerEvent>
         }
 
         if (std::holds_alternative<muse::musesampler::AuditionStartNoteEvent>(first)) {
-            auto& e1 = std::get<muse::musesampler::AuditionStartNoteEvent>(first);
-            auto& e2 = std::get<muse::musesampler::AuditionStartNoteEvent>(second);
+            const auto& e1 = std::get<muse::musesampler::AuditionStartNoteEvent>(first);
+            const auto& e2 = std::get<muse::musesampler::AuditionStartNoteEvent>(second);
             if (e1.msEvent._pitch == e2.msEvent._pitch) {
                 return e1.msEvent._offset_cents < e2.msEvent._offset_cents;
             }
@@ -58,12 +60,22 @@ struct std::less<MuseSamplerEvent>
                    < std::get<muse::musesampler::AuditionStopNoteEvent>(second).msEvent._pitch;
         }
 
+        if (std::holds_alternative<muse::musesampler::AuditionCCEvent>(first)) {
+            const auto& e1 = std::get<muse::musesampler::AuditionCCEvent>(first);
+            const auto& e2 = std::get<muse::musesampler::AuditionCCEvent>(second);
+            if (e1.cc == e2.cc) {
+                return e1.value < e2.value;
+            }
+            return e1.cc < e2.cc;
+        }
+
         return false;
     }
 };
 
 namespace muse::musesampler {
-class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent>
+class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent,
+                                                                        AuditionCCEvent>
 {
 public:
     void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracks* tracks, std::string&& defaultPresetCode);
@@ -74,10 +86,8 @@ public:
     void triggerRender();
 
 private:
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                               const mpe::PlaybackParamList& params) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                const mpe::PlaybackParamLayers& params) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
 
     void pollRenderingProgress();
     void doPollProgress();
@@ -85,21 +95,23 @@ private:
     void clearAllTracks();
     void finalizeAllTracks();
 
-    ms_Track resolveTrack(mpe::layer_idx_t layerIdx);
+    ms_Track findOrCreateTrack(mpe::layer_idx_t layerIdx);
     ms_Track findTrack(mpe::layer_idx_t layerIdx) const;
 
     const TrackList& allTracks() const;
 
-    void loadParams(const mpe::PlaybackParamLayers& changes);
-    void loadNoteEvents(const mpe::PlaybackEventsMap& changes);
+    void loadEvents(const mpe::PlaybackEventsMap& changes);
     void loadDynamicEvents(const mpe::DynamicLevelLayers& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
-    void addTextArticulation(const String& articulationCode, long long startUs, ms_Track track);
-    void addPresets(const StringList& presets, long long startUs, ms_Track track);
-    void addSyllable(const String& syllable, bool hyphenedToNext, long long positionUs, ms_Track track);
+    void addTextArticulationEvent(const mpe::TextArticulationEvent& event, long long startUs);
+    void addSoundPresetEvent(const mpe::SoundPresetChangeEvent& event, long long positionUs);
+    void addSyllableEvent(const mpe::SyllableEvent& event, long long positionUs);
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
+
+    void addAuditionNoteEvent(const mpe::NoteEvent& noteEvent);
+    void addAuditionCCEvent(const mpe::ControllerChangeEvent& event, long long positionUs);
 
     void pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const;
     int pitchLevelToCents(const mpe::pitch_level_t pitchLevel) const;
@@ -108,7 +120,7 @@ private:
     ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;
     void parseArticulations(const mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const;
 
-    struct OffStreamParams {
+    struct AuditionParams {
         std::string presets;
         std::string textArticulation;
         std::string syllable;
@@ -117,15 +129,11 @@ private:
 
         void clear()
         {
-            presets.clear();
-            textArticulation.clear();
-            syllable.clear();
-            textArticulationStartsAtNote = false;
-            syllableStartsAtNote = false;
+            *this = AuditionParams();
         }
     };
 
-    void parseOffStreamParams(const mpe::PlaybackParamList& params, OffStreamParams& out) const;
+    void parseAuditionParams(const mpe::PlaybackEvent& event, AuditionParams& out) const;
 
     struct RenderingInfo {
         long long initialChunksDurationUs = 0;
@@ -147,9 +155,10 @@ private:
     IMuseSamplerTracks* m_tracks = nullptr;
 
     std::unordered_map<mpe::layer_idx_t, track_idx_t> m_layerIdxToTrackIdx;
+    std::unordered_map<ms_Track, std::map<long long /*startUs*/, ms_PresetChange> > m_presetChangesByTrack;
 
     std::string m_defaultPresetCode;
-    OffStreamParams m_offStreamCache;
+    AuditionParams m_auditionParamsCache;
 
     std::unique_ptr<Timer> m_pollRenderingProgressTimer;
     audio::InputProcessingProgress* m_renderingProgress = nullptr;

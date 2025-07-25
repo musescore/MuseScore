@@ -36,8 +36,9 @@ BaseSection {
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
     property alias playNotesWithScoreDynamics: playNotesWithScoreDynamicsBox.checked
 
-    property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
     property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
+    property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
+    property alias useMidiVelocityAndDurationDuringNoteInput: useMidiVelocityAndDurationDuringNoteInputBox.checked
 
     signal playNotesWhenEditingChangeRequested(bool play)
     signal playChordWhenEditingChangeRequested(bool play)
@@ -47,6 +48,7 @@ BaseSection {
     signal playNotesWithScoreDynamicsChangeRequested(bool play)
 
     signal playNotesOnMidiInputChangeRequested(bool play)
+    signal useMidiVelocityAndDurationDuringNoteInputChangeRequested(bool use)
 
     title: qsTrc("appshell/preferences", "Note preview")
 
@@ -183,6 +185,23 @@ BaseSection {
 
         onClicked: {
             root.playNotesOnMidiInputChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
+        id: useMidiVelocityAndDurationDuringNoteInputBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Play MIDI notes with velocity and duration during note input")
+
+        enabled: root.playNotesWhenEditing && playNotesOnMidiInputBox.checked
+
+        navigation.name: "UseMidiVelocityAndDurationDuringNoteInputBox"
+        navigation.panel: root.navigation
+        navigation.row: 7
+
+        onClicked: {
+            root.useMidiVelocityAndDurationDuringNoteInputChangeRequested(!checked)
         }
     }
 }

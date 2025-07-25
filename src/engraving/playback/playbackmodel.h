@@ -80,10 +80,10 @@ public:
 
     bool hasSoundFlags(const InstrumentTrackId& trackId) const;
 
-    const muse::mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
-    const muse::mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const String& instrumentId);
-    void triggerEventsForItems(const std::vector<const EngravingItem*>& items);
+    muse::mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
+    muse::mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const String& instrumentId);
 
+    void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound);
     void triggerMetronome(int tick);
     void triggerCountIn(int tick, muse::mpe::duration_t& totalCountInDuration);
 

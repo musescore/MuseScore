@@ -73,6 +73,10 @@ void NoteInputPreferencesModel::load()
         emit playPreviewNotesWithScoreDynamicsChanged(playPreviewNotesWithScoreDynamics());
     });
 
+    notationConfiguration()->useMidiVelocityAndDurationDuringNoteInputChanged().onReceive(this, [this](bool value) {
+        emit useMidiVelocityAndDurationDuringNoteInputChanged(value);
+    });
+
     notationConfiguration()->isPlayPreviewNotesInInputByDurationChanged().onNotify(this, [this]() {
         emit playPreviewNotesInInputByDurationChanged(playPreviewNotesInInputByDuration());
     });
@@ -198,6 +202,11 @@ bool NoteInputPreferencesModel::playPreviewNotesWithScoreDynamics() const
 bool NoteInputPreferencesModel::playNotesOnMidiInput() const
 {
     return playbackConfiguration()->playNotesOnMidiInput();
+}
+
+bool NoteInputPreferencesModel::useMidiVelocityAndDurationDuringNoteInput() const
+{
+    return notationConfiguration()->useMidiVelocityAndDurationDuringNoteInput();
 }
 
 bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
@@ -339,6 +348,15 @@ void NoteInputPreferencesModel::setPlayNotesOnMidiInput(bool value)
     }
 
     playbackConfiguration()->setPlayNotesOnMidiInput(value);
+}
+
+void NoteInputPreferencesModel::setUseMidiVelocityAndDurationDuringNoteInput(bool value)
+{
+    if (value == useMidiVelocityAndDurationDuringNoteInput()) {
+        return;
+    }
+
+    notationConfiguration()->setUseMidiVelocityAndDurationDuringNoteInput(value);
 }
 
 void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)

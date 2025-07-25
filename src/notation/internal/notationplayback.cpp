@@ -146,9 +146,10 @@ const muse::mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engravi
     return m_playbackModel.resolveTrackPlaybackData(trackId);
 }
 
-void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
+void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration,
+                                             bool flushSound)
 {
-    m_playbackModel.triggerEventsForItems(items);
+    m_playbackModel.triggerEventsForItems(items, duration, flushSound);
 }
 
 void NotationPlayback::triggerMetronome(muse::midi::tick_t tick)
@@ -161,6 +162,31 @@ void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& tot
     muse::mpe::duration_t durationInMicrosecs = 0;
     m_playbackModel.triggerCountIn(tick, durationInMicrosecs);
     totalCountInDuration = audio::microsecsToSecs(durationInMicrosecs);
+}
+
+void NotationPlayback::triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick)
+{
+    if (list.empty()) {
+        return;
+    }
+
+    const Staff* staff = score()->staff(staffIdx);
+    if (!staff) {
+        return;
+    }
+
+    const Part* part = staff->part();
+    const InstrumentTrackId trackId {
+        part->id(),
+        part->instrumentId(Fraction::fromTicks(tick))
+    };
+
+    const mpe::PlaybackEventsMap events {
+        { 0, mpe::PlaybackEventList(list.begin(), list.end()) }
+    };
+
+    mpe::PlaybackData& data = m_playbackModel.resolveTrackPlaybackData(trackId);
+    data.offStream.send(events, {}, false /*flushOffstream*/);
 }
 
 InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
