@@ -1472,7 +1472,7 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     ldata->setPos(PointF());
 
-    const ElementList& elements = item->el();
+    const ElementList& elements = item->orderedElements();
 
     std::vector<FretDiagram*> fretDiagrams;
     for (EngravingItem* element : elements) {
@@ -1549,12 +1549,9 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     const double totalTableWidth = cellWidth * columns + (columns - 1) * columnGap;
 
-    ldata->totalTableHeight = totalTableHeight;
-    ldata->totalTableWidth = totalTableWidth;
-
     ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), totalTableHeight);
 
-    AlignH alignH = item->contentHorizontallAlignment();
+    AlignH alignH = item->contentHorizontalAlignment();
     const double leftMargin = item->getProperty(Pid::LEFT_MARGIN).toDouble() * spatium;
     const double rightMargin = item->getProperty(Pid::RIGHT_MARGIN).toDouble() * spatium;
     const double topMargin = item->getProperty(Pid::TOP_MARGIN).toDouble() * spatium;

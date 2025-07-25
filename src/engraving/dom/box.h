@@ -183,22 +183,11 @@ public:
     void add(EngravingItem*) override;
 
     double textScale() const { return m_textScale; }
-    void setTextScale(double scale) { m_textScale = scale; }
-
     double diagramScale() const { return m_diagramScale; }
-    void setDiagramScale(double scale) { m_diagramScale = scale; }
-
     Spatium columnGap() const { return m_columnGap; }
-    void setColumnGap(Spatium gap) { m_columnGap = gap; }
-
     Spatium rowGap() const { return m_rowGap; }
-    void setRowGap(Spatium gap) { m_rowGap = gap; }
-
     int chordsPerRow() const { return m_chordsPerRow; }
-    void setChordsPerRow(int chords) { m_chordsPerRow = chords; }
-
-    AlignH contentHorizontallAlignment() const { return m_contentAlignmentH; }
-    void setContentHorizontallAlignment(AlignH alignment) { m_contentAlignmentH = alignment; }
+    AlignH contentHorizontalAlignment() const { return m_contentAlignmentH; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& val) override;
@@ -209,18 +198,12 @@ public:
     Grip defaultGrip() const override;
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
-    void undoReorderElements(const std::vector<EID>& newOrderElementsIds);
+    void undoReorderElements(const StringList& newOrder);
+    StringList diagramsOrder() const { return m_diagramsOrder; }
 
-    struct LayoutData : public VBox::LayoutData {
-        double totalTableHeight = 0.0;
-        double totalTableWidth = 0.0;
-    };
-
-    DECLARE_LAYOUTDATA_METHODS(FBox)
+    ElementList orderedElements() const;
 
 private:
-    void resolveContentRect();
-
     double m_textScale = 0.0;
     double m_diagramScale = 0.0;
     Spatium m_columnGap;
@@ -228,6 +211,8 @@ private:
     int m_chordsPerRow = 0;
 
     AlignH m_contentAlignmentH = AlignH::HCENTER;
+
+    StringList /*harmonyNames*/ m_diagramsOrder;
 };
 
 //---------------------------------------------------------
