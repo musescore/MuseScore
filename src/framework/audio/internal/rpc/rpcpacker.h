@@ -56,6 +56,9 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackType& valu
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackFormat& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& value);
 
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSignalVal& value);
+
 // MPE
 // PlaybackEvent
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArrangementContext& value);
@@ -209,6 +212,16 @@ inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackF
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& value)
 {
     p(value.type, value.sampleRate, value.samplesPerChannel, value.audioChannelsNumber, value.bitRate);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value)
+{
+    p(value.amplitude, value.pressure);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSignalVal& value)
+{
+    p(value.amplitude, value.pressure);
 }
 
 // MPE

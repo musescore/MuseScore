@@ -76,6 +76,9 @@ enum class Method {
     SetMasterOutputParams,
     ClearMasterOutputParams,
 
+    GetSignalChanges,
+    GetMasterSignalChanges,
+
     GetAvailableOutputResources,
 
     SaveSoundTrack,
@@ -100,6 +103,7 @@ inline std::string to_string(Method m)
     case Method::GetTrackIdList: return "GetTrackIdList";
     case Method::GetTrackName: return "GetTrackName";
     case Method::AddTrackWithPlaybackData: return "AddTrackWithPlaybackData";
+    case Method::AddTrackWithIODevice: return "AddTrackWithIODevice";
     case Method::AddAuxTrack: return "AddAuxTrack";
 
     case Method::GetAvailableInputResources: return "GetAvailableInputResources";
@@ -126,6 +130,9 @@ inline std::string to_string(Method m)
     case Method::GetMasterOutputParams: return "GetMasterOutputParams";
     case Method::SetMasterOutputParams: return "SetMasterOutputParams";
     case Method::ClearMasterOutputParams: return "ClearMasterOutputParams";
+
+    case Method::GetSignalChanges: return "GetSignalChanges";
+    case Method::GetMasterSignalChanges: return "GetMasterSignalChanges";
 
     case Method::GetAvailableOutputResources: return "GetAvailableOutputResources";
 

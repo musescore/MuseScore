@@ -318,6 +318,42 @@ void WorkerChannelController::initOnWorker(std::shared_ptr<IWorkerPlayback> play
         channel()->send(rpc::make_response(msg, RpcPacker::pack(list)));
     });
 
+    channel()->onMethod(Method::GetSignalChanges, [this](const Msg& msg) {
+        ONLY_AUDIO_WORKER_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackId trackId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackId)) {
+            return;
+        }
+
+        RetVal<AudioSignalChanges> ret = m_playback->signalChanges(seqId, trackId);
+        StreamId streamId = 0;
+        if (ret.ret) {
+            streamId = channel()->addSendStream(ret.val);
+        }
+
+        RetVal<StreamId> res;
+        res.ret = ret.ret;
+        res.val = streamId;
+
+        channel()->send(rpc::make_response(msg, RpcPacker::pack(res)));
+    });
+
+    channel()->onMethod(Method::GetMasterSignalChanges, [this](const Msg& msg) {
+        ONLY_AUDIO_WORKER_THREAD;
+        RetVal<AudioSignalChanges> ret = m_playback->masterSignalChanges();
+        StreamId streamId = 0;
+        if (ret.ret) {
+            streamId = channel()->addSendStream(ret.val);
+        }
+
+        RetVal<StreamId> res;
+        res.ret = ret.ret;
+        res.val = streamId;
+
+        channel()->send(rpc::make_response(msg, RpcPacker::pack(res)));
+    });
+
     channel()->onMethod(Method::SaveSoundTrack, [this](const Msg& msg) {
         ONLY_AUDIO_WORKER_THREAD;
         TrackSequenceId seqId = 0;
