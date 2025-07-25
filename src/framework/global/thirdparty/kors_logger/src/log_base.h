@@ -63,17 +63,29 @@ SOFTWARE.
 #define DO_ASSERT(cond) DO_ASSERT_X(cond, #cond)
 #define ASSERT_X(msg) DO_ASSERT_X(false, msg)
 
-#define IF_ASSERT_FAILED_X(cond, msg) \
-    DO_ASSERT_X(cond, msg) \
-    if (!(cond)) \
+#define CONCAT_IMPL(x, y) x##y
+#define CONCAT(x, y) CONCAT_IMPL(x, y)
+#define UNIQUE_VAR_NAME(prefix) CONCAT(prefix, __LINE__)
 
+#define IF_ASSERT_FAILED_X_IMPL(cond, msg, var_name) \
+    const auto var_name = (cond); \
+    if (!(var_name)) { \
+        LOGE() << "ASSERT FAILED:    " << msg << "    " << __FILE__ << ":" << __LINE__; \
+        assert(cond); \
+    } \
+    if (!(var_name))
+
+#define IF_ASSERT_FAILED_X(cond, msg) IF_ASSERT_FAILED_X_IMPL(cond, msg, UNIQUE_VAR_NAME(__if_assert_failed_))
 #define IF_ASSERT_FAILED(cond) IF_ASSERT_FAILED_X(cond, #cond)
 
-#define IF_FAILED(cond) \
-    if (!(cond)) { \
-        LOGE() << "FAILED:    " << #cond << "    " << __FILE__ << ":" << __LINE__ ; \
+#define IF_FAILED_IMPL(cond, var_name) \
+    const auto var_name = (cond); \
+    if (!(var_name)) { \
+        LOGE() << "FAILED: " << #cond << " at " << __FILE__ << ":" << __LINE__; \
     } \
-    if (!(cond)) \
+    if (!(var_name))
+
+#define IF_FAILED(cond) IF_FAILED_IMPL(cond, UNIQUE_VAR_NAME(__if_failed_))
 
 #define UNUSED(x) (void)x;
 
