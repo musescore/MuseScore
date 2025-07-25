@@ -1982,6 +1982,11 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
     if (!item->stringData()->isNull()) {
         write(item->stringData(), xml);
     }
+
+    if (item->glissandoStyle() != GlissandoStyle::CHROMATIC) {
+        xml.tag("glissandoStyle", TConv::toXml(item->glissandoStyle()));
+    }
+
     for (const NamedEventList& a : item->midiActions()) {
         write(&a, xml, "MidiAction");
     }
