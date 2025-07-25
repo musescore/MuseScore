@@ -258,24 +258,31 @@ void NotationRegionsBeingProcessedModel::startListeningToProgress(const TrackId 
 
     playback()->inputProcessingProgress(sequenceId, trackId)
     .onResolve(this, [this, instrumentTrackId](InputProcessingProgress inputProgress) {
-        if (inputProgress.progress.isStarted()) {
+        if (inputProgress.isStarted) {
             onProgressStarted(instrumentTrackId);
         }
 
-        inputProgress.progress.started().onNotify(this, [this, instrumentTrackId]() {
-            onProgressStarted(instrumentTrackId);
-        });
-
-        inputProgress.chunksBeingProcessedChannel.onReceive(this, [this, instrumentTrackId](const ChunkInfoList& chunks) {
-            onChunksReceived(instrumentTrackId, chunks);
-        });
-
-        inputProgress.progress.progressChanged().onReceive(this, [this, instrumentTrackId](int64_t current, int64_t, const std::string&) {
-            onProgressChanged(instrumentTrackId, current);
-        });
-
-        inputProgress.progress.finished().onReceive(this, [this, instrumentTrackId](const muse::ProgressResult&) {
-            onProgressFinished(instrumentTrackId);
+        inputProgress.processedChannel.onReceive(this, [this, instrumentTrackId]
+                                                 (const InputProcessingProgress::StatusInfo& status,
+                                                  const InputProcessingProgress::ChunkInfoList& chunks,
+                                                  const InputProcessingProgress::ProgressInfo& progress)
+        {
+            switch (status.status) {
+                case InputProcessingProgress::Undefined:
+                    break;
+                case InputProcessingProgress::Started: {
+                    onProgressStarted(instrumentTrackId);
+                } break;
+                case InputProcessingProgress::Processing: {
+                    if (!chunks.empty()) {
+                        onChunksReceived(instrumentTrackId, chunks);
+                    }
+                    onProgressChanged(instrumentTrackId, progress.current);
+                } break;
+                case InputProcessingProgress::Finished: {
+                    onProgressFinished(instrumentTrackId);
+                } break;
+            }
         });
     });
 }

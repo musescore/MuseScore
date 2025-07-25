@@ -457,8 +457,42 @@ struct InputProcessingProgress {
 
     using ChunkInfoList = std::vector<ChunkInfo>;
 
-    async::Channel<ChunkInfoList> chunksBeingProcessedChannel;
-    Progress progress;
+    struct ProgressInfo {
+        int64_t current = 0;
+        int64_t total = 0;
+    };
+
+    enum Status : uint8_t {
+        Undefined = 0,
+        Started,
+        Processing,
+        Finished
+    };
+
+    struct StatusInfo {
+        Status status = Status::Undefined;
+        int errcode = 0;
+    };
+
+    void start()
+    {
+        isStarted = true;
+        processedChannel.send({ Status::Started, 0 }, {}, {});
+    }
+
+    void process(const ChunkInfoList& chuncs, int64_t current, int64_t total)
+    {
+        processedChannel.send({ Status::Processing, 0 }, chuncs, { current, total });
+    }
+
+    void finish(int errcode)
+    {
+        isStarted = false;
+        processedChannel.send({ Status::Finished, errcode }, {}, {});
+    }
+
+    bool isStarted = false;
+    async::Channel<StatusInfo, ChunkInfoList, ProgressInfo> processedChannel;
 };
 }
 

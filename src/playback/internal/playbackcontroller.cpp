@@ -1348,30 +1348,38 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
 {
     playback()->inputProcessingProgress(m_currentSequenceId, trackId)
     .onResolve(this, [this, trackId](muse::audio::InputProcessingProgress inputProgress) {
-        inputProgress.progress.started().onNotify(this, [this, trackId]() {
-            m_onlineSoundsBeingProcessed.insert(trackId);
+        inputProgress.processedChannel.onReceive(this, [this, trackId]
+                                                 (const InputProcessingProgress::StatusInfo& status,
+                                                  const InputProcessingProgress::ChunkInfoList& /*chunks*/,
+                                                  const InputProcessingProgress::ProgressInfo& progress)
+        {
+            switch (status.status) {
+                case InputProcessingProgress::Undefined:
+                    break;
+                case InputProcessingProgress::Started: {
+                    m_onlineSoundsBeingProcessed.insert(trackId);
 
-            if (!m_onlineSoundsProcessingProgress.isStarted()) {
-                m_onlineSoundsProcessingErrorCode = 0;
-                m_onlineSoundsProcessingProgress.start();
-            }
-        });
+                    if (!m_onlineSoundsProcessingProgress.isStarted()) {
+                        m_onlineSoundsProcessingErrorCode = 0;
+                        m_onlineSoundsProcessingProgress.start();
+                    }
+                } break;
+                case InputProcessingProgress::Processing: {
+                    if (m_onlineSoundsBeingProcessed.size() == 1) {
+                        m_onlineSoundsProcessingProgress.progress(progress.current, progress.total);
+                    }
+                } break;
+                case InputProcessingProgress::Finished: {
+                    muse::remove(m_onlineSoundsBeingProcessed, trackId);
 
-        inputProgress.progress.progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& msg) {
-            if (m_onlineSoundsBeingProcessed.size() == 1) {
-                m_onlineSoundsProcessingProgress.progress(current, total, msg);
-            }
-        });
+                    if (m_onlineSoundsProcessingErrorCode == 0 && status.errcode != static_cast<int>(Ret::Code::Cancel)) {
+                        m_onlineSoundsProcessingErrorCode = status.errcode;
+                    }
 
-        inputProgress.progress.finished().onReceive(this, [this, trackId](const muse::ProgressResult& res) {
-            muse::remove(m_onlineSoundsBeingProcessed, trackId);
-
-            if (m_onlineSoundsProcessingErrorCode == 0 && res.ret.code() != static_cast<int>(Ret::Code::Cancel)) {
-                m_onlineSoundsProcessingErrorCode = res.ret.code();
-            }
-
-            if (m_onlineSoundsBeingProcessed.empty()) {
-                m_onlineSoundsProcessingProgress.finish(Ret(m_onlineSoundsProcessingErrorCode));
+                    if (m_onlineSoundsBeingProcessed.empty()) {
+                        m_onlineSoundsProcessingProgress.finish(Ret(m_onlineSoundsProcessingErrorCode));
+                    }
+                } break;
             }
         });
     });

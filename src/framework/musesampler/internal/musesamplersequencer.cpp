@@ -119,8 +119,8 @@ void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSamp
 
 void MuseSamplerSequencer::deinit()
 {
-    if (m_renderingProgress && m_renderingProgress->progress.isStarted()) {
-        m_renderingProgress->progress.cancel();
+    if (m_renderingProgress && m_renderingProgress->isStarted) {
+        m_renderingProgress->finish((int)Ret::Code::Cancel);
     }
 
     if (m_pollRenderingProgressTimer) {
@@ -253,31 +253,33 @@ void MuseSamplerSequencer::doPollProgress()
 
         m_renderingInfo.initialChunksDurationUs = chunksDurationUs;
 
-        if (!m_renderingProgress->progress.isStarted()) {
-            m_renderingProgress->progress.start();
+        if (!m_renderingProgress->isStarted) {
+            m_renderingProgress->start();
         }
     }
 
-    // Send chunks
+    bool isChanged = false;
+    // chunks
     if (m_renderingInfo.lastReceivedChunks != chunks) {
         m_renderingInfo.lastReceivedChunks = chunks;
-
-        if (!chunks.empty()) {
-            m_renderingProgress->chunksBeingProcessedChannel.send(chunks);
-        }
+        isChanged = true;
     }
 
     // Update percentage
     const int64_t percentage = std::lround(100.f - (float)chunksDurationUs / (float)m_renderingInfo.initialChunksDurationUs * 100.f);
     if (percentage != m_renderingInfo.percentage) {
         m_renderingInfo.percentage = percentage;
-        m_renderingProgress->progress.progress(std::lround(percentage), 100);
+        isChanged = true;
+    }
+
+    if (isChanged) {
+        m_renderingProgress->process(chunks, std::lround(percentage), 100);
     }
 
     // Finish progress
     if (chunksDurationUs <= 0) {
         m_pollRenderingProgressTimer->stop();
-        m_renderingProgress->progress.finish(Ret(m_renderingInfo.errorCode));
+        m_renderingProgress->finish(m_renderingInfo.errorCode);
         m_renderingInfo.clear();
     }
 }
