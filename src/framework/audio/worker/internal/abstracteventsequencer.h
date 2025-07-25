@@ -247,14 +247,13 @@ protected:
         while (m_currentOffSequenceIt != m_offStreamEvents.end()
                && m_currentOffSequenceIt->first <= m_offstreamPosition) {
             EventSequence& sequence = result[m_currentOffSequenceIt->first];
-            sequence.insert(m_currentOffSequenceIt->second.cbegin(),
-                            m_currentOffSequenceIt->second.cend());
-            m_currentOffSequenceIt = std::next(m_currentOffSequenceIt);
+            sequence.insert(std::make_move_iterator(m_currentOffSequenceIt->second.begin()),
+                            std::make_move_iterator(m_currentOffSequenceIt->second.end()));
+            m_currentOffSequenceIt = m_offStreamEvents.erase(m_currentOffSequenceIt);
         }
 
         if (m_currentOffSequenceIt == m_offStreamEvents.end()) {
-            m_offStreamEvents.clear();
-            updateOffSequenceIterator();
+            m_offstreamPosition = 0;
         }
     }
 
