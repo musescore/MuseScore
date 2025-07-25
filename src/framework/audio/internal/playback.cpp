@@ -496,30 +496,52 @@ async::Promise<AudioResourceMetaList> Playback::availableOutputResources() const
 
 async::Promise<AudioSignalChanges> Playback::signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return Promise<AudioSignalChanges>([this, sequenceId, trackId](auto resolve, auto reject) {
-        ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_MAIN_THREAD;
+    return make_promise<AudioSignalChanges>([this, sequenceId, trackId](auto resolve, auto reject) {
+        ONLY_AUDIO_MAIN_THREAD;
+        Msg msg = rpc::make_request(Method::GetSignalChanges, RpcPacker::pack(sequenceId, trackId));
+        channel()->send(msg, [this, resolve, reject](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            RetVal<StreamId> ret;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ret)) {
+                return;
+            }
 
-        RetVal<AudioSignalChanges> ret = workerPlayback()->signalChanges(sequenceId, trackId);
-        if (ret.ret) {
-            return resolve(ret.val);
-        } else {
-            return reject(ret.ret.code(), ret.ret.text());
-        }
-    }, AudioThread::ID);
+            if (ret.ret) {
+                AudioSignalChanges ch;
+                channel()->addReceiveStream(ret.val, ch);
+                (void)resolve(ch);
+            } else {
+                (void)reject(ret.ret.code(), ret.ret.text());
+            }
+        });
+        return Promise<AudioSignalChanges>::dummy_result();
+    }, PromiseType::AsyncByBody);
 }
 
 async::Promise<AudioSignalChanges> Playback::masterSignalChanges() const
 {
-    return Promise<AudioSignalChanges>([this](auto resolve, auto reject) {
-        ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_MAIN_THREAD;
+    return make_promise<AudioSignalChanges>([this](auto resolve, auto reject) {
+        ONLY_AUDIO_MAIN_THREAD;
+        Msg msg = rpc::make_request(Method::GetMasterSignalChanges);
+        channel()->send(msg, [this, resolve, reject](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            RetVal<StreamId> ret;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ret)) {
+                return;
+            }
 
-        RetVal<AudioSignalChanges> ret = workerPlayback()->masterSignalChanges();
-        if (ret.ret) {
-            return resolve(ret.val);
-        } else {
-            return reject(ret.ret.code(), ret.ret.text());
-        }
-    }, AudioThread::ID);
+            if (ret.ret) {
+                AudioSignalChanges ch;
+                channel()->addReceiveStream(ret.val, ch);
+                (void)resolve(ch);
+            } else {
+                (void)reject(ret.ret.code(), ret.ret.text());
+            }
+        });
+        return Promise<AudioSignalChanges>::dummy_result();
+    }, PromiseType::AsyncByBody);
 }
 
 async::Promise<bool> Playback::saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
