@@ -22,11 +22,9 @@
 
 #include "engravingobject.h"
 
-#include <iterator>
-#include <unordered_set>
+#include "global/containers.h"
 
 #include "style/textstyle.h"
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "bracketItem.h"
@@ -42,11 +40,6 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 ElementStyle const EngravingObject::EMPTY_STYLE;
-
-EngravingObject* EngravingObjectList::at(size_t i) const
-{
-    return *std::next(begin(), i);
-}
 
 EngravingObject::EngravingObject(const ElementType& type, EngravingObject* parent)
     : m_type(type)
@@ -117,6 +110,7 @@ EngravingObject::~EngravingObject()
                               && !this->isType(ElementType::SCORE)
                               && score()->rootItem() && score()->rootItem()->dummy();
 
+        // copy because moveToDummy might modify children
         EngravingObjectList children = m_children;
         for (EngravingObject* c : children) {
             if (canMoveToDummy) {
@@ -223,7 +217,7 @@ void EngravingObject::removeChild(EngravingObject* o)
         return;
     }
     o->m_parent = nullptr;
-    m_children.remove(o);
+    muse::remove(m_children, o);
 }
 
 EngravingObject* EngravingObject::parent() const
