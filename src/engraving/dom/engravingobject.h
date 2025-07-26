@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "global/allocator.h"
 
 #include "../devtools/iengravingelementsprovider.h"
@@ -198,13 +200,7 @@ class LinkedObjects;
 enum class Pid : int;
 enum class PropertyFlags : char;
 
-class EngravingObjectList : public std::list<EngravingObject*>
-{
-    OBJECT_ALLOCATOR(engraving, EngravingObjectList)
-public:
-
-    EngravingObject* at(size_t i) const;
-};
+using EngravingObjectList = std::vector<EngravingObject*>;
 
 class EngravingObject
 {
