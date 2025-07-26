@@ -1127,6 +1127,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
                                                   const std::vector<Fraction>& ml,
                                                   const std::vector<Fraction>& ms,
                                                   const std::set<int>& systemStartMeasureNrs,
+                                                  const std::set<int>& sectionStartMeasureNrs,
                                                   const std::set<int>& pageStartMeasureNrs,
                                                   const CreditWordsList& crWords,
                                                   const Size& pageSize)
@@ -1165,6 +1166,8 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
         }
         if (pageStartMeasureNrs.count(int(i))) {
             addBreakToPreviousMeasureBase(score, mb, LayoutBreakType::PAGE);
+        } else if (sectionStartMeasureNrs.count(int(i))) {
+            addBreakToPreviousMeasureBase(score, mb, LayoutBreakType::SECTION);
         } else if (systemStartMeasureNrs.count(int(i))) {
             addBreakToPreviousMeasureBase(score, mb, LayoutBreakType::LINE);
         }
@@ -1258,8 +1261,8 @@ Err MusicXmlParserPass1::parse(const ByteArray& data)
     // Fixup timesig at tick = 0 if necessary
     fixupSigmap(m_logger, m_score, m_measureLength);
     // Create the measures
-    createMeasuresAndVboxes(m_score, m_measureLength, m_measureStart, m_systemStartMeasureNrs, m_pageStartMeasureNrs, m_credits,
-                            m_pageSize);
+    createMeasuresAndVboxes(m_score, m_measureLength, m_measureStart, m_systemStartMeasureNrs, m_sectionStartMeasureNrs,
+                            m_pageStartMeasureNrs, m_credits, m_pageSize);
 
     return res;
 }
@@ -2870,11 +2873,39 @@ void MusicXmlParserPass1::print(const int measureNr)
     if (newPage == u"yes") {
         m_pageStartMeasureNrs.insert(measureNr);
     }
-    if (newSystem == u"yes") {
-        m_systemStartMeasureNrs.insert(measureNr);
+
+    // Keep track of the current and previous left margin for use in determining whether this is a
+    // section or system break.
+    double prevLeftMargin = m_leftMargin;
+    while (m_e.readNextStartElement()) {
+        if (m_e.name() == "system-layout") {
+            while (m_e.readNextStartElement()) {
+                if (m_e.name() == "system-margins") {
+                    while (m_e.readNextStartElement()) {
+                        if (m_e.name() == "left-margin") {
+                            m_leftMargin = m_e.readDouble();
+                        } else {
+                            m_e.skipCurrentElement();
+                        }
+                    }
+                } else {
+                    m_e.skipCurrentElement();
+                }
+            }
+        } else {
+            m_e.skipCurrentElement();
+        }
     }
 
-    m_e.skipCurrentElement();          // skip but don't log
+    if (newSystem == u"yes") {
+        // If this new system has a greater margin than the preceding system, infer that it is a
+        // section break rather than a system break.
+        if (m_leftMargin > prevLeftMargin) {
+            m_sectionStartMeasureNrs.insert(measureNr);
+        } else {
+            m_systemStartMeasureNrs.insert(measureNr);
+        }
+    }
 }
 
 //---------------------------------------------------------
