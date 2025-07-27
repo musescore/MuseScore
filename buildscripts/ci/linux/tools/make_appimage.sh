@@ -24,6 +24,11 @@ mkdir -p $BUILD_TOOLS
 # INSTALL APPIMAGETOOL AND LINUXDEPLOY
 ##########################################################################
 
+if [ "$PACKARCH" == "armhf" ]; then
+  # In a Docker container, AppImages cannot run normally because of problems with FUSE.
+  export APPIMAGE_EXTRACT_AND_RUN=1
+fi
+
 function download_github_release()
 {
   local -r repo_slug="$1" release_tag="$2" file="$3"
@@ -36,7 +41,7 @@ function download_github_release()
   echo "try download: ${url}"
   
   # use curl instead of wget which fails on armhf
-  curl "${url}" -O -L -v
+  curl "${url}" -O -L
   chmod +x "${file}"
   echo "downloaded: ${file}"
 }
@@ -52,7 +57,7 @@ function download_appimage_release()
 if [[ ! -d $BUILD_TOOLS/appimagetool ]]; then
   mkdir $BUILD_TOOLS/appimagetool
   cd $BUILD_TOOLS/appimagetool
-  download_appimage_release AppImage/appimagetool appimagetool continuous # use AppImage/appimagetool for the static runtime AppImage
+  download_appimage_release AppImage/appimagetool appimagetool continuous
   cd $ORIGIN_DIR
 fi
 export PATH="$BUILD_TOOLS/appimagetool:$PATH"
@@ -231,12 +236,7 @@ if [[ "${UPDATE_INFORMATION}" ]]; then
   appimageupdatetool --version
 
   # Extract appimageupdatetool
-  # run appimage in docker container with QEMU emulation directly since binfmt fails
-  if [[ "$PACKARCH" == armhf ]]; then
-    /usr/bin/qemu-arm-static appimageupdatetool --appimage-extract >/dev/null # dest folder "squashfs-root"
-  else
-    appimageupdatetool --appimage-extract >/dev/null # dest folder "squashfs-root"
-  fi
+  appimageupdatetool --appimage-extract >/dev/null # dest folder "squashfs-root"
 
   # Move into AppDir
   mv squashfs-root ${appdir}/appimageupdatetool.AppDir
