@@ -16953,7 +16953,7 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Staff notation).</source>
         <comment>mtn-dulcimer-std description</comment>
         <extracomment>description for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>在其他名字中也被称为阿巴拉契亚扬琴。筝琴家族的有品弦乐器。（五线谱）。</translation>
+        <translation>在其他名字中也被称为阿巴拉契亚扬琴。筝琴家族的有品弦乐器。（谱表记号集合）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5577"/>

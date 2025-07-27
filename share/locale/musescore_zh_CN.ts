@@ -2997,7 +2997,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8251"/>
         <source>Default positions of dynamics and hairpins</source>
-        <translation>力度与楔形力度记号的默认位置</translation>
+        <translation>力度和楔形力度记号的默认位置</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
@@ -3037,12 +3037,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11660"/>
         <source>Edit lyrics text style</source>
-        <translation>编辑唱词文本样式</translation>
+        <translation>编辑歌词文本样式</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11764"/>
         <source>Min. gap between lyrics:</source>
-        <translation>唱词段最小间距</translation>
+        <translation>歌词行之间最小间距</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11861"/>
@@ -3127,7 +3127,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation>滑音与音符锚索</translation>
+        <translation>滑音和音符锚索</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
@@ -4260,7 +4260,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10971"/>
         <source>Center between stem and notehead</source>
-        <translation>居中至符干与符头间</translation>
+        <translation>居中至符干和符头之间</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10997"/>
@@ -7514,7 +7514,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="347"/>
         <source>Copy/paste: swap with clipboard</source>
-        <translation>拷贝/粘贴：与剪贴板内容交换</translation>
+        <translation>复制/粘贴：与剪贴板内容交换</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="359"/>
@@ -7614,7 +7614,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="493"/>
         <source>Copy lyrics</source>
-        <translation>拷贝唱词</translation>
+        <translation>复制歌词</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="499"/>
@@ -8002,7 +8002,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1358"/>
         <source>Add text: lyrics</source>
-        <translation>添加文本：唱词</translation>
+        <translation>添加文本：歌词</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1364"/>
@@ -8320,18 +8320,18 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1765"/>
         <source>Add extension line</source>
-        <translation>添加延伸线</translation>
+        <translation>添加延长线</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1766"/>
         <source>Lyrics: enter extension line</source>
-        <translation>唱词：输入延伸线</translation>
+        <translation>歌词：录入延长线</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1771"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1772"/>
         <source>Add lyrics verse</source>
-        <translation>添加唱词段落</translation>
+        <translation>添加歌词段落</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1778"/>
@@ -9999,7 +9999,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1760"/>
         <source>Lyrics: enter hyphen</source>
-        <translation>唱词：输入连字符</translation>
+        <translation>唱词：录入短横线</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1849"/>
@@ -10638,7 +10638,7 @@ text x-height):</source>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation>此动作将会重置您的所有应用程序偏好与删除所有自定义面板与自定义快捷键。最近总谱列表还将会被清除。
+        <translation>此动作将会重置您的所有应用程序偏好和删除所有自定义面板和自定义快捷键。最近总谱列表还将会被清除。
 
 此动作将不会删除您的任何总谱。</translation>
     </message>
@@ -10754,7 +10754,7 @@ This action will not delete any of your scores.</source>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation>此动作将会重置您的所有应用偏好与删除所有自定义快捷键。它将不会删除您的任何总谱。
+        <translation>此动作将会重置您的所有应用偏好和删除所有自定义快捷键。它将不会删除您的任何总谱。
 
 此动作无法撤消。</translation>
     </message>
@@ -11511,7 +11511,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="48"/>
         <source>Text and icons:</source>
-        <translation>文本与图标：</translation>
+        <translation>文本和图标：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="49"/>
@@ -11819,7 +11819,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="41"/>
         <source>Braille table for lyrics:</source>
-        <translation>唱词盲文表：</translation>
+        <translation>歌词盲文表：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="57"/>
@@ -11887,7 +11887,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="39"/>
         <source>When entered, dynamics and hairpins should affect:</source>
-        <translation>当进入时，力度与力度楔形记号应影响：</translation>
+        <translation>当录入之时，力度和楔形力度记号适宜影响：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="46"/>
@@ -13414,7 +13414,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
         <source>Extension line segment</source>
-        <translation>唱词延长区段</translation>
+        <translation>延长线区段</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
@@ -17539,7 +17539,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3667"/>
         <source>Reversed flat and flat (three-quarter-tones flat) (Zimmermann)</source>
-        <translation>逆降号与降号（3/4f降号）（Zimmermann式）</translation>
+        <translation>逆降号和降号（四分之三降号）（Zimmermann 式）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3669"/>
@@ -21046,7 +21046,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="116"/>
         <source>Gap between text and line</source>
-        <translation>文本与线条间距</translation>
+        <translation>文本和线条间距</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="72"/>
@@ -22238,7 +22238,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lyrics/lyricssettingsmodel.cpp" line="32"/>
         <source>Lyrics</source>
-        <translation>唱词</translation>
+        <translation>歌词</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/chords/chordsettingsmodel.cpp" line="33"/>
@@ -22975,7 +22975,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="78"/>
         <source>Marc Sabatella</source>
-        <translation>Marc Sabatella</translation>
+        <translation>马克·萨巴泰拉</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="79"/>
@@ -22996,13 +22996,13 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
 (Note: Mastering MuseScore is available in English only)</source>
-        <translation>欢迎来到《精通MuseScore》——这里有学习全球最受欢迎的记谱软件：Musescore 的最全面的资源！我是Marc Sabatella，自十多年前MuseScore首次发布以来，我一直在帮助开发、支持和推广MuseScore。
+        <translation>欢迎来到《精通 MuseScore》——这里有学习世界最流行的音乐记号集合软件：Musescore 的最全面的资源！我的名字是马克·萨巴泰拉，而自超过十年前 MuseScore 初始发布以来，我已在帮助开发、支持和促销MuseScore。
 
-无论您是刚开始使用软件，还是渴望探索高级制谱和播放技巧的高级用户，我的旗舰在线课程《精通MuseScore》涵盖了您需要了解的MuseScore的一切。
+无论您是随音乐记号集合软件起步，还是渴望探索高级雕版和回放技巧的强力用户，我的旗舰联机课程《精通 MuseScore》涵盖了您需要知晓的 MuseScore 的一切。
 
-此外，《精通MuseScore》还设有一个支持性的音乐家社区，包括讨论区、直播和其他相关课程和服务，以帮助您创作出最好的音乐。利用这个机会从MuseScore最知名的专家之一那里学习MuseScore！
+此外，《精通 MuseScore》特色在于有一个支持性的音乐人社区，带有讨论空间、现场流和其他相关课程和服务，以帮助您创建您的最好音乐。采取这个机会的优势从其最受公认的专家之一那里使得 MuseScore 物尽其用！
 
- （注意：仅提供英语版本）</translation>
+（注意：《精通 MuseScore》仅以英语版本可获得）</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="97"/>
@@ -23855,7 +23855,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="177"/>
         <source>Lyrics</source>
-        <translation>唱词</translation>
+        <translation>歌词</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="179"/>
@@ -24156,7 +24156,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="66"/>
         <source>Please select a note or lyrics and retry</source>
-        <translation>请选择一个音符或唱词后重试</translation>
+        <translation>请选择一个音符或者歌词与重试</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="69"/>
@@ -31343,7 +31343,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1997"/>
         <source>Copy range</source>
-        <translation>拷贝范围</translation>
+        <translation>复制范围</translation>
     </message>
     <message>
         <source>Apply palette element</source>
@@ -31377,7 +31377,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3875"/>
         <source>Move lyrics</source>
-        <translation>移动唱词</translation>
+        <translation>移动歌词</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3887"/>
@@ -31755,7 +31755,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6202"/>
         <source>Navigate to lyrics</source>
-        <translation>导航到唱词</translation>
+        <translation>导航到歌词</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6330"/>
@@ -31795,12 +31795,12 @@ failed.</source>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7207"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7267"/>
         <source>Enter lyrics extension line</source>
-        <translation>输入唱词局部延长线</translation>
+        <translation>录入歌词延长线</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7349"/>
         <source>Add lyrics verse</source>
-        <translation>添加唱词段落</translation>
+        <translation>添加歌词段落</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7397"/>
