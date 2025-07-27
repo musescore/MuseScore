@@ -87,9 +87,7 @@ fi
 if [[ "${UPDATE_INFORMATION}" ]]; then
   export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
 
-  # `appimageupdatetool`'s `AppRun` script gets confused when called via a symlink.
-  # Resolve the symlink here to avoid this issue.
-  $(readlink -f "$(which appimageupdatetool)") --version
+  appimageupdatetool --version
 fi
 
 ##########################################################################
@@ -148,20 +146,6 @@ function find_library()
   "${appdir}/bin/findlib" "$@"
 }
 
-function fallback_library()
-{
-  # Copy a library into a special fallback directory inside the AppDir.
-  # Fallback libraries are not loaded at runtime by default, but they can
-  # be loaded if it is found that the application would crash otherwise.
-  local library="$1"
-  local full_path="$(find_library "$1")"
-  local new_path="${appdir}/fallback/${library}"
-  mkdir -p "${new_path}" # directory has the same name as the library
-  cp -L "${full_path}" "${new_path}/${library}"
-  # Use the AppRun script to check at runtime whether the user has a copy of
-  # this library. If not then add our copy's directory to $LD_LIBRARY_PATH.
-}
-
 # UNWANTED FILES
 # linuxdeploy or linuxdeploy-plugin-qt may have added some files or folders
 # that we don't want. List them here using paths relative to AppDir root.
@@ -171,6 +155,10 @@ unwanted_files=(
   # https://github.com/musescore/MuseScore/issues/24068#issuecomment-2297823192
   lib/libwayland-client.so.0
 )
+
+for file in "${unwanted_files[@]}"; do
+  rm -rf "${appdir}/${file}"
+done
 
 # ADDITIONAL QT COMPONENTS
 # linuxdeploy-plugin-qt may have missed some Qt files or folders that we need.
@@ -188,6 +176,15 @@ additional_qt_components=(
   plugins/wayland-shell-integration
 )
 
+for file in "${additional_qt_components[@]}"; do
+  if [ -f "${appdir}/${file}" ]; then
+    echo "Warning: ${file} was already deployed. Skipping."
+    continue
+  fi
+  mkdir -p "${appdir}/$(dirname "${file}")"
+  cp -Lr "${QT_ROOT_DIR}/${file}" "${appdir}/${file}"
+done
+
 # ADDITIONAL LIBRARIES
 # linuxdeploy may have missed some libraries that we need
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
@@ -199,6 +196,15 @@ if [[ "$PACKARCH" == "x86_64" ]]; then
 else
   additional_libraries=()
 fi
+
+for lib in "${additional_libraries[@]}"; do
+  if [ -f "${appdir}/lib/${lib}" ]; then
+    echo "Warning: ${lib} was already deployed. Skipping."
+    continue
+  fi
+  full_path="$(find_library "${lib}")"
+  cp -L "${full_path}" "${appdir}/lib/${lib}"
+done
 
 # FALLBACK LIBRARIES
 # These get bundled in the AppImage, but are only loaded if the user does not
@@ -213,6 +219,15 @@ fallback_libraries=(
   libOpenGL.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
 )
 
+for fb_lib in "${fallback_libraries[@]}"; do
+  full_path="$(find_library "$fb_lib")"
+  new_path="${appdir}/fallback/${fb_lib}"
+  mkdir -p "${new_path}" # directory has the same name as the library
+  cp -L "${full_path}" "${new_path}/${fb_lib}"
+  # Use the AppRun script to check at runtime whether the user has a copy of
+  # this library. If not then add our copy's directory to $LD_LIBRARY_PATH.
+done
+
 # PREVIOUSLY EXTRACTED APPIMAGES
 # These include their own dependencies. We bundle them uncompressed to avoid
 # creating a double layer of compression (AppImage inside AppImage).
@@ -225,32 +240,6 @@ extracted_appimages=(
   # none
 )
 fi
-
-for file in "${unwanted_files[@]}"; do
-  rm -rf "${appdir}/${file}"
-done
-
-for file in "${additional_qt_components[@]}"; do
-  if [ -f "${appdir}/${file}" ]; then
-    echo "Warning: ${file} was already deployed. Skipping."
-    continue
-  fi
-  mkdir -p "${appdir}/$(dirname "${file}")"
-  cp -Lr "${QT_ROOT_DIR}/${file}" "${appdir}/${file}"
-done
-
-for lib in "${additional_libraries[@]}"; do
-  if [ -f "${appdir}/lib/${lib}" ]; then
-    echo "Warning: ${lib} was already deployed. Skipping."
-    continue
-  fi
-  full_path="$(find_library "${lib}")"
-  cp -L "${full_path}" "${appdir}/lib/${lib}"
-done
-
-for fb_lib in "${fallback_libraries[@]}"; do
-  fallback_library "${fb_lib}"
-done
 
 for name in "${extracted_appimages[@]}"; do
   symlink="$(which "${name}")"
