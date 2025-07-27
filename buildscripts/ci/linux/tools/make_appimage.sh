@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-trap 'echo Making AppImage failed; exit 1' ERR
+trap 'code=$?; echo "error: make_appimage.sh: command \`$BASH_COMMAND\` exited with code $code." >&2; exit 1' ERR
 
 INSTALL_DIR="$1" # MuseScore was installed here
 APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
