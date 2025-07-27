@@ -38,6 +38,8 @@ bool DockTabBar::event(QEvent* event)
         return true;
     }
     case QEvent::MouseButtonPress: {
+        m_currentIndexChangedOnMouseDown = false;
+
         QQuickItem* tabBar = tabBarQmlItem();
         if (tabBar) {
             QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
@@ -47,6 +49,10 @@ bool DockTabBar::event(QEvent* event)
             if (tabIndex < 0) {
                 return true;
             }
+
+            bool ok = true;
+            int currentTabIndex = tabBar->property("currentIndex").toInt(&ok);
+            m_currentIndexChangedOnMouseDown = ok && tabIndex != currentTabIndex;
 
             tabBar->setProperty("currentIndex", tabIndex);
             TabBar::onMousePress(localPos);
@@ -85,4 +91,9 @@ void DockTabBar::setDraggableMouseArea(QQuickItem* mouseArea)
 
     m_draggableMouseArea = mouseArea;
     redirectMouseEvents(mouseArea);
+}
+
+int DockTabBar::currentIndexChangedOnMouseDown() const
+{
+    return m_currentIndexChangedOnMouseDown;
 }
