@@ -228,6 +228,8 @@ public:
     inline bool operator ==(const String& s) const { return constStr() == s.constStr(); }
     inline bool operator !=(const String& s) const { return !operator ==(s); }
 
+    bool isEqualIgnoreCase(const String& s) const;
+
     bool operator ==(const AsciiStringView& s) const;
     inline bool operator !=(const AsciiStringView& s) const { return !operator ==(s); }
     inline bool operator ==(const char16_t* s) const { return constStr() == s; }
