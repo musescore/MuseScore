@@ -102,7 +102,6 @@
             <symbol>breathMarkComma</symbol>
             <eid>P_P</eid>
             <color r="255" g="147" b="0" a="255"/>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>Q_Q</eid>
@@ -124,7 +123,6 @@
             <symbol>caesura</symbol>
             <eid>T_T</eid>
             <color r="255" g="147" b="0" a="255"/>
-            <placement>below</placement>
             </Breath>
           <Rest>
             <eid>U_U</eid>
