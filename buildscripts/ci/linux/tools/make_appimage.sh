@@ -78,18 +78,6 @@ fi
 export PATH="$BUILD_TOOLS/linuxdeploy:$PATH"
 linuxdeploy --list-plugins
 
-if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
-  mkdir $BUILD_TOOLS/appimageupdatetool
-  cd $BUILD_TOOLS/appimageupdatetool
-  download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
-  cd $ORIGIN_DIR
-fi
-if [[ "${UPDATE_INFORMATION}" ]]; then
-  export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
-
-  appimageupdatetool --version
-fi
-
 ##########################################################################
 # BUNDLE DEPENDENCIES INTO APPDIR
 ##########################################################################
@@ -228,47 +216,42 @@ for fb_lib in "${fallback_libraries[@]}"; do
   # this library. If not then add our copy's directory to $LD_LIBRARY_PATH.
 done
 
-# PREVIOUSLY EXTRACTED APPIMAGES
-# These include their own dependencies. We bundle them uncompressed to avoid
-# creating a double layer of compression (AppImage inside AppImage).
+# APPIMAGEUPDATETOOL
+# Bundled uncompressed, to avoid creating a double layer of compression
+# (AppImage inside AppImage).
 if [[ "${UPDATE_INFORMATION}" ]]; then
-extracted_appimages=(
-  appimageupdatetool
-)
-else
-extracted_appimages=(
-  # none
-)
-fi
-
-for name in "${extracted_appimages[@]}"; do
-  symlink="$(which "${name}")"
-
-  if [ -z "$symlink" ]; then
-    echo "$0: Warning: Unable to find AppImage for '${name}'. Will not bundle." >&2
-    continue
+  if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
+    mkdir $BUILD_TOOLS/appimageupdatetool
+    cd $BUILD_TOOLS/appimageupdatetool
+    download_appimage_release AppImageCommunity/AppImageUpdate appimageupdatetool continuous
+    cd $ORIGIN_DIR
   fi
 
-  potential_apprun="$(dirname "${symlink}")/AppRun"
-  if [ -f "${potential_apprun}" ]; then
-    apprun="${potential_apprun}"
+  export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
+  appimageupdatetool --version
+
+  # Extract appimageupdatetool
+  # run appimage in docker container with QEMU emulation directly since binfmt fails
+  if [[ "$PACKARCH" == armhf ]]; then
+    /usr/bin/qemu-arm-static appimageupdatetool --appimage-extract >/dev/null # dest folder "squashfs-root"
   else
-    echo "$0: Warning: Unable to find AppRun for '${name}'. Will not bundle." >&2
-    continue
+    appimageupdatetool --appimage-extract >/dev/null # dest folder "squashfs-root"
   fi
 
-  extracted_appdir_path="$(dirname "${apprun}")"
-  extracted_appdir_name="$(basename "${extracted_appdir_path}")"
+  # Move into AppDir
+  mv squashfs-root ${appdir}/appimageupdatetool.AppDir
 
-  cp -r "${extracted_appdir_path}" "${appdir}/"
-  cat >"${appdir}/bin/${name}" <<EOF
+  # Create alias in `${appdir}/bin`
+  # Use script instead of symlink, because appimageupdatetool.AppDir/AppRun fails
+  # when run from a symlink.
+  cat >"${appdir}/bin/appimageupdatetool" <<EOF
 #!/bin/sh
 unset APPDIR APPIMAGE # clear outer values before running inner AppImage
 HERE="\$(dirname "\$(readlink -f "\$0")")"
-exec "\${HERE}/../${extracted_appdir_name}/AppRun" "\$@"
+exec "\${HERE}/../appimageupdatetool.AppDir/AppRun" "\$@"
 EOF
-  chmod +x "${appdir}/bin/${name}"
-done
+  chmod +x "${appdir}/bin/appimageupdatetool"
+fi
 
 # METHOD OF LAST RESORT
 # Special treatment for some dependencies when all other methods fail
