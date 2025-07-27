@@ -14062,7 +14062,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Filen sparades med en nyare version av MuseScore Studio. Vänligen besök &lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; för att få tag i den senaste versionen.</translation>
+        <translation>Filen har sparats med en nyare version av MuseScore Studio. Besök &lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; för att hämta den senaste versionen.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="92"/>
@@ -18795,12 +18795,12 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="46"/>
         <source>Plugin not found</source>
-        <translation>Instick saknas</translation>
+        <translation>Insticksprogram saknas</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="47"/>
         <source>Could not load plugin</source>
-        <translation>Kunde inte läsa in instick</translation>
+        <translation>Kunde inte läsa in insticksprogram</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
@@ -22995,11 +22995,11 @@ Whether you are just getting started with music notation software, or are a powe
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!
 
 (Note: Mastering MuseScore is available in English only)</source>
-        <translation>Välkommen till Mastering MuseScore – den mest fullständiga resursen för att lära dig om världens mest populära notskriftsprogram! Jag heter Marc Sabatella, och jag har hjälpt till att utveckla, hjälpa användare med, och marknadsföra MuseScore sedan dess första release över ett decennie sedan.
+        <translation>Välkommen till Mastering MuseScore – den mest omfattande resursen för att lära dig använda världens populäraste notskrivningsprogram! Jag heter Marc Sabatella och jag har hjälpt till att utveckla, stödja och marknadsföra MuseScore sedan dess första utgåva för över tio år sedan.
 
-Vare sig du just har börjat med notskrift, eller är en van användare som vill utforska mer avancerade tryck- och uppspelningstekniker, omfattar min största online-kurs Mastering MuseScore allt du behöver för att få mest nytta av MuseScore.
+Vare sig du just har börjat med notskrift, eller är en van användare som vill utforska mer avancerade gravyr- och uppspelningstekniker, omfattar min främsta onlinekurs Mastering MuseScore allt du behöver för att dra största nytta av MuseScore.
 
-Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, med diskussionsplatser, live-streaming, och andra relaterade kurser och tjänster för att hjälpa dig skapa din allra bästa musik. Dra nytta av detta tillfälle att lära dig om MuseScore från en av dess mest erkända experter!
+Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, med diskussionsplatser, live-streaming och andra relaterade kurser och tjänster för att hjälpa dig skapa din allra bästa musik. Dra nytta av detta tillfälle att lära dig om MuseScore från en av dess mest erkända experter!
 
 (Obs: Mastering MuseScore är endast tillgänglig på engelska)</translation>
     </message>
