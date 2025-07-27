@@ -19,18 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_TEXTSTREAM_H
-#define MUSE_GLOBAL_TEXTSTREAM_H
+#pragma once
 
-#include "../io/iodevice.h"
-#include "../types/bytearray.h"
-#include "../types/string.h"
+#include <cstdint>
+#include <string_view>
+#include <vector>
 
 #ifndef NO_QT_SUPPORT
 #include <QString>
 #endif
 
 namespace muse {
+class ByteArray;
+class String;
+
+namespace io {
+class IODevice;
+}
+
 class TextStream
 {
 public:
@@ -43,17 +49,14 @@ public:
     void flush();
 
     TextStream& operator<<(char ch);
-    TextStream& operator<<(int val);
-    TextStream& operator<<(unsigned int val);
-    TextStream& operator<<(double val);
-    TextStream& operator<<(signed long int val);
-    TextStream& operator<<(unsigned long int val);
-    TextStream& operator<<(signed long long val);
-    TextStream& operator<<(unsigned long long val);
+    TextStream& operator<<(int32_t);
+    TextStream& operator<<(uint32_t);
+    TextStream& operator<<(double);
+    TextStream& operator<<(int64_t);
+    TextStream& operator<<(uint64_t);
     TextStream& operator<<(const char* s);
-    TextStream& operator<<(const std::string& s);
+    TextStream& operator<<(std::string_view);
     TextStream& operator<<(const ByteArray& b);
-    TextStream& operator<<(const AsciiStringView& s);
     TextStream& operator<<(const String& s);
 
 #ifndef NO_QT_SUPPORT
@@ -63,8 +66,6 @@ public:
 private:
     void write(const char* ch, size_t len);
     io::IODevice* m_device = nullptr;
-    ByteArray m_buf;
+    std::vector<uint8_t> m_buf;
 };
 }
-
-#endif // MUSE_GLOBAL_TEXTSTREAM_H

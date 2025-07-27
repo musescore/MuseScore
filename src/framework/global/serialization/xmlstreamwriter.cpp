@@ -21,11 +21,16 @@
  */
 #include "xmlstreamwriter.h"
 
+#include <list>
+
+#include <global/thirdparty/utfcpp-3.2.1/utf8.h>
+
 #include "global/containers.h"
 #include "textstream.h"
 
-#include "log.h"
+#include "global/log.h"
 
+using namespace std::literals;
 using namespace muse;
 
 struct XmlStreamWriter::Impl {
@@ -78,19 +83,36 @@ void XmlStreamWriter::writeDoctype(const String& type)
     m_impl->stream << "<!DOCTYPE " << type << '>' << '\n';
 }
 
-String XmlStreamWriter::escapeSymbol(char16_t c)
+std::string XmlStreamWriter::escapeCodePoint(const char32_t c)
 {
-    return String::toXmlEscaped(c);
+    switch (c) {
+    case U'<':
+        return "&lt;"s;
+    case U'>':
+        return "&gt;"s;
+    case U'&':
+        return "&amp;"s;
+    case U'\"':
+        return "&quot;"s;
+    default:
+        // ignore invalid characters in xml 1.0
+        if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D)) {
+            return std::string();
+        }
+        return utf8::utf32to8(std::u32string_view(&c, 1));
+    }
 }
 
-String XmlStreamWriter::escapeString(const String& s)
+std::string XmlStreamWriter::escapeString(const std::string_view str)
 {
-    return String::toXmlEscaped(s);
-}
+    std::string escaped{};
+    auto it = str.begin();
+    while (it != str.end()) {
+        const char32_t c = utf8::next(it, str.end());
+        escaped += escapeCodePoint(c);
+    }
 
-String XmlStreamWriter::escapeString(const AsciiStringView& s)
-{
-    return String::toXmlEscaped(String::fromUtf8(s.ascii()));
+    return escaped;
 }
 
 void XmlStreamWriter::writeValue(const Value& v)
@@ -100,17 +122,17 @@ void XmlStreamWriter::writeValue(const Value& v)
     switch (v.index()) {
     case 0:
         break;
-    case 1: m_impl->stream << std::get<int>(v);
+    case 1: m_impl->stream << int32_t{ std::get<int>(v) };
         break;
-    case 2: m_impl->stream << std::get<unsigned int>(v);
+    case 2: m_impl->stream << uint32_t{ std::get<unsigned int>(v) };
         break;
-    case 3: m_impl->stream << std::get<signed long int>(v);
+    case 3: m_impl->stream << int64_t{ std::get<signed long int>(v) };
         break;
-    case 4: m_impl->stream << std::get<unsigned long int>(v);
+    case 4: m_impl->stream << uint64_t{ std::get<unsigned long int>(v) };
         break;
-    case 5: m_impl->stream << std::get<signed long long>(v);
+    case 5: m_impl->stream << int64_t{ std::get<signed long long>(v) };
         break;
-    case 6: m_impl->stream << std::get<unsigned long long>(v);
+    case 6: m_impl->stream << uint64_t{ std::get<unsigned long long>(v) };
         break;
     case 7: m_impl->stream << std::get<double>(v);
         break;
@@ -118,7 +140,7 @@ void XmlStreamWriter::writeValue(const Value& v)
         break;
     case 9: m_impl->stream << escapeString(std::get<AsciiStringView>(v));
         break;
-    case 10: m_impl->stream << escapeString(std::get<String>(v));
+    case 10: m_impl->stream << escapeString(std::get<String>(v).toStdString());
         break;
     default:
         LOGI() << "index: " << v.index();

@@ -437,6 +437,9 @@ public:
 #endif
 
     operator std::string_view() const {
+        if (!m_data) {
+            return std::string_view{};
+        }
         return std::string_view(m_data, m_size);
     }
 
