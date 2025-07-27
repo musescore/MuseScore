@@ -54,7 +54,6 @@ class SlurSegment final : public SlurTieSegment {
 class Slur final : public SlurTie {
 
       void slurPosChord(SlurPos*);
-      int _sourceStemArrangement = -1;
 
    public:
       Slur(Score* = 0);
