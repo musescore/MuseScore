@@ -389,6 +389,7 @@ bool MeiExporter::writePgHead(const VBox* vBox)
     m_currentNode = m_currentNode.append_child();
 
     libmei::PgHead pgHead;
+    pgHead.SetFunc(libmei::PGFUNC_first);
     pgHead.Write(m_currentNode);
 
     std::list<std::pair<libmei::Rend, String> > cells[CellCount];
