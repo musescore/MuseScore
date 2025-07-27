@@ -39,7 +39,7 @@ Rectangle {
         order: 4
     }
 
-    Flickable {
+    StyledFlickable {
         id: flickableWrapper
 
         anchors.fill: parent
