@@ -695,9 +695,16 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     for (const EngravingItem* e : *item->el()) {
         writeItem(e, xml, ctx);
     }
+    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT_SETTING);
+    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
     if (item->playCountText()) {
         writeItem(item->playCountText(), xml, ctx);
     }
+
+    if (ctx.clipboardmode()) {
+        xml.tag("playCount", item->measure()->repeatCount());
+    }
+
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
