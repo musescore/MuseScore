@@ -540,6 +540,75 @@ static Staff::HideMode computeHideMode(const System* system, const Staff* staff,
     return hideMode;
 }
 
+static bool computeShowSysStaff(const System* system, const Staff* staff, const staff_idx_t staffIdx,
+                                const Fraction& stick, const SpannerMap::IntervalList& spanners,
+                                const Staff::HideMode hideMode)
+{
+    if (hideMode == Staff::HideMode::NEVER) {
+        return true;
+    }
+
+    // Check if there are spanners
+    for (const auto& spanner : spanners) {
+        if (spanner.value->staff() == staff
+            && !spanner.value->systemFlag()
+            && !(spanner.stop == stick.ticks() && !spanner.value->isSlur())) {
+            return true;
+        }
+    }
+
+    // Check if the staff is empty in the system
+    for (const MeasureBase* m : system->measures()) {
+        if (!m->isMeasure()) {
+            continue;
+        }
+        const Measure* measure = toMeasure(m);
+        if (!measure->isEmpty(staffIdx)) {
+            return true;
+        }
+    }
+
+    // check if notes moved into this staff
+    Part* part = staff->part();
+    const size_t n = part->nstaves();
+    if (n > 1) {
+        staff_idx_t idx = part->staves().front()->idx();
+        for (staff_idx_t i = 0; i < n; ++i) {
+            staff_idx_t st = idx + i;
+
+            for (MeasureBase* mb : system->measures()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+
+                const Measure* m = toMeasure(mb);
+                bool empty = m->isEmpty(st);
+                if (hideMode == Staff::HideMode::INSTRUMENT && !empty) {
+                    return true;
+                } else if (empty) {
+                    continue;
+                }
+
+                for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                        ChordRest* cr = s->cr(st * VOICES + voice);
+                        int staffMove = cr ? cr->staffMove() : 0;
+                        if (!cr || cr->isRest() || cr->staffMove() == 0) {
+                            // The case staffMove == 0 has already been checked by measure->isEmpty()
+                            continue;
+                        }
+                        if (staffIdx == st + staffMove) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
 void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem)
 {
     if (ctx.dom().nstaves() == 0) {
@@ -574,77 +643,10 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
             continue;
         }
 
-        Staff::HideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty);
-
-        if (hideMode == Staff::HideMode::NEVER) {
-            ss->setShow(true);
-            systemIsEmpty = false;
-            continue;
-        }
-
-        // From now on, hideMode == Staff::HideMode::ALWAYS or Staff::HideMode::INSTRUMENT,
-        // so hide the staff if it is empty resp. if all its part's staves are empty
-        bool hideStaff = true;
-        for (const auto& spanner : spanners) {
-            if (spanner.value->staff() == staff
-                && !spanner.value->systemFlag()
-                && !(spanner.stop == stick.ticks() && !spanner.value->isSlur())) {
-                hideStaff = false;
-                break;
-            }
-        }
-        for (const MeasureBase* m : system->measures()) {
-            if (!m->isMeasure()) {
-                continue;
-            }
-            const Measure* measure = toMeasure(m);
-            if (!measure->isEmpty(staffIdx)) {
-                hideStaff = false;
-                break;
-            }
-        }
-        // check if notes moved into this staff
-        Part* part = staff->part();
-        const size_t n = part->nstaves();
-        if (hideStaff && (n > 1)) {
-            staff_idx_t idx = part->staves().front()->idx();
-            for (staff_idx_t i = 0; i < n; ++i) {
-                staff_idx_t st = idx + i;
-
-                for (MeasureBase* mb : system->measures()) {
-                    if (!mb->isMeasure()) {
-                        continue;
-                    }
-                    Measure* m = toMeasure(mb);
-                    if (hideMode == Staff::HideMode::INSTRUMENT && !m->isEmpty(st)) {
-                        hideStaff = false;
-                        break;
-                    }
-                    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-                            ChordRest* cr = s->cr(st * VOICES + voice);
-                            int staffMove = cr ? cr->staffMove() : 0;
-                            if (!cr || cr->isRest() || cr->staffMove() == 0) {
-                                // The case staffMove == 0 has already been checked by measure->isEmpty()
-                                continue;
-                            }
-                            if (staffIdx == st + staffMove) {
-                                hideStaff = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (!hideStaff) {
-                        break;
-                    }
-                }
-                if (!hideStaff) {
-                    break;
-                }
-            }
-        }
-        ss->setShow(!hideStaff);
-        if (ss->show()) {
+        const Staff::HideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty);
+        const bool show = computeShowSysStaff(system, staff, staffIdx, stick, spanners, hideMode);
+        ss->setShow(show);
+        if (show) {
             systemIsEmpty = false;
         }
     }
