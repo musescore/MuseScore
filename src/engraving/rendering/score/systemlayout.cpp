@@ -364,6 +364,16 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     // hide empty staves
     hideEmptyStaves(system, ctx, ctx.state().firstSystem());
 
+    // Re-create shapes to account for newly hidden/unhidden staves
+    // (and for potential forgotten shape updates, for example in MeasureLayout::setRepeatCourtesiesAndParens)
+    for (MeasureBase* mb : system->measures()) {
+        if (mb->isMeasure()) {
+            for (Segment& seg : toMeasure(mb)->segments()) {
+                seg.createShapes();
+            }
+        }
+    }
+
     // Relayout system to account for newly hidden/unhidden staves
     curSysWidth -= system->leftMargin();
     SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
@@ -615,9 +625,11 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
         // No staves, nothing to hide
         return;
     }
+
     if (ctx.dom().nstaves() == 1) {
-        // Single staff, always show
-        system->staff(0)->setShow(true);
+        // One staff, show iff not manually hidden score-wide
+        const bool show = ctx.dom().staves().front()->show();
+        system->staves().front()->setShow(show);
         return;
     }
 
@@ -670,15 +682,6 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
         const Staff* staff = firstVisible ? firstVisible : ctx.dom().staves().front();
         SysStaff* ss = system->staff(staff->idx());
         ss->setShow(true);
-    }
-
-    // Re-create the shapes to account for newly hidden or un-hidden staves
-    for (auto mb : system->measures()) {
-        if (mb->isMeasure()) {
-            for (auto& seg : toMeasure(mb)->segments()) {
-                seg.createShapes();
-            }
-        }
     }
 }
 
