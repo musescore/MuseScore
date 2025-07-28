@@ -183,12 +183,17 @@ void PopupView::initCloseController()
 
     m_closeController->setParentItem(parentItem());
     m_closeController->setWindow(window());
-    m_closeController->setCloseOnPressOutsideParent(m_closePolicies & ClosePolicy::CloseOnPressOutsideParent);
-    m_closeController->setCanClose(!m_closePolicies.testFlag(ClosePolicy::NoAutoClose));
+
+    if (!isDialog()) {
+        m_closeController->setCloseOnPressOutsideParent(m_closePolicies & ClosePolicy::CloseOnPressOutsideParent);
+        m_closeController->setCanClose(!m_closePolicies.testFlag(ClosePolicy::NoAutoClose));
+    }
 
     m_closeController->closeNotification().onNotify(this, [this]() {
         close(true);
     });
+
+    m_closeController->setActive(true);
 }
 
 void PopupView::componentComplete()
@@ -281,12 +286,8 @@ void PopupView::doOpen()
 
     m_globalPos = QPointF(); // invalidate
 
-    if (!isDialog()) {
-        if (!m_closeController) {
-            initCloseController();
-        }
-
-        m_closeController->setActive(true);
+    if (!m_closeController) {
+        initCloseController();
     }
 
     qApp->installEventFilter(this);
