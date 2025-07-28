@@ -85,7 +85,7 @@ BasicTableView {
         return modelAdaptor.mapRowToModelIndex(__listView.indexAt(obj.x, obj.y))
     }
 
-    style: Settings.styleComponent(Settings.style, "TreeViewStyle.qml", root)
+    // style: Settings.styleComponent(Settings.style, "TreeViewStyle.qml", root)
 
     // Internal stuff. Do not look
 
@@ -244,14 +244,14 @@ BasicTableView {
                 console.warn("TreeView: Non-single selection is not supported without an ItemSelectionModel.")
         }
 
-        onPressed: {
+        onPressed: function(mouse) {
             var pressedRow = __listView.indexAt(0, mouseY + __listView.contentY)
             pressedIndex = modelAdaptor.mapRowToModelIndex(pressedRow)
             pressedColumn = __listView.columnAt(mouseX)
             selectOnRelease = false
             __listView.forceActiveFocus()
             if (pressedRow === -1
-                || Settings.hasTouchScreen
+                // || Settings.hasTouchScreen
                 || branchDecorationContains(mouse.x, mouse.y)) {
                 return
             }
@@ -268,7 +268,7 @@ BasicTableView {
                 clickedIndex = pressedIndex
         }
 
-        onReleased: {
+        onReleased: function(mouse) {
             if (selectOnRelease) {
                 var releasedRow = __listView.indexAt(0, mouseY + __listView.contentY)
                 var releasedIndex = modelAdaptor.mapRowToModelIndex(releasedRow)
@@ -281,7 +281,7 @@ BasicTableView {
             selectOnRelease = false
         }
 
-        onPositionChanged: {
+        onPositionChanged: function(mouse) {
             // NOTE: Testing for pressed is not technically needed, at least
             // until we decide to support tooltips or some other hover feature
             if (mouseY > __listView.height && pressed) {
@@ -319,7 +319,7 @@ BasicTableView {
             selectOnRelease = false
         }
 
-        onClicked: {
+        onClicked: function(mouse) {
             var clickIndex = __listView.indexAt(0, mouseY + __listView.contentY)
             if (clickIndex > -1) {
                 var modelIndex = modelAdaptor.mapRowToModelIndex(clickIndex)
@@ -329,19 +329,19 @@ BasicTableView {
                     else
                         modelAdaptor.expand(modelIndex)
                 } else {
-                    if (Settings.hasTouchScreen) {
-                        // compensate for the fact that onPressed didn't select on press: do it here instead
-                        pressedIndex = modelAdaptor.mapRowToModelIndex(clickIndex)
-                        pressedColumn = __listView.columnAt(mouseX)
-                        selectOnRelease = false
-                        __listView.forceActiveFocus()
-                        __listView.currentIndex = clickIndex
-                        if (!clickedIndex)
-                            clickedIndex = pressedIndex
-                        mouseSelect(pressedIndex, mouse.modifiers, false)
-                        if (!mouse.modifiers)
-                            clickedIndex = pressedIndex
-                    }
+                    // if (Settings.hasTouchScreen) {
+                    //     // compensate for the fact that onPressed didn't select on press: do it here instead
+                    //     pressedIndex = modelAdaptor.mapRowToModelIndex(clickIndex)
+                    //     pressedColumn = __listView.columnAt(mouseX)
+                    //     selectOnRelease = false
+                    //     __listView.forceActiveFocus()
+                    //     __listView.currentIndex = clickIndex
+                    //     if (!clickedIndex)
+                    //         clickedIndex = pressedIndex
+                    //     mouseSelect(pressedIndex, mouse.modifiers, false)
+                    //     if (!mouse.modifiers)
+                    //         clickedIndex = pressedIndex
+                    // }
                     if (root.__activateItemOnSingleClick && !mouse.modifiers)
                         root.activated(modelIndex)
                 }
@@ -369,38 +369,38 @@ BasicTableView {
 
         Keys.forwardTo: [root]
 
-        Keys.onUpPressed: {
+        Keys.onUpPressed: function(event) {
             event.accepted = __listView.decrementCurrentIndexBlocking()
             keySelect(event.modifiers)
         }
 
-        Keys.onDownPressed: {
+        Keys.onDownPressed: function(event) {
             event.accepted = __listView.incrementCurrentIndexBlocking()
             keySelect(event.modifiers)
         }
 
-        Keys.onRightPressed: {
+        Keys.onRightPressed: function(event) {
             if (root.currentIndex.valid)
                 root.expand(currentIndex)
             else
                 event.accepted = false
         }
 
-        Keys.onLeftPressed: {
+        Keys.onLeftPressed: function(event) {
             if (root.currentIndex.valid)
                 root.collapse(currentIndex)
             else
                 event.accepted = false
         }
 
-        Keys.onReturnPressed: {
+        Keys.onReturnPressed: function(event) {
             if (root.currentIndex.valid)
                 root.activated(currentIndex)
             else
                 event.accepted = false
         }
 
-        Keys.onPressed: {
+        Keys.onPressed: function(event) {
             __listView.scrollIfNeeded(event.key)
 
             if (event.key === Qt.Key_A && event.modifiers & Qt.ControlModifier
@@ -412,7 +412,7 @@ BasicTableView {
             }
         }
 
-        Keys.onReleased: {
+        Keys.onReleased: function(event) {
             if (event.key === Qt.Key_Shift)
                 shiftPressed = false
         }
