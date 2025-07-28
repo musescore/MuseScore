@@ -22,10 +22,8 @@
 #pragma once
 
 #include "global/modularity/imoduleinterface.h"
-
 #include "global/types/retval.h"
 
-#include "iplayer.h"
 #include "audiotypes.h"
 
 namespace muse::audio::worker {
@@ -100,7 +98,8 @@ public:
 
     virtual Ret saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination, const SoundTrackFormat& format) = 0;
     virtual void abortSavingAllSoundTracks() = 0;
-    virtual Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) = 0;
+    virtual async::Channel<int64_t /*current*/, int64_t /*total*/>
+    saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const = 0;
 
     virtual void clearAllFx() = 0;
 };

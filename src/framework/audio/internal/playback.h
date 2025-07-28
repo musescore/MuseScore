@@ -99,8 +99,7 @@ public:
     async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
                                         const SoundTrackFormat& format) override;
     void abortSavingAllSoundTracks() override;
-
-    Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) override;
+    async::Channel<int64_t, int64_t> saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const override;
 
     void clearAllFx() override;
 

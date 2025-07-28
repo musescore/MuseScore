@@ -25,7 +25,6 @@
 #include "modularity/imoduleinterface.h"
 #include "global/async/channel.h"
 #include "global/async/promise.h"
-#include "global/progress.h"
 
 #include "audiotypes.h"
 
@@ -101,8 +100,8 @@ public:
     virtual async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
                                                 const SoundTrackFormat& format) = 0;
     virtual void abortSavingAllSoundTracks() = 0;
-
-    virtual Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) = 0;
+    virtual async::Channel<int64_t /*current*/, int64_t /*total*/>
+    saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const = 0;
 
     virtual void clearAllFx() = 0;
 };
