@@ -210,10 +210,9 @@ void FinaleParser::importSmartShapes()
             return nullptr;
         }
         Fraction tick = FinaleTConv::musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
-        TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, tick, staffIdx);
-        EditTimeTickAnchors::updateLayout(measure);
+        EditTimeTickAnchors::updateAnchors(measure, staffIdx);
         logger()->logInfo(String(u"Created TimeTickAnchor"));
-        return toEngravingItem(anchor->segment());
+        return toEngravingItem(measure->getChordRestOrTimeTickSegment(tick));
     };
 
     /// @note Getting the entire array of smart shapes works for SCORE_PARTID, but if we ever need to do it for excerpts it could fail.
