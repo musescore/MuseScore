@@ -52,7 +52,11 @@ void MeasuresSettingsModel::onCurrentNotationChanged()
         return;
     }
 
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange&) {
+    notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& changes) {
+        if (changes.isTextEditing) {
+            return;
+        }
+
         onNotationChanged({}, {});
     });
 

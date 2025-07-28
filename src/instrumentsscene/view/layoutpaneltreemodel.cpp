@@ -311,6 +311,10 @@ void LayoutPanelTreeModel::setupNotationConnections()
     });
 
     m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& changes) {
+        if (changes.isTextEditing) {
+            return;
+        }
+
         if (!m_layoutPanelVisible) {
             m_scoreChanged = true;
             return;

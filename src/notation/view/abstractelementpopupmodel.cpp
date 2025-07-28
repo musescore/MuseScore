@@ -247,10 +247,15 @@ void AbstractElementPopupModel::init()
     m_item = selection->element();
 
     undoStack->changesChannel().onReceive(this, [this] (const ChangesRange& range) {
+        if (range.isTextEditing) {
+            return;
+        }
+
         for (ElementType type : dependentElementTypes()) {
             if (muse::contains(range.changedTypes, type)) {
                 emit dataChanged();
                 updateItemRect();
+                return;
             }
         }
     });

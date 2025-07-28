@@ -180,6 +180,10 @@ void AbstractInspectorModel::onCurrentNotationChanged()
     });
 
     notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& range) {
+        if (range.isTextEditing) {
+            return;
+        }
+
         if (range.changedPropertyIdSet.empty() && range.changedStyleIdSet.empty()) {
             return;
         }

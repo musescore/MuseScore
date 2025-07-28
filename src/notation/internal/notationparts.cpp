@@ -338,7 +338,7 @@ void NotationParts::listenUndoStackChanges()
     updatePartsAndSystemObjectStaves();
 
     m_undoStack->changesChannel().onReceive(this, [this](const ChangesRange& range) {
-        if (range.changedTypes.empty() || m_ignoreUndoStackChanges) {
+        if (range.isTextEditing || range.changedTypes.empty() || m_ignoreUndoStackChanges) {
             return;
         }
 
