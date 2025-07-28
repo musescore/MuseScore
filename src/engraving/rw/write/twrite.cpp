@@ -701,7 +701,7 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
         writeItem(item->playCountText(), xml, ctx);
     }
 
-    if (ctx.clipboardmode()) {
+    if (ctx.clipboardmode() && item->measure()) {
         xml.tag("playCount", item->measure()->repeatCount());
     }
 

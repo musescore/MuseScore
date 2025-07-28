@@ -5767,6 +5767,8 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     }
     break;
     }
+
+    undoUpdatePlayCountText(m);
 }
 
 //---------------------------------------------------------
