@@ -579,8 +579,32 @@ bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceR
 
     int sourceFirstRow = sourceRow;
     int sourceLastRow = sourceRow + count - 1;
-    int destinationRow = (sourceLastRow > destinationChild || sourceParentItem != destinationParentItem)
-                         ? destinationChild : destinationChild + 1;
+
+    if (sourceRow < 0 || count <= 0 || destinationChild < 0) {
+        return false;
+    }
+
+    if (sourceRow == destinationChild) {
+        return false;
+    }
+
+    int destinationRow = (sourceLastRow > destinationChild) ? destinationChild : destinationChild + 1;
+
+    if (sourceParentItem && destinationParentItem) {
+        int maxRow = sourceParentItem->childCount() - 1;
+
+        if (sourceLastRow > maxRow || destinationRow > maxRow + 1) {
+            return false;
+        }
+    }
+
+    if (!sourceParentItem || !destinationParentItem) {
+        return false;
+    }
+
+    if (sourceFirstRow >= sourceParentItem->childCount()) {
+        return false;
+    }
 
     if (m_dragInProgress) {
         MoveParams params = sourceParentItem->buildMoveParams(sourceRow, count, destinationParentItem, destinationRow);
@@ -622,6 +646,9 @@ void LayoutPanelTreeModel::endActiveDrag()
     setLoadingBlocked(false);
 
     updateSystemObjectLayers();
+    initPartOrders();
+
+    emit layoutChanged();
 }
 
 void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)
@@ -873,7 +900,7 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
     const AbstractLayoutPanelTreeItem* curItem = modelIndexToItem(lastSelectedRowIndex);
     bool lastSelectedIsSystemObjectLayer = curItem && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
 
-    IF_ASSERT_FAILED(lastSelectedRowIndex.row() != 0 || !lastSelectedIsSystemObjectLayer) {
+    if (lastSelectedRowIndex.row() == 0 && lastSelectedIsSystemObjectLayer) {
         // Selecting/moving the top system object layer not allowed
         setIsMovingDownAvailable(false);
         return;
