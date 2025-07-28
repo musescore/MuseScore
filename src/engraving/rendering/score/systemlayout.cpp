@@ -355,13 +355,13 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
      * Now perform all operation to finalize system.
      * **********************************************************/
 
-    // Brake cross-measure beams
+    // Break cross-measure beams
     if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure()) {
         Measure* pm = toMeasure(ctx.mutState().prevMeasure());
         BeamLayout::breakCrossMeasureBeams(pm, ctx);
     }
 
-    // hide empty staves
+    // Hide empty staves
     hideEmptyStaves(system, ctx, ctx.state().firstSystem());
 
     // Re-create shapes to account for newly hidden/unhidden staves
@@ -375,9 +375,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     // Relayout system to account for newly hidden/unhidden staves
-    curSysWidth -= system->leftMargin();
     SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
-    curSysWidth += system->leftMargin();
 
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
