@@ -26,7 +26,6 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "worker/iworkerplayback.h"
 #include "rpc/irpcchannel.h"
 
 #include "iplayer.h"
@@ -34,7 +33,6 @@
 namespace muse::audio {
 class Playback : public IPlayback, public Injectable, public async::Asyncable
 {
-    Inject<worker::IWorkerPlayback> workerPlayback;
     Inject<rpc::IRpcChannel> channel;
 
 public:
@@ -115,6 +113,10 @@ private:
     async::Channel<TrackSequenceId, TrackId, AudioInputParams> m_inputParamsChanged;
     async::Channel<TrackSequenceId, TrackId, AudioOutputParams> m_outputParamsChanged;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
+
+    mutable std::map<TrackSequenceId, async::Channel<int64_t, int64_t> > m_saveSoundTrackProgressChannels;
+    async::Channel<TrackSequenceId, int64_t, int64_t> m_saveSoundTrackProgressStream;
+    mutable rpc::StreamId m_saveSoundTrackProgressStreamId = 0;
 };
 }
 

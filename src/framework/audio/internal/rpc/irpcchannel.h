@@ -59,6 +59,7 @@ enum class Method {
 
     GetInputParams,
     SetInputParams,
+    GetInputProcessingProgress,
     // notification
     InputParamsChanged,
 
@@ -91,6 +92,7 @@ enum class Method {
 
     SaveSoundTrack,
     AbortSavingAllSoundTracks,
+    GetSaveSoundTrackProgress,
 
     ClearAllFx
 };
@@ -121,6 +123,7 @@ inline std::string to_string(Method m)
 
     case Method::GetInputParams: return "GetInputParams";
     case Method::SetInputParams: return "SetInputParams";
+    case Method::GetInputProcessingProgress: return "GetInputProcessingProgress";
     case Method::InputParamsChanged: return "InputParamsChanged";
 
     case Method::ClearSources: return "ClearSources";
@@ -151,6 +154,7 @@ inline std::string to_string(Method m)
 
     case Method::SaveSoundTrack: return "SaveSoundTrack";
     case Method::AbortSavingAllSoundTracks: return "AbortSavingAllSoundTracks";
+    case Method::GetSaveSoundTrackProgress: return "GetSaveSoundTrackProgress";
 
     case Method::ClearAllFx: return "ClearAllFx";
     }
@@ -228,7 +232,7 @@ public:
         : m_rpc(rpc), m_streamId(id), m_type(type), m_ch(ch) {}
 
     StreamId streamId() const override { return m_streamId; }
-    StreamType type() const { return m_type; }
+    StreamType type() const override { return m_type; }
     void init() override;
     bool inited() const override { return m_inited; }
 

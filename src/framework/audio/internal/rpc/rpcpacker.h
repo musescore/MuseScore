@@ -59,6 +59,13 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& va
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSignalVal& value);
 
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::ChunkInfo& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::ChunkInfo& value);
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::ProgressInfo& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::ProgressInfo& value);
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::StatusInfo& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::StatusInfo& value);
+
 // MPE
 // PlaybackEvent
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArrangementContext& value);
@@ -230,6 +237,38 @@ inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignal
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSignalVal& value)
 {
     p(value.amplitude, value.pressure);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::ChunkInfo& value)
+{
+    p(value.start, value.end);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::ChunkInfo& value)
+{
+    p(value.start, value.end);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::ProgressInfo& value)
+{
+    p(value.current, value.total);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::ProgressInfo& value)
+{
+    p(value.current, value.total);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::StatusInfo& value)
+{
+    p(static_cast<uint8_t>(value.status), value.errcode);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::StatusInfo& value)
+{
+    uint8_t status = 0;
+    p(status, value.errcode);
+    value.status = static_cast<muse::audio::InputProcessingProgress::Status>(status);
 }
 
 // MPE
