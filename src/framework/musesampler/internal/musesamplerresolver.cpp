@@ -118,6 +118,11 @@ void MuseSamplerResolver::processOnlineSounds()
     m_processOnlineSoundsRequested.notify();
 }
 
+int MuseSamplerResolver::buildNumber() const
+{
+    return m_libHandler ? m_libHandler->getBuildNumber() : -1;
+}
+
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const
 {
     InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
@@ -239,11 +244,6 @@ std::string MuseSamplerResolver::version() const
     }
 
     String ver = String::fromUtf8(m_libHandler->getVersionString());
-
-    if (configuration()->shouldShowBuildNumber()) {
-        ver += u"." + String::number(m_libHandler->getBuildNumber());
-    }
-
     return ver.toStdString();
 }
 

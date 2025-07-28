@@ -48,6 +48,10 @@ void MuseSamplerActionController::checkLibraryIsDetected()
     if (libVersion.empty()) {
         status = muse::trc("musesampler", "MuseSampler library is not found");
     } else {
+        if (configuration()->shouldShowBuildNumber()) {
+            libVersion += "." + std::to_string(resolver->buildNumber());
+        }
+
         status = muse::qtrc("musesampler", "MuseSampler library is detected, version %1")
                  .arg(QString::fromStdString(libVersion)).toStdString();
     }
