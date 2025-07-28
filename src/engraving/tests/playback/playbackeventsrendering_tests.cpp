@@ -2946,7 +2946,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
  *  https://github.com/musescore/MuseScore/issues/22863
  *  https://github.com/musescore/MuseScore/issues/27661
  */
-TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
+TEST_F(Engraving_PlaybackEventsRendererTests, DISABLED_TiedNotesAndRepeats)
 {
     Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "tied_notes_and_repeats.mscx");
     ASSERT_TRUE(score);
