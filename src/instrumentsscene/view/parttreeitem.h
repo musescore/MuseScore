@@ -59,7 +59,7 @@ public:
     Q_INVOKABLE void resetAllFormatting();
 
 private:
-    void onScoreChanged(const mu::engraving::ScoreChangesRange& changes) override;
+    void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
     void listenVisibilityChanged();
     void createAndAddPart(const muse::ID& masterPartId);

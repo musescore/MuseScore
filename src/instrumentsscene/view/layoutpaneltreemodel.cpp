@@ -310,7 +310,7 @@ void LayoutPanelTreeModel::setupNotationConnections()
         updateSelectedRows();
     });
 
-    m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& changes) {
+    m_notation->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges& changes) {
         if (changes.isTextEditing) {
             return;
         }
@@ -355,7 +355,7 @@ void LayoutPanelTreeModel::updateSelectedRows()
     }
 }
 
-void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChangesRange& changes)
+void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChanges& changes)
 {
     if (!m_rootItem) {
         return;

@@ -146,7 +146,7 @@ private:
     void setupNotationConnections();
 
     void updateSelectedRows();
-    void onScoreChanged(const mu::engraving::ScoreChangesRange& changes = {});
+    void onScoreChanged(const mu::engraving::ScoreChanges& changes = {});
 
     void clear();
     void deleteItems();

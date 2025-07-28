@@ -259,7 +259,7 @@ struct ShowAnchors {
     Fraction endTickExtendedRegion = Fraction(-1, 1);
 };
 
-struct ScoreChangesRange {
+struct ScoreChanges {
     int tickFrom = -1;
     int tickTo = -1;
     staff_idx_t staffIdxFrom = muse::nidx;
@@ -287,7 +287,7 @@ struct ScoreChangesRange {
 
     void clear()
     {
-        *this = ScoreChangesRange();
+        *this = ScoreChanges();
     }
 };
 
@@ -600,7 +600,7 @@ public:
     void lockUpdates(bool locked);
     void undoRedo(bool undo, EditData*);
 
-    virtual muse::async::Channel<ScoreChangesRange> changesChannel() const;
+    virtual muse::async::Channel<ScoreChanges> changesChannel() const;
 
     void cmdRemoveTimeSig(TimeSig*);
     void cmdAddTimeSig(Measure*, staff_idx_t staffIdx, TimeSig*, bool local);

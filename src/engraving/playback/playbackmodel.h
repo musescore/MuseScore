@@ -128,8 +128,8 @@ private:
     void processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat, const Measure* currentMeasure,
                               const staff_idx_t staffIdx, ChangedTrackIdSet* trackChanges);
 
-    bool hasToReloadTracks(const ScoreChangesRange& changesRange) const;
-    bool hasToReloadScore(const ScoreChangesRange& changesRange) const;
+    bool hasToReloadTracks(const ScoreChanges& changes) const;
+    bool hasToReloadScore(const ScoreChanges& changes) const;
 
     void clearExpiredTracks();
     void clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo);
@@ -142,8 +142,8 @@ private:
     void removeTrackEvents(const InstrumentTrackId& trackId, const muse::mpe::timestamp_t timestampFrom = -1,
                            const muse::mpe::timestamp_t timestampTo = -1);
 
-    TrackBoundaries trackBoundaries(const ScoreChangesRange& changesRange) const;
-    TickBoundaries tickBoundaries(const ScoreChangesRange& changesRange) const;
+    TrackBoundaries trackBoundaries(const ScoreChanges& changesRange) const;
+    TickBoundaries tickBoundaries(const ScoreChanges& changesRange) const;
 
     const RepeatList& repeatList() const;
 

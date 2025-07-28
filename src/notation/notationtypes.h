@@ -147,7 +147,7 @@ using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
 using staff_idx_t = mu::engraving::staff_idx_t;
-using ChangesRange = mu::engraving::ScoreChangesRange;
+using ScoreChanges = mu::engraving::ScoreChanges;
 using GuitarBendType = mu::engraving::GuitarBendType;
 using engraving::LoopBoundaryType;
 using Pid = mu::engraving::Pid;

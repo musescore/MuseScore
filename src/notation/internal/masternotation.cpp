@@ -131,7 +131,7 @@ void MasterNotation::initAfterSettingScore(const MasterScore* score)
 
     TRACEFUNC;
 
-    score->changesChannel().onReceive(this, [this](const ScoreChangesRange& changes) {
+    score->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
         if (!changes.isTextEditing) {
             updateExcerpts();
         }

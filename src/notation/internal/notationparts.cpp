@@ -337,8 +337,8 @@ void NotationParts::listenUndoStackChanges()
 
     updatePartsAndSystemObjectStaves();
 
-    m_undoStack->changesChannel().onReceive(this, [this](const ChangesRange& range) {
-        if (range.isTextEditing || range.changedTypes.empty() || m_ignoreUndoStackChanges) {
+    m_undoStack->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+        if (changes.isTextEditing || changes.changedTypes.empty() || m_ignoreUndoStackChanges) {
             return;
         }
 
@@ -349,15 +349,15 @@ void NotationParts::listenUndoStackChanges()
         };
 
         for (ElementType type : TYPES_TO_CHECK) {
-            if (muse::contains(range.changedTypes, type)) {
-                updatePartsAndSystemObjectStaves(range);
+            if (muse::contains(changes.changedTypes, type)) {
+                updatePartsAndSystemObjectStaves(changes);
                 return;
             }
         }
     });
 }
 
-void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChangesRange& range)
+void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes)
 {
     const auto systemObjectStavesWithTopStaff = [this]() {
         std::vector<Staff*> result;
@@ -388,7 +388,7 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
     std::vector<Staff*> removedStaves;
     std::vector<Staff*> addedStaves;
 
-    for (auto& pair : range.changedItems) {
+    for (auto& pair : changes.changedItems) {
         if (!pair.first || !pair.first->isStaff()) {
             continue;
         }
