@@ -129,4 +129,4 @@ MuseScore 3, please refer to the \ref plugin2to3 page.
 
 ## Internationalization
 For the questions related to making a plugin translatable to different languages
-please refer to https://github.com/musescore/MuseScore/blob/master/doc/i18n.md.
+please refer to https://github.com/musescore/MuseScore/blob/master/docs/i18n.md.
