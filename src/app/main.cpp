@@ -119,12 +119,7 @@ int main(int argc, char** argv)
     }
 #endif
 
-//! NOTE: For unknown reasons, Linux scaling for 1 is defined as 1.003 in fractional scaling.
-//!       Because of this, some elements are drawn with a shift on the score.
-//!       Let's make a Linux hack and round values above 0.75(see RoundPreferFloor)
-#ifdef Q_OS_LINUX
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
-#elif defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 #endif
 
