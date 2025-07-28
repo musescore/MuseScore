@@ -33,6 +33,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imusesoundscheckupdatescenario.h
     ${CMAKE_CURRENT_LIST_DIR}/imusesoundscheckupdateservice.h
     ${CMAKE_CURRENT_LIST_DIR}/imusesamplercheckupdateservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/imusesamplercheckupdatescenario.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsrepository.h
@@ -45,6 +46,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdateservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdateservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdateservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdatescenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdatescenario.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/musesoundslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/musesoundslistmodel.h

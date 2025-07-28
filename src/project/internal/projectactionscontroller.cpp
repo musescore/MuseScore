@@ -412,6 +412,8 @@ Ret ProjectActionsController::doFinishOpenProject()
         QTimer::singleShot(1000, [this]() {
             if (museSoundsCheckUpdateScenario()->hasUpdate()) {
                 museSoundsCheckUpdateScenario()->showUpdate();
+            } else if (!museSamplerCheckUpdateScenario()->alreadyChecked()) {
+                museSamplerCheckUpdateScenario()->checkForUpdate();
             }
 
             toursService()->onEvent(u"project_opened");

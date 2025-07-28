@@ -161,10 +161,14 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
 {
     TRACEFUNC;
 
+    bool shouldCheckForMuseSamplerUpdate = false;
+
     switch (modeType) {
     case StartupModeType::StartEmpty:
+        shouldCheckForMuseSamplerUpdate = true;
         break;
     case StartupModeType::StartWithNewScore:
+        shouldCheckForMuseSamplerUpdate = true;
         dispatcher()->dispatch("file-new");
         break;
     case StartupModeType::ContinueLastSession:
@@ -183,6 +187,8 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
 
     if (!configuration()->hasCompletedFirstLaunchSetup()) {
         interactive()->open(FIRST_LAUNCH_SETUP_URI);
+    } else if (shouldCheckForMuseSamplerUpdate) {
+        museSamplerCheckForUpdateScenario()->checkForUpdate();
     }
 }
 
@@ -218,6 +224,7 @@ void StartupScenario::restoreLastSession()
         } else {
             removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
             sessionsManager()->reset();
+            museSamplerCheckForUpdateScenario()->checkForUpdate();
         }
     });
 }
