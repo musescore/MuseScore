@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-trap 'echo Making AppImage failed; exit 1' ERR
+trap 'code=$?; echo "error: make_appimage.sh: command \`$BASH_COMMAND\` exited with code $code." >&2; exit 1' ERR
 
 INSTALL_DIR="$1" # MuseScore was installed here
 APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
@@ -24,6 +24,11 @@ mkdir -p $BUILD_TOOLS
 # INSTALL APPIMAGETOOL AND LINUXDEPLOY
 ##########################################################################
 
+if [ "$PACKARCH" == "armhf" ]; then
+  # In a Docker container, AppImages cannot run normally because of problems with FUSE.
+  export APPIMAGE_EXTRACT_AND_RUN=1
+fi
+
 function download_github_release()
 {
   local -r repo_slug="$1" release_tag="$2" file="$3"
@@ -36,7 +41,7 @@ function download_github_release()
   echo "try download: ${url}"
   
   # use curl instead of wget which fails on armhf
-  curl "${url}" -O -L -v
+  curl "${url}" -O -L
   chmod +x "${file}"
   echo "downloaded: ${file}"
 }
@@ -52,7 +57,7 @@ function download_appimage_release()
 if [[ ! -d $BUILD_TOOLS/appimagetool ]]; then
   mkdir $BUILD_TOOLS/appimagetool
   cd $BUILD_TOOLS/appimagetool
-  download_appimage_release AppImage/appimagetool appimagetool continuous # use AppImage/appimagetool for the static runtime AppImage
+  download_appimage_release AppImage/appimagetool appimagetool continuous
   cd $ORIGIN_DIR
 fi
 export PATH="$BUILD_TOOLS/appimagetool:$PATH"
@@ -77,20 +82,6 @@ if [[ ! -f $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-qt ]]; then
 fi
 export PATH="$BUILD_TOOLS/linuxdeploy:$PATH"
 linuxdeploy --list-plugins
-
-if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
-  mkdir $BUILD_TOOLS/appimageupdatetool
-  cd $BUILD_TOOLS/appimageupdatetool
-  download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
-  cd $ORIGIN_DIR
-fi
-if [[ "${UPDATE_INFORMATION}" ]]; then
-  export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
-
-  # `appimageupdatetool`'s `AppRun` script gets confused when called via a symlink.
-  # Resolve the symlink here to avoid this issue.
-  $(readlink -f "$(which appimageupdatetool)") --version
-fi
 
 ##########################################################################
 # BUNDLE DEPENDENCIES INTO APPDIR
@@ -148,20 +139,6 @@ function find_library()
   "${appdir}/bin/findlib" "$@"
 }
 
-function fallback_library()
-{
-  # Copy a library into a special fallback directory inside the AppDir.
-  # Fallback libraries are not loaded at runtime by default, but they can
-  # be loaded if it is found that the application would crash otherwise.
-  local library="$1"
-  local full_path="$(find_library "$1")"
-  local new_path="${appdir}/fallback/${library}"
-  mkdir -p "${new_path}" # directory has the same name as the library
-  cp -L "${full_path}" "${new_path}/${library}"
-  # Use the AppRun script to check at runtime whether the user has a copy of
-  # this library. If not then add our copy's directory to $LD_LIBRARY_PATH.
-}
-
 # UNWANTED FILES
 # linuxdeploy or linuxdeploy-plugin-qt may have added some files or folders
 # that we don't want. List them here using paths relative to AppDir root.
@@ -171,6 +148,10 @@ unwanted_files=(
   # https://github.com/musescore/MuseScore/issues/24068#issuecomment-2297823192
   lib/libwayland-client.so.0
 )
+
+for file in "${unwanted_files[@]}"; do
+  rm -rf "${appdir}/${file}"
+done
 
 # ADDITIONAL QT COMPONENTS
 # linuxdeploy-plugin-qt may have missed some Qt files or folders that we need.
@@ -188,6 +169,15 @@ additional_qt_components=(
   plugins/wayland-shell-integration
 )
 
+for file in "${additional_qt_components[@]}"; do
+  if [ -f "${appdir}/${file}" ]; then
+    echo "Warning: ${file} was already deployed. Skipping."
+    continue
+  fi
+  mkdir -p "${appdir}/$(dirname "${file}")"
+  cp -Lr "${QT_ROOT_DIR}/${file}" "${appdir}/${file}"
+done
+
 # ADDITIONAL LIBRARIES
 # linuxdeploy may have missed some libraries that we need
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
@@ -199,6 +189,15 @@ if [[ "$PACKARCH" == "x86_64" ]]; then
 else
   additional_libraries=()
 fi
+
+for lib in "${additional_libraries[@]}"; do
+  if [ -f "${appdir}/lib/${lib}" ]; then
+    echo "Warning: ${lib} was already deployed. Skipping."
+    continue
+  fi
+  full_path="$(find_library "${lib}")"
+  cp -L "${full_path}" "${appdir}/lib/${lib}"
+done
 
 # FALLBACK LIBRARIES
 # These get bundled in the AppImage, but are only loaded if the user does not
@@ -213,73 +212,46 @@ fallback_libraries=(
   libOpenGL.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
 )
 
-# PREVIOUSLY EXTRACTED APPIMAGES
-# These include their own dependencies. We bundle them uncompressed to avoid
-# creating a double layer of compression (AppImage inside AppImage).
-if [[ "${UPDATE_INFORMATION}" ]]; then
-extracted_appimages=(
-  appimageupdatetool
-)
-else
-extracted_appimages=(
-  # none
-)
-fi
-
-for file in "${unwanted_files[@]}"; do
-  rm -rf "${appdir}/${file}"
-done
-
-for file in "${additional_qt_components[@]}"; do
-  if [ -f "${appdir}/${file}" ]; then
-    echo "Warning: ${file} was already deployed. Skipping."
-    continue
-  fi
-  mkdir -p "${appdir}/$(dirname "${file}")"
-  cp -Lr "${QT_ROOT_DIR}/${file}" "${appdir}/${file}"
-done
-
-for lib in "${additional_libraries[@]}"; do
-  if [ -f "${appdir}/lib/${lib}" ]; then
-    echo "Warning: ${lib} was already deployed. Skipping."
-    continue
-  fi
-  full_path="$(find_library "${lib}")"
-  cp -L "${full_path}" "${appdir}/lib/${lib}"
-done
-
 for fb_lib in "${fallback_libraries[@]}"; do
-  fallback_library "${fb_lib}"
+  full_path="$(find_library "$fb_lib")"
+  new_path="${appdir}/fallback/${fb_lib}"
+  mkdir -p "${new_path}" # directory has the same name as the library
+  cp -L "${full_path}" "${new_path}/${fb_lib}"
+  # Use the AppRun script to check at runtime whether the user has a copy of
+  # this library. If not then add our copy's directory to $LD_LIBRARY_PATH.
 done
 
-for name in "${extracted_appimages[@]}"; do
-  symlink="$(which "${name}")"
-
-  if [ -z "$symlink" ]; then
-    echo "$0: Warning: Unable to find AppImage for '${name}'. Will not bundle." >&2
-    continue
+# APPIMAGEUPDATETOOL
+# Bundled uncompressed, to avoid creating a double layer of compression
+# (AppImage inside AppImage).
+if [[ "${UPDATE_INFORMATION}" ]]; then
+  if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
+    mkdir $BUILD_TOOLS/appimageupdatetool
+    cd $BUILD_TOOLS/appimageupdatetool
+    download_appimage_release AppImageCommunity/AppImageUpdate appimageupdatetool continuous
+    cd $ORIGIN_DIR
   fi
 
-  potential_apprun="$(dirname "${symlink}")/AppRun"
-  if [ -f "${potential_apprun}" ]; then
-    apprun="${potential_apprun}"
-  else
-    echo "$0: Warning: Unable to find AppRun for '${name}'. Will not bundle." >&2
-    continue
-  fi
+  export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
+  appimageupdatetool --version
 
-  extracted_appdir_path="$(dirname "${apprun}")"
-  extracted_appdir_name="$(basename "${extracted_appdir_path}")"
+  # Extract appimageupdatetool
+  appimageupdatetool --appimage-extract >/dev/null # dest folder "squashfs-root"
 
-  cp -r "${extracted_appdir_path}" "${appdir}/"
-  cat >"${appdir}/bin/${name}" <<EOF
+  # Move into AppDir
+  mv squashfs-root ${appdir}/appimageupdatetool.AppDir
+
+  # Create alias in `${appdir}/bin`
+  # Use script instead of symlink, because appimageupdatetool.AppDir/AppRun fails
+  # when run from a symlink.
+  cat >"${appdir}/bin/appimageupdatetool" <<EOF
 #!/bin/sh
 unset APPDIR APPIMAGE # clear outer values before running inner AppImage
 HERE="\$(dirname "\$(readlink -f "\$0")")"
-exec "\${HERE}/../${extracted_appdir_name}/AppRun" "\$@"
+exec "\${HERE}/../appimageupdatetool.AppDir/AppRun" "\$@"
 EOF
-  chmod +x "${appdir}/bin/${name}"
-done
+  chmod +x "${appdir}/bin/appimageupdatetool"
+fi
 
 # METHOD OF LAST RESORT
 # Special treatment for some dependencies when all other methods fail
