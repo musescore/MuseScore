@@ -420,10 +420,10 @@ void Playback::abortSavingAllSoundTracks()
     }, AudioThread::ID);
 }
 
-Progress Playback::saveSoundTrackProgress(const TrackSequenceId sequenceId)
+async::Channel<int64_t, int64_t> Playback::saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const
 {
     //! FIXME
-    return workerPlayback()->saveSoundTrackProgress(sequenceId);
+    return workerPlayback()->saveSoundTrackProgressChanged(sequenceId);
 }
 
 void Playback::clearAllFx()

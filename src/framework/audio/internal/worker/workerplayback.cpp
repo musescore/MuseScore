@@ -589,9 +589,10 @@ Ret WorkerPlayback::saveSoundTrack(const TrackSequenceId sequenceId, const io::p
     SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(destination, format, totalDuration, mixer(), iocContext());
     m_saveSoundTracksWritersMap[sequenceId] = writer;
 
-    Progress progress = saveSoundTrackProgress(sequenceId);
-    writer->progress().progressChanged().onReceive(this, [&progress](int64_t current, int64_t total, std::string title) {
-        progress.progress(current, total, title);
+    async::Channel<int64_t, int64_t> progress = saveSoundTrackProgressChanged(sequenceId);
+    writer->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, std::string /*title*/) {
+        async::Channel<int64_t, int64_t> mutprogress = progress;
+        mutprogress.send(current, total);
     });
 
     Ret ret = writer->write();
@@ -614,15 +615,15 @@ void WorkerPlayback::abortSavingAllSoundTracks()
 #endif
 }
 
-Progress WorkerPlayback::saveSoundTrackProgress(const TrackSequenceId sequenceId)
+async::Channel<int64_t, int64_t> WorkerPlayback::saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const
 {
     //! FIXME
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
     if (!muse::contains(m_saveSoundTracksProgressMap, sequenceId)) {
-        m_saveSoundTracksProgressMap.emplace(sequenceId, Progress());
+        m_saveSoundTracksProgressMap.emplace(sequenceId, async::Channel<int64_t, int64_t>());
     }
 
-    return m_saveSoundTracksProgressMap[sequenceId];
+    return m_saveSoundTracksProgressMap.at(sequenceId);
 }
 
 void WorkerPlayback::clearAllFx()

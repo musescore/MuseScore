@@ -146,9 +146,9 @@ void AbstractAudioWriter::doWrite(const QString& path, const SoundTrackFormat& f
         }
 
         for (const TrackSequenceId sequenceId : sequenceIdList) {
-            playback()->saveSoundTrackProgress(sequenceId).progressChanged()
-            .onReceive(this, [this](int64_t current, int64_t total, std::string title) {
-                m_progress.progress(current, total, title);
+            playback()->saveSoundTrackProgressChanged(sequenceId)
+            .onReceive(this, [this](int64_t current, int64_t total) {
+                m_progress.progress(current, total);
             });
 
             playback()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))

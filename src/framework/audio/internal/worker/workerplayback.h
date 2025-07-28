@@ -29,8 +29,6 @@
 #include "isynthresolver.h"
 #include "ifxresolver.h"
 #include "iaudioengine.h"
-
-#include "iplayer.h"
 #include "igettracksequence.h"
 
 namespace muse::audio {
@@ -124,7 +122,7 @@ public:
 
     Ret saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination, const SoundTrackFormat& format) override;
     void abortSavingAllSoundTracks() override;
-    Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) override;
+    async::Channel<int64_t, int64_t> saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const override;
 
     void clearAllFx() override;
 
@@ -143,7 +141,7 @@ private:
 
     std::map<TrackSequenceId, ITrackSequencePtr> m_sequences;
 
-    std::unordered_map<TrackSequenceId, Progress> m_saveSoundTracksProgressMap;
+    mutable std::unordered_map<TrackSequenceId, async::Channel<int64_t, int64_t> > m_saveSoundTracksProgressMap;
     std::unordered_map<TrackSequenceId, soundtrack::SoundTrackWriterPtr> m_saveSoundTracksWritersMap;
 };
 }
