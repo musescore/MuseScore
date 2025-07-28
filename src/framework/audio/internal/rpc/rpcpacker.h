@@ -81,18 +81,26 @@ void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArticulationAppliedD
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArticulationAppliedData& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ExpressionContext& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ExpressionContext& value);
+
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::NoteEvent& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::NoteEvent& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::RestEvent& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::RestEvent& value);
+void pack_custom(muse::msgpack::Packer& p, const muse::mpe::TextArticulationEvent& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::TextArticulationEvent& value);
+void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SoundPresetChangeEvent& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SoundPresetChangeEvent& value);
+void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SyllableEvent& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SyllableEvent& value);
+void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ControllerChangeEvent& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ControllerChangeEvent& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackEvent& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackEvent& value);
+
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SoundCategory& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SoundCategory& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackSetupData& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackSetupData& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackParam& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackParam& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackData& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& value);
 
@@ -359,21 +367,84 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::RestEvent& valu
     value = muse::mpe::RestEvent(std::move(arrCtx));
 }
 
+inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::TextArticulationEvent& value)
+{
+    p(value.text, value.layerIdx, value.flags);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::TextArticulationEvent& value)
+{
+    p(value.text, value.layerIdx, value.flags);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SoundPresetChangeEvent& value)
+{
+    p(value.code, value.layerIdx);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SoundPresetChangeEvent& value)
+{
+    p(value.code, value.layerIdx);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SyllableEvent& value)
+{
+    p(value.text, value.layerIdx, value.flags);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SyllableEvent& value)
+{
+    p(value.text, value.layerIdx, value.flags);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ControllerChangeEvent& value)
+{
+    p(static_cast<int8_t>(value.type), value.val, value.layerIdx);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ControllerChangeEvent& value)
+{
+    int8_t type = 0;
+    p(type, value.val, value.layerIdx);
+    value.type = static_cast<muse::mpe::ControllerChangeEvent::Type>(type);
+}
+
 inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackEvent& value)
 {
     uint8_t idx = static_cast<uint8_t>(value.index());
     p(idx);
 
-    if (idx == 0) {
+    switch (idx) {
+    case 0:
         // no data
-    } else if (idx == 1) {
-        const muse::mpe::NoteEvent& noteEvent = std::get<muse::mpe::NoteEvent>(value);
-        p(noteEvent);
-    } else if (idx == 2) {
-        const muse::mpe::RestEvent& restEvent = std::get<muse::mpe::RestEvent>(value);
-        p(restEvent);
-    } else {
-        assert(false && "not supported PlaybackEvent variant index");
+        break;
+    case 1: {
+        const muse::mpe::NoteEvent& event = std::get<muse::mpe::NoteEvent>(value);
+        p(event);
+    } break;
+    case 2: {
+        const muse::mpe::RestEvent& event = std::get<muse::mpe::RestEvent>(value);
+        p(event);
+    } break;
+    case 3: {
+        const muse::mpe::TextArticulationEvent& event = std::get<muse::mpe::TextArticulationEvent>(value);
+        p(event);
+    } break;
+    case 4: {
+        const muse::mpe::SoundPresetChangeEvent& event = std::get<muse::mpe::SoundPresetChangeEvent>(value);
+        p(event);
+    } break;
+    case 5: {
+        const muse::mpe::SyllableEvent& event = std::get<muse::mpe::SyllableEvent>(value);
+        p(event);
+    } break;
+    case 6: {
+        const muse::mpe::ControllerChangeEvent& event = std::get<muse::mpe::ControllerChangeEvent>(value);
+        p(event);
+    } break;
+    default: {
+        assert(false && "unknown PlaybackEvent variant index");
+    }
     }
 }
 
@@ -382,22 +453,43 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackEvent& 
     uint8_t idx = 0;
     p(idx);
 
-    if (idx == 0) {
-        value = {};
-    } else if (idx == 1) {
-        muse::mpe::ArrangementContext nullarrCtx;
-        muse::mpe::PitchContext nullpitchCtx;
-        muse::mpe::ExpressionContext nullexprCtx;
-        muse::mpe::NoteEvent noteEvent = muse::mpe::NoteEvent(std::move(nullarrCtx), std::move(nullpitchCtx), std::move(nullexprCtx));
-        p(noteEvent);
-        value = noteEvent;
-    } else if (idx == 2) {
-        muse::mpe::ArrangementContext nullarrCtx;
-        muse::mpe::RestEvent restEvent = muse::mpe::RestEvent(std::move(nullarrCtx));
-        p(restEvent);
-        value = restEvent;
-    } else {
-        assert(false && "not supported PlaybackEvent variant index");
+    switch (idx) {
+    case 0:
+        // no data
+        break;
+    case 1: {
+        muse::mpe::NoteEvent event;
+        p(event);
+        value = event;
+    } break;
+    case 2: {
+        muse::mpe::RestEvent event;
+        p(event);
+        value = event;
+    } break;
+    case 3: {
+        muse::mpe::TextArticulationEvent event;
+        p(event);
+        value = event;
+    } break;
+    case 4: {
+        muse::mpe::SoundPresetChangeEvent event;
+        p(event);
+        value = event;
+    } break;
+    case 5: {
+        muse::mpe::SyllableEvent event;
+        p(event);
+        value = event;
+    } break;
+    case 6: {
+        muse::mpe::ControllerChangeEvent event;
+        p(event);
+        value = event;
+    } break;
+    default: {
+        assert(false && "unknown PlaybackEvent variant index");
+    }
     }
 }
 
@@ -425,26 +517,14 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackSetupDa
       value.supportsSingleNoteDynamics, value.musicXmlSoundId);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackParam& value)
-{
-    p(static_cast<int8_t>(value.type), value.val, value.flags);
-}
-
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackParam& value)
-{
-    int8_t type = 0;
-    p(type, value.val, value.flags);
-    value.type = static_cast<muse::mpe::PlaybackParam::Type>(type);
-}
-
 inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackData& value)
 {
-    p(value.originEvents, value.setupData, value.dynamics, value.params);
+    p(value.originEvents, value.setupData, value.dynamics);
 }
 
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& value)
 {
-    p(value.originEvents, value.setupData, value.dynamics, value.params);
+    p(value.originEvents, value.setupData, value.dynamics);
 }
 
 namespace muse::audio::rpc {

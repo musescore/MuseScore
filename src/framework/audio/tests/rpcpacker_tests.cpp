@@ -424,19 +424,6 @@ TEST_F(Audio_RpcPackerTests, MPE_PlaybackSetupData)
     EXPECT_TRUE(origin == unpacked);
 }
 
-TEST_F(Audio_RpcPackerTests, MPE_PlaybackParam)
-{
-    mpe::PlaybackParam origin(mpe::PlaybackParam::Type::PlayingTechnique, u"234", mpe::PlaybackParam::FlagType::HyphenedToNext);
-
-    ByteArray data = rpc::RpcPacker::pack(origin);
-
-    mpe::PlaybackParam unpacked(mpe::PlaybackParam::Type::Undefined, u"");
-    bool ok = rpc::RpcPacker::unpack(data, unpacked);
-
-    EXPECT_TRUE(ok);
-    EXPECT_TRUE(origin == unpacked);
-}
-
 TEST_F(Audio_RpcPackerTests, MPE_PlaybackData)
 {
     mpe::PlaybackData origin;

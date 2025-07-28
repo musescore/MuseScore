@@ -36,26 +36,6 @@
 #include "playbacksetupdata.h"
 
 namespace muse::mpe {
-    << << << < HEAD
-    ==
-    == ===struct NoteEvent;
-struct RestEvent;
-using PlaybackEvent = std::variant<std::monostate, NoteEvent, RestEvent>;
-using PlaybackEventList = std::vector<PlaybackEvent>;
-using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
-
-using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
-using DynamicLevelLayers = std::map<layer_idx_t, DynamicLevelMap>;
-
-struct PlaybackParam;
-using PlaybackParamList = std::vector<PlaybackParam>;
-using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
-using PlaybackParamLayers = std::map<layer_idx_t, PlaybackParamMap>;
-
-using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamLayers>;
-using OffStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamList>;
-
->> >> >> > 7e92d 2b21c (added rpc pack for mpe types)
 struct ArrangementContext
 {
     timestamp_t nominalTimestamp = 0;
@@ -118,6 +98,8 @@ struct ExpressionContext
 
 struct NoteEvent
 {
+    NoteEvent() = default;
+
     explicit NoteEvent(ArrangementContext&& arrangementCtx,
                        PitchContext&& pitchCtx,
                        ExpressionContext&& expressionCtx)
@@ -277,6 +259,8 @@ private:
 
 struct RestEvent
 {
+    RestEvent() = default;
+
     explicit RestEvent(ArrangementContext&& arrangement)
         : m_arrangementCtx(arrangement) {}
 
@@ -376,7 +360,7 @@ struct SyllableEvent {
 
 using SyllableEventList = std::vector<SyllableEvent>;
 
-using PlaybackEvent = std::variant<NoteEvent,
+using PlaybackEvent = std::variant<std::monostate, NoteEvent,
                                    RestEvent,
                                    TextArticulationEvent,
                                    SoundPresetChangeEvent,
