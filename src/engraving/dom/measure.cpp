@@ -1669,6 +1669,10 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::BAR_LINE:
     {
         BarLine* bl = toBarLine(e);
+\
+        if (bl->playCount() != -1) {
+            undoChangeProperty(Pid::REPEAT_COUNT, bl->playCount());
+        }
 
         // if dropped bar line refers to span rather than to subtype
         // or if Ctrl key used
@@ -1707,6 +1711,7 @@ EngravingItem* Measure::drop(EditData& data)
                     lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
                 }
             }
+            score()->undoUpdatePlayCountText(this);
         } else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestLast() : this;
             for (size_t stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {

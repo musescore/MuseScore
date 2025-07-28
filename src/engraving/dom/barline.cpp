@@ -105,6 +105,7 @@ BarLine::BarLine(const BarLine& bl)
     m_spanFrom    = bl.m_spanFrom;
     m_spanTo      = bl.m_spanTo;
     m_barLineType = bl.m_barLineType;
+    m_playCount   = bl.m_playCount;
 
     for (EngravingItem* e : bl.m_el) {
         add(e->clone());
@@ -426,6 +427,11 @@ EngravingItem* BarLine::drop(EditData& data)
         bool oldRepeat = barLineType() & bt;
         bool newRepeat = bl->barLineType() & bt;
 
+        Measure* m = measure();
+        if (bl->playCount() != -1) {
+            m->undoChangeProperty(Pid::REPEAT_COUNT, bl->playCount());
+        }
+
         // if ctrl was used and repeats are not involved,
         // or if drop refers to span rather than subtype =>
         // single bar line drop
@@ -448,6 +454,7 @@ EngravingItem* BarLine::drop(EditData& data)
         } else {
             score()->undoChangeBarLineType(this, st, true);
         }
+        score()->undoUpdatePlayCountText(m);
         delete e;
     } else if (e->isArticulationFamily()) {
         Articulation* atr = toArticulation(e);

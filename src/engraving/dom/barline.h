@@ -148,6 +148,9 @@ public:
     void setPlayCountText(Text* text);
     String playCountCustomText() const { return m_playCountCustomText; }
 
+    void setPlayCount(int playCount) { m_playCount = playCount; }
+    int playCount() const { return m_playCount; }
+
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
@@ -181,7 +184,7 @@ private:
     BarLine(const BarLine&);
 
     int m_spanStaff = 0;         // span barline to next staff if true, values > 1 are used for importing from 2.x
-    int m_spanFrom = 0;         // line number on start and end staves
+    int m_spanFrom = 0;          // line number on start and end staves
     int m_spanTo = 0;
     BarLineType m_barLineType = BarLineType::NORMAL;
 
@@ -190,5 +193,6 @@ private:
     Text* m_playCountText = nullptr;     // Play count text for barlines on system object staves
     AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
     String m_playCountCustomText = u"";
+    int m_playCount = -1;                 // For use during copy & paste
 };
 } // namespace mu::engraving

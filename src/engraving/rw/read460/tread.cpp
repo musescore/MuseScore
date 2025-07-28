@@ -2024,6 +2024,8 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
                 TRead::read(image, e, ctx);
                 b->add(image);
             }
+        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT_SETTING)) {
+        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT)) {
         } else if (tag == "Text") {
             Text* p = Factory::createText(b, TextStyleType::REPEAT_PLAY_COUNT);
             // TODO SET STYLE?
@@ -2031,6 +2033,8 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
             p->setParent(b);
             p->setTrack(ctx.track());
             b->add(p);
+        } else if (tag == "playCount") {
+            b->setPlayCount(e.readInt());
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
