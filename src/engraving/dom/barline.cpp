@@ -106,9 +106,15 @@ BarLine::BarLine(const BarLine& bl)
     m_spanTo      = bl.m_spanTo;
     m_barLineType = bl.m_barLineType;
     m_playCount   = bl.m_playCount;
+    m_playCountTextSetting = bl.m_playCountTextSetting;
+    m_playCountCustomText = bl.m_playCountCustomText;
 
     for (EngravingItem* e : bl.m_el) {
         add(e->clone());
+    }
+
+    if (bl.m_playCountText) {
+        m_playCountText = bl.m_playCountText;
     }
 }
 

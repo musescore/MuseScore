@@ -71,6 +71,8 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
         return makeHairpinItems();
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
         return makeGradualTempoChangeItems();
+    case ElementType::TEXT:
+        return makeTextItems();
     default:
         break;
     }
@@ -389,6 +391,33 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
     MenuItem* snapNext = makeMenuItem("toggle-snap-to-next");
     snapNext->setState(snapNextState);
     items << snapNext;
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeTextItems()
+{
+    const EngravingItem* element = currentElement();
+    if (!(element->parentItem() && element->parentItem()->isBarLine())) {
+        // Regular text
+        return makeElementItems();
+    }
+
+    // Play count text
+    MenuItemList items;
+
+    if (interaction()->isTextEditingStarted()) {
+        return items;
+    }
+
+    MenuItemList selectItems = makeSelectItems();
+
+    if (!selectItems.isEmpty()) {
+        items << makeMenu(TranslatableString("notation", "Select"), selectItems);
+    }
+
+    items << makeSeparator()
+          << makeEditStyle(element);
 
     return items;
 }
