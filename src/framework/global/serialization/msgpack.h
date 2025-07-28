@@ -31,6 +31,9 @@
 #include "../types/retval.h"
 #include "../io/path.h"
 
+void pack_custom(std::vector<uint8_t>& data, const size_t& value);
+bool unpack_custom(muse::msgpack::Cursor& cursor, size_t& value);
+
 template<typename T>
 void pack_custom(std::vector<uint8_t>& data, const std::optional<T>& value);
 template<typename T>
@@ -68,6 +71,19 @@ bool unpack_custom(muse::msgpack::Cursor& cursor, muse::io::path_t& value);
 #include "../thirdparty/kors_msgpack/msgpack/msgpack.h"
 
 // std standart
+inline void pack_custom(std::vector<uint8_t>& data, const size_t& value)
+{
+    muse::msgpack::Packer::pack(data, static_cast<uint64_t>(value));
+}
+
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, size_t& value)
+{
+    uint64_t v = 0;
+    bool ok = muse::msgpack::UnPacker::unpack(cursor, v);
+    value = static_cast<size_t>(v);
+    return ok;
+}
+
 template<typename T>
 inline void pack_custom(std::vector<uint8_t>& data, const std::optional<T>& value)
 {

@@ -42,5 +42,8 @@ public:
 private:
 
     std::shared_ptr<IWorkerPlayback> m_playback;
+
+    async::Channel<TrackSequenceId, int64_t, int64_t> m_saveSoundTrackProgressStream;
+    rpc::StreamId m_saveSoundTrackProgressStreamId = 0;
 };
 }

@@ -206,6 +206,23 @@ void WorkerChannelController::initOnWorker(std::shared_ptr<IWorkerPlayback> play
         m_playback->setInputParams(seqId, trackId, params);
     });
 
+    channel()->onMethod(Method::GetInputProcessingProgress, [this](const Msg& msg) {
+        ONLY_AUDIO_WORKER_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackId trackId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackId)) {
+            return;
+        }
+
+        RetVal<InputProcessingProgress> ret = m_playback->inputProcessingProgress(seqId, trackId);
+        StreamId streamId = 0;
+        if (ret.ret) {
+            streamId = channel()->addSendStream(ret.val.processedChannel);
+        }
+
+        channel()->send(rpc::make_response(msg, RpcPacker::pack(ret.ret, ret.val.isStarted, streamId)));
+    });
+
     channel()->onMethod(Method::ClearSources, [this](const Msg&) {
         ONLY_AUDIO_WORKER_THREAD;
         m_playback->clearSources();
@@ -392,6 +409,25 @@ void WorkerChannelController::initOnWorker(std::shared_ptr<IWorkerPlayback> play
     channel()->onMethod(Method::AbortSavingAllSoundTracks, [this](const Msg&) {
         ONLY_AUDIO_WORKER_THREAD;
         m_playback->abortSavingAllSoundTracks();
+    });
+
+    channel()->onMethod(Method::GetSaveSoundTrackProgress, [this](const Msg& msg) {
+        ONLY_AUDIO_WORKER_THREAD;
+        TrackSequenceId seqId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId)) {
+            return;
+        }
+
+        async::Channel<int64_t, int64_t> ch = m_playback->saveSoundTrackProgressChanged(seqId);
+        ch.onReceive(this, [this, seqId](int64_t current, int64_t total) {
+            m_saveSoundTrackProgressStream.send(seqId, current, total);
+        });
+
+        if (m_saveSoundTrackProgressStreamId == 0) {
+            m_saveSoundTrackProgressStreamId = channel()->addSendStream(m_saveSoundTrackProgressStream);
+        }
+
+        channel()->send(rpc::make_response(msg, RpcPacker::pack(m_saveSoundTrackProgressStreamId)));
     });
 
     channel()->onMethod(Method::ClearAllFx, [this](const Msg&) {

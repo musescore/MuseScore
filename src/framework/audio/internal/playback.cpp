@@ -89,6 +89,13 @@ void Playback::init()
         }
         m_masterOutputParamsChanged.send(params);
     });
+
+    m_saveSoundTrackProgressStream.onReceive(this, [this](TrackSequenceId seqId, int64_t current, int64_t total) {
+        auto it = m_saveSoundTrackProgressChannels.find(seqId);
+        if (it != m_saveSoundTrackProgressChannels.end()) {
+            it->second.send(current, total);
+        }
+    });
 }
 
 void Playback::deinit()
@@ -404,16 +411,30 @@ async::Channel<TrackSequenceId, TrackId, AudioInputParams> Playback::inputParams
 muse::async::Promise<InputProcessingProgress> Playback::inputProcessingProgress(const TrackSequenceId sequenceId,
                                                                                 const TrackId trackId) const
 {
-    return Promise<InputProcessingProgress>([this, sequenceId, trackId](auto resolve, auto reject) {
-        ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_MAIN_THREAD;
+    return make_promise<InputProcessingProgress>([this, sequenceId, trackId](auto resolve, auto reject) {
+        ONLY_AUDIO_MAIN_THREAD;
+        Msg msg = rpc::make_request(Method::GetInputProcessingProgress, RpcPacker::pack(sequenceId, trackId));
+        channel()->send(msg, [this, resolve, reject](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            Ret ret;
+            bool isStarted = false;
+            StreamId streamId = 0;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ret, isStarted, streamId)) {
+                return;
+            }
 
-        RetVal<InputProcessingProgress> ret = workerPlayback()->inputProcessingProgress(sequenceId, trackId);
-        if (ret.ret) {
-            return resolve(ret.val);
-        } else {
-            return reject(ret.ret.code(), ret.ret.text());
-        }
-    }, AudioThread::ID);
+            if (ret) {
+                InputProcessingProgress prog;
+                prog.isStarted = isStarted;
+                channel()->addReceiveStream(streamId, prog.processedChannel);
+                (void)resolve(prog);
+            } else {
+                (void)reject(ret.code(), ret.text());
+            }
+        });
+        return Promise<InputProcessingProgress>::dummy_result();
+    }, PromiseType::AsyncByBody);
 }
 
 void Playback::clearSources()
@@ -603,8 +624,30 @@ void Playback::abortSavingAllSoundTracks()
 
 async::Channel<int64_t, int64_t> Playback::saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const
 {
-    //! FIXME
-    return workerPlayback()->saveSoundTrackProgressChanged(sequenceId);
+    auto it = m_saveSoundTrackProgressChannels.find(sequenceId);
+    if (it == m_saveSoundTrackProgressChannels.end()) {
+        it = m_saveSoundTrackProgressChannels.insert({ sequenceId, async::Channel<int64_t, int64_t>() }).first;
+
+        async::Channel<int64_t, int64_t> ch;
+
+        Msg msg = rpc::make_request(Method::GetSaveSoundTrackProgress, RpcPacker::pack(sequenceId));
+        channel()->send(msg, [this, ch](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            StreamId streamId = 0;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, streamId)) {
+                return;
+            }
+
+            if (m_saveSoundTrackProgressStreamId == 0) {
+                m_saveSoundTrackProgressStreamId = streamId;
+                channel()->addReceiveStream(m_saveSoundTrackProgressStreamId, m_saveSoundTrackProgressStream);
+            }
+
+            assert(m_saveSoundTrackProgressStreamId == streamId);
+        });
+    }
+
+    return it->second;
 }
 
 void Playback::clearAllFx()
