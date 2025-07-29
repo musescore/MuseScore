@@ -3617,6 +3617,27 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             } else {
                 m_xml.tagRaw(mxmlTechn);
             }
+        } else if (a->isTapping()) {
+            const Tapping* tap = toTapping(a);
+            notations.tag(m_xml, a);
+            technical.tag(m_xml);
+            mxmlTechn = u"tap";
+            switch (tap->hand()) {
+            case TappingHand::LEFT:
+                mxmlTechn += u" hand=\"left\"";
+                break;
+            case TappingHand::RIGHT:
+                mxmlTechn += u" hand=\"right\"";
+                break;
+            default:
+                break;
+            }
+            mxmlTechn += color2xml(a);
+            mxmlTechn += ExportMusicXml::positioningAttributes(a);
+            if (!placement.empty()) {
+                mxmlTechn += String(u" placement=\"%1\"").arg(placement);
+            }
+            m_xml.tagRaw(mxmlTechn);
         }
     }
 
@@ -3629,6 +3650,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         SymId sid = a->symId();
         if (symIdToArtic(sid).empty()
             && symIdToTechn(sid) == ""
+            && !a->isOrnament() && !a->isTapping()
             && !isLaissezVibrer(sid)) {
             LOGD("unknown chord attribute %d %s", static_cast<int>(sid), muPrintable(a->translatedTypeUserName()));
         }
