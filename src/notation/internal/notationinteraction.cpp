@@ -7723,7 +7723,7 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
 
 muse::Ret NotationInteraction::canAddFretboardDiagram() const
 {
-    bool canAdd = m_selection->elementsSelected({ ElementType::HARMONY, ElementType::NOTE, ElementType::REST });
+    bool canAdd = m_selection->elementsSelected({ ElementType::HARMONY });
     return canAdd ? muse::make_ok() : make_ret(Err::NoteOrRestOrHarmonyIsNotSelected);
 }
 
@@ -7750,15 +7750,11 @@ void NotationInteraction::addFretboardDiagram()
     std::vector<EngravingItem*> filteredElements;
 
     for (EngravingItem* element : selectedElements) {
-        if (!element || (!element->isHarmony() && !element->isRest() && !element->isNote())) {
+        if (!element || !element->isHarmony()) {
             continue;
         }
 
-        if (element->isHarmony()) {
-            if (!element->explicitParent()->isFretDiagram()) {
-                filteredElements.emplace_back(element);
-            }
-        } else {
+        if (!element->explicitParent()->isFretDiagram()) {
             filteredElements.emplace_back(element);
         }
     }
@@ -7775,16 +7771,10 @@ void NotationInteraction::addFretboardDiagram()
         engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy()->segment());
         diagram->setTrack(element->track());
 
-        if (element->isHarmony()) {
-            Harmony* harmony = toHarmony(element);
+        Harmony* harmony = toHarmony(element);
 
-            diagram->updateDiagram(harmony->harmonyName());
-            score->undo(new FretLinkHarmony(diagram, harmony));
-        } else {
-            // add blank diagram
-            diagram->setParent(element->isNote() ? toNote(element)->chord()->segment() : toRest(element)->segment());
-            diagram->clear();
-        }
+        diagram->updateDiagram(harmony->harmonyName());
+        score->undo(new FretLinkHarmony(diagram, harmony));
 
         score->undoAddElement(diagram);
 
