@@ -27,6 +27,13 @@
 
 #include "engraving/types/types.h"
 
+//#define DEBUG_CAPELLA_TUPLETS
+#ifdef DEBUG_CAPELLA_TUPLETS
+#define LOG_TUPLETS LOGD
+#else
+#define LOG_TUPLETS LOGN
+#endif
+
 class QFile;
 
 namespace mu::engraving {
@@ -538,6 +545,7 @@ public:
     BracketObj(Capella* c)
         : LineObj(CapellaType::BRACKET, c) {}
     void read();
+    void readCapx(engraving::XmlReader& e);
 
     char orientation, number;
 };
@@ -574,7 +582,11 @@ public:
     QColor color;
     TIMESTEP t;
     int horizontalShift;
-    int count;                // tuplet
+    int tupletDenominator;           // tuplet type  --  will be used as a count if no separate count is determined
+    bool tupletStart  = false;       // To correctly read Tuplets with mixed durations
+    bool tupletEnd    = false;       // we infer from the Capella file start/stop from the brackets.
+    int tupletCount  = 0;            // Real count of the tuplet notes ...
+    Fraction tupletTicks;            // ... and the ticks of the tuplet, used to calculate the end of the tuplet
     bool tripartite;
     bool isProlonging;
 

@@ -147,7 +147,7 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
     color = Qt::black;
     t = TIMESTEP::D1;
     horizontalShift = 0;
-    count = 0;
+    tupletDenominator = 0;
     tripartite   = 0;
     isProlonging = 0;
     QString base = e.attribute("base");
@@ -168,7 +168,7 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "tuplet") {
-            count = e.attribute("count").toInt();
+            tupletDenominator = e.attribute("count").toInt();
             tripartite = e.asciiAttribute("tripartite", "false") == "true";
             isProlonging = e.asciiAttribute("prolong", "false") == "true";
             e.readNext();
@@ -176,8 +176,8 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
             e.unknown();
         }
     }
-    LOGD("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d cnt %d trp %d ispro %d fullm %d",
-         nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, count, tripartite, isProlonging, fullm
+    LOGD("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d den %d trp %d ispro %d fullm %d",
+         nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, tupletDenominator, tripartite, isProlonging, fullm
          );
 }
 
@@ -524,6 +524,25 @@ void ChordObj::readCapxNotes(XmlReader& e)
             e.unknown();
         }
     }
+
+    if (tupletDenominator <= 0) {
+        return; // no tuplet, so we are done
+    }
+
+    // find a BracketObj in the drawObjects list, get the data and delete it
+    // this is used to read Tuplets with mixed durations
+    for (BasicDrawObj* o : objects) {
+        if (o->type == CapellaType::BRACKET) {
+            // BracketObj* bo = static_cast<BracketObj*>(o);
+            tupletStart = true;
+            tupletCount = o->nNotes;
+            objects.removeOne(o);
+            delete o;
+            LOG_TUPLETS("==> Tuplet start, plus %d notes till end", tupletCount);
+            return; // we are done, and we modified the iterator, so back out
+        }
+    }
+    LOGE("no tuplet start found in drawObjects, but tupletDenominator %d", tupletDenominator);
 }
 
 //---------------------------------------------------------
@@ -550,6 +569,25 @@ void RestObj::readCapx(XmlReader& e)
             e.unknown();
         }
     }
+
+    if (tupletDenominator <= 0) {
+        return; // no tuplet, so we are done
+    }
+
+    // find a BracketObj in the drawObjects list, get the data and delete it
+    // this is used to read Tuplets with mixed durations
+    for (BasicDrawObj* o : objects) {
+        if (o->type == CapellaType::BRACKET) {
+            // BracketObj* bo = static_cast<BracketObj*>(o);
+            tupletStart = true;
+            tupletCount = o->nNotes;
+            objects.removeOne(o);
+            delete o;
+            LOG_TUPLETS("      ==> Tuplet start, plus %d notes till end", tupletCount);
+            return; // we are done, and we modified the iterator, so back out
+        }
+    }
+    LOGE("no tuplet start found in drawObjects, but tupletDenominator %d", tupletDenominator);
 }
 
 //---------------------------------------------------------
@@ -675,6 +713,17 @@ void WedgeObj::readCapx(XmlReader& e)
     e.readNext();
 }
 
+//------------------------------------------------------------
+//   BracketObj::readCapx -- capx equivalent of WedgeObj::read
+//------------------------------------------------------------
+
+void BracketObj::readCapx(XmlReader& e)
+{
+    // TODO: We're actually only interested in the <basic> element following and it's noteRange attribute ...
+    // or to put in another way: Intentionally left empty ...
+    e.skipCurrentElement();
+}
+
 //---------------------------------------------------------
 //   readCapxDrawObjectArray -- capx equivalent of readDrawObjectArray()
 //---------------------------------------------------------
@@ -729,8 +778,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                     LOGD("readCapxDrawObjectArray: found wavyLine (skipping)");
                     e.skipCurrentElement();
                 } else if (tag == "bracket") {
-                    LOGD("readCapxDrawObjectArray: found bracket (skipping)");
-                    e.skipCurrentElement();
+                    BracketObj* o = new BracketObj(this);
+                    bdo = o;           // save o to handle the "basic" tag (which sometimes follows)
+                    o->readCapx(e);
+                    ol.append(o);
                 } else if (tag == "wedge") {
                     WedgeObj* o = new WedgeObj(this);
                     bdo = o;           // save o to handle the "basic" tag (which sometimes follows)
@@ -781,6 +832,10 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
     // v->lyricsFont = 0;
     v->stemDir    = 0;
 
+    int tupletCounter = 0;
+    Fraction tupletTicks = Fraction(0, 1);
+    BasicDurationalObj* tupletObj = nullptr;
+
     while (e.readNextStartElement()) {
         if (e.name() == "lyricsSettings") {
             LOGD("readCapxVoice: found lyricsSettings (skipping)");
@@ -808,10 +863,65 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
                     ChordObj* chord = new ChordObj(this);
                     chord->readCapx(e);
                     v->objects.append(chord);
+                    if (chord->tupletStart) {
+                        tupletCounter = chord->tupletCount;
+                        tupletTicks   = chord->ticks();
+                        tupletObj     = chord;  // save the tuplet object for later
+                        LOG_TUPLETS("     ==| (C) start of tuplet with %d notes, ticks %d",
+                                    1 + tupletCounter, tupletTicks.ticks());
+                    } else if (tupletCounter > 0) {
+                        if (!tupletObj) {
+                            LOGE("     !!! chord with tupletCounter %d without tupletObj", tupletCounter);
+                        } else {
+                            tupletTicks += chord->ticks();
+                            if (chord->tupletDenominator == 0) {
+                                LOGE("     !!! (C) chord with tupletCounter %d outside tuplet", tupletCounter);
+                                chord->tupletDenominator = tupletObj->tupletDenominator;  // copy denominator from the tuplet object
+                            }
+                            --tupletCounter;
+                            if (tupletCounter == 0) {
+                                chord->tupletEnd = true;
+                                tupletObj->tupletTicks = tupletTicks;      // set total ticks to the tuplet object
+                                tupletObj = nullptr;      // reset tuplet object
+                                LOG_TUPLETS("     ==| end of tuplet, total ticks %d", tupletTicks.ticks());
+                            } else {
+                                LOG_TUPLETS("     ==> chord with tupletCounter %d inside tuplet, ticks now %d",
+                                            tupletCounter, tupletTicks.ticks());
+                            }
+                        }
+                    }
                 } else if (tag == "rest") {
                     RestObj* rest = new RestObj(this);
                     rest->readCapx(e);
                     v->objects.append(rest);
+                    if (rest->tupletStart) {
+                        tupletCounter = rest->tupletCount;
+                        tupletTicks   = rest->ticks();
+                        tupletObj     = rest;  // save the tuplet object for later
+                        LOG_TUPLETS("     ==| (R) start of tuplet with %d notes, ticks %d",
+                                    1 + tupletCounter, tupletTicks.ticks());
+                    } else if (tupletCounter > 0) {
+                        if (!tupletObj) {
+                            LOGE("     !!! rest with tupletCounter %d without tupletObj", tupletCounter);
+                        } else {
+                            // add the rest ticks to the tuplet ticks
+                            tupletTicks += rest->ticks();
+                            if (rest->tupletDenominator == 0) {
+                                LOGE("     !!! rest with tupletCounter %d outside tuplet", tupletCounter);
+                                rest->tupletDenominator = tupletObj->tupletDenominator;  // copy denominator from the tuplet object
+                            }
+                            --tupletCounter;
+                            if (tupletCounter == 0) {
+                                rest->tupletEnd = true;
+                                tupletObj->tupletTicks = tupletTicks;      // set total ticks to the tuplet object
+                                tupletObj = nullptr;      // reset tuplet object
+                                LOG_TUPLETS("     ==| end of tuplet, total ticks %d", tupletTicks.ticks());
+                            } else {
+                                LOG_TUPLETS("     ==> rest with tupletCounter %d inside tuplet, ticks now %d",
+                                            tupletCounter, tupletTicks.ticks());
+                            }
+                        }
+                    }
                 } else {
                     e.unknown();
                 }
