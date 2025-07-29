@@ -38,7 +38,8 @@ class BarlineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * spanTo READ spanTo CONSTANT)
     Q_PROPERTY(PropertyItem * hasToShowTips READ hasToShowTips CONSTANT)
     Q_PROPERTY(bool isRepeatStyleChangingAllowed READ isRepeatStyleChangingAllowed NOTIFY isRepeatStyleChangingAllowedChanged)
-    Q_PROPERTY(bool showPlayCountSettings READ showPlayCountSettings NOTIFY showPlayCountSettingsChanged)
+    Q_PROPERTY(bool showPlayCountSettings READ showPlayCountSettings NOTIFY showPlayCountSettingsChanged FINAL)
+    Q_PROPERTY(bool showPlayCount READ showPlayCount NOTIFY showPlayCountChanged FINAL)
 
 public:
     explicit BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -57,10 +58,12 @@ public:
 
     bool isRepeatStyleChangingAllowed() const;
     bool showPlayCountSettings() const;
+    bool showPlayCount() const;
 
 signals:
     void isRepeatStyleChangingAllowedChanged();
-    void showPlayCountSettingsChanged();
+    void showPlayCountSettingsChanged(bool show);
+    void showPlayCountChanged(bool show);
 
 private:
     void createProperties() override;
@@ -72,6 +75,9 @@ private:
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
+    void updateShowPlayCount();
+    void updateShowPlayCountSettings();
+
     PropertyItem* m_type = nullptr;
     PropertyItem* m_playCount = nullptr;
     PropertyItem* m_playCountText = nullptr;
@@ -80,6 +86,9 @@ private:
     PropertyItem* m_spanFrom = nullptr;
     PropertyItem* m_spanTo = nullptr;
     PropertyItem* m_hasToShowTips = nullptr;
+
+    bool m_showPlayCount = false;
+    bool m_showPlayCountSettings = false;
 };
 }
 
