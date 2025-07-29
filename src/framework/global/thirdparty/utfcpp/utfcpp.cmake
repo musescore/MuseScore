@@ -3,6 +3,7 @@ set(UTFCPP_SRC
   "${CMAKE_CURRENT_LIST_DIR}/utf8/core.h"
   "${CMAKE_CURRENT_LIST_DIR}/utf8/cpp11.h"
   "${CMAKE_CURRENT_LIST_DIR}/utf8/cpp17.h"
+  "${CMAKE_CURRENT_LIST_DIR}/utf8/cpp20.h"
   "${CMAKE_CURRENT_LIST_DIR}/utf8/unchecked.h"
   "${CMAKE_CURRENT_LIST_DIR}/utf8.h"
 )
