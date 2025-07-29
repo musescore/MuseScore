@@ -736,6 +736,17 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     MidiInstrumentEffect noteEffect = noteParams.effect;
 
     int noteChannel = getChannel(instr, note, noteEffect, context);
+    auto midiEffectFromEvent = [](const NoteEvent& event) {
+        if (event.slide()) {
+            return MidiInstrumentEffect::SLIDE;
+        }
+
+        if (event.hammerPull()) {
+            return MidiInstrumentEffect::HAMMER_PULL;
+        }
+
+        return MidiInstrumentEffect::NONE;
+    };
 
     int tieLen = calculateTieLength(note);
     if (chord->isGrace()) {
@@ -761,6 +772,23 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
         // if we wish to suppress first note of ornament
         // then change "nels == 1" to "i == 0", and change "break" to "continue"
         if (note->tieBack() && nels == 1 && !isGlissandoFor(note)) {
+            Note* tiedBack = note->tieBack()->startNote();
+            if (!tiedBack) {
+                break;
+            }
+
+            const auto& eventsList = tiedBack->playEvents();
+            IF_ASSERT_FAILED(!eventsList.empty()) {
+                LOGE() << "play events are empty for note on track " << tiedBack->track() << ", tick " << tiedBack->tick().ticks();
+                break;
+            }
+
+            const auto& e = eventsList.front();
+            if (noteEffect == MidiInstrumentEffect::NONE) {
+                noteEffect = midiEffectFromEvent(e);
+                noteChannel = getChannel(instr, note, noteEffect, context);
+            }
+
             break;
         }
 
@@ -807,12 +835,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
             playParams.offTime = std::max(0, off - noteParams.graceOffsetOff);
 
             if (eventEffect == MidiInstrumentEffect::NONE) {
-                if (e.slide()) {
-                    eventEffect = MidiInstrumentEffect::SLIDE;
-                } else if (e.hammerPull()) {
-                    eventEffect = MidiInstrumentEffect::HAMMER_PULL;
-                }
-
+                eventEffect = midiEffectFromEvent(e);
                 eventChannel = getChannel(instr, note, eventEffect, context);
             }
 
