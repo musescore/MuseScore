@@ -36,7 +36,7 @@ class IDockWindow
 public:
     virtual ~IDockWindow() = default;
 
-    virtual bool isDockOpenAndCurrentInFrame(const QString& dockName) const = 0;
+    virtual bool isDockOpen(const QString& dockName) const = 0;
     virtual void setDockOpen(const QString& dockName, bool open) = 0;
     virtual void toggleDock(const QString& dockName) = 0;
 

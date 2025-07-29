@@ -215,7 +215,7 @@ void NotationPageModel::updateDrumsetPanelVisibility()
     }
 
     auto setDrumsetPanelOpen = [this, window](bool open) {
-        if (open == window->isDockOpenAndCurrentInFrame(DRUMSET_PANEL_NAME)) {
+        if (open == window->isDockOpen(DRUMSET_PANEL_NAME)) {
             return;
         }
 
@@ -250,12 +250,12 @@ void NotationPageModel::updatePercussionPanelVisibility()
     //! NOTE: If the user is entering percussion notes with the piano keyboard, we can assume that they
     //! don't want the percussion panel to auto-show...
     const muse::dock::IDockWindow* window = dockWindowProvider()->window();
-    if (!window || window->isDockOpenAndCurrentInFrame(PIANO_KEYBOARD_PANEL_NAME)) {
+    if (!window || window->isDockOpen(PIANO_KEYBOARD_PANEL_NAME)) {
         return;
     }
 
     auto setPercussionPanelOpen = [this, window](bool open) {
-        if (open == window->isDockOpenAndCurrentInFrame(PERCUSSION_PANEL_NAME)) {
+        if (open == window->isDockOpen(PERCUSSION_PANEL_NAME)) {
             return;
         }
 
