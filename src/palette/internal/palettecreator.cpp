@@ -91,6 +91,8 @@ using namespace mu;
 using namespace mu::palette;
 using namespace mu::engraving;
 
+static const qreal FRAME_MAG = 1.25;
+
 // Default wrapper...
 template<class C>
 struct makeElementImplWrapper {
@@ -567,10 +569,10 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
         cell->mag = .7;
     }
 
-    sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox");
-    sp->appendActionIcon(ActionIconType::HFRAME, "insert-hbox");
-    sp->appendActionIcon(ActionIconType::TFRAME, "insert-textframe");
-    sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
+    sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox", FRAME_MAG);
+    sp->appendActionIcon(ActionIconType::HFRAME, "insert-hbox", FRAME_MAG);
+    sp->appendActionIcon(ActionIconType::TFRAME, "insert-textframe", FRAME_MAG);
+    sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
     sp->appendActionIcon(ActionIconType::STAFF_TYPE_CHANGE, "insert-staff-type-change");
     sp->appendActionIcon(ActionIconType::MEASURE, "insert-measure");
 
@@ -1753,7 +1755,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
     }
 
     if (!defaultPalette) {
-        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
+        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
     }
 
     return sp;
@@ -1881,7 +1883,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(pta, TConv::userName(playTechAnnotation.playTechType), 0.8)->setElementTranslated(true);
     }
 
-    sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
+    sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
 
     return sp;
 }
