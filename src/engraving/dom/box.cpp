@@ -481,11 +481,6 @@ void Box::manageExclusionFromParts(bool exclude)
             newFrame->setExcludeFromOtherParts(false);
             // newFrame->setSizeIsSpatiumDependent(!titleFrame);
 
-            // Clear auto generated diagrams inside fret box
-            if (newFrame->isFBox()) {
-                toFBox(newFrame)->clearElements();
-            }
-
             for (EngravingItem* item : el()) {
                 // Don't add instrument name from current part
                 if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
@@ -670,8 +665,6 @@ void VBox::startEditDrag(EditData& ed)
 FBox::FBox(System* parent)
     : VBox(ElementType::FBOX, parent)
 {
-    init();
-
     resetProperty(Pid::FRET_FRAME_TEXT_SCALE);
     resetProperty(Pid::FRET_FRAME_DIAGRAM_SCALE);
     resetProperty(Pid::FRET_FRAME_COLUMN_GAP);
@@ -693,7 +686,7 @@ void FBox::init()
 
     std::set<String> usedDiagrams;
 
-    for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
+    for (mu::engraving::Segment* segment = masterScore()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
          segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
         for (EngravingItem* item : segment->annotations()) {
             if (!item || !item->part()) {

@@ -1143,6 +1143,8 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                 // even if track not in excerpt, we need to clone system elements
                 if (e->systemFlag() && e->track() == 0) {
                     track = 0;
+                } else if (e->isFretDiagram() && toFretDiagram(e)->isInFretBox()) {
+                    track = e->track();
                 } else {
                     continue;
                 }
