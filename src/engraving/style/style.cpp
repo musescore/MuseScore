@@ -643,7 +643,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::measureNumberHPlacement, AlignH::HCENTER);
         }
 
-        if (value(Sid::pedalPlacement).value<PlacementV>() == PlacementV::BELOW) {
+        if (value(Sid::pedalPlacement).value<PlacementV>() == PlacementV::BELOW
+                && value(Sid::pedalHookHeight).value<Spatium>().val() < 0) {
             set(Sid::pedalHookHeight, -value(Sid::pedalHookHeight).value<Spatium>());
         }
     }
