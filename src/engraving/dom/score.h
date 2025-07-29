@@ -521,6 +521,7 @@ public:
     void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t _staff);
     void undoUpdatePlayCountText(Measure* m);
     void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves, bool replace = false);
+    void undoChangePlayCountTextSetting(BarLine* bl, const AutoCustomHide& v);
 
     void updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff, const Fraction& tick);
 
