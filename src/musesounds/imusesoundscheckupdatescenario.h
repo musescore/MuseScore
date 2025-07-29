@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include "async/promise.h"
 #include "types/ret.h"
 
 #include "modularity/imoduleinterface.h"
@@ -31,9 +32,12 @@ class IMuseSoundsCheckUpdateScenario : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IMuseSoundsCheckUpdateScenario)
 
 public:
+    using CheckForUpdateCompleteCallback = std::function<void ()>;
+
     virtual ~IMuseSoundsCheckUpdateScenario() = default;
 
-    virtual void checkForUpdate(bool manual) = 0;
+    virtual bool needCheckForUpdate() const = 0;
+    virtual muse::async::Promise<muse::Ret> checkForUpdate(bool manual) = 0;
 
     virtual bool hasUpdate() const = 0;
     virtual muse::Ret showUpdate() = 0;
