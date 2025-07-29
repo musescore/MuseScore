@@ -5542,6 +5542,13 @@ void Score::undoUpdatePlayCountText(Measure* m)
                 doUndoAddElement(playCountText);
                 playCountText->setSystemFlag(true);
                 playCountText->setSelected(bl->selected());
+            } else {
+                if (playCountText->parent() != bl) {
+                    playCountText->parentItem()->remove(playCountText);
+
+                    playCountText->setParent(bl);
+                    doUndoAddElement(playCountText);
+                }
             }
         } else if (playCountText) {
             doUndoRemoveElement(playCountText);
