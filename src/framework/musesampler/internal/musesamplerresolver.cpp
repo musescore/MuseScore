@@ -22,6 +22,8 @@
 
 #include "musesamplerresolver.h"
 
+#include "global/io/fileinfo.h"
+
 #include "types/version.h"
 
 #include "musesamplerwrapper.h"
@@ -79,21 +81,27 @@ InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const AudioRe
 
 void MuseSamplerResolver::init()
 {
-    m_libHandler = std::make_shared<MuseSamplerLibHandler>(configuration()->libraryPath(), configuration()->useLegacyAudition());
+    const io::path_t& museSamplerLibraryPath = configuration()->libraryPath();
+    if (io::isAbsolute(museSamplerLibraryPath) && !io::FileInfo::exists(museSamplerLibraryPath)) {
+        LOGI() << "MuseSampler library not found: " << museSamplerLibraryPath;
+        return;
+    }
+
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>(museSamplerLibraryPath, configuration()->useLegacyAudition());
 
     if (!m_libHandler->isValid()) {
-        LOGE() << "Incompatible MuseSampler library, ignoring: " << configuration()->libraryPath();
+        LOGE() << "Incompatible MuseSampler library, ignoring: " << museSamplerLibraryPath;
         m_libHandler.reset();
         return;
     }
 
     if (!m_libHandler->init()) {
-        LOGE() << "Could not init MuseSampler: " << configuration()->libraryPath();
+        LOGE() << "Could not init MuseSampler: " << museSamplerLibraryPath;
         m_libHandler.reset();
         return;
     }
 
-    LOGI() << "MuseSampler successfully inited: " << configuration()->libraryPath();
+    LOGI() << "MuseSampler successfully inited: " << museSamplerLibraryPath;
 }
 
 bool MuseSamplerResolver::reloadAllInstruments()
