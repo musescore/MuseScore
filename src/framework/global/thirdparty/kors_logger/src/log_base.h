@@ -54,11 +54,15 @@ SOFTWARE.
 #define LOGN if (0) LOGD_T(LOG_TAG) // compiling, but no output
 
 //! Useful macros
-#define DO_ASSERT_X(cond, msg) \
-    if (!(cond)) { \
-        LOGE() << "ASSERT FAILED:    " << msg << "    " << __FILE__ << ":" << __LINE__; \
-        assert(cond); \
-    } \
+#define DO_ASSERT_X_IMPL(cond, msg, var_name) \
+    { \
+        const auto var_name = (cond); \
+        if (!(var_name)) { \
+            LOGE() << "ASSERT FAILED:    " << msg << "    " << __FILE__ << ":" << __LINE__; \
+            assert(var_name); \
+        } \
+    }
+#define DO_ASSERT_X(cond, msg) DO_ASSERT_X_IMPL(cond, msg, UNIQUE_VAR_NAME(__do_assert_))
 
 #define DO_ASSERT(cond) DO_ASSERT_X(cond, #cond)
 #define ASSERT_X(msg) DO_ASSERT_X(false, msg)
@@ -71,7 +75,7 @@ SOFTWARE.
     const auto var_name = (cond); \
     if (!(var_name)) { \
         LOGE() << "ASSERT FAILED:    " << msg << "    " << __FILE__ << ":" << __LINE__; \
-        assert(cond); \
+        assert(var_name); \
     } \
     if (!(var_name))
 
