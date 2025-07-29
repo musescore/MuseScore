@@ -437,6 +437,12 @@ EngravingItem* BarLine::drop(EditData& data)
         if (bl->playCount() != -1) {
             m->undoChangeProperty(Pid::REPEAT_COUNT, bl->playCount());
         }
+        if (bl->playCountTextSetting() != playCountTextSetting()) {
+            score()->undoChangePlayCountTextSetting(this, bl->playCountTextSetting());
+        }
+        if (bl->playCountCustomText() != playCountCustomText()) {
+            undoChangeProperty(Pid::PLAY_COUNT_TEXT, bl->playCountCustomText());
+        }
 
         // if ctrl was used and repeats are not involved,
         // or if drop refers to span rather than subtype =>
@@ -893,6 +899,8 @@ void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
 {
     if (id == Pid::BARLINE_TYPE && segment()) {
         score()->undoChangeBarLineType(this, v.value<BarLineType>(), true, true);
+    } else if (id == Pid::PLAY_COUNT_TEXT_SETTING) {
+        score()->undoChangePlayCountTextSetting(this, v.value<AutoCustomHide>());
     } else {
         EngravingObject::undoChangeProperty(id, v, ps);
     }
