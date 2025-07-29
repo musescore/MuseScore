@@ -52,7 +52,10 @@ void BarlineSettingsModel::createProperties()
     m_hasToShowTips = buildPropertyItem(Pid::BARLINE_SHOW_TIPS);
 
     connect(m_type, &PropertyItem::valueChanged, this, &BarlineSettingsModel::isRepeatStyleChangingAllowedChanged);
-    connect(m_type, &PropertyItem::valueChanged, this, &BarlineSettingsModel::showPlayCountSettingsChanged);
+    connect(m_type, &PropertyItem::valueChanged, this, [this]() {
+        updateShowPlayCount();
+        updateShowPlayCountSettings();
+    });
 }
 
 void BarlineSettingsModel::requestElements()
@@ -138,6 +141,50 @@ void BarlineSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
 
     if (muse::contains(propertyIdSet, Pid::BARLINE_SHOW_TIPS)) {
         loadPropertyItem(m_hasToShowTips);
+    }
+
+    updateShowPlayCount();
+    updateShowPlayCountSettings();
+}
+
+void BarlineSettingsModel::updateShowPlayCount()
+{
+    using LineType = BarlineTypes::LineType;
+
+    static const QList<LineType> allowedLineTypes {
+        LineType::TYPE_END_REPEAT,
+        LineType::TYPE_END_START_REPEAT
+    };
+
+    LineType currentType = static_cast<LineType>(m_type->value().toInt());
+
+    bool showPlayCount = allowedLineTypes.contains(currentType);
+    if (showPlayCount != m_showPlayCount) {
+        m_showPlayCount = showPlayCount;
+        emit showPlayCountChanged(m_showPlayCount);
+    }
+}
+
+void BarlineSettingsModel::updateShowPlayCountSettings()
+{
+    bool systemObjectStaff = false;
+    for (mu::engraving::EngravingItem* item : m_elementList) {
+        if (!item->isBarLine()) {
+            continue;
+        }
+
+        mu::engraving::BarLine* barline = mu::engraving::toBarLine(item);
+        mu::engraving::Staff* staff = barline->staff();
+
+        if (staff->idx() == 0 || staff->score()->isSystemObjectStaff(staff)) {
+            systemObjectStaff = true;
+            break;
+        }
+    }
+
+    if (m_showPlayCountSettings != systemObjectStaff) {
+        m_showPlayCountSettings = systemObjectStaff;
+        emit showPlayCountSettingsChanged(m_showPlayCountSettings);
     }
 }
 
@@ -266,13 +313,10 @@ bool BarlineSettingsModel::isRepeatStyleChangingAllowed() const
 
 bool BarlineSettingsModel::showPlayCountSettings() const
 {
-    using LineType = BarlineTypes::LineType;
+    return m_showPlayCountSettings;
+}
 
-    static const QList<LineType> allowedLineTypes {
-        LineType::TYPE_END_REPEAT,
-        LineType::TYPE_END_START_REPEAT
-    };
-
-    LineType currentType = static_cast<LineType>(m_type->value().toInt());
-    return allowedLineTypes.contains(currentType);
+bool BarlineSettingsModel::showPlayCount() const
+{
+    return m_showPlayCount;
 }

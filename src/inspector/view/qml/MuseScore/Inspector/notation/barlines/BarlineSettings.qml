@@ -87,7 +87,7 @@ Column {
 
     SpinBoxPropertyView {
         id: playCount
-        visible: root.model.showPlayCountSettings
+        visible: root.model.showPlayCount
 
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
@@ -107,7 +107,7 @@ Column {
     FlatRadioButtonGroupPropertyView {
         id: playCountTextSection
         propertyItem: root.model ? root.model.playCountTextSetting : null
-        visible: root.model.showPlayCountSettings
+        visible: root.model.showPlayCount && root.model.showPlayCountSettings
 
         showTitle: true;
         titleLabelComponent: Component {
@@ -136,7 +136,7 @@ Column {
     TextSection {
         id: playCountText
         propertyItem: root.model ? root.model.playCountText : null
-        visible: root.model && root.model.playCountTextSetting.value && root.model.showPlayCountSettings && root.model.playCountTextSetting.value === BarlineTypes.COUNT_CUSTOM
+        visible: root.model && root.model.playCountTextSetting.value && root.model.showPlayCount && root.model.showPlayCountSettings && root.model.playCountTextSetting.value === BarlineTypes.COUNT_CUSTOM
 
         showButton: false
 
