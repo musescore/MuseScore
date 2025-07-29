@@ -23,7 +23,7 @@
 
 #include <list>
 
-#include <global/thirdparty/utfcpp-3.2.1/utf8.h>
+#include <global/thirdparty/utfcpp/utf8.h>
 
 #include "global/containers.h"
 #include "textstream.h"
