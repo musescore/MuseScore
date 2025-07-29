@@ -188,14 +188,14 @@ void GuitarBend::fixNotesFrettingForStandardBend(Note* startNote, Note* endNote)
     if (startFret == 0) {
         // Bend can't start from empty string
         startString += 1;
-        startFret = stringData->fret(startNote->pitch(), startString, curStaff);
+        startFret = stringData->fret(startNote->pitch() + curStaff->pitchOffset(startNote->tick()), startString, curStaff);
         startNote->undoChangeProperty(Pid::STRING, startString);
         startNote->undoChangeProperty(Pid::FRET, startFret);
     }
 
     if (endNote->string() != startString) {
         endNote->undoChangeProperty(Pid::STRING, startString);
-        int endFret = stringData->fret(endNote->pitch(), startString, curStaff);
+        int endFret = stringData->fret(endNote->pitch() + curStaff->pitchOffset(endNote->tick()), startString, curStaff);
         endNote->undoChangeProperty(Pid::FRET, endFret);
     }
 }
@@ -244,7 +244,8 @@ void GuitarBend::fixNotesFrettingForGraceBend(Note* grace, Note* main)
     // The start grace-note of bend must be on the same string as the main note
     int mainString = main->string();
     const StringData* stringData = main->part()->stringData(main->tick(), main->staff()->idx());
-    int graceFret = stringData->fret(grace->pitch(), mainString, main->staff());
+    int staffPitchOffset = main->staff()->pitchOffset(main->tick());
+    int graceFret = stringData->fret(grace->pitch() + staffPitchOffset, mainString, main->staff());
     if (graceFret > 0) {
         // There is valid fretting
         grace->undoChangeProperty(Pid::STRING, mainString);
@@ -253,11 +254,11 @@ void GuitarBend::fixNotesFrettingForGraceBend(Note* grace, Note* main)
         // No valid fretting on this string, so it must be played on the lower string
         mainString += 1;
         main->undoChangeProperty(Pid::STRING, mainString);
-        int mainFret = stringData->fret(main->pitch(), mainString, main->staff());
+        int mainFret = stringData->fret(main->pitch() + staffPitchOffset, mainString, main->staff());
         main->undoChangeProperty(Pid::FRET, mainFret);
 
         grace->undoChangeProperty(Pid::STRING, mainString);
-        graceFret = stringData->fret(grace->pitch(), mainString, main->staff());
+        graceFret = stringData->fret(grace->pitch() + staffPitchOffset, mainString, main->staff());
         grace->undoChangeProperty(Pid::FRET, graceFret);
     }
 }
