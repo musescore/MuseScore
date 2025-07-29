@@ -4588,6 +4588,10 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
     newMeasureBase->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
     newMeasureBase->setSizeIsSpatiumDependent(!isTitleFrame);
 
+    if (type == ElementType::FBOX) {
+        toFBox(newMeasureBase)->init();
+    }
+
     undo(new InsertMeasures(newMeasureBase, newMeasureBase));
 
     if (options.needDeselectAll) {
