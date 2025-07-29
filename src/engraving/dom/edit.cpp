@@ -2634,6 +2634,10 @@ void Score::deleteItem(EngravingItem* el)
     if (el->generated()) {
         switch (el->type()) {
         // These types can be removed, even if generated
+        case ElementType::TEXT:
+            if (!el->parent()->isBarLine()) {
+                return;
+            }
         case ElementType::BAR_LINE:
         case ElementType::BRACKET:
         case ElementType::CLEF:
@@ -3130,6 +3134,9 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::TEXT:
         if ((el->explicitParent() && el->explicitParent()->isTBox()) || el->isTBox()) {
             el->undoChangeProperty(Pid::TEXT, String());
+        } else if (el->explicitParent() && el->explicitParent()->isBarLine()) {
+            BarLine* bl = toBarLine(el->explicitParent());
+            bl->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::HIDE);
         } else {
             undoRemoveElement(el);
         }
