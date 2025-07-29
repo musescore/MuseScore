@@ -104,6 +104,10 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
             (void)resolve(result);
         });
 
+        promise.onReject(this, [reject](int code, const std::string& msg) {
+            (void)reject(code, msg);
+        });
+
         return Promise<PartInstrumentListScoreOrder>::dummy_result();
     }, PromiseType::AsyncByBody);
 }
