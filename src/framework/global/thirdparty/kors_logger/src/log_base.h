@@ -59,7 +59,7 @@ SOFTWARE.
         const auto var_name = (cond); \
         if (!(var_name)) { \
             LOGE() << "ASSERT FAILED:    " << msg << "    " << __FILE__ << ":" << __LINE__; \
-            assert(var_name); \
+            assert(var_name && #cond); \
         } \
     }
 #define DO_ASSERT_X(cond, msg) DO_ASSERT_X_IMPL(cond, msg, UNIQUE_VAR_NAME(__do_assert_))
@@ -75,7 +75,7 @@ SOFTWARE.
     const auto var_name = (cond); \
     if (!(var_name)) { \
         LOGE() << "ASSERT FAILED:    " << msg << "    " << __FILE__ << ":" << __LINE__; \
-        assert(var_name); \
+        assert(var_name && #cond); \
     } \
     if (!(var_name))
 
