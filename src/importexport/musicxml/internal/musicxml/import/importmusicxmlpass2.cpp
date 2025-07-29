@@ -8696,6 +8696,12 @@ void MusicXmlParserNotations::addTechnical(const Notation& notation, Note* note)
         } else {
             m_logger->logError(u"no note for string", &m_e);
         }
+    } else if (notation.name() == u"tap") {
+        if (note) {
+            addTapToChord(notation, note->chord());        
+        } else {
+            m_logger->logError(u"no note for tap", &m_e);
+        }
     }
 }
 
@@ -9252,8 +9258,6 @@ void MusicXmlParserNotations::addNotation(const Notation& notation, ChordRest* c
             terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), cr->tick(), cr->track());
         } else if (notation.parent() == u"ornaments") {
             addTurnToChord(notation, cr);
-        } else if (notation.name() == u"tap") {
-            addTapToChord(notation, cr);        
         } else {
             addArticulationToChord(notation, cr);
         }
