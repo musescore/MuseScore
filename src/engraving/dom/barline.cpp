@@ -114,7 +114,7 @@ BarLine::BarLine(const BarLine& bl)
     }
 
     if (bl.m_playCountText) {
-        m_playCountText = bl.m_playCountText;
+        add(bl.m_playCountText->clone());
     }
 }
 
