@@ -361,11 +361,16 @@ Item {
                             return
                         }
 
-                        treeModel.moveRows(drag.source.index.parent,
-                                                     drag.source.index.row,
-                                                     1,
-                                                     styleData.index.parent,
-                                                     styleData.index.row)
+                        if (drag.source.index.row < 0 || styleData.index.row < 0) {
+                            return;
+                        }
+
+                        Qt.callLater(treeModel.moveRows,
+                                     drag.source.index.parent,
+                                     drag.source.index.row,
+                                     1,
+                                     styleData.index.parent,
+                                     styleData.index.row)
                     }
                 }
             }
