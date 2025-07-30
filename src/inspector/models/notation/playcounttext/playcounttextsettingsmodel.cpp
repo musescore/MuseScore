@@ -21,6 +21,8 @@
  */
 #include "playcounttextsettingsmodel.h"
 
+#include "engraving/dom/barline.h"
+#include "engraving/types/typesconv.h"
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -39,6 +41,24 @@ void PlayCountTextSettingsModel::createProperties()
 {
     m_playCountText = buildPropertyItem(Pid::PLAY_COUNT_TEXT);
     m_playCountTextSetting = buildPropertyItem(Pid::PLAY_COUNT_TEXT_SETTING);
+
+    connect(m_playCountTextSetting, &PropertyItem::valueChanged, this, [this]() {
+        if (!m_playCountText->value().toString().isEmpty()) {
+            return;
+        }
+
+        // HACK - fill with auto text
+        const BarLine* bl = toBarLine(m_elementList.front());
+        const Measure* m = bl->measure();
+        const int repeatCount = m->repeatCount();
+        if (repeatCount == 2 && !m->style().styleV(Sid::repeatPlayCountShowSingleRepeats).toBool()) {
+            return;
+        }
+        String text = TConv::translatedUserName(m->style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+            repeatCount);
+
+        m_playCountText->setValue(text.toQString());
+    });
 }
 
 void PlayCountTextSettingsModel::requestElements()

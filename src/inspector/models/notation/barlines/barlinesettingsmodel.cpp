@@ -24,6 +24,7 @@
 #include "translation.h"
 #include "types/barlinetypes.h"
 #include "engraving/dom/barline.h"
+#include "engraving/types/typesconv.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
@@ -55,6 +56,23 @@ void BarlineSettingsModel::createProperties()
     connect(m_type, &PropertyItem::valueChanged, this, [this]() {
         updateShowPlayCount();
         updateShowPlayCountSettings();
+    });
+    connect(m_playCountTextSetting, &PropertyItem::valueChanged, this, [this]() {
+        if (!m_playCountText->value().toString().isEmpty()) {
+            return;
+        }
+
+        // HACK - fill with auto text
+        const BarLine* bl = toBarLine(m_elementList.front());
+        const Measure* m = bl->measure();
+        const int repeatCount = m->repeatCount();
+        if (repeatCount == 2 && !m->style().styleV(Sid::repeatPlayCountShowSingleRepeats).toBool()) {
+            return;
+        }
+        String text = TConv::translatedUserName(m->style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+            repeatCount);
+
+        m_playCountText->setValue(text.toQString());
     });
 }
 

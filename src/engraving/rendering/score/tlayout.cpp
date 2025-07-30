@@ -4583,10 +4583,6 @@ void TLayout::layoutPlayCountText(PlayCountText* item, TextBase::LayoutData* lda
     LAYOUT_CALL_ITEM(item);
     BarLine* bl = item->barline();
     Segment* seg = bl->segment();
-    if (!item->cursor()->editing()) {
-        String text = bl->playCountCustomText();
-        item->setXmlText(text);
-    }
 
     layoutBaseTextBase(item, ldata);
 
