@@ -53,6 +53,8 @@
       <stringTuningsFontSize>10.25</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Times New Roman</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Times New Roman</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Times New Roman</articulationFontFace>
+      <articulationFontSize>10.25</articulationFontSize>
       <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
       <longInstrumentFontSize>10.25</longInstrumentFontSize>
       <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>

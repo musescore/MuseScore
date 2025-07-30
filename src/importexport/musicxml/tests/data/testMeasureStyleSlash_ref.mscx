@@ -23,6 +23,7 @@
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
+      <articulationFontSize>10</articulationFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <tempoFontSize>10</tempoFontSize>
       <tempoChangeFontSize>10</tempoChangeFontSize>

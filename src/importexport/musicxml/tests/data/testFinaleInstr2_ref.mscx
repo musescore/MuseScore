@@ -54,6 +54,8 @@
       <stringTuningsFontSize>8.8</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Times</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Times</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Times</articulationFontFace>
+      <articulationFontSize>8.8</articulationFontSize>
       <longInstrumentFontFace>Times</longInstrumentFontFace>
       <longInstrumentFontSize>8.8</longInstrumentFontSize>
       <shortInstrumentFontFace>Times</shortInstrumentFontFace>
