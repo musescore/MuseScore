@@ -52,7 +52,7 @@ public:
 
     // 2. Setup tracks for Sequence
     async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
-    async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    async::Promise<RetVal<TrackName> > trackName(const TrackSequenceId sequenceId, const TrackId trackId) const override;
 
     async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const TrackName& trackName, io::IODevice* playbackData,
                                                   AudioParams&& params) override;

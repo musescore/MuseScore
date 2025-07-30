@@ -111,8 +111,8 @@ private:
         QObject* window = nullptr;
     };
 
-    async::Promise<Val>::Body openFunc(const UriQuery& q);
-    async::Promise<Val>::Body openFunc(const UriQuery& q, const QVariantMap& params);
+    async::Promise<Val>::BodyResolveReject openFunc(const UriQuery& q);
+    async::Promise<Val>::BodyResolveReject openFunc(const UriQuery& q, const QVariantMap& params);
 
     void raiseWindowInStack(QObject* newActiveWindow);
 

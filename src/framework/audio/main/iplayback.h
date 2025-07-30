@@ -23,6 +23,7 @@
 #define MUSE_AUDIO_ISEQUENCER_H
 
 #include "modularity/imoduleinterface.h"
+#include "global/types/retval.h"
 #include "global/async/channel.h"
 #include "global/async/promise.h"
 #include "global/io/path.h"
@@ -53,7 +54,7 @@ public:
 
     // 2. Setup tracks for Sequence
     virtual async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const = 0;
-    virtual async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+    virtual async::Promise<RetVal<TrackName> > trackName(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
 
     virtual async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
                                                           io::IODevice* playbackData, AudioParams&& params) = 0;
