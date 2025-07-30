@@ -1248,9 +1248,17 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                     hdl.push_back(HDegree(d, 0, HDegreeType::SUBTRACT));
                 }
                 if (tok1L == "#") {
-                    hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
+                    if (d == 7) {
+                        m_chord += 11;
+                    } else {
+                        hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
+                    }
                 } else if (tok1L == "b") {
-                    hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
+                    if (d == 7) {
+                        m_chord += 10;
+                    } else {
+                        hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
+                    }
                 }
             }
             if (!degree.empty()) {
