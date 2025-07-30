@@ -42,7 +42,7 @@ class System;
 //    gives infos about note attributes
 //---------------------------------------------------------
 
-enum class ArticulationCategory : char {
+enum class ArticulationCategory : unsigned char {
     NONE = 0x0,
     DOUBLE = 0x1,
     TENUTO = 0x2,
@@ -51,6 +51,7 @@ enum class ArticulationCategory : char {
     MARCATO = 0x10,
     LUTE_FINGERING = 0x20,
     LAISSEZ_VIB = 0x40,
+    HANDBELLS = 0x80,
 };
 DECLARE_FLAGS(ArticulationCategories, ArticulationCategory)
 DECLARE_OPERATORS_FOR_FLAGS(ArticulationCategories)
@@ -173,6 +174,7 @@ public:
     bool isMarcato() const { return m_categories & ArticulationCategory::MARCATO; }
     bool isLuteFingering() const { return m_categories & ArticulationCategory::LUTE_FINGERING; }
     bool isLaissezVib() const { return m_categories & ArticulationCategory::LAISSEZ_VIB; }
+    bool isHandbellsArticulation() const { return m_categories & ArticulationCategory::HANDBELLS; }
 
     bool isBasicArticulation() const;
 

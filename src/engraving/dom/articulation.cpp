@@ -313,8 +313,11 @@ bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
         setDirection(v.value<DirectionV>());
         break;
     case Pid::ARTICULATION_ANCHOR:
+    {
+        ArticulationAnchor anchor = ArticulationAnchor(v.toInt());
         setAnchor(ArticulationAnchor(v.toInt()));
         break;
+    }
     case Pid::PLAY:
         setPlayArticulation(v.toBool());
         break;
@@ -518,6 +521,10 @@ Sid Articulation::getPropertyStyle(Pid id) const
         return EngravingItem::getPropertyStyle(id);
 
     case Pid::ARTICULATION_ANCHOR: {
+        if (isHandbellsArticulation()) {
+            return Sid::articulationAnchorDefault;
+        }
+
         switch (anchorGroup(m_symId)) {
         case AnchorGroup::ARTICULATION:
             return Sid::articulationAnchorDefault;
@@ -601,6 +608,13 @@ void Articulation::computeCategories()
                          || m_symId == SymId::luteFingeringRHThird);
     m_categories.setFlag(ArticulationCategory::LAISSEZ_VIB,
                          m_symId == SymId::articLaissezVibrerAbove || m_symId == SymId::articLaissezVibrerBelow);
+
+    m_categories.setFlag(ArticulationCategory::HANDBELLS,
+                         (static_cast<int>(m_symId) >= static_cast<int>(SymId::handbellsBelltree)
+                          && static_cast<int>(m_symId) <= static_cast<int>(SymId::handbellsTableSingleBell))
+                         || (static_cast<int>(m_textType) >= static_cast<int>(ArticulationTextType::LV)
+                             && static_cast<int>(m_textType) <= static_cast<int>(ArticulationTextType::VIB))
+                         );
 }
 
 bool Articulation::isBasicArticulation() const
