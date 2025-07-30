@@ -2602,7 +2602,7 @@ void ExportMusicXml::clef(staff_idx_t staff, const ClefType ct, const String& ex
 
     int line = ClefInfo::line(ct);
     m_xml.tag("sign", info.sign);
-    if (info.sign != "TAB") {
+    if ((std::string_view(info.sign) != "percussion") && (std::string_view(info.sign) != "TAB")) {
         m_xml.tag("line", line);
     }
     if (info.octChng) {
