@@ -30,13 +30,15 @@
 using namespace mu::converter;
 
 struct ScannerData {
+    using ElementKey = std::pair<mu::engraving::ElementType, int /*subtype*/>;
+
     // in
     ScoreElementScanner::Options options;
 
     // out
     ScoreElementScanner::InstrumentElementMap elements;
     std::set<const mu::engraving::Chord*> chords;
-    std::map<mu::engraving::InstrumentTrackId, std::set<muse::String> > uniqueNames;
+    std::map<mu::engraving::InstrumentTrackId, std::map<ElementKey, std::set<muse::String> > > uniqueNames;
 };
 
 static bool itemAccepted(const mu::engraving::EngravingItem* item, const mu::engraving::ElementTypeSet& acceptedTypes)
@@ -64,7 +66,23 @@ static bool itemAccepted(const mu::engraving::EngravingItem* item, const mu::eng
     return muse::contains(acceptedTypes, type);
 }
 
-static muse::String chordToVoicing(const mu::engraving::Chord* chord)
+static bool isChordArticulation(const mu::engraving::EngravingItem* item)
+{
+    const mu::engraving::EngravingItem* parent = item->parentItem();
+    if (!parent || !parent->isChord()) {
+        return false;
+    }
+
+    static const std::unordered_set<mu::engraving::ElementType> CHORD_ARTICULATION_TYPES {
+        mu::engraving::ElementType::ARPEGGIO,
+        mu::engraving::ElementType::TREMOLO_SINGLECHORD,
+        mu::engraving::ElementType::ORNAMENT,
+    };
+
+    return muse::contains(CHORD_ARTICULATION_TYPES, item->type());
+}
+
+static muse::String chordToNotes(const mu::engraving::Chord* chord)
 {
     muse::StringList notes;
 
@@ -87,7 +105,8 @@ static void addElementInfoIfNeed(void* data, mu::engraving::EngravingItem* item)
     ScoreElementScanner::ElementInfo info;
 
     if (item->isNote()) {
-        const mu::engraving::Chord* chord = mu::engraving::toNote(item)->chord();
+        const mu::engraving::Note* note = mu::engraving::toNote(item);
+        const mu::engraving::Chord* chord = note->chord();
         if (chord->notes().size() > 1) {
             if (muse::contains(scannerData->chords, chord)) {
                 return;
@@ -95,9 +114,10 @@ static void addElementInfoIfNeed(void* data, mu::engraving::EngravingItem* item)
 
             type = chord->type();
             scannerData->chords.insert(chord);
+            info.notes = chordToNotes(chord);
+        } else {
+            info.name = note->tpcUserName();
         }
-
-        info.name = chordToVoicing(chord);
         barbeat = item->barbeat();
     } else if (item->isSpannerSegment()) {
         mu::engraving::Spanner* spanner = mu::engraving::toSpannerSegment(item)->spanner();
@@ -112,12 +132,19 @@ static void addElementInfoIfNeed(void* data, mu::engraving::EngravingItem* item)
     } else if (item->isHarmony()) {
         info.name = mu::engraving::toHarmony(item)->harmonyName();
         barbeat = item->barbeat();
+    } else if (isChordArticulation(item)) {
+        const mu::engraving::Chord* chord = mu::engraving::toChord(item->parentItem());
+        scannerData->chords.insert(chord);
+
+        info.name = item->translatedSubtypeUserName();
+        info.notes = chordToNotes(chord);
+        barbeat = item->barbeat();
     } else {
         info.name = item->translatedSubtypeUserName();
         barbeat = item->barbeat();
     }
 
-    if (info.name.empty()) {
+    if (info.name.empty() && info.notes.empty()) {
         info.name = item->typeUserName().translated();
     }
 
@@ -128,12 +155,15 @@ static void addElementInfoIfNeed(void* data, mu::engraving::EngravingItem* item)
     };
 
     if (scannerData->options.avoidDuplicates) {
-        std::set<muse::String>& uniqueNames = scannerData->uniqueNames[trackId];
-        if (muse::contains(uniqueNames, info.name)) {
+        const muse::String& name = !info.name.empty() ? info.name : info.notes;
+        const ScannerData::ElementKey key = std::make_pair(type, item->subtype());
+        std::set<muse::String>& uniqueNames = scannerData->uniqueNames[trackId][key];
+
+        if (muse::contains(uniqueNames, name)) {
             return;
         }
 
-        uniqueNames.insert(info.name);
+        uniqueNames.insert(name);
     }
 
     info.staffIdx = item->staffIdx();

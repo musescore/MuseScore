@@ -707,7 +707,14 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
 
             for (const ScoreElementScanner::ElementInfo& element : pair.second) {
                 QJsonObject obj;
-                obj["name"] = element.name.toQString();
+
+                if (!element.name.empty()) {
+                    obj["name"] = element.name.toQString();
+                }
+
+                if (!element.notes.empty()) {
+                    obj["notes"] = element.notes.toQString();
+                }
 
                 if (element.staffIdx != muse::nidx) {
                     obj["staffIdx"] = static_cast<int>(element.staffIdx);
@@ -725,7 +732,9 @@ muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notatio
                     obj["beat"] = element.beat;
                 }
 
-                elementArray << obj;
+                if (!obj.empty()) {
+                    elementArray << obj;
+                }
             }
 
             QString type = mu::engraving::TConv::toXml(pair.first).ascii();
