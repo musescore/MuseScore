@@ -76,7 +76,8 @@ PopupView {
 
         showArrow: root.showArrow
         arrowX: root.arrowX
-        opensUpward: root.opensUpward
+        arrowY: root.arrowY
+        popupPosition: root.popupPosition
         isOpened: root.isOpened
 
         enabled: root.isOpened

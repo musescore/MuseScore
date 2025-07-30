@@ -44,6 +44,23 @@ class INavigationControl;
 }
 
 namespace muse::uicomponents {
+class PopupPosition
+{
+    Q_GADGET
+
+public:
+    enum Type: int {
+        Left = 0x01,
+        Right = 0x02,
+        Horizontal = 0x03,
+        Bottom = 0x04,
+        Top = 0x08,
+        Vertical = 0x0C,
+    };
+
+    Q_ENUM(Type)
+};
+
 class PopupView : public QObject, public QQmlParserStatus, public Injectable, public async::Asyncable
 {
     Q_OBJECT
@@ -66,8 +83,10 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
     Q_PROPERTY(PlacementPolicies placementPolicies READ placementPolicies WRITE setPlacementPolicies NOTIFY placementPoliciesChanged)
 
     Q_PROPERTY(QQuickItem * anchorItem READ anchorItem WRITE setAnchorItem NOTIFY anchorItemChanged)
-    Q_PROPERTY(bool opensUpward READ opensUpward NOTIFY opensUpwardChanged)
+    Q_PROPERTY(PopupPosition::Type popupPosition READ popupPosition WRITE setPopupPosition NOTIFY popupPositionChanged)
+
     Q_PROPERTY(int arrowX READ arrowX WRITE setArrowX NOTIFY arrowXChanged)
+    Q_PROPERTY(int arrowY READ arrowY WRITE setArrowY NOTIFY arrowYChanged)
 
     Q_PROPERTY(bool isOpened READ isOpened NOTIFY isOpenedChanged)
     Q_PROPERTY(OpenPolicies openPolicies READ openPolicies WRITE setOpenPolicies NOTIFY openPoliciesChanged)
@@ -128,7 +147,9 @@ public:
         Default = 0x00000000,
         PreferBelow = 0x00000001,
         PreferAbove = 0x00000002,
-        IgnoreFit = 0x00000003
+        PreferLeft = 0x00000004,
+        PreferRight = 0x00000008,
+        IgnoreFit = 0x0000000F,
     };
     Q_DECLARE_FLAGS(PlacementPolicies, PlacementPolicy)
     Q_FLAG(PlacementPolicies)
@@ -174,8 +195,9 @@ public:
     bool alwaysOnTop() const;
     QVariantMap ret() const;
 
-    bool opensUpward() const;
+    PopupPosition::Type popupPosition() const;
     int arrowX() const;
+    int arrowY() const;
     int padding() const;
     bool showArrow() const;
     QQuickItem* anchorItem() const;
@@ -204,8 +226,9 @@ public slots:
     void setAlwaysOnTop(bool alwaysOnTop);
     void setRet(QVariantMap ret);
 
-    void setOpensUpward(bool opensUpward);
+    void setPopupPosition(PopupPosition::Type position);
     void setArrowX(int arrowX);
+    void setArrowY(int arrowY);
     void setPadding(int padding);
     void setShowArrow(bool showArrow);
     void setAnchorItem(QQuickItem* anchorItem);
@@ -238,8 +261,9 @@ signals:
     void aboutToClose(QQuickCloseEvent* closeEvent);
     void closed(bool force);
 
-    void opensUpwardChanged(bool opensUpward);
+    void popupPositionChanged(PopupPosition::Type position);
     void arrowXChanged(int arrowX);
+    void arrowYChanged(int arrowY);
     void paddingChanged(int padding);
     void showArrowChanged(bool showArrow);
     void anchorItemChanged(QQuickItem* anchorItem);
@@ -320,8 +344,9 @@ protected:
     bool m_resizable = false;
     bool m_alwaysOnTop = false;
     QVariantMap m_ret;
-    bool m_opensUpward = false;
+    PopupPosition::Type m_popupPosition = PopupPosition::Bottom;
     int m_arrowX = 0;
+    int m_arrowY = 0;
     int m_padding = 0;
     bool m_showArrow = false;
 

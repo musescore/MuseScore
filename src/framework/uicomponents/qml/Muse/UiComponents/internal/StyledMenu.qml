@@ -174,7 +174,7 @@ MenuView {
         margins: 0
 
         showArrow: root.showArrow
-        opensUpward: root.opensUpward
+        popupPosition: root.popupPosition
         isOpened: root.isOpened
 
         animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
