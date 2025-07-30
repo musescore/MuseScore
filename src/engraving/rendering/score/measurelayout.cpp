@@ -1245,11 +1245,21 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
             continue;
         }
 
+        String text;
         if (bl->playCountTextSetting() == AutoCustomHide::AUTO) {
             const int repeatCount = m->repeatCount();
-            const String text = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+            text = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
                 repeatCount);
-            bl->setPlayCountCustomText(text);
+        } else if (bl->playCountTextSetting() == AutoCustomHide::CUSTOM) {
+            text = bl->playCountCustomText();
+            if (text.empty()) {
+                const int repeatCount = m->repeatCount();
+                text = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+                    repeatCount);
+            }
+        }
+        if (!playCount->cursor()->editing()) {
+            playCount->setXmlText(text);
         }
     }
 }
