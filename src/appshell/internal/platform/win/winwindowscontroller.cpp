@@ -146,15 +146,8 @@ bool WinWindowsController::nativeEventFilterForNonMainWindow(UINT messageType, H
 {
     switch (messageType) {
     case WM_ERASEBKGND: {
-        std::wstring title(GetWindowTextLength(hWnd) + 1, L'\0');
-        GetWindowTextW(hWnd, &title[0], (int)title.size());
-
-        if (!title.empty() && title.back() == L'\0') {
-            title.pop_back();
-        }
-
-        if (title == L"PopupWindow") {
-            //! Popups has transparent background, so no need to change it
+        LONG exStyle = GetWindowLongPtr(hWnd, GWL_EXSTYLE);
+        if (exStyle & WS_EX_LAYERED) {
             return false;
         }
 
