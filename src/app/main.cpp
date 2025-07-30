@@ -119,10 +119,6 @@ int main(int argc, char** argv)
     }
 #endif
 
-#ifdef Q_OS_WIN
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
-#endif
-
     QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
 
 // Can't use MUSE_APP_TITLE until next major release, because this "application name" is used to determine
