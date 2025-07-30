@@ -436,7 +436,7 @@ void WorkerChannelController::initOnWorker(std::shared_ptr<IWorkerPlayback> play
     });
 }
 
-void WorkerChannelController::deinitOnWorker()
+void WorkerChannelController::deinit()
 {
     ONLY_AUDIO_WORKER_THREAD;
 

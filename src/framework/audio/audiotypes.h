@@ -34,7 +34,6 @@
 #include "global/realfn.h"
 #include "global/async/channel.h"
 #include "global/io/iodevice.h"
-#include "global/progress.h"
 
 #include "mpe/events.h"
 
@@ -349,6 +348,12 @@ struct AudioParams {
 struct AudioSignalVal {
     float amplitude = 0.f;
     volume_dbfs_t pressure = 0.f;
+
+    inline bool operator ==(const AudioSignalVal& other) const
+    {
+        return muse::is_equal(amplitude, other.amplitude)
+               && pressure == other.pressure;
+    }
 };
 
 using AudioSignalValuesMap = std::map<audioch_t, AudioSignalVal>;
