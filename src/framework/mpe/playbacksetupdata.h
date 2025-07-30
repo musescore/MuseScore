@@ -23,7 +23,6 @@
 #ifndef MUSE_MPE_PLAYBACKSETUPDATA_H
 #define MUSE_MPE_PLAYBACKSETUPDATA_H
 
-#include <variant>
 #include <optional>
 
 #include "soundid.h"

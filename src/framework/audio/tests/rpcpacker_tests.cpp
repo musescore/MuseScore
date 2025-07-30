@@ -21,6 +21,10 @@
  */
 #include <gtest/gtest.h>
 
+#pragma pack(push, 1)
+#include "audio/audiotypes.h"
+#pragma pack(pop)
+
 #include "audio/internal/rpc/rpcpacker.h"
 
 using namespace muse;
@@ -31,6 +35,22 @@ class Audio_RpcPackerTests : public ::testing::Test
 public:
 };
 
+template<typename ... Fields>
+static constexpr size_t sum_sizeof()
+{
+    size_t s = (0 + ... + sizeof(Fields));
+    return s;
+}
+
+template<typename T, typename ... Fields>
+static constexpr void KNOWN_FIELDS(const T&, const Fields&...)
+{
+    //! NOTE If the asserted, it means the size of the type or structure has changed
+    //! and you need to improve the packing and unpacking functions
+    //! and write the new size in the test.
+    static_assert(sizeof(T) == sum_sizeof<Fields...>());
+}
+
 TEST_F(Audio_RpcPackerTests, AudioResourceMeta)
 {
     AudioResourceMeta origin;
@@ -39,6 +59,13 @@ TEST_F(Audio_RpcPackerTests, AudioResourceMeta)
     origin.vendor = "muse";
     origin.attributes.insert({ u"key", u"val" });
     origin.hasNativeEditorSupport = true;
+
+    KNOWN_FIELDS(origin,
+                 origin.id,
+                 origin.type,
+                 origin.vendor,
+                 origin.attributes,
+                 origin.hasNativeEditorSupport);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
 
@@ -62,6 +89,13 @@ TEST_F(Audio_RpcPackerTests, AudioFxParams)
     origin.configuration.insert({ "key", "val" });
     origin.active = false;
 
+    KNOWN_FIELDS(origin,
+                 origin.categories,
+                 origin.chainOrder,
+                 origin.resourceMeta,
+                 origin.configuration,
+                 origin.active);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     AudioFxParams unpacked;
@@ -76,6 +110,10 @@ TEST_F(Audio_RpcPackerTests, AuxSendParams)
     AuxSendParams origin;
     origin.signalAmount = 0.42;
     origin.active = true;
+
+    KNOWN_FIELDS(origin,
+                 origin.signalAmount,
+                 origin.active);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
 
@@ -97,6 +135,15 @@ TEST_F(Audio_RpcPackerTests, AudioOutputParams)
     origin.muted = true;
     origin.solo = true;
 
+    KNOWN_FIELDS(origin,
+                 origin.fxChain,
+                 origin.volume,
+                 origin.balance,
+                 origin.auxSends,
+                 origin.forceMute,
+                 origin.muted,
+                 origin.solo);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     AudioOutputParams unpacked;
@@ -104,6 +151,24 @@ TEST_F(Audio_RpcPackerTests, AudioOutputParams)
 
     EXPECT_TRUE(ok);
     EXPECT_TRUE(origin == unpacked);
+}
+
+TEST_F(Audio_RpcPackerTests, AudioParams)
+{
+    AudioParams origin;
+
+    KNOWN_FIELDS(origin,
+                 origin.in,
+                 origin.out);
+
+    ByteArray data = rpc::RpcPacker::pack(origin);
+
+    AudioParams unpacked;
+    bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+    EXPECT_TRUE(ok);
+    EXPECT_TRUE(origin.in == unpacked.in);
+    EXPECT_TRUE(origin.out == unpacked.out);
 }
 
 TEST_F(Audio_RpcPackerTests, SoundPreset)
@@ -114,9 +179,40 @@ TEST_F(Audio_RpcPackerTests, SoundPreset)
     origin.isDefault = true;
     origin.attributes.insert({ u"key", u"val" });
 
+    KNOWN_FIELDS(origin,
+                 origin.code,
+                 origin.name,
+                 origin.isDefault,
+                 origin.attributes);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     SoundPreset unpacked;
+    bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+    EXPECT_TRUE(ok);
+    EXPECT_TRUE(origin == unpacked);
+}
+
+TEST_F(Audio_RpcPackerTests, SoundTrackFormat)
+{
+    SoundTrackFormat origin;
+    origin.type = SoundTrackType::OGG;
+    origin.sampleRate = 44000;
+    origin.samplesPerChannel = 256;
+    origin.audioChannelsNumber = 2;
+    origin.bitRate = 196;
+
+    KNOWN_FIELDS(origin,
+                 origin.type,
+                 origin.sampleRate,
+                 origin.samplesPerChannel,
+                 origin.audioChannelsNumber,
+                 origin.bitRate);
+
+    ByteArray data = rpc::RpcPacker::pack(origin);
+
+    SoundTrackFormat unpacked;
     bool ok = rpc::RpcPacker::unpack(data, unpacked);
 
     EXPECT_TRUE(ok);
@@ -129,6 +225,10 @@ TEST_F(Audio_RpcPackerTests, AudioSourceParams)
     origin.resourceMeta.id = "1234";
     origin.configuration.insert({ "key", "val" });
 
+    KNOWN_FIELDS(origin,
+                 origin.resourceMeta,
+                 origin.configuration);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     AudioSourceParams unpacked;
@@ -136,6 +236,96 @@ TEST_F(Audio_RpcPackerTests, AudioSourceParams)
 
     EXPECT_TRUE(ok);
     EXPECT_TRUE(origin == unpacked);
+}
+
+TEST_F(Audio_RpcPackerTests, AudioSignalVal)
+{
+    AudioSignalVal origin;
+    origin.amplitude = 0.6;
+    origin.pressure = 0.5;
+
+    KNOWN_FIELDS(origin,
+                 origin.amplitude,
+                 origin.pressure);
+
+    ByteArray data = rpc::RpcPacker::pack(origin);
+
+    AudioSignalVal unpacked;
+    bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+    EXPECT_TRUE(ok);
+    EXPECT_TRUE(origin == unpacked);
+}
+
+TEST_F(Audio_RpcPackerTests, InputProcessingProgress)
+{
+    // InputProcessingProgress
+    {
+        InputProcessingProgress origin;
+
+        KNOWN_FIELDS(origin,
+                     origin.isStarted,
+                     origin.processedChannel);
+    }
+
+    // ChunkInfo
+    {
+        InputProcessingProgress::ChunkInfo origin;
+        origin.start = 1.6;
+        origin.end = 2.5;
+
+        KNOWN_FIELDS(origin,
+                     origin.start,
+                     origin.end);
+
+        ByteArray data = rpc::RpcPacker::pack(origin);
+
+        InputProcessingProgress::ChunkInfo unpacked;
+        bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+        EXPECT_TRUE(ok);
+        EXPECT_TRUE(origin == unpacked);
+    }
+
+    // ProgressInfo
+    {
+        InputProcessingProgress::ProgressInfo origin;
+        origin.current = 16;
+        origin.total = 25;
+
+        KNOWN_FIELDS(origin,
+                     origin.current,
+                     origin.total);
+
+        ByteArray data = rpc::RpcPacker::pack(origin);
+
+        InputProcessingProgress::ProgressInfo unpacked;
+        bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+        EXPECT_TRUE(ok);
+        EXPECT_TRUE(origin.current == unpacked.current);
+        EXPECT_TRUE(origin.total == unpacked.total);
+    }
+
+    // ProgressInfo
+    {
+        InputProcessingProgress::StatusInfo origin;
+        origin.status = InputProcessingProgress::Status::Started;
+        origin.errcode = 73;
+
+        KNOWN_FIELDS(origin,
+                     origin.status,
+                     origin.errcode);
+
+        ByteArray data = rpc::RpcPacker::pack(origin);
+
+        InputProcessingProgress::StatusInfo unpacked;
+        bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+        EXPECT_TRUE(ok);
+        EXPECT_TRUE(origin.status == unpacked.status);
+        EXPECT_TRUE(origin.errcode == unpacked.errcode);
+    }
 }
 
 // MPE
@@ -155,6 +345,15 @@ static mpe::ArrangementContext makeArrangementContext()
 TEST_F(Audio_RpcPackerTests, MPE_ArrangementContext)
 {
     mpe::ArrangementContext origin = makeArrangementContext();
+
+    KNOWN_FIELDS(origin,
+                 origin.nominalTimestamp,
+                 origin.actualTimestamp,
+                 origin.nominalDuration,
+                 origin.actualDuration,
+                 origin.voiceLayerIndex,
+                 origin.staffLayerIndex,
+                 origin.bps);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
 
@@ -177,6 +376,10 @@ TEST_F(Audio_RpcPackerTests, MPE_PitchContext)
 {
     mpe::PitchContext origin = makePitchContext();
 
+    KNOWN_FIELDS(origin,
+                 origin.nominalPitchLevel,
+                 origin.pitchCurve);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     mpe::PitchContext unpacked;
@@ -192,6 +395,10 @@ TEST_F(Audio_RpcPackerTests, MPE_ArrangementPattern)
     origin.durationFactor = 2;
     origin.timestampOffset = 3;
 
+    KNOWN_FIELDS(origin,
+                 origin.durationFactor,
+                 origin.timestampOffset);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     mpe::ArrangementPattern unpacked;
@@ -206,6 +413,9 @@ TEST_F(Audio_RpcPackerTests, MPE_PitchPattern)
     mpe::PitchPattern origin;
     origin.pitchOffsetMap.insert({ 12, 14 });
 
+    KNOWN_FIELDS(origin,
+                 origin.pitchOffsetMap);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     mpe::PitchPattern unpacked;
@@ -219,6 +429,9 @@ TEST_F(Audio_RpcPackerTests, MPE_ExpressionPattern)
 {
     mpe::ExpressionPattern origin;
     origin.dynamicOffsetMap.insert({ 12, 14 });
+
+    KNOWN_FIELDS(origin,
+                 origin.dynamicOffsetMap);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
 
@@ -242,6 +455,11 @@ static mpe::ArticulationPatternSegment makeArticulationPatternSegment()
 TEST_F(Audio_RpcPackerTests, MPE_ArticulationPatternSegment)
 {
     mpe::ArticulationPatternSegment origin = makeArticulationPatternSegment();
+
+    KNOWN_FIELDS(origin,
+                 origin.arrangementPattern,
+                 origin.pitchPattern,
+                 origin.expressionPattern);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
 
@@ -268,6 +486,14 @@ TEST_F(Audio_RpcPackerTests, MPE_ArticulationMeta)
 {
     mpe::ArticulationMeta origin = makeArticulationMeta();
 
+    KNOWN_FIELDS(origin,
+                 origin.type,
+                 origin.pattern,
+                 origin.timestamp,
+                 origin.overallDuration,
+                 origin.overallPitchChangesRange,
+                 origin.overallDynamicChangesRange);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     mpe::ArticulationMeta unpacked;
@@ -293,6 +519,14 @@ TEST_F(Audio_RpcPackerTests, MPE_ArticulationAppliedData)
 {
     mpe::ArticulationAppliedData origin = makeArticulationAppliedData();
 
+    KNOWN_FIELDS(origin,
+                 origin.meta,
+                 origin.appliedPatternSegment,
+                 origin.occupiedFrom,
+                 origin.occupiedTo,
+                 origin.occupiedPitchChangesRange,
+                 origin.occupiedDynamicChangesRange);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     mpe::ArticulationAppliedData unpacked;
@@ -316,6 +550,12 @@ TEST_F(Audio_RpcPackerTests, MPE_ExpressionContext)
 {
     mpe::ExpressionContext origin = makeExpressionContext();
 
+    KNOWN_FIELDS(origin,
+                 origin.articulations,
+                 origin.nominalDynamicLevel,
+                 origin.expressionCurve,
+                 origin.velocityOverride);
+
     ByteArray data = rpc::RpcPacker::pack(origin);
 
     mpe::ExpressionContext unpacked;
@@ -325,65 +565,32 @@ TEST_F(Audio_RpcPackerTests, MPE_ExpressionContext)
     EXPECT_TRUE(origin == unpacked);
 }
 
-static mpe::NoteEvent makeNoteEvent()
-{
-    muse::mpe::ArrangementContext arrCtx = makeArrangementContext();
-    muse::mpe::PitchContext pitchCtx = makePitchContext();
-    muse::mpe::ExpressionContext exprCtx = makeExpressionContext();
-    mpe::NoteEvent origin = muse::mpe::NoteEvent(std::move(arrCtx), std::move(pitchCtx), std::move(exprCtx));
-    return origin;
-}
-
-TEST_F(Audio_RpcPackerTests, MPE_NoteEvent)
-{
-    mpe::NoteEvent origin = makeNoteEvent();
-
-    ByteArray data = rpc::RpcPacker::pack(origin);
-
-    muse::mpe::ArrangementContext nullarrCtx;
-    muse::mpe::PitchContext nullpitchCtx;
-    muse::mpe::ExpressionContext nullexprCtx;
-    mpe::NoteEvent unpacked = muse::mpe::NoteEvent(std::move(nullarrCtx), std::move(nullpitchCtx), std::move(nullexprCtx));
-    bool ok = rpc::RpcPacker::unpack(data, unpacked);
-
-    EXPECT_TRUE(ok);
-    EXPECT_TRUE(origin == unpacked);
-}
-
-static mpe::RestEvent makeRestEvent()
-{
-    muse::mpe::ArrangementContext arrCtx = makeArrangementContext();
-    mpe::RestEvent origin = muse::mpe::RestEvent(std::move(arrCtx));
-    return origin;
-}
-
-TEST_F(Audio_RpcPackerTests, MPE_RestEvent)
-{
-    mpe::RestEvent origin = makeRestEvent();
-
-    ByteArray data = rpc::RpcPacker::pack(origin);
-
-    muse::mpe::ArrangementContext nullarrCtx;
-    mpe::RestEvent unpacked = muse::mpe::RestEvent(std::move(nullarrCtx));
-    bool ok = rpc::RpcPacker::unpack(data, unpacked);
-
-    EXPECT_TRUE(ok);
-    EXPECT_TRUE(origin == unpacked);
-}
+// void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SyllableEvent& value);
+// void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SyllableEvent& value);
+// void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ControllerChangeEvent& value);
+// void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ControllerChangeEvent& value);
+// void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackEvent& value);
+// void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackEvent& value);
 
 TEST_F(Audio_RpcPackerTests, MPE_PlaybackEvent)
 {
     // NoteEvent
     {
-        mpe::PlaybackEvent origin = makeNoteEvent();
+        muse::mpe::ArrangementContext arrCtx = makeArrangementContext();
+        muse::mpe::PitchContext pitchCtx = makePitchContext();
+        muse::mpe::ExpressionContext exprCtx = makeExpressionContext();
+        mpe::NoteEvent event = muse::mpe::NoteEvent(std::move(arrCtx), std::move(pitchCtx), std::move(exprCtx));
+
+        KNOWN_FIELDS(event,
+                     event.arrangementCtx(),
+                     event.pitchCtx(),
+                     event.expressionCtx());
+
+        mpe::PlaybackEvent origin = event;
 
         ByteArray data = rpc::RpcPacker::pack(origin);
 
-        muse::mpe::ArrangementContext nullarrCtx;
-        muse::mpe::PitchContext nullpitchCtx;
-        muse::mpe::ExpressionContext nullexprCtx;
-        mpe::NoteEvent null = muse::mpe::NoteEvent(std::move(nullarrCtx), std::move(nullpitchCtx), std::move(nullexprCtx));
-        mpe::PlaybackEvent unpacked = null;
+        mpe::PlaybackEvent unpacked;
         bool ok = rpc::RpcPacker::unpack(data, unpacked);
 
         EXPECT_TRUE(ok);
@@ -392,17 +599,123 @@ TEST_F(Audio_RpcPackerTests, MPE_PlaybackEvent)
 
     // RestEvent
     {
-        mpe::PlaybackEvent origin = makeRestEvent();
+        muse::mpe::ArrangementContext arrCtx = makeArrangementContext();
+        mpe::RestEvent event = muse::mpe::RestEvent(std::move(arrCtx));
+
+        KNOWN_FIELDS(event,
+                     event.arrangementCtx());
+
+        mpe::PlaybackEvent origin = event;
 
         ByteArray data = rpc::RpcPacker::pack(origin);
 
-        muse::mpe::ArrangementContext nullarrCtx;
-        mpe::RestEvent null = muse::mpe::RestEvent(std::move(nullarrCtx));
-        mpe::PlaybackEvent unpacked = null;
+        mpe::PlaybackEvent unpacked;
         bool ok = rpc::RpcPacker::unpack(data, unpacked);
 
         EXPECT_TRUE(ok);
         EXPECT_TRUE(origin == unpacked);
+    }
+
+    // TextArticulationEvent
+    {
+        mpe::TextArticulationEvent event;
+        event.text = "ggg";
+        event.layerIdx = 3;
+        event.flags = mpe::TextArticulationEvent::FlagType::StartsAtPlaybackPosition;
+
+        KNOWN_FIELDS(event,
+                     event.text,
+                     event.layerIdx,
+                     event.flags);
+
+        mpe::PlaybackEvent origin = event;
+
+        ByteArray data = rpc::RpcPacker::pack(origin);
+
+        mpe::PlaybackEvent unpacked;
+        bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+        EXPECT_TRUE(ok);
+        EXPECT_TRUE(origin == unpacked);
+    }
+
+    // SoundPresetChangeEvent
+    {
+        mpe::SoundPresetChangeEvent event;
+        event.code = "ggg";
+        event.layerIdx = 3;
+
+        KNOWN_FIELDS(event,
+                     event.code,
+                     event.layerIdx);
+
+        mpe::PlaybackEvent origin = event;
+
+        ByteArray data = rpc::RpcPacker::pack(origin);
+
+        mpe::PlaybackEvent unpacked;
+        bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+        EXPECT_TRUE(ok);
+        EXPECT_TRUE(origin == unpacked);
+    }
+
+    // SyllableEvent
+    {
+        mpe::SyllableEvent event;
+        event.text = "ggg";
+        event.layerIdx = 3;
+        event.flags = mpe::SyllableEvent::FlagType::StartsAtPlaybackPosition;
+
+        KNOWN_FIELDS(event,
+                     event.text,
+                     event.layerIdx,
+                     event.flags);
+
+        mpe::PlaybackEvent origin = event;
+
+        ByteArray data = rpc::RpcPacker::pack(origin);
+
+        mpe::PlaybackEvent unpacked;
+        bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+        EXPECT_TRUE(ok);
+        EXPECT_TRUE(origin == unpacked);
+    }
+
+    // ControllerChangeEvent
+    {
+        mpe::ControllerChangeEvent event;
+        event.type = mpe::ControllerChangeEvent::Type::Modulation;
+        event.val = 0.4;
+        event.layerIdx = 2;
+
+        KNOWN_FIELDS(event,
+                     event.type,
+                     event.val,
+                     event.layerIdx);
+
+        mpe::PlaybackEvent origin = event;
+
+        ByteArray data = rpc::RpcPacker::pack(origin);
+
+        mpe::PlaybackEvent unpacked;
+        bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+        EXPECT_TRUE(ok);
+        EXPECT_TRUE(origin == unpacked);
+    }
+
+    {
+        using KnownPlaybackEvent = std::variant<std::monostate,
+                                                mpe::NoteEvent,
+                                                mpe::RestEvent,
+                                                mpe::TextArticulationEvent,
+                                                mpe::SoundPresetChangeEvent,
+                                                mpe::SyllableEvent,
+                                                mpe::ControllerChangeEvent>;
+
+        static_assert(std::is_same<mpe::PlaybackEvent, KnownPlaybackEvent>::value);
     }
 }
 
@@ -414,6 +727,15 @@ TEST_F(Audio_RpcPackerTests, MPE_PlaybackSetupData)
     origin.subCategories = { u"ggg" };
     origin.supportsSingleNoteDynamics = true;
     origin.musicXmlSoundId = "567";
+    origin.scoreId = "678";
+
+    KNOWN_FIELDS(origin,
+                 origin.id,
+                 origin.category,
+                 origin.subCategories,
+                 origin.supportsSingleNoteDynamics,
+                 origin.musicXmlSoundId,
+                 origin.scoreId);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
 
@@ -422,11 +744,20 @@ TEST_F(Audio_RpcPackerTests, MPE_PlaybackSetupData)
 
     EXPECT_TRUE(ok);
     EXPECT_TRUE(origin == unpacked);
+    EXPECT_TRUE(origin.musicXmlSoundId == unpacked.musicXmlSoundId);
+    EXPECT_TRUE(origin.scoreId == unpacked.scoreId);
 }
 
 TEST_F(Audio_RpcPackerTests, MPE_PlaybackData)
 {
     mpe::PlaybackData origin;
+
+    KNOWN_FIELDS(origin,
+                 origin.originEvents,
+                 origin.setupData,
+                 origin.dynamics,
+                 origin.mainStream,
+                 origin.offStream);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
 

@@ -51,7 +51,7 @@ SOFTWARE.
 #define LOGI LOGI_T(LOG_TAG)
 #define LOGD LOGD_T(LOG_TAG)
 #define LOGDA LOGDA_T(LOG_TAG)      // active debug
-#define LOGN if (0) LOGD_T(LOG_TAG) // compiling, but no output
+#define LOGN if constexpr (0)LOGD_T(LOG_TAG)  // compiling, but no output
 
 //! Useful macros
 #define DO_ASSERT_X_IMPL(cond, msg, var_name) \

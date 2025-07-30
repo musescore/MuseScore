@@ -28,7 +28,6 @@
 
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioResourceType& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioResourceType& value);
-
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioFxCategory& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioFxCategory& value);
 
@@ -547,13 +546,13 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SoundCategory& 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackSetupData& value)
 {
     p(value.id, value.category, value.subCategories,
-      value.supportsSingleNoteDynamics, value.musicXmlSoundId);
+      value.supportsSingleNoteDynamics, value.musicXmlSoundId, value.scoreId);
 }
 
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackSetupData& value)
 {
     p(value.id, value.category, value.subCategories,
-      value.supportsSingleNoteDynamics, value.musicXmlSoundId);
+      value.supportsSingleNoteDynamics, value.musicXmlSoundId, value.scoreId);
 }
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackData& value)

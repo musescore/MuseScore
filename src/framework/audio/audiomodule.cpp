@@ -262,7 +262,7 @@ void AudioModule::onDestroy()
     if (m_audioWorker->isRunning()) {
         m_audioWorker->stop([this]() {
             ONLY_AUDIO_WORKER_THREAD;
-            m_workerChannelController->deinitOnWorker();
+            m_workerChannelController->deinit();
             m_workerPlayback->deinit();
             m_audioEngine->deinit();
         });
@@ -340,8 +340,8 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 
     auto workerLoopBody = [this]() {
         ONLY_AUDIO_WORKER_THREAD;
-        m_audioBuffer->forward();
         m_rpcChannel->process();
+        m_audioBuffer->forward();
     };
 
     msecs_t interval = m_configuration->audioWorkerInterval(activeSpec.samples, activeSpec.sampleRate);

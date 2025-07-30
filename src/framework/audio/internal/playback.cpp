@@ -22,7 +22,6 @@
 #include "playback.h"
 
 #include "rpc/rpcpacker.h"
-#include "audiothread.h"
 #include "audiosanitizer.h"
 #include "player.h"
 
@@ -117,8 +116,10 @@ Promise<TrackSequenceId> Playback::addSequence()
         Msg msg = rpc::make_request(Method::AddSequence);
         channel()->send(msg, [this, resolve](const Msg& res) {
             ONLY_AUDIO_MAIN_THREAD;
-            TrackSequenceId seqId;
-            RpcPacker::unpack(res.data, seqId);
+            TrackSequenceId seqId = 0;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, seqId)) {
+                return;
+            }
             m_sequenceAdded.send(seqId);
             (void)resolve(seqId);
         });
@@ -157,6 +158,9 @@ void Playback::removeSequence(const TrackSequenceId id)
         }
         if (ok) {
             m_sequenceRemoved.send(id);
+
+            // clear cache
+            m_saveSoundTrackProgressChannels.erase(id);
         }
     });
 }

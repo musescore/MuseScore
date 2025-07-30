@@ -37,7 +37,7 @@ public:
     WorkerChannelController() = default;
 
     void initOnWorker(std::shared_ptr<IWorkerPlayback> playback);
-    void deinitOnWorker();
+    void deinit();
 
 private:
 
