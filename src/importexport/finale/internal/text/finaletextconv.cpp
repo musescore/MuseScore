@@ -19,196 +19,71 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "musx/musx.h"
+#include <string_view>
 
 #include "finaletextconv.h"
 
-#include "engraving/infrastructure/smufl.h"
-
-#include "io/dir.h"
-#include "serialization/json.h"
+#include "smufl_mapping.h"
 
 #include "engraving/types/symnames.h"
-
 #include "engraving/iengravingfont.h"
-
-#include "log.h"
 
 using namespace mu;
 using namespace muse;
-using namespace muse::io;
 using namespace mu::engraving;
-
 namespace mu::iex::finale {
-
-bool FinaleTextConv::init()
-{
-    bool ok = initConversionJson();
-
-    return ok;
-}
 
 /// @todo
 // MaestroTimes: import 194 as 2, 205 as 3, 202/203/193 as 2, 216 as 217 (no suitable smufl equivalent)"
 
-String FinaleTextConv::symIdFromFinaleChar(char c, const std::string& font)
+static std::string calcGlyphName(char32_t c, const std::shared_ptr<musx::dom::FontInfo>& font)
 {
-    std::vector<CharacterMap> characterList = muse::value(m_convertedFonts, font, {});
-    char16_t newC = char16_t(c);
-    if (characterList.empty()) {
-        return String(newC);
-    }
-    for (size_t i = 0; i < characterList.size(); ++i) {
-        auto [finaleCode, smuflCode, sym, index] = characterList.at(i);
-        if (finaleCode > newC) {
-            break;
-        } else if (finaleCode != newC) {
-            continue;
+    if (font->calcIsSMuFL()) { /// @todo use MuseScore engraver-fonts list for this? For `calcIsSMuFL` to return true, the font must be an installed SMuFL font on the user's machine
+        if (const std::string_view* glyphName = smufl_mapping::getGlyphName(c)) {
+            return std::string(*glyphName);
         }
-        String newCharList(u"<sym>" + String::fromAscii(SymNames::nameForSymId(sym).ascii()) + u"</sym>");
-        for (size_t j = i + 1; j < characterList.size(); ++j) {
-            auto [finaleCodeB, smuflCodeB, symB, indexB] = characterList.at(j);
-            if (indexB == 0) {
-                break;
-            }
-            newCharList.append(u"<sym>" + String::fromAscii(SymNames::nameForSymId(symB).ascii()) + u"</sym>");
+    } else if (const smufl_mapping::LegacyGlyphInfo* legacyGlyphInfo = smufl_mapping::getLegacyGlyphInfo(font->getName(), c)) {
+        if (legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Smufl) {
+            return std::string(legacyGlyphInfo->name);
         }
-        return newCharList;
     }
-    return String(newC);
+    return {};
 }
 
-String FinaleTextConv::smuflCodeList(char c, const std::string& font)
+engraving::SymId symIdFromFinaleChar(char32_t c, const std::shared_ptr<musx::dom::FontInfo>& font, engraving::SymId def)
 {
-    std::vector<std::tuple<char16_t, char16_t, SymId, int>> characterList = muse::value(m_convertedFonts, font, {});
-    char16_t newC = char16_t(c);
-    if (characterList.empty()) {
-        return String(newC);
+    const std::string glyphName = calcGlyphName(c, font);
+    if (!glyphName.empty()) {
+        return SymNames::symIdByName(glyphName, def);
     }
-    for (size_t i = 0; i < characterList.size(); ++i) {
-        auto [finaleCode, smuflCode, sym, index] = characterList.at(i);
-        if (finaleCode > newC) {
-            break;
-        } else if (finaleCode != newC) {
-            continue;
-        }
-        String newCharList(smuflCode);
-        for (size_t j = i + 1; j < characterList.size(); ++j) {
-            auto [finaleCodeB, smuflCodeB, symB, indexB] = characterList.at(j);
-            if (indexB == 0) {
-                break;
-            }
-            newCharList.append(smuflCodeB);
-        }
-        return newCharList;
-    }
-    return String(newC);
+    return def;
 }
 
-bool FinaleTextConv::initConversionJson()
+std::optional<String> FinaleTextConv::symIdInsertFromFinaleChar(char32_t c, const std::shared_ptr<musx::dom::FontInfo>& font)
 {
-    m_convertedFonts.clear();
-
-    Dir thirdPartyFontsDir(":/src/importexport/finale/third_party/FinaleToSMuFL/");
-    RetVal<io::paths_t> thirdPartyFiles = thirdPartyFontsDir.scanFiles(thirdPartyFontsDir.path(), { "*.json" });
-    if (!thirdPartyFiles.ret) {
-        LOGE() << "Failed to scan files in directory: " << thirdPartyFontsDir.path();
-        return false;
+    const std::string glyphName = calcGlyphName(c, font);
+    if (!glyphName.empty() && SymNames::symIdByName(glyphName) != SymId::noSym) {
+        return u"<sym>" + String::fromStdString(glyphName) + u"</sym>";
     }
+    return std::nullopt;
+}
 
-    Dir homemadeFontsDir("./fontdata/");
-    RetVal<io::paths_t> homemadeFiles = homemadeFontsDir.scanFiles(homemadeFontsDir.path(), { "*.json" });
-    if (!homemadeFiles.ret) {
-        LOGE() << "Failed to scan files in directory: " << homemadeFontsDir.path();
-        return false;
+std::optional<String> FinaleTextConv::smuflStringFromFinaleChar(char32_t c, const std::shared_ptr<musx::dom::FontInfo>& font)
+{
+    if (!font->calcIsSMuFL()) { /// @todo See note above about `calcIsSMuFL`
+        if (const smufl_mapping::LegacyGlyphInfo* legacyGlyphInfo = smufl_mapping::getLegacyGlyphInfo(font->getName(), c)) {
+            if (legacyGlyphInfo->source == smufl_mapping::SmuflGlyphSource::Smufl) { /// @todo do something with optional glyphs from Finale and/or Bravura?
+                if (legacyGlyphInfo->codepoint) {
+                    return String::fromUcs4(legacyGlyphInfo->codepoint.value());
+                }
+                if (const smufl_mapping::SmuflGlyphInfo* smuflGlyphInfo = getGlyphInfo(legacyGlyphInfo->name, legacyGlyphInfo->source)) {
+                    return String::fromUcs4(smuflGlyphInfo->codepoint);
+                }
+            }
+        }
+        return std::nullopt;
     }
-
-    io::paths_t allFiles = thirdPartyFiles.val;
-    muse::join(allFiles, homemadeFiles.val);
-    std::sort(allFiles.begin(), allFiles.end());
-	// There are max. 2 json files per font: The default one and a manual patch.
-
-    std::string prevFont;
-    std::vector<CharacterMap> prevCharacterList;
-
-    for (const io::path_t& file : allFiles) {
-        /// @todo RGP what is fileSystem?
-        RetVal<ByteArray> data;// = fileSystem->readFile(file);
-        if (!data.ret) {
-            LOGE() << "Failed to read file: " << file.toStdString();
-            continue;
-        }
-        const std::string fileName = io::basename(file).toStdString();
-        std::string error;
-        JsonObject glyphNamesJson = JsonDocument::fromJson(data.val, &error).rootObject();
-
-        if (!error.empty()) {
-            LOGE() << "JSON parse error in file '" << fileName << "': " << error;
-            return false;
-        }
-
-        IF_ASSERT_FAILED(!glyphNamesJson.empty()) {
-            LOGE() << "Could not read file '" << fileName << "'.";
-            return false;
-        }
-
-        std::vector<CharacterMap> characterList;
-
-        for (std::string key : glyphNamesJson.keys()) {
-            JsonObject symObj = glyphNamesJson.value(key).toObject();
-            if (!symObj.isValid()) {
-                continue;
-            }
-
-            // Symbol is not mapped to a SMuFL equivalent by default.
-            if (symObj.contains("nameIsMakeMusic")) {
-                continue;
-            }
-
-            SymId sym = SymNames::symIdByName(key);
-            // We should never get here
-            if (sym == SymId::noSym || sym == SymId::lastSym) {
-                continue;
-            }
-
-            bool ok;
-            char16_t smuflCode = symObj.value("codepoint").toString().mid(2).toUInt(&ok, 16);
-            if (!ok) {
-                // smuflCode = Smufl::smuflCode(sym); not matching types (16_t / 32_t)
-                LOGD() << "could not read smufl codepoint for glyph " << key << "in font " << fileName;
-                continue;
-            }
-            char16_t finaleCode = symObj.value("legacyCodepoint").toString().toUInt(&ok, 10);
-            if (!ok) {
-                LOGD() << "could not read finale codepoint for glyph " << key << "in font " << fileName;
-                continue;
-            }
-			// compound symbols
-			int index = symObj.contains("index") ? symObj.value("index").toInt() : 0;
-            characterList.emplace_back(std::make_tuple(finaleCode, smuflCode, sym, index));
-        }
-		if (fileName == prevFont) {
-			prevCharacterList = characterList;
-			prevFont = fileName;
-		} else {
-            muse::join(characterList, prevCharacterList);
-			prevCharacterList.clear();
-			prevFont.clear();
-			if (characterList.empty()) {
-				continue;
-			}
-			std::sort(characterList.begin(), characterList.end(),[] (const auto& a, const auto& b) {
-				auto [finaleCodeA, smuflCodeA, symA, indexA] = a;
-                auto [finaleCodeB, smuflCodeB, symB, indexB] = b;
-				if (finaleCodeA == finaleCodeB) {
-					return indexA < indexB;
-				}
-				return finaleCodeA < finaleCodeB;
-			});
-            m_convertedFonts.emplace(std::make_pair(fileName, characterList));
-		}
-    }
-    return true;
+    return String::fromUcs4(c);
 }
 
 }
