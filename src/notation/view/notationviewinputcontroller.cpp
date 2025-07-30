@@ -699,14 +699,14 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    // Select
-    mousePress_considerSelect(ctx);
-
     // Drag outgoing: range
     consumed = mousePress_considerDragOutgoingRange(ctx);
     if (consumed) {
         return;
     }
+
+    // Select
+    mousePress_considerSelect(ctx);
 
     // Misc
     if (button == Qt::LeftButton) {
