@@ -3623,7 +3623,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             technical.tag(m_xml);
             mxmlTechn = u"tap";
             if (tap->hand() != TappingHand::INVALID) {
-                mxmlTechn += String(" hand=\"%1\"").arg(String::fromAscii(TConv::toXml(tap->hand()).ascii()));
+                mxmlTechn += String(u" hand=\"%1\"").arg(String::fromAscii(TConv::toXml(tap->hand()).ascii()));
             }
             mxmlTechn += color2xml(a);
             mxmlTechn += ExportMusicXml::positioningAttributes(a);
