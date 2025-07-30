@@ -107,7 +107,6 @@
           </time>
         <clef>
           <sign>percussion</sign>
-          <line>2</line>
           </clef>
         </attributes>
       <note>
@@ -175,7 +174,6 @@
           </time>
         <clef>
           <sign>percussion</sign>
-          <line>2</line>
           </clef>
         <staff-details>
           <staff-lines>3</staff-lines>
@@ -247,7 +245,6 @@
           </time>
         <clef>
           <sign>percussion</sign>
-          <line>2</line>
           </clef>
         <staff-details>
           <staff-lines>1</staff-lines>
