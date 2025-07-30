@@ -777,6 +777,15 @@ static String fontStyleToXML(const FontStyle style, bool allowUnderline = true)
 }
 
 //---------------------------------------------------------
+//   placement2xml
+//---------------------------------------------------------
+
+static String placement2xml(const EngravingItem* el)
+{
+    return String(u" placement=\"%1\"").arg(String::fromAscii(TConv::toXml(el->placement()).ascii()));
+}
+
+//---------------------------------------------------------
 //   slurHandler
 //---------------------------------------------------------
 
@@ -4032,8 +4041,8 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
             technical.tag(xml);
             String t = MScoreTextToMusicXml::toPlainText(f->xmlText());
             String attr;
-            if (!f->isStyled(Pid::PLACEMENT) || f->placement() == PlacementV::BELOW) {
-                attr = String(u" placement=\"%1\"").arg((f->placement() == PlacementV::BELOW) ? u"below" : u"above");
+            if (!f->isStyled(Pid::PLACEMENT)) {
+                attr += placement2xml(e);
             }
             if (!f->isStyled(Pid::FONT_FACE)) {
                 attr += String(u" font-family=\"%1\"").arg(f->getProperty(Pid::FONT_FACE).value<String>());
@@ -5088,7 +5097,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
     m_attr.doAttr(m_xml, false);
 
     XmlWriter::Attributes tempoAttrs;
-    tempoAttrs = { { "placement", (text->placement() == PlacementV::BELOW) ? "below" : "above" } };
+    tempoAttrs = { { "placement", TConv::toXml(text->placement()) } };
     if (text->systemFlag() && !ExportMusicXml::configuration()->exportMu3Compat()) {
         tempoAttrs.emplace_back(std::make_pair("system", text->isLinked() ? "also-top" : "only-top"));
     }
@@ -6140,7 +6149,7 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
     }
 
     if (!sound.empty()) {
-        xml.startElement("direction", { { "placement", (jp->placement() == PlacementV::BELOW) ? "below" : "above" } });
+        xml.startElement("direction", { { "placement", TConv::toXml(jp->placement()) } });
         xml.startElement("direction-type");
         String attrs = color2xml(jp);
         attrs += ExportMusicXml::positioningAttributes(jp);
@@ -6270,7 +6279,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
     }
 
     if (!sound.empty()) {
-        xml.startElement("direction", { { "placement", (m->placement() == PlacementV::BELOW) ? "below" : "above" } });
+        xml.startElement("direction", { { "placement", TConv::toXml(m->placement()) } });
         xml.startElement("direction-type");
         String attrs = color2xml(m);
         attrs += ExportMusicXml::positioningAttributes(m);
@@ -8885,7 +8894,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 
     XmlWriter::Attributes harmonyAttrs;
     if (!h->isStyled(Pid::PLACEMENT)) {
-        harmonyAttrs.emplace_back(std::make_pair("placement", (h->placement() == PlacementV::BELOW) ? "below" : "above"));
+        harmonyAttrs.emplace_back(std::make_pair("placement", TConv::toXml(h->placement())));
     }
     harmonyAttrs.emplace_back(std::make_pair("print-frame", h->hasFrame() ? "yes" : "no"));     // .append(relative));
     if (!h->visible()) {
