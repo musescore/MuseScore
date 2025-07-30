@@ -682,6 +682,12 @@ TEST_F(MusicXml_Tests, guitarBends) {
     musicXmlMscxExportTestRef("testGuitarBends");
     MScore::useRead302InTestMode = useRead302;
 }
+TEST_F(MusicXml_Tests, hammerPull) {
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+    musicXmlIoTest("testHammerPull");
+    MScore::useRead302InTestMode = useRead302;
+}
 TEST_F(MusicXml_Tests, harpPedals) {
     musicXmlMscxExportTestRef("testHarpPedals");
 }
