@@ -21,6 +21,7 @@
  */
 #include "notationparts.h"
 
+#include "dom/barline.h"
 #include "translation.h"
 
 #include "engraving/dom/factory.h"
@@ -791,6 +792,11 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
             }
             EngravingItem* copy = obj->linkedClone();
             copy->setStaffIdx(staffIdx);
+
+            if (!obj->parent()->isSegment() && !obj->parent()->isMeasure()) {
+                copy->setParent(engraving::findNewSystemMarkingParent(obj, staff));
+            }
+
             score->undoAddElement(copy, false /*addToLinkedStaves*/);
         }
     }
@@ -859,6 +865,9 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
             continue;
         }
         if (item->staff() == srcStaff) {
+            if (!item->parent()->isSegment() && !item->parent()->isMeasure()) {
+                score()->undoChangeParent(item, engraving::findNewSystemMarkingParent(item, dstStaff), dstStaffIdx);
+            }
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         } else {
             item->undoUnlink();
