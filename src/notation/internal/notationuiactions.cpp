@@ -2661,6 +2661,13 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              TranslatableString("action", "Show/hide line-attach points"),
              Checkable::Yes
              ),
+    UiAction("mark-empty-staff-visibility-overrides",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Mark empty staff visibility overrides"),
+             TranslatableString("action", "Mark empty staff visibility overrides"),
+             Checkable::Yes
+             ),
     UiAction("mark-corrupted-measures",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

@@ -495,6 +495,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("show-system-bounding-rects"),
             makeMenuItem("show-element-masks"),
             makeMenuItem("show-line-attach-points"),
+            makeMenuItem("mark-empty-staff-visibility-overrides"),
             makeMenuItem("mark-corrupted-measures"),
             makeMenuItem("check-for-score-corruptions")
         };

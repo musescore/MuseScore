@@ -260,6 +260,41 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
         }
     }
 
+    if (options.markEmptyStaffVisibilityOverrides) {
+        double _spatium = score->style().spatium();
+
+        for (const System* system : page->systems()) {
+            for (const MeasureBase* mb : system->measures()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+
+                const Measure* m = toMeasure(mb);
+
+                for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+                    AutoOnOff hideIfEmpty = m->hideStaffIfEmpty(staffIdx);
+
+                    Color fillColor;
+                    switch (hideIfEmpty) {
+                    case AutoOnOff::ON:
+                        fillColor = Color(255, 0, 0, 128);
+                        break;
+                    case AutoOnOff::OFF:
+                        fillColor = Color(0, 0, 255, 128);
+                        break;
+                    default:
+                        continue;
+                    }
+
+                    painter.setBrush(fillColor);
+                    painter.setPen(PenStyle::NoPen);
+
+                    painter.drawRect(m->staffPageBoundingRect(staffIdx).adjusted(0, -_spatium, 0, _spatium));
+                }
+            }
+        }
+    }
+
     if (options.markCorruptedMeasures && score->hasCorruptedMeasures()) {
         painter.setPen(Pen(Color::RED, 4.0));
         painter.setBrush(BrushStyle::NoBrush);
@@ -273,7 +308,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
                 }
 
                 const Measure* m = toMeasure(mb);
-                for (size_t staffIdx = 0; staffIdx < m->score()->nstaves(); staffIdx++) {
+                for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
                     if (m->corrupted(staffIdx)) {
                         painter.drawRect(m->staffPageBoundingRect(staffIdx).adjusted(0, -_spatium, 0, _spatium));
                     }

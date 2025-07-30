@@ -2266,7 +2266,7 @@ void ChangeVelocity::flip(EditData*)
 //   ChangeMStaffProperties
 //---------------------------------------------------------
 
-ChangeMStaffProperties::ChangeMStaffProperties(Measure* m, int i, bool v, bool s)
+ChangeMStaffProperties::ChangeMStaffProperties(Measure* m, staff_idx_t i, bool v, bool s)
     : measure(m), staffIdx(i), visible(v), stemless(s)
 {
 }
@@ -2281,8 +2281,29 @@ void ChangeMStaffProperties::flip(EditData*)
     bool s = measure->stemless(staffIdx);
     measure->setStaffVisible(staffIdx, visible);
     measure->setStaffStemless(staffIdx, stemless);
-    visible    = v;
+    visible = v;
     stemless = s;
+}
+
+//---------------------------------------------------------
+//   ChangeMStaffHideIfEmpty
+//---------------------------------------------------------
+
+ChangeMStaffHideIfEmpty::ChangeMStaffHideIfEmpty(Measure* m, staff_idx_t i, AutoOnOff h)
+    : measure(m), staffIdx(i), hideIfEmpty(h)
+{
+}
+
+//---------------------------------------------------------
+//   flip
+//---------------------------------------------------------
+
+void ChangeMStaffHideIfEmpty::flip(EditData*)
+{
+    AutoOnOff h = measure->hideStaffIfEmpty(staffIdx);
+    measure->setHideStaffIfEmpty(staffIdx, hideIfEmpty);
+    measure->triggerLayout(staffIdx);
+    hideIfEmpty = h;
 }
 
 //---------------------------------------------------------

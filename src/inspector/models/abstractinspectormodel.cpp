@@ -317,6 +317,7 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
 
     if (isRange) {
         types << InspectorSectionType::SECTION_MEASURES;
+        types << InspectorSectionType::SECTION_EMPTY_STAVES;
     }
 
     if (showPartsSection(selectedElementList)) {

@@ -108,6 +108,7 @@ MStaff::MStaff(const MStaff& m)
     m_hasVoices = m.m_hasVoices;
     m_vspacerUp = 0;
     m_vspacerDown = 0;
+    m_hideIfEmpty = m.m_hideIfEmpty;
     m_visible   = m.m_visible;
     m_stemless  = m.m_stemless;
 #ifndef NDEBUG
@@ -307,6 +308,23 @@ void Measure::setStaffStemless(staff_idx_t staffIdx, bool stemless)
     if (staff) {
         staff->setStemless(stemless);
     }
+}
+
+AutoOnOff Measure::hideStaffIfEmpty(staff_idx_t staffIdx) const
+{
+    MStaff* staff = mstaff(staffIdx);
+
+    return staff ? staff->hideIfEmpty() : AutoOnOff::AUTO;
+}
+
+void Measure::setHideStaffIfEmpty(staff_idx_t staffIdx, AutoOnOff hideIfEmpty)
+{
+    MStaff* staff = mstaff(staffIdx);
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
+    staff->setHideIfEmpty(hideIfEmpty);
 }
 
 void Measure::setMMRangeText(staff_idx_t staffIdx, MMRestRange* t)
@@ -3431,6 +3449,11 @@ void Measure::triggerLayout() const
     if (prev() || next()) { // avoid triggering layout before getting added to a score
         score()->setLayout(tick(), endTick(), 0, score()->nstaves() - 1, this);
     }
+}
+
+void Measure::triggerLayout(staff_idx_t staffIdx) const
+{
+    score()->setLayout(tick(), endTick(), staffIdx, staffIdx, this);
 }
 
 //---------------------------------------------------------

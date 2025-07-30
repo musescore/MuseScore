@@ -41,6 +41,7 @@
 #include "dom/lyrics.h"
 #include "dom/measure.h"
 #include "dom/measurenumber.h"
+#include "dom/mmrest.h"
 #include "dom/mmrestrange.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
@@ -75,6 +76,7 @@
 #include "horizontalspacing.h"
 #include "dynamicslayout.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace mu::engraving;
@@ -353,19 +355,27 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
      * Now perform all operation to finalize system.
      * **********************************************************/
 
-    // Brake cross-measure beams
+    // Break cross-measure beams
     if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure()) {
         Measure* pm = toMeasure(ctx.mutState().prevMeasure());
         BeamLayout::breakCrossMeasureBeams(pm, ctx);
     }
 
-    // hide empty staves
+    // Hide empty staves
     hideEmptyStaves(system, ctx, ctx.state().firstSystem());
 
+    // Re-create shapes to account for newly hidden/unhidden staves
+    // (and for potential forgotten shape updates, for example in MeasureLayout::setRepeatCourtesiesAndParens)
+    for (MeasureBase* mb : system->measures()) {
+        if (mb->isMeasure()) {
+            for (Segment& seg : toMeasure(mb)->segments()) {
+                seg.createShapes();
+            }
+        }
+    }
+
     // Relayout system to account for newly hidden/unhidden staves
-    curSysWidth -= system->leftMargin();
     SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
-    curSysWidth += system->leftMargin();
 
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
@@ -502,99 +512,156 @@ System* SystemLayout::getNextSystem(LayoutContext& ctx)
     return system;
 }
 
-void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem)
+// Returns ALWAYS, NEVER, or INSTRUMENT
+static Staff::HideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty)
 {
-    size_t staves = ctx.dom().nstaves();
-    staff_idx_t staffIdx = 0;
-    bool systemIsEmpty = true;
+    // Check for system-specific overrides
+    bool hasSystemSpecificOverrideHide = false;
+    bool hasSystemSpecificOverrideDontHide = false;
 
-    Fraction stick = system->measures().front()->tick();
-    Fraction etick = system->measures().back()->endTick();
-    auto& spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
-
-    for (const Staff* staff : ctx.dom().staves()) {
-        SysStaff* ss  = system->staff(staffIdx);
-
-        Staff::HideMode hideMode = staff->hideWhenEmpty();
-
-        if (hideMode == Staff::HideMode::ALWAYS
-            || (ctx.conf().styleB(Sid::hideEmptyStaves)
-                && (staves > 1)
-                && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem))
-                && hideMode != Staff::HideMode::NEVER)) {
-            bool hideStaff = true;
-            for (auto& spanner : spanners) {
-                if (spanner.value->staff() == staff
-                    && !spanner.value->systemFlag()
-                    && !(spanner.stop == stick.ticks() && !spanner.value->isSlur())) {
-                    hideStaff = false;
-                    break;
-                }
-            }
-            for (MeasureBase* m : system->measures()) {
-                if (!m->isMeasure()) {
-                    continue;
-                }
-                Measure* measure = toMeasure(m);
-                if (!measure->isEmpty(staffIdx)) {
-                    hideStaff = false;
-                    break;
-                }
-            }
-            // check if notes moved into this staff
-            Part* part = staff->part();
-            const size_t n = part->nstaves();
-            if (hideStaff && (n > 1)) {
-                staff_idx_t idx = part->staves().front()->idx();
-                for (staff_idx_t i = 0; i < n; ++i) {
-                    staff_idx_t st = idx + i;
-
-                    for (MeasureBase* mb : system->measures()) {
-                        if (!mb->isMeasure()) {
-                            continue;
-                        }
-                        Measure* m = toMeasure(mb);
-                        if (staff->hideWhenEmpty() == Staff::HideMode::INSTRUMENT && !m->isEmpty(st)) {
-                            hideStaff = false;
-                            break;
-                        }
-                        for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-                                ChordRest* cr = s->cr(st * VOICES + voice);
-                                int staffMove = cr ? cr->staffMove() : 0;
-                                if (!cr || cr->isRest() || cr->staffMove() == 0) {
-                                    // The case staffMove == 0 has already been checked by measure->isEmpty()
-                                    continue;
-                                }
-                                if (staffIdx == st + staffMove) {
-                                    hideStaff = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!hideStaff) {
-                            break;
-                        }
-                    }
-                    if (!hideStaff) {
-                        break;
-                    }
-                }
-            }
-            ss->setShow(hideStaff ? false : staff->show());
-            if (ss->show()) {
-                systemIsEmpty = false;
-            }
-        } else if (!staff->show()) {
-            // TODO: OK to check this first and not bother with checking if empty?
-            ss->setShow(false);
-        } else {
-            systemIsEmpty = false;
-            ss->setShow(true);
+    for (const MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
         }
 
-        ++staffIdx;
+        const Measure* measure = toMeasure(mb);
+        const AutoOnOff hideIfEmpty = measure->hideStaffIfEmpty(staffIdx);
+
+        hasSystemSpecificOverrideHide |= (hideIfEmpty == AutoOnOff::ON);
+        hasSystemSpecificOverrideDontHide |= (hideIfEmpty == AutoOnOff::OFF);
     }
+
+    if (hasSystemSpecificOverrideDontHide) {
+        return Staff::HideMode::NEVER;
+    } else if (hasSystemSpecificOverrideHide) {
+        return Staff::HideMode::ALWAYS;
+    }
+
+    // Consider staff hide mode and global hide mode
+    Staff::HideMode hideMode = staff->hideWhenEmpty();
+    if (hideMode == Staff::HideMode::AUTO) {
+        return globalHideIfEmpty ? Staff::HideMode::ALWAYS : Staff::HideMode::NEVER;
+    } else if (hideMode == Staff::HideMode::INSTRUMENT && !globalHideIfEmpty) {
+        return Staff::HideMode::NEVER;
+    }
+
+    return hideMode;
+}
+
+static bool computeShowSysStaff(const System* system, const Staff* staff, const staff_idx_t staffIdx,
+                                const Fraction& stick, const SpannerMap::IntervalList& spanners,
+                                const Staff::HideMode hideMode)
+{
+    if (hideMode == Staff::HideMode::NEVER) {
+        return true;
+    }
+
+    // Check if there are spanners
+    for (const auto& spanner : spanners) {
+        if (spanner.value->staff() == staff
+            && !spanner.value->systemFlag()
+            && !(spanner.stop == stick.ticks() && !spanner.value->isSlur())) {
+            return true;
+        }
+    }
+
+    // Check if the staff is empty in the system
+    for (const MeasureBase* m : system->measures()) {
+        if (!m->isMeasure()) {
+            continue;
+        }
+        const Measure* measure = toMeasure(m);
+        if (!measure->isEmpty(staffIdx)) {
+            return true;
+        }
+    }
+
+    // check if notes moved into this staff
+    Part* part = staff->part();
+    const size_t n = part->nstaves();
+    if (n > 1) {
+        staff_idx_t idx = part->staves().front()->idx();
+        for (staff_idx_t i = 0; i < n; ++i) {
+            staff_idx_t st = idx + i;
+
+            for (MeasureBase* mb : system->measures()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+
+                const Measure* m = toMeasure(mb);
+                bool empty = m->isEmpty(st);
+                if (hideMode == Staff::HideMode::INSTRUMENT && !empty) {
+                    return true;
+                } else if (empty) {
+                    continue;
+                }
+
+                for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                        ChordRest* cr = s->cr(st * VOICES + voice);
+                        int staffMove = cr ? cr->staffMove() : 0;
+                        if (!cr || cr->isRest() || cr->staffMove() == 0) {
+                            // The case staffMove == 0 has already been checked by measure->isEmpty()
+                            continue;
+                        }
+                        if (staffIdx == st + staffMove) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem)
+{
+    if (ctx.dom().nstaves() == 0) {
+        // No staves, nothing to hide
+        return;
+    }
+
+    if (ctx.dom().nstaves() == 1) {
+        // One staff, show iff not manually hidden score-wide
+        const bool show = ctx.dom().staves().front()->show();
+        system->staves().front()->setShow(show);
+        return;
+    }
+
+    const Fraction stick = system->first()->tick();
+    const Fraction etick = system->last()->endTick();
+    const auto& spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
+
+    const bool globalHideIfEmpty = ctx.conf().styleB(Sid::hideEmptyStaves)
+                                   && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem));
+
+    bool systemIsEmpty = true;
+    staff_idx_t staffIdx = 0;
+
+    for (const Staff* staff : ctx.dom().staves()) {
+        SysStaff* ss = system->staff(staffIdx);
+
+        DEFER {
+            ++staffIdx;
+        };
+
+        if (!staff->show()) {
+            ss->setShow(false);
+            continue;
+        }
+
+        const Staff::HideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty);
+        const bool show = computeShowSysStaff(system, staff, staffIdx, stick, spanners, hideMode);
+        ss->setShow(show);
+        if (show) {
+            systemIsEmpty = false;
+        }
+    }
+
+    // If the system is empty, unhide the staves with `showIfEmpty` set to true, if any
     const Staff* firstVisible = nullptr;
     if (systemIsEmpty) {
         for (const Staff* staff : ctx.dom().staves()) {
@@ -607,19 +674,12 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
             }
         }
     }
-    // don't allow a complete empty system
+
+    // If there are no such staves, unhide the first one
     if (systemIsEmpty && !ctx.dom().staves().empty()) {
         const Staff* staff = firstVisible ? firstVisible : ctx.dom().staves().front();
         SysStaff* ss = system->staff(staff->idx());
         ss->setShow(true);
-    }
-    // Re-create the shapes to account for newly hidden or un-hidden staves
-    for (auto mb : system->measures()) {
-        if (mb->isMeasure()) {
-            for (auto& seg : toMeasure(mb)->segments()) {
-                seg.createShapes();
-            }
-        }
     }
 }
 
