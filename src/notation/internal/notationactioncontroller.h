@@ -29,6 +29,7 @@
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "ui/inavigationcontroller.h"
 #include "ui/iuiactionsregister.h"
 #include "context/iglobalcontext.h"
 #include "context/iuicontextresolver.h"
@@ -42,6 +43,7 @@ namespace mu::notation {
 class NotationActionController : public muse::actions::Actionable, public muse::async::Asyncable
 {
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::ui::INavigationController, navigationController)
     INJECT(muse::ui::IUiActionsRegister, actionRegister)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(context::IUiContextResolver, uiContextResolver)
