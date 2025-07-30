@@ -2302,6 +2302,7 @@ void ChangeMStaffHideIfEmpty::flip(EditData*)
 {
     AutoOnOff h = measure->hideStaffIfEmpty(staffIdx);
     measure->setHideStaffIfEmpty(staffIdx, hideIfEmpty);
+    measure->triggerLayout(staffIdx);
     hideIfEmpty = h;
 }
 

@@ -320,11 +320,11 @@ AutoOnOff Measure::hideStaffIfEmpty(staff_idx_t staffIdx) const
 void Measure::setHideStaffIfEmpty(staff_idx_t staffIdx, AutoOnOff hideIfEmpty)
 {
     MStaff* staff = mstaff(staffIdx);
-
-    if (staff) {
-        staff->setHideIfEmpty(hideIfEmpty);
-        triggerLayout(staffIdx);
+    IF_ASSERT_FAILED(staff) {
+        return;
     }
+
+    staff->setHideIfEmpty(hideIfEmpty);
 }
 
 void Measure::setMMRangeText(staff_idx_t staffIdx, MMRestRange* t)
@@ -3453,9 +3453,7 @@ void Measure::triggerLayout() const
 
 void Measure::triggerLayout(staff_idx_t staffIdx) const
 {
-    if (prev() || next()) { // avoid triggering layout before getting added to a score
-        score()->setLayout(tick(), endTick(), staffIdx, staffIdx, this);
-    }
+    score()->setLayout(tick(), endTick(), staffIdx, staffIdx, this);
 }
 
 //---------------------------------------------------------
