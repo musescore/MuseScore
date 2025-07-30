@@ -744,8 +744,8 @@ TEST_F(Audio_RpcPackerTests, MPE_PlaybackSetupData)
 
     EXPECT_TRUE(ok);
     EXPECT_TRUE(origin == unpacked);
-    EXPECT_TRUE(origin.musicXmlSoundId == unpacked.musicXmlSoundId);
     EXPECT_TRUE(origin.scoreId == unpacked.scoreId);
+    EXPECT_TRUE(origin.musicXmlSoundId == unpacked.musicXmlSoundId);
 }
 
 TEST_F(Audio_RpcPackerTests, MPE_PlaybackData)
