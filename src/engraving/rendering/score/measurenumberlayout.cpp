@@ -139,7 +139,8 @@ void MeasureNumberLayout::layoutMeasureNumberBase(const MeasureNumberBase* item,
     }
 
     if (item->isStyled(Pid::OFFSET)) {
-        const_cast<MeasureNumberBase*>(item)->setOffset(item->propertyDefault(Pid::OFFSET).value<PointF>());
+        PointF offset = item->propertyDefault(Pid::OFFSET).value<PointF>() * item->staff()->staffMag(item->tick());
+        const_cast<MeasureNumberBase*>(item)->setOffset(offset);
     }
 }
 
