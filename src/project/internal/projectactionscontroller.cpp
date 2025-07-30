@@ -82,7 +82,7 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-save-as", [this]() { saveProject(SaveMode::SaveAs); });
     dispatcher()->reg(this, "file-save-a-copy", [this]() { saveProject(SaveMode::SaveCopy); });
     dispatcher()->reg(this, "file-save-selection", [this]() { saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
-    dispatcher()->reg(this, "file-save-to-cloud", [this]() { saveProject(SaveMode::SaveAs, SaveLocationType::Cloud); });
+    dispatcher()->reg(this, "file-save-to-cloud", [this]() { saveProject(SaveMode::Save, SaveLocationType::Cloud); });
     dispatcher()->reg(this, "file-save-at", [this](const ActionData& args) { saveProjectAt(args); });
 
     dispatcher()->reg(this, "file-publish", this, &ProjectActionsController::publish);
@@ -797,12 +797,17 @@ bool ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType s
 
     INotationProjectPtr project = currentNotationProject();
 
-    if (saveMode == SaveMode::Save && !project->isNewlyCreated()) {
+    const bool isExistingSave = saveMode == SaveMode::Save && !project->isNewlyCreated();
+    const bool wantNewCloudSave = saveLocationType == SaveLocationType::Cloud && !project->isCloudProject();
+    if (isExistingSave && !wantNewCloudSave) {
+        // Under these conditions, we can save without asking...
+        SaveLocation location;
         if (project->isCloudProject()) {
-            return saveProjectAt(SaveLocation(SaveLocationType::Cloud, project->cloudInfo()));
+            location = SaveLocation(SaveLocationType::Cloud, project->cloudInfo());
+        } else {
+            location = SaveLocation(SaveLocationType::Local);
         }
-
-        return saveProjectAt(SaveLocation(SaveLocationType::Local));
+        return saveProjectAt(location, saveMode, force);
     }
 
     RetVal<SaveLocation> response = openSaveProjectScenario()->askSaveLocation(project, saveMode, saveLocationType);
