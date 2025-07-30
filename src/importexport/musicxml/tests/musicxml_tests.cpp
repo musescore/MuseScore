@@ -1146,6 +1146,9 @@ TEST_F(MusicXml_Tests, tablature4) {
 TEST_F(MusicXml_Tests, tablature5) {
     musicXmlIoTestRef("testTablature5");
 }
+TEST_F(MusicXml_Tests, tapping) {
+    musicXmlIoTest("testTapping");
+}
 TEST_F(MusicXml_Tests, tboxAboveBelow1) {
     musicXmlMscxExportTestRef("testTboxAboveBelow1");
 }

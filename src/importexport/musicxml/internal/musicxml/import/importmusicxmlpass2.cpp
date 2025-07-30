@@ -72,6 +72,7 @@
 #include "engraving/dom/slur.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
+#include "engraving/dom/tapping.h"
 #include "engraving/dom/tempo.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/textline.h"
@@ -1243,6 +1244,38 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     } else {
         cr->segment()->add(fermata);
     }
+}
+
+//---------------------------------------------------------
+//   addTapToChord
+//---------------------------------------------------------
+
+/**
+ Add Tap to Chord.
+ */
+
+static void addTapToChord(const Notation& notation, ChordRest* cr)
+{
+    const Color color = Color::fromString(notation.attribute(u"color"));
+    const String place = notation.attribute(u"placement");
+    const TappingHand hand = notation.attribute(u"hand") == u"right" ? TappingHand::RIGHT : TappingHand::LEFT;
+
+    Tapping* tap = Factory::createTapping(cr);
+    tap->setTrack(cr->track());
+    tap->setHand(hand);
+    if (place == u"above") {
+        tap->setAnchor(ArticulationAnchor::TOP);
+        tap->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
+    } else if (place == u"below") {
+        tap->setAnchor(ArticulationAnchor::BOTTOM);
+        tap->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
+    } else {
+        tap->setAnchor(ArticulationAnchor::AUTO);
+    }
+    if (color.isValid()) {
+        tap->setColor(color);
+    }
+    cr->add(tap);
 }
 
 //---------------------------------------------------------
@@ -8482,7 +8515,8 @@ void MusicXmlParserNotations::technical()
                                                                  m_e.attributes(), u"technical", id);
             m_notations.push_back(notation);
             m_e.skipCurrentElement();  // skip but don't log
-        } else if (m_e.name() == "fingering" || m_e.name() == "fret" || m_e.name() == "pluck" || m_e.name() == "string") {
+        } else if (m_e.name() == "fingering" || m_e.name() == "fret" || m_e.name() == "pluck"
+                   || m_e.name() == "string" || m_e.name() == "tap") {
             Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
                                                                  m_e.attributes(), u"technical");
             notation.setText(m_e.readText());
@@ -8498,11 +8532,6 @@ void MusicXmlParserNotations::technical()
             harmonMute();
         } else if (m_e.name() == "hole") {
             hole();
-        } else if (m_e.name() == "tap") {
-            id = (m_e.attribute("hand") == u"left") ? SymId::guitarLeftHandTapping : SymId::guitarRightHandTapping;
-            m_notations.push_back(Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
-                                                                   m_e.attributes(), u"technical", id));
-            m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "other-technical") {
             otherTechnical();
         } else {
@@ -8669,6 +8698,12 @@ void MusicXmlParserNotations::addTechnical(const Notation& notation, Note* note)
             }
         } else {
             m_logger->logError(u"no note for string", &m_e);
+        }
+    } else if (notation.name() == u"tap") {
+        if (note) {
+            addTapToChord(notation, note->chord());
+        } else {
+            m_logger->logError(u"no note for tap", &m_e);
         }
     }
 }
