@@ -198,6 +198,27 @@ void AbstractInspectorModel::onCurrentNotationChanged()
     });
 }
 
+bool AbstractInspectorModel::isSystemObjectBelowBottomStaff() const
+{
+    return m_isSystemObjectBelowBottomStaff;
+}
+
+void AbstractInspectorModel::updateIsSystemObjectBelowBottomStaff()
+{
+    bool soBelowBottomStaff = false;
+    for (EngravingItem* item : m_elementList) {
+        if (item->isSystemObjectBelowBottomStaff()) {
+            soBelowBottomStaff = true;
+            break;
+        }
+    }
+
+    if (m_isSystemObjectBelowBottomStaff != soBelowBottomStaff) {
+        m_isSystemObjectBelowBottomStaff = soBelowBottomStaff;
+        emit isSystemObjectBelowBottomStaffChanged(m_isSystemObjectBelowBottomStaff);
+    }
+}
+
 void AbstractInspectorModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
 {
 }

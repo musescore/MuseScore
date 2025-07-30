@@ -414,13 +414,21 @@ void LayoutPanelTreeModel::load()
     for (const Part* part : masterParts) {
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
-                if (muse::contains(systemObjectStaves, staff)) {
+                if (!staff->systemObjectsBelowBottomStaff() && muse::contains(systemObjectStaves, staff)) {
                     m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
                 }
             }
         }
 
         m_rootItem->appendChild(buildMasterPartItem(part));
+
+        if (showSystemObjectLayers) {
+            for (Staff* staff : part->staves()) {
+                if (staff->systemObjectsBelowBottomStaff() && muse::contains(systemObjectStaves, staff)) {
+                    m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
+                }
+            }
+        }
     }
 
     endResetModel();
@@ -910,7 +918,7 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
         return;
     }
 
-    int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0) - (lastSelectedIsSystemObjectLayer ? 1 : 0);
+    int lastItemRowIndex = parentItem->childCount() - 1 - (hasControlItem ? 1 : 0);
 
     bool isRowInBoundaries = lastSelectedRowIndex.isValid() && lastSelectedRowIndex.row() < lastItemRowIndex;
 
@@ -1143,8 +1151,9 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
 
         const int partRow = partItem->row();
         const int layerRow = layerItem->row();
+        const int correctLayerRow = layerItem->staff()->systemObjectsBelowBottomStaff() ? partRow + 1 : partRow - 1;
 
-        if (layerRow != partRow - 1) {
+        if (layerRow != correctLayerRow) {
             beginMoveRows(QModelIndex(), layerRow, layerRow, QModelIndex(), partRow);
             m_rootItem->moveChildren(layerRow, 1, m_rootItem, partRow, false /*updateNotation*/);
             endMoveRows();

@@ -38,18 +38,19 @@ using namespace mu::engraving;
 namespace mu::engraving::compat {
 void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
 {
-    if (score->mscVersion() >= 440) {
+    int mscVersion = score->mscVersion();
+
+    if (mscVersion < 460) {
         resetMarkerLeftFontSize(score);
-        return;
     }
 
-    correctPedalEndPoints(score);
-
-    if (score->mscVersion() >= 420) {
-        undoStaffTextExcludeFromPart(score);
+    if (mscVersion < 440) {
+        correctPedalEndPoints(score);
+        migrateDynamicPosOnVocalStaves(score);
+        if (mscVersion >= 420) {
+            undoStaffTextExcludeFromPart(score);
+        }
     }
-
-    migrateDynamicPosOnVocalStaves(score);
 }
 
 void EngravingCompat::correctPedalEndPoints(MasterScore* score)
@@ -182,8 +183,14 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
     bool needRelayout = false;
 
-    if (relayoutUserModifiedCrossStaffBeams(score)) {
-        needRelayout = true;
+    int mscVersion = score->mscVersion();
+
+    if (mscVersion < 460) {
+        needRelayout |= resetHookHeightSign(score);
+    }
+
+    if (mscVersion < 440) {
+        needRelayout |= relayoutUserModifiedCrossStaffBeams(score);
     }
 
     if (needRelayout) {
@@ -229,5 +236,37 @@ bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
     }
 
     return found;
+}
+
+bool EngravingCompat::resetHookHeightSign(MasterScore* masterScore)
+{
+    bool needRelayout = false;
+
+    for (Score* score : masterScore->scoreList()) {
+        for (auto pair : score->spanner()) {
+            Spanner* spanner = pair.second;
+            if (spanner->isTextLineBase()) {
+                for (SpannerSegment* spannerSeg : spanner->spannerSegments()) {
+                    TextLineBaseSegment* textLineSeg = static_cast<TextLineBaseSegment*>(spannerSeg);
+                    if (textLineSeg->placeBelow()) {
+                        if (!textLineSeg->isStyled(Pid::BEGIN_HOOK_HEIGHT)) {
+                            Spatium beginHookHeight = textLineSeg->getProperty(Pid::BEGIN_HOOK_HEIGHT).value<Spatium>();
+                            textLineSeg->setProperty(Pid::BEGIN_HOOK_HEIGHT, -beginHookHeight);
+                            spanner->triggerLayout();
+                            needRelayout = true;
+                        }
+                        if (!textLineSeg->isStyled(Pid::END_HOOK_HEIGHT)) {
+                            Spatium endHookHeight = textLineSeg->getProperty(Pid::END_HOOK_HEIGHT).value<Spatium>();
+                            textLineSeg->setProperty(Pid::END_HOOK_HEIGHT, -endHookHeight);
+                            spanner->triggerLayout();
+                            needRelayout = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return needRelayout;
 }
 } // namespace mu::engraving::compat

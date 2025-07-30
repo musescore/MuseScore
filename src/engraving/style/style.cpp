@@ -642,6 +642,14 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         if (value(Sid::measureNumberPosition).value<AlignH>() == AlignH::HCENTER) {
             set(Sid::measureNumberHPlacement, AlignH::HCENTER);
         }
+
+        if (value(Sid::pedalPlacement).value<PlacementV>() == PlacementV::BELOW
+            && value(Sid::pedalHookHeight).value<Spatium>().val() < 0) {
+            set(Sid::pedalHookHeight, -value(Sid::pedalHookHeight).value<Spatium>());
+        }
+        if (value(Sid::ottavaHookBelow).value<Spatium>().val() < 0) {
+            set(Sid::ottavaHookBelow, -value(Sid::ottavaHookBelow).value<Spatium>());
+        }
     }
 
     if (m_version == 450) {

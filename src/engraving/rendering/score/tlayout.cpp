@@ -6294,8 +6294,11 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         x2 = std::max(x2, item->text()->width());
     }
 
+    double beginHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->beginHookHeight().val() * _spatium;
+    double endHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->endHookHeight().val() * _spatium;
+
     if (tl->endHookType() != HookType::NONE) {
-        double h = pp2.y() + tl->endHookHeight().val() * _spatium;
+        double h = pp2.y() + endHookHeight;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -6304,7 +6307,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
 
     if (tl->beginHookType() != HookType::NONE) {
-        double h = tl->beginHookHeight().val() * _spatium;
+        double h = beginHookHeight;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -6345,8 +6348,6 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
             alignBaseLine(item->endText(), pp1, pp2);
         }
 
-        double beginHookHeight = tl->beginHookHeight().val() * _spatium;
-        double endHookHeight = tl->endHookHeight().val() * _spatium;
         double beginHookWidth = 0.0;
         double endHookWidth = 0.0;
 
@@ -6584,7 +6585,12 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     ldata->setPosX(-shape.bbox().left());
 
     if (item->isAboveStaves()) {
-        ldata->setPosY(-2 * spatium * (1 + scale.height()) - 0.5 * numDist);
+        if (staff->systemObjectsBelowBottomStaff()) {
+            double staffHeight = spatium * (numOfLines - 1) * lineDist;
+            ldata->setPosY(staffHeight - ldata->bbox().top());
+        } else {
+            ldata->setPosY(-ldata->bbox().bottom());
+        }
     } else if (item->isAcrossStaves()) {
         double top = ldata->bbox().top();
         ldata->setPosY(-top);
@@ -6872,6 +6878,18 @@ void TLayout::layoutVoltaSegment(VoltaSegment* item, LayoutContext& ctx)
     LAYOUT_CALL_ITEM(item);
     VoltaSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
+    if (item->placeBelow()) {
+        if (TextBase* beginText = item->text()) {
+            PointF offset = beginText->offset();
+            offset.setY(-offset.y() + beginText->ldata()->bbox().height());
+            beginText->setOffset(offset);
+        }
+        if (TextBase* endText = item->endText()) {
+            PointF offset = endText->offset();
+            offset.setY(-offset.y() + endText->ldata()->bbox().height());
+            endText->setOffset(offset);
+        }
+    }
     Shape sh = textLineBaseSegmentShape(item);
     ldata->setShape(sh);
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());

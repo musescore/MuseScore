@@ -812,6 +812,7 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
 
     for (Staff* staff : staves) {
         if (score->isSystemObjectStaff(staff)) {
+            staff->undoResetProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF);
             score->undo(new mu::engraving::RemoveSystemObjectStaff(staff));
         }
     }
@@ -848,6 +849,8 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
     score()->undo(new mu::engraving::RemoveSystemObjectStaff(srcStaff));
     if (!score()->isSystemObjectStaff(dstStaff) && dstStaffIdx != 0) {
         score()->undo(new mu::engraving::AddSystemObjectStaff(dstStaff));
+    } else {
+        dstStaff->undoResetProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF);
     }
 
     for (EngravingItem* item : systemObjects) {
@@ -862,6 +865,24 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
             score()->undoRemoveElement(item, false /*removeLinked*/);
         }
     }
+
+    apply();
+}
+
+void NotationParts::moveSystemObjectLayerBelowBottomStaff()
+{
+    startEdit(TranslatableString("undoableAction", "Add system object layer below the bottom staff"));
+
+    score()->staves().back()->undoChangeProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, true);
+
+    apply();
+}
+
+void NotationParts::moveSystemObjectLayerAboveBottomStaff()
+{
+    startEdit(TranslatableString("undoableAction", "Remove system object layer below the bottom staff"));
+
+    score()->staves().back()->undoChangeProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, false);
 
     apply();
 }

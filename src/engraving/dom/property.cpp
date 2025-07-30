@@ -463,7 +463,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::IS_COURTESY,             false, "isCourtesy",            P_TYPE::BOOL,               PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "is courtesy") },
     { Pid::EXCLUDE_VERTICAL_ALIGN,  false, "excludeVerticalAlign",  P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "exclude vertical align") },
 
-    { Pid::SHOW_MEASURE_NUMBERS,        false, "showMeasureNumbers",        P_TYPE::AUTO_ON_OFF,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "show bar numbers")},
+    { Pid::SHOW_MEASURE_NUMBERS,              false, "showMeasureNumbers",            P_TYPE::AUTO_ON_OFF, PropertyGroup::NONE, DUMMY_QT_TR_NOOP("propertyName", "show bar numbers")},
+    { Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, false, "systemObjectsBelowBottomStaff", P_TYPE::BOOL,        PropertyGroup::NONE, DUMMY_QT_TR_NOOP("propertyName", "system objects below bottom staff")},
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
