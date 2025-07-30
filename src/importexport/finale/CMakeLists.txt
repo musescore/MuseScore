@@ -17,9 +17,20 @@ FetchContent_Declare(
     musx
     GIT_REPOSITORY https://github.com/rpatters1/musxdom.git
     GIT_TAG        dev/musescore-experiment
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
 FetchContent_MakeAvailable(musx)
+
+set(smufl_mapping_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
+FetchContent_Declare(
+    smufl_mapping
+    GIT_REPOSITORY https://github.com/rpatters1/smufl-mapping.git
+    GIT_TAG        main
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+
+FetchContent_MakeAvailable(smufl_mapping)
 
 if (CC_IS_MSVC)
     include(FindZlibStatic)
@@ -52,7 +63,8 @@ set(MODULE_SRC
 )
 
 set(MODULE_LINK
-    musx              # Link your MusxDom library
+    musx              # Link musxdom library
+    smufl_mapping     # Link smufl_mapping library
     engraving         # MuseScore expects importers to link to "engraving" usually
 )
 
