@@ -36,7 +36,7 @@ class Text final : public TextBase
     DECLARE_CLASSOF(ElementType::TEXT)
 
 public:
-
+    Text(EngravingItem* parent, TextStyleType tid = TextStyleType::DEFAULT);
     Text* clone() const override { return new Text(*this); }
 
     PropertyValue propertyDefault(Pid id) const override;
@@ -48,10 +48,6 @@ public:
 
     bool hasVoiceAssignmentProperties() const override;
     VoiceAssignment voiceAssignment() const;
-
-private:
-    friend class Factory;
-    Text(EngravingItem* parent, TextStyleType tid = TextStyleType::DEFAULT);
 };
 } // namespace mu::engraving
 

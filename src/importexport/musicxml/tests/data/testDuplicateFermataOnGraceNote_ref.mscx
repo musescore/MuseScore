@@ -40,6 +40,8 @@
       <stringTuningsFontSize>10</stringTuningsFontSize>
       <harpPedalDiagramFontFace>FreeSerif</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>FreeSerif</harpPedalTextDiagramFontFace>
+      <articulationFontFace>FreeSerif</articulationFontFace>
+      <articulationFontSize>10</articulationFontSize>
       <longInstrumentFontFace>FreeSerif</longInstrumentFontFace>
       <shortInstrumentFontFace>FreeSerif</shortInstrumentFontFace>
       <partInstrumentFontFace>FreeSerif</partInstrumentFontFace>

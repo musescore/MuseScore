@@ -135,6 +135,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "roman-numeral-analysis",
     "nashville-number",
     "tuplet",
+    "articulation",
     "sticking",
     "fingering",
     "tab-fret-number",
@@ -1823,6 +1824,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::TUPLET:
             return "tuplet";
+
+        case TextStyleType::ARTICULATION:
+            return "articulation";
 
         case TextStyleType::STICKING:
             return "sticking";

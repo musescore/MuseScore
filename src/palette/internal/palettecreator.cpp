@@ -167,6 +167,7 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newFretboardDiagramPalette());
     tree->append(newAccordionPalette());
     tree->append(newBagpipeEmbellishmentPalette());
+    tree->append(newHandbellsPalette());
     tree->append(newBeamPalette());
     tree->append(newLinesPalette());
 
@@ -203,8 +204,10 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newFretboardDiagramPalette(true));
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
+    defaultPalette->append(newHandbellsPalette(true));
     defaultPalette->append(newBeamPalette());
     defaultPalette->append(newLinesPalette(true));
+    defaultPalette->append(newHandbellsPalette(true));
 
     return defaultPalette;
 }
@@ -2000,6 +2003,63 @@ PalettePtr PaletteCreator::newHarpPalette()
     pedalTextDiagram->setIsDiagram(false);
 
     sp->appendElement(pedalTextDiagram, QT_TRANSLATE_NOOP("palette", "Harp pedal text diagram"));
+
+    return sp;
+}
+
+PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
+{
+    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Handbells);
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Handbells"));
+    sp->setGridSize(42, 25);
+    sp->setDrawGrid(true);
+
+    static const std::vector<SymId> standardHandbellsArticSymbols {
+        SymId::handbellsMartellato,
+        SymId::handbellsMartellatoLift,
+        SymId::handbellsMalletBellSuspended,
+        SymId::handbellsMalletBellOnTable,
+        SymId::handbellsMalletLft,
+        SymId::handbellsPluckLift,
+        SymId::handbellsGyro,
+    };
+
+    static const std::vector<SymId> additionalHandbellsArticSymbols {
+        SymId::handbellsHandMartellato,
+        SymId::handbellsMutedMartellato,
+    };
+
+    static const std::vector<ArticulationTextType> handbellsTextTypes {
+        ArticulationTextType::LV,
+        ArticulationTextType::R,
+        ArticulationTextType::TD,
+        ArticulationTextType::BD,
+        ArticulationTextType::RT,
+        ArticulationTextType::PL,
+        ArticulationTextType::SB,
+        ArticulationTextType::VIB,
+    };
+
+    if (defaultPalette) {
+        for (SymId symId : standardHandbellsArticSymbols) {
+            auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+            artic->setSymId(symId);
+            sp->appendElement(artic, artic->subtypeUserName(),
+                              symId == SymId::handbellsGyro ? 0.7 : symId == SymId::handbellsMalletBellSuspended ? 1.4 : 1.0);
+        }
+
+        for (ArticulationTextType textType : handbellsTextTypes) {
+            auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+            artic->setTextType(textType);
+            sp->appendElement(artic, artic->subtypeUserName(), 1.1);
+        }
+    } else {
+        for (SymId symId : additionalHandbellsArticSymbols) {
+            auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+            artic->setSymId(symId);
+            sp->appendElement(artic, artic->subtypeUserName());
+        }
+    }
 
     return sp;
 }

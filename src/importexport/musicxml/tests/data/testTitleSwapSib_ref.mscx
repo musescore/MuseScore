@@ -48,6 +48,8 @@
       <stringTuningsFontSize>11.9365</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Plantin MT Std</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Plantin MT Std</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Plantin MT Std</articulationFontFace>
+      <articulationFontSize>11.9365</articulationFontSize>
       <longInstrumentFontFace>Plantin MT Std</longInstrumentFontFace>
       <longInstrumentFontSize>11.9365</longInstrumentFontSize>
       <shortInstrumentFontFace>Plantin MT Std</shortInstrumentFontFace>

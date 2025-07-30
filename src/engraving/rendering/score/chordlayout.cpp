@@ -987,7 +987,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                 }
             }
         }
-        x -= 0.5 * a->ldata()->bbox().width();
+        x -= a->ldata()->opticalCenter();
         a->setPos(x, y);
         if (a->visible()) {
             prevVisibleArticulation = a;
@@ -1142,7 +1142,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
                     staffBotY = a->y() + a->height() + minDist + yOffset;
                 }
             }
-            a->mutldata()->moveX(-0.5 * a->width());
+            a->mutldata()->moveX(-a->ldata()->opticalCenter());
         }
 
         if (!a->isOnCrossBeamSide()) {

@@ -205,7 +205,7 @@ public:
     static void layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf,
                                bool includeCrossStaffHeight = false);
-    static void layoutArticulation(const Articulation* item, Articulation::LayoutData* ldata);
+    static void layoutArticulation(Articulation* item, Articulation::LayoutData* ldata);
     static void fillArticulationShape(const Articulation* item, Articulation::LayoutData* ldata);
 
     static void layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx);

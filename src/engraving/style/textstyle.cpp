@@ -346,6 +346,24 @@ const TextStyle harpPedalDiagramTextStyle { {
     { TextStylePropertyType::Position,             Sid::harpPedalDiagramPosition,               Pid::POSITION },
 } };
 
+const TextStyle articulationTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::articulationFontFace,                      Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::articulationFontSize,                      Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::articulationLineSpacing,                   Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::articulationFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::articulationFontStyle,                     Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::articulationColor,                         Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::articulationAlign,                         Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::articulationOffset,                        Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::articulationFrameType,                     Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::articulationFramePadding,                  Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::articulationFrameWidth,                    Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::articulationFrameRound,                    Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::articulationFrameFgColor,                  Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::articulationFrameBgColor,                  Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
 const TextStyle harpPedalTextDiagramTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::harpPedalTextDiagramFontFace,               Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::harpPedalTextDiagramFontSize,               Pid::FONT_SIZE },
@@ -1374,6 +1392,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::HARMONY_NASHVILLE: return &nashvilleNumberTextStyle;
 
     case TextStyleType::TUPLET: return &tupletTextStyle;
+    case TextStyleType::ARTICULATION: return &articulationTextStyle;
     case TextStyleType::STICKING: return &stickingTextStyle;
     case TextStyleType::FINGERING: return &fingeringTextStyle;
     case TextStyleType::TAB_FRET_NUMBER: return &tabFretNumberTextStyle;

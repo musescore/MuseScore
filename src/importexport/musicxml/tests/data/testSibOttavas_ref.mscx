@@ -63,6 +63,8 @@
       <stringTuningsFontSize>11.9365</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Quicksand</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Quicksand</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Quicksand</articulationFontFace>
+      <articulationFontSize>11.9365</articulationFontSize>
       <longInstrumentFontFace>Quicksand</longInstrumentFontFace>
       <longInstrumentFontSize>11.9365</longInstrumentFontSize>
       <shortInstrumentFontFace>Quicksand</shortInstrumentFontFace>

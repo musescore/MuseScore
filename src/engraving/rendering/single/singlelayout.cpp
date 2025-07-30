@@ -472,15 +472,25 @@ void SingleLayout::layout(Arpeggio* item, const Context& ctx)
     }
 }
 
-void SingleLayout::layout(Articulation* item, const Context&)
+void SingleLayout::layout(Articulation* item, const Context& ctx)
 {
     RectF bbox;
 
     if (item->textType() != ArticulationTextType::NO_TEXT) {
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
-        FontMetrics fm(scaledFont);
-        bbox = fm.boundingRect(scaledFont, TConv::text(item->textType()));
+        if (!item->text()) {
+            Text* text = new Text(item, TextStyleType::ARTICULATION);
+            static const ElementStyle elementStyle = {};
+            text->initElementStyle(&elementStyle);
+            item->setText(text);
+        }
+
+        Text* text = item->text();
+        text->setXmlText(TConv::text(item->textType()));
+        text->setTrack(item->track());
+        text->setParent(item);
+        text->setAlign(Align(AlignH::HCENTER, AlignV::VCENTER));
+
+        layoutTextBase(item->text(), ctx, item->text()->mutldata());
     } else {
         bbox = item->symBbox(item->symId());
     }

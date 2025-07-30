@@ -55,6 +55,8 @@
       <stringTuningsFontSize>22</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Palatino,serif</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Palatino,serif</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Palatino,serif</articulationFontFace>
+      <articulationFontSize>22</articulationFontSize>
       <longInstrumentFontFace>Palatino,serif</longInstrumentFontFace>
       <longInstrumentFontSize>22</longInstrumentFontSize>
       <shortInstrumentFontFace>Palatino,serif</shortInstrumentFontFace>
