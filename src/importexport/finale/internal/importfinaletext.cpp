@@ -132,17 +132,15 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     // The processTextChunk function process each chunk of processed text with font information. It is only
     // called when the font information changes.
     auto processTextChunk = [&](const std::string& nextChunk, const musx::util::EnigmaStyles& styles) -> bool {
+        std::optional<String> symIds = FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font);
         const FontTracker font(styles.font, options.scaleFontSizeBy);
         if (firstFontInfo && !prevFont) {
             *firstFontInfo = font;
         } else {
             if (!prevFont || prevFont->fontName != font.fontName) {
-                // When using musical fonts, don't actually set the font type since symbols are loaded separately.
-                /// @todo decide when we want to not convert symbols/fonts, e.g. to allow multiple musical fonts in one score.
-                /// @todo append this based on whether symbol ends up being replaced or not.
-                //if (!font->calcIsDefaultMusic()) { /// @todo RGP changed from a name check, but each notation element has its own default font setting in Finale. We need to handle that.
+                if (!symIds) { // if this chunk is not all mapped sym tags
                     endString.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
-                //}
+                }
             }
             if (!prevFont || prevFont->fontSize != font.fontSize) {
                 endString.append(String(u"<font size=\""));
@@ -153,7 +151,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
             }
         }
         prevFont = font;
-        endString.append(String::fromStdString(nextChunk));
+        endString.append(symIds ? symIds.value() : String::fromStdString(nextChunk));
         return true;
     };
 

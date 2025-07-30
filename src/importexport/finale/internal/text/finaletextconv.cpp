@@ -68,6 +68,20 @@ std::optional<String> FinaleTextConv::symIdInsertFromFinaleChar(char32_t c, cons
     return std::nullopt;
 }
 
+std::optional<String> FinaleTextConv::symIdInsertsFromStdString(const std::string& text, const std::shared_ptr<musx::dom::FontInfo>& font)
+{
+    std::u32string u32Text = String::fromStdString(text).toStdU32String();
+    String result;
+    for (char32_t c : u32Text) {
+        if (std::optional<String> nextSymTag = FinaleTextConv::symIdInsertFromFinaleChar(c, font)) {
+            result.append(nextSymTag.value());
+        } else {
+            return std::nullopt;
+        }
+    }
+    return result;
+}
+
 std::optional<String> FinaleTextConv::smuflStringFromFinaleChar(char32_t c, const std::shared_ptr<musx::dom::FontInfo>& font)
 {
     if (!font->calcIsSMuFL()) { /// @todo See note above about `calcIsSMuFL`
