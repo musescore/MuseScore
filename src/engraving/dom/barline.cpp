@@ -22,12 +22,11 @@
 
 #include "barline.h"
 
-#include "dom/text.h"
+#include "dom/playcounttext.h"
 #include "translation.h"
 #include "types/symnames.h"
 
 #include "articulation.h"
-#include "factory.h"
 #include "marker.h"
 #include "masterscore.h"
 #include "measure.h"
@@ -41,7 +40,6 @@
 #include "stafftype.h"
 #include "system.h"
 #include "undo.h"
-#include "types/typesconv.h"
 
 #include "log.h"
 
@@ -50,11 +48,6 @@ using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::read400;
-
-static ElementStyle playCountStyle {
-    { Sid::repeatPlayCountPlacement, Pid::PLACEMENT },
-    { Sid::repeatPlayCountMinDistance, Pid::MIN_DISTANCE },
-};
 
 //---------------------------------------------------------
 //   BarLineTable
@@ -775,10 +768,8 @@ void BarLine::add(EngravingItem* e)
         setGenerated(false);
         e->added();
         break;
-    case ElementType::TEXT: {
-        Text* t = toText(e);
-        t->initElementStyle(&playCountStyle);
-        setPlayCountText(toText(e));
+    case ElementType::PLAY_COUNT_TEXT: {
+        setPlayCountText(toPlayCountText(e));
     }
     break;
     default:
@@ -804,7 +795,7 @@ void BarLine::remove(EngravingItem* e)
             e->removed();
         }
         break;
-    case ElementType::TEXT:
+    case ElementType::PLAY_COUNT_TEXT:
         setPlayCountText(nullptr);
         break;
     default:
@@ -915,7 +906,7 @@ EngravingItem* BarLine::propertyDelegate(Pid pid)
     return EngravingItem::propertyDelegate(pid);
 }
 
-void BarLine::setPlayCountText(Text* text)
+void BarLine::setPlayCountText(PlayCountText* text)
 {
     m_playCountText = text;
     if (m_playCountText != nullptr) {

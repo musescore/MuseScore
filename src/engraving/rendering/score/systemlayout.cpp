@@ -48,6 +48,7 @@
 #include "dom/part.h"
 #include "dom/parenthesis.h"
 #include "dom/pedal.h"
+#include "dom/playcounttext.h"
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/slur.h"
@@ -1124,7 +1125,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
-    for (Text* pt : elementsToLayout.playCountText) {
+    for (PlayCountText* pt : elementsToLayout.playCountText) {
         if (pt->autoplace()) {
             Autoplace::autoplaceSegmentElement(pt, pt->mutldata());
         }
@@ -1198,7 +1199,7 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
             if (s->isType(SegmentType::BarLineType)) {
                 if (BarLine* bl = toBarLine(s->element(track))) {
                     elements.barlines.push_back(bl);
-                    if (Text* pt = toText(bl->playCountText())) {
+                    if (PlayCountText* pt = bl->playCountText()) {
                         elements.playCountText.push_back(pt);
                     }
                 }

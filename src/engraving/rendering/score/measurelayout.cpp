@@ -1232,7 +1232,6 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
 
     Score* score = m->score();
     const std::vector<MStaff*>& measureStaves = m->mstaves();
-    const int repeatCount = m->repeatCount();
 
     for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         if (staffIdx >= measureStaves.size()) {
@@ -1241,26 +1240,19 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
 
         Segment* endBarSeg = m->last(SegmentType::BarLineType);
         BarLine* bl = endBarSeg ? toBarLine(endBarSeg->element(staff2track(staffIdx))) : nullptr;
-        Text* playCount = bl ? bl->playCountText() : nullptr;
+        PlayCountText* playCount = bl ? bl->playCountText() : nullptr;
         if (!playCount) {
             continue;
         }
 
-        String text;
-        if (bl->playCountTextSetting() == AutoCustomHide::CUSTOM) {
-            text = bl->playCountCustomText();
-        } else {
-            text = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+        if (bl->playCountTextSetting() == AutoCustomHide::AUTO) {
+            const int repeatCount = m->repeatCount();
+            const String text = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
                 repeatCount);
+            bl->setPlayCountCustomText(text);
         }
 
-        playCount->setXmlText(text);
-
-        TLayout::layoutText(playCount, playCount->mutldata());
-
-        const double barlineWidth = bl->width();
-        const double diff = playCount->width() - barlineWidth;
-        playCount->mutldata()->moveX(-diff);
+        TLayout::layoutPlayCountText(playCount, playCount->mutldata());
     }
 }
 

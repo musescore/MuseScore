@@ -241,6 +241,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pitch.h
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.h
+    ${CMAKE_CURRENT_LIST_DIR}/playcounttext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playcounttext.h
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.h
     ${CMAKE_CURRENT_LIST_DIR}/property.cpp

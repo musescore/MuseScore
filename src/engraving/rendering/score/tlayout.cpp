@@ -382,6 +382,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::PICK_SCRAPE_SEGMENT: layoutPickScrapeSegment(item_cast<PickScrapeSegment*>(item), ctx);
         break;
+    case ElementType::PLAY_COUNT_TEXT:
+        layoutPlayCountText(item_cast<PlayCountText*>(item), static_cast<PlayCountText::LayoutData*>(ldata));
+        break;
     case ElementType::PLAYTECH_ANNOTATION:
         layoutPlayTechAnnotation(item_cast<const PlayTechAnnotation*>(item), static_cast<PlayTechAnnotation::LayoutData*>(ldata));
         break;
@@ -4590,6 +4593,22 @@ void TLayout::layoutPickScrapeSegment(PickScrapeSegment* item, LayoutContext& ct
     PickScrapeSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+}
+
+void TLayout::layoutPlayCountText(PlayCountText* item, TextBase::LayoutData* ldata)
+{
+    LAYOUT_CALL_ITEM(item);
+    BarLine* bl = item->barline();
+    if (!item->cursor()->editing()) {
+        String text = bl->playCountCustomText();
+        item->setXmlText(text);
+    }
+
+    layoutBaseTextBase(item, ldata);
+
+    const double barlineWidth = bl->width();
+    const double diff = item->width() - barlineWidth;
+    ldata->moveX(-diff);
 }
 
 void TLayout::layoutPlayTechAnnotation(const PlayTechAnnotation* item, PlayTechAnnotation::LayoutData* ldata)

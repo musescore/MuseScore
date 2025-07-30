@@ -38,12 +38,13 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/pedal.h"
+#include "engraving/dom/playcounttext.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stem.h"
+#include "engraving/dom/text.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/volta.h"
-#include "engraving/dom/text.h"
 
 #include "log.h"
 
@@ -397,7 +398,7 @@ EngravingItem* ElementRepositoryService::findTextDelegate(EngravingItem* element
         return element;
     }
 
-    if (Text* playCount = toBarLine(element)->playCountText()) {
+    if (PlayCountText* playCount = toBarLine(element)->playCountText()) {
         return playCount;
     }
 

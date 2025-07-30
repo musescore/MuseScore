@@ -144,9 +144,10 @@ public:
     using EngravingObject::undoChangeProperty;
     EngravingItem* propertyDelegate(Pid) override;
 
-    Text* playCountText() const { return m_playCountText; }
-    void setPlayCountText(Text* text);
+    PlayCountText* playCountText() const { return m_playCountText; }
+    void setPlayCountText(PlayCountText* text);
     String playCountCustomText() const { return m_playCountCustomText; }
+    void setPlayCountCustomText(const String& v) { m_playCountCustomText = v; }
 
     void setPlayCount(int playCount) { m_playCount = playCount; }
     int playCount() const { return m_playCount; }
@@ -190,7 +191,7 @@ private:
 
     ElementList m_el;          ///< fermata or other articulations
 
-    Text* m_playCountText = nullptr;     // Play count text for barlines on system object staves
+    PlayCountText* m_playCountText = nullptr;     // Play count text for barlines on system object staves
     AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
     String m_playCountCustomText = u"";
     int m_playCount = -1;                 // For use during copy & paste

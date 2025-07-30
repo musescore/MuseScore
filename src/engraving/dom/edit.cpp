@@ -23,6 +23,7 @@
 #include <map>
 #include <set>
 
+#include "dom/playcounttext.h"
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
@@ -97,6 +98,7 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
+#include "types/typesconv.h"
 
 #include "log.h"
 
@@ -2634,10 +2636,6 @@ void Score::deleteItem(EngravingItem* el)
     if (el->generated()) {
         switch (el->type()) {
         // These types can be removed, even if generated
-        case ElementType::TEXT:
-            if (!el->parent()->isBarLine()) {
-                return;
-            }
         case ElementType::BAR_LINE:
         case ElementType::BRACKET:
         case ElementType::CLEF:
@@ -2646,6 +2644,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::MEASURE_NUMBER:
         case ElementType::SYSTEM_LOCK_INDICATOR:
         case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+        case ElementType::PLAY_COUNT_TEXT:
             break;
         // All other types cannot be removed if generated
         default:
@@ -3134,14 +3133,14 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::TEXT:
         if ((el->explicitParent() && el->explicitParent()->isTBox()) || el->isTBox()) {
             el->undoChangeProperty(Pid::TEXT, String());
-        } else if (el->explicitParent() && el->explicitParent()->isBarLine()) {
-            BarLine* bl = toBarLine(el->explicitParent());
-            bl->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::HIDE);
         } else {
             undoRemoveElement(el);
         }
         break;
-
+    case ElementType::PLAY_COUNT_TEXT: {
+        BarLine* bl = toBarLine(el->explicitParent());
+        bl->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::HIDE);
+    } break;
     case ElementType::INSTRUMENT_CHANGE:
     {
         InstrumentChange* ic = static_cast<InstrumentChange*>(el);
@@ -5505,7 +5504,8 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
 
 void Score::undoUpdatePlayCountText(Measure* m)
 {
-    if (!m->repeatEnd()) {
+    // TODO PARTS
+    if (!m || !m->repeatEnd()) {
         return;
     }
     const MStyle& _style = style();
@@ -5528,20 +5528,19 @@ void Score::undoUpdatePlayCountText(Measure* m)
         if (!bl) {
             continue;
         }
-        Text* playCountText = bl->playCountText();
+        PlayCountText* playCountText = bl->playCountText();
 
         bool blShowPlayCount = (showPlayCount && bl->playCountTextSetting() == AutoCustomHide::AUTO)
                                || bl->playCountTextSetting() == AutoCustomHide::CUSTOM;
 
         if (blShowPlayCount && curStaff->shouldShowPlayCount()) {
             if (!playCountText) {
-                playCountText = Factory::createText(bl, TextStyleType::REPEAT_PLAY_COUNT);
+                playCountText = Factory::createPlayCountText(bl);
                 playCountText->setTrack(staff2track(staffIdx));
                 playCountText->setParent(bl);
-                playCountText->setGenerated(true);
-                doUndoAddElement(playCountText);
                 playCountText->setSystemFlag(true);
                 playCountText->setSelected(bl->selected());
+                doUndoAddElement(playCountText);
             } else {
                 if (playCountText->parent() != bl) {
                     playCountText->parentItem()->remove(playCountText);
@@ -5791,7 +5790,6 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
 
 void Score::undoChangePlayCountTextSetting(BarLine* bl, const AutoCustomHide& v)
 {
-    LOGI() << "==> undoChangePlayCountTextSetting";
     if (v == bl->playCountTextSetting()) {
         return;
     }
@@ -5810,7 +5808,6 @@ void Score::undoChangePlayCountTextSetting(BarLine* bl, const AutoCustomHide& v)
             String text = TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
                 bl->getProperty(Pid::REPEAT_COUNT).toInt());
             bl->undoChangeProperty(Pid::PLAY_COUNT_TEXT, text);
-            LOGI() << "SET PLAY COUNT: " << text;
         }
     }
 }

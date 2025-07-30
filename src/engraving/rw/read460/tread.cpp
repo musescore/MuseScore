@@ -52,6 +52,7 @@
 #include "../../dom/tremolobar.h"
 #include "../../dom/sticking.h"
 #include "../../dom/systemtext.h"
+#include "../../dom/playcounttext.h"
 #include "../../dom/playtechannotation.h"
 #include "../../dom/rehearsalmark.h"
 
@@ -270,6 +271,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::PARTIAL_TIE: read(item_cast<PartialTie*>(item), xml, ctx);
         break;
     case ElementType::PEDAL: read(item_cast<Pedal*>(item), xml, ctx);
+        break;
+    case ElementType::PLAY_COUNT_TEXT: read(item_cast<PlayCountText*>(item), xml, ctx);
         break;
     case ElementType::PLAYTECH_ANNOTATION: read(item_cast<PlayTechAnnotation*>(item), xml, ctx);
         break;
@@ -891,6 +894,11 @@ void TRead::read(Sticking* s, XmlReader& xml, ReadContext& ctx)
 void TRead::read(SystemText* t, XmlReader& xml, ReadContext& ctx)
 {
     read(static_cast<StaffTextBase*>(t), xml, ctx);
+}
+
+void TRead::read(PlayCountText* t, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<TextBase*>(t), xml, ctx);
 }
 
 void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)

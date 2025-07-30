@@ -104,6 +104,7 @@
 #include "dom/part.h"
 #include "dom/pedal.h"
 #include "dom/pickscrape.h"
+#include "dom/playcounttext.h"
 #include "dom/playtechannotation.h"
 
 #include "dom/rasgueado.h"
@@ -321,6 +322,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::PEDAL_SEGMENT:        draw(item_cast<const PedalSegment*>(item), painter);
         break;
     case ElementType::PICK_SCRAPE_SEGMENT:  draw(item_cast<const PickScrapeSegment*>(item), painter);
+        break;
+    case ElementType::PLAY_COUNT_TEXT:      draw(item_cast<const PlayCountText*>(item), painter);
         break;
     case ElementType::PLAYTECH_ANNOTATION:  draw(item_cast<const PlayTechAnnotation*>(item), painter);
         break;
@@ -2400,6 +2403,12 @@ void TDraw::draw(const PickScrapeSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void TDraw::draw(const PlayCountText* item, muse::draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
 
 void TDraw::draw(const PlayTechAnnotation* item, Painter* painter)

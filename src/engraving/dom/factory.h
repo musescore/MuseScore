@@ -304,6 +304,8 @@ public:
     static Symbol* createSymbol(EngravingItem* parent, bool isAccessibleEnabled = true);
     static FSymbol* createFSymbol(EngravingItem* parent, bool isAccessibleEnabled = true);
 
+    static PlayCountText* createPlayCountText(BarLine* parent, bool isAccessibleEnabled = true);
+
     static PlayTechAnnotation* createPlayTechAnnotation(Segment* parent, PlayingTechniqueType techniqueType, TextStyleType styleType,
                                                         bool isAccessibleEnabled = true);
 

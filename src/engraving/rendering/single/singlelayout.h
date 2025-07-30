@@ -96,6 +96,7 @@ class PalmMute;
 class PalmMuteSegment;
 class Pedal;
 class PedalSegment;
+class PlayCountText;
 class PlayTechAnnotation;
 
 class RehearsalMark;
@@ -213,6 +214,7 @@ public:
 
     static void layout(PalmMute* item, const Context& ctx);
     static void layout(Pedal* item, const Context& ctx);
+    static void layout(PlayCountText* item, const Context& ctx);
     static void layout(PlayTechAnnotation* item, const Context& ctx);
 
     static void layout(RehearsalMark* item, const Context& ctx);
