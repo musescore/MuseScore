@@ -49,3 +49,38 @@ void PlayCountText::endEdit(EditData& ed)
     barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT, xmlText());
     TextBase::endEdit(ed);
 }
+
+EngravingItem* PlayCountText::propertyDelegate(Pid pid)
+{
+    if (pid == Pid::PLAY_COUNT_TEXT || pid == Pid::PLAY_COUNT_TEXT_SETTING) {
+        return barline();
+    }
+    return nullptr;
+}
+
+PropertyValue PlayCountText::getProperty(Pid id) const
+{
+    if (EngravingItem* e = const_cast<PlayCountText*>(this)->propertyDelegate(id)) {
+        return e->getProperty(id);
+    }
+
+    return TextBase::getProperty(id);
+}
+
+bool PlayCountText::setProperty(Pid id, const PropertyValue& v)
+{
+    if (EngravingItem* e = propertyDelegate(id)) {
+        return e->setProperty(id, v);
+    }
+
+    return TextBase::setProperty(id, v);
+}
+
+PropertyValue PlayCountText::propertyDefault(Pid propertyId) const
+{
+    if (EngravingItem* e = const_cast<PlayCountText*>(this)->propertyDelegate(propertyId)) {
+        return e->propertyDefault(propertyId);
+    }
+
+    return TextBase::propertyDefault(propertyId);
+}

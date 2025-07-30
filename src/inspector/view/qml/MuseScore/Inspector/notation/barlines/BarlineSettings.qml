@@ -27,6 +27,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.Inspector 1.0
 import "../../common"
+import "../playcounttext"
 
 Column {
     id: root
@@ -104,44 +105,14 @@ Column {
         propertyItem: root.model ? root.model.playCount : null
     }
 
-    FlatRadioButtonGroupPropertyView {
-        id: playCountTextSection
-        propertyItem: root.model ? root.model.playCountTextSetting : null
+    PlayCountSettings {
+        id: playCountSection
+
         visible: root.model.showPlayCount && root.model.showPlayCountSettings
 
-        showTitle: true;
-        titleLabelComponent: Component {
-            id: playCountTextSectionLabel
-
-            StyledTextLabel {
-                width: parent.width
-                text: qsTrc("inspector", "Play count text")
-                horizontalAlignment: Text.AlignLeft
-                elide: Text.ElideNone
-                wrapMode: Text.Wrap
-            }
-        }
-
-        navigationName: "Play count text"
+        model: root.model
         navigationPanel: root.navigationPanel
         navigationRowStart: playCount.navigationRowEnd + 1
-
-        model: [
-            { text: qsTrc("inspector", "Auto"), value: BarlineTypes.COUNT_AUTO },
-            { text: qsTrc("inspector", "Custom"), value: BarlineTypes.COUNT_CUSTOM },
-            { text: qsTrc("inspector", "Hide"), value: BarlineTypes.COUNT_HIDE }
-        ]
-    }
-
-    TextSection {
-        id: playCountText
-        propertyItem: root.model ? root.model.playCountText : null
-        visible: root.model && root.model.playCountTextSetting.value && root.model.showPlayCount && root.model.showPlayCountSettings && root.model.playCountTextSetting.value === BarlineTypes.COUNT_CUSTOM
-
-        showButton: false
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: playCountTextSection.navigationRowStart + 1
     }
 
     ExpandableBlank {
@@ -153,7 +124,7 @@ Column {
         width: parent.width
 
         navigation.panel: root.navigationPanel
-        navigation.row: playCountText.navigationRowEnd + 1
+        navigation.row: playCountSection.navigationRowEnd + 1
 
         contentItemComponent: Column {
             height: implicitHeight

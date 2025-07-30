@@ -144,7 +144,8 @@ public:
         TYPE_REST_REST,
         TYPE_STRING_TUNINGS,
         TYPE_SYMBOL,
-        TYPE_NOTELINE
+        TYPE_NOTELINE,
+        TYPE_PLAY_COUNT_TEXT
     };
     Q_ENUM(InspectorModelType)
 

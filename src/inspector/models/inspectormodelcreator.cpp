@@ -79,6 +79,7 @@
 #include "notation/expressions/expressionsettingsmodel.h"
 #include "notation/stringtunings/stringtuningssettingsmodel.h"
 #include "notation/symbols/symbolsettingsmodel.h"
+#include "notation/playcounttext/playcounttextsettingsmodel.h"
 
 using namespace mu::inspector;
 
@@ -108,6 +109,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new GlissandoSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BARLINE:
         return new BarlineSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_PLAY_COUNT_TEXT:
+        return new PlayCountTextSettingsModel(parent, repository);
     case InspectorModelType::TYPE_MARKER:
         return new MarkerSettingsModel(parent, repository);
     case InspectorModelType::TYPE_SECTIONBREAK:
