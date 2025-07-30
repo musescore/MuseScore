@@ -900,8 +900,7 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
         for (const auto& it : chordRest->score()->spanner()) {
             String tagName = u"slur";
             auto sp = it.second;
-            if (sp->generated() || (sp->type() != ElementType::SLUR && sp->type() != ElementType::HAMMER_ON_PULL_OFF)
-                || !ExportMusicXml::canWrite(sp)) {
+            if (sp->generated() || !sp->isSlur() || !ExportMusicXml::canWrite(sp)) {
                 continue;
             }
             if (sp->isHammerOnPullOff()) {
