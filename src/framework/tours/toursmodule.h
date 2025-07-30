@@ -37,7 +37,6 @@ public:
     void registerExports() override;
     void registerResources() override;
     void registerUiTypes() override;
-    void onInit(const IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<ToursService> m_service;
