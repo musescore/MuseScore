@@ -273,8 +273,9 @@ void FinaleParser::importParts()
             }
             return stringFromEnigmaText(parsingContext, options);
         };
-        part->setPartName(nameFromEnigmaText(staff->getFullInstrumentNameCtx(m_currentMusxPartId), u"longInstrument"));
-        part->setLongName(nameFromEnigmaText(compositeStaff->getFullInstrumentNameCtx(m_currentMusxPartId), u"longInstrument"));
+        const String longName = nameFromEnigmaText(staff->getFullInstrumentNameCtx(m_currentMusxPartId), u"longInstrument");
+        part->setPartName(longName);
+        part->setLongName(longName);
         part->setShortName(nameFromEnigmaText(compositeStaff->getAbbreviatedInstrumentNameCtx(m_currentMusxPartId), u"shortInstrument"));
 
         m_score->appendPart(part);
