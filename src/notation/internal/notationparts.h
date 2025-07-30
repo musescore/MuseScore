@@ -101,7 +101,7 @@ private:
     friend class MasterNotationParts;
 
     void listenUndoStackChanges();
-    void updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChangesRange& range = {});
+    void updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes = {});
 
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);

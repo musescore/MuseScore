@@ -164,7 +164,7 @@ void AbstractLayoutPanelTreeItem::removeChildren(int row, int count, bool delete
     }
 }
 
-void AbstractLayoutPanelTreeItem::onScoreChanged(const mu::engraving::ScoreChangesRange&)
+void AbstractLayoutPanelTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
 {
 }
 

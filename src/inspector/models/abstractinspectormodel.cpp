@@ -179,15 +179,19 @@ void AbstractInspectorModel::onCurrentNotationChanged()
         onNotationChanged({}, {});
     });
 
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& range) {
-        if (range.changedPropertyIdSet.empty() && range.changedStyleIdSet.empty()) {
+    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+        if (changes.isTextEditing) {
+            return;
+        }
+
+        if (changes.changedPropertyIdSet.empty() && changes.changedStyleIdSet.empty()) {
             return;
         }
 
         if (m_updatePropertiesAllowed && !isEmpty()) {
-            PropertyIdSet expandedPropertyIdSet = propertyIdSetFromStyleIdSet(range.changedStyleIdSet);
-            expandedPropertyIdSet.insert(range.changedPropertyIdSet.cbegin(), range.changedPropertyIdSet.cend());
-            onNotationChanged(expandedPropertyIdSet, range.changedStyleIdSet);
+            PropertyIdSet expandedPropertyIdSet = propertyIdSetFromStyleIdSet(changes.changedStyleIdSet);
+            expandedPropertyIdSet.insert(changes.changedPropertyIdSet.cbegin(), changes.changedPropertyIdSet.cend());
+            onNotationChanged(expandedPropertyIdSet, changes.changedStyleIdSet);
         }
 
         m_updatePropertiesAllowed = true;
