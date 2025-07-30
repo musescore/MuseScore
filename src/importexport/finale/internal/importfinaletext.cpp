@@ -251,7 +251,6 @@ bool FinaleParser::isOnlyPage(const std::shared_ptr<others::PageTextAssign>& pag
 
 void FinaleParser::importPageTexts()
 {
-    FinaleTextConv::init();
     std::vector<std::shared_ptr<others::PageTextAssign>> pageTextAssignList = m_doc->getOthers()->getArray<others::PageTextAssign>(m_currentMusxPartId);
 
     // we need to work with real-time positions and pages, so we layout the score.
