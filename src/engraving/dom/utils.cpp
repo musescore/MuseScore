@@ -1455,9 +1455,11 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
                         continue;
                     }
 
-                    BarLine* bl = toBarLine(item);
-                    if (PlayCountText* playCount = bl->playCountText()) {
-                        result.push_back(playCount);
+                    if ((!staves.empty() && muse::contains(staves, item->staff())) || (staves.empty() && (item->staffIdx() == 0))) {
+                        BarLine* bl = toBarLine(item);
+                        if (PlayCountText* playCount = bl->playCountText()) {
+                            result.push_back(playCount);
+                        }
                     }
                 }
             }
@@ -1811,5 +1813,19 @@ bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment
     }
 
     return false;
+}
+
+EngravingItem* findNewSystemMarkingParent(const EngravingItem* item, const Staff* staff)
+{
+    EngravingItem* newParent = nullptr;
+    if (item->isPlayCountText()) {
+        BarLine* oldParent = toBarLine(item->parent());
+        Segment* blSeg = oldParent->segment();
+        newParent = toBarLine(blSeg->element(staff2track(staff->idx())));
+    } else {
+        newParent = item->findLinkedInStaff(staff);
+    }
+
+    return newParent;
 }
 }
