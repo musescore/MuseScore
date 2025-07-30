@@ -5909,7 +5909,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
             Char ch = dynText.at(i);
             const auto it = map.find(ch.unicode());
             if (it != map.end()) {
-                // found a SMUFL single letter dynamics glyph
+                // found a SMuFL single letter dynamics glyph
                 if (!inDynamicsSym) {
                     if (!text.empty()) {
                         m_xml.tag("other-dynamics", text);
