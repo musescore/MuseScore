@@ -104,7 +104,7 @@ bool FirstLaunchSetupModel::askAboutClosingEarly()
     const std::string body = muse::qtrc("appshell/gettingstarted",
                                         "If you choose to cancel, then be sure to check out our free "
                                         "MuseSounds playback libraries on <a href=\"%1\">MuseHub.com</a>.")
-                             .arg(configuration()->museHubFreeMuseSoundsUrl())
+                             .arg(QString::fromStdString(configuration()->museHubFreeMuseSoundsUrl()))
                              .toStdString();
     const IInteractive::Text text(body, IInteractive::TextFormat::RichText);
 
