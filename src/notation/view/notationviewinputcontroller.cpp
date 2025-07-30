@@ -687,12 +687,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->endEditElement();
     }
 
-    // Alt+click paste range
-    consumed = mousePress_considerPasteRange(ctx);
-    if (consumed) {
-        return;
-    }
-
     // Drag outgoing: element
     consumed = mousePress_considerDragOutgoingElement(ctx);
     if (consumed) {
@@ -701,6 +695,12 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     // Drag outgoing: range
     consumed = mousePress_considerDragOutgoingRange(ctx);
+    if (consumed) {
+        return;
+    }
+
+    // Alt+click paste range
+    consumed = mousePress_considerStartPasteRangeOnRelease(ctx);
     if (consumed) {
         return;
     }
@@ -759,7 +759,7 @@ bool NotationViewInputController::mousePress_considerDragOutgoingElement(const C
     return true;
 }
 
-bool NotationViewInputController::mousePress_considerPasteRange(const ClickContext& ctx)
+bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(const ClickContext& ctx)
 {
     // Check if this is a left click with Alt modifier
     if (ctx.event->button() != Qt::LeftButton || !(ctx.event->modifiers() & Qt::AltModifier)) {
@@ -772,17 +772,20 @@ bool NotationViewInputController::mousePress_considerPasteRange(const ClickConte
         return false;
     }
 
-    // Get the MIME data for the current selection
-    muse::ByteArray rangeData = selection->mimeData();
-    if (rangeData.empty()) {
+    INotationSelectionRangePtr range = selection->range();
+    Fraction sourceTick = range->startTick();
+    Fraction tickLength = range->endTick() - range->startTick();
+    engraving::staff_idx_t sourceStaffIdx = range->startStaffIndex();
+    size_t numStaves = range->endStaffIndex() - range->startStaffIndex();
+
+    bool started = viewInteraction()->startDropRange(sourceTick, tickLength, sourceStaffIdx, numStaves);
+    if (!started) {
         return false;
     }
 
-    // Perform the paste operation at the click position
-    QByteArray qRangeData = rangeData.toQByteArrayNoCopy();
-    bool success = viewInteraction()->pasteRange(qRangeData, ctx.logicClickPos);
-
-    return success;
+    viewInteraction()->updateDropRange(ctx.logicClickPos);
+    m_mouseDownInfo.dragAction = MouseDownInfo::PasteRangeOnRelease;
+    return true;
 }
 
 void NotationViewInputController::mousePress_considerSelect(const ClickContext& ctx)
@@ -1001,6 +1004,11 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         }
         return;
     }
+    case MouseDownInfo::PasteRangeOnRelease: {
+        PointF logicPos = m_view->toLogical(event->pos());
+        viewInteraction()->updateDropRange(logicPos);
+        return;
+    }
     case MouseDownInfo::Nothing:
         return;
     case MouseDownInfo::Other:
@@ -1088,6 +1096,22 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
     INotationInteractionPtr interaction = viewInteraction();
     INotationNoteInputPtr noteInput = interaction->noteInput();
     const EngravingItem* hitElement = hitElementContext().element;
+
+    if (m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
+        INotationSelectionPtr selection = interaction->selection();
+        if (!selection->isRange() || !selection->canCopy()) {
+            viewInteraction()->endDrop();
+            return;
+        }
+        muse::ByteArray rangeData = selection->mimeData();
+        if (rangeData.empty()) {
+            viewInteraction()->endDrop();
+            return;
+        }
+        PointF logicPos = m_view->toLogical(event->pos());
+        viewInteraction()->dropRange(rangeData.toQByteArrayNoCopy(), logicPos, false);
+        return;
+    }
 
     if (event->modifiers() != Qt::ControlModifier && event->modifiers() != Qt::ShiftModifier) {
         if (!hitElement && !m_isCanvasDragged && !interaction->isGripEditStarted()
