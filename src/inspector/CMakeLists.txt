@@ -218,6 +218,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/mmrests/mmrestsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/playcounttext/playcounttextsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/playcounttext/playcounttextsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/instrumentname/instrumentnamesettingsmodel.cpp

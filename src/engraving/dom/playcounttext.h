@@ -39,6 +39,11 @@ public:
     void startEdit(EditData&) override;
     void endEdit(EditData&) override;
 
+    EngravingItem* propertyDelegate(Pid) override;
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+
 private:
     friend class Factory;
     PlayCountText(BarLine* parent, TextStyleType tid = TextStyleType::REPEAT_PLAY_COUNT);

@@ -63,6 +63,7 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
     { mu::engraving::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
     { mu::engraving::ElementType::BAR_LINE, InspectorModelType::TYPE_BARLINE },
+    { mu::engraving::ElementType::PLAY_COUNT_TEXT, InspectorModelType::TYPE_PLAY_COUNT_TEXT },
     { mu::engraving::ElementType::MARKER, InspectorModelType::TYPE_MARKER },
     { mu::engraving::ElementType::JUMP, InspectorModelType::TYPE_JUMP },
     { mu::engraving::ElementType::KEYSIG, InspectorModelType::TYPE_KEYSIGNATURE },
