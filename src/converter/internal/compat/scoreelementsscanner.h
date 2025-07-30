@@ -50,7 +50,8 @@ public:
     };
 
     // Instrument -> ElementType -> Elements
-    using ElementMap = std::map<mu::engraving::ElementType, std::vector<ElementInfo> >;
+    using ElementInfoList = std::vector<ElementInfo>;
+    using ElementMap = std::map<mu::engraving::ElementType, ElementInfoList>;
     using InstrumentElementMap = std::map<mu::engraving::InstrumentTrackId, ElementMap>;
 
     static InstrumentElementMap scanElements(mu::engraving::Score* score, const Options& options = {});
