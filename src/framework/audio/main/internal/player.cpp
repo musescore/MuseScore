@@ -134,7 +134,7 @@ void Player::setDuration(const msecs_t durationMsec)
 async::Promise<bool> Player::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
 {
     ONLY_AUDIO_MAIN_THREAD;
-    return make_promise<bool>([this, fromMsec, toMsec](auto resolve, auto reject) {
+    return async::make_promise<bool>([this, fromMsec, toMsec](auto resolve, auto reject) {
         ONLY_AUDIO_MAIN_THREAD;
         Msg msg = rpc::make_request(Method::SetLoop, RpcPacker::pack(m_sequenceId, fromMsec, toMsec));
         channel()->send(msg, [resolve, reject](const Msg& res) {

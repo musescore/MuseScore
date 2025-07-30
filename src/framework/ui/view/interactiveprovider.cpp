@@ -150,7 +150,7 @@ RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
     QEventLoop loop;
     Promise<Val>::Resolve resolve;
     Promise<Val>::Reject reject;
-    Promise<Val> promise = make_promise<Val>([&resolve, &reject](auto res, auto rej) {
+    Promise<Val> promise = async::make_promise<Val>([&resolve, &reject](auto res, auto rej) {
         resolve = res;
         reject = rej;
         return Promise<Val>::Result::unchecked();
@@ -183,15 +183,15 @@ RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
 
 Promise<Val> InteractiveProvider::openAsync(const UriQuery& q)
 {
-    return make_promise<Val>(openFunc(q), PromiseType::AsyncByBody);
+    return async::make_promise<Val>(openFunc(q), PromiseType::AsyncByBody);
 }
 
 async::Promise<Val> InteractiveProvider::openAsync(const Uri& uri, const QVariantMap& params)
 {
-    return make_promise<Val>(openFunc(UriQuery(uri), params), PromiseType::AsyncByBody);
+    return async::make_promise<Val>(openFunc(UriQuery(uri), params), PromiseType::AsyncByBody);
 }
 
-Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q)
+Promise<Val>::BodyResolveReject InteractiveProvider::openFunc(const UriQuery& q)
 {
     QVariantMap params;
     const UriQuery::Params& p = q.params();
@@ -202,7 +202,7 @@ Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q)
     return openFunc(q, params);
 }
 
-Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q, const QVariantMap& params)
+Promise<Val>::BodyResolveReject InteractiveProvider::openFunc(const UriQuery& q, const QVariantMap& params)
 {
     auto func = [this, q, params](Promise<Val>::Resolve resolve, Promise<Val>::Reject reject) {
         IF_ASSERT_FAILED(!m_openingObject.objectId.isValid()) {

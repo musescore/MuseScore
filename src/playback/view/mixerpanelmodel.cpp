@@ -27,6 +27,7 @@
 #include "log.h"
 #include "translation.h"
 
+using namespace muse;
 using namespace mu::playback;
 using namespace muse::audio;
 using namespace mu::engraving;
@@ -422,14 +423,14 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
     });
 
     playback()->trackName(m_currentTrackSequenceId, trackId)
-    .onResolve(this, [this, trackId](const TrackName& trackName) {
-        if (MixerChannelItem* item = findChannelItem(trackId)) {
-            item->setTitle(QString::fromStdString(trackName));
+    .onResolve(this, [this, trackId](const RetVal<TrackName>& trackName) {
+        if (trackName.ret) {
+            if (MixerChannelItem* item = findChannelItem(trackId)) {
+                item->setTitle(QString::fromStdString(trackName.val));
+            }
+        } else {
+            LOGE() << "unable to get track name, error: " << trackName.ret.toString();
         }
-    })
-    .onReject(this, [](int errCode, std::string text) {
-        LOGE() << "unable to get track name, error code: " << errCode
-               << ", " << text;
     });
 
     playback()->outputParams(m_currentTrackSequenceId, trackId)
@@ -484,14 +485,14 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
     item->loadSoloMuteState(audioSettings()->auxSoloMuteState(index));
 
     playback()->trackName(m_currentTrackSequenceId, trackId)
-    .onResolve(this, [this, trackId](const TrackName& trackName) {
-        if (MixerChannelItem* item = findChannelItem(trackId)) {
-            item->setTitle(QString::fromStdString(trackName));
+    .onResolve(this, [this, trackId](const RetVal<TrackName>& trackName) {
+        if (trackName.ret) {
+            if (MixerChannelItem* item = findChannelItem(trackId)) {
+                item->setTitle(QString::fromStdString(trackName.val));
+            }
+        } else {
+            LOGE() << "unable to get track name, error: " << trackName.ret.toString();
         }
-    })
-    .onReject(this, [](int errCode, std::string text) {
-        LOGE() << "unable to get track name, error code: " << errCode
-               << ", " << text;
     });
 
     playback()->outputParams(m_currentTrackSequenceId, trackId)
