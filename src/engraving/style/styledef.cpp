@@ -660,7 +660,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(ottavaPosAbove,                             PointF(.0, -2.0)),
     styleDef(ottavaPosBelow,                             PointF(.0, 2.0)),
     styleDef(ottavaHookAbove,                            Spatium(1)),
-    styleDef(ottavaHookBelow,                            Spatium(-1)),
+    styleDef(ottavaHookBelow,                            Spatium(1)),
     styleDef(ottavaLineWidth,                            Spatium(0.11)),
     styleDef(ottavaLineStyle,                            PropertyValue(LineType::DASHED)),
     styleDef(ottavaDashLineLen,                          6.0),
