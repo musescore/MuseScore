@@ -206,6 +206,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
     defaultPalette->append(newLinesPalette(true));
+    defaultPalette->append(newHandbellsPalette(true));
 
     return defaultPalette;
 }
@@ -2005,23 +2006,26 @@ PalettePtr PaletteCreator::newHarpPalette()
     return sp;
 }
 
-PalettePtr PaletteCreator::newHandbellsPalette()
+PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Handbells);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Handbells"));
     sp->setGridSize(42, 25);
     sp->setDrawGrid(true);
 
-    static const std::vector<SymId> handbellsArticSymbols {
+    static const std::vector<SymId> standardHandbellsArticSymbols {
         SymId::handbellsMartellato,
         SymId::handbellsMartellatoLift,
-        SymId::handbellsHandMartellato,
-        SymId::handbellsMutedMartellato,
         SymId::handbellsMalletBellSuspended,
         SymId::handbellsMalletBellOnTable,
         SymId::handbellsMalletLft,
         SymId::handbellsPluckLift,
         SymId::handbellsGyro,
+    };
+
+    static const std::vector<SymId> additionalHandbellsArticSymbols {
+        SymId::handbellsHandMartellato,
+        SymId::handbellsMutedMartellato,
     };
 
     static const std::vector<ArticulationTextType> handbellsTextTypes {
@@ -2035,16 +2039,24 @@ PalettePtr PaletteCreator::newHandbellsPalette()
         ArticulationTextType::VIB,
     };
 
-    for (SymId symId : handbellsArticSymbols) {
-        auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
-        artic->setSymId(symId);
-        sp->appendElement(artic, artic->subtypeUserName());
-    }
+    if (defaultPalette) {
+        for (SymId symId : standardHandbellsArticSymbols) {
+            auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+            artic->setSymId(symId);
+            sp->appendElement(artic, artic->subtypeUserName());
+        }
 
-    for (ArticulationTextType textType : handbellsTextTypes) {
-        auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
-        artic->setTextType(textType);
-        sp->appendElement(artic, artic->subtypeUserName());
+        for (ArticulationTextType textType : handbellsTextTypes) {
+            auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+            artic->setTextType(textType);
+            sp->appendElement(artic, artic->subtypeUserName());
+        }
+    } else {
+        for (SymId symId : additionalHandbellsArticSymbols) {
+            auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+            artic->setSymId(symId);
+            sp->appendElement(artic, artic->subtypeUserName());
+        }
     }
 
     return sp;
