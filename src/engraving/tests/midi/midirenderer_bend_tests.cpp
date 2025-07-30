@@ -623,3 +623,34 @@ TEST_F(MidiRendererBend_Tests, bendGraceAfter)
 
     EXPECT_TRUE(events[0].empty());
 }
+
+TEST_F(MidiRendererBend_Tests, bendAfterHammer)
+{
+    constexpr int defVol = 80; // mf
+    constexpr int pwReset = 8192;
+
+    EventsHolder events = renderMidiEvents(u"bend_after_hammer.mscx", true, true);
+
+    EXPECT_EQ(events.size(), 2);
+    EXPECT_EQ(events[0].size(), 2);
+    EXPECT_EQ(events[1].size(), 16);
+
+    checkEventInterval(events, 0, 479, 62, defVol);
+    checkEventInterval(events, 480, 1679, 66, defVol, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 960, pwReset, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 970, 8201, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 980, 8229, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 990, 8277, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1000, 8343, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1010, 8429, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1020, 8533, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1030, 8656, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1040, 8798, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1050, 8960, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1060, 9140, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1070, 9339, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1080, 9557, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+
+    EXPECT_EQ(events[0].size(), 0);
+    EXPECT_EQ(events[1].size(), 1);
+}
