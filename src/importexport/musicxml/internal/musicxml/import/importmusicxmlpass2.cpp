@@ -1261,11 +1261,14 @@ static void addTapToChord(const Notation& notation, ChordRest* cr)
     const TappingHand hand = notation.attribute(u"hand") == u"right" ? TappingHand::RIGHT : TappingHand::LEFT;
 
     Tapping* tap = Factory::createTapping(cr);
+    tap->setTrack(cr->track());
     tap->setHand(hand);
     if (place == u"above") {
         tap->setAnchor(ArticulationAnchor::TOP);
+        tap->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
     } else if (place == u"below") {
         tap->setAnchor(ArticulationAnchor::BOTTOM);
+        tap->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
     } else {
         tap->setAnchor(ArticulationAnchor::AUTO);
     }
@@ -8698,7 +8701,7 @@ void MusicXmlParserNotations::addTechnical(const Notation& notation, Note* note)
         }
     } else if (notation.name() == u"tap") {
         if (note) {
-            addTapToChord(notation, note->chord());        
+            addTapToChord(notation, note->chord());
         } else {
             m_logger->logError(u"no note for tap", &m_e);
         }
