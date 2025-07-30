@@ -43,6 +43,7 @@
 #include "note.h"
 #include "page.h"
 #include "part.h"
+#include "playcounttext.h"
 #include "partialtie.h"
 #include "pitchspelling.h"
 #include "rest.h"
@@ -1464,7 +1465,7 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
                     }
 
                     BarLine* bl = toBarLine(item);
-                    if (Text* playCount = bl->playCountText()) {
+                    if (PlayCountText* playCount = bl->playCountText()) {
                         result.push_back(playCount);
                     }
                 }

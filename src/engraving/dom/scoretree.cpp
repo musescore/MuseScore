@@ -43,6 +43,7 @@
 #include "note.h"
 #include "notedot.h"
 #include "page.h"
+#include "playcounttext.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"

@@ -120,6 +120,7 @@ enum class ElementType : unsigned char {
     STAFF_TEXT,
     SYSTEM_TEXT,
     SOUND_FLAG,
+    PLAY_COUNT_TEXT,
     PLAYTECH_ANNOTATION,
     CAPO,
     STRING_TUNINGS,

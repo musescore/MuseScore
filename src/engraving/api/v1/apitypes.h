@@ -290,6 +290,7 @@ enum class ElementType {
     STAFF_TEXT            = int(mu::engraving::ElementType::STAFF_TEXT),
     SYSTEM_TEXT           = int(mu::engraving::ElementType::SYSTEM_TEXT),
     SOUND_FLAG            = int(mu::engraving::ElementType::SOUND_FLAG),
+    PLAY_COUNT_TEXT       = int(mu::engraving::ElementType::PLAY_COUNT_TEXT),
     PLAYTECH_ANNOTATION   = int(mu::engraving::ElementType::PLAYTECH_ANNOTATION),
     CAPO                  = int(mu::engraving::ElementType::CAPO),
     STRING_TUNINGS        = int(mu::engraving::ElementType::STRING_TUNINGS),
