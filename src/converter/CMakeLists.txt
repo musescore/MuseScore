@@ -47,9 +47,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/compat/scoreelementsscanner.h
     )
 
+if (MUE_BUILD_CONVERTER_TESTS)
+    add_subdirectory(tests)
+endif()
+
 if (QT_SUPPORT)
     list(APPEND MODULE_LINK Qt::Qml)
 endif()
 
 setup_module()
-
