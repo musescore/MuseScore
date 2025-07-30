@@ -4599,6 +4599,7 @@ void TLayout::layoutPlayCountText(PlayCountText* item, TextBase::LayoutData* lda
 {
     LAYOUT_CALL_ITEM(item);
     BarLine* bl = item->barline();
+    Segment* seg = bl->segment();
     if (!item->cursor()->editing()) {
         String text = bl->playCountCustomText();
         item->setXmlText(text);
@@ -4606,8 +4607,15 @@ void TLayout::layoutPlayCountText(PlayCountText* item, TextBase::LayoutData* lda
 
     layoutBaseTextBase(item, ldata);
 
+    // Avoid incoming barlines from above
+    double xAdj = 0.0;
+    BarLine* blAbove = item->staffIdx() != 0 ? toBarLine(seg->elementAt(staff2track(item->staffIdx() - 1))) : nullptr;
+    if (blAbove && blAbove->spanStaff()) {
+        xAdj = blAbove->width();
+    }
+
     const double barlineWidth = bl->width();
-    const double diff = item->width() - barlineWidth;
+    const double diff = item->width() - barlineWidth + xAdj;
     ldata->moveX(-diff);
 }
 

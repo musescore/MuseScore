@@ -1251,8 +1251,6 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
                 repeatCount);
             bl->setPlayCountCustomText(text);
         }
-
-        TLayout::layoutPlayCountText(playCount, playCount->mutldata());
     }
 }
 
