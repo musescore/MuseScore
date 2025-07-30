@@ -167,9 +167,9 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newFretboardDiagramPalette());
     tree->append(newAccordionPalette());
     tree->append(newBagpipeEmbellishmentPalette());
+    tree->append(newHandbellsPalette());
     tree->append(newBeamPalette());
     tree->append(newLinesPalette());
-    tree->append(newHandbellsPalette());
 
     return tree;
 }
@@ -204,6 +204,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newFretboardDiagramPalette(true));
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
+    defaultPalette->append(newHandbellsPalette(true));
     defaultPalette->append(newBeamPalette());
     defaultPalette->append(newLinesPalette(true));
     defaultPalette->append(newHandbellsPalette(true));
@@ -2043,13 +2044,14 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
         for (SymId symId : standardHandbellsArticSymbols) {
             auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
             artic->setSymId(symId);
-            sp->appendElement(artic, artic->subtypeUserName());
+            sp->appendElement(artic, artic->subtypeUserName(),
+                              symId == SymId::handbellsGyro ? 0.7 : symId == SymId::handbellsMalletBellSuspended ? 1.4 : 1.0);
         }
 
         for (ArticulationTextType textType : handbellsTextTypes) {
             auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
             artic->setTextType(textType);
-            sp->appendElement(artic, artic->subtypeUserName());
+            sp->appendElement(artic, artic->subtypeUserName(), 1.1);
         }
     } else {
         for (SymId symId : additionalHandbellsArticSymbols) {
