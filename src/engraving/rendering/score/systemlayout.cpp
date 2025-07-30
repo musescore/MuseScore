@@ -1122,6 +1122,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     for (PlayCountText* pt : elementsToLayout.playCountText) {
+        TLayout::layoutPlayCountText(pt, pt->mutldata());
         if (pt->autoplace()) {
             Autoplace::autoplaceSegmentElement(pt, pt->mutldata());
         }

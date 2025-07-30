@@ -867,6 +867,7 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
         if (item->staff() == srcStaff) {
             if (!item->parent()->isSegment() && !item->parent()->isMeasure()) {
                 score()->undoChangeParent(item, engraving::findNewSystemMarkingParent(item, dstStaff), dstStaffIdx);
+                item->triggerLayout();
             }
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         } else {
