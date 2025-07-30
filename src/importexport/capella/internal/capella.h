@@ -586,7 +586,7 @@ public:
     bool tupletStart  = false;       // To correctly read Tuplets with mixed durations
     bool tupletEnd    = false;       // we infer from the Capella file start/stop from the brackets.
     int tupletCount  = 0;            // Real count of the tuplet notes ...
-    Fraction tupletTicks;            // ... and the ticks of the tuplet, used to calculate the end of the tuplet
+    engraving::Fraction tupletTicks; // ... and the ticks of the tuplet, used to calculate the end of the tuplet
     bool tripartite;
     bool isProlonging;
 
