@@ -100,6 +100,7 @@ Column {
         id: placementSection
 
         propertyItem: root.model ? root.model.placement : null
+        enabled: root.model ? !root.model.isSystemObjectBelowBottomStaff : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: lineStyleSection.navigationRowEnd + 1

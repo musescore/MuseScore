@@ -53,6 +53,8 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(InspectorModelType modelType READ modelType CONSTANT)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
+    Q_PROPERTY(bool isSystemObjectBelowBottomStaff READ isSystemObjectBelowBottomStaff NOTIFY isSystemObjectBelowBottomStaffChanged)
+
 public:
     INJECT(context::IGlobalContext, context)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
@@ -174,6 +176,8 @@ public:
 
     virtual void onCurrentNotationChanged();
 
+    bool isSystemObjectBelowBottomStaff() const;
+
 public slots:
     void setTitle(QString title);
     void setIcon(muse::ui::IconCode::Code icon);
@@ -187,6 +191,8 @@ signals:
     void isEmptyChanged();
 
     void requestReloadPropertyItems();
+
+    void isSystemObjectBelowBottomStaffChanged(bool isSystemObjectBelowBottomStaff);
 
 protected:
     void setElementType(mu::engraving::ElementType type);
@@ -237,6 +243,7 @@ protected slots:
     void onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue);
     void setPropertyValue(const QList<mu::engraving::EngravingItem*>& items, const mu::engraving::Pid pid, const QVariant& newValue);
     void updateProperties();
+    void updateIsSystemObjectBelowBottomStaff();
 
 private:
     void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
@@ -253,6 +260,8 @@ private:
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     mu::engraving::ElementType m_elementType = mu::engraving::ElementType::INVALID;
     bool m_updatePropertiesAllowed = false;
+
+    bool m_isSystemObjectBelowBottomStaff = false;
 };
 
 using InspectorModelType = AbstractInspectorModel::InspectorModelType;
