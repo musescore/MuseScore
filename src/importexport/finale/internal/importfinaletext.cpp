@@ -218,8 +218,14 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
                 case HeaderFooterType::FirstPage: return "$C";
                 case HeaderFooterType::SecondPageToEnd: return "$c";
             }
-//        } else if (parsedCommand[0] == "flat") {
-//            return "<sym>accidentalFlat</sym>";
+        } else if (std::optional<options::AccidentalInsertSymbolType> acciInsertType = musx::util::EnigmaString::commandIsAccidentalType(parsedCommand[0])) {
+            const auto& acciDataIt = musxOptions().textOptions->symbolInserts.find(acciInsertType.value());
+            if (acciDataIt != musxOptions().textOptions->symbolInserts.end()) {
+                if (std::optional<String> symTag = FinaleTextConv::symIdInsertFromFinaleChar(acciDataIt->second->symChar, acciDataIt->second->symFont)) {
+                    return symTag.value().toStdString();
+                }
+            }
+            // since we could not map the character to a symbol, let it fall thru and parse as glyphs
         }
         // Find and insert metaTags when appropriate
         if (isHeaderOrFooter) {
