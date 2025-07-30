@@ -510,6 +510,9 @@ public:
         TUPLET_GRAPHICAL_CENTER = 0xF4AC,
         TUPLET_RYTHMIC_CENTER = 0xF4AD,
 
+        MUSESCORE_COM_LOGO = 0xF4A0,
+        AUDIO_COM_LOGO = 0xF4A2,
+
         NONE = 0xFFFF
     };
 

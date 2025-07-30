@@ -84,6 +84,9 @@ private:
     muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode, muse::uicomponents::MenuItemRole role);
 
     muse::uicomponents::MenuItem* makeFileMenu();
+    muse::uicomponents::MenuItemList makeSaveOtherSubItems();
+    muse::uicomponents::MenuItemList makePublishOnlineSubItems();
+
     muse::uicomponents::MenuItem* makeEditMenu();
     muse::uicomponents::MenuItem* makeViewMenu();
     muse::uicomponents::MenuItem* makeAddMenu();
