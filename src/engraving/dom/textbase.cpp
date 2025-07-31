@@ -2180,16 +2180,19 @@ String TextBase::genText(const LayoutData* ldata) const
     }
 
     String text;
-    bool bold_      = false;
-    bool italic_    = false;
-    bool underline_ = false;
-    bool strike_    = false;
+    XmlNesting xmlNesting(&text);
 
     CharFormat fmt;
     fmt.setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
     fmt.setFontSize(propertyDefault(Pid::FONT_SIZE).toReal());
     fmt.setStyle(static_cast<FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
 
+    // Prepare the initial style tags (if any).
+    // We only need those if there is any fragment in the blocks with a different style than the default one.
+    bool bold_      = false;
+    bool italic_    = false;
+    bool underline_ = false;
+    bool strike_    = false;
     for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             if (!f.format.bold() && fmt.bold()) {
@@ -2206,8 +2209,6 @@ String TextBase::genText(const LayoutData* ldata) const
             }
         }
     }
-
-    XmlNesting xmlNesting(&text);
     if (bold_) {
         xmlNesting.pushB();
     }
@@ -2221,11 +2222,14 @@ String TextBase::genText(const LayoutData* ldata) const
         xmlNesting.pushS();
     }
 
+    // And here for the actual formatting of the text.
     for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             // don't skip, empty text fragments hold information for empty lines
-//                  if (f.text.isEmpty())                     // skip empty fragments, not to
-//                        continue;                           // insert extra HTML formatting
+            //    if (f.text.isEmpty())                   // skip empty fragments, not to
+            //        continue;                           // insert extra HTML formatting
+
+            // Push or Pop XML tags according to the current format changes
             const CharFormat& format = f.format;
             if (fmt.bold() != format.bold()) {
                 if (format.bold()) {
