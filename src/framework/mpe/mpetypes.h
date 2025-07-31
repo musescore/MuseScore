@@ -299,6 +299,24 @@ enum class ArticulationType : signed char {
 
     ContinuousGlissando,
 
+    // Handbells
+    MalletBellOnTable,
+    MalletBellSuspended,
+    MalletLift,
+    Pluck,
+    PluckLift,
+    Gyro,
+    Martellato,
+    MartellatoLift,
+    HandMartellato,
+    MutedMartellato,
+    ThumbDamp,
+    BrushDamp,
+    Ring,
+    RingTouch,
+    SingingBell,
+    SingingVibrate,
+
     // multi-note articulations
     Trill,
     Crescendo,

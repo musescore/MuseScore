@@ -117,8 +117,8 @@ private:
     int pitchLevelToCents(const mpe::pitch_level_t pitchLevel) const;
     double dynamicLevelRatio(const mpe::dynamic_level_t level) const;
 
-    ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;
-    void parseArticulations(const mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const;
+    void parseArticulations(const mpe::ArticulationMap& articulations, ms_NoteArticulation& articulations1,
+                            ms_NoteArticulation2& articulations2, ms_NoteHead& notehead) const;
 
     struct AuditionParams {
         std::string presets;

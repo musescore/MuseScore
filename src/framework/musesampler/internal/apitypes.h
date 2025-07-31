@@ -109,6 +109,7 @@ enum ms_NoteArticulation : uint64_t
     ms_NoteArticulation_Appoggiatura = 1LL << 29, // Duration is ignored
     ms_NoteArticulation_Acciaccatura = 1LL << 30, // Duration is ignored
     ms_NoteArticulation_Open = 1LL << 31,
+
     ms_NoteArticulation_Portamento = 1LL << 36,
     ms_NoteArticulation_Pizzicato = 1LL << 37,
     ms_NoteArticulation_Glissando = 1LL << 39,
@@ -123,9 +124,34 @@ enum ms_NoteArticulation : uint64_t
     ms_NoteArticulation_PalmMute = 1LL << 48,
     ms_NoteArticulation_PinchHarmonic = 1LL << 49,
     ms_NoteArticulation_BuzzTremolo = 1LL << 50,
+    // TO BE REPLACED = 1LL << 51,
+
+    ms_NoteArticulation_Martellato = 1LL << 32,
+    ms_NoteArticulation_MartellatoLift = 1LL << 33,
+    ms_NoteArticulation_HandMartellato = 1LL << 34,
+    ms_NoteArticulation_MutedMartellato = 1LL << 35,
+    ms_NoteArticulation_MalletBellSuspended = 1LL << 38,
+    ms_NoteArticulation_MalletBellOnTable = 1LL << 52,
+    ms_NoteArticulation_MalletLift = 1LL << 53,
+    ms_NoteArticulation_PluckLift = 1LL << 54,
+    ms_NoteArticulation_Gyro = 1LL << 55,
+    // More noteheads:
     ms_NoteArticulation_LaissezVibrer = 1LL << 59,
 };
 
+enum ms_NoteArticulation2 : uint64_t
+{
+    ms_NoteArticulation2_None = 0,
+    ms_NoteArticulation2_Ring = 1LL << 0,
+    ms_NoteArticulation2_ThumbDamp = 1LL << 1,
+    ms_NoteArticulation2_BrushDamp = 1LL << 2,
+    ms_NoteArticulation2_RingTouch = 1LL << 3,
+    ms_NoteArticulation2_Pluck = 1LL << 4,
+    ms_NoteArticulation2_SingingBell = 1LL << 5,
+    ms_NoteArticulation2_SingingVibrate = 1LL << 6,
+};
+
+// added in v0.6
 enum ms_NoteHead : int16_t
 {
     ms_NoteHead_Normal,
@@ -163,6 +189,20 @@ typedef struct ms_NoteEvent_4
     ms_NoteHead _notehead;
 } ms_NoteEvent_4;
 
+// Added in version 0.102 // Adds a new ms_NoteArticulation2 enum so we have more bits available
+typedef struct ms_NoteEvent_5
+{
+    int _voice; // 0-3
+    long long _location_us;
+    long long _duration_us;
+    int _pitch;      // MIDI pitch
+    double _tempo;   // BPM
+    int _offset_cents; // pitch offset in cents: -50 would be a quarter tone flat
+    ms_NoteArticulation _articulation;
+    ms_NoteArticulation2 _articulation_2;
+    ms_NoteHead _notehead;
+} ms_NoteEvent_5;
+
 // Added in v0.6
 typedef struct ms_AuditionStartNoteEvent_3
 {
@@ -190,6 +230,23 @@ typedef struct ms_AuditionStartNoteEvent_4
     bool _articulation_text_starts_at_note;
     bool _syllable_starts_at_note;
 } ms_AuditionStartNoteEvent_4;
+
+// Added in version 0.102 // Adds a new ms_NoteArticulation2 enum so we have more bits available
+typedef struct ms_AuditionStartNoteEvent_5
+{
+    int _pitch;      // MIDI pitch
+    int _offset_cents; // pitch offsets in cents ()
+    ms_NoteArticulation _articulation;
+    ms_NoteArticulation2 _articulation_2;
+    ms_NoteHead _notehead;
+    double _dynamics;
+    const char* _active_presets; // presets that are selected for this note. list is separated by "|". If "" then the
+                                 // first available preset is used.
+    const char* _active_text_articulation; // text articulation that is active for this note. Can be empty
+    const char* _active_syllable;        // currently active lyrics syllable. Can be empty
+    bool _articulation_text_starts_at_note;
+    bool _syllable_starts_at_note;
+} ms_AuditionStartNoteEvent_5;
 
 typedef struct ms_AuditionStopNoteEvent
 {
@@ -381,6 +438,9 @@ typedef void (* ms_MuseSampler_set_auto_render_interval)(ms_MuseSampler ms, doub
 typedef void (* ms_MuseSampler_trigger_render)(ms_MuseSampler ms);
 
 typedef ms_Result (* ms_MuseSampler_add_audition_cc_event)(ms_MuseSampler ms, ms_Track track, int cc, float value);
+
+typedef ms_Result (* ms_MuseSampler_add_track_note_event_6)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent_5 evt, long long& event_id);
+typedef ms_Result (* ms_MuseSampler_start_audition_note_5)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_5 evt);
 // ------------------------------------------------------------
 
 namespace muse::musesampler {
@@ -398,7 +458,7 @@ struct InstrumentInfo {
 };
 
 struct AuditionStartNoteEvent {
-    ms_AuditionStartNoteEvent_4 msEvent;
+    ms_AuditionStartNoteEvent_5 msEvent;
     ms_Track msTrack = nullptr;
 };
 
@@ -413,7 +473,7 @@ struct AuditionCCEvent {
     ms_Track msTrack = nullptr;
 };
 
-using NoteEvent = ms_NoteEvent_4;
+using NoteEvent = ms_NoteEvent_5;
 using SyllableEvent = ms_SyllableEvent2;
 }
 

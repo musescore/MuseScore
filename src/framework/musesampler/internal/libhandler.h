@@ -88,7 +88,7 @@ struct MuseSamplerLibHandler
 
     std::function<bool(ms_MuseSampler ms, ms_Track track, const SyllableEvent& ev)> addSyllableEvent = nullptr;
 
-    std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4)> startAuditionNote = nullptr;
+    std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_5)> startAuditionNote = nullptr;
     ms_MuseSampler_stop_audition_note stopAuditionNote = nullptr;
     ms_MuseSampler_add_audition_cc_event addAuditionCCEvent = nullptr;
 
@@ -123,8 +123,10 @@ private:
     ms_MuseSampler_add_track_dynamics_event_2 addDynamicsEventInternal2 = nullptr;
     ms_MuseSampler_add_track_pedal_event_2 addPedalEventInternal2 = nullptr;
     ms_MuseSampler_add_track_note_event_5 addNoteEventInternal5 = nullptr;
+    ms_MuseSampler_add_track_note_event_6 addNoteEventInternal6 = nullptr;
     ms_MuseSampler_start_audition_note_3 startAuditionNoteInternal3 = nullptr;
     ms_MuseSampler_start_audition_note_4 startAuditionNoteInternal4 = nullptr;
+    ms_MuseSampler_start_audition_note_5 startAuditionNoteInternal5 = nullptr;
     ms_MuseSampler_start_liveplay_note_2 startLivePlayNoteInternal2 = nullptr;
     ms_MuseSampler_add_track_syllable_event addSyllableEventInternal = nullptr;
     ms_MuseSampler_add_track_syllable_event_2 addSyllableEventInternal2 = nullptr;
@@ -239,21 +241,41 @@ public:
             return addPedalEventInternal2(ms, track, evt) == ms_Result_OK;
         };
 
-        addNoteEventInternal5 = (ms_MuseSampler_add_track_note_event_5)muse::getLibFunc(m_lib, "ms_MuseSampler_add_track_note_event_5");
-        addNoteEvent = [this](ms_MuseSampler ms, ms_Track track, const NoteEvent& ev, long long& event_id) {
-            return addNoteEventInternal5(ms, track, ev, event_id) == ms_Result_OK;
-        };
+        if (at_least_v_0_102) {
+            addNoteEventInternal6 = (ms_MuseSampler_add_track_note_event_6)muse::getLibFunc(m_lib, "ms_MuseSampler_add_track_note_event_6");
+            addNoteEvent = [this](ms_MuseSampler ms, ms_Track track, const NoteEvent& ev, long long& event_id) {
+                return addNoteEventInternal6(ms, track, ev, event_id) == ms_Result_OK;
+            };
+        } else {
+            addNoteEventInternal5 = (ms_MuseSampler_add_track_note_event_5)muse::getLibFunc(m_lib, "ms_MuseSampler_add_track_note_event_5");
+            addNoteEvent = [this](ms_MuseSampler ms, ms_Track track, const NoteEvent& ev, long long& event_id) {
+                ms_NoteEvent_4 ev4{ ev._voice, ev._location_us, ev._duration_us, ev._pitch, ev._tempo, ev._offset_cents,
+                                    ev._articulation, ev._notehead };
 
-        if (at_least_v_0_100) {
+                return addNoteEventInternal5(ms, track, ev4, event_id) == ms_Result_OK;
+            };
+        }
+
+        if (at_least_v_0_102) {
+            startAuditionNoteInternal5 = (ms_MuseSampler_start_audition_note_5)muse::getLibFunc(m_lib,
+                                                                                                "ms_MuseSampler_start_audition_note_5");
+            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_5 ev) {
+                return startAuditionNoteInternal5(ms, track, ev) == ms_Result_OK;
+            };
+        } else if (at_least_v_0_100) {
             startAuditionNoteInternal4 = (ms_MuseSampler_start_audition_note_4)muse::getLibFunc(m_lib,
                                                                                                 "ms_MuseSampler_start_audition_note_4");
-            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4 ev) {
-                return startAuditionNoteInternal4(ms, track, ev) == ms_Result_OK;
+            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_5 ev) {
+                ms_AuditionStartNoteEvent_4 ev4{ ev._pitch, ev._offset_cents, ev._articulation, ev._notehead, ev._dynamics,
+                                                 ev._active_presets, ev._active_text_articulation, ev._active_syllable,
+                                                 ev._articulation_text_starts_at_note, ev._syllable_starts_at_note };
+
+                return startAuditionNoteInternal4(ms, track, ev4) == ms_Result_OK;
             };
         } else {
             startAuditionNoteInternal3 = (ms_MuseSampler_start_audition_note_3)muse::getLibFunc(m_lib,
                                                                                                 "ms_MuseSampler_start_audition_note_3");
-            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4 ev) {
+            startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_5 ev) {
                 ms_AuditionStartNoteEvent_3 ev3{ ev._pitch, ev._offset_cents, ev._articulation, ev._notehead, ev._dynamics,
                                                  ev._active_presets, ev._active_text_articulation };
 
@@ -491,7 +513,11 @@ private:
                << "\n ms_MuseSampler_add_track_dynamics_event_2 - " << reinterpret_cast<uint64_t>(addDynamicsEventInternal2)
                << "\n ms_MuseSampler_add_track_pedal_event_2 - " << reinterpret_cast<uint64_t>(addPedalEventInternal2)
                << "\n ms_MuseSampler_add_pitch_bend - " << reinterpret_cast<uint64_t>(addPitchBend)
+               << "\n ms_MuseSampler_add_track_note_event_5 - " << reinterpret_cast<uint64_t>(addNoteEventInternal5)
+               << "\n ms_MuseSampler_add_track_note_event_6 - " << reinterpret_cast<uint64_t>(addNoteEventInternal6)
                << "\n ms_MuseSampler_start_audition_note_3 - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal3)
+               << "\n ms_MuseSampler_start_audition_note_4 - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal4)
+               << "\n ms_MuseSampler_start_audition_note_5 - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal5)
                << "\n ms_MuseSampler_stop_audition_note - " << reinterpret_cast<uint64_t>(stopAuditionNote)
                << "\n ms_MuseSampler_add_pitch_bend - " << reinterpret_cast<uint64_t>(addPitchBend)
                << "\n ms_MuseSampler_add_vibrato - " << reinterpret_cast<uint64_t>(addVibrato)
