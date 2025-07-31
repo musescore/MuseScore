@@ -21,15 +21,15 @@
  */
 #pragma once
 
-#include "iworkerplayback.h"
+#include "../iworkerplayback.h"
 
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
-#include "isynthresolver.h"
-#include "ifxresolver.h"
-#include "iaudioengine.h"
-#include "igettracksequence.h"
+#include "audio/isynthresolver.h"
+#include "audio/ifxresolver.h"
+#include "audio/internal/worker/iaudioengine.h"
+#include "audio/internal/worker/igettracksequence.h"
 
 namespace muse::audio {
 class Mixer;

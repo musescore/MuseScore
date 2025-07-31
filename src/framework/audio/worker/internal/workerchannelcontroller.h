@@ -21,10 +21,29 @@
  */
 #pragma once
 
+#include "global/async/asyncable.h"
+
+#include "global/modularity/ioc.h"
+#include "audio/common/rpc/irpcchannel.h"
+
+#include "../iworkerplayback.h"
+
 namespace muse::audio::worker {
-class IWorkerPlayer
+class WorkerChannelController : public async::Asyncable
 {
+    Inject<rpc::IRpcChannel> channel;
+
 public:
-    virtual ~IWorkerPlayer() = default;
+    WorkerChannelController() = default;
+
+    void init(std::shared_ptr<IWorkerPlayback> playback);
+    void deinit();
+
+private:
+
+    std::shared_ptr<IWorkerPlayback> m_playback;
+
+    async::Channel<TrackSequenceId, int64_t, int64_t> m_saveSoundTrackProgressStream;
+    rpc::StreamId m_saveSoundTrackProgressStreamId = 0;
 };
 }
