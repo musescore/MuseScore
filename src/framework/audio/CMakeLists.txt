@@ -93,7 +93,6 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiothreadsecurer.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxprocessor.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/soundfonttypes.h
@@ -127,10 +126,6 @@ set(MODULE_SRC
     ${DRIVER_SRC}
 
     # Worker
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/samplerateconvertor.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/samplerateconvertor.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.h
 

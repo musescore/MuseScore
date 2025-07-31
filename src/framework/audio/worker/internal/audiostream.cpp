@@ -43,6 +43,7 @@
 #endif
 
 using namespace muse::audio;
+using namespace muse::audio::worker;
 
 AudioStream::AudioStream()
     : m_src(m_data, 0, 1, 1)

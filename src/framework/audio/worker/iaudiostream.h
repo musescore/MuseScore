@@ -24,7 +24,7 @@
 
 #include "global/io/path.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class IAudioStream
 {
 public:

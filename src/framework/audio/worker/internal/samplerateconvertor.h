@@ -25,7 +25,7 @@
 #include <vector>
 #include <deque>
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class SampleRateConvertor
 {
 public:
@@ -70,9 +70,9 @@ private:
     std::vector<float> m_fir;
     mutable std::deque<float> m_y;
 
-    unsigned int m_channelsCount;
-    unsigned int m_sampleRateIn;
-    unsigned int m_sampleRateOut;
+    unsigned int m_channelsCount = 0;
+    unsigned int m_sampleRateIn = 0;
+    unsigned int m_sampleRateOut = 0;
     Method m_method = FIR;
 };
 }
