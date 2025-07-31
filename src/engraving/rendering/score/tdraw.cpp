@@ -642,13 +642,6 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
         y1l = st->doty1() * spatium;
         y2l = st->doty2() * spatium;
 
-        // workaround to make external fonts work correctly with repeatDots
-        if (item->score()->engravingFont()->name() == "Ekmelos") { // not the other ones from the Ekmelos family though (EkmelosXXedo)
-            double offset = 0.5 * item->style().spatium() * item->mag();
-            y1l += offset;
-            y2l += offset;
-        }
-
         //adjust for staffType offset
         double stYOffset = item->staffOffsetY();
         y1l += stYOffset;
