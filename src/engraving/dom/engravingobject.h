@@ -92,6 +92,7 @@ class Harmony;
 class HarpPedalDiagram;
 class Hook;
 class Image;
+class IndicatorIcon;
 class InstrumentChange;
 class InstrumentName;
 class Jump;
@@ -359,6 +360,7 @@ public:
     CONVERT(Jump,          JUMP)
     CONVERT(Ottava,        OTTAVA)
     CONVERT(LayoutBreak,   LAYOUT_BREAK)
+    CONVERT(IndicatorIcon, INDICATOR_ICON)
     CONVERT(SystemLockIndicator, SYSTEM_LOCK_INDICATOR)
     CONVERT(Segment,       SEGMENT)
     CONVERT(System,        SYSTEM)
@@ -796,6 +798,7 @@ CONVERT(PlayTechAnnotation)
 CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
+CONVERT(IndicatorIcon)
 CONVERT(SystemLockIndicator)
 CONVERT(Segment)
 CONVERT(System)
