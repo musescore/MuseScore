@@ -26,9 +26,10 @@
 #include "global/types/retval.h"
 #include "mpe/events.h"
 
+#include "audio/common/audiotypes.h"
+
 #include "isequenceplayer.h"
-#include "audio/internal/worker/isequenceio.h"
-#include "audiotypes.h"
+#include "isequenceio.h"
 
 namespace muse::audio::worker {
 class ITrackSequence

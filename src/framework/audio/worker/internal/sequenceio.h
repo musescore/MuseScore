@@ -24,11 +24,10 @@
 
 #include "global/async/asyncable.h"
 
-#include "isequenceio.h"
-#include "audio/worker/internal/igettracks.h"
-#include "audiotypes.h"
+#include "../isequenceio.h"
+#include "igettracks.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class SequenceIO : public ISequenceIO, public async::Asyncable
 {
 public:
