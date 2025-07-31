@@ -86,7 +86,7 @@ static void isLayoutDone(void* data, EngravingItem* e)
         // Melisma line may be omitted if too short
         return;
     }
-    if (e->isLayoutBreak() || e->isSystemLockIndicator()) {
+    if (e->isLayoutBreak() || e->isSystemLockIndicator() /*TODO: || e->isStaffVisibilityIndicator()*/) {
         return;
     }
 
