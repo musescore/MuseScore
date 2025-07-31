@@ -409,8 +409,8 @@ MeasureBase* Selection::endMeasureBase() const
 std::vector<System*> Selection::selectedSystems() const
 {
     EngravingItem* el = element();
-    if (el && el->isSystemLockIndicator()) {
-        return { const_cast<System*>(toSystemLockIndicator(el)->system()) };
+    if (el && (el->isSystemLockIndicator() /*TODO: || el->isStaffVisibilityIndicator*/)) {
+        return { const_cast<System*>(toIndicatorIcon(el)->system()) };
     }
 
     const MeasureBase* startMB = startMeasureBase();

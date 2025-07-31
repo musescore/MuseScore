@@ -139,27 +139,13 @@ void SystemLocks::dump()
 #endif
 
 SystemLockIndicator::SystemLockIndicator(System* parent, const SystemLock* lock)
-    : EngravingItem(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_systemLock(lock) {}
-
-Font SystemLockIndicator::font() const
-{
-    Font font(configuration()->iconsFontFamily(), Font::Type::Icon);
-    static constexpr double STANDARD_POINT_SIZE = 12.0;
-    double scaling = spatium() / SPATIUM20;
-    font.setPointSizeF(STANDARD_POINT_SIZE * scaling);
-    return font;
-}
+    : IndicatorIcon(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_systemLock(lock) {}
 
 void SystemLockIndicator::setSelected(bool v)
 {
     EngravingItem::setSelected(v);
     renderer()->layoutItem(this);
     system()->page()->invalidateBspTree();
-}
-
-char16_t SystemLockIndicator::iconCode() const
-{
-    return 0xF487;
 }
 
 String SystemLockIndicator::formatBarsAndBeats() const

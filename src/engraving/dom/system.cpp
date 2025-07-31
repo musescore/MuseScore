@@ -709,6 +709,8 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
         func(data, i);
     }
 
+    // TODO: func(data, staffVisibilityIndicator())
+
     for (const SysStaff* st : m_staves) {
         if (all || st->show()) {
             for (InstrumentName* t : st->instrumentNames) {
