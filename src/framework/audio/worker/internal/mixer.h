@@ -33,9 +33,10 @@
 #include "../../iaudioconfiguration.h"
 #include "audio/internal/dsp/limiter.h"
 
+#include "../iclock.h"
+
 #include "audio/internal/worker/abstractaudiosource.h"
 #include "mixerchannel.h"
-#include "audio/internal/worker/iclock.h"
 
 namespace muse {
 class TaskScheduler;

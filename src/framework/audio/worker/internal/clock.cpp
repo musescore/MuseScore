@@ -21,10 +21,11 @@
  */
 #include "clock.h"
 
-#include "../../audioerrors.h"
+#include "common/audioerrors.h"
 
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::audio::worker;
 
 Clock::Clock()
 {

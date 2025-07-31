@@ -21,6 +21,7 @@
 set(AUDIO_COMMON_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/audiosanitizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audiosanitizer.h
 
