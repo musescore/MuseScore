@@ -28,7 +28,7 @@
 #include "modularity/imodulesetup.h"
 #include "global/async/asyncable.h"
 
-#include "iaudiodriver.h"
+#include "../iaudiodriver.h"
 
 namespace muse::audio::fx {
 class FxResolver;

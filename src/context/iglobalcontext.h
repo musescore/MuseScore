@@ -25,7 +25,7 @@
 #include "async/notification.h"
 #include "modularity/imoduleinterface.h"
 #include "project/inotationproject.h"
-#include "audio/iplayer.h"
+#include "audio/main/iplayer.h"
 #include "iplaybackstate.h"
 
 namespace mu::context {

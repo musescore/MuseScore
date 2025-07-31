@@ -26,9 +26,9 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "rpc/irpcchannel.h"
+#include "common/rpc/irpcchannel.h"
 
-#include "iplayer.h"
+#include "../iplayer.h"
 
 namespace muse::audio {
 class Playback : public IPlayback, public Injectable, public async::Asyncable

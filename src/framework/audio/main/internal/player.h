@@ -23,18 +23,20 @@
 #ifndef MUSE_AUDIO_PLAYER_H
 #define MUSE_AUDIO_PLAYER_H
 
-#include "iplayer.h"
+#include "../iplayer.h"
+
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "worker/iworkerplayback.h"
-#include "rpc/irpcchannel.h"
+#include "audio/common/rpc/irpcchannel.h"
+
+#include "audio/internal/worker/iworkerplayback.h"
 
 namespace muse::audio {
 class Player : public IPlayer, public async::Asyncable
 {
-    Inject<worker::IWorkerPlayback> workerPlayback;
     Inject<rpc::IRpcChannel> channel;
+    Inject<worker::IWorkerPlayback> workerPlayback;
 
 public:
     Player(const TrackSequenceId sequenceId);

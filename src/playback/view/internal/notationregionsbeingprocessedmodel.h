@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 
 #include "context/iglobalcontext.h"
-#include "audio/iplayback.h"
+#include "audio/main/iplayback.h"
 #include "iplaybackcontroller.h"
 #include "iplaybackconfiguration.h"
 #include "notation/inotationconfiguration.h"

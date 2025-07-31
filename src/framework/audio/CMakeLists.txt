@@ -74,11 +74,20 @@ elseif(OS_IS_WASM)
     )
 endif()
 
+include(common/audio_common.cmake)
+include(main/audio_main.cmake)
+
 set(MODULE_SRC
 
+    ${AUDIO_COMMON_SRC}
+    ${AUDIO_MAIN_SRC}
+
+    # Temporary
+    ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
+
     # Common public
-    ${CMAKE_CURRENT_LIST_DIR}/audiomodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/audiomodule.h
+
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiothreadsecurer.h
@@ -87,23 +96,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/soundfonttypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/audioutils.h
-    ${CMAKE_CURRENT_LIST_DIR}/iplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/abstractfxresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/abstractfxresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
 
     # Common internal
-    ${CMAKE_CURRENT_LIST_DIR}/internal/playback.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/playback.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/player.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/player.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothreadsecurer.cpp
@@ -112,8 +114,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiobuffer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.cpp
@@ -124,12 +124,6 @@ set(MODULE_SRC
 
     # Driver
     ${DRIVER_SRC}
-
-    # Rpc
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/irpcchannel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcpacker.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/platform/general/generalrpcchannel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/platform/general/generalrpcchannel.h
 
     # Worker
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iworkerplayback.h

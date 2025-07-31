@@ -25,8 +25,6 @@
 
 #include "tracksequence.h"
 
-#include "internal/player.h"
-
 #include "audioerrors.h"
 
 #include "muse_framework_config.h"

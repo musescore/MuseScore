@@ -28,7 +28,7 @@
 #include "global/async/promise.h"
 #include "global/async/channel.h"
 
-#include "audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio {
 class IPlayer

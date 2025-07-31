@@ -17,7 +17,7 @@
 #include "framework/actions/actionsmodule.h"
 
 #ifdef MUSE_MODULE_AUDIO
-#include "framework/audio/audiomodule.h"
+#include "framework/audio/main/audiomodule.h"
 #else
 #include "framework/stubs/audio/audiostubmodule.h"
 #endif

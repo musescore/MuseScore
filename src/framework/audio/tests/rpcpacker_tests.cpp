@@ -22,10 +22,10 @@
 #include <gtest/gtest.h>
 
 #pragma pack(push, 1)
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #pragma pack(pop)
 
-#include "audio/internal/rpc/rpcpacker.h"
+#include "audio/common/rpc/rpcpacker.h"
 
 using namespace muse;
 using namespace muse::audio;

@@ -25,8 +25,9 @@
 #include "modularity/imoduleinterface.h"
 #include "global/async/channel.h"
 #include "global/async/promise.h"
+#include "global/io/path.h"
 
-#include "audiotypes.h"
+#include "../common/audiotypes.h"
 
 namespace muse::audio {
 class ITracks;
