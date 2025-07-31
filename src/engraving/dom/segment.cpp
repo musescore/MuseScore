@@ -2196,7 +2196,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
                 if (lockInd) {
                     return lockInd;
                 }
-            }
+            } //TODO: StaffVisibilityIndicator handling
         }
 
         while (nextSegment) {
@@ -2407,7 +2407,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
                 }
             } else if (psm != pmb) {
                 return pmb;
-            }
+            } //TODO: StaffVisibilityIndicator handling
         }
 
         if (EngravingItem* annotation = prevSeg->lastAnnotation(activeStaff)) {

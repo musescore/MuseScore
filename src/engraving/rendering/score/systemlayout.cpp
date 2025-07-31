@@ -482,7 +482,7 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     lockIndicator->setParent(system);
     system->addLockIndicator(lockIndicator);
 
-    TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
+    TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
 }
 
 //---------------------------------------------------------
