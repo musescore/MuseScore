@@ -30,14 +30,14 @@
 #include "../audiotypes.h"
 #include "../isynthesizer.h"
 #include "../iaudioconfiguration.h"
-#include "worker/iaudioengine.h"
+#include "audio/worker/iaudioengine.h"
 
 namespace muse::audio::synth {
 class AbstractSynthesizer : public ISynthesizer, public Injectable, public async::Asyncable
 {
 public:
     muse::Inject<IAudioConfiguration> config = { this };
-    muse::Inject<IAudioEngine> audioEngine = { this };
+    muse::Inject<worker::IAudioEngine> audioEngine = { this };
 
 public:
     AbstractSynthesizer(const audio::AudioInputParams& params, const modularity::ContextPtr& iocCtx);

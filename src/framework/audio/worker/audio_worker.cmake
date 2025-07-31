@@ -22,9 +22,12 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audioworkermodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audioworkermodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkerplayback.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerchannelcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerchannelcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
 )

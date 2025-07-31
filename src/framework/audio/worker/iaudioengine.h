@@ -25,10 +25,11 @@
 
 #include "global/async/notification.h"
 
-#include "../../audiotypes.h"
-#include "mixer.h"
+#include "audio/common/audiotypes.h"
 
-namespace muse::audio {
+#include "audio/internal/worker/mixer.h"
+
+namespace muse::audio::worker {
 class IAudioEngine : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioEngine)

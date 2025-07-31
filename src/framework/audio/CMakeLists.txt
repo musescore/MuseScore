@@ -140,9 +140,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sinesource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/noisesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/noisesource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iaudioengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audioengine.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/tracksequence.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/tracksequence.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/mixer.cpp

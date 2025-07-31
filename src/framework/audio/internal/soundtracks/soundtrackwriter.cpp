@@ -24,7 +24,6 @@
 
 #include "global/defer.h"
 
-#include "internal/worker/audioengine.h"
 #include "internal/encoders/mp3encoder.h"
 #include "internal/encoders/oggencoder.h"
 #include "internal/encoders/flacencoder.h"
