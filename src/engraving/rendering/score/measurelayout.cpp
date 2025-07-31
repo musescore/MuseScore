@@ -228,6 +228,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     mmrMeasure->setTimesig(firstMeasure->timesig());
     mmrMeasure->setPageBreak(lastMeasure->pageBreak());
     mmrMeasure->setLineBreak(lastMeasure->lineBreak());
+    mmrMeasure->setRepeatCount(lastMeasure->repeatCount());
     mmrMeasure->setMMRestCount(numMeasuresInMMRest);
     mmrMeasure->setNo(firstMeasure->no());
 
@@ -248,11 +249,17 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     eClone->setGenerated(generated);
                     eClone->setParent(mmrEndBarlineSeg);
                     ctx.mutDom().doUndoAddElement(eClone);// ???
+                    if (PlayCountText* playCount = toBarLine(eClone)->playCountText()) {
+                        ctx.mutDom().undo(new Link(playCount, toBarLine(e)->playCountText()));
+                    }
                 } else {
                     BarLine* mmrEndBarline = toBarLine(mmrEndBarlineSeg->element(staffIdx * VOICES));
                     BarLine* lastMeasureEndBarline = toBarLine(e);
                     if (!generated && !mmrEndBarline->links()) {
                         ctx.mutDom().undo(new Link(mmrEndBarline, lastMeasureEndBarline));
+                        if (PlayCountText* playCount = mmrEndBarline->playCountText()) {
+                            ctx.mutDom().undo(new Link(playCount, lastMeasureEndBarline->playCountText()));
+                        }
                     }
                     if (mmrEndBarline->barLineType() != lastMeasureEndBarline->barLineType()) {
                         // change directly when generating mmrests, do not change underlying measures or follow links

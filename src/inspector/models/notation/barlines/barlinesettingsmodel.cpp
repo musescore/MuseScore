@@ -58,7 +58,8 @@ void BarlineSettingsModel::createProperties()
         updateShowPlayCountSettings();
     });
     connect(m_playCountTextSetting, &PropertyItem::valueChanged, this, [this]() {
-        if (!m_playCountText->value().toString().isEmpty()) {
+        if (!m_playCountText->value().toString().isEmpty()
+            || m_playCountTextSetting->value().value<AutoCustomHide>() != AutoCustomHide::CUSTOM) {
             return;
         }
 
