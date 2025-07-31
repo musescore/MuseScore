@@ -63,6 +63,7 @@ Utils 1.0 Utils.js
 ValueAdjustControl 1.0 ValueAdjustControl.qml
 ValueList 1.0 ValueList.qml
 VisibilityBox 1.0 VisibilityBox.qml
+VisibilityControls 1.0 VisibilityControls.qml
 StyledToolBarView 1.0 StyledToolBarView.qml
 StyledToolBarItem 1.0 StyledToolBarItem.qml
 StyledViewScrollAndZoomArea 1.0 StyledViewScrollAndZoomArea.qml

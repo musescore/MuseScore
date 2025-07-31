@@ -60,6 +60,7 @@
         <file>qml/Muse/UiComponents/ValueAdjustControl.qml</file>
         <file>qml/Muse/UiComponents/ValueList.qml</file>
         <file>qml/Muse/UiComponents/VisibilityBox.qml</file>
+        <file>qml/Muse/UiComponents/VisibilityControls.qml</file>
         <file>qml/Muse/UiComponents/internal/ArrowScrollButton.qml</file>
         <file>qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml</file>
         <file>qml/Muse/UiComponents/internal/DirectoriesView.qml</file>
