@@ -50,6 +50,7 @@ public:
         TYPE_CAPO,
         TYPE_STRING_TUNINGS,
         TYPE_SOUND_FLAG,
+        TYPE_STAFF_VISIBILITY,
         TYPE_DYNAMIC,
         TYPE_TEXT,
         TYPE_PARTIAL_TIE,
