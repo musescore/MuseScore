@@ -29,12 +29,12 @@
 #include "global/async/asyncable.h"
 #include "global/types/retval.h"
 
+#include "abstractaudiosource.h"
+
 #include "../../ifxresolver.h"
 #include "../../iaudioconfiguration.h"
 
 #include "../iclock.h"
-
-#include "audio/internal/worker/abstractaudiosource.h"
 
 #include "dsp/limiter.h"
 #include "mixerchannel.h"

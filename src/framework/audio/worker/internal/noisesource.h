@@ -19,27 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MUSE_AUDIO_NOISESOURCE_H
+#define MUSE_AUDIO_NOISESOURCE_H
 
-#ifndef MUSE_AUDIO_IGETTRACKS_H
-#define MUSE_AUDIO_IGETTRACKS_H
-
-#include "global/async/channel.h"
-
-#include "audio/internal/worker/track.h"
-#include "audio/common/audiotypes.h"
+#include "abstractaudiosource.h"
 
 namespace muse::audio::worker {
-class IGetTracks
+class NoiseSource : public AbstractAudioSource
 {
 public:
-    virtual ~IGetTracks() = default;
+    enum Type {
+        WHITE,
+        PINK
+    };
 
-    virtual TrackPtr track(const TrackId id) const = 0;
-    virtual const TracksMap& allTracks() const = 0;
+    NoiseSource();
 
-    virtual async::Channel<TrackPtr> trackAboutToBeAdded() const = 0;
-    virtual async::Channel<TrackPtr> trackAboutToBeRemoved() const = 0;
+    void setType(Type type);
+    unsigned int audioChannelsCount() const override;
+
+    samples_t process(float* buffer, samples_t samplesPerChannel) override;
+
+private:
+    float pinkFilter(float white);
+
+    Type m_type = WHITE;
+    float lpf[7] = { 0, 0, 0, 0, 0, 0, 0 };
 };
 }
 
-#endif // MUSE_AUDIO_IGETTRACKS_H
+#endif // MUSE_AUDIO_NOISESOURCE_H

@@ -27,10 +27,10 @@
 #include "mpe/events.h"
 
 #include "audiotypes.h"
-#include "isynthresolver.h"
+#include "audio/isynthresolver.h"
 #include "track.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class EventAudioSource : public ITrackAudioInput, public muse::Injectable, public async::Asyncable
 {
     Inject<synth::ISynthResolver> synthResolver = { this };

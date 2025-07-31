@@ -29,7 +29,7 @@
 #include "global/modularity/ioc.h"
 
 #include "audiotypes.h"
-#include "iaudiosource.h"
+#include "audio/worker/iaudiosource.h"
 #include "audio/worker/iaudioengine.h"
 #include "../encoders/abstractaudioencoder.h"
 
@@ -39,8 +39,8 @@ class SoundTrackWriter : public muse::Injectable, public async::Asyncable
     muse::Inject<worker::IAudioEngine> audioEngine = { this };
 
 public:
-    SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source,
-                     const muse::modularity::ContextPtr& iocCtx);
+    SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration,
+                     worker::IAudioSourcePtr source, const muse::modularity::ContextPtr& iocCtx);
     ~SoundTrackWriter() override;
 
     Ret write();
@@ -53,7 +53,7 @@ private:
 
     void sendStepProgress(int step, int64_t current, int64_t total);
 
-    IAudioSourcePtr m_source = nullptr;
+    worker::IAudioSourcePtr m_source = nullptr;
 
     std::vector<float> m_inputBuffer;
     std::vector<float> m_intermBuffer;

@@ -19,33 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_NOISESOURCE_H
-#define MUSE_AUDIO_NOISESOURCE_H
+#include "sinesource.h"
 
-#include "abstractaudiosource.h"
+#include <cmath>
 
-namespace muse::audio {
-class NoiseSource : public AbstractAudioSource
+using namespace muse::audio;
+using namespace muse::audio::worker;
+
+SineSource::SineSource()
 {
-public:
-    enum Type {
-        WHITE,
-        PINK
-    };
-
-    NoiseSource();
-
-    void setType(Type type);
-    unsigned int audioChannelsCount() const override;
-
-    samples_t process(float* buffer, samples_t samplesPerChannel) override;
-
-private:
-    float pinkFilter(float white);
-
-    Type m_type = WHITE;
-    float lpf[7] = { 0, 0, 0, 0, 0, 0, 0 };
-};
 }
 
-#endif // MUSE_AUDIO_NOISESOURCE_H
+unsigned int SineSource::audioChannelsCount() const
+{
+    return 2;
+}
+
+samples_t SineSource::process(float* buffer, samples_t samplesPerChannel)
+{
+    auto streams = audioChannelsCount();
+    for (unsigned int i = 0; i < samplesPerChannel; ++i) {
+        m_phase += m_frequency / m_sampleRate * 2 * M_PI;
+        if (m_phase > 2 * M_PI) {
+            m_phase -= 2 * float(M_PI);
+        }
+
+        for (unsigned int s = 0; s < streams; ++s) {
+            buffer[streams * i + s] = 0.1 * std::sin(m_phase + s * 2 * M_PI / streams);
+        }
+    }
+
+    return samplesPerChannel;
+}

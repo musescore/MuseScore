@@ -25,7 +25,7 @@
 #include "global/async/asyncable.h"
 
 #include "isequenceio.h"
-#include "audio/worker/igettracks.h"
+#include "audio/worker/internal/igettracks.h"
 #include "audiotypes.h"
 
 namespace muse::audio {

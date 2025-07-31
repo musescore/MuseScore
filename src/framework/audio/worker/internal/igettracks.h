@@ -19,29 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_ABSTRACTAUDIOSOURCE_H
-#define MUSE_AUDIO_ABSTRACTAUDIOSOURCE_H
 
-#include "../../iaudiosource.h"
+#ifndef MUSE_AUDIO_IGETTRACKS_H
+#define MUSE_AUDIO_IGETTRACKS_H
 
-namespace muse::audio {
-class AbstractAudioSource : public IAudioSource
+#include "global/async/channel.h"
+
+#include "audio/common/audiotypes.h"
+
+#include "track.h"
+
+namespace muse::audio::worker {
+class IGetTracks
 {
 public:
-    virtual ~AbstractAudioSource() = default;
+    virtual ~IGetTracks() = default;
 
-    virtual void setSampleRate(unsigned int sampleRate) override;
+    virtual TrackPtr track(const TrackId id) const = 0;
+    virtual const TracksMap& allTracks() const = 0;
 
-    bool isActive() const override;
-    void setIsActive(bool arg) override;
-
-    async::Channel<unsigned int> audioChannelsCountChanged() const override;
-
-protected:
-    unsigned int m_sampleRate = 1;
-    async::Channel<unsigned int> m_streamsCountChanged;
-    bool m_isActive = false;
+    virtual async::Channel<TrackPtr> trackAboutToBeAdded() const = 0;
+    virtual async::Channel<TrackPtr> trackAboutToBeRemoved() const = 0;
 };
 }
 
-#endif // MUSE_AUDIO_ABSTRACTAUDIOSOURCE_H
+#endif // MUSE_AUDIO_IGETTRACKS_H

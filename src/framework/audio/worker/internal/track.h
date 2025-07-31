@@ -28,10 +28,11 @@
 #include "global/async/channel.h"
 #include "global/async/notification.h"
 
-#include "../../iaudiosource.h"
-#include "../../audiotypes.h"
+#include "audio/common/audiotypes.h"
 
-namespace muse::audio {
+#include "../iaudiosource.h"
+
+namespace muse::audio::worker {
 enum TrackType {
     Undefined = -1,
     Event_track,

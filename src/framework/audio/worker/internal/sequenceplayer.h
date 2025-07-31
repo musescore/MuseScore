@@ -29,8 +29,9 @@
 #include "../iaudioengine.h"
 
 #include "../isequenceplayer.h"
-#include "../igettracks.h"
 #include "../iclock.h"
+
+#include "igettracks.h"
 
 namespace muse::audio::worker {
 class SequencePlayer : public ISequencePlayer, public Injectable, public async::Asyncable

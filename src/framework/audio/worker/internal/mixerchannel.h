@@ -29,7 +29,7 @@
 #include "../../ifxresolver.h"
 #include "../../ifxprocessor.h"
 #include "dsp/compressor.h"
-#include "audio/internal/worker/track.h"
+#include "track.h"
 
 namespace muse::audio::worker {
 class MixerChannel : public ITrackAudioOutput, public Injectable, public async::Asyncable

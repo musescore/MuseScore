@@ -26,6 +26,7 @@
 #include "log.h"
 
 using namespace muse::audio;
+using namespace muse::audio::worker;
 
 static constexpr size_t DEFAULT_SIZE_PER_CHANNEL = 1024 * 8;
 static constexpr size_t DEFAULT_SIZE = DEFAULT_SIZE_PER_CHANNEL * 2;

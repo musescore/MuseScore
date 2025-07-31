@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "iaudiosource.h"
+#include "audio/worker/iaudiosource.h"
 
 #include "global/async/notification.h"
 
 namespace muse::audio::synth {
-class ISynthesizer : public IAudioSource
+class ISynthesizer : public worker::IAudioSource
 {
 public:
     virtual ~ISynthesizer() = default;

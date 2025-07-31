@@ -28,6 +28,7 @@
 
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::audio::worker;
 using namespace muse::audio::synth;
 using namespace muse::mpe;
 

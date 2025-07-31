@@ -29,9 +29,10 @@
 #include "common/audiotypes.h"
 
 #include "../itracksequence.h"
-#include "../igettracks.h"
 #include "../iclock.h"
-#include "audio/internal/worker/track.h"
+
+#include "track.h"
+#include "igettracks.h"
 
 namespace muse::audio::worker {
 class Mixer;
