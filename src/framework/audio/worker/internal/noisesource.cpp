@@ -24,6 +24,7 @@
 #include <random>
 
 using namespace muse::audio;
+using namespace muse::audio::worker;
 
 NoiseSource::NoiseSource()
 {

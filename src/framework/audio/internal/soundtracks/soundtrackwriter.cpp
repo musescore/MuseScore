@@ -35,6 +35,7 @@
 
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::audio::worker;
 using namespace muse::audio::soundtrack;
 
 static constexpr int PREPARE_STEP = 0;

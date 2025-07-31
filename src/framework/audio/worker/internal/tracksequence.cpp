@@ -25,7 +25,7 @@
 #include "common/audioerrors.h"
 
 #include "internal/audiosanitizer.h"
-#include "audio/internal/worker/eventaudiosource.h"
+#include "eventaudiosource.h"
 #include "sequenceplayer.h"
 #include "audio/internal/worker/sequenceio.h"
 

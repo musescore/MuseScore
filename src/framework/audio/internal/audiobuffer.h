@@ -26,8 +26,8 @@
 #include <memory>
 #include <atomic>
 
-#include "iaudiosource.h"
-#include "audiotypes.h"
+#include "audio/worker/iaudiosource.h"
+#include "audio//common/audiotypes.h"
 
 //!Note Somehow clang has this define, but doesn't have symbols for std::hardware_destructive_interference_size
 #if defined(__cpp_lib_hardware_interference_size) && !defined(Q_OS_MACOS)
@@ -50,7 +50,7 @@ public:
 
     void init(const audioch_t audioChannelsCount);
 
-    void setSource(IAudioSourcePtr source);
+    void setSource(worker::IAudioSourcePtr source);
     void setMinSamplesPerChannelToReserve(const samples_t samplesPerChannel);
     void setRenderStep(const samples_t renderStep);
 
@@ -71,7 +71,7 @@ private:
     samples_t m_minSamplesToReserve = 0;
     samples_t m_renderStep = 0;
 
-    IAudioSourcePtr m_source = nullptr;
+    worker::IAudioSourcePtr m_source = nullptr;
 };
 
 using AudioBufferPtr = std::shared_ptr<AudioBuffer>;

@@ -19,27 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MUSE_AUDIO_SINESOURCE_H
+#define MUSE_AUDIO_SINESOURCE_H
+
 #include "abstractaudiosource.h"
 
-using namespace muse;
-using namespace muse::audio;
-
-void AbstractAudioSource::setSampleRate(unsigned int sampleRate)
+namespace muse::audio::worker {
+class SineSource : public AbstractAudioSource
 {
-    m_sampleRate = sampleRate;
+public:
+    SineSource();
+    ~SineSource() = default;
+
+    unsigned int audioChannelsCount() const override;
+
+    samples_t process(float* buffer, samples_t samplesPerChannel) override;
+
+private:
+    float m_frequency = 1000.f;
+    float m_phase = 0;
+};
 }
 
-bool AbstractAudioSource::isActive() const
-{
-    return m_isActive;
-}
-
-void AbstractAudioSource::setIsActive(bool isActive)
-{
-    m_isActive = isActive;
-}
-
-async::Channel<unsigned int> AbstractAudioSource::audioChannelsCountChanged() const
-{
-    return m_streamsCountChanged;
-}
+#endif // MUSE_AUDIO_SINESOURCE_H

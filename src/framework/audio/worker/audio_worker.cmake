@@ -23,9 +23,9 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audioworkermodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/iclock.h
     ${CMAKE_CURRENT_LIST_DIR}/itracksequence.h
-    ${CMAKE_CURRENT_LIST_DIR}/igettracks.h
     ${CMAKE_CURRENT_LIST_DIR}/isequenceplayer.h
 
     # internal
@@ -43,8 +43,18 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/clock.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/tracksequence.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/tracksequence.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/igettracks.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/track.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiosource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiosource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/eventaudiosource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/eventaudiosource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/noisesource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/noisesource.h
 
     # DSP
     ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/envelopefilterconfig.h
