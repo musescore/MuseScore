@@ -21,6 +21,7 @@
  */
 #include "playcounttextsettingsmodel.h"
 
+#include "dom/playcounttext.h"
 #include "engraving/dom/barline.h"
 #include "engraving/types/typesconv.h"
 #include "translation.h"
@@ -48,7 +49,8 @@ void PlayCountTextSettingsModel::createProperties()
         }
 
         // HACK - fill with auto text
-        const BarLine* bl = toBarLine(m_elementList.front());
+        const PlayCountText* pc = toPlayCountText(m_elementList.front());
+        const BarLine* bl = pc->barline();
         const Measure* m = bl->measure();
         const int repeatCount = m->repeatCount();
         if (repeatCount == 2 && !m->style().styleV(Sid::repeatPlayCountShowSingleRepeats).toBool()) {
