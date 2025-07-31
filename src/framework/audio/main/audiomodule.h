@@ -39,9 +39,7 @@ class SynthResolver;
 }
 
 namespace muse::audio::worker  {
-class WorkerPlayback;
-class WorkerChannel;
-class WorkerChannelController;
+class AudioWorkerModule;
 }
 
 namespace muse::audio::rpc  {
@@ -87,8 +85,8 @@ private:
     std::shared_ptr<synth::SynthResolver> m_synthResolver;
 
     std::shared_ptr<Playback> m_mainPlayback; // facade
-    std::shared_ptr<worker::WorkerPlayback> m_workerPlayback;
-    std::shared_ptr<worker::WorkerChannelController> m_workerChannelController;
+
+    std::shared_ptr<worker::AudioWorkerModule> m_workerModule;
 
     QTimer m_rpcTimer;
     std::shared_ptr<rpc::GeneralRpcChannel> m_rpcChannel;

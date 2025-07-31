@@ -29,7 +29,7 @@
 using namespace muse::audio::worker;
 using namespace muse::audio::rpc;
 
-void WorkerChannelController::initOnWorker(std::shared_ptr<IWorkerPlayback> playback)
+void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
 {
     ONLY_AUDIO_WORKER_THREAD;
 

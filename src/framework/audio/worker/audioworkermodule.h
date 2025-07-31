@@ -19,31 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include "global/async/asyncable.h"
-
-#include "global/modularity/ioc.h"
-#include "common/rpc/irpcchannel.h"
-
-#include "iworkerplayback.h"
+#include "modularity/imodulesetup.h"
 
 namespace muse::audio::worker {
-class WorkerChannelController : public async::Asyncable
+class WorkerPlayback;
+class WorkerChannelController;
+
+class AudioWorkerModule : public modularity::IModuleSetup
 {
-    Inject<rpc::IRpcChannel> channel;
-
 public:
-    WorkerChannelController() = default;
 
-    void initOnWorker(std::shared_ptr<IWorkerPlayback> playback);
-    void deinit();
+    std::string moduleName() const override;
+
+    void registerExports() override;
+    void onInit(const IApplication::RunMode& mode) override;
+    void onDestroy() override;
 
 private:
-
-    std::shared_ptr<IWorkerPlayback> m_playback;
-
-    async::Channel<TrackSequenceId, int64_t, int64_t> m_saveSoundTrackProgressStream;
-    rpc::StreamId m_saveSoundTrackProgressStreamId = 0;
+    std::shared_ptr<worker::WorkerPlayback> m_workerPlayback;
+    std::shared_ptr<worker::WorkerChannelController> m_workerChannelController;
 };
 }

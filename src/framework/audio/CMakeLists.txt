@@ -76,11 +76,13 @@ endif()
 
 include(common/audio_common.cmake)
 include(main/audio_main.cmake)
+include(worker/audio_worker.cmake)
 
 set(MODULE_SRC
 
     ${AUDIO_COMMON_SRC}
     ${AUDIO_MAIN_SRC}
+    ${AUDIO_WORKER_SRC}
 
     # Temporary
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
@@ -126,11 +128,6 @@ set(MODULE_SRC
     ${DRIVER_SRC}
 
     # Worker
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iworkerplayback.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerplayback.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerplayback.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerchannelcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerchannelcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/samplerateconvertor.cpp
