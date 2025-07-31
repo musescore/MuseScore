@@ -24,9 +24,6 @@
 #include "audio/common/rpc/rpcpacker.h"
 #include "audio/common/audiosanitizer.h"
 
-#include "global/async/async.h"
-#include "audio/internal/audiothread.h"
-
 #include "log.h"
 
 using namespace muse;
@@ -45,43 +42,45 @@ void Player::init()
 
     //! NOTE Subscribe and request initial state
 
-    m_playbackStatusChanged.onReceive(this, [this](PlaybackStatus st) {
-        m_playbackStatus = st;
-    });
-
-    m_playbackPositionChanged.onReceive(this, [this](const secs_t newPos) {
-        m_playbackPosition = newPos;
-    });
-
-    Msg msg = rpc::make_request(Method::GetPlaybackStatus, RpcPacker::pack(m_sequenceId));
-    channel()->send(msg, [this](const Msg& res) {
-        ONLY_AUDIO_MAIN_THREAD;
-        PlaybackStatus status = PlaybackStatus::Stopped;
-        StreamId streamId = 0;
-        IF_ASSERT_FAILED(RpcPacker::unpack(res.data, status, streamId)) {
-            return;
-        }
-
-        channel()->addReceiveStream(streamId, m_playbackStatusChanged);
-        //! NOTE Send initial state
-        m_playbackStatusChanged.send(status);
-    });
-
-    Async::call(this, [this]() {
-        ONLY_AUDIO_WORKER_THREAD;
-
-        //! NOTE Send initial state
-        // m_playbackStatusChanged.send(workerPlayback()->playbackStatus(m_sequenceId));
-        // workerPlayback()->playbackStatusChanged(m_sequenceId).onReceive(this, [this](const PlaybackStatus newStatus) {
-        //     m_playbackStatusChanged.send(newStatus);
-        // });
-
-        //! NOTE Send initial state
-        m_playbackPositionChanged.send(workerPlayback()->playbackPosition(m_sequenceId));
-        workerPlayback()->playbackPositionChanged(m_sequenceId).onReceive(this, [this](const secs_t newPos) {
-            m_playbackPositionChanged.send(newPos);
+    {
+        m_playbackStatusChanged.onReceive(this, [this](PlaybackStatus st) {
+            m_playbackStatus = st;
         });
-    }, AudioThread::ID);
+
+        Msg msg = rpc::make_request(Method::GetPlaybackStatus, RpcPacker::pack(m_sequenceId));
+        channel()->send(msg, [this](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            PlaybackStatus status = PlaybackStatus::Stopped;
+            StreamId streamId = 0;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, status, streamId)) {
+                return;
+            }
+
+            channel()->addReceiveStream(streamId, m_playbackStatusChanged);
+            //! NOTE Send initial state
+            m_playbackStatusChanged.send(status);
+        });
+    }
+
+    {
+        m_playbackPositionChanged.onReceive(this, [this](const secs_t newPos) {
+            m_playbackPosition = newPos;
+        });
+
+        Msg msg = rpc::make_request(Method::GetPlaybackPosition, RpcPacker::pack(m_sequenceId));
+        channel()->send(msg, [this](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            secs_t pos = 0.0;
+            StreamId streamId = 0;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, pos, streamId)) {
+                return;
+            }
+
+            channel()->addReceiveStream(streamId, m_playbackPositionChanged);
+            //! NOTE Send initial state
+            m_playbackPositionChanged.send(pos);
+        });
+    }
 }
 
 TrackSequenceId Player::sequenceId() const
