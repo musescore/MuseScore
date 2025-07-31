@@ -75,6 +75,7 @@ enum class Method {
     SetLoop,
     ResetLoop,
     GetPlaybackStatus,
+    GetPlaybackPosition,
 
     // Output
     GetOutputParams,
@@ -139,6 +140,7 @@ inline std::string to_string(Method m)
     case Method::SetLoop: return "SetLoop";
     case Method::ResetLoop: return "ResetLoop";
     case Method::GetPlaybackStatus: return "GetPlaybackStatus";
+    case Method::GetPlaybackPosition: return "GetPlaybackPosition";
 
     // Output
     case Method::GetOutputParams: return "GetOutputParams";
