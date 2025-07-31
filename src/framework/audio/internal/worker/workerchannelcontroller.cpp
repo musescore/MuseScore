@@ -308,6 +308,19 @@ void WorkerChannelController::initOnWorker(std::shared_ptr<IWorkerPlayback> play
         m_playback->resetLoop(seqId);
     });
 
+    channel()->onMethod(Method::GetPlaybackStatus, [this](const Msg& msg) {
+        ONLY_AUDIO_WORKER_THREAD;
+        TrackSequenceId seqId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId)) {
+            return;
+        }
+
+        PlaybackStatus status = m_playback->playbackStatus(seqId);
+        async::Channel<PlaybackStatus> ch = m_playback->playbackStatusChanged(seqId);
+        StreamId streamId = channel()->addSendStream(ch);
+        channel()->send(rpc::make_response(msg, RpcPacker::pack(status, streamId)));
+    });
+
     // Output
 
     channel()->onMethod(Method::GetOutputParams, [this](const Msg& msg) {
