@@ -24,6 +24,7 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iworkerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/iclock.h
     ${CMAKE_CURRENT_LIST_DIR}/isequenceio.h
     ${CMAKE_CURRENT_LIST_DIR}/itracksequence.h
@@ -49,6 +50,10 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/igettracks.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiostream.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiostream.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/samplerateconvertor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/samplerateconvertor.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/track.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiosource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiosource.h
