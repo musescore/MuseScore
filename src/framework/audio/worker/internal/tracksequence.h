@@ -26,11 +26,12 @@
 #include "modularity/ioc.h"
 #include "../iaudioengine.h"
 
+#include "common/audiotypes.h"
+
 #include "../itracksequence.h"
 #include "../igettracks.h"
-#include "audio/internal/worker/iclock.h"
+#include "../iclock.h"
 #include "audio/internal/worker/track.h"
-#include "audio/common/audiotypes.h"
 
 namespace muse::audio::worker {
 class Mixer;

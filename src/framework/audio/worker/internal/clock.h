@@ -25,9 +25,9 @@
 #include "global/types/retval.h"
 #include "global/async/asyncable.h"
 
-#include "iclock.h"
+#include "../iclock.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class Clock : public IClock, public async::Asyncable
 {
 public:

@@ -30,7 +30,7 @@
 
 #include "../isequenceplayer.h"
 #include "../igettracks.h"
-#include "audio/internal/worker/iclock.h"
+#include "../iclock.h"
 
 namespace muse::audio::worker {
 class SequencePlayer : public ISequencePlayer, public Injectable, public async::Asyncable

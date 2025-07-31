@@ -86,11 +86,11 @@ set(MODULE_SRC
 
     # Temporary
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
 
     # Common public
 
-    ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiothreadsecurer.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiostream.h
@@ -140,9 +140,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sinesource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/noisesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/noisesource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iclock.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/clock.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/clock.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/isequenceio.h
