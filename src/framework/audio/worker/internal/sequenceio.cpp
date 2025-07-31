@@ -22,14 +22,15 @@
 
 #include "sequenceio.h"
 
+#include "audio/common/audioerrors.h"
 #include "internal/audiosanitizer.h"
-#include "audioerrors.h"
 
 #include "log.h"
 
 using namespace muse;
-using namespace muse::audio;
 using namespace muse::async;
+using namespace muse::audio;
+using namespace muse::audio::worker;
 
 SequenceIO::SequenceIO(worker::IGetTracks* getTracks)
     : m_getTracks(getTracks)

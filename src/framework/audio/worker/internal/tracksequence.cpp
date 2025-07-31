@@ -27,7 +27,7 @@
 #include "internal/audiosanitizer.h"
 #include "eventaudiosource.h"
 #include "sequenceplayer.h"
-#include "audio/internal/worker/sequenceio.h"
+#include "sequenceio.h"
 
 #include "clock.h"
 
