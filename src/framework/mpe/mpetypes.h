@@ -514,12 +514,16 @@ struct ArticulationsProfile
 {
     std::vector<ArticulationFamily> supportedFamilies;
 
-    const ArticulationPattern& pattern(const ArticulationType type) const
+    const ArticulationPattern& pattern(const ArticulationType type,
+                                       const ArticulationType fallback = ArticulationType::Undefined) const
     {
         auto search = m_patterns.find(type);
+        if (search == m_patterns.cend() && fallback != ArticulationType::Undefined) {
+            search = m_patterns.find(fallback);
+        }
 
         if (search == m_patterns.cend()) {
-            static ArticulationPattern emptyPattern;
+            static const ArticulationPattern emptyPattern;
             return emptyPattern;
         }
 
