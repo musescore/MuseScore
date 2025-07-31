@@ -41,7 +41,6 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
-    void onDelayedInit() override;
 
 private:
     std::shared_ptr<MuseSoundsConfiguration> m_configuration;

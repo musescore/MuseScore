@@ -48,14 +48,12 @@ public:
     UpdateScenario(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void delayedInit();
-
-    void checkForUpdate() override;
+    bool needCheckForUpdate() const override;
+    muse::async::Promise<Ret> checkForUpdate(bool manual) override;
 
 private:
-    bool isCheckStarted() const;
+    bool isCheckInProgress() const;
 
-    void doCheckForUpdate(bool manual);
     void th_checkForUpdate();
 
     void processUpdateResult(int errorCode);
@@ -68,7 +66,7 @@ private:
     void downloadRelease();
     void closeAppAndStartInstallation(const io::path_t& installerPath);
 
-    bool m_checkProgress = false;
+    bool m_checkInProgress = false;
     ProgressPtr m_checkProgressChannel = nullptr;
 };
 }
