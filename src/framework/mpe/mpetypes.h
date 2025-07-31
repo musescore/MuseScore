@@ -294,6 +294,9 @@ enum class ArticulationType : signed char {
     Slap,
     Pop,
 
+    LeftHandTapping,
+    RightHandTapping,
+
     ContinuousGlissando,
 
     // multi-note articulations
@@ -317,7 +320,7 @@ using ArticulationTypeSet = std::unordered_set<ArticulationType>;
 
 inline bool isMultiNoteArticulation(const ArticulationType type)
 {
-    static const ArticulationTypeSet MULTI_TYPES = {
+    static const ArticulationTypeSet MULTI_TYPES {
         ArticulationType::Trill,
         ArticulationType::Crescendo,
         ArticulationType::Diminuendo,

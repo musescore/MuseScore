@@ -144,6 +144,8 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::Overdrive, "Overdrive" },
     { ArticulationType::Slap, "Slap" },
     { ArticulationType::Pop, "Pop" },
+    { ArticulationType::LeftHandTapping, "LeftHandTapping" },
+    { ArticulationType::RightHandTapping, "RightHandTapping" },
 };
 
 inline ArticulationFamily articulationFamilyFromString(const QString& str)
