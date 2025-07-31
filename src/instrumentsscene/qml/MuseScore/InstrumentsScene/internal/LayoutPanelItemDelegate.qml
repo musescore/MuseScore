@@ -96,7 +96,7 @@ FocusableControl {
     navigation.column: 0
 
     navigation.accessible.role: MUAccessible.ListItem
-    navigation.accessible.name: titleLabel.text
+    navigation.accessible.name: visibilityControls.title
 
     onNavigationTriggered: { root.clicked(null) }
 
@@ -208,117 +208,54 @@ FocusableControl {
         }
     }
 
-    RowLayout {
+    VisibilityControls {
+        id: visibilityControls
+
         anchors.fill: parent
         anchors.leftMargin: root.sideMargin
         anchors.rightMargin: root.sideMargin
 
-        spacing: 2
+        navigationPanel: root.navigation.panel
+        navigationRow: root.navigation.row
 
-        VisibilityBox {
-            id: visibilityBox
-            visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-            Layout.alignment: Qt.AlignLeft
-            Layout.preferredWidth: width
+        title: Boolean(model) ? model.itemRole.title : ""
+        isRootControl: Boolean(model) && root.type === LayoutPanelItemType.PART
 
-            objectName: "VisibleBtn"
-            navigation.panel: root.navigation.panel
-            navigation.row: root.navigation.row
-            navigation.column: 1
-
-            isVisible: model && model.itemRole.isVisible
-
-            onVisibleToggled: {
-                if (!model) {
-                    return
-                }
-
-                if (root.isSelected) {
-                    root.changeVisibilityOfSelectedRowsRequested(!isVisible)
-                } else {
-                    root.changeVisibilityRequested(styleData.index, !isVisible)
-                }
+        useVisibilityButton: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+        isVisible: Boolean(model) && model.itemRole.isVisible
+        onVisibilityButtonClicked: function(isVisible) {
+            if (!model) {
+                return
+            }
+            if (root.isSelected) {
+                root.changeVisibilityOfSelectedRowsRequested(!isVisible)
+            } else {
+                root.changeVisibilityRequested(styleData.index, !isVisible)
             }
         }
 
-        StyledIconLabel {
-            Layout.preferredWidth: visibilityBox.width
-            visible: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-            Layout.alignment: Qt.AlignCenter
-            iconCode: IconCode.MINUS
-            opacity: model && model.itemRole.isVisible ? 1 : 0.75
-        }
+        showDashIcon: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
-        Item {
-            Layout.fillWidth: true
-            Layout.leftMargin: 12 * styleData.depth
-            height: childrenRect.height
-
-            FlatButton {
-                id: expandButton
-                anchors.left: parent.left
-
-                visible: root.isExpandable
-                width: expandButton.visible || styleData.depth !== 0 ? expandButton.implicitWidth : 0
-
-                objectName: "ExpandBtn"
-                enabled: expandButton.visible
-                navigation.panel: root.navigation.panel
-                navigation.row: root.navigation.row
-                navigation.column: 2
-                navigation.accessible.name: styleData.isExpanded
-                                            //: Collapse a tree item
-                                            ? qsTrc("global", "Collapse")
-                                            //: Expand a tree item
-                                            : qsTrc("global", "Expand")
-
-                transparent: true
-                icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
-
-                onClicked: {
-                    if (!styleData.isExpanded) {
-                        root.treeView.expand(styleData.index)
-                    } else {
-                        root.treeView.collapse(styleData.index)
-                    }
-                }
-            }
-
-            StyledTextLabel {
-                id: titleLabel
-
-                anchors.left: expandButton.right
-                anchors.leftMargin: 4
-                anchors.right: parent.right
-                anchors.rightMargin: 8
-                anchors.verticalCenter: expandButton.verticalCenter
-
-                text: model ? model.itemRole.title : ""
-                horizontalAlignment: Text.AlignLeft
-                opacity: model && model.itemRole.isVisible ? 1 : 0.75
-
-                font: {
-                    if (Boolean(model) && root.type === LayoutPanelItemType.PART && model.itemRole.isVisible) {
-                        return ui.theme.bodyBoldFont
-                    }
-
-                    return ui.theme.bodyFont
-                }
+        isExpandable: root.isExpandable
+        isExpanded: styleData.isExpanded
+        expandableDepth: styleData.depth
+        onExpandButtonClicked: function(expand) {
+            if (expand) {
+                root.treeView.expand(styleData.index)
+            } else {
+                root.treeView.collapse(styleData.index)
             }
         }
 
-        FlatButton {
+        rightSideButtonComp: FlatButton {
             id: settingsButton
-
-            Layout.alignment: Qt.AlignRight
-            Layout.preferredWidth: width
 
             visible: root.settingsAvailable
             enabled: root.visible && root.settingsEnabled
 
             objectName: "SettingsBtn"
-            navigation.panel: root.navigation.panel
-            navigation.row: root.navigation.row
+            navigation.panel: visibilityControls.navigationPanel
+            navigation.row: visibilityControls.navigationRow
             navigation.column: 3
             navigation.accessible.name: qsTrc("layoutpanel", "Settings")
 
