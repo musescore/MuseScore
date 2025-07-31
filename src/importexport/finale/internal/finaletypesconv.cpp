@@ -1200,6 +1200,21 @@ std::pair<int, int> FinaleTConv::hookHeightsFromShapeType(musx::dom::others::Sma
     return muse::value(shapeTypeTable, shapeType, { 0, 0 });
 }
 
+String FinaleTConv::fontStyleSuffixFromCategoryType(musx::dom::others::MarkingCategory::CategoryType categoryType)
+{
+    using CategoryType = musx::dom::others::MarkingCategory::CategoryType;
+    /// @note Any changes to this list should also be reflected in `writeMarkingPrefs` in importfinalestyles.cpp
+    static const std::unordered_map<CategoryType, std::string_view> categoryTypeTable = {
+        { CategoryType::Dynamics, "dynamics" },
+        { CategoryType::ExpressiveText, "expression" },
+        { CategoryType::TempoMarks, "tempo" },
+        { CategoryType::TempoAlterations, "tempoChange" },
+        { CategoryType::TechniqueText, "staffText" },
+        { CategoryType::RehearsalMarks, "rehearsalMark" },
+    };
+    return String::fromUtf8(muse::value(categoryTypeTable, categoryType, "default"));
+}
+
 double FinaleTConv::doubleFromEvpu(double evpuDouble)
 {
     return evpuDouble / EVPU_PER_SPACE;

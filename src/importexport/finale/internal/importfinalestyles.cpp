@@ -684,7 +684,7 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     writeCategoryTextFontPref(style, context, "dynamics", CategoryType::Dynamics);
     writeCategoryTextFontPref(style, context, "expression", CategoryType::ExpressiveText);
     writeCategoryTextFontPref(style, context, "tempo", CategoryType::TempoMarks);
-    writeCategoryTextFontPref(style, context, "tempoChange", CategoryType::ExpressiveText);
+    writeCategoryTextFontPref(style, context, "tempoChange", CategoryType::TempoAlterations);
     writeLinePrefs(style, "tempoChange",
                    prefs.smartShapeOptions->smartLineWidth,
                    prefs.smartShapeOptions->smartDashOn,
@@ -698,10 +698,10 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     writeDefaultFontPref(style, context, "repeatLeft", FontType::Repeat);
     writeDefaultFontPref(style, context, "repeatRight", FontType::Repeat);
     writeFontPref(style, "frame", textBlockFont);
-    writeCategoryTextFontPref(style, context, "textLine", CategoryType::TechniqueText);
-    writeCategoryTextFontPref(style, context, "systemTextLine", CategoryType::ExpressiveText);
-    writeCategoryTextFontPref(style, context, "glissando", CategoryType::TechniqueText);
-    writeCategoryTextFontPref(style, context, "bend", CategoryType::TechniqueText);
+    writeFontPref(style, "textLine", textBlockFont);
+    writeFontPref(style, "systemTextLine", textBlockFont);
+    writeFontPref(style, "glissando", textBlockFont);
+    writeFontPref(style, "bend", textBlockFont);
     writeFontPref(style, "header", textBlockFont);
     writeFontPref(style, "footer", textBlockFont);
     writeFontPref(style, "copyright", textBlockFont);

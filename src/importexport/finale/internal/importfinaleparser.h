@@ -209,6 +209,7 @@ private:
     void importMeasures();
     void importPageLayout();
     void importStaffItems();
+    void importTextExpressions();
 
     engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff, engraving::Staff::HideMode defaultHideMode,
                                   const engraving::InstrumentTemplate* it = nullptr);
