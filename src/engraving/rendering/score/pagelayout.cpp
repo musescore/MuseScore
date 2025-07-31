@@ -43,6 +43,7 @@
 #include "dom/spacer.h"
 #include "dom/spannermap.h"
 #include "dom/staff.h"
+#include "dom/staffvisibilityindicator.h"
 #include "dom/system.h"
 #include "dom/systemdivider.h"
 #include "dom/tremolosinglechord.h"
@@ -355,6 +356,12 @@ void PageLayout::collectPage(LayoutContext& ctx)
             MeasureLayout::layout2(m, ctx);
         }
         SystemLayout::layoutSystemLockIndicators(s, ctx);
+
+        StaffVisibilityIndicator* visibilityIndicator = s->staffVisibilityIndicator();
+        IF_ASSERT_FAILED(visibilityIndicator) {
+            continue;
+        }
+        TLayout::layoutIndicatorIcon(visibilityIndicator, visibilityIndicator->mutldata());
     }
 
     // If this is the last page we layout, we must also relayout the first barlines of the
