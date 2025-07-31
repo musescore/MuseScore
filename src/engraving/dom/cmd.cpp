@@ -3363,7 +3363,7 @@ void Score::cmdAddParentheses(EngravingItem* el)
         TimeSig* ts = toTimeSig(el);
         ts->setLargeParentheses(true);
     } else {
-        ParenthesesMode p = el->bothParentheses() ? ParenthesesMode::NONE : ParenthesesMode::BOTH;
+        ParenthesesMode p = el->leftParen() || el->rightParen() ? ParenthesesMode::NONE : ParenthesesMode::BOTH;
         el->undoChangeProperty(Pid::HAS_PARENTHESES, p);
     }
 }
