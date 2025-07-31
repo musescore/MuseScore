@@ -242,6 +242,8 @@ public:
     void setFret(int val) { m_fret = val; }
     float harmonicFret() const { return m_harmonicFret; }
     void setHarmonicFret(float val) { m_harmonicFret = val; }
+    int harmonicPitchOffset() const { return m_harmonicPitchOffset; }
+    void setHarmonicPitchOffset(int val) { m_harmonicPitchOffset = val; }
     DisplayFretOption displayFret() const { return m_displayFret; }
     void setDisplayFret(DisplayFretOption val) { m_displayFret = val; }
     String fretString() const { return m_fretString; }
@@ -508,6 +510,7 @@ private:
     int m_line = INVALID_LINE;  // y-Position; 0 - top line.
     int m_fret = -1;            // for tablature view
     float m_harmonicFret = -1.0;
+    int m_harmonicPitchOffset = 0;
     DisplayFretOption m_displayFret = DisplayFretOption::NoHarmonic;
     int m_string = -1;
     mutable int m_tpc[2] = { Tpc::TPC_INVALID, Tpc::TPC_INVALID };   // tonal pitch class  (concert/transposing)
