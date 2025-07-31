@@ -140,8 +140,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sinesource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/noisesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/noisesource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/tracksequence.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/tracksequence.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/mixer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/mixer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/mixerchannel.cpp
@@ -151,12 +149,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/clock.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/itracksequence.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/igettracks.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/isequenceplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/isequenceio.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceplayer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceio.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceio.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/track.h

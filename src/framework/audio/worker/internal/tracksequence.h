@@ -24,19 +24,22 @@
 
 #include "global/async/asyncable.h"
 #include "modularity/ioc.h"
-#include "audio/worker/iaudioengine.h"
+#include "../iaudioengine.h"
 
-#include "itracksequence.h"
-#include "igettracks.h"
-#include "iclock.h"
-#include "track.h"
-#include "audiotypes.h"
+#include "../itracksequence.h"
+#include "../igettracks.h"
+#include "audio/internal/worker/iclock.h"
+#include "audio/internal/worker/track.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio {
 class Mixer;
+}
+
+namespace muse::audio::worker {
 class TrackSequence : public ITrackSequence, public IGetTracks, public muse::Injectable, public async::Asyncable
 {
-    Inject<worker::IAudioEngine> audioEngine = { this };
+    Inject<IAudioEngine> audioEngine = { this };
 
 public:
     TrackSequence(const TrackSequenceId id, const muse::modularity::ContextPtr& iocCtx);

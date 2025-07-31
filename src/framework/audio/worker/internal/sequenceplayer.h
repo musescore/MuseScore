@@ -26,13 +26,13 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "audio/worker/iaudioengine.h"
+#include "../iaudioengine.h"
 
-#include "isequenceplayer.h"
-#include "igettracks.h"
-#include "iclock.h"
+#include "../isequenceplayer.h"
+#include "../igettracks.h"
+#include "audio/internal/worker/iclock.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class SequencePlayer : public ISequencePlayer, public Injectable, public async::Asyncable
 {
     Inject<worker::IAudioEngine> audioEngine = { this };

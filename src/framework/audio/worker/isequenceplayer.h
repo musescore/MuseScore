@@ -26,9 +26,9 @@
 #include "global/types/ret.h"
 #include "global/async/channel.h"
 
-#include "audiotypes.h"
+#include "audio/common/audiotypes.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class ISequencePlayer
 {
 public:

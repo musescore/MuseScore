@@ -29,7 +29,7 @@
 #include "audio/isynthresolver.h"
 #include "audio/ifxresolver.h"
 #include "../iaudioengine.h"
-#include "audio/internal/worker/itracksequence.h"
+#include "../itracksequence.h"
 
 namespace muse::audio {
 class Mixer;

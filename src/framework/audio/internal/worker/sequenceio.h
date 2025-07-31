@@ -25,14 +25,14 @@
 #include "global/async/asyncable.h"
 
 #include "isequenceio.h"
-#include "igettracks.h"
+#include "audio/worker/igettracks.h"
 #include "audiotypes.h"
 
 namespace muse::audio {
 class SequenceIO : public ISequenceIO, public async::Asyncable
 {
 public:
-    explicit SequenceIO(IGetTracks* getTracks);
+    explicit SequenceIO(worker::IGetTracks* getTracks);
 
     bool hasTrack(const TrackId id) const override;
 
@@ -50,7 +50,7 @@ public:
     InputProcessingProgress inputProcessingProgress(const TrackId id) const override;
 
 private:
-    IGetTracks* m_getTracks = nullptr;
+    worker::IGetTracks* m_getTracks = nullptr;
 
     async::Channel<TrackId, AudioInputParams> m_inputParamsChanged;
     async::Channel<TrackId, AudioOutputParams> m_outputParamsChanged;

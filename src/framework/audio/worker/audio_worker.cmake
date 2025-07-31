@@ -23,6 +23,9 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audioworkermodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/itracksequence.h
+    ${CMAKE_CURRENT_LIST_DIR}/igettracks.h
+    ${CMAKE_CURRENT_LIST_DIR}/isequenceplayer.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.h
@@ -30,4 +33,9 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerchannelcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/tracksequence.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/tracksequence.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.h
+
 )
