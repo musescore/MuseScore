@@ -155,7 +155,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/itracksequence.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/igettracksequence.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/igettracks.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/isequenceplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/isequenceio.h

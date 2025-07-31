@@ -29,7 +29,7 @@
 #include "audio/isynthresolver.h"
 #include "audio/ifxresolver.h"
 #include "audio/internal/worker/iaudioengine.h"
-#include "audio/internal/worker/igettracksequence.h"
+#include "audio/internal/worker/itracksequence.h"
 
 namespace muse::audio {
 class Mixer;
@@ -41,7 +41,7 @@ using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 }
 
 namespace muse::audio::worker {
-class WorkerPlayback : public IWorkerPlayback, public IGetTrackSequence, public Injectable, public async::Asyncable
+class WorkerPlayback : public IWorkerPlayback, public Injectable, public async::Asyncable
 {
     Inject<synth::ISynthResolver> synthResolver = { this };
     Inject<fx::IFxResolver> fxResolver = { this };
@@ -58,9 +58,7 @@ public:
     TrackSequenceId addSequence() override;
     void removeSequence(const TrackSequenceId id) override;
     TrackSequenceIdList sequenceIdList() const override;
-
-    // IGetTrackSequence
-    ITrackSequencePtr sequence(const TrackSequenceId id) const override;
+    ITrackSequencePtr sequence(const TrackSequenceId id) const;
 
     // 2. Setup tracks for Sequence
     RetVal<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
