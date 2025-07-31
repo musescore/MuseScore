@@ -3900,14 +3900,21 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
     double x = endMB->x() + endMB->width();
     x -= iconBox.right() + 0.5 * spatium;
 
-    double xLayoutBreaks = endMB->x() + endMB->width();
+    double xOffset = endMB->x() + endMB->width();
     for (EngravingItem* el : endMB->el()) {
         if (el->isLayoutBreak()) {
-            xLayoutBreaks = std::min(xLayoutBreaks, endMB->x() + el->x() + el->ldata()->bbox().left() - spatium);
+            xOffset = std::min(xOffset, endMB->x() + el->x() + el->ldata()->bbox().left() - spatium);
         }
     }
 
-    x = std::min(x, xLayoutBreaks - iconBox.right());
+    for (const SystemLockIndicator* sli : item->system()->lockIndicators()) {
+        if (sli != item) {
+            // TODO: Rough spacing here
+            xOffset -= (sli->ldata()->bbox().width() * 2) - spatium;
+        }
+    }
+
+    x = std::min(x, xOffset - iconBox.right());
 
     ldata->setPos(PointF(x, -2.5 * spatium));
 

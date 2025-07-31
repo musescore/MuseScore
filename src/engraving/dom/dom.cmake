@@ -310,6 +310,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stafftypechange.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftypelist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftypelist.h
+    ${CMAKE_CURRENT_LIST_DIR}/staffvisibilityindicator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/staffvisibilityindicator.h
     ${CMAKE_CURRENT_LIST_DIR}/stem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stem.h
     ${CMAKE_CURRENT_LIST_DIR}/stemslash.cpp
