@@ -404,6 +404,7 @@ public:
         SPECTROGRAM = 0xF442,
         SPECTROGRAM_BOX_SELECTION = 0xF443,
         BRUSH = 0xF444,
+        SPLIT_TOOL = 0xF494,
 
         PLAY_FILL = 0xF446,
         STOP_FILL = 0xF447,
