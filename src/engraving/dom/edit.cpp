@@ -5788,30 +5788,6 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     undoUpdatePlayCountText(m);
 }
 
-void Score::undoChangePlayCountTextSetting(BarLine* bl, const AutoCustomHide& v)
-{
-    if (v == bl->playCountTextSetting()) {
-        return;
-    }
-    Segment* seg = bl->segment();
-
-    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-        BarLine* bl = seg ? toBarLine(seg->element(staff2track(staffIdx))) : nullptr;
-        if (!bl || bl->playCountTextSetting() == v) {
-            continue;
-        }
-
-        // TODO PARTS
-        undo(new ChangeProperty(bl, Pid::PLAY_COUNT_TEXT_SETTING, v, PropertyFlags::NOSTYLE));
-
-        if (bl->playCountCustomText().isEmpty()) {
-            String text = TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
-                bl->getProperty(Pid::REPEAT_COUNT).toInt());
-            bl->undoChangeProperty(Pid::PLAY_COUNT_TEXT, text);
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   undoChangeElement
 //---------------------------------------------------------

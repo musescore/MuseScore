@@ -790,7 +790,8 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
                 obj->triggerLayout();
                 continue;
             }
-            EngravingItem* copy = obj->linkedClone();
+            bool shouldLink = !obj->isPlayCountText();
+            EngravingItem* copy = shouldLink ? obj->linkedClone() : obj->clone();
             copy->setStaffIdx(staffIdx);
 
             if (!obj->parent()->isSegment() && !obj->parent()->isMeasure()) {
