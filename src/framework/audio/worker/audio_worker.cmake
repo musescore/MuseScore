@@ -71,4 +71,8 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/limiter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/limiter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/audiomathutils.h
+
+    # FX
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/equaliser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/equaliser.h
 )
