@@ -53,14 +53,28 @@ void Player::init()
         m_playbackPosition = newPos;
     });
 
+    Msg msg = rpc::make_request(Method::GetPlaybackStatus, RpcPacker::pack(m_sequenceId));
+    channel()->send(msg, [this](const Msg& res) {
+        ONLY_AUDIO_MAIN_THREAD;
+        PlaybackStatus status = PlaybackStatus::Stopped;
+        StreamId streamId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(res.data, status, streamId)) {
+            return;
+        }
+
+        channel()->addReceiveStream(streamId, m_playbackStatusChanged);
+        //! NOTE Send initial state
+        m_playbackStatusChanged.send(status);
+    });
+
     Async::call(this, [this]() {
         ONLY_AUDIO_WORKER_THREAD;
 
         //! NOTE Send initial state
-        m_playbackStatusChanged.send(workerPlayback()->playbackStatus(m_sequenceId));
-        workerPlayback()->playbackStatusChanged(m_sequenceId).onReceive(this, [this](const PlaybackStatus newStatus) {
-            m_playbackStatusChanged.send(newStatus);
-        });
+        // m_playbackStatusChanged.send(workerPlayback()->playbackStatus(m_sequenceId));
+        // workerPlayback()->playbackStatusChanged(m_sequenceId).onReceive(this, [this](const PlaybackStatus newStatus) {
+        //     m_playbackStatusChanged.send(newStatus);
+        // });
 
         //! NOTE Send initial state
         m_playbackPositionChanged.send(workerPlayback()->playbackPosition(m_sequenceId));

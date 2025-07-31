@@ -26,6 +26,9 @@
 #include "global/serialization/msgpack_forward.h"
 #include "../../audiotypes.h"
 
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::PlaybackStatus& value);
+
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioResourceType& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioResourceType& value);
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioFxCategory& value);
@@ -112,9 +115,21 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& value);
 
 #include "global/serialization/msgpack.h"
 
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value)
+{
+    p.process(static_cast<int8_t>(value));
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::PlaybackStatus& value)
+{
+    int8_t val = 0;
+    p.process(val);
+    value = static_cast<muse::audio::PlaybackStatus>(val);
+}
+
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioResourceType& value)
 {
-    p.process(static_cast<int>(value));
+    p.process(static_cast<int8_t>(value));
 }
 
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioResourceType& value)
