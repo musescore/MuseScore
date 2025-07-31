@@ -40,6 +40,7 @@
 #include "stafftype.h"
 #include "system.h"
 #include "undo.h"
+#include "types/typesconv.h"
 
 #include "log.h"
 
@@ -431,7 +432,12 @@ EngravingItem* BarLine::drop(EditData& data)
             m->undoChangeProperty(Pid::REPEAT_COUNT, bl->playCount());
         }
         if (bl->playCountTextSetting() != playCountTextSetting()) {
-            score()->undoChangePlayCountTextSetting(this, bl->playCountTextSetting());
+            score()->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, bl->playCountTextSetting());
+            if (playCountTextSetting() == AutoCustomHide::CUSTOM && playCountCustomText().isEmpty()) {
+                String text = TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+                    getProperty(Pid::REPEAT_COUNT).toInt());
+                undoChangeProperty(Pid::PLAY_COUNT_TEXT, text);
+            }
         }
         if (bl->playCountCustomText() != playCountCustomText()) {
             undoChangeProperty(Pid::PLAY_COUNT_TEXT, bl->playCountCustomText());
@@ -868,6 +874,11 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::PLAY_COUNT_TEXT_SETTING:
         m_playCountTextSetting = v.value<AutoCustomHide>();
+        if (playCountTextSetting() == AutoCustomHide::CUSTOM && playCountCustomText().isEmpty()) {
+            String text = TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+                getProperty(Pid::REPEAT_COUNT).toInt());
+            undoChangeProperty(Pid::PLAY_COUNT_TEXT, text);
+        }
         score()->undoUpdatePlayCountText(measure());
         break;
     case Pid::PLAY_COUNT_TEXT:
@@ -890,8 +901,6 @@ void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
 {
     if (id == Pid::BARLINE_TYPE && segment()) {
         score()->undoChangeBarLineType(this, v.value<BarLineType>(), true, true);
-    } else if (id == Pid::PLAY_COUNT_TEXT_SETTING) {
-        score()->undoChangePlayCountTextSetting(this, v.value<AutoCustomHide>());
     } else {
         EngravingObject::undoChangeProperty(id, v, ps);
     }
