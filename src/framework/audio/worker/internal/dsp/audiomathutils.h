@@ -26,7 +26,7 @@
 #include <cstdlib>
 #include <limits>
 
-#include "../../audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio::dsp {
 inline float balanceGain(const balance_t balance, const int audioChannelNumber)

@@ -23,7 +23,7 @@
 #ifndef MUSE_AUDIO_DSP_ENVELOPEFILTERCONFIG_H
 #define MUSE_AUDIO_DSP_ENVELOPEFILTERCONFIG_H
 
-#include "../../audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "audiomathutils.h"
 
 namespace muse::audio::dsp {

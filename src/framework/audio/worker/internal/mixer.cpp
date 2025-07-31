@@ -23,9 +23,11 @@
 
 #include "concurrency/taskscheduler.h"
 
-#include "audio/internal//audiosanitizer.h"
-#include "audio/internal//dsp/audiomathutils.h"
-#include "audioerrors.h"
+#include "audio/internal/audiosanitizer.h"
+
+#include "audio/common/audioerrors.h"
+
+#include "dsp/audiomathutils.h"
 
 #include "log.h"
 
