@@ -68,6 +68,7 @@ public:
     static engraving::DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
     static engraving::LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
     static std::pair<int, int> hookHeightsFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
+    static engraving::String fontStyleSuffixFromCategoryType(musx::dom::others::MarkingCategory::CategoryType categoryType);
     // unit conversion
     static double doubleFromEvpu(double evpu);
     static engraving::PointF evpuToPointF(double xEvpu, double yEvpu);
