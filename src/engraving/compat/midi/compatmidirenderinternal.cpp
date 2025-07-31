@@ -783,9 +783,8 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
                 break;
             }
 
-            const auto& e = eventsList.front();
             if (noteEffect == MidiInstrumentEffect::NONE) {
-                noteEffect = midiEffectFromEvent(e);
+                noteEffect = midiEffectFromEvent(eventsList.front());
                 noteChannel = getChannel(instr, note, noteEffect, context);
             }
 
@@ -797,7 +796,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
             continue;
         }
 
-        int p = std::clamp(note->ppitch() + e.pitch(), 0, 127);
+        int p = std::clamp(note->ppitch() + e.pitch() + note->harmonicPitchOffset(), 0, 127);
         int on = tick1 + (ticks * e.ontime()) / 1000;
         int off = on + (ticks * e.len()) / 1000 - 1;
 

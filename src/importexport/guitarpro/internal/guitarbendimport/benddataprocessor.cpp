@@ -117,6 +117,9 @@ static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Sc
 
                 startNote->setPitch(note->pitch() - pitch);
                 startNote->setTpcFromPitch();
+                if (note->displayFret() == Note::DisplayFretOption::Hide) {
+                    startNote->setDisplayFret(Note::DisplayFretOption::Hide);
+                }
 
                 int newPitch = note->pitch();
                 Note* tiedNote = nullptr;

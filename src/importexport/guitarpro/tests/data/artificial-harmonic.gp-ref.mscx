@@ -92,7 +92,6 @@
               <eid>K_K</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -101,6 +100,7 @@
               <pitch>62</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -132,7 +132,6 @@
               <eid>O_O</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -141,6 +140,7 @@
               <pitch>69</pitch>
               <tpc>17</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -172,7 +172,6 @@
               <eid>S_S</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -181,6 +180,7 @@
               <pitch>74</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -213,7 +213,6 @@
               <eid>W_W</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              <play>0</play>
               <fret>5</fret>
               <string>1</string>
               </Note>
@@ -226,6 +225,7 @@
               <pitch>92</pitch>
               <tpc>22</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>5</fret>
               <string>1</string>
               </Note>
@@ -266,7 +266,6 @@
               <eid>d_d</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -275,6 +274,7 @@
               <pitch>81</pitch>
               <tpc>17</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -306,7 +306,6 @@
               <eid>h_h</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
-              <play>0</play>
               <fret>10</fret>
               <string>4</string>
               </Note>
@@ -315,6 +314,7 @@
               <pitch>89</pitch>
               <tpc>13</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>10</fret>
               <string>4</string>
               </Note>
@@ -326,7 +326,6 @@
               <eid>k_k</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -335,6 +334,7 @@
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -346,7 +346,6 @@
               <eid>n_n</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
-              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
@@ -355,6 +354,7 @@
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>5</fret>
               <string>4</string>
               </Note>
