@@ -158,6 +158,7 @@ class StaffState;
 class StaffText;
 class StaffTextBase;
 class StaffTypeChange;
+class StaffVisibilityIndicator;
 class Stem;
 class StemSlash;
 class Sticking;
@@ -361,6 +362,7 @@ public:
     CONVERT(Ottava,        OTTAVA)
     CONVERT(LayoutBreak,   LAYOUT_BREAK)
     CONVERT(IndicatorIcon, INDICATOR_ICON)
+    CONVERT(StaffVisibilityIndicator, STAFF_VISIBILITY_INDICATOR)
     CONVERT(SystemLockIndicator, SYSTEM_LOCK_INDICATOR)
     CONVERT(Segment,       SEGMENT)
     CONVERT(System,        SYSTEM)
@@ -799,6 +801,7 @@ CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
 CONVERT(IndicatorIcon)
+CONVERT(StaffVisibilityIndicator)
 CONVERT(SystemLockIndicator)
 CONVERT(Segment)
 CONVERT(System)
