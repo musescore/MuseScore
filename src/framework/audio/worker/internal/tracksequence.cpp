@@ -23,10 +23,10 @@
 #include "tracksequence.h"
 
 #include "internal/audiosanitizer.h"
-#include "clock.h"
-#include "eventaudiosource.h"
+#include "audio/internal/worker/clock.h"
+#include "audio/internal/worker/eventaudiosource.h"
 #include "sequenceplayer.h"
-#include "sequenceio.h"
+#include "audio/internal/worker/sequenceio.h"
 #include "audioerrors.h"
 
 #include "log.h"
@@ -34,6 +34,7 @@
 using namespace muse;
 using namespace muse::async;
 using namespace muse::audio;
+using namespace muse::audio::worker;
 
 TrackSequence::TrackSequence(const TrackSequenceId id, const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx), m_id(id)

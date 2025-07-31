@@ -27,10 +27,10 @@
 #include "mpe/events.h"
 
 #include "isequenceplayer.h"
-#include "isequenceio.h"
+#include "audio/internal/worker/isequenceio.h"
 #include "audiotypes.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class ITrackSequence
 {
 public:

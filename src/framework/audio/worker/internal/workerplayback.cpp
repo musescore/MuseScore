@@ -23,7 +23,7 @@
 
 #include "internal/audiosanitizer.h"
 
-#include "audio/internal/worker/tracksequence.h"
+#include "tracksequence.h"
 
 #include "audioerrors.h"
 

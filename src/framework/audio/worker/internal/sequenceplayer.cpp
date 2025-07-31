@@ -28,6 +28,7 @@
 
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::audio::worker;
 using namespace muse::async;
 
 SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx)

@@ -25,10 +25,10 @@
 
 #include "global/async/channel.h"
 
-#include "track.h"
-#include "audiotypes.h"
+#include "audio/internal/worker/track.h"
+#include "audio/common/audiotypes.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class IGetTracks
 {
 public:

@@ -31,7 +31,7 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::async;
 
-SequenceIO::SequenceIO(IGetTracks* getTracks)
+SequenceIO::SequenceIO(worker::IGetTracks* getTracks)
     : m_getTracks(getTracks)
 {
     m_getTracks->trackAboutToBeAdded().onReceive(this, [this](TrackPtr trackPtr) {
