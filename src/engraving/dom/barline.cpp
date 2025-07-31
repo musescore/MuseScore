@@ -802,7 +802,11 @@ void BarLine::remove(EngravingItem* e)
         }
         break;
     case ElementType::PLAY_COUNT_TEXT:
-        setPlayCountText(nullptr);
+        if (e != m_playCountText) {
+            LOGD("BarLine::remove(): cannot find %s", e->typeName());
+        } else {
+            setPlayCountText(nullptr);
+        }
         break;
     default:
         LOGD("BarLine::remove() not impl. %s", e->typeName());

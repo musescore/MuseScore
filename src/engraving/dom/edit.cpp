@@ -5540,13 +5540,16 @@ void Score::undoUpdatePlayCountText(Measure* m)
                 playCountText->setParent(bl);
                 playCountText->setSystemFlag(true);
                 playCountText->setSelected(bl->selected());
-                doUndoAddElement(playCountText);
+                bl->undoChangeProperty(Pid::GENERATED, false, PropertyFlags::NOSTYLE);
+                undoAddElement(playCountText);
+                // set generated flag before and after so it sticks on type change and also works on undo/redo
+                bl->undoChangeProperty(Pid::GENERATED, false, PropertyFlags::NOSTYLE);
             } else {
                 if (playCountText->parent() != bl) {
                     playCountText->parentItem()->remove(playCountText);
 
                     playCountText->setParent(bl);
-                    doUndoAddElement(playCountText);
+                    undoAddElement(playCountText);
                 }
             }
         } else if (playCountText) {
@@ -6541,6 +6544,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || (et == ElementType::JUMP)
         || (et == ElementType::MARKER)
         || (et == ElementType::TEMPO_TEXT)
+        || (et == ElementType::PLAY_COUNT_TEXT)
         || isSystemLine
         ) {
         std::list<Staff* > staffList;
@@ -6607,6 +6611,15 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             } else if (et == ElementType::MEASURE_NUMBER) {
                 toMeasure(element->explicitParent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE,
                                                                          static_cast<int>(MeasureNumberMode::SHOW));
+            } else if (et == ElementType::PLAY_COUNT_TEXT) {
+                BarLine* bl = toBarLine(element->explicitParent());
+                Fraction tick = bl->tick();
+                Measure* m = score->tick2measure(tick - Fraction::eps());
+                Segment* blSeg = m->last(SegmentType::EndBarLine);
+                BarLine* linkedBl = toBarLine(blSeg->element(ntrack));
+                ne->setTrack(ntrack);
+                ne->setParent(linkedBl);
+                doUndoAddElement(ne);
             } else {
                 Segment* segment  = toSegment(element->explicitParent());
                 Fraction tick     = segment->tick();
@@ -6766,7 +6779,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::HARP_DIAGRAM
             && et != ElementType::FIGURED_BASS
             && et != ElementType::CLEF
-            && et != ElementType::AMBITUS)
+            && et != ElementType::AMBITUS
+            && et != ElementType::PLAY_COUNT_TEXT)
         ) {
         doUndoAddElement(element);
         return;
@@ -6845,6 +6859,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 case ElementType::EXPRESSION:
                 case ElementType::LYRICS:                       // not normally segment-attached
                 case ElementType::PARTIAL_LYRICSLINE:
+                case ElementType::PLAY_COUNT_TEXT:
                     continue;
                 default:
                     break;

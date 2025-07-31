@@ -3015,6 +3015,8 @@ void ChangeParent::flip(EditData*)
     parent->add(element);
     staffIdx = si;
     parent = p;
+
+    element->triggerLayout();
 }
 
 //---------------------------------------------------------
