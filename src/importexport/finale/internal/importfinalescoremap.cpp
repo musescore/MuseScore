@@ -266,8 +266,8 @@ void FinaleParser::importParts()
             // Compensate here.
             options.scaleFontSizeBy = 1.0;
             // userMag is not set yet, so use musx data
-            const std::vector<std::shared_ptr<others::InstrumentUsed>> systemOneStaves = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, 1);
-            if (std::optional<size_t> index = others::InstrumentUsed::getIndexForStaff(systemOneStaves, staff->getCmper())) {
+            const others::InstrumentUsedArray systemOneStaves = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, 1);
+            if (std::optional<size_t> index = systemOneStaves.getIndexForStaff(staff->getCmper())) {
                 const musx::util::Fraction staffMag = systemOneStaves[index.value()]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling;
                 options.scaleFontSizeBy /= staffMag.toDouble();
             }
@@ -338,7 +338,7 @@ void FinaleParser::importBrackets()
         throw std::logic_error("Unable to read PartDefinition for score");
         return;
     }
-    auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    const others::InstrumentUsedArray scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
     auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, m_currentMusxPartId, scrollView);
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
@@ -347,8 +347,8 @@ void FinaleParser::importBrackets()
             logger()->logWarning(String(u"Group info encountered without start or end slot information"));
             continue;
         }
-        auto musxStartStaff = others::InstrumentUsed::getStaffInstanceAtIndex(scrollView, Cmper(groupInfo.info.startSlot.value()));
-        auto musxEndStaff = others::InstrumentUsed::getStaffInstanceAtIndex(scrollView, Cmper(groupInfo.info.endSlot.value()));
+        auto musxStartStaff = scrollView.getStaffInstanceAtIndex(Cmper(groupInfo.info.startSlot.value()));
+        auto musxEndStaff = scrollView.getStaffInstanceAtIndex(Cmper(groupInfo.info.endSlot.value()));
         IF_ASSERT_FAILED(musxStartStaff && musxEndStaff) {
             logger()->logWarning(String(u"Group info encountered missing start or end staff information"));
             continue;
@@ -577,8 +577,8 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
 
     // userMag is not based on staff styles but on others::InstrumentUsed
     if (std::shared_ptr<others::StaffSystem> system = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
-        std::vector<std::shared_ptr<others::InstrumentUsed>> systemStaves = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, system->getCmper());
-        if (std::optional<size_t> index = others::InstrumentUsed::getIndexForStaff(systemStaves, currStaff->getCmper())) {
+        const others::InstrumentUsedArray systemStaves = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, system->getCmper());
+        if (std::optional<size_t> index = systemStaves.getIndexForStaff(currStaff->getCmper())) {
             const size_t x = index.value();
             const double newUserMag = (systemStaves[x]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling).toDouble();
             if (changed(staffType->userMag(), newUserMag, result)) {
@@ -627,8 +627,8 @@ void FinaleParser::importStaffItems()
         }
         for (const auto& musxSystem : musxSystems) {
             if (musxSystem->startMeas > 1) { // we already added measure 1 at init time
-                std::vector<std::shared_ptr<others::InstrumentUsed>> systemStaves = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, musxSystem->getCmper());
-                if (others::InstrumentUsed::getIndexForStaff(systemStaves, rawStaff->getCmper())) {
+                const others::InstrumentUsedArray systemStaves = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, musxSystem->getCmper());
+                if (systemStaves.getIndexForStaff(rawStaff->getCmper())) {
                     styleChanges.emplace(musxSystem->startMeas);
                 }
             }
