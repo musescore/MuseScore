@@ -31,16 +31,13 @@
 #include "../iaudioengine.h"
 #include "../itracksequence.h"
 
-namespace muse::audio {
-class Mixer;
-
-namespace soundtrack {
+namespace muse::audio::soundtrack {
 class SoundTrackWriter;
 using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 }
-}
 
 namespace muse::audio::worker {
+class Mixer;
 class WorkerPlayback : public IWorkerPlayback, public Injectable, public async::Asyncable
 {
     Inject<synth::ISynthResolver> synthResolver = { this };

@@ -28,10 +28,10 @@
 
 #include "../../ifxresolver.h"
 #include "../../ifxprocessor.h"
-#include "../dsp/compressor.h"
-#include "track.h"
+#include "audio/internal/dsp/compressor.h"
+#include "audio/internal/worker/track.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class MixerChannel : public ITrackAudioOutput, public Injectable, public async::Asyncable
 {
     Inject<fx::IFxResolver> fxResolver = { this };

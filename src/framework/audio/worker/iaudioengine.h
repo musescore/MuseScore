@@ -27,7 +27,7 @@
 
 #include "audio/common/audiotypes.h"
 
-#include "audio/internal/worker/mixer.h"
+#include "internal/mixer.h"
 
 namespace muse::audio::worker {
 class IAudioEngine : MODULE_EXPORT_INTERFACE

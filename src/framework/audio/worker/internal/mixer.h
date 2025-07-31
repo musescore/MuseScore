@@ -31,17 +31,17 @@
 
 #include "../../ifxresolver.h"
 #include "../../iaudioconfiguration.h"
-#include "../dsp/limiter.h"
+#include "audio/internal/dsp/limiter.h"
 
-#include "abstractaudiosource.h"
+#include "audio/internal/worker/abstractaudiosource.h"
 #include "mixerchannel.h"
-#include "iclock.h"
+#include "audio/internal/worker/iclock.h"
 
 namespace muse {
 class TaskScheduler;
 }
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class Mixer : public AbstractAudioSource, public Injectable, public async::Asyncable, public std::enable_shared_from_this<Mixer>
 {
     Inject<fx::IFxResolver> fxResolver = { this };

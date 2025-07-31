@@ -23,15 +23,16 @@
 
 #include "concurrency/taskscheduler.h"
 
-#include "internal/audiosanitizer.h"
-#include "internal/dsp/audiomathutils.h"
+#include "audio/internal//audiosanitizer.h"
+#include "audio/internal//dsp/audiomathutils.h"
 #include "audioerrors.h"
 
 #include "log.h"
 
 using namespace muse;
-using namespace muse::audio;
 using namespace muse::async;
+using namespace muse::audio;
+using namespace muse::audio::worker;
 
 Mixer::Mixer(const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx)

@@ -32,11 +32,8 @@
 #include "audio/internal/worker/track.h"
 #include "audio/common/audiotypes.h"
 
-namespace muse::audio {
-class Mixer;
-}
-
 namespace muse::audio::worker {
+class Mixer;
 class TrackSequence : public ITrackSequence, public IGetTracks, public muse::Injectable, public async::Asyncable
 {
     Inject<IAudioEngine> audioEngine = { this };

@@ -23,14 +23,15 @@
 
 #include <algorithm>
 
-#include "internal/dsp/audiomathutils.h"
-#include "internal/audiosanitizer.h"
+#include "audio/internal/dsp/audiomathutils.h"
+#include "audio/internal/audiosanitizer.h"
 
 #include "log.h"
 
 using namespace muse;
-using namespace muse::audio;
 using namespace muse::async;
+using namespace muse::audio;
+using namespace muse::audio::worker;
 
 MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate,
                            const modularity::ContextPtr& iocCtx)
