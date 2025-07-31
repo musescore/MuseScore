@@ -25,6 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace muse::audio::worker {
+class AudioEngine;
 class WorkerPlayback;
 class WorkerChannelController;
 
@@ -38,8 +39,12 @@ public:
     void onInit(const IApplication::RunMode& mode) override;
     void onDestroy() override;
 
+    // Temporarily for compatibility
+    std::shared_ptr<AudioEngine> audioEngine() const { return m_audioEngine; }
+
 private:
-    std::shared_ptr<worker::WorkerPlayback> m_workerPlayback;
-    std::shared_ptr<worker::WorkerChannelController> m_workerChannelController;
+    std::shared_ptr<AudioEngine> m_audioEngine;
+    std::shared_ptr<WorkerPlayback> m_workerPlayback;
+    std::shared_ptr<WorkerChannelController> m_workerChannelController;
 };
 }

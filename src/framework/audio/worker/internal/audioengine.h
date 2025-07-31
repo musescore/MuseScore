@@ -28,16 +28,17 @@
 #include "global/async/notification.h"
 #include "global/types/ret.h"
 
-#include "iaudioengine.h"
-#include "mixer.h"
+#include "../iaudioengine.h"
 
 namespace muse::audio {
 class AudioBuffer;
-class AudioEngine : public IAudioEngine, public Injectable, public async::Asyncable
+}
+
+namespace muse::audio::worker {
+class AudioEngine : public IAudioEngine, public async::Asyncable
 {
 public:
-    AudioEngine(const modularity::ContextPtr& iocCtx)
-        : Injectable(iocCtx) {}
+    AudioEngine() = default;
     ~AudioEngine();
 
     struct RenderConstraints {

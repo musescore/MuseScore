@@ -48,7 +48,6 @@ class GeneralRpcChannel;
 
 namespace muse::audio {
 class AudioConfiguration;
-class AudioEngine;
 class AudioThread;
 class AudioBuffer;
 class AudioOutputDeviceController;
@@ -76,7 +75,6 @@ private:
     void setupAudioWorker(const IAudioDriver::Spec& activeSpec);
 
     std::shared_ptr<AudioConfiguration> m_configuration;
-    std::shared_ptr<AudioEngine> m_audioEngine;
     std::shared_ptr<AudioThread> m_audioWorker;
     std::shared_ptr<AudioBuffer> m_audioBuffer;
     std::shared_ptr<AudioOutputDeviceController> m_audioOutputController;

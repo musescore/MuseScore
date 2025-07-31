@@ -26,7 +26,7 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iaudioengine.h"
+#include "audio/worker/iaudioengine.h"
 
 #include "isequenceplayer.h"
 #include "igettracks.h"
@@ -35,7 +35,7 @@
 namespace muse::audio {
 class SequencePlayer : public ISequencePlayer, public Injectable, public async::Asyncable
 {
-    Inject<IAudioEngine> audioEngine = { this };
+    Inject<worker::IAudioEngine> audioEngine = { this };
 
 public:
     explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx);

@@ -22,8 +22,11 @@
 
 #include "audioworkermodule.h"
 
+#include "internal/audioengine.h"
 #include "internal/workerplayback.h"
 #include "internal/workerchannelcontroller.h"
+
+#include "audio/common/audiosanitizer.h"
 
 using namespace muse;
 using namespace muse::modularity;
@@ -36,9 +39,11 @@ std::string AudioWorkerModule::moduleName() const
 
 void AudioWorkerModule::registerExports()
 {
+    m_audioEngine = std::make_shared<AudioEngine>();
     m_workerPlayback = std::make_shared<WorkerPlayback>(iocContext());
     m_workerChannelController  = std::make_shared<WorkerChannelController>();
 
+    ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
     ioc()->registerExport<IWorkerPlayback>(moduleName(), m_workerPlayback);
 }
 
@@ -50,6 +55,9 @@ void AudioWorkerModule::onInit(const IApplication::RunMode&)
 
 void AudioWorkerModule::onDestroy()
 {
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_audioEngine->deinit();
     m_workerChannelController->deinit();
     m_workerPlayback->deinit();
 }

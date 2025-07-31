@@ -31,7 +31,7 @@
 #include "internal/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"
 
-#include "internal/worker/audioengine.h"
+#include "audio/worker/internal/audioengine.h"
 
 #include "internal/playback.h"
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
@@ -113,7 +113,6 @@ std::string AudioModule::moduleName() const
 void AudioModule::registerExports()
 {
     m_configuration = std::make_shared<AudioConfiguration>(iocContext());
-    m_audioEngine = std::make_shared<AudioEngine>(iocContext());
     m_audioWorker = std::make_shared<AudioThread>();
     m_audioBuffer = std::make_shared<AudioBuffer>();
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
@@ -151,7 +150,6 @@ void AudioModule::registerExports()
 #endif // MUSE_MODULE_AUDIO_JACK
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
     ioc()->registerExport<IAudioDriver>(moduleName(), m_audioDriver);
     ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);
@@ -265,7 +263,6 @@ void AudioModule::onDestroy()
         m_audioWorker->stop([this]() {
             ONLY_AUDIO_WORKER_THREAD;
             m_workerModule->onDestroy();
-            m_audioEngine->deinit();
         });
     }
 }
@@ -309,7 +306,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
 void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 {
-    AudioEngine::RenderConstraints consts;
+    worker::AudioEngine::RenderConstraints consts;
     consts.minSamplesToReserveWhenIdle = m_configuration->minSamplesToReserve(RenderMode::IdleMode);
     consts.minSamplesToReserveInRealtime = m_configuration->minSamplesToReserve(RenderMode::RealTimeMode);
 
@@ -318,12 +315,13 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         ONLY_AUDIO_WORKER_THREAD;
 
         // Setup audio engine
-        m_audioEngine->init(m_audioBuffer, consts);
-        m_audioEngine->setAudioChannelsCount(m_configuration->audioChannelsCount());
-        m_audioEngine->setSampleRate(activeSpec.sampleRate);
-        m_audioEngine->setReadBufferSize(activeSpec.samples);
+        std::shared_ptr<worker::AudioEngine> audioEngine = m_workerModule->audioEngine();
+        audioEngine->init(m_audioBuffer, consts);
+        audioEngine->setAudioChannelsCount(m_configuration->audioChannelsCount());
+        audioEngine->setSampleRate(activeSpec.sampleRate);
+        audioEngine->setReadBufferSize(activeSpec.samples);
 
-        m_audioEngine->setOnReadBufferChanged([this](const samples_t samples, const sample_rate_t rate) {
+        audioEngine->setOnReadBufferChanged([this](const samples_t samples, const sample_rate_t rate) {
             msecs_t interval = m_configuration->audioWorkerInterval(samples, rate);
             m_audioWorker->setInterval(interval);
         });

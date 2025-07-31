@@ -29,6 +29,7 @@
 
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::audio::worker;
 
 AudioEngine::~AudioEngine()
 {
@@ -52,7 +53,7 @@ Ret AudioEngine::init(AudioBufferPtr bufferPtr, const RenderConstraints& consts)
         return make_ret(Ret::Code::InternalError);
     }
 
-    m_mixer = std::make_shared<Mixer>(iocContext());
+    m_mixer = std::make_shared<Mixer>(nullptr);
     m_buffer = std::move(bufferPtr);
     m_renderConsts = consts;
 
