@@ -28,6 +28,7 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/igettracks.h
     ${CMAKE_CURRENT_LIST_DIR}/isequenceplayer.h
 
+    # internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerchannelcontroller.cpp
@@ -45,4 +46,11 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sequenceplayer.h
 
+    # DSP
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/envelopefilterconfig.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/compressor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/compressor.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/limiter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/limiter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/audiomathutils.h
 )

@@ -23,7 +23,7 @@
 
 #include <algorithm>
 
-#include "audio/internal/dsp/audiomathutils.h"
+#include "dsp/audiomathutils.h"
 #include "audio/internal/audiosanitizer.h"
 
 #include "log.h"

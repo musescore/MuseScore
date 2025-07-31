@@ -24,7 +24,7 @@
 
 #include "FLAC++/encoder.h"
 
-#include "internal/dsp/audiomathutils.h"
+#include "audio/worker/internal/dsp/audiomathutils.h"
 
 #include "log.h"
 

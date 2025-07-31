@@ -28,7 +28,7 @@
 
 #include "../../ifxresolver.h"
 #include "../../ifxprocessor.h"
-#include "audio/internal/dsp/compressor.h"
+#include "dsp/compressor.h"
 #include "audio/internal/worker/track.h"
 
 namespace muse::audio::worker {
