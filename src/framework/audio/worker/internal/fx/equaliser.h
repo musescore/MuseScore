@@ -24,7 +24,7 @@
 
 #include "ifxprocessor.h"
 
-namespace muse::audio {
+namespace muse::audio::fx {
 class Equaliser : public IFxProcessor
 {
 public:

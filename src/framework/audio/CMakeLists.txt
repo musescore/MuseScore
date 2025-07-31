@@ -125,10 +125,6 @@ set(MODULE_SRC
     # Driver
     ${DRIVER_SRC}
 
-    # Worker
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.h
-
     # fx
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.h

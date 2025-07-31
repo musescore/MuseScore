@@ -26,6 +26,7 @@
 #include "log.h"
 
 using namespace muse::audio;
+using namespace muse::audio::fx;
 
 void Equaliser::setSampleRate(unsigned int sampleRate)
 {
