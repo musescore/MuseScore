@@ -156,20 +156,24 @@ Text* Page::layoutHeaderFooter(int area, const String& s) const
     text->createBlocks();
 
     // second formatting pass - replace macros and apply their unique formatting (if any)
+    int emptyBlocks = 0;
     const TextStyleType style = isHeader ? TextStyleType::HEADER : TextStyleType::FOOTER;
     std::vector<TextBlock> newBlocks;
     for (const TextBlock& oldBlock : text->ldata()->blocks) {
         Text* dummyText = Factory::createText(score()->dummy(), style);
         dummyText->mutldata()->blocks = { replaceTextMacros(oldBlock) };
         dummyText->genText();
-        if (!dummyText->xmlText().isEmpty()) {
-            dummyText->createBlocks();
-            newBlocks.insert(newBlocks.end(), dummyText->ldata()->blocks.cbegin(), dummyText->ldata()->blocks.cend());
+        dummyText->createBlocks();
+        if (dummyText->xmlText().isEmpty()) {
+            emptyBlocks++;                                 // count empty blocks to remove them later if there is only 1 empty block
         }
+        newBlocks.insert(newBlocks.end(), dummyText->ldata()->blocks.cbegin(), dummyText->ldata()->blocks.cend());
         delete dummyText;
     }
 
-    if (newBlocks.empty()) {
+    if (newBlocks.empty() || (newBlocks.size() == 1 && emptyBlocks == 1)) {
+        // If there is no block, or the only block is empty.
+        // This preserves empty lines if and only if there also is some text anywhere in the header/footer.
         return nullptr;
     }
 
