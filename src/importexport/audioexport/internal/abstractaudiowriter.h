@@ -24,7 +24,7 @@
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "audio/iplayback.h"
+#include "audio/main/iplayback.h"
 #include "iaudioexportconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "playback/iplaybackcontroller.h"

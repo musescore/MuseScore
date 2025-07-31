@@ -21,8 +21,8 @@
  */
 #include "workerchannelcontroller.h"
 
-#include "../audiosanitizer.h"
-#include "../rpc/rpcpacker.h"
+#include "audio/common/audiosanitizer.h"
+#include "audio/common/rpc/rpcpacker.h"
 
 #include "log.h"
 

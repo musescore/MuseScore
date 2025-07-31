@@ -21,11 +21,11 @@
  */
 #include "player.h"
 
-#include "global/async/async.h"
+#include "audio/common/rpc/rpcpacker.h"
+#include "audio/common/audiosanitizer.h"
 
-#include "rpc/rpcpacker.h"
-#include "audiosanitizer.h"
-#include "audiothread.h"
+#include "global/async/async.h"
+#include "audio/internal/audiothread.h"
 
 #include "log.h"
 

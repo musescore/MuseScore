@@ -23,6 +23,7 @@
 
 #include "global/modularity/imoduleinterface.h"
 #include "global/types/retval.h"
+#include "global/io/path.h"
 
 #include "audiotypes.h"
 

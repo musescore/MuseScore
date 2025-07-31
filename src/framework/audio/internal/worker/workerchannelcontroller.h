@@ -24,7 +24,7 @@
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
-#include "../rpc/irpcchannel.h"
+#include "common/rpc/irpcchannel.h"
 
 #include "iworkerplayback.h"
 

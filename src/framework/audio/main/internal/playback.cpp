@@ -21,8 +21,8 @@
  */
 #include "playback.h"
 
-#include "rpc/rpcpacker.h"
-#include "audiosanitizer.h"
+#include "audio/common/rpc/rpcpacker.h"
+#include "audio/common/audiosanitizer.h"
 #include "player.h"
 
 #include "muse_framework_config.h"

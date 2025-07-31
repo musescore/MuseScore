@@ -35,7 +35,7 @@
 
 #include "internal/playback.h"
 #include "internal/worker/workerplayback.h"
-#include "internal/rpc/platform/general/generalrpcchannel.h"
+#include "audio/common/rpc/platform/general/generalrpcchannel.h"
 #include "internal/worker/workerchannelcontroller.h"
 
 #include "internal/soundfontrepository.h"
