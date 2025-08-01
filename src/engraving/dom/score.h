@@ -415,6 +415,7 @@ public:
     void cmdIncDurationDotted() { cmdIncDecDuration(-1, true); }
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
+    void cmdExtendToNextNote();
     void cmdToggleLayoutBreak(LayoutBreakType);
     void cmdMoveMeasureToPrevSystem();
     void cmdMoveMeasureToNextSystem();
