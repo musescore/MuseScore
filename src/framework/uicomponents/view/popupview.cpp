@@ -620,16 +620,6 @@ void PopupView::setRet(QVariantMap ret)
     emit retChanged(m_ret);
 }
 
-void PopupView::setOpensUpward(bool opensUpward)
-{
-    if (m_opensUpward == opensUpward) {
-        return;
-    }
-
-    m_opensUpward = opensUpward;
-    emit opensUpwardChanged(m_opensUpward);
-}
-
 void PopupView::setArrowX(int arrowX)
 {
     if (m_arrowX == arrowX) {
@@ -638,6 +628,26 @@ void PopupView::setArrowX(int arrowX)
 
     m_arrowX = arrowX;
     emit arrowXChanged(m_arrowX);
+}
+
+void PopupView::setArrowY(int arrowY)
+{
+    if (m_arrowY == arrowY) {
+        return;
+    }
+
+    m_arrowY = arrowY;
+    emit arrowYChanged(m_arrowY);
+}
+
+void PopupView::setPopupPosition(PopupPosition::Type position)
+{
+    if (m_popupPosition == position) {
+        return;
+    }
+
+    m_popupPosition = position;
+    emit popupPositionChanged(m_popupPosition);
 }
 
 void PopupView::setPadding(int padding)
@@ -695,14 +705,19 @@ QVariantMap PopupView::ret() const
     return m_ret;
 }
 
-bool PopupView::opensUpward() const
+PopupPosition::Type PopupView::popupPosition() const
 {
-    return m_opensUpward;
+    return m_popupPosition;
 }
 
 int PopupView::arrowX() const
 {
     return m_arrowX;
+}
+
+int PopupView::arrowY() const
+{
+    return m_arrowY;
 }
 
 int PopupView::padding() const
@@ -792,20 +807,50 @@ void PopupView::updateGeometry()
     bool ignoreFit = m_placementPolicies.testFlag(PlacementPolicy::IgnoreFit);
     bool canFitAbove = !ignoreFit ? viewRect.height() < parentTopLeft.y() : true;
     bool canFitBelow = !ignoreFit ? viewRect.bottom() < anchorRect.bottom() : true;
+    bool canFitLeft = !ignoreFit ? viewRect.width() < parentTopLeft.x() : true;
+    bool canFitRight = !ignoreFit ? viewRect.right() < anchorRect.right() : true;
+
+    auto moveBelow = [&]() {
+        movePos(m_globalPos.x(), parentTopLeft.y() + parent->height());
+        setPopupPosition(PopupPosition::Bottom);
+    };
+
+    auto moveAbove = [&]() {
+        movePos(m_globalPos.x(), parentTopLeft.y() - viewRect.height());
+        setPopupPosition(PopupPosition::Top);
+    };
+
+    auto moveLeft = [&]() {
+        movePos(parentTopLeft.x() - viewRect.width(), m_globalPos.y());
+        setPopupPosition(PopupPosition::Left);
+    };
+
+    auto moveRight = [&]() {
+        movePos(parentTopLeft.x() + parent->width(), m_globalPos.y());
+        setPopupPosition(PopupPosition::Right);
+    };
 
     if (m_placementPolicies.testFlag(PlacementPolicy::PreferBelow) && canFitBelow) {
-        movePos(m_globalPos.x(), parentTopLeft.y() + parent->height());
+        moveBelow();
     } else if (m_placementPolicies.testFlag(PlacementPolicy::PreferAbove) && canFitAbove) {
-        movePos(m_globalPos.x(), parentTopLeft.y() - viewRect.height());
-        setOpensUpward(true);
-    } else if (!canFitBelow) {
+        moveAbove();
+    } else if (m_placementPolicies.testFlag(PlacementPolicy::PreferLeft) && canFitLeft) {
+        moveLeft();
+    } else if (m_placementPolicies.testFlag(PlacementPolicy::PreferRight) && canFitRight) {
+        moveRight();
+    } else if (!canFitBelow && m_placementPolicies.testFlag(PlacementPolicy::PreferBelow)) {
         if (canFitAbove) {
-            // move to the top of the parent
-            movePos(m_globalPos.x(), parentTopLeft.y() - viewRect.height());
-            setOpensUpward(true);
+            moveAbove();
         } else {
             // move to the right of the parent and move to top to an area that doesn't fit
             movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()) + padding());
+        }
+    } else if (!canFitRight && m_placementPolicies.testFlag(PlacementPolicy::PreferRight)) {
+        if (canFitLeft) {
+            moveLeft();
+        } else {
+            // move to the bottom of the parent and move to left to an area that doesn't fit
+            movePos(m_globalPos.x() - (viewRect.right() - anchorRect.right()) + padding(), parentTopLeft.y() + parent->height());
         }
     }
 
@@ -820,7 +865,11 @@ void PopupView::updateGeometry()
     }
 
     if (!showArrow()) {
-        movePos(m_globalPos.x() - padding(), m_globalPos.y());
+        if (popupPosition() == PopupPosition::Bottom || popupPosition() == PopupPosition::Top) {
+            movePos(m_globalPos.x() - padding(), m_globalPos.y());
+        } else if (popupPosition() == PopupPosition::Left || popupPosition() == PopupPosition::Right) {
+            movePos(m_globalPos.x(), m_globalPos.y() - padding());
+        }
     }
 }
 
@@ -842,6 +891,12 @@ void PopupView::updateContentPosition()
             setArrowX(viewGeometry.width() / 2);
         } else {
             setArrowX(parentTopLeft.x() + (parent->width() / 2) - m_globalPos.x());
+        }
+
+        if (parentTopLeft.y() < viewTopLeft.y() || parentTopLeft.y() > viewGeometry.bottom()) {
+            setArrowY(viewGeometry.height() / 2);
+        } else {
+            setArrowY(parentTopLeft.y() + (parent->height() / 2) - m_globalPos.y());
         }
     }
 }
