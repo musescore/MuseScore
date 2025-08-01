@@ -217,7 +217,7 @@ public:
     void setColor(const Color& val) { m_color = val; }
     Spatium yoffset() const { return m_yoffset; }
     void setYoffset(Spatium val) { m_yoffset = val; }
-    double spatium() const;
+    double getScaledSpatium(double sp) const;
 
     void setStemless(bool val) { m_stemless = val; }
     bool stemless() const { return m_stemless; }

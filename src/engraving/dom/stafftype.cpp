@@ -1093,9 +1093,9 @@ const MStyle& StaffType::style() const
 //   spatium
 //---------------------------------------------------------
 
-double StaffType::spatium() const
+double StaffType::getScaledSpatium(double sp) const
 {
-    return style().spatium() * (isSmall() ? style().styleD(Sid::smallStaffMag) : 1.0) * userMag();
+    return sp * (isSmall() ? style().styleD(Sid::smallStaffMag) : 1.0) * userMag();
 }
 
 //=========================================================
