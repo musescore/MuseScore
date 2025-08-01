@@ -69,7 +69,7 @@ void Playback::init()
         m_inputParamsChanged.send(seqId, trackId, params);
     });
 
-    channel()->onMethod(Method::InputParamsChanged, [this](const Msg& msg) {
+    channel()->onMethod(Method::OutputParamsChanged, [this](const Msg& msg) {
         ONLY_AUDIO_MAIN_THREAD;
         TrackSequenceId seqId = 0;
         TrackId trackId = 0;
