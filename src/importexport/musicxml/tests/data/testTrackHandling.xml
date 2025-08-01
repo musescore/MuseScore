@@ -63,6 +63,7 @@
     </part-list>
   <part id="P1">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -1069,6 +1070,7 @@
         </note>
       </measure>
     <measure number="14">
+      <print page-number="2"/>
       <note>
         <pitch>
           <step>D</step>
@@ -1329,6 +1331,7 @@
     </part>
   <part id="P2">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -2060,6 +2063,7 @@
         </note>
       </measure>
     <measure number="14">
+      <print page-number="2"/>
       <note>
         <pitch>
           <step>D</step>
@@ -2310,6 +2314,7 @@
     </part>
   <part id="P3">
     <measure number="1">
+      <print page-number="1"/>
       <attributes>
         <divisions>1</divisions>
         <key>
@@ -2649,6 +2654,7 @@
         </note>
       </measure>
     <measure number="14">
+      <print page-number="2"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
