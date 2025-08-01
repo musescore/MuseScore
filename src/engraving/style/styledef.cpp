@@ -1365,6 +1365,25 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(rehearsalMarkPosBelow,                      PointF(.0, 4.0)),
     styleDef(rehearsalMarkMinDistance,                   Spatium(0.5)),
 
+    styleDef(repeatPlayCountFontFace,                    "Edwin"),
+    styleDef(repeatPlayCountFontSize,                    10.0),
+    styleDef(repeatPlayCountLineSpacing,                 1.0),
+    styleDef(repeatPlayCountFontSpatiumDependent,        true),
+    styleDef(repeatPlayCountFontStyle,                   int(FontStyle::Normal)),
+    styleDef(repeatPlayCountColor,                       PropertyValue::fromValue(Color::BLACK)),
+    styleDef(repeatPlayCountAlign,                       Align(AlignH::LEFT, AlignV::BASELINE)),
+    styleDef(repeatPlayCountPlacement,                   PlacementV::ABOVE),
+    styleDef(repeatPlayCountFrameType,                   int(FrameType::NO_FRAME)),
+    styleDef(repeatPlayCountFramePadding,                0.2),
+    styleDef(repeatPlayCountFrameWidth,                  0.1),
+    styleDef(repeatPlayCountFrameRound,                  0),
+    styleDef(repeatPlayCountFrameFgColor,                PropertyValue::fromValue(Color::BLACK)),
+    styleDef(repeatPlayCountFrameBgColor,                PropertyValue::fromValue(Color::transparent)),
+    styleDef(repeatPlayCountPosition,                    AlignH::LEFT),
+    styleDef(repeatPlayCountPosAbove,                    PointF(.0, -2.0)),
+    styleDef(repeatPlayCountPosBelow,                    PointF(.0, 4.0)),
+    styleDef(repeatPlayCountMinDistance,                 Spatium(0.5)),
+
     styleDef(repeatLeftFontFace,                         "Edwin"),
     styleDef(repeatLeftFontSize,                         10.0),
     styleDef(repeatLeftLineSpacing,                      1.0),
@@ -1960,6 +1979,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(showCourtesiesAfterCancellingOtherJumps,    true),
     styleDef(useParensOtherJumpCourtesiesAfterCancelling, true),
     styleDef(smallParens,                                true),
+    styleDef(repeatPlayCountPreset,                      RepeatPlayCountPreset::N_X),
+    styleDef(repeatPlayCountShow,         true),
+    styleDef(repeatPlayCountShowSingleRepeats,           false),
 } };
 
 #undef styleDef

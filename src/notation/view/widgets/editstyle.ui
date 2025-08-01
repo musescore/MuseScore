@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>962</width>
-    <height>812</height>
+    <height>824</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -98,7 +98,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Measure repeats</string>
+        <string>Repeats</string>
        </property>
       </item>
       <item>
@@ -6066,187 +6066,8 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="PageMeasureRepeats">
-       <layout class="QGridLayout" name="gridLayout_58">
-        <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox_measure_repeats">
-          <property name="title">
-           <string>Measure repeats</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_52">
-           <item row="3" column="0" colspan="2">
-            <widget class="QCheckBox" name="fourMeasureRepeatShowExtenders">
-             <property name="text">
-              <string>Show extenders on 4-measure repeats</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3">
-            <spacer name="horizontalSpacer_25">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="4" column="0" colspan="3">
-            <widget class="QGroupBox" name="mrNumberSeries">
-             <property name="accessibleName">
-              <string>Number consecutive measure repeats</string>
-             </property>
-             <property name="title">
-              <string>Number consecutive measure repeats</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_53">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_163">
-                <property name="text">
-                 <string>Every</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="mrNumberEveryXMeasures">
-                <property name="keyboardTracking">
-                 <bool>false</bool>
-                </property>
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>10</number>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QLabel" name="label_170">
-                <property name="text">
-                 <string>measures</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="3">
-               <spacer name="horizontalSpacer_7">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>64</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="1" column="5">
-               <widget class="QToolButton" name="resetMRNumberSeriesWithParentheses">
-                <property name="text">
-                 <string notr="true">…</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="5">
-               <widget class="QToolButton" name="resetMRNumberEveryXMeasures">
-                <property name="text">
-                 <string notr="true">…</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" colspan="4">
-               <widget class="QCheckBox" name="mrNumberSeriesWithParentheses">
-                <property name="text">
-                 <string>With parentheses</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetFourMeasureRepeatShowExtenders">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Time signature to barline distance' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_148">
-             <property name="text">
-              <string>Number position:</string>
-             </property>
-             <property name="buddy">
-              <cstring>measureRepeatNumberPos</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" colspan="2">
-            <widget class="QCheckBox" name="oneMeasureRepeatShow1">
-             <property name="text">
-              <string notr="true">Show ‘\1’ on 1-measure repeats [set in edidstyle.cpp]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="measureRepeatNumberPos">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="minimum">
-              <double>-99.989999999999995</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="resetMeasureRepeatNumberPos">
-             <property name="text">
-              <string notr="true">…</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetOneMeasureRepeatShow1">
-             <property name="text">
-              <string notr="true">…</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <spacer name="verticalSpacer_36">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
+      <widget class="QWidget" name="PageRepeats">
+       <layout class="QGridLayout" name="gridLayout_58"/>
       </widget>
       <widget class="QWidget" name="PageBeams">
        <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -14569,17 +14390,6 @@ followed by dashes</string>
   <tabstop>resetMMRestOldStyleMaxMeasures</tabstop>
   <tabstop>mmRestOldStyleSpacing</tabstop>
   <tabstop>resetMMRestOldStyleSpacing</tabstop>
-  <tabstop>measureRepeatNumberPos</tabstop>
-  <tabstop>resetMeasureRepeatNumberPos</tabstop>
-  <tabstop>oneMeasureRepeatShow1</tabstop>
-  <tabstop>resetOneMeasureRepeatShow1</tabstop>
-  <tabstop>fourMeasureRepeatShowExtenders</tabstop>
-  <tabstop>resetFourMeasureRepeatShowExtenders</tabstop>
-  <tabstop>mrNumberSeries</tabstop>
-  <tabstop>mrNumberEveryXMeasures</tabstop>
-  <tabstop>resetMRNumberEveryXMeasures</tabstop>
-  <tabstop>mrNumberSeriesWithParentheses</tabstop>
-  <tabstop>resetMRNumberSeriesWithParentheses</tabstop>
   <tabstop>scrollArea_tuplets</tabstop>
   <tabstop>tupletDirection</tabstop>
   <tabstop>resetTupletDirection</tabstop>

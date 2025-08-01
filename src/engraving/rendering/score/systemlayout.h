@@ -149,6 +149,7 @@ private:
         std::vector<Image*> images;
         std::vector<Parenthesis*> parenthesis;
         std::vector<Harmony*> harmonies;
+        std::vector<PlayCountText*> playCountText;
 
         std::vector<Spanner*> slurs;
         std::vector<Spanner*> trills;

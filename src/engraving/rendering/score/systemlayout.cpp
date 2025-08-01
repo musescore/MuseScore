@@ -48,6 +48,7 @@
 #include "dom/part.h"
 #include "dom/parenthesis.h"
 #include "dom/pedal.h"
+#include "dom/playcounttext.h"
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/slur.h"
@@ -964,6 +965,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
         MeasureLayout::layoutMeasureNumber(measure, ctx);
         MeasureLayout::layoutMMRestRange(measure, ctx);
+        MeasureLayout::layoutPlayCountText(measure, ctx);
         MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 
         collectElementsToLayout(measure, elementsToLayout, ctx);
@@ -1119,6 +1121,13 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
+    for (PlayCountText* pt : elementsToLayout.playCountText) {
+        TLayout::layoutPlayCountText(pt, pt->mutldata());
+        if (pt->autoplace()) {
+            Autoplace::autoplaceSegmentElement(pt, pt->mutldata());
+        }
+    }
+
     AlignmentLayout::alignItemsWithTheirSnappingChain(tempoElementsToAlign, system);
 
     for (RehearsalMark* rehearsMark : elementsToLayout.rehMarks) {
@@ -1187,6 +1196,9 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
             if (s->isType(SegmentType::BarLineType)) {
                 if (BarLine* bl = toBarLine(s->element(track))) {
                     elements.barlines.push_back(bl);
+                    if (PlayCountText* pt = bl->playCountText()) {
+                        elements.playCountText.push_back(pt);
+                    }
                 }
                 track += VOICES;
                 continue;

@@ -115,5 +115,6 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleResetButton.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleToggle.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/TupletCenteringSelector.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml</file>
     </qresource>
 </RCC>

@@ -137,6 +137,7 @@ class Pedal;
 class PedalSegment;
 class PickScrape;
 class PickScrapeSegment;
+class PlayCountText;
 class PlayTechAnnotation;
 class Rasgueado;
 class RasgueadoSegment;
@@ -436,6 +437,7 @@ public:
     CONVERT(StaffText,     STAFF_TEXT)
     CONVERT(SystemText,    SYSTEM_TEXT)
     CONVERT(SoundFlag,     SOUND_FLAG)
+    CONVERT(PlayCountText, PLAY_COUNT_TEXT)
     CONVERT(PlayTechAnnotation, PLAYTECH_ANNOTATION)
     CONVERT(Capo,          CAPO)
     CONVERT(BracketItem,   BRACKET_ITEM)
@@ -789,6 +791,7 @@ CONVERT(Harmony)
 CONVERT(Volta)
 CONVERT(Jump)
 CONVERT(StaffText)
+CONVERT(PlayCountText)
 CONVERT(PlayTechAnnotation)
 CONVERT(Capo)
 CONVERT(Ottava)

@@ -122,6 +122,7 @@ class Page;
 class PalmMute;
 class Part;
 class Pedal;
+class PlayCountText;
 class PlayTechAnnotation;
 
 class Rasgueado;
@@ -275,6 +276,7 @@ public:
     static void read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx);
     static void read(PartialTie* p, XmlReader& xml, ReadContext& ctx);
     static void read(Pedal* p, XmlReader& xml, ReadContext& ctx);
+    static void read(PlayCountText* t, XmlReader& xml, ReadContext& ctx);
     static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
 
     static void read(Rasgueado* r, XmlReader& xml, ReadContext& ctx);

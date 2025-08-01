@@ -85,6 +85,8 @@
       <staffTextFrameWidth>0.07682</staffTextFrameWidth>
       <rehearsalMarkFontFace>Times</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>7.4</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Times</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>7.4</repeatPlayCountFontSize>
       <repeatLeftFontFace>Times</repeatLeftFontFace>
       <repeatLeftFontSize>7.4</repeatLeftFontSize>
       <repeatRightFontFace>Times</repeatRightFontFace>

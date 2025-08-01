@@ -21,6 +21,7 @@
  */
 #include "notationparts.h"
 
+#include "dom/barline.h"
 #include "translation.h"
 
 #include "engraving/dom/factory.h"
@@ -789,8 +790,14 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
                 obj->triggerLayout();
                 continue;
             }
-            EngravingItem* copy = obj->linkedClone();
+            bool shouldLink = !obj->isPlayCountText();
+            EngravingItem* copy = shouldLink ? obj->linkedClone() : obj->clone();
             copy->setStaffIdx(staffIdx);
+
+            if (!obj->parent()->isSegment() && !obj->parent()->isMeasure()) {
+                copy->setParent(engraving::findNewSystemMarkingParent(obj, staff));
+            }
+
             score->undoAddElement(copy, false /*addToLinkedStaves*/);
         }
     }
@@ -853,16 +860,32 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
         dstStaff->undoResetProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF);
     }
 
+    // Remove items first
     for (EngravingItem* item : systemObjects) {
         if (item->isTimeSig()) {
             item->triggerLayout();
             continue;
         }
+
         if (item->staff() == srcStaff) {
+            continue;
+        }
+        item->undoUnlink();
+        score()->undoRemoveElement(item, false /*removeLinked*/);
+    }
+
+    // Move items
+    for (EngravingItem* item : systemObjects) {
+        if (item->isTimeSig()) {
+            continue;
+        }
+
+        if (item->staff() == srcStaff) {
+            if (!item->parent()->isSegment() && !item->parent()->isMeasure()) {
+                score()->undoChangeParent(item, engraving::findNewSystemMarkingParent(item, dstStaff), dstStaffIdx);
+                item->triggerLayout();
+            }
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
-        } else {
-            item->undoUnlink();
-            score()->undoRemoveElement(item, false /*removeLinked*/);
         }
     }
 

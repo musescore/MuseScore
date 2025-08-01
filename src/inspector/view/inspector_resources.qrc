@@ -128,5 +128,6 @@
         <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsView.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/playcounttext/PlayCountSettings.qml</file>
     </qresource>
 </RCC>

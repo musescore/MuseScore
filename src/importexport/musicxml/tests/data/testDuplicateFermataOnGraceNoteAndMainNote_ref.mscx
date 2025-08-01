@@ -63,6 +63,7 @@
       <staffTextFontFace>FreeSerif</staffTextFontFace>
       <rehearsalMarkFontFace>FreeSerif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>FreeSerif</repeatPlayCountFontFace>
       <repeatLeftFontFace>FreeSerif</repeatLeftFontFace>
       <repeatRightFontFace>FreeSerif</repeatRightFontFace>
       <frameFontFace>FreeSerif</frameFontFace>

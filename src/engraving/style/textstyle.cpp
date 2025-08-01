@@ -760,6 +760,25 @@ const TextStyle rehearsalMarkTextStyle { {
     { TextStylePropertyType::Position,             Sid::rehearsalMarkPosition,                  Pid::POSITION },
 } };
 
+const TextStyle repeatPlayCountTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::repeatPlayCountFontFace,                Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::repeatPlayCountFontSize,                Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::repeatPlayCountLineSpacing,             Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::repeatPlayCountFontSpatiumDependent,    Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::repeatPlayCountFontStyle,               Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::repeatPlayCountColor,                   Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::repeatPlayCountAlign,                   Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::repeatPlayCountPosAbove,                Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::repeatPlayCountFrameType,               Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::repeatPlayCountFramePadding,            Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::repeatPlayCountFrameWidth,              Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::repeatPlayCountFrameRound,              Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::repeatPlayCountFrameFgColor,            Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::repeatPlayCountFrameBgColor,            Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::Position,             Sid::repeatPlayCountPosition,                Pid::POSITION },
+} };
+
 const TextStyle repeatLeftTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::repeatLeftFontFace,                     Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::repeatLeftFontSize,                     Pid::FONT_SIZE },
@@ -1375,6 +1394,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::TEMPO: return &tempoTextStyle;
     case TextStyleType::TEMPO_CHANGE: return &tempoChangeTextStyle;
     case TextStyleType::METRONOME: return &metronomeTextStyle;
+    case TextStyleType::REPEAT_PLAY_COUNT: return &repeatPlayCountTextStyle;
     case TextStyleType::REPEAT_LEFT: return &repeatLeftTextStyle;
     case TextStyleType::REPEAT_RIGHT: return &repeatRightTextStyle;
     case TextStyleType::REHEARSAL_MARK: return &rehearsalMarkTextStyle;
@@ -1456,6 +1476,7 @@ static const std::vector<TextStyleType> _primaryTextStyles = {
     TextStyleType::MEASURE_NUMBER_ALTERNATE,
     TextStyleType::MMREST_RANGE,
     TextStyleType::TEMPO,
+    TextStyleType::REPEAT_PLAY_COUNT,
     TextStyleType::REPEAT_LEFT,
     TextStyleType::REPEAT_RIGHT,
     TextStyleType::REHEARSAL_MARK,

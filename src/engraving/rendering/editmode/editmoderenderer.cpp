@@ -92,6 +92,9 @@ void EditModeRenderer::drawItem(EngravingItem* item, muse::draw::Painter* painte
     case ElementType::PARTIAL_TIE_SEGMENT:
         drawSlurTieSegment(item_cast<SlurTieSegment*>(item), painter, ed, currentViewScaling);
         break;
+    case ElementType::PLAY_COUNT_TEXT:
+        drawTextBase(item_cast<TextBase*>(item), painter, ed, currentViewScaling);
+        break;
     case ElementType::PLAYTECH_ANNOTATION:
         drawTextBase(item_cast<TextBase*>(item), painter, ed, currentViewScaling);
         break;

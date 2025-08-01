@@ -19,33 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_STAFFSETTINGSMODEL_H
-#define MU_INSPECTOR_STAFFSETTINGSMODEL_H
+#pragma once
 
 #include "models/abstractinspectormodel.h"
 
 namespace mu::inspector {
-class StaffSettingsModel : public AbstractInspectorModel
+class PlayCountTextSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * barlinesSpanFrom READ barlinesSpanFrom CONSTANT)
-    Q_PROPERTY(PropertyItem * barlinesSpanTo READ barlinesSpanTo CONSTANT)
-public:
-    explicit StaffSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    Q_PROPERTY(PropertyItem * playCountText READ playCountText CONSTANT)
+    Q_PROPERTY(PropertyItem * playCountTextSetting READ playCountTextSetting CONSTANT)
 
+public:
+    explicit PlayCountTextSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    PropertyItem* playCountText() const;
+    PropertyItem* playCountTextSetting() const;
+
+private:
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
 
-    PropertyItem* barlinesSpanFrom() const;
-    PropertyItem* barlinesSpanTo() const;
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
-private:
-    PropertyItem* m_barlinesSpanFrom = nullptr;
-    PropertyItem* m_barlinesSpanTo = nullptr;
+    PropertyItem* m_playCountText = nullptr;
+    PropertyItem* m_playCountTextSetting = nullptr;
 };
 }
-
-#endif // MU_INSPECTOR_STAFFSETTINGSMODEL_H

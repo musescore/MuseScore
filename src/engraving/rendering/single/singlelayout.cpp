@@ -72,6 +72,7 @@
 #include "dom/ottava.h"
 #include "dom/palmmute.h"
 #include "dom/pedal.h"
+#include "dom/playcounttext.h"
 #include "dom/playtechannotation.h"
 #include "dom/rehearsalmark.h"
 #include "dom/slur.h"
@@ -196,6 +197,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::PALM_MUTE:    layout(toPalmMute(item), ctx);
         break;
     case ElementType::PEDAL:        layout(toPedal(item), ctx);
+        break;
+    case ElementType::PLAY_COUNT_TEXT: layout(toPlayCountText(item), ctx);
         break;
     case ElementType::PLAYTECH_ANNOTATION: layout(toPlayTechAnnotation(item), ctx);
         break;
@@ -1465,6 +1468,11 @@ void SingleLayout::layout(PedalSegment* item, const Context& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
     item->setOffset(PointF());
+}
+
+void SingleLayout::layout(PlayCountText* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx, item->mutldata());
 }
 
 void SingleLayout::layout(PlayTechAnnotation* item, const Context& ctx)
