@@ -430,11 +430,17 @@ const std::vector<const ChordDescription*> Harmony::parseHarmony(const String& s
     if (s.startsWith('(')) {
         setParenthesesMode(rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT, true, true);
         s.remove(0, 1);
+    } else {
+        setParenthesesMode(rightParen() ? ParenthesesMode::RIGHT : ParenthesesMode::NONE, true, true);
     }
+
     if (s.endsWith(')') && s.count('(') < s.count(')')) {
         setParenthesesMode(leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT, true, true);
         s.remove(s.size() - 1, 1);
+    } else {
+        setParenthesesMode(leftParen() ? ParenthesesMode::LEFT : ParenthesesMode::NONE, true, true);
     }
+
     if (parenthesesMode() == ParenthesesMode::BOTH) {
         s = s.simplified();         // in case of spaces inside parentheses
     }
