@@ -42,6 +42,7 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
     // Layout parentheses surrounding an engraving item. Handle padding and placement
     Parenthesis* leftParen = parent->leftParen();
     Parenthesis* rightParen = parent->rightParen();
+
     if (!(leftParen || rightParen)) {
         return;
     }
@@ -72,16 +73,17 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
     if (!leftParen || !rightParen) {
         // 1 parenthesis
         Parenthesis* paren = leftParen ? leftParen : rightParen;
+        Parenthesis::LayoutData* ldata = paren->mutldata();
         const bool leftBracket = paren->direction() == DirectionH::LEFT;
         double minDist = 0.0;
         if (!leftBracket && itemAddToSkyline) {
             // Space against existing item shape
             minDist = HorizontalSpacing::minHorizontalDistance(dummyItemShape, paren->shape().translated(
-                                                                   paren->pos()), paren->spatium());
+                                                                   ldata->pos()), paren->spatium());
         } else if (itemAddToSkyline) {
             // Space following item shape against this
             minDist = -HorizontalSpacing::minHorizontalDistance(paren->shape().translated(
-                                                                    paren->pos()), dummyItemShape, paren->spatium());
+                                                                    ldata->pos()), dummyItemShape, paren->spatium());
         }
         paren->mutldata()->moveX(minDist);
 
@@ -95,16 +97,19 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
         return;
     }
 
+    Parenthesis::LayoutData* leftLdata = leftParen->mutldata();
+    Parenthesis::LayoutData* rightLdata = rightParen->mutldata();
+
     const double itemLeftX = dummyItemShape.bbox().x();
     const double itemRightX = itemLeftX + parent->width();
 
-    const double leftParenPadding = HorizontalSpacing::minHorizontalDistance(leftParen->shape().translated(leftParen->pos()),
+    const double leftParenPadding = HorizontalSpacing::minHorizontalDistance(leftParen->shape().translated(leftLdata->pos()),
                                                                              dummyItemShape, leftParen->spatium());
     leftParen->mutldata()->moveX(-leftParenPadding);
-    dummyItemShape.add(leftParen->shape().translate(leftParen->pos() + leftParen->staffOffset()));
+    dummyItemShape.add(leftParen->shape().translate(leftLdata->pos() + leftParen->staffOffset()));
 
     const double rightParenPadding = HorizontalSpacing::minHorizontalDistance(dummyItemShape, rightParen->shape().translated(
-                                                                                  rightParen->pos()), rightParen->spatium());
+                                                                                  rightLdata->pos()), rightParen->spatium());
     rightParen->mutldata()->moveX(rightParenPadding);
 
     // If the right parenthesis has been padded against the left parenthesis, this means the parenthesis -> parenthesis padding distance
@@ -119,8 +124,8 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
     }
 
     // Move parentheses to place item in the middle
-    const double leftParenX = leftParen->pos().x() + leftParen->ldata()->bbox().x() + leftParen->ldata()->midPointThickness;
-    const double rightParenX = rightParen->pos().x() + rightParen->ldata()->bbox().x() + rightParen->width()
+    const double leftParenX = leftLdata->pos().x() + leftParen->ldata()->bbox().x() + leftParen->ldata()->midPointThickness;
+    const double rightParenX = rightLdata->pos().x() + rightParen->ldata()->bbox().x() + rightParen->width()
                                - rightParen->ldata()->midPointThickness;
 
     const double leftParenToItem = itemLeftX - leftParenX;
