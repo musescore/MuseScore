@@ -507,9 +507,9 @@ public:
 
     struct BarBeat
     {
-        int bar;
-        int displayedBar;
-        double beat;
+        int bar = 0;
+        int displayedBar = 0;
+        double beat = 0.0;
     };
     BarBeat barbeat() const;
 
