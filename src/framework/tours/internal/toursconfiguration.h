@@ -22,28 +22,19 @@
 
 #pragma once
 
-#include "io/path.h"
-
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-
-#include "tourstypes.h"
 
 #include "itoursconfiguration.h"
 
 namespace muse::tours {
 class ToursConfiguration : public IToursConfiguration, public Injectable
 {
-    Inject<IGlobalConfiguration> globalConfiguration = { this };
-
 public:
     ToursConfiguration(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
     String lastShownTourIdForEvent(const String& eventCode) const override;
     void setLastShownTourIdForEvent(const String& eventCode, const String& tourId) override;
-
-    io::path_t toursFilePath() const override;
 
 private:
     StringList lastShownTours() const;
