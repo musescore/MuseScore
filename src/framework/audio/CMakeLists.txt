@@ -164,10 +164,19 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthresolver.h
     )
 
+# instpatch dependancy
+include(SetupGlib)
+include(SetupGobject)
+
 # fluidsynth dependency
 include(SetupSndFile)
+include(SetupInstPatch)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
+
+if (LIBINSTPATCH_SUPPORT)
+    list(APPEND MODULE_INCLUDE_PRIVATE ${GLIB_INCDIRS})
+endif (LIBINSTPATCH_SUPPORT)
 
 set(MODULE_LINK
     fluidsynth

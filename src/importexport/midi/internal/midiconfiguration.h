@@ -37,6 +37,10 @@ public:
     void setMidiShortestNote(int ticks) override;
     muse::async::Channel<int> midiShortestNoteChanged() const override;
 
+    bool midiChannel9isDrum() const override;
+    void setMidiChannel9isDrum(bool isDrum) override;
+    muse::async::Channel<bool> midiChannel9isDrumChanged() const override;
+
     void setMidiImportOperationsFile(const std::optional<muse::io::path_t>& filePath) const override;
 
     // export
@@ -48,6 +52,7 @@ public:
 
 private:
     muse::async::Channel<int> m_midiShortestNoteChanged;
+    muse::async::Channel<bool> m_midiChannel9isDrumChanged;
 };
 }
 
