@@ -56,6 +56,7 @@ void PropertyItem::updateCurrentValue(const QVariant& currentValue)
 void PropertyItem::resetToDefault()
 {
     setValue(m_defaultValue);
+    emit resetToDefaultRequested();
 }
 
 void PropertyItem::applyToStyle()

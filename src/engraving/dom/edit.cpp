@@ -5502,9 +5502,26 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
     }
 }
 
+void Score::undoResetPlayCountTextSettings(BarLine* bl)
+{
+    if (!bl || !bl->segment()) {
+        return;
+    }
+    Segment* seg = bl->segment();
+
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        BarLine* curBl = toBarLine(seg->element(staff2track(staffIdx)));
+
+        if (!curBl) {
+            continue;
+        }
+
+        curBl->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::AUTO);
+    }
+}
+
 void Score::undoUpdatePlayCountText(Measure* m)
 {
-    // TODO PARTS
     if (!m || !m->repeatEnd()) {
         return;
     }

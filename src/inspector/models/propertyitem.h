@@ -75,6 +75,7 @@ signals:
     void isStyledChanged();
     void isVisibleChanged(bool isVisible);
     void isModifiedChanged(bool isModified);
+    void resetToDefaultRequested();
 
     void propertyModified(mu::engraving::Pid propertyId, QVariant newValue);
     void applyToStyleRequested(mu::engraving::Sid styledId, QVariant newStyleValue);

@@ -519,6 +519,7 @@ public:
     void undoChangeStyleValues(std::unordered_map<Sid, PropertyValue> values);
     void undoChangePageNumberOffset(int po);
     void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t _staff);
+    void undoResetPlayCountTextSettings(BarLine* bl);
     void undoUpdatePlayCountText(Measure* m);
     void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves, bool replace = false);
 
