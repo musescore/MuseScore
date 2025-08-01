@@ -23,7 +23,7 @@
 
 #include "global/translation.h"
 
-#include "synthesizers/fluidsynth/fluidsoundfontparser.h"
+#include "audio/worker/internal/synthesizers/fluidsynth/fluidsoundfontparser.h"
 
 #include "log.h"
 

@@ -27,8 +27,9 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "audio/common/audiotypes.h"
+
 #include "isynthesizer.h"
-#include "audiotypes.h"
 
 namespace muse::audio::synth {
 class ISynthResolver : MODULE_EXPORT_INTERFACE

@@ -25,7 +25,7 @@
 
 #include <memory>
 
-#include "audio/internal/abstractsynthesizer.h"
+#include "audio/worker/internal/synthesizers/abstractsynthesizer.h"
 #include "async/channel.h"
 
 #include "libhandler.h"
@@ -36,7 +36,7 @@
 #include "timer.h"
 
 namespace muse::musesampler {
-class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, public IMuseSamplerTracks
+class MuseSamplerWrapper : public audio::synth::AbstractSynthesizer, public IMuseSamplerTracks
 {
 public:
     MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params,

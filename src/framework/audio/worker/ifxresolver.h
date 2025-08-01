@@ -27,8 +27,8 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "audio/common/audiotypes.h"
 #include "ifxprocessor.h"
-#include "audiotypes.h"
 
 namespace muse::audio::fx {
 class IFxResolver : MODULE_EXPORT_INTERFACE

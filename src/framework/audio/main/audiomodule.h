@@ -30,14 +30,6 @@
 
 #include "../iaudiodriver.h"
 
-namespace muse::audio::fx {
-class FxResolver;
-}
-
-namespace muse::audio::synth  {
-class SynthResolver;
-}
-
 namespace muse::audio::worker  {
 class AudioWorkerModule;
 }
@@ -78,9 +70,6 @@ private:
     std::shared_ptr<AudioThread> m_audioWorker;
     std::shared_ptr<AudioBuffer> m_audioBuffer;
     std::shared_ptr<AudioOutputDeviceController> m_audioOutputController;
-
-    std::shared_ptr<fx::FxResolver> m_fxResolver;
-    std::shared_ptr<synth::SynthResolver> m_synthResolver;
 
     std::shared_ptr<Playback> m_mainPlayback; // facade
 

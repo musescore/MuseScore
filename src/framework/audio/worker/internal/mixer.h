@@ -31,10 +31,10 @@
 
 #include "abstractaudiosource.h"
 
-#include "../../ifxresolver.h"
 #include "../../iaudioconfiguration.h"
 
 #include "../iclock.h"
+#include "../ifxresolver.h"
 
 #include "dsp/limiter.h"
 #include "mixerchannel.h"
