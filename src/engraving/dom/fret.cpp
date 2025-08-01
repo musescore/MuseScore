@@ -73,8 +73,29 @@ static const ElementStyle fretStyle {
 //   FretDiagram
 //---------------------------------------------------------
 
-static std::unordered_map<String, String> s_harmonyToDiagramMap;
-static std::unordered_map<String, std::vector<String> > s_diagramPatternToHarmoniesMap;
+struct HarmonyMapKey
+{
+    HarmonyMapKey() {}
+    HarmonyMapKey(int k, int r, int b)
+        : keys(k), rootTpc(r), bassTpc(b) {}
+
+    int keys = 0;
+    int rootTpc = Tpc::TPC_INVALID;
+    int bassTpc = Tpc::TPC_INVALID;
+
+    bool operator<(const HarmonyMapKey& other) const
+    {
+        return std::tie(keys, rootTpc, bassTpc) < std::tie(other.keys, other.rootTpc, other.bassTpc);
+    }
+
+    bool operator==(const HarmonyMapKey& other) const
+    {
+        return std::tie(keys, rootTpc, bassTpc) == std::tie(other.keys, other.rootTpc, other.bassTpc);
+    }
+};
+
+static std::map<HarmonyMapKey /*key*/, String /*harmonyXml*/> s_harmonyToDiagramMap;
+static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/> > s_diagramPatternToHarmoniesMap;
 
 static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
 
@@ -83,6 +104,41 @@ static const String blankPattern(int strings)
     std::vector<Char> blank(strings, Char('-'));
     String pattern(blank.data(), blank.size());
     return pattern;
+}
+
+static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType, const ChordList* cl)
+{
+    String s = harmony;
+    NoteCaseType noteCase;
+    size_t idx;
+    int rootTpc = convertNote(s, spellingType, noteCase, idx);
+
+    int bassTpc = Tpc::TPC_INVALID;
+    size_t slash = s.lastIndexOf(u'/');
+    if (slash != muse::nidx) {
+        String bs = s.mid(slash + 1).simplified();
+        s = s.mid(idx, slash - idx).simplified();
+        size_t idx2 = 0;
+        bassTpc = convertNote(bs, spellingType, noteCase, idx2);
+
+        if (!tpcIsValid(bassTpc)) {
+            // if what follows after slash is not (just) a TPC
+            // then reassemble chord and try to parse with the slash
+            s = s + u"/" + bs;
+        }
+    } else {
+        s = s.mid(idx);
+    }
+
+    ParsedChord chord;
+    HarmonyMapKey mapKey;
+    if (!chord.parse(s, cl)) {
+        LOGE() << "Error parse " << harmony;
+    }
+
+    int keys = chord.keys();
+
+    return HarmonyMapKey(keys, rootTpc, bassTpc);
 }
 
 FretDiagram::FretDiagram(Segment* parent)
@@ -172,16 +228,11 @@ void FretDiagram::updateDiagram(const String& harmonyName)
     String _harmonyName = harmonyName;
 
     NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
-    if (spellingType != NoteSpellingType::STANDARD) {
-        NoteCaseType noteCase;
-        size_t idx;
-        int tpc = convertNote(harmonyName, spellingType, noteCase, idx);
-        String acc = _harmonyName.mid(idx);
 
-        _harmonyName = tpc2name(tpc, NoteSpellingType::STANDARD, noteCase) + acc;
-    }
+    ParsedChord chord;
+    HarmonyMapKey key = createHarmonyMapKey(_harmonyName, spellingType, score()->chordList());
 
-    String diagramXml = muse::value(s_harmonyToDiagramMap, _harmonyName.toLower());
+    String diagramXml = muse::value(s_harmonyToDiagramMap, key);
 
     if (diagramXml.empty()) {
         return;
@@ -1345,8 +1396,14 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) con
                        read460::HarmonyToDiagramReader::FretDiagramInfo> harmonyToDiagramMap
         = read460::HarmonyToDiagramReader::read(reader);
 
+    const ChordList* chordList = score()->chordList();
+    const NoteSpellingType spellingType = NoteSpellingType::STANDARD;
+
     for (auto& [key, value] : harmonyToDiagramMap) {
-        s_harmonyToDiagramMap.insert({ key, value.xml });
+        ParsedChord chord;
+        HarmonyMapKey mapKey = createHarmonyMapKey(key, spellingType, chordList);
+
+        s_harmonyToDiagramMap.insert({ mapKey, value.xml });
         s_diagramPatternToHarmoniesMap[value.pattern].push_back(key);
     }
 }

@@ -298,8 +298,12 @@ void HChord::add(const std::vector<HDegree>& degreeList)
     };
     // factor in the degrees
     for (const HDegree& d : degreeList) {
-        int dv  = degreeTable[(d.value() - 1) % 7] + d.alter();
-        int dv1 = degreeTable[(d.value() - 1) % 7];
+        int i = (d.value() - 1) % 7;
+        if (i < 0) {
+            continue; // ?
+        }
+        int dv  = degreeTable[i] + d.alter();
+        int dv1 = degreeTable[i];
 
         if (d.value() == 7 && d.alter() == 0) {
             dv -= 1;
@@ -919,7 +923,8 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             addPending = true;
             continue;
         }
-        if (tok1L == "sus") {
+        // When there are no numbers after, default to sus4 further down
+        if (tok1L == "sus" && i != len) {
             addToken(tok1, ChordTokenClass::MODIFIER);
             susPending = true;
             continue;
@@ -1243,9 +1248,17 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                     hdl.push_back(HDegree(d, 0, HDegreeType::SUBTRACT));
                 }
                 if (tok1L == "#") {
-                    hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
+                    if (d == 7) {
+                        m_chord += 11;
+                    } else {
+                        hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
+                    }
                 } else if (tok1L == "b") {
-                    hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
+                    if (d == 7) {
+                        m_chord += 10;
+                    } else {
+                        hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
+                    }
                 }
             }
             if (!degree.empty()) {
@@ -1600,7 +1613,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
     static const std::wregex SUS_ADD_REGEX = std::wregex(L"sus|add");
     bool stackSusOrAdd = false;
     for (const String& mod : m_modifierList) {
-        if (!mod.contains(SUS_ADD_REGEX)) {
+        if (!stackModifiersEnabled || !mod.contains(SUS_ADD_REGEX)) {
             continue;
         }
         if (!stackSusOrAdd) {

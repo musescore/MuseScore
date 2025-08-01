@@ -7778,7 +7778,7 @@ void NotationInteraction::addFretboardDiagram()
         if (element->isHarmony()) {
             Harmony* harmony = toHarmony(element);
 
-            diagram->updateDiagram(harmony->plainText());
+            diagram->updateDiagram(harmony->harmonyName());
             score->undo(new FretLinkHarmony(diagram, harmony));
         } else {
             // add blank diagram
