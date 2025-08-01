@@ -899,7 +899,6 @@
           <Breath>
             <symbol>caesura</symbol>
             <eid>xC_xC</eid>
-            <placement>below</placement>
             </Breath>
           <Rest>
             <eid>yC_yC</eid>
@@ -1779,7 +1778,6 @@
           <Breath>
             <symbol>caesura</symbol>
             <eid>cF_cF</eid>
-            <placement>below</placement>
             </Breath>
           <Rest>
             <eid>dF_dF</eid>
