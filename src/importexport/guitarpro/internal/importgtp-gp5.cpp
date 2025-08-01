@@ -36,6 +36,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/glissando.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/lyrics.h"
@@ -994,30 +995,8 @@ bool GuitarPro5::read(IODevice* io)
                         if (br) {
                             break;
                         }
-                        Glissando* s = mu::engraving::Factory::createGlissando(n);
-                        s->setAnchor(Spanner::Anchor::NOTE);
-                        s->setStartElement(n);
-                        s->setTick(n->chord()->segment()->tick());
-                        s->setTrack(n->track());
-                        s->setParent(n);
-                        s->setGlissandoType(GlissandoType::STRAIGHT);
-                        s->setGlissandoShift(true);
-                        s->setEndElement(nt);
-                        s->setTick2(nt->chord()->segment()->tick());
-                        s->setTrack2(n->track());
 
-                        for (Spanner* spanner : n->chord()->startingSpanners()) {
-                            if (spanner && spanner->isSlur()) {
-                                Slur* slur = toSlur(spanner);
-                                if (slur->endElement() == nt->chord()) {
-                                    slur->setConnectedElement(mu::engraving::Slur::ConnectedElement::GLISSANDO);
-                                    s->setGlissandoShift(false);
-                                    break;
-                                }
-                            }
-                        }
-
-                        score->addElement(s);
+                        m_glissandoNotePairs.push_back({ n, nt });
                         br = true;
                         break;
                     }
@@ -1080,6 +1059,7 @@ bool GuitarPro5::read(IODevice* io)
 
     m_continiousElementsBuilder->addElementsToScore();
     m_guitarBendImporter->applyBendsToChords();
+    addGlissandos();
 
     return true;
 }
@@ -1656,6 +1636,64 @@ float GuitarPro5::naturalHarmonicFromFret(int fret)
         return 21.7f;
     default:
         return 12.0f;
+    }
+}
+
+void GuitarPro5::addGlissandos()
+{
+    for (auto& [startNote, endNote] : m_glissandoNotePairs) {
+        Note* currentStart = startNote;
+        if (startNote->bendFor()) {
+            Note* bendNote = startNote;
+            GuitarBend* bend = bendNote->bendFor();
+
+            while (bend) {
+                bendNote = bend->endNote();
+                IF_ASSERT_FAILED(bendNote) {
+                    LOGE() << "glissando start note may be incorrect";
+                    break;
+                }
+
+                if (!bendNote->chord()->isGraceAfter()) {
+                    break;
+                }
+
+                currentStart = bendNote;
+                bend = bendNote->bendFor();
+            }
+        }
+
+        Glissando* gliss = mu::engraving::Factory::createGlissando(currentStart);
+        gliss->setAnchor(Spanner::Anchor::NOTE);
+        gliss->setStartElement(currentStart);
+        gliss->setTick(currentStart->tick());
+        gliss->setTrack(currentStart->track());
+        gliss->setParent(currentStart);
+        gliss->setGlissandoType(GlissandoType::STRAIGHT);
+        gliss->setGlissandoShift(true);
+        gliss->setEndElement(endNote);
+        gliss->setTick2(endNote->tick());
+        gliss->setTrack2(endNote->track());
+        score->addElement(gliss);
+
+        std::vector<std::pair<Slur*, Note*> > movedSlurs;
+        for (Spanner* spanner : startNote->chord()->startingSpanners()) {
+            if (spanner && spanner->isSlur()) {
+                Slur* slur = toSlur(spanner);
+                if (slur->endElement() == endNote->chord()) {
+                    gliss->setGlissandoShift(false);
+                    slur->setConnectedElement(mu::engraving::Slur::ConnectedElement::GLISSANDO);
+                    movedSlurs.push_back({ slur, currentStart });
+                    break;
+                }
+            }
+        }
+
+        for (auto& [slur, note] : movedSlurs) {
+            slur->setStartElement(note->chord());
+            slur->setTick(note->tick());
+            slur->setTrack(note->track());
+        }
     }
 }
 } // namespace mu::iex::guitarpro
