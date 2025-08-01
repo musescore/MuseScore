@@ -191,18 +191,16 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenuItem("file-new"),
         makeMenuItem("file-open"),
         makeMenu(TranslatableString("appshell/menu/file", "Open &recent"), recentScoresList, "menu-file-open", openRecentEnabled),
-        makeSeparator(),
         makeMenuItem("file-close"),
+        makeSeparator(),
         makeMenuItem("file-save"),
         makeMenuItem("file-save-as"),
-        makeMenuItem("file-save-a-copy"),
-        makeMenuItem("file-save-selection"),
         makeMenuItem("file-save-to-cloud"),
-        makeMenuItem("file-publish"),
+        makeMenu(TranslatableString("appshell/menu/file", "Save o&ther"), makeSaveOtherSubItems()),
+        makeMenu(TranslatableString("appshell/menu/file", "Pu&blish online"), makePublishOnlineSubItems()),
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
         makeMenuItem("file-export"),
-        makeMenuItem("file-share-audio"),
         makeSeparator(),
         makeMenuItem("project-properties"),
         makeMenuItem("parts", TranslatableString("action", "Parts…")),
@@ -213,6 +211,24 @@ MenuItem* AppMenuModel::makeFileMenu()
     };
 
     return makeMenu(TranslatableString("appshell/menu/file", "&File"), fileItems, "menu-file");
+}
+
+MenuItemList AppMenuModel::makeSaveOtherSubItems()
+{
+    MenuItemList subItems {
+        makeMenuItem("file-save-a-copy"),
+        makeMenuItem("file-save-selection"),
+    };
+    return subItems;
+}
+
+MenuItemList AppMenuModel::makePublishOnlineSubItems()
+{
+    MenuItemList subItems {
+        makeMenuItem("file-publish"),
+        makeMenuItem("file-share-audio"),
+    };
+    return subItems;
 }
 
 MenuItem* AppMenuModel::makeEditMenu()
