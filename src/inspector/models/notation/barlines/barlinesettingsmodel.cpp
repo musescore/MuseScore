@@ -75,6 +75,12 @@ void BarlineSettingsModel::createProperties()
 
         m_playCountText->setValue(text.toQString());
     });
+
+    connect(m_playCount, &PropertyItem::resetToDefaultRequested, this, [this]() {
+        m_playCountTextSetting->resetToDefault();
+        BarLine* bl = toBarLine(m_elementList.front());
+        bl->score()->undoResetPlayCountTextSettings(bl);
+    });
 }
 
 void BarlineSettingsModel::requestElements()
