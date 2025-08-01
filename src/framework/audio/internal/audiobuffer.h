@@ -27,7 +27,7 @@
 #include <atomic>
 
 #include "audio/worker/iaudiosource.h"
-#include "audio//common/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 //!Note Somehow clang has this define, but doesn't have symbols for std::hardware_destructive_interference_size
 #if defined(__cpp_lib_hardware_interference_size) && !defined(Q_OS_MACOS)

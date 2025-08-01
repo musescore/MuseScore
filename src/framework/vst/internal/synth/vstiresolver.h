@@ -23,10 +23,8 @@
 #ifndef MUSE_VST_VSTIRESOLVER_H
 #define MUSE_VST_VSTIRESOLVER_H
 
-#include <map>
-
 #include "modularity/ioc.h"
-#include "audio/isynthresolver.h"
+#include "audio/worker/isynthresolver.h"
 
 #include "../../ivstinstancesregister.h"
 #include "../../ivstmodulesrepository.h"

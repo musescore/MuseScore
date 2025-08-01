@@ -24,13 +24,14 @@
 
 #include "global/async/channel.h"
 #include "global/async/asyncable.h"
-#include "global/modularity/ioc.h"
 #include "mpe/events.h"
 
-#include "../audiotypes.h"
-#include "../isynthesizer.h"
-#include "../iaudioconfiguration.h"
-#include "audio/worker/iaudioengine.h"
+#include "global/modularity/ioc.h"
+#include "../../iaudioengine.h"
+#include "audio/iaudioconfiguration.h"
+
+#include "audio/common/audiotypes.h"
+#include "../../isynthesizer.h"
 
 namespace muse::audio::synth {
 class AbstractSynthesizer : public ISynthesizer, public Injectable, public async::Asyncable

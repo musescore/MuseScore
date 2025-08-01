@@ -29,10 +29,10 @@
 #include "global/async/asyncable.h"
 #include "mpe/events.h"
 
-#include "audiosanitizer.h"
-#include "../audiotypes.h"
+#include "audio/common/audiosanitizer.h"
+#include "audio/common/audiotypes.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 template<class ... Types>
 class AbstractEventSequencer : public async::Asyncable
 {
