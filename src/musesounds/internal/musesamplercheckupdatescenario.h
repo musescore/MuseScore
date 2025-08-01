@@ -25,23 +25,25 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "global/iinteractive.h"
-#include "actions/iactionsdispatcher.h"
-#include "imusesoundsconfiguration.h"
-#include "global/iglobalconfiguration.h"
-#include "multiinstances/imultiinstancesprovider.h"
 
 #include "imusesamplercheckupdateservice.h"
+#include "imusesoundsconfiguration.h"
+#include "global/iinteractive.h"
+#include "global/iprocess.h"
+#include "global/iglobalconfiguration.h"
+#include "actions/iactionsdispatcher.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::musesounds {
 class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, public muse::Injectable, public muse::async::Asyncable
 {
     Inject<IMuseSamplerCheckUpdateService> service = { this };
-    Inject<muse::IInteractive> interactive = { this };
-    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     Inject<IMuseSoundsConfiguration> configuration = { this };
+    Inject<muse::IInteractive> interactive = { this };
+    Inject<muse::IProcess> process = { this };
     Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
-    muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
 
 public:
     MuseSamplerCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
