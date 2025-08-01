@@ -26,8 +26,8 @@
 #include "global/async/asyncable.h"
 #include "global/async/notification.h"
 
-#include "../../ifxresolver.h"
-#include "../../ifxprocessor.h"
+#include "../ifxresolver.h"
+#include "../ifxprocessor.h"
 #include "dsp/compressor.h"
 #include "track.h"
 

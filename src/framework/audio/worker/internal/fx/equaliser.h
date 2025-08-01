@@ -22,7 +22,7 @@
 #ifndef MUSE_AUDIO_EQUALISER_H
 #define MUSE_AUDIO_EQUALISER_H
 
-#include "ifxprocessor.h"
+#include "../../ifxprocessor.h"
 
 namespace muse::audio::fx {
 class Equaliser : public IFxProcessor

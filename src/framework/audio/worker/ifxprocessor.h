@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include "audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio {
 class IFxProcessor

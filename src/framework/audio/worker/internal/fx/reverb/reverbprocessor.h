@@ -28,7 +28,7 @@
 #include <utility>
 #include <vector>
 
-#include "ifxprocessor.h"
+#include "../../../ifxprocessor.h"
 
 namespace muse::audio::fx {
 class ReverbProcessor : public IFxProcessor

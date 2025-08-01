@@ -18,6 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+include(GetPlatformInfo)
+
 set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audioworkermodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audioworkermodule.h
@@ -29,6 +31,8 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isequenceio.h
     ${CMAKE_CURRENT_LIST_DIR}/itracksequence.h
     ${CMAKE_CURRENT_LIST_DIR}/isequenceplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/ifxprocessor.h
+    ${CMAKE_CURRENT_LIST_DIR}/ifxresolver.h
 
     # internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.cpp
@@ -73,6 +77,41 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/audiomathutils.h
 
     # FX
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/abstractfxresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/abstractfxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/equaliser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/equaliser.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassdispersion.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassmodulateddelay.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/circularsamplebuffer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/iirbiquadfilter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/ivndecorrelation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/ivndecorrelation.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbfilters.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbmatrices.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sampledelay.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/smoothlinearvalue.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sparsefirfilter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/vectorops.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.h
 )
+
+if (ARCH_IS_X86_64)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_sse2.h
+        )
+elseif (ARCH_IS_AARCH64)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_neon.h
+        )
+else ()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
+        )
+endif()

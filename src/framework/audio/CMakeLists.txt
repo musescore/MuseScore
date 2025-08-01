@@ -93,14 +93,10 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiothreadsecurer.h
-    ${CMAKE_CURRENT_LIST_DIR}/ifxprocessor.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/soundfonttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/audioutils.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/ifxresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/abstractfxresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/abstractfxresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
@@ -124,27 +120,6 @@ set(MODULE_SRC
 
     # Driver
     ${DRIVER_SRC}
-
-    # fx
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/musefxresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassdispersion.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/allpassmodulateddelay.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/circularsamplebuffer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/iirbiquadfilter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/ivndecorrelation.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/ivndecorrelation.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbfilters.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbmatrices.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sampledelay.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/smoothlinearvalue.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/sparsefirfilter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/vectorops.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.h
 
     # Synthesizers
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/soundmapping.h
@@ -207,20 +182,6 @@ if (MUSE_MODULE_AUDIO_EXPORT)
         ${MODULE_LINK}
         ${FLAC_TARGETS}
     )
-endif()
-
-if (ARCH_IS_X86_64)
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_sse2.h
-        )
-elseif (ARCH_IS_AARCH64)
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_neon.h
-        )
-else ()
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
-        )
 endif()
 
 if (MUSE_MODULE_AUDIO_JACK)

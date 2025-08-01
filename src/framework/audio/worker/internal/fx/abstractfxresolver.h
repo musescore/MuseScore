@@ -26,8 +26,8 @@
 #include <map>
 #include <unordered_map>
 
-#include "ifxresolver.h"
-#include "ifxprocessor.h"
+#include "../../ifxresolver.h"
+#include "../../ifxprocessor.h"
 
 namespace muse::audio::fx {
 class AbstractFxResolver : public IFxResolver::IResolver
