@@ -125,7 +125,7 @@ QAccessible::State AccessibleItemInterface::state() const
         return state;
     }
 
-    IAccessible::Role r = m_object->item()->accessibleRole();
+    IAccessible::Role r = item->accessibleRole();
     switch (r) {
     case IAccessible::Role::NoRole: break;
     case IAccessible::Role::Application: {
@@ -213,6 +213,17 @@ QAccessible::State AccessibleItemInterface::state() const
     } break;
     }
 
+    if (IAccessible* pretendFocus = m_object->controller().lock()->pretendFocus()) {
+        if (item == pretendFocus) {
+            // Pretend to have focus.
+            state.focusable = true;
+            state.focused = true;
+        } else {
+            // Pretend to not have focus.
+            state.focused = false;
+        }
+    }
+
     return state;
 }
 
@@ -223,7 +234,13 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::NoRole: return QAccessible::NoRole;
     case IAccessible::Role::Application: return QAccessible::Application;
     case IAccessible::Role::Dialog: return QAccessible::Dialog;
-    case IAccessible::Role::Panel: return QAccessible::Pane;
+    case IAccessible::Role::Panel:
+#if defined(Q_OS_WIN)
+        // Narrator: Don't say the panel name twice when changing panels.
+        return QAccessible::StaticText;
+#else
+        return QAccessible::Pane;
+#endif
     case IAccessible::Role::StaticText: return QAccessible::StaticText;
     case IAccessible::Role::SilentRole: {
         // See https://doc.qt.io/qt-5/qaccessible.html#Role-enum
@@ -269,31 +286,45 @@ QAccessible::Role AccessibleItemInterface::role() const
 
 QString AccessibleItemInterface::text(QAccessible::Text textType) const
 {
+    // NOTE: Handling of text types must match AccessibilityController::propertyChanged().
     switch (textType) {
     case QAccessible::Name: {
+        QString ann = announcement();
+        if (!ann.isEmpty()) {
+            return ann;
+        }
         QString name = m_object->item()->accessibleName();
 #if defined(Q_OS_MACOS)
         // VoiceOver doesn't speak descriptions so add it to name instead.
-        QString description = m_object->item()->accessibleDescription();
-        if (!description.isEmpty() && description != name) {
-            name += ", " + description;
+        QString desc = description();
+        if (!desc.isEmpty()) {
+            name += ", " + desc;
         }
 #endif
-        if (m_object->controller().lock()->needToVoicePanelInfo()) {
-            QString panelName = m_object->controller().lock()->currentPanelAccessibleName();
-            if (!panelName.isEmpty()) {
-                name.prepend(panelName + " " + muse::qtrc("accessibility", "Panel") + ", ");
+        if (auto controller = m_object->controller().lock()) {
+            if (m_object->item() == controller->lastFocused() && controller->needToVoicePanelInfo()) {
+                QString panelName = controller->currentPanelAccessibleName();
+                if (!panelName.isEmpty()) {
+                    name.prepend(muse::qtrc("accessibility", "%1 panel").arg(panelName) + ", ");
+                }
             }
         }
         return name;
     }
+#if !defined(Q_OS_MACOS) // Give description separately to name.
 #if defined(Q_OS_WINDOWS)
     // Narrator doesn't read descriptions but it does read accelerators.
-    // NVDA reads both so it should be safe to give just an Accelerator.
-    case QAccessible::Accelerator: return m_object->item()->accessibleDescription();
-#elif !defined(Q_OS_MACOS)
+    // NVDA reads both so it should be safe to give just an accelerator.
+    case QAccessible::Accelerator: {
+#else
     //  Orca on Linux does read descriptions.
-    case QAccessible::Description: return m_object->item()->accessibleDescription();
+    case QAccessible::Description: {
+#endif
+        if (!announcement().isEmpty()) {
+            break; // Don't say description after an announcement.
+        }
+        return description();
+    }
 #endif
     default: break;
     }
@@ -503,4 +534,28 @@ IAccessible::TextBoundaryType AccessibleItemInterface::muBoundaryType(QAccessibl
     }
 
     return IAccessible::NoBoundary;
+}
+
+QString AccessibleItemInterface::announcement() const
+{
+    if (auto controller = m_object->controller().lock()) {
+        // Announcements override the current item's accessible name.
+        if (m_object->item() == controller->lastFocused()) {
+            return controller->announcement(); // Can be empty/null.
+        }
+    }
+
+    return QString(); // Don't override the names of any other items.
+}
+
+QString AccessibleItemInterface::description() const
+{
+    IAccessible* item = m_object->item();
+    QString desc = item->accessibleDescription(); // Can be empty/null.
+
+    if (desc.isEmpty() || item->accessibleName().contains(desc, Qt::CaseInsensitive)) {
+        return QString();
+    }
+
+    return desc;
 }

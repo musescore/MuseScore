@@ -30,6 +30,7 @@
 #include "inotationinteraction.h"
 #include "inotationundostack.h"
 
+#include "framework/accessibility/iaccessibilitycontroller.h"
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
@@ -40,6 +41,7 @@ namespace mu::notation {
 class NotationNoteInput : public INotationNoteInput, public muse::Injectable, public muse::async::Asyncable
 {
     muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:
     NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack,
