@@ -94,6 +94,7 @@ public:
 
     QList<DockPanelView*> findPanelsForDropping(const DockPanelView* panel) const;
     DockPanelView* findPanelForTab(const DockPanelView* tab) const;
+    DockPanelView* findPanelForTab(const DockPanelView* tab, const QList<DockPanelView*>& panelsToSearch, bool searchClosedPanels) const;
 
     bool isDockOpen(const QString& dockName) const;
     void toggleDock(const QString& dockName);
