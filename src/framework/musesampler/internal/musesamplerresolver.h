@@ -47,6 +47,8 @@ public:
     bool reloadAllInstruments();
     void processOnlineSounds();
 
+    int buildNumber() const;
+
     muse::audio::synth::ISynthesizerPtr resolveSynth(const muse::audio::TrackId trackId,
                                                      const muse::audio::AudioInputParams& params) const override;
     bool hasCompatibleResources(const muse::audio::PlaybackSetupData& setup) const override;

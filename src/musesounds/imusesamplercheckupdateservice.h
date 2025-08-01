@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_IPROCESS_H
-#define MUSE_GLOBAL_IPROCESS_H
+#pragma once
 
-#include <string>
-#include <vector>
+#include "types/retval.h"
 
 #include "modularity/imoduleinterface.h"
 
-namespace muse {
-class IProcess : MODULE_EXPORT_INTERFACE
+#include "async/promise.h"
+
+namespace mu::musesounds {
+class IMuseSamplerCheckUpdateService : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(muse::IProcess)
+    INTERFACE_ID(IMuseSamplerCheckUpdateService)
 
 public:
-    virtual ~IProcess() = default;
+    virtual ~IMuseSamplerCheckUpdateService() = default;
 
-    virtual int execute(const std::string& program, const std::vector<std::string>& arguments = {}) = 0;
-    virtual bool startDetached(const std::string& program, const std::vector<std::string>& arguments = {}) = 0;
+    virtual bool canCheckForUpdate() const = 0;
+    virtual muse::async::Promise<muse::RetVal<bool> > checkForUpdate() = 0;
 };
 }
-
-#endif // MUSE_GLOBAL_IPROCESS_H

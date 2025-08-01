@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_IPROCESS_H
-#define MUSE_GLOBAL_IPROCESS_H
-
-#include <string>
-#include <vector>
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
-namespace muse {
-class IProcess : MODULE_EXPORT_INTERFACE
+namespace mu::musesounds {
+class IMuseSamplerCheckUpdateScenario : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(muse::IProcess)
+    INTERFACE_ID(IMuseSamplerCheckUpdateScenario)
 
 public:
-    virtual ~IProcess() = default;
+    virtual ~IMuseSamplerCheckUpdateScenario() = default;
 
-    virtual int execute(const std::string& program, const std::vector<std::string>& arguments = {}) = 0;
-    virtual bool startDetached(const std::string& program, const std::vector<std::string>& arguments = {}) = 0;
+    virtual bool alreadyChecked() const = 0;
+    virtual void checkForUpdate() = 0;
 };
 }
-
-#endif // MUSE_GLOBAL_IPROCESS_H

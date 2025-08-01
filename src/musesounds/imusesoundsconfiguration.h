@@ -40,11 +40,16 @@ public:
     virtual muse::UriQuery soundsUri() const = 0;
     virtual muse::UriQuery soundPageUri(const muse::String& soundCode) const = 0;
 
-    virtual bool needCheckForUpdate() const = 0;
+    virtual bool needCheckForMuseSoundsUpdate() const = 0;
 
-    virtual muse::UriQuery checkForMuseSoundsUpdateUrl() = 0;
+    virtual QUrl checkForMuseSoundsUpdateUrl() const = 0;
+    virtual QUrl checkForMuseSamplerUpdateUrl() const = 0;
+
+    virtual QString getMuseSamplerVersionQuery() const = 0;
 
     virtual std::string lastShownMuseSoundsReleaseVersion() const = 0;
     virtual void setLastShownMuseSoundsReleaseVersion(const std::string& version) = 0;
+
+    virtual bool museSamplerCheckForUpdateTestMode() const = 0;
 };
 }
