@@ -31,29 +31,24 @@
 #include "internal/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"
 
-#include "audio/worker/internal/audioengine.h"
-
 #include "internal/playback.h"
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
 
 #include "internal/soundfontrepository.h"
 
-// synthesizers
-#include "internal/synthesizers/fluidsynth/fluidresolver.h"
-#include "internal/synthesizers/synthresolver.h"
-
 #include "diagnostics/idiagnosticspathsregister.h"
 #include "devtools/inputlag.h"
 
 #include "audio/worker/audioworkermodule.h"
+// Temporarily for compatibility
+#include "audio/worker/internal/audioengine.h"
+#include "audio/worker/internal/synthesizers/synthresolver.h"
 
 #include "log.h"
 
 using namespace muse;
 using namespace muse::modularity;
 using namespace muse::audio;
-using namespace muse::audio::synth;
-using namespace muse::audio::fx;
 
 #ifdef MUSE_MODULE_AUDIO_JACK
 #include "internal/platform/jack/jackaudiodriver.h"
@@ -113,7 +108,6 @@ void AudioModule::registerExports()
     m_audioWorker = std::make_shared<AudioThread>();
     m_audioBuffer = std::make_shared<AudioBuffer>();
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
-    m_synthResolver = std::make_shared<SynthResolver>();
     m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
     m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
@@ -150,8 +144,6 @@ void AudioModule::registerExports()
     ioc()->registerExport<IAudioDriver>(moduleName(), m_audioDriver);
     ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), m_rpcChannel);
-
-    ioc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
 
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 
@@ -309,6 +301,8 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         AudioSanitizer::setupWorkerThread();
         ONLY_AUDIO_WORKER_THREAD;
 
+        m_workerModule->onPreInit(IApplication::RunMode::GuiApp);
+
         // Setup audio engine
         std::shared_ptr<worker::AudioEngine> audioEngine = m_workerModule->audioEngine();
         audioEngine->init(m_audioBuffer, consts);
@@ -321,9 +315,7 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
             m_audioWorker->setInterval(interval);
         });
 
-        auto fluidResolver = std::make_shared<FluidResolver>(iocContext());
-        m_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
-        m_synthResolver->init(m_configuration->defaultAudioInputParams());
+        m_workerModule->synthResolver()->init(m_configuration->defaultAudioInputParams());
 
         m_rpcChannel->initOnWorker();
 

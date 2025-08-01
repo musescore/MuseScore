@@ -27,7 +27,7 @@
 #include "mpe/events.h"
 #include "midi/miditypes.h"
 
-namespace muse::audio {
+namespace muse::audio::synth {
 struct SoundMappingKey {
     mpe::SoundId id = mpe::SoundId::Undefined;
     mpe::SoundSubCategories subCategories;

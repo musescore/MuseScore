@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_FXRESOLVERSTUB_H
 #define MU_AUDIO_FXRESOLVERSTUB_H
 
-#include "audio/ifxresolver.h"
+#include "audio/worker/ifxresolver.h"
 
 namespace muse::audio::fx {
 class FxResolverStub : public IFxResolver

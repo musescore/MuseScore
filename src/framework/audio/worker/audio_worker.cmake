@@ -33,6 +33,8 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isequenceplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxprocessor.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
 
     # internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.cpp
@@ -67,6 +69,7 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/noisesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/noisesource.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstracteventsequencer.h
 
     # DSP
     ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/envelopefilterconfig.h
@@ -100,6 +103,22 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/vectorops.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/reverbprocessor.h
+
+    # Synthesizers
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/abstractsynthesizer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/abstractsynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/soundmapping.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/sfcachedloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsequencer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsequencer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.cpp
 )
 
 if (ARCH_IS_X86_64)

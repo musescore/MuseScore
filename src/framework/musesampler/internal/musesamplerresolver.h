@@ -23,7 +23,7 @@
 #ifndef MUSE_MUSESAMPLER_MUSESAMPLERRESOLVER_H
 #define MUSE_MUSESAMPLER_MUSESAMPLERRESOLVER_H
 
-#include "audio/isynthresolver.h"
+#include "audio/worker/isynthresolver.h"
 #include "modularity/ioc.h"
 
 #include "libhandler.h"
@@ -33,7 +33,7 @@
 #include "async/notification.h"
 
 namespace muse::musesampler {
-class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Injectable
+class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Injectable
 {
     Inject<IMuseSamplerConfiguration> configuration = { this };
 
