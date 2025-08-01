@@ -22,6 +22,7 @@
       <romanNumeralFontFace>FreeSerif</romanNumeralFontFace>
       <nashvilleNumberFontFace>FreeSerif</nashvilleNumberFontFace>
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <tupletFontFace>FreeSerif</tupletFontFace>
       <tupletFontSize>10</tupletFontSize>
       <titleFontFace>FreeSerif</titleFontFace>

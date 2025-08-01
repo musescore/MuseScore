@@ -17,8 +17,8 @@
       <group-symbol>none</group-symbol>
       </part-group>
     <score-part id="P1">
-      <part-name>Guitare acoustique</part-name>
-      <part-abbreviation>Guit.</part-abbreviation>
+      <part-name print-object="no">Guitare acoustique</part-name>
+      <part-abbreviation print-object="no">Guit.</part-abbreviation>
       <score-instrument id="P1-I1">
         <instrument-name>Guitare acoustique</instrument-name>
         </score-instrument>
