@@ -44,9 +44,6 @@
 #include "internal/synthesizers/fluidsynth/fluidresolver.h"
 #include "internal/synthesizers/synthresolver.h"
 
-#include "internal/fx/fxresolver.h"
-#include "internal/fx/musefxresolver.h"
-
 #include "diagnostics/idiagnosticspathsregister.h"
 #include "devtools/inputlag.h"
 
@@ -109,7 +106,7 @@ AudioModule::AudioModule()
 
 std::string AudioModule::moduleName() const
 {
-    return "audio_engine";
+    return "audio";
 }
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
@@ -136,7 +133,6 @@ void AudioModule::registerExports()
     m_audioWorker = std::make_shared<AudioThread>();
     m_audioBuffer = std::make_shared<AudioBuffer>();
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
-    m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
     m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
@@ -176,7 +172,6 @@ void AudioModule::registerExports()
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), m_rpcChannel);
 
     ioc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
-    ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
 
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 
@@ -195,7 +190,7 @@ void AudioModule::registerUiTypes()
 
 void AudioModule::resolveImports()
 {
-    m_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
+    m_workerModule->resolveImports();
 }
 
 void AudioModule::onInit(const IApplication::RunMode& mode)

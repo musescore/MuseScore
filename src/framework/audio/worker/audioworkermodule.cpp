@@ -26,11 +26,15 @@
 #include "internal/workerplayback.h"
 #include "internal/workerchannelcontroller.h"
 
+#include "internal/fx/fxresolver.h"
+#include "internal/fx/musefxresolver.h"
+
 #include "audio/common/audiosanitizer.h"
 
 using namespace muse;
 using namespace muse::modularity;
 using namespace muse::audio::worker;
+using namespace muse::audio::fx;
 
 std::string AudioWorkerModule::moduleName() const
 {
@@ -42,9 +46,16 @@ void AudioWorkerModule::registerExports()
     m_audioEngine = std::make_shared<AudioEngine>();
     m_workerPlayback = std::make_shared<WorkerPlayback>(iocContext());
     m_workerChannelController  = std::make_shared<WorkerChannelController>();
+    m_fxResolver = std::make_shared<FxResolver>();
 
     ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
     ioc()->registerExport<IWorkerPlayback>(moduleName(), m_workerPlayback);
+    ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
+}
+
+void AudioWorkerModule::resolveImports()
+{
+    m_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
 }
 
 void AudioWorkerModule::onInit(const IApplication::RunMode&)

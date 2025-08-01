@@ -26,7 +26,7 @@
 #include <map>
 #include <mutex>
 
-#include "ifxresolver.h"
+#include "../../ifxresolver.h"
 
 namespace muse::audio::fx {
 class FxResolver : public IFxResolver
