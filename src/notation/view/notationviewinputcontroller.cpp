@@ -50,7 +50,7 @@ static bool seekAllowed(const mu::engraving::EngravingItem* element)
         return false;
     }
 
-    static const ElementTypeSet playableTypes = {
+    static const ElementTypeSet ALLOWED_TYPES {
         ElementType::NOTE,
         ElementType::REST,
         ElementType::MMREST,
@@ -58,7 +58,7 @@ static bool seekAllowed(const mu::engraving::EngravingItem* element)
         ElementType::BAR_LINE
     };
 
-    return muse::contains(playableTypes, element->type());
+    return muse::contains(ALLOWED_TYPES, element->type());
 }
 
 NotationViewInputController::NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx)
@@ -1525,18 +1525,17 @@ void NotationViewInputController::updateShadowNotePopupVisibility(bool forceHide
 
 EngravingItem* NotationViewInputController::resolveStartPlayableElement() const
 {
-    EngravingItem* hitElement = hitElementContext().element;
-
     if (playbackController()->isPlaying()) {
+        EngravingItem* hitElement = hitElementContext().element;
         return seekAllowed(hitElement) ? hitElement : nullptr;
     }
 
     INotationSelectionPtr selection = viewInteraction()->selection();
     if (!selection->isRange()) {
-        return hitElement;
+        return selection->element();
     }
 
-    EngravingItem* playbackStartElement = hitElement;
+    EngravingItem* playbackStartElement = hitElementContext().element;
 
     for (EngravingItem* element: selection->elements()) {
         if (!element || element == playbackStartElement) {
