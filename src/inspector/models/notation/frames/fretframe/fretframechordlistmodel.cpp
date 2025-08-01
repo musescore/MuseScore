@@ -47,7 +47,7 @@ void FretFrameChordListModel::load()
     auto harmonyName = [](const Harmony* harmony) {
         QString name;
         for (const TextSegment* segment : harmony->ldata()->textList()) {
-            name += segment->text();
+            name += segment->text().toQString();
         }
 
         return name;
