@@ -450,9 +450,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
-    .WillOnce(ReturnRef(newContext));
+    .Times(1)
+    .WillOnce(ReturnRef(oldContext));
 
     //! [GIVEN] There isn't a range selection
     ON_CALL(*m_selection, isRange())
@@ -460,6 +459,9 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
 
     ON_CALL(*m_selection, elements())
     .WillByDefault(ReturnRef(selectedElements));
+
+    ON_CALL(*m_selection, element())
+    .WillByDefault(Return(selectedElements.front()));
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -690,9 +692,11 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
-    .WillOnce(ReturnRef(newContext));
+    .Times(1)
+    .WillOnce(ReturnRef(oldContext));
+
+    ON_CALL(*m_selection, element())
+    .WillByDefault(Return(oldContext.element));
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
