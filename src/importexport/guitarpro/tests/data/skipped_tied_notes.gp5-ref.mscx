@@ -33,13 +33,13 @@
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
-          <string>29</string>
-          <string>34</string>
-          <string>39</string>
-          <string>44</string>
-          <string>49</string>
-          <string>54</string>
-          <string>58</string>
+          <string>35</string>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
           </StringData>
         <Channel>
           <program value="29"/>
@@ -70,23 +70,39 @@
             <velocity>96</velocity>
             <eid>H_H</eid>
             </Dynamic>
-          <Beam>
+          <StringTunings>
+            <visibleStrings></visibleStrings>
+            <StringData>
+              <frets>24</frets>
+              <string>29</string>
+              <string>34</string>
+              <string>39</string>
+              <string>44</string>
+              <string>49</string>
+              <string>54</string>
+              <string>58</string>
+              </StringData>
             <eid>I_I</eid>
+            <style>string_tunings</style>
+            <text/>
+            </StringTunings>
+          <Beam>
+            <eid>J_J</eid>
             <l1>-10</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>L_L</eid>
+                <eid>M_M</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>M_M</eid>
+                  <eid>N_N</eid>
                   </Tie>
                 <next>
                   <location>
@@ -101,13 +117,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>P_P</eid>
+                  <eid>Q_Q</eid>
                   </Tie>
                 <next>
                   <location>
@@ -128,14 +144,14 @@
               <string>5</string>
               </Note>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>R_R</eid>
+                <eid>S_S</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>S_S</eid>
+                  <eid>T_T</eid>
                   </Tie>
                 <next>
                   <location>
@@ -150,10 +166,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -167,10 +183,10 @@
               <string>5</string>
               </Note>
             <Note>
-              <eid>V_V</eid>
+              <eid>W_W</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>W_W</eid>
+                  <eid>X_X</eid>
                   </Tie>
                 <next>
                   <location>
@@ -193,10 +209,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -212,7 +228,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
