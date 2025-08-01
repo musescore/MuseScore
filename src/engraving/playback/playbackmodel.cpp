@@ -60,24 +60,6 @@ static const Harmony* findChordSymbol(const EngravingItem* item)
     return nullptr;
 }
 
-static bool shouldSkipChanges(const ScoreChanges& changes)
-{
-    if (!changes.isValid() || changes.isTextEditing) {
-        return true;
-    }
-
-    if (changes.changedItems.size() != 1) {
-        return false;
-    }
-
-    const EngravingItem* item = changes.changedItems.begin()->first;
-    if (item->isTextBase()) {
-        return toTextBase(item)->empty();
-    }
-
-    return false;
-}
-
 void PlaybackModel::load(Score* score)
 {
     TRACEFUNC;
@@ -934,6 +916,33 @@ void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const mu
     for (auto it = lowerBound; it != upperBound && it != trackPlaybackData.originEvents.end();) {
         it = trackPlaybackData.originEvents.erase(it);
     }
+}
+
+bool PlaybackModel::shouldSkipChanges(const ScoreChanges& changes) const
+{
+    if (!changes.isValid() || changes.isTextEditing) {
+        return true;
+    }
+
+    if (changes.changedItems.size() != 1) {
+        return false;
+    }
+
+    const EngravingItem* item = changes.changedItems.begin()->first;
+    if (!item->isTextBase()) {
+        return false;
+    }
+
+    const bool empty = toTextBase(item)->empty();
+
+    if (empty && item->isHarmony() && m_playChordSymbols) {
+        const InstrumentTrackId trackId = chordSymbolsTrackId(item->part()->id());
+        if (!muse::contains(m_playbackDataMap, trackId)) {
+            return false;
+        }
+    }
+
+    return empty;
 }
 
 PlaybackModel::TrackBoundaries PlaybackModel::trackBoundaries(const ScoreChanges& changes) const
