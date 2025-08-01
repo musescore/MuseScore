@@ -2287,9 +2287,11 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
 
     track_idx_t trackIdx = chordRest->track();
 
-    for (const EngravingItem* element : chordRest->segment()->annotations()) {
-        if (element->track() == trackIdx) {
-            m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
+    if (!chordRest->isGrace()) {
+        for (const EngravingItem* element : chordRest->segment()->annotations()) {
+            if (element->track() == trackIdx) {
+                m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
+            }
         }
     }
     // Breath is handled differently
