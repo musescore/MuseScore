@@ -58,6 +58,7 @@
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "restlayout.h"
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
 #include "tremololayout.h"
@@ -1016,7 +1017,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         for (Segment& segment : measure->segments()) {
             if (segment.isChordRestType()) {
                 ChordLayout::layoutChords1(ctx, &segment, staffIdx);
-                ChordLayout::resolveVerticalRestConflicts(ctx, &segment, staffIdx);
+                RestLayout::resolveVerticalRestConflicts(ctx, &segment, staffIdx);
                 for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                     ChordRest* cr = segment.cr(staffIdx * VOICES + voice);
                     if (cr) {

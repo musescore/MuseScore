@@ -2611,6 +2611,7 @@ void TWrite::write(const Rest* item, XmlWriter& xml, WriteContext& ctx)
     writeChordRestBeam(item, xml, ctx);
     xml.startElement(item);
     writeStyledProperties(item, xml);
+    writeProperty(item, xml, Pid::ALIGN_WITH_OTHER_RESTS);
     writeProperties(static_cast<const ChordRest*>(item), xml, ctx);
     writeItems(item->el(), xml, ctx);
     bool write_dots = false;

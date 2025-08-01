@@ -1347,7 +1347,7 @@ void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Ch
         }
         if (e->isChord() && !toChordRest(e)->staffMove()) {
             chords.push_back(toChord(e));
-        } else if (e->isRest() && !toChordRest(e)->staffMove()) {
+        } else if (e->isRest() && !toChordRest(e)->staffMove() && !toRest(e)->isFullMeasureRest()) {
             rests.push_back(toRest(e));
         }
     }
@@ -1383,15 +1383,6 @@ void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::
             Chord* chord = toChord(e);
             Fraction chordEndTick = prevSegTick + chord->actualTicks();
             if (chordEndTick <= curTick) {
-                continue;
-            }
-            Measure* measure = segment->measure();
-            Segment* endSegment = measure->findSegmentR(SegmentType::ChordRest, chordEndTick);
-            if (!endSegment) {
-                continue;
-            }
-            EngravingItem* endItem = endSegment->elementAt(track);
-            if (!endItem || !endItem->isChord()) {
                 continue;
             }
 
