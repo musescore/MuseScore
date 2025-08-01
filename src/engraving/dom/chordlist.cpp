@@ -390,6 +390,10 @@ static void readRenderList(String val, std::list<RenderActionPtr>& renderList, i
             renderList.emplace_back(new RenderActionNote());
         } else if (s == u":a") {
             renderList.emplace_back(new RenderActionAccidental());
+        } else if (s == u":pl") {
+            renderList.emplace_back(new RenderActionParenLeft());
+        } else if (s == u":pr") {
+            renderList.emplace_back(new RenderActionParenRight());
         } else {
             renderList.emplace_back(new RenderActionSet(s));
         }
@@ -449,6 +453,11 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderActionPtr>& al
         case RenderAction::RenderActionType::ACCIDENTAL:
             s += u":a";
             break;
+        case RenderAction::RenderActionType::PAREN: {
+            const RenderActionParenPtr paren = std::static_pointer_cast<RenderActionParen>(a);
+            s += paren->direction() == DirectionH::LEFT ? u":pl" : u":pr";
+            break;
+        }
         case RenderAction::RenderActionType::STOPHALIGN:
             // Internal, skip
             break;
@@ -1625,7 +1634,10 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
     }
 
     bool adjust = cl ? cl->autoAdjust() : false;
-    for (const ChordToken& tok : m_tokenList) {
+    bool firstModifierToken = true;
+    bool closingParenPending = false;
+    for (auto tokIt = m_tokenList.begin(); tokIt != m_tokenList.end(); tokIt++) {
+        const ChordToken& tok = *tokIt;
         const String n = tok.names.front();
         if ((n == u"/" || n == u"," || n == u"\\") && stackSusOrAdd) {
             continue;
@@ -1637,6 +1649,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
         if (stackSusOrAdd && stackModifier && modIdx == 0) {
             curMod.remove(SUS_ADD_REGEX);
         }
+        const bool modifierEnd = curMod.endsWith(n) && modIdx != finalModIdx;
 
         std::list<RenderActionPtr > rl;
         std::list<ChordToken> definedTokens;
@@ -1683,6 +1696,23 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
 
             // Stacked modifiers
             if (stackModifier) {
+                // Pad modifier stack before
+                if (firstModifierToken) {
+                    m_renderList.emplace_back(new RenderActionMove(0.15, 0));
+                    firstModifierToken = false;
+                }
+
+                // Check if the next token is a closing paren
+                // Delay starting a new line until after the paren
+                // (parens are excluded from the modifier string)
+                const auto& nextTokIt = std::next(tokIt);
+                if (nextTokIt != m_tokenList.end() && modifierEnd) {
+                    const ChordToken& nextTok = *nextTokIt;
+                    if (nextTok.names.front() == ")") {
+                        closingParenPending = true;
+                    }
+                }
+
                 auto startsWithAcc = [](const String& s) -> bool {
                     return s.startsWith(u"b") || s.startsWith(u"#");
                 };
@@ -1744,8 +1774,9 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
             m_renderList.emplace_back(new RenderActionPopY());
             // Reset scale
             m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
-            if (curMod.endsWith(n) && modIdx != finalModIdx) {
+            if (modifierEnd != closingParenPending) {
                 modIdx++;
+                closingParenPending = false;
 
                 // Restore x position
                 m_renderList.emplace_back(new RenderActionPopX());
@@ -2293,6 +2324,12 @@ void RenderActionMoveScaled::print() const
 void RenderActionMoveXHeight::print() const
 {
     String info = String(u"up: %1").arg(m_up);
+    RenderAction::print(actionType(), info);
+}
+
+void RenderActionParen::print() const
+{
+    String info = String(u"direction: %1").arg(direction() == DirectionH::LEFT ? u"left" : u"right");
     RenderAction::print(actionType(), info);
 }
 }

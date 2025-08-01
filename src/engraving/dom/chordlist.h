@@ -123,7 +123,7 @@ private:
 struct RenderAction
 {
     enum class RenderActionType : char {
-        SET, MOVE, MOVEXHEIGHT, PUSH, POP, NOTE, ACCIDENTAL, STOPHALIGN, SCALE
+        SET, MOVE, MOVEXHEIGHT, PUSH, POP, NOTE, ACCIDENTAL, STOPHALIGN, SCALE, PAREN
     };
 
     virtual RenderActionType actionType() const = 0;
@@ -286,12 +286,33 @@ private:
     double m_scale = 1.0;
 };
 
+struct RenderActionParen : RenderAction
+{
+    virtual DirectionH direction() const = 0;
+    RenderActionType actionType() const override { return RenderActionType::PAREN; }
+
+    void print() const override;
+};
+
+struct RenderActionParenLeft : RenderActionParen
+{
+    RenderActionParenLeft() {}
+    DirectionH direction() const override { return DirectionH::LEFT; }
+};
+
+struct RenderActionParenRight : RenderActionParen
+{
+    RenderActionParenRight() {}
+    DirectionH direction() const override { return DirectionH::RIGHT; }
+};
+
 using RenderActionPtr = std::shared_ptr<RenderAction>;
 using RenderActionMovePtr = std::shared_ptr<RenderActionMove>;
 using RenderActionMoveXHeightPtr = std::shared_ptr<RenderActionMoveXHeight>;
 using RenderActionPopPtr = std::shared_ptr<RenderActionPop>;
 using RenderActionScalePtr = std::shared_ptr<RenderActionScale>;
 using RenderActionSetPtr = std::shared_ptr<RenderActionSet>;
+using RenderActionParenPtr = std::shared_ptr<RenderActionParen>;
 
 //---------------------------------------------------------
 //   ChordToken
