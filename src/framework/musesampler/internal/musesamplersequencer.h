@@ -23,7 +23,7 @@
 #ifndef MUSE_MUSESAMPLER_MUSESAMPLERSEQUENCER_H
 #define MUSE_MUSESAMPLER_MUSESAMPLERSEQUENCER_H
 
-#include "audio/internal/abstracteventsequencer.h"
+#include "audio/worker/internal/abstracteventsequencer.h"
 #include "imusesamplertracks.h"
 
 #include "internal/apitypes.h"
@@ -74,8 +74,8 @@ struct std::less<MuseSamplerEvent>
 };
 
 namespace muse::musesampler {
-class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent,
-                                                                        AuditionCCEvent>
+class MuseSamplerSequencer : public audio::worker::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent,
+                                                                          AuditionCCEvent>
 {
 public:
     void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracks* tracks, std::string&& defaultPresetCode);

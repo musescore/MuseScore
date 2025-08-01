@@ -23,7 +23,7 @@
 #ifndef MUSE_VST_VSTFXRESOLVER_H
 #define MUSE_VST_VSTFXRESOLVER_H
 
-#include "audio/abstractfxresolver.h"
+#include "audio/worker/internal/fx/abstractfxresolver.h"
 
 #include "modularity/ioc.h"
 #include "../../ivstinstancesregister.h"

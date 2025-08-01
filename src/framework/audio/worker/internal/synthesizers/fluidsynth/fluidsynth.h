@@ -30,7 +30,7 @@
 #include "global/modularity/ioc.h"
 #include "midi/imidioutport.h"
 
-#include "../../abstractsynthesizer.h"
+#include "../abstractsynthesizer.h"
 #include "fluidsequencer.h"
 
 namespace muse::audio::synth {

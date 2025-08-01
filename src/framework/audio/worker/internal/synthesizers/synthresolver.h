@@ -26,7 +26,7 @@
 #include <map>
 #include <mutex>
 
-#include "isynthresolver.h"
+#include "../../isynthresolver.h"
 
 namespace muse::audio::synth {
 class SynthResolver : public ISynthResolver

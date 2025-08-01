@@ -26,11 +26,13 @@
 #include <optional>
 #include <unordered_map>
 
+#include "../../../isynthresolver.h"
+
 #include "global/async/asyncable.h"
 #include "global/modularity/ioc.h"
 
 #include "isoundfontrepository.h"
-#include "isynthresolver.h"
+
 #include "fluidsynth.h"
 
 namespace muse::audio::synth {
