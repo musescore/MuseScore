@@ -142,8 +142,10 @@ private:
     void removeTrackEvents(const InstrumentTrackId& trackId, const muse::mpe::timestamp_t timestampFrom = -1,
                            const muse::mpe::timestamp_t timestampTo = -1);
 
-    TrackBoundaries trackBoundaries(const ScoreChanges& changesRange) const;
-    TickBoundaries tickBoundaries(const ScoreChanges& changesRange) const;
+    bool shouldSkipChanges(const ScoreChanges& changes) const;
+
+    TrackBoundaries trackBoundaries(const ScoreChanges& changes) const;
+    TickBoundaries tickBoundaries(const ScoreChanges& changes) const;
 
     const RepeatList& repeatList() const;
 
