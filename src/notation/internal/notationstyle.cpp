@@ -31,6 +31,7 @@
 #include "io/file.h"
 
 #include "log.h"
+#include "types/translatablestring.h"
 
 using namespace mu::notation;
 using namespace muse::async;

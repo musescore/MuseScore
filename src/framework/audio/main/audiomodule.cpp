@@ -21,6 +21,8 @@
  */
 #include "audiomodule.h"
 
+#include <QtEnvironmentVariables>
+
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
@@ -62,13 +64,13 @@ using namespace muse::audio::fx;
 #include "internal/platform/jack/jackaudiodriver.h"
 #endif
 
-#ifdef Q_OS_LINUX
-#include "internal/platform/lin/linuxaudiodriver.h"
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+#include "internal/platform/lin/alsaaudiodriver.h"
+#ifdef MUSE_PIPEWIRE_AUDIO_DRIVER
+#include "internal/platform/lin/pwaudiodriver.h"
+#endif
 #endif
 
-#ifdef Q_OS_FREEBSD
-#include "internal/platform/lin/linuxaudiodriver.h"
-#endif
 #ifdef Q_OS_WIN
 //#include "internal/platform/win/winmmdriver.h"
 //#include "internal/platform/win/wincoreaudiodriver.h"
@@ -110,6 +112,24 @@ std::string AudioModule::moduleName() const
     return "audio_engine";
 }
 
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+std::shared_ptr<IAudioDriver> makeLinuxAudioDriver()
+{
+#if defined(MUSE_PIPEWIRE_AUDIO_DRIVER)
+    if (!qEnvironmentVariableIsSet("MUSESCORE_FORCE_ALSA")) {
+        auto driver = std::make_shared<PwAudioDriver>();
+        if (driver->connectedToPwServer()) {
+            LOGI() << "Using audio driver: Pipewire";
+            return driver;
+        }
+    }
+#endif // MUSE_PIPEWIRE_AUDIO_DRIVER
+    LOGI() << "Using audio driver: ALSA";
+    return std::make_shared<AlsaAudioDriver>();
+}
+
+#endif // Q_OS_LINUX || Q_OS_FREEBSD
+
 void AudioModule::registerExports()
 {
     m_configuration = std::make_shared<AudioConfiguration>(iocContext());
@@ -130,7 +150,7 @@ void AudioModule::registerExports()
 #else
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
+    m_audioDriver = makeLinuxAudioDriver();
 #endif
 
 #ifdef Q_OS_WIN
