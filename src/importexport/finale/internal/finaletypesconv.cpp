@@ -49,7 +49,7 @@ ID FinaleTConv::createPartId(int partNumber)
     return "P" + std::to_string(partNumber);
 }
 
-ID FinaleTConv::createStaffId(musx::dom::InstCmper staffId)
+ID FinaleTConv::createStaffId(musx::dom::StaffCmper staffId)
 {
     return std::to_string(staffId);
 }
@@ -1264,7 +1264,7 @@ double FinaleTConv::doubleFromPercent(int percent)
     return double(percent) / 100.0;
 }
 
-double FinaleTConv::spatiumScaledFontSize(const std::shared_ptr<const FontInfo>& fontInfo)
+double FinaleTConv::spatiumScaledFontSize(const MusxInstance<FontInfo>& fontInfo)
 {
     // Finale uses music font size 24 to fill a space.
     // MuseScore uses music font size 20 to fill a space.

@@ -47,7 +47,7 @@ static const std::set<std::string_view> museScoreSMuFLFonts {
 };
 
 template <typename T>
-static std::shared_ptr<T> getDocOptions(const FinaleParser& context, const std::string& prefsName)
+static MusxInstance<T> getDocOptions(const FinaleParser& context, const std::string& prefsName)
 {
     auto result = context.musxDocument()->getOptions()->get<T>();
     if (!result) {
@@ -162,7 +162,7 @@ static void writeEvpuPointF(MStyle& style, Sid sid, Evpu xEvpu, Evpu yEvpu)
     style.set(sid, FinaleTConv::evpuToPointF(xEvpu, yEvpu));
 }
 
-static void writeFontPref(MStyle& style, const std::string& namePrefix, const std::shared_ptr<FontInfo>& fontInfo)
+static void writeFontPref(MStyle& style, const std::string& namePrefix, const MusxInstance<FontInfo>& fontInfo)
 {
     style.set(styleIdx(namePrefix + "FontFace"), String::fromStdString(fontInfo->getName()));
     style.set(styleIdx(namePrefix + "FontSize"), FinaleTConv::spatiumScaledFontSize(fontInfo));
@@ -300,7 +300,7 @@ static void writeLyricsPrefs(MStyle& style, const FinaleParser& context)
          }) {
         auto verseText = context.musxDocument()->getTexts()->get<texts::LyricsVerse>(Cmper(verseNumber));
         if (verseText && !verseText->text.empty()) {
-            auto font = verseText->getRawTextCtx(context.currentMusxPartId()).parseFirstFontInfo();
+            auto font = verseText->getRawTextCtx(verseText, context.currentMusxPartId()).parseFirstFontInfo();
             if (font) {
                 fontInfo = font;
             }
@@ -512,8 +512,8 @@ void writeMeasureNumberPrefs(MStyle& style, const FinaleParser& context)
             return (vertical >= 0) ? PlacementV::ABOVE : PlacementV::BELOW;
         };
 
-        auto processSegment = [&](const std::shared_ptr<FontInfo>& fontInfo,
-                                  const std::shared_ptr<others::Enclosure>& enclosure,
+        auto processSegment = [&](const MusxInstance<FontInfo>& fontInfo,
+                                  const MusxInstance<others::Enclosure>& enclosure,
                                   bool useEnclosure,
                                   MeasureNumberRegion::AlignJustify justification,
                                   MeasureNumberRegion::AlignJustify alignment,

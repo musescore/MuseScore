@@ -40,7 +40,7 @@ public:
     FinaleTConv() = default;
 
     static engraving::ID createPartId(int partNumber);
-    static engraving::ID createStaffId(musx::dom::InstCmper staffId);
+    static engraving::ID createStaffId(musx::dom::StaffCmper staffId);
 
     static int createFinaleVoiceId(musx::dom::LayerIndex layerIndex, bool forV2);
 
@@ -74,7 +74,7 @@ public:
     static engraving::PointF evpuToPointF(double xEvpu, double yEvpu);
     static double doubleFromEfix(double efix);
     static double doubleFromPercent(int percent);
-    static double spatiumScaledFontSize(const std::shared_ptr<const musx::dom::FontInfo>& fontInfo);
+    static double spatiumScaledFontSize(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo);
     static engraving::Spatium absoluteSpatium(double value, engraving::EngravingItem* e);
     static engraving::Spatium absoluteSpatiumFromEvpu(musx::dom::Evpu evpu, engraving::EngravingItem* e);
 };
