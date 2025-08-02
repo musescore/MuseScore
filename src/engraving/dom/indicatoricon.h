@@ -28,13 +28,12 @@ namespace mu::engraving {
 class IndicatorIcon : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, IndicatorIcon)
-    DECLARE_CLASSOF(ElementType::INDICATOR_ICON)
 
 public:
     IndicatorIcon(const ElementType& type, System* parent = nullptr, ElementFlags = ElementFlag::NOTHING);
     IndicatorIcon* clone() const override { return new IndicatorIcon(*this); }
 
-    const System* system() const { return toSystem(explicitParent()); }
+    System* system() const { return toSystem(explicitParent()); }
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<RectF> rangeRect = { "[IndicatorIcon] rangeRect", RectF() };
