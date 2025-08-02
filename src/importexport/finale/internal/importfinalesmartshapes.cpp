@@ -59,7 +59,7 @@ static const std::regex pedalRegex(R"(\bped(ale?)?\b)", std::regex_constants::ic
 static const std::regex hairpinRegex(R"(\b(((de)?cresc)|(dim))\.?\b)", std::regex_constants::icase);
 static const std::regex gtcRegex(R"(\b((rit(\.|ardando)?)|(rall(\.|entando)?))\b)", std::regex_constants::icase);
 
-ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const std::shared_ptr<musx::dom::others::SmartShapeCustomLine>& customLine)
+ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const MusxInstance<musx::dom::others::SmartShapeCustomLine>& customLine)
 {
     beginText       = context.stringFromEnigmaText(customLine->getLeftStartRawTextCtx(context.currentMusxPartId()));
     continueText    = context.stringFromEnigmaText(customLine->getLeftContRawTextCtx(context.currentMusxPartId()));
@@ -74,7 +74,7 @@ ReadableCustomLine::ReadableCustomLine(const FinaleParser& context, const std::s
             /// to decide between trill, vibrato, tremolobar. For now, assume trill.
             return ElementType::TRILL;
         }
-        // std::vector<std::shared_ptr<texts::SmartShapeText>> customLineTexts = m_doc->getTexts()->getArray<texts::SmartShapeText>();
+        // MusxInstanceList<texts::SmartShapeText> customLineTexts = m_doc->getTexts()->getArray<texts::SmartShapeText>();
         if (std::regex_search(beginText.toStdString(), pedalRegex) || std::regex_search(continueText.toStdString(), pedalRegex)
             || endText == u"*" /*maestro symbol for pedal star*/) {
             return ElementType::PEDAL;
@@ -186,9 +186,9 @@ static ElementType spannerTypeFromElements(EngravingItem* startElement, Engravin
 
 void FinaleParser::importSmartShapes()
 {
-    auto elementFromTerminationSeg = [&](const std::shared_ptr<others::SmartShape>& smartShape, bool start) -> EngravingItem* {
+    auto elementFromTerminationSeg = [&](const MusxInstance<others::SmartShape>& smartShape, bool start) -> EngravingItem* {
         logger()->logInfo(String(u"Finding spanner element..."));
-        const std::shared_ptr<others::SmartShape::TerminationSeg>& termSeg = start ? smartShape->startTermSeg : smartShape->endTermSeg;
+        const MusxInstance<others::SmartShape::TerminationSeg>& termSeg = start ? smartShape->startTermSeg : smartShape->endTermSeg;
         EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(m_currentMusxPartId);
         if (entryInfoPtr) {
             NoteNumber nn = start ? smartShape->startNoteId : smartShape->endNoteId;
@@ -221,9 +221,9 @@ void FinaleParser::importSmartShapes()
     /// @note Getting the entire array of smart shapes works for SCORE_PARTID, but if we ever need to do it for excerpts it could fail.
     /// This is because `getArray` currently cannot pull a mix of score and partially shared part instances. Adding the ability to do so
     /// would require significant refactoring of musx. -- RGP
-    std::vector<std::shared_ptr<others::SmartShape>> smartShapes = m_doc->getOthers()->getArray<others::SmartShape>(m_currentMusxPartId); //, BASE_SYSTEM_ID
+    MusxInstanceList<others::SmartShape> smartShapes = m_doc->getOthers()->getArray<others::SmartShape>(m_currentMusxPartId); //, BASE_SYSTEM_ID
     logger()->logInfo(String(u"Import smart shapes: Found %1 smart shapes").arg(smartShapes.size()));
-    for (const std::shared_ptr<others::SmartShape>& smartShape : smartShapes) {
+    for (const MusxInstance<others::SmartShape>& smartShape : smartShapes) {
         if (smartShape->shapeType == others::SmartShape::ShapeType::WordExtension
             || smartShape->shapeType == others::SmartShape::ShapeType::Hyphen) {
             // Will be handled elsewhere

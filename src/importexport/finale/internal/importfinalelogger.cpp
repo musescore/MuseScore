@@ -61,7 +61,7 @@ FinaleLogger::~FinaleLogger()
 //   musxLocation
 //---------------------------------------------------------
 
-static String musxLocation(const DocumentPtr& musxDocument, InstCmper currMusxStaff, MeasCmper currMusxMeas)
+static String musxLocation(const DocumentPtr& musxDocument, StaffCmper currMusxStaff, MeasCmper currMusxMeas)
 {
     String loc;
     if (musxDocument && currMusxStaff > 0 && currMusxMeas > 0) {
@@ -80,7 +80,7 @@ static String musxLocation(const DocumentPtr& musxDocument, InstCmper currMusxSt
 //---------------------------------------------------------
 //   logString
 //---------------------------------------------------------
-static String logString(FinaleLogger::Level level, const String& text, const DocumentPtr& musxDocument, InstCmper currMusxStaff, MeasCmper currMusxMeas)
+static String logString(FinaleLogger::Level level, const String& text, const DocumentPtr& musxDocument, StaffCmper currMusxStaff, MeasCmper currMusxMeas)
 {
     String str;
     switch (level) {
@@ -111,7 +111,7 @@ static String logString(FinaleLogger::Level level, const String& text, const Doc
  Log debug (function) trace.
  */
 
-void FinaleLogger::logDebugTrace(const String& trace, const DocumentPtr& musxDocument, MeasCmper currMusxStaff, InstCmper currMusxMeas) const
+void FinaleLogger::logDebugTrace(const String& trace, const DocumentPtr& musxDocument, MeasCmper currMusxStaff, StaffCmper currMusxMeas) const
 {
     if (m_level <= Level::MUSX_TRACE) {
         LOGD() << logString(Level::MUSX_TRACE, trace, musxDocument, currMusxStaff, currMusxMeas);
@@ -126,7 +126,7 @@ void FinaleLogger::logDebugTrace(const String& trace, const DocumentPtr& musxDoc
  Log debug \a info (non-fatal events).
  */
 
-void FinaleLogger::logInfo(const String& info, const DocumentPtr& musxDocument, InstCmper currMusxStaff, MeasCmper currMusxMeas) const
+void FinaleLogger::logInfo(const String& info, const DocumentPtr& musxDocument, StaffCmper currMusxStaff, MeasCmper currMusxMeas) const
 {
     if (m_level <= Level::MUSX_INFO) {
         LOGI() << logString(Level::MUSX_INFO, info, musxDocument, currMusxStaff, currMusxMeas);
@@ -141,7 +141,7 @@ void FinaleLogger::logInfo(const String& info, const DocumentPtr& musxDocument, 
  Log \a warning (possible error but non-fatal).
  */
 
-void FinaleLogger::logWarning(const String& warning, const DocumentPtr& musxDocument, InstCmper currMusxStaff, MeasCmper currMusxMeas) const
+void FinaleLogger::logWarning(const String& warning, const DocumentPtr& musxDocument, StaffCmper currMusxStaff, MeasCmper currMusxMeas) const
 {
     if (m_level <= Level::MUSX_WARNING) {
         LOGW() << logString(Level::MUSX_WARNING, warning, musxDocument, currMusxStaff, currMusxMeas);
@@ -156,7 +156,7 @@ void FinaleLogger::logWarning(const String& warning, const DocumentPtr& musxDocu
  Log \a error (fatal errors: file processing stopped).
  */
 
-void FinaleLogger::logError(const String& error, const DocumentPtr& musxDocument, InstCmper currMusxStaff, MeasCmper currMusxMeas) const
+void FinaleLogger::logError(const String& error, const DocumentPtr& musxDocument, StaffCmper currMusxStaff, MeasCmper currMusxMeas) const
 {
     if (m_level <= Level::MUSX_ERROR) {
         LOGE() << logString(Level::MUSX_ERROR, error, musxDocument, currMusxStaff, currMusxMeas);
