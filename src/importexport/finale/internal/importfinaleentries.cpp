@@ -72,7 +72,7 @@ void FinaleParser::mapLayers()
 
     auto layerAttrs = m_doc->getOthers()->getArray<others::LayerAttributes>(m_currentMusxPartId);
 
-    const auto mapLayer = [&](const std::shared_ptr<others::LayerAttributes>& layerAttr) {
+    const auto mapLayer = [&](const MusxInstance<others::LayerAttributes>& layerAttr) {
         std::array<voice_idx_t, 4> tryOrder;
         if (!layerAttr->freezeLayer) {
             tryOrder = { 0, 1, 2, 3 }; // default
@@ -108,7 +108,7 @@ void FinaleParser::mapLayers()
 }
 
 std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::map<LayerIndex, bool>& finaleVoiceMap,
-                                                                        musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const
+                                                                        musx::dom::StaffCmper curStaff, musx::dom::MeasCmper curMeas) const
 {
     using FinaleVoiceID = int;
     std::unordered_map<FinaleVoiceID, voice_idx_t> result;
@@ -165,7 +165,7 @@ ChordRest* FinaleParser::chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr
     return muse::value(m_entryNumber2CR, entryInfoPtr->getEntry()->getEntryNumber());
 }
 
-static void transferTupletProperties(std::shared_ptr<const details::TupletDef> musxTuplet, Tuplet* scoreTuplet, FinaleLoggerPtr& logger)
+static void transferTupletProperties(MusxInstance<details::TupletDef> musxTuplet, Tuplet* scoreTuplet, FinaleLoggerPtr& logger)
 {
     scoreTuplet->setNumberType(FinaleTConv::toMuseScoreTupletNumberType(musxTuplet->numStyle));
     // actual number object is generated on score layout
@@ -258,7 +258,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                                          std::vector<ReadableTuplet>& tupletMap, std::unordered_map<Rest*, NoteInfoPtr>& fixedRests)
 {
     // Retrieve entry from entryInfo
-    std::shared_ptr<const Entry> currentEntry = entryInfo->getEntry();
+    MusxInstance<Entry> currentEntry = entryInfo->getEntry();
     if (!currentEntry) {
         logger()->logWarning(String(u"Failed to get entry"));
         return false;
@@ -306,7 +306,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
         NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
         if (noteInfoPtr->crossStaff) {
-            InstCmper nextMusxStaff = noteInfoPtr.calcStaff();
+            StaffCmper nextMusxStaff = noteInfoPtr.calcStaff();
             staff_idx_t crossStaffIdx = muse::value(m_inst2Staff, nextMusxStaff, muse::nidx);
             IF_ASSERT_FAILED(crossStaffIdx != muse::nidx) {
                 logger()->logWarning(String(u"Collect cross staffing: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(nextMusxStaff))));
@@ -380,7 +380,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                         /// @todo Finale doesn't offset notes for ledger lines, MuseScore offsets
                         /// rightmost accidentals matching the type of an accidental on a note with ledger lines.
                         /// @todo decide when to disable autoplace
-                        if (const std::shared_ptr<details::AccidentalAlterations>& accidentalInfo = m_doc->getDetails()->getForNote<details::AccidentalAlterations>(noteInfoPtr)) {
+                        if (const MusxInstance<details::AccidentalAlterations>& accidentalInfo = m_doc->getDetails()->getForNote<details::AccidentalAlterations>(noteInfoPtr)) {
                             if (muse::RealIsEqualOrLess(FinaleTConv::doubleFromPercent(accidentalInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
                                 a->setSmall(true);
                             }
@@ -395,7 +395,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             }
 
             if (currentEntry->noteDetail) {
-                if (const std::shared_ptr<details::NoteAlterations> noteInfo = m_doc->getDetails()->getForNote<details::NoteAlterations>(noteInfoPtr)) {
+                if (const MusxInstance<details::NoteAlterations> noteInfo = m_doc->getDetails()->getForNote<details::NoteAlterations>(noteInfoPtr)) {
                     if (muse::RealIsEqualOrLess(FinaleTConv::doubleFromPercent(noteInfo->percent), m_score->style().styleD(Sid::smallNoteMag))) {
                         note->setSmall(true);
                     }
@@ -465,8 +465,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         /// @todo does this chord have a stem already?
         /* if (chord->stem() && currentEntry->stemDetail) {
             // Stem visibility and offset
-            std::vector<std::shared_ptr<details::CustomStem>> customStems = m_doc->getDetails()->getArray<details::CustomStem>(m_currentMusxPartId); // RGP: pass in the entry number as 2nd param here
-            for (const std::shared_ptr<details::CustomStem>& customStem : customStems) {
+            MusxInstanceList<details::CustomStem> customStems = m_doc->getDetails()->getArray<details::CustomStem>(m_currentMusxPartId); // RGP: pass in the entry number as 2nd param here
+            for (const MusxInstance<details::CustomStem>& customStem : customStems) {
                 chord->stem()->setVisible(customStem->calcIsHiddenStem());
                 if (customStem->hOffset != 0 || customStem->vOffset != 0) {
                     chord->stem()->setOffset(FinaleTConv::evpuToPointF(customStem->hOffset, -customStem->vOffset));
@@ -477,7 +477,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         // chord->setIsChordPlayable(!currentEntry->noPlayback); //this is an undo method
         cr = toChordRest(chord);
     } else {
-        const std::shared_ptr<others::Staff> musxStaff = entryInfo.createCurrentStaff();
+        const MusxInstance<others::Staff> musxStaff = entryInfo.createCurrentStaff();
         if (entryInfo.calcIsFullMeasureRest()) {
             d = TDuration(DurationType::V_MEASURE);
         }
@@ -533,8 +533,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     // Dot offset
     /// @todo MuseScore's dot placement is smarter than Finale's, ideally we should account for the difference in effective positioning.
     if (currentEntry->dotTieAlt) {
-        std::vector<std::shared_ptr<details::DotAlterations>> dotAlterations = m_doc->getDetails()->getArray<details::DotAlterations>(m_currentMusxPartId, currentEntryNumber);
-        for (const std::shared_ptr<details::DotAlterations>& da : dotAlterations) {
+        MusxInstanceList<details::DotAlterations> dotAlterations = m_doc->getDetails()->getArray<details::DotAlterations>(m_currentMusxPartId, currentEntryNumber);
+        for (const MusxInstance<details::DotAlterations>& da : dotAlterations) {
             engraving::Note* n = cr->isChord() ? noteFromEntryInfoAndNumber(entryInfo, da->getNoteId()) : nullptr;
             Rest* r = cr->isRest() ? toRest(cr) : nullptr;
             EvpuFloat museInterdot = EvpuFloat(da->interdotSpacing) - evpuAugmentationDotWidth(); /// @todo not sure about this, but it gets the closest result to Finale in my testing
@@ -585,7 +585,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     cr->setBeamMode(BeamMode::BEGIN);
     ChordRest* lastCr = nullptr;
     for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
-        std::shared_ptr<const Entry> currentEntry = nextInBeam->getEntry();
+        MusxInstance<Entry> currentEntry = nextInBeam->getEntry();
         if (entryInfoPtr->getEntry()->graceNote && !currentEntry->isNote) {
             // Grace rests are unmapped and not supported
             continue;
@@ -624,7 +624,7 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
         Rest* rest = next.first;
         NoteInfoPtr noteInfoPtr = next.second;
         EntryInfoPtr entryInfoPtr = noteInfoPtr.getEntryInfo();
-        InstCmper targetMusxStaffId = muse::value(m_staff2Inst, rest->staffIdx(), 0);
+        StaffCmper targetMusxStaffId = muse::value(m_staff2Inst, rest->staffIdx(), 0);
         IF_ASSERT_FAILED (targetMusxStaffId) {
             logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
             return false;
@@ -633,7 +633,7 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
         if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
             /// @todo correctly calculate default rest position in multi-voice situation. rest->setAutoPlace is problematic because it also affects spacing
             /// (and does not cover all vertical placement situations either).
-            std::shared_ptr<const others::StaffComposite> currMusxStaff = noteInfoPtr.getEntryInfo().createCurrentStaff(targetMusxStaffId);
+            MusxInstance<others::StaffComposite> currMusxStaff = noteInfoPtr.getEntryInfo().createCurrentStaff(targetMusxStaffId);
             IF_ASSERT_FAILED(currMusxStaff) {
                 logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
             }
@@ -790,11 +790,11 @@ void FinaleParser::importEntries()
         logger()->logWarning(String(u"Add entries: No measures in score"));
         return;
     }
-    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
-    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     std::vector<engraving::Note*> notesWithUnmanagedTies;
-    for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
-        staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
+    for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
+        staff_idx_t curStaffIdx = muse::value(m_inst2Staff, StaffCmper(musxScrollViewItem->staffId), muse::nidx);
         track_idx_t staffTrackIdx = curStaffIdx * VOICES;
         IF_ASSERT_FAILED (curStaffIdx != muse::nidx) {
             logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxScrollViewItem->staffId, 1);
@@ -803,7 +803,7 @@ void FinaleParser::importEntries()
 
         Staff* curStaff = m_score->staff(curStaffIdx);
 
-        for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
+        for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
             Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
             Measure* measure = !currTick.negative()  ? m_score->tick2measure(currTick) : nullptr;
             if (!measure) {
@@ -826,7 +826,7 @@ void FinaleParser::importEntries()
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
-                    std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
+                    MusxInstance<EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
                     if (!entryFrame) {
                         logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                         continue;
@@ -879,7 +879,7 @@ void FinaleParser::importEntries()
             measure->checkMeasure(curStaffIdx);
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(staffTrackIdx)) {
-                std::shared_ptr<const others::StaffComposite> currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+                MusxInstance<others::StaffComposite> currMusxStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
                 Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
