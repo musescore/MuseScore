@@ -109,8 +109,6 @@ void SysStaff::restoreLayout()
 System::System(Page* parent)
     : EngravingItem(ElementType::SYSTEM, parent)
 {
-    m_staffVisibilityIndicator = Factory::createStaffVisibilityIndicator(this);
-    m_staffVisibilityIndicator->setParent(this);
 }
 
 //---------------------------------------------------------
@@ -132,7 +130,9 @@ System::~System()
     muse::DeleteAll(m_staves);
     muse::DeleteAll(m_brackets);
     muse::DeleteAll(m_lockIndicators);
-    delete m_staffVisibilityIndicator;
+    if (m_staffVisibilityIndicator) {
+        delete m_staffVisibilityIndicator;
+    }
     delete m_systemDividerLeft;
     delete m_systemDividerRight;
 }
@@ -274,6 +274,17 @@ size_t System::getBracketsColumnsCount()
         }
     }
     return columns;
+}
+
+void System::setHasStaffVisibilityIndicator(bool has)
+{
+    if (has && !m_staffVisibilityIndicator) {
+        m_staffVisibilityIndicator = Factory::createStaffVisibilityIndicator(this);
+        m_staffVisibilityIndicator->setParent(this);
+    } else if (!has && m_staffVisibilityIndicator) {
+        delete m_staffVisibilityIndicator;
+        m_staffVisibilityIndicator = nullptr;
+    }
 }
 
 bool System::isLocked() const

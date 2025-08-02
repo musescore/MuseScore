@@ -630,6 +630,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
         // One staff, show iff not manually hidden score-wide
         const bool show = ctx.dom().staves().front()->show();
         system->staves().front()->setShow(show);
+        system->setHasStaffVisibilityIndicator(false);
         return;
     }
 
@@ -640,6 +641,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     const bool globalHideIfEmpty = ctx.conf().styleB(Sid::hideEmptyStaves)
                                    && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem));
 
+    bool hasHiddenStaves = false;
     bool systemIsEmpty = true;
     staff_idx_t staffIdx = 0;
 
@@ -660,8 +662,12 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
         ss->setShow(show);
         if (show) {
             systemIsEmpty = false;
+        } else {
+            hasHiddenStaves = true;
         }
     }
+
+    system->setHasStaffVisibilityIndicator(hasHiddenStaves);
 
     // If the system is empty, unhide the staves with `showIfEmpty` set to true, if any
     const Staff* firstVisible = nullptr;
