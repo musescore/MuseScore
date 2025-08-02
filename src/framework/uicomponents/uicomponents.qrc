@@ -53,6 +53,7 @@
         <file>qml/Muse/UiComponents/StyledTabButton.qml</file>
         <file>qml/Muse/UiComponents/StyledTextLabel.qml</file>
         <file>qml/Muse/UiComponents/StyledToolTip.qml</file>
+        <file>qml/Muse/UiComponents/StyledTreeView.qml</file>
         <file>qml/Muse/UiComponents/TextInputField.qml</file>
         <file>qml/Muse/UiComponents/TimeInputField.qml</file>
         <file>qml/Muse/UiComponents/ToggleButton.qml</file>

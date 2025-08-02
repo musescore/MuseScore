@@ -20,11 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
-import MuseScore.NotationScene 1.0
+import Muse.Ui
+import Muse.UiComponents
+import MuseScore.NotationScene
 
 StyledPopupView {
     id: root
@@ -33,117 +34,166 @@ StyledPopupView {
     property alias navigationOrderStart: staffVisibilityNavPanel.order
     readonly property int navigationOrderEnd: 0
 
-    contentWidth: contentColumn.width
-    contentHeight: contentColumn.height
+    contentWidth: 276
+    contentHeight: Math.min(contentColumn.implicitHeight, 600)
+
+    margins: 0
 
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        root.x = root.parent.width / 2 - root.contentWidth / 2
-        root.y = root.parent.height + 4 // 4 for spacing
+        root.x = root.parent.width / 2 - root.contentWidth / 2;
+        root.y = root.parent.height + 4; // 4 for spacing
     }
 
     NavigationPanel {
         id: staffVisibilityNavPanel
         name: "StaffVisibility"
         direction: NavigationPanel.Horizontal
-        accessible.name: qsTrc("notation", "Staff visibility popup")
+        accessible.name: qsTrc("notation/staffvisibilitypopup", "Staff visibility popup")
 
-        onNavigationEvent: function(event) {
+        onNavigationEvent: function (event) {
             if (event.type === NavigationEvent.Escape) {
-                root.close()
+                root.close();
             }
         }
     }
 
-    Column {
+    StaffVisibilityPopupModel {
+        id: popupModel
+        onItemRectChanged: function (rect) {
+            root.elementRectChanged(rect);
+        }
+    }
+
+    ColumnLayout {
         id: contentColumn
 
-        width: 276
-        spacing: 6
+        anchors.fill: parent
+        spacing: 0
 
-        Item {
-            id: headerArea
+        RowLayout {
+            id: headerRow
 
-            width: parent.width
-            height: 36
+            Layout.margins: 12
 
-            StyledTextLabel {
-                id: title
+            ColumnLayout {
+                spacing: 4
 
-                anchors.top: parent.top
-                anchors.left: parent.left
+                StyledTextLabel {
+                    id: title
+                    Layout.fillWidth: true
+                    text: qsTrc("notation/staffvisibilitypopup", "Hide empty staves")
+                    font: ui.theme.largeBodyBoldFont
+                    horizontalAlignment: Text.AlignLeft
+                }
 
-                text: qsTrc("notation", "Hide empty staves")
-                font: ui.theme.largeBodyBoldFont
-            }
-
-            StyledTextLabel {
-                id: systemNumberLabel
-
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-
-                text: "System #" // TODO
-                font: ui.theme.bodyFont
+                StyledTextLabel {
+                    id: systemNumberLabel
+                    Layout.fillWidth: true
+                    text: qsTrc("notation/staffvisibilitypopup", "System %1").arg(popupModel.systemIndex)
+                    font: ui.theme.bodyFont
+                    horizontalAlignment: Text.AlignLeft
+                }
             }
 
             FlatButton {
                 id: resetAllButton
 
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-
+                visible: popupModel.emptyStavesVisibilityModel.canResetAll
                 icon: IconCode.UNDO
+                toolTipTitle: qsTrc("notation/staffvisibilitypopup", "Reset all")
+
+                navigation.name: "ResetAllButton"
+                navigation.panel: staffVisibilityNavPanel
+                navigation.row: 0
+
+                onClicked: {
+                    popupModel.emptyStavesVisibilityModel.resetAllVisibility();
+                }
             }
         }
 
-        SeparatorLine {
-            width: root.parent.width
-        }
+        SeparatorLine {}
 
-        Column {
-            id: staffVisibilityControlsColumn
+        StyledTreeView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            width: parent.width
-            spacing: 4
+            implicitHeight: contentHeight
 
-            Repeater {
-                model: 5
+            model: popupModel.emptyStavesVisibilityModel
+
+            columnWidthProvider: function (column) {
+                return width
+            }
+
+            delegate: Item {
+                id: delegateItem
+
+                // Assigned to by TreeView:
+                required property TreeView treeView
+                required property bool isTreeNode
+                required property bool expanded
+                required property bool hasChildren
+                required property int depth
+                required property int row
+                required property int column
+                required property bool current
+
+                readonly property var modelIndex: treeView.index(row, column)
+
+                required property var model
+
+                implicitWidth: visibilityControls.implicitWidth
+                implicitHeight: 32
+
+                Rectangle {
+                    anchors.fill: parent
+                    visible: depth > 0
+                    color: ui.theme.textFieldColor
+                }
 
                 VisibilityControls {
                     id: visibilityControls
 
+                    anchors.fill: parent
+                    anchors.leftMargin: 12
+                    anchors.rightMargin: 12
+
                     navigationPanel: staffVisibilityNavPanel
-                    navigationRow: 0
+                    navigationRow: delegateItem.row + 1 // +1 for ResetAllButton
 
-                    width: parent.width
-                    height: implicitHeight
-
-                    // TODO: Placeholder values/model...
-
-                    title: "Staff/part name"
+                    title: delegateItem.model.name
+                    isRootControl: delegateItem.depth === 0
 
                     useVisibilityButton: true
-                    isVisible: true
+                    isVisible: delegateItem.model.isVisible
+                    onVisibilityButtonClicked: function (visible) {
+                        delegateItem.model.isVisible = visible;
+                    }
 
-                    isExpandable: true
-                    isExpanded: false
+                    isExpandable: delegateItem.hasChildren
+                    isExpanded: delegateItem.expanded
+                    expandableDepth: delegateItem.depth
+                    onExpandButtonClicked: function (expand) {
+                        expand ? delegateItem.treeView.expand(delegateItem.row) : delegateItem.treeView.collapse(delegateItem.row);
+                    }
 
-                    rightSideButtonComp: FlatButton {
+                    FlatButton {
                         id: resetButton
 
-                        // TODO: visible: (can reset)
-
-                        navigation.panel: visibilityControls.navigationPanel
-                        navigation.row: visibilityControls.navigationRow
-                        navigation.column: 3
-                        navigation.accessible.name: qsTrc("notation", "Reset staff visibility")
-
+                        visible: delegateItem.model.canReset
                         icon: IconCode.UNDO
+                        toolTipTitle: qsTrc("notation/staffvisibilitypopup", "Reset")
+
+                        navigation.name: "ResetButton%1".arg(delegateItem.row + 1)
+                        navigation.panel: staffVisibilityNavPanel
+                        navigation.row: delegateItem.row + 1 // +1 for ResetAllButton
+                        navigation.column: 3
 
                         onClicked: {
-                            console.log("Reset staff visibility")
+                            popupModel.emptyStavesVisibilityModel.resetVisibility(delegateItem.modelIndex);
                         }
                     }
                 }
