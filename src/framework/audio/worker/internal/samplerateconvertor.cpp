@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace muse::audio;
+using namespace muse::audio::worker;
 
 SampleRateConvertor::SampleRateConvertor(const std::vector<float>& data,
                                          unsigned int channelsCount,
