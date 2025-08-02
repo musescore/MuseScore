@@ -109,7 +109,7 @@ RowLayout {
             icon: root.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
 
             onClicked: {
-                root.onExpandButtonClicked(!root.isExpanded)
+                root.expandButtonClicked(!root.isExpanded)
             }
         }
 
