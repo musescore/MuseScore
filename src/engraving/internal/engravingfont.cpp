@@ -498,6 +498,22 @@ void EngravingFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternat
           std::string("timeSig9Narrow"),
           SymId::timeSig9Narrow
         },
+        { std::string("timeSigBracketLeftSmall"),
+          std::string("timeSigBracketLeftSmallLarge"),
+          SymId::timeSigBracketLeftSmallLarge
+        },
+        { std::string("timeSigBracketLeftSmall"),
+          std::string("timeSigBracketLeftSmallNarrow"),
+          SymId::timeSigBracketLeftSmallNarrow
+        },
+        { std::string("timeSigBracketRightSmall"),
+          std::string("timeSigBracketRightSmallLarge"),
+          SymId::timeSigBracketRightSmallLarge
+        },
+        { std::string("timeSigBracketRightSmall"),
+          std::string("timeSigBracketRightSmallNarrow"),
+          SymId::timeSigBracketRightSmallNarrow
+        },
         { std::string("timeSigCommon"),
           std::string("timeSigCommonLarge"),
           SymId::timeSigCommonLarge
