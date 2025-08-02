@@ -5552,10 +5552,31 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
             }
             tag += color2xml(hp);
             tag += positioningAttributes(hp, isStart);
+            switch (hp->lineStyle()) {
+            case LineType::DASHED:
+                tag += u" line-type=\"dashed\"";
+                break;
+            case LineType::DOTTED:
+                tag += u" line-type=\"dotted\"";
+                break;
+            case LineType::SOLID:
+            default:
+                break;
+            }
+            if (configuration()->exportLayout() && (hp->lineStyle() == LineType::DASHED)) {
+                tag += String(u" dash-length=\"%1\"").arg(String::number(hp->dashLineLen() * 10, 2));
+                tag += String(u" space-length=\"%1\"").arg(String::number(hp->dashGapLen() * 10, 2));
+            }
+            if (configuration()->exportLayout() && hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
+                tag += String(u" spread=\"%1\"").arg(String::number(hp->hairpinHeight().val() * 10, 2));
+            }
         } else {
             tag += u"\"stop\"";
             if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DIM_HAIRPIN) {
                 tag += u" niente=\"yes\"";
+            }
+            if (configuration()->exportLayout() && hp->hairpinType() == HairpinType::DIM_HAIRPIN) {
+                tag += String(u" spread=\"%1\"").arg(String::number(hp->hairpinHeight().val() * 10, 2));
             }
         }
         tag += String(u" number=\"%1\"").arg(n + 1);
