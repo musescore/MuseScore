@@ -208,6 +208,7 @@ public:
     void resetShortestLongestChordRest();
 
     StaffVisibilityIndicator* staffVisibilityIndicator() const { return m_staffVisibilityIndicator; }
+    void setHasStaffVisibilityIndicator(bool has);
 
     bool isLocked() const;
     const SystemLock* systemLock() const;
