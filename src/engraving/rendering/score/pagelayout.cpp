@@ -357,11 +357,9 @@ void PageLayout::collectPage(LayoutContext& ctx)
         }
         SystemLayout::layoutSystemLockIndicators(s, ctx);
 
-        StaffVisibilityIndicator* visibilityIndicator = s->staffVisibilityIndicator();
-        IF_ASSERT_FAILED(visibilityIndicator) {
-            continue;
+        if (StaffVisibilityIndicator* visibilityIndicator = s->staffVisibilityIndicator()) {
+            TLayout::layoutIndicatorIcon(visibilityIndicator, visibilityIndicator->mutldata());
         }
-        TLayout::layoutIndicatorIcon(visibilityIndicator, visibilityIndicator->mutldata());
     }
 
     // If this is the last page we layout, we must also relayout the first barlines of the
