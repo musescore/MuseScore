@@ -90,7 +90,7 @@ Rectangle {
         }
     }
 
-    TreeView {
+    LegacyTreeView {
         id: view
         anchors.top: tools.bottom
         anchors.bottom: parent.bottom
@@ -146,7 +146,7 @@ Rectangle {
             role: "itemData"
         }
 
-        style: TreeViewStyle {
+        style: LegacyTreeViewStyle {
             indentation: styleData.depth
             rowDelegate: Rectangle {
                 height: 48

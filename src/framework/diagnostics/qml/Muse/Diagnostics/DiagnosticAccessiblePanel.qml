@@ -76,7 +76,7 @@ Rectangle {
         }
     }
 
-    TreeView {
+    LegacyTreeView {
         id: view
         anchors.top: tools.bottom
         anchors.bottom: parent.bottom
@@ -132,7 +132,7 @@ Rectangle {
             role: "itemData"
         }
 
-        style: TreeViewStyle {
+        style: LegacyTreeViewStyle {
             rowDelegate: Rectangle {
                 height: 48
                 width: parent.width
