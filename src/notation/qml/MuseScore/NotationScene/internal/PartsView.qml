@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
@@ -70,7 +71,7 @@ Item {
 
         spacing: 0
 
-        model: root.model
+        model: root.filteredModel()
 
         interactive: height < contentHeight
 
@@ -114,7 +115,8 @@ Item {
             canDelete: model.isCustom
 
             navigation.name: model.title + model.index
-            navigation.panel: view.navigationPanel
+            navigation.panel: root.navigationPanel
+            navigation.column: (model.isSelected && root.model.hasSelection) ? 4 : -1
             navigation.row: model.index
             navigation.onActiveChanged: {
                 if (navigation.active) {

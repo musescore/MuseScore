@@ -15,3 +15,4 @@ PianoKeyboardPanel 1.0 PianoKeyboardPanel.qml
 PercussionPanel 1.0 PercussionPanel.qml
 PercussionPanelPadSwapDialog 1.0 PercussionPanelPadSwapDialog.qml
 EditPercussionPanelShortcutDialog 1.0 EditPercussionPanelShortcutDialog
+NavigatorPanel 1.0 NavigatorPanel.qml
