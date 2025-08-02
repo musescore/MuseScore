@@ -7,18 +7,13 @@
         <autorepeat>0</autorepeat>
     </SC>
     <SC>
-        <key>accessibility-dev-show-tree</key>
+        <key>diagnostic-show-accessible-tree</key>
         <seq>Ctrl+F2</seq>
         <autorepeat>0</autorepeat>
     </SC>
     <SC>
         <key>multiinstances-dev-show-info</key>
         <seq>Ctrl+F3</seq>
-        <autorepeat>0</autorepeat>
-    </SC>
-    <SC>
-        <key>diagnostics-show</key>
-        <seq>Ctrl+F8</seq>
         <autorepeat>0</autorepeat>
     </SC>
 <!-- Keyboard navigation -->
@@ -93,11 +88,6 @@
       <seq>Esc</seq>
     </SC>
 <!-- end Keyboard navigation -->
-  <SC>
-    <key>plugin-creator</key>
-    <seq>Ctrl+Shift+P</seq>
-    <autorepeat>0</autorepeat>
-    </SC>
   <SC>
     <key>help</key>
     <seq>F1</seq>
@@ -854,30 +844,6 @@
     <autorepeat>0</autorepeat>
     </SC>
   <SC>
-    <key>play-prev-chord</key>
-    <seq>Left</seq>
-    </SC>
-  <SC>
-    <key>play-prev-measure</key>
-    <seq>Ctrl+Left</seq>
-    </SC>
-  <SC>
-    <key>play-next-chord</key>
-    <seq>Right</seq>
-    </SC>
-  <SC>
-    <key>play-next-measure</key>
-    <seq>Ctrl+Right</seq>
-    </SC>
-  <SC>
-    <key>seek-begin</key>
-    <seq>Home</seq>
-    </SC>
-  <SC>
-    <key>seek-end</key>
-    <seq>End</seq>
-    </SC>
-  <SC>
     <key>notation-select-all</key>
     <seq>Ctrl+A</seq>
     </SC>
@@ -917,10 +883,6 @@
   <SC>
     <key>show-keys</key>
     <seq>Shift+F2</seq>
-    </SC>
-  <SC>
-    <key>backspace</key>
-    <seq>Backspace</seq>
     </SC>
   <SC>
     <key>find</key>
@@ -973,10 +935,6 @@
     <seq>Ctrl+J</seq>
     </SC>
   <SC>
-    <key>revision</key>
-    <seq>Ctrl+F11</seq>
-    </SC>
-  <SC>
     <key>fullscreen</key>
     <seq>F11</seq>
     <autorepeat>0</autorepeat>
@@ -988,14 +946,6 @@
   <SC>
     <key>toggle-percussion-panel</key>
     <seq>O</seq>
-    </SC>
-  <SC>
-    <key>next-score</key>
-    <std>20</std>
-    </SC>
-  <SC>
-    <key>previous-score</key>
-    <std>21</std>
     </SC>
   <SC>
     <key>inspector</key>
@@ -1016,18 +966,6 @@
     <key>masterpalette</key>
     <seq>Shift+F9</seq>
     <autorepeat>0</autorepeat>
-    </SC>
-  <SC>
-    <key>key-signatures</key>
-    <seq>Shift+K</seq>
-    </SC>
-  <SC>
-    <key>time-signatures</key>
-    <seq>Shift+T</seq>
-    </SC>
-  <SC>
-    <key>symbols</key>
-    <seq>Z</seq>
     </SC>
   <SC>
     <key>next-text-element</key>
@@ -1054,16 +992,6 @@
     <seq>Alt+S</seq>
     </SC>
 <!-- TAB specific shortcuts -->
-  <SC>
-    <key>note-longa-TAB</key>
-    <seq>9</seq> <!-- AZERTY for Shift+9 -->
-    <seq>Num+9</seq>
-    </SC>
-  <SC>
-    <key>note-breve-TAB</key>
-    <seq>8</seq> <!-- AZERTY for Shift+8 -->
-    <seq>Num+8</seq>
-    </SC>
   <SC>
     <key>pad-note-1-TAB</key>
     <seq>7</seq> <!-- AZERTY for Shift+7 -->
@@ -1249,14 +1177,6 @@
     <seq>Ctrl+b</seq>
     </SC>
   <SC>
-    <key>text-word-left</key>
-    <seq>Ctrl+Left</seq>
-    </SC>
-  <SC>
-    <key>text-word-right</key>
-    <seq>Ctrl+Right</seq>
-    </SC>
-  <SC>
     <key>text-i</key>
     <seq>Ctrl+i</seq>
     </SC>
@@ -1269,28 +1189,8 @@
     <seq>F4</seq>
     </SC>
   <SC>
-    <key>viewmode</key>
-    <seq>Ctrl+Shift+V</seq>
-    </SC>
-  <SC>
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
-    </SC>
-  <SC>
-    <key>zoom-in-horiz-pre</key>
-    <seq>Ctrl++</seq>
-    </SC>
-  <SC>
-    <key>zoom-out-horiz-pre</key>
-    <seq>Ctrl+-</seq>
-    </SC>
-  <SC>
-    <key>zoom-in-vert-pre</key>
-    <seq>Ctrl+Shift++</seq>
-    </SC>
-  <SC>
-    <key>zoom-out-vert-pre</key>
-    <seq>Ctrl+Shift+-</seq>
     </SC>
   <SC>
     <key>notation-context-menu</key>
