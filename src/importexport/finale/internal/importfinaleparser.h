@@ -47,42 +47,42 @@ struct FinaleOptions
 {
     void init(const FinaleParser& context);
     // common
-    std::shared_ptr<const musx::dom::FontInfo> defaultMusicFont;
+    musx::dom::MusxInstance<musx::dom::FontInfo> defaultMusicFont;
     musx::util::Fraction combinedDefaultStaffScaling;  // cache this so we don't need to calculate it every time
     // options
-    std::shared_ptr<const musx::dom::options::AccidentalOptions> accidentalOptions;
-    std::shared_ptr<const musx::dom::options::AlternateNotationOptions> alternateNotationOptions;
-    std::shared_ptr<const musx::dom::options::AugmentationDotOptions> augDotOptions;
-    std::shared_ptr<const musx::dom::options::BarlineOptions> barlineOptions;
-    std::shared_ptr<const musx::dom::options::BeamOptions> beamOptions;
-    std::shared_ptr<const musx::dom::options::ClefOptions> clefOptions;
-    std::shared_ptr<const musx::dom::options::FlagOptions> flagOptions;
-    std::shared_ptr<const musx::dom::options::GraceNoteOptions> graceOptions;
-    std::shared_ptr<const musx::dom::options::KeySignatureOptions> keyOptions;
-    std::shared_ptr<const musx::dom::options::LineCurveOptions> lineCurveOptions;
-    std::shared_ptr<const musx::dom::options::MiscOptions> miscOptions;
-    std::shared_ptr<const musx::dom::options::MultimeasureRestOptions> mmRestOptions;
-    std::shared_ptr<const musx::dom::options::MusicSpacingOptions> musicSpacing;
-    std::shared_ptr<const musx::dom::options::PageFormatOptions::PageFormat> pageFormat;
-    std::shared_ptr<const musx::dom::options::PianoBraceBracketOptions> braceOptions;
-    std::shared_ptr<const musx::dom::options::RepeatOptions> repeatOptions;
-    std::shared_ptr<const musx::dom::options::SmartShapeOptions> smartShapeOptions;
-    std::shared_ptr<const musx::dom::options::StaffOptions> staffOptions;
-    std::shared_ptr<const musx::dom::options::StemOptions> stemOptions;
-    std::shared_ptr<const musx::dom::options::TextOptions> textOptions;
-    std::shared_ptr<const musx::dom::options::TieOptions> tieOptions;
-    std::shared_ptr<const musx::dom::options::TimeSignatureOptions> timeOptions;
-    std::shared_ptr<const musx::dom::options::TupletOptions> tupletOptions;
+    musx::dom::MusxInstance<musx::dom::options::AccidentalOptions> accidentalOptions;
+    musx::dom::MusxInstance<musx::dom::options::AlternateNotationOptions> alternateNotationOptions;
+    musx::dom::MusxInstance<musx::dom::options::AugmentationDotOptions> augDotOptions;
+    musx::dom::MusxInstance<musx::dom::options::BarlineOptions> barlineOptions;
+    musx::dom::MusxInstance<musx::dom::options::BeamOptions> beamOptions;
+    musx::dom::MusxInstance<musx::dom::options::ClefOptions> clefOptions;
+    musx::dom::MusxInstance<musx::dom::options::FlagOptions> flagOptions;
+    musx::dom::MusxInstance<musx::dom::options::GraceNoteOptions> graceOptions;
+    musx::dom::MusxInstance<musx::dom::options::KeySignatureOptions> keyOptions;
+    musx::dom::MusxInstance<musx::dom::options::LineCurveOptions> lineCurveOptions;
+    musx::dom::MusxInstance<musx::dom::options::MiscOptions> miscOptions;
+    musx::dom::MusxInstance<musx::dom::options::MultimeasureRestOptions> mmRestOptions;
+    musx::dom::MusxInstance<musx::dom::options::MusicSpacingOptions> musicSpacing;
+    musx::dom::MusxInstance<musx::dom::options::PageFormatOptions::PageFormat> pageFormat;
+    musx::dom::MusxInstance<musx::dom::options::PianoBraceBracketOptions> braceOptions;
+    musx::dom::MusxInstance<musx::dom::options::RepeatOptions> repeatOptions;
+    musx::dom::MusxInstance<musx::dom::options::SmartShapeOptions> smartShapeOptions;
+    musx::dom::MusxInstance<musx::dom::options::StaffOptions> staffOptions;
+    musx::dom::MusxInstance<musx::dom::options::StemOptions> stemOptions;
+    musx::dom::MusxInstance<musx::dom::options::TextOptions> textOptions;
+    musx::dom::MusxInstance<musx::dom::options::TieOptions> tieOptions;
+    musx::dom::MusxInstance<musx::dom::options::TimeSignatureOptions> timeOptions;
+    musx::dom::MusxInstance<musx::dom::options::TupletOptions> tupletOptions;
     // others that function as options
-    std::shared_ptr<const musx::dom::others::LayerAttributes> layerOneAttributes;
-    std::shared_ptr<const musx::dom::others::MeasureNumberRegion::ScorePartData> measNumScorePart;
-    std::shared_ptr<const musx::dom::others::PartGlobals> partGlobals;
+    musx::dom::MusxInstance<musx::dom::others::LayerAttributes> layerOneAttributes;
+    musx::dom::MusxInstance<musx::dom::others::MeasureNumberRegion::ScorePartData> measNumScorePart;
+    musx::dom::MusxInstance<musx::dom::others::PartGlobals> partGlobals;
 };
 
 struct ReadableTuplet {
     engraving::Fraction startTick;
     engraving::Fraction endTick;
-    std::shared_ptr<const musx::dom::details::TupletDef> musxTuplet = nullptr; // actual tuplet object. used for writing properties
+    musx::dom::MusxInstance<musx::dom::details::TupletDef> musxTuplet = nullptr; // actual tuplet object. used for writing properties
     engraving::Tuplet* scoreTuplet = nullptr; // to be created tuplet object.
     int layer = 0; // for nested tuplets. 0 = outermost
 };
@@ -98,7 +98,7 @@ struct FontTracker
     FontTracker() = default;
     FontTracker(const engraving::String& name, double size, engraving::FontStyle styles = engraving::FontStyle::Normal, bool spatiumInd = false)
         : fontName(name), fontSize(size), fontStyle(styles), spatiumIndependent(spatiumInd) {}
-    FontTracker(const std::shared_ptr<const musx::dom::FontInfo>& fontInfo, double additionalSizeScaling = 1.0);
+    FontTracker(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo, double additionalSizeScaling = 1.0);
     FontTracker(const engraving::MStyle& style, const engraving::String& sidNamePrefix);
 
     engraving::String fontName;
@@ -120,7 +120,7 @@ struct EnigmaParsingOptions
 struct ReadableCustomLine
 {
     ReadableCustomLine() = default;
-    ReadableCustomLine(const FinaleParser&, const std::shared_ptr<musx::dom::others::SmartShapeCustomLine>&);
+    ReadableCustomLine(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::SmartShapeCustomLine>&);
 
     engraving::ElementType elementType;
     bool lineVisible;
@@ -194,7 +194,7 @@ public:
     // Text
     engraving::String stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options = {}, FontTracker* firstFontInfo = nullptr) const;
     bool fontIsEngravingFont(const std::string& fontName) const;
-    bool fontIsEngravingFont(const std::shared_ptr<const musx::dom::FontInfo>& fontInfo) const { return fontIsEngravingFont(fontInfo->getName()); }
+    bool fontIsEngravingFont(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo) const { return fontIsEngravingFont(fontInfo->getName()); }
     bool fontIsEngravingFont(const engraving::String& fontName) const { return fontIsEngravingFont(fontName.toStdString()); }
 
     // Utility
@@ -211,29 +211,29 @@ private:
     void importStaffItems();
     void importTextExpressions();
 
-    engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff, engraving::Staff::HideMode defaultHideMode,
+    engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff, engraving::Staff::HideMode defaultHideMode,
                                   const engraving::InstrumentTemplate* it = nullptr);
-    engraving::ClefType toMuseScoreClefType(const std::shared_ptr<const musx::dom::options::ClefOptions::ClefDef>& clefDef,
-                                            const std::shared_ptr<const musx::dom::others::Staff>& musxStaff);
+    engraving::ClefType toMuseScoreClefType(const musx::dom::MusxInstance<musx::dom::options::ClefOptions::ClefDef>& clefDef,
+                                            const musx::dom::MusxInstance<musx::dom::others::Staff>& musxStaff);
     engraving::Clef* createClef(engraving::Score* score,
-                                const std::shared_ptr<musx::dom::others::Staff>& musxStaff,
+                                const musx::dom::MusxInstance<musx::dom::others::Staff>& musxStaff,
                                 engraving::staff_idx_t staffIdx,
                                 musx::dom::ClefIndex musxClef,
                                 engraving::Measure* measure, musx::dom::Edu musxEduPos,
                                 bool afterBarline, bool visible);
-    void importClefs(const std::shared_ptr<musx::dom::others::InstrumentUsed>& musxScrollViewItem,
-                     const std::shared_ptr<musx::dom::others::Measure>& musxMeasure,
+    void importClefs(const musx::dom::MusxInstance<musx::dom::others::StaffUsed>& musxScrollViewItem,
+                     const musx::dom::MusxInstance<musx::dom::others::Measure>& musxMeasure,
                      engraving::Measure* measure, engraving::staff_idx_t curStaffIdx,
                      musx::dom::ClefIndex& musxCurrClef,
-                     const std::shared_ptr<musx::dom::others::Measure>& nextMusxMeasure);
-    bool applyStaffSyles(engraving::StaffType* staffType, const std::shared_ptr<const musx::dom::others::StaffComposite>& currStaff);
+                     const musx::dom::MusxInstance<musx::dom::others::Measure>& nextMusxMeasure);
+    bool applyStaffSyles(engraving::StaffType* staffType, const musx::dom::MusxInstance<musx::dom::others::StaffComposite>& currStaff);
 
     // entries
     void mapLayers();
     void importEntries();
 
     std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,
-                                                         musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const;
+                                                         musx::dom::StaffCmper curStaff, musx::dom::MeasCmper curMeas) const;
     bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Measure* measure, bool graceNotes,
                           std::vector<engraving::Note*>& notesWithUnmanagedTies,
                           std::vector<ReadableTuplet>& tupletMap, std::unordered_map<engraving::Rest*, musx::dom::NoteInfoPtr>& fixedRests);
@@ -252,7 +252,7 @@ private:
     // texts
     void importPageTexts();
 
-    bool isOnlyPage(const std::shared_ptr<musx::dom::others::PageTextAssign>& pageTextAssign, musx::dom::PageCmper page);
+    bool isOnlyPage(const musx::dom::MusxInstance<musx::dom::others::PageTextAssign>& pageTextAssign, musx::dom::PageCmper page);
 
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
@@ -262,8 +262,8 @@ private:
     bool m_smallNoteMagFound = false;
     std::unordered_map<std::string, const engraving::IEngravingFontPtr> m_engravingFonts;
 
-    std::unordered_map<engraving::staff_idx_t, musx::dom::InstCmper> m_staff2Inst;
-    std::unordered_map<musx::dom::InstCmper, engraving::staff_idx_t> m_inst2Staff;
+    std::unordered_map<engraving::staff_idx_t, musx::dom::StaffCmper> m_staff2Inst;
+    std::unordered_map<musx::dom::StaffCmper, engraving::staff_idx_t> m_inst2Staff;
     std::unordered_map<musx::dom::MeasCmper, engraving::Fraction> m_meas2Tick;
     std::map<engraving::Fraction, musx::dom::MeasCmper> m_tick2Meas; // use std::map to avoid need for Fraction hash function
     std::unordered_map<musx::dom::LayerIndex, engraving::voice_idx_t> m_layer2Voice;

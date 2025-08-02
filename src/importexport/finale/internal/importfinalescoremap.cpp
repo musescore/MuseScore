@@ -62,15 +62,15 @@ using namespace mu::iex::finale;
 
 namespace mu::iex::finale {
 
-Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others::Staff> musxStaff, Staff::HideMode defaultHideMode, const InstrumentTemplate* it)
+Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> musxStaff, Staff::HideMode defaultHideMode, const InstrumentTemplate* it)
 {
-    auto clefTypeListFromMusxStaff = [&](const std::shared_ptr<const others::Staff> musxStaff) -> std::optional<ClefTypeList>
+    auto clefTypeListFromMusxStaff = [&](const MusxInstance<others::Staff> musxStaff) -> std::optional<ClefTypeList>
     {
-        const std::shared_ptr<options::ClefOptions::ClefDef>& concerClefDef = musxOptions().clefOptions->getClefDef(musxStaff->calcFirstClefIndex());
+        const MusxInstance<options::ClefOptions::ClefDef>& concerClefDef = musxOptions().clefOptions->getClefDef(musxStaff->calcFirstClefIndex());
         ClefType concertClef = toMuseScoreClefType(concerClefDef, musxStaff);
         ClefType transposeClef = concertClef;
         if (musxStaff->transposition && musxStaff->transposition->setToClef) {
-            const std::shared_ptr<options::ClefOptions::ClefDef>& trasposeClefDef = musxOptions().clefOptions->getClefDef(musxStaff->transposition->setToClef);
+            const MusxInstance<options::ClefOptions::ClefDef>& trasposeClefDef = musxOptions().clefOptions->getClefDef(musxStaff->transposition->setToClef);
             transposeClef = toMuseScoreClefType(trasposeClefDef, musxStaff);
         }
         if (concertClef == ClefType::INVALID || transposeClef == ClefType::INVALID) {
@@ -118,8 +118,8 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
         staffType->setGenClef(false);
     }
     m_score->appendStaff(s);
-    m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), s->idx());
-    m_staff2Inst.emplace(s->idx(), InstCmper(musxStaff->getCmper()));
+    m_inst2Staff.emplace(StaffCmper(musxStaff->getCmper()), s->idx());
+    m_staff2Inst.emplace(s->idx(), StaffCmper(musxStaff->getCmper()));
     return s;
 }
 
@@ -131,8 +131,8 @@ void FinaleParser::importMeasures()
     m_score->sigmap()->add(0, currTimeSig);
 
     // create global time signatures. local timesigs are set up later
-    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
-    for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
+    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
         MeasureBase* lastMeasure = m_score->measures()->last();
         Fraction tick(lastMeasure ? lastMeasure->endTick() : Fraction(0, 1));
 
@@ -140,7 +140,7 @@ void FinaleParser::importMeasures()
         measure->setTick(tick);
         m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
         m_tick2Meas.emplace(tick, musxMeasure->getCmper());
-        std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
+        MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
         Fraction scoreTimeSig = FinaleTConv::simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
         if (scoreTimeSig != currTimeSig) {
             m_score->sigmap()->add(tick.ticks(), scoreTimeSig);
@@ -203,12 +203,12 @@ void FinaleParser::importMeasures()
 
 void FinaleParser::importParts()
 {
-    std::vector<std::shared_ptr<others::InstrumentUsed>> scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    MusxInstanceList<others::StaffUsed> scrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
-    std::unordered_map<InstCmper, QString> inst2Part;
+    std::unordered_map<StaffCmper, QString> inst2Part;
     int partNumber = 0;
-    for (const std::shared_ptr<others::InstrumentUsed>& item : scrollView) {
-        std::shared_ptr<others::Staff> staff = item->getStaffInstance();
+    for (const MusxInstance<others::StaffUsed>& item : scrollView) {
+        MusxInstance<others::Staff> staff = item->getStaffInstance();
         IF_ASSERT_FAILED(staff) {
             continue; // safety check
         }
@@ -237,7 +237,7 @@ void FinaleParser::importParts()
         const auto& [topStaffId, instInfo] = *instIt;
         Staff::HideMode defaultHideModeForInst = Staff::HideMode::AUTO;
         if (instInfo.staffGroupId != 0) {
-            if (std::shared_ptr<details::StaffGroup> group = m_doc->getDetails()->get<details::StaffGroup>(m_currentMusxPartId, BASE_SYSTEM_ID, instInfo.staffGroupId)) {
+            if (MusxInstance<details::StaffGroup> group = m_doc->getDetails()->get<details::StaffGroup>(m_currentMusxPartId, BASE_SYSTEM_ID, instInfo.staffGroupId)) {
                 switch (group->hideStaves) {
                 case details::StaffGroup::HideStaves::None:
                     defaultHideModeForInst = Staff::HideMode::NEVER;
@@ -251,7 +251,7 @@ void FinaleParser::importParts()
                 }
             }
         }
-        for (const InstCmper inst : instInfo.getSequentialStaves()) {
+        for (const StaffCmper inst : instInfo.getSequentialStaves()) {
             if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
                 createStaff(part, instStaff, defaultHideModeForInst, it);
                 inst2Part.emplace(inst, partId);
@@ -266,7 +266,7 @@ void FinaleParser::importParts()
             // Compensate here.
             options.scaleFontSizeBy = 1.0;
             // userMag is not set yet, so use musx data
-            const others::InstrumentUsedArray systemOneStaves = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, 1);
+            const MusxInstanceList<others::StaffUsed> systemOneStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, 1);
             if (std::optional<size_t> index = systemOneStaves.getIndexForStaff(staff->getCmper())) {
                 const musx::util::Fraction staffMag = systemOneStaves[index.value()]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling;
                 options.scaleFontSizeBy /= staffMag.toDouble();
@@ -338,7 +338,7 @@ void FinaleParser::importBrackets()
         throw std::logic_error("Unable to read PartDefinition for score");
         return;
     }
-    const others::InstrumentUsedArray scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
     auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, m_currentMusxPartId, scrollView);
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
@@ -353,7 +353,7 @@ void FinaleParser::importBrackets()
             logger()->logWarning(String(u"Group info encountered missing start or end staff information"));
             continue;
         }
-        staff_idx_t startStaffIdx = muse::value(m_inst2Staff, InstCmper(musxStartStaff->getCmper()), muse::nidx);
+        staff_idx_t startStaffIdx = muse::value(m_inst2Staff, StaffCmper(musxStartStaff->getCmper()), muse::nidx);
         IF_ASSERT_FAILED(startStaffIdx != muse::nidx) {
             logger()->logWarning(String(u"Create brackets: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(musxStartStaff->getCmper()))));
             continue;
@@ -374,8 +374,8 @@ void FinaleParser::importBrackets()
     }
 }
 
-ClefType FinaleParser::toMuseScoreClefType(const std::shared_ptr<const musx::dom::options::ClefOptions::ClefDef>& clefDef,
-                                           const std::shared_ptr<const musx::dom::others::Staff>& musxStaff)
+ClefType FinaleParser::toMuseScoreClefType(const MusxInstance<musx::dom::options::ClefOptions::ClefDef>& clefDef,
+                                           const MusxInstance<musx::dom::others::Staff>& musxStaff)
 {
     // Musx staff positions start with the reference line as 0. (The reference line on a standard 5-line staff is the top line.)
     // Positive values are above the reference line. Negative values are below the reference line.
@@ -431,11 +431,11 @@ ClefType FinaleParser::toMuseScoreClefType(const std::shared_ptr<const musx::dom
     return ClefType::INVALID;
 }
 
-Clef* FinaleParser::createClef(Score* score, const std::shared_ptr<musx::dom::others::Staff>& musxStaff,
+Clef* FinaleParser::createClef(Score* score, const MusxInstance<musx::dom::others::Staff>& musxStaff,
                                staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Edu musxEduPos,
                                bool afterBarline, bool visible)
 {
-    const std::shared_ptr<options::ClefOptions::ClefDef>& clefDef = musxOptions().clefOptions->getClefDef(musxClef);
+    const MusxInstance<options::ClefOptions::ClefDef>& clefDef = musxOptions().clefOptions->getClefDef(musxClef);
     ClefType entryClefType = toMuseScoreClefType(clefDef, musxStaff);
     if (entryClefType == ClefType::INVALID) {
         return nullptr;
@@ -468,9 +468,9 @@ Clef* FinaleParser::createClef(Score* score, const std::shared_ptr<musx::dom::ot
     return clef;
 }
 
-void FinaleParser::importClefs(const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem,
-                                    const std::shared_ptr<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx,
-                                    ClefIndex& musxCurrClef, const std::shared_ptr<others::Measure>& prevMusxMeasure)
+void FinaleParser::importClefs(const MusxInstance<others::StaffUsed>& musxScrollViewItem,
+                                    const MusxInstance<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx,
+                                    ClefIndex& musxCurrClef, const MusxInstance<others::Measure>& prevMusxMeasure)
 {
     // The Finale UI requires transposition to be a full-measure staff-style assignment, so checking only the beginning of the bar should be sufficient.
     // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
@@ -494,8 +494,8 @@ void FinaleParser::importClefs(const std::shared_ptr<others::InstrumentUsed>& mu
                 }
             }
         } else {
-            std::vector<std::shared_ptr<others::ClefList>> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId, gfHold->clefListId);
-            for (const std::shared_ptr<others::ClefList>& midMeasureClef : midMeasureClefs) {
+            MusxInstanceList<others::ClefList> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId, gfHold->clefListId);
+            for (const MusxInstance<others::ClefList>& midMeasureClef : midMeasureClefs) {
                 if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef || midMeasureClef->clefMode == ShowClefMode::Always) {
                     const bool visible = midMeasureClef->clefMode != ShowClefMode::Never;
                     const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
@@ -526,7 +526,7 @@ static bool changed(const T& a, const T& b, bool& result)
     return isNotEqual;
 }
 
-bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<const musx::dom::others::StaffComposite>& currStaff)
+bool FinaleParser::applyStaffSyles(StaffType* staffType, const MusxInstance<musx::dom::others::StaffComposite>& currStaff)
 {
     bool result = false;
     if (changed(staffType->genClef(), !currStaff->hideClefs, result)) {
@@ -575,9 +575,9 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
         staffType->setStemless(currStaff->hideStems);
     }
 
-    // userMag is not based on staff styles but on others::InstrumentUsed
-    if (std::shared_ptr<others::StaffSystem> system = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
-        const others::InstrumentUsedArray systemStaves = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, system->getCmper());
+    // userMag is not based on staff styles but on others::StaffUsed
+    if (MusxInstance<others::StaffSystem> system = m_doc->calculateSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
+        const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, system->getCmper());
         if (std::optional<size_t> index = systemStaves.getIndexForStaff(currStaff->getCmper())) {
             const size_t x = index.value();
             const double newUserMag = (systemStaves[x]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling).toDouble();
@@ -596,15 +596,15 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
 
 void FinaleParser::importStaffItems()
 {
-    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     if (!m_score->firstMeasure()) {
         return;
     }
-    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
-    std::vector<std::shared_ptr<others::StaffSystem>> musxSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
-    for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
+    MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    MusxInstanceList<others::StaffSystem> musxSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
         // per staff style calculations
-        const std::shared_ptr<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxScrollViewItem->staffId);
+        const MusxInstance<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxScrollViewItem->staffId);
         IF_ASSERT_FAILED(rawStaff) {
             logger()->logWarning(String(u"Unable to retrieve musx raw staff"), m_doc, musxScrollViewItem->staffId, 1);
             return;
@@ -612,7 +612,7 @@ void FinaleParser::importStaffItems()
         std::set<MeasCmper> styleChanges; // MuseScore style changes must occur on measure boundaries
         styleChanges.emplace(1); // there is always a style change on the first measure.
         if (rawStaff->hasStyles) {
-            std::vector<std::shared_ptr<others::StaffStyleAssign>> musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, rawStaff->getCmper());
+            MusxInstanceList<others::StaffStyleAssign> musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, rawStaff->getCmper());
             for (const auto& musxStyleChange : musxStyleChanges) {
                 styleChanges.emplace(musxStyleChange->startMeas);
                 if (std::optional<std::pair<MeasCmper, Edu>> nextLoc = musxStyleChange->nextLocation()) {  // staff style locations are global edus
@@ -627,7 +627,7 @@ void FinaleParser::importStaffItems()
         }
         for (const auto& musxSystem : musxSystems) {
             if (musxSystem->startMeas > 1) { // we already added measure 1 at init time
-                const others::InstrumentUsedArray systemStaves = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, musxSystem->getCmper());
+                const MusxInstanceList<others::StaffUsed> systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, musxSystem->getCmper());
                 if (systemStaves.getIndexForStaff(rawStaff->getCmper())) {
                     styleChanges.emplace(musxSystem->startMeas);
                 }
@@ -646,7 +646,7 @@ void FinaleParser::importStaffItems()
                 logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxScrollViewItem->staffId, measNum);
                 return;
             }
-            std::shared_ptr<const others::StaffComposite> currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, measNum, 0);
+            MusxInstance<others::StaffComposite> currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, measNum, 0);
             IF_ASSERT_FAILED(currStaff) {
                 logger()->logWarning(String(u"Unable to retrieve musx current staff"), m_doc, musxScrollViewItem->staffId, measNum);
                 return;
@@ -673,13 +673,13 @@ void FinaleParser::importStaffItems()
             }
         }
         // per measure calculations
-        std::shared_ptr<TimeSignature> currMusxTimeSig;
-        std::shared_ptr<KeySignature> currMusxKeySig;
+        MusxInstance<TimeSignature> currMusxTimeSig;
+        MusxInstance<KeySignature> currMusxKeySig;
         std::optional<KeySigEvent> currKeySigEvent;
-        std::shared_ptr<others::Measure> prevMusxMeasure;
+        MusxInstance<others::Measure> prevMusxMeasure;
         ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
         /// @todo handle pickup measures and other measures where display and actual timesigs differ
-        for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
+        for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
             Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
             Measure* measure = !currTick.negative() ? m_score->tick2measure(currTick) : nullptr;
             IF_ASSERT_FAILED(measure) {
@@ -700,8 +700,8 @@ void FinaleParser::importStaffItems()
 
             // timesig
             /// @todo figure out how to deal with display vs actual time signature.
-            const std::shared_ptr<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
-            const std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
+            const MusxInstance<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
+            const MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
             if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
                 Fraction timeSig = FinaleTConv::simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
                 Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
@@ -722,7 +722,7 @@ void FinaleParser::importStaffItems()
             importClefs(musxScrollViewItem, musxMeasure, measure, staffIdx, musxCurrClef, prevMusxMeasure);
 
             // keysig
-            const std::shared_ptr<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxScrollViewItem->staffId);
+            const MusxInstance<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxScrollViewItem->staffId);
             if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig) || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
                 /// @todo microtonal keysigs
                 std::optional<KeySigEvent> keySigEvent;
@@ -754,8 +754,8 @@ void FinaleParser::importStaffItems()
                         }
                         ksEvent.setMode(km);
                     } else if (musxKeySig->isNonLinear()) {
-                        std::shared_ptr<others::AcciOrderSharps> musxAccis = m_doc->getOthers()->get<others::AcciOrderSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
-                        std::shared_ptr<others::AcciAmountSharps> musxAmounts = m_doc->getOthers()->get<others::AcciAmountSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
+                        MusxInstance<others::AcciOrderSharps> musxAccis = m_doc->getOthers()->get<others::AcciOrderSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
+                        MusxInstance<others::AcciAmountSharps> musxAmounts = m_doc->getOthers()->get<others::AcciAmountSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
                         IF_ASSERT_FAILED(musxAccis->values.size() >= musxAmounts->values.size()) {
                             logger()->logWarning(String(u"Nonlinear key %1 has insufficient AcciOrderSharps.").arg(musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                             return;
@@ -818,13 +818,13 @@ void FinaleParser::importPageLayout()
     /// reverse engineering of Finale behavior.
 
     // Handle blank pages
-    std::vector<std::shared_ptr<others::Page>> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
+    MusxInstanceList<others::Page> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
     size_t blankPagesToAdd = 0;
     for (const auto& page : pages) {
         if (page->isBlank()) {
             ++blankPagesToAdd;
         } else if (blankPagesToAdd) {
-            const std::shared_ptr<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
+            const MusxInstance<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
             IF_ASSERT_FAILED(firstPageSystem) {
                 continue;
             }
@@ -860,12 +860,12 @@ void FinaleParser::importPageLayout()
     if (!m_score->firstMeasure() || m_score->noStaves()) {
         return;
     }
-    std::vector<std::shared_ptr<others::StaffSystem>> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
     logger()->logDebugTrace(String(u"Document contains %1 staff systems and %2 pages.").arg(staffSystems.size(), pages.size()));
     size_t currentPageIndex = 0;
     for (size_t i = 0; i < staffSystems.size(); ++i) {
-        const std::shared_ptr<others::StaffSystem>& leftStaffSystem = staffSystems[i];
-        std::shared_ptr<others::StaffSystem>& rightStaffSystem = staffSystems[i];
+        const MusxInstance<others::StaffSystem>& leftStaffSystem = staffSystems[i];
+        MusxInstance<others::StaffSystem>& rightStaffSystem = staffSystems[i];
 
         //retrieve leftmost measure of system
         Fraction startTick = muse::value(m_meas2Tick, leftStaffSystem->startMeas, Fraction(-1, 1));
@@ -875,11 +875,11 @@ void FinaleParser::importPageLayout()
         // determine the current page the staffsystem is on
         bool isFirstSystemOnPage = false;
         for (size_t j = currentPageIndex; j < pages.size(); ++j) {
-            const std::shared_ptr<others::Page>& page = pages[j];
+            const MusxInstance<others::Page>& page = pages[j];
             if (page->isBlank()) {
                 continue;
             }
-            const std::shared_ptr<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
+            const MusxInstance<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
             IF_ASSERT_FAILED(firstPageSystem) {
                 break;
             }
@@ -977,11 +977,11 @@ void FinaleParser::importPageLayout()
 
         // add page break if needed
         bool isLastSystemOnPage = false;
-        for (const std::shared_ptr<others::Page>& page : pages) {
+        for (const MusxInstance<others::Page>& page : pages) {
             if (page->isBlank()) {
                 continue;
             }
-            const std::shared_ptr<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
+            const MusxInstance<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystemId);
             Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1));
             // the last staff system in the score can't be compared to the startTick of the preceding page -
             // account for that here too, but don't add a page break
@@ -997,7 +997,7 @@ void FinaleParser::importPageLayout()
         }
 
         // If following measure should show full instrument names, add section break to sysEnd
-        const std::shared_ptr<others::Measure>& nextMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, rightStaffSystem->endMeas);
+        const MusxInstance<others::Measure>& nextMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, rightStaffSystem->endMeas);
         if (nextMeasure && nextMeasure->showFullNames) {
             LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
             lb->setLayoutBreakType(LayoutBreakType::SECTION);
@@ -1005,7 +1005,7 @@ void FinaleParser::importPageLayout()
             lb->setStartWithLongNames(true);
             lb->setPause(0.0);
             lb->setFirstSystemIndentation(false);
-            const std::shared_ptr<others::Measure>& lastMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, rightStaffSystem->getLastMeasure());
+            const MusxInstance<others::Measure>& lastMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, rightStaffSystem->getLastMeasure());
             lb->setShowCourtesy(!lastMeasure->hideCaution);
             sysEnd->add(lb);
         }
@@ -1032,10 +1032,10 @@ void FinaleParser::importPageLayout()
         // Add distance between the staves
         /// @todo do we need to account for staff visibility here, using startMeasure->system()->staff(staffIdx)->show() ?
         /// Possibly a layout call would needed before here, since we may need check for the visibility of SysStaves
-        auto instrumentsUsedInSystem = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, leftStaffSystem->getCmper());
+        auto instrumentsUsedInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, leftStaffSystem->getCmper());
         for (size_t j = 1; j < instrumentsUsedInSystem.size(); ++j) {
-            std::shared_ptr<others::InstrumentUsed>& prevMusxStaff = instrumentsUsedInSystem[j - 1];
-            std::shared_ptr<others::InstrumentUsed>& nextMusxStaff = instrumentsUsedInSystem[j];
+            MusxInstance<others::StaffUsed>& prevMusxStaff = instrumentsUsedInSystem[j - 1];
+            MusxInstance<others::StaffUsed>& nextMusxStaff = instrumentsUsedInSystem[j];
             staff_idx_t prevStaffIdx = muse::value(m_inst2Staff, prevMusxStaff->staffId, muse::nidx);
             staff_idx_t nextStaffIdx = muse::value(m_inst2Staff, nextMusxStaff->staffId, muse::nidx);
             if (nextStaffIdx == muse::nidx || prevStaffIdx == muse::nidx) {
