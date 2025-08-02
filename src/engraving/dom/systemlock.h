@@ -24,6 +24,7 @@
 
 #include <map>
 
+#include "indicatoricon.h"
 #include "measurebase.h"
 
 namespace mu::engraving {
@@ -79,32 +80,21 @@ private:
     std::map<const MeasureBase*, const SystemLock*, Ordering> m_systemLocks;
 };
 
-class SystemLockIndicator : public EngravingItem
+class SystemLockIndicator : public IndicatorIcon
 {
     OBJECT_ALLOCATOR(engraving, SystemLockIndicator)
     DECLARE_CLASSOF(ElementType::SYSTEM_LOCK_INDICATOR)
 
 public:
     SystemLockIndicator(System* parent, const SystemLock* lock);
-    SystemLockIndicator* clone() const override { return new SystemLockIndicator(*this); }
-
-    const System* system() const { return toSystem(explicitParent()); }
-    const SystemLock* systemLock() const { return m_systemLock; }
-
-    struct LayoutData : public EngravingItem::LayoutData {
-        ld_field<RectF> rangeRect = { "[SystemLockIndicator] rangeRect", RectF() };
-    };
-    DECLARE_LAYOUTDATA_METHODS(SystemLockIndicator)
-
-    muse::draw::Font font() const;
 
     void setSelected(bool v) override;
 
-    char16_t iconCode() const;
+    const SystemLock* systemLock() const { return m_systemLock; }
+
+    char16_t iconCode() const override { return 0xF487; }
 
     String formatBarsAndBeats() const override;
-
-    void undoChangeProperty(Pid, const PropertyValue&, PropertyFlags) override { return; } // not editable
 
 private:
     const SystemLock* m_systemLock = nullptr;

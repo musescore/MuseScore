@@ -151,7 +151,7 @@ Item {
             contentWidth: width
             contentHeight: layoutPanelTreeView.implicitHeight
 
-            TreeView {
+            LegacyTreeView {
                 id: layoutPanelTreeView
 
                 readonly property real delegateHeight: 38
@@ -225,7 +225,7 @@ Item {
                            itemType === LayoutPanelItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
                 }
 
-                style: TreeViewStyle {
+                style: LegacyTreeViewStyle {
                     indentation: 0
 
                     frame: Item {}
