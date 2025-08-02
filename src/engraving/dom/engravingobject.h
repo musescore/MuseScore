@@ -361,7 +361,6 @@ public:
     CONVERT(Jump,          JUMP)
     CONVERT(Ottava,        OTTAVA)
     CONVERT(LayoutBreak,   LAYOUT_BREAK)
-    CONVERT(IndicatorIcon, INDICATOR_ICON)
     CONVERT(StaffVisibilityIndicator, STAFF_VISIBILITY_INDICATOR)
     CONVERT(SystemLockIndicator, SYSTEM_LOCK_INDICATOR)
     CONVERT(Segment,       SEGMENT)
@@ -586,6 +585,8 @@ public:
     {
         return isArticulationFamily() || isFermata();
     }
+
+    bool isIndicatorIcon() const { return isSystemLockIndicator() || isStaffVisibilityIndicator(); }
 };
 
 //---------------------------------------------------
