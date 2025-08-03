@@ -82,6 +82,14 @@ FontTracker::FontTracker(const MStyle& style, const String& sidNamePrefix)
     spatiumIndependent = !style.styleB(MStyle::styleIdx(sidNamePrefix + u"FontSpatiumDependent"));
 }
 
+FontTracker FontTracker::fromEngravingFont(const engraving::MStyle& style, engraving::Sid styleId, double scaling)
+{
+    FontTracker result;
+    result.fontName = style.styleSt(styleId);
+    result.fontSize = 20.0 * scaling;
+    return result;
+}
+
 // Passing in the firstFontInfo pointer suppresses any first font information from being generated in the output string.
 // Instead, it is returned in the pointer.
 String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext& parsingContext, const EnigmaParsingOptions& options, FontTracker* firstFontInfo) const
@@ -89,6 +97,7 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     String endString;
     const bool isHeaderOrFooter = options.hfType != HeaderFooterType::None;
     std::optional<FontTracker> prevFont = options.initialFont;
+    std::optional<FontTracker> symFont = options.musicSymbolFont;
     std::unordered_set<FontStyle> emittedOpenTags; // tracks whose open tags we actually emitted here
     uint16_t flagsThatAreStillOpen = 0; // any flags we've opened that need to be closed.
 
@@ -134,9 +143,10 @@ String FinaleParser::stringFromEnigmaText(const musx::util::EnigmaParsingContext
     auto processTextChunk = [&](const std::string& nextChunk, const musx::util::EnigmaStyles& styles) -> bool {
         std::optional<String> symIds = FinaleTextConv::symIdInsertsFromStdString(nextChunk, styles.font);
         const FontTracker font(styles.font, options.scaleFontSizeBy);
+        const bool isSymFont = symFont && font == symFont.value();
         if (firstFontInfo && !prevFont) {
             *firstFontInfo = font;
-        } else {
+        } else if (!symIds || !isSymFont) {
             if (!prevFont || prevFont->fontName != font.fontName) {
                 if (!symIds) { // if this chunk is not all mapped sym tags
                     endString.append(String(u"<font face=\"" + font.fontName + u"\"/>"));
@@ -248,20 +258,38 @@ void FinaleParser::importTextExpressions()
     std::unordered_map<Cmper, String> mappedExpressionStrings;
     MusxInstanceList<others::TextExpressionDef> textExpressionList = m_doc->getOthers()->getArray<others::TextExpressionDef>(m_currentMusxPartId);
     for (const auto& textExpression : textExpressionList) {
+        /// @todo Rather than rely only on marking category, it probably makes more sense to interpret the playback features to detect what kind of marking
+        /// this is. Or perhaps a combination of both. This would provide better support to legacy files whose expressions are all Misc.
         others::MarkingCategory::CategoryType categoryType = others::MarkingCategory::CategoryType::Misc;
+        MusxInstance<FontInfo> catMusicFont;
         if (MusxInstance<others::MarkingCategory> category = m_doc->getOthers()->get<others::MarkingCategory>(m_currentMusxPartId, textExpression->categoryId)) {
             categoryType = category->categoryType;
+            catMusicFont = category->musicFont;
         }
         EnigmaParsingOptions options;
         musx::util::EnigmaParsingContext parsingContext = textExpression->getRawTextCtx(m_currentMusxPartId);
-        /// @todo Currently, if the expression starts with a <sym> it is setting the size and font efx for the music font. We can suppress either or both if it makes sense.
-        /// If it is better in MuseScore, we can pass in a variable to get the first font info, and that will suppress any font settngs at the beginning of the string, returning
-        /// either the music font settings (if it starts with a sym) or the text font settings (if it does not.)
-        // Option 1 (to the capture first font info and suppress it in the string)
         FontTracker firstFontInfo;
         String exprString = stringFromEnigmaText(parsingContext, options, &firstFontInfo);
         // Option 2 (to match style setting if possible, with font info tags at the beginning if they differ)
         options.initialFont = FontTracker(m_score->style(), FinaleTConv::fontStyleSuffixFromCategoryType(categoryType));
+        /// @todo The musicSymbol font here must be the inferred font *in Finale* that we expect, based on the detection of what kind
+        /// of marking it is mentioned above. Right now this code relies on the category, but probably that is too naive a design.
+        /// Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.
+        options.musicSymbolFont = [&]() -> std::optional<FontTracker> {
+            if (!catMusicFont) {
+                return std::nullopt;
+            } else if (fontIsEngravingFont(catMusicFont->getName())) {
+                return FontTracker(catMusicFont); // if it's an engraving font use it
+            } else if (catMusicFont->calcIsDefaultMusic() && !musxOptions().calculatedEngravingFontName.empty()) {
+                return FontTracker(catMusicFont); // if it's not an engraving font, but we are using an alternative as engraving font,
+                                                  // specify the non-engraving font here. The parsing routine strips it out and MuseScore
+                                                  // uses the engraving font instead.
+            }
+            return std::nullopt;
+        }();
+        if (catMusicFont && (fontIsEngravingFont(catMusicFont->getName()) || catMusicFont->calcIsDefaultMusic())) {
+            options.musicSymbolFont = FontTracker(catMusicFont);
+        }
         String exprString2 = stringFromEnigmaText(parsingContext, options);
         mappedExpressionStrings.emplace(textExpression->getCmper(), std::move(exprString));
     }
