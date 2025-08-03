@@ -148,6 +148,7 @@ Gtr. 1</shortName>
           <string>59</string>
           <string>64</string>
           </StringData>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -279,6 +280,7 @@ Gtr. 2</shortName>
           <string>59</string>
           <string>64</string>
           </StringData>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -410,6 +412,7 @@ Gtr.</shortName>
           <string>59</string>
           <string>64</string>
           </StringData>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

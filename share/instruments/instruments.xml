@@ -5514,6 +5514,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>52-77</aPitchRange>
                   <pPitchRange>52-81</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5534,6 +5535,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>45-74</aPitchRange>
                   <pPitchRange>45-77</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5555,6 +5557,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-70</aPitchRange>
                   <pPitchRange>40-74</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5575,6 +5578,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-71</aPitchRange>
                   <pPitchRange>36-74</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5604,6 +5608,7 @@
                   <pPitchRange>36-74</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5624,6 +5629,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>32-65</aPitchRange>
                   <pPitchRange>21-77</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5648,6 +5654,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-62</aPitchRange>
                   <pPitchRange>18-72</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5669,6 +5676,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-62</aPitchRange>
                   <pPitchRange>24-72</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5685,6 +5693,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>45-74</aPitchRange>
                   <pPitchRange>45-77</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5702,6 +5711,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-70</aPitchRange>
                   <pPitchRange>40-74</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5719,6 +5729,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-70</aPitchRange>
                   <pPitchRange>36-74</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -6239,6 +6250,7 @@
                   <aPitchRange>54-81</aPitchRange>
                   <pPitchRange>54-81</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 114; MS General: Steel Drums-->
                         <program value="114"/> <!--Steel Drums-->
@@ -13318,6 +13330,7 @@
                   <aPitchRange>62-93</aPitchRange>
                   <pPitchRange>62-93</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 25; MS General: Steel String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
@@ -13333,6 +13346,7 @@
                   <musicXMLid>pluck.guitar</musicXMLid>
                   <stafftype staffTypePreset="tab4StrSimple">tablature</stafftype>
                   <genre>world</genre>
+                  <glissandoStyle>portamento</glissandoStyle>
             </Instrument>
             <Instrument id="soprano-guitar">
                   <family>guitars</family>
@@ -13355,6 +13369,7 @@
                   <aPitchRange>52-93</aPitchRange>
                   <pPitchRange>52-93</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
@@ -13385,6 +13400,7 @@
                   <aPitchRange>47-88</aPitchRange>
                   <pPitchRange>47-88</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
@@ -13416,6 +13432,7 @@
                   <aPitchRange>40-86</aPitchRange>
                   <pPitchRange>40-88</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 27; MS General: Clean Guitar-->
                         <program value="27"/> <!--Electric Guitar (clean)-->
@@ -13469,6 +13486,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 27; MS General: Clean Guitar-->
                         <program value="27"/> <!--Electric Guitar (clean)-->
@@ -13495,6 +13513,7 @@
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-84</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 25; MS General: Steel String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
@@ -13536,6 +13555,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 25; MS General: Steel String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
@@ -13562,6 +13582,7 @@
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-83</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
@@ -13595,6 +13616,7 @@
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-83</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <Channel name="open">
@@ -13613,6 +13635,7 @@
                   <longName>Electric Guitar</longName>
                   <description>Electric guitar (tablature).</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -13624,6 +13647,7 @@
                   <description>Acoustic nylon-string guitar (tablature).</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>common</genre>
             </Instrument>
             <Instrument id="guitar-steel-tablature">
@@ -13634,6 +13658,7 @@
                   <description>Acoustic steel-string guitar (tablature).</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>common</genre>
                   <genre>classroom</genre>
             </Instrument>
@@ -13649,6 +13674,7 @@
                   <aPitchRange>35-84</aPitchRange>
                   <pPitchRange>35-84</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 25; MS General: Steel String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
@@ -13684,6 +13710,7 @@
                   <aPitchRange>35-78</aPitchRange>
                   <pPitchRange>35-78</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
@@ -13719,6 +13746,7 @@
                   <aPitchRange>31-83</aPitchRange>
                   <pPitchRange>31-83</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
@@ -13751,6 +13779,7 @@
                   <aPitchRange>35-83</aPitchRange>
                   <pPitchRange>35-83</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
@@ -13765,6 +13794,7 @@
                   <description>7-string guitar (tablature).</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <stafftype staffTypePreset="tab7StrCommon">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>world</genre>
             </Instrument>
             <Instrument id="11-string-alto-guitar">
@@ -13797,6 +13827,7 @@
                   <aPitchRange>34-86</aPitchRange>
                   <pPitchRange>34-86</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
@@ -13824,6 +13855,7 @@
                   </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-85</pPitchRange>
                   <Channel name="open">
@@ -13864,6 +13896,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 33; MS General: Fingered Bass-->
                         <program value="33"/> <!--Electric Bass (finger)-->
@@ -13903,6 +13936,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 33; MS General: Fingered Bass-->
                         <program value="33"/> <!--Electric Bass (finger)-->
@@ -13924,6 +13958,7 @@
                   <longName>5-str. Electric Bass</longName>
                   <description>5-string electric bass guitar (tablature).</description>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -13934,6 +13969,7 @@
                   <longName>5-str. Electric Bass</longName>
                   <description>5-string electric bass guitar, high C tuning (tablature).</description>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="6-string-electric-bass">
@@ -13960,6 +13996,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 33; MS General: Fingered Bass-->
                         <program value="33"/> <!--Electric Bass (finger)-->
@@ -13981,6 +14018,7 @@
                   <longName>6-str. Electric Bass</longName>
                   <description>6-string electric bass guitar (tablature).</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="bass-guitar">
@@ -14005,6 +14043,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 34; MS General: Picked Bass-->
                         <program value="34"/> <!--Electric Bass (pick)-->
@@ -14044,6 +14083,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 33; MS General: Fingered Bass-->
                         <program value="33"/> <!--Electric Bass (finger)-->
@@ -14082,6 +14122,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 35; MS General: Fretless Bass-->
                         <program value="35"/> <!--Fretless Bass-->
@@ -14120,6 +14161,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="slap">
                         <!--MIDI: Bank 0, Prog 36; MS General: Slap Bass-->
                         <program value="36"/> <!--Slap Bass 1-->
@@ -14151,6 +14193,7 @@
                   <description>Bass guitar (tablature).</description>
                   <musicXMLid>pluck.bass</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -14162,6 +14205,7 @@
                   <description>Electric bass guitar (tablature).</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -14349,6 +14393,7 @@
                   <description>Standard ukulele (tablature).</description>
                   <musicXMLid>pluck.ukulele</musicXMLid>
                   <stafftype staffTypePreset="tabUkulele">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>common</genre>
                   <genre>popular</genre>
                   <genre>classroom</genre>
@@ -15487,6 +15532,7 @@
                   <staves>2</staves>
                   <clef>G</clef>
                   <clef staff="2">F</clef>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <aPitchRange>24-108</aPitchRange>
                   <pPitchRange>24-108</pPitchRange>
                   <Channel name="arco">
@@ -15506,6 +15552,7 @@
                   <init>contrabass</init>
                   <family>orchestral-strings</family>
                   <description>Contrabass (double bass).</description>
+                  <glissandoStyle>portamento</glissandoStyle>
             </Instrument>
             <Instrument id="violin">
                   <family>orchestral-strings</family>
@@ -15518,6 +15565,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-88</aPitchRange>
                   <pPitchRange>55-103</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 40; MS General: Violin-->
                         <program value="40"/> <!--Violin-->
@@ -15546,6 +15594,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-88</aPitchRange>
                   <pPitchRange>55-103</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 21, Prog 48; MS General: Violins Fast Expr.-->
                         <controller ctrl="32" value="21"/> <!--Bank LSB-->
@@ -15575,6 +15624,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-79</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 41; MS General: Viola-->
                         <program value="41"/> <!--Viola-->
@@ -15602,6 +15652,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-79</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 31, Prog 48; MS General: Violas Fast Expr.-->
                         <controller ctrl="32" value="31"/> <!--Bank LSB-->
@@ -15631,6 +15682,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-67</aPitchRange>
                   <pPitchRange>36-90</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 42; MS General: Cello-->
                         <program value="42"/> <!--Cello-->
@@ -15659,6 +15711,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-67</aPitchRange>
                   <pPitchRange>36-90</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 41, Prog 48; MS General: Celli Fast Expr.-->
                         <controller ctrl="32" value="41"/> <!--Bank LSB-->
@@ -15691,6 +15744,7 @@
                   <pPitchRange>24-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 43; MS General: Contrabass-->
                         <program value="43"/> <!--Contrabass-->
@@ -15722,6 +15776,7 @@
                   <pPitchRange>24-67</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 51, Prog 48; MS General: Basses Fast Expr.-->
                         <controller ctrl="32" value="51"/> <!--Bank LSB-->
@@ -15760,6 +15815,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>50-86</aPitchRange>
                   <pPitchRange>50-91</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 40; MS General: Violin-->
                         <program value="40"/> <!--Violin-->
@@ -15794,6 +15850,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>45-81</aPitchRange>
                   <pPitchRange>45-86</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 41; MS General: Viola-->
                         <program value="41"/> <!--Viola-->
@@ -15827,6 +15884,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-91</aPitchRange>
                   <pPitchRange>55-96</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 40; MS General: Violin-->
                         <program value="40"/> <!--Violin-->
@@ -15861,6 +15919,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-79</aPitchRange>
                   <pPitchRange>43-84</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 41; MS General: Viola-->
                         <program value="41"/> <!--Viola-->
@@ -15895,6 +15954,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-74</aPitchRange>
                   <pPitchRange>33-79</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 42; MS General: Cello-->
                         <program value="42"/> <!--Cello-->
@@ -15929,6 +15989,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>33-74</aPitchRange>
                   <pPitchRange>33-79</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 42; MS General: Cello-->
                         <program value="42"/> <!--Cello-->
@@ -15951,6 +16012,7 @@
                   <shortName>B. Vl.</shortName>
                   <description>Bass viola da gamba (tablature). Third lowest member of the viol family.</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="violone">
@@ -15974,6 +16036,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>31-60</aPitchRange>
                   <pPitchRange>31-64</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 43; MS General: Contrabass-->
                         <program value="43"/> <!--Contrabass-->
@@ -16009,6 +16072,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>26-55</aPitchRange>
                   <pPitchRange>26-59</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 43; MS General: Contrabass-->
                         <program value="43"/> <!--Contrabass-->
@@ -16037,6 +16101,7 @@
                   <pPitchRange>12-33</pPitchRange>
                   <transposeDiatonic>-14</transposeDiatonic>
                   <transposeChromatic>-24</transposeChromatic>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 43; MS General: Contrabass-->
                         <program value="43"/> <!--Contrabass-->
@@ -16066,6 +16131,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>62-93</aPitchRange>
                   <pPitchRange>62-105</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 110; MS General: Fiddle-->
                         <program value="110"/> <!--Fiddle-->
@@ -16091,6 +16157,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-79</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <Channel name="arco">
                         <!--MIDI: Bank 0, Prog 41; MS General: Viola-->
                         <program value="41"/> <!--Viola-->

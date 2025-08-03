@@ -175,6 +175,7 @@
         <minPitchA>55</minPitchA>
         <maxPitchA>88</maxPitchA>
         <instrumentId>strings.violin</instrumentId>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -252,6 +253,7 @@
         <minPitchA>55</minPitchA>
         <maxPitchA>88</maxPitchA>
         <instrumentId>strings.violin</instrumentId>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -332,6 +334,7 @@
         <maxPitchA>79</maxPitchA>
         <instrumentId>strings.viola</instrumentId>
         <clef>C3</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -410,6 +413,7 @@
         <maxPitchA>79</maxPitchA>
         <instrumentId>strings.viola</instrumentId>
         <clef>C3</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -490,6 +494,7 @@
         <maxPitchA>79</maxPitchA>
         <instrumentId>strings.viola</instrumentId>
         <clef>C3</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -569,6 +574,7 @@
         <maxPitchA>67</maxPitchA>
         <instrumentId>strings.cello</instrumentId>
         <clef>F</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -647,6 +653,7 @@
         <maxPitchA>79</maxPitchA>
         <instrumentId>strings.viola</instrumentId>
         <clef>C3</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
