@@ -37,7 +37,7 @@ using SoundFontPaths = std::vector<SoundFontPath>;
 inline bool isSoundFont(const io::path_t& filePath)
 {
     std::string ext = io::suffix(filePath);
-    return ext == "sf2" || ext == "sf3";
+    return ext == "sf2" || ext == "sf3" || ext == "dls";
 }
 
 struct SoundFontPreset

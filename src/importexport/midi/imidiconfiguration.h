@@ -41,6 +41,10 @@ public:
     virtual void setMidiShortestNote(int ticks) = 0;
     virtual muse::async::Channel<int> midiShortestNoteChanged() const = 0;
 
+    virtual bool midiChannel9isDrum() const = 0;
+    virtual void setMidiChannel9isDrum(bool isDrum) = 0;
+    virtual muse::async::Channel<bool> midiChannel9isDrumChanged() const = 0;
+
     virtual void setMidiImportOperationsFile(const std::optional<muse::io::path_t>& filePath) const = 0;
 
     // export

@@ -32,6 +32,7 @@ using namespace muse;
 using namespace mu::iex::midi;
 
 static const Settings::Key SHORTEST_NOTE_KEY("iex_midi", "io/midi/shortestNote");
+static const Settings::Key CHANNEL9_IS_DRUM_KEY("iex_midi", "io/midi/channel9isDrum");
 static const Settings::Key EXPORTRPNS_KEY("iex_midi", "io/midi/exportRPNs");
 static const Settings::Key EXPAND_REPEATS_KEY("iex_midi", "io/midi/expandRepeats");
 
@@ -40,6 +41,11 @@ void MidiConfiguration::init()
     settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(mu::engraving::Constants::DIVISION / 4));
     settings()->valueChanged(SHORTEST_NOTE_KEY).onReceive(this, [this](const Val& val) {
         m_midiShortestNoteChanged.send(val.toInt());
+    });
+
+    settings()->setDefaultValue(CHANNEL9_IS_DRUM_KEY, Val(true));
+    settings()->valueChanged(CHANNEL9_IS_DRUM_KEY).onReceive(this, [this](const Val& val) {
+        m_midiChannel9isDrumChanged.send(val.toBool());
     });
 
     settings()->setDefaultValue(EXPAND_REPEATS_KEY, Val(true));
@@ -59,6 +65,21 @@ void MidiConfiguration::setMidiShortestNote(int ticks)
 async::Channel<int> MidiConfiguration::midiShortestNoteChanged() const
 {
     return m_midiShortestNoteChanged;
+}
+
+bool MidiConfiguration::midiChannel9isDrum() const
+{
+    return settings()->value(CHANNEL9_IS_DRUM_KEY).toBool();
+}
+
+void MidiConfiguration::setMidiChannel9isDrum(bool isDrum)
+{
+    settings()->setSharedValue(CHANNEL9_IS_DRUM_KEY, Val(isDrum));
+}
+
+async::Channel<bool> MidiConfiguration::midiChannel9isDrumChanged() const
+{
+    return m_midiChannel9isDrumChanged;
 }
 
 void MidiConfiguration::setMidiImportOperationsFile(const std::optional<muse::io::path_t>& filePath) const

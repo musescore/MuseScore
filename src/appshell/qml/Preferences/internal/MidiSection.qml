@@ -29,9 +29,11 @@ BaseSection {
     title: qsTrc("appshell/preferences", "MIDI")
 
     property alias shortestNotes: shortestNotesBox.model
+    property alias channel9isDrum: channel9isDrumBox.checked
     property int currentShortestNote: 0
 
     signal currentShortestNoteChangeRequested(int note)
+    signal currentChannel9isDrumChangeRequested(bool isDrum)
 
     ComboBoxWithTitle {
         id: shortestNotesBox
@@ -50,6 +52,21 @@ BaseSection {
 
         onValueEdited: function(newIndex, newValue) {
             root.currentShortestNoteChangeRequested(newValue)
+        }
+    }
+
+    CheckBox {
+        id: channel9isDrumBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Channel 9 is drum")
+
+        navigation.name: "Channel9isDrum"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        onClicked: {
+            root.currentChannel9isDrumChangeRequested(!checked)
         }
     }
 }

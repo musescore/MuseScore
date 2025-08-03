@@ -37,6 +37,7 @@ apt_packages_standard=(
   libfreetype6-dev
   libfreetype6
   libgl1-mesa-dev
+  libinstpatch-dev
   libjack-dev
   libmp3lame-dev
   libnss3-dev
