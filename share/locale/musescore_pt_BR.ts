@@ -1142,132 +1142,132 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="723"/>
         <source>0 - Perfect unison</source>
-        <translation>0 - Uníssono perfeito</translation>
+        <translation>0 — Uníssono perfeito</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="728"/>
         <source>1 - Augmented unison</source>
-        <translation>1 - Uníssono aumentado</translation>
+        <translation>1 — Uníssono aumentado</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="733"/>
         <source>0 - Diminished second</source>
-        <translation>0 - Segunda diminuta</translation>
+        <translation>0 — Segunda diminuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="738"/>
         <source>1 - Minor second</source>
-        <translation>1 - Segunda menor</translation>
+        <translation>1 — Segunda menor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="743"/>
         <source>2 - Major second</source>
-        <translation>2 - Segunda maior</translation>
+        <translation>2 — Segunda maior</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="748"/>
         <source>3 - Augmented second</source>
-        <translation>3 - Segunda aumentada</translation>
+        <translation>3 — Segunda aumentada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="753"/>
         <source>2 - Diminished third</source>
-        <translation>2 - Terça diminuta</translation>
+        <translation>2 — Terça diminuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="758"/>
         <source>3 - Minor third</source>
-        <translation>3 - Terça menor</translation>
+        <translation>3 — Terça menor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="763"/>
         <source>4 - Major third</source>
-        <translation>4 - Terça maior</translation>
+        <translation>4 — Terça maior</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="768"/>
         <source>5 - Augmented third</source>
-        <translation>5 - Terça aumentada</translation>
+        <translation>5 — Terça aumentada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="773"/>
         <source>4 - Diminished fourth</source>
-        <translation>4 - Quarta diminuta</translation>
+        <translation>4 — Quarta diminuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="778"/>
         <source>5 - Perfect fourth</source>
-        <translation>5 - Quarta perfeita</translation>
+        <translation>5 — Quarta perfeita</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="783"/>
         <source>6 - Augmented fourth</source>
-        <translation>6 - Quarta aumentada</translation>
+        <translation>6 — Quarta aumentada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="788"/>
         <source>6 - Diminished fifth</source>
-        <translation>6 - Quinta diminuta</translation>
+        <translation>6 — Quinta diminuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="793"/>
         <source>7 - Perfect fifth</source>
-        <translation>7 - Quinta perfeita</translation>
+        <translation>7 — Quinta perfeita</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="798"/>
         <source>8 - Augmented fifth</source>
-        <translation>8 - Quinta aumentada</translation>
+        <translation>8 — Quinta aumentada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="803"/>
         <source>7 - Diminished sixth</source>
-        <translation>7 - Sexta diminuta</translation>
+        <translation>7 — Sexta diminuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="808"/>
         <source>8 - Minor sixth</source>
-        <translation>8 - Sexta menor</translation>
+        <translation>8 — Sexta menor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="813"/>
         <source>9 - Major sixth</source>
-        <translation>9 - Sexta maior</translation>
+        <translation>9 — Sexta maior</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="818"/>
         <source>10 - Augmented sixth</source>
-        <translation>10 - Sexta aumentada</translation>
+        <translation>10 — Sexta aumentada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="823"/>
         <source>9 - Diminished seventh</source>
-        <translation>9 - Sétima diminuta</translation>
+        <translation>9 — Sétima diminuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="828"/>
         <source>10 - Minor seventh</source>
-        <translation>10 - Sétima menor</translation>
+        <translation>10 — Sétima menor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="833"/>
         <source>11 - Major seventh</source>
-        <translation>11 - Sétima maior</translation>
+        <translation>11 — Sétima maior</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="838"/>
         <source>12 - Augmented seventh</source>
-        <translation>12 - Sétima aumentada</translation>
+        <translation>12 — Sétima aumentada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="843"/>
         <source>11 - Diminished octave</source>
-        <translation>11 - Oitava diminuta</translation>
+        <translation>11 — Oitava diminuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="848"/>
         <source>12 - Perfect octave</source>
-        <translation>12 - Oitava perfeita</translation>
+        <translation>12 — Oitava perfeita</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="990"/>
@@ -2237,7 +2237,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
         <source>Select swing ratio:</source>
-        <translation>Selecionar quociente de balanço::</translation>
+        <translation>Selecionar quociente de balanço:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="829"/>
@@ -2939,7 +2939,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5332"/>
         <source>Only before courtesy key signatures</source>
-        <translation>Somente antes das armaduras de clave de cortesia</translation>
+        <translation>Somente antes das armaduras de clave de precaução</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5342"/>
@@ -2949,7 +2949,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5362"/>
         <source>Only before courtesy time signatures</source>
-        <translation>Somente antes das fórmulas de compassos de cortesia</translation>
+        <translation>Somente antes das fórmulas de compassos de precaução</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5616"/>
@@ -4552,7 +4552,7 @@ texto altura-x):</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13145"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
-        <translation>Posição do capo nos trastes:</translation>
+        <translation>Posição do capotraste:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13180"/>
@@ -4745,7 +4745,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="723"/>
         <source>Swing settings</source>
-        <translation>Configurações de swing</translation>
+        <translation>Configurações de balanço</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="748"/>
@@ -5817,7 +5817,7 @@ texto altura-x):</translation>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="27"/>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="33"/>
         <source>Swing settings</source>
-        <translation>Configurações de swing</translation>
+        <translation>Configurações de balanço</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="54"/>
@@ -5842,7 +5842,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="112"/>
         <source>Select swing ratio:</source>
-        <translation>Selecionar quociente de balanço::</translation>
+        <translation>Selecionar quociente de balanço:</translation>
     </message>
 </context>
 <context>
@@ -6909,7 +6909,7 @@ texto altura-x):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="563"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="564"/>
         <source>Measure properties…</source>
-        <translation>Propriedades de Compasso...</translation>
+        <translation>Propriedades do compasso...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
@@ -7133,7 +7133,7 @@ texto altura-x):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1837"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1838"/>
         <source>Go to first empty trailing measure</source>
-        <translation>vá para o primeiro compasso vazio</translation>
+        <translation>Ir para o primeiro compasso vazio no final da partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1987"/>
@@ -7599,7 +7599,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
         <source>Respell pitches</source>
-        <translation>Renomear alturas</translation>
+        <translation>Renomear notas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="475"/>
@@ -7619,7 +7619,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="499"/>
         <source>Remove empty trailing measures</source>
-        <translation>Remover compasso de arrasto vazio</translation>
+        <translation>Remover compassos vazios no final da partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="512"/>
@@ -8052,7 +8052,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1417"/>
         <source>&amp;Nonuplet</source>
-        <translation>&amp;nonina</translation>
+        <translation>&amp;Nonina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1418"/>
@@ -8108,13 +8108,13 @@ texto altura-x):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1491"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1492"/>
         <source>Zoom to page width</source>
-        <translation>Zoom para a largura da página</translation>
+        <translation>Zoom com a largura da página</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1497"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1498"/>
         <source>Zoom to whole page</source>
-        <translation>Zoom para ver a página inteira</translation>
+        <translation>Zoom na página inteira</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1503"/>
@@ -8200,12 +8200,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1630"/>
         <source>Change enharmonic spelling (concert and written pitch)</source>
-        <translation>Mudar enarmonia (tom de concerto e escrito)</translation>
+        <translation>Alterar grafia enarmônica (concerto e tom escrito)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1637"/>
         <source>Change enharmonic spelling (current mode only)</source>
-        <translation>Mudar enarmonia (modo atual apenas)</translation>
+        <translation>Alterar grafia enarmônica (somente modo atual)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1656"/>
@@ -8920,12 +8920,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1629"/>
         <source>Change enharmonic spelling (both modes)</source>
-        <translation>Mudar enarmonia (ambos os modos)</translation>
+        <translation>Alterar grafia enarmônica (ambos os modos)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
         <source>Change enharmonic spelling (current mode)</source>
-        <translation>Mudar enarmonia (modo atual)</translation>
+        <translation>Alterar grafia enarmônica (modo atual)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="208"/>
@@ -9430,7 +9430,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2534"/>
         <source>Show &amp;frames</source>
-        <translation>Mostrar &amp;quadros</translation>
+        <translation>Mostrar &amp;molduras</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
@@ -9446,19 +9446,19 @@ texto altura-x):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1471"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1472"/>
         <source>Zoom in</source>
-        <translation>Aumentar zoom</translation>
+        <translation>Aproximar</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1478"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1479"/>
         <source>Zoom out</source>
-        <translation>Diminuir Zoom</translation>
+        <translation>Reduzir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1485"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1486"/>
         <source>Zoom to 100%</source>
-        <translation>Aumentar 100%</translation>
+        <translation>Aproximar em 100%</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1843"/>
@@ -9575,7 +9575,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="468"/>
         <source>Respell &amp;pitches</source>
-        <translation>Reescrever &amp;alturas</translation>
+        <translation>Re&amp;nomear notas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="474"/>
@@ -9595,7 +9595,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="498"/>
         <source>Remove empty trailing meas&amp;ures</source>
-        <translation>Remover compassos vazios no final</translation>
+        <translation>Remover compassos vazios no final da partit&amp;ura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="505"/>
@@ -10461,12 +10461,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="39"/>
         <source>&amp;Manage plugins…</source>
-        <translation>Gerenciar extensões...</translation>
+        <translation>Gerenciar plugins...</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="40"/>
         <source>Manage plugins…</source>
-        <translation>Gerenciar extensões...</translation>
+        <translation>Gerenciar plugins...</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="45"/>
@@ -10511,7 +10511,7 @@ texto altura-x):</translation>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="73"/>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="97"/>
         <source>Plugins</source>
-        <translation>Extensões</translation>
+        <translation>Plugins</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="90"/>
@@ -10527,7 +10527,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="110"/>
         <source>Plugins search</source>
-        <translation>Procurar extensões</translation>
+        <translation>Procurar plugins</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="129"/>
@@ -11071,7 +11071,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="367"/>
         <source>&amp;Plugins</source>
-        <translation>E&amp;xtensões</translation>
+        <translation>&amp;Plugins</translation>
     </message>
 </context>
 <context>
@@ -11547,12 +11547,12 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="48"/>
         <source>Default zoom:</source>
-        <translation>Zoom padrão:</translation>
+        <translation>Ampliação padrão:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="94"/>
         <source>Mouse zoom precision:</source>
-        <translation>Precisão do zoom do mouse:</translation>
+        <translation>Precisão da ampliação do mouse:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PreferencesDialog.qml" line="34"/>
@@ -11588,7 +11588,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="103"/>
         <source>Plugins</source>
-        <translation>Extensões</translation>
+        <translation>Plugins</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="107"/>
@@ -11980,7 +11980,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
         <location filename="../../src/framework/audioplugins/internal/registeraudiopluginsscenario.cpp" line="80"/>
         <location filename="../../src/framework/audioplugins/tests/registeraudiopluginsscenariotest.cpp" line="157"/>
         <source>Scanning audio plugins</source>
-        <translation>Plugins de áudio em varredura</translation>
+        <translation>Escaneando plugins de áudio</translation>
     </message>
 </context>
 <context>
@@ -12374,13 +12374,13 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
         <location filename="../../src/engraving/dom/note.cpp" line="3377"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="754"/>
         <source>Cross-staff above</source>
-        <translation>Notação cruzada acima</translation>
+        <translation>Notação entre pautas acima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="756"/>
         <source>Cross-staff below</source>
-        <translation>Notação cruzada abaixo</translation>
+        <translation>Notação entre pautas abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3383"/>
@@ -12733,7 +12733,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
         <source>Ambitus</source>
-        <translation>Extensão melódica</translation>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="193"/>
@@ -12889,7 +12889,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
         <source>Capo</source>
-        <translation>Capo</translation>
+        <translation>Capotraste</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="223"/>
@@ -15329,27 +15329,27 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="811"/>
         <source>Bass clef</source>
-        <translation>Clave de baixo</translation>
+        <translation>Clave de Fá</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="812"/>
         <source>Bass clef 15ma bassa</source>
-        <translation>Clave de baixo 15ª abaixo</translation>
+        <translation>Clave de Fá 15ª abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="813"/>
         <source>Bass clef 8va bassa</source>
-        <translation>Clave de baixo 8ª abaixo</translation>
+        <translation>Clave de Fá 8ª abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="814"/>
         <source>Bass clef 8va alta</source>
-        <translation>Clave de baixo 8ª acima</translation>
+        <translation>Clave de Fá 8ª acima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="815"/>
         <source>Bass clef 15ma alta</source>
-        <translation>Clave de baixo 15ª acima</translation>
+        <translation>Clave de Fá 15ª acima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="816"/>
@@ -18752,7 +18752,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="162"/>
         <source>Reload plugins</source>
-        <translation>Recarregar extensões</translation>
+        <translation>Recarregar plugins</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="116"/>
@@ -18795,12 +18795,12 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="46"/>
         <source>Plugin not found</source>
-        <translation>Extensão não encontrada</translation>
+        <translation>Plugin não encontrado</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="47"/>
         <source>Could not load plugin</source>
-        <translation>Não foi possível carregar a extensão</translation>
+        <translation>Não foi possível carregar o plugin</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
@@ -18815,7 +18815,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="77"/>
         <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
-        <translation>Opcionalmente, você pode habilitar a qualquer momento em Home &gt; Extensões.</translation>
+        <translation>Opcionalmente, você pode habilitar a qualquer momento em Início &gt; Plugins.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="42"/>
@@ -20660,7 +20660,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
         <source>Show courtesy clef</source>
-        <translation>Mostrar clave de cortesia</translation>
+        <translation>Mostrar clave de precaução</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="63"/>
@@ -20903,7 +20903,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature</source>
-        <translation>Mostrar armadura de clave de cortesia</translation>
+        <translation>Mostrar armadura de clave de precaução</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -21388,7 +21388,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="95"/>
         <source>Hide courtesy clefs and signatures</source>
-        <translation>Ocultar claves e armaduras de cortesia </translation>
+        <translation>Ocultar claves e armaduras de precaução</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
@@ -21522,7 +21522,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature</source>
-        <translation>Mostrar fórmula de compasso de cortesia</translation>
+        <translation>Mostrar fórmula de compasso de precaução</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -21889,7 +21889,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/models/notation/ambituses/ambitussettingsmodel.cpp" line="34"/>
         <source>Ambitus</source>
-        <translation>Extensão melódica</translation>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/articulations/articulationsettingsmodel.cpp" line="35"/>
@@ -23326,17 +23326,17 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="78"/>
         <source>Zoom in</source>
-        <translation>Aumentar zoom</translation>
+        <translation>Aproximar</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="58"/>
         <source>Zoom out</source>
-        <translation>Diminuir Zoom</translation>
+        <translation>Reduzir</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="126"/>
         <source>Zoom menu</source>
-        <translation>Menu de zoom</translation>
+        <translation>Menu de ampliação</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="129"/>
@@ -24499,12 +24499,12 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="75"/>
         <source>Capo settings</source>
-        <translation>Configurações do Capo</translation>
+        <translation>Configurações do capotraste</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="87"/>
         <source>Capo</source>
-        <translation>Capo</translation>
+        <translation>Capotraste</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="119"/>
@@ -25094,7 +25094,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="108"/>
         <source>Show courtesy clefs</source>
-        <translation>Mostrar claves de cortesia</translation>
+        <translation>Mostrar claves de precaução</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="115"/>
@@ -25180,7 +25180,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="398"/>
         <source>Show courtesy time signatures</source>
-        <translation>Mostrar fórmulas de compasso de cortesia</translation>
+        <translation>Mostrar fórmulas de compasso de precaução</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="417"/>
@@ -25220,7 +25220,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="479"/>
         <source>Show courtesy key signatures</source>
-        <translation>Mostrar armaduras de clave de cortesia</translation>
+        <translation>Mostrar armaduras de clave de precaução</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="488"/>
@@ -25250,12 +25250,12 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="689"/>
         <source>Show when cancelling a courtesy before repeats</source>
-        <translation>Mostrar ao cancelar uma cortesia antes de repetições</translation>
+        <translation>Mostrar ao cancelar uma precaução antes de repetições</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="700"/>
         <source>Show when cancelling a courtesy before all other jumps</source>
-        <translation>Mostrar ao cancelar uma cortesia antes de todos os outros saltos</translation>
+        <translation>Mostrar ao cancelar uma precaução antes de todos os outros saltos</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="585"/>
@@ -26070,7 +26070,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1788"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1789"/>
         <source>Capo</source>
-        <translation>Capo</translation>
+        <translation>Capotraste</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="162"/>
@@ -26114,7 +26114,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1330"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1957"/>
         <source>Ambitus</source>
-        <translation>Extensão melódica</translation>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1334"/>
@@ -26271,7 +26271,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1500"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1502"/>
         <source>Swing</source>
-        <translation>Swing</translation>
+        <translation>Balanço</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1509"/>
@@ -28664,7 +28664,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="154"/>
         <source>New &amp; recent</source>
-        <translation>Novo &amp; recentes</translation>
+        <translation>Novo e recentes</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="88"/>
@@ -29733,12 +29733,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="148"/>
         <source>Zoom in</source>
-        <translation>Aumentar zoom</translation>
+        <translation>Aproximar</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="161"/>
         <source>Zoom out</source>
-        <translation>Diminuir zoom</translation>
+        <translation>Reduzir</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="49"/>
@@ -31688,7 +31688,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5890"/>
         <source>Remove empty trailing measures</source>
-        <translation>Remover compasso de arrasto vazio</translation>
+        <translation>Remover compassos vazios no final da partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5901"/>
@@ -31708,7 +31708,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5926"/>
         <source>Respell pitches</source>
-        <translation>Renomear alturas</translation>
+        <translation>Renomear notas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5933"/>

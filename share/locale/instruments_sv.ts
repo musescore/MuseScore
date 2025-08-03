@@ -19608,7 +19608,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="84"/>
         <source>Early Music</source>
-        <translation>Antik musik</translation>
+        <translation>Tidig musik</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="85"/>

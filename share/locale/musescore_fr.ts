@@ -26830,12 +26830,12 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="106"/>
         <source>Spacing Modifier Letters</source>
-        <translation>Lettres modificatrices d&apos;espacements</translation>
+        <translation>Lettres modificatives avec chasse</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="107"/>
         <source>Combining Diacritical Marks</source>
-        <translation>Signes diacritiques à combiner</translation>
+        <translation>Diacritiques</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="108"/>
@@ -27085,7 +27085,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="157"/>
         <source>Combining Diacritical Marks Extended</source>
-        <translation>Signes diacritiques à combiner Etendus</translation>
+        <translation>Diacritiques étendus</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="158"/>
@@ -27145,7 +27145,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="169"/>
         <source>Combining Diacritical Marks Supplement</source>
-        <translation>Signes diacritiques à combiner - Supplément</translation>
+        <translation>Diacritiques supplément</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="170"/>
@@ -27175,7 +27175,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="175"/>
         <source>Combining Diacritical Marks for Symbols</source>
-        <translation>Signes diacritiques à combiner des symboles</translation>
+        <translation>Diacritiques des symboles</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="176"/>
@@ -27320,7 +27320,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="204"/>
         <source>CJK Radicals Supplement</source>
-        <translation>Radicaux CJK - Supplément</translation>
+        <translation>CJC Sinogrammes - Clés - Supplément</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="205"/>
@@ -27335,7 +27335,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="207"/>
         <source>CJK Symbols and Punctuation</source>
-        <translation>Ponctuation et symboles CJK</translation>
+        <translation>CJC Symboles et Ponctuation</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="208"/>
@@ -27370,7 +27370,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="214"/>
         <source>CJK Strokes</source>
-        <translation>Points CJK</translation>
+        <translation>CJC Sinogrammes - Traits</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="215"/>
@@ -27380,17 +27380,17 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="216"/>
         <source>Enclosed CJK Letters and Months</source>
-        <translation>CJK - Lettres et Mois inclus</translation>
+        <translation>CJC Délimités - Lettres et Mois</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="217"/>
         <source>CJK Compatibility</source>
-        <translation>Compatiblité CJK</translation>
+        <translation>CJC Sinogrammes - Compatibilité</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="218"/>
         <source>CJK Unified Ideographs Extension A</source>
-        <translation>Idéogrammes CJK Unifiés - Extension A</translation>
+        <translation>CJC Sinogrammes unifiés - Extension A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="219"/>
@@ -27400,7 +27400,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="220"/>
         <source>CJK Unified Ideographs</source>
-        <translation>Idéogrammes Unifiés CJK</translation>
+        <translation>CJC Sinogrammes unifiés</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="221"/>
@@ -27565,7 +27565,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="253"/>
         <source>CJK Compatibility Ideographs</source>
-        <translation>Idéogrammes de Compatibilité CJK</translation>
+        <translation>CJC Sinogrammes de compatibilité</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="254"/>
@@ -27580,7 +27580,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="256"/>
         <source>Variation Selectors</source>
-        <translation>Sélecteurs de variation</translation>
+        <translation>Sélecteurs de variante</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="257"/>
@@ -27595,7 +27595,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="259"/>
         <source>CJK Compatibility Forms</source>
-        <translation>Formes de compatibilité CJK</translation>
+        <translation>CJC Sinogrammes Formes de compatibilité</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="260"/>
@@ -28105,7 +28105,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="361"/>
         <source>Small Kana Extension</source>
-        <translation>Extension Sutegana</translation>
+        <translation> Kana - Extension Petit Kana</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="362"/>
@@ -28155,7 +28155,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="371"/>
         <source>Sutton SignWriting</source>
-        <translation>SignWriting de Sutton</translation>
+        <translation>Écriture des signes de Sutton</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="372"/>
@@ -28280,22 +28280,22 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="396"/>
         <source>CJK Unified Ideographs Extension B</source>
-        <translation>Idéogrammes CJK Unifiés - Extension B</translation>
+        <translation>CJC Sinogrammes unifiés - Extension B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="397"/>
         <source>CJK Unified Ideographs Extension C</source>
-        <translation>Idéogrammes CJK Unifiés - Extension C</translation>
+        <translation>CJC Sinogrammes unifiés - Extension C</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="398"/>
         <source>CJK Unified Ideographs Extension D</source>
-        <translation>Idéogrammes CJK Unifiés - Extension D</translation>
+        <translation>CJC Sinogrammes unifiés - Extension D</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="399"/>
         <source>CJK Compatibility Ideographs Supplement</source>
-        <translation>Supplément des Idéogrammes de Compatibilité CJK</translation>
+        <translation>CJC Sinogrammes de compatibilité supplément</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="400"/>
@@ -28305,17 +28305,17 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="401"/>
         <source>Variation Selectors Supplement</source>
-        <translation>Sélecteurs de variation supplémentaires</translation>
+        <translation>Sélecteurs de variante supplément</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="402"/>
         <source>Supplementary Private Use Area-A</source>
-        <translation>Zone d&apos;utilisation privée supplémentaire - Zone A</translation>
+        <translation>Zone à usage privé supplémentaire A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="403"/>
         <source>Supplementary Private Use Area-B</source>
-        <translation>Zone d&apos;utilisation privée supplémentaire - Zone B</translation>
+        <translation>Zone à usage privé supplémentaire B</translation>
     </message>
 </context>
 <context>

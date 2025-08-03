@@ -1896,21 +1896,21 @@
         <source>Very rare variant of the heckelphone in F, sounding a fourth higher than the oboe.</source>
         <comment>piccolo-heckelphone description</comment>
         <extracomment>description for Piccolo Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>非常罕见的F调赫格管（heckelphone）变种，比双簧管高四度。</translation>
+        <translation>非常罕见的 F 调黑克尔双簧管变种，比双簧管高四度。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="818"/>
         <source>Piccolo Heckelphone</source>
         <comment>piccolo-heckelphone trackName</comment>
         <extracomment>trackName for Piccolo Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>高音赫格管</translation>
+        <translation>高音黑克尔双簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="820"/>
         <source>Piccolo Heckelphone</source>
         <comment>piccolo-heckelphone longName</comment>
         <extracomment>longName for Piccolo Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>高音赫格管</translation>
+        <translation>高音黑克尔双簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="822"/>
@@ -2092,7 +2092,7 @@
         <source>Oboe in C, sounding an octave lower than the standard oboe. Similar, but not identical to, the heckelphone.</source>
         <comment>bass-oboe description</comment>
         <extracomment>description for Bass Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调双簧管，比标准双簧管低一个八度。与赫格管（heckelphone）相似，但不完全相同。</translation>
+        <translation>C 调双簧管，比标准双簧管低一个八度。类似，但是不等同于黑克尔双簧管。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="881"/>
@@ -2120,21 +2120,21 @@
         <source>Oboe in C, sounding an octave lower than the standard oboe. Similar, but not identical to, the bass oboe.</source>
         <comment>heckelphone description</comment>
         <extracomment>description for Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C调双簧管，比标准双簧管低一个八度。与低音双簧航管相似，但不完全相同。</translation>
+        <translation>C 调双簧管，比标准双簧管低一个八度。类似，但是不等同于，低音双簧航管。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="890"/>
         <source>Heckelphone</source>
         <comment>heckelphone trackName</comment>
         <extracomment>trackName for Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>赫格管</translation>
+        <translation>黑克尔双簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="892"/>
         <source>Heckelphone</source>
         <comment>heckelphone longName</comment>
         <extracomment>longName for Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>赫格管</translation>
+        <translation>黑克尔双簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="894"/>
@@ -2148,7 +2148,7 @@
         <source>Very rare instrument similar to the heckelphone, with slightly smaller bore and lower range.</source>
         <comment>lupophone description</comment>
         <extracomment>description for Lupophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>非常罕见的乐器，类似于赫格管（heckelphone），但管身和音域更小。</translation>
+        <translation>非常罕见的乐器，类似于黑克尔双簧管，带有更小的管身和更低的音域。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="899"/>
@@ -3569,7 +3569,7 @@
         <source>Similar to the standard soprano clarinet, but with an extension to the lower range.</source>
         <comment>basset-clarinet description</comment>
         <extracomment>description for Basset Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>与标准高音单簧管相似，但延伸到较低的音域。</translation>
+        <translation>类似于标准高音单簧管，但是带有扩展到较低的音域。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1352"/>
@@ -4388,14 +4388,14 @@
         <source>Heckelphone-clarinet</source>
         <comment>heckelphone-clarinet trackName</comment>
         <extracomment>trackName for Heckelphone-clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>赫格单簧管</translation>
+        <translation>黑克尔单簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1613"/>
         <source>Heckelphone-clarinet</source>
         <comment>heckelphone-clarinet longName</comment>
         <extracomment>longName for Heckelphone-clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>赫格单簧管</translation>
+        <translation>黑克尔单簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1615"/>
@@ -10114,7 +10114,7 @@
         <source>Pitched drums that can be tuned quickly by rotating the drumhead.</source>
         <comment>roto-toms description</comment>
         <extracomment>description for Roto-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>调音鼓，可以通过旋转鼓头快速调音。</translation>
+        <translation>调音鼓，能通过旋转鼓头快速调音。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3424"/>
@@ -19980,7 +19980,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="59"/>
         <source>Band and Percussion</source>
-        <translation>乐队与打击乐器</translation>
+        <translation>乐队和打击乐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>

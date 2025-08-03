@@ -3453,7 +3453,7 @@ primera nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6035"/>
         <source>Center between staves on multi-staff instruments</source>
-        <translation>Centrar entre pentagramas en instrumentos multipentagrámicos</translation>
+        <translation>Centrar entre pentagramas en instrumentos de varios pentagramas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6084"/>
