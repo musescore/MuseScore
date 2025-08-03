@@ -49,6 +49,7 @@ struct FinaleOptions
     // common
     musx::dom::MusxInstance<musx::dom::FontInfo> defaultMusicFont;
     musx::util::Fraction combinedDefaultStaffScaling;  // cache this so we don't need to calculate it every time
+    engraving::String calculatedEngravingFontName;
     // options
     musx::dom::MusxInstance<musx::dom::options::AccidentalOptions> accidentalOptions;
     musx::dom::MusxInstance<musx::dom::options::AlternateNotationOptions> alternateNotationOptions;
@@ -101,10 +102,17 @@ struct FontTracker
     FontTracker(const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo, double additionalSizeScaling = 1.0);
     FontTracker(const engraving::MStyle& style, const engraving::String& sidNamePrefix);
 
+    static FontTracker fromEngravingFont(const engraving::MStyle& style, engraving::Sid styleId = engraving::Sid::musicalSymbolFont, double scaling = 1.0);
+
     engraving::String fontName;
     double fontSize = 0.0;
     engraving::FontStyle fontStyle = engraving::FontStyle::Normal;
     bool spatiumIndependent = false;
+
+    bool operator==(const FontTracker& src) const {
+        return fontName == src.fontName && muse::RealIsEqual(fontSize, src.fontSize)
+               && fontStyle == src.fontStyle && spatiumIndependent == src.spatiumIndependent;
+    }
 };
 
 struct EnigmaParsingOptions
@@ -114,7 +122,8 @@ struct EnigmaParsingOptions
 
     HeaderFooterType hfType = HeaderFooterType::None;
     double scaleFontSizeBy = 1.0;
-    std::optional<FontTracker> initialFont;
+    std::optional<FontTracker> initialFont;         ///< This is the default text font for the text we are parsing
+    std::optional<FontTracker> musicSymbolFont;     ///< This is the default font for musical `<sym>` tags
 };
 
 struct ReadableCustomLine
