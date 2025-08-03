@@ -104,6 +104,26 @@ void FinaleOptions::init(const FinaleParser& context)
         throw std::invalid_argument("document contains no options for Layer 1");
     }
     combinedDefaultStaffScaling = pageFormat->calcCombinedSystemScaling();
+    calculatedEngravingFontName = [&]() {
+        const auto& defaultMusicFont = context.musxOptions().defaultMusicFont;
+        std::string fontName = defaultMusicFont->getName();
+        if (context.fontIsEngravingFont(defaultMusicFont)) {
+            return String::fromStdString(fontName);
+        } else if (fontName == "AshMusic" && context.fontIsEngravingFont("Finale Ash")) {
+            return String("Finale Ash");
+        } else if (fontName == "Broadway Copyist" && context.fontIsEngravingFont("Finale Broadway")) {
+            return String("Finale Broadway");
+        } else if (fontName == "Engraver" && context.fontIsEngravingFont("Finale Engraver")) {
+            return String("Finale Engraver");
+        } else if (fontName == "Jazz" && context.fontIsEngravingFont("Finale Jazz")) {
+            return String("Finale Jazz");
+        } else if ((fontName == "Maestro" || fontName == "Pmusic" || fontName == "Sonata") && context.fontIsEngravingFont("Finale Maestro")) {
+            return String("Finale Maestro");
+        } else if (fontName == "Petrucci" && context.fontIsEngravingFont("Finale Legacy")) {
+            return String("Finale Legacy");
+        } // other `else if` checks as required go here
+        return String();
+    }();
 }
 
 bool FinaleParser::fontIsEngravingFont(const std::string& fontName) const
@@ -265,29 +285,9 @@ static void writePagePrefs(MStyle& style, const FinaleParser& context)
     }
 
     // Default music font
-    const String musicFontName = [&]() {
-        const auto& defaultMusicFont = context.musxOptions().defaultMusicFont;
-        std::string fontName = defaultMusicFont->getName();
-        if (context.fontIsEngravingFont(defaultMusicFont)) {
-            return String::fromStdString(fontName);
-        } else if (fontName == "AshMusic" && context.fontIsEngravingFont("Finale Ash")) {
-            return String("Finale Ash");
-        } else if (fontName == "Broadway Copyist" && context.fontIsEngravingFont("Finale Broadway")) {
-            return String("Finale Broadway");
-        } else if (fontName == "Engraver" && context.fontIsEngravingFont("Finale Engraver")) {
-            return String("Finale Engraver");
-        } else if (fontName == "Jazz" && context.fontIsEngravingFont("Finale Jazz")) {
-            return String("Finale Jazz");
-        } else if ((fontName == "Maestro" || fontName == "Pmusic" || fontName == "Sonata") && context.fontIsEngravingFont("Finale Maestro")) {
-            return String("Finale Maestro");
-        } else if (fontName == "Petrucci" && context.fontIsEngravingFont("Finale Legacy")) {
-            return String("Finale Legacy");
-        } // other `else if` checks as required go here
-        return String();
-    }();
-    if (!musicFontName.empty()) {
-        style.set(Sid::musicalSymbolFont, musicFontName);
-        style.set(Sid::musicalTextFont, musicFontName + " Text");
+    if (!prefs.calculatedEngravingFontName.empty()) {
+        style.set(Sid::musicalSymbolFont, prefs.calculatedEngravingFontName);
+        style.set(Sid::musicalTextFont, prefs.calculatedEngravingFontName + " Text");
     }
 }
 
@@ -643,17 +643,17 @@ void writeMarkingPrefs(MStyle& style, const FinaleParser& context)
     if (!cat) {
         throw std::invalid_argument("unable to find MarkingCategory for dynamics");
     }
-    auto catFontInfo = cat->musicFont;
-    const bool catFontIsEngraving = context.fontIsEngravingFont(catFontInfo);
-    const bool override = catFontInfo && catFontIsEngraving && !catFontInfo->calcIsDefaultMusic();
-    style.set(Sid::dynamicsOverrideFont, override);
-    if (override) {
-        style.set(Sid::dynamicsFont, String::fromStdString(catFontInfo->getName()));
-        style.set(Sid::dynamicsSize, double(catFontInfo->fontSize) / double(prefs.defaultMusicFont->fontSize));
-    } else {
-        style.set(Sid::dynamicsFont, String::fromStdString(prefs.defaultMusicFont->getName()));
-        style.set(Sid::dynamicsSize,
-                  catFontIsEngraving ? (double(catFontInfo->fontSize) / double(prefs.defaultMusicFont->fontSize)) : 1.0);
+    if (auto catFontInfo = cat->musicFont) {
+        const bool catFontIsEngraving = context.fontIsEngravingFont(catFontInfo);
+        const bool override = catFontIsEngraving && !catFontInfo->calcIsDefaultMusic();
+        style.set(Sid::dynamicsOverrideFont, override);
+        if (override) {
+            style.set(Sid::dynamicsFont, String::fromStdString(catFontInfo->getName()));
+            style.set(Sid::dynamicsSize, double(catFontInfo->fontSize) / double(prefs.defaultMusicFont->fontSize));
+        } else if (!prefs.calculatedEngravingFontName.empty()) {
+            style.set(Sid::dynamicsFont, prefs.calculatedEngravingFontName);
+            style.set(Sid::dynamicsSize, double(catFontInfo->fontSize) / double(prefs.defaultMusicFont->fontSize));
+        }
     }
 
     auto textBlockFont = options::FontOptions::getFontInfo(context.musxDocument(), FontType::TextBlock);
