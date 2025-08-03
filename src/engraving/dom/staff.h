@@ -78,7 +78,8 @@ public:
     bool isTop() const;
     String partName() const;
     staff_idx_t rstaff() const;
-    staff_idx_t idx() const;
+    staff_idx_t idx() const { return m_idx; }
+    void setIdx(staff_idx_t idx) { m_idx = idx; }
 
     Part* part() const { return m_part; }
     void setPart(Part* p) { m_part = p; }
@@ -286,6 +287,7 @@ private:
     void updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks);
 
     ID m_id = INVALID_ID;
+    staff_idx_t m_idx = muse::nidx;
     Part* m_part = nullptr;
 
     ClefList m_clefs;
