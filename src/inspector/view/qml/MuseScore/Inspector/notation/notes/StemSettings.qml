@@ -167,6 +167,7 @@ FocusableItem {
 
                         titleText: qsTrc("inspector", "Thickness")
                         propertyItem: root.stemModel ? root.stemModel.thickness : null
+                        enabled: root.stemModel ? !root.stemModel.isEmpty : false
 
                         maxValue: 4
                         minValue: 0.01
@@ -185,6 +186,7 @@ FocusableItem {
 
                         titleText: qsTrc("inspector", "Length")
                         propertyItem: root.stemModel ? root.stemModel.length : null
+                        enabled: root.stemModel ? !root.stemModel.isEmpty : false
 
                         maxValue: 10
                         minValue: -10
@@ -199,6 +201,7 @@ FocusableItem {
                     id: stemOffsetSection
                     titleText: qsTrc("inspector", "Stem offset")
                     propertyItem: root.stemModel ? root.stemModel.offset : null
+                    enabled: root.stemModel ? !root.stemModel.isEmpty : false
 
                     navigationName: "StemOffset"
                     navigationPanel: root.navigationPanel
@@ -208,6 +211,7 @@ FocusableItem {
                 OffsetSection {
                     titleText: qsTrc("inspector", "Flag offset")
                     propertyItem: root.hookModel ? root.hookModel.offset : null
+                    enabled: root.hookModel ? !root.hookModel.isEmpty : false
 
                     navigationName: "FlagOffset"
                     navigationPanel: root.navigationPanel
