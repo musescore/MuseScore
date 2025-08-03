@@ -247,7 +247,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>(options, ctx);
 
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
-    //! For other modules, the order is (an should be) unimportant.
+    //! For other modules, the order is (and should be) unimportant.
     app->addModule(new muse::diagnostics::DiagnosticsModule());
 
     // framework
