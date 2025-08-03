@@ -277,7 +277,7 @@ void FinaleParser::importTextExpressions()
         /// Whichever font we choose here will be stripped out in favor of the default for the kind of marking it is.
         options.musicSymbolFont = [&]() -> std::optional<FontTracker> {
             if (!catMusicFont) {
-                return std::nullopt;
+                return FontTracker(musxOptions().defaultMusicFont); // we get here for the Misc category, and this seems like the best choice for legacy files. See todo comments, though.
             } else if (fontIsEngravingFont(catMusicFont->getName())) {
                 return FontTracker(catMusicFont); // if it's an engraving font use it
             } else if (catMusicFont->calcIsDefaultMusic() && !musxOptions().calculatedEngravingFontName.empty()) {
