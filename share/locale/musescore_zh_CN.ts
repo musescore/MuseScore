@@ -12037,7 +12037,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
-        <translation>登录成功！您可以返回MuseScore Studio桌面应用。</translation>
+        <translation>登录成功！您良好地回到 MuseScore Studio。</translation>
     </message>
 </context>
 <context>
@@ -12050,7 +12050,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="39"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation>将创建一个包含有关MuseScore Studio设置信息的.zip文件，以帮助开发人员诊断您遇到的任何问题。在发送给他人前，您可以检查此文件的内容。</translation>
+        <translation>这将会创建一个包含带有关于您的 MuseScore Studio 设置信息的 .zip 文件，以帮助开发人员诊断您遇到的任何问题。在发送给他人前，您能检查此文件的内容。</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="53"/>
@@ -15467,7 +15467,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2453"/>
         <source>Acoustic Snare</source>
-        <translation>传统小军鼓</translation>
+        <translation>传统响弦鼓</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2454"/>
@@ -15477,7 +15477,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2456"/>
         <source>Electric Snare</source>
-        <translation>电子小军鼓</translation>
+        <translation>电子响弦鼓</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2457"/>
@@ -15487,7 +15487,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2458"/>
         <source>Closed Hi-Hat</source>
-        <translation>弱音踩镲</translation>
+        <translation>弱音踩钹</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2459"/>
@@ -15497,7 +15497,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2460"/>
         <source>Pedal Hi-Hat</source>
-        <translation>踏踩镲</translation>
+        <translation>踏板踩钹</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2461"/>
@@ -15507,7 +15507,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2462"/>
         <source>Open Hi-Hat</source>
-        <translation>开音踩镲</translation>
+        <translation>开音踩钹</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2463"/>
@@ -15717,7 +15717,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2509"/>
         <source>Snare (Rim shot)</source>
-        <translation>小军鼓（边击）</translation>
+        <translation>响弦鼓（边击）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2511"/>
@@ -16435,22 +16435,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="640"/>
         <source>4-shape (Walker)</source>
-        <translation>4形（Walker）</translation>
+        <translation>4 形（沃克）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="641"/>
         <source>7-shape (Aikin)</source>
-        <translation>7形（Aikin）</translation>
+        <translation>7 形（艾金）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="642"/>
         <source>7-shape (Funk)</source>
-        <translation>7形（Funk）</translation>
+        <translation>7 形（芬克）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="643"/>
         <source>7-shape (Walker)</source>
-        <translation>7形（Walker）</translation>
+        <translation>7 形（沃克）</translation>
     </message>
 </context>
 <context>
@@ -18815,7 +18815,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="77"/>
         <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
-        <translation>或者，您可以随时从 主页 &gt; 插件 启用它。</translation>
+        <translation>抑或，您能随时从主页 &gt; 插件启用它。</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="42"/>
@@ -19525,12 +19525,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="203"/>
         <source>This setting can be changed at any time in Preferences</source>
-        <translation>随时可以在偏好中更改此设置</translation>
+        <translation>随时能在偏好中更改此设置</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
         <source>You can change this setting in Preferences at any time.</source>
-        <translation>您随时可以在偏好中更改此设置。</translation>
+        <translation>您随时能在偏好中更改此设置。</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="56"/>
@@ -21250,7 +21250,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="148"/>
         <source>Override visual duration</source>
-        <translation>覆盖谱面时值</translation>
+        <translation>重载目视时值</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="159"/>
@@ -21447,25 +21447,25 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="197"/>
         <source>4-shape (Walker)</source>
-        <translation>4形（Walker）</translation>
+        <translation>4 形（沃克）</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="197"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="198"/>
         <source>7-shape (Aikin)</source>
-        <translation>7形（Aikin）</translation>
+        <translation>7 形（艾金）</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="198"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="199"/>
         <source>7-shape (Funk)</source>
-        <translation>7形（Funk）</translation>
+        <translation>7 形（芬克）</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="199"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="200"/>
         <source>7-shape (Walker)</source>
-        <translation>7形（Walker）</translation>
+        <translation>7 形（沃克）</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="55"/>
@@ -22484,7 +22484,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
         <source>Score and part synchronization</source>
-        <translation>乐谱与分谱同步</translation>
+        <translation>总谱和分谱同步化</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/symbols/symbolsettingsmodel.cpp" line="34"/>
@@ -22865,7 +22865,7 @@ pickup measure</source>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="135"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Layout panel (LayoutControlPanel.qml)</extracomment>
-        <translation>您的总谱中没有乐器。欲挑选一些，请按下 &lt;b&gt;添加&lt;/b&gt;，或者使用快捷键%1。</translation>
+        <translation>您的总谱中没有乐器。欲挑选一些，请按下 &lt;b&gt;添加&lt;/b&gt;，或使用快捷键%1。</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/LayoutPanel.qml" line="138"/>
@@ -24156,7 +24156,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="66"/>
         <source>Please select a note or lyrics and retry</source>
-        <translation>请选择一个音符或者歌词与重试</translation>
+        <translation>请选择一个音符或歌词和重试</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="69"/>
@@ -25055,7 +25055,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1400"/>
         <source>Available metadata tags and their current values</source>
-        <translation>可用的元数据标签与其当前值</translation>
+        <translation>可获得的元数据标签和其当前值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1402"/>
@@ -25144,7 +25144,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="191"/>
         <source>Style and size</source>
-        <translation>样式与大小</translation>
+        <translation>样式和尺寸</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="205"/>
@@ -25236,7 +25236,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="562"/>
         <source>Changes that apply to both the repeat/jump and the subsequent bar</source>
-        <translation>同时应用于反复号/跳跃号内与后续小节的更替</translation>
+        <translation>同时应用于反复号/跳跃号内和后续小节的更替</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="569"/>
@@ -25261,7 +25261,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="585"/>
         <source>Changes that apply only after repeats and jumps</source>
-        <translation>仅在反复与跳跃后才应用的更改</translation>
+        <translation>仅在反复号和跳跃后才应用的更改</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="595"/>
@@ -25559,7 +25559,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1432"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2538"/>
         <source>Jumps and markers</source>
-        <translation>跳转与反复</translation>
+        <translation>跳转和锚点</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1343"/>
@@ -28849,22 +28849,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on MuseScore.org.</source>
-        <translation>此乐谱已损坏且包含错误。您可以手动修复这些错误，或将其保存到您的电脑里，然后到MuseScore.org上寻求帮助。</translation>
+        <translation>此总谱已损坏和包含错误。您能手动修复这些错误，或将总谱保存到您的计算机里和到 MuseScore.org 上获取此课题的帮助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1537"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on MuseScore.org.</source>
-        <translation>尽管该文件或将无法使用，您仍可以继续将其保存于本地。您可以尝试手动修复这些错误，或者到MuseScore.org上寻求帮助。</translation>
+        <translation>尽管该文件或将无法使用，您仍能继续将其保存于本地。您能试图手动修复这些错误，或到 MuseScore.org 上寻求此课题的帮助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1539"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on MuseScore.org.</source>
-        <translation>尽管该文件或将无法使用，您仍可以将其继续保存于本地。若您想要妥善地保存乐谱，请恢复它到上次保存的版本，或手动修复错误。您也可以到MuseScore.org上寻求帮助。</translation>
+        <translation>尽管该文件可能将无法使用，您仍能将其继续保存于本地。若您想要妥善地保存您的总谱，请恢复它到上次保存的版本，或手动修复错误。您还能在 MuseScore.org 上获取对于此课题的帮助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
         <source>This score is corrupted. You can get help for this issue on MuseScore.org.</source>
-        <translation>该乐谱已损坏。您可以到MuseScore.org上寻求帮助。</translation>
+        <translation>该总谱已损坏。您能在 MuseScore.org 上获取对于此课题的帮助。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1637"/>
@@ -29394,7 +29394,7 @@ failed.</source>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="71"/>
         <source>Score_and_Parts</source>
         <extracomment>Used in export filename suggestion. Please use only characters that are valid for filenames.</extracomment>
-        <translation>总谱与分谱</translation>
+        <translation>总谱和分谱</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="74"/>
@@ -30275,7 +30275,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
-        <translation>每一次保存可能占用若干分，取决于您的总谱的文件尺寸。这些设置总是可以在偏好中更改。</translation>
+        <translation>每一次保存可能占用若干分，取决于您的总谱的文件尺寸。这些设置总是能在偏好中更改。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1375"/>
@@ -30291,7 +30291,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1378"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</source>
-        <translation>所有既存更改现在都将更新到云端。您可以在MuseScore.com上的乐谱管理器中管理此文件。</translation>
+        <translation>所有既存更改现在都将会更新到云端。您能在 MuseScore.com 上的总谱管理器中管理此文件。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1603"/>
@@ -30306,7 +30306,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1623"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation>为了保留您的乐谱，请试着重新保存一次。若本消息仍然出现，请将您的乐谱保存为新副本。您也可以在%1上获得有关此问题的帮助。&lt;br/&gt;&lt;br/&gt;错误详情（请求支持时请引用）：%2</translation>
+        <translation>为了保留您的总谱，请试着重新保存一次。如果本消息仍然出现，请将您的总谱保存为新副本。您还能在 %1 上获取对于此课题的帮助。&lt;br/&gt;&lt;br/&gt;错误详情（当请求支持时请引用）：%2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
@@ -30356,7 +30356,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="560"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
-        <translation>您可以替换已有的 &lt;a href=&quot;%1&quot;&gt;联机乐谱&lt;/a&gt;, 或将其出版为新乐谱以避免丢失当前在线版本中的改动。</translation>
+        <translation>您能替换已有的 &lt;a href=&quot;%1&quot;&gt;联机总谱&lt;/a&gt;，或将其出版为新总谱以避免丢失当前联机版本中的改动。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="566"/>
@@ -30372,7 +30372,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="571"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
-        <translation>您可以替换已有的 &lt;a href=&quot;%1&quot;&gt;在线乐谱&lt;/a&gt;, 或将其存为新文件以免丢失当前在线版本中的更改。</translation>
+        <translation>您能替换已有的 &lt;a href=&quot;%1&quot;&gt;联机总谱&lt;/a&gt;，或将其保存为新文件以避免丢失当前联机版本中的更改。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>

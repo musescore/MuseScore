@@ -1322,7 +1322,7 @@
         <source>Soprano Ocarina</source>
         <comment>c-soprano-ocarina trackName</comment>
         <extracomment>trackName for Soprano Ocarina; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopránová okarína</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="636"/>
@@ -1357,7 +1357,7 @@
         <source>Soprano Ocarina</source>
         <comment>bb-soprano-ocarina trackName</comment>
         <extracomment>trackName for Soprano Ocarina; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopránová okarína</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="647"/>
@@ -15427,14 +15427,14 @@
         <source>Soprano Ocarina</source>
         <comment>g-soprano-ocarina trackName</comment>
         <extracomment>trackName for Soprano Ocarina; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopránová okarína</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="614"/>
         <source>Soprano Ocarina</source>
         <comment>f-soprano-ocarina trackName</comment>
         <extracomment>trackName for Soprano Ocarina; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopránová okarína</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2592"/>

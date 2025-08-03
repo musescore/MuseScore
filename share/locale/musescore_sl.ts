@@ -13188,7 +13188,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1246"/>
         <source>System</source>
-        <translation>Vrsta zapisa</translation>
+        <translation>Vrstica</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
@@ -25478,7 +25478,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="56"/>
         <source>System text properties</source>
-        <translation>Lastnosti napisa partiture</translation>
+        <translation>Lastnosti napisa vrstice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="58"/>
@@ -26296,7 +26296,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1541"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1542"/>
         <source>System text</source>
-        <translation>Napis partiture</translation>
+        <translation>Napis vrstice</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1554"/>

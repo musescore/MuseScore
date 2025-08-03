@@ -11695,7 +11695,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="178"/>
         <source>MIDI mappings</source>
-        <translation>MIDI-kartoitukset</translation>
+        <translation>MIDI-määritykset</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="172"/>
@@ -30491,7 +30491,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="92"/>
         <source>MIDI mapping:</source>
-        <translation>MIDI-kartoitus:</translation>
+        <translation>MIDI-määritys:</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/StandardEditShortcutDialog.qml" line="33"/>
@@ -30521,12 +30521,12 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="43"/>
         <source>MIDI mapping bottom panel</source>
-        <translation>MIDI-kartoitus alapaneeli</translation>
+        <translation>MIDI-määritys alapaneeli</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="55"/>
         <source>Assign MIDI mapping…</source>
-        <translation>Määritä MIDI-kartoitus…</translation>
+        <translation>Määritä MIDI-määritys…</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsBottomPanel.qml" line="45"/>
@@ -30646,7 +30646,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml" line="39"/>
         <source>MIDI mapping top panel</source>
-        <translation>MIDI-kartoitus yläpaneeli</translation>
+        <translation>MIDI-määritys yläpaneeli</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml" line="38"/>

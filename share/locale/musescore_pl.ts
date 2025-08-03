@@ -10869,7 +10869,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Discover new sound libraries in MuseHub and enjoy realistic score playback</source>
-        <translation>Odkryj nowe biblioteki dźwięków w MuseHubie i ciesz się realistycznym odtwarzaniem partytur</translation>
+        <translation>Odkryj nowe biblioteki dźwięków na MuseHubie i ciesz się realistycznym odtwarzaniem partytur</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>

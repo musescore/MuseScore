@@ -2974,7 +2974,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5775"/>
         <source>Default vertical offset:</source>
-        <translation type="unfinished"/>
+        <translation>Predvolené zvislé odsadenie:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7102"/>
@@ -2992,7 +2992,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7756"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7958"/>
         <source>Ties</source>
-        <translation type="unfinished"/>
+        <translation>Hudobné ligatúry</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8251"/>
@@ -3094,7 +3094,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8487"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8490"/>
         <source>Override score font</source>
-        <translation type="unfinished"/>
+        <translation>Zmena písma notového zápisu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8454"/>
@@ -3669,7 +3669,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
         <source>Slurs &amp; ties</source>
-        <translation type="unfinished"/>
+        <translation>Legatové oblúky a ligatúry</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
@@ -3902,7 +3902,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7542"/>
         <source>Slurs &amp;&amp; ties</source>
-        <translation type="unfinished"/>
+        <translation>Legatové oblúky a ligatúry</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7647"/>
@@ -7654,7 +7654,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="545"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="546"/>
         <source>Staff/Part properties…</source>
-        <translation type="unfinished"/>
+        <translation>Vlastnosti notovej osnovy/partu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="625"/>
@@ -8424,12 +8424,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2018"/>
         <source>Make selected element(s) visible</source>
-        <translation type="unfinished"/>
+        <translation>Zviditeľnenie vybraného/-ých prvku/-ov</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2024"/>
         <source>Make selected element(s) invisible</source>
-        <translation type="unfinished"/>
+        <translation>Zneviditeľnenie vybraného/-ých prvku/-ov</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2029"/>
@@ -8471,19 +8471,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2138"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2215"/>
         <source>Set duration: whole note</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenie trvania na: celú notu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2145"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2222"/>
         <source>Set duration: half note</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenie trvania na: polovú notu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2152"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2229"/>
         <source>Set duration: quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenie trvania na: štvrťovú notu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2158"/>
@@ -8495,13 +8495,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2159"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2236"/>
         <source>Set duration: eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenie trvania na: osminovú notu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2166"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2243"/>
         <source>Set duration: 16th note</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenie trvania na: šestnástinovú notu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2173"/>
@@ -8519,7 +8519,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2187"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2264"/>
         <source>Set duration: 128th note</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenie trvania na: stodvadsaťosminovú notu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2194"/>
@@ -9173,7 +9173,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="82"/>
         <source>Open online handbook</source>
-        <translation type="unfinished"/>
+        <translation>Otvoriť online príručku</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
@@ -9301,7 +9301,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="86"/>
         <source>Toggle MIDI input</source>
-        <translation type="unfinished"/>
+        <translation>Prepnutie MIDI vstupu</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="140"/>
@@ -10723,7 +10723,7 @@ Táto operácia nezmaže žiadne vaše notové zápisy a partitúry.</translatio
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="40"/>
         <source>Loading new score…‎</source>
-        <translation type="unfinished"/>
+        <translation>Načítavam nový notový zápis...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="44"/>
@@ -10745,14 +10745,16 @@ Táto operácia nezmaže žiadne vaše notové zápisy a partitúry.</translatio
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="212"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation type="unfinished"/>
+        <translation>Viete určite, že chcete obnoviť nastavenia?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="213"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Táto akcia obnoví všetky predvoľby aplikácie a odstráni všetky užívateľské klávesové skratky. Nebude vymazaný žiadny váš notový zápis.
+
+Túto akciu nemožno vrátiť späť.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="223"/>
@@ -10812,7 +10814,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation type="unfinished"/>
+        <translation>Copyright © 2004–2021 prispievatelia špecifikácie MusicXML, publikované skupinou Music Notation Community Group v rámci dohody W3C Community Final Specification Agreement (FSA):</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
@@ -10904,7 +10906,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="33"/>
         <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</source>
-        <translation type="unfinished"/>
+        <translation>Za týmto dialógovým oknom sa nachádza sekcia „Nauč sa“, kde nájdeš návody na začiatok.
+(Video návody vyžadujú pripojenie na internet.)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="80"/>
@@ -10924,7 +10927,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
         <source>If you choose to cancel, then be sure to check out our free MuseSounds playback library on MuseScore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Ak sa rozhodnete zrušiť, určite si pozrite našu bezplatnú hudobnú knižnicu MuseSounds na stránke MuseScore.org.</translation>
     </message>
 </context>
 <context>
@@ -12404,7 +12407,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/noteentry.cpp" line="432"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Tento takt obsahuje opakovanie taktu. Ak sem zadáš noty, opakovanie bude odstránené. Chceš pokračovať?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1527"/>
@@ -13494,7 +13497,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1230"/>
         <source>Instrument name (Short)</source>
-        <translation type="unfinished"/>
+        <translation>Názov hudobného nástroja (skrátene)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1234"/>
@@ -13539,12 +13542,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1262"/>
         <source>LH guitar fingering</source>
-        <translation type="unfinished"/>
+        <translation>Prstoklad ľavej ruky</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1263"/>
         <source>RH guitar fingering</source>
-        <translation type="unfinished"/>
+        <translation>Prstoklad pravej ruky</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1267"/>
@@ -14021,7 +14024,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="202"/>
         <source>%n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Jeden takt</numerusform><numerusform>%n takty</numerusform><numerusform>%n taktov</numerusform><numerusform>%n taktov</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="66"/>
@@ -14130,7 +14133,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/check.cpp" line="149"/>
         <source>Part score: %1</source>
         <extracomment>%1 is the name of a part score.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Časť notového zápisu: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="191"/>
@@ -18204,7 +18207,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4861"/>
         <source>Whole note (semibreve)</source>
-        <translation type="unfinished"/>
+        <translation>Celá nota</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5339"/>
@@ -18982,7 +18985,7 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="53"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pred dňom</numerusform><numerusform>Pred %n dňami</numerusform><numerusform>Pred %n dňami</numerusform><numerusform>Pred %n dňami</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="59"/>
@@ -18992,7 +18995,7 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="63"/>
         <source>%n week(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pred týždňom</numerusform><numerusform>Pred n% týždňami</numerusform><numerusform>Pred n% týždňami</numerusform><numerusform>Pred n% týždňami</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="71"/>
@@ -19002,12 +19005,12 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="75"/>
         <source>%n month(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pred mesiacom</numerusform><numerusform>pred %n mesiacmi</numerusform><numerusform>pred %n mesiacmi</numerusform><numerusform>pred %n mesiacmi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="80"/>
         <source>%n year(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pred rokom</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="88"/>
@@ -19518,12 +19521,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="203"/>
         <source>This setting can be changed at any time in Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Toto nastavenie je možné kedykoľvek zmeniť v Nastaveniach.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
         <source>You can change this setting in Preferences at any time.</source>
-        <translation type="unfinished"/>
+        <translation>Toto nastavenie je možné kedykoľvek zmeniť v Nastaveniach.</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TimeInputField.qml" line="56"/>
@@ -19824,7 +19827,7 @@ predtaktie</translation>
     <message numerus="yes">
         <location filename="../../src/importexport/musicxml/internal/musicxml/import/importmusicxml.cpp" line="117"/>
         <source>%n error(s) found, import may be incomplete.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>1 nájdená chyba, import môže byť neúplný.</numerusform><numerusform>Zistilo sa niekoľko chýb, import môže byť neúplný.</numerusform><numerusform>Zistilo sa mnoho chýb, import môže byť neúplný.</numerusform><numerusform>Zistili sa ďalšie chyby, import môže byť neúplný.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/import/musicxmlvalidation.cpp" line="96"/>
@@ -20324,7 +20327,7 @@ predtaktie</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
         <source>Keep measures on the selected system(s) together and prevent them from reflowing to the next system</source>
-        <translation type="unfinished"/>
+        <translation>Udrží takty zvoleného(-ých) systému(-ov) pohromade a zabráni ich opätovnému prechodu do ďalšieho systému.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="187"/>
@@ -22402,7 +22405,7 @@ predtaktie</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="91"/>
         <source>Tie placement</source>
-        <translation type="unfinished"/>
+        <translation>Umiestnenie ligatúry</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="91"/>
@@ -22884,13 +22887,13 @@ predtaktie</translation>
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="987"/>
         <source>Are you sure you want to delete the selected %n instrument(s)?</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Naozaj chcete odstrániť vybraný hudobný nástroj?</numerusform><numerusform>Naozaj chcete odstrániť niekoľko vybraných hudobných nástrojov?</numerusform><numerusform>Naozaj chcete odstrániť množstvo vybraných hudobných nástrojov?</numerusform><numerusform>Naozaj chcete odstrániť vybrané hudobné nástroje?</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="992"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Týmto sa odstráni 1 hudobný nástroj z celého notového zápisu a všetkých častí notového zápisu.</numerusform><numerusform>Týmto sa odstráni pár hudobných nástrojov z celého notového zápisu a všetkých častí notového zápisu.</numerusform><numerusform>Týmto sa odstráni množstvo hudobných nástrojov z celého notového zápisu a všetkých častí notového zápisu.</numerusform><numerusform>Týmto sa odstráni množstvo hudobných nástrojov z celého notového zápisu a všetkých častí notového zápisu.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="242"/>
@@ -23037,7 +23040,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="167"/>
         <source>Sorry, we are unable to load these sounds right now</source>
-        <translation type="unfinished"/>
+        <translation>Je nám ľúto, ale momentálne nie je možné načítať tieto hudobné zvuky</translation>
     </message>
 </context>
 <context>
@@ -23430,7 +23433,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1850"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation type="unfinished"/>
+        <translation>Keďže tento štýlový súbor pochádza z inej verzie MuseScore Studio, zobrazenie tvojej partitúry nemusí byť úplne správne.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1852"/>
@@ -23445,7 +23448,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1867"/>
         <source>An error occurred.</source>
-        <translation type="unfinished"/>
+        <translation>Vyskytla sa chyba.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/searchcommandsparser.cpp" line="40"/>
@@ -23490,7 +23493,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="244"/>
         <source>After selection…</source>
-        <translation type="unfinished"/>
+        <translation>Po výbere...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="245"/>
@@ -23739,7 +23742,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="243"/>
         <source>Name already exists</source>
-        <translation type="unfinished"/>
+        <translation>Názov už existuje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="284"/>
@@ -25463,7 +25466,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="56"/>
         <source>System text properties</source>
-        <translation type="unfinished"/>
+        <translation>Vlastnosti textov systému</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="58"/>
@@ -28468,7 +28471,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="685"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Zvukové nastavenia tohto nástroja môžu byť obnovené, ale texty na notovej osnove zostanú zachované. Túto akciu nie je možné vrátiť späť.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="33"/>
@@ -28748,7 +28751,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="2310"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction. Please fix those at the earliest, to prevent crashes and further corruptions.</source>
-        <translation type="unfinished"/>
+        <translation>Tento súbor obsahuje chyby, ktoré môžu spôsobiť nefunkčnosť aplikácie MuseScore Studio. Opravte ich čo najskôr, aby ste predišli zlyhaniam a ďalším poruchám.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1765"/>
@@ -28867,7 +28870,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
-        <translation type="unfinished"/>
+        <translation>Tento súbor sa nepodarilo otvoriť. Uistite sa, že MuseScore Studio má povolenie na čítanie tohto súboru.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
@@ -28957,7 +28960,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="129"/>
         <source>Create backup of file on disk before saving new changes</source>
-        <translation type="unfinished"/>
+        <translation>Vytvoriť zálohu súboru pred uložením nových zmien na disk</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="346"/>
@@ -29222,7 +29225,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="487"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
         <source>Your MuseScore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation type="unfinished"/>
+        <translation>Váš účet na MuseScore.com je potrebné najprv overiť. Aktivujte si účet prostredníctvom odkazu v aktivačnom e-maile.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="508"/>
@@ -29282,7 +29285,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="109"/>
         <source>Clear selection</source>
-        <translation type="unfinished"/>
+        <translation>Zrušiť výber</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="128"/>
@@ -29625,7 +29628,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation type="unfinished"/>
+        <translation>Upozorňujeme, že vzhľad vašej partitúry sa zmení v dôsledku vylepšení predvolených nastavení pre viazanie nôt, ligatúry, legatové oblúky, systémové objekty a horizontálne rozostupy.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
@@ -30056,7 +30059,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
         <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
-        <translation type="unfinished"/>
+        <translation>Súbory sú ukladané súkromne na vaše osobné konto. Pracovné verzie môžete zdieľať s ostatnými a hotové notové záznamy môžete zverejniť aj verejne.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
@@ -30241,7 +30244,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="138"/>
         <source>Every: %1 saves</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Každé: %1 uloženie/a</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="169"/>
@@ -30422,7 +30425,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="630"/>
         <source>Your Audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation type="unfinished"/>
+        <translation>Váš účet na Audio.com je potrebné najprv overiť. Aktivujte si účet prostredníctvom odkazu v aktivačnom e-maile.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="637"/>
@@ -31054,7 +31057,7 @@ failed.</source>
         <location filename="../../src/engraving/dom/edit.cpp" line="1974"/>
         <location filename="../../src/engraving/dom/edit.cpp" line="2099"/>
         <source>Add tie</source>
-        <translation type="unfinished"/>
+        <translation>Pridať ligatúru</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="743"/>
@@ -31091,7 +31094,7 @@ failed.</source>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="2100"/>
         <source>Remove tie</source>
-        <translation type="unfinished"/>
+        <translation>Odstrániť ligatúru</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="2186"/>
@@ -31150,13 +31153,13 @@ failed.</source>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="143"/>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="485"/>
         <source>Make element(s) visible</source>
-        <translation type="unfinished"/>
+        <translation>Urob prvok/ky viditeľným/i</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="144"/>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="487"/>
         <source>Make element(s) invisible</source>
-        <translation type="unfinished"/>
+        <translation>Urob prvok/ky neviditeľným/i</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/inspectormodelwithvoiceandpositionoptions.cpp" line="163"/>
@@ -31411,7 +31414,7 @@ failed.</source>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4713"/>
         <source>Add %n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pridať jeden takt</numerusform><numerusform>Pridať %n takty</numerusform><numerusform>Pridať %n taktov</numerusform><numerusform>Pridať %n taktov</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4778"/>
@@ -31479,7 +31482,7 @@ failed.</source>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5872"/>
         <source>Delete %n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Vymazať jeden takt</numerusform><numerusform>Vymazať %n takty</numerusform><numerusform>Vymazať %n taktov</numerusform><numerusform>Vymazať %n taktov</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7609"/>
@@ -31541,7 +31544,7 @@ failed.</source>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1096"/>
         <source>Drag element(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Presuňte prvok</numerusform><numerusform>Presuňte prvky</numerusform><numerusform>Presuňte veľa prvkov</numerusform><numerusform>Presuňte prvok/ky/ov</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1740"/>
@@ -32185,7 +32188,7 @@ failed.</source>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="133"/>
         <source>UI preferences (colors, canvas style, etc.)</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenia používateľského rozhrania (farby, štýl zobrazenia, atď.)</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="150"/>
