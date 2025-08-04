@@ -767,3 +767,49 @@ TEST_F(Audio_RpcPackerTests, MPE_PlaybackData)
     EXPECT_TRUE(ok);
     EXPECT_TRUE(origin == unpacked);
 }
+
+template<typename ... Types>
+static void unpack_stream(ByteArray data, async::Channel<Types...> ch)
+{
+    std::tuple<Types...> values;
+    bool success = std::apply([data](auto&... args) {
+        return rpc::RpcPacker::unpack(data, args ...);
+    }, values);
+
+    if (success) {
+        std::apply([&ch](const auto&... args) {
+            ch.send(args ...);
+        }, values);
+    }
+}
+
+TEST_F(Audio_RpcPackerTests, StreamUnpack)
+{
+    int v1_1 = 42;
+    double v1_2 = 73.0;
+    std::string v1_3 = "gg";
+
+    ByteArray data = rpc::RpcPacker::pack(v1_1, v1_2, v1_3);
+
+    async::Channel<int, double, std::string> ch;
+
+    ch.onReceive(nullptr, [v1_1, v1_2, v1_3](int v2_1, double v2_2, std::string v2_3) {
+        EXPECT_EQ(v1_1, v2_1);
+        EXPECT_DOUBLE_EQ(v1_2, v2_2);
+        EXPECT_EQ(v1_3, v2_3);
+    });
+
+    unpack_stream(data, ch);
+}
+
+TEST_F(Audio_RpcPackerTests, Duration)
+{
+    mpe::duration_t origin = 9223372036854775807;
+    ByteArray data = rpc::RpcPacker::pack(origin);
+
+    mpe::duration_t unpacked = 0;
+    bool ok = rpc::RpcPacker::unpack(data, unpacked);
+
+    EXPECT_TRUE(ok);
+    EXPECT_TRUE(origin == unpacked);
+}
