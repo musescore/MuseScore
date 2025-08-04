@@ -130,7 +130,7 @@ void FretCanvas::draw(QPainter* painter)
             double insetX = 2 * lw1;
             double insetY = fret == 1 ? lw2 + lw1 : insetX;
             double startX = startString * stringDist + insetX;
-            double endX = (endString == -1 ? x2 : stringDist * (endString - 1)) - insetX;
+            double endX = (endString == -1 ? x2 : stringDist * endString) - insetX;
             double shoulderXoffset = 0.2 * (endX - startX);
             double startEndY = (fret - 1) * fretDist - insetY;
             double shoulderY = startEndY - 0.5 * fretDist;

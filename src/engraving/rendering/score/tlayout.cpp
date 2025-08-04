@@ -2781,21 +2781,20 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
             continue;
         }
         int startString = barre.startString;
-        int endString = barre.endString != -1 ? barre.endString : item->strings();
+        int endString = barre.endString != -1 ? barre.endString : item->strings() - 1;
         int fret = i.first;
-        if (!ctx.conf().styleB(Sid::barreAppearanceSlur)) {
-            for (int string = startString; string < endString; ++string) {
+        bool slurStyleBarre = ctx.conf().styleB(Sid::barreAppearanceSlur);
+        for (int string = 0; string < item->strings(); ++string) {
+            if (slurStyleBarre && string >= startString && string <= endString) {
+                const_cast<FretDiagram*>(item)->addDotForDotStyleBarre(string, fret);
+            } else {
                 const_cast<FretDiagram*>(item)->removeDotForDotStyleBarre(string, fret);
             }
-            break;
-        }
-        for (int string = startString; string < endString; ++string) {
-            const_cast<FretDiagram*>(item)->addDotForDotStyleBarre(string, fret);
         }
         double insetX = 2 * ldata->stringLineWidth;
         double insetY = fret == 1 ? ldata->nutLineWidth + ldata->stringLineWidth : insetX;
         double startX = startString * ldata->stringDist + insetX;
-        double endX = (endString - 1) * ldata->stringDist - insetX;
+        double endX = (endString) * ldata->stringDist - insetX;
         double shoulderXoffset = 0.2 * (endX - startX);
         double startEndY = (fret - 1) * ldata->fretDist - insetY;
         double shoulderY = startEndY - 0.5 * ldata->fretDist;
