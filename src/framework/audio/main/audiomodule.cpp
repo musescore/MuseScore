@@ -21,8 +21,6 @@
  */
 #include "audiomodule.h"
 
-#include <QtEnvironmentVariables>
-
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
@@ -57,6 +55,7 @@ using namespace muse::audio;
 #endif
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+#include <QtEnvironmentVariables>
 #include "internal/platform/lin/alsaaudiodriver.h"
 #ifdef MUSE_PIPEWIRE_AUDIO_DRIVER
 #include "internal/platform/lin/pwaudiodriver.h"
