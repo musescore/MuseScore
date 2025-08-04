@@ -478,7 +478,7 @@ inline bool unpack_type(Cursor& cursor, int64_t& value) {
     } else if (cursor.data() == int64) {
         cursor.next();
         uint64_t ui64 = 0;
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 8; ++i) {
             uint8_t byte = cursor.read();
             ui64 = (ui64 << 8) | byte;
         }
