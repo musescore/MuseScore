@@ -68,30 +68,35 @@ Cowboys From Hell</text>
           <style>composer</style>
           <text>Pantera</text>
           </Text>
+        <Text>
+          <eid>H_H</eid>
+          <style>poet</style>
+          <text>Words by Pantera</text>
+          </Text>
         </VBox>
       <Measure>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         <voice>
           <KeySig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             </Dynamic>
           <Spanner type="HarmonicMark">
             <HarmonicMark>
               <beginText>AH</beginText>
               <beginTextOffset x="0" y="0"/>
               <continueText>AH</continueText>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               </HarmonicMark>
             <next>
               <location>
@@ -100,20 +105,20 @@ Cowboys From Hell</text>
               </next>
             </Spanner>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <parentheses>both</parentheses>
               <Parenthesis>
-                <eid>O_O</eid>
+                <eid>P_P</eid>
                 </Parenthesis>
               <Parenthesis>
                 <horizontalDirection>right</horizontalDirection>
-                <eid>P_P</eid>
+                <eid>Q_Q</eid>
                 </Parenthesis>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -124,7 +129,7 @@ Cowboys From Hell</text>
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>Q_Q</eid>
+                  <eid>R_R</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -135,10 +140,10 @@ Cowboys From Hell</text>
               </Note>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>4</fret>
@@ -152,7 +157,7 @@ Cowboys From Hell</text>
                 </Spanner>
               </Note>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <head>diamond</head>
@@ -169,7 +174,7 @@ Cowboys From Hell</text>
               </prev>
             </Spanner>
           <Rest>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

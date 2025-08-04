@@ -98,7 +98,7 @@ void GuitarPro5::readInfo()
     artist       = readDelphiString();
     album        = readDelphiString();
     composer     = readDelphiString();
-    readDelphiString();
+    poet         = readDelphiString();
     String copyright = readDelphiString();
     if (!copyright.isEmpty()) {
         score->setMetaTag(u"copyright", copyright);

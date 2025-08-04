@@ -2781,9 +2781,12 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp, bool experimental)
         m->add(s);
     }
 
-    //TODO: Temporary for experimental import, will be deleted later
-    if (experimental) {
+    if (!gp->poet.isEmpty() || experimental) {
         Text* s = Factory::createText(score->dummy(), TextStyleType::LYRICIST);
+        if (!gp->poet.isEmpty()) {
+            s->setPlainText(muse::mtrc("iex_guitarpro", "Words by %1").arg(gp->poet));
+        }
+
         m->add(s);
     }
 }
@@ -2912,11 +2915,13 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, const muse::m
 
     GuitarPro* gp;
     bool readResult = false;
+    bool isVersionAbove6 = false;
     // check to see if we are dealing with a GP file via the extension
     if (strcmp(header, "PK\x3\x4") == 0) {
         gp = new GuitarPro7(score, iocCtx);
         readResult = gp->read(io);
         gp->setTempo(0, 0);
+        isVersionAbove6 = true;
     }
     // check to see if we are dealing with a GPX file via the extension
     else if (strcmp(header, "BCFZ") == 0) {
@@ -2924,6 +2929,7 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, const muse::m
         drumset::initGuitarProDrumset();
         readResult = gp->read(io);
         gp->setTempo(0, 0);
+        isVersionAbove6 = true;
     }
     // otherwise it's an older version - check the header
     else if (strcmp(&header[1], "FIC") == 0) {
@@ -2969,7 +2975,9 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, const muse::m
         return Err::NoError;
     }
 
-    addMetaInfo(score, gp, experimental);
+    if (!isVersionAbove6) {
+        addMetaInfo(score, gp, experimental);
+    }
 
     int idx = 0;
 
