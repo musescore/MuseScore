@@ -313,11 +313,8 @@ bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
         setDirection(v.value<DirectionV>());
         break;
     case Pid::ARTICULATION_ANCHOR:
-    {
-        ArticulationAnchor anchor = ArticulationAnchor(v.toInt());
         setAnchor(ArticulationAnchor(v.toInt()));
         break;
-    }
     case Pid::PLAY:
         setPlayArticulation(v.toBool());
         break;
