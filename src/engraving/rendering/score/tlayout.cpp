@@ -6029,7 +6029,8 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
     shape.translateY(yoff);
     ldata->setShape(shape);
 
-    if (item->hasFrame()) {
+    // Layout a frame, or at least make the layout valid in some strange-font cases ...
+    if (item->hasFrame() || (!item->plainText().isEmpty() && !ldata->isValid() && !ldata->isSkipDraw())) {
         item->layoutFrame(ldata);
     }
 
