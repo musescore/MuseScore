@@ -115,8 +115,8 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
             return;
         }
 
-        channel()->addReceiveStream(mainStreamId, playbackData.mainStream);
-        channel()->addReceiveStream(offStreamId, playbackData.offStream);
+        channel()->addReceiveStream(StreamName::PlaybackDataMainStream, mainStreamId, playbackData.mainStream);
+        channel()->addReceiveStream(StreamName::PlaybackDataOffStream, offStreamId, playbackData.offStream);
 
         RetVal2<TrackId, AudioParams> ret = m_playback->addTrack(seqId, trackName, playbackData, params);
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
@@ -217,7 +217,7 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
         RetVal<InputProcessingProgress> ret = m_playback->inputProcessingProgress(seqId, trackId);
         StreamId streamId = 0;
         if (ret.ret) {
-            streamId = channel()->addSendStream(ret.val.processedChannel);
+            streamId = channel()->addSendStream(StreamName::InputProcessingProgressStream, ret.val.processedChannel);
         }
 
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret.ret, ret.val.isStarted, streamId)));
@@ -317,7 +317,7 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
 
         PlaybackStatus status = m_playback->playbackStatus(seqId);
         async::Channel<PlaybackStatus> ch = m_playback->playbackStatusChanged(seqId);
-        StreamId streamId = channel()->addSendStream(ch);
+        StreamId streamId = channel()->addSendStream(StreamName::PlaybackStatusStream, ch);
         channel()->send(rpc::make_response(msg, RpcPacker::pack(status, streamId)));
     });
 
@@ -330,7 +330,7 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
 
         secs_t pos = m_playback->playbackPosition(seqId);
         async::Channel<secs_t> ch = m_playback->playbackPositionChanged(seqId);
-        StreamId streamId = channel()->addSendStream(ch);
+        StreamId streamId = channel()->addSendStream(StreamName::PlaybackPositionStream, ch);
         channel()->send(rpc::make_response(msg, RpcPacker::pack(pos, streamId)));
     });
 
@@ -395,7 +395,7 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
         RetVal<AudioSignalChanges> ret = m_playback->signalChanges(seqId, trackId);
         StreamId streamId = 0;
         if (ret.ret) {
-            streamId = channel()->addSendStream(ret.val);
+            streamId = channel()->addSendStream(StreamName::AudioSignalStream, ret.val);
         }
 
         RetVal<StreamId> res;
@@ -410,7 +410,7 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
         RetVal<AudioSignalChanges> ret = m_playback->masterSignalChanges();
         StreamId streamId = 0;
         if (ret.ret) {
-            streamId = channel()->addSendStream(ret.val);
+            streamId = channel()->addSendStream(StreamName::AudioMasterSignalStream, ret.val);
         }
 
         RetVal<StreamId> res;
@@ -450,7 +450,8 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
         });
 
         if (m_saveSoundTrackProgressStreamId == 0) {
-            m_saveSoundTrackProgressStreamId = channel()->addSendStream(m_saveSoundTrackProgressStream);
+            m_saveSoundTrackProgressStreamId = channel()->addSendStream(StreamName::SaveSoundTrackProgressStream,
+                                                                        m_saveSoundTrackProgressStream);
         }
 
         channel()->send(rpc::make_response(msg, RpcPacker::pack(m_saveSoundTrackProgressStreamId)));

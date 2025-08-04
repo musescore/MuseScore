@@ -267,8 +267,8 @@ async::Promise<TrackId, AudioParams> Playback::addTrack(const TrackSequenceId se
     return async::make_promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {
         ONLY_AUDIO_MAIN_THREAD;
 
-        rpc::StreamId mainStreamId = channel()->addSendStream(playbackData.mainStream);
-        rpc::StreamId offStreamId = channel()->addSendStream(playbackData.offStream);
+        rpc::StreamId mainStreamId = channel()->addSendStream(StreamName::PlaybackDataMainStream, playbackData.mainStream);
+        rpc::StreamId offStreamId = channel()->addSendStream(StreamName::PlaybackDataOffStream, playbackData.offStream);
 
         ByteArray data = RpcPacker::pack(sequenceId, trackName, playbackData, params, mainStreamId, offStreamId);
 
@@ -427,7 +427,7 @@ muse::async::Promise<InputProcessingProgress> Playback::inputProcessingProgress(
             if (ret) {
                 InputProcessingProgress prog;
                 prog.isStarted = isStarted;
-                channel()->addReceiveStream(streamId, prog.processedChannel);
+                channel()->addReceiveStream(StreamName::InputProcessingProgressStream, streamId, prog.processedChannel);
                 (void)resolve(prog);
             } else {
                 (void)reject(ret.code(), ret.text());
@@ -556,7 +556,7 @@ async::Promise<AudioSignalChanges> Playback::signalChanges(const TrackSequenceId
 
             if (ret.ret) {
                 AudioSignalChanges ch;
-                channel()->addReceiveStream(ret.val, ch);
+                channel()->addReceiveStream(StreamName::AudioSignalStream, ret.val, ch);
                 (void)resolve(ch);
             } else {
                 (void)reject(ret.ret.code(), ret.ret.text());
@@ -581,7 +581,7 @@ async::Promise<AudioSignalChanges> Playback::masterSignalChanges() const
 
             if (ret.ret) {
                 AudioSignalChanges ch;
-                channel()->addReceiveStream(ret.val, ch);
+                channel()->addReceiveStream(StreamName::AudioMasterSignalStream, ret.val, ch);
                 (void)resolve(ch);
             } else {
                 (void)reject(ret.ret.code(), ret.ret.text());
@@ -640,7 +640,9 @@ async::Channel<int64_t, int64_t> Playback::saveSoundTrackProgressChanged(const T
 
             if (m_saveSoundTrackProgressStreamId == 0) {
                 m_saveSoundTrackProgressStreamId = streamId;
-                channel()->addReceiveStream(m_saveSoundTrackProgressStreamId, m_saveSoundTrackProgressStream);
+                channel()->addReceiveStream(StreamName::SaveSoundTrackProgressStream,
+                                            m_saveSoundTrackProgressStreamId,
+                                            m_saveSoundTrackProgressStream);
             }
 
             assert(m_saveSoundTrackProgressStreamId == streamId);
