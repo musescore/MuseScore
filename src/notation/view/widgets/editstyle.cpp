@@ -836,7 +836,7 @@ EditStyle::EditStyle(QWidget* parent)
     auto restOffsetSelector = createQmlWidget(
         groupBox_rests,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml")));
-    restOffsetSelector.widget->setMinimumSize(224, 100);
+    restOffsetSelector.widget->setMinimumSize(224, 70);
     groupBox_rests->layout()->addWidget(restOffsetSelector.widget);
 
     // ====================================================

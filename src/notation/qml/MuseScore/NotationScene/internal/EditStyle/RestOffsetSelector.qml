@@ -59,14 +59,6 @@ Rectangle {
         }
 
         CheckBox {
-            text: qsTrc("notation", "Align adjacent rests")
-            checked: restsPageModel.alignAdjacentRests.value
-            onClicked: {
-                restsPageModel.alignAdjacentRests.value = !restsPageModel.alignAdjacentRests.value
-            }
-        }
-
-        CheckBox {
             id: mergeMatchingRestsCheckbox
             text: qsTrc("notation", "Merge matching rests")
             checked: restsPageModel.mergeMatchingRests.value

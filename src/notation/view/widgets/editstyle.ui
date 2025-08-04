@@ -245,7 +245,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>10</number>
+       <number>13</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -5421,7 +5421,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>622</width>
+             <width>401</width>
              <height>585</height>
             </rect>
            </property>

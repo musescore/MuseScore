@@ -650,8 +650,6 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         if (value(Sid::ottavaHookBelow).value<Spatium>().val() < 0) {
             set(Sid::ottavaHookBelow, -value(Sid::ottavaHookBelow).value<Spatium>());
         }
-
-        set(Sid::alignAdjacentRests, false);
     }
 
     if (m_version == 450) {
