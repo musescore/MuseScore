@@ -4529,9 +4529,13 @@ void NotationInteraction::endEditGrip()
 
 void NotationInteraction::updateGripAnchorLines()
 {
+    if (!m_editData.element) {
+        return;
+    }
+
     std::vector<LineF> lines;
-    mu::engraving::Grip anchorLinesGrip = m_editData.curGrip
-                                          == mu::engraving::Grip::NO_GRIP ? m_editData.element->defaultGrip() : m_editData.curGrip;
+    mu::engraving::Grip anchorLinesGrip = m_editData.curGrip == mu::engraving::Grip::NO_GRIP
+                                          ? m_editData.element->defaultGrip() : m_editData.curGrip;
     std::vector<LineF> anchorLines = m_editData.element->gripAnchorLines(anchorLinesGrip);
 
     if (!anchorLines.empty()) {
