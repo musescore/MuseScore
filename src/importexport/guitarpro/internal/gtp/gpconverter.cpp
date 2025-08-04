@@ -1074,7 +1074,10 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
 
     if (!gpscore->poet().isEmpty() || engravingConfiguration()->guitarProImportExperimental()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::LYRICIST);
-        s->setPlainText(muse::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
+        if (!gpscore->poet().isEmpty()) {
+            s->setPlainText(muse::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
+        }
+
         m->add(s);
     }
 }
