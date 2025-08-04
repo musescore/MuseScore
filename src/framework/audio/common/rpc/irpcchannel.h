@@ -197,6 +197,40 @@ struct Msg {
 using Handler = std::function<void (const Msg& msg)>;
 
 // stream
+enum class StreamName {
+    Undefined = -1,
+
+    PlaybackDataMainStream,
+    PlaybackDataOffStream,
+
+    AudioSignalStream,
+    AudioMasterSignalStream,
+
+    PlaybackStatusStream,
+    PlaybackPositionStream,
+
+    InputProcessingProgressStream,
+    SaveSoundTrackProgressStream
+};
+
+inline std::string to_string(StreamName n)
+{
+    switch (n) {
+    case StreamName::Undefined: return "Undefined";
+    case StreamName::PlaybackDataMainStream: return "PlaybackDataMainStream";
+    case StreamName::PlaybackDataOffStream: return "PlaybackDataOffStream";
+    case StreamName::AudioSignalStream: return "AudioSignalStream";
+    case StreamName::AudioMasterSignalStream: return "AudioMasterSignalStream";
+    case StreamName::PlaybackStatusStream: return "PlaybackStatusStream";
+    case StreamName::PlaybackPositionStream: return "PlaybackPositionStream";
+    case StreamName::InputProcessingProgressStream: return "InputProcessingProgressStream";
+    case StreamName::SaveSoundTrackProgressStream: return "SaveSoundTrackProgressStream";
+    }
+
+    assert(false && "unknown enum value");
+    return std::to_string(static_cast<int>(n));
+}
+
 using StreamId = uint32_t;
 inline StreamId new_stream_id()
 {
@@ -206,6 +240,7 @@ inline StreamId new_stream_id()
 }
 
 struct StreamMsg {
+    StreamName name = StreamName::Undefined;
     StreamId streamId = 0;
     ByteArray data;
 };
@@ -232,9 +267,10 @@ template<typename ... Types>
 class RpcStream : public IRpcStream, public async::Asyncable
 {
 public:
-    RpcStream(IRpcChannel* rpc, StreamId id, StreamType type, const async::Channel<Types...>& ch)
-        : m_rpc(rpc), m_streamId(id), m_type(type), m_ch(ch) {}
+    RpcStream(IRpcChannel* rpc, StreamName name, StreamId id, StreamType type, const async::Channel<Types...>& ch)
+        : m_rpc(rpc), m_name(name), m_streamId(id), m_type(type), m_ch(ch) {}
 
+    StreamName name() const { return m_name; }
     StreamId streamId() const override { return m_streamId; }
     StreamType type() const override { return m_type; }
     void init() override;
@@ -242,6 +278,7 @@ public:
 
 private:
     IRpcChannel* m_rpc = nullptr;
+    StreamName m_name = StreamName::Undefined;
     StreamId m_streamId = 0;
     StreamType m_type = StreamType::Undefined;
     async::Channel<Types...> m_ch;
@@ -260,18 +297,18 @@ public:
 
     // stream (async/channel)
     template<typename ... Types>
-    StreamId addSendStream(const async::Channel<Types...>& ch)
+    StreamId addSendStream(StreamName name, const async::Channel<Types...>& ch)
     {
         StreamId id = new_stream_id();
-        std::shared_ptr<IRpcStream> s = std::shared_ptr<IRpcStream>(new RpcStream<Types...>(this, id, StreamType::Send, ch));
+        std::shared_ptr<IRpcStream> s = std::shared_ptr<IRpcStream>(new RpcStream<Types...>(this, name, id, StreamType::Send, ch));
         addStream(s);
         return id;
     }
 
     template<typename ... Types>
-    void addReceiveStream(rpc::StreamId id, const async::Channel<Types...>& ch)
+    void addReceiveStream(StreamName name, rpc::StreamId id, const async::Channel<Types...>& ch)
     {
-        std::shared_ptr<IRpcStream> s = std::shared_ptr<IRpcStream>(new RpcStream<Types...>(this, id, StreamType::Receive, ch));
+        std::shared_ptr<IRpcStream> s = std::shared_ptr<IRpcStream>(new RpcStream<Types...>(this, name, id, StreamType::Receive, ch));
         addStream(s);
     }
 
@@ -292,7 +329,7 @@ void RpcStream<Types...>::init()
     case StreamType::Send: {
         m_ch.onReceive(this, [this](const Types... args) {
                 ByteArray data = RpcPacker::pack(args ...);
-                m_rpc->sendStream(StreamMsg { m_streamId, data });
+                m_rpc->sendStream(StreamMsg { m_name, m_streamId, data });
             });
     } break;
     case StreamType::Receive: {

@@ -27,7 +27,7 @@
 
 #include "log.h"
 
-//#define RPC_LOGGING_ENABLED
+#define RPC_LOGGING_ENABLED
 
 #ifdef RPC_LOGGING_ENABLED
 #define RPCLOG() LOGDA()
@@ -105,7 +105,8 @@ void GeneralRpcChannel::receive(RpcData& from, RpcData& to) const
     while (!streamMsgQueue.empty()) {
         const StreamMsg& m = streamMsgQueue.front();
 
-        RPCLOG() << "received streamId: " << m.streamId
+        RPCLOG() << "received stream: " << to_string(m.name)
+                 << ", streamId: " << m.streamId
                  << ", data.size: " << m.data.size();
 
         auto it = to.onStreams.find(m.streamId);
@@ -188,7 +189,8 @@ void GeneralRpcChannel::removeStream(StreamId id)
 
 void GeneralRpcChannel::sendStream(const StreamMsg& msg)
 {
-    RPCLOG() << "streamId: " << msg.streamId
+    RPCLOG() << "stream: " << to_string(msg.name)
+             << ", streamId: " << msg.streamId
              << ", data.size: " << msg.data.size();
 
     if (isWorkerThread()) {

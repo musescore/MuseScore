@@ -56,7 +56,7 @@ void Player::init()
                 return;
             }
 
-            channel()->addReceiveStream(streamId, m_playbackStatusChanged);
+            channel()->addReceiveStream(StreamName::PlaybackStatusStream, streamId, m_playbackStatusChanged);
             //! NOTE Send initial state
             m_playbackStatusChanged.send(status);
         });
@@ -76,7 +76,7 @@ void Player::init()
                 return;
             }
 
-            channel()->addReceiveStream(streamId, m_playbackPositionChanged);
+            channel()->addReceiveStream(StreamName::PlaybackPositionStream, streamId, m_playbackPositionChanged);
             //! NOTE Send initial state
             m_playbackPositionChanged.send(pos);
         });
