@@ -3818,6 +3818,9 @@ void Note::undoUnlink()
     for (Spanner* s : m_spannerFor) {
         s->undoUnlink();
     }
+    if (m_tieFor) {
+        m_tieFor->undoUnlink();
+    }
 }
 
 //---------------------------------------------------------
