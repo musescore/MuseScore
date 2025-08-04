@@ -45,6 +45,8 @@ public:
     bool uniqueStaffType() const { return m_staffTypeChanges.empty(); }
     std::pair<int, int> staffTypeRange(const Fraction&) const;
 
+    const std::map<int, StaffType>& staffTypeChanges() const { return m_staffTypeChanges; }
+
 private:
     StaffType m_firstStaffType;   // staff type at tick 0
     std::map<int, StaffType> m_staffTypeChanges;

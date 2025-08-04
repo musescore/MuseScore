@@ -867,7 +867,7 @@
           <eid>/B_/B</eid>
           <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <trackName>Alto</trackName>
@@ -1351,7 +1351,7 @@
           <eid>ND_ND</eid>
           <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <trackName>Tenor</trackName>

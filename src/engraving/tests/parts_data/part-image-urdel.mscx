@@ -842,7 +842,7 @@
         <Staff>
           <eid>5B_5B</eid>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <trackName>Alto</trackName>
@@ -1299,7 +1299,7 @@
         <Staff>
           <eid>JD_JD</eid>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           </Staff>
         <trackName>Tenor</trackName>
