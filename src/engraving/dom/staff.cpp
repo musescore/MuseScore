@@ -1266,7 +1266,11 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 void Staff::init(const Staff* s)
 {
     m_id                = s->m_id;
-    m_staffTypeList     = s->m_staffTypeList;
+    for (const auto& stPair : s->m_staffTypeList.staffTypeChanges()) {
+        const StaffType& st = stPair.second;
+        StaffType newStaffType(st);
+        setStaffType(Fraction::fromTicks(stPair.first), newStaffType);
+    }
     setDefaultClefType(s->defaultClefType());
     m_barLineFrom       = s->m_barLineFrom;
     m_barLineTo         = s->m_barLineTo;
