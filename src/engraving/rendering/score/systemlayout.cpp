@@ -1154,7 +1154,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             AlignmentLayout::alignItemsForSystem(fretItems, system);
         }
 
-        layoutHarmonies(elementsToLayout.harmonies, system, false, ctx);
+        layoutHarmonies(elementsToLayout.harmonies, system, true, ctx);
 
         for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
             if (Harmony* harmony = fretDiag->harmony()) {

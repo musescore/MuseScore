@@ -200,7 +200,7 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
     case ElementType::HARMONY: {
         EngravingItem* parentItem = toHarmony(item)->parentItem();
         if (parentItem && parentItem->isFretDiagram()) {
-            curY += parentItem->pos().y();
+            curY += parentItem->pos().y() + item->height();
         }
         break;
     }
