@@ -986,7 +986,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         BeamLayout::layoutNonCrossBeams(cr, ctx);
     }
 
-    RestLayout::alignRests(elementsToLayout.system, ctx);
+    if (ctx.conf().styleB(Sid::alignAdjacentRests)) {
+        RestLayout::alignRests(elementsToLayout.system, ctx);
+    }
     RestLayout::checkFullMeasureRestCollisions(elementsToLayout.system, ctx);
 
     for (BarLine* bl : elementsToLayout.barlines) {

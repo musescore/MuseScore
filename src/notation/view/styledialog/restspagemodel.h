@@ -30,11 +30,13 @@ class RestsPageModel : public AbstractStyleDialogModel
 
     Q_PROPERTY(StyleItem * multiVoiceRestTwoSpaceOffset READ multiVoiceRestTwoSpaceOffset CONSTANT)
     Q_PROPERTY(StyleItem * mergeMatchingRests READ mergeMatchingRests CONSTANT)
+    Q_PROPERTY(StyleItem * alignAdjacentRests READ alignAdjacentRests CONSTANT)
 
 public:
     explicit RestsPageModel(QObject* parent = nullptr);
 
     StyleItem* multiVoiceRestTwoSpaceOffset() const;
     StyleItem* mergeMatchingRests() const;
+    StyleItem* alignAdjacentRests() const;
 };
 }
