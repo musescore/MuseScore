@@ -25,6 +25,7 @@
 #include <QBuffer>
 #include <QJsonDocument>
 
+#include "global/types/version.h"
 #include "defer.h"
 
 using namespace mu::musesounds;
@@ -41,10 +42,10 @@ bool MuseSamplerCheckUpdateService::canCheckForUpdate() const
 
 muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
 {
-    const std::string localVersion = museSampler() ? museSampler()->version() : std::string();
+    const std::string localVersionStr = museSampler() ? museSampler()->version() : std::string();
 
-    return muse::async::Promise<muse::RetVal<bool> >([this, localVersion](auto resolve, auto) {
-        if (localVersion.empty()) {
+    return muse::async::Promise<muse::RetVal<bool> >([this, localVersionStr](auto resolve, auto) {
+        if (localVersionStr.empty()) {
             muse::RetVal<bool> result;
             result.ret = muse::Ret(int(muse::Ret::Code::UnknownError), "Unable to obtain the local MuseSampler version");
             result.val = false;
@@ -52,7 +53,7 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
         }
 
 #ifdef QT_CONCURRENT_SUPPORTED
-        Concurrent::run([this, localVersion, resolve]() {
+        Concurrent::run([this, localVersionStr, resolve]() {
             if (configuration()->museSamplerCheckForUpdateTestMode()) {
                 (void)resolve(muse::RetVal<bool>::make_ok(true));
                 return;
@@ -96,8 +97,12 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
             }
 
             const QJsonObject firstAsset = assetsArray.first().toObject();
-            const std::string version = firstAsset.value("version").toString().toStdString();
-            result.val = !version.empty() && localVersion != version;
+            const QString versionStr = firstAsset.value("version").toString();
+
+            const muse::Version version(versionStr);
+            const muse::Version localVersion(localVersionStr);
+
+            result.val = localVersion < version;
         });
 
         return muse::async::Promise<muse::RetVal<bool> >::dummy_result();
