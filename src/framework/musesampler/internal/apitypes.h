@@ -99,18 +99,16 @@ enum ms_NoteArticulation : uint64_t
     ms_NoteArticulation_TurnInvertedWholeSemi = 1LL << 19,
     ms_NoteArticulation_ArpeggioUp = 1LL << 20,
     ms_NoteArticulation_ArpeggioDown = 1LL << 21,
-    ms_NoteArticulation_Tremolo1 = 1LL << 22,
-    ms_NoteArticulation_Tremolo2 = 1LL << 23,
-    ms_NoteArticulation_Tremolo3 = 1LL << 24,
+    ms_NoteArticulation_Tremolo1 = 1LL << 22, // One or two note, depending on fallback notes
+    ms_NoteArticulation_Tremolo2 = 1LL << 23, // One or two note, depending on fallback notes
+    ms_NoteArticulation_Tremolo3 = 1LL << 24, // One or two note, depending on fallback notes
     ms_NoteArticulation_Scoop = 1LL << 25,
     ms_NoteArticulation_Plop = 1LL << 26,
     ms_NoteArticulation_Doit = 1LL << 27,
     ms_NoteArticulation_Fall = 1LL << 28,
     ms_NoteArticulation_Appoggiatura = 1LL << 29, // Duration is ignored
     ms_NoteArticulation_Acciaccatura = 1LL << 30, // Duration is ignored
-
     ms_NoteArticulation_Open = 1LL << 31,
-
     ms_NoteArticulation_Portamento = 1LL << 36,
     ms_NoteArticulation_Pizzicato = 1LL << 37,
     ms_NoteArticulation_Glissando = 1LL << 39,
@@ -120,12 +118,11 @@ enum ms_NoteArticulation : uint64_t
     ms_NoteArticulation_ColLegno = 1LL << 43,
     ms_NoteArticulation_SulTasto = 1LL << 44,
     ms_NoteArticulation_SulPonticello = 1LL << 45,
-    ms_NoteArticulation_HammerOn = 1LL << 46,
-    ms_NoteArticulation_PullOff = 1LL << 47,
+    ms_NoteArticulation_LeftHandTapping = 1LL << 46,
+    ms_NoteArticulation_RightHandTapping = 1LL << 47,
     ms_NoteArticulation_PalmMute = 1LL << 48,
     ms_NoteArticulation_PinchHarmonic = 1LL << 49,
     ms_NoteArticulation_BuzzTremolo = 1LL << 50,
-
     ms_NoteArticulation_LaissezVibrer = 1LL << 59,
 };
 
