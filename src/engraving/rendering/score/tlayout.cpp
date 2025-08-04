@@ -2791,14 +2791,15 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
                 const_cast<FretDiagram*>(item)->removeDotForDotStyleBarre(string, fret);
             }
         }
-        double insetX = 2 * ldata->stringLineWidth;
-        double insetY = fret == 1 ? ldata->nutLineWidth + ldata->stringLineWidth : insetX;
+        int length = endString - startString;
+        double insetX = (length < 2 ? 1.25 : 2) * ldata->stringLineWidth;
+        double insetY = fret == 1 ? ldata->nutLineWidth + ldata->stringLineWidth : length < 2 ? 2 * ldata->stringLineWidth : insetX;
         double startX = startString * ldata->stringDist + insetX;
         double endX = (endString) * ldata->stringDist - insetX;
         double shoulderXoffset = 0.2 * (endX - startX);
         double startEndY = (fret - 1) * ldata->fretDist - insetY;
-        double shoulderY = startEndY - 0.5 * ldata->fretDist;
-        double slurThickness = 0.1 * item->spatium() * item->userMag();
+        double shoulderY = startEndY - (length < 2 ? 0.3 : length < 3 ? 0.4 : 0.5) * ldata->fretDist;
+        double slurThickness = (length < 2 ? 0.08 : 0.1) * item->spatium() * item->userMag();
         double shoulderYfor = shoulderY - slurThickness;
         double shoulderYback = shoulderY + slurThickness;
         PointF bezier1for = PointF(startX + shoulderXoffset, shoulderYfor);

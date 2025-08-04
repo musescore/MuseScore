@@ -127,14 +127,15 @@ void FretCanvas::draw(QPainter* painter)
         if (m_diagram->score()->style().styleB(mu::engraving::Sid::barreAppearanceSlur)) {
             // Copy-pasted from TLayout and TDraw, like most of the other code in this class.
             // This probably needs a better solution in the future. (M.S.)
-            double insetX = 2 * lw1;
-            double insetY = fret == 1 ? lw2 + lw1 : insetX;
+            int length = endString - startString;
+            double insetX = (length < 2 ? 1.25 : 2) * lw1;
+            double insetY = fret == 1 ? lw2 + lw1 : length < 2 ? 2 * lw1 : insetX;
             double startX = startString * stringDist + insetX;
             double endX = (endString == -1 ? x2 : stringDist * endString) - insetX;
             double shoulderXoffset = 0.2 * (endX - startX);
             double startEndY = (fret - 1) * fretDist - insetY;
-            double shoulderY = startEndY - 0.5 * fretDist;
-            double slurThickness = 0.1 * _spatium;
+            double shoulderY = startEndY - (length < 2 ? 0.3 : length < 3 ? 0.4 : 0.5) * fretDist;
+            double slurThickness = (length < 2 ? 0.08 : 0.1) * _spatium;
             double shoulderYfor = shoulderY - slurThickness;
             double shoulderYback = shoulderY + slurThickness;
             QPointF bezier1for = QPointF(startX + shoulderXoffset, shoulderYfor);
