@@ -255,6 +255,11 @@ bool WinWindowsController::initWindowBackgroundColor(HWND hWnd)
     HBRUSH brush = (HBRUSH)GetClassLongPtrW(hWnd, GCLP_HBRBACKGROUND);
     FillRect(hdc, &rect, brush);
 
+    //! NOTE: Actually it'is needed only for windows with widget content,
+    //! because for such windows there is no redraw event after changing the color.
+    //! But at the moment we cannot determine the content type.
+    RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE);
+
     return true;
 }
 
