@@ -55,7 +55,8 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
     auto calculateBoundingRect = [](const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx) -> PointF
     {
         const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->staffHeight(item->tick()) : 0.0;
-        const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
+        const EngravingItem* parent = item->explicitParent() ? toEngravingItem(item->explicitParent()) : nullptr;
+        const FretDiagram* fd = (parent && parent->isFretDiagram() && parent->visible())
                                 ? toFretDiagram(item->explicitParent())
                                 : nullptr;
 
