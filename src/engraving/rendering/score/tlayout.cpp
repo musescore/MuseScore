@@ -1479,8 +1479,8 @@ void TLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layout
 void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    const System* parentSystem = item->system();
 
+    const System* parentSystem = item->system();
     LD_CONDITION(parentSystem->ldata()->isSetBbox());
 
     ldata->setPos(PointF());

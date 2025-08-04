@@ -481,13 +481,15 @@ void Box::manageExclusionFromParts(bool exclude)
             newFrame->setExcludeFromOtherParts(false);
             // newFrame->setSizeIsSpatiumDependent(!titleFrame);
 
-            for (EngravingItem* item : el()) {
-                // Don't add instrument name from current part
-                if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
-                    continue;
+            if (!isFBox()) {
+                for (EngravingItem* item : el()) {
+                    // Don't add instrument name from current part
+                    if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
+                        continue;
+                    }
+                    // add frame items (Layout Break, Title, ...)
+                    newFrame->add(item->linkedClone());
                 }
-                // add frame items (Layout Break, Title, ...)
-                newFrame->add(item->linkedClone());
             }
 
             if (isTBox()) {

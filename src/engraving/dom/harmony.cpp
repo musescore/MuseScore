@@ -1490,6 +1490,8 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         if (TextBase::setProperty(pid, v)) {
             if (pid == Pid::TEXT) {
                 setHarmony(v.value<String>());
+
+                //! After each changes we rebuild the fret box
                 score()->rebuildFretBox();
             }
             break;
