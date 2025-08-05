@@ -46,8 +46,6 @@ RowLayout {
     property bool isExpanded: false
     property int expandableDepth: 0
 
-    property Component rightSideButtonComp: null
-
     signal visibilityButtonClicked(var isVisibile);
     signal expandButtonClicked(var expand)
     signal settingsButtonClicked(var button)
@@ -127,14 +125,5 @@ RowLayout {
 
             font: root.isRootControl && root.isVisible ? ui.theme.bodyBoldFont : ui.theme.bodyFont
         }
-    }
-
-    Loader {
-        id: rightSideButtonLoader
-
-        Layout.alignment: Qt.AlignRight
-        Layout.preferredWidth: width
-
-        sourceComponent: root.rightSideButtonComp
     }
 }
