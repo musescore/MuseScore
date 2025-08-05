@@ -44,6 +44,8 @@ elseif(OS_IS_WIN)
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/winwindowscontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/winwindowscontroller.h
     )
     # Exclude from Unity Build to avoid Error C2872: 'Uri': ambiguous symbol
     set_source_files_properties(
@@ -51,6 +53,8 @@ elseif(OS_IS_WIN)
         PROPERTIES
         SKIP_UNITY_BUILD_INCLUSION ON
         )
+
+    set(MODULE_LINK ${MODULE_LINK} dwmapi)
 elseif(OS_IS_LIN)
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/linux/linuxplatformtheme.cpp
@@ -83,6 +87,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inavigation.h
     ${CMAKE_CURRENT_LIST_DIR}/inavigationcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/idragcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/iwindowscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/graphicsapiprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphicsapiprovider.h
 
@@ -114,6 +119,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiarrangement.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dragcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dragcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/windowscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/windowscontroller.h
     ${PLATFORM_THEME_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp
@@ -162,6 +169,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/progressdialogmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/widgetdialogadapter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/widgetdialogadapter.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/view/windowsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/windowsmodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h

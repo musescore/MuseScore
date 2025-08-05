@@ -22,22 +22,22 @@
 
 #pragma once
 
-#include <QAbstractNativeEventFilter>
-#include <QWindow>
+#include <qwindowdefs.h>
 
-namespace mu::appshell {
-class WindowsController : public QAbstractNativeEventFilter
+#include "modularity/imoduleinterface.h"
+
+namespace muse::ui {
+class IWindowsController : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IWindowsController)
+
 public:
-    virtual void init();
+    virtual ~IWindowsController() = default;
 
-    QRect mainWindowTitleBarMoveArea() const;
-    void setMainWindowTitleBarMoveArea(const QRect& area);
+    virtual void regWindow(WId winId) = 0;
+    virtual void unregWindow(WId winId) = 0;
 
-protected:
-    bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result) override;
-
-private:
-    QRect m_mainWindowTitleBarMoveArea;
+    virtual QRect mainWindowTitleBarMoveArea() const = 0;
+    virtual void setMainWindowTitleBarMoveArea(const QRect& area) = 0;
 };
 }

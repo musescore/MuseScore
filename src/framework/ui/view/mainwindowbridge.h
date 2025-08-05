@@ -26,10 +26,11 @@
 #include <QObject>
 #include <QWindow>
 
-#include "modularity/ioc.h"
-
-#include "framework/ui/imainwindow.h"
 #include "async/notification.h"
+
+#include "modularity/ioc.h"
+#include "ui/imainwindow.h"
+#include "ui/iwindowscontroller.h"
 
 namespace muse::ui {
 class MainWindowBridge : public QObject, public Injectable
@@ -41,6 +42,7 @@ class MainWindowBridge : public QObject, public Injectable
     Q_PROPERTY(bool fileModified READ fileModified WRITE setFileModified NOTIFY fileModifiedChanged)
 
     Inject<IMainWindow> mainWindow = { this };
+    Inject<IWindowsController> windowsController = { this };
 
 public:
     explicit MainWindowBridge(QObject* parent = nullptr);

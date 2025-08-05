@@ -20,28 +20,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "windowscontroller.h"
+#pragma once
 
-using namespace mu::appshell;
+#include <QObject>
 
-void WindowsController::init()
+#include "modularity/ioc.h"
+#include "ui/iwindowscontroller.h"
+
+namespace muse::ui {
+class WindowsModel : public QObject, public Injectable
 {
-}
+    Q_OBJECT
 
-QRect WindowsController::mainWindowTitleBarMoveArea() const
-{
-    return m_mainWindowTitleBarMoveArea;
-}
+    Inject<ui::IWindowsController> windowsController = { this };
 
-void WindowsController::setMainWindowTitleBarMoveArea(const QRect& area)
-{
-    m_mainWindowTitleBarMoveArea = area;
-}
+    Q_PROPERTY(
+        QRect mainWindowTitleBarMoveArea READ mainWindowTitleBarMoveArea WRITE setMainWindowTitleBarMoveArea NOTIFY mainWindowTitleBarMoveAreaChanged)
 
-bool WindowsController::nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result)
-{
-    Q_UNUSED(eventType)
-    Q_UNUSED(message)
-    Q_UNUSED(result)
-    return true;
+public:
+    explicit WindowsModel(QObject* parent = nullptr);
+
+    QRect mainWindowTitleBarMoveArea() const;
+
+public slots:
+    void setMainWindowTitleBarMoveArea(const QRect& area);
+
+signals:
+    void mainWindowTitleBarMoveAreaChanged(QRect titleBarMoveArea);
+};
 }

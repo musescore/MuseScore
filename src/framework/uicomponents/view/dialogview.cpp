@@ -51,6 +51,8 @@ void DialogView::beforeOpen()
     if (m_title.isEmpty()) {
         setTitle(application()->title());
     }
+
+    windowsController()->regWindow(qWindow()->winId());
 }
 
 void DialogView::onHidden()

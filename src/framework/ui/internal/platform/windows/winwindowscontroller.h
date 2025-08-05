@@ -22,19 +22,21 @@
 
 #pragma once
 
+#include <windows.h>
+#include <minwindef.h>
+
 #include <QObject>
 
-#include "internal/windowscontroller.h"
+#include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/imainwindow.h"
 
-#include <windows.h>
-#include <minwindef.h>
+#include "internal/windowscontroller.h"
 
-namespace mu::appshell {
-class WinWindowsController : public QObject, public WindowsController
+namespace muse::ui {
+class WinWindowsController : public QObject, public WindowsController, public async::Asyncable
 {
     INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(muse::ui::IMainWindow, mainWindow)
@@ -42,9 +44,9 @@ class WinWindowsController : public QObject, public WindowsController
 public:
     explicit WinWindowsController();
 
-    void init() override;
-
 private:
+    void finishRegWindow(WId winId) override;
+
     bool eventFilter(QObject* watched, QEvent* event) override;
 
     bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result) override;
@@ -62,6 +64,11 @@ private:
     bool showSystemMenuIfNeed(HWND hWnd, LPARAM lParam) const;
 
     bool isWindowMaximized(HWND hWnd) const;
+
+    HWND mainWindowId() const;
+    bool isMainWindow(HWND hWnd) const;
+
+    void updateMainWindowPosition();
 
     HWND findTaskbar() const;
     std::optional<UINT> taskbarEdge() const;
