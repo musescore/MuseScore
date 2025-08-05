@@ -25,10 +25,10 @@
 #include "global/defer.h"
 #include "global/async/processevents.h"
 
-#include "internal/encoders/mp3encoder.h"
-#include "internal/encoders/oggencoder.h"
-#include "internal/encoders/flacencoder.h"
-#include "internal/encoders/wavencoder.h"
+#include "mp3encoder.h"
+#include "oggencoder.h"
+#include "flacencoder.h"
+#include "wavencoder.h"
 
 #include "audioerrors.h"
 

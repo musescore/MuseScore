@@ -134,3 +134,34 @@ else ()
         ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
         )
 endif()
+
+set(AUDIO_WORKER_LINK )
+if (MUSE_MODULE_AUDIO_EXPORT)
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/soundtrackwriter.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/soundtrackwriter.h
+        # Encoders
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/abstractaudioencoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/mp3encoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/mp3encoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/oggencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/oggencoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/flacencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/flacencoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/wavencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/export/wavencoder.h
+    )
+
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/lame lame EXCLUDE_FROM_ALL)
+    list(APPEND AUDIO_WORKER_LINK lame)
+
+    include(${CMAKE_CURRENT_LIST_DIR}/../cmake/SetupOpusEnc.cmake)
+    list(APPEND AUDIO_WORKER_LINK ${LIBOPUSENC_TARGETS})
+
+    include(${CMAKE_CURRENT_LIST_DIR}/../cmake/SetupFlac.cmake)
+    list(APPEND AUDIO_WORKER_LINK ${FLAC_TARGETS})
+
+endif() # MUSE_MODULE_AUDIO_EXPORT
+
+
+
