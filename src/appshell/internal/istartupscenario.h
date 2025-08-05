@@ -45,6 +45,8 @@ public:
     virtual muse::async::Promise<muse::Ret> runOnSplashScreen() = 0;
     virtual void runAfterSplashScreen() = 0;
     virtual bool startupCompleted() const = 0;
+
+    virtual QList<QVariantMap> welcomeDialogData() const = 0;
 };
 }
 

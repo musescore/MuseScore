@@ -25,11 +25,13 @@ import QtQuick.Controls 2.15 as Controls
 Controls.PageIndicator {
     id: root
 
+    property int indicatorSize: 6
+
     padding: 0
     spacing: 6
 
     delegate: Rectangle {
-        implicitWidth: 6
+        implicitWidth: root.indicatorSize
         implicitHeight: implicitWidth
 
         radius: width / 2
