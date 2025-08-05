@@ -247,7 +247,7 @@ FocusableControl {
             }
         }
 
-        rightSideButtonComp: FlatButton {
+        FlatButton {
             id: settingsButton
 
             visible: root.settingsAvailable
