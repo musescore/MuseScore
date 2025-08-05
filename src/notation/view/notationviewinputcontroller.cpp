@@ -1146,7 +1146,8 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    QTimer::singleShot(QApplication::doubleClickInterval(), [this]() {
+    // Can't pass `this` as the second argument, because not QObject. But `m_view` works as well.
+    QTimer::singleShot(QApplication::doubleClickInterval(), m_view->asItem(), [this]() {
         m_tripleClickPending = false;
     });
 
