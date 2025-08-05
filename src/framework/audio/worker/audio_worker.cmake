@@ -67,8 +67,8 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/eventaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sinesource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/noisesource.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/noisesource.h
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/noisesource.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/noisesource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstracteventsequencer.h
 
     # DSP
