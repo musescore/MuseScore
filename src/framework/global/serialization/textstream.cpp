@@ -95,12 +95,11 @@ TextStream& TextStream::operator<<(double val)
 {
     // macOS: requires macOS 13.3 at runtime
     // linux: requires at least libstdc++ 11 (we compile with libstdc++ 10) or libc++ 14
-#if ((!defined(__APPLE__)) \
-    || (defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 130300) \
-    || (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED >= 160300)) \
-    && (defined(_MSC_VER) \
-    || (defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 14000) \
-    || (defined(_GLIBCXX_RELEASE) && _GLIBCXX_RELEASE >= 11))
+#if (defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 130300) \
+    || (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED >= 160300) \
+    || defined(_MSC_VER) \
+    || (!defined(__APPLE__) && defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 14000) \
+    || (defined(_GLIBCXX_RELEASE) && _GLIBCXX_RELEASE >= 11)
     std::array<char, 24> buf{};
     const auto [last, ec] = std::to_chars(buf.data(), buf.data() + buf.size(), val);
     IF_ASSERT_FAILED(ec == std::errc {}) {
