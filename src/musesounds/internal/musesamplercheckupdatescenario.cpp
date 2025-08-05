@@ -54,22 +54,24 @@ void MuseSamplerCheckUpdateScenario::checkForUpdate()
 
 void MuseSamplerCheckUpdateScenario::showUpdateNotification()
 {
-#ifdef Q_OS_LINUX
-    muse::String appName(u"MuseSounds Manager");
-#else
-    muse::String appName(u"MuseHub");
-#endif
-
     muse::IInteractive::ButtonData notNowBtn(int(muse::IInteractive::Button::CustomButton) + 1,
                                              muse::trc("musesounds", "Not now"));
-    muse::IInteractive::ButtonData launchBtn(int(muse::IInteractive::Button::CustomButton) + 2,
-                                             muse::mtrc("musesounds", "Quit & launch %1")
-                                             .arg(appName).toStdString(), true /*accent*/);
 
-    std::string msg = muse::mtrc("musesounds", "To keep MuseSounds running smoothly, "
-                                               "MuseScore Studio needs to close briefly so %1 can apply the update. "
-                                               "You’ll be prompted to relaunch MuseScore Studio when it’s ready.")
-                      .arg(appName).toStdString();
+#ifdef Q_OS_LINUX
+    muse::IInteractive::ButtonData launchBtn(int(muse::IInteractive::Button::CustomButton) + 2,
+                                             muse::trc("musesounds", "Quit & launch MuseSounds Manager"), true /*accent*/);
+
+    std::string msg = muse::trc("musesounds", "To keep MuseSounds running smoothly, "
+                                              "MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. "
+                                              "You’ll need to restart MuseScore Studio when the update is complete.");
+#else
+    muse::IInteractive::ButtonData launchBtn(int(muse::IInteractive::Button::CustomButton) + 2,
+                                             muse::trc("musesounds", "Quit & launch MuseHub"), true /*accent*/);
+
+    std::string msg = muse::trc("musesounds", "To keep MuseSounds running smoothly, "
+                                              "MuseScore Studio needs to close briefly so MuseHub can apply the update. "
+                                              "You’ll be prompted to relaunch MuseScore Studio when it’s ready.");
+#endif
 
     interactive()->info(muse::trc("musesounds", "An update for MuseSounds is available"), msg,
                         { notNowBtn, launchBtn }, launchBtn.btn, muse::IInteractive::Option::WithIcon)
