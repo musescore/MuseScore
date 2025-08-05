@@ -66,6 +66,10 @@ public:
     MOCK_METHOD(int, musicalFontSize, (), (const, override));
     MOCK_METHOD(async::Notification, musicalFontChanged, (), (const, override));
 
+    MOCK_METHOD(std::string, musicalTextFontFamily, (), (const, override));
+    MOCK_METHOD(int, musicalTextFontSize, (), (const, override));
+    MOCK_METHOD(async::Notification, musicalTextFontChanged, (), (const, override));
+
     MOCK_METHOD(std::string, defaultFontFamily, (), (const, override));
     MOCK_METHOD(int, defaultFontSize, (), (const, override));
 

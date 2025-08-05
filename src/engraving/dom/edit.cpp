@@ -4588,6 +4588,10 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
     newMeasureBase->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
     newMeasureBase->setSizeIsSpatiumDependent(!isTitleFrame);
 
+    if (type == ElementType::FBOX) {
+        toFBox(newMeasureBase)->init();
+    }
+
     undo(new InsertMeasures(newMeasureBase, newMeasureBase));
 
     if (options.needDeselectAll) {
@@ -6702,6 +6706,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     }
                 }
             }
+
+            if (element->isHarmony() || element->isFretDiagram()) {
+                element->score()->rebuildFretBox();
+            }
         } else if (element->isSlur()
                    || element->isHairpin()
                    || element->isOttava()
@@ -7092,6 +7100,7 @@ void Score::rebuildFretBox()
 
     fretBox->init();
     fretBox->triggerLayout();
+    update();
 
     for (EngravingObject* linkedObject : fretBox->linkList()) {
         if (!linkedObject || !linkedObject->isFBox() || linkedObject == fretBox) {
@@ -7102,6 +7111,7 @@ void Score::rebuildFretBox()
 
         box->init();
         box->triggerLayout();
+        box->score()->update();
     }
 }
 
@@ -7216,6 +7226,10 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
             }
             if (e->explicitParent() && e->explicitParent()->isSystem()) {
                 e->setParent(0);   // systems will be regenerated upon redo, so detach
+            }
+
+            if (e->isHarmony() || e->isFretDiagram()) {
+                e->score()->rebuildFretBox();
             }
         }
     }

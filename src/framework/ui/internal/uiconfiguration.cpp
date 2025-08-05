@@ -52,6 +52,8 @@ static const Settings::Key UI_FONT_SIZE_KEY("ui", "ui/theme/fontSize");
 static const Settings::Key UI_ICONS_FONT_FAMILY_KEY("ui", "ui/theme/iconsFontFamily");
 static const Settings::Key UI_MUSICAL_FONT_FAMILY_KEY("ui", "ui/theme/musicalFontFamily");
 static const Settings::Key UI_MUSICAL_FONT_SIZE_KEY("ui", "ui/theme/musicalFontSize");
+static const Settings::Key UI_MUSICAL_TEXT_FONT_FAMILY_KEY("ui", "ui/theme/musicalTextFontFamily");
+static const Settings::Key UI_MUSICAL_TEXT_FONT_SIZE_KEY("ui", "ui/theme/musicalTextFontSize");
 
 static const QString WINDOW_GEOMETRY_KEY("window");
 
@@ -74,6 +76,8 @@ void UiConfiguration::init()
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(24));
+    settings()->setDefaultValue(UI_MUSICAL_TEXT_FONT_FAMILY_KEY, Val("Leland Text"));
+    settings()->setDefaultValue(UI_MUSICAL_TEXT_FONT_SIZE_KEY, Val(defaultFontSize()));
     settings()->setDefaultValue(UI_THEMES_KEY, Val(""));
 
     settings()->valueChanged(UI_THEMES_KEY).onReceive(this, [this](const Val&) {
@@ -555,6 +559,21 @@ int UiConfiguration::musicalFontSize() const
 muse::async::Notification UiConfiguration::musicalFontChanged() const
 {
     return m_musicalFontChanged;
+}
+
+std::string UiConfiguration::musicalTextFontFamily() const
+{
+    return settings()->value(UI_MUSICAL_TEXT_FONT_FAMILY_KEY).toString();
+}
+
+int UiConfiguration::musicalTextFontSize() const
+{
+    return settings()->value(UI_MUSICAL_TEXT_FONT_SIZE_KEY).toInt();
+}
+
+Notification UiConfiguration::musicalTextFontChanged() const
+{
+    return m_musicalTextFontChanged;
 }
 
 std::string UiConfiguration::defaultFontFamily() const
