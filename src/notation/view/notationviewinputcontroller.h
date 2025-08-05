@@ -197,7 +197,7 @@ private:
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
 
-    bool anchorEditingKeysFound(QKeyEvent* event) const;
+    bool isAnchorEditingEvent(QKeyEvent* event) const;
 
     bool tryPercussionShortcut(QKeyEvent* event);
 
