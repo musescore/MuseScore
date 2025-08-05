@@ -100,7 +100,7 @@ StyledPopupView {
             FlatButton {
                 id: resetAllButton
 
-                visible: popupModel.emptyStavesVisibilityModel.canResetAll
+                enabled: popupModel.emptyStavesVisibilityModel.canResetAll
                 icon: IconCode.UNDO
                 toolTipTitle: qsTrc("notation/staffvisibilitypopup", "Reset all")
 
@@ -146,7 +146,7 @@ StyledPopupView {
                 required property var model
 
                 implicitWidth: visibilityControls.implicitWidth
-                implicitHeight: 32
+                implicitHeight: 38
 
                 Rectangle {
                     anchors.fill: parent
@@ -183,7 +183,7 @@ StyledPopupView {
                     FlatButton {
                         id: resetButton
 
-                        visible: delegateItem.model.canReset
+                        enabled: delegateItem.model.canReset
                         icon: IconCode.UNDO
                         toolTipTitle: qsTrc("notation/staffvisibilitypopup", "Reset")
 
