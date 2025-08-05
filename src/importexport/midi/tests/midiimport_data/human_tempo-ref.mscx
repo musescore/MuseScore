@@ -1476,37 +1476,37 @@
             <eid>QE_QE</eid>
             <durationType>16th</durationType>
             </Rest>
-          <Beam>
-            <eid>RE_RE</eid>
-            <l1>8</l1>
-            <l2>8</l2>
-            </Beam>
           <Chord>
-            <eid>SE_SE</eid>
+            <eid>RE_RE</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoBelow</subtype>
-              <eid>TE_TE</eid>
+              <eid>SE_SE</eid>
               </Articulation>
             <Note>
-              <eid>UE_UE</eid>
+              <eid>TE_TE</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <velocity>60</velocity>
               </Note>
             <Note>
-              <eid>VE_VE</eid>
+              <eid>UE_UE</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <velocity>84</velocity>
               </Note>
             <Note>
-              <eid>WE_WE</eid>
+              <eid>VE_VE</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <velocity>71</velocity>
               </Note>
             </Chord>
+          <Beam>
+            <eid>WE_WE</eid>
+            <l1>8</l1>
+            <l2>8</l2>
+            </Beam>
           <Chord>
             <eid>XE_XE</eid>
             <durationType>eighth</durationType>
