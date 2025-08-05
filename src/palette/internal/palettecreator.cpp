@@ -207,8 +207,6 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newHandbellsPalette(true));
     defaultPalette->append(newBeamPalette());
     defaultPalette->append(newLinesPalette(true));
-    defaultPalette->append(newHandbellsPalette(true));
-
     return defaultPalette;
 }
 
