@@ -291,6 +291,8 @@ class IRpcChannel : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IRpcChannel() = default;
 
+    virtual void process() = 0;
+
     virtual void send(const Msg& msg, const Handler& onResponse = nullptr) = 0;
     virtual void onMethod(Method method, Handler h) = 0;
     virtual void listenAll(Handler h) = 0;

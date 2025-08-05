@@ -26,17 +26,20 @@
 #include <vector>
 
 #include "global/async/asyncable.h"
-#include "global/modularity/ioc.h"
 
-#include "audiotypes.h"
-#include "audio/worker/iaudiosource.h"
+#include "global/modularity/ioc.h"
 #include "audio/worker/iaudioengine.h"
+#include "audio/common/rpc/irpcchannel.h"
+
+#include "audio/common/audiotypes.h"
+#include "audio/worker/iaudiosource.h"
 #include "../encoders/abstractaudioencoder.h"
 
 namespace muse::audio::soundtrack {
 class SoundTrackWriter : public muse::Injectable, public async::Asyncable
 {
     muse::Inject<worker::IAudioEngine> audioEngine = { this };
+    muse::Inject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
     SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration,

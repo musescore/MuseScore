@@ -27,7 +27,7 @@
 
 #include "log.h"
 
-// #define RPC_LOGGING_ENABLED
+//#define RPC_LOGGING_ENABLED
 
 #ifdef RPC_LOGGING_ENABLED
 #define RPCLOG() LOGDA()

@@ -160,6 +160,8 @@ Ret SoundTrackWriter::generateAudioData()
 
         inputBufferOffset += samplesToCopy;
         sendStepProgress(PREPARE_STEP, inputBufferOffset, inputBufferMaxOffset);
+
+        rpcChannel()->process();
     }
 
     if (m_isAborted) {
