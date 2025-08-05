@@ -37,7 +37,7 @@ FocusScope {
     property alias background: contentBackground
 
     property int padding: 0
-    property int margins: 12 + contentBackground.border.width
+    property int margins: 12
 
     property bool showArrow: false
     property int arrowX: 0
@@ -105,9 +105,28 @@ FocusScope {
 
                 color: ui.theme.popupBackgroundColor
                 radius: 4
-                border.width: 1
-                border.color: ui.theme.strokeColor
             }
+        }
+
+        Item {
+            id: contentBody
+            x: root.margins
+            y: root.margins
+            width: root.contentWidth
+            height: root.contentHeight
+
+            implicitWidth: root.contentWidth
+            implicitHeight: root.contentHeight
+        }
+
+        Rectangle {
+            id: contentBorder
+            anchors.fill: parent
+
+            color: "transparent"
+            radius: contentBackground.radius
+            border.width: 1
+            border.color: ui.theme.strokeColor
         }
 
         Canvas {
@@ -120,8 +139,8 @@ FocusScope {
             enabled: root.showArrow
 
             x: root.arrowX - arrow.width / 2 - root.padding
-            y: root.opensUpward ? parent.y + parent.height - height - contentBackground.border.width
-                                : -height + contentBackground.border.width
+            y: root.opensUpward ? parent.y + parent.height - height - contentBorder.border.width
+                                : -height + contentBorder.border.width
 
             onPaint: {
                 var ctx = getContext("2d");
@@ -129,10 +148,10 @@ FocusScope {
 
                 ctx.lineWidth = 2;
                 ctx.fillStyle = contentBackground.color
-                ctx.strokeStyle = contentBackground.border.color
+                ctx.strokeStyle = contentBorder.border.color
                 ctx.beginPath();
 
-                if (opensUpward) {
+                if (root.opensUpward) {
                     ctx.moveTo(0, 0);
                     ctx.lineTo(width / 2, height - 1);
                     ctx.lineTo(width, 0);
@@ -157,20 +176,9 @@ FocusScope {
             }
 
             Connections {
-                target: contentBackground.border
+                target: contentBorder.border
                 function onColorChanged() { arrow.requestPaint() }
             }
-        }
-
-        Item {
-            id: contentBody
-            x: root.margins
-            y: root.margins
-            width: root.contentWidth
-            height: root.contentHeight
-
-            implicitWidth: root.contentWidth
-            implicitHeight: root.contentHeight
         }
     }
 
