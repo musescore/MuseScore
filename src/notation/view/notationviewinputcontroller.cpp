@@ -1152,24 +1152,27 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 
     m_tripleClickPending = true;
 
-    const INotationInteraction::HitElementContext& ctx = hitElementContext();
     if (viewInteraction()->isTextEditingStarted()) {
         viewInteraction()->selectText(mu::engraving::SelectTextType::Word);
         return;
-    } else if (viewInteraction()->textEditingAllowed(ctx.element)) {
-        viewInteraction()->startEditText(ctx.element, m_mouseDownInfo.logicalBeginPoint);
     }
 
-    PointF logicPos = m_view->toLogical(event->pos());
-    const EngravingItem* hitElement = viewInteraction()->hitElement(logicPos, hitWidth());
-
-    if (!hitElement) {
+    const INotationInteraction::HitElementContext& ctx = hitElementContext();
+    if (!ctx.element) {
         return;
     }
 
-    if (hitElement->isMeasure() && event->modifiers() == Qt::NoModifier) {
+    if (viewInteraction()->textEditingAllowed(ctx.element)) {
+        viewInteraction()->startEditText(ctx.element, m_mouseDownInfo.logicalBeginPoint);
+        return;
+    }
+
+    if (ctx.element->isMeasure() && event->modifiers() == Qt::NoModifier) {
         dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_mouseDownInfo.logicalBeginPoint));
-    } else if (hitElement->isInstrumentName()) {
+        return;
+    }
+
+    if (ctx.element->isInstrumentName()) {
         m_shouldStartEditOnLeftClickRelease = true;
     }
 }
