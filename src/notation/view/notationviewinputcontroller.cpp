@@ -625,7 +625,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     };
 
     m_shouldStartEditOnLeftClickRelease = false;
-    m_shouldTogglePopupOnLeftClickRelease = false;
 
     // When using MiddleButton, just start moving the canvas
     if (button == Qt::MiddleButton) {
@@ -643,8 +642,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     };
 
     if (!m_readonly) {
-        m_prevHitElement = hitElementContext().element;
-
         INotationInteraction::HitElementContext context;
         context.element = viewInteraction()->hitElement(logicPos, hitWidth());
         context.staff = viewInteraction()->hitStaff(logicPos);
@@ -762,6 +759,8 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
         return;
     }
 
+    m_hitElementWasAlreadySelected = ctx.hitElement->selected();
+
     if (ctx.event->button() == Qt::LeftButton) {
         if (ctx.event->modifiers() & Qt::ControlModifier) {
             const std::vector<EngravingItem*> overlappingHitElements = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
@@ -769,9 +768,6 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
                 cycleOverlappingHitElements(overlappingHitElements, ctx.hitStaff);
                 return;
             }
-        } else if (ctx.hitElement->selected()) {
-            m_shouldTogglePopupOnLeftClickRelease = true;
-            return;
         }
     } else if (ctx.event->button() == Qt::RightButton) {
         if (ctx.hitElement->selected()) {
@@ -790,6 +786,12 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
         if (selection->isRange()
             && (selection->range()->containsItem(ctx.hitElement, ctx.hitStaff)
                 || selection->range()->containsPoint(ctx.logicClickPos))) {
+            m_shouldSelectOnLeftClickRelease = true;
+            return;
+        } else if (ctx.hitElement->selected()) {
+            if (selection->elements().size() > 1) {
+                m_shouldSelectOnLeftClickRelease = true;
+            }
             return;
         }
     }
@@ -851,16 +853,14 @@ bool NotationViewInputController::mousePress_considerDragOutgoingRange(const Cli
 
 void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 {
-    if (!ctx.hitElement) {
+    if (!ctx.hitElement || !ctx.hitElement->selected()) {
         return;
     }
 
-    const INotationSelectionPtr selection = viewInteraction()->selection();
-    const bool needStartEditing = ctx.hitElement->selected()
-                                  && ctx.hitElement->needStartEditingAfterSelecting();
-
-    if (!selection->isRange() && needStartEditing) {
-        if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage() && selection->elements().size() == 1) {
+    // If it is the only selected element, start editing if needed
+    if (ctx.hitElement == viewInteraction()->selection()->element()
+        && ctx.hitElement->needStartEditingAfterSelecting()) {
+        if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage()) {
             viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->defaultGrip());
         } else {
             viewInteraction()->startEditElement(ctx.hitElement);
@@ -1111,26 +1111,32 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         return;
     }
 
-    engraving::staff_idx_t staffIndex = ctx.staff ? ctx.staff->idx() : muse::nidx;
+    if (m_shouldSelectOnLeftClickRelease) {
+        m_shouldSelectOnLeftClickRelease = false;
+        engraving::staff_idx_t staffIndex = ctx.staff ? ctx.staff->idx() : muse::nidx;
 
-    INotationInteractionPtr interaction = viewInteraction();
-    interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
+        INotationInteractionPtr interaction = viewInteraction();
+        interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
 
-    if (ctx.element && ctx.element->needStartEditingAfterSelecting()) {
-        viewInteraction()->startEditElement(ctx.element);
+        if (ctx.element->needStartEditingAfterSelecting()) {
+            viewInteraction()->startEditElement(ctx.element);
+            return;
+        }
+    }
+
+    if (!m_hitElementWasAlreadySelected) {
         return;
     }
 
-    if (m_shouldTogglePopupOnLeftClickRelease) {
+    // Same element clicked again while it was already selected.
+    // Either toggle popup or start text editing.
+
+    if (viewInteraction()->textEditingAllowed(ctx.element)) {
+        if (!viewInteraction()->isTextEditingStarted()) {
+            viewInteraction()->startEditText(ctx.element, m_mouseDownInfo.logicalBeginPoint);
+        }
+    } else {
         togglePopupForItemIfSupports(ctx.element);
-    }
-
-    if (ctx.element != m_prevHitElement) {
-        return;
-    }
-
-    if (interaction->isTextEditingStarted()) {
-        return;
     }
 }
 
