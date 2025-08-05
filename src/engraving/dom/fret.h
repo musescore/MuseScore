@@ -297,6 +297,7 @@ private:
     static void applyDiagramPattern(FretDiagram* diagram, const String& pattern);
 
     void applyAlignmentToHarmony();
+    void resetHarmonyAlignment();
 
     int m_strings = 0;
     int m_frets = 0;
