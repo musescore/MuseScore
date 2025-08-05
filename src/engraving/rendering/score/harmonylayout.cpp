@@ -209,16 +209,19 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 // Layout parenthesis pair
                 double startY = openingParen->top;
                 double height = openingParen->bottom - openingParen->top;
-                double thickness = openingParen->paren->ldata()->height / 60 * openingParen->paren->ldata()->mag();
+                double midPointThickness = height / 30 * openingParen->paren->ldata()->mag();
+                double endPointThickness = 0.05;
                 openingParen->paren->mutldata()->startY = startY;
                 openingParen->sety(startY);
                 openingParen->paren->mutldata()->height = height;
-                openingParen->paren->mutldata()->midPointThickness.set_value(thickness);
+                openingParen->paren->mutldata()->midPointThickness.set_value(midPointThickness);
+                openingParen->paren->mutldata()->endPointThickness.set_value(endPointThickness);
 
                 paren->paren->mutldata()->startY = startY;
                 paren->sety(startY);
                 paren->paren->mutldata()->height = height;
-                paren->paren->mutldata()->midPointThickness.set_value(thickness);
+                paren->paren->mutldata()->midPointThickness.set_value(midPointThickness);
+                paren->paren->mutldata()->endPointThickness.set_value(endPointThickness);
                 paren->setx(openingParen->closingParenPos);
 
                 ParenthesisLayout::createPathAndShape(openingParen->paren, openingParen->paren->mutldata());
