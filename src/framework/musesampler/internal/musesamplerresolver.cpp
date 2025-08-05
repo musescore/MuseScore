@@ -256,7 +256,7 @@ bool MuseSamplerResolver::isLoaded() const
 
 float MuseSamplerResolver::defaultReverbLevel(const String& instrumentSoundId) const
 {
-    if (!m_libHandler || !m_libHandler->getReverbLevel || instrumentSoundId.empty()) {
+    if (!m_libHandler || instrumentSoundId.empty()) {
         return 0.f;
     }
 
