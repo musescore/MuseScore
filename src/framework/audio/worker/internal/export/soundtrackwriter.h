@@ -33,7 +33,9 @@
 
 #include "audio/common/audiotypes.h"
 #include "audio/worker/iaudiosource.h"
-#include "../encoders/abstractaudioencoder.h"
+#include "audio/worker/iaudioengine.h"
+
+#include "abstractaudioencoder.h"
 
 namespace muse::audio::soundtrack {
 class SoundTrackWriter : public muse::Injectable, public async::Asyncable

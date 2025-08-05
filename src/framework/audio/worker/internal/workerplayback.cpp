@@ -29,7 +29,7 @@
 
 #include "muse_framework_config.h"
 #ifdef MUSE_MODULE_AUDIO_EXPORT
-#include "internal/soundtracks/soundtrackwriter.h"
+#include "export/soundtrackwriter.h"
 #endif
 
 #include "log.h"

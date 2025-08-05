@@ -127,47 +127,9 @@ include(SetupSndFile)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
 
 set(MODULE_LINK
+    ${AUDIO_WORKER_LINK}
     fluidsynth
     )
-
-if (MUSE_MODULE_AUDIO_EXPORT)
-    set(MODULE_SRC
-        ${MODULE_SRC}
-
-        # Encoders
-        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/oggencoder.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/oggencoder.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/flacencoder.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/flacencoder.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/wavencoder.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/wavencoder.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/abstractaudioencoder.h
-
-        # SoundTracks
-        ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.h
-        )
-
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/lame lame EXCLUDE_FROM_ALL)
-    set(MODULE_LINK
-        ${MODULE_LINK}
-        lame
-    )
-
-    include(cmake/SetupOpusEnc.cmake)
-    set(MODULE_LINK
-        ${MODULE_LINK}
-        ${LIBOPUSENC_TARGETS}
-    )
-
-    include(cmake/SetupFlac.cmake)
-    set(MODULE_LINK
-        ${MODULE_LINK}
-        ${FLAC_TARGETS}
-    )
-endif()
 
 if (MUSE_MODULE_AUDIO_JACK)
     find_package(Jack REQUIRED)
@@ -202,15 +164,6 @@ set(MODULE_QRC audio.qrc)
 
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
-
-if (OS_IS_WIN)
-    # Prevent mysterious compile errors in debug builds
-    set_source_files_properties(
-        ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.cpp
-        PROPERTIES
-        SKIP_UNITY_BUILD_INCLUSION ON
-    )
-endif()
 
 setup_module()
 
