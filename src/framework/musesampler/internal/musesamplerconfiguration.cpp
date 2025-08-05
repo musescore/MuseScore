@@ -53,6 +53,11 @@ muse::io::path_t MuseSamplerConfiguration::libraryPath() const
 
 #endif
 
+muse::Version MuseSamplerConfiguration::minSupportedVersion() const
+{
+    return Version(0, 6, 0);
+}
+
 bool MuseSamplerConfiguration::shouldShowBuildNumber() const
 {
     return globalConfig()->devModeEnabled();

@@ -87,7 +87,10 @@ void MuseSamplerResolver::init()
         return;
     }
 
-    m_libHandler = std::make_shared<MuseSamplerLibHandler>(museSamplerLibraryPath, configuration()->useLegacyAudition());
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>(museSamplerLibraryPath,
+                                                           configuration()->minSupportedVersion(),
+                                                           configuration()->useLegacyAudition());
+    m_samplerVersion = m_libHandler->version();
 
     if (!m_libHandler->isValid()) {
         LOGE() << "Incompatible MuseSampler library, ignoring: " << museSamplerLibraryPath;
@@ -120,7 +123,7 @@ void MuseSamplerResolver::processOnlineSounds()
 
 int MuseSamplerResolver::buildNumber() const
 {
-    return m_libHandler ? m_libHandler->getBuildNumber() : -1;
+    return m_samplerBuildNumber;
 }
 
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const
@@ -237,17 +240,12 @@ void MuseSamplerResolver::clearSources()
 {
 }
 
-std::string MuseSamplerResolver::version() const
+const Version& MuseSamplerResolver::version() const
 {
-    if (!m_libHandler) {
-        return std::string();
-    }
-
-    String ver = String::fromUtf8(m_libHandler->getVersionString());
-    return ver.toStdString();
+    return m_samplerVersion;
 }
 
-bool MuseSamplerResolver::isInstalled() const
+bool MuseSamplerResolver::isLoaded() const
 {
     if (m_libHandler) {
         return true;

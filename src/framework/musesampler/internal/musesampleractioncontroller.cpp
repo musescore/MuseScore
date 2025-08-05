@@ -42,21 +42,26 @@ void MuseSamplerActionController::checkLibraryIsDetected()
         return;
     }
 
-    std::string libVersion = resolver->version();
-    std::string status;
+    const Version& libVersion = resolver->version();
+    String libVersionStr = libVersion.toString();
 
-    if (libVersion.empty()) {
-        status = muse::trc("musesampler", "MuseSampler library is not found");
-    } else {
-        if (configuration()->shouldShowBuildNumber()) {
-            libVersion += "." + std::to_string(resolver->buildNumber());
-        }
-
-        status = muse::qtrc("musesampler", "MuseSampler library is detected, version %1")
-                 .arg(QString::fromStdString(libVersion)).toStdString();
+    if (configuration()->shouldShowBuildNumber() && resolver->buildNumber() >= 0) {
+        libVersionStr += u"." + String::number(resolver->buildNumber());
     }
 
-    interactive()->info(status, std::string());
+    String status;
+
+    if (resolver->isLoaded()) {
+        status = muse::mtrc("musesampler", "MuseSampler library is detected, version %1")
+                 .arg(libVersionStr);
+    } else if (!libVersion.isNull() && libVersion < configuration()->minSupportedVersion()) {
+        status = muse::mtrc("musesampler", "Installed MuseSampler library is not supported, version %1")
+                 .arg(libVersionStr);
+    } else {
+        status = muse::mtrc("musesampler", "MuseSampler library is not found");
+    }
+
+    interactive()->info(status.toStdString(), std::string());
 }
 
 void MuseSamplerActionController::reloadMuseSampler()

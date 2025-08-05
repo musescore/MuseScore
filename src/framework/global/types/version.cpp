@@ -144,6 +144,11 @@ void Version::setSuffix(const String& suffix)
     m_suffixVersion = versionSuffix.second;
 }
 
+bool Version::isNull() const
+{
+    return m_major == 0 && m_minor == 0 && m_patch == 0;
+}
+
 bool Version::preRelease() const
 {
     return !suffix().isEmpty();

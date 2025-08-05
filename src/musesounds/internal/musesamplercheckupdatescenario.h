@@ -53,7 +53,9 @@ public:
     void checkForUpdate() override;
 
 private:
-    void showUpdateNotification();
+    void showCriticalUpdateNotification();
+    void showNewVersionNotification();
+
     void openMuseHubAndQuit();
     void openMuseHubWebsiteAndQuit();
 
