@@ -59,7 +59,6 @@
 #include "view/preferences/percussionpreferencesmodel.h"
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
 #include "view/preferences/braillepreferencesmodel.h"
-#include "view/windowsmodel.h"
 #include "view/publish/publishtoolbarmodel.h"
 #include "view/internal/maintoolbarmodel.h"
 
@@ -173,7 +172,6 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<FirstLaunchSetupModel>("MuseScore.AppShell", 1, 0, "FirstLaunchSetupModel");
     qmlRegisterType<ThemesPageModel>("MuseScore.AppShell", 1, 0, "ThemesPageModel");
     qmlRegisterType<TutorialsPageModel>("MuseScore.AppShell", 1, 0, "TutorialsPageModel");
-    qmlRegisterType<WindowsModel>("MuseScore.AppShell", 1, 0, "WindowsModel");
     qmlRegisterType<PublishToolBarModel>("MuseScore.AppShell", 1, 0, "PublishToolBarModel");
     qmlRegisterType<MainToolBarModel>("MuseScore.AppShell", 1, 0, "MainToolBarModel");
 }

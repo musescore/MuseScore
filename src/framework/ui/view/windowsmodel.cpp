@@ -20,36 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "windowsmodel.h"
 
-#include <QObject>
+using namespace muse::ui;
 
-class QWindow;
-
-namespace mu::appshell {
-class WindowsController;
-class WindowsModel : public QObject
+WindowsModel::WindowsModel(QObject* parent)
+    : QObject(parent)
 {
-    Q_OBJECT
+}
 
-    Q_PROPERTY(
-        QRect mainWindowTitleBarMoveArea READ mainWindowTitleBarMoveArea WRITE setMainWindowTitleBarMoveArea NOTIFY mainWindowTitleBarMoveAreaChanged)
+QRect WindowsModel::mainWindowTitleBarMoveArea() const
+{
+    return windowsController()->mainWindowTitleBarMoveArea();
+}
 
-public:
-    explicit WindowsModel(QObject* parent = nullptr);
-    ~WindowsModel();
+void WindowsModel::setMainWindowTitleBarMoveArea(const QRect& area)
+{
+    if (mainWindowTitleBarMoveArea() == area) {
+        return;
+    }
 
-    Q_INVOKABLE void init();
-
-    QRect mainWindowTitleBarMoveArea() const;
-
-public slots:
-    void setMainWindowTitleBarMoveArea(const QRect& area);
-
-signals:
-    void mainWindowTitleBarMoveAreaChanged(QRect titleBarMoveArea);
-
-private:
-    WindowsController* m_controller = nullptr;
-};
+    windowsController()->setMainWindowTitleBarMoveArea(area);
+    emit mainWindowTitleBarMoveAreaChanged(area);
 }

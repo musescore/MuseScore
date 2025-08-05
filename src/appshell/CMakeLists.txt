@@ -34,8 +34,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/windowscontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/windowscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/istartupscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.h
@@ -92,8 +90,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/windowsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/windowsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/iappmenumodelhook.h
@@ -133,15 +129,6 @@ if (OS_IS_MAC)
         SKIP_PRECOMPILE_HEADERS ON
         )
 endif(OS_IS_MAC)
-
-if (OS_IS_WIN)
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winwindowscontroller.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winwindowscontroller.h
-    )
-
-    set(MODULE_LINK ${MODULE_LINK} dwmapi)
-endif(OS_IS_WIN)
 
 if (NOT OS_IS_MAC)
     set(MODULE_SRC ${MODULE_SRC}

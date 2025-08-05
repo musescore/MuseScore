@@ -31,17 +31,11 @@
 #include <dwmapi.h>
 
 #include <QScreen>
+#include <QQuickWindow>
 
 #include "log.h"
 
-using namespace mu::appshell;
-
-static HWND s_hwnd = 0;
-
-static void updateWindowPosition()
-{
-    SetWindowPos(s_hwnd, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
-}
+using namespace muse::ui;
 
 WinWindowsController::WinWindowsController()
     : WindowsController()
@@ -53,23 +47,21 @@ WinWindowsController::WinWindowsController()
     qApp->installNativeEventFilter(this);
 }
 
-void WinWindowsController::init()
+void WinWindowsController::finishRegWindow(WId winId)
 {
-    QWindow* window = mainWindow()->qWindow();
-    IF_ASSERT_FAILED(window) {
+    HWND hWnd = (HWND)winId;
+    if (!isMainWindow(hWnd)) {
         return;
     }
 
-    s_hwnd = (HWND)window->winId();
-
-    SetWindowLongPtr(s_hwnd, GWL_STYLE,
+    SetWindowLongPtr(hWnd, GWL_STYLE,
                      static_cast<LONG>(WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME
                                        | WS_CLIPCHILDREN));
 
     const MARGINS shadow_on = { 1, 1, 1, 1 };
-    DwmExtendFrameIntoClientArea(s_hwnd, &shadow_on);
+    DwmExtendFrameIntoClientArea(hWnd, &shadow_on);
 
-    updateWindowPosition();
+    updateMainWindowPosition();
 }
 
 bool WinWindowsController::eventFilter(QObject* watched, QEvent* event)
@@ -91,7 +83,7 @@ bool WinWindowsController::eventFilter(QObject* watched, QEvent* event)
     if (m_screen != window->screen()) {
         m_screen = window->screen();
         //! Redrawing a window by updating a position
-        updateWindowPosition();
+        updateMainWindowPosition();
     }
 
     return false;
@@ -108,12 +100,15 @@ bool WinWindowsController::nativeEventFilter(const QByteArray& eventType, void* 
         return false;
     }
 
-    UINT messageType = msg->message;
     HWND hWnd = msg->hwnd;
+    if (!muse::contains(m_windowsIds, (WId)hWnd)) {
+        return false;
+    }
+
+    UINT messageType = msg->message;
     LPARAM lParam = msg->lParam;
 
-    bool isMainWindow = hWnd == s_hwnd;
-    return isMainWindow ? nativeEventFilterForMainWindow(messageType, hWnd, lParam, result)
+    return isMainWindow(hWnd) ? nativeEventFilterForMainWindow(messageType, hWnd, lParam, result)
            : nativeEventFilterForNonMainWindow(messageType, hWnd);
 }
 
@@ -166,7 +161,7 @@ bool WinWindowsController::removeWindowFrame(HWND hWnd, LPARAM lParam, qintptr* 
 
     WINDOWPLACEMENT placement = {};
     placement.length = sizeof(WINDOWPLACEMENT);
-    GetWindowPlacement(s_hwnd, &placement);
+    GetWindowPlacement(hWnd, &placement);
 
     if (placement.showCmd == SW_SHOWMAXIMIZED) {
         HMONITOR hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONULL);
@@ -363,7 +358,7 @@ void WinWindowsController::updateContextMenuState(HWND hWnd) const
     menuItemInfo.fState = MF_GRAYED;
 
     WINDOWPLACEMENT windowPlacement;
-    GetWindowPlacement(s_hwnd, &windowPlacement);
+    GetWindowPlacement(hWnd, &windowPlacement);
 
     switch (windowPlacement.showCmd) {
     case SW_SHOWMAXIMIZED:
@@ -410,6 +405,21 @@ bool WinWindowsController::isWindowMaximized(HWND hWnd) const
     }
 
     return wp.showCmd == SW_MAXIMIZE;
+}
+
+HWND muse::ui::WinWindowsController::mainWindowId() const
+{
+    return (HWND)mainWindow()->qWindow()->winId();
+}
+
+bool muse::ui::WinWindowsController::isMainWindow(HWND hWnd) const
+{
+    return mainWindowId() == hWnd;
+}
+
+void muse::ui::WinWindowsController::updateMainWindowPosition()
+{
+    SetWindowPos(mainWindowId(), nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
 }
 
 HWND WinWindowsController::findTaskbar() const
