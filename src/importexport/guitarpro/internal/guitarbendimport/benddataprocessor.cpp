@@ -192,6 +192,7 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
                     graceChord->setTrack(track);
                     graceChord->setNoteType(NoteType::GRACE8_AFTER);
                     graceChord->setNoStem(true);
+                    graceChord->setBeamMode(BeamMode::NONE);
 
                     TDuration dur;
                     dur.setVal(mu::engraving::Constants::DIVISION / 2);

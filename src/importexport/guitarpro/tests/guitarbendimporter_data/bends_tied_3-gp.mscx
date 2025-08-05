@@ -158,6 +158,7 @@
             </Chord>
           <Chord>
             <eid>P_P</eid>
+            <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
@@ -305,6 +306,7 @@
           <Chord>
             <eid>f_f</eid>
             <linkedTo>P_P</linkedTo>
+            <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>

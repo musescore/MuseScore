@@ -124,6 +124,7 @@
             </Chord>
           <Chord>
             <eid>M_M</eid>
+            <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
@@ -228,6 +229,7 @@
           <Chord>
             <eid>Y_Y</eid>
             <linkedTo>M_M</linkedTo>
+            <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
