@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,13 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MUSESAMPLER_APITYPES_H
-#define MUSE_MUSESAMPLER_APITYPES_H
+#pragma once
 
 #include <stdint.h>
-#include <memory>
-
-#include "log.h"
 
 typedef void* MuseSamplerLib;
 
@@ -203,18 +199,6 @@ typedef struct ms_NoteEvent_5
     ms_NoteHead _notehead;
 } ms_NoteEvent_5;
 
-// Added in v0.6
-typedef struct ms_AuditionStartNoteEvent_3
-{
-    int _pitch; // MIDI pitch
-    int _offset_cents;
-    ms_NoteArticulation _articulation;
-    ms_NoteHead _notehead;
-    double _dynamics;
-    const char* _active_presets; // presets that are selected for this note. list is separated by "|"
-    const char* _active_text_articulation; // text articulation that is active for this note. Can be empty
-} ms_AuditionStartNoteEvent_3;
-
 // Added in v0.100 -> changed from ms_AuditionStartNoteEvent3 by adding "_active_syllable"
 typedef struct ms_AuditionStartNoteEvent_4
 {
@@ -356,8 +340,6 @@ typedef ms_Result (* ms_MuseSampler_add_vibrato)(ms_MuseSampler ms, ms_Track tra
 typedef ms_Result (* ms_MuseSampler_stop_audition_note)(ms_MuseSampler ms, ms_Track track, ms_AuditionStopNoteEvent evt);
 
 // Added in 0.6
-typedef ms_Result (* ms_MuseSampler_start_audition_note_3)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3 evt);
-
 typedef ms_Result (* ms_MuseSampler_start_liveplay_mode)(ms_MuseSampler ms);
 typedef ms_Result (* ms_MuseSampler_stop_liveplay_mode)(ms_MuseSampler ms);
 
@@ -476,5 +458,3 @@ struct AuditionCCEvent {
 using NoteEvent = ms_NoteEvent_5;
 using SyllableEvent = ms_SyllableEvent2;
 }
-
-#endif // MUSE_MUSESAMPLER_APITYPES_H
