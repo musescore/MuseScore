@@ -491,7 +491,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     .Times(0);
     EXPECT_CALL(*m_interaction, startEditGrip(newContext.element, _))
     .Times(0);
-    EXPECT_CALL(*m_interaction, startEditElement(newContext.element, _))
+    EXPECT_CALL(*m_interaction, startEditElement(newContext.element))
     .Times(0);
 
     //! [WHEN] User pressed left mouse button

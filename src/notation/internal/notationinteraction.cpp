@@ -1043,7 +1043,7 @@ void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
     select({ element }, SelectType::SINGLE);
 
     if (element->needStartEditingAfterSelecting()) {
-        startEditElement(element, false);
+        startEditElement(element);
     }
 }
 
@@ -3328,7 +3328,7 @@ void NotationInteraction::doFinishAddFretboardDiagram()
     //! then add harmony
     mu::engraving::TextBase* text = score()->addText(TextStyleType::HARMONY_A, fretDiagram);
     doSelect({ text }, SelectType::SINGLE);
-    startEditElement(text, true);
+    startEditElement(text);
 }
 
 void NotationInteraction::setAnchorLines(const std::vector<LineF>& anchorList)
@@ -4569,7 +4569,7 @@ bool NotationInteraction::isElementEditStarted() const
     return m_editData.element != nullptr;
 }
 
-void NotationInteraction::startEditElement(EngravingItem* element, bool editTextualProperties)
+void NotationInteraction::startEditElement(EngravingItem* element)
 {
     if (!element) {
         return;
@@ -4579,7 +4579,7 @@ void NotationInteraction::startEditElement(EngravingItem* element, bool editText
         return;
     }
 
-    if (element->isTextBase() && editTextualProperties) {
+    if (element->isTextBase()) {
         startEditText(element);
     } else if (element->isEditable()) {
         element->startEdit(m_editData);
@@ -5689,7 +5689,6 @@ void NotationInteraction::toggleDynamicPopup()
                 // If there is already a dynamic, select it instead of opening an empty popup
                 select({ startDynOrExp });
                 if (startDynOrExp->isDynamic()) {
-                    startEditElement(startDynOrExp, false);
                     autoFlipHairpinsType(toDynamic(startDynOrExp));
                 }
             } else {
@@ -5701,7 +5700,6 @@ void NotationInteraction::toggleDynamicPopup()
                 // If there is already a dynamic, select it instead of opening an empty popup
                 select({ endDynOrExp });
                 if (endDynOrExp->isDynamic()) {
-                    startEditElement(endDynOrExp, false);
                     autoFlipHairpinsType(toDynamic(endDynOrExp));
                 }
             } else {

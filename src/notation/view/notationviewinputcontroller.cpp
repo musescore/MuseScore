@@ -863,7 +863,7 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
         if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage() && selection->elements().size() == 1) {
             viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->defaultGrip());
         } else {
-            viewInteraction()->startEditElement(ctx.hitElement, false);
+            viewInteraction()->startEditElement(ctx.hitElement);
         }
     }
 
@@ -1117,7 +1117,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
 
     if (ctx.element && ctx.element->needStartEditingAfterSelecting()) {
-        viewInteraction()->startEditElement(ctx.element, /*editTextualProperties*/ false);
+        viewInteraction()->startEditElement(ctx.element);
         return;
     }
 
