@@ -189,8 +189,9 @@ void BendDataCollector::regroupBendDataByTiedChords()
                     if (noteInfo.type == BendType::PREBEND) {
                         noteInfo.type = BendType::HOLD;
                         // rewriting first note's info about should it connect to next or not
-                        size_t noteIndex = muse::indexOf(currentNote->chord()->notes(), currentNote);
                         auto& firstChordData = chunk[0];
+                        size_t noteIndex = std::min(muse::indexOf(currentNote->chord()->notes(), currentNote),
+                                                    firstChordData.chord->notes().size() - 1);
                         firstChordData.dataByNote[firstChordData.chord->notes()[noteIndex]].connectionType
                             = ConnectionToNextNoteType::MAIN_NOTE_CONNECTS;
                     } else {
@@ -232,8 +233,9 @@ void BendDataCollector::fillBendDataContext(BendDataContext& bendDataCtx)
                         moveSegmentsToTiedNotes(chunk, dataForFirstNote, noteIdx);
                     } else if (mainNote->tieFor()) {
                         // last grace note should connect to next tied note instead of original note of chord
-                        size_t noteIndex = muse::indexOf(mainNote->chord()->notes(), mainNote);
                         auto& lastChordData = chunk.back();
+                        size_t noteIndex = std::min(muse::indexOf(mainNote->chord()->notes(), mainNote),
+                                                    lastChordData.chord->notes().size() - 1);
                         lastChordData.dataByNote[lastChordData.chord->notes()[noteIndex]].connectionType
                             = ConnectionToNextNoteType::LAST_GRACE_CONNECTS;
                     }
