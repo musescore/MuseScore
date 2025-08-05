@@ -71,8 +71,8 @@ void LanguagesService::init()
     QString activeLanguageCode = languageCode.val;
     languageCode.ch.onReceive(this, [this, activeLanguageCode](const QString& newLanguageCode) {
         //! NOTE To change the language at the moment, a restart is required
-        m_needRestartToApplyLanguageChange = newLanguageCode != activeLanguageCode;
-        m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
+        m_restartRequiredToApplyLanguage = newLanguageCode != activeLanguageCode;
+        m_restartRequiredToApplyLanguageChanged.send(m_restartRequiredToApplyLanguage);
     });
 
     m_inited = true;
@@ -346,14 +346,14 @@ Progress LanguagesService::update(const QString& languageCode)
     return progress;
 }
 
-bool LanguagesService::needRestartToApplyLanguageChange() const
+bool LanguagesService::restartRequiredToApplyLanguage() const
 {
-    return m_needRestartToApplyLanguageChange;
+    return m_restartRequiredToApplyLanguage;
 }
 
-async::Channel<bool> LanguagesService::needRestartToApplyLanguageChangeChanged() const
+async::Channel<bool> LanguagesService::restartRequiredToApplyLanguageChanged() const
 {
-    return m_needRestartToApplyLanguageChangeChanged;
+    return m_restartRequiredToApplyLanguageChanged;
 }
 
 void LanguagesService::th_update(const QString& languageCode, Progress progress)
@@ -373,8 +373,8 @@ void LanguagesService::th_update(const QString& languageCode, Progress progress)
         return;
     }
 
-    m_needRestartToApplyLanguageChange = true;
-    m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
+    m_restartRequiredToApplyLanguage = true;
+    m_restartRequiredToApplyLanguageChanged.send(m_restartRequiredToApplyLanguage);
 
     progress.finish(make_ret(Err::NoError));
 }

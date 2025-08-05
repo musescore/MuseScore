@@ -48,7 +48,7 @@ class GeneralPreferencesModel : public QObject, public muse::Injectable, public 
     Q_PROPERTY(bool isOSCRemoteControl READ isOSCRemoteControl WRITE setIsOSCRemoteControl NOTIFY isOSCRemoteControlChanged)
     Q_PROPERTY(int oscPort READ oscPort WRITE setOscPort NOTIFY oscPortChanged)
 
-    Q_PROPERTY(bool isNeedRestart READ isNeedRestart WRITE setIsNeedRestart NOTIFY isNeedRestartChanged)
+    Q_PROPERTY(bool restartRequired READ restartRequired WRITE setRestartRequired NOTIFY restartRequiredChanged)
 
     Q_PROPERTY(QVariantList startupModes READ startupModes CONSTANT)
     Q_PROPERTY(int currentStartupMode READ currentStartupMode WRITE setCurrentStartupMode NOTIFY currentStartupModeChanged)
@@ -75,7 +75,7 @@ public:
 
     bool isOSCRemoteControl() const;
     int oscPort() const;
-    bool isNeedRestart() const;
+    bool restartRequired() const;
 
     QVariantList startupModes() const;
     int currentStartupMode() const;
@@ -87,7 +87,7 @@ public slots:
     void setCurrentKeyboardLayout(const QString& keyboardLayout);
     void setIsOSCRemoteControl(bool isOSCRemoteControl);
     void setOscPort(int oscPort);
-    void setIsNeedRestart(bool newIsNeedRestart);
+    void setRestartRequired(bool restartRequired);
     void setCurrentStartupMode(int mode);
     void setStartupScorePath(const QString& scorePath);
 
@@ -99,7 +99,7 @@ signals:
     void oscPortChanged(int oscPort);
 
     void receivingUpdateForCurrentLanguage(int current, int total, QString status);
-    void isNeedRestartChanged();
+    void restartRequiredChanged();
 
     void currentStartupModeChanged();
     void startupScorePathChanged();
@@ -107,6 +107,6 @@ signals:
 private:
     muse::Progress m_languageUpdateProgress;
 
-    bool m_isNeedRestart = false;
+    bool m_restartRequired = false;
 };
 }
