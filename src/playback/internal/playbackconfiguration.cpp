@@ -387,7 +387,7 @@ bool PlaybackConfiguration::shouldMeasureInputLag() const
 
 const SoundProfileName& PlaybackConfiguration::fallbackSoundProfileStr() const
 {
-    if (musesamplerInfo() && musesamplerInfo()->isInstalled()) {
+    if (musesamplerInfo() && musesamplerInfo()->isLoaded()) {
         return MUSESOUNDS_PROFILE_NAME;
     }
 

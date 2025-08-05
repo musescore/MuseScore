@@ -25,6 +25,7 @@
 #include "modularity/imoduleinterface.h"
 
 #include "io/path.h"
+#include "types/version.h"
 
 namespace muse::musesampler {
 class IMuseSamplerConfiguration : MODULE_EXPORT_INTERFACE
@@ -35,6 +36,8 @@ public:
     virtual ~IMuseSamplerConfiguration() = default;
 
     virtual io::path_t libraryPath() const = 0;
+
+    virtual Version minSupportedVersion() const = 0;
 
     virtual bool shouldShowBuildNumber() const = 0;
     virtual bool useLegacyAudition() const = 0;

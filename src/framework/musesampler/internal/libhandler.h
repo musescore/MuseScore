@@ -134,14 +134,9 @@ private:
     ms_MuseSampler_init_2 initSamplerInternal2 = nullptr;
 
 public:
-    MuseSamplerLibHandler(const io::path_t& path, bool useLegacyAudition = false)
+    MuseSamplerLibHandler(const io::path_t& path, const Version& minSupportedVersion, bool useLegacyAudition = false)
     {
-        // The specific versions supported, based on known functions/etc:
-        const Version minimumSupported{ 0, 6, 0 };
-        constexpr int maximumMajorVersion = 0;
-
         m_lib = muse::loadLib(path);
-
         if (!m_lib) {
             LOGE() << "Unable to open MuseSampler library, path: " << path;
             return;
@@ -160,19 +155,22 @@ public:
             return;
         }
 
-        Version current(getVersionMajor(),
-                        getVersionMinor(),
-                        getVersionRevision());
-        if (current < minimumSupported) {
-            LOGE() << "MuseSampler " << current.toString() << " is not supported (too old -- update MuseSampler); ignoring";
+        m_version = Version(getVersionMajor(), getVersionMinor(), getVersionRevision());
+
+        if (getBuildNumber) {
+            m_buildNumber = getBuildNumber();
+        }
+
+        if (m_version < minSupportedVersion) {
+            LOGE() << "MuseSampler " << m_version.toString() << " is not supported (too old -- update MuseSampler); ignoring";
             return;
         }
 
-        // Major versions have incompatible changes; we can only support
-        // interfaces we know about.
-        // TODO: check when we fixed the issue with version numbers not reporting?  Was this ever an issue?
-        if (current.major() > maximumMajorVersion) {
-            LOGE() << "MuseSampler " << current.toString() << " is not supported (too new -- update MuseScore Studio); ignoring";
+        // Major versions have incompatible changes; we can only support interfaces we know about
+        constexpr int maximumMajorVersion = 0;
+
+        if (m_version.major() > maximumMajorVersion) {
+            LOGE() << "MuseSampler " << m_version.toString() << " is not supported (too new -- update MuseScore Studio); ignoring";
             return;
         }
 
@@ -383,6 +381,16 @@ public:
         muse::closeLib(m_lib);
     }
 
+    const Version& version() const
+    {
+        return m_version;
+    }
+
+    int buildNumber() const
+    {
+        return m_buildNumber;
+    }
+
     bool init()
     {
         if (!initLib) {
@@ -542,6 +550,8 @@ private:
 
     MuseSamplerLib m_lib = nullptr;
     bool m_supportsReinit = false;
+    Version m_version;
+    int m_buildNumber = -1;
 };
 
 using MuseSamplerLibHandlerPtr = std::shared_ptr<MuseSamplerLibHandler>;
