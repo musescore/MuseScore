@@ -2034,9 +2034,8 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
             }
         } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT_SETTING)) {
         } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT)) {
-        } else if (tag == "Text") {
-            Text* p = Factory::createText(b, TextStyleType::REPEAT_PLAY_COUNT);
-            // TODO SET STYLE?
+        } else if (tag == "PlayCountText") {
+            PlayCountText* p = Factory::createPlayCountText(b);
             TRead::read(p, e, ctx);
             p->setParent(b);
             p->setTrack(ctx.track());
