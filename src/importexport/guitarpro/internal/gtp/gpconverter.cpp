@@ -19,6 +19,7 @@
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harmony.h"
@@ -1325,6 +1326,31 @@ void GPConverter::addContinuousSlideHammerOn()
         if (!endNote || startNote->string() == -1 || startNote->fret() == endNote->fret()) {
             //mistake in GP: such kind od slides shouldn't exist
             continue;
+        }
+
+        Note* currentStart = nullptr;
+        if (startNote->bendFor()) {
+            Note* bendNote = startNote;
+            GuitarBend* bend = bendNote->bendFor();
+
+            while (bend) {
+                bendNote = bend->endNote();
+                IF_ASSERT_FAILED(bendNote) {
+                    LOGE() << "glissando start note may be incorrect";
+                    break;
+                }
+
+                if (!bendNote->chord()->isGraceAfter()) {
+                    break;
+                }
+
+                currentStart = bendNote;
+                bend = bendNote->bendFor();
+            }
+
+            if (currentStart) {
+                startNote = currentStart;
+            }
         }
 
         Fraction startTick = startNote->chord()->tick();
