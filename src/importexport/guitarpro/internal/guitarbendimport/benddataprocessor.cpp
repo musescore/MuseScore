@@ -241,11 +241,6 @@ static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engravi
                 continue;
             }
 
-            Chord* nextChord = chord->nextTiedChord();
-            if (!nextChord) {
-                continue;
-            }
-
             for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
                 if (!muse::contains(tickInfo, noteIndex)) {
                     continue;
@@ -253,7 +248,11 @@ static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engravi
 
                 const auto& noteInfo = tickInfo.at(noteIndex);
                 Note* startNote = chord->notes()[noteIndex];
-                Note* endNote = nextChord->notes()[noteIndex];
+                Note* endNote = startNote->tieFor() ? startNote->tieFor()->endNote() : nullptr;
+                if (!endNote) {
+                    LOGE() << "bend import error: not found tied note for track " << track << ", tick " << tick.ticks();
+                    continue;
+                }
 
                 GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, startNote, endNote);
                 QuarterOffset quarterOff = noteInfo.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
