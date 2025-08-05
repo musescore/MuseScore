@@ -221,9 +221,6 @@
               <string no="4">
                 <dot fret="3">normal</dot>
                 </string>
-              <string no="5">
-                <dot fret="1">normal</dot>
-                </string>
               <barre start="1" end="5">1</barre>
               </fretDiagram>
             <string no="0">
@@ -237,9 +234,6 @@
               </string>
             <string no="4">
               <dot>3</dot>
-              </string>
-            <string no="5">
-              <dot>1</dot>
               </string>
             </FretDiagram>
           <Harmony>
