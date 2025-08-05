@@ -23,6 +23,7 @@
 #include "soundtrackwriter.h"
 
 #include "global/defer.h"
+#include "global/async/processevents.h"
 
 #include "internal/encoders/mp3encoder.h"
 #include "internal/encoders/oggencoder.h"
@@ -160,6 +161,11 @@ Ret SoundTrackWriter::generateAudioData()
 
         inputBufferOffset += samplesToCopy;
         sendStepProgress(PREPARE_STEP, inputBufferOffset, inputBufferMaxOffset);
+
+        //! NOTE It is necessary for cancellation to work
+        //! and for information about the audio signal to be transmitted.
+        async::processEvents();
+        rpcChannel()->process();
     }
 
     if (m_isAborted) {

@@ -34,7 +34,7 @@ public:
     GeneralRpcChannel() = default;
 
     void initOnWorker();
-    void process();
+    void process() override;
 
     // IRpcChannel
     // msgs
