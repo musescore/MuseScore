@@ -41,9 +41,9 @@ void GeneralPreferencesModel::load()
         emit currentLanguageCodeChanged(languageCode);
     });
 
-    setIsNeedRestart(languagesService()->needRestartToApplyLanguageChange());
-    languagesService()->needRestartToApplyLanguageChangeChanged().onReceive(this, [this](bool need) {
-        setIsNeedRestart(need);
+    setRestartRequired(languagesService()->restartRequiredToApplyLanguage());
+    languagesService()->restartRequiredToApplyLanguageChanged().onReceive(this, [this](bool required) {
+        setRestartRequired(required);
     });
 
     configuration()->startupModeTypeChanged().onNotify(this, [this]() {
@@ -139,7 +139,6 @@ void GeneralPreferencesModel::setCurrentLanguageCode(const QString& currentLangu
     }
 
     languagesConfiguration()->setCurrentLanguageCode(currentLanguageCode);
-    emit currentLanguageCodeChanged(currentLanguageCode);
 }
 
 void GeneralPreferencesModel::setCurrentKeyboardLayout(const QString& keyboardLayout)
@@ -164,18 +163,18 @@ void GeneralPreferencesModel::setOscPort(int oscPort)
     emit oscPortChanged(oscPort);
 }
 
-bool GeneralPreferencesModel::isNeedRestart() const
+bool GeneralPreferencesModel::restartRequired() const
 {
-    return m_isNeedRestart;
+    return m_restartRequired;
 }
 
-void GeneralPreferencesModel::setIsNeedRestart(bool newIsNeedRestart)
+void GeneralPreferencesModel::setRestartRequired(bool restartRequired)
 {
-    if (m_isNeedRestart == newIsNeedRestart) {
+    if (m_restartRequired == restartRequired) {
         return;
     }
-    m_isNeedRestart = newIsNeedRestart;
-    emit isNeedRestartChanged();
+    m_restartRequired = restartRequired;
+    emit restartRequiredChanged();
 }
 
 QVariantList GeneralPreferencesModel::startupModes() const
@@ -220,7 +219,6 @@ void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)
     }
 
     configuration()->setStartupModeType(selectedType);
-    emit currentStartupModeChanged();
 }
 
 QString GeneralPreferencesModel::startupScorePath() const
@@ -235,7 +233,6 @@ void GeneralPreferencesModel::setStartupScorePath(const QString& scorePath)
     }
 
     configuration()->setStartupScorePath(scorePath);
-    emit startupScorePathChanged();
 }
 
 QStringList GeneralPreferencesModel::scorePathFilter() const

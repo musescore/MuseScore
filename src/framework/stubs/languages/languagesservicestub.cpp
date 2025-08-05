@@ -62,12 +62,12 @@ Progress LanguagesServiceStub::update(const QString&)
     return Progress();
 }
 
-bool LanguagesServiceStub::needRestartToApplyLanguageChange() const
+bool LanguagesServiceStub::restartRequiredToApplyLanguage() const
 {
     return false;
 }
 
-async::Channel<bool> LanguagesServiceStub::needRestartToApplyLanguageChangeChanged() const
+async::Channel<bool> LanguagesServiceStub::restartRequiredToApplyLanguageChanged() const
 {
     return async::Channel<bool>();
 }
