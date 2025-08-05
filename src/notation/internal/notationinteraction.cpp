@@ -4243,15 +4243,18 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
         return;
     }
 
-    m_editData.clear();
-
     if (element->isTBox()) {
-        m_editData.element = toTBox(element)->text();
-    } else {
-        m_editData.element = element;
+        element = toTBox(element)->text();
     }
 
+    if (element != m_selection->element()) {
+        select({ element }, SelectType::SINGLE);
+    }
+
+    m_editData.clear();
+    m_editData.element = element;
     m_editData.startMove = bindCursorPosToText(cursorPos, m_editData.element);
+
     m_editData.element->startEdit(m_editData);
 
     notifyAboutTextEditingStarted();
