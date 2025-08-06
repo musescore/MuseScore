@@ -96,7 +96,7 @@ QVariant NotationRegionsBeingProcessedModel::data(const QModelIndex& index, int 
     const RegionInfo& region = m_regions.at(index.row());
 
     switch (role) {
-    case RectRole: return region.rect;
+    case RectRole: return region.viewRect;
     case ProgressRole: {
         auto it = m_tracksBeingProcessed.find(region.trackId);
         return it != m_tracksBeingProcessed.end() ? it->second.progress : 0;
@@ -182,7 +182,7 @@ void NotationRegionsBeingProcessedModel::setNotationViewMatrix(const QVariant& m
     m_notationViewMatrix = matrix;
     emit notationViewMatrixChanged();
 
-    updateRegionsBeingProcessed(m_tracksBeingProcessed);
+    onViewMatrixChanged();
 }
 
 bool NotationRegionsBeingProcessedModel::isPlaying() const
@@ -396,6 +396,20 @@ void NotationRegionsBeingProcessedModel::onProgressFinished(const InstrumentTrac
     }
 }
 
+void NotationRegionsBeingProcessedModel::onViewMatrixChanged()
+{
+    if (m_regions.empty()) {
+        return;
+    }
+
+    const QTransform matrix = m_notationViewMatrix.value<QTransform>();
+    for (RegionInfo& region : m_regions) {
+        region.viewRect = matrix.mapRect(region.logicRect);
+    }
+
+    emit dataChanged(index(0), index(m_regions.size() - 1), { RectRole });
+}
+
 void NotationRegionsBeingProcessedModel::initShouldShowRegions()
 {
     switch (configuration()->onlineSoundsShowProgressBarMode()) {
@@ -422,6 +436,7 @@ void NotationRegionsBeingProcessedModel::updateRegionsBeingProcessed(const Track
         return;
     }
 
+    const QTransform matrix = m_notationViewMatrix.value<QTransform>();
     QList<RegionInfo> newRegions = m_regions;
 
     newRegions.removeIf([&tracks](const RegionInfo& r) {
@@ -439,7 +454,8 @@ void NotationRegionsBeingProcessedModel::updateRegionsBeingProcessed(const Track
         for (const QRectF& rect : newRects) {
             RegionInfo region;
             region.trackId = pair.first;
-            region.rect = rect;
+            region.logicRect = rect;
+            region.viewRect = matrix.mapRect(rect);
 
             newRegions.push_back(region);
         }
@@ -481,7 +497,6 @@ std::vector<QRectF> NotationRegionsBeingProcessedModel::calculateRects(const Par
     const Score* score = system->score();
     const Measure* lastMeasure = score->lastMeasure();
     const double lastMeasureEndX = lastMeasure ? lastMeasure->canvasPos().x() + lastMeasure->width() : 0.0;
-    const QTransform matrix = m_notationViewMatrix.value<QTransform>();
 
     std::vector<QRectF> result;
 
@@ -495,7 +510,7 @@ std::vector<QRectF> NotationRegionsBeingProcessedModel::calculateRects(const Par
         }
 
         const muse::PointF systemPos = system->canvasPos();
-        muse::RectF logicRect = sysStaff->bbox().translated(systemPos);
+        QRectF logicRect = sysStaff->bbox().translated(systemPos).toQRectF();
 
         const Segment* segmentFrom = findSegmentFrom(score, system, range.tickFrom, staffIdx);
         if (segmentFrom) {
@@ -517,19 +532,18 @@ std::vector<QRectF> NotationRegionsBeingProcessedModel::calculateRects(const Par
             logicRect.setWidth(width);
         }
 
-        const QRectF newRect = matrix.mapRect(logicRect.toQRectF());
         bool shouldAdd = true;
 
         for (QRectF& rect: result) {
-            if (rect.intersects(newRect)) {
-                rect = rect.united(newRect);
+            if (rect.intersects(logicRect)) {
+                rect = rect.united(logicRect);
                 shouldAdd = false;
                 break;
             }
         }
 
         if (shouldAdd) {
-            result.push_back(newRect);
+            result.push_back(logicRect);
         }
     }
 
