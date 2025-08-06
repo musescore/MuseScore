@@ -132,7 +132,7 @@ bool MuseSoundsCheckUpdateScenario::isCheckInProgress() const
 
 bool MuseSoundsCheckUpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
 {
-    return info.version == configuration()->lastShownMuseSoundsReleaseVersion();
+    return info.version == configuration()->lastShownMuseSoundsReleaseVersion() && !configuration()->museSoundsCheckForUpdateTestMode();
 }
 
 void MuseSoundsCheckUpdateScenario::setIgnoredUpdate(const std::string& version)
@@ -164,8 +164,11 @@ muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info
     };
 
     UriQuery query("musescore://musesounds/musesoundsreleaseinfo");
-    query.addParam("notes", Val(info.notes));
-    query.addParam("features", Val(info.additionInfo.at("features")));
+
+    if (!configuration()->museSoundsCheckForUpdateTestMode()) {
+        query.addParam("notes", Val(info.notes));
+        query.addParam("features", Val(info.additionInfo.at("features")));
+    }
 
     if (info.actionTitle.empty()) {
         query.addParam("actionTitle", Val(DEFAULT_ACTION_TITLE.qTranslated()));

@@ -76,6 +76,14 @@ muse::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
 
     clear();
 
+    if (configuration()->checkForUpdateTestMode()) {
+        // Return dummy info...
+        result.val = ReleaseInfo();
+        result.ret = muse::make_ok();
+        m_lastCheckResult = result;
+        return result;
+    }
+
     QBuffer buff;
     m_networkManager = networkManagerCreator()->makeNetworkManager();
 
