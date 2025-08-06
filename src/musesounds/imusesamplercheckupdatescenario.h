@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include "types/ret.h"
+
 #include "modularity/imoduleinterface.h"
 
 namespace mu::musesounds {
@@ -33,5 +35,8 @@ public:
 
     virtual bool alreadyChecked() const = 0;
     virtual void checkForUpdate() = 0;
+
+    virtual bool hasUpdate() const = 0;
+    virtual muse::Ret showUpdate() = 0;
 };
 }

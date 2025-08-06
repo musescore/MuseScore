@@ -37,5 +37,7 @@ public:
 
     virtual bool canCheckForUpdate() const = 0;
     virtual muse::async::Promise<muse::RetVal<bool> > checkForUpdate() = 0;
+
+    virtual muse::RetVal<bool> lastCheckResult() const = 0;
 };
 }

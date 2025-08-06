@@ -52,6 +52,9 @@ public:
     bool alreadyChecked() const override;
     void checkForUpdate() override;
 
+    bool hasUpdate() const override;
+    muse::Ret showUpdate() override;
+
 private:
     void showUpdateNotification();
     void openMuseHubAndQuit();

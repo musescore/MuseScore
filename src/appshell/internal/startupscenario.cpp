@@ -101,6 +101,18 @@ void StartupScenario::runOnSplashScreen()
 
         qApp->setQuitLockEnabled(true);
     }
+
+    if (appUpdateScenario()) {
+        appUpdateScenario()->checkForUpdate(/*manual*/ false);
+    }
+
+    if (museSoundsUpdateScenario()) {
+        museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false);
+    }
+
+    if (museSamplerCheckForUpdateScenario()) {
+        museSamplerCheckForUpdateScenario()->checkForUpdate();
+    }
 }
 
 void StartupScenario::runAfterSplashScreen()
@@ -161,23 +173,24 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
 {
     TRACEFUNC;
 
-    bool shouldCheckForMuseSamplerUpdate = false;
+    bool showMuseSamplerUpdateDialog = museSamplerCheckForUpdateScenario() && museSamplerCheckForUpdateScenario()->hasUpdate();
 
     switch (modeType) {
     case StartupModeType::StartEmpty:
-        shouldCheckForMuseSamplerUpdate = true;
         break;
     case StartupModeType::StartWithNewScore:
-        shouldCheckForMuseSamplerUpdate = true;
         dispatcher()->dispatch("file-new");
         break;
     case StartupModeType::ContinueLastSession:
+        showMuseSamplerUpdateDialog = false;
         dispatcher()->dispatch("continue-last-session");
         break;
     case StartupModeType::Recovery:
+        showMuseSamplerUpdateDialog = false;
         restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
+        showMuseSamplerUpdateDialog = false;
         project::ProjectFile file = m_startupScoreFile.isValid()
                                     ? m_startupScoreFile
                                     : project::ProjectFile(configuration()->startupScorePath());
@@ -185,10 +198,15 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     } break;
     }
 
+    if (appUpdateScenario() && appUpdateScenario()->hasUpdate()) {
+        // TODO: Check if this is the correct interaction with the sampler updater...
+        appUpdateScenario()->showUpdate();
+    }
+
     if (!configuration()->hasCompletedFirstLaunchSetup()) {
         interactive()->open(FIRST_LAUNCH_SETUP_URI);
-    } else if (shouldCheckForMuseSamplerUpdate) {
-        museSamplerCheckForUpdateScenario()->checkForUpdate();
+    } else if (showMuseSamplerUpdateDialog) {
+        museSamplerCheckForUpdateScenario()->showUpdate();
     }
 }
 
@@ -224,7 +242,9 @@ void StartupScenario::restoreLastSession()
         } else {
             removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
             sessionsManager()->reset();
-            museSamplerCheckForUpdateScenario()->checkForUpdate();
+            if (museSamplerCheckForUpdateScenario() && museSamplerCheckForUpdateScenario()->hasUpdate()) {
+                museSamplerCheckForUpdateScenario()->showUpdate();
+            }
         }
     });
 }

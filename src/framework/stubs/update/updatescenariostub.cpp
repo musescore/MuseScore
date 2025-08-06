@@ -26,3 +26,13 @@ using namespace muse::update;
 void UpdateScenarioStub::checkForUpdate(bool)
 {
 }
+
+bool UpdateScenarioStub::hasUpdate() const
+{
+    return false;
+}
+
+muse::Ret UpdateScenarioStub::showUpdate()
+{
+    return muse::make_ok();
+}

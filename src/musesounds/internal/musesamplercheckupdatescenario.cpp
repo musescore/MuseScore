@@ -45,11 +45,31 @@ void MuseSamplerCheckUpdateScenario::checkForUpdate()
             LOGE() << res.ret.toString();
             return;
         }
-
-        if (res.val) {
-            showUpdateNotification();
-        }
     });
+}
+
+bool MuseSamplerCheckUpdateScenario::hasUpdate() const
+{
+    if (!m_alreadyChecked) {
+        return false;
+    }
+
+    const muse::RetVal<bool> lastCheckResult = service()->lastCheckResult();
+    if (!lastCheckResult.ret) {
+        return false;
+    }
+
+    return lastCheckResult.val;
+}
+
+muse::Ret MuseSamplerCheckUpdateScenario::showUpdate()
+{
+    if (!hasUpdate()) {
+        return muse::make_ret(muse::Ret::Code::UnknownError);
+    }
+
+    showUpdateNotification();
+    return muse::make_ok();
 }
 
 void MuseSamplerCheckUpdateScenario::showUpdateNotification()
