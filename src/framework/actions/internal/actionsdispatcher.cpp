@@ -27,7 +27,9 @@
 
 #include "log.h"
 
+using namespace muse::accessibility;
 using namespace muse::actions;
+using namespace muse::ui;
 
 ActionsDispatcher::~ActionsDispatcher()
 {
@@ -102,6 +104,10 @@ void ActionsDispatcher::dump() const
 
 void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& actionCode, const ActionData& data)
 {
+    auto accessibility = accessibilityController();
+    const IAccessible* oldFocus = accessibility ? accessibility->lastFocused() : nullptr;
+    const QString& oldName = oldFocus ? oldFocus->accessibleName() : QString();
+
     int canReceiveCount = 0;
     for (auto cit = clients.cbegin(); cit != clients.cend(); ++cit) {
         const Actionable* client = cit->first;
@@ -113,6 +119,13 @@ void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& act
                 continue;
             }
 
+            // Clear previous screen reader announcement so we can tell if the
+            // action sets its own announcement.
+            if (accessibility) {
+                accessibility->announce(QString());
+            }
+
+            // Perform the action
             const ActionCallBackWithNameAndData& callback = cbit->second;
             LOGI() << "try call action: " << actionCode;
             callback(actionCode, data);
@@ -121,9 +134,40 @@ void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& act
 
     if (canReceiveCount == 0) {
         LOGI() << "no one can handle the action: " << actionCode;
-    } else if (canReceiveCount > 1) {
+        return;
+    }
+
+    if (canReceiveCount > 1) {
         LOGW() << "More than one client can handle the action, this is not a typical situation.";
     }
+
+    // Let's make sure the screen reader says something.
+
+    if (!accessibility || !accessibility->announcement().isEmpty()) {
+        return; // No accessibility, or the action set its own announcement.
+    }
+
+    const IAccessible* newFocus = accessibility->lastFocused();
+    if (newFocus == nullptr) {
+        return;
+    }
+
+    if (oldFocus != newFocus || oldName != newFocus->accessibleName()) {
+        return; // The screen reader will say something anyway.
+    }
+
+    const UiAction action = actionRegister()->action(actionCode);
+    if (!action.isValid()) {
+        return;
+    }
+
+    // Try to say the name of the action we just performed.
+    QString title = action.title.qTranslatedWithoutMnemonic();
+    if (title.isEmpty()) {
+        // E.g. UI navigation shortcuts: Tab, Space, Enter, Esc, etc.
+        return; // Let screen reader decide what to say.
+    }
+    accessibility->announce(title);
 }
 
 void ActionsDispatcher::unReg(Actionable* client)
