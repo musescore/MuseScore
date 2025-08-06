@@ -32,9 +32,11 @@
 #include "global/async/channel.h"
 #include "global/iapplication.h"
 
+#include "framework/actions/iactionsdispatcher.h"
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 #include "ui/iinteractiveprovider.h"
+#include "ui/iuiactionsregister.h"
 #include "../iaccessibilityconfiguration.h"
 #include "../iaccessibilitycontroller.h"
 #include "accessibleobject.h"
@@ -54,6 +56,8 @@ public:
     Inject<IApplication> application = { this };
     Inject<ui::IMainWindow> mainWindow = { this };
     Inject<ui::IInteractiveProvider> interactiveProvider = { this };
+    Inject<ui::IUiActionsRegister> actionsRegister = { this };
+    Inject<actions::IActionsDispatcher> actionsDispatcher = { this };
     Inject<IAccessibilityConfiguration> configuration = { this };
 
 public:
@@ -175,6 +179,9 @@ private:
     IAccessible* m_pretendFocus = nullptr;
     QTimer m_pretendFocusTimer;
     QString m_announcement;
+
+    IAccessible* m_preDispatchFocus = nullptr;
+    QString m_preDispatchName;
 
     bool m_inited = false;
     bool m_enabled = false;
