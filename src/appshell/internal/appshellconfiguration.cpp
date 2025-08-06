@@ -73,6 +73,10 @@ void AppShellConfiguration::init()
     settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
 
     settings()->setDefaultValue(WELCOME_DIALOG_SHOW_ON_STARTUP_KEY, Val(true));
+    settings()->valueChanged(WELCOME_DIALOG_SHOW_ON_STARTUP_KEY).onReceive(this, [this](const Val&) {
+        m_welcomeDialogShowOnStartupChanged.notify();
+    });
+
     settings()->setDefaultValue(WELCOME_DIALOG_LAST_SHOWN_VERSION_KEY, Val("0.0.0"));
     settings()->setDefaultValue(WELCOME_DIALOG_LAST_SHOWN_INDEX, Val(-1));
 
@@ -111,6 +115,11 @@ bool AppShellConfiguration::welcomeDialogShowOnStartup() const
 void AppShellConfiguration::setWelcomeDialogShowOnStartup(bool show)
 {
     settings()->setSharedValue(WELCOME_DIALOG_SHOW_ON_STARTUP_KEY, Val(show));
+}
+
+async::Notification AppShellConfiguration::welcomeDialogShowOnStartupChanged() const
+{
+    return m_welcomeDialogShowOnStartupChanged;
 }
 
 std::string AppShellConfiguration::welcomeDialogLastShownVersion() const

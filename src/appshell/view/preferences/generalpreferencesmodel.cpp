@@ -53,6 +53,10 @@ void GeneralPreferencesModel::load()
     configuration()->startupScorePathChanged().onNotify(this, [this]() {
         emit startupScorePathChanged();
     });
+
+    configuration()->welcomeDialogShowOnStartupChanged().onNotify(this, [this]() {
+        emit showWelcomeDialogChanged();
+    });
 }
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
@@ -239,4 +243,18 @@ QStringList GeneralPreferencesModel::scorePathFilter() const
 {
     return { muse::qtrc("appshell/preferences", "MuseScore file") + " (*.mscz)",
              muse::qtrc("appshell/preferences", "All") + " (*)" };
+}
+
+bool GeneralPreferencesModel::showWelcomeDialog() const
+{
+    return configuration()->welcomeDialogShowOnStartup();
+}
+
+void GeneralPreferencesModel::setShowWelcomeDialog(bool show)
+{
+    if (configuration()->welcomeDialogShowOnStartup() == show) {
+        return;
+    }
+
+    configuration()->setWelcomeDialogShowOnStartup(show);
 }

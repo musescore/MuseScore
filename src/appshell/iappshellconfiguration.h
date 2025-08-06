@@ -42,6 +42,7 @@ public:
 
     virtual bool welcomeDialogShowOnStartup() const = 0;
     virtual void setWelcomeDialogShowOnStartup(bool show) = 0;
+    virtual muse::async::Notification welcomeDialogShowOnStartupChanged() const = 0;
 
     virtual std::string welcomeDialogLastShownVersion() const = 0;
     virtual void setWelcomeDialogLastShownVersion(const std::string& version) = 0;
