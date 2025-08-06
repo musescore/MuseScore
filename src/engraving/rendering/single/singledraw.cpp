@@ -461,6 +461,7 @@ void SingleDraw::draw(const Articulation* item, Painter* painter)
     if (item->textType() == ArticulationTextType::NO_TEXT) {
         item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
     } else {
+        item->text()->setColor(item->curColor());
         drawTextBase(item->text(), painter);
     }
 }
