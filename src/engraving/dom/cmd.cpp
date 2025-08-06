@@ -2299,7 +2299,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
 
 void Score::changeAccidental(Note* note, AccidentalType accidental)
 {
-    Chord* chord = note->chord();
+    Chord* chord = note ? note->chord() : nullptr;
     if (!chord) {
         return;
     }
