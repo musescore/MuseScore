@@ -414,7 +414,7 @@ void LayoutPanelTreeModel::load()
     for (const Part* part : masterParts) {
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
-                if (!staff->systemObjectsBelowBottomStaff() && muse::contains(systemObjectStaves, staff)) {
+                if (!staff->hasSystemObjectsBelowBottomStaff() && muse::contains(systemObjectStaves, staff)) {
                     m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
                 }
             }
@@ -424,7 +424,7 @@ void LayoutPanelTreeModel::load()
 
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
-                if (staff->systemObjectsBelowBottomStaff() && muse::contains(systemObjectStaves, staff)) {
+                if (staff->hasSystemObjectsBelowBottomStaff()) {
                     m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, systemObjects[staff]));
                 }
             }
@@ -1151,7 +1151,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
 
         const int partRow = partItem->row();
         const int layerRow = layerItem->row();
-        const int correctLayerRow = layerItem->staff()->systemObjectsBelowBottomStaff() ? partRow + 1 : partRow - 1;
+        const int correctLayerRow = layerItem->staff()->hasSystemObjectsBelowBottomStaff() ? partRow + 1 : partRow - 1;
 
         if (layerRow != correctLayerRow) {
             beginMoveRows(QModelIndex(), layerRow, layerRow, QModelIndex(), partRow);

@@ -1440,7 +1440,7 @@ void MusicXmlParserPass1::scorePartwise()
         }
 
         Score* score = staff->score();
-        if (!score->isSystemObjectStaff(staff) && exporterSoftware() == MusicXmlExporterSoftware::FINALE
+        if (!staff->isSystemObjectStaff() && exporterSoftware() == MusicXmlExporterSoftware::FINALE
             && configuration()->inferTextType()) {
             score->addSystemObjectStaff(staff);
         }

@@ -386,7 +386,7 @@ static EngravingItem* pasteSystemObject(EditData& srcData, EngravingItem* target
         return nullptr;
     }
 
-    if (targetStaff == targetScore->staff(0) || targetScore->isSystemObjectStaff(targetStaff)) {
+    if (targetStaff == targetScore->staff(0) || targetStaff->isSystemObjectStaff()) {
         return target->drop(srcData);
     }
 

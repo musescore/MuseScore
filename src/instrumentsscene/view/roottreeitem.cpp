@@ -215,7 +215,7 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
     bool moveDown = destinationRow > sourceRow;
     bool sourceIsSystemObjectLayer = srcItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
     bool sourceIsPartLayer = srcItem->type() == LayoutPanelItemType::PART;
-    if (srcStaff->systemObjectsBelowBottomStaff()) {
+    if (srcStaff->hasSystemObjectsBelowBottomStaff()) {
         if ((sourceIsSystemObjectLayer && moveUp) || (sourceIsPartLayer && moveDown)) {
             moveParams.moveSysObjAboveBottomStaff = true;
         }

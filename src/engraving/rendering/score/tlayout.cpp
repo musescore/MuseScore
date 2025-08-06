@@ -6523,7 +6523,7 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     ldata->setPosX(-shape.bbox().left());
 
     if (item->isAboveStaves()) {
-        if (staff->systemObjectsBelowBottomStaff()) {
+        if (staff->hasSystemObjectsBelowBottomStaff()) {
             double staffHeight = spatium * (numOfLines - 1) * lineDist;
             ldata->setPosY(staffHeight - ldata->bbox().top());
         } else {
