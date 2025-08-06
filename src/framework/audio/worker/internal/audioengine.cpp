@@ -22,8 +22,9 @@
 
 #include "audioengine.h"
 
-#include "internal/audiobuffer.h"
-#include "internal/audiosanitizer.h"
+#include "audio/common/audiosanitizer.h"
+
+#include "audiobuffer.h"
 
 #include "log.h"
 

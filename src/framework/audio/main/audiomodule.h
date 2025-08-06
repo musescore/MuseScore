@@ -41,7 +41,6 @@ class GeneralRpcChannel;
 namespace muse::audio {
 class AudioConfiguration;
 class AudioThread;
-class AudioBuffer;
 class AudioOutputDeviceController;
 class Playback;
 class SoundFontController;
@@ -69,7 +68,6 @@ private:
 
     std::shared_ptr<AudioConfiguration> m_configuration;
     std::shared_ptr<AudioThread> m_audioWorker;
-    std::shared_ptr<AudioBuffer> m_audioBuffer;
     std::shared_ptr<AudioOutputDeviceController> m_audioOutputController;
     std::shared_ptr<Playback> m_mainPlayback;
     std::shared_ptr<SoundFontController> m_soundFontController;

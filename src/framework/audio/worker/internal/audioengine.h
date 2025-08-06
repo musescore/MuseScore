@@ -30,11 +30,8 @@
 
 #include "../iaudioengine.h"
 
-namespace muse::audio {
-class AudioBuffer;
-}
-
 namespace muse::audio::worker {
+class AudioBuffer;
 class AudioEngine : public IAudioEngine, public async::Asyncable
 {
 public:
