@@ -39,6 +39,7 @@
 using namespace mu;
 using namespace muse;
 using namespace muse::io;
+using namespace muse::ui;
 using namespace mu::notation;
 using namespace muse::actions;
 using namespace mu::context;
@@ -738,9 +739,11 @@ void NotationActionController::toggleNoteInput()
 
     if (noteInput->isNoteInputMode()) {
         noteInput->endNoteInput();
-    } else {
-        noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
+        return;
     }
+
+    // If the Braille panel or Note Input toolbar has focus, stay there.
+    noteInput->startNoteInput(configuration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 }
 
 void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
@@ -2227,12 +2230,16 @@ void NotationActionController::playSelectedElement(bool playChord)
 
 bool NotationActionController::startNoteInputAllowed() const
 {
-    if (isEditingElement()) {
+    if (isEditingElement() || QGuiApplication::applicationState() != Qt::ApplicationActive) {
         return false;
     }
 
-    const muse::ui::UiContext ctx = uiContextResolver()->currentUiContext();
-    return ctx == muse::ui::UiCtxProjectFocused && QGuiApplication::applicationState() == Qt::ApplicationActive;
+    const UiContext ctx = uiContextResolver()->currentUiContext();
+    const INavigationControl* ctrl = navigationController()->activeControl();
+
+    return ctx == ui::UiCtxProjectFocused
+           || ctx == ui::UiCtxBrailleFocused
+           || (ctrl && ctrl->name().startsWith("note-input")); // Toolbar buttons.
 }
 
 void NotationActionController::startNoteInput()

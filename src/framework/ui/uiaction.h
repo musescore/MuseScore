@@ -39,7 +39,10 @@ static constexpr UiContext UiCtxAny = "UiCtxAny";
 // pages
 static constexpr ui::UiContext UiCtxHomeOpened = "UiCtxHomeOpened";
 static constexpr ui::UiContext UiCtxProjectOpened = "UiCtxProjectOpened";
+
+// panels
 static constexpr ui::UiContext UiCtxProjectFocused = "UiCtxProjectFocused";
+static constexpr ui::UiContext UiCtxBrailleFocused = "UiCtxBrailleFocused";
 
 // dialogs
 static constexpr ui::UiContext UiCtxDialogOpened = "UiCtxDialogOpened";
