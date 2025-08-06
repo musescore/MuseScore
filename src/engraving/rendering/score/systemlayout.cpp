@@ -2671,7 +2671,9 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     } else if (!topVBox && bottomVBox) {
         return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()), top->minBottom());
     } else if (topVBox && bottomVBox) {
-        return bottomVBox->absoluteFromSpatium(bottomVBox->topGap()) + topVBox->absoluteFromSpatium(topVBox->bottomGap());
+        double largestGap = std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()),
+                                     topVBox->absoluteFromSpatium(topVBox->bottomGap()));
+        return largestGap;
     }
 
     if (top->staves().empty() || bottom->staves().empty()) {
