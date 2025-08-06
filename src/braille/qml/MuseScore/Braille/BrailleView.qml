@@ -30,16 +30,18 @@ import MuseScore.Braille 1.0
 
 StyledFlickable {
     id: root
+    enabled: brailleModel.enabled
+    visible: enabled
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "BrailleView"
         enabled: brailleTextArea.enabled && brailleTextArea.visible
         direction: NavigationPanel.Both
+        accessible.name: qsTrc("braille/view", "Braille")
     }
 
     Component.onCompleted: {
         brailleModel.load()
-        root.visible = brailleModel.enabled
     }
 
     BrailleModel {
@@ -53,23 +55,6 @@ StyledFlickable {
                     //brailleTextArea.select(brailleModel.currentItemPositionStart.valueOf(), brailleModel.currentItemPositionEnd.valueOf());
                 if(brailleTextArea.focus) {
                     brailleTextArea.cursorPosition = brailleModel.currentItemPositionEnd.valueOf();
-                }
-            }
-        }
-
-        onBraillePanelEnabledChanged: {
-            root.visible = brailleModel.enabled
-        }
-
-        onBrailleModeChanged: {
-            switch(brailleModel.mode) {
-                case 1: {
-                    fakeNavCtrl.accessible.setName("Braille: Normal mode");
-                    break;
-                }
-                case 2: {
-                    fakeNavCtrl.accessible.setName("Braille: Note input mode");
-                    break;
                 }
             }
         }
@@ -181,7 +166,11 @@ StyledFlickable {
             order: 1
 
             accessible.role: MUAccessible.EditableText
-            accessible.name: "Braille"
+            accessible.name: brailleModel.mode === 2
+                             //: Braille input with 6 keyboard keys (F,D,S & J,K,L) to represent the 6 dots in a braille cell.
+                             ? qsTrc("braille/view", "Six-key input mode")
+                             //: Braille navigation.
+                             : qsTrc("braille/view", "Navigation mode")
             accessible.visualItem: brailleTextArea
             accessible.text: brailleTextArea.text
             accessible.selectedText: brailleTextArea.selectedText
