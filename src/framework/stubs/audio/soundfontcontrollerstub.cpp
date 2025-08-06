@@ -19,28 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "soundfontrepositorystub.h"
+#include "soundfontcontrollerstub.h"
 
 using namespace muse;
 using namespace muse::audio;
 
-const synth::SoundFontPaths& SoundFontRepositoryStub::soundFontPaths() const
-{
-    static const synth::SoundFontPaths paths;
-    return paths;
-}
-
-const synth::SoundFontsMap& SoundFontRepositoryStub::soundFonts() const
-{
-    static const synth::SoundFontsMap map;
-    return map;
-}
-
-async::Notification SoundFontRepositoryStub::soundFontsChanged() const
-{
-    return async::Notification();
-}
-
-void SoundFontRepositoryStub::addSoundFont(const synth::SoundFontPath&)
+void SoundFontControllerStub::addSoundFont(const synth::SoundFontPath&)
 {
 }

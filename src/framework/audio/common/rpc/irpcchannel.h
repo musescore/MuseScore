@@ -96,7 +96,11 @@ enum class Method {
     AbortSavingAllSoundTracks,
     GetSaveSoundTrackProgress,
 
-    ClearAllFx
+    ClearAllFx,
+
+    // SoundFont
+    LoadSoundFonts,
+    AddSoundFont
 };
 
 inline std::string to_string(Method m)
@@ -161,6 +165,10 @@ inline std::string to_string(Method m)
     case Method::GetSaveSoundTrackProgress: return "GetSaveSoundTrackProgress";
 
     case Method::ClearAllFx: return "ClearAllFx";
+
+    // SoundFont
+    case Method::LoadSoundFonts: return "LoadSoundFonts";
+    case Method::AddSoundFont: return "AddSoundFont";
     }
 
     assert(false && "unknown enum value");
