@@ -112,6 +112,12 @@ void GuitarBend::setEndNotePitch(int pitch, QuarterOffset quarterOff)
 
     score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
 
+    Note* tiedNote = note->tieFor() ? note->tieFor()->endNote() : nullptr;
+    while (tiedNote) {
+        score()->undoChangePitch(tiedNote, pitch, targetTpc1, targetTpc2);
+        tiedNote = tiedNote->tieFor() ? tiedNote->tieFor()->endNote() : nullptr;
+    }
+
     AccidentalType accidentalType = Accidental::value2subtype(tpc2alter(targetTpc1));
     if (quarterOff == QuarterOffset::QUARTER_SHARP) {
         switch (accidentalType) {
