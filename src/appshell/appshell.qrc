@@ -58,6 +58,7 @@
         <file>qml/Preferences/internal/IncrementalPropertyControlWithTitle.qml</file>
         <file>qml/Preferences/internal/KeyboardLayoutsSection.qml</file>
         <file>qml/Preferences/internal/SaveToCloudSection.qml</file>
+        <file>qml/Preferences/internal/WelcomeDialogSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSubSection.qml</file>

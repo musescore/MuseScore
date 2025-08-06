@@ -61,6 +61,7 @@ public:
 
     bool welcomeDialogShowOnStartup() const override;
     void setWelcomeDialogShowOnStartup(bool show) override;
+    muse::async::Notification welcomeDialogShowOnStartupChanged() const override;
 
     std::string welcomeDialogLastShownVersion() const override;
     void setWelcomeDialogLastShownVersion(const std::string& version) override;
@@ -124,6 +125,8 @@ private:
     muse::io::paths_t parseSessionProjectsPaths(const QByteArray& json) const;
 
     QString m_preferencesDialogCurrentPageId;
+
+    muse::async::Notification m_welcomeDialogShowOnStartupChanged;
 
     muse::async::Notification m_startupModeTypeChanged;
     muse::async::Notification m_startupScorePathChanged;
