@@ -23,69 +23,17 @@ set(MODULE_ALIAS muse::audio)
 
 include(GetPlatformInfo)
 
-if (OS_IS_WIN)
-    set(DRIVER_SRC
-        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
-        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.h
-        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.cpp
-        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudioclient.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudioclient.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapitypes.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wasapiaudiodriver.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.h
-    )
-elseif(OS_IS_LIN OR OS_IS_FBSD)
-    set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsaaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsaaudiodriver.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
-    )
-    if (MUSE_PIPEWIRE_AUDIO_DRIVER)
-        set(DRIVER_SRC
-            ${DRIVER_SRC}
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/pwaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/pwaudiodriver.h
-        )
-    endif()
-    if (MUSE_MODULE_AUDIO_JACK)
-        set(DRIVER_SRC
-            ${DRIVER_SRC}
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
-        )
-    endif()
-elseif(OS_IS_MAC)
-    set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.h
-    )
-
-    set_source_files_properties(
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
-        PROPERTIES
-        SKIP_UNITY_BUILD_INCLUSION ON
-        SKIP_PRECOMPILE_HEADERS ON
-    )
-elseif(OS_IS_WASM)
-    set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/web/webaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/web/webaudiodriver.h
-    )
-endif()
-
 include(common/audio_common.cmake)
 include(main/audio_main.cmake)
 include(worker/audio_worker.cmake)
+include(driver/audio_driver.cmake)
 
 set(MODULE_SRC
 
     ${AUDIO_COMMON_SRC}
     ${AUDIO_MAIN_SRC}
     ${AUDIO_WORKER_SRC}
+    ${AUDIO_DRIVER_SRC}
 
     # Temporary
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
@@ -116,8 +64,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.h
 
-    # Driver
-    ${DRIVER_SRC}
 
     )
 
