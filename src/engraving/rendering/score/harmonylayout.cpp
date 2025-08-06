@@ -646,7 +646,7 @@ void HarmonyLayout::renderActionSet(Harmony* item, Harmony::LayoutData* ldata, c
 void HarmonyLayout::renderActionMove(Harmony* item, const RenderActionMovePtr& a, HarmonyRenderCtx& harmonyCtx)
 {
     const FontMetrics fm = FontMetrics(item->font());
-    const double scale = a->scaled() ? harmonyCtx.scale : 1.0;
+    const double scale = (a->scaled() ? harmonyCtx.scale : 1.0) * item->mag();
     harmonyCtx.pos = harmonyCtx.pos + a->vec() * FontMetrics::capHeight(item->font()) * scale;
 }
 
