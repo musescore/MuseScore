@@ -44,12 +44,17 @@ enum class HarmonyType : unsigned char {
     NASHVILLE
 };
 
+enum class HarmonyRenderItemType : unsigned char {
+    TEXT,
+    PAREN
+};
+
 struct HarmonyRenderItem {
     virtual ~HarmonyRenderItem() = default;
     HarmonyRenderItem(bool align, double _x, double _y)
         : m_hAlign(align), m_pos(_x, _y) {}
 
-    PointF pos() const { return m_pos + offset(); }
+    PointF pos() const { return m_pos + m_offset; }
     double x() const { return m_pos.x(); }
     double y() const { return m_pos.y(); }
     void movex(double v) { m_pos.rx() += v; }
@@ -58,12 +63,17 @@ struct HarmonyRenderItem {
     void sety(double v) { m_pos.ry() = v; }
     void setOffset(const PointF& p) { m_offset = p; }
 
+    virtual double height() const = 0;
+
     bool align() const { return m_hAlign; }
 
     virtual RectF boundingRect() const = 0;
 
-protected:
-    PointF offset() const { return m_offset; }
+    virtual double leftPadding() const = 0;
+    virtual double rightPadding() const = 0;
+
+    virtual HarmonyRenderItemType type() const = 0;
+
 private:
     bool m_hAlign = true;
     PointF m_offset;       // Offset for placing within the TextBase.
@@ -82,6 +92,17 @@ struct ChordSymbolParen : HarmonyRenderItem {
     double closingParenPos = -DBL_MAX;
 
     Parenthesis* paren = nullptr;
+
+    double height() const override { return paren->height(); }
+
+    double leftPadding() const override { return paren->direction() == DirectionH::LEFT ? OUTER_PADDING : INNER_PADDING; }
+    double rightPadding() const override { return paren->direction() == DirectionH::LEFT ? INNER_PADDING : OUTER_PADDING; }
+
+    HarmonyRenderItemType type() const override { return HarmonyRenderItemType::PAREN; }
+
+private:
+    static constexpr double INNER_PADDING = 0.05;
+    static constexpr double OUTER_PADDING = 0.1;
 };
 
 //---------------------------------------------------------
@@ -100,6 +121,13 @@ struct TextSegment : HarmonyRenderItem {
 
     muse::draw::Font font() const { return m_font; }
     void setFont(const muse::draw::Font& f);
+
+    double leftPadding() const override { return 0.0; }
+    double rightPadding() const override { return 0.0; }
+
+    double height() const override { return boundingRect().height(); }
+
+    HarmonyRenderItemType type() const override { return HarmonyRenderItemType::TEXT; }
 
     TextSegment(const String& s, const muse::draw::Font& f, double _x, double _y, bool align)
         : HarmonyRenderItem(align, _x, _y) { setText(s); setFont(f); }

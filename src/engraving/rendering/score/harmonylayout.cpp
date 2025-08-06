@@ -189,9 +189,10 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
 
 void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
 {
+    const std::vector<HarmonyRenderItem*>& itemList = item->ldata()->renderItemList();
     // Layout parentheses
     std::vector<ChordSymbolParen*> openingParenStack;
-    for (HarmonyRenderItem* renderItem : item->ldata()->renderItemList()) {
+    for (HarmonyRenderItem* renderItem : itemList) {
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
             if (paren->paren->direction() == DirectionH::LEFT) {
                 // Opening paren
@@ -245,19 +246,46 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
         }
     }
 
+    auto computePadding = [](HarmonyRenderItem* item1, HarmonyRenderItem* item2) {
+        bool item1Paren = item1->type() == HarmonyRenderItemType::PAREN;
+        bool item2Paren = item2->type() == HarmonyRenderItemType::PAREN;
+
+        double padding = 0.0;
+        if (item1Paren && item2Paren) {
+            padding = std::min(item1->rightPadding(), item2->leftPadding());
+        } else {
+            padding = std::max(item1->rightPadding(), item2->leftPadding());
+        }
+
+        double scaling = (item1->height() + item2->height()) / 2;
+        padding *= scaling;
+
+        return padding;
+    };
+
     // Create space in text for parentheses
-    double parenSpace = 0.0;
-    for (HarmonyRenderItem* renderItem : item->ldata()->renderItemList()) {
+    // TODO - STACKED C7((#11)#13)
+    // C7(#11(#13))
+    double additionalSpace = 0.0;
+    for (size_t i = 0; i < itemList.size(); i++) {
+        HarmonyRenderItem* renderItem = itemList.at(i);
+        double padding = i != 0 ? computePadding(itemList.at(i - 1), renderItem) : 0.0;
+        LOGI() << "padding: " << padding;
+
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
+            LOGI() << "PAREN";
             if (paren->paren->direction() == DirectionH::LEFT) {
-                parenSpace += paren->paren->width();
+                additionalSpace += paren->paren->width() + padding;
+                paren->movex(additionalSpace);
             }
-            paren->movex(parenSpace);
             if (paren->paren->direction() == DirectionH::RIGHT) {
-                parenSpace += paren->paren->width();
+                paren->movex(additionalSpace + padding);
+                additionalSpace += paren->paren->width() + padding;
             }
         } else if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
-            ts->movex(parenSpace);
+            LOGI() << ts->text();
+            additionalSpace += padding;
+            ts->movex(additionalSpace);
         }
     }
 }
