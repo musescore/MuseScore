@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include "async/promise.h"
 #include "types/ret.h"
 
 #include "modularity/imoduleinterface.h"
@@ -34,7 +35,7 @@ public:
     virtual ~IMuseSamplerCheckUpdateScenario() = default;
 
     virtual bool alreadyChecked() const = 0;
-    virtual void checkForUpdate() = 0;
+    virtual muse::async::Promise<muse::Ret> checkForUpdate() = 0;
 
     virtual bool hasUpdate() const = 0;
     virtual muse::Ret showUpdate() = 0;

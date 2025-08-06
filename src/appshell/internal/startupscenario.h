@@ -65,11 +65,13 @@ public:
     const project::ProjectFile& startupScoreFile() const override;
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
-    void runOnSplashScreen() override;
+    muse::async::Promise<muse::Ret> runOnSplashScreen() override;
     void runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
 private:
+    void registerAudioPlugins();
+
     void onStartupPageOpened(StartupModeType modeType);
 
     StartupModeType resolveStartupModeType() const;
@@ -83,6 +85,8 @@ private:
     std::string m_startupTypeStr;
     project::ProjectFile m_startupScoreFile;
     bool m_startupCompleted = false;
+
+    bool m_updateCheckInProgress = false;
 };
 }
 

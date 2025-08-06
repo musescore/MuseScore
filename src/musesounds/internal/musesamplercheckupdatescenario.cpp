@@ -31,20 +31,28 @@ bool MuseSamplerCheckUpdateScenario::alreadyChecked() const
     return m_alreadyChecked;
 }
 
-void MuseSamplerCheckUpdateScenario::checkForUpdate()
+muse::async::Promise<muse::Ret> MuseSamplerCheckUpdateScenario::checkForUpdate()
 {
-    if (!service()->canCheckForUpdate() || multiInstancesProvider()->instances().size() != 1) {
-        return;
-    }
-
-    auto promise = service()->checkForUpdate();
-    promise.onResolve(this, [this](const muse::RetVal<bool>& res) {
-        m_alreadyChecked = true;
-
-        if (!res.ret) {
-            LOGE() << res.ret.toString();
-            return;
+    return async::make_promise<Ret>([this](auto resolve, auto) {
+        if (!service()->canCheckForUpdate() || multiInstancesProvider()->instances().size() != 1) {
+            const muse::Ret ret = muse::make_ret(Ret::Code::UnknownError);
+            return resolve(ret);
         }
+
+        auto promise = service()->checkForUpdate();
+        promise.onResolve(this, [this, resolve](const muse::RetVal<bool>& res) {
+            m_alreadyChecked = true;
+
+            if (!res.ret) {
+                LOGE() << res.ret.toString();
+                (void)resolve(res.ret);
+                return;
+            }
+
+            (void)resolve(muse::make_ok());
+        });
+
+        return muse::async::Promise<Ret>::dummy_result();
     });
 }
 

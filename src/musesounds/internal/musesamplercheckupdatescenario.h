@@ -50,7 +50,7 @@ public:
         : Injectable(iocCtx) {}
 
     bool alreadyChecked() const override;
-    void checkForUpdate() override;
+    muse::async::Promise<muse::Ret> checkForUpdate() override;
 
     bool hasUpdate() const override;
     muse::Ret showUpdate() override;
