@@ -73,8 +73,8 @@ static muse::mpe::NoteEvent buildMetronomeEvent(const TimeSigFrac& timeSig, cons
     duration_t duration = durationFromTempoAndTicks(bps, ticksPerBeat);
 
     pitch_level_t eventPitchLevel = beatType == BeatType::DOWNBEAT
-                                    ? pitchLevel(PitchClass::E, 5) // high wood block
-                                    : pitchLevel(PitchClass::F, 5); // low wood block
+                                    ? pitchLevel(PitchClass::A, 1) // high met
+                                    : pitchLevel(PitchClass::G_sharp, 1); // low met
 
     const ArticulationMap articulations = makeStandardArticulationMap(profile, actualTimestamp, duration);
 
