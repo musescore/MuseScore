@@ -26,7 +26,7 @@
 
 #include "global/settings.h"
 
-#include "soundfonttypes.h"
+#include "audio/common/soundfonttypes.h"
 
 #include "log.h"
 

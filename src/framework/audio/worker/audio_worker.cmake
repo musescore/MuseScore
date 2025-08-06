@@ -35,6 +35,7 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ifxresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
+    ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
 
     # internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.cpp
@@ -109,6 +110,8 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/abstractsynthesizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/abstractsynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/soundfontrepository.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/soundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/soundmapping.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/sfcachedloader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.cpp

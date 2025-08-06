@@ -34,15 +34,14 @@
 #include "internal/playback.h"
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
 
-#include "internal/soundfontrepository.h"
-
 #include "diagnostics/idiagnosticspathsregister.h"
 #include "devtools/inputlag.h"
 
-#include "audio/worker/audioworkermodule.h"
 // Temporarily for compatibility
+#include "audio/worker/audioworkermodule.h"
 #include "audio/worker/internal/audioengine.h"
 #include "audio/worker/internal/synthesizers/synthresolver.h"
+#include "audio/worker/internal/synthesizers/soundfontrepository.h"
 
 #include "log.h"
 
@@ -129,7 +128,6 @@ void AudioModule::registerExports()
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
-    m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
     //! NOTE Temporarily for compatibility
     m_workerModule = std::make_shared<worker::AudioWorkerModule>();
@@ -163,8 +161,6 @@ void AudioModule::registerExports()
     ioc()->registerExport<IAudioDriver>(moduleName(), m_audioDriver);
     ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), m_rpcChannel);
-
-    ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 
     m_workerModule->registerExports();
 }
@@ -223,7 +219,7 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
-    m_soundFontRepository->init();
+    m_workerModule->soundFontRepository()->init();
 
     m_audioBuffer->init(m_configuration->audioChannelsCount());
 

@@ -45,9 +45,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiothreadsecurer.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
-    ${CMAKE_CURRENT_LIST_DIR}/soundfonttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/audioutils.h
-    ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
 
     # Common internal
@@ -59,8 +57,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiobuffer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.h
 

@@ -30,8 +30,8 @@
 #include "translation.h"
 #include "types/string.h"
 
-#include "audio/soundfonttypes.h"
-#include "audio/audioutils.h"
+#include "audio/common/soundfonttypes.h"
+#include "audio/common/audioutils.h"
 
 #include "msbasicpresetscategories.h"
 

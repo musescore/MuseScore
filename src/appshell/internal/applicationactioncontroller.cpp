@@ -31,7 +31,7 @@
 #include <QMimeData>
 
 #include "async/async.h"
-#include "audio/soundfonttypes.h"
+#include "audio/common/soundfonttypes.h"
 
 #include "defer.h"
 #include "translation.h"
