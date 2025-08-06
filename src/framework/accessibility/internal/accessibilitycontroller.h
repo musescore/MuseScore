@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QList>
 #include <QHash>
+#include <QTimer>
 
 #include "global/async/asyncable.h"
 #include "global/async/channel.h"
@@ -35,7 +36,6 @@
 #include "ui/imainwindow.h"
 #include "ui/iinteractiveprovider.h"
 #include "../iaccessibilityconfiguration.h"
-#include "../iqaccessibleinterfaceregister.h"
 #include "../iaccessibilitycontroller.h"
 #include "accessibleobject.h"
 
@@ -57,8 +57,7 @@ public:
     Inject<IAccessibilityConfiguration> configuration = { this };
 
 public:
-    AccessibilityController(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+    AccessibilityController(const muse::modularity::ContextPtr& iocCtx);
     ~AccessibilityController() override;
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
@@ -68,6 +67,9 @@ public:
     // IAccessibilityController
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;
+
+    void announce(const QString& announcement) override;
+    QString announcement() const override;
 
     const IAccessible* accessibleRoot() const override;
     const IAccessible* lastFocused() const override;
@@ -128,6 +130,7 @@ public:
     int indexOfChild(const IAccessible* item, const QAccessibleInterface* iface) const;
     QAccessibleInterface* focusedChild(const IAccessible* item) const;
 
+    IAccessible* pretendFocus() const;
     async::Channel<QAccessibleEvent*> eventSent() const;
 
 private:
@@ -141,6 +144,7 @@ private:
         QAccessibleInterface* iface = nullptr;
 
         bool isValid() const { return item != nullptr; }
+        bool isUsable() const { return item && iface && !item->accessibleIgnored(); }
     };
 
     void init();
@@ -154,18 +158,23 @@ private:
 
     void cancelPreviousReading();
     void savePanelAccessibleName(const IAccessible* oldItem, const IAccessible* newItem);
-    void triggerRevoicingOfChangedName(IAccessible* item);
+    bool needsRevoicing(const QAccessibleInterface& iface, QAccessible::Event eventType) const;
+    void triggerRevoicing(const Item& current);
+    void restoreFocus();
+    void setExternalFocus(const Item& other);
 
     const IAccessible* panel(const IAccessible* item) const;
 
-    IAccessible* findSiblingItem(const IAccessible* item, const IAccessible* currentItem) const;
+    const Item& findSiblingItem(const Item& parent, const Item& current) const;
 
     QHash<const IAccessible*, Item> m_allItems;
 
     QList<IAccessible*> m_children;
     async::Channel<QAccessibleEvent*> m_eventSent;
     IAccessible* m_lastFocused = nullptr;
-    IAccessible* m_itemForRestoreFocus = nullptr;
+    IAccessible* m_pretendFocus = nullptr;
+    QTimer m_pretendFocusTimer;
+    QString m_announcement;
 
     bool m_inited = false;
     bool m_enabled = false;
