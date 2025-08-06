@@ -31,6 +31,7 @@
 
 #include "internal/synthesizers/fluidsynth/fluidresolver.h"
 #include "internal/synthesizers/synthresolver.h"
+#include "internal/synthesizers/soundfontrepository.h"
 
 #include "audio/common/audiosanitizer.h"
 
@@ -52,11 +53,13 @@ void AudioWorkerModule::registerExports()
     m_workerChannelController  = std::make_shared<WorkerChannelController>();
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
+    m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
     ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
     ioc()->registerExport<IWorkerPlayback>(moduleName(), m_workerPlayback);
     ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
     ioc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
+    ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 }
 
 void AudioWorkerModule::resolveImports()

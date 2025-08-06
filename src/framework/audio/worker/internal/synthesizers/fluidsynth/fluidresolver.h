@@ -30,8 +30,7 @@
 
 #include "global/async/asyncable.h"
 #include "global/modularity/ioc.h"
-
-#include "isoundfontrepository.h"
+#include "../../../isoundfontrepository.h"
 
 #include "fluidsynth.h"
 

@@ -25,7 +25,7 @@
 
 #include "global/types/retval.h"
 
-#include "soundfonttypes.h"
+#include "audio/common/soundfonttypes.h"
 
 namespace muse::audio::synth {
 class FluidSoundFontParser

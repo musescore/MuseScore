@@ -21,9 +21,11 @@
 set(AUDIO_COMMON_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/soundfonttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/audiosanitizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audiosanitizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/audioutils.h
 
     # Rpc
     ${CMAKE_CURRENT_LIST_DIR}/rpc/irpcchannel.h

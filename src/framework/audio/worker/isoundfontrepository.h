@@ -26,9 +26,9 @@
 
 #include "global/async/notification.h"
 
-#include "soundfonttypes.h"
+#include "audio/common/soundfonttypes.h"
 
-namespace muse::audio {
+namespace muse::audio::synth {
 class ISoundFontRepository : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ISoundFontRepository)
@@ -36,11 +36,11 @@ class ISoundFontRepository : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISoundFontRepository() = default;
 
-    virtual const synth::SoundFontPaths& soundFontPaths() const = 0;
-    virtual const synth::SoundFontsMap& soundFonts() const = 0;
+    virtual const SoundFontPaths& soundFontPaths() const = 0;
+    virtual const SoundFontsMap& soundFonts() const = 0;
     virtual async::Notification soundFontsChanged() const = 0;
 
-    virtual void addSoundFont(const synth::SoundFontPath& path) = 0;
+    virtual void addSoundFont(const SoundFontPath& path) = 0;
 };
 }
 

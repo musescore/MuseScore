@@ -27,10 +27,10 @@
 #include "global/io/ifilesystem.h"
 #include "global/async/asyncable.h"
 
-#include "isoundfontrepository.h"
+#include "../../isoundfontrepository.h"
 #include "iaudioconfiguration.h"
 
-namespace muse::audio {
+namespace muse::audio::synth {
 class SoundFontRepository : public ISoundFontRepository, public Injectable, public async::Asyncable
 {
     Inject<IInteractive> interactive = { this };
@@ -43,23 +43,23 @@ public:
 
     void init();
 
-    const synth::SoundFontPaths& soundFontPaths() const override;
-    const synth::SoundFontsMap& soundFonts() const override;
+    const SoundFontPaths& soundFontPaths() const override;
+    const SoundFontsMap& soundFonts() const override;
     async::Notification soundFontsChanged() const override;
 
-    void addSoundFont(const synth::SoundFontPath& path) override;
+    void addSoundFont(const SoundFontPath& path) override;
 
 private:
 
-    Ret doAddSoundFont(const synth::SoundFontPath& src, const synth::SoundFontPath& dst);
+    Ret doAddSoundFont(const SoundFontPath& src, const SoundFontPath& dst);
 
     void loadSoundFonts();
-    void loadSoundFont(const synth::SoundFontPath& path, const synth::SoundFontsMap& oldSoundFonts = {});
+    void loadSoundFont(const SoundFontPath& path, const SoundFontsMap& oldSoundFonts = {});
 
-    RetVal<synth::SoundFontPath> resolveInstallationPath(const synth::SoundFontPath& path) const;
+    RetVal<SoundFontPath> resolveInstallationPath(const SoundFontPath& path) const;
 
-    synth::SoundFontPaths m_soundFontPaths;
-    synth::SoundFontsMap m_soundFonts;
+    SoundFontPaths m_soundFontPaths;
+    SoundFontsMap m_soundFonts;
     async::Notification m_soundFontsChanged;
 };
 }

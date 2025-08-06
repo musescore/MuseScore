@@ -44,7 +44,6 @@ class AudioThread;
 class AudioBuffer;
 class AudioOutputDeviceController;
 class Playback;
-class SoundFontRepository;
 class KnownAudioPluginsRegister;
 class RegisterAudioPluginsScenario;
 class AudioModule : public modularity::IModuleSetup, public async::Asyncable
@@ -77,8 +76,6 @@ private:
 
     QTimer m_rpcTimer;
     std::shared_ptr<rpc::GeneralRpcChannel> m_rpcChannel;
-
-    std::shared_ptr<SoundFontRepository> m_soundFontRepository;
 
     std::shared_ptr<IAudioDriver> m_audioDriver;
 };
