@@ -3567,16 +3567,22 @@ bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
 
 bool Measure::canAddStaffTypeChange(staff_idx_t staffIdx) const
 {
+    if (isMMRest()) {
+        return false;
+    }
+
     for (const EngravingObject* child : el()) {
         if (!child || !child->isStaffTypeChange()) {
             continue;
         }
+
         const StaffTypeChange* stc = toStaffTypeChange(child);
         if (stc->staffIdx() == staffIdx) {
             // Staff already has a StaffTypeChange at this measure...
             return false;
         }
     }
+
     return true;
 }
 
