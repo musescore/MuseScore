@@ -49,6 +49,7 @@ std::string AudioWorkerModule::moduleName() const
 void AudioWorkerModule::registerExports()
 {
     m_audioEngine = std::make_shared<AudioEngine>();
+    m_audioBuffer = std::make_shared<AudioBuffer>();
     m_workerPlayback = std::make_shared<WorkerPlayback>(iocContext());
     m_workerChannelController  = std::make_shared<WorkerChannelController>();
     m_fxResolver = std::make_shared<FxResolver>();

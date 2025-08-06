@@ -53,8 +53,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothreadsecurer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothreadsecurer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiobuffer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiobuffer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.cpp

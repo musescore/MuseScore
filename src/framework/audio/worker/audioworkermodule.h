@@ -35,6 +35,7 @@ class SoundFontRepository;
 
 namespace muse::audio::worker {
 class AudioEngine;
+class AudioBuffer;
 class WorkerPlayback;
 class WorkerChannelController;
 
@@ -52,10 +53,12 @@ public:
 
     // Temporarily for compatibility
     std::shared_ptr<AudioEngine> audioEngine() const { return m_audioEngine; }
+    std::shared_ptr<AudioBuffer> audioBuffer() const { return m_audioBuffer; }
     std::shared_ptr<synth::SynthResolver> synthResolver() const { return m_synthResolver; }
 
 private:
     std::shared_ptr<AudioEngine> m_audioEngine;
+    std::shared_ptr<AudioBuffer> m_audioBuffer;
     std::shared_ptr<WorkerPlayback> m_workerPlayback;
     std::shared_ptr<WorkerChannelController> m_workerChannelController;
     std::shared_ptr<fx::FxResolver> m_fxResolver;

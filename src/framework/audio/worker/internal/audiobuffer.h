@@ -42,7 +42,7 @@ constexpr size_t cache_line_size = 64;
 #pragma warning(disable: 4324)
 #endif
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class AudioBuffer
 {
 public:
@@ -71,7 +71,7 @@ private:
     samples_t m_minSamplesToReserve = 0;
     samples_t m_renderStep = 0;
 
-    worker::IAudioSourcePtr m_source = nullptr;
+    IAudioSourcePtr m_source = nullptr;
 };
 
 using AudioBufferPtr = std::shared_ptr<AudioBuffer>;
