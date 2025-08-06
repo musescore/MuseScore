@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,27 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_ISOUNDFONTREPOSITORY_H
-#define MUSE_AUDIO_ISOUNDFONTREPOSITORY_H
 
-#include "modularity/imoduleinterface.h"
+#pragma once
 
-#include "global/async/notification.h"
+#include "global/modularity/imoduleinterface.h"
 
 #include "audio/common/soundfonttypes.h"
 
-namespace muse::audio::synth {
-class ISoundFontRepository : MODULE_EXPORT_INTERFACE
+namespace muse::audio {
+class ISoundFontController : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ISoundFontRepository)
+    INTERFACE_ID(ISoundFontController)
 
 public:
-    virtual ~ISoundFontRepository() = default;
+    virtual ~ISoundFontController() = default;
 
-    virtual const SoundFontPaths& soundFontPaths() const = 0;
-    virtual const SoundFontsMap& soundFonts() const = 0;
-    virtual async::Notification soundFontsChanged() const = 0;
+    virtual void addSoundFont(const synth::SoundFontPath& path) = 0;
 };
 }
-
-#endif // MUSE_AUDIO_ISOUNDFONTREPOSITORY_H

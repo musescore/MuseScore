@@ -53,7 +53,6 @@ public:
     // Temporarily for compatibility
     std::shared_ptr<AudioEngine> audioEngine() const { return m_audioEngine; }
     std::shared_ptr<synth::SynthResolver> synthResolver() const { return m_synthResolver; }
-    std::shared_ptr<synth::SoundFontRepository> soundFontRepository() const { return m_soundFontRepository; }
 
 private:
     std::shared_ptr<AudioEngine> m_audioEngine;

@@ -44,6 +44,7 @@ class AudioThread;
 class AudioBuffer;
 class AudioOutputDeviceController;
 class Playback;
+class SoundFontController;
 class KnownAudioPluginsRegister;
 class RegisterAudioPluginsScenario;
 class AudioModule : public modularity::IModuleSetup, public async::Asyncable
@@ -58,6 +59,7 @@ public:
     void registerUiTypes() override;
     void resolveImports() override;
     void onInit(const IApplication::RunMode& mode) override;
+    void onDelayedInit() override;
     void onDeinit() override;
     void onDestroy() override;
 
@@ -69,8 +71,8 @@ private:
     std::shared_ptr<AudioThread> m_audioWorker;
     std::shared_ptr<AudioBuffer> m_audioBuffer;
     std::shared_ptr<AudioOutputDeviceController> m_audioOutputController;
-
-    std::shared_ptr<Playback> m_mainPlayback; // facade
+    std::shared_ptr<Playback> m_mainPlayback;
+    std::shared_ptr<SoundFontController> m_soundFontController;
 
     std::shared_ptr<worker::AudioWorkerModule> m_workerModule;
 

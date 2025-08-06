@@ -19,21 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_SOUNDFONTREPOSITORYSTUB_H
-#define MU_AUDIO_SOUNDFONTREPOSITORYSTUB_H
+#pragma once
 
-#include "audio/isoundfontrepository.h"
+#include "audio/main/isoundfontcontroller.h"
 
 namespace muse::audio {
-class SoundFontRepositoryStub : public ISoundFontRepository
+class SoundFontControllerStub : public ISoundFontController
 {
 public:
-    const synth::SoundFontPaths& soundFontPaths() const override;
-    const synth::SoundFontsMap& soundFonts() const override;
-    async::Notification soundFontsChanged() const override;
 
     void addSoundFont(const synth::SoundFontPath& path) override;
 };
 }
-
-#endif // MU_AUDIO_SOUNDFONTREPOSITORYSTUB_H

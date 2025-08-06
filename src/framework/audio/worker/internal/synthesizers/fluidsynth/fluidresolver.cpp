@@ -36,10 +36,11 @@ FluidResolver::FluidResolver(const modularity::ContextPtr& iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    refresh();
     soundFontRepository()->soundFontsChanged().onNotify(this, [this]() {
         refresh();
     });
+
+    refresh();
 }
 
 ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const

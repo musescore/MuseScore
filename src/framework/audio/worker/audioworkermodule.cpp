@@ -78,6 +78,7 @@ void AudioWorkerModule::onInit(const IApplication::RunMode&)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    m_soundFontRepository->init();
     m_workerPlayback->init();
     m_workerChannelController->init(m_workerPlayback);
 }
