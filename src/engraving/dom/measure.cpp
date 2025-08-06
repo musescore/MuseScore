@@ -2863,6 +2863,7 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
         break;
     case Pid::REPEAT_COUNT:
         setRepeatCount(value.toInt());
+        score()->undoUpdatePlayCountText(this);
         break;
     case Pid::USER_STRETCH:
         setUserStretch(value.toDouble());

@@ -852,12 +852,8 @@ PropertyValue BarLine::getProperty(Pid id) const
 bool BarLine::setProperty(Pid id, const PropertyValue& v)
 {
     if (EngravingItem* e = propertyDelegate(id)) {
-        bool success = e->setProperty(id, v);
-
-        if (id == Pid::REPEAT_COUNT) {
-            score()->undoUpdatePlayCountText(measure());
-        }
-        return success;
+        e->setProperty(id, v);
+        return e->setProperty(id, v);
     }
 
     switch (id) {
