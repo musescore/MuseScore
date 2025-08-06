@@ -1170,7 +1170,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             }
 
             AbstractLayoutPanelTreeItem* newItem = buildSystemObjectsLayerItem(staff, systemObjects[staff]);
-            int row = partItem->row();
+            int row = staff->hasSystemObjectsBelowBottomStaff() ? partItem->row() + 1 : partItem->row();
 
             beginInsertRows(QModelIndex(), row, row);
             m_rootItem->insertChild(newItem, row);
