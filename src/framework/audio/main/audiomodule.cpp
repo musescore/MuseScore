@@ -51,29 +51,29 @@ using namespace muse::modularity;
 using namespace muse::audio;
 
 #ifdef MUSE_MODULE_AUDIO_JACK
-#include "internal/platform/jack/jackaudiodriver.h"
+#include "audio/driver/platform/jack/jackaudiodriver.h"
 #endif
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 #include <QtEnvironmentVariables>
-#include "internal/platform/lin/alsaaudiodriver.h"
+#include "audio/driver/platform/lin/alsaaudiodriver.h"
 #ifdef MUSE_PIPEWIRE_AUDIO_DRIVER
-#include "internal/platform/lin/pwaudiodriver.h"
+#include "audio/driver/platform/lin/pwaudiodriver.h"
 #endif
 #endif
 
 #ifdef Q_OS_WIN
-//#include "internal/platform/win/winmmdriver.h"
-//#include "internal/platform/win/wincoreaudiodriver.h"
-#include "internal/platform/win/wasapiaudiodriver.h"
+//#include "audio/driver/platform/win/winmmdriver.h"
+//#include "audio/driver/platform/win/wincoreaudiodriver.h"
+#include "audio/driver/platform/win/wasapiaudiodriver.h"
 #endif
 
 #ifdef Q_OS_MACOS
-#include "internal/platform/osx/osxaudiodriver.h"
+#include "audio/driver/platform/osx/osxaudiodriver.h"
 #endif
 
 #ifdef Q_OS_WASM
-#include "internal/platform/web/webaudiodriver.h"
+#include "audio/driver/platform/web/webaudiodriver.h"
 #endif
 
 static void measureInputLag(const float* buf, const size_t size)
