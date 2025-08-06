@@ -1606,7 +1606,12 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
             y += rowHeights[r] + rowGap;
         }
 
-        harmony->mutldata()->moveY(-(harmonyBaselines[row] - harmony->baseLine()));
+        double baseline = harmony->ldata()->textList.value().empty() ? 0.0 : harmony->ldata()->textList.value().front()->bboxBaseLine()
+                          + harmony->ldata()->textList.value().front()->pos().y();
+
+        double baseLineAdjust = harmony->ldata()->bbox().bottom() - baseline;
+
+        harmony->mutldata()->moveY(-(harmonyBaselines[row]) + baseLineAdjust);
 
         double fretDiagramX = x;
         double fretDiagramY = y + harmonyHeights[row] + shapeMarginAboveDiagram;

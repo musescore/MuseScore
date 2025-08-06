@@ -54,6 +54,7 @@ struct TextSegment {
     double capHeight() const;
     RectF boundingRect() const;
     RectF tightBoundingRect() const;
+    double bboxBaseLine() const;
 
     void setOffset(const PointF& p) { m_offset = p; }
     PointF pos() const { return m_pos + m_offset; }
