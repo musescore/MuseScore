@@ -741,10 +741,6 @@ void NotationActionController::toggleNoteInput()
     } else {
         noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
     }
-
-    muse::ui::UiActionState state = actionRegister()->actionState("note-input");
-    std::string stateTitle = state.checked ? muse::trc("notation", "Note input mode") : muse::trc("notation", "Normal mode");
-    notifyAccessibilityAboutVoiceInfo(stateTitle);
 }
 
 void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
