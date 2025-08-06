@@ -40,9 +40,9 @@ public:
     void setTechniqueType(const PlayingTechniqueType techniqueType);
 
     PlayTechAnnotation* clone() const override;
+    TranslatableString subtypeUserName() const override;
 
 private:
-
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid id) const override;
