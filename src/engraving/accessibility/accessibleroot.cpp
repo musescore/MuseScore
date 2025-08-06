@@ -49,6 +49,10 @@ AccessibleRoot::~AccessibleRoot()
 
 void AccessibleRoot::setFocusedElement(AccessibleItemPtr e, bool voiceStaffInfoChange)
 {
+    if (!m_enabled) {
+        return; // User is outside the score panel (e.g. in the Braille panel).
+    }
+
     AccessibleItemWeakPtr old = m_focusedElement;
     updateStaffInfo(e, old, voiceStaffInfoChange);
 
