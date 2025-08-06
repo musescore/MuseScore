@@ -6725,6 +6725,13 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             nsp->setTrack2(linkedTrack + diff);
             nsp->setTrack(linkedTrack);
 
+            if (Chord* startChord = toChord(sp->startChord())) {
+                Chord* linkedChord = findLinkedChord(startChord, score->staff(staffIdx));
+                if (linkedChord) {
+                    nsp->setParent(linkedChord->measure()->system());
+                }
+            }
+
             // determine start/end element for slurs
             // this is only necessary if start/end element is
             //   a grace note, otherwise the element can be set to zero
