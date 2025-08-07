@@ -377,10 +377,10 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 
 bool Accidental::acceptDrop(EditData& data) const
 {
-    EngravingItem* e = data.dropElement;
+    const EngravingItem* e = data.dropElement;
 
     if (e->type() == ElementType::ACCIDENTAL) {
-        return true;
+        return note();
     }
 
     if (e->isActionIcon()) {
