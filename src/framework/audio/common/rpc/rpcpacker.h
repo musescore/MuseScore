@@ -581,10 +581,17 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& v
 }
 
 namespace muse::audio::rpc {
+using Options = msgpack::Options;
 class RpcPacker
 {
 public:
     RpcPacker() = default;
+
+    template<class ... Types>
+    static ByteArray pack(const Options& opt, const Types&... args)
+    {
+        return msgpack::pack(opt, args ...);
+    }
 
     template<class ... Types>
     static ByteArray pack(const Types&... args)

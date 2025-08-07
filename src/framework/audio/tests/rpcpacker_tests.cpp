@@ -80,6 +80,37 @@ TEST_F(Audio_RpcPackerTests, AudioResourceMeta)
     EXPECT_TRUE(origin.hasNativeEditorSupport == unpacked.hasNativeEditorSupport);
 }
 
+TEST_F(Audio_RpcPackerTests, AudioResourceMetaList)
+{
+    int count = 1000;
+    AudioResourceMetaList origin;
+    origin.reserve(count);
+
+    for (int i = 0; i < count; ++i) {
+        AudioResourceMeta meta;
+        meta.id = std::to_string(1234567);
+        meta.type = AudioResourceType::MuseSamplerSoundPack;
+        meta.vendor = "MuseSounds";
+        meta.attributes = {
+            { u"playbackSetupData", u"instrumentSoundId" },
+            { u"museCategory", u"internalCategory" },
+            { u"musePack", u"instrumentPackName" },
+            { u"museVendorName", u"vendorName" },
+            { u"museName", u"internalName" },
+            { u"museUID", String::fromStdString(std::to_string(1234567)) },
+        };
+
+        meta.attributes.insert(std::make_pair(u"isOnline", String::number(1)));
+
+        origin.push_back(meta);
+    }
+
+    BEGIN_STEP_TIME("pack_meta_list");
+    ByteArray data = rpc::RpcPacker::pack(rpc::Options { origin.size() * 300 }, origin);
+    STEP_TIME("pack_meta_list", "after pack");
+    LOGDA() << "data.size: " << data.size();
+}
+
 TEST_F(Audio_RpcPackerTests, AudioFxParams)
 {
     AudioFxParams origin;
