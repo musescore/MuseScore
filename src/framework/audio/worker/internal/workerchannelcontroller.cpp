@@ -171,7 +171,10 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
     channel()->onMethod(Method::GetAvailableInputResources, [this](const Msg& msg) {
         ONLY_AUDIO_WORKER_THREAD;
         AudioResourceMetaList list = m_playback->availableInputResources();
-        channel()->send(rpc::make_response(msg, RpcPacker::pack(list)));
+        //! NOTE The list can be large.
+        //! There can be many re-allocations, because of this it takes a long time to pack.
+        //! Let's add a reserve. 300 is approximately the size of one element, we get empirically.
+        channel()->send(rpc::make_response(msg, RpcPacker::pack(rpc::Options { list.size() * 300 }, list)));
     });
 
     channel()->onMethod(Method::GetAvailableSoundPresets, [this](const Msg& msg) {

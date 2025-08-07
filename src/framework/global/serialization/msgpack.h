@@ -218,6 +218,10 @@ inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::io::path_t& value
 
 // pack / unpack
 namespace muse::msgpack {
+struct Options {
+    size_t rezerveSize = 100;
+};
+
 template<class ... Types>
 static inline void pack(std::vector<uint8_t>& data, const Types&... args)
 {
@@ -225,14 +229,21 @@ static inline void pack(std::vector<uint8_t>& data, const Types&... args)
 }
 
 template<class ... Types>
-static inline ByteArray pack(const Types&... args)
+static inline ByteArray pack(const Options& opt, const Types&... args)
 {
     ByteArray ba;
     std::vector<uint8_t>& vdata = ba.vdata();
     vdata.clear();
+    vdata.reserve(opt.rezerveSize);
     Packer::pack(vdata, args ...);
     vdata.emplace_back(0);
     return ba;
+}
+
+template<class ... Types>
+static inline ByteArray pack(const Types&... args)
+{
+    return pack(Options {}, args ...);
 }
 
 template<class ... Types>
