@@ -38,7 +38,6 @@ set(MODULE_SRC
     # Temporary
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
 
     # Common public
 

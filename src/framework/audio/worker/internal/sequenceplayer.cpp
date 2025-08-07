@@ -22,7 +22,7 @@
 
 #include "sequenceplayer.h"
 
-#include "internal/audiosanitizer.h"
+#include "audio/common/audiosanitizer.h"
 
 #include "log.h"
 

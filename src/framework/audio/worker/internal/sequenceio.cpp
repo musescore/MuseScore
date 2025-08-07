@@ -23,7 +23,7 @@
 #include "sequenceio.h"
 
 #include "audio/common/audioerrors.h"
-#include "internal/audiosanitizer.h"
+#include "audio/common/audiosanitizer.h"
 
 #include "log.h"
 

@@ -25,7 +25,7 @@
 #include "global/threadutils.h"
 #include "global/async/processevents.h"
 
-#include "internal/audiosanitizer.h"
+#include "audio/common/audiosanitizer.h"
 
 #ifdef Q_OS_WASM
 #include <emscripten/html5.h>
