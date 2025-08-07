@@ -31,7 +31,7 @@ using namespace muse;
 using namespace muse::musesampler;
 using namespace muse::mpe;
 
-static const std::unordered_map<ArticulationType, ms_NoteArticulation> ARTICULATION_TYPES {
+static const std::unordered_map<ArticulationType, ms_NoteArticulation> ARTICULATION_TYPES_PART1 {
     { ArticulationType::Standard, ms_NoteArticulation_None },
     { ArticulationType::Staccato, ms_NoteArticulation_Staccato },
     { ArticulationType::Staccatissimo, ms_NoteArticulation_Staccatissimo },
@@ -83,10 +83,31 @@ static const std::unordered_map<ArticulationType, ms_NoteArticulation> ARTICULAT
     { ArticulationType::SulTasto, ms_NoteArticulation_SulTasto },
     { ArticulationType::SulPont, ms_NoteArticulation_SulPonticello },
 
+    { ArticulationType::MalletBellOnTable, ms_NoteArticulation_MalletBellOnTable },
+    { ArticulationType::MalletBellSuspended, ms_NoteArticulation_MalletBellSuspended },
+    { ArticulationType::MalletLift, ms_NoteArticulation_MalletLift },
+    { ArticulationType::PluckLift, ms_NoteArticulation_PluckLift },
+    { ArticulationType::Gyro, ms_NoteArticulation_Gyro },
+    { ArticulationType::Martellato, ms_NoteArticulation_Martellato },
+    { ArticulationType::MartellatoLift, ms_NoteArticulation_MartellatoLift },
+    { ArticulationType::HandMartellato, ms_NoteArticulation_HandMartellato },
+    { ArticulationType::MutedMartellato, ms_NoteArticulation_MutedMartellato },
+
     { ArticulationType::LaissezVibrer, ms_NoteArticulation_LaissezVibrer },
 
     { ArticulationType::LeftHandTapping, ms_NoteArticulation_LeftHandTapping },
     { ArticulationType::RightHandTapping, ms_NoteArticulation_RightHandTapping },
+};
+
+static const std::unordered_map<ArticulationType, ms_NoteArticulation2> ARTICULATION_TYPES_PART2 {
+    { ArticulationType::Standard, ms_NoteArticulation2_None },
+    { ArticulationType::Ring, ms_NoteArticulation2_Ring },
+    { ArticulationType::ThumbDamp, ms_NoteArticulation2_ThumbDamp },
+    { ArticulationType::BrushDamp, ms_NoteArticulation2_BrushDamp },
+    { ArticulationType::RingTouch, ms_NoteArticulation2_RingTouch },
+    { ArticulationType::Pluck, ms_NoteArticulation2_Pluck },
+    { ArticulationType::SingingBell, ms_NoteArticulation2_SingingBell },
+    { ArticulationType::SingingVibrate, ms_NoteArticulation2_SingingVibrate },
 };
 
 static const std::unordered_map<ArticulationType, ms_NoteHead> NOTEHEAD_TYPES {
@@ -412,8 +433,8 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     }
 
     const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
-    voice_layer_idx_t voiceIdx = arrangementCtx.voiceLayerIndex;
-    layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, voiceIdx);
+    const voice_layer_idx_t voiceIdx = arrangementCtx.voiceLayerIndex;
+    const layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, voiceIdx);
 
     ms_Track track = findOrCreateTrack(layerIdx);
     IF_ASSERT_FAILED(track) {
@@ -421,8 +442,6 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     }
 
     for (const auto& art : noteEvent.expressionCtx().articulations) {
-        auto ms_art = convertArticulationType(art.first);
-
         if (art.first == ArticulationType::Pedal || art.first == ArticulationType::LetRing) {
             // Pedal on:
             m_samplerLib->addPedalEvent(m_sampler, track, art.second.meta.timestamp, 1.0);
@@ -430,6 +449,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
             m_samplerLib->addPedalEvent(m_sampler, track, art.second.meta.timestamp + art.second.meta.overallDuration, 0.0);
         }
 
+        const ms_NoteArticulation ms_art = muse::value(ARTICULATION_TYPES_PART1, art.first, ms_NoteArticulation_None);
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this starts an articulation range, indicate the start
             if (art.second.occupiedFrom == 0 && art.second.occupiedTo != HUNDRED_PERCENT) {
@@ -447,16 +467,15 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     event._tempo = arrangementCtx.bps * 60.0; // API expects BPM
 
     pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, event._pitch, event._offset_cents);
-    parseArticulations(noteEvent.expressionCtx().articulations, event._articulation, event._notehead);
+    parseArticulations(noteEvent.expressionCtx().articulations, event._articulation, event._articulation_2, event._notehead);
 
     long long noteEventId = 0;
-
     if (!m_samplerLib->addNoteEvent(m_sampler, track, event, noteEventId)) {
         LOGE() << "Unable to add event for track";
     }
 
     for (auto& art : noteEvent.expressionCtx().articulations) {
-        auto ms_art = convertArticulationType(art.first);
+        const ms_NoteArticulation ms_art = muse::value(ARTICULATION_TYPES_PART1, art.first, ms_NoteArticulation_None);
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this ends an articulation range, indicate the end
             if (art.second.occupiedFrom != 0 && art.second.occupiedTo == HUNDRED_PERCENT) {
@@ -612,23 +631,26 @@ void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
 
     if (arrangementCtx.hasStart()) {
         AuditionStartNoteEvent noteOn;
-        parseArticulations(noteEvent.expressionCtx().articulations, noteOn.msEvent._articulation, noteOn.msEvent._notehead);
-        noteOn.msEvent._pitch = pitch;
-        noteOn.msEvent._offset_cents = offsetCents;
+        noteOn.msTrack = track;
+
+        auto& msEvent = noteOn.msEvent;
+        msEvent._pitch = pitch;
+        msEvent._offset_cents = offsetCents;
+
+        parseArticulations(noteEvent.expressionCtx().articulations, msEvent._articulation, msEvent._articulation_2, msEvent._notehead);
 
         if (noteEvent.expressionCtx().velocityOverride.has_value()) {
-            noteOn.msEvent._dynamics = noteEvent.expressionCtx().velocityOverride.value();
+            msEvent._dynamics = noteEvent.expressionCtx().velocityOverride.value();
         } else {
-            noteOn.msEvent._dynamics = dynamicLevelRatio(noteEvent.expressionCtx().nominalDynamicLevel);
+            msEvent._dynamics = dynamicLevelRatio(noteEvent.expressionCtx().nominalDynamicLevel);
         }
 
-        noteOn.msEvent._active_presets = m_auditionParamsCache.presets.empty() ? m_defaultPresetCode.c_str()
-                                         : m_auditionParamsCache.presets.c_str();
-        noteOn.msEvent._active_text_articulation = m_auditionParamsCache.textArticulation.c_str();
-        noteOn.msEvent._active_syllable = m_auditionParamsCache.syllable.c_str();
-        noteOn.msEvent._articulation_text_starts_at_note = m_auditionParamsCache.textArticulationStartsAtNote;
-        noteOn.msEvent._syllable_starts_at_note = m_auditionParamsCache.syllableStartsAtNote;
-        noteOn.msTrack = track;
+        msEvent._active_presets = m_auditionParamsCache.presets.empty() ? m_defaultPresetCode.c_str()
+                                  : m_auditionParamsCache.presets.c_str();
+        msEvent._active_text_articulation = m_auditionParamsCache.textArticulation.c_str();
+        msEvent._active_syllable = m_auditionParamsCache.syllable.c_str();
+        msEvent._articulation_text_starts_at_note = m_auditionParamsCache.textArticulationStartsAtNote;
+        msEvent._syllable_starts_at_note = m_auditionParamsCache.syllableStartsAtNote;
 
         m_offStreamEvents[arrangementCtx.actualTimestamp].insert(noteOn);
     }
@@ -740,31 +762,36 @@ double MuseSamplerSequencer::dynamicLevelRatio(const dynamic_level_t level) cons
     return 48.0 / 127.0;
 }
 
-ms_NoteArticulation MuseSamplerSequencer::convertArticulationType(ArticulationType articulation) const
-{
-    if (auto search = ARTICULATION_TYPES.find(articulation); search != ARTICULATION_TYPES.cend()) {
-        return static_cast<ms_NoteArticulation>(search->second);
-    }
-    return static_cast<ms_NoteArticulation>(0);
-}
-
 void MuseSamplerSequencer::parseArticulations(const ArticulationMap& articulations,
-                                              ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const
+                                              ms_NoteArticulation& articulations1,
+                                              ms_NoteArticulation2& articulations2,
+                                              ms_NoteHead& notehead) const
 {
     notehead = ms_NoteHead_Normal;
-    uint64_t artFlag = 0;
+    uint64_t arts1 = 0;
+    uint64_t arts2 = 0;
 
     for (const auto& pair : articulations) {
-        auto artIt = ARTICULATION_TYPES.find(pair.first);
-        if (artIt != ARTICULATION_TYPES.cend()) {
-            //! NOTE: skip last note of slur / hopo, sampler requirement
-            if (pair.second.occupiedFrom != 0 && pair.second.occupiedTo == HUNDRED_PERCENT) {
-                if (pair.first == mpe::ArticulationType::Legato) {
-                    continue;
-                }
-            }
+        if (pair.first == mpe::ArticulationType::Standard) {
+            continue;
+        }
 
-            artFlag |= convertArticulationType(pair.first);
+        //! NOTE: skip last note of slur / hopo, sampler requirement
+        if (pair.first == mpe::ArticulationType::Legato) {
+            if (pair.second.occupiedFrom != 0 && pair.second.occupiedTo == HUNDRED_PERCENT) {
+                continue;
+            }
+        }
+
+        auto art1It = ARTICULATION_TYPES_PART1.find(pair.first);
+        if (art1It != ARTICULATION_TYPES_PART1.cend()) {
+            arts1 |= art1It->second;
+            continue;
+        }
+
+        auto art2It = ARTICULATION_TYPES_PART2.find(pair.first);
+        if (art2It != ARTICULATION_TYPES_PART2.cend()) {
+            arts2 |= art2It->second;
             continue;
         }
 
@@ -774,7 +801,8 @@ void MuseSamplerSequencer::parseArticulations(const ArticulationMap& articulatio
         }
     }
 
-    articulationFlag = static_cast<ms_NoteArticulation>(artFlag);
+    articulations1 = static_cast<ms_NoteArticulation>(arts1);
+    articulations2 = static_cast<ms_NoteArticulation2>(arts2);
 }
 
 void MuseSamplerSequencer::parseAuditionParams(const mpe::PlaybackEvent& event, AuditionParams& out) const
