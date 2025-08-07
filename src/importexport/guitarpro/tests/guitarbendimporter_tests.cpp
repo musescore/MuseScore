@@ -196,5 +196,8 @@ TEST_F(GuitarBendImporter_Tests, gpBendOnTuplet) {
 TEST_F(GuitarBendImporter_Tests, gpBendOnUnequalChords) {
     gpReadTest(u"bend_on_unequal_chords", u"gp");
 }
+TEST_F(GuitarBendImporter_Tests, gpGraceChordDiffBends) {
+    gpReadTest(u"grace_chord_diff_bends", u"gp");
+}
 #endif
 }
