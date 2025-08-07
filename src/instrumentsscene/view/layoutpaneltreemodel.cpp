@@ -236,7 +236,7 @@ void LayoutPanelTreeModel::setupPartsConnections()
     m_notation->parts()->systemObjectStavesChanged().onNotify(this, [this]() {
         m_shouldUpdateSystemObjectLayers = true;
         if (!m_isLoadingBlocked) {
-            updateSystemObjectLayers();
+            load();
         }
     });
 }
