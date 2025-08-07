@@ -1744,11 +1744,17 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
             m_renderList.emplace_back(new RenderActionPopY());
             // Reset scale
             m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
-            if (curMod.endsWith(n) && modIdx != finalModIdx) {
-                modIdx++;
 
-                // Restore x position
-                m_renderList.emplace_back(new RenderActionPopX());
+            if (curMod.endsWith(n)) {
+                if (modIdx != finalModIdx) {
+                    modIdx++;
+
+                    // Restore x position
+                    m_renderList.emplace_back(new RenderActionPopX());
+                } else {
+                    // Create space for bass slash which could be present
+                    m_renderList.emplace_back(new RenderActionMove(0.15, 0.0));
+                }
             }
         }
     }

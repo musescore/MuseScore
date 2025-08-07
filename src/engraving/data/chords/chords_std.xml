@@ -225,7 +225,7 @@
 
   <token>
     <name>69</name>
-    <render>:push m:0:-0.5 696 :pop m:0:0.4 699 m:0:-0.4</render>
+    <render>:push m:0:-0.5 696 :pop m:0:0.4 699 m:0.15:-0.4</render>
     </token>
 
   <token class="extension">
