@@ -42,7 +42,6 @@ set(MODULE_SRC
     # Common public
 
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudiothreadsecurer.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/audioutils.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
@@ -50,8 +49,6 @@ set(MODULE_SRC
     # Common internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiothreadsecurer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiothreadsecurer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
     )

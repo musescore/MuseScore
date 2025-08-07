@@ -30,7 +30,7 @@
 
 #include "modularity/ioc.h"
 #include "audioplugins/iknownaudiopluginsregister.h"
-#include "audio/iaudiothreadsecurer.h"
+#include "audio/common/iaudiothreadsecurer.h"
 
 #include "audioplugins/audiopluginstypes.h"
 #include "vsttypes.h"
