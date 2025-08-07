@@ -26,9 +26,13 @@
 #pragma pack(pop)
 
 #include "audio/common/rpc/rpcpacker.h"
+#include "audio/common/rpc/irpcchannel.h"
+
+#include "log.h"
 
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::audio::rpc;
 
 class Audio_RpcPackerTests : public ::testing::Test
 {
