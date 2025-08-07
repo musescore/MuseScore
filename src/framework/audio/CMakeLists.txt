@@ -55,10 +55,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothreadsecurer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.h
-
-
     )
 
 # fluidsynth dependency

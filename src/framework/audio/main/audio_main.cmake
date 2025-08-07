@@ -31,4 +31,6 @@ set(AUDIO_MAIN_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/player.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiooutputdevicecontroller.h
 )
