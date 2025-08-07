@@ -886,6 +886,7 @@ Font TextFragment::font(const TextBase* t) const
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic()
             || t->isStringTunings()
+            || t->isPlayTechAnnotation()
             || t->textStyleType() == TextStyleType::OTTAVA
             || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM
             || t->textStyleType() == TextStyleType::TUPLET

@@ -4596,6 +4596,27 @@ void TLayout::layoutPlayTechAnnotation(const PlayTechAnnotation* item, PlayTechA
     LAYOUT_CALL_ITEM(item);
     layoutBaseTextBase(item, ldata);
 
+    if (item->isHandbellsSymbol()) {
+        Chord* chord = nullptr;
+        Segment* seg = item->segment();
+        track_idx_t sTrack = staff2track(item->staffIdx());
+        track_idx_t eTrack = sTrack + VOICES;
+        for (track_idx_t track = sTrack; track < eTrack; ++track) {
+            if (seg->element(track) && seg->element(track)->isChord()) {
+                chord = toChord(seg->element(track));
+                break;
+            }
+        }
+        double center = 0.0;
+        if (chord) {
+            Note* refNote = item->placeAbove() ? chord->upNote() : chord->downNote();
+            center = 0.5 * refNote->width() + refNote->x() + chord->x();
+        } else {
+            center = 0.5 * item->score()->noteHeadWidth();
+        }
+        ldata->setPosX(center - 0.5 * (ldata->bbox().right() - ldata->bbox().left()));
+    }
+
     if (item->autoplace()) {
         const Segment* s = toSegment(item->explicitParent());
         const Measure* m = s->measure();

@@ -926,6 +926,13 @@ enum class PlayingTechniqueType : signed char {
     Overdrive,
     Harmonics,
     JazzTone,
+    // Handbells
+    HandbellsSwing,
+    HandbellsSwingUp,
+    HandbellsSwingDown,
+    HandbellsEcho1,
+    HandbellsEcho2,
+    HandbellsDamp
 };
 
 enum class GradualTempoChangeType : signed char {

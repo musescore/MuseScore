@@ -2036,6 +2036,15 @@ static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
     { PlayingTechniqueType::Overdrive,     "overdrive",      muse::TranslatableString("engraving/playtechtype", "Overdrive") },
     { PlayingTechniqueType::Harmonics,     "harmonics",      muse::TranslatableString("engraving/playtechtype", "Harmonics") },
     { PlayingTechniqueType::JazzTone,      "jazz_tone",      muse::TranslatableString("engraving/playtechtype", "Jazz tone") },
+    // Handbells
+    { PlayingTechniqueType::HandbellsSwing, "handbells_swing", muse::TranslatableString("engraving/playtechtype", "Swing") },
+    { PlayingTechniqueType::HandbellsSwingUp, "handbells_swing_up",
+      muse::TranslatableString("engraving/playtechtype", "Swing up") },
+    { PlayingTechniqueType::HandbellsSwingDown, "handbells_swing_down",
+      muse::TranslatableString("engraving/playtechtype", "Swing down") },
+    { PlayingTechniqueType::HandbellsEcho1, "handbells_echo_1", muse::TranslatableString("engraving/playtechtype", "Echo") },
+    { PlayingTechniqueType::HandbellsEcho2, "handbells_echo_2", muse::TranslatableString("engraving/playtechtype", "Echo") },
+    { PlayingTechniqueType::HandbellsDamp, "handbells_damp", muse::TranslatableString("engraving/playtechtype", "Damp") },
 };
 
 const muse::TranslatableString& TConv::userName(PlayingTechniqueType v)
