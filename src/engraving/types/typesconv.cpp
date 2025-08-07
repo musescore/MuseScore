@@ -3147,11 +3147,11 @@ const std::array<ArticulationTextTypeItem, 10> ARTICULATIONTEXT_TYPES = { {
     { ArticulationTextType::POP,    "Pop",  String(u"P"),    muse::TranslatableString("engraving/sym", "Pop") },
     // Handbells
     { ArticulationTextType::LV,     "LV",   String(u"LV"),   muse::TranslatableString("engraving/sym", "Let vibrate") },
-    { ArticulationTextType::R,      "R",    String(u"P"),    muse::TranslatableString("engraving/sym", "Ring") },
+    { ArticulationTextType::R,      "R",    String(u"R"),    muse::TranslatableString("engraving/sym", "Ring") },
     { ArticulationTextType::TD,     "TD",   String(u"TD"),   muse::TranslatableString("engraving/sym", "Thumb damp") },
     { ArticulationTextType::BD,     "BD",   String(u"BD"),   muse::TranslatableString("engraving/sym", "Brush damp") },
     { ArticulationTextType::RT,     "RT",   String(u"RT"),   muse::TranslatableString("engraving/sym", "Ring touch") },
-    { ArticulationTextType::PL,     "PL",   String(u"Pl"),   muse::TranslatableString("engraving/sym", "Pluck") },
+    { ArticulationTextType::PL,     "PL",   String(u"PL"),   muse::TranslatableString("engraving/sym", "Pluck") },
     { ArticulationTextType::SB,     "SB",   String(u"SB"),   muse::TranslatableString("engraving/sym", "Singing bell") },
     { ArticulationTextType::VIB,    "VIB",  String(u"vib."), muse::TranslatableString("engraving/sym", "Vibrate") },
 } };
