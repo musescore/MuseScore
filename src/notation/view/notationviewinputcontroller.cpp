@@ -699,7 +699,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    // Alt+click paste range
+    // Alt+click to paste range
     consumed = mousePress_considerStartPasteRangeOnRelease(ctx);
     if (consumed) {
         return;
@@ -1093,9 +1093,17 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 {
+    if (m_mouseDownInfo.dragAction == MouseDownInfo::Nothing) {
+        return;
+    }
+
     INotationInteractionPtr interaction = viewInteraction();
     INotationNoteInputPtr noteInput = interaction->noteInput();
     const EngravingItem* hitElement = hitElementContext().element;
+
+    DEFER {
+        m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
+    };
 
     if (m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
         INotationSelectionPtr selection = interaction->selection();
@@ -1276,6 +1284,10 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
         return true;
     }
 
+    if (key == Qt::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
+        return true;
+    }
+
     if (viewInteraction()->isElementEditStarted()) {
         return viewInteraction()->isEditAllowed(event);
     }
@@ -1293,6 +1305,11 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 
     if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
         dispatcher()->dispatch("edit-text");
+        event->accept();
+    } else if (event->key() == Qt::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
+        // Cancel "Alt+click to paste range"
+        viewInteraction()->endDrop();
+        m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
         event->accept();
     } else if (viewInteraction()->isElementEditStarted()) {
         viewInteraction()->editElement(event);
