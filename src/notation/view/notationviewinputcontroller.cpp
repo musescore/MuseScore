@@ -783,8 +783,11 @@ bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(co
         return false;
     }
 
-    viewInteraction()->updateDropRange(ctx.logicClickPos);
     m_mouseDownInfo.dragAction = MouseDownInfo::PasteRangeOnRelease;
+
+    const bool canDrop = viewInteraction()->updateDropRange(ctx.logicClickPos);
+    m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : QCursor());
+
     return true;
 }
 
@@ -1006,7 +1009,8 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
     case MouseDownInfo::PasteRangeOnRelease: {
         PointF logicPos = m_view->toLogical(event->pos());
-        viewInteraction()->updateDropRange(logicPos);
+        const bool canDrop = viewInteraction()->updateDropRange(logicPos);
+        m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : QCursor());
         return;
     }
     case MouseDownInfo::Nothing:
@@ -1103,6 +1107,7 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 
     DEFER {
         m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
+        m_view->asItem()->setCursor(QCursor());
     };
 
     if (m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
@@ -1310,6 +1315,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
         // Cancel "Alt+click to paste range"
         viewInteraction()->endDrop();
         m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
+        m_view->asItem()->setCursor({});
         event->accept();
     } else if (viewInteraction()->isElementEditStarted()) {
         viewInteraction()->editElement(event);
