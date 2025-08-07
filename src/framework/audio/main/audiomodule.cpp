@@ -24,10 +24,11 @@
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
+#include "global/async/processevents.h"
+
 #include "internal/audioconfiguration.h"
 #include "audio/common/audiosanitizer.h"
 #include "audio/common/audiothreadsecurer.h"
-#include "internal/audiothread.h"
 #include "internal/audiooutputdevicecontroller.h"
 
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
@@ -42,6 +43,7 @@
 #include "audio/worker/internal/audioengine.h"
 #include "audio/worker/internal/audiobuffer.h"
 #include "audio/worker/internal/synthesizers/synthresolver.h"
+#include "audio/worker/internal/audiothread.h"
 
 #include "log.h"
 
@@ -123,7 +125,6 @@ std::shared_ptr<IAudioDriver> makeLinuxAudioDriver()
 void AudioModule::registerExports()
 {
     m_configuration = std::make_shared<AudioConfiguration>(iocContext());
-    m_audioWorker = std::make_shared<AudioThread>();
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
@@ -131,6 +132,7 @@ void AudioModule::registerExports()
 
     //! NOTE Temporarily for compatibility
     m_workerModule = std::make_shared<worker::AudioWorkerModule>();
+    m_audioThread = std::make_shared<worker::AudioThread>();
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
@@ -265,8 +267,8 @@ void AudioModule::onDestroy()
 {
     //! NOTE During deinitialization, objects that process events are destroyed,
     //! it is better to destroy them on onDestroy, when no events should come anymore
-    if (m_audioWorker->isRunning()) {
-        m_audioWorker->stop([this]() {
+    if (m_audioThread->isRunning()) {
+        m_audioThread->stop([this]() {
             ONLY_AUDIO_WORKER_THREAD;
             m_workerModule->onDestroy();
         });
@@ -281,18 +283,18 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
     requiredSpec.channels = m_configuration->audioChannelsCount();
     requiredSpec.samples = m_configuration->driverBufferSize();
 
-    std::shared_ptr<worker::AudioBuffer> audioBuffer = m_workerModule->audioBuffer();
-
     if (m_configuration->shouldMeasureInputLag()) {
-        requiredSpec.callback = [audioBuffer](void* /*userdata*/, uint8_t* stream, int byteCount) {
+        requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
             auto samplesPerChannel = byteCount / (2 * sizeof(float));  // 2 == m_configuration->audioChannelsCount()
             float* dest = reinterpret_cast<float*>(stream);
+            const std::shared_ptr<worker::AudioBuffer>& audioBuffer = m_workerModule->audioBuffer();
             audioBuffer->pop(dest, samplesPerChannel);
             measureInputLag(dest, samplesPerChannel * audioBuffer->audioChannelCount());
         };
     } else {
-        requiredSpec.callback = [audioBuffer](void* /*userdata*/, uint8_t* stream, int byteCount) {
+        requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
             auto samplesPerChannel = byteCount / (2 * sizeof(float));
+            const std::shared_ptr<worker::AudioBuffer>& audioBuffer = m_workerModule->audioBuffer();
             audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
         };
     }
@@ -318,9 +320,7 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
     consts.minSamplesToReserveWhenIdle = m_configuration->minSamplesToReserve(RenderMode::IdleMode);
     consts.minSamplesToReserveInRealtime = m_configuration->minSamplesToReserve(RenderMode::RealTimeMode);
 
-    std::shared_ptr<worker::AudioBuffer> audioBuffer = m_workerModule->audioBuffer();
-
-    auto workerSetup = [this, activeSpec, consts, audioBuffer]() {
+    auto workerSetup = [this, activeSpec, consts]() {
         AudioSanitizer::setupWorkerThread();
         ONLY_AUDIO_WORKER_THREAD;
 
@@ -330,6 +330,7 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         m_workerModule->onPreInit(IApplication::RunMode::GuiApp);
 
         // Setup audio engine
+        std::shared_ptr<worker::AudioBuffer> audioBuffer = m_workerModule->audioBuffer();
         std::shared_ptr<worker::AudioEngine> audioEngine = m_workerModule->audioEngine();
         audioEngine->init(audioBuffer, consts);
         audioEngine->setAudioChannelsCount(m_configuration->audioChannelsCount());
@@ -338,7 +339,7 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 
         audioEngine->setOnReadBufferChanged([this](const samples_t samples, const sample_rate_t rate) {
             msecs_t interval = m_configuration->audioWorkerInterval(samples, rate);
-            m_audioWorker->setInterval(interval);
+            m_audioThread->setInterval(interval);
         });
 
         m_workerModule->synthResolver()->init(m_configuration->defaultAudioInputParams());
@@ -346,12 +347,13 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         m_workerModule->onInit(IApplication::RunMode::GuiApp);
     };
 
-    auto workerLoopBody = [this, audioBuffer]() {
+    auto workerLoopBody = [this]() {
         ONLY_AUDIO_WORKER_THREAD;
+        async::processEvents();
         m_rpcChannel->process();
-        audioBuffer->forward();
+        m_workerModule->audioBuffer()->forward();
     };
 
     msecs_t interval = m_configuration->audioWorkerInterval(activeSpec.samples, activeSpec.sampleRate);
-    m_audioWorker->run(workerSetup, workerLoopBody, interval);
+    m_audioThread->run(workerSetup, workerLoopBody, interval);
 }

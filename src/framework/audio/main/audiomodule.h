@@ -32,6 +32,7 @@
 
 namespace muse::audio::worker  {
 class AudioWorkerModule;
+class AudioThread;
 }
 
 namespace muse::audio::rpc  {
@@ -40,7 +41,6 @@ class GeneralRpcChannel;
 
 namespace muse::audio {
 class AudioConfiguration;
-class AudioThread;
 class AudioOutputDeviceController;
 class Playback;
 class SoundFontController;
@@ -67,11 +67,11 @@ private:
     void setupAudioWorker(const IAudioDriver::Spec& activeSpec);
 
     std::shared_ptr<AudioConfiguration> m_configuration;
-    std::shared_ptr<AudioThread> m_audioWorker;
     std::shared_ptr<AudioOutputDeviceController> m_audioOutputController;
     std::shared_ptr<Playback> m_mainPlayback;
     std::shared_ptr<SoundFontController> m_soundFontController;
 
+    std::shared_ptr<worker::AudioThread> m_audioThread;
     std::shared_ptr<worker::AudioWorkerModule> m_workerModule;
 
     QTimer m_rpcTimer;

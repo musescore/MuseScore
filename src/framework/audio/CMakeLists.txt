@@ -49,8 +49,6 @@ set(MODULE_SRC
     # Common internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
     )
 
 # fluidsynth dependency

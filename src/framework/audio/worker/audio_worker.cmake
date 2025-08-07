@@ -42,6 +42,8 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerchannelcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workerchannelcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiobuffer.cpp
