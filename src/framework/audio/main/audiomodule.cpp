@@ -26,8 +26,8 @@
 
 #include "internal/audioconfiguration.h"
 #include "audio/common/audiosanitizer.h"
+#include "audio/common/audiothreadsecurer.h"
 #include "internal/audiothread.h"
-#include "internal/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"
 
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
