@@ -1499,6 +1499,7 @@ void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
     }
 
     viewInteraction()->endDrop();
+    m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
 }
 
 void NotationViewInputController::dropEvent(QDropEvent* event)
