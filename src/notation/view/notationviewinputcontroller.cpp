@@ -772,13 +772,13 @@ bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(co
         return false;
     }
 
-    INotationSelectionRangePtr range = selection->range();
-    Fraction sourceTick = range->startTick();
-    Fraction tickLength = range->endTick() - range->startTick();
-    engraving::staff_idx_t sourceStaffIdx = range->startStaffIndex();
-    size_t numStaves = range->endStaffIndex() - range->startStaffIndex();
+    const INotationSelectionRangePtr range = selection->range();
+    const Fraction sourceTick = range->startTick();
+    const Fraction tickLength = range->endTick() - range->startTick();
+    const engraving::staff_idx_t sourceStaffIdx = range->startStaffIndex();
+    const size_t numStaves = range->endStaffIndex() - range->startStaffIndex();
 
-    bool started = viewInteraction()->startDropRange(sourceTick, tickLength, sourceStaffIdx, numStaves);
+    const bool started = viewInteraction()->startDropRange(sourceTick, tickLength, sourceStaffIdx, numStaves);
     if (!started) {
         return false;
     }
@@ -980,14 +980,14 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     }
 
-    QPointF physicalDragDelta = event->pos() - m_mouseDownInfo.physicalBeginPoint;
+    const QPointF physicalDragDelta = event->pos() - m_mouseDownInfo.physicalBeginPoint;
 
-    bool isDragStarted = m_isCanvasDragged
-                         || viewInteraction()->isDragStarted()
-                         || viewInteraction()->isOutgoingDragStarted();
+    const bool isDragStarted = m_isCanvasDragged
+                               || viewInteraction()->isDragStarted()
+                               || viewInteraction()->isOutgoingDragStarted();
     if (!isDragStarted) {
         // only start drag operations after a minimum of movement:
-        bool canStartDrag = physicalDragDelta.manhattanLength() > 4;
+        const bool canStartDrag = physicalDragDelta.manhattanLength() > 4;
         if (!canStartDrag) {
             return;
         }
@@ -1008,7 +1008,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     }
     case MouseDownInfo::PasteRangeOnRelease: {
-        PointF logicPos = m_view->toLogical(event->pos());
+        const PointF logicPos = m_view->toLogical(event->pos());
         const bool canDrop = viewInteraction()->updateDropRange(logicPos);
         m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : QCursor());
         return;
@@ -1019,18 +1019,18 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         break;
     }
 
-    Qt::KeyboardModifiers keyState = event->modifiers();
+    const Qt::KeyboardModifiers keyState = event->modifiers();
 
     m_view->hideContextMenu();
     if (!viewInteraction()->isTextEditingStarted()) {
         m_view->hideElementPopup();
     }
 
-    PointF logicPos = m_view->toLogical(event->pos());
+    const PointF logicPos = m_view->toLogical(event->pos());
 
-    bool isNoteEnterMode = m_view->isNoteEnterMode();
-    bool isMiddleButton  = (event->buttons() & Qt::MiddleButton);
-    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying() || isMiddleButton);
+    const bool isNoteEnterMode = m_view->isNoteEnterMode();
+    const bool isMiddleButton  = (event->buttons() & Qt::MiddleButton);
+    const bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying() || isMiddleButton);
     if (isDragObjectsAllowed) {
         const EngravingItem* hitElement = hitElementContext().element;
 
@@ -1069,7 +1069,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
     // move canvas
     if (!isNoteEnterMode || isMiddleButton) {
-        PointF logicalDragDelta = logicPos - m_mouseDownInfo.logicalBeginPoint;
+        const PointF logicalDragDelta = logicPos - m_mouseDownInfo.logicalBeginPoint;
         m_view->moveCanvas(logicalDragDelta.x(), logicalDragDelta.y());
 
         m_isCanvasDragged = true;
