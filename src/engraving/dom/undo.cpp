@@ -973,7 +973,7 @@ void AddElement::undo(EditData*)
     }
 
     if (element->isHarmony() || element->isFretDiagram()) {
-        element->score()->rebuildFretBox();
+        score->rebuildFretBox();
     }
 
     endUndoRedo(true);
@@ -993,6 +993,10 @@ void AddElement::redo(EditData*)
 
     if (element->isStaffTextBase()) {
         updateStaffTextCache(toStaffTextBase(element), score);
+    }
+
+    if (element->isHarmony() || element->isFretDiagram()) {
+        score->rebuildFretBox();
     }
 
     endUndoRedo(false);
@@ -1149,7 +1153,7 @@ void RemoveElement::undo(EditData*)
     } else if (element->isKeySig()) {
         score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
     } else if (element->isHarmony() || element->isFretDiagram()) {
-        element->score()->rebuildFretBox();
+        score->rebuildFretBox();
     }
 }
 
@@ -1179,6 +1183,8 @@ void RemoveElement::redo(EditData*)
         score->setLayout(element->staff()->nextClefTick(element->tick()), element->staffIdx());
     } else if (element->isKeySig()) {
         score->setLayout(element->staff()->nextKeyTick(element->tick()), element->staffIdx());
+    } else if (element->isHarmony() || element->isFretDiagram()) {
+        score->rebuildFretBox();
     }
 }
 
