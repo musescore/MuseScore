@@ -23,18 +23,18 @@
 #define MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
 
 #include "global/async/asyncable.h"
-#include "global/modularity/ioc.h"
 
+#include "global/modularity/ioc.h"
 #include "iaudioconfiguration.h"
 #include "iaudiodriver.h"
-#include "audio/worker/iaudioengine.h"
+#include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
 class AudioOutputDeviceController : public Injectable, public async::Asyncable
 {
     Inject<IAudioConfiguration> configuration = { this };
     Inject<IAudioDriver> audioDriver = { this };
-    Inject<worker::IAudioEngine> audioEngine = { this };
+    Inject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
 

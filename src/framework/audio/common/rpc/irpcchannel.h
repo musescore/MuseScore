@@ -100,7 +100,11 @@ enum class Method {
 
     // SoundFont
     LoadSoundFonts,
-    AddSoundFont
+    AddSoundFont,
+
+    // AudioEngine
+    SetReadBufferSize,
+    SetSampleRate,
 };
 
 inline std::string to_string(Method m)
@@ -169,6 +173,10 @@ inline std::string to_string(Method m)
     // SoundFont
     case Method::LoadSoundFonts: return "LoadSoundFonts";
     case Method::AddSoundFont: return "AddSoundFont";
+
+    // AudioEngine
+    case Method::SetReadBufferSize: return "SetReadBufferSize";
+    case Method::SetSampleRate: return "SetSampleRate";
     }
 
     assert(false && "unknown enum value");

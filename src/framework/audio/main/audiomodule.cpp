@@ -321,6 +321,9 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         AudioSanitizer::setupWorkerThread();
         ONLY_AUDIO_WORKER_THREAD;
 
+        //! NOTE It should be as early as possible
+        m_rpcChannel->initOnWorker();
+
         m_workerModule->onPreInit(IApplication::RunMode::GuiApp);
 
         // Setup audio engine
@@ -336,8 +339,6 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         });
 
         m_workerModule->synthResolver()->init(m_configuration->defaultAudioInputParams());
-
-        m_rpcChannel->initOnWorker();
 
         m_workerModule->onInit(IApplication::RunMode::GuiApp);
     };

@@ -23,6 +23,7 @@
 #include "audioengine.h"
 
 #include "audio/common/audiosanitizer.h"
+#include "audio/common/rpc/rpcpacker.h"
 
 #include "audiobuffer.h"
 
@@ -31,6 +32,7 @@
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::worker;
+using namespace muse::audio::rpc;
 
 AudioEngine::~AudioEngine()
 {
@@ -57,6 +59,22 @@ Ret AudioEngine::init(AudioBufferPtr bufferPtr, const RenderConstraints& consts)
     m_mixer = std::make_shared<Mixer>(nullptr);
     m_buffer = std::move(bufferPtr);
     m_renderConsts = consts;
+
+    rpcChannel()->onMethod(Method::SetReadBufferSize, [this](const Msg& msg) {
+        uint16_t bufferSize = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, bufferSize)) {
+            return;
+        }
+        this->setReadBufferSize(bufferSize);
+    });
+
+    rpcChannel()->onMethod(Method::SetSampleRate, [this](const Msg& msg) {
+        sample_rate_t sampleRate = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, sampleRate)) {
+            return;
+        }
+        this->setSampleRate(sampleRate);
+    });
 
     setMode(RenderMode::IdleMode);
 
