@@ -123,6 +123,8 @@ void UiComponentsModule::registerUiTypes()
                                                      QLatin1String("Do not create objects of type SelectionMode"));
 
     qmlRegisterUncreatableType<ToolBarItemType>("Muse.UiComponents", 1, 0, "ToolBarItemType", "Cannot create a ToolBarItemType");
+    qmlRegisterUncreatableType<PopupPosition>("Muse.UiComponents", 1, 0, "PopupPosition",
+                                              QLatin1String("Do not create objects of type PopupPosition"));
 
     auto ui = ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {
