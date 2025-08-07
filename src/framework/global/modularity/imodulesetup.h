@@ -28,11 +28,13 @@
 #include "../iapplication.h"
 
 namespace muse::modularity {
-// IModuleSetup is the class used to register a MuseScore module. TL;DR;
+// `IModuleSetup` is the class used to register a MuseScore module.
+// It is then loaded to the `IApplication` using `app->addModule(new YourModule());` in `appfactory.h`
+// TL;DR;
 // 
 // - override `registerResources` for registering .qrc files
 // - override `registerUiTypes` for injecting C++ types into the QML code
-// - override `registerExports` to 
+// - override `registerExports` to register types that are commonly used in the app (Singleton)
 class IModuleSetup
 {
 public:
