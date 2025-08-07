@@ -1194,9 +1194,11 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
     }
 }
 
-bool NotationViewInputController::anchorEditingKeysFound(QKeyEvent* event) const
+bool NotationViewInputController::isAnchorEditingEvent(QKeyEvent* event) const
 {
-    return (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) && event->modifiers() & Qt::ShiftModifier;
+    bool anchorEditingKeyCombo = (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) && event->modifiers() & Qt::ShiftModifier;
+    EngravingItem* selectedItem = viewInteraction()->selection()->element();
+    return selectedItem && selectedItem->allowTimeAnchor() && anchorEditingKeyCombo;
 }
 
 bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
@@ -1212,7 +1214,7 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
         return viewInteraction()->isEditAllowed(event);
     }
 
-    if (anchorEditingKeysFound(event)) {
+    if (isAnchorEditingEvent(event)) {
         return true;
     }
 
@@ -1234,7 +1236,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
     } else if (key == Qt::Key_Shift) {
         updateShadowNotePopupVisibility();
         viewInteraction()->updateTimeTickAnchors(event);
-    } else if (anchorEditingKeysFound(event)) {
+    } else if (isAnchorEditingEvent(event)) {
         viewInteraction()->moveElementAnchors(event);
     }
 
