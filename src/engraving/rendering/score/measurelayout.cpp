@@ -53,6 +53,7 @@
 #include "dom/undo.h"
 #include "dom/utils.h"
 
+#include "autoplace.h"
 #include "tlayout.h"
 #include "layoutcontext.h"
 #include "arpeggiolayout.h"
@@ -1042,6 +1043,9 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
             for (EngravingItem* e : segment.annotations()) {
                 if (e->isSymbol() || e->isHarmony() || e->isFretDiagram()) {
                     TLayout::layoutItem(e, ctx);
+                    if ((e->isHarmony() || e->isFretDiagram()) && e->autoplace() && measure->system()) {
+                        Autoplace::autoplaceSegmentElement(e, e->mutldata());
+                    }
                 }
             }
         }
