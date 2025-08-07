@@ -28,20 +28,45 @@
 #include "../iapplication.h"
 
 namespace muse::modularity {
+// IModuleSetup is the class used to register a MuseScore module. TL;DR;
+// 
+// - override `registerResources` for registering .qrc files
+// - override `registerUiTypes` for injecting C++ types into the QML code
+// - override `registerExports` to 
 class IModuleSetup
 {
 public:
 
     virtual ~IModuleSetup() {}
 
+    // What do we use this module name for?
+    //
+    // When you want to get the implementation of a type that is registered through `registerExports`,
+    // you do `ioc()->resolve<T>("theModuleName");`.
     virtual std::string moduleName() const = 0;
 
+    // Sometimes you want to register a C++ type and
+    // access it from multiple parts of the code (like a Singleton pattern).
+    //
+    // **How to register**: `ioc()->registerExport<IUiEngine>(moduleName(), m_uiEngine);`
+    // (where `m_uiEngine` is a `std::shared_ptr` that is previously initialized).
+    // **How to access**: `ioc()->resolve<IUiEngine>(moduleName());`.
     virtual void registerExports() {}
     virtual void resolveImports() {}
 
+    // Register .qrc files
+    // **Use**: `Q_INIT_RESOURCE(file)`
+    // where `file` refers to a file named `file.qrc`
     virtual void registerResources() {}
+    // Sometimes you want to create a QtQuick type from C++ code
+    // and use it in a .qml file.
+    // **Use:** `qmlRegisterType<Type>("Namespace.Import", 1, 0, "Type");`.
+    // there is also `qmlRegisterUncreatableType` and `qmlRegisterAnonymousType`
     virtual void registerUiTypes() {}
     virtual void registerApi() {}
+
+    // NOTE ! What do we use these below here for?
+    // I understand more or less what they mean but - what are they used for?
 
     virtual void onPreInit(const IApplication::RunMode& mode) { (void)mode; }
     virtual void onInit(const IApplication::RunMode& mode) { (void)mode; }
