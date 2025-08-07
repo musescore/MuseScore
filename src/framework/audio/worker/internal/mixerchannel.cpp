@@ -23,8 +23,9 @@
 
 #include <algorithm>
 
+#include "audio/common/audiosanitizer.h"
+
 #include "dsp/audiomathutils.h"
-#include "audio/internal/audiosanitizer.h"
 
 #include "log.h"
 

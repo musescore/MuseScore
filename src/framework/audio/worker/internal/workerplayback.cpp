@@ -21,11 +21,10 @@
  */
 #include "workerplayback.h"
 
-#include "internal/audiosanitizer.h"
+#include "audio/common/audiosanitizer.h"
+#include "audio/common/audioerrors.h"
 
 #include "tracksequence.h"
-
-#include "audioerrors.h"
 
 #include "muse_framework_config.h"
 #ifdef MUSE_MODULE_AUDIO_EXPORT

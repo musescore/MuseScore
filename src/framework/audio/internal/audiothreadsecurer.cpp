@@ -22,7 +22,7 @@
 
 #include "audiothreadsecurer.h"
 
-#include "audiosanitizer.h"
+#include "audio/common/audiosanitizer.h"
 
 using namespace muse::audio;
 

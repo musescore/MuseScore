@@ -25,7 +25,7 @@
 #include "global/modularity/ioc.h"
 
 #include "internal/audioconfiguration.h"
-#include "internal/audiosanitizer.h"
+#include "audio/common/audiosanitizer.h"
 #include "internal/audiothread.h"
 #include "internal/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"

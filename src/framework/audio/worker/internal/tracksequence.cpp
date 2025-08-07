@@ -22,9 +22,9 @@
 
 #include "tracksequence.h"
 
-#include "common/audioerrors.h"
+#include "audio/common/audioerrors.h"
+#include "audio/common/audiosanitizer.h"
 
-#include "internal/audiosanitizer.h"
 #include "eventaudiosource.h"
 #include "sequenceplayer.h"
 #include "sequenceio.h"
