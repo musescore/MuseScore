@@ -552,6 +552,8 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     } else if (tag == "Parenthesis") {
         Parenthesis* p = Factory::createParenthesis(item);
         TRead::read(p, e, ctx);
+        p->setParent(item);
+        p->setTrack(ctx.track());
         item->add(p);
     } else {
         return false;
