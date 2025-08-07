@@ -26,7 +26,6 @@
 
 #include "../iaudioengine.h"
 
-#include "global/async/asyncable.h"
 #include "global/async/notification.h"
 #include "global/types/ret.h"
 
@@ -35,7 +34,7 @@
 
 namespace muse::audio::worker {
 class AudioBuffer;
-class AudioEngine : public IAudioEngine, public async::Asyncable
+class AudioEngine : public IAudioEngine
 {
     Inject<rpc::IRpcChannel> rpcChannel;
 

@@ -30,7 +30,7 @@
 
 #include "audiotypes.h"
 
-namespace muse::audio {
+namespace muse::audio::worker {
 class AudioThread
 {
 public:

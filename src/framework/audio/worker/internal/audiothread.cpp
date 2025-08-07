@@ -23,13 +23,8 @@
 
 #include "global/runtime.h"
 #include "global/threadutils.h"
-#include "global/async/processevents.h"
 
 #include "audio/common/audiosanitizer.h"
-
-#ifdef Q_OS_WASM
-#include <emscripten/html5.h>
-#endif
 
 #ifdef Q_OS_WIN
 #include "global/platform/win/waitabletimer.h"
@@ -38,6 +33,7 @@
 #include "log.h"
 
 using namespace muse::audio;
+using namespace muse::audio::worker;
 
 static uint64_t toWinTime(const msecs_t msecs)
 {
@@ -60,7 +56,6 @@ void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const m
     m_intervalMsecs = interval;
     m_intervalInWinTime = toWinTime(interval);
 
-#ifndef Q_OS_WASM
     m_running = true;
     m_thread = std::make_unique<std::thread>([this]() {
         main();
@@ -69,12 +64,6 @@ void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const m
     if (!muse::setThreadPriority(*m_thread, ThreadPriority::High)) {
         LOGE() << "Unable to change audio thread priority";
     }
-#else
-    emscripten_set_timeout_loop([](double, void* userData) -> EM_BOOL {
-        reinterpret_cast<AudioThread*>(userData)->loopBody();
-        return EM_TRUE;
-    }, 2, this);
-#endif
 }
 
 void AudioThread::setInterval(const msecs_t interval)
@@ -118,8 +107,6 @@ void AudioThread::main()
 #endif
 
     while (m_running) {
-        async::processEvents();
-
         if (m_mainLoopBody) {
             m_mainLoopBody();
         }

@@ -52,9 +52,9 @@ public:
     void onDestroy() override;
 
     // Temporarily for compatibility
-    std::shared_ptr<AudioEngine> audioEngine() const { return m_audioEngine; }
-    std::shared_ptr<AudioBuffer> audioBuffer() const { return m_audioBuffer; }
-    std::shared_ptr<synth::SynthResolver> synthResolver() const { return m_synthResolver; }
+    const std::shared_ptr<AudioEngine>& audioEngine() const { return m_audioEngine; }
+    const std::shared_ptr<AudioBuffer>& audioBuffer() const { return m_audioBuffer; }
+    const std::shared_ptr<synth::SynthResolver>& synthResolver() const { return m_synthResolver; }
 
 private:
     std::shared_ptr<AudioEngine> m_audioEngine;
