@@ -25,8 +25,8 @@
 #include "global/async/asyncable.h"
 #include "global/modularity/ioc.h"
 
-#include "../iaudioconfiguration.h"
-#include "../iaudiodriver.h"
+#include "iaudioconfiguration.h"
+#include "iaudiodriver.h"
 #include "audio/worker/iaudioengine.h"
 
 namespace muse::audio {
