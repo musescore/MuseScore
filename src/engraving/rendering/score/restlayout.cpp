@@ -128,28 +128,23 @@ void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Lay
         fillShape(item, ldata, ctx.conf());
     }
 
-    auto layoutRestDots = [](const Rest* item, const LayoutConfiguration& conf, Rest::LayoutData* ldata)
-    {
-        const_cast<Rest*>(item)->checkDots();
-        double visibleX = item->symWidthNoLedgerLines(ldata) + conf.styleMM(Sid::dotNoteDistance) * item->mag();
-        double visibleDX = conf.styleMM(Sid::dotDotDistance) * item->mag();
-        double invisibleX = item->symWidthNoLedgerLines(ldata);
-        double y = item->dotLine() * item->spatium() * .5;
-        for (NoteDot* dot : item->dotList()) {
-            NoteDot::LayoutData* dotldata = dot->mutldata();
-            TLayout::layoutNoteDot(dot, dotldata);
-            if (dot->visible()) {
-                dotldata->setPos(visibleX, y);
-                visibleX += visibleDX;
-            } else {
-                invisibleX +=  0.1 * item->spatium();
-                dotldata->setPos(invisibleX, y);
-                invisibleX += item->symWidth(SymId::augmentationDot) * dot->mag();
-            }
+    const_cast<Rest*>(item)->checkDots();
+    double visibleX = item->symWidthNoLedgerLines(ldata) + ctx.conf().styleMM(Sid::dotNoteDistance) * item->mag();
+    double visibleDX = ctx.conf().styleMM(Sid::dotDotDistance) * item->mag();
+    double invisibleX = item->symWidthNoLedgerLines(ldata);
+    double y = item->dotLine() * item->spatium() * .5;
+    for (NoteDot* dot : item->dotList()) {
+        NoteDot::LayoutData* dotldata = dot->mutldata();
+        TLayout::layoutNoteDot(dot, dotldata);
+        if (dot->visible()) {
+            dotldata->setPos(visibleX, y);
+            visibleX += visibleDX;
+        } else {
+            invisibleX +=  0.1 * item->spatium();
+            dotldata->setPos(invisibleX, y);
+            invisibleX += item->symWidth(SymId::augmentationDot) * dot->mag();
         }
-    };
-
-    layoutRestDots(item, ctx.conf(), ldata);
+    }
 }
 
 void RestLayout::fillShape(const Rest* item, Rest::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -554,7 +549,6 @@ InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure,
                 if (interruptHere(thisCR)) {
                     interruptionPointSets[voice].insert(segment->rtick());
                 }
-            } else {
             }
         }
     }

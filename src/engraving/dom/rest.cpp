@@ -687,12 +687,7 @@ bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
         setVisible(v.toBool());
         break;
     case Pid::OFFSET:
-        score()->addRefresh(canvasBoundingRect());
         setOffset(v.value<PointF>());
-
-        renderer()->layoutItem(this);
-
-        score()->addRefresh(canvasBoundingRect());
         if (measure() && durationType().type() == DurationType::V_MEASURE) {
             measure()->triggerLayout();
         }
