@@ -24,16 +24,21 @@
 
 #include <memory>
 
+#include "../iaudioengine.h"
+
 #include "global/async/asyncable.h"
 #include "global/async/notification.h"
 #include "global/types/ret.h"
 
-#include "../iaudioengine.h"
+#include "global/modularity/ioc.h"
+#include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio::worker {
 class AudioBuffer;
 class AudioEngine : public IAudioEngine, public async::Asyncable
 {
+    Inject<rpc::IRpcChannel> rpcChannel;
+
 public:
     AudioEngine() = default;
     ~AudioEngine();

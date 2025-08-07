@@ -21,13 +21,12 @@
  */
 #include "audiooutputdevicecontroller.h"
 
-#include "global/async/async.h"
-
-#include "internal/audiothread.h"
+#include "audio/common/rpc/rpcpacker.h"
 
 #include "log.h"
 
 using namespace muse::audio;
+using namespace muse::audio::rpc;
 
 void AudioOutputDeviceController::init()
 {
@@ -49,26 +48,22 @@ void AudioOutputDeviceController::init()
     });
 
     configuration()->driverBufferSizeChanged().onNotify(this, [this]() {
-        unsigned int bufferSize = configuration()->driverBufferSize();
+        uint16_t bufferSize = configuration()->driverBufferSize();
         LOGI() << "Trying to change buffer size: " << bufferSize;
 
         bool ok = audioDriver()->setOutputDeviceBufferSize(bufferSize);
         if (ok) {
-            async::Async::call(this, [this, bufferSize](){
-                audioEngine()->setReadBufferSize(bufferSize);
-            }, AudioThread::ID);
+            rpcChannel()->send(rpc::make_request(Method::SetReadBufferSize, RpcPacker::pack(bufferSize)));
         }
     });
 
     configuration()->sampleRateChanged().onNotify(this, [this]() {
-        unsigned int sampleRate = configuration()->sampleRate();
+        sample_rate_t sampleRate = configuration()->sampleRate();
         LOGI() << "Trying to change sample rate: " << sampleRate;
 
         bool ok = audioDriver()->setOutputDeviceSampleRate(sampleRate);
         if (ok) {
-            async::Async::call(this, [this, sampleRate](){
-                audioEngine()->setSampleRate(sampleRate);
-            }, AudioThread::ID);
+            rpcChannel()->send(rpc::make_request(Method::SetSampleRate, RpcPacker::pack(sampleRate)));
         }
     });
 }
@@ -108,9 +103,7 @@ void AudioOutputDeviceController::onOutputDeviceChanged()
 {
     IAudioDriver::Spec activeSpec = audioDriver()->activeSpec();
 
-    async::Async::call(this, [this, activeSpec]() {
-        // TODO: audioEngine()->setAudioChannelsCount(activeSpec.channels);
-        audioEngine()->setSampleRate(activeSpec.sampleRate);
-        audioEngine()->setReadBufferSize(activeSpec.samples);
-    }, AudioThread::ID);
+    // TODO: audioEngine()->setAudioChannelsCount(activeSpec.channels);
+    rpcChannel()->send(rpc::make_request(Method::SetSampleRate, RpcPacker::pack(activeSpec.sampleRate)));
+    rpcChannel()->send(rpc::make_request(Method::SetReadBufferSize, RpcPacker::pack(activeSpec.samples)));
 }
