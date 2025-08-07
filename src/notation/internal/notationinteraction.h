@@ -174,7 +174,7 @@ public:
     void endEditGrip() override;
 
     bool isElementEditStarted() const override;
-    void startEditElement(EngravingItem* element, bool editTextualProperties = true) override;
+    void startEditElement(EngravingItem* element) override;
     void changeEditElement(EngravingItem* newElement) override;
     bool isEditAllowed(QKeyEvent* event) override;
     void editElement(QKeyEvent* event) override;

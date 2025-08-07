@@ -286,9 +286,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     //! [GIVEN] There is a test score
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
 
-    //! [GIVEN] Previous selected note
-    INotationInteraction::HitElementContext oldContext = hitContext(score, { ElementType::NOTE, true /*first note*/ });
-
     //! [GIVEN] User selected new note that was already selected
     INotationInteraction::HitElementContext newContext = hitContext(score, { ElementType::NOTE, false /*last note*/ });
     newContext.element->setSelected(true);
@@ -308,8 +305,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
+    .Times(1)
     .WillOnce(ReturnRef(newContext));
 
     //! [GIVEN] There is a range selection
@@ -339,7 +335,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     .Times(0);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -415,7 +411,7 @@ TEST_F(NotationViewInputControllerTests, DISABLED_Mouse_Press_On_Selected_Text_E
     .Times(1);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -448,10 +444,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     //! [GIVEN] The new hit element context with new hairpin will be set
     EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
     .Times(1);
-
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(1)
-    .WillOnce(ReturnRef(oldContext));
 
     //! [GIVEN] There isn't a range selection
     ON_CALL(*m_selection, isRange())
@@ -491,11 +483,11 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     .Times(0);
     EXPECT_CALL(*m_interaction, startEditGrip(newContext.element, _))
     .Times(0);
-    EXPECT_CALL(*m_interaction, startEditElement(newContext.element, _))
+    EXPECT_CALL(*m_interaction, startEditElement(newContext.element))
     .Times(0);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -526,8 +518,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
+    .Times(1)
     .WillOnce(ReturnRef(newContext));
 
     //! [GIVEN] No note enter mode, no playing
@@ -540,7 +531,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     //! [THEN] We will select and play selected note, but no seek
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
-    .Times(1);
+    .Times(1)
+    .WillOnce([newContext] { newContext.element->setSelected(true); });
 
     std::vector<const EngravingItem*> playElements = { newContext.element };
     EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
@@ -562,7 +554,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     .Times(1);
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 }
 
 /**
@@ -589,8 +581,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Range)
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(context))
+    .Times(1)
     .WillOnce(ReturnRef(context));
 
     //! [GIVEN] There is a range selection
@@ -612,7 +603,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Range)
     .Times(0);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -639,8 +630,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Shift_On_Already_Selected_R
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(context))
+    .Times(1)
     .WillOnce(ReturnRef(context));
 
     //! [GIVEN] There is a range selection
@@ -662,7 +652,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Shift_On_Already_Selected_R
     .WillOnce(ReturnRef(selectElements));
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 }
 
 /**
@@ -691,12 +681,12 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
     .Times(1);
 
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(1)
-    .WillOnce(ReturnRef(oldContext));
-
     ON_CALL(*m_selection, element())
     .WillByDefault(Return(oldContext.element));
+
+    std::vector<EngravingItem*> selectedElements = { oldContext.element };
+    ON_CALL(*m_selection, elements())
+    .WillByDefault(ReturnRef(selectedElements));
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -706,8 +696,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     .WillByDefault(Return(false));
 
     //! [THEN] We will no select already selected note, but play and seek
-    std::vector<EngravingItem*> selectElements = { newContext.element };
-    EXPECT_CALL(*m_interaction, select(selectElements, _, _))
+    EXPECT_CALL(*m_interaction, select(_, _, _))
     .Times(0);
 
     std::vector<const EngravingItem*> playElements = { newContext.element };
@@ -722,7 +711,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     .WillByDefault(Return(false));
 
     //! [WHEN] User pressed left mouse button with NoModifier on the new note
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -751,8 +740,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
+    .Times(1)
     .WillOnce(ReturnRef(newContext));
 
     //! [GIVEN] No note enter mode, no playing
@@ -765,7 +753,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     //! [THEN] We will select new measure
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
-    .Times(1);
+    .Times(1)
+    .WillOnce([newContext] { newContext.element->setSelected(true); });
 
     //! [GIVEN] There is a range selection with two measures
     ON_CALL(*m_selection, isRange())
@@ -785,7 +774,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     .WillOnce(ReturnRef(selectElements));
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 }
 
 /**
@@ -797,8 +786,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
 {
     //! [GIVEN] There is a test score
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
-
-    INotationInteraction::HitElementContext oldContext;
 
     //! [GIVEN] User selected a measure
     INotationInteraction::HitElementContext selectMeasureContext = hitMeasureContext(score, 0 /*first measure*/);
@@ -823,10 +810,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     .WillOnce(Return());
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .WillOnce(ReturnRef(oldContext))
     .WillOnce(ReturnRef(selectMeasureContext))
     //! right button click
-    .WillOnce(ReturnRef(selectMeasureContext))
     .WillOnce(ReturnRef(contextMenuOnMeasureContext))
 #if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
     .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
@@ -843,8 +828,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     //! [THEN] We will select new measure only one time
     std::vector<EngravingItem*> selectElements = { selectMeasureContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
-    .Times(1)
-    .WillOnce(Return());
+    .Times(1);
 
     EXPECT_CALL(*m_selection, isRange())
     .WillRepeatedly(Return(true));
@@ -875,10 +859,10 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
 #endif
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -890,8 +874,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
 {
     //! [GIVEN] There is a test score
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
-
-    INotationInteraction::HitElementContext oldContext;
 
     //! [GIVEN] User selected a measure
     INotationInteraction::HitElementContext selectMeasureContext = hitMeasureContext(score, 0 /*first measure*/);
@@ -915,10 +897,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     .WillOnce(Return());
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .WillOnce(ReturnRef(oldContext))
     .WillOnce(ReturnRef(selectMeasureContext))
     //! right button click
-    .WillOnce(ReturnRef(selectMeasureContext))
     .WillOnce(ReturnRef(contextMenuOnMeasureContext))
 #if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
     .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
@@ -938,7 +918,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     //! [THEN] The selection should be changed
     std::vector<EngravingItem*> selectElements = { selectMeasureContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
-    .WillOnce(Return());
+    .Times(1);
 
     std::vector<EngravingItem*> contextMenuSelectElements = { contextMenuOnMeasureContext.element };
     EXPECT_CALL(*m_interaction, select(contextMenuSelectElements, _, _))
@@ -971,8 +951,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
 #endif
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
 }

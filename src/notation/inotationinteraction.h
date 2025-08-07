@@ -168,7 +168,7 @@ public:
     virtual void endEditGrip() = 0;
 
     virtual bool isElementEditStarted() const = 0;
-    virtual void startEditElement(EngravingItem* element, bool editTextualProperties = true) = 0;
+    virtual void startEditElement(EngravingItem* element) = 0;
     virtual void changeEditElement(EngravingItem* newElement) = 0;
     virtual bool isEditAllowed(QKeyEvent* event) = 0;
     virtual void editElement(QKeyEvent* event) = 0;

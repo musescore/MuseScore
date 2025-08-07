@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H
-#define MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H
+#pragma once
 
 #include <QtEvents>
 
@@ -232,12 +231,10 @@ private:
     bool dropEvent(const DragMoveEvent& event, const QMimeData* mimeData = nullptr);
     DragMoveEvent m_lastDragMoveEvent;
 
-    const mu::engraving::EngravingItem* m_prevHitElement = nullptr;
     const mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
 
+    bool m_hitElementWasAlreadySelected = false;
+    bool m_shouldSelectOnLeftClickRelease = false;
     bool m_shouldStartEditOnLeftClickRelease = false;
-    bool m_shouldTogglePopupOnLeftClickRelease = false;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H
