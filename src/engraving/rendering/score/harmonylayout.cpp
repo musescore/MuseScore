@@ -98,7 +98,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
         RectF bb;
         RectF hAlignBox;
         for (HarmonyRenderItem* renderItem : item->ldata()->renderItemList()) {
-            RectF tsBbox = renderItem->boundingRect().translated(renderItem->x(), renderItem->y());
+            RectF tsBbox = renderItem->tightBoundingRect().translated(renderItem->x(), renderItem->y());
             bb.unite(tsBbox);
 
             if (renderItem->align()) {

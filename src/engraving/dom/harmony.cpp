@@ -1139,13 +1139,14 @@ double TextSegment::capHeight() const
     return FontMetrics::capHeight(m_font);
 }
 
-//---------------------------------------------------------
-//   tightBoundingRect
-//---------------------------------------------------------
+RectF TextSegment::tightBoundingRect() const
+{
+    return FontMetrics::tightBoundingRect(m_font, m_text);
+}
 
 RectF TextSegment::boundingRect() const
 {
-    return FontMetrics::tightBoundingRect(m_font, m_text);
+    return FontMetrics::boundingRect(m_font, m_text);
 }
 
 double TextSegment::bboxBaseLine() const

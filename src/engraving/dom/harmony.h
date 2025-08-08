@@ -68,6 +68,7 @@ struct HarmonyRenderItem {
     bool align() const { return m_hAlign; }
 
     virtual RectF boundingRect() const = 0;
+    virtual RectF tightBoundingRect() const = 0;
 
     virtual double leftPadding() const = 0;
     virtual double rightPadding() const = 0;
@@ -87,6 +88,7 @@ struct ChordSymbolParen : HarmonyRenderItem {
     ~ChordSymbolParen() { delete paren; }
 
     RectF boundingRect() const override { return paren->shape().bbox(); }
+    RectF tightBoundingRect() const override { return paren->shape().bbox(); }
 
     double top = DBL_MAX;
     double bottom = -DBL_MAX;
@@ -117,7 +119,7 @@ struct TextSegment : HarmonyRenderItem {
     double capHeight() const;
     double bboxBaseLine() const override;
     RectF boundingRect() const override;
-    RectF tightBoundingRect() const;
+    RectF tightBoundingRect() const override;
 
     void setText(const String& t) { m_text = t; }
     String text() const { return m_text; }
