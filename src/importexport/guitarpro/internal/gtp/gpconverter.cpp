@@ -47,6 +47,7 @@
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
+#include "engraving/dom/capo.h"
 #include "engraving/types/symid.h"
 
 #include "../utils.h"
@@ -765,12 +766,23 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
                 int capo = staff->capo(fr).fretPosition;
 
                 if (capo != 0 && !engravingConfiguration()->guitarProImportExperimental()) {
-                    StaffText* st = Factory::createStaffText(s);
-                    st->setTrack(curTrack);
-                    String capoText = String(u"Capo fret %1").arg(capo);
-                    st->setPlainText(muse::mtrc("iex_guitarpro", capoText));
-                    s->add(st);
+//                    StaffText* st = Factory::createStaffText(s);
+//                    st->setTrack(curTrack);
+//                    String capoText = String(u"Capo fret %1").arg(capo);
+//                    st->setPlainText(muse::mtrc("iex_guitarpro", capoText));
+//                    s->add(st);
                     m_hasCapo[curTrack] = true;
+                    Capo* newCapo = Factory::createCapo(s);
+
+                    CapoParams params;
+                    params.active = capo > 0;
+                    params.fretPosition = capo;
+
+                    newCapo->setTrack(curTrack);
+                    newCapo->setParams(params);
+                    newCapo->setProperty(Pid::PLACEMENT, PlacementV::ABOVE);
+
+                    s->add(newCapo);
                 }
             }
         }

@@ -60,6 +60,8 @@ PropertyValue Capo::getProperty(Pid id) const
         return ignoredStrings;
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return m_shouldAutomaticallyGenerateText;
+    } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
+        return m_params.transposeMode;
     }
 
     return StaffTextBase::getProperty(id);
@@ -75,6 +77,8 @@ PropertyValue Capo::propertyDefault(Pid id) const
         return std::vector<int>();
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return true;
+    } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
+        return (int)CapoParams::TransposeMode::PLAYBACK_ONLY;
     }
 
     return StaffTextBase::propertyDefault(id);
@@ -98,6 +102,8 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
         if (!m_shouldAutomaticallyGenerateText) {
             setXmlText(m_customText);
         }
+    } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
+        m_params.transposeMode = (CapoParams::TransposeMode)val.toInt();
     } else {
         return StaffTextBase::setProperty(id, val);
     }

@@ -1028,6 +1028,16 @@ const CapoParams& Staff::capo(const Fraction& tick) const
 void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
 {
     m_capoMap.insert_or_assign(tick.ticks(), params);
+    // TODO: Handle capo transpose mode
+//    for (const auto &[tick, capo] : m_capoMap) {
+//        switch (capo.transposeMode) {
+//            case CapoParams::TransposeMode::PLAYBACK_ONLY:
+//            case CapoParams::TransposeMode::NOTATION_ONLY:
+//            case CapoParams::TransposeMode::TAB_ONLY:
+//            default:
+//                break;
+//        }
+//    }
 }
 
 void Staff::clearCapoParams()
