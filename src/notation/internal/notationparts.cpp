@@ -1062,7 +1062,7 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         staffCopy->setPart(part);
         staffCopy->init(staff);
 
-        insertStaff(staffCopy, static_cast<int>(staffIndex));
+        insertStaff(staffCopy, static_cast<int>(staffIndex), /* createRests = */ false);
         score()->undo(new mu::engraving::Link(staffCopy, staff));
 
         mu::engraving::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
