@@ -22,6 +22,7 @@
 
 #include "audioworkermodule.h"
 
+#include "internal/audiobuffer.h"
 #include "internal/audioengine.h"
 #include "internal/workerplayback.h"
 #include "internal/workerchannelcontroller.h"
