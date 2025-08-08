@@ -56,6 +56,12 @@ PlayTechAnnotation* PlayTechAnnotation::clone() const
     return new PlayTechAnnotation(*this);
 }
 
+bool PlayTechAnnotation::isHandbellsSymbol() const
+{
+    return static_cast<int>(m_techniqueType) >= static_cast<int>(PlayingTechniqueType::HandbellsSwing)
+           && static_cast<int>(m_techniqueType) <= static_cast<int>(PlayingTechniqueType::HandbellsDamp);
+}
+
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const
 {
     switch (id) {
