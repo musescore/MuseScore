@@ -36,7 +36,6 @@ using namespace mu::engraving;
 namespace mu::iex::guitarpro {
 static void createSlightBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
 static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
-static Note* getLocatedNote(mu::engraving::Score* score, Fraction tickFr, track_idx_t track, size_t noteInChordIdx);
 static Chord* getLocatedChord(mu::engraving::Score* score, Fraction tickFr, track_idx_t track);
 static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
 static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
@@ -162,55 +161,75 @@ static Chord* getLocatedChord(mu::engraving::Score* score, Fraction tickFr, trac
     return chord;
 }
 
-static Note* getLocatedNote(mu::engraving::Score* score, Fraction tickFr, track_idx_t track, size_t noteInChordIdx)
+static std::vector<Chord*> createGraceChords(Chord* chord, const guitarpro::grace_bend_data_map_t& bendInfo)
 {
-    Chord* chord = getLocatedChord(score, tickFr, track);
-    if (chord && noteInChordIdx >= chord->notes().size()) {
-        LOGE() << "bend import error: note index invalid for track " << track << ", tick " << tickFr.ticks();
-        return nullptr;
+    std::vector<Chord*> graceChords;
+
+    size_t maxGraceAmount = 0;
+    for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
+        if (!muse::contains(bendInfo, noteIndex)) {
+            continue;
+        }
+
+        const auto& graceData = bendInfo.at(noteIndex);
+
+        maxGraceAmount = std::max(maxGraceAmount, graceData.data.size());
     }
 
-    return chord->notes()[noteInChordIdx];
+    const Score* score = chord->score();
+
+    for (size_t i = 0; i < maxGraceAmount; i++) {
+        Chord* graceChord = Factory::createChord(score->dummy()->segment());
+        graceChord->setTrack(chord->track());
+        graceChord->setNoteType(NoteType::GRACE8_AFTER);
+        graceChord->setNoStem(true);
+        graceChord->setBeamMode(BeamMode::NONE);
+
+        TDuration dur;
+        dur.setVal(mu::engraving::Constants::DIVISION / 2);
+        graceChord->setDurationType(dur);
+        graceChord->setTicks(dur.fraction());
+        chord->add(graceChord);
+
+        graceChords.push_back(graceChord);
+    }
+
+    return graceChords;
 }
 
 static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score)
 {
     for (const auto& [track, trackInfo] : bendDataCtx.graceAfterBendData) {
         for (const auto& [tick, tickInfo] : trackInfo) {
-            for (const auto& [noteInChordIdx, graceData] : tickInfo) {
-                Note* mainNote = getLocatedNote(score, tick, track, noteInChordIdx);
-                if (!mainNote) {
+            Chord* chord = getLocatedChord(score, tick, track);
+            std::vector<Chord*> graceChords = createGraceChords(chord, tickInfo);
+            for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
+                if (!muse::contains(tickInfo, noteIndex)) {
                     continue;
                 }
 
-                const auto& graceVector = graceData.data;
+                Note* mainNote = chord->notes()[noteIndex];
+                const auto& graceData = tickInfo.at(noteIndex);
+
+                const auto& graceVectorData = graceData.data;
                 bool shouldMoveTie = graceData.shouldMoveTie;
 
                 Note* currentNote = mainNote;
-                for (const auto& graceInfo : graceVector) {
-                    Chord* graceChord = Factory::createChord(score->dummy()->segment());
-                    graceChord->setTrack(track);
-                    graceChord->setNoteType(NoteType::GRACE8_AFTER);
-                    graceChord->setNoStem(true);
-                    graceChord->setBeamMode(BeamMode::NONE);
-
-                    TDuration dur;
-                    dur.setVal(mu::engraving::Constants::DIVISION / 2);
-                    graceChord->setDurationType(dur);
-                    graceChord->setTicks(dur.fraction());
+                for (size_t graceIndex = 0; graceIndex < graceVectorData.size(); graceIndex++) {
+                    const auto& noteData = graceVectorData[graceIndex];
+                    Chord* graceChord = graceChords[graceIndex];
 
                     Note* graceNote = Factory::createNote(graceChord);
-                    graceNote->setPitch(currentNote->pitch() + graceInfo.quarterTones / 2);
+                    graceNote->setPitch(currentNote->pitch() + noteData.quarterTones / 2);
                     graceNote->setTpcFromPitch();
                     graceChord->add(graceNote);
-                    mainNote->chord()->add(graceChord);
 
                     GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, currentNote, graceNote);
 
-                    QuarterOffset quarterOff = graceInfo.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
-                    bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + graceInfo.quarterTones / 2, quarterOff);
-                    bend->setStartTimeFactor(graceInfo.startFactor);
-                    bend->setEndTimeFactor(graceInfo.endFactor);
+                    QuarterOffset quarterOff = noteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+                    bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + noteData.quarterTones / 2, quarterOff);
+                    bend->setStartTimeFactor(noteData.startFactor);
+                    bend->setEndTimeFactor(noteData.endFactor);
 
                     currentNote = graceNote;
                 }
