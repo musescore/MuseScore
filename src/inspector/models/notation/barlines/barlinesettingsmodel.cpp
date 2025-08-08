@@ -201,7 +201,7 @@ void BarlineSettingsModel::updateShowPlayCountSettings()
         mu::engraving::BarLine* barline = mu::engraving::toBarLine(item);
         mu::engraving::Staff* staff = barline->staff();
 
-        if (staff->idx() == 0 || staff->score()->isSystemObjectStaff(staff)) {
+        if (staff->idx() == 0 || staff->isSystemObjectStaff()) {
             systemObjectStaff = true;
             break;
         }

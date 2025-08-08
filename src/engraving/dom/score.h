@@ -476,7 +476,6 @@ public:
     void addSystemObjectStaff(Staff* staff);
     void removeSystemObjectStaff(Staff* staff);
     const std::vector<Staff*>& systemObjectStaves() const { return m_systemObjectStaves; }
-    bool isSystemObjectStaff(Staff* staff) const;
 
     Measure* pos2measure(const PointF&, staff_idx_t* staffIdx, int* pitch, Segment**, PointF* offset) const;
     void dragPosition(const PointF&, staff_idx_t* staffIdx, Segment**, double spacingFactor = 0.5, bool allowTimeAnchor = false) const;

@@ -1376,7 +1376,7 @@ RemoveStaff::RemoveStaff(Staff* p)
 {
     staff = p;
     ridx  = staff->rstaff();
-    wasSystemObjectStaff = staff->score()->isSystemObjectStaff(staff);
+    wasSystemObjectStaff = staff->isSystemObjectStaff();
 }
 
 void RemoveStaff::undo(EditData*)

@@ -1672,7 +1672,7 @@ bool EngravingItem::isPlayable() const
 
 bool EngravingItem::isSystemObjectBelowBottomStaff() const
 {
-    return systemFlag() && staff() && staff()->systemObjectsBelowBottomStaff();
+    return systemFlag() && staff() && staff()->hasSystemObjectsBelowBottomStaff();
 }
 
 //---------------------------------------------------------

@@ -2715,7 +2715,7 @@ void Score::removeStaff(Staff* staff)
     muse::remove(m_staves, staff);
     staff->part()->removeStaff(staff);
 
-    if (isSystemObjectStaff(staff)) {
+    if (staff->isSystemObjectStaff()) {
         muse::remove(m_systemObjectStaves, staff);
     }
 
@@ -5828,11 +5828,6 @@ void Score::addSystemObjectStaff(Staff* staff)
 void Score::removeSystemObjectStaff(Staff* staff)
 {
     muse::remove(m_systemObjectStaves, staff);
-}
-
-bool Score::isSystemObjectStaff(Staff* staff) const
-{
-    return muse::contains(m_systemObjectStaves, staff);
 }
 
 const std::vector<Part*>& Score::parts() const

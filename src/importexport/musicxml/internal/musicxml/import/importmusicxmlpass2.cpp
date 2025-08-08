@@ -1009,7 +1009,7 @@ void MusicXmlParserPass2::addElemOffset(engraving::EngravingItem* el, engraving:
         Score* score = measure->score();
         Staff* st = score->staff(track2staff(track));
 
-        if (!score->isSystemObjectStaff(st) && st->idx() != 0) {
+        if (!st->isSystemObjectStaff() && st->idx() != 0) {
             if (finale) {
                 delete el;
                 return;

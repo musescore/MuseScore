@@ -428,7 +428,7 @@ double TimeSig::yPos() const
 {
     switch (timeSigPlacement()) {
     case TimeSigPlacement::NORMAL: return style().styleMM(Sid::timeSigNormalY);
-    case TimeSigPlacement::ABOVE_STAVES: return (staff()->systemObjectsBelowBottomStaff() ? -1.0 : 1.0)
+    case TimeSigPlacement::ABOVE_STAVES: return (staff()->hasSystemObjectsBelowBottomStaff() ? -1.0 : 1.0)
                * style().styleMM(Sid::timeSigAboveY);
     case TimeSigPlacement::ACROSS_STAVES: return style().styleMM(Sid::timeSigAcrossY);
     default:
@@ -438,7 +438,7 @@ double TimeSig::yPos() const
 
 bool TimeSig::showOnThisStaff() const
 {
-    return timeSigPlacement() == TimeSigPlacement::NORMAL || staffIdx() == 0 || score()->isSystemObjectStaff(staff());
+    return timeSigPlacement() == TimeSigPlacement::NORMAL || staffIdx() == 0 || staff()->isSystemObjectStaff();
 }
 
 bool TimeSig::isAboveStaves() const
