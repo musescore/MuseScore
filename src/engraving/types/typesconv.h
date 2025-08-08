@@ -275,5 +275,13 @@ public:
 
     static AsciiStringView toXml(ParenthesesMode pm);
     static ParenthesesMode fromXml(const AsciiStringView& str, ParenthesesMode def);
+
+    static const TranslatableString& userName(RepeatPlayCountPreset v);
+    static String translatedUserName(RepeatPlayCountPreset v);
+    static AsciiStringView toXml(RepeatPlayCountPreset repeatPreset);
+    static RepeatPlayCountPreset fromXml(const AsciiStringView& str, RepeatPlayCountPreset def);
+
+    static AsciiStringView toXml(AutoCustomHide autoOnOff);
+    static AutoCustomHide fromXml(const AsciiStringView& str, AutoCustomHide def);
 };
 }

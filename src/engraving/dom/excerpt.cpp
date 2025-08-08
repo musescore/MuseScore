@@ -27,6 +27,7 @@
 #include "containers.h"
 
 #include "dom/partialtie.h"
+#include "dom/playcounttext.h"
 #include "style/style.h"
 
 #include "barline.h"
@@ -1033,9 +1034,16 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         }
 
                         ne->setScore(score);
-                        if (oe->isBarLine() && adjustedBarlineSpan) {
+                        if (oe->isBarLine()) {
                             BarLine* nbl = toBarLine(ne);
-                            nbl->setSpanStaff(adjustedBarlineSpan);
+                            if (adjustedBarlineSpan) {
+                                nbl->setSpanStaff(adjustedBarlineSpan);
+                            }
+                            if (PlayCountText* newText = nbl->playCountText()) {
+                                newText->setTrack(track);
+                                PlayCountText* oldText = toBarLine(oe)->playCountText();
+                                score->undo(new Link(newText, oldText));
+                            }
                         } else if (oe->isChordRest()) {
                             ChordRest* ocr = toChordRest(oe);
                             ChordRest* ncr = toChordRest(ne);

@@ -114,6 +114,7 @@
 #include "dom/partialtie.h"
 #include "dom/pedal.h"
 #include "dom/pickscrape.h"
+#include "dom/playcounttext.h"
 #include "dom/playtechannotation.h"
 
 #include "dom/rasgueado.h"
@@ -293,6 +294,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::PEDAL:        write(item_cast<const Pedal*>(item), xml, ctx);
         break;
     case ElementType::PICK_SCRAPE:  write(item_cast<const PickScrape*>(item), xml, ctx);
+        break;
+    case ElementType::PLAY_COUNT_TEXT: write(item_cast<const PlayCountText*>(item), xml, ctx);
         break;
     case ElementType::PLAYTECH_ANNOTATION: write(item_cast<const PlayTechAnnotation*>(item), xml, ctx);
         break;
@@ -695,6 +698,16 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     for (const EngravingItem* e : *item->el()) {
         writeItem(e, xml, ctx);
     }
+    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT_SETTING);
+    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
+    if (item->playCountText()) {
+        writeItem(item->playCountText(), xml, ctx);
+    }
+
+    if (ctx.clipboardmode() && item->measure()) {
+        xml.tag("playCount", item->measure()->repeatCount());
+    }
+
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
@@ -2572,6 +2585,13 @@ void TWrite::write(const PickScrape* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const PlayCountText* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 

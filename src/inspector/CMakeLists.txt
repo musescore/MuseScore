@@ -116,8 +116,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/articulations/articulationsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsproxymodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/beams/beammodesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/beams/beammodesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/bends/bendsettingsmodel.cpp
@@ -190,8 +188,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/spacers/spacersettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/spacers/spacersettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/staffs/staffsettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/staffs/staffsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/stafftype/stafftypesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/stafftype/stafftypesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/symbols/symbolsettingsmodel.cpp
@@ -222,6 +218,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/mmrests/mmrestsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/playcounttext/playcounttextsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/playcounttext/playcounttextsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/instrumentname/instrumentnamesettingsmodel.cpp

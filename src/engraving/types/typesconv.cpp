@@ -343,6 +343,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::SOUND_FLAG, "SoundFlag",
           TranslatableString("engraving", "sound flag(s)", nullptr, 1),
           TranslatableString("engraving", "Sound flag(s)", nullptr, 1) },
+    Item{ ElementType::PLAY_COUNT_TEXT, "PlayCountText",
+          TranslatableString("engraving", "play count text(s)", nullptr, 1),
+          TranslatableString("engraving", "Play count text(s)", nullptr, 1) },
     Item{ ElementType::PLAYTECH_ANNOTATION, "PlayTechAnnotation",
           TranslatableString("engraving", "playing technique annotation(s)", nullptr, 1),
           TranslatableString("engraving", "Playing technique annotation(s)", nullptr, 1) },
@@ -936,6 +939,49 @@ AsciiStringView TConv::toXml(ParenthesesMode pm)
 ParenthesesMode TConv::fromXml(const AsciiStringView& str, ParenthesesMode def)
 {
     return findTypeByXmlTag<ParenthesesMode>(PARENTHESES_MODE, str, def);
+}
+
+static const std::vector<Item<RepeatPlayCountPreset> > REPEAT_COUNT_PRESET = {
+    { RepeatPlayCountPreset::X_N, "xn",                         muse::TranslatableString("engraving", "x%1") },
+    { RepeatPlayCountPreset::N_X, "nx",                         muse::TranslatableString("engraving", "%1x") },
+    { RepeatPlayCountPreset::PLAY_N_TIMES, "playntimes",        muse::TranslatableString("engraving", "Play %1 times") },
+    { RepeatPlayCountPreset::N_REPEATS, "nrepeats",             muse::TranslatableString("engraving", "%1 repeats") },
+};
+
+const muse::TranslatableString& TConv::userName(RepeatPlayCountPreset v)
+{
+    return findCapitalizedUserNameByType(REPEAT_COUNT_PRESET, v);
+}
+
+String TConv::translatedUserName(RepeatPlayCountPreset v)
+{
+    return findCapitalizedUserNameByType(REPEAT_COUNT_PRESET, v).translated();
+}
+
+AsciiStringView TConv::toXml(RepeatPlayCountPreset repeatPreset)
+{
+    return findXmlTagByType<RepeatPlayCountPreset>(REPEAT_COUNT_PRESET, repeatPreset);
+}
+
+RepeatPlayCountPreset TConv::fromXml(const AsciiStringView& str, RepeatPlayCountPreset def)
+{
+    return findTypeByXmlTag<RepeatPlayCountPreset>(REPEAT_COUNT_PRESET, str, def);
+}
+
+static const std::vector<Item<AutoCustomHide> > AUTO_CUSTOM_HIDE = {
+    { AutoCustomHide::AUTO, "auto" },
+    { AutoCustomHide::CUSTOM, "custom" },
+    { AutoCustomHide::HIDE, "hide" },
+};
+
+AsciiStringView TConv::toXml(AutoCustomHide autoCustomHide)
+{
+    return findXmlTagByType<AutoCustomHide>(AUTO_CUSTOM_HIDE, autoCustomHide);
+}
+
+AutoCustomHide TConv::fromXml(const AsciiStringView& str, AutoCustomHide def)
+{
+    return findTypeByXmlTag<AutoCustomHide>(AUTO_CUSTOM_HIDE, str, def);
 }
 
 static const std::vector<Item<VoiceAssignment> > VOICE_ASSIGNMENT = {
@@ -1652,6 +1698,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::TEMPO,             "tempo",                muse::TranslatableString("engraving", "Tempo") },
     { TextStyleType::TEMPO_CHANGE,      "tempo change",         muse::TranslatableString("engraving", "Gradual tempo change") },
     { TextStyleType::METRONOME,         "metronome",            muse::TranslatableString("engraving", "Metronome") },
+    { TextStyleType::REPEAT_PLAY_COUNT, "repeat_play_count",    muse::TranslatableString("engraving", "Repeat play count") },
     { TextStyleType::REPEAT_LEFT,       "repeat_left",          muse::TranslatableString("engraving", "Repeat text left") },
     { TextStyleType::REPEAT_RIGHT,      "repeat_right",         muse::TranslatableString("engraving", "Repeat text right") },
     { TextStyleType::REHEARSAL_MARK,    "rehearsal_mark",       muse::TranslatableString("engraving", "Rehearsal mark") },

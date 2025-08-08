@@ -43,6 +43,7 @@
 #include "note.h"
 #include "page.h"
 #include "part.h"
+#include "playcounttext.h"
 #include "partialtie.h"
 #include "pitchspelling.h"
 #include "rest.h"
@@ -56,6 +57,7 @@
 #include "tremolotwochord.h"
 #include "tuplet.h"
 #include "drumset.h"
+#include "barline.h"
 
 #include "log.h"
 
@@ -1446,6 +1448,21 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
                     }
                 }
             }
+
+            if (measure->repeatEnd() && seg.isType(SegmentType::BarLineType)) {
+                for (EngravingItem* item : seg.elist()) {
+                    if (!item || !item->isBarLine()) {
+                        continue;
+                    }
+
+                    if ((!staves.empty() && muse::contains(staves, item->staff())) || (staves.empty() && (item->staffIdx() == 0))) {
+                        BarLine* bl = toBarLine(item);
+                        if (PlayCountText* playCount = bl->playCountText()) {
+                            result.push_back(playCount);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1796,5 +1813,19 @@ bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment
     }
 
     return false;
+}
+
+EngravingItem* findNewSystemMarkingParent(const EngravingItem* item, const Staff* staff)
+{
+    EngravingItem* newParent = nullptr;
+    if (item->isPlayCountText()) {
+        BarLine* oldParent = toBarLine(item->parent());
+        Segment* blSeg = oldParent->segment();
+        newParent = toBarLine(blSeg->element(staff2track(staff->idx())));
+    } else {
+        newParent = item->findLinkedInStaff(staff);
+    }
+
+    return newParent;
 }
 }

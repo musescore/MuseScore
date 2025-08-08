@@ -263,6 +263,7 @@ public:
     static void write(const PartialLyricsLine* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Pedal* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const PickScrape* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const PlayCountText* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const PlayTechAnnotation* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Rasgueado* item, XmlWriter& xml, WriteContext& ctx);

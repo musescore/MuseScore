@@ -23,6 +23,7 @@
 
 #include "types/texttypes.h"
 
+#include "engraving/dom/barline.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/bracketItem.h"
@@ -32,16 +33,18 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/hook.h"
 #include "engraving/dom/layoutbreak.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/pedal.h"
+#include "engraving/dom/playcounttext.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stem.h"
+#include "engraving/dom/text.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/volta.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/lyrics.h"
 
 #include "log.h"
 
@@ -110,6 +113,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::PARTIAL_TIE:
     case mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE:
     case mu::engraving::ElementType::PALM_MUTE: return findLines(elementType);
+    // case mu::engraving::ElementType::PLAY_COUNT_TEXT: return findPlayCountText();
     default:
         QList<mu::engraving::EngravingItem*> resultList;
 
@@ -388,13 +392,27 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findSectionBreaks
     return resultList;
 }
 
+EngravingItem* ElementRepositoryService::findTextDelegate(EngravingItem* element) const
+{
+    if (!element->isBarLine()) {
+        return element;
+    }
+
+    if (PlayCountText* playCount = toBarLine(element)->playCountText()) {
+        return playCount;
+    }
+
+    return element;
+}
+
 QList<mu::engraving::EngravingItem*> ElementRepositoryService::findTexts() const
 {
     QList<mu::engraving::EngravingItem*> resultList;
 
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
-        if (TEXT_ELEMENT_TYPES.contains(element->type())) {
-            resultList << element;
+        EngravingItem* el = findTextDelegate(element);
+        if (TEXT_ELEMENT_TYPES.contains(el->type())) {
+            resultList << el;
         }
     }
 

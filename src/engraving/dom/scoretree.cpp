@@ -43,6 +43,7 @@
 #include "note.h"
 #include "notedot.h"
 #include "page.h"
+#include "playcounttext.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
@@ -632,6 +633,10 @@ EngravingObjectList BarLine::scanChildren() const
 
     for (EngravingItem* element : m_el) {
         children.push_back(element);
+    }
+
+    if (m_playCountText) {
+        children.push_back(m_playCountText);
     }
 
     return children;

@@ -239,6 +239,14 @@ bool Staff::shouldShowMeasureNumbers() const
     return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff && m_showMeasureNumbers == AutoOnOff::ON);
 }
 
+bool Staff::shouldShowPlayCount() const
+{
+    bool isTopStave = score()->staves().front() == this;
+    bool isSystemObjectStaff = muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
+
+    return isTopStave || isSystemObjectStaff;
+}
+
 //---------------------------------------------------------
 //   fillBrackets
 //    make sure index idx is valid

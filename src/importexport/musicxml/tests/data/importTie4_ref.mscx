@@ -85,6 +85,8 @@
       <staffTextFontSize>22</staffTextFontSize>
       <rehearsalMarkFontFace>Palatino,serif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>22</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Palatino,serif</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>22</repeatPlayCountFontSize>
       <repeatLeftFontFace>Palatino,serif</repeatLeftFontFace>
       <repeatLeftFontSize>22</repeatLeftFontSize>
       <repeatRightFontFace>Palatino,serif</repeatRightFontFace>

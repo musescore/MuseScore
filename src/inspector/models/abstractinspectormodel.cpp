@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "abstractinspectormodel.h"
+#include "dom/barline.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/property.h"
 
@@ -62,6 +63,7 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
     { mu::engraving::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
     { mu::engraving::ElementType::BAR_LINE, InspectorModelType::TYPE_BARLINE },
+    { mu::engraving::ElementType::PLAY_COUNT_TEXT, InspectorModelType::TYPE_PLAY_COUNT_TEXT },
     { mu::engraving::ElementType::MARKER, InspectorModelType::TYPE_MARKER },
     { mu::engraving::ElementType::JUMP, InspectorModelType::TYPE_JUMP },
     { mu::engraving::ElementType::KEYSIG, InspectorModelType::TYPE_KEYSIGNATURE },
@@ -315,6 +317,25 @@ static bool isPureDynamics(const QList<mu::engraving::EngravingItem*>& selectedE
     return true;
 }
 
+static bool barlineWithPlayText(const QList<mu::engraving::EngravingItem*>& selectedElementList)
+{
+    if (selectedElementList.empty()) {
+        return false;
+    }
+
+    for (const EngravingItem* item : selectedElementList) {
+        if (!item->isBarLine()) {
+            continue;
+        }
+
+        if (toBarLine(item)->playCountText()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
                                                                           const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
@@ -327,7 +348,7 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         }
 
         // Don't show the "Text" inspector panel for "pure" dynamics (i.e. without custom text)
-        if (TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) {
+        if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) || barlineWithPlayText(selectedElementList)) {
             types << InspectorSectionType::SECTION_TEXT;
         }
 

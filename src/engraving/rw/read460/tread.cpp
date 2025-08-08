@@ -52,6 +52,7 @@
 #include "../../dom/tremolobar.h"
 #include "../../dom/sticking.h"
 #include "../../dom/systemtext.h"
+#include "../../dom/playcounttext.h"
 #include "../../dom/playtechannotation.h"
 #include "../../dom/rehearsalmark.h"
 
@@ -271,6 +272,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
         break;
     case ElementType::PEDAL: read(item_cast<Pedal*>(item), xml, ctx);
         break;
+    case ElementType::PLAY_COUNT_TEXT: read(item_cast<PlayCountText*>(item), xml, ctx);
+        break;
     case ElementType::PLAYTECH_ANNOTATION: read(item_cast<PlayTechAnnotation*>(item), xml, ctx);
         break;
     case ElementType::RASGUEADO: read(item_cast<Rasgueado*>(item), xml, ctx);
@@ -461,6 +464,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PartialSpannerDirection::OUTGOING));
     case P_TYPE::PARENTHESES_MODE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), ParenthesesMode::NONE));
+    case P_TYPE::AUTO_CUSTOM_HIDE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoCustomHide::AUTO));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -889,6 +894,11 @@ void TRead::read(Sticking* s, XmlReader& xml, ReadContext& ctx)
 void TRead::read(SystemText* t, XmlReader& xml, ReadContext& ctx)
 {
     read(static_cast<StaffTextBase*>(t), xml, ctx);
+}
+
+void TRead::read(PlayCountText* t, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<TextBase*>(t), xml, ctx);
 }
 
 void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)
@@ -2022,6 +2032,16 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
                 TRead::read(image, e, ctx);
                 b->add(image);
             }
+        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT_SETTING)) {
+        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT)) {
+        } else if (tag == "PlayCountText") {
+            PlayCountText* p = Factory::createPlayCountText(b);
+            TRead::read(p, e, ctx);
+            p->setParent(b);
+            p->setTrack(ctx.track());
+            b->add(p);
+        } else if (tag == "playCount") {
+            b->setPlayCount(e.readInt());
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }

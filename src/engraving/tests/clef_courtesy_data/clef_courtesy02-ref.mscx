@@ -30,6 +30,7 @@
       <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
       <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
       <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
+      <repeatPlayCountShow>0</repeatPlayCountShow>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>

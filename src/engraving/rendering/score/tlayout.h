@@ -81,6 +81,7 @@
 #include "../../dom/notedot.h"
 
 #include "../../dom/parenthesis.h"
+#include "../../dom/playcounttext.h"
 #include "../../dom/playtechannotation.h"
 
 #include "../../dom/rehearsalmark.h"
@@ -308,6 +309,7 @@ public:
     static void layoutPedal(Pedal* item, LayoutContext& ctx);
     static void layoutPedalSegment(PedalSegment* item, LayoutContext& ctx);
     static void layoutPickScrapeSegment(PickScrapeSegment* item, LayoutContext& ctx);
+    static void layoutPlayCountText(PlayCountText* item, PlayCountText::LayoutData* ldata);
     static void layoutPlayTechAnnotation(const PlayTechAnnotation* item, PlayTechAnnotation::LayoutData* ldata);
 
     static void layoutRasgueadoSegment(RasgueadoSegment* item, LayoutContext& ctx);

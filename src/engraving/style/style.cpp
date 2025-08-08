@@ -229,6 +229,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::TEXT_STYLE:
                 set(idx, TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT));
                 break;
+            case P_TYPE::PLAY_COUNT_PRESET:
+                set(idx, TConv::fromXml(e.readAsciiText(), RepeatPlayCountPreset::X_N));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -650,6 +653,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         if (value(Sid::ottavaHookBelow).value<Spatium>().val() < 0) {
             set(Sid::ottavaHookBelow, -value(Sid::ottavaHookBelow).value<Spatium>());
         }
+        set(Sid::repeatPlayCountShow, false);
     }
 
     if (m_version == 450) {
@@ -740,6 +744,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<TextStyleType>()));
         } else if (P_TYPE::PARENTHESES_MODE == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<ParenthesesMode>()));
+        } else if (P_TYPE::PLAY_COUNT_PRESET == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<RepeatPlayCountPreset>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

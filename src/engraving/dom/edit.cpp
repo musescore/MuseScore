@@ -23,6 +23,7 @@
 #include <map>
 #include <set>
 
+#include "dom/playcounttext.h"
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
@@ -97,6 +98,7 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
+#include "types/typesconv.h"
 
 #include "log.h"
 
@@ -2642,6 +2644,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::MEASURE_NUMBER:
         case ElementType::SYSTEM_LOCK_INDICATOR:
         case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+        case ElementType::PLAY_COUNT_TEXT:
             break;
         // All other types cannot be removed if generated
         default:
@@ -2933,7 +2936,11 @@ void Score::deleteItem(EngravingItem* el)
                     Measure* lmeasure = lscore->tick2measure(m2->tick());
                     if (lmeasure) {
                         lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
+                        lmeasure->undoChangeProperty(Pid::REPEAT_COUNT, 2);
                     }
+                }
+                if (!bl->generated()) {
+                    undoRemoveElement(el);
                 }
             } else if (bl->barLineType() == BarLineType::END_REPEAT) {
                 Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
@@ -2941,7 +2948,11 @@ void Score::deleteItem(EngravingItem* el)
                     Measure* lmeasure = lscore->tick2measure(m2->tick());
                     if (lmeasure) {
                         lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
+                        lmeasure->undoChangeProperty(Pid::REPEAT_COUNT, 2);
                     }
+                }
+                if (!bl->generated()) {
+                    undoRemoveElement(el);
                 }
             } else {
                 bl->undoChangeProperty(Pid::BARLINE_TYPE, PropertyValue::fromValue(BarLineType::NORMAL));
@@ -3126,7 +3137,10 @@ void Score::deleteItem(EngravingItem* el)
             undoRemoveElement(el);
         }
         break;
-
+    case ElementType::PLAY_COUNT_TEXT: {
+        BarLine* bl = toBarLine(el->explicitParent());
+        bl->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::HIDE);
+    } break;
     case ElementType::INSTRUMENT_CHANGE:
     {
         InstrumentChange* ic = static_cast<InstrumentChange*>(el);
@@ -5488,6 +5502,312 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
     }
 }
 
+void Score::undoResetPlayCountTextSettings(BarLine* bl)
+{
+    if (!bl || !bl->segment()) {
+        return;
+    }
+    Segment* seg = bl->segment();
+
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        BarLine* curBl = toBarLine(seg->element(staff2track(staffIdx)));
+
+        if (!curBl) {
+            continue;
+        }
+
+        curBl->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::AUTO);
+    }
+}
+
+void Score::undoUpdatePlayCountText(Measure* m)
+{
+    if (!m || !m->repeatEnd()) {
+        return;
+    }
+    const MStyle& _style = style();
+    const bool showText = _style.styleB(Sid::repeatPlayCountShow);
+    const bool singleRepeats = _style.styleB(Sid::repeatPlayCountShowSingleRepeats);
+    const int playCount = m->repeatCount();
+    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true);
+
+    const std::vector<MStaff*>& measureStaves = m->mstaves();
+
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        if (staffIdx >= measureStaves.size()) {
+            break;
+        }
+
+        Staff* curStaff = staff(staffIdx);
+
+        Segment* endBarSeg = m->last(SegmentType::BarLineType);
+        BarLine* bl = endBarSeg ? toBarLine(endBarSeg->element(staff2track(staffIdx))) : nullptr;
+        if (!bl) {
+            continue;
+        }
+        PlayCountText* playCountText = bl->playCountText();
+
+        bool blShowPlayCount = (showPlayCount && bl->playCountTextSetting() == AutoCustomHide::AUTO)
+                               || bl->playCountTextSetting() == AutoCustomHide::CUSTOM;
+
+        if (blShowPlayCount && curStaff->shouldShowPlayCount()) {
+            if (!playCountText) {
+                playCountText = Factory::createPlayCountText(bl);
+                playCountText->setTrack(staff2track(staffIdx));
+                playCountText->setParent(bl);
+                playCountText->setSystemFlag(true);
+                playCountText->setSelected(bl->selected());
+                bl->undoChangeProperty(Pid::GENERATED, false, PropertyFlags::NOSTYLE);
+                undoAddElement(playCountText);
+                // set generated flag before and after so it sticks on type change and also works on undo/redo
+                bl->undoChangeProperty(Pid::GENERATED, false, PropertyFlags::NOSTYLE);
+            } else {
+                if (playCountText->parent() != bl) {
+                    playCountText->parentItem()->remove(playCountText);
+
+                    playCountText->setParent(bl);
+                    undoAddElement(playCountText);
+                }
+            }
+        } else if (playCountText) {
+            doUndoRemoveElement(playCountText);
+        }
+    }
+}
+
+void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves, bool replace)
+{
+    if (barType == bl->barLineType()) {
+        return;
+    }
+
+    Measure* m = bl->measure();
+    if (!m) {
+        return;
+    }
+
+    bool keepStartRepeat = false;
+
+    if (barType == BarLineType::START_REPEAT && bl->segment()->segmentType() != SegmentType::BeginBarLine) {
+        m = m->nextMeasure();
+        if (!m) {  // we were in last measure
+            return;
+        }
+    } else if (bl->barLineType() == BarLineType::START_REPEAT) {
+        if (m->isFirstInSystem()) {
+            if (barType != BarLineType::END_REPEAT) {
+                for (Score* lscore : m->score()->scoreList()) {
+                    Measure* lmeasure = lscore->tick2measure(m->tick());
+                    if (lmeasure) {
+                        lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
+                    }
+                }
+            }
+            return;
+        }
+
+        m = m->prevMeasureMM();
+        if (!m) {
+            return;
+        }
+
+        bl = const_cast<BarLine*>(m->endBarLine());
+        if (!bl) {
+            return;
+        }
+
+        if (barType == BarLineType::END_REPEAT) {
+            keepStartRepeat = true;
+        }
+    }
+
+    // when setting barline type on mmrest, set for underlying measure (and linked staves)
+    // createMMRest will then set for the mmrest directly
+    Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
+
+    switch (barType) {
+    case BarLineType::END:
+    case BarLineType::NORMAL:
+    case BarLineType::DOUBLE:
+    case BarLineType::BROKEN:
+    case BarLineType::DOTTED:
+    case BarLineType::REVERSE_END:
+    case BarLineType::HEAVY:
+    case BarLineType::DOUBLE_HEAVY: {
+        if (m->nextMeasureMM() && m->nextMeasureMM()->isFirstInSystem()) {
+            keepStartRepeat = true;
+        }
+
+        Segment* segment = bl->segment();
+        SegmentType segmentType = segment->segmentType();
+
+        if (segmentType == SegmentType::EndBarLine) {
+            bool generated = false;
+            if (bl->barLineType() == barType) {
+                generated = bl->generated();                // no change: keep current status
+            } else if (!bl->generated() && (barType == BarLineType::NORMAL)) {
+                generated = true;                           // currently non-generated, changing to normal: assume generated
+            }
+            if (allStaves) {
+                // use all staves of master score; we will take care of parts in loop through linked staves below
+                Score* mScore = bl->masterScore();
+                if (mScore->style().styleB(Sid::createMultiMeasureRests)) {
+                    m2 = mScore->tick2measureMM(m2->tick());
+                    if (!m2) {
+                        return;
+                    }
+                    segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
+                    m2 = m2->isMMRest() ? m2->mmRestLast() : m2;
+                    if (!m2) {
+                        return;
+                    }
+                } else {
+                    m2 = mScore->tick2measure(m2->tick());
+                    if (!m2) {
+                        return;
+                    }
+                    segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
+                }
+            }
+            const std::vector<EngravingItem*>& elist = allStaves ? segment->elist() : std::vector<EngravingItem*> { bl };
+            for (EngravingItem* e : elist) {
+                if (!e || !e->staff() || !e->isBarLine()) {
+                    continue;
+                }
+
+                // handle linked staves/parts:
+                // barlines themselves are not necessarily linked,
+                // so use staffList to find linked staves
+                BarLine* sbl = toBarLine(e);
+                for (Staff* lstaff : sbl->staff()->staffList()) {
+                    Score* lscore = lstaff->score();
+                    track_idx_t ltrack = lstaff->idx() * VOICES;
+
+                    // handle mmrests:
+                    // set the barline on the underlying measure
+                    // this will copied to the mmrest during layout, in createMMRest
+                    Measure* lmeasure = lscore->tick2measure(m2->tick());
+                    if (!lmeasure) {
+                        continue;
+                    }
+
+                    lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
+
+                    Measure* nextMeasure = lmeasure->nextMeasure();
+                    if (nextMeasure && !keepStartRepeat) {
+                        nextMeasure->undoChangeProperty(Pid::REPEAT_START, false);
+                    }
+                    Segment* lsegment = lmeasure->undoGetSegmentR(SegmentType::EndBarLine, lmeasure->ticks());
+                    BarLine* lbl = toBarLine(lsegment->element(ltrack));
+                    if (!lbl) {
+                        lbl = Factory::createBarLine(lsegment);
+                        lbl->setParent(lsegment);
+                        lbl->setTrack(ltrack);
+                        lbl->setSpanStaff(lstaff->barLineSpan());
+                        lbl->setSpanFrom(lstaff->barLineFrom());
+                        lbl->setSpanTo(lstaff->barLineTo());
+                        lbl->setBarLineType(barType);
+                        lbl->setGenerated(generated);
+                        lscore->addElement(lbl);
+                        if (!generated) {
+                            lbl->linkTo(sbl);
+                        }
+                    } else {
+                        lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
+                        lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
+                        // set generated flag before and after so it sticks on type change and also works on undo/redo
+                        lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
+                        if (lbl != sbl && !generated && !lbl->links()) {
+                            lscore->undo(new Link(lbl, sbl));
+                        } else if (lbl != sbl && generated && lbl->isLinked(sbl)) {
+                            lscore->undo(new Unlink(lbl));
+                            while (EngravingItem* linkedOnCoveringMMRest = sbl->findLinkedInScore(lscore)) {
+                                // Edge case: an additional link of this barline exists on the covering mmRest of lbl's measure
+                                lscore->undo(new Unlink(linkedOnCoveringMMRest));
+                                lscore->doUndoRemoveElement(linkedOnCoveringMMRest);
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (segmentType == SegmentType::BeginBarLine) {
+            for (Score* lscore : m2->score()->scoreList()) {
+                Measure* lmeasure = lscore->tick2measure(m2->tick());
+                Segment* segment1 = lmeasure->undoGetSegmentR(SegmentType::BeginBarLine, Fraction(0, 1));
+                for (EngravingItem* e : segment1->elist()) {
+                    if (e) {
+                        lscore->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
+                        lscore->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
+                        // set generated flag before and after so it sticks on type change and also works on undo/redo
+                        lscore->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
+                    }
+                }
+            }
+        }
+    }
+    break;
+    case BarLineType::START_REPEAT: {
+        for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
+            if (m2->isMeasureRepeatGroupWithPrevM(staffIdx)) {
+                MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
+                return;
+            }
+        }
+        for (Score* lscore : m2->score()->scoreList()) {
+            Measure* lmeasure = lscore->tick2measure(m2->tick());
+            if (lmeasure) {
+                lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                lmeasure = lmeasure->prevMeasure();
+                if (lmeasure && replace) {
+                    lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
+                }
+            }
+        }
+    }
+    break;
+    case BarLineType::END_REPEAT: {
+        for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
+            if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
+                MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
+                return;
+            }
+        }
+        for (Score* lscore : m2->score()->scoreList()) {
+            Measure* lmeasure = lscore->tick2measure(m2->tick());
+            if (lmeasure) {
+                lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                lmeasure = lmeasure->nextMeasure();
+                if (lmeasure && replace) {
+                    lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
+                }
+            }
+        }
+    }
+    break;
+    case BarLineType::END_START_REPEAT: {
+        for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
+            if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
+                MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
+                return;
+            }
+        }
+        for (Score* lscore : m2->score()->scoreList()) {
+            Measure* lmeasure = lscore->tick2measure(m2->tick());
+            if (lmeasure) {
+                lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                lmeasure = lmeasure->nextMeasure();
+                if (lmeasure) {
+                    lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                }
+            }
+        }
+    }
+    break;
+    }
+
+    undoUpdatePlayCountText(m);
+}
+
 //---------------------------------------------------------
 //   undoChangeElement
 //---------------------------------------------------------
@@ -6466,7 +6786,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::HARP_DIAGRAM
             && et != ElementType::FIGURED_BASS
             && et != ElementType::CLEF
-            && et != ElementType::AMBITUS)
+            && et != ElementType::AMBITUS
+            && et != ElementType::PLAY_COUNT_TEXT)
         ) {
         doUndoAddElement(element);
         return;
@@ -6545,6 +6866,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 case ElementType::EXPRESSION:
                 case ElementType::LYRICS:                       // not normally segment-attached
                 case ElementType::PARTIAL_LYRICSLINE:
+                case ElementType::PLAY_COUNT_TEXT:
                     continue;
                 default:
                     break;
@@ -6872,6 +7194,15 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             nbreath->setTrack(linkedTrack);
             nbreath->setParent(seg);
             doUndoAddElement(nbreath);
+        } else if (element->isPlayCountText()) {
+            BarLine* bl = toBarLine(element->explicitParent());
+            Fraction tick = bl->tick();
+            Measure* m = score->tick2measureMM(tick - Fraction::eps());
+            Segment* blSeg = m->last(SegmentType::EndBarLine);
+            BarLine* linkedBl = toBarLine(blSeg->element(linkedTrack));
+            ne->setTrack(linkedTrack);
+            ne->setParent(linkedBl);
+            doUndoAddElement(ne);
         } else {
             LOGW("undoAddElement: unhandled: <%s>", element->typeName());
         }
