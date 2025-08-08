@@ -100,6 +100,7 @@ private:
     enum Roles {
         Name = Qt::UserRole + 1,
         IsVisible,
+        CanChangeVisibility,
         CanReset
     };
 

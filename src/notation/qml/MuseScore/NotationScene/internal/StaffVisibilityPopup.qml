@@ -169,6 +169,7 @@ StyledPopupView {
 
                     useVisibilityButton: true
                     isVisible: delegateItem.model.isVisible
+                    canChangeVisibility: delegateItem.model.canChangeVisibility
                     onVisibilityButtonClicked: function (visible) {
                         delegateItem.model.isVisible = visible;
                     }
