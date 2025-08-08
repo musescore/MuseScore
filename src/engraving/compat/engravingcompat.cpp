@@ -218,8 +218,8 @@ void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             MeasureBase* nextmb = mb->next();
             if (mb->isVBoxBase() && nextmb && nextmb->isVBoxBase()) {
-                VBox* first = toVBox(mb);
-                VBox* second = toVBox(nextmb);
+                VBox* first = static_cast<VBox*>(mb);
+                VBox* second = static_cast<VBox*>(nextmb);
                 first->setBottomGap(first->bottomGap() + second->topGap()); // Because pre-4.6 these used to be added
             }
         }

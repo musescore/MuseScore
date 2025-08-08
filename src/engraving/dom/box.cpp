@@ -842,9 +842,6 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
     case Pid::TOP_GAP:
     case Pid::BOTTOM_GAP:
         return 4.0;
-    case Pid::TOP_MARGIN:
-    case Pid::BOTTOM_MARGIN:
-        return 2.0;
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
         return PropertyValue();
     default:
