@@ -1944,7 +1944,6 @@ ChangeStaff::ChangeStaff(Staff* _staff)
     visible = staff->visible();
     clefType = staff->defaultClefType();
     userDist = staff->userDist();
-    hideMode = staff->hideWhenEmpty();
     showIfEmpty = staff->showIfEmpty();
     cutaway = staff->cutaway();
     hideSystemBarLine = staff->hideSystemBarLine();
@@ -1953,14 +1952,13 @@ ChangeStaff::ChangeStaff(Staff* _staff)
 }
 
 ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType,
-                         Spatium _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
+                         Spatium _userDist, bool _showIfEmpty, bool _cutaway,
                          bool _hideSystemBarLine, AutoOnOff _mergeMatchingRests, bool _reflectTranspositionInLinkedTab)
 {
     staff       = _staff;
     visible     = _visible;
     clefType    = _clefType;
     userDist    = _userDist;
-    hideMode    = _hideMode;
     showIfEmpty = _showIfEmpty;
     cutaway     = _cutaway;
     hideSystemBarLine  = _hideSystemBarLine;
@@ -1977,7 +1975,6 @@ void ChangeStaff::flip(EditData*)
     bool oldVisible = staff->visible();
     ClefTypeList oldClefType = staff->defaultClefType();
     Spatium oldUserDist   = staff->userDist();
-    Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
     bool oldShowIfEmpty = staff->showIfEmpty();
     bool oldCutaway     = staff->cutaway();
     bool oldHideSystemBarLine  = staff->hideSystemBarLine();
@@ -1987,7 +1984,6 @@ void ChangeStaff::flip(EditData*)
     staff->setVisible(visible);
     staff->setDefaultClefType(clefType);
     staff->setUserDist(userDist);
-    staff->setHideWhenEmpty(hideMode);
     staff->setShowIfEmpty(showIfEmpty);
     staff->setCutaway(cutaway);
     staff->setHideSystemBarLine(hideSystemBarLine);
@@ -1997,7 +1993,6 @@ void ChangeStaff::flip(EditData*)
     visible     = oldVisible;
     clefType    = oldClefType;
     userDist    = oldUserDist;
-    hideMode    = oldHideMode;
     showIfEmpty = oldShowIfEmpty;
     cutaway     = oldCutaway;
     hideSystemBarLine  = oldHideSystemBarLine;

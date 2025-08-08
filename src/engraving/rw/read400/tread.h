@@ -28,6 +28,7 @@
 #include "readcontext.h"
 
 #include "../../dom/property.h"
+#include "../../types/types.h"
 
 namespace mu::engraving {
 class XmlReader;
@@ -352,6 +353,8 @@ public:
 
     static void readSpanner(XmlReader& e, ReadContext& ctx, EngravingItem* current, track_idx_t track);
     static void readSpanner(XmlReader& e, ReadContext& ctx, Score* current, track_idx_t track);
+
+    static AutoOnOff readStaffHideMode(AsciiStringView asciiText);
 
 private:
     static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);

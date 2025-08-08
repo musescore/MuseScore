@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PART_H
-#define MU_ENGRAVING_PART_H
+#pragma once
 
 #include <vector>
 
@@ -190,6 +189,9 @@ public:
     const Part* masterPart() const;
     Part* masterPart();
 
+    AutoOnOff hideWhenEmpty() const { return m_hideWhenEmpty; }
+    void setHideWhenEmpty(AutoOnOff v) { m_hideWhenEmpty = v; }
+
     PreferSharpFlat preferSharpFlat() const { return m_preferSharpFlat; }
     void setPreferSharpFlat(PreferSharpFlat v) { m_preferSharpFlat = v; }
 
@@ -212,10 +214,10 @@ private:
     bool m_soloist = false;           ///< used in score ordering
     int m_capoFret = 0;
     int m_color = 0;                  ///User specified color for helping to label parts
+    AutoOnOff m_hideWhenEmpty = AutoOnOff::AUTO; ///< hide part when empty
 
     PreferSharpFlat m_preferSharpFlat = PreferSharpFlat::AUTO;
 
     std::map<int, StringTunings*> m_stringTunings;
 };
-} // namespace mu::engraving
-#endif
+}
