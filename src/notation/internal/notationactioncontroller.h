@@ -29,6 +29,7 @@
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "ui/inavigationcontroller.h"
 #include "ui/iuiactionsregister.h"
 #include "context/iglobalcontext.h"
 #include "context/iuicontextresolver.h"
@@ -42,6 +43,7 @@ namespace mu::notation {
 class NotationActionController : public muse::actions::Actionable, public muse::async::Asyncable
 {
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::ui::INavigationController, navigationController)
     INJECT(muse::ui::IUiActionsRegister, actionRegister)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(context::IUiContextResolver, uiContextResolver)
@@ -64,8 +66,6 @@ public:
 
     INotationStylePtr currentNotationStyle() const;
     muse::async::Notification currentNotationStyleChanged() const;
-
-    INotationAccessibilityPtr currentNotationAccessibility() const;
 
     using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
     static const std::unordered_map<muse::actions::ActionCode, bool EngravingDebuggingOptions::*> engravingDebuggingActions;
@@ -267,9 +267,6 @@ private:
     template<typename P1, typename P2, typename Q1, typename Q2>
     void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), Q1, Q2, PlayMode = PlayMode::NoPlay,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
-
-    void notifyAccessibilityAboutActionTriggered(const muse::actions::ActionCode& actionCode);
-    void notifyAccessibilityAboutVoiceInfo(const std::string& info);
 
     muse::async::Notification m_currentNotationNoteInputChanged;
 
