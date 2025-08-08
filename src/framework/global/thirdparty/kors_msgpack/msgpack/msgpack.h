@@ -158,56 +158,58 @@ struct has_emplace_back<T, std::void_t<
         decltype(std::declval<T>().emplace_back())
 >> : std::true_type {};
 
-class Packer;
+template<typename Data>
+class DataPacker;
 
-template <typename T, typename = void>
+template <typename Data, typename T, typename = void>
 struct has_pack_packer : std::false_type {};
 
-template <typename T>
-struct has_pack_packer<T, std::void_t<
-        decltype(std::declval<T&>().pack(std::declval<Packer&>()))
+template <typename Data, typename T>
+struct has_pack_packer<Data, T, std::void_t<
+        decltype(std::declval<T&>().pack(std::declval<DataPacker<Data>&>()))
 >> : std::true_type {};
 
-template <typename T, typename = void>
+template <typename Data, typename T, typename = void>
 struct has_pack_const_packer : std::false_type {};
 
-template <typename T>
-struct has_pack_const_packer<T, std::void_t<
-        decltype(std::declval<const T&>().pack(std::declval<Packer&>()))
+template <typename Data, typename T>
+struct has_pack_const_packer<Data, T, std::void_t<
+        decltype(std::declval<const T&>().pack(std::declval<DataPacker<Data>&>()))
 >> : std::true_type {};
 
-template <typename T, typename = void>
+template <typename Data, typename T, typename = void>
 struct has_pack_data : std::false_type {};
 
-template <typename T>
-struct has_pack_data<T, std::void_t<
-        decltype(std::declval<const T&>().pack(std::declval<std::vector<uint8_t>&>()))
+template <typename Data, typename T>
+struct has_pack_data<Data, T, std::void_t<
+        decltype(std::declval<const T&>().pack(std::declval<Data&>()))
 >> : std::true_type {};
 
-template <typename T, typename = void>
+template <typename Data, typename T, typename = void>
 struct has_func_pack_custom_packer : std::false_type {};
 
-template <typename T>
-struct has_func_pack_custom_packer<T,
-           std::void_t<decltype(pack_custom(std::declval<Packer&>(), std::declval<T&>()))>
+template <typename Data, typename T>
+struct has_func_pack_custom_packer<Data, T,
+           std::void_t<decltype(pack_custom(std::declval<DataPacker<Data>&>(), std::declval<T&>()))>
        > : std::true_type {};
 
-class UnPacker;
+template<typename Data>
+class DataUnPacker;
 
-template <typename T, typename = void>
+template <typename Data, typename T, typename = void>
 struct has_pack_unpacker : std::false_type {};
 
-template <typename T>
-struct has_pack_unpacker<T, std::void_t<
-        decltype(std::declval<T&>().pack(std::declval<UnPacker&>()))
+template <typename Data, typename T>
+struct has_pack_unpacker<Data, T, std::void_t<
+        decltype(std::declval<T&>().pack(std::declval<DataUnPacker<Data>&>()))
 >> : std::true_type {};
 
-template <typename T, typename = void>
+template <typename Data, typename T, typename = void>
 struct has_unpack_unpacker : std::false_type {};
 
-template <typename T>
-struct has_unpack_unpacker<T, std::void_t<
-        decltype(std::declval<T>().unpack(std::declval<UnPacker&>()))
+template <typename Data, typename T>
+struct has_unpack_unpacker<Data, T, std::void_t<
+        decltype(std::declval<T>().unpack(std::declval<DataUnPacker<Data>&>()))
 >> : std::true_type {};
 
 template <typename T, typename = void>
@@ -218,56 +220,60 @@ struct has_unpack_cursor<T, std::void_t<
         decltype(std::declval<T>().unpack(std::declval<Cursor&>()))
 >> : std::true_type {};
 
-template <typename T, typename = void>
+template <typename Data, typename T, typename = void>
 struct has_func_unpack_custom_unpacker : std::false_type {};
 
-template <typename T>
-struct has_func_unpack_custom_unpacker<T,
-           std::void_t<decltype(unpack_custom(std::declval<UnPacker&>(), std::declval<T&>()))>
+template <typename Data, typename T>
+struct has_func_unpack_custom_unpacker<Data, T,
+           std::void_t<decltype(unpack_custom(std::declval<DataUnPacker<Data>&>(), std::declval<T&>()))>
        > : std::true_type {};
 
-template<class T>
-void pack_type(std::vector<uint8_t>& data, const T& value);
-template<class T>
+template<typename Data, typename T>
+void pack_type(Data& data, const T& value);
+template<typename Data, typename T>
 bool unpack_type(Cursor& cursor, T& value);
 
 // Nil
-inline void pack_type(std::vector<uint8_t>& data, const std::nullptr_t&/*value*/) {
-    data.emplace_back(nil_marker);
+template<typename Data>
+inline void pack_type(Data& data, const std::nullptr_t&/*value*/) {
+    data.push_back(nil_marker);
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, std::nullptr_t& /*value*/) {
     cursor.next();
     return true;
 }
 
 // Bool
-inline void pack_type(std::vector<uint8_t>& data, const bool& value) {
+template<typename Data>
+inline void pack_type(Data& data, const bool& value) {
     if (value) {
-        data.emplace_back(true_bool);
+        data.push_back(true_bool);
     } else {
-        data.emplace_back(false_bool);
+        data.push_back(false_bool);
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, bool& value) {
     value = cursor.read() != 0xc2;
     return true;
 }
 
 // Int family
-template<typename T>
-inline bool pack_fixint(std::vector<uint8_t>& data, const T& value) {
+template<typename Data, typename T>
+inline bool pack_fixint(Data& data, const T& value) {
 
     // positive fixint
     if (value >= 0 && value <= 127) {
-        data.emplace_back(static_cast<uint8_t>(value));
+        data.push_back(static_cast<uint8_t>(value));
         return true;
     }
 
     // negative fixint
     if (value >= -32 && value <= -1) {
-        data.emplace_back(static_cast<uint8_t>(0xE0 | (static_cast<uint8_t>(value + 32))));
+        data.push_back(static_cast<uint8_t>(0xE0 | (static_cast<uint8_t>(value + 32))));
         return true;
     }
 
@@ -295,15 +301,17 @@ inline bool unpack_fixint(Cursor& cursor, T& value) {
     return false;
 }
 
-inline void pack_type(std::vector<uint8_t>& data, const int8_t& value) {
+template<typename Data>
+inline void pack_type(Data& data, const int8_t& value) {
     if (pack_fixint(data, value)) {
         return;
     }
 
-    data.emplace_back(int8);
-    data.emplace_back(static_cast<uint8_t>(value));
+    data.push_back(int8);
+    data.push_back(static_cast<uint8_t>(value));
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, int8_t& value) {
     if (unpack_fixint(cursor, value)) {
         return true;
@@ -315,15 +323,17 @@ inline bool unpack_type(Cursor& cursor, int8_t& value) {
     return false;
 }
 
-inline void pack_type(std::vector<uint8_t>& data, const uint8_t& value) {
+template<typename Data>
+inline void pack_type(Data& data, const uint8_t& value) {
     if (pack_fixint(data, value)) {
         return;
     }
 
-    data.emplace_back(uint8);
-    data.emplace_back(value);
+    data.push_back(uint8);
+    data.push_back(value);
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, uint8_t& value) {
     if (unpack_fixint(cursor, value)) {
         return true;
@@ -341,20 +351,22 @@ constexpr bool is_fit_in_type(U value) noexcept {
             value <= std::numeric_limits<T>::max();
 }
 
-inline void pack_type(std::vector<uint8_t>& data, const int16_t& value) {
+template<typename Data>
+inline void pack_type(Data& data, const int16_t& value) {
     if (is_fit_in_type<int8_t>(value)) {
         pack_type(data, static_cast<int8_t>(value));
     } else {
-        data.emplace_back(int16);
+        data.push_back(int16);
         uint16_t uvalue = static_cast<uint16_t>(value);
-        data.emplace_back(static_cast<uint8_t>((uvalue >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(uvalue & 0xFF));
+        data.push_back(static_cast<uint8_t>((uvalue >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(uvalue & 0xFF));
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, int16_t& value) {
 
-    if (int8_t i8 = 0; unpack_type(cursor, i8)) {
+    if (int8_t i8 = 0; unpack_type<Data>(cursor, i8)) {
         value = static_cast<int16_t>(i8);
         return true;
     } else if (cursor.data() == int16) {
@@ -369,19 +381,21 @@ inline bool unpack_type(Cursor& cursor, int16_t& value) {
     return false;
 }
 
-inline void pack_type(std::vector<uint8_t>& data, const uint16_t& value) {
+template<typename Data>
+inline void pack_type(Data& data, const uint16_t& value) {
     if (is_fit_in_type<uint8_t>(value)) {
         pack_type(data, static_cast<uint8_t>(value));
     } else {
-        data.emplace_back(uint16);
-        data.emplace_back(static_cast<uint8_t>((value >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(value & 0xFF));
+        data.push_back(uint16);
+        data.push_back(static_cast<uint8_t>((value >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(value & 0xFF));
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, uint16_t& value) {
 
-    if (uint8_t ui8 = 0; unpack_type(cursor, ui8)) {
+    if (uint8_t ui8 = 0; unpack_type<Data>(cursor, ui8)) {
         value = static_cast<uint16_t>(ui8);
         return true;
     } else if (cursor.data() == uint16) {
@@ -395,22 +409,24 @@ inline bool unpack_type(Cursor& cursor, uint16_t& value) {
     return false;
 }
 
-inline void pack_type(std::vector<uint8_t>& data, const int32_t& value) {
+template<typename Data>
+inline void pack_type(Data& data, const int32_t& value) {
     if (is_fit_in_type<int16_t>(value)) {
         pack_type(data, static_cast<int16_t>(value));
     } else {
-        data.emplace_back(int32);
+        data.push_back(int32);
         uint32_t uvalue = static_cast<uint32_t>(value);
-        data.emplace_back(static_cast<uint8_t>((uvalue >> 24) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((uvalue >> 16) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((uvalue >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(uvalue & 0xFF));
+        data.push_back(static_cast<uint8_t>((uvalue >> 24) & 0xFF));
+        data.push_back(static_cast<uint8_t>((uvalue >> 16) & 0xFF));
+        data.push_back(static_cast<uint8_t>((uvalue >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(uvalue & 0xFF));
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, int32_t& value) {
 
-    if (int16_t i16 = 0; unpack_type(cursor, i16)) {
+    if (int16_t i16 = 0; unpack_type<Data>(cursor, i16)) {
         value = static_cast<int32_t>(i16);
         return true;
     } else if (cursor.data() == int32) {
@@ -427,21 +443,23 @@ inline bool unpack_type(Cursor& cursor, int32_t& value) {
     return false;
 }
 
-inline void pack_type(std::vector<uint8_t>& data, const uint32_t& value) {
+template<typename Data>
+inline void pack_type(Data& data, const uint32_t& value) {
     if (is_fit_in_type<uint16_t>(value)) {
         pack_type(data, static_cast<uint16_t>(value));
     } else {
-        data.emplace_back(uint32);
-        data.emplace_back(static_cast<uint8_t>((value >> 24) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((value >> 16) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((value >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(value & 0xFF));
+        data.push_back(uint32);
+        data.push_back(static_cast<uint8_t>((value >> 24) & 0xFF));
+        data.push_back(static_cast<uint8_t>((value >> 16) & 0xFF));
+        data.push_back(static_cast<uint8_t>((value >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(value & 0xFF));
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, uint32_t& value) {
 
-    if (uint16_t ui16 = 0; unpack_type(cursor, ui16)) {
+    if (uint16_t ui16 = 0; unpack_type<Data>(cursor, ui16)) {
         value = static_cast<uint32_t>(ui16);
         return true;
     } else if (cursor.data() == uint32) {
@@ -458,21 +476,23 @@ inline bool unpack_type(Cursor& cursor, uint32_t& value) {
     return false;
 }
 
-inline void pack_type(std::vector<uint8_t>& data, const int64_t& value) {
+template<typename Data>
+inline void pack_type(Data& data, const int64_t& value) {
     if (is_fit_in_type<int32_t>(value)) {
         pack_type(data, static_cast<int32_t>(value));
     } else {
-        data.emplace_back(int64);
+        data.push_back(int64);
         uint64_t uvalue = static_cast<uint64_t>(value);
         for (int i = 7; i >= 0; --i) {
-            data.emplace_back(static_cast<uint8_t>((uvalue >> (i * 8)) & 0xFF));
+            data.push_back(static_cast<uint8_t>((uvalue >> (i * 8)) & 0xFF));
         }
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, int64_t& value) {
 
-    if (int32_t i32 = 0; unpack_type(cursor, i32)) {
+    if (int32_t i32 = 0; unpack_type<Data>(cursor, i32)) {
         value = static_cast<int64_t>(i32);
         return true;
     } else if (cursor.data() == int64) {
@@ -489,20 +509,22 @@ inline bool unpack_type(Cursor& cursor, int64_t& value) {
     return false;
 }
 
-inline void pack_type(std::vector<uint8_t>& data, const uint64_t& value) {
+template<typename Data>
+inline void pack_type(Data& data, const uint64_t& value) {
     if (is_fit_in_type<uint32_t>(value)) {
         pack_type(data, static_cast<uint32_t>(value));
     } else {
-        data.emplace_back(uint64);
+        data.push_back(uint64);
         for (int i = 7; i >= 0; --i) {
-            data.emplace_back(static_cast<uint8_t>((value >> (i * 8)) & 0xFF));
+            data.push_back(static_cast<uint8_t>((value >> (i * 8)) & 0xFF));
         }
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, uint64_t& value) {
 
-    if (uint32_t ui32 = 0; unpack_type(cursor, ui32)) {
+    if (uint32_t ui32 = 0; unpack_type<Data>(cursor, ui32)) {
         value = static_cast<uint64_t>(ui32);
         return true;
     } else if (cursor.data() == uint64) {
@@ -520,20 +542,22 @@ inline bool unpack_type(Cursor& cursor, uint64_t& value) {
 }
 
 // Float/Double
-inline void pack_type(std::vector<uint8_t>& data, const float& value) {
+template<typename Data>
+inline void pack_type(Data& data, const float& value) {
 
-    data.emplace_back(float32);
+    data.push_back(float32);
 
     uint32_t bin = 0;
     static_assert(sizeof(float) == sizeof(uint32_t), "Float size mismatch");
     std::memcpy(&bin, &value, sizeof(float));
 
-    data.emplace_back(static_cast<uint8_t>((bin >> 24) & 0xFF));
-    data.emplace_back(static_cast<uint8_t>((bin >> 16) & 0xFF));
-    data.emplace_back(static_cast<uint8_t>((bin >> 8) & 0xFF));
-    data.emplace_back(static_cast<uint8_t>(bin & 0xFF));
+    data.push_back(static_cast<uint8_t>((bin >> 24) & 0xFF));
+    data.push_back(static_cast<uint8_t>((bin >> 16) & 0xFF));
+    data.push_back(static_cast<uint8_t>((bin >> 8) & 0xFF));
+    data.push_back(static_cast<uint8_t>(bin & 0xFF));
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, float& value) {
 
     if (cursor.data() == float32) {
@@ -554,21 +578,23 @@ inline bool unpack_type(Cursor& cursor, float& value) {
     return false;
 }
 
-inline void pack_type(std::vector<uint8_t>& data, const double& value) {
+template<typename Data>
+inline void pack_type(Data& data, const double& value) {
 
-    data.emplace_back(float64);
+    data.push_back(float64);
     uint64_t bin = 0;
     static_assert(sizeof(double) == sizeof(uint64_t), "Double size mismatch");
     std::memcpy(&bin, &value, sizeof(double));
 
     for (int i = 7; i >= 0; --i) {
-        data.emplace_back(static_cast<uint8_t>((bin >> (i * 8)) & 0xFF));
+        data.push_back(static_cast<uint8_t>((bin >> (i * 8)) & 0xFF));
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, double& value) {
 
-    if (float f32 = 0; unpack_type(cursor, f32)) {
+    if (float f32 = 0; unpack_type<Data>(cursor, f32)) {
         value = static_cast<double>(f32);
         return true;
     } else if (cursor.data() == float64) {
@@ -590,27 +616,28 @@ inline bool unpack_type(Cursor& cursor, double& value) {
 }
 
 // string
-inline void pack_type(std::vector<uint8_t>& data, const std::string& value) {
+template<typename Data>
+inline void pack_type(Data& data, const std::string& value) {
 
     const size_t len = value.size();
 
     if (len <= 31) {
-        data.emplace_back(static_cast<uint8_t>(fixstr | len));
+        data.push_back(static_cast<uint8_t>(fixstr | len));
     } else if (len <= 0xFF) {
-        data.emplace_back(str8);
-        data.emplace_back(static_cast<uint8_t>(len));
+        data.push_back(str8);
+        data.push_back(static_cast<uint8_t>(len));
     }
     else if (len <= 0xFFFF) {
-        data.emplace_back(str16);
-        data.emplace_back(static_cast<uint8_t>((len >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(len & 0xFF));
+        data.push_back(str16);
+        data.push_back(static_cast<uint8_t>((len >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(len & 0xFF));
     }
     else if (len <= 0xFFFFFFFF) {
-        data.emplace_back(str32);
-        data.emplace_back(static_cast<uint8_t>((len >> 24) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((len >> 16) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((len >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(len & 0xFF));
+        data.push_back(str32);
+        data.push_back(static_cast<uint8_t>((len >> 24) & 0xFF));
+        data.push_back(static_cast<uint8_t>((len >> 16) & 0xFF));
+        data.push_back(static_cast<uint8_t>((len >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(len & 0xFF));
     } else {
         // too long for MessagePack
         return;
@@ -618,10 +645,11 @@ inline void pack_type(std::vector<uint8_t>& data, const std::string& value) {
 
     data.reserve(data.size() + len + 5);
     for (char i : value) {
-        data.emplace_back(static_cast<uint8_t>(i));
+        data.push_back(static_cast<uint8_t>(i));
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, std::string& value) {
 
     size_t len = 0;
@@ -661,25 +689,26 @@ inline bool unpack_type(Cursor& cursor, std::string& value) {
 }
 
 // bin
-inline void pack_type(std::vector<uint8_t>& data, const std::vector<uint8_t>& value) {
+template<typename Data>
+inline void pack_type(Data& data, const std::vector<uint8_t>& value) {
 
     const size_t len = value.size();
 
     if (len <= 0xFF) {
-        data.emplace_back(bin8);
-        data.emplace_back(static_cast<uint8_t>(len));
+        data.push_back(bin8);
+        data.push_back(static_cast<uint8_t>(len));
     }
     else if (len <= 0xFFFF) {
-        data.emplace_back(bin16);
-        data.emplace_back(static_cast<uint8_t>((len >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(len & 0xFF));
+        data.push_back(bin16);
+        data.push_back(static_cast<uint8_t>((len >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(len & 0xFF));
     }
     else if (len <= 0xFFFFFFFF) {
-        data.emplace_back(bin32);
-        data.emplace_back(static_cast<uint8_t>((len >> 24) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((len >> 16) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((len >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(len & 0xFF));
+        data.push_back(bin32);
+        data.push_back(static_cast<uint8_t>((len >> 24) & 0xFF));
+        data.push_back(static_cast<uint8_t>((len >> 16) & 0xFF));
+        data.push_back(static_cast<uint8_t>((len >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(len & 0xFF));
     } else {
         // too long for MessagePack
         return;
@@ -687,16 +716,17 @@ inline void pack_type(std::vector<uint8_t>& data, const std::vector<uint8_t>& va
 
     data.reserve(data.size() + len + 5);
     for (uint8_t i : value) {
-        data.emplace_back(i);
+        data.push_back(i);
     }
 }
 
+template<typename Data>
 inline bool unpack_type(Cursor& cursor, std::vector<uint8_t>& value) {
 
     size_t len = 0;
     uint8_t marker = cursor.read();
     if (marker == bin8) {
-        len = cursor.read();;
+        len = cursor.read();
     } else if (marker == bin16) {
         uint16_t ui16 = 0;
         for (int i = 0; i < 2; ++i) {
@@ -728,23 +758,23 @@ inline bool unpack_type(Cursor& cursor, std::vector<uint8_t>& value) {
 }
 
 // array
-template<class T>
-void pack_array(std::vector<uint8_t>& data, const T& array) {
+template<typename Data, typename T>
+void pack_array(Data& data, const T& array) {
 
     const size_t len = array.size();
 
     if (len < 16) {
-        data.emplace_back(uint8_t(fixarray | len));
+        data.push_back(uint8_t(fixarray | len));
     } else if (len <= 0xFFFF) {
-        data.emplace_back(array16);
-        data.emplace_back(static_cast<uint8_t>((len >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(len & 0xFF));
+        data.push_back(array16);
+        data.push_back(static_cast<uint8_t>((len >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(len & 0xFF));
     } else if (len <= 0xFFFFFFFF) {
-        data.emplace_back(array32);
-        data.emplace_back(static_cast<uint8_t>((len >> 24) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((len >> 16) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((len >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(len & 0xFF));
+        data.push_back(array32);
+        data.push_back(static_cast<uint8_t>((len >> 24) & 0xFF));
+        data.push_back(static_cast<uint8_t>((len >> 16) & 0xFF));
+        data.push_back(static_cast<uint8_t>((len >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(len & 0xFF));
     } else {
         // too long for MessagePack
         return;
@@ -755,7 +785,7 @@ void pack_array(std::vector<uint8_t>& data, const T& array) {
     }
 }
 
-template<class T>
+template<typename Data, typename T>
 inline bool unpack_array(Cursor& cursor, T& array) {
 
     size_t len = 0;
@@ -789,7 +819,7 @@ inline bool unpack_array(Cursor& cursor, T& array) {
 
     for (size_t i = 0; i < len; ++i) {
         ValueType val{};
-        bool ok = unpack_type(cursor, val);
+        bool ok = unpack_type<Data>(cursor, val);
         if (!ok) {
             return false;
         }
@@ -805,23 +835,23 @@ inline bool unpack_array(Cursor& cursor, T& array) {
 }
 
 // map
-template <typename T>
-void pack_map(std::vector<uint8_t>& data, const T& map) {
+template <typename Data, typename T>
+void pack_map(Data& data, const T& map) {
 
     const size_t len = map.size();
 
     if (len < 16) {
-        data.emplace_back(uint8_t(fixmap | len));
+        data.push_back(uint8_t(fixmap | len));
     } else if (len <= 0xFFFF) {
-        data.emplace_back(map16);
-        data.emplace_back(static_cast<uint8_t>((len >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(len & 0xFF));
+        data.push_back(map16);
+        data.push_back(static_cast<uint8_t>((len >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(len & 0xFF));
     } else if (len <= 0xFFFFFFFF) {
-        data.emplace_back(map32);
-        data.emplace_back(static_cast<uint8_t>((len >> 24) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((len >> 16) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>((len >> 8) & 0xFF));
-        data.emplace_back(static_cast<uint8_t>(len & 0xFF));
+        data.push_back(map32);
+        data.push_back(static_cast<uint8_t>((len >> 24) & 0xFF));
+        data.push_back(static_cast<uint8_t>((len >> 16) & 0xFF));
+        data.push_back(static_cast<uint8_t>((len >> 8) & 0xFF));
+        data.push_back(static_cast<uint8_t>(len & 0xFF));
     } else {
         // too long for MessagePack
         return;
@@ -833,7 +863,7 @@ void pack_map(std::vector<uint8_t>& data, const T& map) {
     }
 }
 
-template<class T>
+template<typename Data, typename T>
 inline bool unpack_map(Cursor& cursor, T& map) {
 
     size_t len = 0;
@@ -865,12 +895,12 @@ inline bool unpack_map(Cursor& cursor, T& map) {
     for (size_t i = 0; i < len; ++i) {
         KeyType key{};
         MappedType value{};
-        bool ok = unpack_type(cursor, key);
+        bool ok = unpack_type<Data>(cursor, key);
         if (!ok) {
             return false;
         }
 
-        ok = unpack_type(cursor, value);
+        ok = unpack_type<Data>(cursor, value);
         if (!ok) {
             return false;
         }
@@ -882,28 +912,28 @@ inline bool unpack_map(Cursor& cursor, T& map) {
 }
 
 // pack by packer
-template <typename T>
-void pack_packer(std::vector<uint8_t>& data, const T& value);
-template <typename T>
-void pack_const_packer(std::vector<uint8_t>& data, const T& value);
-template <typename T>
-void pack_custom_packer(std::vector<uint8_t>& data, const T& value);
+template <typename Data, typename T>
+void pack_packer(Data& data, const T& value);
+template <typename Data, typename T>
+void pack_const_packer(Data& data, const T& value);
+template <typename Data, typename T>
+void pack_custom_packer(Data& data, const T& value);
 
 // unpack by unpacker
-template <typename T>
+template <typename Data, typename T>
 bool pack_unpacker(Cursor& cursor, T& value);
-template <typename T>
+template <typename Data, typename T>
 bool unpack_unpacker(Cursor& cursor, T& value);
-template <typename T>
+template <typename Data, typename T>
 bool unpack_custom_unpacker(Cursor& cursor, T& value);
 
-template<class T>
-inline void do_pack_type(std::vector<uint8_t>& data, const T& value) {
+template<typename Data, typename T>
+inline void do_pack_type(Data& data, const T& value) {
     pack_type(data, value);
 }
 
-template<class T>
-inline void pack_type(std::vector<uint8_t>& data, const T& value) {
+template<typename Data, typename T>
+inline void pack_type(Data& data, const T& value) {
 
     if constexpr(is_map<T>::value) {
         pack_map(data, value);
@@ -911,13 +941,13 @@ inline void pack_type(std::vector<uint8_t>& data, const T& value) {
         pack_array(data, value);
     } else {
         // custom
-        if constexpr(has_pack_data<T>::value && !has_pack_const_packer<T>::value) {
+        if constexpr(has_pack_data<Data, T>::value && !has_pack_const_packer<Data, T>::value) {
             value.pack(data);
-        }  else if constexpr(has_pack_const_packer<T>::value) {
+        }  else if constexpr(has_pack_const_packer<Data, T>::value) {
             pack_const_packer(data, value);
-        } else if constexpr(has_pack_packer<T>::value) {
+        } else if constexpr(has_pack_packer<Data, T>::value) {
             pack_packer(data, value);
-        } else if constexpr (has_func_pack_custom_packer<T>::value) {
+        } else if constexpr (has_func_pack_custom_packer<Data, T>::value) {
             pack_custom_packer(data, value);
         } else {
             pack_custom(data, value);
@@ -925,47 +955,48 @@ inline void pack_type(std::vector<uint8_t>& data, const T& value) {
     }
 }
 
-template<class T>
+template<typename Data, typename T>
 inline bool do_unpack_type(Cursor& cursor, T& value) {
-    bool ok = unpack_type(cursor, value);
+    bool ok = unpack_type<Data>(cursor, value);
     return ok;
 }
 
-template<class T>
+template<typename Data, typename T>
 inline bool unpack_type(Cursor& cursor, T& value) {
 
     if constexpr(is_map<T>::value) {
-        return unpack_map(cursor, value);
+        return unpack_map<Data>(cursor, value);
     } else if constexpr(is_container<T>::value) {
-        return unpack_array(cursor, value);
+        return unpack_array<Data>(cursor, value);
     } else {
         // custom
-        if constexpr(has_unpack_cursor<T>::value && !has_unpack_unpacker<T>::value) {
+        if constexpr(has_unpack_cursor<T>::value && !has_unpack_unpacker<Data, T>::value) {
             value.unpack(cursor);
-        } else if constexpr(has_unpack_unpacker<T>::value) {
-            return unpack_unpacker(cursor, value);
-        } else if constexpr(has_pack_unpacker<T>::value) {
-            return pack_unpacker(cursor, value);
-        } else if constexpr (has_func_unpack_custom_unpacker<T>::value) {
-            return unpack_custom_unpacker(cursor, value);
+        } else if constexpr(has_unpack_unpacker<Data, T>::value) {
+            return unpack_unpacker<Data>(cursor, value);
+        } else if constexpr(has_pack_unpacker<Data, T>::value) {
+            return pack_unpacker<Data>(cursor, value);
+        } else if constexpr (has_func_unpack_custom_unpacker<Data, T>::value) {
+            return unpack_custom_unpacker<Data>(cursor, value);
         } else {
             return unpack_custom(cursor, value);
         }
     }
 }
 
-class Packer
+template<typename Data>
+class DataPacker
 {
 public:
 
-    Packer(std::vector<uint8_t>& d)
+    DataPacker(Data& d)
         : m_ref(d) {}
 
-    Packer()
+    DataPacker()
         : m_ref(m_data) {}
 
     template<class ... Types>
-    static void pack(std::vector<uint8_t>& data, const Types &... args) {
+    static void pack(Data& data, const Types &... args) {
         do_pack(data, args...);
     }
 
@@ -979,31 +1010,32 @@ public:
         do_pack(m_ref, args...);
     }
 
-    const std::vector<uint8_t>& data() const {
+    const Data& data() const {
         return m_ref;
     }
 
 private:
     template<class ... Types>
-    static void do_pack(std::vector<uint8_t>& data, const Types &... args) {
+    static void do_pack(Data& data, const Types &... args) {
         (do_pack_type(data, std::forward<const Types &>(args)), ...);
     }
 
-    std::vector<uint8_t> m_data;
-    std::vector<uint8_t>& m_ref;
+    Data m_data;
+    Data& m_ref;
 };
 
-class UnPacker
+template<typename Data>
+class DataUnPacker
 {
 public:
 
-    UnPacker(Cursor& cursor)
+    DataUnPacker(Cursor& cursor)
         : m_cursor(cursor) {}
 
-    UnPacker(const uint8_t* start, std::size_t size)
+    DataUnPacker(const uint8_t* start, std::size_t size)
         : m_cursor(Cursor(start, size)) {}
 
-    UnPacker(const std::vector<uint8_t>& data)
+    DataUnPacker(const Data& data)
         : m_cursor(Cursor(&data[0], data.size())) {}
 
     template<class ... Types>
@@ -1018,7 +1050,7 @@ public:
     }
 
     template<class ... Types>
-    static bool unpack(const std::vector<uint8_t>& data, Types&... args) {
+    static bool unpack(const Data& data, Types&... args) {
         Cursor c(&data[0], data.size());
         return do_unpack(c, args...);
     }
@@ -1040,7 +1072,7 @@ public:
 private:
     template<class ... Types>
     static bool do_unpack(Cursor& c, Types&... args) {
-        bool ok = (do_unpack_type(c, std::forward<Types&>(args)), ...);
+        bool ok = (do_unpack_type<Data>(c, std::forward<Types&>(args)), ...);
         return ok && !c.error;
     }
 
@@ -1048,47 +1080,47 @@ private:
     Cursor m_cursor;
 };
 
-template <typename T>
-inline void pack_packer(std::vector<uint8_t>& data, const T& value)
+template <typename Data, typename T>
+inline void pack_packer(Data& data, const T& value)
 {
-    Packer p(data);
+    DataPacker<Data> p(data);
     const_cast<T&>(value).pack(p);
 }
 
-template <typename T>
-inline void pack_const_packer(std::vector<uint8_t>& data, const T& value)
+template <typename Data, typename T>
+inline void pack_const_packer(Data& data, const T& value)
 {
-    Packer p(data);
+    DataPacker<Data> p(data);
     value.pack(p);
 }
 
-template <typename T>
-inline void pack_custom_packer(std::vector<uint8_t>& data, const T& value)
+template <typename Data, typename T>
+inline void pack_custom_packer(Data& data, const T& value)
 {
-    Packer p(data);
+    DataPacker<Data> p(data);
     pack_custom(p, value);
 }
 
-template <typename T>
+template <typename Data, typename T>
 inline bool pack_unpacker(Cursor& cursor, T& value)
 {
-    UnPacker u(cursor);
+    DataUnPacker<Data> u(cursor);
     value.pack(u);
     return u.success();
 }
 
-template <typename T>
+template <typename Data, typename T>
 inline bool unpack_unpacker(Cursor& cursor, T& value)
 {
-    UnPacker u(cursor);
+    DataUnPacker<Data> u(cursor);
     value.unpack(u);
     return u.success();
 }
 
-template <typename T>
+template <typename Data, typename T>
 inline bool unpack_custom_unpacker(Cursor& cursor, T& value)
 {
-    UnPacker u(cursor);
+    DataUnPacker<Data> u(cursor);
     unpack_custom(u, value);
     cursor = u.cursor();
     return u.success();

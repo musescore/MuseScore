@@ -223,7 +223,7 @@ struct Options {
 };
 
 template<class ... Types>
-static inline void pack(std::vector<uint8_t>& data, const Types&... args)
+static inline void pack_to_data(std::vector<uint8_t>& data, const Types&... args)
 {
     Packer::pack(data, args ...);
 }
@@ -255,6 +255,6 @@ static inline bool unpack(muse::msgpack::Cursor& cursor, Types&... args)
 template<class ... Types>
 static inline bool unpack(const ByteArray& data, Types&... args)
 {
-    return UnPacker::unpack(data.constVData(), args ...);
+    return DataUnPacker<std::vector<uint8_t>>::unpack(data.constVData(), args ...);
 }
 }

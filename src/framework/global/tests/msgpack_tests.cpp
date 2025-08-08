@@ -40,7 +40,7 @@ bool unpack_custom(muse::msgpack::Cursor& cursor, muse::ObjectCustom& value);
 
 void pack_custom(std::vector<uint8_t>& data, const muse::ObjectCustom& value)
 {
-    muse::msgpack::pack(data, value.i32, value.str);
+    muse::msgpack::pack_to_data(data, value.i32, value.str);
 }
 
 bool unpack_custom(muse::msgpack::Cursor& cursor, muse::ObjectCustom& value)
@@ -67,7 +67,7 @@ struct ObjectWithPack {
     String mustr;
     number_t<float> mureal;
 
-    template<class T>
+    template<typename T>
     void pack(T& pack)
     {
         pack(i32, ui64, float32, float64, str, b, vi, map, mustr, mureal);

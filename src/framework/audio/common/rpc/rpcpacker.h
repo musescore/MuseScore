@@ -582,6 +582,46 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& v
 
 namespace muse::audio::rpc {
 using Options = msgpack::Options;
+
+template<typename T>
+class RpcAllocator
+{
+public:
+    using value_type = T;
+    using pointer = T*;
+    using const_pointer = const T*;
+    using reference = T&;
+    using const_reference = const T&;
+    using size_type = std::size_t;
+
+private:
+    static inline std::vector<uint8_t> m_pool;
+    static inline size_t m_currentPos = 0;
+    static inline std::mutex m_mutex;
+
+public:
+    RpcAllocator() = default;
+
+    pointer allocate(size_type n, const void* = static_cast<const void*>(0))
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
+        if (m_currentPos + n > m_pool.size()) {
+            size_type newSize = std::max(m_pool.size() * 2, n);
+            m_pool.resize(newSize);
+        }
+
+        pointer ptr = reinterpret_cast<pointer>(&m_pool[m_currentPos]);
+        m_currentPos += n;
+        return ptr;
+    }
+
+    void deallocate(pointer, size_type n)
+    {
+        m_currentPos -= n;
+    }
+};
+
 class RpcPacker
 {
 public:
@@ -590,12 +630,25 @@ public:
     template<class ... Types>
     static ByteArray pack(const Options& opt, const Types&... args)
     {
+        // RpcAllocator<uint8_t> allocator;
+        // // std::vector<uint8_t, RpcAllocator<uint8_t>> data(allocator);
+        // std::vector<uint8_t> data;
+        // data.reserve(opt.rezerveSize);
+        // msgpack::pack_to_data(data, args ...);
+        // return ByteArray::fromRawData(&data[0], data.size());
+
         return msgpack::pack(opt, args ...);
     }
 
     template<class ... Types>
     static ByteArray pack(const Types&... args)
     {
+        // RpcAllocator<uint8_t> allocator;
+        // //std::vector<uint8_t, RpcAllocator<uint8_t>> data(allocator);
+        // std::vector<uint8_t> data;
+        // msgpack::pack_to_data(data, args ...);
+        // return ByteArray::fromRawData(&data[0], data.size());
+
         return msgpack::pack(args ...);
     }
 

@@ -21,14 +21,23 @@
  */
 #pragma once
 
+#include <vector>
+#include <cstdint>
+
 namespace kors::msgpack {
-class Packer;
-class UnPacker;
+template<typename Data>
+class DataPacker;
+template<typename Data>
+class DataUnPacker;
 struct Cursor;
 }
 
 namespace muse::msgpack {
-using Packer = kors::msgpack::Packer;
-using UnPacker = kors::msgpack::UnPacker;
+template<typename Data = std::vector<uint8_t>>
+using DataPacker = kors::msgpack::DataPacker<Data>;
+using Packer = kors::msgpack::DataPacker<std::vector<uint8_t>>;
+template<typename Data = std::vector<uint8_t>>
+using DataUnPacker = kors::msgpack::DataUnPacker<Data>;
+using UnPacker = kors::msgpack::DataUnPacker<std::vector<uint8_t>>;
 using Cursor = kors::msgpack::Cursor;
 }
