@@ -44,6 +44,7 @@ RowLayout {
 
     property bool isExpandable: false
     property bool isExpanded: false
+    property bool makeRoomForExpandButton: root.expandableDepth !== 0
     property int expandableDepth: 0
 
     signal visibilityButtonClicked(var isVisibile);
@@ -90,7 +91,7 @@ RowLayout {
 
             visible: root.isExpandable
 
-            width: expandButton.visible || root.expandableDepth !== 0 ? expandButton.implicitWidth : 0
+            width: expandButton.visible || root.makeRoomForExpandButton ? expandButton.implicitWidth : 0
 
             objectName: "ExpandBtn"
             enabled: expandButton.visible

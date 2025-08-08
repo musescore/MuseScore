@@ -22,12 +22,11 @@
 
 #include "staffvisibilitypopupmodel.h"
 
+#include <algorithm>
+#include <iterator>
+#include <memory>
+
 #include "containers.h"
-#include "dom/engravingobject.h"
-#include "dom/measurebase.h"
-#include "inotation.h"
-#include "types/id.h"
-#include "types/translatablestring.h"
 
 #include "engraving/dom/measure.h"
 #include "engraving/dom/staff.h"
@@ -35,9 +34,6 @@
 #include "engraving/dom/system.h"
 #include "engraving/types/fraction.h"
 #include "engraving/types/types.h"
-#include <algorithm>
-#include <iterator>
-#include <memory>
 
 using namespace mu::notation;
 
@@ -199,7 +195,10 @@ int EmptyStavesVisibilityModel::rowCount(const QModelIndex& parent) const
     if (parent.isValid()) {
         const PartItem* part = static_cast<const PartItem*>(parent.internalPointer());
         assert(part);
-        return static_cast<int>(part->staves.size());
+        if (part->staves.size() > 1) {
+            return static_cast<int>(part->staves.size());
+        }
+        return 0; // If part has only one staff, it is not displayed separately
     }
 
     return static_cast<int>(m_parts.size());
@@ -241,11 +240,9 @@ bool EmptyStavesVisibilityModel::setData(const QModelIndex& index, const QVarian
     assert(item);
 
     if (StaffItem* staff = dynamic_cast<StaffItem*>(item)) {
-        setStaffVisibility(staff,
-                           value.toBool() ? engraving::AutoOnOff::ON : engraving::AutoOnOff::OFF);
+        setStaffVisibility(staff, value.toBool() ? engraving::AutoOnOff::ON : engraving::AutoOnOff::OFF);
     } else if (PartItem* part = dynamic_cast<PartItem*>(item)) {
-        setPartVisibility(part,
-                          value.toBool() ? engraving::AutoOnOff::ON : engraving::AutoOnOff::OFF);
+        setPartVisibility(part, value.toBool() ? engraving::AutoOnOff::ON : engraving::AutoOnOff::OFF);
     } else {
         return false;
     }
@@ -317,8 +314,7 @@ void EmptyStavesVisibilityModel::setPartVisibility(PartItem* partItem, engraving
     assert(score);
 
     for (const auto& staffItem : partItem->staves) {
-        score->cmdSetHideStaffIfEmptyOverride(
-            staffItem->staffIndex, m_system, value);
+        score->cmdSetHideStaffIfEmptyOverride(staffItem->staffIndex, m_system, value);
     }
 
     m_notation->undoStack()->commitChanges();
@@ -374,9 +370,11 @@ void EmptyStavesVisibilityModel::updateData(PartItem* partItem)
     QModelIndex partModelIndex = index(row, 0, QModelIndex());
     emit dataChanged(partModelIndex, partModelIndex, { IsVisible, CanReset });
 
-    emit dataChanged(index(0, 0, partModelIndex),
-                     index(static_cast<int>(partItem->staves.size()) - 1, 0, partModelIndex),
-                     { IsVisible, CanReset });
+    if (partItem->staves.size() > 1) {
+        emit dataChanged(index(0, 0, partModelIndex),
+                         index(static_cast<int>(partItem->staves.size()) - 1, 0, partModelIndex),
+                         { IsVisible, CanReset });
+    }
 
     emit canResetAllChanged();
 }
