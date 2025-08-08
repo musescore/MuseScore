@@ -71,6 +71,7 @@ struct HarmonyRenderItem {
 
     virtual double leftPadding() const = 0;
     virtual double rightPadding() const = 0;
+    virtual double bboxBaseLine() const = 0;
 
     virtual HarmonyRenderItemType type() const = 0;
 
@@ -98,6 +99,8 @@ struct ChordSymbolParen : HarmonyRenderItem {
     double leftPadding() const override { return paren->direction() == DirectionH::LEFT ? OUTER_PADDING : INNER_PADDING; }
     double rightPadding() const override { return paren->direction() == DirectionH::LEFT ? INNER_PADDING : OUTER_PADDING; }
 
+    double bboxBaseLine() const override { return bottom; }
+
     HarmonyRenderItemType type() const override { return HarmonyRenderItemType::PAREN; }
 
 private:
@@ -112,7 +115,7 @@ private:
 struct TextSegment : HarmonyRenderItem {
     double width() const;
     double capHeight() const;
-    double bboxBaseLine() const;
+    double bboxBaseLine() const override;
     RectF boundingRect() const override;
     RectF tightBoundingRect() const;
 

@@ -1599,8 +1599,8 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
             y += rowHeights[r] + rowGap;
         }
 
-        double baseline = harmony->ldata()->textList.value().empty() ? 0.0 : harmony->ldata()->textList.value().front()->bboxBaseLine()
-                          + harmony->ldata()->textList.value().front()->pos().y();
+        std::vector<HarmonyRenderItem*> renderItemList = harmony->ldata()->renderItemList.value();
+        double baseline = renderItemList.empty() ? 0.0 : renderItemList.front()->bboxBaseLine() + renderItemList.front()->pos().y();
 
         double baseLineAdjust = harmony->ldata()->bbox().bottom() - baseline;
 
