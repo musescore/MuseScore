@@ -25,6 +25,7 @@
 #include "dom/marker.h"
 #include "dom/system.h"
 #include "engraving/dom/beam.h"
+#include "engraving/dom/box.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/masterscore.h"
@@ -43,6 +44,7 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
     if (mscVersion < 460) {
         resetMarkerLeftFontSize(score);
         resetRestVerticalOffsets(score);
+        adjustVBoxDistances(score);
     }
 
     if (mscVersion < 440) {
@@ -205,6 +207,20 @@ void EngravingCompat::resetRestVerticalOffsets(MasterScore* masterScore)
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            MeasureBase* nextmb = mb->next();
+            if (mb->isVBoxBase() && nextmb && nextmb->isVBoxBase()) {
+                VBox* first = static_cast<VBox*>(mb);
+                VBox* second = static_cast<VBox*>(nextmb);
+                first->setBottomGap(first->bottomGap() + second->topGap()); // Because pre-4.6 these used to be added
             }
         }
     }

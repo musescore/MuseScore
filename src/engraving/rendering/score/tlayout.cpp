@@ -1554,24 +1554,9 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
     }
 
     const double cellWidth = maxFretDiagramWidth;
-    const size_t rows = rowHeights.size();
     const size_t columns = std::min(totalDiagrams, chordsPerRow);
 
-    double totalTableHeight = 0.0;
-    for (size_t i = 0; i < rows; ++i) {
-        totalTableHeight += rowHeights[i];
-        if (i > 0) {
-            totalTableHeight += rowGap;
-        }
-    }
-
-    if (muse::RealIsNull(totalTableHeight)) {
-        totalTableHeight = item->minHeight();
-    }
-
     const double totalTableWidth = cellWidth * columns + (columns - 1) * columnGap;
-
-    ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), totalTableHeight);
 
     AlignH alignH = item->contentHorizontalAlignment();
     const double leftMargin = item->getProperty(Pid::LEFT_MARGIN).toDouble() * spatium;
@@ -1579,12 +1564,16 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
     const double topMargin = item->getProperty(Pid::TOP_MARGIN).toDouble() * spatium;
     const double bottomMargin = item->getProperty(Pid::BOTTOM_MARGIN).toDouble() * spatium;
 
+    const double width = item->system()->width();
+
     const double startX = alignH == AlignH::HCENTER
-                          ? (item->width() - totalTableWidth) / 2
-                          : alignH == AlignH::RIGHT ? item->width() - totalTableWidth : 0.0;
-    const double startY = !muse::RealIsNull(topMargin) ? topMargin : -bottomMargin;
+                          ? (width - totalTableWidth) / 2
+                          : alignH == AlignH::RIGHT ? width - totalTableWidth : 0.0;
+    const double startY = topMargin;
 
     const double shapeMarginAboveDiagram = ctx.conf().styleMM(Sid::harmonyFretDist).val() * 1.5;
+
+    double bottomY = 0.0;
 
     for (size_t i = 0; i < totalDiagrams; ++i) {
         FretDiagram* fretDiagram = fretDiagrams[i];
@@ -1618,7 +1607,11 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
         double fretDiagramY = y + harmonyHeights[row] + shapeMarginAboveDiagram;
 
         fretDiagram->mutldata()->setPos(PointF(fretDiagramX, fretDiagramY));
+
+        bottomY = std::max(bottomY, fretDiagram->mutldata()->bbox().translated(fretDiagram->mutldata()->pos()).bottom());
     }
+
+    ldata->setBbox(0.0, 0.0, width, bottomY + bottomMargin);
 }
 
 void TLayout::layoutTBox(const TBox* item, TBox::LayoutData* ldata, const LayoutContext& ctx)
