@@ -57,6 +57,9 @@ Ret AudioEngine::init(AudioBufferPtr bufferPtr, const RenderConstraints& consts)
     }
 
     m_mixer = std::make_shared<Mixer>(nullptr);
+
+    m_mixer->init(consts.desiredAudioThreadNumber, consts.minTrackCountForMultithreading);
+
     m_buffer = std::move(bufferPtr);
     m_renderConsts = consts;
 

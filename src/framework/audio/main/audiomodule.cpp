@@ -316,6 +316,8 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
     worker::AudioEngine::RenderConstraints consts;
     consts.minSamplesToReserveWhenIdle = m_configuration->minSamplesToReserve(RenderMode::IdleMode);
     consts.minSamplesToReserveInRealtime = m_configuration->minSamplesToReserve(RenderMode::RealTimeMode);
+    consts.desiredAudioThreadNumber = m_configuration->desiredAudioThreadNumber();
+    consts.minTrackCountForMultithreading = m_configuration->minTrackCountForMultithreading();
 
     auto workerSetup = [this, activeSpec, consts]() {
         AudioSanitizer::setupWorkerThread();

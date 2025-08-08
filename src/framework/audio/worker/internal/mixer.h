@@ -31,8 +31,6 @@
 
 #include "abstractaudiosource.h"
 
-#include "../../iaudioconfiguration.h"
-
 #include "../iclock.h"
 #include "../ifxresolver.h"
 
@@ -47,11 +45,12 @@ namespace muse::audio::worker {
 class Mixer : public AbstractAudioSource, public Injectable, public async::Asyncable, public std::enable_shared_from_this<Mixer>
 {
     Inject<fx::IFxResolver> fxResolver = { this };
-    Inject<IAudioConfiguration> configuration = { this };
 
 public:
     Mixer(const modularity::ContextPtr& iocCtx);
     ~Mixer();
+
+    void init(size_t desiredAudioThreadNumber, size_t minTrackCountForMultithreading);
 
     IAudioSourcePtr mixedSource();
 
