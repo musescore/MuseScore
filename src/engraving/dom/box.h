@@ -158,10 +158,18 @@ public:
 
     PropertyValue getProperty(Pid propertyId) const override;
     PropertyValue propertyDefault(Pid) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
 
     void startEditDrag(EditData&) override;
 
     std::vector<PointF> gripsPositions(const EditData&) const override;
+
+    Spatium paddingToNotationAbove() const { return m_paddingToNotationAbove; }
+    Spatium paddingToNotationBelow() const { return m_paddingToNotationBelow; }
+
+private:
+    Spatium m_paddingToNotationAbove;
+    Spatium m_paddingToNotationBelow;
 };
 
 //---------------------------------------------------------

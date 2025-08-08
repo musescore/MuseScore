@@ -47,6 +47,8 @@ void VerticalFrameSettingsModel::createProperties()
     m_frameTopMargin = buildPropertyItem(Pid::TOP_MARGIN);
     m_frameBottomMargin = buildPropertyItem(Pid::BOTTOM_MARGIN);
     m_isSizeSpatiumDependent = buildPropertyItem(Pid::SIZE_SPATIUM_DEPENDENT);
+    m_paddingToNotationAbove = buildPropertyItem(Pid::PADDING_TO_NOTATION_ABOVE);
+    m_paddingToNotationBelow = buildPropertyItem(Pid::PADDING_TO_NOTATION_BELOW);
 }
 
 void VerticalFrameSettingsModel::requestElements()
@@ -64,7 +66,9 @@ void VerticalFrameSettingsModel::loadProperties()
         Pid::RIGHT_MARGIN,
         Pid::TOP_MARGIN,
         Pid::BOTTOM_MARGIN,
-        Pid::SIZE_SPATIUM_DEPENDENT
+        Pid::SIZE_SPATIUM_DEPENDENT,
+        Pid::PADDING_TO_NOTATION_ABOVE,
+        Pid::PADDING_TO_NOTATION_BELOW,
     };
 
     loadProperties(propertyIdSet);
@@ -80,6 +84,8 @@ void VerticalFrameSettingsModel::resetProperties()
     m_frameTopMargin->resetToDefault();
     m_frameBottomMargin->resetToDefault();
     m_isSizeSpatiumDependent->resetToDefault();
+    m_paddingToNotationAbove->resetToDefault();
+    m_paddingToNotationBelow->resetToDefault();
 }
 
 void VerticalFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
@@ -119,6 +125,14 @@ void VerticalFrameSettingsModel::loadProperties(const mu::engraving::PropertyIdS
 
     if (muse::contains(propertyIdSet, Pid::SIZE_SPATIUM_DEPENDENT)) {
         loadPropertyItem(m_isSizeSpatiumDependent);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::PADDING_TO_NOTATION_ABOVE)) {
+        loadPropertyItem(m_paddingToNotationAbove);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::PADDING_TO_NOTATION_BELOW)) {
+        loadPropertyItem(m_paddingToNotationBelow);
     }
 }
 
@@ -160,4 +174,14 @@ PropertyItem* VerticalFrameSettingsModel::frameBottomMargin() const
 PropertyItem* VerticalFrameSettingsModel::isSizeSpatiumDependent() const
 {
     return m_isSizeSpatiumDependent;
+}
+
+PropertyItem* VerticalFrameSettingsModel::paddingToNotationAbove() const
+{
+    return m_paddingToNotationAbove;
+}
+
+PropertyItem* VerticalFrameSettingsModel::paddingToNotationBelow() const
+{
+    return m_paddingToNotationBelow;
 }

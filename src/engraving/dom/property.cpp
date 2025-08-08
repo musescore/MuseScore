@@ -127,6 +127,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::RIGHT_MARGIN,            false, "rightMargin",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "right padding") },
     { Pid::TOP_MARGIN,              false, "topMargin",             P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "top padding") },
     { Pid::BOTTOM_MARGIN,           false, "bottomMargin",          P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bottom padding") },
+    { Pid::PADDING_TO_NOTATION_ABOVE, false, "paddingToNotationAbove", P_TYPE::SPATIUM,         PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "padding to notation above") },
+    { Pid::PADDING_TO_NOTATION_BELOW, false, "paddingToNotationBelow", P_TYPE::SPATIUM,         PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "padding to notation below") },
+
     { Pid::LAYOUT_BREAK,            false, "subtype",               P_TYPE::LAYOUTBREAK_TYPE,   PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "subtype") },
     { Pid::AUTOSCALE,               false, "autoScale",             P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "autoscale") },
     { Pid::SIZE,                    false, "size",                  P_TYPE::SIZE,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "size") },

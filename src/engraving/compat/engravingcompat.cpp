@@ -217,10 +217,15 @@ void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
     for (Score* score : masterScore->scoreList()) {
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             MeasureBase* nextmb = mb->next();
-            if (mb->isVBoxBase() && nextmb && nextmb->isVBoxBase()) {
-                VBox* first = static_cast<VBox*>(mb);
-                VBox* second = static_cast<VBox*>(nextmb);
-                first->setBottomGap(first->bottomGap() + second->topGap()); // Because pre-4.6 these used to be added
+            if (mb->isVBoxBase()) {
+                VBox* vbox = static_cast<VBox*>(mb);
+                vbox->setProperty(Pid::PADDING_TO_NOTATION_ABOVE, Spatium()); // Because pre-4.6 these didn't exist
+                vbox->setProperty(Pid::PADDING_TO_NOTATION_BELOW, Spatium());
+                if (nextmb && nextmb->isVBoxBase()) {
+                    VBox* first = static_cast<VBox*>(mb);
+                    VBox* second = static_cast<VBox*>(nextmb);
+                    first->setBottomGap(first->bottomGap() + second->topGap()); // Because pre-4.6 these used to be added
+                }
             }
         }
     }

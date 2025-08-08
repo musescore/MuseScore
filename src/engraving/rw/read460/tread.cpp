@@ -2224,6 +2224,8 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
             //! but when we add it to Box, the parent will be rewritten.
             b->add(vb);
         }
+    } else if (TRead::readProperty(b, tag, e, ctx, Pid::PADDING_TO_NOTATION_ABOVE)) {
+    } else if (TRead::readProperty(b, tag, e, ctx, Pid::PADDING_TO_NOTATION_BELOW)) {
     } else if (TRead::readProperties(static_cast<MeasureBase*>(b), e, ctx)) {
     } else {
         return false;

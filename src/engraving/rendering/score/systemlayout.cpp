@@ -2675,13 +2675,15 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     const LayoutConfiguration& conf = ctx.conf();
     const DomAccessor& dom = ctx.dom();
 
-    const Box* topVBox = top->vbox();
-    const Box* bottomVBox = bottom->vbox();
+    const VBox* topVBox = static_cast<VBox*>(top->vbox());
+    const VBox* bottomVBox = static_cast<VBox*>(bottom->vbox());
 
     if (topVBox && !bottomVBox) {
-        return std::max(topVBox->absoluteFromSpatium(topVBox->bottomGap()), bottom->minTop());
+        return std::max(topVBox->absoluteFromSpatium(topVBox->bottomGap()),
+                        bottom->minTop() + topVBox->absoluteFromSpatium(topVBox->paddingToNotationBelow()));
     } else if (!topVBox && bottomVBox) {
-        return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()), top->minBottom());
+        return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()),
+                        top->minBottom() + bottomVBox->absoluteFromSpatium(bottomVBox->paddingToNotationAbove()));
     } else if (topVBox && bottomVBox) {
         double largestGap = std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()),
                                      topVBox->absoluteFromSpatium(topVBox->bottomGap()));
