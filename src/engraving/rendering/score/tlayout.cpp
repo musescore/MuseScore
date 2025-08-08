@@ -1524,9 +1524,13 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     //! The height of each row is determined by the height of the tallest cell in that row
     std::vector<double> rowHeights;
+    std::vector<double> harmonyHeights;
+    std::vector<double> harmonyBaselines;
     for (size_t i = 0; i < totalDiagrams; i += chordsPerRow) {
         size_t itemsInRow = std::min(chordsPerRow, totalDiagrams - i);
         double maxRowHeight = 0.0;
+        double maxHarmonyHeight = 0.0;
+        double harmonyBaseline = 0.0;
 
         for (size_t j = 0; j < itemsInRow; ++j) {
             FretDiagram* fretDiagram = fretDiagrams[i + j];
@@ -1539,9 +1543,13 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
             double height = fretRect.united(harmonyRect).height();
             maxRowHeight = std::max(maxRowHeight, height);
+            maxHarmonyHeight = std::max(maxHarmonyHeight, harmonyRect.height());
+            harmonyBaseline = std::max(harmonyBaseline, fretDiagram->harmony()->baseLine());
         }
 
         rowHeights.push_back(maxRowHeight);
+        harmonyHeights.push_back(maxHarmonyHeight);
+        harmonyBaselines.push_back(harmonyBaseline);
     }
 
     const double cellWidth = maxFretDiagramWidth;
@@ -1579,6 +1587,7 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     for (size_t i = 0; i < totalDiagrams; ++i) {
         FretDiagram* fretDiagram = fretDiagrams[i];
+        Harmony* harmony = fretDiagram->harmony();
 
         size_t row = i / chordsPerRow;
         size_t col = i % chordsPerRow;
@@ -1597,8 +1606,15 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
             y += rowHeights[r] + rowGap;
         }
 
+        double baseline = harmony->ldata()->textList.value().empty() ? 0.0 : harmony->ldata()->textList.value().front()->bboxBaseLine()
+                          + harmony->ldata()->textList.value().front()->pos().y();
+
+        double baseLineAdjust = harmony->ldata()->bbox().bottom() - baseline;
+
+        harmony->mutldata()->moveY(-(harmonyBaselines[row]) + baseLineAdjust);
+
         double fretDiagramX = x;
-        double fretDiagramY = y + fretDiagram->harmony()->ldata()->harmonyHeight + shapeMarginAboveDiagram;
+        double fretDiagramY = y + harmonyHeights[row] + shapeMarginAboveDiagram;
 
         fretDiagram->mutldata()->setPos(PointF(fretDiagramX, fretDiagramY));
     }
