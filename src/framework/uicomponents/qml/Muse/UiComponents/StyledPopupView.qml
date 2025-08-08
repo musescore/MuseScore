@@ -46,9 +46,9 @@ PopupView {
 
     property alias useDropShadow: content.useDropShadow
 
-    property bool isPlacementVertical: (root.placementPolicies === PopupView.Default)
-                                        || (root.placementPolicies === PopupView.PreferAbove)
-                                        || (root.placementPolicies === PopupView.PreferBelow)
+    property bool isPlacementVertical:  (root.placementPolicies === PopupView.Default)
+                                        || (root.placementPolicies & PopupView.PreferAbove)
+                                        || (root.placementPolicies & PopupView.PreferBelow)
 
     contentWidth: 240
     contentHeight: content.contentBodyHeight
