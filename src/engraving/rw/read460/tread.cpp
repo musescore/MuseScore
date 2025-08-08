@@ -3562,6 +3562,7 @@ void TRead::read(Rest* r, XmlReader& e, ReadContext& ctx)
             TRead::read(dot, e, ctx);
             r->add(dot);
         } else if (TRead::readStyledProperty(r, tag, e, ctx)) {
+        } else if (TRead::readProperty(r, tag, e, ctx, Pid::ALIGN_WITH_OTHER_RESTS)) {
         } else if (TRead::readProperties(r, e, ctx)) {
         } else {
             e.unknown();

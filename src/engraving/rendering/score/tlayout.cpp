@@ -172,6 +172,7 @@
 #include "markerlayout.h"
 #include "measurenumberlayout.h"
 #include "parenthesislayout.h"
+#include "restlayout.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -4722,123 +4723,7 @@ void TLayout::checkRehearsalMarkVSBigTimeSig(const RehearsalMark* item, TextBase
 
 void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx)
 {
-    LAYOUT_CALL_ITEM(item);
-    if (item->isGap()) {
-        return;
-    }
-
-    if (DeadSlapped* ds = item->deadSlapped()) {
-        LD_INDEPENDENT;
-        layoutDeadSlapped(ds, ds->mutldata());
-        return;
-    }
-
-    //! NOTE The types are listed here explicitly to show what types there are (see Rest::add method)
-    //! and accordingly show what depends on.
-    for (EngravingItem* e : item->el()) {
-        switch (e->type()) {
-        case ElementType::SYMBOL: {
-            Symbol* s = item_cast<Symbol*>(e);
-            // LD_X not clear yet
-            layoutSymbol(s, s->mutldata(), ctx);
-        } break;
-        case ElementType::IMAGE: {
-            Image* im = item_cast<Image*>(e);
-            LD_INDEPENDENT;
-            layoutImage(im, im->mutldata());
-        } break;
-        default:
-            UNREACHABLE;
-        }
-    }
-
-    if (item->deadSlapped()) {
-        ldata->setIsSkipDraw(true);
-        return;
-    }
-    ldata->setIsSkipDraw(false);
-
-    double spatium = item->spatium();
-
-    ldata->setPosX(0.0);
-    const StaffType* stt = item->staffType();
-    if (stt && stt->isTabStaff()) {
-        // if rests are shown and note values are shown as duration symbols
-        if (stt->showRests() && stt->genDurations()) {
-            DurationType type = item->durationType().type();
-            int dots = item->durationType().dots();
-            // if rest is whole measure, convert into actual type and dot values
-            if (type == DurationType::V_MEASURE && item->measure()) {
-                Fraction ticks = item->measure()->ticks();
-                TDuration dur  = TDuration(ticks).type();
-                type           = dur.type();
-                dots           = dur.dots();
-            }
-            // symbol needed; if not exist, create, if exists, update duration
-            if (!item->tabDur()) {
-                const_cast<Rest*>(item)->setTabDur(new TabDurationSymbol(const_cast<Rest*>(item), stt, type, dots));
-            } else {
-                item->tabDur()->setDuration(type, dots, stt);
-            }
-            item->tabDur()->setParent(const_cast<Rest*>(item));
-// needed?        _tabDur->setTrack(track());
-            TLayout::layoutTabDurationSymbol(item->tabDur(), item->tabDur()->mutldata());
-            ldata->setBbox(item->tabDur()->ldata()->bbox());
-            ldata->setPos(0.0, 0.0);                   // no rest is drawn: reset any position might be set for it
-            return;
-        }
-        // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
-        // this is to ensure horiz space is reserved for rest, even if they are not displayed
-        // Rest::draw() will skip their drawing, if not needed
-        if (item->tabDur()) {
-            delete item->tabDur();
-            const_cast<Rest*>(item)->setTabDur(nullptr);
-        }
-    }
-
-    const_cast<Rest*>(item)->setDotLine(Rest::getDotline(item->durationType().type()));
-
-    double yOff = item->offset().y();
-    const Staff* stf = item->staff();
-    const StaffType* st = stf ? stf->staffTypeForElement(item) : 0;
-    double lineDist = st ? st->lineDistance().val() : 1.0;
-    int userLine   = RealIsNull(yOff) ? 0 : lrint(yOff / (lineDist * spatium));
-    int lines      = st ? st->lines() : 5;
-
-    int naturalLine = item->computeNaturalLine(lines); // Measured in 1sp steps
-    int voiceOffset = item->computeVoiceOffset(lines, ldata); // Measured in 1sp steps
-    int wholeRestOffset = item->computeWholeOrBreveRestOffset(voiceOffset, lines);
-    int finalLine = naturalLine + voiceOffset + wholeRestOffset;
-
-    ldata->sym = item->getSymbol(item->durationType().type(), finalLine + userLine, lines);
-
-    ldata->setPosY(finalLine * lineDist * spatium);
-    if (!item->shouldNotBeDrawn()) {
-        ChordLayout::fillShape(item, ldata, ctx.conf());
-    }
-
-    auto layoutRestDots = [](const Rest* item, const LayoutConfiguration& conf, Rest::LayoutData* ldata)
-    {
-        const_cast<Rest*>(item)->checkDots();
-        double visibleX = item->symWidthNoLedgerLines(ldata) + conf.styleMM(Sid::dotNoteDistance) * item->mag();
-        double visibleDX = conf.styleMM(Sid::dotDotDistance) * item->mag();
-        double invisibleX = item->symWidthNoLedgerLines(ldata);
-        double y = item->dotLine() * item->spatium() * .5;
-        for (NoteDot* dot : item->dotList()) {
-            NoteDot::LayoutData* dotldata = dot->mutldata();
-            TLayout::layoutNoteDot(dot, dotldata);
-            if (dot->visible()) {
-                dotldata->setPos(visibleX, y);
-                visibleX += visibleDX;
-            } else {
-                invisibleX +=  0.1 * item->spatium();
-                dotldata->setPos(invisibleX, y);
-                invisibleX += item->symWidth(SymId::augmentationDot) * dot->mag();
-            }
-        }
-    };
-
-    layoutRestDots(item, ctx.conf(), ldata);
+    RestLayout::layoutRest(item, ldata, ctx);
 }
 
 void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)

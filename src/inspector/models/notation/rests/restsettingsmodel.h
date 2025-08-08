@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,19 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_RESTSETTINGSPROXYMODEL_H
-#define MU_INSPECTOR_RESTSETTINGSPROXYMODEL_H
 
-#include "models/abstractinspectorproxymodel.h"
+#pragma once
+
+#include "models/abstractinspectormodel.h"
 
 namespace mu::inspector {
-class RestSettingsProxyModel : public AbstractInspectorProxyModel
+class RestSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-public:
-    explicit RestSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
-};
-}
+    Q_PROPERTY(PropertyItem * alignWithOtherRests READ alignWithOtherRests CONSTANT)
 
-#endif // MU_INSPECTOR_RESTSETTINGSPROXYMODEL_H
+public:
+    explicit RestSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    PropertyItem* alignWithOtherRests() const;
+
+private:
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+private:
+    PropertyItem* m_alignWithOtherRests = nullptr;
+};
+} // namespace mu::inspector

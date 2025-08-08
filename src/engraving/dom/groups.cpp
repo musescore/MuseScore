@@ -169,7 +169,14 @@ BeamMode Groups::beamMode(int tick, DurationType d) const
         break;
     case DurationType::V_16TH:   shift = 4;
         break;
-    case DurationType::V_32ND:   shift = 8;
+    case DurationType::V_32ND:
+    // All beams shorter than 32nds break in the same place
+    case DurationType::V_64TH:
+    case DurationType::V_128TH:
+    case DurationType::V_256TH:
+    case DurationType::V_512TH:
+    case DurationType::V_1024TH:
+        shift = 8;
         break;
     default:
         return BeamMode::AUTO;

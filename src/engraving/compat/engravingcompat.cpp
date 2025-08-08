@@ -42,6 +42,7 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
 
     if (mscVersion < 460) {
         resetMarkerLeftFontSize(score);
+        resetRestVerticalOffsets(score);
     }
 
     if (mscVersion < 440) {
@@ -174,6 +175,36 @@ void EngravingCompat::resetMarkerLeftFontSize(MasterScore* masterScore)
                     continue;
                 }
                 marker->setSize(CORRECT_DEFAULT_SIZE);
+            }
+        }
+    }
+}
+
+void EngravingCompat::resetRestVerticalOffsets(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            Measure* measure = toMeasure(mb);
+            for (staff_idx_t staff = 0; staff < score->nstaves(); ++staff) {
+                if (!measure->hasVoices(staff)) {
+                    continue;
+                }
+                track_idx_t startTrack = staff2track(staff);
+                track_idx_t endTrack = startTrack + VOICES;
+                for (Segment& seg : measure->segments()) {
+                    if (!seg.isChordRestType()) {
+                        continue;
+                    }
+                    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+                        EngravingItem* item = seg.element(track);
+                        if (item && item->isRest()) {
+                            item->resetProperty(Pid::OFFSET);
+                        }
+                    }
+                }
             }
         }
     }

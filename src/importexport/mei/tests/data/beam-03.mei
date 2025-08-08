@@ -97,6 +97,8 @@
                                  <note xml:id="n1e5do8b" pname="b" oct="4" />
                                  <note xml:id="n11mfx7r" pname="d" oct="5" />
                               </chord>
+                           </beam>
+                           <beam>
                               <chord xml:id="ci5tqxj" dur="64">
                                  <note xml:id="n1qj2hdo" pname="b" oct="4" />
                                  <note xml:id="n1texv5p" pname="d" oct="5" />

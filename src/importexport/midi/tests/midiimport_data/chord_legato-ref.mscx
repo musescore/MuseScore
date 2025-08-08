@@ -112,21 +112,21 @@
             <eid>J_J</eid>
             <durationType>128th</durationType>
             </Rest>
-          <Beam>
-            <eid>K_K</eid>
-            <l1>-26</l1>
-            <l2>-20</l2>
-            </Beam>
           <Chord>
-            <eid>L_L</eid>
+            <eid>K_K</eid>
             <durationType>128th</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>L_L</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
+          <Beam>
+            <eid>M_M</eid>
+            <l1>-12</l1>
+            <l2>-10</l2>
+            </Beam>
           <Chord>
             <eid>N_N</eid>
             <durationType>64th</durationType>
