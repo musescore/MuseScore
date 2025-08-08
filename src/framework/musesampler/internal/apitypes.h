@@ -357,6 +357,17 @@ typedef bool (* ms_MuseSampler_ready_to_play)(ms_MuseSampler ms);
 // ------------------------------------------------------------
 
 // Added in 0.102
+enum ms_ErrorLevel : int16_t
+{
+    ms_ErrorLevel_Debug = 0,
+    ms_ErrorLevel_Info = 1,
+    ms_ErrorLevel_Warning = 2,
+    ms_ErrorLevel_Error = 3,
+};
+
+typedef void (* ms_logging_callback)(ms_ErrorLevel level, const char* msg);
+typedef void (* ms_set_logging_callback)(ms_logging_callback callback);
+
 typedef bool (* ms_Instrument_is_online)(ms_InstrumentInfo);
 
 typedef void (* ms_MuseSampler_set_score_id)(ms_MuseSampler ms, const char* score_id);
