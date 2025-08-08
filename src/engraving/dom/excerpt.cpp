@@ -1669,7 +1669,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     for (auto i : oscore->spanner()) {
         Spanner* s = i.second;
-        if (!(s->tick() >= startTick && s->tick2() < endTick) || s->excludeFromOtherParts()) {
+        if (!(s->tick() >= startTick && s->tick2() <= endTick) || s->excludeFromOtherParts()) {
             continue;
         }
 
