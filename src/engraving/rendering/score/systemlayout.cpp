@@ -515,7 +515,8 @@ System* SystemLayout::getNextSystem(LayoutContext& ctx)
 }
 
 // Returns ALWAYS, NEVER, or INSTRUMENT
-static Staff::HideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty)
+static Staff::HideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty,
+                                       bool& hasSystemSpecificOverrides)
 {
     // Check for system-specific overrides
     bool hasSystemSpecificOverrideHide = false;
@@ -534,8 +535,10 @@ static Staff::HideMode computeHideMode(const System* system, const Staff* staff,
     }
 
     if (hasSystemSpecificOverrideDontHide) {
+        hasSystemSpecificOverrides = true;
         return Staff::HideMode::NEVER;
     } else if (hasSystemSpecificOverrideHide) {
+        hasSystemSpecificOverrides = true;
         return Staff::HideMode::ALWAYS;
     }
 
@@ -641,6 +644,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     const bool globalHideIfEmpty = ctx.conf().styleB(Sid::hideEmptyStaves)
                                    && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem));
 
+    bool hasSystemSpecificOverrides = false;
     bool hasHiddenStaves = false;
     bool systemIsEmpty = true;
     staff_idx_t staffIdx = 0;
@@ -657,7 +661,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
             continue;
         }
 
-        const Staff::HideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty);
+        const Staff::HideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty, hasSystemSpecificOverrides);
         const bool show = computeShowSysStaff(system, staff, staffIdx, stick, spanners, hideMode);
         ss->setShow(show);
         if (show) {
@@ -667,7 +671,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
         }
     }
 
-    system->setHasStaffVisibilityIndicator(hasHiddenStaves);
+    system->setHasStaffVisibilityIndicator(hasSystemSpecificOverrides || hasHiddenStaves);
 
     // If the system is empty, unhide the staves with `showIfEmpty` set to true, if any
     const Staff* firstVisible = nullptr;
@@ -684,7 +688,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     }
 
     // If there are no such staves, unhide the first one
-    if (systemIsEmpty && !ctx.dom().staves().empty()) {
+    if (systemIsEmpty) {
         const Staff* staff = firstVisible ? firstVisible : ctx.dom().staves().front();
         SysStaff* ss = system->staff(staff->idx());
         ss->setShow(true);
