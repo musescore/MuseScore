@@ -106,10 +106,14 @@ FocusableItem {
             navigation.row: alignmentSection.navigationRowEnd + 1
         }
 
+        SeparatorLine { anchors.margins: -12 }
+
         VerticalGapsSection {
             id: verticalGapsSection
             gapAbove: root.model ? root.model.gapAbove : null
             gapBelow: root.model ? root.model.gapBelow : null
+            notationGapAbove: root.model ? root.model.paddingToNotationAbove : null
+            notationGapBelow: root.model ? root.model.paddingToNotationBelow : null
 
             navigationPanel: root.navigationPanel
             navigationRowStart: matchStaffSize.navigationRowEnd + 1

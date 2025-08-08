@@ -786,6 +786,10 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
         bool force = ((item->isVBox() || item->isFBox()) && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
         writeProperty(item, xml, id, force);
     }
+    if (item->isVBoxBase()) {
+        writeProperty(item, xml, Pid::PADDING_TO_NOTATION_ABOVE);
+        writeProperty(item, xml, Pid::PADDING_TO_NOTATION_BELOW);
+    }
     writeItemProperties(item, xml, ctx);
     for (const EngravingItem* e : item->el()) {
         writeItem(e, xml, ctx);
