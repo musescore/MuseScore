@@ -91,7 +91,7 @@ Item {
     StyledTextLabel {
         id: notationPadding
         anchors.top: gapAbove.bottom
-        anchors.topMargin: 4
+        anchors.topMargin: 12
         horizontalAlignment: Qt.AlignLeft
         text: qsTrc("inspector", "Clearance for notation")
         font: ui.theme.bodyBoldFont

@@ -46,6 +46,8 @@ namespace mu::engraving {
 static const ElementStyle boxStyle {
     { Sid::systemFrameDistance,                Pid::TOP_GAP },
     { Sid::frameSystemDistance,                Pid::BOTTOM_GAP },
+    { Sid::paddingToNotationAbove,             Pid::PADDING_TO_NOTATION_ABOVE },
+    { Sid::paddingToNotationBelow,             Pid::PADDING_TO_NOTATION_BELOW },
 };
 
 static const ElementStyle hBoxStyle {
@@ -604,8 +606,6 @@ VBox::VBox(const ElementType& type, System* parent)
     initElementStyle(&boxStyle);
 
     resetProperty(Pid::BOX_HEIGHT);
-    resetProperty(Pid::PADDING_TO_NOTATION_ABOVE);
-    resetProperty(Pid::PADDING_TO_NOTATION_BELOW);
 
     setLineBreak(true);
 }
@@ -648,9 +648,6 @@ PropertyValue VBox::propertyDefault(Pid id) const
     switch (id) {
     case Pid::BOX_HEIGHT:
         return Spatium(10.0);
-    case Pid::PADDING_TO_NOTATION_ABOVE:
-    case Pid::PADDING_TO_NOTATION_BELOW:
-        return Spatium(2.0);
     default:
         return Box::propertyDefault(id);
     }

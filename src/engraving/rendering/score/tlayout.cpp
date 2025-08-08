@@ -1614,7 +1614,8 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
         bottomY = std::max(bottomY, fretDiagram->mutldata()->bbox().translated(fretDiagram->mutldata()->pos()).bottom());
     }
 
-    ldata->setBbox(0.0, 0.0, width, bottomY + bottomMargin);
+    double height = std::max(bottomY + bottomMargin, item->minHeight());
+    ldata->setBbox(0.0, 0.0, width, height);
 }
 
 void TLayout::layoutTBox(const TBox* item, TBox::LayoutData* ldata, const LayoutContext& ctx)
