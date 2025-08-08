@@ -36,6 +36,7 @@ class StaffSettingsModel : public QObject, public muse::Injectable
     Q_PROPERTY(int staffType READ staffType WRITE setStaffType NOTIFY staffTypeChanged)
     Q_PROPERTY(bool isSmallStaff READ isSmallStaff WRITE setIsSmallStaff NOTIFY isSmallStaffChanged)
     Q_PROPERTY(bool cutawayEnabled READ cutawayEnabled WRITE setCutawayEnabled NOTIFY cutawayEnabledChanged)
+    Q_PROPERTY(int hideWhenEmpty READ hideWhenEmpty WRITE setHideWhenEmpty NOTIFY hideWhenEmptyChanged)
 
     Q_PROPERTY(QVariantList voices READ voices NOTIFY voicesChanged)
     Q_PROPERTY(QVariantList allStaffTypes READ allStaffTypes NOTIFY allStaffTypesChanged)
@@ -50,6 +51,7 @@ public:
     int staffType() const;
     bool isSmallStaff() const;
     bool cutawayEnabled() const;
+    int hideWhenEmpty() const;
 
     QVariantList voices() const;
     QVariantList allStaffTypes() const;
@@ -65,6 +67,7 @@ public slots:
     void setStaffType(int type);
     void setIsSmallStaff(bool value);
     void setCutawayEnabled(bool value);
+    void setHideWhenEmpty(int value);
 
 signals:
     void staffTypeChanged();
@@ -72,6 +75,7 @@ signals:
     void voiceVisibilityChanged(int voiceIndex, bool visible);
     void isSmallStaffChanged();
     void cutawayEnabledChanged();
+    void hideWhenEmptyChanged();
     void allStaffTypesChanged();
 
     void isMainScoreChanged(bool isMainScore);

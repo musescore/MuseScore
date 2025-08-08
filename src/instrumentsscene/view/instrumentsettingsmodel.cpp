@@ -21,9 +21,12 @@
  */
 #include "instrumentsettingsmodel.h"
 
+#include "engraving/types/types.h"
+
 using namespace muse;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 InstrumentSettingsModel::InstrumentSettingsModel(QObject* parent)
     : QObject(parent)
@@ -48,6 +51,7 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
 
     m_instrumentName = part->instrument()->nameAsPlainText();
     m_instrumentAbbreviature = part->instrument()->abbreviatureAsPlainText();
+    m_hideWhenEmpty = static_cast<int>(part->hideWhenEmpty());
 
     context()->currentNotationChanged().onNotify(this, [this]() {
         emit isMainScoreChanged();
@@ -64,6 +68,11 @@ QString InstrumentSettingsModel::instrumentName() const
 QString InstrumentSettingsModel::abbreviature() const
 {
     return m_instrumentAbbreviature;
+}
+
+int InstrumentSettingsModel::hideWhenEmpty() const
+{
+    return m_hideWhenEmpty;
 }
 
 bool InstrumentSettingsModel::isMainScore() const
@@ -89,6 +98,29 @@ void InstrumentSettingsModel::setAbbreviature(const QString& abbreviature)
 
     m_instrumentAbbreviature = abbreviature;
     notationParts()->setInstrumentAbbreviature(m_instrumentKey, abbreviature);
+}
+
+void InstrumentSettingsModel::setHideWhenEmpty(int value)
+{
+    if (m_hideWhenEmpty == value || !notationParts()) {
+        return;
+    }
+
+    m_hideWhenEmpty = value;
+
+    const Part* part = notationParts()->part(m_instrumentKey.partId);
+    if (!part) {
+        return;
+    }
+
+    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("instruments", "Change instrument settings"));
+
+    Part* mutablePart = const_cast<Part*>(part);
+    mutablePart->undoChangeProperty(Pid::HIDE_WHEN_EMPTY, PropertyValue(static_cast<AutoOnOff>(value)));
+
+    currentNotation()->undoStack()->commitChanges();
+
+    emit hideWhenEmptyChanged();
 }
 
 INotationPtr InstrumentSettingsModel::currentNotation() const
