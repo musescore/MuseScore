@@ -102,6 +102,23 @@ void MuseSamplerResolver::init()
     }
 
     LOGI() << "MuseSampler successfully inited: " << museSamplerLibraryPath;
+
+    m_libHandler->setLoggingCallback([](ms_ErrorLevel level, const char* msg) {
+        switch (level) {
+            case ms_ErrorLevel_Debug:
+                LOGD() << msg;
+                break;
+            case ms_ErrorLevel_Info:
+                LOGI() << msg;
+                break;
+            case ms_ErrorLevel_Warning:
+                LOGW() << msg;
+                break;
+            case ms_ErrorLevel_Error:
+                LOGE() << msg;
+                break;
+        }
+    });
 }
 
 bool MuseSamplerResolver::reloadAllInstruments()
