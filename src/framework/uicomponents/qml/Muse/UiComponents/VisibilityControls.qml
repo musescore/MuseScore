@@ -39,6 +39,7 @@ RowLayout {
 
     property alias useVisibilityButton: visibilityBox.visible
     property alias isVisible: visibilityBox.isVisible
+    property alias canChangeVisibility: visibilityBox.enabled
 
     property bool showDashIcon: false
 

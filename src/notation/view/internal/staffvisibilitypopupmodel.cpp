@@ -32,10 +32,12 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/staffvisibilityindicator.h"
 #include "engraving/dom/system.h"
+#include "engraving/rendering/score/systemlayout.h"
 #include "engraving/types/fraction.h"
 #include "engraving/types/types.h"
 
 using namespace mu::notation;
+using mu::engraving::rendering::score::SystemLayout;
 
 StaffVisibilityPopupModel::StaffVisibilityPopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_STAFF_VISIBILITY, parent)
@@ -71,6 +73,7 @@ struct EmptyStavesVisibilityModel::Item {
     muse::ID id;
     QString name;
     bool isVisible = false;
+    bool canChangeVisibility = false;
     bool canReset = false;
 };
 
@@ -122,6 +125,12 @@ void EmptyStavesVisibilityModel::reload()
             if (staffItem->isVisible) {
                 // Part is visible if any of its staves is visible
                 partItem->isVisible = true;
+            }
+
+            staffItem->canChangeVisibility = SystemLayout::canChangeSysStaffVisibility(m_system, staffItem->staffIndex);
+            if (staffItem->canChangeVisibility) {
+                // Part visibility can be changed if any of its staves can change visibility
+                partItem->canChangeVisibility = true;
             }
 
             // Staff can reset visibility if any measure in the range contains an override
@@ -223,6 +232,8 @@ QVariant EmptyStavesVisibilityModel::data(const QModelIndex& index, int role) co
         return item->name;
     case IsVisible:
         return item->isVisible;
+    case CanChangeVisibility:
+        return item->canChangeVisibility;
     case CanReset:
         return item->canReset;
     default:
@@ -299,6 +310,7 @@ QHash<int, QByteArray> EmptyStavesVisibilityModel::roleNames() const
     QHash<int, QByteArray> roles {
         { Name, "name" },
         { IsVisible, "isVisible" },
+        { CanChangeVisibility, "canChangeVisibility" },
         { CanReset, "canReset" }
     };
 
@@ -340,6 +352,7 @@ void EmptyStavesVisibilityModel::setStaffVisibility(StaffItem* staffItem, engrav
 void EmptyStavesVisibilityModel::updateData(PartItem* partItem)
 {
     partItem->isVisible = false;
+    partItem->canChangeVisibility = false;
     partItem->canReset = false;
 
     for (const auto& staffItem : partItem->staves) {
@@ -347,6 +360,12 @@ void EmptyStavesVisibilityModel::updateData(PartItem* partItem)
         if (staffItem->isVisible) {
             // Part is visible if any of its staves is visible
             partItem->isVisible = true;
+        }
+
+        staffItem->canChangeVisibility = SystemLayout::canChangeSysStaffVisibility(m_system, staffItem->staffIndex);
+        if (staffItem->canChangeVisibility) {
+            // Part visibility can be changed if any of its staves can change visibility
+            partItem->canChangeVisibility = true;
         }
 
         // Staff can reset visibility if any measure in the range contains an override
