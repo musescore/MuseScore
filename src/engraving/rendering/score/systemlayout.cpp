@@ -691,6 +691,32 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     }
 }
 
+bool SystemLayout::canChangeSysStaffVisibility(const System* system, const staff_idx_t staffIdx)
+{
+    if (system->staves().size() <= 1) {
+        // Only one staff; always visible
+        return false;
+    }
+
+    const Staff* staff = system->score()->staff(staffIdx);
+
+    if (system->staff(staffIdx)->show()) {
+        // SysStaff is visible; check if can hide
+        const Fraction stick = system->first()->tick();
+        const Fraction etick = system->last()->endTick();
+        const auto& spanners = system->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
+
+        return !computeShowSysStaff(system, staff, staffIdx, system->first()->tick(), spanners, Staff::HideMode::ALWAYS);
+    }
+
+    // SysStaff is hidden; check if can show
+    if (!staff->show()) {
+        return false;
+    }
+
+    return true;
+}
+
 void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
 {
     if (ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::ABOVE_STAVES) {
