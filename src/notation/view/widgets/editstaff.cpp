@@ -164,7 +164,6 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     mag->setValue(stt->userMag() * 100.0);
 
     cutaway->setChecked(m_staff->cutaway());
-    hideMode->setCurrentIndex(int(m_staff->hideWhenEmpty()));
     showIfEmpty->setChecked(m_staff->showIfEmpty());
     hideSystemBarLine->setChecked(m_staff->hideSystemBarLine());
     mergeMatchingRests->setCurrentIndex(static_cast<int>(m_staff->mergeMatchingRests()));
@@ -510,7 +509,6 @@ void EditStaff::applyStaffProperties()
     config.showIfEmpty = showIfEmpty->isChecked();
     config.hideSystemBarline = hideSystemBarLine->isChecked();
     config.mergeMatchingRests = static_cast<AutoOnOff>(mergeMatchingRests->currentIndex());
-    config.hideMode = Staff::HideMode(hideMode->currentIndex());
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
     config.staffType = *m_staff->staffType(mu::engraving::Fraction(0, 1));
     config.reflectTranspositionInLinkedTab = !noReflectTranspositionInLinkedTab->isChecked();

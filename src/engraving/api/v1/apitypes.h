@@ -1294,10 +1294,10 @@ enum class StaffGroup {
 Q_ENUM_NS(StaffGroup);
 
 enum class HideMode {
-    AUTO       = int(mu::engraving::Staff::HideMode::AUTO),
-    ALWAYS     = int(mu::engraving::Staff::HideMode::ALWAYS),
-    NEVER      = int(mu::engraving::Staff::HideMode::NEVER),
-    INSTRUMENT = int(mu::engraving::Staff::HideMode::INSTRUMENT),
+    AUTO       = int(mu::engraving::AutoOnOff::AUTO),
+    ALWAYS     = int(mu::engraving::AutoOnOff::ON),
+    NEVER      = int(mu::engraving::AutoOnOff::OFF),
+    INSTRUMENT = int(mu::engraving::AutoOnOff::AUTO),
 };
 Q_ENUM_NS(HideMode);
 

@@ -3718,6 +3718,20 @@ void TRead::read(Staff* s, XmlReader& e, ReadContext& ctx)
     }
 }
 
+AutoOnOff TRead::readStaffHideMode(AsciiStringView asciiText)
+{
+    if (asciiText == "0") { // AUTO
+        // Cannot be represented anymore, so convert to the equivalent of INSTRUMENT
+        return AutoOnOff::AUTO;
+    } else if (asciiText == "1") { // ALWAYS
+        return AutoOnOff::ON;
+    } else if (asciiText == "2") { // NEVER
+        return AutoOnOff::OFF;
+    } else { // INSTRUMENT
+        return AutoOnOff::AUTO;
+    }
+}
+
 bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
@@ -3737,7 +3751,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "invisible") {
         s->staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {
-        s->setHideWhenEmpty(Staff::HideMode(e.readInt()));
+        s->setHideWhenEmpty(readStaffHideMode(e.readAsciiText()));
     } else if (tag == "cutaway") {
         s->setCutaway(e.readInt());
     } else if (tag == "showIfSystemEmpty") {

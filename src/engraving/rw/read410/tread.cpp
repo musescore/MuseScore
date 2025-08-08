@@ -133,6 +133,7 @@
 
 #include "../xmlreader.h"
 #include "../read206/read206.h"
+#include "../read400/tread.h"
 #include "../compat/compatutils.h"
 #include "../compat/tremolocompat.h"
 #include "readcontext.h"
@@ -4008,7 +4009,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "invisible") {
         s->staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {
-        s->setHideWhenEmpty(Staff::HideMode(e.readInt()));
+        s->setHideWhenEmpty(read400::TRead::readStaffHideMode(e.readAsciiText()));
     } else if (tag == "cutaway") {
         s->setCutaway(e.readInt());
     } else if (tag == "showIfSystemEmpty") {

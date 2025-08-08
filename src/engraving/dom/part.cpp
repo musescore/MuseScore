@@ -602,6 +602,8 @@ PropertyValue Part::getProperty(Pid id) const
     switch (id) {
     case Pid::VISIBLE:
         return PropertyValue(m_show);
+    case Pid::HIDE_WHEN_EMPTY:
+        return PropertyValue(m_hideWhenEmpty);
     case Pid::USE_DRUMSET:
         return instrument()->useDrumset();
     case Pid::PREFER_SHARP_FLAT:
@@ -620,6 +622,9 @@ bool Part::setProperty(Pid id, const PropertyValue& property)
     switch (id) {
     case Pid::VISIBLE:
         setShow(property.toBool());
+        break;
+    case Pid::HIDE_WHEN_EMPTY:
+        setHideWhenEmpty(property.value<AutoOnOff>());
         break;
     case Pid::USE_DRUMSET:
         instrument()->setUseDrumset(property.toBool());

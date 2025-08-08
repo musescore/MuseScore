@@ -758,7 +758,7 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "neverHide") {
             bool v = e.readInt();
             if (v) {
-                staff->setHideWhenEmpty(Staff::HideMode::NEVER);
+                staff->setHideWhenEmpty(AutoOnOff::OFF);
             }
         } else if (tag == "barLineSpan") {
             staff->setBarLineFrom(e.intAttribute("from", 0));

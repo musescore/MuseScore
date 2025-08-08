@@ -2222,7 +2222,6 @@ static void createPart(Score* score, const String& id, PartMap& pm)
     pm.insert({ id, part });
     score->appendPart(part);
     Staff* staff = Factory::createStaff(part);
-    staff->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
     score->appendStaff(staff);
 }
 
@@ -2611,17 +2610,13 @@ static void setNumberOfStavesForPart(Part* const part, const size_t staves)
     size_t prevnstaves = part->nstaves();
     if (staves > part->nstaves()) {
         part->setStaves(static_cast<int>(staves));
-        // New staves default to INSTRUMENT hide mode
-        for (size_t i = prevnstaves; i < staves; ++i) {
-            part->staff(i)->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
-        }
     }
     if (staves != 0 && prevnstaves != 1 && prevnstaves != staves) {
         for (size_t i = 0; i < part->nstaves(); ++i) {
             // A "staves" value different from the existing nstaves means
             // staves in a part will sometimes be hidden.
-            // We can approximate this with the AUTO hide mode.
-            part->staff(i)->setHideWhenEmpty(Staff::HideMode::AUTO);
+            // We can approximate this with the AUTO hide mode. TODO
+            // part->staff(i)->setHideWhenEmpty(Staff::HideMode::AUTO);
         }
     }
 }
@@ -2942,7 +2937,7 @@ void MusicXmlParserPass1::attributes(const String& partId, const Fraction cTime)
         setNumberOfStavesForPart(muse::value(m_partMap, partId), staves - static_cast<int>(hiddenStaves.size()));
     } else {
         // Otherwise, don't discard any staves
-        // And set hidden staves to HideMode::AUTO
+        // And set hidden staves to hide when empty
         // (MuseScore doesn't currently have a mechanism
         // for hiding non-empty staves, so this is an approximation
         // of the correct implementation)
@@ -2950,7 +2945,7 @@ void MusicXmlParserPass1::attributes(const String& partId, const Fraction cTime)
         for (int hiddenStaff : hiddenStaves) {
             int hiddenStaffIndex = muse::value(m_parts, partId).staffNumberToIndex(hiddenStaff);
             if (hiddenStaffIndex >= 0) {
-                muse::value(m_partMap, partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO);
+                muse::value(m_partMap, partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(engraving::AutoOnOff::ON);
             }
         }
     }

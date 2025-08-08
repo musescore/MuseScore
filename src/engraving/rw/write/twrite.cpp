@@ -2512,6 +2512,10 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("color", item->color());
     }
 
+    if (item->hideWhenEmpty() != AutoOnOff::AUTO) {
+        xml.tag("hideWhenEmpty", TConv::toXml(item->hideWhenEmpty()));
+    }
+
     if (item->preferSharpFlat() != PreferSharpFlat::AUTO) {
         switch (item->preferSharpFlat()) {
         case PreferSharpFlat::AUTO:
@@ -2763,8 +2767,8 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("defaultTransposingClef", TConv::toXml(ct.transposingClef));
     }
 
-    if (item->hideWhenEmpty() != Staff::HideMode::AUTO) {
-        xml.tag("hideWhenEmpty", int(item->hideWhenEmpty()));
+    if (item->hideWhenEmpty() != AutoOnOff::AUTO) {
+        xml.tag("hideWhenEmpty", TConv::toXml(item->hideWhenEmpty()));
     }
     if (item->cutaway()) {
         xml.tag("cutaway", item->cutaway());

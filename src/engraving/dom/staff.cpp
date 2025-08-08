@@ -1537,6 +1537,8 @@ PropertyValue Staff::getProperty(Pid id) const
         return staffType(Fraction(0, 1))->userMag();
     case Pid::STAFF_INVISIBLE:
         return staffType(Fraction(0, 1))->invisible();
+    case Pid::HIDE_WHEN_EMPTY:
+        return m_hideWhenEmpty;
     case Pid::STAFF_COLOR:
         return PropertyValue::fromValue(staffType(Fraction(0, 1))->color());
     case Pid::PLAYBACK_VOICE1:
@@ -1586,6 +1588,9 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         setLocalSpatium(_spatium, spatium(Fraction(0, 1)), Fraction(0, 1));
     }
     break;
+    case Pid::HIDE_WHEN_EMPTY:
+        setHideWhenEmpty(v.value<AutoOnOff>());
+        break;
     case Pid::STAFF_COLOR:
         setColor(Fraction(0, 1), v.value<Color>());
         break;
@@ -1659,6 +1664,8 @@ PropertyValue Staff::propertyDefault(Pid id) const
         return false;
     case Pid::MAG:
         return 1.0;
+    case Pid::HIDE_WHEN_EMPTY:
+        return AutoOnOff::AUTO;
     case Pid::STAFF_COLOR:
         return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::PLAYBACK_VOICE1:

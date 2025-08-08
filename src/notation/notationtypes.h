@@ -419,7 +419,6 @@ struct StaffConfig
     bool hideSystemBarline = false;
     engraving::AutoOnOff mergeMatchingRests = engraving::AutoOnOff::AUTO;
     bool reflectTranspositionInLinkedTab = false;
-    Staff::HideMode hideMode = Staff::HideMode::AUTO;
     ClefTypeList clefTypeList;
     engraving::StaffType staffType;
 
@@ -431,7 +430,6 @@ struct StaffConfig
         equal &= showIfEmpty == conf.showIfEmpty;
         equal &= hideSystemBarline == conf.hideSystemBarline;
         equal &= mergeMatchingRests == conf.mergeMatchingRests;
-        equal &= hideMode == conf.hideMode;
         equal &= clefTypeList == conf.clefTypeList;
         equal &= staffType == conf.staffType;
         equal &= reflectTranspositionInLinkedTab == conf.reflectTranspositionInLinkedTab;

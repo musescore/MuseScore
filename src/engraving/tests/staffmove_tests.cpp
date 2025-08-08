@@ -65,7 +65,7 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
 
     // Hide staff
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
-    score->undo(new mu::engraving::ChangeStaff(staff, false, staff->defaultClefType(), staff->userDist(), staff->hideWhenEmpty(),
+    score->undo(new mu::engraving::ChangeStaff(staff, false, staff->defaultClefType(), staff->userDist(),
                                                staff->showIfEmpty(), staff->cutaway(), staff->hideSystemBarLine(),
                                                staff->mergeMatchingRests(),
                                                staff->reflectTranspositionInLinkedTab()));
@@ -76,7 +76,7 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
 
     // Unhide staff
     score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
-    score->undo(new mu::engraving::ChangeStaff(staff, true, staff->defaultClefType(), staff->userDist(), staff->hideWhenEmpty(),
+    score->undo(new mu::engraving::ChangeStaff(staff, true, staff->defaultClefType(), staff->userDist(),
                                                staff->showIfEmpty(), staff->cutaway(), staff->hideSystemBarLine(),
                                                staff->mergeMatchingRests(),
                                                staff->reflectTranspositionInLinkedTab()));

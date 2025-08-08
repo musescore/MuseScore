@@ -66,8 +66,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::VISIBLE,                 false, "visible",               P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "visible") },
     { Pid::Z,                       false, "z",                     P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "z") },
     { Pid::SMALL,                   false, "small",                 P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "small") },
+    { Pid::HIDE_WHEN_EMPTY,         false, "hideWhenEmpty",         P_TYPE::AUTO_ON_OFF,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "hide when empty") },
     { Pid::SHOW_COURTESY,           false, "showCourtesySig",       P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
-    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEY_MODE,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
+    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEY_MODE,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "key signature mode") },
     { Pid::SLUR_STYLE_TYPE,         false, "lineType",              P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "line type") },
     { Pid::PITCH,                   true,  "pitch",                 P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "pitch") },
 
