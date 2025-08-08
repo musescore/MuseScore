@@ -225,6 +225,8 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     m_audioOutputController->init();
 
+    m_soundFontController->init();
+
     // rpc
     m_rpcTimer.setInterval(16); // corresponding to 60 fps
     QObject::connect(&m_rpcTimer, &QTimer::timeout, [this]() {
@@ -245,11 +247,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
             pr->reg("soundfonts", p);
         }
     }
-}
-
-void AudioModule::onDelayedInit()
-{
-    m_soundFontController->init();
 }
 
 void AudioModule::onDeinit()
