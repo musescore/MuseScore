@@ -47,6 +47,7 @@ private:
     static void setClefValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
     static void setTimeSigValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
     static void setNoteValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
+    static void setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
     static void setDefaultValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
 
     static bool isInternalParenPadding(const EngravingItem* item1, const EngravingItem* item2);

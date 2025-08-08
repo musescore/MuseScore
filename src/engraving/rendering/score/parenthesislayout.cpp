@@ -20,19 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "parenthesislayout.h"
-#include "dom/score.h"
-#include "dom/timesig.h"
-#include "horizontalspacing.h"
-
 #include "dom/chord.h"
+#include "dom/harmony.h"
 #include "dom/ledgerline.h"
 #include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/parenthesis.h"
+#include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/slurtie.h"
 #include "dom/staff.h"
+#include "dom/timesig.h"
+#include "horizontalspacing.h"
+#include "parenthesislayout.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -329,6 +329,9 @@ void ParenthesisLayout::setLayoutValues(Parenthesis* item, Parenthesis::LayoutDa
         break;
     case ElementType::KEYSIG:
         break;
+    case ElementType::HARMONY:
+        setHarmonyValues(item, ldata);
+        break;
     default:
         setDefaultValues(item, ldata);
         break;
@@ -392,6 +395,22 @@ void ParenthesisLayout::setNoteValues(Parenthesis* item, Parenthesis::LayoutData
         ldata->midPointThickness.set_value(ldata->height / 30 * ldata->mag());
         ldata->endPointThickness.set_value(0.05);
     }
+}
+
+void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata)
+{
+    const double spatium = item->spatium();
+    Harmony* parent = toHarmony(item->parentItem());
+    RectF bbox = parent->ldata()->bbox();
+
+    double bottom = parent->baseLine();
+
+    ldata->setMag(parent->mag());
+    ldata->startY = bbox.top() - 0.25 * spatium;
+    ldata->height = bottom - ldata->startY;
+    ldata->midPointThickness.set_value(ldata->height / 60 * ldata->mag());  // 0.1sp for a height of 6sp
+    const double PADDING = spatium * 0.2;
+    ldata->setPosX(item->direction() == DirectionH::RIGHT ? bbox.right() + PADDING : bbox.left() - PADDING);
 }
 
 void ParenthesisLayout::setDefaultValues(Parenthesis* item, Parenthesis::LayoutData* ldata)
