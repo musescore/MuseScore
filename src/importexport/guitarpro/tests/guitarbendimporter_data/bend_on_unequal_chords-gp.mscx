@@ -260,8 +260,8 @@
               <eid>b_b</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>7</fret>
-              <string>2</string>
+              <fret>3</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>2</guitarBendType>
