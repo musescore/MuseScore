@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -69,17 +70,17 @@
         </section>
       </Order>
     <Part id="1">
-      <Staff id="1">
-        <linkedTo>2</linkedTo>
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <Staff id="2">
-        <linkedTo>1</linkedTo>
+      <Staff>
+        <eid>D_D</eid>
+        <linkedTo>C_C</linkedTo>
         <StaffType group="pitched">
-          <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
@@ -121,39 +122,45 @@
       <VBox>
         <height>10</height>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>E_E</eid>
         <Text>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Untitled score</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure len="7/16">
+        <eid>I_I</eid>
         <voice>
           <KeySig>
-            <linkedMain/>
+            <eid>J_J</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <linkedMain/>
+            <eid>L_L</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <linkedMain/>
+            <eid>M_M</eid>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <linkedMain/>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -163,27 +170,28 @@
       <Measure len="7/16">
         <voice>
           <KeySig>
-            <linked>
-              </linked>
+            <eid>O_O</eid>
+            <linkedTo>J_J</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>P_P</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <linked>
-              </linked>
+            <eid>Q_Q</eid>
+            <linkedTo>L_L</linkedTo>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <linked>
-              </linked>
+            <eid>R_R</eid>
+            <linkedTo>M_M</linkedTo>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <linked>
-              </linked>
+            <eid>S_S</eid>
+            <linkedTo>N_N</linkedTo>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
