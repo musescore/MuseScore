@@ -56,7 +56,7 @@ PopupView {
     closePolicies: PopupView.CloseOnPressOutsideParent
 
     x: root.isPlacementVertical ? (root.parent.width / 2) - (root.width / 2) : root.parent.width
-    y: root.isPlacementeVertical ? root.parent.height : (root.parent.height / 2) - (root.height / 2)
+    y: root.isPlacementVertical ? root.parent.height : (root.parent.height / 2) - (root.height / 2)
 
     onOpened: {
         if (!(openPolicies & PopupView.NoActivateFocus) && content.navigationSection) {
