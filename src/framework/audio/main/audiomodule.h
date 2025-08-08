@@ -59,7 +59,6 @@ public:
     void registerUiTypes() override;
     void resolveImports() override;
     void onInit(const IApplication::RunMode& mode) override;
-    void onDelayedInit() override;
     void onDeinit() override;
     void onDestroy() override;
 
