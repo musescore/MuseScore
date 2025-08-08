@@ -45,6 +45,10 @@ public:
     struct RenderConstraints {
         samples_t minSamplesToReserveWhenIdle = 0;
         samples_t minSamplesToReserveInRealtime = 0;
+
+        // mixer
+        size_t desiredAudioThreadNumber = 0;
+        size_t minTrackCountForMultithreading = 0;
     };
 
     Ret init(std::shared_ptr<AudioBuffer> bufferPtr, const RenderConstraints& consts);

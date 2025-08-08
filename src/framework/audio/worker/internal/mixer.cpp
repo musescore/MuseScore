@@ -39,8 +39,18 @@ Mixer::Mixer(const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
+}
 
-    m_taskScheduler = std::make_unique<TaskScheduler>(static_cast<thread_pool_size_t>(configuration()->desiredAudioThreadNumber()));
+Mixer::~Mixer()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+}
+
+void Mixer::init(size_t desiredAudioThreadNumber, size_t minTrackCountForMultithreading)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_taskScheduler = std::make_unique<TaskScheduler>(static_cast<thread_pool_size_t>(desiredAudioThreadNumber));
 
     if (!m_taskScheduler->setThreadsPriority(ThreadPriority::High)) {
         LOGE() << "Unable to change audio threads priority";
@@ -48,12 +58,7 @@ Mixer::Mixer(const modularity::ContextPtr& iocCtx)
 
     AudioSanitizer::setMixerThreads(m_taskScheduler->threadIdSet());
 
-    m_minTrackCountForMultithreading = configuration()->minTrackCountForMultithreading();
-}
-
-Mixer::~Mixer()
-{
-    ONLY_AUDIO_WORKER_THREAD;
+    m_minTrackCountForMultithreading = minTrackCountForMultithreading;
 }
 
 IAudioSourcePtr Mixer::mixedSource()
@@ -117,14 +122,18 @@ RetVal<MixerChannelPtr> Mixer::addAuxChannel(const TrackId trackId)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    const samples_t samplesToPreallocate = configuration()->samplesToPreallocate();
-    const audioch_t audioChannelsCount = configuration()->audioChannelsCount();
+    IF_ASSERT_FAILED(m_audioChannelsCount > 0) {
+        return RetVal<MixerChannelPtr>::make_ret(Ret::Code::InternalError);
+    }
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_sampleRate, audioChannelsCount, iocContext());
+    IF_ASSERT_FAILED(m_sampleRate > 0) {
+        return RetVal<MixerChannelPtr>::make_ret(Ret::Code::InternalError);
+    }
+
+    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_sampleRate, m_audioChannelsCount, iocContext());
 
     AuxChannelInfo aux;
     aux.channel = channel;
-    aux.buffer = std::vector<float>(samplesToPreallocate * audioChannelsCount, 0.f);
 
     m_auxChannelInfoList.emplace_back(std::move(aux));
 
