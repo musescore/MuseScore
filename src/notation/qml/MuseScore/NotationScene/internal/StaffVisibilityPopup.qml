@@ -179,23 +179,6 @@ StyledPopupView {
                     onExpandButtonClicked: function (expand) {
                         expand ? delegateItem.treeView.expand(delegateItem.row) : delegateItem.treeView.collapse(delegateItem.row);
                     }
-
-                    FlatButton {
-                        id: resetButton
-
-                        enabled: delegateItem.model.canReset
-                        icon: IconCode.UNDO
-                        toolTipTitle: qsTrc("notation/staffvisibilitypopup", "Reset")
-
-                        navigation.name: "ResetButton%1".arg(delegateItem.row + 1)
-                        navigation.panel: staffVisibilityNavPanel
-                        navigation.row: delegateItem.row + 1 // +1 for ResetAllButton
-                        navigation.column: 3
-
-                        onClicked: {
-                            popupModel.emptyStavesVisibilityModel.resetVisibility(delegateItem.modelIndex);
-                        }
-                    }
                 }
             }
         }
