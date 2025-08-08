@@ -175,6 +175,7 @@ StyledPopupView {
 
                     isExpandable: delegateItem.hasChildren
                     isExpanded: delegateItem.expanded
+                    makeRoomForExpandButton: true
                     expandableDepth: delegateItem.depth
                     onExpandButtonClicked: function (expand) {
                         expand ? delegateItem.treeView.expand(delegateItem.row) : delegateItem.treeView.collapse(delegateItem.row);
