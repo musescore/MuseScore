@@ -58,6 +58,7 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
         const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
                                 ? toFretDiagram(item->explicitParent())
                                 : nullptr;
+        const bool alignToFretDiagram = fd && fd->visible();
 
         const double cw = item->symWidth(SymId::noteheadBlack);
 
@@ -67,7 +68,7 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
         if (item->ldata()->textList().empty()) {
             TLayout::layoutBaseTextBase1(item, ldata);
 
-            if (fd) {
+            if (alignToFretDiagram) {
                 newPosY = ldata->pos().y();
             } else {
                 newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? -ldata->bbox().height() : 0.0);
@@ -85,7 +86,7 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
             }
 
             double xx = 0.0;
-            if (fd) {
+            if (alignToFretDiagram) {
                 switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
                 case AlignH::LEFT:
                     xx = -hAlignBox.left();
@@ -120,7 +121,7 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
                 yy = -bb.height() - bb.y();
             }
 
-            if (fd) {
+            if (alignToFretDiagram) {
                 newPosY = ypos - yy - ctx.conf().styleMM(Sid::harmonyFretDist);
             } else {
                 newPosY = ypos;
@@ -136,7 +137,7 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
             ldata->harmonyHeight = ldata->bbox().height();
         }
 
-        if (fd) {
+        if (alignToFretDiagram) {
             switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
             case AlignH::LEFT:
                 newPosX = 0.0;
@@ -160,6 +161,11 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
                 newPosX = cw;
                 break;
             }
+        }
+
+        if (fd && !fd->visible()) {
+            // Translate to base position around note
+            newPosX -= fd->pos().x();
         }
 
         return PointF(newPosX, newPosY);
