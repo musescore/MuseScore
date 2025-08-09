@@ -50,6 +50,7 @@ StringData::StringData(int numFrets, int numStrings, int strings[], bool useFlat
 
     for (int i = 0; i < numStrings; i++) {
         strg.pitch = strings[i];
+        strg.useFlat = useFlats;
         m_stringTable.push_back(strg);
     }
     m_useFlats = useFlats;

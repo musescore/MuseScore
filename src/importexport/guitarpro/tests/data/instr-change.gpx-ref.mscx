@@ -35,10 +35,10 @@
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
-          <string>76</string>
-          <string>69</string>
-          <string>74</string>
-          <string>79</string>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
           <string>71</string>
           <string>76</string>
           </StringData>
@@ -98,16 +98,31 @@ The Wall</text>
             <eid>M_M</eid>
             <text><sym>metNoteQuarterUp</sym> = 115</text>
             </Tempo>
-          <Beam>
+          <StringTunings>
+            <visibleStrings></visibleStrings>
+            <StringData>
+              <frets>24</frets>
+              <string>76</string>
+              <string>69</string>
+              <string>74</string>
+              <string>79</string>
+              <string>71</string>
+              <string>76</string>
+              </StringData>
             <eid>N_N</eid>
+            <style>string_tunings</style>
+            <text/>
+            </StringTunings>
+          <Beam>
+            <eid>O_O</eid>
             <l1>38</l1>
             <l2>36</l2>
             </Beam>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -122,10 +137,10 @@ The Wall</text>
               <instrumentId>pluck.guitar</instrumentId>
               <StringData>
                 <frets>24</frets>
-                <string>76</string>
-                <string>69</string>
-                <string>74</string>
-                <string>79</string>
+                <string>52</string>
+                <string>57</string>
+                <string>62</string>
+                <string>67</string>
                 <string>71</string>
                 <string>76</string>
                 </StringData>
@@ -133,14 +148,14 @@ The Wall</text>
                 <program value="25"/>
                 </Channel>
               </Instrument>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <text>German-APiano</text>
             </InstrumentChange>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -155,10 +170,10 @@ The Wall</text>
               <instrumentId>pluck.guitar</instrumentId>
               <StringData>
                 <frets>24</frets>
-                <string>76</string>
-                <string>69</string>
-                <string>74</string>
-                <string>79</string>
+                <string>52</string>
+                <string>57</string>
+                <string>62</string>
+                <string>67</string>
                 <string>71</string>
                 <string>76</string>
                 </StringData>
@@ -166,14 +181,14 @@ The Wall</text>
                 <program value="25"/>
                 </Channel>
               </Instrument>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <text>D-Steel</text>
             </InstrumentChange>
           <Chord>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>W_W</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -181,13 +196,13 @@ The Wall</text>
               </Note>
             </Chord>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>Y_Y</eid>
+                <eid>Z_Z</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
@@ -203,10 +218,10 @@ The Wall</text>
               <instrumentId>pluck.guitar</instrumentId>
               <StringData>
                 <frets>24</frets>
-                <string>76</string>
-                <string>69</string>
-                <string>74</string>
-                <string>79</string>
+                <string>52</string>
+                <string>57</string>
+                <string>62</string>
+                <string>67</string>
                 <string>71</string>
                 <string>76</string>
                 </StringData>
@@ -214,19 +229,19 @@ The Wall</text>
                 <program value="25"/>
                 </Channel>
               </Instrument>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <text>German-APiano</text>
             </InstrumentChange>
           <Beam>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             <l1>24</l1>
             <l2>22</l2>
             </Beam>
           <Chord>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>c_c</eid>
+              <eid>d_d</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -234,10 +249,10 @@ The Wall</text>
               </Note>
             </Chord>
           <Chord>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>f_f</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -245,10 +260,10 @@ The Wall</text>
               </Note>
             </Chord>
           <Chord>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>g_g</eid>
+              <eid>h_h</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
@@ -263,10 +278,10 @@ The Wall</text>
               <instrumentId>pluck.guitar</instrumentId>
               <StringData>
                 <frets>24</frets>
-                <string>76</string>
-                <string>69</string>
-                <string>74</string>
-                <string>79</string>
+                <string>52</string>
+                <string>57</string>
+                <string>62</string>
+                <string>67</string>
                 <string>71</string>
                 <string>76</string>
                 </StringData>
@@ -274,14 +289,14 @@ The Wall</text>
                 <program value="25"/>
                 </Channel>
               </Instrument>
-            <eid>h_h</eid>
+            <eid>i_i</eid>
             <text>D-Steel</text>
             </InstrumentChange>
           <Chord>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>j_j</eid>
+              <eid>k_k</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -289,16 +304,16 @@ The Wall</text>
               </Note>
             </Chord>
           <Rest>
-            <eid>k_k</eid>
+            <eid>l_l</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
-            <eid>l_l</eid>
+            <eid>m_m</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>m_m</eid>
+        <eid>n_n</eid>
         <voice>
           <InstrumentChange>
             <Instrument id="cavaquinho">
@@ -308,10 +323,10 @@ The Wall</text>
               <instrumentId>pluck.guitar</instrumentId>
               <StringData>
                 <frets>24</frets>
-                <string>76</string>
-                <string>69</string>
-                <string>74</string>
-                <string>79</string>
+                <string>52</string>
+                <string>57</string>
+                <string>62</string>
+                <string>67</string>
                 <string>71</string>
                 <string>76</string>
                 </StringData>
@@ -319,19 +334,19 @@ The Wall</text>
                 <program value="25"/>
                 </Channel>
               </Instrument>
-            <eid>n_n</eid>
+            <eid>o_o</eid>
             <text>German-APiano</text>
             </InstrumentChange>
           <Beam>
-            <eid>o_o</eid>
+            <eid>p_p</eid>
             <l1>38</l1>
             <l2>36</l2>
             </Beam>
           <Chord>
-            <eid>p_p</eid>
+            <eid>q_q</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>q_q</eid>
+              <eid>r_r</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -339,10 +354,10 @@ The Wall</text>
               </Note>
             </Chord>
           <Chord>
-            <eid>r_r</eid>
+            <eid>s_s</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>s_s</eid>
+              <eid>t_t</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -350,10 +365,10 @@ The Wall</text>
               </Note>
             </Chord>
           <Chord>
-            <eid>t_t</eid>
+            <eid>u_u</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>u_u</eid>
+              <eid>v_v</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -368,10 +383,10 @@ The Wall</text>
               <instrumentId>pluck.guitar</instrumentId>
               <StringData>
                 <frets>24</frets>
-                <string>76</string>
-                <string>69</string>
-                <string>74</string>
-                <string>79</string>
+                <string>52</string>
+                <string>57</string>
+                <string>62</string>
+                <string>67</string>
                 <string>71</string>
                 <string>76</string>
                 </StringData>
@@ -379,17 +394,17 @@ The Wall</text>
                 <program value="25"/>
                 </Channel>
               </Instrument>
-            <eid>v_v</eid>
+            <eid>w_w</eid>
             <text>D-Steel</text>
             </InstrumentChange>
           <Chord>
-            <eid>w_w</eid>
+            <eid>x_x</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>x_x</eid>
+              <eid>y_y</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>y_y</eid>
+                <eid>z_z</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
@@ -398,15 +413,15 @@ The Wall</text>
               </Note>
             </Chord>
           <Beam>
-            <eid>z_z</eid>
+            <eid>0_0</eid>
             <l1>24</l1>
             <l2>22</l2>
             </Beam>
           <Chord>
-            <eid>0_0</eid>
+            <eid>1_1</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>1_1</eid>
+              <eid>2_2</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -414,10 +429,10 @@ The Wall</text>
               </Note>
             </Chord>
           <Chord>
-            <eid>2_2</eid>
+            <eid>3_3</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>3_3</eid>
+              <eid>4_4</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -432,10 +447,10 @@ The Wall</text>
               <instrumentId>pluck.guitar</instrumentId>
               <StringData>
                 <frets>24</frets>
-                <string>76</string>
-                <string>69</string>
-                <string>74</string>
-                <string>79</string>
+                <string>52</string>
+                <string>57</string>
+                <string>62</string>
+                <string>67</string>
                 <string>71</string>
                 <string>76</string>
                 </StringData>
@@ -443,14 +458,14 @@ The Wall</text>
                 <program value="25"/>
                 </Channel>
               </Instrument>
-            <eid>4_4</eid>
+            <eid>5_5</eid>
             <text>German-APiano</text>
             </InstrumentChange>
           <Chord>
-            <eid>5_5</eid>
+            <eid>6_6</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>6_6</eid>
+              <eid>7_7</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>4</fret>
@@ -465,10 +480,10 @@ The Wall</text>
               <instrumentId>pluck.guitar</instrumentId>
               <StringData>
                 <frets>24</frets>
-                <string>76</string>
-                <string>69</string>
-                <string>74</string>
-                <string>79</string>
+                <string>52</string>
+                <string>57</string>
+                <string>62</string>
+                <string>67</string>
                 <string>71</string>
                 <string>76</string>
                 </StringData>
@@ -476,14 +491,14 @@ The Wall</text>
                 <program value="25"/>
                 </Channel>
               </Instrument>
-            <eid>7_7</eid>
+            <eid>8_8</eid>
             <text>D-Steel</text>
             </InstrumentChange>
           <Chord>
-            <eid>8_8</eid>
+            <eid>9_9</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>9_9</eid>
+              <eid>+_+</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -491,16 +506,16 @@ The Wall</text>
               </Note>
             </Chord>
           <Rest>
-            <eid>+_+</eid>
+            <eid>/_/</eid>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <eid>/_/</eid>
+            <eid>AB_AB</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>AB_AB</eid>
+            <eid>BB_BB</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
