@@ -6225,7 +6225,7 @@ void NotationInteraction::changeEnharmonicSpelling(bool both)
 
 void NotationInteraction::spellPitches()
 {
-    startEdit(TranslatableString("undoableAction", "Respell pitches"));
+    startEdit(TranslatableString("undoableAction", "Optimize enharmonic spelling"));
     score()->spell();
     apply();
 }
