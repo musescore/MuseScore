@@ -415,7 +415,6 @@ struct StaffConfig
     bool visible = false;
     engraving::Spatium userDistance = engraving::Spatium(0.0);
     bool cutaway = false;
-    bool showIfEmpty = false;
     bool hideSystemBarline = false;
     engraving::AutoOnOff mergeMatchingRests = engraving::AutoOnOff::AUTO;
     bool reflectTranspositionInLinkedTab = false;
@@ -427,7 +426,6 @@ struct StaffConfig
         bool equal = visible == conf.visible;
         equal &= userDistance == conf.userDistance;
         equal &= cutaway == conf.cutaway;
-        equal &= showIfEmpty == conf.showIfEmpty;
         equal &= hideSystemBarline == conf.hideSystemBarline;
         equal &= mergeMatchingRests == conf.mergeMatchingRests;
         equal &= clefTypeList == conf.clefTypeList;

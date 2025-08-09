@@ -115,16 +115,6 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="6">
-       <widget class="QLabel" name="labelColor">
-        <property name="text">
-         <string>Staff line color:</string>
-        </property>
-        <property name="buddy">
-         <cstring>color</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="1">
        <widget class="QDoubleSpinBox" name="lineDistance">
         <property name="sizePolicy">
@@ -273,42 +263,31 @@
         </property>
        </spacer>
       </item>
-      <item row="4" column="7">
-       <widget class="Awl::ColorLabel" name="color">
-        <property name="focusPolicy">
-         <enum>Qt::FocusPolicy::TabFocus</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="6" colspan="2">
-       <widget class="QCheckBox" name="cutaway">
-        <property name="text">
-         <string>Cutaway</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="6" colspan="2">
+      <item row="0" column="6" colspan="2">
        <widget class="QCheckBox" name="invisible">
         <property name="text">
          <string>Invisible staff lines</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="6" colspan="2">
-       <widget class="QCheckBox" name="isSmallCheckbox">
+      <item row="1" column="6">
+       <widget class="QLabel" name="labelColor">
         <property name="text">
-         <string>Small staff</string>
+         <string>Staff line color:</string>
+        </property>
+        <property name="buddy">
+         <cstring>color</cstring>
         </property>
        </widget>
       </item>
-      <item row="0" column="6" colspan="2">
-       <widget class="QCheckBox" name="showIfEmpty">
-        <property name="text">
-         <string>Do not hide if system is empty</string>
+      <item row="1" column="7">
+       <widget class="Awl::ColorLabel" name="color">
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::TabFocus</enum>
         </property>
        </widget>
       </item>
-      <item row="5" column="6" colspan="2">
+      <item row="2" column="6" colspan="2">
        <widget class="QPushButton" name="changeStaffType">
         <property name="text">
          <string>Advanced style properties…</string>
@@ -1042,10 +1021,7 @@
   <tabstop>showBarlines</tabstop>
   <tabstop>hideSystemBarLine</tabstop>
   <tabstop>mergeMatchingRests</tabstop>
-  <tabstop>showIfEmpty</tabstop>
-  <tabstop>isSmallCheckbox</tabstop>
   <tabstop>invisible</tabstop>
-  <tabstop>cutaway</tabstop>
   <tabstop>color</tabstop>
   <tabstop>changeStaffType</tabstop>
   <tabstop>changeInstrument</tabstop>

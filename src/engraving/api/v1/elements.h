@@ -1981,9 +1981,9 @@ class Staff : public ScoreElement
     /// mid-system when measures are empty.
     /// \since MuseScore 4.6
     Q_PROPERTY(bool cutaway READ cutaway)
-    /// Whether to not hide if the system is empty.
+    /// Whether to not hide this staff if an entire system is empty.
     /// \since MuseScore 4.6
-    Q_PROPERTY(bool showIfEmpty READ showIfEmpty)
+    Q_PROPERTY(bool showIfEntireSystemEmpty READ showIfEntireSystemEmpty)
     /// Whether to display the system barline (leftmost barline).
     /// \since MuseScore 4.6
     Q_PROPERTY(bool hideSystemBarLine READ hideSystemBarLine)
@@ -2019,7 +2019,7 @@ public:
     int idx() { return int(staff()->idx()); }
     bool show() { return staff()->show(); }
     bool cutaway() { return staff()->cutaway(); }
-    bool showIfEmpty() { return staff()->showIfEmpty(); }
+    bool showIfEntireSystemEmpty() { return staff()->showIfEntireSystemEmpty(); }
     bool hideSystemBarLine() { return staff()->hideSystemBarLine(); }
     int hideWhenEmpty() { return int(staff()->hideWhenEmpty()); }
     int mergeMatchingRests() { return int(staff()->mergeMatchingRests()); }

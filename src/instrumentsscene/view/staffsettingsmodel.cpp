@@ -54,6 +54,7 @@ void StaffSettingsModel::load(const QString& staffId)
     emit cutawayEnabledChanged();
     emit isSmallStaffChanged();
     emit hideWhenEmptyChanged();
+    emit showIfEntireSystemEmptyChanged();
     emit voicesChanged();
     emit allStaffTypesChanged();
     emit staffTypeChanged();
@@ -244,6 +245,41 @@ void StaffSettingsModel::setHideWhenEmpty(int value)
     currentNotation()->undoStack()->commitChanges();
 
     emit hideWhenEmptyChanged();
+}
+
+bool StaffSettingsModel::showIfEntireSystemEmpty() const
+{
+    if (!notationParts()) {
+        return false;
+    }
+
+    const Staff* staff = notationParts()->staff(m_staffId);
+    if (!staff) {
+        return false;
+    }
+
+    return staff->showIfEntireSystemEmpty();
+}
+
+void StaffSettingsModel::setShowIfEntireSystemEmpty(bool value)
+{
+    if (!notationParts()) {
+        return;
+    }
+
+    const Staff* staff = notationParts()->staff(m_staffId);
+    if (!staff || staff->showIfEntireSystemEmpty() == value) {
+        return;
+    }
+
+    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("instruments", "Change staff settings"));
+
+    Staff* mutableStaff = const_cast<Staff*>(staff);
+    mutableStaff->undoChangeProperty(Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY, PropertyValue(value));
+
+    currentNotation()->undoStack()->commitChanges();
+
+    emit showIfEntireSystemEmptyChanged();
 }
 
 void StaffSettingsModel::createLinkedStaff()
