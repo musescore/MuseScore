@@ -1004,17 +1004,17 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="281"/>
         <source>Show barlines</source>
-        <translation>Mostrar barras de compasso</translation>
+        <translation>Exibir barras de compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="185"/>
         <source>Show clef</source>
-        <translation>Mostrar clave</translation>
+        <translation>Exibir clave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="260"/>
         <source>Show time signature</source>
-        <translation>Mostrar fórmula de compasso</translation>
+        <translation>Exibir fórmula de compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="240"/>
@@ -1024,7 +1024,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="290"/>
         <source>Hide when empty:</source>
-        <translation>Esconder quando vazio:</translation>
+        <translation>Ocultar quando vazio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="301"/>
@@ -1412,29 +1412,29 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="188"/>
         <source>Show clef</source>
-        <translation>Mostrar clave</translation>
+        <translation>Exibir clave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="195"/>
         <source>Show time signature</source>
-        <translation>Mostrar fórmula de compasso</translation>
+        <translation>Exibir fórmula de compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="202"/>
         <source>Show barlines</source>
-        <translation>Mostrar barras de compasso</translation>
+        <translation>Exibir barras de compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="244"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="360"/>
         <source>Show key signature</source>
-        <translation>Mostrar armadura de clave</translation>
+        <translation>Exibir armadura de clave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="251"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="374"/>
         <source>Show ledger lines</source>
-        <translation>Mostrar linhas complementares</translation>
+        <translation>Exibir linhas complementares</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="258"/>
@@ -1530,7 +1530,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="686"/>
         <source>Show fingering in tablature</source>
-        <translation>Mostrar digitação na tablatura</translation>
+        <translation>Exibir digitação na tablatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="20"/>
@@ -1550,7 +1550,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="826"/>
         <source>Shown as:</source>
-        <translation>Mostrado como:</translation>
+        <translation>Exibido como:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="845"/>
@@ -1647,7 +1647,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1233"/>
         <source>Show rests</source>
-        <translation>Mostrar pausas</translation>
+        <translation>Exibir pausas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1314"/>
@@ -2212,12 +2212,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="556"/>
         <source>Hide empty staves within systems</source>
-        <translation>Esconder pautas vazias entre os sistemas</translation>
+        <translation>Ocultar pautas vazias entre os sistemas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="575"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>Mostrar colchetes ao abranger pauta simples</translation>
+        <translation>Exibir colchetes ao abranger pauta simples</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="585"/>
@@ -2486,13 +2486,13 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2361"/>
         <source>Show header also on first page</source>
-        <translation>Mostrar cabeçalho também na primeira página</translation>
+        <translation>Exibir cabeçalho também na primeira página</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2364"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2667"/>
         <source>Show on first page</source>
-        <translation>Mostrar na primeira página</translation>
+        <translation>Exibir na primeira página</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2384"/>
@@ -2542,7 +2542,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2664"/>
         <source>Show footer also on first page</source>
-        <translation>Mostrar rodapé também na primeira página</translation>
+        <translation>Exibir rodapé também na primeira página</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2687"/>
@@ -2552,7 +2552,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2989"/>
         <source>Show first</source>
-        <translation>Mostrar primeiro</translation>
+        <translation>Exibir primeiro</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3011"/>
@@ -2582,7 +2582,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3178"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation>Mostrar faixa de compassos em compassos de espera</translation>
+        <translation>Exibir faixa de compassos em compassos de espera</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3395"/>
@@ -2664,12 +2664,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="617"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation>Redefinir o valor de &apos;Etiquetas de instrumentos em sistemas subsequentes&apos;</translation>
+        <translation>Redefinir o valor de &apos;Rótulos de instrumentos em sistemas subsequentes&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="637"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation>Redefinir o valor de &apos;Etiquetas de instrumentos na primeira seção de sistemas&apos;</translation>
+        <translation>Redefinir o valor de &apos;Rótulos de instrumentos na primeira seção de sistemas&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="647"/>
@@ -2985,7 +2985,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7475"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
-        <translation>Não mostrar arpejos em notação padrão quando exibidos em tablatura</translation>
+        <translation>Não exibir arpejos em notação padrão quando exibidos em tablatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7753"/>
@@ -3497,7 +3497,7 @@ primeira nota do sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6405"/>
         <source>Show extenders on 4-measure repeats</source>
-        <translation>Mostrar símile em repetições de 4 compassos</translation>
+        <translation>Exibir símile em repetições de 4 compassos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6425"/>
@@ -4515,12 +4515,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
         <source>Show only for intervals other than seconds</source>
-        <translation>Mostrar apenas para intervalos diferentes de segundos</translation>
+        <translation>Exibir apenas para intervalos diferentes de segundos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11049"/>
         <source>Show for all intervals</source>
-        <translation>Mostrar para todos os intervalos</translation>
+        <translation>Exibir para todos os intervalos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13037"/>
@@ -4775,12 +4775,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5065"/>
         <source>Reset &apos;Show repeat barline tips (“winged” repeats)&apos; value</source>
-        <translation>Redefinir valor &apos;Mostrar barras de repetição com marcações especiais&apos;</translation>
+        <translation>Redefinir valor &apos;Exibir barras de repetição com marcações especiais&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5249"/>
         <source>Show repeat barline tips (“winged” repeats)</source>
-        <translation>Mostrar barras de repetição com marcações especiais</translation>
+        <translation>Exibir barras de repetição com marcações especiais</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5785"/>
@@ -4902,12 +4902,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14392"/>
         <source>Always show at the start of a measure</source>
-        <translation>Sempre mostrar no início de um compasso</translation>
+        <translation>Sempre exibir no início de um compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14406"/>
         <source>Always show parenthesized fret marks when articulation markings are present</source>
-        <translation>Sempre mostrar marcas de escala entre parênteses quando houver marcações de articulação</translation>
+        <translation>Sempre exibir marcas de escala entre parênteses quando houver marcações de articulação</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14905"/>
@@ -4969,27 +4969,27 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14355"/>
         <source>Show ties and repeat fret marks</source>
-        <translation>Mostrar ligaduras de prolongamento e marcas de repetição de casa</translation>
+        <translation>Exibir ligaduras de prolongamento e marcas de repetição de casa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14362"/>
         <source>Show ties only</source>
-        <translation>Mostrar apenas ligaduras de prolongamento</translation>
+        <translation>Exibir apenas ligaduras de prolongamento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14369"/>
         <source>Show initial fret mark only</source>
-        <translation>Mostrar apenas marca de escala inicial</translation>
+        <translation>Exibir apenas marca de escala inicial</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14385"/>
         <source>Only show at the start of a system</source>
-        <translation>Mostrar apenas no início de um sistema</translation>
+        <translation>Exibir apenas no início de um sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14399"/>
         <source>Never show</source>
-        <translation>Nunca mostrar</translation>
+        <translation>Nunca exibir </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14479"/>
@@ -5111,12 +5111,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="850"/>
         <source>Show ‘1’ on 1-measure repeats</source>
-        <translation>Mostrar &apos;1&apos; em repetições de 1 compasso</translation>
+        <translation>Exibir &apos;1&apos; em repetições de 1 compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="851"/>
         <source>Show number ‘1’</source>
-        <translation>Mostrar número ‘1’</translation>
+        <translation>Exibir número ‘1’</translation>
     </message>
 </context>
 <context>
@@ -5380,7 +5380,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="428"/>
         <source>Always show</source>
-        <translation>Sempre mostrar</translation>
+        <translation>Sempre exibir </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="433"/>
@@ -5618,7 +5618,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="172"/>
         <source>Show more…</source>
-        <translation>Mostrar mais…</translation>
+        <translation>Exibir mais…</translation>
     </message>
 </context>
 <context>
@@ -7650,7 +7650,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="540"/>
         <source>Find / Go to</source>
-        <translation>Procurar / Ir para</translation>
+        <translation>Encontrar / Ir para</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="545"/>
@@ -8108,19 +8108,19 @@ texto altura-x):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1491"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1492"/>
         <source>Zoom to page width</source>
-        <translation>Zoom com a largura da página</translation>
+        <translation>Ampliar para a largura da página</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1497"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1498"/>
         <source>Zoom to whole page</source>
-        <translation>Zoom na página inteira</translation>
+        <translation>Ampliar para página inteira</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1503"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1504"/>
         <source>Zoom to two pages</source>
-        <translation>Zoom para ver duas páginas</translation>
+        <translation>Ampliar para duas páginas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1510"/>
@@ -8421,7 +8421,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2012"/>
         <source>Show/hide empty staves</source>
-        <translation>Mostar/ocultar pautas vazias</translation>
+        <translation>Exibir/ocultar pautas vazias</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2018"/>
@@ -8648,27 +8648,27 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2521"/>
         <source>Show/hide invisible elements</source>
-        <translation>Mostrar/ocultar elementos invisíveis</translation>
+        <translation>Exibir/ocultar elementos invisíveis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2535"/>
         <source>Show/hide frames</source>
-        <translation>Mostrar/ocultar molduras</translation>
+        <translation>Exibir/ocultar molduras</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2542"/>
         <source>Show/hide page margins</source>
-        <translation>Mostrar/ocultar margens da página</translation>
+        <translation>Exibir/ocultar margens da página</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2565"/>
         <source>Show element bounding rectangles</source>
-        <translation>Mostrar retângulos de borda do elemento</translation>
+        <translation>Exibir retângulos de borda do elemento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2566"/>
         <source>Show/hide element bounding rectangles</source>
-        <translation>Mostrar/esconder retângulos de borda do elemento</translation>
+        <translation>Exibir/ocultar  retângulos de borda do elemento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2572"/>
@@ -8678,12 +8678,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2578"/>
         <source>Show segment shapes</source>
-        <translation>Mostrar formatos do segmento</translation>
+        <translation>Exibir formatos do segmento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2579"/>
         <source>Show/hide segment shapes</source>
-        <translation>Mostrar/esconder formatos do segmento</translation>
+        <translation>Exibir/ocultar formatos do segmento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2585"/>
@@ -8693,32 +8693,32 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2591"/>
         <source>Show skylines</source>
-        <translation>Mostrar limites do sistema</translation>
+        <translation>Exibir limites do sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2592"/>
         <source>Show/hide skylines</source>
-        <translation>Mostrar/ocultar limites do sistema</translation>
+        <translation>Exibir/ocultar limites do sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2598"/>
         <source>Show system bounding rectangles</source>
-        <translation>Mostrar retângulos de borda de sistema</translation>
+        <translation>Exibir retângulos de borda de sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2599"/>
         <source>Show/hide system bounding rectangles</source>
-        <translation>Mostrar/esconder retângulos de borda de sistema</translation>
+        <translation>Exibir/ocultar retângulos de borda de sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2605"/>
         <source>Show element masks</source>
-        <translation>Mostrar máscaras de elementos</translation>
+        <translation>Exibir máscaras de elementos</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2606"/>
         <source>Show/hide element masks</source>
-        <translation>Mostrar/ocultar máscaras de elementos</translation>
+        <translation>Exibir/ocultar máscaras de elementos</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1999"/>
@@ -9050,12 +9050,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="109"/>
         <source>Show/hide playback controls</source>
-        <translation>Mostrar/ocultar controles de reprodução</translation>
+        <translation>Exibir/ocultar controles de reprodução</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="116"/>
         <source>Show/hide note input toolbar</source>
-        <translation>Mostrar/ocultar barra de ferramentas de entrada de notas</translation>
+        <translation>Exibir/ocultar barra de ferramentas de entrada de notas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="124"/>
@@ -9065,7 +9065,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="125"/>
         <source>Show/hide palettes</source>
-        <translation>Mostrar/ocultar paletas</translation>
+        <translation>Exibir/ocultar paletas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="138"/>
@@ -9075,7 +9075,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="139"/>
         <source>Show/hide properties</source>
-        <translation>Mostrar/ocultar propriedades</translation>
+        <translation>Exibir/ocultar propriedades</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
@@ -9085,7 +9085,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="146"/>
         <source>Show/hide selection filter</source>
-        <translation>Mostrar/ocultar filtro de seleção</translation>
+        <translation>Exibir/ocultar filtro de seleção</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="152"/>
@@ -9095,7 +9095,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="153"/>
         <source>Show/hide undo history</source>
-        <translation>Mostrar/ocultar histórico de desfazer</translation>
+        <translation>Exibir/ocultar histórico de desfazer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="161"/>
@@ -9105,7 +9105,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="162"/>
         <source>Show/hide navigator</source>
-        <translation>Mostrar/ocultar navegador</translation>
+        <translation>Exibir/ocultar navegador</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="170"/>
@@ -9115,7 +9115,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="171"/>
         <source>Show/hide braille panel</source>
-        <translation>Mostrar/ocultar painel de braille</translation>
+        <translation>Exibir/ocultar painel de braille</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="179"/>
@@ -9125,17 +9125,17 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="180"/>
         <source>Show/hide timeline</source>
-        <translation>Mostrar/ocultar linha do tempo</translation>
+        <translation>Exibir/ocultar linha do tempo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="187"/>
         <source>Show/hide mixer</source>
-        <translation>Mostrar/ocultar mixer</translation>
+        <translation>Exibir/ocultar mixer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="195"/>
         <source>Show/hide piano keyboard</source>
-        <translation>Mostrar/ocultar teclado</translation>
+        <translation>Exibir/ocultar teclado</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="201"/>
@@ -9145,7 +9145,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="202"/>
         <source>Show/hide percussion panel</source>
-        <translation>Mostrar/esconder painel de percussão</translation>
+        <translation>Exibir/ocultar painel de percussão</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="216"/>
@@ -9155,7 +9155,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="217"/>
         <source>Show/hide status bar</source>
-        <translation>Mostrar/ocultar barra de status</translation>
+        <translation>Exibir/ocultar barra de status</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="225"/>
@@ -9200,7 +9200,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
         <source>Show/hide layout panel</source>
-        <translation>Mostrar/ocultar painel de layout</translation>
+        <translation>Exibir/ocultar painel de layout</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="194"/>
@@ -9415,27 +9415,27 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2520"/>
         <source>Show &amp;invisible</source>
-        <translation>Mostrar &amp;invisíveis</translation>
+        <translation>Exibir &amp;invisíveis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2527"/>
         <source>Show f&amp;ormatting</source>
-        <translation>Mostrar f&amp;ormatação</translation>
+        <translation>Exibir f&amp;ormatação</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2528"/>
         <source>Show/hide formatting</source>
-        <translation>Mostrar/ocultar formatação</translation>
+        <translation>Exibir/ocultar formatação</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2534"/>
         <source>Show &amp;frames</source>
-        <translation>Mostrar &amp;molduras</translation>
+        <translation>Exibir &amp;molduras</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
         <source>Show page &amp;margins</source>
-        <translation>Mostrar &amp;margens da página</translation>
+        <translation>Exibir &amp;margens da página</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="71"/>
@@ -9446,7 +9446,7 @@ texto altura-x):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1471"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1472"/>
         <source>Zoom in</source>
-        <translation>Aproximar</translation>
+        <translation>Ampliar</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1478"/>
@@ -9458,7 +9458,7 @@ texto altura-x):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1485"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1486"/>
         <source>Zoom to 100%</source>
-        <translation>Aproximar em 100%</translation>
+        <translation>Ampliar para 100%</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1843"/>
@@ -9881,7 +9881,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1387"/>
         <source>&amp;Quadruplet</source>
-        <translation>&amp;Quiáltera de 4</translation>
+        <translation>&amp;Quartina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1393"/>
@@ -10297,12 +10297,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2548"/>
         <source>Show sound flags</source>
-        <translation>Mostrar sound flags</translation>
+        <translation>Exibir sound flags</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2549"/>
         <source>Show/hide sound flags</source>
-        <translation>Mostrar/ocultar sound flags</translation>
+        <translation>Exibir/ocultar sound flags</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
@@ -10354,12 +10354,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
         <source>Show batch tests…</source>
-        <translation>Mostrar testes em lote...</translation>
+        <translation>Exibir testes em lote...</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="42"/>
         <source>Show &amp;scripts…</source>
-        <translation>Mostrar &amp;scripts…</translation>
+        <translation>Exibir &amp;scripts…</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="38"/>
@@ -10401,27 +10401,27 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="42"/>
         <source>Show p&amp;aths…</source>
-        <translation>Mostrar caminhos...</translation>
+        <translation>Exibir caminhos...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="47"/>
         <source>Show pr&amp;ofiler…</source>
-        <translation>Mostrar pr&amp;ofiler…</translation>
+        <translation>Exibir pr&amp;ofiler…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show g&amp;raphics info…</source>
-        <translation>Mostrar informações g&amp;ráficas…</translation>
+        <translation>Exibir informações g&amp;ráficas…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
         <source>Show &amp;navigation tree…</source>
-        <translation>Mostrar árvore de navegação...</translation>
+        <translation>Exibir árvore de navegação...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation>Mostr&amp;ar árvore de acessibilidade…</translation>
+        <translation>Exibir árvore de &amp;acessibilidade…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
@@ -10431,12 +10431,12 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
         <source>Show engraving &amp;elements</source>
-        <translation>Mostrar &amp;elementos de gravação</translation>
+        <translation>Exibir &amp;elementos de diagramação de partitura</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="77"/>
         <source>Show &amp;actions list</source>
-        <translation>Mostrar lista de &amp;ações</translation>
+        <translation>Exibir lista de &amp;ações</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="82"/>
@@ -10471,7 +10471,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="45"/>
         <source>Show API dump</source>
-        <translation>Mostrar despejo de API</translation>
+        <translation>Exibir despejo de API</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="38"/>
@@ -10504,7 +10504,7 @@ texto altura-x):</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="88"/>
         <source>Scores</source>
-        <translation>Partitura</translation>
+        <translation>Partituras</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="89"/>
@@ -11001,7 +11001,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="487"/>
         <source>&amp;Engraving</source>
-        <translation>&amp;Gravura</translation>
+        <translation>&amp;Diagramação de partitura</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="488"/>
@@ -11542,7 +11542,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="30"/>
         <source>Zoom</source>
-        <translation>Ampliação</translation>
+        <translation>Ampliar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="48"/>
@@ -11573,7 +11573,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="91"/>
         <source>Scores</source>
-        <translation>Partitura</translation>
+        <translation>Partituras</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="95"/>
@@ -11873,11 +11873,11 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Layout panel</source>
-        <translation>Alternar o silenciamento da faixa mostrando/ocultando instrumentos no painel Layout</translation>
+        <translation>Alternar o silenciamento da faixa exibindo/ocultando instrumentos no painel Layout</translation>
     </message>
     <message>
         <source>Toggle track mute by showing/hiding instruments in the Instruments panel</source>
-        <translation>Alternar o silenciamento da faixa mostrando/ocultando instrumentos no painel Instrumentos</translation>
+        <translation>Alternar o silenciamento da faixa exibindo/ocultando instrumentos no painel Instrumentos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="35"/>
@@ -14136,7 +14136,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
         <location filename="../../src/engraving/dom/check.cpp" line="149"/>
         <source>Part score: %1</source>
         <extracomment>%1 is the name of a part score.</extracomment>
-        <translation>Partitura de naipe: %1</translation>
+        <translation>Parte da partitura: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="191"/>
@@ -19456,7 +19456,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/StandardDialog.qml" line="52"/>
         <source>Show details</source>
-        <translation>Mostrar detalhes</translation>
+        <translation>Exibir detalhes</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="132"/>
@@ -19764,7 +19764,7 @@ durações</translation>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="759"/>
         <source>Show
 staccato</source>
-        <translation>Mostrar
+        <translation>Exibir
 staccato</translation>
     </message>
     <message>
@@ -19778,14 +19778,14 @@ pontuadas</translation>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="808"/>
         <source>Show
 tempo text</source>
-        <translation>Mostrar
+        <translation>Exibir
 texto de andamento</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="835"/>
         <source>Show
 chord symbols</source>
-        <translation>Mostrar
+        <translation>Exibir
 cifras</translation>
     </message>
     <message>
@@ -20660,7 +20660,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
         <source>Show courtesy clef</source>
-        <translation>Mostrar clave de precaução</translation>
+        <translation>Exibir clave de precaução</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="63"/>
@@ -20725,7 +20725,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="89"/>
         <source>Show fingerings</source>
-        <translation>Mostrar digitações</translation>
+        <translation>Exibir digitações</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="162"/>
@@ -20786,7 +20786,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="142"/>
         <source>Show nut</source>
-        <translation>Mostrar noz</translation>
+        <translation>Exibir nut</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="152"/>
@@ -20903,7 +20903,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature</source>
-        <translation>Mostrar armadura de clave de precaução</translation>
+        <translation>Exibir armadura de clave de precaução</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -20973,7 +20973,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="75"/>
         <source>Show text</source>
-        <translation>Mostrar texto</translation>
+        <translation>Exibir texto</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="84"/>
@@ -21083,7 +21083,7 @@ anacruse</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangeStyleTab.qml" line="49"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineWithHooksCommonStyleSettings.qml" line="49"/>
         <source>Show line</source>
-        <translation>Mostrar linha</translation>
+        <translation>Exibir linha</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml" line="51"/>
@@ -21094,7 +21094,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml" line="61"/>
         <source>Show numbers only</source>
-        <translation>Números apenas</translation>
+        <translation>Exibir apenas números</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml" line="53"/>
@@ -21104,7 +21104,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/PedalStyleSettings.qml" line="69"/>
         <source>Show line with rosette</source>
-        <translation>Mostrar linha com roseta</translation>
+        <translation>Exibir linha com roseta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="49"/>
@@ -21159,7 +21159,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="48"/>
         <source>Show number</source>
-        <translation>Mostrar número</translation>
+        <translation>Exibir número</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="59"/>
@@ -21325,7 +21325,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="64"/>
         <source>Show stem slash</source>
-        <translation>Mostrar barra de haste</translation>
+        <translation>Exibir barra de haste</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="77"/>
@@ -21476,12 +21476,12 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="218"/>
         <source>Show barlines</source>
-        <translation>Mostrar barras de compasso</translation>
+        <translation>Exibir barras de compasso</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="227"/>
         <source>Show ledger lines</source>
-        <translation>Mostrar linhas complementares</translation>
+        <translation>Exibir linhas complementares</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="236"/>
@@ -21522,7 +21522,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature</source>
-        <translation>Mostrar fórmula de compasso de precaução</translation>
+        <translation>Exibir fórmula de compasso de precaução</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -21597,7 +21597,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="68"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>Mostrar colchetes quando abrangem uma pauta simples</translation>
+        <translation>Exibir colchetes quando abrangem uma pauta simples</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
@@ -21607,7 +21607,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="77"/>
         <source>Show options for hiding empty staves</source>
-        <translation>Mostrar opções para esconder pautas vazias</translation>
+        <translation>Exibir opções para esconder pautas vazias</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="107"/>
@@ -22228,7 +22228,7 @@ anacruse</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="74"/>
         <location filename="../../src/inspector/models/score/scoredisplaysettingsmodel.cpp" line="34"/>
         <source>Show</source>
-        <translation>Mostrar</translation>
+        <translation>Exibir</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml" line="49"/>
@@ -22365,7 +22365,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="189"/>
         <source>Show any alteration</source>
-        <translation>Mostrar qualquer alteração</translation>
+        <translation>Exibir qualquer alteração</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="190"/>
@@ -22626,7 +22626,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="68"/>
         <source>Name on part score</source>
-        <translation>Nome da parte</translation>
+        <translation>Nome na parte da partitura</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="89"/>
@@ -22898,7 +22898,7 @@ anacruse</translation>
         <location filename="../../src/instrumentsscene/view/layoutpaneltreemodel.cpp" line="992"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>Isso removerá o(s) instrumento(s) %n da partitura completa e de todas as partituras parciais.</numerusform><numerusform>Isso removerá o(s) instrumento(s) %n da partitura completa e de todas as partituras parciais.</numerusform><numerusform>Isso removerá o(s) instrumento(s) %n da partitura completa e de todas as partituras parciais.</numerusform></translation>
+        <translation><numerusform>Isso removerá o(s) instrumento(s) %n da partitura completa e de todas as partituras parciais.</numerusform><numerusform>Isso removerá o(s) instrumento(s) %n da partitura completa e de todas as partituras parciais.</numerusform><numerusform>Isso removerá o(s) instrumento(s) %n da partitura completa e de todas as partes da partitura</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="242"/>
@@ -22998,7 +22998,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 (Note: Mastering MuseScore is available in English only)</source>
         <translation>Bem-vindo ao Mastering MuseScore – o recurso mais completo para aprender o software de notação musical mais popular do mundo! Meu nome é Marc Sabatella e tenho ajudado a desenvolver, dar suporte e promover o MuseScore desde seu lançamento inicial, há mais de dez anos.
 
-Seja você um iniciante em softwares de notação musical ou um usuário avançado ansioso para explorar técnicas avançadas de gravação e reprodução, meu principal curso online, Mastering MuseScore, abrange tudo o que você precisa saber para aproveitar ao máximo o MuseScore.
+Seja você um iniciante em softwares de notação musical ou um usuário avançado ansioso para explorar técnicas avançadas de diagrmação de partituras e reprodução, meu principal curso online, Mastering MuseScore, abrange tudo o que você precisa saber para aproveitar ao máximo o MuseScore.
 
 Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com espaços de discussão, transmissões ao vivo e outros cursos e serviços relacionados para ajudar você a criar suas melhores músicas. Aproveite esta oportunidade para aprender o MuseScore com um de seus especialistas mais renomados!
 
@@ -23209,7 +23209,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="71"/>
         <source>Show text:</source>
-        <translation>Mostrar texto:</translation>
+        <translation>Exibir texto:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml" line="83"/>
@@ -23287,7 +23287,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="102"/>
         <source>Find / Go to:</source>
-        <translation>Procurar / Ir para:</translation>
+        <translation>Encontrar / Ir para:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
@@ -23316,7 +23316,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="188"/>
         <source>Show/hide toolbar buttons</source>
-        <translation>Mostrar/ocultar botões da barra de ferramentas</translation>
+        <translation>Exibir/ocultar botões da barra de ferramentas</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="60"/>
@@ -23326,7 +23326,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="78"/>
         <source>Zoom in</source>
-        <translation>Aproximar</translation>
+        <translation>Ampliar</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="58"/>
@@ -23921,7 +23921,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="80"/>
         <source>Nut line thickness:</source>
-        <translation>Grossura da linha de pestana</translation>
+        <translation>Espessura da linha do nut</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="88"/>
@@ -24012,7 +24012,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="203"/>
         <source>Show fingerings</source>
-        <translation>Mostrar digitação</translation>
+        <translation>Exibir digitação</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="209"/>
@@ -25079,7 +25079,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="88"/>
         <source>Show all clefs on every system</source>
-        <translation>Mostrar todas as claves em todos os sistemas</translation>
+        <translation>Exibir todas as claves em todos os sistemas</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="89"/>
@@ -25094,7 +25094,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="108"/>
         <source>Show courtesy clefs</source>
-        <translation>Mostrar claves de precaução</translation>
+        <translation>Exibir claves de precaução</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="115"/>
@@ -25180,7 +25180,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="398"/>
         <source>Show courtesy time signatures</source>
-        <translation>Mostrar fórmulas de compasso de precaução</translation>
+        <translation>Exibir fórmulas de compasso de precaução</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="417"/>
@@ -25210,17 +25210,17 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="466"/>
         <source>Show on every system</source>
-        <translation>Mostrar em todos os sistemas</translation>
+        <translation>Exibir em todos os sistemas</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="467"/>
         <source>Hide after the first system where they appear</source>
-        <translation>Esconder depois do primeiro sistema que eles aparecem</translation>
+        <translation>Ocultar depois do primeiro sistema que eles aparecem</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="479"/>
         <source>Show courtesy key signatures</source>
-        <translation>Mostrar armaduras de clave de precaução</translation>
+        <translation>Exibir armaduras de clave de precaução</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="488"/>
@@ -25240,22 +25240,22 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="569"/>
         <source>At repeats, only show changes before the barline</source>
-        <translation>Em repetições, mostrar apenas as mudanças antes da barra de compasso</translation>
+        <translation>Em repetições, exibir apenas as mudanças antes da barra de compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="575"/>
         <source>At all other jumps, only show changes before the barline</source>
-        <translation>Em todos os outros saltos, mostrar apenas as mudanças antes da barra de compasso</translation>
+        <translation>Em todos os outros saltos, exibir apenas as mudanças antes da barra de compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="689"/>
         <source>Show when cancelling a courtesy before repeats</source>
-        <translation>Mostrar ao cancelar uma precaução antes de repetições</translation>
+        <translation>Exibir ao cancelar uma precaução antes de repetições</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="700"/>
         <source>Show when cancelling a courtesy before all other jumps</source>
-        <translation>Mostrar ao cancelar uma precaução antes de todos os outros saltos</translation>
+        <translation>Exibir ao cancelar uma precaução antes de todos os outros saltos</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="585"/>
@@ -25285,12 +25285,12 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="667"/>
         <source>Show at repeats</source>
-        <translation>Mostrar nas repetições</translation>
+        <translation>Exibir nas repetições</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="678"/>
         <source>Show at all other jumps</source>
-        <translation>Mostrar em todos os outros saltos</translation>
+        <translation>Exibir em todos os outros saltos</translation>
     </message>
 </context>
 <context>
@@ -25515,12 +25515,12 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="601"/>
         <source>Hide instrument in score</source>
-        <translation>Esconder instrumento na partitura</translation>
+        <translation>Ocultar instrumento na partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="604"/>
         <source>Show instrument in score</source>
-        <translation>Mostrar instrumento na partitura</translation>
+        <translation>Exibir instrumento na partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="766"/>
@@ -25608,7 +25608,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3079"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3108"/>
         <source>Show all</source>
-        <translation>Mostrar todos</translation>
+        <translation>Exibir todos</translation>
     </message>
 </context>
 <context>
@@ -25724,7 +25724,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="168"/>
         <source>Hide palette</source>
-        <translation>Esconder paleta</translation>
+        <translation>Ocultar paleta</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="168"/>
@@ -25832,7 +25832,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="162"/>
         <source>Show grid</source>
-        <translation>Mostrar Grade</translation>
+        <translation>Exibir grade</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="111"/>
@@ -28412,7 +28412,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
         <source>Labels</source>
-        <translation>Etiquetas</translation>
+        <translation>Rótulos</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="49"/>
@@ -28670,7 +28670,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="88"/>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="95"/>
         <source>Scores</source>
-        <translation>Partitura</translation>
+        <translation>Partituras</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="108"/>
@@ -29655,7 +29655,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="83"/>
         <source>Select the engraving improvements you would like to apply to your score</source>
-        <translation>Escolha as melhoras de gravura que deseja aplicar à partitura</translation>
+        <translation>Escolha as melhoras de diagramação de partitura que deseja aplicar à sua peça</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="112"/>
@@ -29733,7 +29733,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="148"/>
         <source>Zoom in</source>
-        <translation>Aproximar</translation>
+        <translation>Ampliar</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="161"/>
@@ -29778,7 +29778,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TempoSettings.qml" line="95"/>
         <source>Show tempo marking on my score</source>
-        <translation>Adicionar marcação de andamento à partitura</translation>
+        <translation>Exibir marcação de andamento na minha partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="48"/>
@@ -29788,7 +29788,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ScoreInfoPage.qml" line="71"/>
         <source>Additional score information</source>
-        <translation>Informação adicional da partitura</translation>
+        <translation>Informações adicionais sobre a partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
@@ -31901,13 +31901,13 @@ failed.</source>
         <location filename="../../src/notation/internal/notationparts.cpp" line="278"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3042"/>
         <source>Show instrument</source>
-        <translation>Mostrar instrumento</translation>
+        <translation>Exibir instrumento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="279"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3043"/>
         <source>Hide instrument</source>
-        <translation>Esconder instrumento</translation>
+        <translation>Ocultar instrumento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="312"/>
@@ -31947,17 +31947,17 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="483"/>
         <source>Show voice %1</source>
-        <translation>Mostrar voz %1</translation>
+        <translation>Exibir voz %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="484"/>
         <source>Hide voice %1</source>
-        <translation>Esconder voz %1</translation>
+        <translation>Ocultar voz %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="513"/>
         <source>Show staff</source>
-        <translation>Mostrar pauta</translation>
+        <translation>Exibir pauta</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="514"/>

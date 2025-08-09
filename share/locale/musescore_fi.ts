@@ -42,7 +42,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Measures per system</source>
-        <translation>Tahteja / viivastoryhmä</translation>
+        <translation>Tahteja per viivastoryhmä</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
@@ -6914,12 +6914,12 @@ x-korkeudesta):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
         <source>Measures per s&amp;ystem…</source>
-        <translation>Tahteja / &amp;viivastoryhmä…</translation>
+        <translation>Tahteja per &amp;viivastoryhmä…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
         <source>Measures per system…</source>
-        <translation>Tahteja / viivastoryhmä…</translation>
+        <translation>Tahteja per viivastoryhmä…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
@@ -9323,7 +9323,7 @@ x-korkeudesta):</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="75"/>
         <source>Playback setup</source>
-        <translation>Toiston asetukset</translation>
+        <translation>Toiston asetus</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="158"/>
@@ -15438,7 +15438,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2447"/>
         <source>Square Click</source>
-        <translation>Neliöklikkaus</translation>
+        <translation>Neliöklikki</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2448"/>
@@ -21364,7 +21364,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="213"/>
         <source>Flag offset</source>
-        <translation>Väkäsen poikkeama</translation>
+        <translation>Lipun poikkeama</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="48"/>
@@ -28491,7 +28491,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="33"/>
         <source>Playback setup</source>
-        <translation>Toiston asetukset</translation>
+        <translation>Toiston asetus</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="84"/>
@@ -31613,7 +31613,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5490"/>
         <source>Measures per system</source>
-        <translation>Tahteja / viivastoryhmä</translation>
+        <translation>Tahteja per viivastoryhmä</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5497"/>

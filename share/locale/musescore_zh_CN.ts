@@ -10756,7 +10756,7 @@ This action will not delete any of your scores.</source>
 This action cannot be undone.</source>
         <translation>此动作将会重置您的所有应用偏好和删除所有自定义快捷键。它将不会删除您的任何总谱。
 
-此动作无法撤消。</translation>
+此动作不能撤消。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="223"/>
@@ -11193,7 +11193,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation>更新检查需要网络访问。为了保护您的隐私，MuseScore Studio不存储任何个人信息。详情请参阅我们的&lt;a href=&quot;%1&quot;&gt;隐私政策&lt;/a&gt;。</translation>
+        <translation>更新自检要求访问网络。为了保护您的隐私，MuseScore Studio 不存储任何个人信息。对于更多信息，参阅我们的《&lt;a href=&quot;%1&quot;&gt;隐私策略&lt;/a&gt;》。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -14109,7 +14109,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="264"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation>无法创建比例为%1时值为%2的连音</translation>
+        <translation>不能创建比例为%1时值为%2的连音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="7405"/>
@@ -18800,7 +18800,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="47"/>
         <source>Could not load plugin</source>
-        <translation>无法加载插件</translation>
+        <translation>不能加载插件</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
@@ -22908,7 +22908,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/view/parttreeitem.cpp" line="243"/>
         <source>This action can not be undone</source>
-        <translation>此操作无法撤消</translation>
+        <translation>此动作不能撤消</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/staffcontroltreeitem.cpp" line="33"/>
@@ -22998,7 +22998,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 (Note: Mastering MuseScore is available in English only)</source>
         <translation>欢迎来到《精通 MuseScore》——这里有学习世界最流行的音乐记号集合软件：Musescore 的最全面的资源！我的名字是马克·萨巴泰拉，而自超过十年前 MuseScore 初始发布以来，我已在帮助开发、支持和促销MuseScore。
 
-无论您是随音乐记号集合软件起步，还是渴望探索高级雕版和回放技巧的强力用户，我的旗舰联机课程《精通 MuseScore》涵盖了您需要知晓的 MuseScore 的一切。
+无论您是随音乐记号集合软件入门，还是渴望探索高级雕版和回放技巧的强力用户，我的旗舰联机课程《精通 MuseScore》涵盖了您需要知晓的 MuseScore 的一切。
 
 此外，《精通 MuseScore》特色在于有一个支持性的音乐人社区，带有讨论空间、现场流和其他相关课程和服务，以帮助您创建您的最好音乐。采取这个机会的优势从其最受公认的专家之一那里使得 MuseScore 物尽其用！
 
@@ -23439,12 +23439,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1845"/>
         <source>The style file could not be loaded.</source>
-        <translation>无法加载样式文件。</translation>
+        <translation>不能加载样式文件。</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1850"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation>由于此样式文件来自不同版本的 MuseScore Studio，因此无法保证您的乐谱显示正确。</translation>
+        <translation>由于此样式文件来自不同版本的 MuseScore Studio，因此不保证您的乐谱显示正确。</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1852"/>
@@ -23845,7 +23845,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="173"/>
         <source>Hairpins</source>
-        <translation>楔形力度符号</translation>
+        <translation>楔形记号</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="175"/>
@@ -24206,7 +24206,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="85"/>
         <source>Cannot insert chord/rest in tuplet</source>
-        <translation>无法向连音中插入和弦/休止符</translation>
+        <translation>不能向连音中插入和弦/休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="88"/>
@@ -24247,7 +24247,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="109"/>
         <source>Cannot remove time from tuplet</source>
-        <translation>无法将拍号从连音中移除</translation>
+        <translation>不能将拍号从连音中移除</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="110"/>
@@ -25853,7 +25853,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1172"/>
         <source>Dynamic + hairpin</source>
-        <translation>文本+楔形力度符号</translation>
+        <translation>力度文本+楔形记号</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="284"/>
@@ -28485,7 +28485,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="685"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>此乐器上的音色标志可能会被重置，但谱表文本将被保留。此操作无法撤销。</translation>
+        <translation>可能重置此乐器上的音色标志，但是将会保持谱表文本。此动作不能撤销。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="33"/>
@@ -28590,7 +28590,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="166"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>音色标志可能被重置，但谱表文本将被保留。此操作无法撤消。</translation>
+        <translation>可能重置音色标志，但是将会保持谱表文本。此动作不能撤销。</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml" line="76"/>
@@ -28823,7 +28823,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="476"/>
         <source>Your score could not be opened</source>
-        <translation>您的乐谱无法打开</translation>
+        <translation>不能打开您的总谱</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="481"/>
@@ -28834,12 +28834,12 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1743"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1782"/>
         <source>Cannot read file %1</source>
-        <translation>无法读取文件 %1</translation>
+        <translation>不能读文件 %1</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1787"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
-        <translation>该文件不存在或此时无法访问。</translation>
+        <translation>此文件不存在或此时不能存取。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1751"/>
@@ -28884,7 +28884,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
-        <translation>无法打开文件，请确保MuseScore Studio有读取该文件的权限。</translation>
+        <translation>不能打开此文件。请确保 MuseScore Studio 有权限来读此文件。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
@@ -29245,22 +29245,22 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="508"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="594"/>
         <source>Could not connect to &lt;a href=&quot;https://musescore.com&quot;&gt;MuseScore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
-        <translation>无法连接到&lt;a href=&quot;https://musescore.com&quot;&gt;MuseScore.com&lt;/a&gt;。请检查您的互联网连接或稍后重试。</translation>
+        <translation>不能连接到&lt;a href=&quot;https://musescore.com&quot;&gt;MuseScore.com&lt;/a&gt;。请自检您的互联网连接或稍后再尝试。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="484"/>
         <source>The file could not be downloaded to your disk.</source>
-        <translation>该乐谱无法下载到您的磁盘。</translation>
+        <translation>不能将该文件下载到您的盘。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="491"/>
         <source>This score does not belong to this account. To access this score, make sure you are logged in to the desktop app with the account to which this score belongs.</source>
-        <translation>此乐谱不属于此帐户。要访问此乐谱，请确保您已使用此乐谱所属的帐户登录到桌面应用程序。</translation>
+        <translation>此总谱不属于此账户。欲存取此总谱，请确保您已用此总谱所属的账户登录到桌面应用程序。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="495"/>
         <source>The score could not be found, or cannot be accessed by your account.</source>
-        <translation>找不到乐谱，或无法通过您的帐户访问乐谱。</translation>
+        <translation>总谱不能找到，或不能通过您的账户存取。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="512"/>
@@ -30421,7 +30421,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="830"/>
         <source>File “%1” could not be opened for validation. %2</source>
-        <translation>文件“%1”无法打开进行验证。%2</translation>
+        <translation>不能打开文件“%1”供确认。%2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="841"/>
@@ -30461,7 +30461,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="645"/>
         <source>Could not connect to Audio.com. Please check your internet connection or try again later.</source>
-        <translation>无法连接到Audio.com。请检查您的互联网连接或稍后重试。</translation>
+        <translation>不能连接到 Audio.com。请自检您的互联网连接或稍后再尝试。</translation>
     </message>
 </context>
 <context>
@@ -30696,7 +30696,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="58"/>
         <source>The directory could not be cleared</source>
-        <translation>无法清除目录</translation>
+        <translation>不能清除目录</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="59"/>
@@ -31461,7 +31461,7 @@ failed.</source>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5072"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="201"/>
         <source>Add hairpin</source>
-        <translation>添加楔形力度号</translation>
+        <translation>添加楔形记号</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5170"/>
@@ -31579,7 +31579,7 @@ failed.</source>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5342"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="193"/>
         <source>Change hairpin type</source>
-        <translation>更改楔形力度号类型</translation>
+        <translation>更改楔形记号类型</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5385"/>
@@ -32089,7 +32089,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="190"/>
         <source>Remove hairpin</source>
-        <translation>移除楔形力度记号</translation>
+        <translation>移除楔形记号</translation>
     </message>
 </context>
 <context>
