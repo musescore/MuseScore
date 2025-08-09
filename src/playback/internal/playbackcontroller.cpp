@@ -1298,10 +1298,10 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
         }
     }
 
+    removeFromOnlineSounds(search->second);
+
     m_trackRemoved.send(search->second);
     m_instrumentTrackIdMap.erase(instrumentTrackId);
-
-    removeFromOnlineSounds(search->second);
 }
 
 void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTrackId)
