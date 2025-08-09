@@ -36,6 +36,8 @@ public:
     virtual ~IMuseSamplerCheckUpdateService() = default;
 
     virtual bool canCheckForUpdate() const = 0;
+    virtual bool incompatibleLocalVersion() const = 0;
+
     virtual muse::async::Promise<muse::RetVal<bool> > checkForUpdate() = 0;
 };
 }
