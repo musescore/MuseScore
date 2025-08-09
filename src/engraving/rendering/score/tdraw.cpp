@@ -121,6 +121,7 @@
 #include "dom/stafftext.h"
 #include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
+#include "dom/staffvisibilityindicator.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
@@ -348,6 +349,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter);
         break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter);
+        break;
+    case ElementType::STAFF_VISIBILITY_INDICATOR: draw(item_cast<const StaffVisibilityIndicator*>(item), painter);
         break;
     case ElementType::STEM:                 draw(item_cast<const Stem*>(item), painter);
         break;
@@ -2865,7 +2868,7 @@ void TDraw::draw(const SystemText* item, Painter* painter)
     drawTextBase(item, painter);
 }
 
-void TDraw::draw(const SystemLockIndicator* item, muse::draw::Painter* painter)
+void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -2882,15 +2885,17 @@ void TDraw::draw(const SystemLockIndicator* item, muse::draw::Painter* painter)
 
     painter->drawSymbol(PointF(), item->iconCode());
 
-    if (item->selected()) {
-        Color lockedAreaColor = item->configuration()->selectionColor();
+    if (item->isSystemLockIndicator() && item->selected()) {
+        const SystemLockIndicator* sli = toSystemLockIndicator(item);
+
+        Color lockedAreaColor = sli->configuration()->selectionColor();
         lockedAreaColor.setAlpha(38);
         Brush brush(lockedAreaColor);
         painter->setBrush(brush);
         painter->setNoPen();
-        double radius = 0.5 * item->spatium();
+        double radius = 0.5 * sli->spatium();
 
-        painter->drawRoundedRect(item->ldata()->rangeRect, radius, radius);
+        painter->drawRoundedRect(sli->ldata()->rangeRect, radius, radius);
     }
 }
 

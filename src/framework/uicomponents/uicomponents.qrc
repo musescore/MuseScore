@@ -53,6 +53,7 @@
         <file>qml/Muse/UiComponents/StyledTabButton.qml</file>
         <file>qml/Muse/UiComponents/StyledTextLabel.qml</file>
         <file>qml/Muse/UiComponents/StyledToolTip.qml</file>
+        <file>qml/Muse/UiComponents/StyledTreeView.qml</file>
         <file>qml/Muse/UiComponents/TextInputField.qml</file>
         <file>qml/Muse/UiComponents/TimeInputField.qml</file>
         <file>qml/Muse/UiComponents/ToggleButton.qml</file>
@@ -60,6 +61,7 @@
         <file>qml/Muse/UiComponents/ValueAdjustControl.qml</file>
         <file>qml/Muse/UiComponents/ValueList.qml</file>
         <file>qml/Muse/UiComponents/VisibilityBox.qml</file>
+        <file>qml/Muse/UiComponents/VisibilityControls.qml</file>
         <file>qml/Muse/UiComponents/internal/ArrowScrollButton.qml</file>
         <file>qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml</file>
         <file>qml/Muse/UiComponents/internal/DirectoriesView.qml</file>
@@ -76,6 +78,9 @@
         <file>qml/Muse/UiComponents/qmldir</file>
         <file>qml/Muse/UiComponents/treeview/BasicTableView.qml</file>
         <file>qml/Muse/UiComponents/treeview/BasicTableViewStyle.qml</file>
+        <file>qml/Muse/UiComponents/treeview/LegacyTreeView.qml</file>
+        <file>qml/Muse/UiComponents/treeview/LegacyTreeViewItemDelegateLoader.qml</file>
+        <file>qml/Muse/UiComponents/treeview/LegacyTreeViewStyle.qml</file>
         <file>qml/Muse/UiComponents/treeview/ScrollBar.qml</file>
         <file>qml/Muse/UiComponents/treeview/ScrollView.qml</file>
         <file>qml/Muse/UiComponents/treeview/ScrollViewHelper.qml</file>
@@ -83,9 +88,6 @@
         <file>qml/Muse/UiComponents/treeview/Style.qml</file>
         <file>qml/Muse/UiComponents/treeview/TableViewColumn.qml</file>
         <file>qml/Muse/UiComponents/treeview/TableViewItemDelegateLoader.qml</file>
-        <file>qml/Muse/UiComponents/treeview/TreeView.qml</file>
-        <file>qml/Muse/UiComponents/treeview/TreeViewItemDelegateLoader.qml</file>
-        <file>qml/Muse/UiComponents/treeview/TreeViewStyle.qml</file>
         <file>qml/Muse/UiComponents/treeview/images/header.png</file>
         <file>qml/Muse/UiComponents/StyledToolBarView.qml</file>
         <file>qml/Muse/UiComponents/StyledToolBarItem.qml</file>

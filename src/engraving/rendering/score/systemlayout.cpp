@@ -484,7 +484,7 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     lockIndicator->setParent(system);
     system->addLockIndicator(lockIndicator);
 
-    TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
+    TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
 }
 
 //---------------------------------------------------------
@@ -515,7 +515,8 @@ System* SystemLayout::getNextSystem(LayoutContext& ctx)
 }
 
 // Returns ALWAYS, NEVER, or INSTRUMENT
-static Staff::HideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty)
+static Staff::HideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty,
+                                       bool& hasSystemSpecificOverrides)
 {
     // Check for system-specific overrides
     bool hasSystemSpecificOverrideHide = false;
@@ -534,8 +535,10 @@ static Staff::HideMode computeHideMode(const System* system, const Staff* staff,
     }
 
     if (hasSystemSpecificOverrideDontHide) {
+        hasSystemSpecificOverrides = true;
         return Staff::HideMode::NEVER;
     } else if (hasSystemSpecificOverrideHide) {
+        hasSystemSpecificOverrides = true;
         return Staff::HideMode::ALWAYS;
     }
 
@@ -630,6 +633,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
         // One staff, show iff not manually hidden score-wide
         const bool show = ctx.dom().staves().front()->show();
         system->staves().front()->setShow(show);
+        system->setHasStaffVisibilityIndicator(false);
         return;
     }
 
@@ -640,6 +644,8 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     const bool globalHideIfEmpty = ctx.conf().styleB(Sid::hideEmptyStaves)
                                    && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem));
 
+    bool hasSystemSpecificOverrides = false;
+    bool hasHiddenStaves = false;
     bool systemIsEmpty = true;
     staff_idx_t staffIdx = 0;
 
@@ -655,13 +661,17 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
             continue;
         }
 
-        const Staff::HideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty);
+        const Staff::HideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty, hasSystemSpecificOverrides);
         const bool show = computeShowSysStaff(system, staff, staffIdx, stick, spanners, hideMode);
         ss->setShow(show);
         if (show) {
             systemIsEmpty = false;
+        } else {
+            hasHiddenStaves = true;
         }
     }
+
+    system->setHasStaffVisibilityIndicator(hasSystemSpecificOverrides || hasHiddenStaves);
 
     // If the system is empty, unhide the staves with `showIfEmpty` set to true, if any
     const Staff* firstVisible = nullptr;
@@ -678,11 +688,37 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     }
 
     // If there are no such staves, unhide the first one
-    if (systemIsEmpty && !ctx.dom().staves().empty()) {
+    if (systemIsEmpty) {
         const Staff* staff = firstVisible ? firstVisible : ctx.dom().staves().front();
         SysStaff* ss = system->staff(staff->idx());
         ss->setShow(true);
     }
+}
+
+bool SystemLayout::canChangeSysStaffVisibility(const System* system, const staff_idx_t staffIdx)
+{
+    if (system->staves().size() <= 1) {
+        // Only one staff; always visible
+        return false;
+    }
+
+    const Staff* staff = system->score()->staff(staffIdx);
+
+    if (system->staff(staffIdx)->show()) {
+        // SysStaff is visible; check if can hide
+        const Fraction stick = system->first()->tick();
+        const Fraction etick = system->last()->endTick();
+        const auto& spanners = system->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
+
+        return !computeShowSysStaff(system, staff, staffIdx, system->first()->tick(), spanners, Staff::HideMode::ALWAYS);
+    }
+
+    // SysStaff is hidden; check if can show
+    if (!staff->show()) {
+        return false;
+    }
+
+    return true;
 }
 
 void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
