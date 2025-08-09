@@ -113,7 +113,6 @@
           <Breath>
             <symbol>breathMarkComma</symbol>
             <eid>P_P</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>Q_Q</eid>
@@ -145,7 +144,6 @@
           <Breath>
             <symbol>breathMarkUpbow</symbol>
             <eid>W_W</eid>
-            <placement>below</placement>
             </Breath>
           </voice>
         </Measure>
@@ -164,7 +162,6 @@
           <Breath>
             <symbol>caesuraCurved</symbol>
             <eid>a_a</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>b_b</eid>
@@ -178,7 +175,6 @@
           <Breath>
             <symbol>caesura</symbol>
             <eid>d_d</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>e_e</eid>
@@ -201,7 +197,6 @@
           <Breath>
             <symbol>caesuraShort</symbol>
             <eid>i_i</eid>
-            <placement>below</placement>
             </Breath>
           </voice>
         </Measure>
@@ -229,7 +224,6 @@
           <Breath>
             <symbol>chantCaesura</symbol>
             <eid>o_o</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>p_p</eid>
@@ -271,7 +265,6 @@
           <Breath>
             <symbol>chantCaesura</symbol>
             <eid>x_x</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>y_y</eid>
@@ -285,7 +278,6 @@
           <Breath>
             <symbol>caesuraThick</symbol>
             <eid>0_0</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>1_1</eid>
@@ -299,7 +291,6 @@
           <Breath>
             <symbol>caesuraThick</symbol>
             <eid>3_3</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>4_4</eid>
@@ -313,7 +304,6 @@
           <Breath>
             <symbol>caesuraThick</symbol>
             <eid>6_6</eid>
-            <placement>below</placement>
             </Breath>
           <BarLine>
             <subtype>end</subtype>
@@ -357,7 +347,6 @@
           <Breath>
             <symbol>breathMarkComma</symbol>
             <eid>BB_BB</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>CB_CB</eid>
@@ -384,7 +373,6 @@
           <Breath>
             <symbol>caesura</symbol>
             <eid>GB_GB</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>HB_HB</eid>
@@ -439,7 +427,6 @@
           <Breath>
             <symbol>caesuraThick</symbol>
             <eid>QB_QB</eid>
-            <placement>below</placement>
             </Breath>
           <Chord>
             <eid>RB_RB</eid>
