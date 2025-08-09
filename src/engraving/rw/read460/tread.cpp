@@ -3523,6 +3523,8 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
         p->setSoloist(e.readInt());
     } else if (tag == "hideWhenEmpty") {
         p->setHideWhenEmpty(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
+    } else if (tag == "hideStavesWhenIndividuallyEmpty") {
+        p->setHideStavesWhenIndividuallyEmpty(e.readBool());
     } else if (tag == "preferSharpFlat") {
         String val = e.readText();
         if (val == "sharps") {

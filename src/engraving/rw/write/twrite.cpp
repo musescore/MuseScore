@@ -2516,6 +2516,10 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("hideWhenEmpty", TConv::toXml(item->hideWhenEmpty()));
     }
 
+    if (item->hideStavesWhenIndividuallyEmpty()) {
+        xml.tag("hideStavesWhenIndividuallyEmpty", item->hideStavesWhenIndividuallyEmpty());
+    }
+
     if (item->preferSharpFlat() != PreferSharpFlat::AUTO) {
         switch (item->preferSharpFlat()) {
         case PreferSharpFlat::AUTO:

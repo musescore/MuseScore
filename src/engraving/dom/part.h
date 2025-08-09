@@ -192,6 +192,9 @@ public:
     AutoOnOff hideWhenEmpty() const { return m_hideWhenEmpty; }
     void setHideWhenEmpty(AutoOnOff v) { m_hideWhenEmpty = v; }
 
+    bool hideStavesWhenIndividuallyEmpty() const { return m_hideStavesWhenIndividuallyEmpty; }
+    void setHideStavesWhenIndividuallyEmpty(bool v) { m_hideStavesWhenIndividuallyEmpty = v; }
+
     PreferSharpFlat preferSharpFlat() const { return m_preferSharpFlat; }
     void setPreferSharpFlat(PreferSharpFlat v) { m_preferSharpFlat = v; }
 
@@ -214,7 +217,12 @@ private:
     bool m_soloist = false;           ///< used in score ordering
     int m_capoFret = 0;
     int m_color = 0;                  ///User specified color for helping to label parts
-    AutoOnOff m_hideWhenEmpty = AutoOnOff::AUTO; ///< hide part when empty
+
+    /// Hide staves in this part when empty
+    AutoOnOff m_hideWhenEmpty = AutoOnOff::AUTO;
+
+    /// Hide staves when they are individually empty, rather than only if all this part's staves are empty
+    bool m_hideStavesWhenIndividuallyEmpty = false;
 
     PreferSharpFlat m_preferSharpFlat = PreferSharpFlat::AUTO;
 
