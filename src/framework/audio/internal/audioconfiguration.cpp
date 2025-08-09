@@ -54,7 +54,7 @@ static const AudioResourceAttributes DEFAULT_AUDIO_RESOURCE_ATTRIBUTES = {
     { SOUNDFONT_NAME_ATTRIBUTE, String::fromStdString(DEFAULT_SOUND_FONT_NAME) } };
 
 static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
-    = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", DEFAULT_AUDIO_RESOURCE_ATTRIBUTES, false /*hasNativeEditor*/ };
+    = { DEFAULT_SOUND_FONT_NAME, "Fluid", DEFAULT_AUDIO_RESOURCE_ATTRIBUTES, AudioResourceType::FluidSoundfont, false /*hasNativeEditor*/ };
 
 void AudioConfiguration::init()
 {

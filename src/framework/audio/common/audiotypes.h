@@ -134,9 +134,9 @@ enum class AudioResourceType {
 
 struct AudioResourceMeta {
     AudioResourceId id;
-    AudioResourceType type = AudioResourceType::Undefined;
     AudioResourceVendor vendor;
     AudioResourceAttributes attributes;
+    AudioResourceType type = AudioResourceType::Undefined;
     bool hasNativeEditorSupport = false;
 
     const String& attributeVal(const String& key) const
@@ -212,9 +212,9 @@ using AudioFxChainOrder = int8_t;
 
 struct AudioFxParams {
     AudioFxCategories categories;
-    AudioFxChainOrder chainOrder = -1;
-    AudioResourceMeta resourceMeta;
     AudioUnitConfig configuration;
+    AudioResourceMeta resourceMeta;
+    AudioFxChainOrder chainOrder = -1;
     bool active = false;
 
     AudioFxType type() const
