@@ -38,67 +38,95 @@ using namespace muse;
 using namespace muse::update;
 using namespace muse::actions;
 
-void UpdateScenario::delayedInit()
+bool UpdateScenario::needCheckForUpdate() const
 {
-    if (configuration()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
-        QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this]() {
-            doCheckForUpdate(false);
+    return configuration()->needCheckForUpdate();
+}
+
+muse::async::Promise<Ret> UpdateScenario::checkForUpdate(bool manual)
+{
+    return async::make_promise<Ret>([this, manual](auto resolve, auto) {
+        m_checkProgressChannel = std::make_shared<Progress>();
+        m_checkProgressChannel->started().onNotify(this, [this]() {
+            m_checkInProgress = true;
         });
-    }
-}
 
-void UpdateScenario::checkForUpdate()
-{
-    if (isCheckStarted()) {
-        return;
-    }
-
-    doCheckForUpdate(true);
-}
-
-bool UpdateScenario::isCheckStarted() const
-{
-    return m_checkProgress;
-}
-
-void UpdateScenario::doCheckForUpdate(bool manual)
-{
-    m_checkProgressChannel = std::make_shared<Progress>();
-    m_checkProgressChannel->started().onNotify(this, [this]() {
-        m_checkProgress = true;
-    });
-
-    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
-        DEFER {
-            m_checkProgress = false;
-        };
-
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
-        if (!noUpdate && !res.ret) {
-            LOGE() << "Unable to check for update, error: " << res.ret.toString();
-
-            if (manual) {
-                showServerErrorMsg();
-            }
-
-            return;
+        if (isCheckInProgress()) {
+            LOGE() << "Check already in progress";
+            const Ret ret = muse::make_ret(Ret::Code::UnknownError);
+            return resolve(ret);
         }
 
-        ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
-        if (!manual) {
-            bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
-            if (noUpdate || shouldIgnoreUpdate) {
+        m_checkProgressChannel = std::make_shared<Progress>();
+        m_checkProgressChannel->started().onNotify(this, [this]() {
+            m_checkInProgress = true;
+        });
+
+        m_checkProgressChannel->finished().onReceive(this, [this, manual, resolve](const ProgressResult& res) {
+            Ret ret = muse::make_ok();
+            DEFER {
+                m_checkInProgress = false;
+                (void)resolve(ret);
+            };
+
+            const bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+            if (!noUpdate && !res.ret) {
+                LOGE() << "Unable to check for update, error: " << res.ret.toString();
+                ret = muse::make_ret(Ret::Code::UnknownError);
+
+                if (manual) {
+                    showServerErrorMsg();
+                }
+
                 return;
             }
-        } else if (noUpdate) {
-            showNoUpdateMsg();
-            return;
-        }
 
-        showReleaseInfo(info);
+            if (!manual) {
+                return;
+            }
+
+            ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
+            noUpdate ? showNoUpdateMsg() : showReleaseInfo(info);
+        });
+
+        Concurrent::run(this, &UpdateScenario::th_checkForUpdate);
+        return muse::async::Promise<Ret>::dummy_result();
     });
+}
 
-    Concurrent::run(this, &UpdateScenario::th_checkForUpdate);
+bool UpdateScenario::hasUpdate() const
+{
+    if (isCheckInProgress()) {
+        return false;
+    }
+
+    const RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
+    if (!lastCheckResult.ret) {
+        return false;
+    }
+
+    bool noUpdate = lastCheckResult.ret.code() == static_cast<int>(Err::NoUpdate);
+    if (noUpdate) {
+        return false;
+    }
+
+    return !shouldIgnoreUpdate(lastCheckResult.val);
+}
+
+muse::Ret UpdateScenario::showUpdate()
+{
+    RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
+    if (!lastCheckResult.ret) {
+        return lastCheckResult.ret;
+    }
+
+    showReleaseInfo(lastCheckResult.val);
+    return muse::make_ok();
+}
+
+bool UpdateScenario::isCheckInProgress() const
+{
+    return m_checkInProgress;
 }
 
 void UpdateScenario::th_checkForUpdate()
@@ -160,6 +188,10 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
         return;
     }
 
+    if (configuration()->checkForUpdateTestMode()) {
+        return;
+    }
+
     QString actionCode = rv.val.toQString();
 
     if (actionCode == "install") {
@@ -208,4 +240,9 @@ void UpdateScenario::closeAppAndStartInstallation(const muse::io::path_t& instal
 
         dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
     });
+}
+
+bool UpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
+{
+    return info.version == configuration()->skippedReleaseVersion() && !configuration()->checkForUpdateTestMode();
 }

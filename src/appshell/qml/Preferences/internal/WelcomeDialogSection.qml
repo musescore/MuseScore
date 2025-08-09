@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,30 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15 as Controls
 
-Controls.PageIndicator {
+import QtQuick 2.15
+
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0
+import MuseScore.Preferences
+
+BaseSection {
     id: root
 
-    property int indicatorSize: 6
+    title: qsTrc("appshell/preferences", "Welcome screen")
 
-    padding: 0
-    spacing: 6
+    required property GeneralPreferencesModel model
 
-    delegate: Rectangle {
-        implicitWidth: root.indicatorSize
-        implicitHeight: implicitWidth
+    rowSpacing: 16
 
-        radius: width / 2
+    CheckBox {
+        id: checkbox
 
-        color: ui.theme.fontPrimaryColor
-        opacity: index === root.currentIndex ? 0.7 : 0.2
+        width: parent.width
 
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: 50
-            }
+        text: qsTrc("appshell/preferences", "Show welcome screen when MuseScore Studio launches")
+        checked: root.model.showWelcomeDialog
+
+        navigation.name: checkbox.text
+        navigation.panel: root.navigation
+
+        onClicked: {
+            root.model.showWelcomeDialog = !root.model.showWelcomeDialog
         }
     }
 }

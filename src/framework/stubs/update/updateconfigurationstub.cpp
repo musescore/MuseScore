@@ -61,6 +61,11 @@ void UpdateConfigurationStub::setSkippedReleaseVersion(const std::string&)
 {
 }
 
+bool UpdateConfigurationStub::checkForUpdateTestMode() const
+{
+    return false;
+}
+
 std::string UpdateConfigurationStub::checkForAppUpdateUrl() const
 {
     return "";

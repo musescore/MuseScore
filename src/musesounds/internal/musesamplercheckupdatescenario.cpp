@@ -31,25 +31,53 @@ bool MuseSamplerCheckUpdateScenario::alreadyChecked() const
     return m_alreadyChecked;
 }
 
-void MuseSamplerCheckUpdateScenario::checkForUpdate()
+muse::async::Promise<muse::Ret> MuseSamplerCheckUpdateScenario::checkForUpdate()
 {
-    if (!service()->canCheckForUpdate() || multiInstancesProvider()->instances().size() != 1) {
-        return;
+    return async::make_promise<Ret>([this](auto resolve, auto) {
+        if (!service()->canCheckForUpdate() || multiInstancesProvider()->instances().size() != 1) {
+            const muse::Ret ret = muse::make_ret(Ret::Code::UnknownError);
+            return resolve(ret);
+        }
+
+        auto promise = service()->checkForUpdate();
+        promise.onResolve(this, [this, resolve](const muse::RetVal<bool>& res) {
+            m_alreadyChecked = true;
+
+            if (!res.ret) {
+                LOGE() << res.ret.toString();
+                (void)resolve(res.ret);
+                return;
+            }
+
+            (void)resolve(muse::make_ok());
+        });
+
+        return muse::async::Promise<Ret>::dummy_result();
+    });
+}
+
+bool MuseSamplerCheckUpdateScenario::hasUpdate() const
+{
+    if (!m_alreadyChecked) {
+        return false;
     }
 
-    auto promise = service()->checkForUpdate();
-    promise.onResolve(this, [this](const muse::RetVal<bool>& res) {
-        m_alreadyChecked = true;
+    const muse::RetVal<bool> lastCheckResult = service()->lastCheckResult();
+    if (!lastCheckResult.ret) {
+        return false;
+    }
 
-        if (!res.ret) {
-            LOGE() << res.ret.toString();
-            return;
-        }
+    return lastCheckResult.val;
+}
 
-        if (res.val) {
-            showUpdateNotification();
-        }
-    });
+muse::Ret MuseSamplerCheckUpdateScenario::showUpdate()
+{
+    if (!hasUpdate()) {
+        return muse::make_ret(muse::Ret::Code::UnknownError);
+    }
+
+    showUpdateNotification();
+    return muse::make_ok();
 }
 
 void MuseSamplerCheckUpdateScenario::showUpdateNotification()

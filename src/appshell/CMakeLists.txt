@@ -52,6 +52,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationstatusbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/welcomedialogmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/welcomedialogmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/firstlaunchsetupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/firstlaunchsetupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/themespagemodel.cpp

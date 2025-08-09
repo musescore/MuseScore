@@ -46,8 +46,8 @@ public:
 
     virtual Progress update(const QString& languageCode) = 0;
 
-    virtual bool needRestartToApplyLanguageChange() const = 0;
-    virtual async::Channel<bool> needRestartToApplyLanguageChangeChanged() const = 0;
+    virtual bool restartRequiredToApplyLanguage() const = 0;
+    virtual async::Channel<bool> restartRequiredToApplyLanguageChanged() const = 0;
 };
 }
 

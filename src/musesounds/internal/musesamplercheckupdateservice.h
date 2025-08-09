@@ -44,5 +44,10 @@ public:
 
     bool canCheckForUpdate() const override;
     muse::async::Promise<muse::RetVal<bool> > checkForUpdate() override;
+
+    muse::RetVal<bool> lastCheckResult() const override;
+
+private:
+    muse::RetVal<bool> m_lastCheckResult;
 };
 }

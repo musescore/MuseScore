@@ -76,6 +76,14 @@ muse::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
 
     clear();
 
+    if (configuration()->checkForUpdateTestMode()) {
+        // Return dummy info...
+        result.val = ReleaseInfo();
+        result.ret = muse::make_ok();
+        m_lastCheckResult = result;
+        return result;
+    }
+
     QBuffer buff;
     m_networkManager = networkManagerCreator()->makeNetworkManager();
 
@@ -144,9 +152,14 @@ muse::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
     result.ret = muse::make_ok();
     result.val = std::move(releaseInfo);
 
-    m_lastCheckResult = result.val;
+    m_lastCheckResult = result;
 
     return result;
+}
+
+muse::RetVal<ReleaseInfo> AppUpdateService::lastCheckResult() const
+{
+    return m_lastCheckResult;
 }
 
 RetVal<AppUpdateService::UpdateRequestHistory> AppUpdateService::readUpdateRequestHistory(const io::path_t& path) const
@@ -192,20 +205,21 @@ Ret AppUpdateService::writeUpdateRequestHistory(const io::path_t& path, const Up
 muse::RetVal<muse::io::path_t> AppUpdateService::downloadRelease()
 {
     RetVal<io::path_t> result;
+    ReleaseInfo info = m_lastCheckResult.val;
 
     QBuffer buff;
-    QUrl fileUrl = QUrl::fromUserInput(QString::fromStdString(m_lastCheckResult.fileUrl));
+    QUrl fileUrl = QUrl::fromUserInput(QString::fromStdString(info.fileUrl));
 
     m_updateProgress.start();
 
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-    m_networkManager->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
+    m_networkManager->progress().progressChanged().onReceive(this, [this, info](int64_t current, int64_t total, const std::string&) {
         m_updateProgress.progress(
             current, total,
 
             //: Means that the download is currently in progress.
             //: %1 will be replaced by the version number of the version that is being downloaded.
-            muse::qtrc("update", "Downloading MuseScore Studio %1").arg(QString::fromStdString(m_lastCheckResult.version)).toStdString());
+            muse::qtrc("update", "Downloading MuseScore Studio %1").arg(QString::fromStdString(info.version)).toStdString());
     });
 
     Ret ret = m_networkManager->get(fileUrl, &buff);
@@ -214,7 +228,7 @@ muse::RetVal<muse::io::path_t> AppUpdateService::downloadRelease()
         return result;
     }
 
-    io::path_t installerPath = configuration()->updateDataPath() + "/" + m_lastCheckResult.fileName;
+    io::path_t installerPath = configuration()->updateDataPath() + "/" + info.fileName;
     fileSystem()->makePath(muse::io::absoluteDirpath(installerPath));
 
     ret = fileSystem()->writeFile(installerPath, ByteArray::fromQByteArrayNoCopy(buff.data()));
@@ -406,7 +420,7 @@ PrevReleasesNotesList AppUpdateService::parsePreviousReleasesNotes(const QByteAr
 
 void AppUpdateService::clear()
 {
-    m_lastCheckResult = ReleaseInfo();
+    m_lastCheckResult = RetVal<ReleaseInfo>();
 
 #if !defined(Q_OS_LINUX)
     fileSystem()->remove(configuration()->updateDataPath());

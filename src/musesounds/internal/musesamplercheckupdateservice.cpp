@@ -49,13 +49,16 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
             muse::RetVal<bool> result;
             result.ret = muse::Ret(int(muse::Ret::Code::UnknownError), "Unable to obtain the local MuseSampler version");
             result.val = false;
+            m_lastCheckResult = result;
             return resolve(result);
         }
 
 #ifdef QT_CONCURRENT_SUPPORTED
         Concurrent::run([this, localVersionStr, resolve]() {
             if (configuration()->museSamplerCheckForUpdateTestMode()) {
-                (void)resolve(muse::RetVal<bool>::make_ok(true));
+                muse::RetVal<bool> result = muse::RetVal<bool>::make_ok(true);
+                m_lastCheckResult = result;
+                (void)resolve(result);
                 return;
             }
 
@@ -71,6 +74,7 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
 
             muse::RetVal<bool> result = muse::RetVal<bool>::make_ok(false);
             DEFER {
+                m_lastCheckResult = result;
                 (void)resolve(result);
             };
 
@@ -114,7 +118,14 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
         result.ret = muse::Ret(int(muse::Ret::Code::NotSupported), "NotSupported");
         result.val = false;
 
+        m_lastCheckResult = result;
+
         return resolve(result);
 #endif
     }, muse::async::PromiseType::AsyncByBody);
+}
+
+muse::RetVal<bool> MuseSamplerCheckUpdateService::lastCheckResult() const
+{
+    return m_lastCheckResult;
 }
