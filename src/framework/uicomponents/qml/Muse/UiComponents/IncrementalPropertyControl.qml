@@ -201,8 +201,18 @@ Item {
             canIncrease: root.canIncrease
             canDecrease: root.canDecrease
 
-            onIncreaseButtonClicked: { root.increment(); textInputField.selectAll() }
-            onDecreaseButtonClicked: { root.decrement(); textInputField.selectAll() }
+            onIncreaseButtonClicked: {
+                root.increment()
+                if (textInputField.activeFocus) {
+                    textInputField.selectAll()
+                }
+            }
+            onDecreaseButtonClicked: {
+                root.decrement()
+                if (textInputField.activeFocus) {
+                    textInputField.selectAll()
+                }
+            }
         }
 
         mouseArea.onWheel: function(wheel) {
