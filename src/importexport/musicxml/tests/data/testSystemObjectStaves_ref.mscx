@@ -60,7 +60,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="3" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -126,7 +125,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Oboe</trackName>
@@ -191,7 +189,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Clarinet in B♭</trackName>
       <Instrument id="bb-clarinet">
@@ -257,7 +254,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -266,7 +262,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">

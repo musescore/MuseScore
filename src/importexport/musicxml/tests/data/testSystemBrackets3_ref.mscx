@@ -26,7 +26,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="1" col="0" visible="1"/>
         </Staff>
       <trackName>Backing
@@ -95,7 +94,6 @@ Vocals</longName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="6" col="0" visible="1"/>
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
@@ -122,7 +120,6 @@ Vocals</longName>
           <showTabFingering>1</showTabFingering>
           <useNumbers>1</useNumbers>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Electric
@@ -227,7 +224,6 @@ Gtr. 1</shortName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="2" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -253,7 +249,6 @@ Gtr. 1</shortName>
           <showTabFingering>1</showTabFingering>
           <useNumbers>1</useNumbers>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Electric
@@ -358,7 +353,6 @@ Gtr. 2</shortName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -384,7 +378,6 @@ Gtr. 2</shortName>
           <showTabFingering>1</showTabFingering>
           <useNumbers>1</useNumbers>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Acoustic
 Guitar</trackName>
@@ -474,7 +467,6 @@ Gtr.</shortName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -483,7 +475,6 @@ Gtr.</shortName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano 2</trackName>
       <Instrument id="piano">
