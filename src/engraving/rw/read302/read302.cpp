@@ -172,7 +172,6 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 
                 Score* curScore = ctx.score();
                 ctx.setScore(s);
-                ctx.setMasterCtx(&ctx);
 
                 readScore302(s, e, ctx);
 

@@ -93,8 +93,6 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
             return;
         }
         irregular = true;
-        ctx.compatTimeSigMap()->add(measure->tick().ticks(), SigEvent(measure->m_len, measure->m_timesig));
-        ctx.compatTimeSigMap()->add((measure->tick() + measure->ticks()).ticks(), SigEvent(measure->m_timesig));
     }
 
     while (e.readNextStartElement()) {
@@ -353,32 +351,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             TRead::read(clef, e, ctx);
             clef->setGenerated(false);
 
-            bool header = false;
-            if (ctx.score()->mscVersion() < 410) {
-                /***********************************************************************
-                 * LEGACY: we used to try to guess if the clef is a header based
-                 * on context, which is very unreliable. After 4.1, we just TAG it.
-                 * *********************************************************************/
-                // there may be more than one clef segment for same tick position
-                // the first clef may be missing and is added later in layout
-                if (ctx.tick() != measure->tick()) {
-                    header = false;
-                } else if (!segment) {
-                    header = true;
-                } else {
-                    header = true;
-                    for (Segment* s = measure->m_segments.first(); s && s->rtick().isZero(); s = s->next()) {
-                        if (s->isKeySigType() || s->isTimeSigType()) {
-                            // hack: there may be other segment types which should
-                            // generate a clef at current position
-                            header = false;
-                            break;
-                        }
-                    }
-                }
-            } else {
-                header = clef->isHeader();
-            }
+            bool header = clef->isHeader();
 
             if (ctx.score()->mscVersion() < 450) {
                 // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
@@ -390,7 +363,6 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
 
             segment = measure->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, ctx.tick());
             segment->add(clef);
-            clef->setIsHeader(header);
         } else if (tag == "TimeSig") {
             TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());
             ts->setTrack(ctx.track());

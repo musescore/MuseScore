@@ -21,13 +21,17 @@
  */
 #pragma once
 
-#include "../xmlreader.h"
-#include "readcontext.h"
+#include "xmlreader.h"
 
-namespace mu::engraving::read410 {
+namespace mu::engraving::rw {
 class HarmonyToDiagramReader
 {
 public:
-    static std::unordered_map<String, String> read(XmlReader& reader);
+    struct FretDiagramInfo {
+        String xml;
+        String pattern;
+    };
+
+    static std::unordered_map<String, FretDiagramInfo> read(XmlReader& reader);
 };
 }
