@@ -21,7 +21,7 @@
  */
 #include "harmonytodiagramreader.h"
 
-using namespace mu::engraving::read460;
+using namespace mu::engraving::rw;
 
 std::unordered_map<muse::String, HarmonyToDiagramReader::FretDiagramInfo> HarmonyToDiagramReader::read(XmlReader& reader)
 {

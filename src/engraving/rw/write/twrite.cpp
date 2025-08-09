@@ -511,8 +511,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
 
     writeItemLink(item, xml, ctx);
 
-    if ((ctx.writeTrack() || item->track() != ctx.curTrack())
-        && (item->track() != muse::nidx) && !item->isBeam() && !item->isTuplet()) {
+    if (item->track() != ctx.curTrack() && item->track() != muse::nidx && !item->isBeam() && !item->isTuplet()) {
         // Writing track number for beams and tuplets is redundant as it is calculated
         // during layout.
         int t = static_cast<int>(item->track()) + ctx.trackDiff();
