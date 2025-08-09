@@ -163,12 +163,12 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioResource
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioFxParams& value)
 {
-    p.process(value.categories, value.chainOrder, value.resourceMeta, value.configuration, value.active);
+    p.process(value.categories, value.resourceMeta, value.configuration, value.chainOrder, value.active);
 }
 
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioFxParams& value)
 {
-    p.process(value.categories, value.chainOrder, value.resourceMeta, value.configuration, value.active);
+    p.process(value.categories, value.resourceMeta, value.configuration, value.chainOrder, value.active);
 }
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AuxSendParams& value)
