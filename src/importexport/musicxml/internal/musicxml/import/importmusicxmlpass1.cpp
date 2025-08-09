@@ -2612,12 +2612,10 @@ static void setNumberOfStavesForPart(Part* const part, const size_t staves)
         part->setStaves(static_cast<int>(staves));
     }
     if (staves != 0 && prevnstaves != 1 && prevnstaves != staves) {
-        for (size_t i = 0; i < part->nstaves(); ++i) {
-            // A "staves" value different from the existing nstaves means
-            // staves in a part will sometimes be hidden.
-            // We can approximate this with the AUTO hide mode. TODO
-            // part->staff(i)->setHideWhenEmpty(Staff::HideMode::AUTO);
-        }
+        // A "staves" value different from the existing nstaves means
+        // staves in a part will sometimes be hidden.
+        // We can approximate this in the following way:
+        part->setHideStavesWhenIndividuallyEmpty(true);
     }
 }
 

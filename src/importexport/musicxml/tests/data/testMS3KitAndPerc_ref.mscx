@@ -58,7 +58,6 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -302,7 +301,6 @@
           <name>perc5Line</name>
           <keysig>0</keysig>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Percussion</trackName>
       <Instrument id="percussion">
