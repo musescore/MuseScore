@@ -24672,8 +24672,8 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="307"/>
-        <source>Horizontal alignent buttons</source>
-        <translation type="unfinished">Horizontal alignent buttons</translation>
+        <source>Horizontal alignment buttons</source>
+        <translation type="unfinished">Horizontal alignment buttons</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="352"/>

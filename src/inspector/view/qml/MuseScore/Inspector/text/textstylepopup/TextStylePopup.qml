@@ -304,7 +304,7 @@ StyledPopupView {
                         navigation.name: "horizonalAlignmentButtonList"
                         navigation.panel: textStyleSettingsNavPanel
                         navigation.row: horizontalAlignmentButtonList.navigationRowStart + model.index
-                        navigation.accessible.name: qsTrc("inspector", "Horizontal alignent buttons")
+                        navigation.accessible.name: qsTrc("inspector", "Horizontal alignment buttons")
 
                         width: root.elementSize
 
