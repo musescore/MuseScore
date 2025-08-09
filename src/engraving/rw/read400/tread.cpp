@@ -97,6 +97,7 @@
 #include "../../dom/slurtie.h"
 #include "../../dom/spacer.h"
 #include "../../dom/spanner.h"
+#include "../../dom/staff.h"
 #include "../../dom/staffstate.h"
 #include "../../dom/stafftext.h"
 #include "../../dom/stafftextbase.h"
@@ -3304,8 +3305,10 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
 {
     p->setId(e.intAttribute("id", 0));
 
+    StaffHideModes staffHideModes;
+
     while (e.readNextStartElement()) {
-        if (!readProperties(p, e, ctx)) {
+        if (!readProperties(p, e, ctx, staffHideModes)) {
             e.unknown();
         }
     }
@@ -3313,9 +3316,85 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
     if (p->partName().isEmpty()) {
         p->setPartName(p->instrument()->trackName());
     }
+
+    read(p, staffHideModes, ctx.style().styleB(Sid::hideEmptyStaves));
 }
 
-bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
+void TRead::read(Part* p, StaffHideModes& staffHideModes, const bool globalHideEmptyStaves)
+{
+    IF_ASSERT_FAILED(p->nstaves() > 0) {
+        return;
+    }
+
+    if (p->nstaves() == 1) {
+        switch (staffHideModes[p->staves().front()]) { // inserts AUTO if not found
+        case StaffHideMode::AUTO:
+            break;
+        case StaffHideMode::ALWAYS:
+            p->setHideWhenEmpty(AutoOnOff::ON);
+            break;
+        case StaffHideMode::NEVER:
+            p->setHideWhenEmpty(AutoOnOff::OFF);
+            break;
+        case StaffHideMode::INSTRUMENT:
+            break;
+        }
+        return;
+    }
+
+    bool hasAuto = false;
+    bool allAlways = true;
+    bool allNever = true;
+    bool hasInstrument = false;
+
+    for (Staff* staff : p->staves()) {
+        StaffHideMode mode = staffHideModes[staff]; // inserts AUTO if not found
+
+        hasAuto |= (mode == StaffHideMode::AUTO);
+        allAlways &= (mode == StaffHideMode::ALWAYS);
+        allNever &= (mode == StaffHideMode::NEVER);
+        hasInstrument |= (mode == StaffHideMode::INSTRUMENT);
+    }
+
+    if (allAlways) {
+        p->setHideWhenEmpty(AutoOnOff::ON);
+        p->setHideStavesWhenIndividuallyEmpty(true);
+        return;
+    } else if (allNever) {
+        p->setHideWhenEmpty(AutoOnOff::OFF);
+        return;
+    }
+
+    if (globalHideEmptyStaves && hasAuto && !hasInstrument) {
+        p->setHideStavesWhenIndividuallyEmpty(true);
+    }
+
+    for (Staff* staff : p->staves()) {
+        switch (staffHideModes[staff]) {
+        case StaffHideMode::AUTO:
+            // If this Part contains a mix of AUTO and INSTRUMENT staves, that
+            // can't really be represented in the new system. The INSTRUMENT
+            // staves force us to leave `hideStavesWhenIndividuallyEmpty` false,
+            // so if we choose `AutoOnOff::AUTO`, that will have the effect of
+            // INSTRUMENT. That means the staff might appear in some systems
+            // where it is empty but one of the other staves is not empty. The
+            // alternative is that we choose `AutoOnOff::ON`, but in that case
+            // the staff will be hidden in the first system if it's empty there,
+            // which is even less likely to match the user's intent.
+            break;
+        case StaffHideMode::ALWAYS:
+            staff->setHideWhenEmpty(AutoOnOff::ON);
+            break;
+        case StaffHideMode::NEVER:
+            staff->setHideWhenEmpty(AutoOnOff::OFF);
+            break;
+        case StaffHideMode::INSTRUMENT:
+            break;
+        }
+    }
+}
+
+bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes)
 {
     const AsciiStringView tag(e.name());
     if (tag == "id") {
@@ -3323,7 +3402,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Staff") {
         Staff* staff = Factory::createStaff(p);
         p->score()->appendStaff(staff);
-        TRead::read(staff, e, ctx);
+        TRead::read(staff, e, ctx, staffHideModes);
     } else if (tag == "Instrument") {
         Instrument* instr = new Instrument;
         read(instr, e, ctx, p);
@@ -3709,10 +3788,10 @@ void TRead::read(StaffTypeChange* c, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(Staff* s, XmlReader& e, ReadContext& ctx)
+void TRead::read(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes)
 {
     while (e.readNextStartElement()) {
-        if (!readProperties(s, e, ctx)) {
+        if (!readProperties(s, e, ctx, staffHideModes)) {
             e.unknown();
         }
     }
@@ -3732,7 +3811,7 @@ AutoOnOff TRead::readStaffHideMode(AsciiStringView asciiText)
     }
 }
 
-bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
+bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes)
 {
     const AsciiStringView tag(e.name());
     if (tag == "StaffType") {
@@ -3751,7 +3830,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "invisible") {
         s->staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {
-        s->setHideWhenEmpty(readStaffHideMode(e.readAsciiText()));
+        staffHideModes[s] = static_cast<StaffHideMode>(e.readInt());
     } else if (tag == "cutaway") {
         s->setCutaway(e.readInt());
     } else if (tag == "showIfSystemEmpty") {

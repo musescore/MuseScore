@@ -3544,8 +3544,10 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
 {
     p->setId(e.intAttribute("id", 0));
 
+    StaffHideModes staffHideModes;
+
     while (e.readNextStartElement()) {
-        if (!readProperties(p, e, ctx)) {
+        if (!readProperties(p, e, ctx, staffHideModes)) {
             e.unknown();
         }
     }
@@ -3553,6 +3555,8 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
     if (p->partName().isEmpty()) {
         p->setPartName(p->instrument()->trackName());
     }
+
+    read400::TRead::read(p, staffHideModes, ctx.style().styleB(Sid::hideEmptyStaves));
 }
 
 void TRead::read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx)
@@ -3580,7 +3584,7 @@ void TRead::read(PartialTie* p, XmlReader& xml, ReadContext& ctx)
     }
 }
 
-bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
+bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes)
 {
     const AsciiStringView tag(e.name());
     if (tag == "id") {
@@ -3588,7 +3592,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Staff") {
         Staff* staff = Factory::createStaff(p);
         p->score()->appendStaff(staff);
-        TRead::read(staff, e, ctx);
+        TRead::read(staff, e, ctx, staffHideModes);
     } else if (tag == "Instrument") {
         Instrument* instr = new Instrument;
         read(instr, e, ctx, p);
@@ -3981,16 +3985,16 @@ void TRead::read(StaffTypeChange* c, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(Staff* s, XmlReader& e, ReadContext& ctx)
+void TRead::read(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes)
 {
     while (e.readNextStartElement()) {
-        if (!readProperties(s, e, ctx)) {
+        if (!readProperties(s, e, ctx, staffHideModes)) {
             e.unknown();
         }
     }
 }
 
-bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
+bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes)
 {
     const AsciiStringView tag(e.name());
     if (tag == "StaffType") {
@@ -4009,7 +4013,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "invisible") {
         s->staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {
-        s->setHideWhenEmpty(read400::TRead::readStaffHideMode(e.readAsciiText()));
+        staffHideModes[s] = static_cast<StaffHideMode>(e.readInt());
     } else if (tag == "cutaway") {
         s->setCutaway(e.readInt());
     } else if (tag == "showIfSystemEmpty") {

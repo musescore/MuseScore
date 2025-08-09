@@ -20,15 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_READ206_H
-#define MU_ENGRAVING_READ206_H
+#pragma once
 
 #include "../ireader.h"
 
-#include "modularity/ioc.h"
-#include "iengravingfontsprovider.h"
-
-#include "engravingerrors.h"
 #include "style/styledef.h"
 #include "dom/score.h"
 
@@ -99,5 +94,3 @@ private:
     static void readPart206(Part* part, XmlReader& e, read400::ReadContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_READ206_H
