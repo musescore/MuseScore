@@ -73,7 +73,7 @@ struct unique_cotaskmem_ptr
     }
 
     operator bool() const {
-        return m_p;
+        return static_cast<bool>(m_p);
     }
 
     T* operator->() { return m_p; }
