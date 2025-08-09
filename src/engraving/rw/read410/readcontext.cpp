@@ -22,11 +22,9 @@
 
 #include "readcontext.h"
 
-#include "dom/beam.h"
 #include "dom/linkedobjects.h"
 #include "dom/score.h"
 #include "dom/trill.h"
-#include "dom/tuplet.h"
 #include "dom/undo.h"
 
 #include "connectorinforeader.h"
