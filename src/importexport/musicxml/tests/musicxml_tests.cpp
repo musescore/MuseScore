@@ -761,10 +761,10 @@ TEST_F(MusicXml_Tests, incorrectStaffNumber1) {
 TEST_F(MusicXml_Tests, incorrectStaffNumber2) {
     musicXmlIoTestRef("testIncorrectStaffNumber2");
 }
-TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(inferredCredits1)) {
+TEST_F(MusicXml_Tests, inferredCredits1) {
     musicXmlImportTestRef("testInferredCredits1");
 }
-TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(inferredCredits2)) {
+TEST_F(MusicXml_Tests, inferredCredits2) {
     musicXmlImportTestRef("testInferredCredits2");
 }
 TEST_F(MusicXml_Tests, inferCodaII) {
