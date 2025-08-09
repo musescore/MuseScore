@@ -126,9 +126,9 @@ TEST_F(Audio_RpcPackerTests, AudioFxParams)
 
     KNOWN_FIELDS(origin,
                  origin.categories,
-                 origin.chainOrder,
                  origin.resourceMeta,
                  origin.configuration,
+                 origin.chainOrder,
                  origin.active);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
