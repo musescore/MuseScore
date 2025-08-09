@@ -4113,11 +4113,6 @@ followed by dashes</translation>
         <translation type="unfinished">Note to note:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="2688"/>
-        <source>%</source>
-        <translation type="unfinished">%</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2730"/>
         <source>System density:</source>
         <translation type="unfinished">System density:</translation>

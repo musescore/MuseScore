@@ -2685,7 +2685,7 @@
                  <item row="0" column="1">
                   <widget class="QDoubleSpinBox" name="spacingDensity">
                    <property name="suffix">
-                    <string>%</string>
+                    <string notr="true">%</string>
                    </property>
                    <property name="decimals">
                     <number>1</number>
