@@ -28,6 +28,8 @@
 
 #include "compat/pageformat.h"
 
+#include "engravingerrors.h"
+
 #include "infrastructure/htmlparser.h"
 
 #include "rw/compat/compatutils.h"
@@ -102,6 +104,8 @@ using namespace mu::engraving::read400;
 using namespace mu::engraving::read114;
 using namespace mu::engraving::read206;
 using namespace mu::engraving::compat;
+
+using mu::engraving::compat::TremoloCompat;
 
 static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };
 static int g_bassStrings[]   = { 28, 33, 38, 43 };
@@ -888,15 +892,15 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 //   readTremolo
 //---------------------------------------------------------
 
-static void readTremolo(compat::TremoloCompat* t, XmlReader& e, ReadContext& ctx)
+static void readTremolo(TremoloCompat* t, XmlReader& e, ReadContext& ctx)
 {
-    auto createDefaultTremolo = [](compat::TremoloCompat* t) {
+    auto createDefaultTremolo = [](TremoloCompat* t) {
         t->single = Factory::createTremoloSingleChord(t->parent);
         t->single->setTrack(t->parent->track());
         t->single->setTremoloType(TremoloType::R8);
     };
 
-    auto item = [createDefaultTremolo](compat::TremoloCompat* t) -> EngravingItem* {
+    auto item = [createDefaultTremolo](TremoloCompat* t) -> EngravingItem* {
         if (t->two) {
             return t->two;
         }
@@ -990,7 +994,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
                 chord->add(el);
             }
         } else if (tag == "Tremolo") {
-            compat::TremoloCompat tcompat;
+            TremoloCompat tcompat;
             tcompat.parent = chord;
             readTremolo(&tcompat, e, ctx);
             if (tcompat.two) {
@@ -3192,7 +3196,7 @@ void Read114::pasteSymbols(XmlReader&, ChordRest*)
     UNREACHABLE;
 }
 
-void Read114::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
+void Read114::readTremoloCompat(TremoloCompat*, XmlReader&)
 {
     UNREACHABLE;
 }

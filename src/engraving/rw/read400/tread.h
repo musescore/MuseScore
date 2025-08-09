@@ -19,16 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_TREAD_H
-#define MU_ENGRAVING_TREAD_H
+#pragma once
 
-#include "global/types/string.h"
-
-#include "../xmlreader.h"
-#include "readcontext.h"
-
-#include "../../dom/property.h"
 #include "../../types/types.h"
+
+#include "../compat/compattypes.h"
+#include "../xmlreader.h"
+
+#include "readcontext.h"
 
 namespace mu::engraving {
 class XmlReader;
@@ -161,9 +159,14 @@ class Trill;
 class Tuplet;
 class Vibrato;
 class Volta;
+
+enum class Pid;
 }
 
 namespace mu::engraving::read400 {
+using rw::compat::StaffHideMode;
+using rw::compat::StaffHideModes;
+
 class TRead
 {
 public:
@@ -255,6 +258,7 @@ public:
     static void read(Page* p, XmlReader& xml, ReadContext& ctx);
     static void read(PalmMute* p, XmlReader& xml, ReadContext& ctx);
     static void read(Part* p, XmlReader& xml, ReadContext& ctx);
+    static void read(Part*, StaffHideModes& staffHideModes, const bool globalHideEmptyStaves);
     static void read(Pedal* p, XmlReader& xml, ReadContext& ctx);
     static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
 
@@ -267,7 +271,7 @@ public:
     static void read(SlurTie* s, XmlReader& xml, ReadContext& ctx);
     static void read(SlurTieSegment* s, XmlReader& xml, ReadContext& ctx);
     static void read(Spacer* s, XmlReader& xml, ReadContext& ctx);
-    static void read(Staff* s, XmlReader& xml, ReadContext& ctx);
+    static void read(Staff* s, XmlReader& xml, ReadContext& ctx, StaffHideModes& staffHideModes);
     static void read(StaffName* item, XmlReader& xml);
     static void read(StaffState* s, XmlReader& xml, ReadContext& ctx);
     static void read(StaffText* t, XmlReader& xml, ReadContext& ctx);
@@ -338,14 +342,14 @@ public:
     static bool readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Ottava* o, XmlReader& xml, ReadContext& ctx);
 
-    static bool readProperties(Part* p, XmlReader& xml, ReadContext& ctx);
+    static bool readProperties(Part* p, XmlReader& xml, ReadContext& ctx, StaffHideModes& staffHideModes);
 
     static int read(SigEvent* item, XmlReader& xml, int fileDivision);
     static bool readProperties(SLine* l, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Slur* s, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(SlurTie* s, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Spanner* s, XmlReader& xml, ReadContext& ctx);
-    static bool readProperties(Staff* s, XmlReader& e, ReadContext& ctx);
+    static bool readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes);
     static bool readProperties(Stem* s, XmlReader& e, ReadContext& ctx);
 
     static bool readProperties(TextLineBase* b, XmlReader& e, ReadContext& ctx);
@@ -364,5 +368,3 @@ private:
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_TREAD_H
