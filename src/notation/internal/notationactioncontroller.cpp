@@ -214,8 +214,8 @@ void NotationActionController::init()
 
     registerAction("double-duration", &Controller::doubleNoteInputDuration);
     registerAction("half-duration", &Controller::halveNoteInputDuration);
-    registerAction("inc-duration-dotted", &Interaction::increaseDecreaseDuration, -1, true);
-    registerAction("dec-duration-dotted", &Interaction::increaseDecreaseDuration, 1, true);
+    registerAction("inc-duration-dotted", &Interaction::increaseDecreaseDuration, 1, true);
+    registerAction("dec-duration-dotted", &Interaction::increaseDecreaseDuration, -1, true);
 
     registerAction("notation-cut", &Controller::cutSelection, &Controller::hasSelection);
     registerAction("notation-copy", &Interaction::copySelection, &Controller::hasSelection);
@@ -1030,7 +1030,7 @@ void NotationActionController::doubleNoteInputDuration()
     if (noteInput->isNoteInputMode()) {
         noteInput->doubleNoteInputDuration();
     } else {
-        interaction->increaseDecreaseDuration(-1, false);
+        interaction->increaseDecreaseDuration(1, false);
     }
 }
 
@@ -1048,7 +1048,7 @@ void NotationActionController::halveNoteInputDuration()
     if (noteInput->isNoteInputMode()) {
         noteInput->halveNoteInputDuration();
     } else {
-        interaction->increaseDecreaseDuration(1, false);
+        interaction->increaseDecreaseDuration(-1, false);
     }
 }
 
