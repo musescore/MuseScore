@@ -249,7 +249,7 @@ Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVers
             //! For version 4.0 (400), this does not need to be done,
             //! because starting from version 4.0 the entire style is stored in a file,
             //! respectively, the entire style will be loaded, which was when the score was created.
-            if (styleHook && (score->mscVersion() < 400 || MScore::testMode)) {
+            if (styleHook && (score->mscVersion() < 400 || (MScore::testMode && MScore::useRead302InTestMode))) {
                 styleHook->setupDefaultStyle();
             }
 
