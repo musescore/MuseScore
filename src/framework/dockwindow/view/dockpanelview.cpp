@@ -265,7 +265,7 @@ void DockPanelView::setToolbarComponent(QQmlComponent* component)
     emit toolbarComponentChanged();
 }
 
-bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
+bool DockPanelView::isTabAllowed(const DockPanelView* tab, bool panelCanBeClosed) const
 {
     IF_ASSERT_FAILED(tab) {
         return false;
@@ -275,11 +275,15 @@ bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
         return false;
     }
 
-    if (!isOpen()) {
+    if (!panelCanBeClosed && !isOpen()) {
         return false;
     }
 
-    if (floating()) {
+    if (!isOpen()) {
+        if (!dockWidget()->lastPositions().isValid() || dockWidget()->lastPositions().wasFloating()) {
+            return false;
+        }
+    } else if (dockWidget()->isFloating() || !dockWidget()->isInMainWindow()) {
         return false;
     }
 
@@ -290,18 +294,33 @@ bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
     return m_groupName == tab->m_groupName;
 }
 
-void DockPanelView::addPanelAsTab(DockPanelView* tab)
+void DockPanelView::addPanelAsTab(DockPanelView* tab, bool addVisible, int tabIndex)
 {
     IF_ASSERT_FAILED(tab && dockWidget()) {
         return;
     }
 
-    if (!isTabAllowed(tab)) {
+    if (!isTabAllowed(tab, true)) {
         return;
     }
 
-    dockWidget()->addDockWidgetAsTab(tab->dockWidget());
-    tab->setVisible(true);
+    if (!addVisible && tab->isOpen()) {
+        tab->close();
+    }
+
+    // Copy the placeholder/layout item from this panel to the panel being added so they end up tabbed.
+    tab->dockWidget()->lastPositions().removePlaceholders();
+    tab->dockWidget()->lastPositions().addPosition(dockWidget()->lastPositions().lastItem());
+
+    // We also need the tab index at which to tab the widget. A value of -1 will add it at the end.
+    tab->dockWidget()->lastPositions().saveTabIndex(tabIndex, false);
+
+    // If the panel being added should be visible, materialize/move it to a tab into
+    // the placeholder/layout item we just copied. If it should be closed, do nothing
+    // and it will be materialized when the user opens it.
+    if (addVisible) {
+        tab->dockWidget()->restoreToPreviousPosition();
+    }
 }
 
 void DockPanelView::setCurrentTabIndex(int index)
