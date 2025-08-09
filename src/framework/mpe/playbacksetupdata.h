@@ -31,18 +31,19 @@ namespace muse::mpe {
 struct PlaybackSetupData
 {
     String id;
-    SoundCategory category = SoundCategory::Undefined;
     StringList subCategories;
-
-    bool supportsSingleNoteDynamics = false;
 
     std::optional<std::string> scoreId;
     std::optional<std::string> musicXmlSoundId;
 
+    SoundCategory category = SoundCategory::Undefined;
+
+    bool supportsSingleNoteDynamics = false;
+
     PlaybackSetupData() = default;
 
     PlaybackSetupData(SoundId id, SoundCategory category, SoundSubCategories&& soundSubCategories = {}, bool supportsSND = false)
-        : id(soundIdToString(id)), category(category), supportsSingleNoteDynamics(supportsSND)
+        : id(soundIdToString(id)), supportsSingleNoteDynamics(supportsSND), category(category)
     {
         for (SoundSubCategory subCategory : soundSubCategories) {
             subCategories.push_back(soundSubCategoryToString(subCategory));
@@ -50,7 +51,7 @@ struct PlaybackSetupData
     }
 
     PlaybackSetupData(String id, SoundCategory category, StringList&& subCategories = {})
-        : id(std::move(id)), category(category), subCategories(std::move(subCategories))
+        : id(std::move(id)), subCategories(std::move(subCategories)), category(category)
     {}
 
     SoundId soundId() const
