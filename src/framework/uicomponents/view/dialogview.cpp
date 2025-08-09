@@ -62,6 +62,8 @@ void DialogView::onHidden()
     if (m_loop.isRunning()) {
         m_loop.exit();
     }
+
+    activateNavigationParentControl();
 }
 
 QScreen* DialogView::resolveScreen() const
