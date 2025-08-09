@@ -119,6 +119,7 @@
 #include "../../dom/mmrest.h"
 #include "../../dom/rest.h"
 #include "../../dom/rasgueado.h"
+#include "../../dom/sig.h"
 #include "../../dom/slur.h"
 #include "../../dom/slurtie.h"
 #include "../../dom/spacer.h"

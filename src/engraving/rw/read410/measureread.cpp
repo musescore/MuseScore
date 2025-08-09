@@ -93,8 +93,6 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
             return;
         }
         irregular = true;
-        ctx.compatTimeSigMap()->add(measure->tick().ticks(), SigEvent(measure->m_len, measure->m_timesig));
-        ctx.compatTimeSigMap()->add((measure->tick() + measure->ticks()).ticks(), SigEvent(measure->m_timesig));
     }
 
     while (e.readNextStartElement()) {

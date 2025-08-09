@@ -2754,34 +2754,10 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
 
-    //! TODO Should be replaced with `ctx.mscVersion()`
-    //! But at the moment, `ctx` is not set everywhere
-    int mscVersion = ch->score()->mscVersion();
-
     if (tag == "durationType") {
         ch->setDurationType(TConv::fromXml(e.readAsciiText(), DurationType::V_QUARTER));
         if (ch->actualDurationType().type() != DurationType::V_MEASURE) {
-            if (mscVersion < 112 && (ch->type() == ElementType::REST)
-                &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
-                              // if long enough to fill a measure.
-                              // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
-                              // (see Fraction() constructor in fraction.h; this happens for instance
-                              // when pasting selection from clipboard): they should not be converted
-                ch->ticks().numerator() != 0
-                &&            // rest durations are initialized to full measure duration when
-                              // created upon reading the <Rest> tag (see Measure::read() )
-                              // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                (ch->actualDurationType() == DurationType::V_WHOLE && ch->ticks() <= Fraction(4, 4))) {
-                // old pre 2.0 scores: convert
-                ch->setDurationType(DurationType::V_MEASURE);
-            } else {    // not from old score: set duration fraction from duration type
-                ch->setTicks(ch->actualDurationType().fraction());
-            }
-        } else {
-            if (mscVersion <= 114) {
-                SigEvent event = ctx.compatTimeSigMap()->timesig(ctx.tick());
-                ch->setTicks(event.timesig());
-            }
+            ch->setTicks(ch->actualDurationType().fraction());
         }
     } else if (tag == "BeamMode") {
         ch->setBeamMode(TConv::fromXml(e.readAsciiText(), BeamMode::AUTO));
@@ -2802,20 +2778,6 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
         ch->setSmall(e.readInt());
     } else if (tag == "duration") {
         ch->setTicks(e.readFraction());
-    } else if (tag == "ticklen") {      // obsolete (version < 1.12)
-        int mticks = ctx.compatTimeSigMap()->timesig(ctx.tick()).timesig().ticks();
-        int i = e.readInt();
-        if (i == 0) {
-            i = mticks;
-        }
-        if ((ch->type() == ElementType::REST) && (mticks == i)) {
-            ch->setDurationType(DurationType::V_MEASURE);
-            ch->setTicks(Fraction::fromTicks(i));
-        } else {
-            Fraction f = Fraction::fromTicks(i);
-            ch->setTicks(f);
-            ch->setDurationType(TDuration(f));
-        }
     } else if (tag == "dots") {
         ch->setDots(e.readInt());
     } else if (tag == "staffMove") {
@@ -2990,10 +2952,6 @@ void TRead::read(Fingering* f, XmlReader& e, ReadContext& ctx)
 void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
 {
     g->eraseSpannerSegments();
-
-    if (g->score()->mscVersion() < 301) {
-        ctx.addSpanner(e.intAttribute("id", -1), g);
-    }
 
     staff_idx_t staffIdx = track2staff(ctx.track());
     Staff* staff = ctx.score()->staff(staffIdx);
@@ -3330,9 +3288,6 @@ bool TRead::readProperties(LedgerLine* l, XmlReader& e, ReadContext&)
 
 void TRead::read(LetRing* r, XmlReader& e, ReadContext& ctx)
 {
-    if (r->score()->mscVersion() < 301) {
-        ctx.addSpanner(e.intAttribute("id", -1), r);
-    }
     while (e.readNextStartElement()) {
         if (readProperty(r, e.name(), e, ctx, Pid::LINE_WIDTH)) {
             r->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
@@ -3680,9 +3635,6 @@ void TRead::read(NoteLine* nl, XmlReader& xml, ReadContext& ctx)
 void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
 {
     o->eraseSpannerSegments();
-    if (o->score()->mscVersion() < 301) {
-        ctx.addSpanner(e.intAttribute("id", -1), o);
-    }
     while (e.readNextStartElement()) {
         readProperties(o, e, ctx);
     }
@@ -3741,9 +3693,6 @@ void TRead::read(Page* p, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
 {
-    if (p->score()->mscVersion() < 301) {
-        ctx.addSpanner(e.intAttribute("id", -1), p);
-    }
     while (e.readNextStartElement()) {
         if (readProperty(p, e.name(), e, ctx, Pid::LINE_WIDTH)) {
             p->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
@@ -3848,10 +3797,6 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
 {
-    if (p->score()->mscVersion() < 301) {
-        ctx.addSpanner(e.intAttribute("id", -1), p);
-    }
-
     bool beginTextTag = false;
     bool continueTextTag = false;
     bool endTextTag = false;
@@ -3957,10 +3902,6 @@ void TRead::read(Segment* s, XmlReader& e, ReadContext& ctx)
 void TRead::read(SLine* l, XmlReader& e, ReadContext& ctx)
 {
     l->eraseSpannerSegments();
-
-    if (l->score()->mscVersion() < 301) {
-        ctx.addSpanner(e.intAttribute("id", -1), l);
-    }
 
     while (e.readNextStartElement()) {
         if (!readProperties(l, e, ctx)) {
@@ -4444,10 +4385,6 @@ void TRead::read(TextLine* l, XmlReader& e, ReadContext& ctx)
 void TRead::read(TextLineBase* b, XmlReader& e, ReadContext& ctx)
 {
     b->eraseSpannerSegments();
-
-    if (b->score()->mscVersion() < 301) {
-        ctx.addSpanner(e.intAttribute("id", -1), b);
-    }
 
     while (e.readNextStartElement()) {
         if (!readProperties(b, e, ctx)) {

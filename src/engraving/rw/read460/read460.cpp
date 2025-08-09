@@ -51,6 +51,7 @@
 #include "engravingerrors.h"
 
 #include "../compat/tremolocompat.h"
+#include "../inoutdata.h"
 #include "staffread.h"
 #include "tread.h"
 

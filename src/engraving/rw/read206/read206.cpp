@@ -1871,10 +1871,8 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);
         read400::TRead::read(cl, e, ctx);
-        PointF o = cl->offset();
         cl->setOffset(0.0, 0.0);
         ch->add(cl);
-        ctx.fixOffsets().push_back({ cl, o });
     } else {
         return false;
     }
@@ -3400,7 +3398,6 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 ex->setExcerptScore(s);
                 ctx.setLastMeasure(nullptr);
                 ReadContext exCtx(s);
-                exCtx.setMasterCtx(&ctx);
 
                 readScore206(s, e, exCtx);
 
