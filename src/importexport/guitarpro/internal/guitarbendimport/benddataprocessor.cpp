@@ -31,12 +31,13 @@
 #include <engraving/dom/tie.h>
 #include <engraving/dom/tuplet.h>
 
+#include "../utils.h"
+
 using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
 static void createSlightBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
 static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
-static Chord* getLocatedChord(mu::engraving::Score* score, Fraction tickFr, track_idx_t track);
 static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
 static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
 
@@ -62,7 +63,7 @@ static void createSlightBends(const BendDataContext& bendDataCtx, mu::engraving:
 {
     for (const auto& [track, trackInfo] : bendDataCtx.slightBendData) {
         for (const auto& [tick, tickInfo] : trackInfo) {
-            Chord* chord = getLocatedChord(score, tick, track);
+            Chord* chord = utils::getLocatedChord(score, tick, track);
             for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
                 if (!muse::contains(tickInfo, noteIndex)) {
                     continue;
@@ -87,7 +88,7 @@ static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Sc
 {
     for (const auto& [track, trackInfo] : bendDataCtx.prebendData) {
         for (const auto& [tick, tickInfo] : trackInfo) {
-            Chord* chord = getLocatedChord(score, tick, track);
+            Chord* chord = utils::getLocatedChord(score, tick, track);
             for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
                 if (!muse::contains(tickInfo, noteIndex)) {
                     continue;
@@ -144,23 +145,6 @@ static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Sc
     }
 }
 
-static Chord* getLocatedChord(mu::engraving::Score* score, Fraction tickFr, track_idx_t track)
-{
-    const Measure* measure = score->tick2measure(tickFr);
-    if (!measure) {
-        LOGE() << "bend import error: no valid measure for track " << track << ", tick " << tickFr.ticks();
-        return nullptr;
-    }
-
-    Chord* chord = measure->findChord(tickFr, track);
-    if (!chord) {
-        LOGE() << "bend import error: no valid chord for track " << track << ", tick " << tickFr.ticks();
-        return nullptr;
-    }
-
-    return chord;
-}
-
 static std::vector<Chord*> createGraceChords(Chord* chord, const guitarpro::grace_bend_data_map_t& bendInfo)
 {
     std::vector<Chord*> graceChords;
@@ -201,7 +185,7 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
 {
     for (const auto& [track, trackInfo] : bendDataCtx.graceAfterBendData) {
         for (const auto& [tick, tickInfo] : trackInfo) {
-            Chord* chord = getLocatedChord(score, tick, track);
+            Chord* chord = utils::getLocatedChord(score, tick, track);
             std::vector<Chord*> graceChords = createGraceChords(chord, tickInfo);
             for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
                 if (!muse::contains(tickInfo, noteIndex)) {
@@ -256,7 +240,7 @@ static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engravi
 {
     for (const auto& [track, trackInfo] : bendDataCtx.tiedNotesBendsData) {
         for (const auto& [tick, tickInfo] : trackInfo) {
-            Chord* chord = getLocatedChord(score, tick, track);
+            Chord* chord = utils::getLocatedChord(score, tick, track);
             if (!chord) {
                 continue;
             }
