@@ -1284,7 +1284,7 @@ void Staff::init(const Staff* s)
     m_barLineTo         = s->m_barLineTo;
     m_hideWhenEmpty     = s->m_hideWhenEmpty;
     m_cutaway           = s->m_cutaway;
-    m_showIfEmpty       = s->m_showIfEmpty;
+    m_showIfEntireSystemEmpty = s->m_showIfEntireSystemEmpty;
     m_hideSystemBarLine = s->m_hideSystemBarLine;
     m_mergeMatchingRests = s->m_mergeMatchingRests;
     m_color             = s->m_color;
@@ -1561,6 +1561,8 @@ PropertyValue Staff::getProperty(Pid id) const
         return false;
     case Pid::SHOW_MEASURE_NUMBERS:
         return m_showMeasureNumbers;
+    case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
+        return m_showIfEntireSystemEmpty;
     case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
         return m_systemObjectsBelowBottomStaff;
     default:
@@ -1642,6 +1644,9 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::SHOW_MEASURE_NUMBERS:
         m_showMeasureNumbers = v.value<AutoOnOff>();
         break;
+    case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
+        m_showIfEntireSystemEmpty = v.toBool();
+        break;
     case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
         m_systemObjectsBelowBottomStaff = v.toBool();
         break;
@@ -1682,6 +1687,8 @@ PropertyValue Staff::propertyDefault(Pid id) const
         return Spatium(0.0);
     case Pid::SHOW_MEASURE_NUMBERS:
         return AutoOnOff::AUTO;
+    case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
+        return false;
     case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
         return false;
     default:

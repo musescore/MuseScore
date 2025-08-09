@@ -691,12 +691,12 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
 
     system->setHasStaffVisibilityIndicator(hasSystemSpecificOverrides || hasHiddenStaves);
 
-    // If the system is empty, unhide the staves with `showIfEmpty` set to true, if any
+    // If the system is empty, unhide the staves with `showIfEntireSystemEmpty` set to true, if any
     const Staff* firstVisible = nullptr;
     if (systemIsEmpty) {
         for (const Staff* staff : ctx.dom().staves()) {
             SysStaff* ss  = system->staff(staff->idx());
-            if (staff->showIfEmpty() && !ss->show()) {
+            if (staff->showIfEntireSystemEmpty() && !ss->show()) {
                 ss->setShow(true);
                 systemIsEmpty = false;
             } else if (!firstVisible && staff->show()) {

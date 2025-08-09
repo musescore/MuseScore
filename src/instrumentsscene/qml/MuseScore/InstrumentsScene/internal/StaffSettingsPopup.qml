@@ -154,6 +154,8 @@ StyledPopupView {
             spacing: 8
 
             CheckBox {
+                width: parent.width
+
                 navigation.panel: root.navigationPanel
                 navigation.row: 20 // Should be more than a voices checkbox
 
@@ -166,9 +168,7 @@ StyledPopupView {
             }
 
             CheckBox {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.rightMargin: 20
+                width: parent.width
 
                 navigation.panel: root.navigationPanel
                 navigation.row: 21 // after small staff CheckBox
@@ -224,6 +224,21 @@ StyledPopupView {
                     }
                 }
             }
+
+            CheckBox {
+                id: showIfEntireSystemEmptyCheckBox
+                width: parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.row: 25 // after hideEmptyStavesGroup
+
+                text: qsTrc("layoutpanel", "If the entire system is empty, show this staff")
+                checked: settingsModel.showIfEntireSystemEmpty
+
+                onClicked: {
+                    settingsModel.showIfEntireSystemEmpty = !checked
+                }
+            }
         }
 
         SeparatorLine {}
@@ -236,7 +251,7 @@ StyledPopupView {
                 width: parent.width
 
                 navigation.panel: root.navigationPanel
-                navigation.row: 25 // after hideWhenEmpty radio buttons
+                navigation.row: 26 // after showIfEntireSystemEmptyCheckBox
 
                 text: qsTrc("layoutpanel", "Create a linked staff")
 

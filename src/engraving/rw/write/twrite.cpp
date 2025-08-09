@@ -2773,8 +2773,8 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     if (item->cutaway()) {
         xml.tag("cutaway", item->cutaway());
     }
-    if (item->showIfEmpty()) {
-        xml.tag("showIfSystemEmpty", item->showIfEmpty());
+    if (item->showIfEntireSystemEmpty()) {
+        xml.tag("showIfSystemEmpty", item->showIfEntireSystemEmpty());
     }
     if (item->hideSystemBarLine()) {
         xml.tag("hideSystemBarLine", item->hideSystemBarLine());

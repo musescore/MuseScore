@@ -82,7 +82,6 @@ EditStaff::EditStaff(QWidget* parent)
     connect(showTimesig,      &QCheckBox::clicked, this, &EditStaff::showTimeSigChanged);
     connect(showBarlines,     &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
     connect(invisible,        &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
-    connect(isSmallCheckbox,  &QCheckBox::clicked, this, &EditStaff::isSmallChanged);
 
     connect(color, &Awl::ColorLabel::colorChanged, this, &EditStaff::colorChanged);
 
@@ -137,7 +136,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     m_staff->setPart(part);
     m_staff->setCutaway(m_orgStaff->cutaway());
     m_staff->setHideWhenEmpty(m_orgStaff->hideWhenEmpty());
-    m_staff->setShowIfEmpty(m_orgStaff->showIfEmpty());
+    m_staff->setShowIfEntireSystemEmpty(m_orgStaff->showIfEntireSystemEmpty());
     m_staff->setHideSystemBarLine(m_orgStaff->hideSystemBarLine());
     m_staff->setMergeMatchingRests(m_orgStaff->mergeMatchingRests());
     m_staff->setReflectTranspositionInLinkedTab(m_orgStaff->reflectTranspositionInLinkedTab());
@@ -159,12 +158,9 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     // set dlg controls
     spinExtraDistance->setValue(s->userDist().val());
     invisible->setChecked(stt->invisible());
-    isSmallCheckbox->setChecked(stt->isSmall());
     color->setColor(stt->color().toQColor());
     mag->setValue(stt->userMag() * 100.0);
 
-    cutaway->setChecked(m_staff->cutaway());
-    showIfEmpty->setChecked(m_staff->showIfEmpty());
     hideSystemBarLine->setChecked(m_staff->hideSystemBarLine());
     mergeMatchingRests->setCurrentIndex(static_cast<int>(m_staff->mergeMatchingRests()));
     noReflectTranspositionInLinkedTab->setChecked(!m_staff->reflectTranspositionInLinkedTab());
@@ -194,7 +190,6 @@ void EditStaff::updateStaffType(const mu::engraving::StaffType& staffType)
     showTimesig->setChecked(staffType.genTimesig());
     showBarlines->setChecked(staffType.showBarlines());
     invisible->setChecked(staffType.invisible());
-    isSmallCheckbox->setChecked(staffType.isSmall());
     staffGroupName->setText(staffType.translatedGroupName());
 }
 
@@ -397,11 +392,6 @@ void EditStaff::invisibleChanged()
     m_staff->staffType(Fraction(0, 1))->setInvisible(invisible->isChecked());
 }
 
-void EditStaff::isSmallChanged()
-{
-    m_staff->staffType(Fraction(0, 1))->setSmall(isSmallCheckbox->isChecked());
-}
-
 void EditStaff::colorChanged()
 {
     m_staff->staffType(Fraction(0, 1))->setColor(color->color());
@@ -505,8 +495,6 @@ void EditStaff::applyStaffProperties()
     config.visible = m_orgStaff->visible();
 
     config.userDistance = Spatium(spinExtraDistance->value());
-    config.cutaway = cutaway->isChecked();
-    config.showIfEmpty = showIfEmpty->isChecked();
     config.hideSystemBarline = hideSystemBarLine->isChecked();
     config.mergeMatchingRests = static_cast<AutoOnOff>(mergeMatchingRests->currentIndex());
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());

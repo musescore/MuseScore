@@ -77,6 +77,7 @@ enum class Pid {
     Z,
     SMALL,
     HIDE_WHEN_EMPTY, // hide empty staves
+    SHOW_IF_ENTIRE_SYSTEM_EMPTY,
     SHOW_COURTESY,
     KEYSIG_MODE,
     SLUR_STYLE_TYPE,

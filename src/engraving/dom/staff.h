@@ -134,8 +134,8 @@ public:
     bool stemless(const Fraction&) const;
     bool cutaway() const { return m_cutaway; }
     void setCutaway(bool val) { m_cutaway = val; }
-    bool showIfEmpty() const { return m_showIfEmpty; }
-    void setShowIfEmpty(bool val) { m_showIfEmpty = val; }
+    bool showIfEntireSystemEmpty() const { return m_showIfEntireSystemEmpty; }
+    void setShowIfEntireSystemEmpty(bool val) { m_showIfEntireSystemEmpty = val; }
 
     bool hideSystemBarLine() const { return m_hideSystemBarLine; }
     void setHideSystemBarLine(bool val) { m_hideSystemBarLine = val; }
@@ -298,7 +298,7 @@ private:
     int m_barLineTo = 0;                // line of end staff to draw the bar line to (0= staff bottom line, ...)
 
     bool m_cutaway = false;
-    bool m_showIfEmpty = false;             // show this staff if system is empty and hideEmptyStaves is true
+    bool m_showIfEntireSystemEmpty = false;             // show this staff if system is empty and hideEmptyStaves is true
     bool m_hideSystemBarLine = false;       // no system barline if not preceded by staff with barline
     AutoOnOff m_mergeMatchingRests = AutoOnOff::AUTO;      // merge matching rests in multiple voices
     AutoOnOff m_hideWhenEmpty = AutoOnOff::AUTO;      // hide empty staves
