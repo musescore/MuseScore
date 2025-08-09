@@ -52,12 +52,15 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
     m_instrumentName = part->instrument()->nameAsPlainText();
     m_instrumentAbbreviature = part->instrument()->abbreviatureAsPlainText();
     m_hideWhenEmpty = static_cast<int>(part->hideWhenEmpty());
+    m_hideStavesWhenIndividuallyEmpty = part->hideStavesWhenIndividuallyEmpty();
 
     context()->currentNotationChanged().onNotify(this, [this]() {
         emit isMainScoreChanged();
     });
 
     emit dataChanged();
+    emit hideWhenEmptyChanged();
+    emit hideStavesWhenIndividuallyEmptyChanged();
 }
 
 QString InstrumentSettingsModel::instrumentName() const
@@ -73,6 +76,11 @@ QString InstrumentSettingsModel::abbreviature() const
 int InstrumentSettingsModel::hideWhenEmpty() const
 {
     return m_hideWhenEmpty;
+}
+
+bool InstrumentSettingsModel::hideStavesWhenIndividuallyEmpty() const
+{
+    return m_hideStavesWhenIndividuallyEmpty;
 }
 
 bool InstrumentSettingsModel::isMainScore() const
@@ -106,8 +114,6 @@ void InstrumentSettingsModel::setHideWhenEmpty(int value)
         return;
     }
 
-    m_hideWhenEmpty = value;
-
     const Part* part = notationParts()->part(m_instrumentKey.partId);
     if (!part) {
         return;
@@ -120,7 +126,30 @@ void InstrumentSettingsModel::setHideWhenEmpty(int value)
 
     currentNotation()->undoStack()->commitChanges();
 
+    m_hideWhenEmpty = value;
     emit hideWhenEmptyChanged();
+}
+
+void InstrumentSettingsModel::setHideStavesWhenIndividuallyEmpty(bool value)
+{
+    if (m_hideStavesWhenIndividuallyEmpty == value || !notationParts()) {
+        return;
+    }
+
+    const Part* part = notationParts()->part(m_instrumentKey.partId);
+    if (!part) {
+        return;
+    }
+
+    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("instruments", "Change instrument settings"));
+
+    Part* mutablePart = const_cast<Part*>(part);
+    mutablePart->undoChangeProperty(Pid::HIDE_STAVES_WHEN_INDIVIDUALLY_EMPTY, PropertyValue(value));
+
+    currentNotation()->undoStack()->commitChanges();
+
+    m_hideStavesWhenIndividuallyEmpty = value;
+    emit hideStavesWhenIndividuallyEmptyChanged();
 }
 
 INotationPtr InstrumentSettingsModel::currentNotation() const

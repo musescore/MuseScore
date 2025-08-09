@@ -159,6 +159,22 @@ StyledPopupView {
                     }
                 }
             }
+
+            CheckBox {
+                id: hideStavesWhenIndividuallyEmptyCheckBox
+
+                width: parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.row: 6
+
+                text: qsTrc("instruments", "Only hide staves if all are empty")
+
+                checked: !settingsModel.hideStavesWhenIndividuallyEmpty
+                onClicked: {
+                    settingsModel.hideStavesWhenIndividuallyEmpty = !!checked
+                }
+            }
         }
 
         SeparatorLine {}
@@ -171,7 +187,7 @@ StyledPopupView {
                 width: parent.width
 
                 navigation.panel: root.navigationPanel
-                navigation.row: 6
+                navigation.row: 7
 
                 text: qsTrc("instruments", "Replace instrument")
 
@@ -187,7 +203,7 @@ StyledPopupView {
                 width: parent.width
 
                 navigation.panel: root.navigationPanel
-                navigation.row: 7
+                navigation.row: 8
 
                 text: qsTrc("instruments", "Reset all formatting")
 
