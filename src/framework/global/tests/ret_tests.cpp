@@ -100,6 +100,7 @@ TEST(Global_RetTests, Data_BadAnyCast_ReturnsDefaultInReleaseANDTriggersAssertio
 #else
     EXPECT_DEATH({
         const auto result = ret.data<int>("value", 999);
+        UNUSED(result);
     }, ".*Assertion.*failed");
 #endif
 }
@@ -124,6 +125,7 @@ TEST(Global_RetTests, Data_EnumClassKeyNotFound_ReturnsDefaultInReleaseANDTrigge
     const Ret ret;
     EXPECT_DEATH({
         const auto result = ret.data<Global_RetTests::StatusCode>("missing", Global_RetTests::StatusCode::Unknown);
+        UNUSED(result);
     }, ".*Assertion.*failed");
 #endif
 }
