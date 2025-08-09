@@ -198,7 +198,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="372"/>
         <source>Load…</source>
-        <translation>잠시만 기다려주세요...</translation>
+        <translation>불러오기</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.ui" line="379"/>
@@ -1382,7 +1382,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="997"/>
         <source>Don’t reflect transposition in linked tablature staves</source>
-        <translation>연결된 태블러처 보표에 조옮김을 반영하지 마세요.</translation>
+        <translation>연결된 태블러처 보표에 조옮김 반영하지 않기</translation>
     </message>
 </context>
 <context>
@@ -2643,7 +2643,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
         <source>Dynamics &amp; hairpins</source>
-        <translation type="unfinished"/>
+        <translation>셈여림표/헤어핀</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="592"/>
@@ -2653,13 +2653,13 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="598"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>악기가 하나만 있을 때 숨기기</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="607"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="627"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>긴 이름</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="617"/>
@@ -3440,7 +3440,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5947"/>
         <source>measure(s)</source>
-        <translation type="unfinished"/>
+        <translation>마디</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6025"/>
@@ -3675,7 +3675,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8818"/>
         <source>Voltas</source>
-        <translation type="unfinished"/>
+        <translation>볼타</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
@@ -3902,7 +3902,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7542"/>
         <source>Slurs &amp;&amp; ties</source>
-        <translation type="unfinished"/>
+        <translation>이음줄/붙임줄</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7647"/>
@@ -4838,7 +4838,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14101"/>
         <source>Turns</source>
-        <translation type="unfinished"/>
+        <translation>턴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14084"/>
@@ -4885,12 +4885,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14032"/>
         <source>Mordents</source>
-        <translation type="unfinished"/>
+        <translation>모르덴트</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13999"/>
         <source>Rasgueado</source>
-        <translation type="unfinished"/>
+        <translation>라스게아도</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14379"/>
@@ -4987,7 +4987,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14399"/>
         <source>Never show</source>
-        <translation type="unfinished"/>
+        <translation>보이지 않기</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14479"/>
@@ -5179,7 +5179,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="143"/>
         <source>Minimize</source>
-        <translation type="unfinished"/>
+        <translation>최소화</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="144"/>
@@ -5189,22 +5189,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="265"/>
         <source>Auto-hide</source>
-        <translation type="unfinished"/>
+        <translation>자동으로 숨기기</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="268"/>
         <source>Disable auto-hide</source>
-        <translation type="unfinished"/>
+        <translation>자동 숨기기 비활성화</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
         <source>Restore</source>
-        <translation type="unfinished"/>
+        <translation>복구</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
         <source>Maximize</source>
-        <translation type="unfinished"/>
+        <translation>최대화</translation>
     </message>
 </context>
 <context>
@@ -5388,12 +5388,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="471"/>
         <source>Apply and go to previous measure</source>
-        <translation type="unfinished"/>
+        <translation>적용하고 이전 마디로</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="487"/>
         <source>Apply and go to next measure</source>
-        <translation type="unfinished"/>
+        <translation>적용하고 다음 마디로</translation>
     </message>
 </context>
 <context>
@@ -5596,7 +5596,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="14"/>
         <source>Realize chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>코드 기호 나타내기</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="17"/>
@@ -5655,12 +5655,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="99"/>
         <source>Same beat</source>
-        <translation type="unfinished"/>
+        <translation>같은 박</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="106"/>
         <source>Same measure</source>
-        <translation type="unfinished"/>
+        <translation>같은 마디</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="113"/>
@@ -5768,12 +5768,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="166"/>
         <source>Same beat</source>
-        <translation type="unfinished"/>
+        <translation>같은 박</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="173"/>
         <source>Same measure</source>
-        <translation type="unfinished"/>
+        <translation>같은 마디</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="183"/>
@@ -5985,7 +5985,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="35"/>
         <source>Transpose to key (specified at concert pitch)</source>
-        <translation type="unfinished"/>
+        <translation>실음으로 옮기기</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="38"/>
@@ -6241,7 +6241,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="523"/>
         <source>Accidentals:</source>
-        <translation type="unfinished"/>
+        <translation>임시표</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="537"/>
@@ -6302,7 +6302,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="491"/>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"/>
+        <translation>음계 바깥 음 유지하기</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="507"/>
@@ -6625,7 +6625,7 @@ text x-height):</source>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="234"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="77"/>
         <source>Undo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>‘%1’ 되돌리기</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="239"/>
@@ -6639,7 +6639,7 @@ text x-height):</source>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="240"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="85"/>
         <source>Redo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>‘%1’ 다시 실행</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2053"/>
@@ -6787,7 +6787,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="289"/>
         <source>Halve duration</source>
-        <translation type="unfinished"/>
+        <translation>절반 길이</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="295"/>
@@ -7261,7 +7261,7 @@ text x-height):</source>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="53"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="54"/>
         <source>Time signature properties…</source>
-        <translation type="unfinished"/>
+        <translation>박자표 속성</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="59"/>
@@ -7278,7 +7278,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="72"/>
         <source>Insert special characters…</source>
-        <translation type="unfinished"/>
+        <translation>특수 문자 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="191"/>
@@ -7587,7 +7587,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="444"/>
         <source>Realize chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>코드 기호 나타내기</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="450"/>
@@ -7790,7 +7790,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="890"/>
         <source>&amp;Unison</source>
-        <translation type="unfinished"/>
+        <translation>1도</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="891"/>
@@ -7985,12 +7985,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1340"/>
         <source>Add text: chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 추가: 화음 기호</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1346"/>
         <source>Add text: Roman numeral analysis</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 추가: 로마숫자 분석</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1352"/>
@@ -8000,67 +8000,67 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1358"/>
         <source>Add text: lyrics</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 추가: 가사</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1364"/>
         <source>Add text: figured bass</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 추가: 지속저음</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1370"/>
         <source>Add text: tempo marking</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 추가: 빠르기 기호</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1376"/>
         <source>Enter tuplet: duplet</source>
-        <translation type="unfinished"/>
+        <translation>둘잇단음표 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1382"/>
         <source>Enter tuplet: triplet</source>
-        <translation type="unfinished"/>
+        <translation>셋잇단음표 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1388"/>
         <source>Enter tuplet: quadruplet</source>
-        <translation type="unfinished"/>
+        <translation>넷잇단음표 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1394"/>
         <source>Enter tuplet: quintuplet</source>
-        <translation type="unfinished"/>
+        <translation>다섯잇단음표 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1400"/>
         <source>Enter tuplet: sextuplet</source>
-        <translation type="unfinished"/>
+        <translation>여섯잇단음표 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1406"/>
         <source>Enter tuplet: septuplet</source>
-        <translation type="unfinished"/>
+        <translation>일곱잇단음표 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1412"/>
         <source>Enter tuplet: octuplet</source>
-        <translation type="unfinished"/>
+        <translation>여덟잇단음표 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1417"/>
         <source>&amp;Nonuplet</source>
-        <translation type="unfinished"/>
+        <translation>아홉잇단음표</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1418"/>
         <source>Enter tuplet: nonuplet</source>
-        <translation type="unfinished"/>
+        <translation>아홉잇단음표 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1424"/>
         <source>Enter tuplet: other…</source>
-        <translation type="unfinished"/>
+        <translation>기타 잇단음표 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1430"/>
@@ -8085,7 +8085,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1459"/>
         <source>Reset s&amp;hapes and positions</source>
-        <translation type="unfinished"/>
+        <translation>모양/위치 초기화</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1460"/>
@@ -8106,19 +8106,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1491"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1492"/>
         <source>Zoom to page width</source>
-        <translation type="unfinished"/>
+        <translation>페이지 너비에 맞추기</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1497"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1498"/>
         <source>Zoom to whole page</source>
-        <translation type="unfinished"/>
+        <translation>전체 페이지에 맞추기</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1503"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1504"/>
         <source>Zoom to two pages</source>
-        <translation type="unfinished"/>
+        <translation>양쪽 맞추기</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1510"/>
@@ -8334,27 +8334,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1778"/>
         <source>Format text: bold</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 서식: 볼드</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1785"/>
         <source>Format text: italic</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 서식: 이탤릭</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1792"/>
         <source>Format text: underline</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 서식: 밑줄</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
         <source>Strikethrough</source>
-        <translation type="unfinished"/>
+        <translation>취소선</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1799"/>
         <source>Format text: strikethrough</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 서식: 취소선</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1805"/>
@@ -8364,7 +8364,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1806"/>
         <source>Format text: subscript</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 서식: 아래첨자</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1812"/>
@@ -8374,7 +8374,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1813"/>
         <source>Format text: superscript</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 서식: 위첨자</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1820"/>
@@ -8389,12 +8389,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1934"/>
         <source>Add clef: treble</source>
-        <translation type="unfinished"/>
+        <translation>높은음자리표 추가</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1940"/>
         <source>Add clef: bass</source>
-        <translation type="unfinished"/>
+        <translation>낮은음자리표 추가</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1952"/>
@@ -13150,7 +13150,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="279"/>
         <source>Rasgueado</source>
-        <translation type="unfinished"/>
+        <translation>라스게아도</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
@@ -13475,7 +13475,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="323"/>
         <source>Voltas</source>
-        <translation type="unfinished"/>
+        <translation>볼타</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="324"/>
@@ -21664,7 +21664,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="113"/>
         <source>Strikethrough</source>
-        <translation type="unfinished"/>
+        <translation>취소선</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="206"/>
@@ -22121,7 +22121,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/notationsettingsproxymodel.cpp" line="38"/>
         <source>Notation</source>
-        <translation type="unfinished"/>
+        <translation>기보법</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/beams/beamsettingsmodel.cpp" line="34"/>
@@ -29941,7 +29941,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
         <source>Dotted eighth note</source>
-        <translation type="unfinished"/>
+        <translation>점8분음표</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
@@ -30149,7 +30149,7 @@ failed.</source>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
         <source>Replace the &lt;a href=&quot;%1&quot;&gt;existing audio&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online audio in question</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;기존 오디오&lt;/a&gt; 대치</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="202"/>
@@ -30195,12 +30195,12 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="997"/>
         <source>Log in to MuseScore.com to save this score to the cloud.</source>
-        <translation type="unfinished"/>
+        <translation>악보를 클라우드에 저장하려면 musescore.com에 로그인하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
         <source>Log in to MuseScore.com to publish this score.</source>
-        <translation type="unfinished"/>
+        <translation>악보를 게시하려면 musescore.com에 로그인하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="347"/>
@@ -30265,7 +30265,7 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="442"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="539"/>
         <source>Log in or create a free account on MuseScore.com to open this score.</source>
-        <translation type="unfinished"/>
+        <translation>악보를 열려면 로그인하거나 musescore.com에서 무료 계정을 생성하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1378"/>
@@ -30275,12 +30275,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1603"/>
         <source>An unknown error occurred while saving this file.</source>
-        <translation type="unfinished"/>
+        <translation>파일을 저장하는 중 알 수 없는 오류가 발생했습니다.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1621"/>
         <source>An error occurred while saving your score</source>
-        <translation type="unfinished"/>
+        <translation>악보를 저장하는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1623"/>
@@ -30315,12 +30315,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="529"/>
         <source>Your score cannot be published</source>
-        <translation type="unfinished"/>
+        <translation>악보를 게시할 수 없습니다</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="530"/>
         <source>Your score cannot be saved to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>악보를 클라우드에 저장할 수 없습니다</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="543"/>
@@ -30627,7 +30627,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml" line="38"/>
         <source>Enter shortcut</source>
-        <translation type="unfinished"/>
+        <translation>단축키 입력</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml" line="71"/>
@@ -30637,7 +30637,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="101"/>
         <source>Reassign shortcut for &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;%1&lt;/b&gt;로 단축기 재지정</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/editpercussionshortcutmodel.cpp" line="184"/>
@@ -30647,7 +30647,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelpadmodel.cpp" line="91"/>
         <source>Define keyboard shortcut…</source>
-        <translation type="unfinished"/>
+        <translation>단축키 설정</translation>
     </message>
 </context>
 <context>
@@ -31071,7 +31071,7 @@ failed.</source>
     <message>
         <location filename="../../src/engraving/api/v1/score.cpp" line="247"/>
         <source>Plugin edit</source>
-        <translation type="unfinished"/>
+        <translation>플러그인 편집</translation>
     </message>
     <message>
         <location filename="../../src/engraving/devtools/corruptscoredevtoolsmodel.cpp" line="44"/>
@@ -31087,7 +31087,7 @@ failed.</source>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="2100"/>
         <source>Remove tie</source>
-        <translation type="unfinished"/>
+        <translation>붙임줄 제거</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="2186"/>
@@ -31108,12 +31108,12 @@ failed.</source>
     <message>
         <location filename="../../src/engraving/dom/lyrics.cpp" line="192"/>
         <source>Paste lyrics</source>
-        <translation type="unfinished"/>
+        <translation>가사 붙여넣기</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/textedit.cpp" line="908"/>
         <source>Paste text</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 붙여넣기</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tie.cpp" line="106"/>
@@ -31659,7 +31659,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5826"/>
         <source>Realize chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>코드 기호 나타내기</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5883"/>

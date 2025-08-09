@@ -23865,7 +23865,7 @@ Remarque : Maitriser MuseScore est disponible principalement en anglais (Certain
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="181"/>
         <source>Other text</source>
-        <translation>Autre texte</translation>
+        <translation>Autres textes</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="189"/>
