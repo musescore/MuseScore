@@ -98,7 +98,7 @@ public:
     virtual void pasteSymbols(XmlReader& e, ChordRest* dst) = 0;
 
     // compat
-    virtual void readTremoloCompat(compat::TremoloCompat* item, XmlReader& xml) = 0;
+    virtual void readTremoloCompat(engraving::compat::TremoloCompat* item, XmlReader& xml) = 0;
 
 private:
     virtual void doReadItem(EngravingItem* item, XmlReader& xml) = 0;

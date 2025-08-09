@@ -39,7 +39,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument id="flute">
@@ -105,7 +104,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Oboe</trackName>
       <Instrument id="oboe">
@@ -171,7 +169,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Bassoon</trackName>
       <Instrument id="bassoon">
@@ -238,7 +235,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>B♭ Clarinet</trackName>
       <Instrument id="bb-clarinet">
@@ -304,7 +300,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>E♭ Alto Clarinet</trackName>
       <Instrument id="alto-clarinet">
@@ -370,7 +365,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>B♭ Bass Clarinet</trackName>
       <Instrument id="bb-bass-clarinet">
@@ -438,7 +432,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>E♭ Alto Sax.</trackName>
       <Instrument id="alto-saxophone">
@@ -504,7 +497,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName> B♭ Tenor Sax.</trackName>
       <Instrument id="tenor-saxophone">
@@ -572,7 +564,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>E♭ Baritone Sax.</trackName>
       <Instrument id="baritone-saxophone">
@@ -640,7 +631,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
@@ -711,7 +701,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>F Horn</trackName>
       <Instrument id="horn">
@@ -782,7 +771,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Trombone</trackName>
       <Instrument id="trombone">
@@ -854,7 +842,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Baritone (B.C.)</trackName>
       <Instrument id="f-trumpet">
@@ -925,7 +912,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Baritone (T.C.)</trackName>
       <Instrument id="f-trumpet">
@@ -996,7 +982,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Tuba</trackName>
       <Instrument id="tuba">
@@ -1063,7 +1048,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Electric Bass</trackName>
       <Instrument id="electric-bass">
@@ -1148,7 +1132,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Percussion</trackName>
       <Instrument id="percussion">
@@ -1613,7 +1596,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Keyboard Percussion</trackName>
       <Instrument id="glockenspiel">

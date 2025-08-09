@@ -55,6 +55,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/expression_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hairpin_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/harpdiagram_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/hideemptystaves_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/implodeexplode_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/instrumentchange_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/join_tests.cpp

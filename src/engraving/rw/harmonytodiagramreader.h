@@ -21,9 +21,9 @@
  */
 #pragma once
 
-#include "../xmlreader.h"
+#include "xmlreader.h"
 
-namespace mu::engraving::read460 {
+namespace mu::engraving::rw {
 class HarmonyToDiagramReader
 {
 public:

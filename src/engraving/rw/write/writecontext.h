@@ -21,10 +21,8 @@
  */
 #pragma once
 
-#include <map>
-
 #include "containers.h"
-#include "../linksindexer.h"
+
 #include "dom/select.h"
 #include "dom/score.h"
 
@@ -41,10 +39,6 @@ public:
         return m_score->configuration();
     }
 
-    int assignLocalIndex(const Location& mainElementLocation);
-    void setLidLocalIndex(int lid, int localIndex);
-    int lidLocalIndex(int lid) const;
-
     Fraction curTick() const { return _curTick; }
     void setCurTick(const Fraction& v) { _curTick   = v; }
     void incCurTick(const Fraction& v) { _curTick += v; }
@@ -58,14 +52,8 @@ public:
     void setTrackDiff(int v) { _trackDiff = v; }
 
     bool clipboardmode() const { return _clipboardmode; }
-    bool excerptmode() const { return _excerptmode; }
-    bool isMsczMode() const { return _msczMode; }
-    bool writeTrack() const { return _writeTrack; }
 
     void setClipboardmode(bool v) { _clipboardmode = v; }
-    void setExcerptmode(bool v) { _excerptmode = v; }
-    void setIsMsczMode(bool v) { _msczMode = v; }
-    void setWriteTrack(bool v) { _writeTrack= v; }
 
     void setFilter(SelectionFilter f) { _filter = f; }
     bool canWrite(const EngravingItem*) const;
@@ -79,12 +67,7 @@ public:
                && _curTrack == c._curTrack
                && _trackDiff == c._trackDiff
                && _clipboardmode == c._clipboardmode
-               && _excerptmode == c._excerptmode
-               && _msczMode == c._msczMode
-               && _writeTrack == c._writeTrack
-               && _filter == c._filter
-               && m_linksIndexer == c.m_linksIndexer
-               && m_lidLocalIndices == c.m_lidLocalIndices;
+               && _filter == c._filter;
     }
 
     inline bool operator!=(const WriteContext& c) const { return !this->operator==(c); }
@@ -99,13 +82,7 @@ private:
     int _trackDiff       { 0 };             // saved track is curTrack-trackDiff
 
     bool _clipboardmode  { false };     // used to modify write() behaviour
-    bool _excerptmode    { false };     // true when writing a part
-    bool _msczMode       { true };      // false if writing into *.msc file
-    bool _writeTrack     { false };
 
     SelectionFilter _filter;
-
-    LinksIndexer m_linksIndexer;
-    std::map<int, int> m_lidLocalIndices;
 };
 }

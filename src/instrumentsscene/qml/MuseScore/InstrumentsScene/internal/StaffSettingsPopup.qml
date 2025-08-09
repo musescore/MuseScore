@@ -62,26 +62,34 @@ StyledPopupView {
 
         spacing: 12
 
-        StyledTextLabel {
-            id: typeLabel
-            text: qsTrc("layoutpanel", "Staff type")
-        }
-
-        StyledDropdown {
-            id: staffTypesDropdown
-
+        Column {
             width: parent.width
+            spacing: 8
 
-            navigation.panel: root.navigationPanel
-            navigation.row: 1
-            navigation.accessible.name: typeLabel.text + " " + currentValue
+            StyledTextLabel {
+                id: typeLabel
+                width: parent.width
+                text: qsTrc("layoutpanel", "Staff type")
+                font: ui.theme.bodyBoldFont
+                horizontalAlignment: Text.AlignLeft
+            }
 
-            currentIndex: staffTypesDropdown.indexOfValue(settingsModel.staffType)
-            model: settingsModel.allStaffTypes
-            enabled: staffTypesDropdown.count > 1
+            StyledDropdown {
+                id: staffTypesDropdown
 
-            onActivated: function(index, value) {
-                settingsModel.staffType = value
+                width: parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.row: 1
+                navigation.accessible.name: typeLabel.text + " " + currentValue
+
+                currentIndex: staffTypesDropdown.indexOfValue(settingsModel.staffType)
+                model: settingsModel.allStaffTypes
+                enabled: staffTypesDropdown.count > 1
+
+                onActivated: function(index, value) {
+                    settingsModel.staffType = value
+                }
             }
         }
 
@@ -89,44 +97,49 @@ StyledPopupView {
             visible: !settingsModel.isMainScore
         }
 
-        StyledTextLabel {
-            visible: !settingsModel.isMainScore
-            text: qsTrc("layoutpanel", "Voices visible in the score")
-        }
-
-        Row {
-            height: childrenRect.height
+        Column {
             width: parent.width
+            spacing: 8
 
-            spacing: 26
+            StyledTextLabel {
+                visible: !settingsModel.isMainScore
+                text: qsTrc("layoutpanel", "Voices visible in the score")
+            }
 
-            visible: !settingsModel.isMainScore
+            Row {
+                height: childrenRect.height
+                width: parent.width
 
-            Repeater {
-                model: settingsModel.voices
+                spacing: 26
 
-                delegate: CheckBox {
-                    id: item
+                visible: !settingsModel.isMainScore
 
-                    property int index: model.index
+                Repeater {
+                    model: settingsModel.voices
 
-                    objectName: "Voice" + modelData.title + "CheckBox"
+                    delegate: CheckBox {
+                        id: item
 
-                    navigation.panel: root.navigationPanel
-                    navigation.row: model.index + 2 //! NOTE after staffTypesDropdown
+                        property int index: model.index
 
-                    text: modelData.title
-                    checked: modelData.visible
+                        objectName: "Voice" + modelData.title + "CheckBox"
 
-                    onClicked: {
-                        settingsModel.setVoiceVisible(model.index, !checked)
-                    }
+                        navigation.panel: root.navigationPanel
+                        navigation.row: model.index + 2 //! NOTE after staffTypesDropdown
 
-                    Connections {
-                        target: settingsModel
-                        function onVoiceVisibilityChanged(voiceIndex, visible) {
-                            if (item.index === voiceIndex) {
-                                item.checked = visible
+                        text: modelData.title
+                        checked: modelData.visible
+
+                        onClicked: {
+                            settingsModel.setVoiceVisible(model.index, !checked)
+                        }
+
+                        Connections {
+                            target: settingsModel
+                            function onVoiceVisibilityChanged(voiceIndex, visible) {
+                                if (item.index === voiceIndex) {
+                                    item.checked = visible
+                                }
                             }
                         }
                     }
@@ -136,56 +149,124 @@ StyledPopupView {
 
         SeparatorLine {}
 
-        CheckBox {
-            navigation.panel: root.navigationPanel
-            navigation.row: 20 // Should be more than a voices checkbox
+        Column {
+            width: parent.width
+            spacing: 8
 
-            text: qsTrc("layoutpanel", "Small staff")
-            checked: settingsModel.isSmallStaff
+            CheckBox {
+                width: parent.width
 
-            onClicked: {
-                settingsModel.isSmallStaff = !checked
+                navigation.panel: root.navigationPanel
+                navigation.row: 20 // Should be more than a voices checkbox
+
+                text: qsTrc("layoutpanel", "Small staff")
+                checked: settingsModel.isSmallStaff
+
+                onClicked: {
+                    settingsModel.isSmallStaff = !checked
+                }
             }
-        }
 
-        CheckBox {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.rightMargin: 20
+            CheckBox {
+                width: parent.width
 
-            navigation.panel: root.navigationPanel
-            navigation.row: 21 // after small staff CheckBox
+                navigation.panel: root.navigationPanel
+                navigation.row: 21 // after small staff CheckBox
 
-            text: qsTrc("layoutpanel", "Hide all measures that do not contain notation (cutaway)")
+                text: qsTrc("layoutpanel", "Hide all measures that do not contain notation (cutaway)")
 
-            checked: settingsModel.cutawayEnabled
+                checked: settingsModel.cutawayEnabled
 
-            onClicked: {
-                settingsModel.cutawayEnabled = !checked
+                onClicked: {
+                    settingsModel.cutawayEnabled = !checked
+                }
             }
         }
 
         SeparatorLine {}
 
-        FlatButton {
+        Column {
             width: parent.width
+            spacing: 8
 
-            navigation.panel: root.navigationPanel
-            navigation.row: 22 // after cutaway CheckBox
+            StyledTextLabel {
+                width: parent.width
+                text: qsTrc("layoutpanel", "Hide empty staves")
+                font: ui.theme.bodyBoldFont
+                horizontalAlignment: Text.AlignLeft
+            }
 
-            text: qsTrc("layoutpanel", "Create a linked staff")
+            RadioButtonGroup {
+                id: hideEmptyStavesGroup
 
-            onClicked: {
-                settingsModel.createLinkedStaff()
-                root.close()
+                width: parent.width
+                orientation: ListView.Vertical
+
+                model: [
+                    { text: qsTrc("layoutpanel", "Follow instrument"), value: 0 },
+                    { text: qsTrc("layoutpanel", "Always hide"), value: 1 },
+                    { text: qsTrc("layoutpanel", "Never hide"), value: 2 }
+                ]
+
+                delegate: FlatRadioButton {
+                    required property var modelData
+                    required property int index
+
+                    navigation.panel: root.navigationPanel
+                    navigation.row: 22 + index
+                    navigation.accessible.name: qsTrc("layoutpanel", "Hide empty staves") + " " + text
+
+                    text: modelData.text
+
+                    checked: settingsModel.hideWhenEmpty === modelData.value
+                    onToggled: {
+                        settingsModel.hideWhenEmpty = modelData.value
+                    }
+                }
+            }
+
+            CheckBox {
+                id: showIfEntireSystemEmptyCheckBox
+                width: parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.row: 25 // after hideEmptyStavesGroup
+
+                text: qsTrc("layoutpanel", "If the entire system is empty, show this staff")
+                checked: settingsModel.showIfEntireSystemEmpty
+
+                onClicked: {
+                    settingsModel.showIfEntireSystemEmpty = !checked
+                }
             }
         }
 
-        StyledTextLabel {
-            width: parent.width
+        SeparatorLine {}
 
-            text: qsTrc("layoutpanel", "Note: linked staves contain identical information.")
-            wrapMode: Text.WordWrap
+        Column {
+            width: parent.width
+            spacing: 8
+
+            FlatButton {
+                width: parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.row: 26 // after showIfEntireSystemEmptyCheckBox
+
+                text: qsTrc("layoutpanel", "Create a linked staff")
+
+                onClicked: {
+                    settingsModel.createLinkedStaff()
+                    root.close()
+                }
+            }
+
+            StyledTextLabel {
+                width: parent.width
+
+                text: qsTrc("layoutpanel", "Linked staves contain identical notation (e.g. for guitar tablature)")
+                wrapMode: Text.WordWrap
+            }
         }
     }
 }

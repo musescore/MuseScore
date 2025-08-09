@@ -511,8 +511,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
 
     writeItemLink(item, xml, ctx);
 
-    if ((ctx.writeTrack() || item->track() != ctx.curTrack())
-        && (item->track() != muse::nidx) && !item->isBeam() && !item->isTuplet()) {
+    if (item->track() != ctx.curTrack() && item->track() != muse::nidx && !item->isBeam() && !item->isTuplet()) {
         // Writing track number for beams and tuplets is redundant as it is calculated
         // during layout.
         int t = static_cast<int>(item->track()) + ctx.trackDiff();
@@ -2513,6 +2512,14 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("color", item->color());
     }
 
+    if (item->hideWhenEmpty() != AutoOnOff::AUTO) {
+        xml.tag("hideWhenEmpty", TConv::toXml(item->hideWhenEmpty()));
+    }
+
+    if (item->hideStavesWhenIndividuallyEmpty()) {
+        xml.tag("hideStavesWhenIndividuallyEmpty", item->hideStavesWhenIndividuallyEmpty());
+    }
+
     if (item->preferSharpFlat() != PreferSharpFlat::AUTO) {
         switch (item->preferSharpFlat()) {
         case PreferSharpFlat::AUTO:
@@ -2764,14 +2771,14 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("defaultTransposingClef", TConv::toXml(ct.transposingClef));
     }
 
-    if (item->hideWhenEmpty() != Staff::HideMode::AUTO) {
-        xml.tag("hideWhenEmpty", int(item->hideWhenEmpty()));
+    if (item->hideWhenEmpty() != AutoOnOff::AUTO) {
+        xml.tag("hideWhenEmpty", TConv::toXml(item->hideWhenEmpty()));
     }
     if (item->cutaway()) {
         xml.tag("cutaway", item->cutaway());
     }
-    if (item->showIfEmpty()) {
-        xml.tag("showIfSystemEmpty", item->showIfEmpty());
+    if (item->showIfEntireSystemEmpty()) {
+        xml.tag("showIfSystemEmpty", item->showIfEntireSystemEmpty());
     }
     if (item->hideSystemBarLine()) {
         xml.tag("hideSystemBarLine", item->hideSystemBarLine());

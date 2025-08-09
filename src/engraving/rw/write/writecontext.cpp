@@ -21,25 +21,9 @@
  */
 
 #include "writecontext.h"
-#include "containers.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::write;
-
-int WriteContext::assignLocalIndex(const Location& mainElementLocation)
-{
-    return m_linksIndexer.assignLocalIndex(mainElementLocation);
-}
-
-void WriteContext::setLidLocalIndex(int lid, int localIndex)
-{
-    m_lidLocalIndices.insert({ lid, localIndex });
-}
-
-int WriteContext::lidLocalIndex(int lid) const
-{
-    return muse::value(m_lidLocalIndices, lid, 0);
-}
 
 bool WriteContext::canWrite(const EngravingItem* e) const
 {

@@ -262,6 +262,8 @@ public:
     static void layoutHarmony(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutHook(const Hook* item, Hook::LayoutData* ldata);
 
+    static void layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::LayoutData* ldata);
+
     static void layoutImage(const Image* item, Image::LayoutData* ldata);
     static void layoutInstrumentChange(const InstrumentChange* item, InstrumentChange::LayoutData* ldata);
     static void layoutInstrumentName(const InstrumentName* item, InstrumentName::LayoutData* ldata);
@@ -272,7 +274,6 @@ public:
 
     static void layoutLaissezVib(LaissezVib* item);
     static void layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData* ldata);
-    static void layoutSystemLockIndicator(const SystemLockIndicator* item, SystemLockIndicator::LayoutData* ldata);
     static void layoutLedgerLine(LedgerLine* item, LayoutContext& ctx);
     static void layoutLetRing(LetRing* item, LayoutContext& ctx);
     static void layoutLetRingSegment(LetRingSegment* item, LayoutContext& ctx);

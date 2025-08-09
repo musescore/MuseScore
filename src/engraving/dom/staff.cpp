@@ -1284,7 +1284,7 @@ void Staff::init(const Staff* s)
     m_barLineTo         = s->m_barLineTo;
     m_hideWhenEmpty     = s->m_hideWhenEmpty;
     m_cutaway           = s->m_cutaway;
-    m_showIfEmpty       = s->m_showIfEmpty;
+    m_showIfEntireSystemEmpty = s->m_showIfEntireSystemEmpty;
     m_hideSystemBarLine = s->m_hideSystemBarLine;
     m_mergeMatchingRests = s->m_mergeMatchingRests;
     m_color             = s->m_color;
@@ -1537,6 +1537,8 @@ PropertyValue Staff::getProperty(Pid id) const
         return staffType(Fraction(0, 1))->userMag();
     case Pid::STAFF_INVISIBLE:
         return staffType(Fraction(0, 1))->invisible();
+    case Pid::HIDE_WHEN_EMPTY:
+        return m_hideWhenEmpty;
     case Pid::STAFF_COLOR:
         return PropertyValue::fromValue(staffType(Fraction(0, 1))->color());
     case Pid::PLAYBACK_VOICE1:
@@ -1559,6 +1561,8 @@ PropertyValue Staff::getProperty(Pid id) const
         return false;
     case Pid::SHOW_MEASURE_NUMBERS:
         return m_showMeasureNumbers;
+    case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
+        return m_showIfEntireSystemEmpty;
     case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
         return m_systemObjectsBelowBottomStaff;
     default:
@@ -1586,6 +1590,9 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         setLocalSpatium(_spatium, spatium(Fraction(0, 1)), Fraction(0, 1));
     }
     break;
+    case Pid::HIDE_WHEN_EMPTY:
+        setHideWhenEmpty(v.value<AutoOnOff>());
+        break;
     case Pid::STAFF_COLOR:
         setColor(Fraction(0, 1), v.value<Color>());
         break;
@@ -1637,6 +1644,9 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::SHOW_MEASURE_NUMBERS:
         m_showMeasureNumbers = v.value<AutoOnOff>();
         break;
+    case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
+        m_showIfEntireSystemEmpty = v.toBool();
+        break;
     case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
         m_systemObjectsBelowBottomStaff = v.toBool();
         break;
@@ -1659,6 +1669,8 @@ PropertyValue Staff::propertyDefault(Pid id) const
         return false;
     case Pid::MAG:
         return 1.0;
+    case Pid::HIDE_WHEN_EMPTY:
+        return AutoOnOff::AUTO;
     case Pid::STAFF_COLOR:
         return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::PLAYBACK_VOICE1:
@@ -1675,6 +1687,8 @@ PropertyValue Staff::propertyDefault(Pid id) const
         return Spatium(0.0);
     case Pid::SHOW_MEASURE_NUMBERS:
         return AutoOnOff::AUTO;
+    case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
+        return false;
     case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
         return false;
     default:

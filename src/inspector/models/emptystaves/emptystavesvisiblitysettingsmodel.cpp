@@ -61,15 +61,8 @@ void EmptyStavesVisibilitySettingsModel::hideEmptyStavesInSelection()
     beginCommand(muse::TranslatableString("undoableAction", "Hide empty staves in selection"));
 
     for (System* system : systems) {
-        for (MeasureBase* mb = system->firstMeasure(); mb; mb = system->nextMeasure(mb)) {
-            Measure* measure = mb->isMeasure() ? toMeasure(mb) : nullptr;
-            if (!measure) {
-                continue;
-            }
-
-            for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
-                score->undo(new ChangeMStaffHideIfEmpty(measure, staffIdx, AutoOnOff::ON));
-            }
+        for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
+            score->cmdSetHideStaffIfEmptyOverride(staffIdx, system, AutoOnOff::ON);
         }
     }
 
@@ -90,16 +83,8 @@ void EmptyStavesVisibilitySettingsModel::showAllEmptyStaves()
     beginCommand(muse::TranslatableString("undoableAction", "Show all empty staves"));
 
     for (System* system : systems) {
-        for (MeasureBase* mb = system->firstMeasure(); mb; mb = system->nextMeasure(mb)) {
-            Measure* measure = mb->isMeasure() ? toMeasure(mb) : nullptr;
-            if (!measure) {
-                continue;
-            }
-
-            // Apply to all staves in the score, not just selected ones
-            for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-                score->undo(new ChangeMStaffHideIfEmpty(measure, staffIdx, AutoOnOff::OFF));
-            }
+        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            score->cmdSetHideStaffIfEmptyOverride(staffIdx, system, engraving::AutoOnOff::OFF);
         }
     }
 
@@ -120,16 +105,9 @@ void EmptyStavesVisibilitySettingsModel::resetEmptyStavesVisibility()
     beginCommand(muse::TranslatableString("undoableAction", "Reset empty staves visibility"));
 
     for (System* system : systems) {
-        for (MeasureBase* mb = system->firstMeasure(); mb; mb = system->nextMeasure(mb)) {
-            Measure* measure = mb->isMeasure() ? toMeasure(mb) : nullptr;
-            if (!measure) {
-                continue;
-            }
-
-            // Apply to all staves in the score, not just selected ones
-            for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-                score->undo(new ChangeMStaffHideIfEmpty(measure, staffIdx, AutoOnOff::AUTO));
-            }
+        // Apply to all staves in the score, not just selected ones
+        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            score->cmdSetHideStaffIfEmptyOverride(staffIdx, system, engraving::AutoOnOff::AUTO);
         }
     }
 

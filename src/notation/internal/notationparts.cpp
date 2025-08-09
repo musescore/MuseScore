@@ -162,10 +162,8 @@ StaffConfig NotationParts::staffConfig(const ID& staffId) const
     config.visible = staff->visible();
     config.userDistance = staff->userDist();
     config.cutaway = staff->cutaway();
-    config.showIfEmpty = staff->showIfEmpty();
     config.hideSystemBarline = staff->hideSystemBarLine();
     config.mergeMatchingRests = staff->mergeMatchingRests();
-    config.hideMode = staff->hideWhenEmpty();
     config.clefTypeList = staff->defaultClefType();
     config.reflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
 
@@ -1021,8 +1019,8 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
         return;
     }
 
-    score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode,
-                                                 config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests,
+    score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.cutaway,
+                                                 config.hideSystemBarline, config.mergeMatchingRests,
                                                  config.reflectTranspositionInLinkedTab));
 
     score()->undo(new mu::engraving::ChangeStaffType(staff, config.staffType));

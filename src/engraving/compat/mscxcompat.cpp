@@ -35,59 +35,24 @@ using namespace muse;
 using namespace muse::io;
 using namespace mu::engraving;
 
-Ret mu::engraving::compat::mscxToMscz(const io::path_t& mscxFilePath, ByteArray* msczData)
-{
-    File mscxFile(mscxFilePath);
-    if (!mscxFile.open(IODevice::ReadOnly)) {
-        return make_ret(Err::FileOpenError, mscxFilePath);
-    }
-
-    ByteArray mscxData = mscxFile.readAll();
-
-    Buffer buf(msczData);
-    MscWriter::Params params;
-    params.device = &buf;
-    params.filePath = mscxFilePath;
-    params.mode = MscIoMode::Zip;
-    MscWriter writer(params);
-    writer.open();
-    writer.writeScoreFile(mscxData);
-
-    return muse::make_ok();
-}
-
 Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const io::path_t& path, bool ignoreVersionError)
 {
     std::string suffix = io::suffix(path);
 
-    ByteArray msczData;
-    if (suffix == MSCX) {
-        //! NOTE Convert mscx -> mscz
-        Ret ret = mscxToMscz(path, &msczData);
-        if (!ret) {
-            return ret;
-        }
-    } else if (suffix == MSCZ) {
-        File msczFile(path);
-        if (!msczFile.open(IODevice::ReadOnly)) {
-            return make_ret(Err::FileOpenError, path);
-        }
-
-        msczData = msczFile.readAll();
-    } else {
+    MscReader::Params params;
+    params.filePath = path;
+    params.mode = mscIoModeBySuffix(suffix);
+    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
         return make_ret(Err::FileUnknownType, path);
     }
 
-    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
-
-    Buffer msczBuf(&msczData);
-    MscReader::Params params;
-    params.device = &msczBuf;
-    params.filePath = path;
-    params.mode = MscIoMode::Zip;
-
     MscReader reader(params);
-    reader.open();
+    Ret ret = reader.open();
+    if (!ret) {
+        return ret;
+    }
+
+    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
     MscLoader scoreReader;
     SettingsCompat audioSettings;
@@ -98,34 +63,20 @@ Ret mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const io:
 {
     std::string suffix = io::suffix(path);
 
-    ByteArray msczData;
-    if (suffix == MSCX) {
-        //! NOTE Convert mscx -> mscz
-        Ret ret = mscxToMscz(path, &msczData);
-        if (!ret) {
-            return ret;
-        }
-    } else if (suffix == MSCZ) {
-        File msczFile(path);
-        if (!msczFile.open(IODevice::ReadOnly)) {
-            return make_ret(Err::FileOpenError, path);
-        }
-
-        msczData = msczFile.readAll();
-    } else {
+    MscReader::Params params;
+    params.filePath = path;
+    params.mode = mscIoModeBySuffix(suffix);
+    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
         return make_ret(Err::FileUnknownType, path);
     }
 
-    project->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
-
-    Buffer msczBuf(&msczData);
-    MscReader::Params params;
-    params.device = &msczBuf;
-    params.filePath = path;
-    params.mode = MscIoMode::Zip;
-
     MscReader reader(params);
-    reader.open();
+    Ret ret = reader.open();
+    if (!ret) {
+        return ret;
+    }
+
+    project->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
     SettingsCompat settingsCompat;
     return project->loadMscz(reader, settingsCompat, ignoreVersionError);

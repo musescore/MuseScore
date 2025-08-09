@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_STAFF_H
-#define MU_ENGRAVING_STAFF_H
+#pragma once
 
 #include <map>
 #include <vector>
@@ -35,6 +34,8 @@
 #include "keylist.h"
 #include "pitch.h"
 #include "stafftypelist.h"
+
+#include "../types/types.h"
 
 namespace mu::engraving {
 class BracketItem;
@@ -60,10 +61,6 @@ class Staff final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Staff)
 
 public:
-    enum class HideMode : unsigned char {
-        AUTO, ALWAYS, NEVER, INSTRUMENT
-    };
-
     Staff* clone() const override;
 
     void init(const InstrumentTemplate*, const StaffType* staffType, int);
@@ -137,13 +134,13 @@ public:
     bool stemless(const Fraction&) const;
     bool cutaway() const { return m_cutaway; }
     void setCutaway(bool val) { m_cutaway = val; }
-    bool showIfEmpty() const { return m_showIfEmpty; }
-    void setShowIfEmpty(bool val) { m_showIfEmpty = val; }
+    bool showIfEntireSystemEmpty() const { return m_showIfEntireSystemEmpty; }
+    void setShowIfEntireSystemEmpty(bool val) { m_showIfEntireSystemEmpty = val; }
 
     bool hideSystemBarLine() const { return m_hideSystemBarLine; }
     void setHideSystemBarLine(bool val) { m_hideSystemBarLine = val; }
-    HideMode hideWhenEmpty() const { return m_hideWhenEmpty; }
-    void setHideWhenEmpty(HideMode v) { m_hideWhenEmpty = v; }
+    AutoOnOff hideWhenEmpty() const { return m_hideWhenEmpty; }
+    void setHideWhenEmpty(AutoOnOff v) { m_hideWhenEmpty = v; }
     AutoOnOff mergeMatchingRests() const { return m_mergeMatchingRests; }
     void setMergeMatchingRests(AutoOnOff val) { m_mergeMatchingRests = val; }
     bool shouldMergeMatchingRests() const;
@@ -301,10 +298,10 @@ private:
     int m_barLineTo = 0;                // line of end staff to draw the bar line to (0= staff bottom line, ...)
 
     bool m_cutaway = false;
-    bool m_showIfEmpty = false;             // show this staff if system is empty and hideEmptyStaves is true
+    bool m_showIfEntireSystemEmpty = false;             // show this staff if system is empty and hideEmptyStaves is true
     bool m_hideSystemBarLine = false;       // no system barline if not preceded by staff with barline
     AutoOnOff m_mergeMatchingRests = AutoOnOff::AUTO;      // merge matching rests in multiple voices
-    HideMode m_hideWhenEmpty = HideMode::AUTO;      // hide empty staves
+    AutoOnOff m_hideWhenEmpty = AutoOnOff::AUTO;      // hide empty staves
 
     Color m_color;
     Spatium m_userDist     { Spatium(0.0) };           ///< user edited extra distance
@@ -324,5 +321,4 @@ private:
     AutoOnOff m_showMeasureNumbers = AutoOnOff::AUTO;
     bool m_systemObjectsBelowBottomStaff = false;
 };
-} // namespace mu::engraving
-#endif
+}

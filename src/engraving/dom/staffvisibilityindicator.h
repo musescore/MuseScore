@@ -19,15 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include "../xmlreader.h"
-#include "readcontext.h"
+#include "indicatoricon.h"
 
-namespace mu::engraving::read410 {
-class HarmonyToDiagramReader
+namespace mu::engraving {
+class StaffVisibilityIndicator : public IndicatorIcon
 {
+    OBJECT_ALLOCATOR(engraving, StaffVisibilityIndicator)
+    DECLARE_CLASSOF(ElementType::STAFF_VISIBILITY_INDICATOR)
+
 public:
-    static std::unordered_map<String, String> read(XmlReader& reader);
+    StaffVisibilityIndicator(System* parent);
+
+    char16_t iconCode() const override { return 0xEF53; }
 };
 }
