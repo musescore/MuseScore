@@ -1432,7 +1432,7 @@ void NotationInteraction::startOutgoingDragRange(QObject* dragSource)
         return;
     }
 
-    QMimeData* mimeData = selection()->mimeData();
+    QMimeData* mimeData = selection()->qMimeData();
     if (!mimeData) {
         return;
     }
@@ -1518,6 +1518,26 @@ bool NotationInteraction::startDropRange(const QByteArray& data)
         resetDropData();
         return false;
     }
+
+    return true;
+}
+
+bool NotationInteraction::startDropRange(const Fraction& sourceTick, const Fraction& tickLength,
+                                         engraving::staff_idx_t sourceStaffIdx, size_t numStaves)
+{
+    if (tickLength.isZero() || numStaves == 0) {
+        return false;
+    }
+
+    resetDropData();
+
+    m_dropData.rangeDropData = RangeDropData();
+    RangeDropData& rdd = m_dropData.rangeDropData.value();
+
+    rdd.sourceTick = sourceTick;
+    rdd.tickLength = tickLength;
+    rdd.sourceStaffIdx = sourceStaffIdx;
+    rdd.numStaves = numStaves;
 
     return true;
 }
@@ -5037,7 +5057,7 @@ void NotationInteraction::copySelection()
             QGuiApplication::clipboard()->setMimeData(mimeData);
         }
     } else {
-        QMimeData* mimeData = selection()->mimeData();
+        QMimeData* mimeData = selection()->qMimeData();
         if (!mimeData) {
             return;
         }
@@ -5172,7 +5192,7 @@ void NotationInteraction::swapSelection()
     QString mimeType = selection.mimeType();
 
     if (mimeType == mu::engraving::mimeStaffListFormat) { // determine size of clipboard selection
-        const QMimeData* mimeData = this->selection()->mimeData();
+        const QMimeData* mimeData = this->selection()->qMimeData();
         QByteArray data = mimeData ? mimeData->data(mu::engraving::mimeStaffListFormat) : QByteArray();
         mu::engraving::XmlReader reader(data);
         reader.readNextStartElement();

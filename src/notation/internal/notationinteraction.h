@@ -119,6 +119,8 @@ public:
     // Drop
     bool startDropSingle(const QByteArray& edata) override;
     bool startDropRange(const QByteArray& data) override;
+    bool startDropRange(const Fraction& sourceTick, const Fraction& tickLength, engraving::staff_idx_t sourceStaffIdx,
+                        size_t numStaves) override;
     bool startDropImage(const QUrl& url) override;
     bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool updateDropRange(const muse::PointF& pos) override;

@@ -189,6 +189,7 @@ private:
     void mousePress_considerSelect(const ClickContext& ctx);
     void cycleOverlappingHitElements(const std::vector<EngravingItem*>& hitElements, staff_idx_t hitStaffIndex);
     bool mousePress_considerDragOutgoingRange(const ClickContext& ctx);
+    bool mousePress_considerStartPasteRangeOnRelease(const ClickContext& ctx);
     void handleLeftClick(const ClickContext& ctx);
     void handleRightClick(const ClickContext& ctx);
     void handleLeftClickRelease(const QPointF& releasePoint);
@@ -214,6 +215,7 @@ private:
         enum DragAction {
             DragOutgoingElement,
             DragOutgoingRange,
+            PasteRangeOnRelease,
             Other,
             Nothing
         } dragAction = Other;
