@@ -519,10 +519,8 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
       else {
             const StaffType* st = staffType();
 
-            // workaround to make the (external) fonts Emmentaler (mscore.ttf)
-            // and Ekmelos (none of the others from the Ekmelos family, EkmelosXXedo, though) work correctly with repeatDots
-            qreal offset = ((score()->scoreFont()->name() == "Emmentaler" && score()->scoreFont()->fontPath().endsWith(".ttf"))
-                            || score()->scoreFont()->name() == "Ekmelos") ? 0.5 * score()->spatium() * mag() : 0;
+            // workaround to make the (external) font Emmentaler (mscore.ttf) work correctly with repeatDots
+            qreal offset = (score()->scoreFont()->name() == "Emmentaler" && score()->scoreFont()->fontPath().endsWith(".ttf")) ? 0.5 * score()->spatium() * mag() : 0;
             y1l          = st->doty1() * _spatium + offset;
             y2l          = st->doty2() * _spatium + offset;
 
