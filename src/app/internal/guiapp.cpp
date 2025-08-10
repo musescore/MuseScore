@@ -24,11 +24,6 @@ GuiApp::GuiApp(const CmdOptions& options, const modularity::ContextPtr& ctx)
 {
 }
 
-void GuiApp::addModule(muse::modularity::IModuleSetup* module)
-{
-    m_modules.push_back(module);
-}
-
 void GuiApp::perform()
 {
     const CmdOptions& options = m_options;
@@ -44,88 +39,7 @@ void GuiApp::perform()
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
-    m_globalModule.setApplication(shared_from_this());
-    m_globalModule.registerResources();
-    m_globalModule.registerExports();
-    m_globalModule.registerUiTypes();
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->setApplication(shared_from_this());
-        m->registerResources();
-    }
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->registerExports();
-    }
-
-    m_globalModule.resolveImports();
-    m_globalModule.registerApi();
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->registerUiTypes();
-        m->resolveImports();
-        m->registerApi();
-    }
-
-    // ====================================================
-    // Setup modules: apply the command line options
-    // ====================================================
-    applyCommandLineOptions(options);
-
-    // ====================================================
-    // Setup modules: onPreInit
-    // ====================================================
-    m_globalModule.onPreInit(runMode);
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onPreInit(runMode);
-    }
-
-    SplashScreen* splashScreen = nullptr;
-    if (multiInstancesProvider()->isMainInstance()) {
-        splashScreen = new SplashScreen(SplashScreen::Default);
-    } else {
-        const project::ProjectFile& file = startupScenario()->startupScoreFile();
-        if (file.isValid()) {
-            if (file.hasDisplayName()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
-            } else {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
-            }
-        } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
-            splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
-        } else {
-            splashScreen = new SplashScreen(SplashScreen::Default);
-        }
-    }
-
-    if (splashScreen) {
-        splashScreen->show();
-    }
-
-    // ====================================================
-    // Setup modules: onInit
-    // ====================================================
-    m_globalModule.onInit(runMode);
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onInit(runMode);
-    }
-
-    // ====================================================
-    // Setup modules: onAllInited
-    // ====================================================
-    m_globalModule.onAllInited(runMode);
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onAllInited(runMode);
-    }
-
-    // ====================================================
-    // Setup modules: onStartApp (on next event loop)
-    // ====================================================
-    QMetaObject::invokeMethod(qApp, [this]() {
-        m_globalModule.onStartApp();
-        for (modularity::IModuleSetup* m : m_modules) {
-            m->onStartApp();
-        }
-    }, Qt::QueuedConnection);
+    setupModules();
 
     // ====================================================
     // Run
@@ -172,74 +86,13 @@ void GuiApp::perform()
         }
     }
 
-    QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    QQmlApplicationEngine* engine = loadApplication();
 
-#if defined(Q_OS_WIN)
-    const QString mainQmlFile = "/platform/win/Main.qml";
-#elif defined(Q_OS_MACOS)
-    const QString mainQmlFile = "/platform/mac/Main.qml";
-#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    const QString mainQmlFile = "/platform/linux/Main.qml";
-#elif defined(Q_OS_WASM)
-    const QString mainQmlFile = "/Main.wasm.qml";
-#endif
+    // When the QmlEngine has loaded the Main.qml file,
+    logSceneGraphErrors();
+    engineLoadedWork();
 
-#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
-    const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
-#else
-    const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);
-#endif
-
-    QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
-        QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
-        //! NOTE It is important that there is a connection to this signal with an error,
-        //! otherwise the default action will be performed - displaying a message and terminating.
-        //! We will not be able to switch to another backend.
-        QObject::connect(w, &QQuickWindow::sceneGraphError, qApp, [](QQuickWindow::SceneGraphError, const QString& msg) {
-            LOGE() << "scene graph error: " << msg;
-        });
-    }, Qt::DirectConnection);
-
-    QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                     qApp, [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
-        if (!obj && url == objUrl) {
-            LOGE() << "failed Qml load\n";
-            QCoreApplication::exit(-1);
-            return;
-        }
-
-        if (url == objUrl) {
-            // ====================================================
-            // Setup modules: onDelayedInit
-            // ====================================================
-
-            m_globalModule.onDelayedInit();
-            for (modularity::IModuleSetup* m : m_modules) {
-                m->onDelayedInit();
-            }
-
-            startupScenario()->runOnSplashScreen();
-
-            if (splashScreen) {
-                splashScreen->close();
-                delete splashScreen;
-            }
-
-            startupScenario()->runAfterSplashScreen();
-        }
-    }, Qt::QueuedConnection);
-
-    QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
-        for (const QQmlError& e : warnings) {
-            LOGE() << "error: " << e.toString().toStdString() << "\n";
-        }
-    });
-
-    // ====================================================
-    // Load Main qml
-    // ====================================================
-
-    engine->load(url);
+    logQmlEngineMessages();
 
 #endif // MUE_BUILD_APPSHELL_MODULE
 }
@@ -261,26 +114,57 @@ void GuiApp::finish()
     ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
 
     // Deinit
+    deinitModules();
+}
 
-    m_globalModule.invokeQueuedCalls();
+void GuiApp::logSceneGraphErrors() {
+    QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
+        QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
+        //! NOTE It is important that there is a connection to this signal with an error,
+        //! otherwise the default action will be performed - displaying a message and terminating.
+        //! We will not be able to switch to another backend.
+        QObject::connect(w, &QQuickWindow::sceneGraphError, qApp, [](QQuickWindow::SceneGraphError, const QString& msg) {
+            LOGE() << "scene graph error: " << msg;
+        });
+    }, Qt::DirectConnection);
+}
 
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onDeinit();
-    }
+// Makes sure that messages from QmlEngine are loaded through OUR log system
+void GuiApp::logQmlEngineMessages() {
+    QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
+        for (const QQmlError& e : warnings) {
+            LOGE() << "error: " << e.toString().toStdString() << "\n";
+        }
+    });
+}
 
-    m_globalModule.onDeinit();
+void GuiApp::engineLoadedWork() {
+    QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
+                     qApp, [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
+        // Makes sure Main.qml was in fact loaded
+        bool noObjectExists = !obj;
+        // Checks that the correct file was loaded
+        bool correctFileWasLoaded = url == objUrl;
 
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onDestroy();
-    }
+        if (noObjectExists && correctFileWasLoaded) {
+            LOGE() << "failed Qml load\n";
+            QCoreApplication::exit(-1);
+            return;
+        }
 
-    m_globalModule.onDestroy();
+        if (correctFileWasLoaded) {
+            m_globalModule.onDelayedInit();
+            for (modularity::IModuleSetup* m : m_modules) {
+                m->onDelayedInit();
+            }
 
-    // Delete modules
-    qDeleteAll(m_modules);
-    m_modules.clear();
+            startupScenario()->runOnSplashScreen();
 
-    removeIoC();
+            hideSplashScreen();
+
+            startupScenario()->runAfterSplashScreen();
+        }
+        }, Qt::QueuedConnection);
 }
 
 void GuiApp::applyCommandLineOptions(const CmdOptions& options)
@@ -314,4 +198,160 @@ void GuiApp::applyCommandLineOptions(const CmdOptions& options)
     if (options.app.loggerLevel) {
         m_globalModule.setLoggerLevel(options.app.loggerLevel.value());
     }
+}
+
+void GuiApp::loadApplication() {
+   // The Qml App Engine from IUiEngine is used instead of just creating one.
+   // (i.e. new QQmlApplicationEngine() like most applications would do).
+   // because it injects an object called "ui" that UiComponents use.
+   // See: `setContextProperty("ui", this)`
+   QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+
+   // Determine the path to use to the Main.qml file (is platform-dependent)
+    #if defined(Q_OS_WIN)
+        const QString mainQmlFile = "/platform/win/Main.qml";
+    #elif defined(Q_OS_MACOS)
+        const QString mainQmlFile = "/platform/mac/Main.qml";
+    #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+        const QString mainQmlFile = "/platform/linux/Main.qml";
+    #elif defined(Q_OS_WASM)
+        const QString mainQmlFile = "/Main.wasm.qml";
+    #endif
+
+    #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
+        const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
+    #else
+        const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);
+    #endif
+
+    // Loads the Main.qml file to the QML Engine
+    engine->load(url);
+
+    return engine;
+}
+
+void GuiApp::addModule(muse::modularity::IModuleSetup* module)
+{
+    m_modules.push_back(module);
+}
+
+void GuiApp::setupModules() {
+    // We always init the global module first
+    // Synchronously, so the other modules can access it
+
+    m_globalModule.setApplication(shared_from_this());
+    m_globalModule.registerResources();
+    m_globalModule.registerExports();
+    m_globalModule.registerUiTypes();
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->setApplication(shared_from_this());
+        m->registerResources();
+    }
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->registerExports();
+    }
+
+    m_globalModule.resolveImports();
+    m_globalModule.registerApi();
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->registerUiTypes();
+        m->resolveImports();
+        m->registerApi();
+    }
+
+    // ====================================================
+    // Setup modules: apply the command line options
+    // ====================================================
+    applyCommandLineOptions(options);
+
+    // ====================================================
+    // Setup modules: onPreInit
+    // ====================================================
+    m_globalModule.onPreInit(runMode);
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onPreInit(runMode);
+    }
+
+    displaySplashScreen();
+
+    // ====================================================
+    // Setup modules: onInit
+    // ====================================================
+    m_globalModule.onInit(runMode);
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onInit(runMode);
+    }
+
+    // ====================================================
+    // Setup modules: onAllInited
+    // ====================================================
+    m_globalModule.onAllInited(runMode);
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onAllInited(runMode);
+    }
+
+    // ====================================================
+    // Setup modules: onStartApp (on next event loop)
+    // ====================================================
+    QMetaObject::invokeMethod(qApp, [this]() {
+        m_globalModule.onStartApp();
+        for (modularity::IModuleSetup* m : m_modules) {
+            m->onStartApp();
+        }
+    }, Qt::QueuedConnection);
+}
+
+void GuiApp::deinitModules() {
+    m_globalModule.invokeQueuedCalls();
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onDeinit();
+    }
+
+    m_globalModule.onDeinit();
+
+    for (modularity::IModuleSetup* m : m_modules) {
+        m->onDestroy();
+    }
+
+    m_globalModule.onDestroy();
+
+    // Delete modules
+    qDeleteAll(m_modules);
+    m_modules.clear();
+
+    removeIoC();
+}
+
+void GuiApp::hideSplashScreen() {
+        if (m_splashScreen) {
+                m_splashScreen->close();
+                delete m_splashScreen;
+        }
+}
+
+void GuiApp::displaySplashScreen() {
+        m_splashScreen = nullptr;
+        if (multiInstancesProvider()->isMainInstance()) {
+            m_splashScreen = new SplashScreen(SplashScreen::Default);
+        } else {
+            const project::ProjectFile& file = startupScenario()->startupScoreFile();
+            if (file.isValid()) {
+                if (file.hasDisplayName()) {
+                    m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
+                } else {
+                    m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
+                }
+            } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
+                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
+            } else {
+                m_splashScreen = new SplashScreen(SplashScreen::Default);
+            }
+        }
+
+        if (m_splashScreen) {
+            m_splashScreen->show();
+        }
 }

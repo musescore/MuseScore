@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <QQmlApplicationEngine>
 
 #include "global/internal/baseapplication.h"
 #include "../cmdoptions.h"
@@ -16,6 +17,7 @@
 #include "appshell/iappshellconfiguration.h"
 #include "appshell/internal/istartupscenario.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
+#include "appshell/view/internal/splashscreen/splashscreen.h"
 
 namespace mu::app {
 class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this<GuiApp>
@@ -36,6 +38,32 @@ public:
 
 private:
     void applyCommandLineOptions(const CmdOptions& options);
+    // Loads the Main.qml file to the Qml Engine
+    QQmlApplicationEngine* loadApplication();
+
+    // Sets up modules
+    // - Loads .qrc files
+    // - Register exports (so that you can do `ioc()->resolve<SomeType>("moduleName");`)
+    // - Calls events (`onPreInit`, `onInit`, ...)
+    void setupModules();
+    // Cleanup work to modules. Sends `onDeinit` and `onDestroy` events.
+    void deinitModules();
+
+    SplashScreen *m_splashScreen;
+    void displaySplashScreen();
+    void hideSplashScreen();
+
+    // Sets up a signal so that when the QQmlApplicationEngine is loaded,
+    // - makes sure the Main.qml was in fact loaded
+    // - the splash screen is closed and deleted
+    // - call onDelayedInit on all modules
+    void engineLoadedWork();
+
+    // Makes sure to log SceneGraph errors of the Qml Engine to OUR logging system.
+    // Overrides default behaviour (logging & closing the application).
+    void logSceneGraphErrors();
+    // Logs all QQmlApplicationEngine messages through our logging system (log.h).
+    void logQmlEngineMessages();
 
     CmdOptions m_options;
 
