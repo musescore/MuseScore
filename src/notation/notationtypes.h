@@ -152,6 +152,7 @@ using GuitarBendType = mu::engraving::GuitarBendType;
 using engraving::LoopBoundaryType;
 using Pid = mu::engraving::Pid;
 using VoiceAssignment = mu::engraving::VoiceAssignment;
+using MeasureBeat = mu::engraving::MeasureBeat;
 
 static const muse::String COMMON_GENRE_ID("common");
 
@@ -529,14 +530,6 @@ inline QString staffTypeToString(StaffTypeId type)
     const StaffType* preset = StaffType::preset(type);
     return preset ? preset->name().toQString() : QString();
 }
-
-struct MeasureBeat
-{
-    int measureIndex = 0;
-    int maxMeasureIndex = 0;
-    float beat = 0.f;
-    int maxBeatIndex = 0;
-};
 
 enum class BracketsType : unsigned char
 {

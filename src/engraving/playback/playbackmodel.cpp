@@ -319,7 +319,7 @@ void PlaybackModel::triggerMetronome(int tick)
     trackPlaybackData->second.offStream.send(std::move(result), {}, true /*flushOffstream*/);
 }
 
-void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& totalCountInDuration)
+void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& countInDuration)
 {
     auto trackPlaybackData = m_playbackDataMap.find(METRONOME_TRACK_ID);
     if (trackPlaybackData == m_playbackDataMap.cend()) {
@@ -329,7 +329,7 @@ void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& totalCountIn
     const ArticulationsProfilePtr profile = defaultActiculationProfile(METRONOME_TRACK_ID);
 
     PlaybackEventsMap result;
-    m_renderer.renderCountIn(m_score, tick, 0, profile, result, totalCountInDuration);
+    m_renderer.renderCountIn(m_score, tick, 0, profile, result, countInDuration);
     trackPlaybackData->second.offStream.send(std::move(result), {}, true /*flushOffstream*/);
 }
 
@@ -612,8 +612,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
             }
 
             if (m_metronomeEnabled) {
-                m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
-                                           metronomeProfile, metronomeEvents);
+                m_renderer.renderMetronome(m_score, measure, tickPositionOffset, metronomeProfile, metronomeEvents);
                 collectChangesTracks(METRONOME_TRACK_ID, trackChanges);
             }
         }
@@ -638,11 +637,7 @@ void PlaybackModel::reloadMetronomeEvents()
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
         for (const Measure* measure : repeatSegment->measureList()) {
-            int measureStartTick = measure->tick().ticks();
-            int measureEndTick = measure->endTick().ticks();
-
-            m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
-                                       metronomeProfile, metronomeData.originEvents);
+            m_renderer.renderMetronome(m_score, measure, tickPositionOffset, metronomeProfile, metronomeData.originEvents);
         }
     }
 

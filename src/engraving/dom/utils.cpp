@@ -1828,4 +1828,25 @@ EngravingItem* findNewSystemMarkingParent(const EngravingItem* item, const Staff
 
     return newParent;
 }
+
+MeasureBeat findBeat(const Score* score, int tick)
+{
+    MeasureBeat measureBeat;
+    if (!score || !score->checkHasMeasures()) {
+        return measureBeat;
+    }
+
+    int ticks = 0;
+    int beatIndex = 0;
+    score->sigmap()->tickValues(tick, &measureBeat.measureIndex, &beatIndex, &ticks);
+
+    const TimeSigFrac timeSig = score->sigmap()->timesig(Fraction::fromTicks(tick)).timesig();
+    const int ticksB = ticks_beat(timeSig.denominator());
+
+    measureBeat.beat = beatIndex + ticks / static_cast<float>(ticksB);
+    measureBeat.maxMeasureIndex = const_cast<Score*>(score)->measures()->size() - 1;
+    measureBeat.maxBeatIndex = timeSig.numerator() - 1;
+
+    return measureBeat;
+}
 }

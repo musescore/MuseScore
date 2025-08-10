@@ -3380,12 +3380,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, CountIn)
 
     // [WHEN] Render the anacrusis measure
     PlaybackEventsMap result;
-    duration_t totalCountInDuration = 0;
-    m_renderer.renderCountIn(score, anacrusisMeasure_1_4->tick().ticks(), 0, m_defaultProfile, result, totalCountInDuration);
+    duration_t countInDuration = 0;
+    int startTick = anacrusisMeasure_1_4->tick().ticks();
+    m_renderer.renderCountIn(score, startTick, 0, m_defaultProfile, result, countInDuration);
 
     // [THEN] 7 quarter note events
     EXPECT_EQ(result.size(), 7);
-    EXPECT_EQ(totalCountInDuration, QUARTER_NOTE_DURATION * 7);
+    EXPECT_EQ(countInDuration, QUARTER_NOTE_DURATION * 7);
 
     timestamp_t expectedTimestamp = 0;
 
@@ -3409,12 +3410,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, CountIn)
 
     // [WHEN] Render Count In events starting from the beginning of the measure (4/4)
     result.clear();
-    totalCountInDuration = 0;
-    m_renderer.renderCountIn(score, secondMeasure_4_4->tick().ticks(), 0, m_defaultProfile, result, totalCountInDuration);
+    countInDuration = 0;
+    startTick = secondMeasure_4_4->tick().ticks();
+    m_renderer.renderCountIn(score, startTick, 0, m_defaultProfile, result, countInDuration);
 
     // [THEN] 4 quarter note events
     EXPECT_EQ(result.size(), 4);
-    EXPECT_EQ(totalCountInDuration, QUARTER_NOTE_DURATION * 4);
+    EXPECT_EQ(countInDuration, QUARTER_NOTE_DURATION * 4);
 
     expectedTimestamp = 0;
 
@@ -3434,12 +3436,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, CountIn)
 
     // [WHEN] Render the same measure (4/4), but starting from the 3rd beat
     result.clear();
-    totalCountInDuration = 0;
-    m_renderer.renderCountIn(score, secondMeasure_4_4->tick().ticks() + 480 + 480, 0, m_defaultProfile, result, totalCountInDuration);
+    countInDuration = 0;
+    startTick = secondMeasure_4_4->tick().ticks() + 480 + 480;
+    m_renderer.renderCountIn(score, startTick, 0, m_defaultProfile, result, countInDuration);
 
     // [THEN] 6 quarter note events
     EXPECT_EQ(result.size(), 6);
-    EXPECT_EQ(totalCountInDuration, QUARTER_NOTE_DURATION * 6);
+    EXPECT_EQ(countInDuration, QUARTER_NOTE_DURATION * 6);
 
     expectedTimestamp = 0;
 
@@ -3463,12 +3466,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, CountIn)
 
     // [WHEN] Render the 3rd measure (3/8)
     result.clear();
-    totalCountInDuration = 0;
-    m_renderer.renderCountIn(score, thirdMeasure_3_8->tick().ticks(), 0, m_defaultProfile, result, totalCountInDuration);
+    countInDuration = 0;
+    startTick = thirdMeasure_3_8->tick().ticks();
+    m_renderer.renderCountIn(score, startTick, 0, m_defaultProfile, result, countInDuration);
 
     // [THEN] 3 quaver note events
     EXPECT_EQ(result.size(), 3);
-    EXPECT_EQ(totalCountInDuration, QUAVER_NOTE_DURATION * 3);
+    EXPECT_EQ(countInDuration, QUAVER_NOTE_DURATION * 3);
 
     expectedTimestamp = 0;
 
@@ -3488,12 +3492,14 @@ TEST_F(Engraving_PlaybackEventsRendererTests, CountIn)
 
     // [WHEN] Render the 3rd measure (3/8) from some random tick that is not equal to any beat position
     result.clear();
-    totalCountInDuration = 0;
-    m_renderer.renderCountIn(score, thirdMeasure_3_8->tick().ticks() + 333, 0, m_defaultProfile, result, totalCountInDuration); // tick: 240 + 93
+    countInDuration = 0;
+    startTick = thirdMeasure_3_8->tick().ticks() + 333;
+    m_renderer.renderCountIn(score, startTick, 0, m_defaultProfile, result, countInDuration); // tick: 240 + 93
 
     // [THEN] 5 quaver note events (3 + 2)
+    constexpr int closestMainBeat = 2880;
     EXPECT_EQ(result.size(), 5);
-    EXPECT_EQ(totalCountInDuration, QUAVER_NOTE_DURATION * 5);
+    EXPECT_EQ(countInDuration, QUAVER_NOTE_DURATION * 5 - durationFromTempoAndTicks(2.0, closestMainBeat - startTick));
 
     expectedTimestamp = 0;
 

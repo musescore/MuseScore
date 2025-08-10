@@ -108,6 +108,8 @@ extern std::unordered_set<EngravingItem*> collectElementsAnchoredToNote(const No
 
 extern EngravingItem* findNewSystemMarkingParent(const EngravingItem* item, const Staff* staff);
 
+extern MeasureBeat findBeat(const Score* score, int tick);
+
 extern bool noteAnchoredSpannerIsInRange(const Spanner*, const Fraction& rangeStart, const Fraction& rangeEnd);
 
 extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
