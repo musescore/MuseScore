@@ -12788,7 +12788,7 @@ followed by dashes</string>
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
          <widget class="QWidget" name="chordSymbolsPage" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout_59"/>
+          <layout class="QVBoxLayout" name="verticalLayout_591"/>
          </widget>
         </item>
        </layout>
