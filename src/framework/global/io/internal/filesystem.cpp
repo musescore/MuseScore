@@ -21,9 +21,13 @@
  */
 #include "filesystem.h"
 
-#include <QFileInfo>
 #include <QDir>
 #include <QDirIterator>
+#include <QFileInfo>
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+#include <QDirListing>
+#endif
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -56,42 +60,51 @@ Ret FileSystem::remove(const io::path_t& path_, bool onlyIfEmpty)
     return make_ret(Err::NoError);
 }
 
-Ret FileSystem::clear(const io::path_t& path_)
+Ret FileSystem::clear(const io::path_t& path)
 {
-    QString path = path_.toQString();
-    if (!QFileInfo::exists(path)) {
+    const QString qPath = path.toQString();
+    if (!QFileInfo::exists(qPath)) {
         return true;
     }
 
-    Ret ret = make_ret(Err::NoError);
-    QDirIterator di(path, QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot);
-    while (di.hasNext()) {
-        di.next();
-        const QFileInfo& fi = di.fileInfo();
-        const QString& filePath = di.filePath();
-        if (fi.isDir() && !fi.isSymLink()) {
-            ret = removeDir(filePath); // recursive
-        } else {
-            bool ok = QFile::remove(filePath);
-            if (!ok) { // Read-only files prevent directory deletion on Windows, retry with Write permission.
-                const QFile::Permissions permissions = QFile::permissions(filePath);
-                if (!(permissions & QFile::WriteUser)) {
-                    ok = QFile::setPermissions(filePath, permissions | QFile::WriteUser)
-                         && QFile::remove(filePath);
-                }
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    using ItFlag = QDirListing::IteratorFlag;
+    for (const auto& dirEntry : QDirListing{ qPath, ItFlag::IncludeHidden }) {
+        if (dirEntry.isDir() && !dirEntry.isSymLink()) {
+            const Ret didRemove = removeDir(dirEntry.filePath());
+            if (!didRemove) {
+                return didRemove;
             }
 
-            if (!ok) {
-                ret = make_ret(Err::FSRemoveError);
-            }
+            continue;
         }
 
-        if (!ret) {
-            break;
+        const Ret didRemove = removeFile(dirEntry.filePath());
+        if (!didRemove) {
+            return didRemove;
         }
     }
+#else
+    QDirIterator di(qPath, QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot);
+    while (di.hasNext()) {
+        const QString& filePath = di.next();
+        const QFileInfo& fi = di.fileInfo();
 
-    return ret;
+        if (fi.isDir() && !fi.isSymLink()) {
+            const Ret didRemove = removeDir(filePath); // recursive
+            if (!didRemove) {
+                return didRemove;
+            }
+            continue;
+        }
+        const Ret didRemove = removeFile(filePath);
+        if (!didRemove) {
+            return didRemove;
+        }
+    }
+#endif
+
+    return make_ok();
 }
 
 Ret FileSystem::copy(const io::path_t& src, const io::path_t& dst, bool replace)
@@ -310,29 +323,67 @@ RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const std::
     return result;
 }
 
-Ret FileSystem::removeFile(const io::path_t& path) const
+Ret FileSystem::removeFile(const io::path_t& path)
 {
     QFile file(path.toQString());
     if (!file.remove()) {
-        return make_ret(Err::FSRemoveError);
+        // Read-only files prevent directory deletion on Windows, retry with Write permission.
+        LOGW() << "Failed to delete file. Setting write permission and trying again...";
+        if (!file.setPermissions(file.permissions() | QFile::WriteUser)) {
+            LOGE() << "Failed to set write permission for file";
+            return make_ret(Err::FSRemoveError);
+        }
+        if (!file.remove()) {
+            LOGE() << "Second delete attempt failed";
+            return make_ret(Err::FSRemoveError);
+        }
+
+        return make_ok();
     }
 
-    return make_ret(Err::NoError);
+    return make_ok();
 }
 
-Ret FileSystem::removeDir(const io::path_t& path, bool onlyIfEmpty) const
+Ret FileSystem::removeDir(const io::path_t& path, const bool onlyIfEmpty)
 {
-    QDir dir(path.toQString());
+    const QString qPath = path.toQString();
+    QDir dir(qPath);
 
-    if (onlyIfEmpty && !dir.isEmpty()) {
+    if (!onlyIfEmpty) {
+        // clear directory for deletion
+        const Ret didClear = clear(path);
+        if (!didClear) {
+            LOGE() << "Failed to clear directory for deletion";
+
+            return didClear;
+        }
+    }
+
+    if (!dir.isEmpty()) {
         return make_ret(Err::FSDirNotEmptyError);
     }
 
-    if (!dir.removeRecursively()) {
-        return make_ret(Err::FSRemoveError);
+    const QString dirName = dir.dirName();
+    if (!dir.cdUp()) {
+        return make_ret(Err::FSNotExist);
     }
 
-    return make_ret(Err::NoError);
+    if (!dir.rmdir(dirName)) {
+        // OneDrive removes delete permission on Windows. try again with write permission
+        LOGW() << "Failed to delete directory. Setting write permission and trying again...";
+        if (!QFile::setPermissions(qPath, QFile::permissions(qPath) | QFile::WriteUser)) {
+            LOGE() << "Failed to set write permission for directory";
+            return make_ret(Err::FSRemoveError);
+        }
+        if (!dir.rmdir(dirName)) {
+            LOGE() << "Second delete attempt failed";
+            return make_ret(Err::FSRemoveError);
+        }
+
+        return make_ok();
+    }
+
+    return make_ok();
 }
 
 Ret FileSystem::copyRecursively(const io::path_t& src, const io::path_t& dst) const
