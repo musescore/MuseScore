@@ -402,29 +402,29 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
 //   TupletFractionCap
 //---------------------------------------------------------
 
-Fraction TupletFractionCap(int tupletCount, bool tuplettrp, bool tupletprol)
+Fraction TupletFractionCap(int tupletNotesSpanned, bool tuplettrp, bool tupletprol)
       {
       int dd         = 0;
       int nn         = 0;
       qreal exponent = 0;
-      qreal count    = tupletCount;
+      qreal tupletDenominator = tupletNotesSpanned;
       Fraction f(3,2);
 
-      if ((count > 0) && (count <= 15)) {
+      if ((tupletDenominator > 0) && (tupletDenominator <= 15)) {
             if (tuplettrp)
-                  exponent = qFloor(qLn(count/3.0)/qLn(2.0));
+                  exponent = qFloor(qLn(tupletDenominator/3.0)/qLn(2.0));
             else
-                  exponent = qFloor(qLn(count)/qLn(2.0));
+                  exponent = qFloor(qLn(tupletDenominator)/qLn(2.0));
             }
       else {
-            qDebug("Unknown tuplet, count = %d",tupletCount);
+            qDebug("Unknown tuplet, tupletDenominator = %d", tupletNotesSpanned);
             return f;
             }
       if (tupletprol)
             exponent += 1.0;
       if (exponent < 0.0)
             exponent = 0.0;
-      nn = tupletCount;
+      nn = tupletNotesSpanned;
       dd = static_cast<int>(qPow(2.0, exponent));
       if (tuplettrp)
             dd = dd * 3;
@@ -473,8 +473,8 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
             if (foundcr1) {
                   --n;   // found the object corresponding to cr1, count down to find the second one
                   ticks = d->ticks();
-                  if (d->count) {
-                        Fraction f = TupletFractionCap(d->count, d->tripartite, d->isProlonging);
+                  if (d->tupletDenominator) {
+                        Fraction f = TupletFractionCap(d->tupletDenominator, d->tripartite, d->isProlonging);
                         ticks = ticks / f;
                         }
                   if (nobj->type() == CapellaNoteObjectType::REST) {
@@ -566,11 +566,11 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
       //
       Fraction startTick = tick;
 
-      Tuplet* tuplet  = nullptr;
-      int tupletCount = 0;
-      bool tuplettrp  = false;
-      bool tupletprol = false;
-      int nTuplet     = 0;
+      Tuplet* tuplet            = nullptr;
+      int tupletNotesSpanned    = 0;     // Total number of notes/rests in the tuplet
+      int tupletCurrentSequence = 0;     // Current sequence number after adding to the tuplet (1 => first note/rest)
+      bool tuplettrp            = false;
+      bool tupletprol           = false;
       Fraction tupletTick = Fraction(0,1);
       ClefType pclef = score->staff(staffIdx)->defaultClefType()._concertClef;
 
@@ -587,23 +587,25 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                               break;
                         TDuration d;
                         d.setVal(ticks.ticks());
-                        if (o->count) {
+                        if (o->tupletDenominator) {
                               if (tuplet == nullptr) {
-                                    tupletCount = o->count;
+                                    tupletCurrentSequence = 0; // reset tuplet counter
+                                    tupletNotesSpanned = (o->tupletCount) ? o->tupletCount + 1 : o->tupletDenominator;
                                     tuplettrp   = o->tripartite;
                                     tupletprol  = o->isProlonging;
-                                    nTuplet     = 0;
                                     tupletTick  = tick;
                                     tuplet      = new Tuplet(score);
-                                    Fraction f  = TupletFractionCap(tupletCount,tuplettrp,tupletprol);
+                                    Fraction f  = TupletFractionCap(o->tupletDenominator, tuplettrp, tupletprol);
                                     tuplet->setRatio(f);
                                     tuplet->setBaseLen(d);
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
                                     tuplet->setParent(m);
-                                    Fraction nn = (ticks * tupletCount) / f;
+                                    Fraction nn = ((o->tupletTicks.isZero()) ? (ticks * tupletNotesSpanned) : o->tupletTicks) / f;
                                     tuplet->setTicks(nn);
                                     }
+                              qDebug("Tuplet(R) at %d: tupletDenominator: %d  tri: %d  prolonging: %d  ticks %d objects %d",
+                                     tick.ticks(), o->tupletDenominator, o->tripartite, o->isProlonging, ticks.ticks(), o->objects.size());
                               }
 
                         Fraction ft = m->ticks();
@@ -637,13 +639,16 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                               rest->setTrack(track);
                               rest->setVisible(!o->invisible);
                               s->add(rest);
-                              if (tuplet)
+                              if (tuplet) {
                                     tuplet->add(rest);
+                                    if (++tupletCurrentSequence >= tupletNotesSpanned)
+                                          o->tupletEnd = true; // mark the last position in the tuplet
+                                    }
                               processBasicDrawObj(o->objects, s, track, rest);
                               }
 
                         if (tuplet) {
-                              if (++nTuplet >= tupletCount) {
+                              if (o->tupletEnd) {
                                     tick = tupletTick + tuplet->actualTicks();
                                     //! NOTE If the tuplet is not added anywhere, then delete it
                                     if (tuplet->elements().empty())
@@ -672,26 +677,25 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         Measure* m = score->getCreateMeasure(tick);
 
                         bool isgracenote = (!(o->invisible) && (ticks.isZero()));
-                        if (o->count) {
+                        if (o->tupletDenominator) {
                               if (tuplet == nullptr) {
-                                    tupletCount = o->count;
+                                    tupletCurrentSequence = 0; // reset tuplet counter
+                                    tupletNotesSpanned = (o->tupletCount) ? o->tupletCount + 1 : o->tupletDenominator;
                                     tuplettrp   = o->tripartite;
                                     tupletprol  = o->isProlonging;
-                                    nTuplet     = 0;
                                     tupletTick  = tick;
                                     tuplet      = new Tuplet(score);
-                                    Fraction f  = TupletFractionCap(tupletCount,tuplettrp,tupletprol);
+                                    Fraction f  = TupletFractionCap(o->tupletDenominator, tuplettrp, tupletprol);
                                     tuplet->setRatio(f);
                                     tuplet->setBaseLen(d);
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
                                     tuplet->setParent(m);
-                                    Fraction nn = (ticks * tupletCount) / f;
+                                    Fraction nn = ((o->tupletTicks.isZero()) ? (ticks * tupletNotesSpanned) : o->tupletTicks) / f;
                                     tuplet->setTicks(nn);
                                     }
-                              qDebug("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %d",
-                                     tick.ticks(), o->count, o->tripartite, o->isProlonging, ticks.ticks(),
-                                     o->objects.size());
+                              qDebug("Tuplet(C) at %d: tupletDenominator: %d  tri: %d  prolonging: %d  ticks %d objects %d",
+                                     tick.ticks(), o->tupletDenominator, o->tripartite, o->isProlonging, ticks.ticks(), o->objects.size());
                               }
 
                         Chord* chord = new Chord(score);
@@ -733,8 +737,11 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                                     }
                               graceNotes.clear();
                               }
-                        if (tuplet)
+                        if (tuplet) {
                               tuplet->add(chord);
+                              if (++tupletCurrentSequence >= tupletNotesSpanned)
+                                    o->tupletEnd = true; // mark the last chord in the tuplet
+                              }
                         ClefType clef = score->staff(staffIdx)->clef(tick);
                         Key key  = score->staff(staffIdx)->key(tick);
                         int off;
@@ -829,7 +836,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                               }
 
                         if (tuplet) {
-                              if (++nTuplet >= tupletCount) {
+                              if (o->tupletEnd) {
                                     tick = tupletTick + tuplet->actualTicks();
                                     //! NOTE If the tuplet is not added anywhere, then delete it
                                     if (tuplet->elements().empty())
@@ -1115,8 +1122,8 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         }
                   }
             Fraction ticks = d->ticks();
-            if (d->count) {
-                  Fraction f = TupletFractionCap(d->count, d->tripartite, d->isProlonging);
+            if (d->tupletDenominator) {
+                  Fraction f = TupletFractionCap(d->tupletDenominator, d->tripartite, d->isProlonging);
                   ticks = ticks / f;
                   }
             if (no->type() == CapellaNoteObjectType::REST) {
@@ -1845,12 +1852,12 @@ void BasicDurationalObj::read()
             throw Capella::Error::BAD_FORMAT;
       t = TIMESTEP(c & 0x0f);
       horizontalShift = (c & 0x10) ? cap->readInt() : 0;
-      count = 0;
+      tupletDenominator = 0;
       tripartite = 0;
       isProlonging = 0;
       if (c & 0x20) {
             unsigned char tuplet = cap->readByte();
-            count        = tuplet & 0x0f;
+            tupletDenominator = tuplet & 0x0f;
             tripartite   = (tuplet & 0x10) != 0;
             isProlonging = (tuplet & 0x20) != 0;
             if (tuplet & 0xc0)
@@ -1859,8 +1866,8 @@ void BasicDurationalObj::read()
       if (c & 0x40) {
             objects = cap->readDrawObjectArray();
             }
-      qDebug("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d cnt %d trp %d ispro %d",
-             nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, count, tripartite, isProlonging
+      qDebug("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d den %d trp %d ispro %d",
+             nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, tupletDenominator, tripartite, isProlonging
              );
       }
 

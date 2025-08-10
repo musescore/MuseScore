@@ -111,7 +111,7 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
       color = Qt::black;
       t = TIMESTEP::D1;
       horizontalShift = 0;
-      count = 0;
+      tupletDenominator = 0;
       tripartite   = 0;
       isProlonging = 0;
       QString base = e.attribute("base");
@@ -131,7 +131,7 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "tuplet") {
-                  count = e.attribute("count").toInt();
+                  tupletDenominator = e.attribute("count").toInt();
                   tripartite = e.attribute("tripartite", "false") == "true";
                   isProlonging = e.attribute("prolong", "false") == "true";
                   e.readNext();
@@ -139,8 +139,8 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
             else
                   e.unknown();
             }
-      qDebug("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d cnt %d trp %d ispro %d fullm %d",
-             nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, count, tripartite, isProlonging, fullm
+      qDebug("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d den %d trp %d ispro %d fullm %d",
+             nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, tupletDenominator, tripartite, isProlonging, fullm
              );
       }
 
@@ -369,8 +369,8 @@ static signed char pitchStr2Char(QString& strPitch)
             }
 
       QString steps("C.D.EF.G.A.B");
-      int istep  = steps.indexOf(strPitch.left(1));
-      int octave = strPitch.right(1).toInt();
+      int istep  = steps.indexOf(strPitch.leftRef(1));
+      int octave = strPitch.rightRef(1).toInt();
       int pitch  = istep + 12 * octave;
 
       if (pitch < 0)
@@ -447,6 +447,24 @@ void ChordObj::readCapxNotes(XmlReader& e)
             else
                   e.unknown();
             }
+
+      if (tupletDenominator <= 0)
+            return; // no tuplet, so we are done
+
+      // find a BracketObj in the drawObjects list, get the data and delete it
+      // this is used to read Tuplets with mixed durations
+      for (BasicDrawObj*& o : objects) {
+            if (o->type == CapellaType::BRACKET) {
+                  // BracketObj* bo = static_cast<BracketObj*>(o);
+                  tupletStart = true;
+                  tupletCount = o->nNotes;
+                  objects.removeOne(o);
+                  delete o;
+                  qDebug("==> Tuplet start, plus %d notes till end", tupletCount);
+                  return; // we are done, and we modified the iterator, so back out
+                  }
+            }
+      qDebug("no tuplet start found in drawObjects, but tupletDenominator %d", tupletDenominator);
       }
 
 //---------------------------------------------------------
@@ -476,6 +494,24 @@ void RestObj::readCapx(XmlReader& e)
             else
                   e.unknown();
             }
+
+      if (tupletDenominator <= 0)
+            return; // no tuplet, so we are done
+
+      // find a BracketObj in the drawObjects list, get the data and delete it
+      // this is used to read Tuplets with mixed durations
+      for (BasicDrawObj*& o : objects) {
+            if (o->type == CapellaType::BRACKET) {
+                  // BracketObj* bo = static_cast<BracketObj*>(o);
+                  tupletStart = true;
+                  tupletCount = o->nNotes;
+                  objects.removeOne(o);
+                  delete o;
+                  qDebug("      ==> Tuplet start, plus %d notes till end", tupletCount);
+                  return; // we are done, and we modified the iterator, so back out
+                  }
+            }
+      qDebug("no tuplet start found in drawObjects, but tupletDenominator %d", tupletDenominator);
       }
 
 //---------------------------------------------------------
@@ -603,6 +639,17 @@ void WedgeObj::readCapx(XmlReader& e)
       e.readNext();
       }
 
+//------------------------------------------------------------
+//   BracketObj::readCapx -- capx equivalent of WedgeObj::read
+//------------------------------------------------------------
+
+void BracketObj::readCapx(XmlReader& e)
+      {
+      // TODO: We're actually only interested in the <basic> element following and it's noteRange attribute ...
+      // or to put in another way: Intentionally left empty ...
+      e.skipCurrentElement();
+      }
+
 //---------------------------------------------------------
 //   readCapxDrawObjectArray -- capx equivalent of readDrawObjectArray()
 //---------------------------------------------------------
@@ -667,8 +714,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                               e.skipCurrentElement();
                               }
                         else if (tag == "bracket") {
-                              qDebug("readCapxDrawObjectArray: found bracket (skipping)");
-                              e.skipCurrentElement();
+                              BracketObj* o = new BracketObj(this);
+                              bdo = o;           // save o to handle the "basic" tag (which sometimes follows)
+                              o->readCapx(e);
+                              ol.append(o);
                               }
                         else if (tag == "wedge") {
                               WedgeObj* o = new WedgeObj(this);
@@ -725,6 +774,10 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
       // v->lyricsFont = 0;
       v->stemDir    = 0;
 
+      int tupletCounter = 0;
+      Fraction tupletTicks = Fraction(0, 1);
+      BasicDurationalObj* tupletObj = nullptr;
+
       while (e.readNextStartElement()) {
             if (e.name() == "lyricsSettings") {
                   qDebug("readCapxVoice: found lyricsSettings (skipping)");
@@ -757,11 +810,66 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
                               ChordObj* chord = new ChordObj(this);
                               chord->readCapx(e);
                               v->objects.append(chord);
+                              if (chord->tupletStart) {
+                                    tupletCounter = chord->tupletCount;
+                                    tupletTicks   = chord->ticks();
+                                    tupletObj     = chord;  // save the tuplet object for later
+                                    qDebug("     ==| (C) start of tuplet with %d notes, ticks %d",
+                                           1 + tupletCounter, tupletTicks.ticks());
+                                    } else if (tupletCounter > 0) {
+                                    if (!tupletObj) {
+                                          qDebug("     !!! chord with tupletCounter %d without tupletObj", tupletCounter);
+                                          } else {
+                                          tupletTicks += chord->ticks();
+                                          if (chord->tupletDenominator == 0) {
+                                                qDebug("     !!! (C) chord with tupletCounter %d outside tuplet", tupletCounter);
+                                                chord->tupletDenominator = tupletObj->tupletDenominator;  // copy denominator from the tuplet object
+                                                }
+                                          --tupletCounter;
+                                          if (tupletCounter == 0) {
+                                                chord->tupletEnd = true;
+                                                tupletObj->tupletTicks = tupletTicks;      // set total ticks to the tuplet object
+                                                tupletObj = nullptr;      // reset tuplet object
+                                                qDebug("     ==| end of tuplet, total ticks %d", tupletTicks.ticks());
+                                                } else {
+                                                qDebug("     ==> chord with tupletCounter %d inside tuplet, ticks now %d",
+                                                       tupletCounter, tupletTicks.ticks());
+                                                }
+                                          }
+                                    }
                               }
                         else if (tag == "rest") {
                               RestObj* rest = new RestObj(this);
                               rest->readCapx(e);
                               v->objects.append(rest);
+                              if (rest->tupletStart) {
+                                    tupletCounter = rest->tupletCount;
+                                    tupletTicks   = rest->ticks();
+                                    tupletObj     = rest;  // save the tuplet object for later
+                                    qDebug("     ==| (R) start of tuplet with %d notes, ticks %d",
+                                                1 + tupletCounter, tupletTicks.ticks());
+                                    } else if (tupletCounter > 0) {
+                                    if (!tupletObj) {
+                                          qDebug("     !!! rest with tupletCounter %d without tupletObj", tupletCounter);
+                                          } else {
+                                          // add the rest ticks to the tuplet ticks
+                                          tupletTicks += rest->ticks();
+                                          if (rest->tupletDenominator == 0) {
+                                                qDebug("     !!! rest with tupletCounter %d outside tuplet", tupletCounter);
+                                                rest->tupletDenominator = tupletObj->tupletDenominator;  // copy denominator from the tuplet object
+                                                }
+                                          --tupletCounter;
+                                          if (tupletCounter == 0) {
+                                                rest->tupletEnd = true;
+                                                tupletObj->tupletTicks = tupletTicks;      // set total ticks to the tuplet object
+                                                tupletObj = nullptr;      // reset tuplet object
+                                                qDebug("     ==| end of tuplet, total ticks %d", tupletTicks.ticks());
+                                                } else {
+                                                qDebug("     ==> rest with tupletCounter %d inside tuplet, ticks now %d",
+                                                            tupletCounter, tupletTicks.ticks());
+                                                }
+                                          }
+                                    }
                               }
                         else
                               e.unknown();
@@ -1043,7 +1151,7 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
 
 static void capxLayoutBrackets(XmlReader& e, QList<CapBracket>& bracketList)
       {
-      int i = 0; // bracket count
+      // int i = 0; // bracket count
       while (e.readNextStartElement()) {
             if (e.name() == "bracket") {
                   CapBracket b;
@@ -1053,7 +1161,7 @@ static void capxLayoutBrackets(XmlReader& e, QList<CapBracket>& bracketList)
                   // qDebug("Bracket%d %d-%d curly %d", i, b.from, b.to, b.curly);
                   bracketList.append(b);
                   e.readNext();
-                  ++i;
+                  // ++i;
                   }
             else
                   e.unknown();

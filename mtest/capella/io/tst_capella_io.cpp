@@ -11,9 +11,8 @@
 //=============================================================================
 
 #include <QtTest/QtTest>
-#include "mtest/testutils.h"
 #include "libmscore/score.h"
-#include "mscore/preferences.h"
+#include "mtest/testutils.h"
 
 #define DIR QString("capella/io/")
 
@@ -63,6 +62,7 @@ private slots:
       void capxTestText1() { capxReadTest("testText1"); }
       void capxTestTuplet1() { capxReadTest("testTuplet1"); } // generates different (incorrect ?) l1 and l2 values in beams
       void capxTestTuplet2() { capxReadTest("testTuplet2"); } // generates different beaming with respect to the original
+      void capxTestTuplet3() { capxReadTest("testTuplet3"); } // generates different beaming with respect to the original
       void capxTestVolta1() { capxReadTest("testVolta1"); }
       void capxTestBarline() { capxReadTest("testBarline"); }
       };
@@ -105,4 +105,6 @@ void TestCapellaIO::capxReadTest(const char* file)
       }
 
 QTEST_MAIN(TestCapellaIO)
+#if __has_include("tst_capella_io.moc")
 #include "tst_capella_io.moc"
+#endif
