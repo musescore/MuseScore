@@ -36,6 +36,7 @@ enum class Err {
     NoteOrRestIsNotSelected,
     NoteOrFiguredBassIsNotSelected,
     MeasureIsNotSelected,
+    NoteOrRestOrHarmonyIsNotSelected,
     SelectCompleteTupletOrTremolo,
     EmptySelection,
 };
@@ -63,6 +64,10 @@ inline muse::Ret make_ret(Err err)
     case Err::MeasureIsNotSelected:
         text = muse::trc("notation", "No measure selected")
                + "\n" + muse::trc("notation", "Please select a measure and retry");
+        break;
+    case Err::NoteOrRestOrHarmonyIsNotSelected:
+        text = muse::trc("notation", "No note or rest or harmony selected")
+               + "\n" + muse::trc("notation", "Please select a note or rest or harmony and retry");
         break;
     case Err::SelectCompleteTupletOrTremolo:
         text = muse::trc("notation", "Please select the complete tuplet or tremolo and retry");

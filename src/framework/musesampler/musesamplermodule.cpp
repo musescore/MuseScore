@@ -23,7 +23,7 @@
 #include "musesamplermodule.h"
 
 #include "modularity/ioc.h"
-#include "audio/isynthresolver.h"
+#include "audio/worker/isynthresolver.h"
 
 #include "ui/iuiactionsregister.h"
 
@@ -77,13 +77,10 @@ void MuseSamplerModule::onInit(const IApplication::RunMode& mode)
 
     m_configuration->init();
     m_resolver->init();
-    m_actionController->init([this]() {
-        return m_resolver->reloadMuseSampler();
-    });
+    m_actionController->init(m_resolver);
 
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("musesampler", m_configuration->userLibraryPath());
-        pr->reg("musesampler fallback", m_configuration->fallbackLibraryPath());
+        pr->reg("musesampler", m_configuration->libraryPath());
     }
 }

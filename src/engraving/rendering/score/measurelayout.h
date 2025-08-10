@@ -54,6 +54,7 @@ public:
     static void computePreSpacingItems(Measure* m, LayoutContext& ctx);
 
     static void layoutStaffLines(Measure* m, LayoutContext& ctx);
+    static void layoutPlayCountText(Measure* m, LayoutContext& ctx);
     static void layoutMeasureNumber(Measure* m, LayoutContext& ctx);
     static void layoutMMRestRange(Measure* m, LayoutContext& ctx);
     static void layoutMeasureElements(Measure* m, LayoutContext& ctx);
@@ -94,6 +95,7 @@ private:
     static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
 
     static void createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx);
+    static void removeMMRestElements(Measure* mmRestMeasure);
 
     static void setClefSegVisibility(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
 
@@ -104,13 +106,12 @@ private:
     static void setCourtesyClef(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
                                 LayoutContext& ctx);
 
-    static Parenthesis* findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track);
     static void removeRepeatCourtesyParenthesesMeasure(Measure* m, const bool continuation, LayoutContext& ctx);
-    static void removeRepeatCourtesyParenthesesSegment(Segment* seg, const track_idx_t track,
-                                                       const DirectionH direction = DirectionH::AUTO);
+    static void removeRepeatCourtesyParenthesis(EngravingItem* item, const DirectionH direction = DirectionH::AUTO);
     static void addRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
-    static void placeParentheses(const Segment* segment, track_idx_t trackIdx, LayoutContext& ctx);
     static void addRepeatCourtesies(Measure* m, LayoutContext& ctx);
+    static void removeRepeatCourtesies(Measure* m);
     static void addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx);
+    static void removeRepeatContinuationCourtesies(Measure* m);
 };
 }

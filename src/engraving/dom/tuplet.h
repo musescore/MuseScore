@@ -20,18 +20,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TUPLET_H
-#define MU_ENGRAVING_TUPLET_H
+#pragma once
 
 #include <set>
 
 #include "durationelement.h"
 #include "property.h"
-#include "types.h"
 
 namespace mu::engraving {
 class Text;
 class Spanner;
+
+enum class TupletNumberType : unsigned char {
+    SHOW_NUMBER, SHOW_RELATION, NO_TEXT
+};
+enum class TupletBracketType : unsigned char {
+    AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
+};
 
 //------------------------------------------------------------------------
 //   @@ Tuplet
@@ -144,9 +149,9 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
-    int gripsCount() const override { return 2; }
-    Grip initialEditModeGrip() const override { return Grip::END; }
-    Grip defaultGrip() const override { return Grip::START; }
+    int gripsCount() const override;
+    Grip initialEditModeGrip() const override { return Grip::MIDDLE; }
+    Grip defaultGrip() const override { return Grip::MIDDLE; }
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
     void sanitizeTuplet();
@@ -199,5 +204,4 @@ private:
 
     Text* m_number = nullptr;
 };
-} // namespace mu::engraving
-#endif
+}

@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
 #include <functional>
@@ -35,12 +34,14 @@
 #include "draw/types/geometry.h"
 #include "draw/types/painterpath.h"
 
+// IWYU pragma: begin_exports
 #include "bps.h"
 #include "dimension.h"
 #include "fraction.h"
 #include "groupnode.h"
 #include "pitchvalue.h"
 #include "symid.h"
+// IWYU pragma: end_exports
 
 namespace mu::engraving {
 using staff_idx_t = size_t;
@@ -64,7 +65,6 @@ using semitone_t = int8_t;
 ///   Note: keep in sync with array in TConv
 //-------------------------------------------------------------------
 enum class ElementType : unsigned char {
-    ///.\{
     INVALID = 0,
     BRACKET_ITEM,
     PART,
@@ -75,13 +75,13 @@ enum class ElementType : unsigned char {
     MEASURE_NUMBER,
     MMREST_RANGE,
     INSTRUMENT_NAME,
+    BAR_LINE,
+    STAFF_LINES,
+    SYSTEM_DIVIDER,
     SLUR_SEGMENT,
     TIE_SEGMENT,
     LAISSEZ_VIB_SEGMENT,
     PARTIAL_TIE_SEGMENT,
-    BAR_LINE,
-    STAFF_LINES,
-    SYSTEM_DIVIDER,
     STEM_SLASH,
     ARPEGGIO,
     ACCIDENTAL,
@@ -109,7 +109,6 @@ enum class ElementType : unsigned char {
     DYNAMIC,
     EXPRESSION,
     BEAM,
-    BEAM_SEGMENT,
     LYRICS,
     FIGURED_BASS,
     FIGURED_BASS_ITEM,
@@ -121,6 +120,7 @@ enum class ElementType : unsigned char {
     STAFF_TEXT,
     SYSTEM_TEXT,
     SOUND_FLAG,
+    PLAY_COUNT_TEXT,
     PLAYTECH_ANNOTATION,
     CAPO,
     STRING_TUNINGS,
@@ -132,7 +132,6 @@ enum class ElementType : unsigned char {
     FRET_DIAGRAM,
     HARP_DIAGRAM,
     BEND,
-    STRETCHED_BEND,
     TREMOLOBAR,
     VOLTA,
     HAIRPIN_SEGMENT,
@@ -187,23 +186,16 @@ enum class ElementType : unsigned char {
     BRACKET,
     SEGMENT,
     SYSTEM,
-    COMPOUND,
     CHORD,
     SLUR,
-    ELEMENT,
-    ELEMENT_LIST,
-    STAFF_LIST,
-    MEASURE_LIST,
     HBOX,
     VBOX,
     TBOX,
     FBOX,
     ACTION_ICON,
-    OSSIA,
     BAGPIPE_EMBELLISHMENT,
     STICKING,
     GRACE_NOTES_GROUP,
-    FRET_CIRCLE,
     GUITAR_BEND,
     GUITAR_BEND_SEGMENT,
     GUITAR_BEND_HOLD,
@@ -213,12 +205,18 @@ enum class ElementType : unsigned char {
     TREMOLO_SINGLECHORD,
     TIME_TICK_ANCHOR,
     PARENTHESIS,
+    HAMMER_ON_PULL_OFF,
+    HAMMER_ON_PULL_OFF_SEGMENT,
+    HAMMER_ON_PULL_OFF_TEXT,
+    TAPPING,
+    TAPPING_HALF_SLUR,
+    TAPPING_HALF_SLUR_SEGMENT,
+    TAPPING_TEXT,
 
     ROOT_ITEM,
     DUMMY,
 
     MAXTYPE
-    ///\}
 };
 
 constexpr size_t TOT_ELEMENT_TYPES = static_cast<size_t>(ElementType::MAXTYPE);
@@ -337,6 +335,12 @@ enum class AutoOnOff : unsigned char {
     AUTO,
     ON,
     OFF
+};
+
+enum class AutoCustomHide : unsigned char {
+    AUTO,
+    CUSTOM,
+    HIDE
 };
 
 //! Note: from lowest to highest priority
@@ -582,6 +586,7 @@ enum class ClefType : signed char {
     TAB4_SERIF,
     // new clefs to be added between here
     C4_8VB,
+    G8_VB_C,
     // and here in oder to not break TAB clef style
     MAX
 };
@@ -629,24 +634,6 @@ enum class DynamicType : unsigned char {
     N,
     LAST
 };
-
-//! OBSOLETE. Use VoiceAssignment
-enum class DynamicRange : unsigned char {
-    STAFF, PART, SYSTEM
-};
-
-inline VoiceAssignment dynamicRangeToVoiceAssignment(DynamicRange range)
-{
-    switch (range) {
-    case DynamicRange::STAFF:
-        return VoiceAssignment::ALL_VOICE_IN_STAFF;
-    case DynamicRange::PART:
-    case DynamicRange::SYSTEM:
-        break;
-    }
-
-    return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
-}
 
 // P_TYPE::DYNAMIC_SPEED
 enum class DynamicSpeed : unsigned char {
@@ -753,6 +740,51 @@ enum class PartialSpannerDirection : signed char {
     BOTH
 };
 
+enum ChordStylePreset : unsigned char {
+    STANDARD,
+    JAZZ,
+    LEGACY,
+    CUSTOM
+};
+
+// P_TYPE::PARENTHESES_MODE
+enum class ParenthesesMode : unsigned char {
+    NONE = 0x0,
+    LEFT = 0x1,
+    RIGHT = 0x2,
+    BOTH = 0x3,
+};
+constexpr bool operator&(const ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    return static_cast<int>(t1) & static_cast<int>(t2);
+}
+
+constexpr bool operator|(const ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    return static_cast<int>(t1) | static_cast<int>(t2);
+}
+
+constexpr void operator|=(ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    int t1i = static_cast<int>(t1);
+    t1i |= static_cast<int>(t2);
+    t1 = ParenthesesMode(t1i);
+}
+
+constexpr void operator&=(ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    int t1i = static_cast<int>(t1);
+    t1i &= static_cast<int>(t2);
+    t1 = ParenthesesMode(t1i);
+}
+
+enum RepeatPlayCountPreset : unsigned char {
+    X_N,
+    N_X,
+    PLAY_N_TIMES,
+    N_REPEATS
+};
+
 //-------------------------------------------------------------------
 //   Tid
 ///   Enumerates the list of built-in text substyles
@@ -781,12 +813,14 @@ enum class TextStyleType : unsigned char {
 
     // Measure-oriented styles
     MEASURE_NUMBER,
+    MEASURE_NUMBER_ALTERNATE,
     MMREST_RANGE,
 
     // System-level styles
     TEMPO,
     TEMPO_CHANGE,
     METRONOME,
+    REPEAT_PLAY_COUNT,
     REPEAT_LEFT,       // align to start of measure
     REPEAT_RIGHT,      // align to end of measure
     REHEARSAL_MARK,
@@ -806,10 +840,13 @@ enum class TextStyleType : unsigned char {
 
     // Note oriented styles
     TUPLET,
+    ARTICULATION,
     STICKING,
     FINGERING,
+    TAB_FRET_NUMBER,
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
+    HAMMER_ON_PULL_OFF,
     STRING_NUMBER,
     STRING_TUNINGS,
     FRET_DIAGRAM_FINGERING,
@@ -846,6 +883,39 @@ enum class TextStyleType : unsigned char {
     IGNORED_TYPES         // used for types no longer relevant (mainly Figured bass text type)
 };
 
+//---------------------------------------------------------
+//   FontStyle
+//---------------------------------------------------------
+
+enum class FontStyle : signed char {
+    Undefined = -1,
+    Normal = 0,
+    Bold = 1 << 0,
+    Italic = 1 << 1,
+    Underline = 1 << 2,
+    Strike = 1 << 3
+};
+
+constexpr FontStyle operator+(FontStyle a1, FontStyle a2)
+{
+    return static_cast<FontStyle>(static_cast<char>(a1) | static_cast<char>(a2));
+}
+
+constexpr FontStyle operator|(FontStyle a1, FontStyle a2)
+{
+    return static_cast<FontStyle>(static_cast<char>(a1) | static_cast<char>(a2));
+}
+
+constexpr FontStyle operator-(FontStyle a1, FontStyle a2)
+{
+    return static_cast<FontStyle>(static_cast<char>(a1) & ~static_cast<char>(a2));
+}
+
+constexpr bool operator&(FontStyle a1, FontStyle a2)
+{
+    return static_cast<bool>(static_cast<char>(a1) & static_cast<char>(a2));
+}
+
 enum class AnnotationCategory : signed char {
     Undefined = -1,
     TempoAnnotation,
@@ -871,6 +941,13 @@ enum class PlayingTechniqueType : signed char {
     Overdrive,
     Harmonics,
     JazzTone,
+    // Handbells
+    HandbellsSwing,
+    HandbellsSwingUp,
+    HandbellsSwingDown,
+    HandbellsEcho1,
+    HandbellsEcho2,
+    HandbellsDamp
 };
 
 enum class GradualTempoChangeType : signed char {
@@ -920,6 +997,20 @@ enum class AccidentalVal : signed char {
     MAX     = SHARP3
 };
 
+// Positions of naturals in key sig. changes
+enum class KeySigNatural : char {
+    NONE   = 0,      // no naturals, except for change to CMaj/Amin
+    BEFORE = 1,      // naturals before accidentals
+    AFTER  = 2       // naturals after accidentals (but always before if going sharps <=> flats)
+};
+
+// For barlines before key sig. and time sig. changes
+enum class CourtesyBarlineMode : char {
+    ALWAYS_SINGLE = 0,
+    ALWAYS_DOUBLE = 1,
+    DOUBLE_BEFORE_COURTESY = 2,
+};
+
 enum class FermataType : signed char {
     Undefined = -1,
     VeryShort,
@@ -942,6 +1033,28 @@ enum class SlurStyleType : signed char {
     Dotted,
     Dashed,
     WideDashed
+};
+
+enum class TappingHand {
+    INVALID = -1,
+    LEFT,
+    RIGHT,
+};
+
+enum class LHTappingSymbol : unsigned char {
+    DOT,
+    CIRCLED_T,
+};
+
+enum class RHTappingSymbol : unsigned char {
+    T,
+    PLUS,
+};
+
+enum class LHTappingShowItems : unsigned char {
+    HALF_SLUR,
+    SYMBOL,
+    BOTH,
 };
 
 struct InstrumentTrackId {
@@ -1054,9 +1167,18 @@ enum class VibratoType : unsigned char {
 
 enum class ArticulationTextType : unsigned char {
     NO_TEXT,
-    TAP,
+    // Guitar
     SLAP,
-    POP
+    POP,
+    // Handbells
+    LV,
+    R,
+    TD,
+    BD,
+    RT,
+    PL,
+    SB,
+    VIB,
 };
 
 enum class LyricsSyllabic : unsigned char {
@@ -1106,6 +1228,10 @@ enum class TimeSigVSMargin : unsigned char {
     HANG_INTO_MARGIN,
     RIGHT_ALIGN_TO_BARLINE,
     CREATE_SPACE,
+};
+
+enum class NoteSpellingType : unsigned char {
+    STANDARD = 0, GERMAN, GERMAN_PURE, SOLFEGGIO, FRENCH
 };
 
 //---------------------------------------------------------
@@ -1204,16 +1330,6 @@ struct std::hash<mu::engraving::InstrumentTrackId>
         std::size_t h2 = std::hash<muse::String> {}(s.instrumentId);
         return h1 ^ (h2 << 1);
     }
-};
-
-enum class ScoreStylePreset : unsigned char {
-    DEFAULT = 0,
-    MSN_16MM,
-    MSN_18MM,
-    MSN_20MM,
-    MSN_22MM,
-    MSN_25MM,
-    MAX_PRESET
 };
 
 #ifndef NO_QT_SUPPORT

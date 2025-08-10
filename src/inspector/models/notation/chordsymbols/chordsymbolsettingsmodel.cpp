@@ -39,18 +39,37 @@ void ChordSymbolSettingsModel::createProperties()
     m_isLiteral = buildPropertyItem(mu::engraving::Pid::HARMONY_VOICE_LITERAL);
     m_voicingType = buildPropertyItem(mu::engraving::Pid::HARMONY_VOICING);
     m_durationType = buildPropertyItem(mu::engraving::Pid::HARMONY_DURATION);
+    m_verticalAlign = buildPropertyItem(mu::engraving::Pid::EXCLUDE_VERTICAL_ALIGN);
+    m_position = buildPropertyItem(mu::engraving::Pid::POSITION);
+    m_bassScale = buildPropertyItem(mu::engraving::Pid::HARMONY_BASS_SCALE, [this](const engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toDouble() / 100);
+    }, [this](const engraving::Sid sid, const QVariant& newValue) {
+        updateStyleValue(sid, newValue.toDouble() / 100);
+        emit requestReloadPropertyItems();
+    });
+    m_doNotStackModifiers = buildPropertyItem(mu::engraving::Pid::HARMONY_DO_NOT_STACK_MODIFIERS);
 }
 
 void ChordSymbolSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HARMONY);
+    updateHasLinkedFretboardDiagram();
+    updateIsDurationAvailable();
 }
 
 void ChordSymbolSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isLiteral);
     loadPropertyItem(m_voicingType);
+
     loadPropertyItem(m_durationType);
+    updateIsDurationAvailable();
+    loadPropertyItem(m_verticalAlign);
+    loadPropertyItem(m_position);
+    loadPropertyItem(m_bassScale, [](const QVariant& elementPropertyValue) -> QVariant {
+        return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+    });
+    loadPropertyItem(m_doNotStackModifiers);
 }
 
 void ChordSymbolSettingsModel::resetProperties()
@@ -58,6 +77,10 @@ void ChordSymbolSettingsModel::resetProperties()
     m_isLiteral->resetToDefault();
     m_voicingType->resetToDefault();
     m_durationType->resetToDefault();
+    m_verticalAlign->resetToDefault();
+    m_position->resetToDefault();
+    m_bassScale->resetToDefault();
+    m_doNotStackModifiers->resetToDefault();
 }
 
 PropertyItem* ChordSymbolSettingsModel::isLiteral() const
@@ -73,4 +96,73 @@ PropertyItem* ChordSymbolSettingsModel::voicingType() const
 PropertyItem* ChordSymbolSettingsModel::durationType() const
 {
     return m_durationType;
+}
+
+void ChordSymbolSettingsModel::addFretboardDiagram()
+{
+    dispatcher()->dispatch("add-fretboard-diagram");
+}
+
+bool ChordSymbolSettingsModel::hasLinkedFretboardDiagram() const
+{
+    return m_hasLinkedFretboardDiagram;
+}
+
+void ChordSymbolSettingsModel::setHasLinkedFretboardDiagram(bool has)
+{
+    if (m_hasLinkedFretboardDiagram == has) {
+        return;
+    }
+
+    m_hasLinkedFretboardDiagram = has;
+    emit hasLinkedFretboardDiagramChanged();
+}
+
+void ChordSymbolSettingsModel::updateHasLinkedFretboardDiagram()
+{
+    bool hasHarmonyWhithoutFretboardDiagram = false;
+
+    for (mu::engraving::EngravingItem* item : m_elementList) {
+        engraving::EngravingObject* parent = item->explicitParent();
+        if (parent && !parent->isFretDiagram()) {
+            hasHarmonyWhithoutFretboardDiagram = true;
+            break;
+        }
+    }
+
+    setHasLinkedFretboardDiagram(!hasHarmonyWhithoutFretboardDiagram);
+}
+
+void ChordSymbolSettingsModel::updateIsDurationAvailable()
+{
+    bool available = true;
+
+    for (engraving::EngravingItem* item : m_elementList) {
+        if (engraving::toHarmony(item)->isInFretBox()) {
+            available = false;
+            break;
+        }
+    }
+
+    m_durationType->setIsVisible(available);
+}
+
+PropertyItem* ChordSymbolSettingsModel::verticalAlign() const
+{
+    return m_verticalAlign;
+}
+
+PropertyItem* ChordSymbolSettingsModel::position() const
+{
+    return m_position;
+}
+
+PropertyItem* ChordSymbolSettingsModel::bassScale() const
+{
+    return m_bassScale;
+}
+
+PropertyItem* ChordSymbolSettingsModel::doNotStackModifiers() const
+{
+    return m_doNotStackModifiers;
 }

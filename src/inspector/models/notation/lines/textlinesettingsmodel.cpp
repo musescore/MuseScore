@@ -128,6 +128,8 @@ void TextLineSettingsModel::loadProperties()
     };
 
     loadProperties(propertyIdSet);
+
+    updateIsSystemObjectBelowBottomStaff();
 }
 
 void TextLineSettingsModel::resetProperties()

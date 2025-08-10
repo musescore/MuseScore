@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "compat/scoreaccess.h"
 #include "dom/chordrest.h"
 #include "dom/durationtype.h"
 #include "dom/excerpt.h"
@@ -367,4 +368,74 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeJazz)
     score->cmdRealizeChordSymbols();
     score->endCmd();
     test_post(score, u"realize-jazz");
+}
+
+TEST_F(Engraving_ChordSymbolTests, testNashvilleNumbers) {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+    MasterScore* score = test_pre(u"nashville-numbers");
+    selectAllChordSymbols(score);
+
+    static const std::array<std::pair<int, String>, 23> tpcAndExtension { {
+        { 14, u"" },
+        { 16, u"" },
+        { 18, u"" },
+        { 13, u"" },
+        { 16, u"" },
+        { 18, u"" },
+        { 20, u"" },
+        { 15, u"" },
+        { 10, u"" },
+        { 12, u"" },
+        { 14, u"" },
+        { 9, u"" },
+        { 5, u"" },
+        { 7, u"" },
+        { 9, u"" },
+        { 4, u"" },
+        { 12, u"m" },
+        { 14, u"o" },
+        { 16, u"o7#11" },
+        { 14, u"6" },
+        { 14, u"69" },
+        { 18, u"sus" },
+        { 13, u"6" }
+    } };
+
+    size_t idx = 0;
+
+    std::vector<EngravingItem*> els = score->selection().elements(ElementType::HARMONY);
+
+    ASSERT_EQ(els.size(), tpcAndExtension.size());
+
+    for (EngravingItem* e : els) {
+        Harmony* h = toHarmony(e);
+        EXPECT_FALSE(h->chords().empty());
+        HarmonyInfo* info = h->chords().front();
+
+        int tpc = tpcAndExtension.at(idx).first;
+        String ext = tpcAndExtension.at(idx).second;
+
+        EXPECT_EQ(tpc, info->rootTpc());
+        EXPECT_EQ(ext, info->textName());
+
+        idx++;
+    }
+
+    MScore::useRead302InTestMode = use302;
+}
+
+TEST_F(Engraving_ChordSymbolTests, testParserSuffix)
+{
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    StringList symbols = { u"Cno3rd", u"Domit1st", u"Cadd9th", u"Ebsus2nd" };
+
+    // Expect these symbols to parse successfully
+    ParsedChord* pc = new ParsedChord();
+    for (const String& chord : symbols) {
+        EXPECT_TRUE(pc->parse(chord, score->chordList()));
+    }
+
+    delete pc;
+    delete score;
 }

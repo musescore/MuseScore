@@ -86,6 +86,7 @@ class MeasureNumber;
 class MeasureRepeat;
 
 class NoteHead;
+class NoteLine;
 
 class Ornament;
 class Ottava;
@@ -95,6 +96,7 @@ class PalmMute;
 class PalmMuteSegment;
 class Pedal;
 class PedalSegment;
+class PlayCountText;
 class PlayTechAnnotation;
 
 class RehearsalMark;
@@ -185,6 +187,8 @@ public:
     static void layout(GuitarBend* item, const Context& ctx);
 
     static void layout(Hairpin* item, const Context& ctx);
+    static void layout(HammerOnPullOff* item, const Context& ctx);
+    static void layout(HammerOnPullOffSegment* item, const Context& ctx);
     static void layout(HarpPedalDiagram* item, const Context& ctx);
 
     static void layout(Image* item, const Context& ctx);
@@ -199,6 +203,7 @@ public:
     static void layout(Lyrics* item, const Context& ctx);
 
     static void layout(NoteHead* item, const Context& ctx);
+    static void layout(NoteLine* item, const Context& ctx);
 
     static void layout(Marker* item, const Context& ctx);
     static void layout(MeasureNumber* item, const Context& ctx);
@@ -209,6 +214,7 @@ public:
 
     static void layout(PalmMute* item, const Context& ctx);
     static void layout(Pedal* item, const Context& ctx);
+    static void layout(PlayCountText* item, const Context& ctx);
     static void layout(PlayTechAnnotation* item, const Context& ctx);
 
     static void layout(RehearsalMark* item, const Context& ctx);
@@ -224,6 +230,7 @@ public:
     static void layout(Symbol* item, const Context& ctx);
     static void layout(SystemText* item, const Context& ctx);
 
+    static void layout(Tapping* item, const Context& ctx);
     static void layout(TempoText* item, const Context& ctx);
     static void layout(TextLine* item, const Context& ctx);
     static void layout(TimeSig* item, const Context& ctx);

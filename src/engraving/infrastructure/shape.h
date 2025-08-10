@@ -159,6 +159,8 @@ public:
     double right() const;
     double top() const;
     double bottom() const;
+    double topAtX(double x) const;
+    double bottomAtX(double x) const;
     double rightMostEdgeAtHeight(double yAbove, double yBelow) const;
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
     double leftMostEdgeAtTop() const;

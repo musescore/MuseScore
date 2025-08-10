@@ -121,7 +121,7 @@ enum class ElementFlag {
     ENABLED                = 0x04000000,      // used for segments
     EMPTY                  = 0x08000000,
     WRITTEN                = 0x10000000,
-    END_OF_MEASURE_CHANGE         = 0x20000000
+    END_OF_MEASURE_CHANGE  = 0x20000000,
 };
 
 typedef muse::Flags<ElementFlag> ElementFlags;
@@ -131,10 +131,11 @@ enum class KerningType : unsigned char
 {
     KERNING,
     NON_KERNING,
-    LIMITED_KERNING,
+    KERN_UNTIL_LEFT_EDGE,
+    KERN_UNTIL_CENTER,
+    KERN_UNTIL_RIGHT_EDGE,
     SAME_VOICE_LIMIT,
     ALLOW_COLLISION,
-    NOT_SET,
 };
 
 class EngravingItemList : public std::list<EngravingItem*>
@@ -217,7 +218,7 @@ public:
     virtual void setSelected(bool f);
 
     bool visible() const { return !flag(ElementFlag::INVISIBLE); }
-    virtual void setVisible(bool f) { setFlag(ElementFlag::INVISIBLE, !f); }
+    virtual void setVisible(bool f);
 
     bool isInteractionAvailable() const;
 
@@ -225,7 +226,7 @@ public:
     void setSizeIsSpatiumDependent(bool v) { setFlag(ElementFlag::SIZE_SPATIUM_DEPENDENT, !v); }
     bool offsetIsSpatiumDependent() const override;
 
-    PlacementV placement() const { return PlacementV(!flag(ElementFlag::PLACE_ABOVE)); }
+    PlacementV placement() const;
     void setPlacement(PlacementV val) { setFlag(ElementFlag::PLACE_ABOVE, !bool(val)); }
     bool placeAbove() const { return placement() == PlacementV::ABOVE; }
     bool placeBelow() const { return placement() == PlacementV::BELOW; }
@@ -237,6 +238,7 @@ public:
     Spatium minDistance() const { return m_minDistance; }
     void setMinDistance(Spatium v) { m_minDistance = v; }
 
+    PointF systemPos() const;
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
     double pageX() const;
@@ -270,8 +272,6 @@ public:
     bool hitShapeIntersects(const RectF& rr) const;
 
     virtual int subtype() const { return -1; }                    // for select gui
-
-    void drawAt(muse::draw::Painter* p, const PointF& pt) const;
 
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
     virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> /*isDragged*/)
@@ -358,7 +358,7 @@ public:
 
     virtual void setColor(const Color& c);
     virtual Color color() const;
-    Color curColor() const;
+    virtual Color curColor() const;
     Color curColor(bool isVisible) const;
     Color curColor(bool isVisible, Color normalColor) const;
 
@@ -405,11 +405,13 @@ public:
     double magS() const;
 
     bool isPrintable() const;
-    bool isPlayable() const;
+    virtual bool isPlayable() const;
     virtual double absoluteFromSpatium(const Spatium& sp) const { return sp.val() * spatium(); }
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
     void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v); }
+
+    bool isSystemObjectBelowBottomStaff() const;
 
     bool header() const { return flag(ElementFlag::HEADER); }
     void setHeader(bool v) { setFlag(ElementFlag::HEADER, v); }
@@ -435,6 +437,9 @@ public:
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
     bool addToSkyline() const { return !(m_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)) && !ldata()->isSkipDraw(); }
 
+    bool excludeVerticalAlign() const { return m_excludeVerticalAlign; }
+    void setExcludeVerticalAlign(bool v) { m_excludeVerticalAlign = v; }
+
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
@@ -453,7 +458,7 @@ public:
     double symWidth(const SymIdList&) const;
     RectF symBbox(SymId id) const;
     RectF symBbox(const SymIdList&) const;
-    Shape symShapeWithCutouts(SymId id) const;
+    virtual Shape symShapeWithCutouts(SymId id) const;
 
     PointF symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const;
 
@@ -485,12 +490,20 @@ public:
     virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
     virtual void triggerLayoutToEnd() const;
-    virtual void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling);
 
     double styleP(Sid idx) const;
 
     bool colorsInversionEnabled() const;
     void setColorsInverionEnabled(bool enabled);
+
+    virtual void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false);
+    ParenthesesMode parenthesesMode() const;
+    inline bool bothParentheses() const { return m_leftParenthesis && m_rightParenthesis; }
+    inline Parenthesis* paren(const DirectionH& dir) const { return dir == DirectionH::LEFT ? m_leftParenthesis : m_rightParenthesis; }
+    Parenthesis* leftParen() const { return m_leftParenthesis; }
+    Parenthesis* rightParen() const { return m_rightParenthesis; }
+    void setLeftParen(Parenthesis* paren) { m_leftParenthesis = paren; }
+    void setRightParen(Parenthesis* paren) { m_rightParenthesis = paren; }
 
     struct BarBeat
     {
@@ -739,7 +752,14 @@ private:
 
     bool m_colorsInversionEnabled = true;
 
+    bool m_excludeVerticalAlign = false;
+
     mutable LayoutData* m_layoutData = nullptr;
+
+    Parenthesis* m_leftParenthesis = nullptr;
+    Parenthesis* m_rightParenthesis = nullptr;
+    void setHasLeftParenthesis(bool v, bool addToLinked = true, bool generated = false);
+    void setHasRightParenthesis(bool v, bool addToLinked = true, bool generated = false);
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;
@@ -773,7 +793,6 @@ class ElementEditData
 public:
     EngravingItem* e = nullptr;
     std::list<PropertyData> propertyData;
-    PointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
 
     virtual ~ElementEditData() = default;
     void pushProperty(Pid pid)
@@ -809,12 +828,10 @@ public:
     Compound(const ElementType& type, Score*);
     Compound(const Compound&);
 
-    virtual void draw(muse::draw::Painter*) const;
     virtual void addElement(EngravingItem*, double x, double y);
     void clear();
     virtual void setSelected(bool f);
     virtual void setVisible(bool);
-    virtual void layout();
 
 protected:
     const std::list<EngravingItem*>& getElements() const { return m_elements; }

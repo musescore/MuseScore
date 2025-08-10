@@ -76,8 +76,8 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
 
     int streams = SND_SEQ_OPEN_OUTPUT;
     const unsigned int cap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
-    const unsigned int type_hw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
-    const unsigned int type_sw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_SOFTWARE;
+    const unsigned int type_hw = SND_SEQ_PORT_TYPE_HARDWARE;
+    const unsigned int type_sw = SND_SEQ_PORT_TYPE_SOFTWARE;
 
     std::vector<MidiDevice> ret;
 
@@ -252,10 +252,10 @@ Ret AlsaMidiOutPort::sendEvent(const Event& e)
 
     switch (e.opcode()) {
     case Event::Opcode::NoteOn:
-        snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity());
+        snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity7());
         break;
     case Event::Opcode::NoteOff:
-        snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity());
+        snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity7());
         break;
     case Event::Opcode::ProgramChange:
         snd_seq_ev_set_pgmchange(&seqev, e.channel(), e.program());

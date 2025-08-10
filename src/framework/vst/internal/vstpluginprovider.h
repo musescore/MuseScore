@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_VST_VSTPLUGINPROVIDER_H
-#define MUSE_VST_VSTPLUGINPROVIDER_H
+#pragma once
 
 #include "vst/vsttypes.h"
 
@@ -43,5 +41,3 @@ private:
     std::unique_ptr<Impl> m_impl;
 };
 }
-
-#endif // MUSE_VST_VSTPLUGINPROVIDER_H

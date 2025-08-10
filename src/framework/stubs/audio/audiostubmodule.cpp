@@ -28,7 +28,7 @@
 #include "audiodriverstub.h"
 #include "synthresolverstub.h"
 #include "fxresolverstub.h"
-#include "soundfontrepositorystub.h"
+#include "soundfontcontrollerstub.h"
 
 using namespace muse;
 using namespace muse::modularity;
@@ -52,7 +52,7 @@ void AudioModule::registerExports()
     ioc()->registerExport<synth::ISynthResolver>(moduleName(), new synth::SynthResolverStub());
     ioc()->registerExport<fx::IFxResolver>(moduleName(), new fx::FxResolverStub());
 
-    ioc()->registerExport<ISoundFontRepository>(moduleName(), new SoundFontRepositoryStub());
+    ioc()->registerExport<ISoundFontController>(moduleName(), new SoundFontControllerStub());
 }
 
 void AudioModule::registerResources()

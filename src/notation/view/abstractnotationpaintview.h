@@ -59,6 +59,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(qreal startVerticalScrollPosition READ startVerticalScrollPosition NOTIFY verticalScrollChanged)
     Q_PROPERTY(qreal verticalScrollbarSize READ verticalScrollbarSize NOTIFY verticalScrollChanged)
 
+    Q_PROPERTY(QVariant matrix READ matrix NOTIFY matrixChanged)
     Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
 
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
@@ -138,6 +139,8 @@ public:
     qreal startVerticalScrollPosition() const;
     qreal verticalScrollbarSize() const;
 
+    QVariant matrix() const;
+
     muse::PointF viewportTopLeft() const override;
     muse::RectF viewport() const;
     QRectF viewport_property() const;
@@ -160,6 +163,7 @@ signals:
     void verticalScrollChanged();
 
     void backgroundColorChanged(QColor color);
+    void matrixChanged();
     void viewportChanged();
     void publishModeChanged();
 
@@ -266,6 +270,7 @@ private:
     INotationPtr m_notation;
     muse::draw::Transform m_matrix;
 
+    bool m_loadCalled = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;

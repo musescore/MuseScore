@@ -28,8 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "audio/itracks.h"
-#include "audio/iplayback.h"
+#include "audio/main/iplayback.h"
 #include "context/iglobalcontext.h"
 #include "ui/view/navigationsection.h"
 #include "playback/iplaybackconfiguration.h"

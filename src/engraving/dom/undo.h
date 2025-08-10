@@ -29,17 +29,16 @@
 
 #include <map>
 
-#include "modularity/ioc.h"
-#include "../iengravingfontsprovider.h"
-
 #include "../style/style.h"
 #include "../compat/midi/midipatch.h"
 
 #include "bend.h"
+#include "box.h"
 #include "bracket.h"
 #include "chord.h"
 #include "drumset.h"
 #include "fret.h"
+#include "harmony.h"
 #include "harppedaldiagram.h"
 #include "input.h"
 #include "instrchange.h"
@@ -54,17 +53,13 @@
 #include "score.h"
 #include "scoreorder.h"
 #include "select.h"
+#include "soundflag.h"
 #include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "stringdata.h"
 #include "stringtunings.h"
-#include "synthesizerstate.h"
-#include "soundflag.h"
-#include "text.h"
-
 #include "tremolotwochord.h"
-#include "tremolobar.h"
 
 namespace mu::engraving {
 class Bend;
@@ -96,6 +91,123 @@ class Text;
 class TremoloBar;
 
 enum class PlayEventType : unsigned char;
+
+enum class CommandType : signed char {
+    Unknown = -1,
+
+    // Parts
+    InsertPart,
+    RemovePart,
+    AddPartToExcerpt,
+    SetSoloist,
+    ChangePart,
+
+    // Staves
+    InsertStaff,
+    RemoveStaff,
+    AddSystemObjectStaff,
+    RemoveSystemObjectStaff,
+    SortStaves,
+    ChangeStaff,
+    ChangeStaffType,
+
+    // MStaves
+    InsertMStaff,
+    RemoveMStaff,
+    InsertStaves,
+    RemoveStaves,
+    ChangeMStaffProperties,
+    ChangeMStaffHideIfEmpty,
+
+    // Instruments
+    ChangeInstrumentShort,
+    ChangeInstrumentLong,
+    ChangeInstrument,
+    ChangeDrumset,
+
+    // Measures
+    RemoveMeasures,
+    InsertMeasures,
+    ChangeMeasureLen,
+    ChangeMMRest,
+    ChangeMeasureRepeatCount,
+
+    // Elements
+    AddElement,
+    RemoveElement,
+    Unlink,
+    Link,
+    ChangeElement,
+    ChangeParent,
+
+    // Notes
+    ChangePitch,
+    ChangeFretting,
+    ChangeVelocity,
+
+    // ChordRest
+    ChangeChordStaffMove,
+    SwapCR,
+
+    // Brackets
+    RemoveBracket,
+    AddBracket,
+
+    // Fret
+    FretDataChange,
+    FretDot,
+    FretMarker,
+    FretBarre,
+    FretClear,
+    FretLinkHarmony,
+
+    // Harmony
+    TransposeHarmony,
+
+    // KeySig
+    ChangeKeySig,
+
+    // Clef
+    ChangeClefType,
+
+    // Tremolo
+    MoveTremolo,
+
+    // Spanners
+    ChangeSpannerElements,
+    InsertTimeUnmanagedSpanner,
+    ChangeStartEndSpanner,
+
+    // Ties
+    ChangeTieEndPointActive,
+
+    // Style
+    ChangeStyle,
+    ChangeStyleValues,
+
+    // Property
+    ChangeProperty,
+
+    // Voices
+    ExchangeVoice,
+    CloneVoice,
+
+    // Excerpts
+    AddExcerpt,
+    RemoveExcerpt,
+    SwapExcerpt,
+    ChangeExcerptTitle,
+
+    // Meta info
+    ChangeMetaInfo,
+
+    // Text
+    TextEdit,
+
+    // Other
+    InsertTime,
+    ChangeScoreOrder,
+};
 
 #define UNDO_TYPE(t) CommandType type() const override { return t; }
 #define UNDO_NAME(a) const char* name() const override { return a; }
@@ -179,6 +291,7 @@ public:
         std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
         StyleIdSet changedStyleIdSet;
         PropertyIdSet changedPropertyIdSet;
+        bool isTextEditing = false;
     };
 
     ChangesInfo changesInfo(bool undo = false) const;
@@ -587,18 +700,38 @@ class TransposeHarmony : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmony)
 
-    Harmony* harmony = nullptr;
-    int rootTpc = 0;
-    int baseTpc = 0;
+    Harmony* m_harmony = nullptr;
+
+    Interval m_interval = Interval(0, 0);
+    bool m_useDoubleSharpsFlats = false;
 
     void flip(EditData*) override;
 
 public:
-    TransposeHarmony(Harmony*, int rootTpc, int baseTpc);
+    TransposeHarmony(Harmony*, Interval interval, bool useDoubleSharpsFlats);
 
     UNDO_TYPE(CommandType::TransposeHarmony)
     UNDO_NAME("TransposeHarmony")
-    UNDO_CHANGED_OBJECTS({ harmony })
+    UNDO_CHANGED_OBJECTS({ m_harmony })
+};
+
+class TransposeHarmonyDiatonic : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, TransposeHarmonyDiatonic)
+
+    Harmony* m_harmony = nullptr;
+    int m_interval = 0;
+    bool m_useDoubleSharpsFlats = false;
+    bool m_transposeKeys = false;
+
+    void flip(EditData*) override;
+
+public:
+    TransposeHarmonyDiatonic(Harmony*, int interval, bool useDoubleSharpsFlats, bool transposeKeys);
+
+    UNDO_TYPE(CommandType::TransposeHarmony)
+    UNDO_NAME("TransposeHarmonyDiatonic")
+    UNDO_CHANGED_OBJECTS({ m_harmony })
 };
 
 class ExchangeVoice : public UndoCommand
@@ -763,8 +896,8 @@ class ChangePatch : public UndoCommand
     void flip(EditData*) override;
 
 public:
-    ChangePatch(Score* s, InstrChannel* c, const MidiPatch* pt)
-        : score(s), channel(c), patch(*pt) {}
+    ChangePatch(Score* s, InstrChannel* c, const MidiPatch& pt)
+        : score(s), channel(c), patch(pt) {}
     UNDO_NAME("ChangePatch")
     UNDO_CHANGED_OBJECTS({ score })
 };
@@ -796,7 +929,7 @@ class ChangeStaff : public UndoCommand
 
     bool visible = false;
     ClefTypeList clefType;
-    double userDist = 0.0;
+    Spatium userDist = Spatium(0.0);
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     bool showIfEmpty = false;
     bool cutaway = false;
@@ -809,8 +942,8 @@ class ChangeStaff : public UndoCommand
 public:
     ChangeStaff(Staff*);
 
-    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, double userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                bool _hideSystemBarLine, AutoOnOff _mergeRests, bool _reflectTranspositionInLinkedTab);
+    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, Spatium userDist, Staff::HideMode _hideMode, bool _showIfEmpty,
+                bool _cutaway, bool _hideSystemBarLine, AutoOnOff _mergeRests, bool _reflectTranspositionInLinkedTab);
 
     UNDO_TYPE(CommandType::ChangeStaff)
     UNDO_NAME("ChangeStaff")
@@ -870,6 +1003,8 @@ class ChangeStyle : public UndoCommand
 
 public:
     ChangeStyle(Score*, const MStyle&, const bool overlapOnly = false);
+
+    StyleIdSet changedIds() const;
 
     UNDO_TYPE(CommandType::ChangeStyle)
     UNDO_NAME("ChangeStyle")
@@ -953,17 +1088,35 @@ class ChangeMStaffProperties : public UndoCommand
     OBJECT_ALLOCATOR(engraving, ChangeMStaffProperties)
 
     Measure* measure = nullptr;
-    int staffIdx = 0;
+    staff_idx_t staffIdx = 0;
     bool visible = false;
     bool stemless = false;
 
     void flip(EditData*) override;
 
 public:
-    ChangeMStaffProperties(Measure*, int staffIdx, bool visible, bool stemless);
+    ChangeMStaffProperties(Measure*, staff_idx_t staffIdx, bool visible, bool stemless);
 
     UNDO_TYPE(CommandType::ChangeMStaffProperties)
     UNDO_NAME("ChangeMStaffProperties")
+    UNDO_CHANGED_OBJECTS({ measure })
+};
+
+class ChangeMStaffHideIfEmpty : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeMStaffHideIfEmpty)
+
+    Measure* measure = nullptr;
+    staff_idx_t staffIdx = 0;
+    AutoOnOff hideIfEmpty = AutoOnOff::AUTO;
+
+    void flip(EditData*) override;
+
+public:
+    ChangeMStaffHideIfEmpty(Measure*, staff_idx_t staffIdx, AutoOnOff hideIfEmpty);
+
+    UNDO_TYPE(CommandType::ChangeMStaffHideIfEmpty)
+    UNDO_NAME("ChangeMStaffHideIfEmpty")
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
@@ -1648,6 +1801,25 @@ public:
     UNDO_TYPE(CommandType::FretClear)
     UNDO_NAME("FretClear")
     UNDO_CHANGED_OBJECTS({ diagram })
+};
+
+class FretLinkHarmony : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, FretLinkHarmony)
+
+    FretDiagram* m_fretDiagram = nullptr;
+    Harmony* m_harmony = nullptr;
+    bool m_unlink = false;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    FretLinkHarmony(FretDiagram*, Harmony*, bool unlink = false);
+
+    UNDO_TYPE(CommandType::FretLinkHarmony)
+    UNDO_NAME("FretLinkHarmony")
+    UNDO_CHANGED_OBJECTS({ m_fretDiagram })
 };
 
 class MoveTremolo : public UndoCommand

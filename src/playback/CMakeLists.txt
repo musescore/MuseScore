@@ -61,6 +61,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/msbasicpresetscategories.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/soundflag/soundflagsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/soundflag/soundflagsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/onlinesoundsstatusmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/onlinesoundsstatusmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/notationregionsbeingprocessedmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/notationregionsbeingprocessedmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelcontextmenumodel.cpp
@@ -73,8 +77,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/soundprofilesmodel.h
     )
 
-if (MUE_BUILD_PLAYBACK_TESTS)
-    add_subdirectory(tests)
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick)
 endif()
 
 setup_module()
+
+if (MUE_BUILD_PLAYBACK_TESTS)
+    add_subdirectory(tests)
+endif()

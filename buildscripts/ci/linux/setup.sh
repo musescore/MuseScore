@@ -19,9 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# For maximum AppImage compatibility, build on the oldest Linux distribution
-# that still receives security updates from its manufacturer.
-
 echo "Setup Linux build environment"
 trap 'echo Setup failed; exit 1' ERR
 
@@ -29,10 +26,13 @@ df -h .
 
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
+PACKARCH="x86_64" # x86_64, armv7l, aarch64, wasm
 COMPILER="gcc" # gcc, clang
+EMSDK_VERSION="3.1.70" # for Qt 6.9
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
+        --arch) PACKARCH="$2"; shift ;;
         --compiler) COMPILER="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
@@ -46,49 +46,56 @@ rm -f $ENV_FILE
 
 echo "echo 'Setup MuseScore build environment'" >> $ENV_FILE
 
+if [[ "$PACKARCH" == "armv7l" ]]; then
+  SUDO=""
+  export DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
+else
+  SUDO="sudo"
+fi
+
 ##########################################################################
 # GET DEPENDENCIES
 ##########################################################################
 
-# DISTRIBUTION PACKAGES
-
-# These are installed by default on Travis CI, but not on Docker
-apt_packages_basic=(
-  # Alphabetical order please!
-  desktop-file-utils
-  file
-  git
-  lcov # for code coverage
-  software-properties-common # installs `add-apt-repository`
-  unzip
-  p7zip-full
-  )
-
-# These are the same as on Travis CI
-apt_packages_standard=(
-  # Alphabetical order please!
+apt_packages=(
+  coreutils
   curl
-  libasound2-dev 
+  desktop-file-utils # installs `desktop-file-validate` for appimagetool
+  gawk
+  git
+  lcov
+  libasound2-dev
+  libcups2-dev
   libfontconfig1-dev
   libfreetype6-dev
-  libfreetype6
+  libgcrypt20-dev
   libgl1-mesa-dev
+  libglib2.0-dev
+  libgpgme-dev # install for appimagetool
   libjack-dev
   libnss3-dev
   libportmidi-dev
   libpulse-dev
+  librsvg2-dev
   libsndfile1-dev
+  libssl-dev
+  libtool
   make
+  p7zip-full
+  sed
+  software-properties-common # installs `add-apt-repository`
+  unzip
   wget
+  zsync # installs `zsyncmake` for appimagetool
   )
 
 # MuseScore compiles without these but won't run without them
 apt_packages_runtime=(
   # Alphabetical order please!
-  libcups2
   libdbus-1-3
   libegl1-mesa-dev
-  libodbc1
+  libgles2-mesa-dev
+  libodbc2
   libpq-dev
   libssl-dev
   libxcomposite-dev
@@ -112,40 +119,22 @@ apt_packages_runtime=(
 
 apt_packages_ffmpeg=(
   ffmpeg
-  libavcodec-dev 
-  libavformat-dev 
+  libavcodec-dev
+  libavformat-dev
   libswscale-dev
   )
 
-sudo apt-get update 
-sudo apt-get install -y --no-install-recommends \
-  "${apt_packages_basic[@]}" \
-  "${apt_packages_standard[@]}" \
+apt_packages_pw_deps=(
+  libdbus-1-dev
+  libudev-dev
+  )
+
+$SUDO apt-get update
+$SUDO apt-get install -y --no-install-recommends \
+  "${apt_packages[@]}" \
   "${apt_packages_runtime[@]}" \
-  "${apt_packages_ffmpeg[@]}"
-
-##########################################################################
-# GET QT
-##########################################################################
-
-# Get newer Qt (only used cached version if it is the same)
-qt_version="624"
-qt_revision="r2" # added websocket module
-qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
-if [[ ! -d "${qt_dir}" ]]; then
-  mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64_${qt_revision}.7z"
-  wget -q --show-progress -O qt.7z "${qt_url}"
-  7z x -y qt.7z -o"${qt_dir}"
-  rm qt.7z
-fi
-
-echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
-echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
-echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
-echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
-
+  "${apt_packages_ffmpeg[@]}" \
+  "${apt_packages_pw_deps[@]}"
 
 ##########################################################################
 # GET TOOLS
@@ -155,8 +144,8 @@ echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 if [ "$COMPILER" == "gcc" ]; then
 
   gcc_version="10"
-  sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
-  sudo update-alternatives \
+  $SUDO apt-get install -y --no-install-recommends "g++-${gcc_version}"
+  $SUDO update-alternatives \
     --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
     --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
 
@@ -168,51 +157,159 @@ if [ "$COMPILER" == "gcc" ]; then
 
 elif [ "$COMPILER" == "clang" ]; then
 
-  sudo apt-get install clang
+  $SUDO apt-get install clang
   echo export CC="/usr/bin/clang" >> ${ENV_FILE}
   echo export CXX="/usr/bin/clang++" >> ${ENV_FILE}
 
   clang --version
   clang++ --version
 
-else 
+else
   echo "Unknown compiler: $COMPILER"
 fi
 
 # CMAKE
 # Get newer CMake (only used cached version if it is the same)
-cmake_version="3.24.0"
-cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
-if [[ ! -d "$cmake_dir" ]]; then
-  mkdir -p "$cmake_dir"
-  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz" 
-  wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
-fi
-echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
-$cmake_dir/bin/cmake --version
+case "$PACKARCH" in
+  x86_64 | wasm)
+    cmake_version="3.24.0"
+    cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
+    if [[ ! -d "$cmake_dir" ]]; then
+      mkdir -p "$cmake_dir"
+      cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz"
+      wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
+    fi
+    export PATH="$cmake_dir/bin:$PATH"
+    echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
+    ;;
+  armv7l | aarch64)
+    $SUDO apt-get install -y --no-install-recommends cmake
+    ;;
+esac
+cmake --version
 
 # Ninja
-echo "Get Ninja"
-ninja_dir=$BUILD_TOOLS/Ninja
-if [[ ! -d "$ninja_dir" ]]; then
-  mkdir -p $ninja_dir
-  wget -q --show-progress -O $ninja_dir/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
-  chmod +x $ninja_dir/ninja
-fi
-echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
+case "$PACKARCH" in
+  x86_64 | wasm)
+    echo "Get Ninja"
+    ninja_dir=$BUILD_TOOLS/Ninja
+    if [[ ! -d "$ninja_dir" ]]; then
+      mkdir -p $ninja_dir
+      wget -q --show-progress -O $ninja_dir/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
+      chmod +x $ninja_dir/ninja
+    fi
+    export PATH="${ninja_dir}:${PATH}"
+    echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
+    ;;
+  armv7l | aarch64)
+    $SUDO apt-get install -y --no-install-recommends ninja-build
+    ;;
+esac
 echo "ninja version"
-$ninja_dir/ninja --version
+ninja --version
+
+if [[ "$PACKARCH" == "wasm" ]]; then
+  git clone https://github.com/emscripten-core/emsdk.git $BUILD_TOOLS/emsdk
+  origin_dir=$(pwd)
+  cd $BUILD_TOOLS/emsdk
+  git pull
+  ./emsdk install $EMSDK_VERSION
+  ./emsdk activate $EMSDK_VERSION
+  echo "source $BUILD_TOOLS/emsdk/emsdk_env.sh" >> ${ENV_FILE}
+  cd $origin_dir
+fi
+
+# MESON
+# Get recent version of Meson (to build pipewire)
+meson_version="1.1.1"
+sudo python3 -m pip install meson==${meson_version}
+
+##########################################################################
+# BUILD PIPWIRE
+##########################################################################
+
+pw_version="1.0.4"
+pw_src_dir="$BUILD_TOOLS/pw-src-${pw_version}"
+pw_dist_dir="$BUILD_TOOLS/pw-dist-${pw_version}"
+pw_url="https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/${pw_version}/pipewire-${pw_version}.tar.gz"
+if [[ ! -d "${pw_src_dir}" ]]; then
+  mkdir -p "${pw_src_dir}"
+  wget -q --show-progress -O pw.tar.gz "${pw_url}"
+  tar -xzf pw.tar.gz -C "${pw_src_dir}" --strip-components=1
+  rm pw.tar.gz
+  pushd "${pw_src_dir}"
+
+  meson setup builddir \
+    --buildtype=debug \
+    --prefix=${pw_dist_dir} \
+    --libdir=${pw_dist_dir}/lib \
+    -Dexamples=disabled \
+    -Dtests=disabled \
+    -Dgstreamer=disabled \
+    -Dgstreamer-device-provider=disabled \
+    -Dsystemd=disabled \
+    -Dselinux=disabled \
+    -Dpipewire-alsa=disabled \
+    -Dpipewire-jack=disabled \
+    -Dpipewire-v4l2=disabled \
+    -Djack-devel=false \
+    -Dalsa=disabled \
+    -Daudiomixer=disabled \
+    -Daudioconvert=enabled \
+    -Dbluez5=disabled \
+    -Dcontrol=disabled \
+    -Daudiotestsrc=disabled \
+    -Djack=disabled \
+    -Dsupport=enabled \
+    -Devl=disabled \
+    -Dv4l2=disabled \
+    -Dvideoconvert=disabled \
+    -Dvideotestsrc=disabled \
+    -Dpw-cat=disabled \
+    -Dudev=disabled \
+    -Dsdl2=disabled \
+    -Dsndfile=disabled \
+    -Dlibmysofa=disabled \
+    -Dlibpulse=disabled \
+    -Droc=disabled \
+    -Decho-cancel-webrtc=disabled \
+    -Dlibusb=disabled \
+    -Dsession-managers=[] \
+    -Draop=disabled \
+    -Dlv2=disabled \
+    -Dx11=disabled \
+    -Dlibcanberra=disabled \
+    -Dlegacy-rtkit=false \
+    -Davb=disabled \
+    -Dflatpak=disabled \
+    -Dreadline=disabled \
+    -Dgsettings=disabled \
+    -Dcompress-offload=disabled \
+    -Drlimits-install=false \
+    -Dopus=disabled \
+    -Dlibffado=disabled \
+
+  meson compile -C builddir
+  popd
+fi
+echo "Built pipewire in ${pw_src_dir}/builddir"
+if [[ ! -d "${pw_dist_dir}" ]]; then
+  pushd ${pw_src_dir}
+  meson install -C builddir
+  popd
+fi
+echo "Installed pipewire to ${pw_dist_dir}"
+
+echo export PW_DIST_DIR="${pw_dist_dir}" >> ${ENV_FILE}
+echo export PKG_CONFIG_PATH="${pw_dist_dir}/lib/pkgconfig:\${PKG_CONFIG_PATH}" >> ${ENV_FILE}
+echo export LIBRARY_PATH="${pw_dist_dir}/lib:\${LIBRARY_PATH}" >> ${ENV_FILE}
+echo export LD_LIBRARY_PATH="${pw_dist_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
 
 ##########################################################################
 # POST INSTALL
 ##########################################################################
 
 chmod +x "$ENV_FILE"
-
-# # tidy up (reduce size of Docker image)
-# apt-get clean autoclean
-# apt-get autoremove --purge -y
-# rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
 
 df -h .
 echo "Setup script done"

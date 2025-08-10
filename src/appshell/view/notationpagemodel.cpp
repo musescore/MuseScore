@@ -24,6 +24,8 @@
 #include "internal/applicationuiactions.h"
 #include "dockwindow/idockwindow.h"
 
+#include "async/async.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
@@ -58,6 +60,14 @@ void NotationPageModel::init()
         onNotationChanged();
     });
 
+    extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
+        updateExtensionsToolBarVisibility();
+    });
+
+    extensionsProvider()->manifestChanged().onReceive(this, [this](const muse::extensions::Manifest&) {
+        updateExtensionsToolBarVisibility();
+    });
+
     brailleConfiguration()->braillePanelEnabledChanged().onNotify(this, [this]() {
         emit isBraillePanelVisibleChanged();
     });
@@ -66,9 +76,14 @@ void NotationPageModel::init()
 
     updateDrumsetPanelVisibility();
     updatePercussionPanelVisibility();
+    updateExtensionsToolBarVisibility();
 
     notationConfiguration()->useNewPercussionPanelChanged().onNotify(this, [this]() {
         updateDrumsetPanelVisibility();
+        updatePercussionPanelVisibility();
+    });
+
+    notationConfiguration()->percussionPanelAutoShowModeChanged().onNotify(this, [this]() {
         updatePercussionPanelVisibility();
     });
 }
@@ -91,6 +106,11 @@ QString NotationPageModel::undoRedoToolBarName() const
 QString NotationPageModel::noteInputBarName() const
 {
     return NOTE_INPUT_BAR_NAME;
+}
+
+QString NotationPageModel::extensionsToolBarName() const
+{
+    return EXTENSIONS_TOOLBAR_NAME;
 }
 
 QString NotationPageModel::palettesPanelName() const
@@ -156,25 +176,14 @@ void NotationPageModel::onNotationChanged()
     }
 
     INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
-    if (!notationConfiguration()->useNewPercussionPanel()) {
-        noteInput->stateChanged().onNotify(this, [this]() {
-            updateDrumsetPanelVisibility();
-            updatePercussionPanelVisibility();
-        });
-        return;
-    }
-
-    INotationInteractionPtr notationInteraction = notation->interaction();
-    notationInteraction->selectionChanged().onNotify(this, [this]() {
+    noteInput->stateChanged().onNotify(this, [this]() {
         updateDrumsetPanelVisibility();
         updatePercussionPanelVisibility();
     });
 
-    noteInput->noteInputStarted().onReceive(this, [this](bool) {
-        updatePercussionPanelVisibility();
-    });
-
-    noteInput->noteInputEnded().onNotify(this, [this]() {
+    INotationInteractionPtr notationInteraction = notation->interaction();
+    notationInteraction->selectionChanged().onNotify(this, [this]() {
+        updateDrumsetPanelVisibility();
         updatePercussionPanelVisibility();
     });
 }
@@ -206,10 +215,14 @@ void NotationPageModel::updateDrumsetPanelVisibility()
     }
 
     auto setDrumsetPanelOpen = [this, window](bool open) {
-        if (open == window->isDockOpenAndCurrentInFrame(DRUMSET_PANEL_NAME)) {
+        if (open == window->isDockOpen(DRUMSET_PANEL_NAME)) {
             return;
         }
-        dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, open));
+
+        //! NOTE: ensure we don't dispatch it multiple times in succession
+        muse::async::Async::call(this, [=]() {
+            dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, open));
+        });
     };
 
     // This should never be open when the new percussion panel is in use...
@@ -234,16 +247,22 @@ void NotationPageModel::updatePercussionPanelVisibility()
 {
     TRACEFUNC;
 
+    //! NOTE: If the user is entering percussion notes with the piano keyboard, we can assume that they
+    //! don't want the percussion panel to auto-show...
     const muse::dock::IDockWindow* window = dockWindowProvider()->window();
-    if (!window) {
+    if (!window || window->isDockOpen(PIANO_KEYBOARD_PANEL_NAME)) {
         return;
     }
 
     auto setPercussionPanelOpen = [this, window](bool open) {
-        if (open == window->isDockOpenAndCurrentInFrame(PERCUSSION_PANEL_NAME)) {
+        if (open == window->isDockOpen(PERCUSSION_PANEL_NAME)) {
             return;
         }
-        dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(PERCUSSION_PANEL_NAME, open));
+
+        //! NOTE: ensure we don't dispatch it multiple times in succession
+        muse::async::Async::call(this, [=]() {
+            dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(PERCUSSION_PANEL_NAME, open));
+        });
     };
 
     // This should never be open when the old drumset panel is in use...
@@ -253,14 +272,13 @@ void NotationPageModel::updatePercussionPanelVisibility()
     }
 
     const PercussionPanelAutoShowMode autoShowMode = notationConfiguration()->percussionPanelAutoShowMode();
-    const bool autoClose = notationConfiguration()->autoClosePercussionPanel();
-
     const INotationPtr notation = globalContext()->currentNotation();
     if (!notation || !notation->elements() || autoShowMode == PercussionPanelAutoShowMode::NEVER) {
         return;
     }
 
     const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+    const bool autoClose = notationConfiguration()->autoClosePercussionPanel();
     if (noteInput && !noteInput->isNoteInputMode() && autoShowMode == PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT) {
         if (autoClose) {
             setPercussionPanelOpen(false);
@@ -308,4 +326,34 @@ void NotationPageModel::updatePercussionPanelVisibility()
     }
 
     setPercussionPanelOpen(true);
+}
+
+void NotationPageModel::updateExtensionsToolBarVisibility()
+{
+    const muse::dock::IDockWindow* window = dockWindowProvider()->window();
+    if (!window) {
+        return;
+    }
+
+    auto setExtensionsToolBarOpen = [this](bool open) {
+        //! NOTE: ensure we don't dispatch it multiple times in succession
+        muse::async::Async::call(this, [=]() {
+            dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(EXTENSIONS_TOOLBAR_NAME, open));
+        });
+    };
+
+    bool noItems = true;
+
+    muse::extensions::ManifestList enabledExtensions = extensionsProvider()->manifestList(muse::extensions::Filter::Enabled);
+    for (const muse::extensions::Manifest& m : enabledExtensions) {
+        for (const muse::extensions::Action& a : m.actions) {
+            if (!a.showOnToolbar) {
+                continue;
+            }
+
+            noItems = false;
+        }
+    }
+
+    setExtensionsToolBarOpen(!noItems);
 }

@@ -20,7 +20,7 @@
          <mdiv>
             <score>
                <scoreDef>
-                  <pgHead>
+                  <pgHead func="first">
                      <rend halign="center" valign="top">
                         <rend type="title" fontsize="x-large">Absolute chord labels</rend>
                         <lb />
@@ -66,8 +66,8 @@
                            </chord>
                         </layer>
                      </staff>
-                     <harm xml:id="h1bgzmmn" startid="#c16epnbl">E^7</harm>
-                     <harm xml:id="h1fslw0p" startid="#c4pb0j8">Bb/D</harm>
+                     <harm xml:id="h1bgzmmn" staff="1" startid="#c16epnbl">E^7</harm>
+                     <harm xml:id="h1fslw0p" staff="1" startid="#c4pb0j8">Bb/D</harm>
                   </measure>
                   <measure xml:id="m17w9yor" n="2">
                      <staff xml:id="m2s1" n="1">
@@ -98,9 +98,9 @@
                            </chord>
                         </layer>
                      </staff>
-                     <harm xml:id="h5dj6v7" startid="#rezq8rc">EM</harm>
-                     <harm xml:id="hnjtfvy" startid="#c15hduaw">E7</harm>
-                     <harm xml:id="hg8bgbi" startid="#cccssun">not a chord</harm>
+                     <harm xml:id="h5dj6v7" staff="1" startid="#rezq8rc">EM</harm>
+                     <harm xml:id="hnjtfvy" staff="1" startid="#c15hduaw">E7</harm>
+                     <harm xml:id="hg8bgbi" staff="1" startid="#cccssun">not a chord</harm>
                   </measure>
                   <measure xml:id="m9o8nmk" n="3">
                      <staff xml:id="m3s1" n="1">
@@ -141,9 +141,9 @@
                            </note>
                         </layer>
                      </staff>
-                     <harm xml:id="h1dlo6v9" startid="#c944xvj">Bbb</harm>
-                     <harm xml:id="h1uvdsty" startid="#c1lo3mzp">Gb-</harm>
-                     <harm xml:id="h1e83rhs" startid="#n6az5co" place="below">Eb0</harm>
+                     <harm xml:id="h1dlo6v9" staff="1" startid="#c944xvj">Bbb</harm>
+                     <harm xml:id="h1uvdsty" staff="1" startid="#c1lo3mzp">Gb-</harm>
+                     <harm xml:id="h1e83rhs" staff="1" startid="#n6az5co" place="below">Eb0</harm>
                   </measure>
                   <measure xml:id="mjnwqx9" right="end" n="4">
                      <staff xml:id="m4s1" n="1">
@@ -180,9 +180,9 @@
                            </note>
                         </layer>
                      </staff>
-                     <harm xml:id="h1jmd9aa" startid="#c1dl6j78">Db9Maj7</harm>
-                     <harm xml:id="htlcc69" startid="#n11s8pxj" place="below">Bbono5ma7</harm>
-                     <harm xml:id="hp721hh" startid="#nj8l4lr">Bb-Maj7/Db</harm>
+                     <harm xml:id="h1jmd9aa" staff="1" startid="#c1dl6j78">Db9Maj7</harm>
+                     <harm xml:id="htlcc69" staff="1" startid="#n11s8pxj" place="below">Bbono5ma7</harm>
+                     <harm xml:id="hp721hh" staff="1" startid="#nj8l4lr">Bb-Maj7/Db</harm>
                   </measure>
                </section>
             </score>

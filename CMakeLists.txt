@@ -16,9 +16,9 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22) # Min. required by Qt 6.9
 
 project(MuseScore LANGUAGES C CXX)
 
@@ -46,6 +46,7 @@ set(MUSESCORE_BUILD_CONFIGURATION "app" CACHE STRING "Build configuration")
 # Possible MUSESCORE_BUILD_CONFIGURATION values:
 # - app             - for desktop app
 # - app-portable    - for desktop portable app (Windows build for PortableApps.com)
+# - app-web         - for web app (experimental for internal use)
 # - vtest           - for visual tests (for CI)
 # - utest           - for unit tests (for CI)
 
@@ -67,18 +68,31 @@ option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
 option(MUE_BUILD_ENGRAVING_TESTS "Build engraving tests" ON)
 option(MUE_BUILD_ENGRAVING_DEVTOOLS "Build engraving devtools" ON)
 option(MUE_BUILD_ENGRAVING_PLAYBACK "Build engraving playback" ON)
-option(MUE_BUILD_IMPORTEXPORT_MODULE "Build importexport module" ON)
+
+# IMPORT EXPORT MODULES
+option(MUE_BUILD_IMPEXP_BB_MODULE "Build importexport bb module" ON)
+option(MUE_BUILD_IMPEXP_BWW_MODULE "Build importexport bww module" ON)
+option(MUE_BUILD_IMPEXP_CAPELLA_MODULE "Build importexport capella module" ON)
+option(MUE_BUILD_IMPEXP_MIDI_MODULE "Build importexport midi module" ON)
+option(MUE_BUILD_IMPEXP_MUSEDATA_MODULE "Build importexport musedata module" ON)
+option(MUE_BUILD_IMPEXP_MUSICXML_MODULE "Build importexport musicxml module" ON)
+option(MUE_BUILD_IMPEXP_OVE_MODULE "Build importexport ove module" ON)
+option(MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE "Build importexport audioexport module" ON)
+option(MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE "Build importexport imagesexport module" ON)
+option(MUE_BUILD_IMPEXP_GUITARPRO_MODULE "Build importexport guitarpro module" ON)
+option(MUE_BUILD_IMPEXP_MEI_MODULE "Build importexport mei module" ON)
+option(MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE "Build importexport videoexport module" OFF)
+
 option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
-option(MUE_BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF)
-option(MUE_BUILD_IMAGESEXPORT_MODULE "Build imagesexport module" ON)
 option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
-option(MUE_BUILD_MUSESOUNDS_MODULE "Build muse sounds module" ON)
+option(MUE_BUILD_MUSESOUNDS_MODULE "Build MuseSounds module" ON)
 option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
 option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON)
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
 option(MUE_BUILD_PLAYBACK_MODULE "Build playback module" ON)
 option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ON)
+option(MUE_BUILD_PRINT_MODULE "Build print module" ON)
 option(MUE_BUILD_PROJECT_MODULE "Build project module" ON)
 option(MUE_BUILD_PROJECT_TESTS "Build project tests" ON)
 
@@ -97,7 +111,7 @@ option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with t
 option(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "Path to precompiled dependencies (macOS only; optional: if not specified, some libraries will be used from the system and others will be built from source)" "")
 
 option(MUSE_COMPILE_USE_UNITY "Use unity build" ON)
-option(MUSE_COMPILE_USE_CCACHE "Try use ccache" ON)
+option(MUSE_COMPILE_USE_COMPILER_CACHE "Try to use compiler cache: tries ccache, sccache, buildcache in that order. Use COMPILER_CACHE_PROGRAM to specify a specific compiler cache program." ON)
 option(MUSE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
 
 # === System libraries ===
@@ -115,10 +129,23 @@ option(MUE_ENABLE_ENGRAVING_RENDER_DEBUG "Enable rendering debug" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_ACCESS "Enable diagnostic engraving check layout data access" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
 
+if (OS_IS_LIN)
+    option(MUSE_PIPEWIRE_AUDIO_DRIVER "Use PipeWire audio driver" OFF) # Turns ON on CI
+elseif (OS_IS_FBSD)
+    option(MUSE_PIPEWIRE_AUDIO_DRIVER "Use PipeWire audio driver" OFF)
+endif()
 
 ###########################################
 # Setup Configure
 ###########################################
+
+# default
+set(QT_ADD_STATEMACHINE ON)
+set(QT_ADD_LINGUISTTOOLS ON)
+set(QT_ADD_CONCURRENT ON)
+set(QT_ADD_WEBSOCKET OFF)
+set(QT_QPROCESS_SUPPORTED ON)
+set(QT_CONCURRENT_SUPPORTED ON)
 
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake")
     include(${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake)
@@ -135,9 +162,10 @@ set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
-if (MUSE_COMPILE_USE_CCACHE)
-    include(TryUseCcache)
-endif()
+
+if (MUSE_COMPILE_USE_COMPILER_CACHE)
+    include(SetupCompilerCache)
+endif(MUSE_COMPILE_USE_COMPILER_CACHE)
 
 
 ###########################################
@@ -150,12 +178,6 @@ if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     # These are included in the precompiled dependencies, so let's use them from there
     set(MUE_COMPILE_USE_SYSTEM_FLAC ON)
     set(MUE_COMPILE_USE_SYSTEM_OPUS ON)
-endif()
-
-set(QT_MIN_VERSION "6.2.4")
-set(QT_ADD_STATEMACHINE ON)
-if (MUSE_MODULE_NETWORK_WEBSOCKET)
-    set(QT_ADD_WEBSOCKET ON)
 endif()
 
 include(SetupQt6)

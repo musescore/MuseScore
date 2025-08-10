@@ -28,28 +28,14 @@
 
 #include "async/channel.h"
 #include "realfn.h"
+#include "global/types/number.h"
+#include "types/flags.h"
+#include "types/number.h"
 
 #include "mpetypes.h"
 #include "playbacksetupdata.h"
 
 namespace muse::mpe {
-struct NoteEvent;
-struct RestEvent;
-using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
-using PlaybackEventList = std::vector<PlaybackEvent>;
-using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
-
-using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
-using DynamicLevelLayers = std::map<layer_idx_t, DynamicLevelMap>;
-
-struct PlaybackParam;
-using PlaybackParamList = std::vector<PlaybackParam>;
-using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
-using PlaybackParamLayers = std::map<layer_idx_t, PlaybackParamMap>;
-
-using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamLayers>;
-using OffStreamChanges = async::Channel<PlaybackEventsMap, PlaybackParamList>;
-
 struct ArrangementContext
 {
     timestamp_t nominalTimestamp = 0;
@@ -60,6 +46,16 @@ struct ArrangementContext
     staff_layer_idx_t staffLayerIndex = 0;
     double bps = 0.0;
 
+    bool hasStart() const
+    {
+        return actualDuration > 0;
+    }
+
+    bool hasEnd() const
+    {
+        return actualDuration != mpe::INFINITE_DURATION;
+    }
+
     bool operator==(const ArrangementContext& other) const
     {
         return nominalTimestamp == other.nominalTimestamp
@@ -68,7 +64,7 @@ struct ArrangementContext
                && actualDuration == other.actualDuration
                && voiceLayerIndex == other.voiceLayerIndex
                && staffLayerIndex == other.staffLayerIndex
-               && bps == other.bps;
+               && muse::is_equal(bps, other.bps);
     }
 };
 
@@ -102,6 +98,8 @@ struct ExpressionContext
 
 struct NoteEvent
 {
+    NoteEvent() = default;
+
     explicit NoteEvent(ArrangementContext&& arrangementCtx,
                        PitchContext&& pitchCtx,
                        ExpressionContext&& expressionCtx)
@@ -198,7 +196,7 @@ private:
     {
         m_arrangementCtx.actualDuration = m_arrangementCtx.nominalDuration;
 
-        if (articulationsApplied.empty()) {
+        if (articulationsApplied.empty() || m_arrangementCtx.nominalDuration == INFINITE_DURATION) {
             return;
         }
 
@@ -261,6 +259,8 @@ private:
 
 struct RestEvent
 {
+    RestEvent() = default;
+
     explicit RestEvent(ArrangementContext&& arrangement)
         : m_arrangementCtx(arrangement) {}
 
@@ -289,37 +289,97 @@ private:
     ArrangementContext m_arrangementCtx;
 };
 
-struct PlaybackParam {
+struct ControllerChangeEvent {
     enum Type : signed char {
         Undefined = -1,
-        SoundPreset,
-        PlayingTechnique,
-        Syllable,
+        Modulation,
+        SustainPedalOnOff,
+        PitchBend,
     };
 
-    using Value = String;
+    using Value = muse::number_t<float>;
 
     Type type = Undefined;
-    Value val;
+    Value val; // [0;1]
+    layer_idx_t layerIdx = 0;
 
-    std::optional<bool> isPersistent;
-
-    PlaybackParam(Type t, Value v)
-        : type(t), val(std::move(v))
+    bool operator==(const ControllerChangeEvent& e) const
     {
-    }
-
-    bool operator==(const PlaybackParam& other) const
-    {
-        return type == other.type && val == other.val;
+        return type == e.type && val == e.val && layerIdx == e.layerIdx;
     }
 };
+
+using ControllerChangeEventList = std::vector<ControllerChangeEvent>;
+
+struct TextArticulationEvent {
+    enum FlagType : unsigned char {
+        NoFlags = 0,
+        StartsAtPlaybackPosition,
+    };
+
+    String text;
+    layer_idx_t layerIdx = 0;
+    Flags<FlagType> flags;
+
+    bool operator==(const TextArticulationEvent& e) const
+    {
+        return text == e.text && layerIdx == e.layerIdx && flags == e.flags;
+    }
+};
+
+using TextArticulationEventList = std::vector<TextArticulationEvent>;
+
+struct SoundPresetChangeEvent {
+    String code;
+    layer_idx_t layerIdx = 0;
+
+    bool operator==(const SoundPresetChangeEvent& e) const
+    {
+        return code == e.code && layerIdx == e.layerIdx;
+    }
+};
+
+using SoundPresetChangeEventList = std::vector<SoundPresetChangeEvent>;
+
+struct SyllableEvent {
+    enum FlagType : unsigned char {
+        NoFlags = 0,
+        StartsAtPlaybackPosition,
+        HyphenedToNext,
+    };
+
+    String text;
+    layer_idx_t layerIdx = 0;
+    Flags<FlagType> flags;
+
+    bool operator==(const SyllableEvent& e) const
+    {
+        return text == e.text && layerIdx == e.layerIdx && flags == e.flags;
+    }
+};
+
+using SyllableEventList = std::vector<SyllableEvent>;
+
+using PlaybackEvent = std::variant<std::monostate, NoteEvent,
+                                   RestEvent,
+                                   TextArticulationEvent,
+                                   SoundPresetChangeEvent,
+                                   SyllableEvent,
+                                   ControllerChangeEvent>;
+
+using PlaybackEventList = std::vector<PlaybackEvent>;
+using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
+
+using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
+using DynamicLevelLayers = std::map<layer_idx_t, DynamicLevelMap>;
+
+using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers>;
+using OffStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, bool /*flushOffstream*/>;
 
 struct PlaybackData {
     PlaybackEventsMap originEvents;
     PlaybackSetupData setupData;
     DynamicLevelLayers dynamics;
-    PlaybackParamLayers params;
 
     MainStreamChanges mainStream;
     OffStreamChanges offStream;
@@ -328,8 +388,7 @@ struct PlaybackData {
     {
         return originEvents == other.originEvents
                && setupData == other.setupData
-               && dynamics == other.dynamics
-               && params == other.params;
+               && dynamics == other.dynamics;
     }
 
     bool isValid() const

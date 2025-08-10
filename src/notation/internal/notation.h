@@ -24,7 +24,8 @@
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+
+#include "engraving/iengravingconfiguration.h"
 
 #include "../inotation.h"
 #include "igetscore.h"
@@ -59,6 +60,8 @@ public:
     muse::async::Notification openChanged() const override;
 
     bool hasVisibleParts() const override;
+
+    bool isMaster() const override;
 
     ViewMode viewMode() const override;
     void setViewMode(const ViewMode& viewMode) override;

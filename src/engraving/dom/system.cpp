@@ -215,7 +215,7 @@ void System::removeLastMeasure()
 Box* System::vbox() const
 {
     if (!m_ml.empty()) {
-        if (m_ml[0]->isVBox() || m_ml[0]->isTBox()) {
+        if (m_ml[0]->isVBox() || m_ml[0]->isTBox() || m_ml[0]->isFBox()) {
             return toBox(m_ml[0]);
         }
     }
@@ -367,6 +367,27 @@ staff_idx_t System::prevVisibleStaff(staff_idx_t startStaffIdx) const
     return muse::nidx;
 }
 
+staff_idx_t System::lastVisibleStaff() const
+{
+    size_t nstaves = score()->nstaves();
+    if (nstaves < 1) {
+        return muse::nidx;
+    }
+
+    for (staff_idx_t i = nstaves - 1; ; --i) {
+        Staff* staff = score()->staff(i);
+        SysStaff* sysStaff = m_staves[i];
+        if (staff->show() && sysStaff->show()) {
+            return i;
+        }
+        if (i == 0) {
+            break;
+        }
+    }
+
+    return muse::nidx;
+}
+
 //---------------------------------------------------------
 //   firstVisibleStaff
 //---------------------------------------------------------
@@ -489,6 +510,8 @@ void System::add(EngravingItem* el)
     case ElementType::PICK_SCRAPE_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT:
     {
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
@@ -913,10 +936,10 @@ double System::spacerDistance(bool up) const
             Spacer* sp = up ? m->vspacerUp(staff) : m->vspacerDown(staff);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = sp->gap();
+                    dist = sp->absoluteGap();
                     break;
                 } else {
-                    dist = std::max(dist, sp->gap().val());
+                    dist = std::max(dist, sp->absoluteGap());
                 }
             }
         }
@@ -1003,7 +1026,7 @@ double System::firstNoteRestSegmentX(bool leading) const
             break;
         }
     }
-    LOGD("firstNoteRestSegmentX: did not find segment");
+
     return margin;
 }
 
@@ -1100,12 +1123,18 @@ staff_idx_t System::firstSysStaffOfPart(const Part* part) const
 staff_idx_t System::firstVisibleSysStaffOfPart(const Part* part) const
 {
     staff_idx_t firstIdx = firstSysStaffOfPart(part);
+    if (firstIdx == muse::nidx) {
+        return muse::nidx;
+    }
+
     for (staff_idx_t idx = firstIdx; idx < firstIdx + part->nstaves(); ++idx) {
-        if (staff(idx)->show()) {
+        const SysStaff* s = staff(idx);
+        if (s && s->show()) {
             return idx;
         }
     }
-    return muse::nidx;   // No visible staves on this part.
+
+    return muse::nidx; // No visible staves on this part.
 }
 
 //---------------------------------------------------------

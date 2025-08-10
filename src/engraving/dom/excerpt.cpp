@@ -27,6 +27,7 @@
 #include "containers.h"
 
 #include "dom/partialtie.h"
+#include "dom/playcounttext.h"
 #include "style/style.h"
 
 #include "barline.h"
@@ -460,8 +461,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         continue;
                     }
                     Harmony* h  = toHarmony(e);
-                    int rootTpc = mu::engraving::transposeTpc(h->rootTpc(), interval, true);
-                    int baseTpc = mu::engraving::transposeTpc(h->baseTpc(), interval, true);
                     // mmrests are on by default in part
                     // if this harmony is attached to an mmrest,
                     // be sure to transpose harmony in underlying measure as well
@@ -471,7 +470,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         if (hh->staff() != h->staff()) {
                             continue;
                         }
-                        score->undoTransposeHarmony(hh, rootTpc, baseTpc);
+                        score->undoTransposeHarmony(hh, interval);
                     }
                 }
             }
@@ -573,6 +572,10 @@ void MasterScore::initExcerpt(Excerpt* excerpt)
 
     Excerpt::createExcerpt(excerpt);
     excerpt->setInited(true);
+
+    if (!score->style().isDefault(Sid::timeSigPlacement)) {
+        score->resetStyleValue(Sid::timeSigPlacement);
+    }
 }
 
 void MasterScore::initParts(Excerpt* excerpt)
@@ -726,15 +729,31 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
     ns->styleChanged();
 }
 
-static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* m, track_idx_t track)
+static void updateSpatium(void* oldElement, EngravingItem* newElement)
 {
+    double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
+    double newSpatium = newElement->spatium();
+    if (!muse::RealIsEqual(oldSpatium, newSpatium)) {
+        newElement->spatiumChanged(oldSpatium, newSpatium);
+    }
+}
+
+static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* nm, track_idx_t track)
+{
+    const auto handleTuplet = [&](Tuplet* tuplet) {
+        tuplet->clear();
+        tuplet->setTrack(track);
+        tuplet->setParent(nm);
+        tuplet->styleChanged();
+        tuplet->scanElements(ot, updateSpatium);
+    };
+
     ot->setTrack(ocr->track());
+
     Tuplet* nt = tupletMap.findNew(ot);
-    if (nt == 0) {
+    if (!nt) {
         nt = toTuplet(ot->linkedClone());
-        nt->setTrack(track);
-        nt->setParent(m);
-        nt->setScore(ncr->score());
+        handleTuplet(nt);
         tupletMap.add(ot, nt);
 
         Tuplet* nt1 = nt;
@@ -742,9 +761,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
             Tuplet* nt2 = tupletMap.findNew(ot->tuplet());
             if (nt2 == 0) {
                 nt2 = toTuplet(ot->tuplet()->linkedClone());
-                nt2->setTrack(track);
-                nt2->setParent(m);
-                nt2->setScore(ncr->score());
+                handleTuplet(nt2);
                 tupletMap.add(ot->tuplet(), nt2);
             }
             nt2->add(nt1);
@@ -784,6 +801,7 @@ static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* sc
         if (tie) {
             newNote->setTieBack(tie);
             tie->setEndNote(newNote);
+            tie->setTrack2(newNote->track());
         } else {
             LOGD("addTiesToMap: cannot find tie");
         }
@@ -794,7 +812,24 @@ static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* sc
     }
 }
 
-static void addGraceNoteTies(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap, Score* score)
+static void addBackSpanners(Note* on, Note* nn, Score* score)
+{
+    // add back spanners (going back from end to start spanner element
+    // makes sure the 'other' spanner anchor element is already set up)
+    // 'on' is the old spanner end note and 'nn' is the new spanner end note
+    for (Spanner* oldSp : on->spannerBack()) {
+        Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
+        if (newStart != nullptr) {
+            Spanner* newSp = toSpanner(oldSp->linkedClone());
+            newSp->setNoteSpan(newStart, nn);
+            score->addElement(newSp);
+        } else {
+            LOGD("cloneStaff2: cannot find spanner start note");
+        }
+    }
+}
+
+static void addGraceNoteTiesAndBackSpanners(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap, Score* score)
 {
     for (Chord* oldGrace : originalGraceNotes) {
         Chord* newGrace = newChord->graceNoteAt(oldGrace->graceIndex());
@@ -808,6 +843,7 @@ static void addGraceNoteTies(GraceNotesGroup& originalGraceNotes, Chord* newChor
             Note* newNote = newGrace->notes().at(i);
 
             addTies(originalNote, newNote, tieMap, score);
+            addBackSpanners(originalNote, newNote, score);
         }
     }
 }
@@ -850,14 +886,24 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
 
     if (mb->isHBox()) {
         nmb = Factory::createHBox(score->dummy()->system());
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
     } else if (mb->isVBox()) {
         if (toBox(mb)->isTitleFrame()) {
             nmb = Factory::createTitleVBox(score->dummy()->system());
         } else {
             nmb = Factory::createVBox(score->dummy()->system());
         }
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
+    } else if (mb->isFBox()) {
+        nmb = Factory::createFBox(score->dummy()->system());
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
     } else if (mb->isTBox()) {
         nmb = Factory::createTBox(score->dummy()->system());
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
         Text* text = toTBox(mb)->text();
         EngravingItem* ne = text->linkedClone();
         ne->setScore(score);
@@ -911,14 +957,10 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         ns->add(ne);
                         // for chord symbols,
                         // re-render with new style settings
-                        if (ne->isHarmony()) {
-                            Harmony* h = toHarmony(ne);
-                            h->render();
-                        } else if (ne->isFretDiagram()) {
+                        if (ne->isFretDiagram()) {
                             Harmony* h = toHarmony(toFretDiagram(ne)->harmony());
                             if (h) {
                                 processLinkedClone(h, score, strack);
-                                h->render();
                             }
                         }
                     }
@@ -926,6 +968,11 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
 
                 //If track is not mapped skip the following
                 if (muse::value(trackList, srcTrack, muse::nidx) == muse::nidx) {
+                    continue;
+                }
+
+                // TimeSig and KeySig announce should never be cloned
+                if (oseg->isTimeSigAnnounceType() || oseg->isKeySigAnnounceType()) {
                     continue;
                 }
 
@@ -987,9 +1034,16 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         }
 
                         ne->setScore(score);
-                        if (oe->isBarLine() && adjustedBarlineSpan) {
+                        if (oe->isBarLine()) {
                             BarLine* nbl = toBarLine(ne);
-                            nbl->setSpanStaff(adjustedBarlineSpan);
+                            if (adjustedBarlineSpan) {
+                                nbl->setSpanStaff(adjustedBarlineSpan);
+                            }
+                            if (PlayCountText* newText = nbl->playCountText()) {
+                                newText->setTrack(track);
+                                PlayCountText* oldText = toBarLine(oe)->playCountText();
+                                score->undo(new Link(newText, oldText));
+                            }
                         } else if (oe->isChordRest()) {
                             ChordRest* ocr = toChordRest(oe);
                             ChordRest* ncr = toChordRest(ne);
@@ -1013,7 +1067,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                             if (oe->isChord()) {
                                 Chord* och = toChord(ocr);
                                 Chord* nch = toChord(ncr);
-                                addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
+                                addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
                                 size_t n = och->notes().size();
                                 for (size_t i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
@@ -1052,7 +1106,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                         }
                                     }
                                 }
-                                addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
+                                addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                                 addTremoloTwoChord(och, nch, prevTremolo);
                             }
                         }
@@ -1097,6 +1151,8 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                 // even if track not in excerpt, we need to clone system elements
                 if (e->systemFlag() && e->track() == 0) {
                     track = 0;
+                } else if (e->isFretDiagram() && toFretDiagram(e)->isInFretBox()) {
+                    track = e->track();
                 } else {
                     continue;
                 }
@@ -1146,7 +1202,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
             continue;
         }
         MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
-        measures->add(newMeasure);
+        measures->append(newMeasure);
     }
 
     size_t n = sourceStavesIndexes.size();
@@ -1211,7 +1267,7 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
 
     for (MeasureBase* mb = oscore->firstMeasure(); mb; mb = mb->next()) {
         MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, {}, {}, tieMap);
-        measures->add(newMeasure);
+        measures->append(newMeasure);
     }
 
     collectTieEndPoints(tieMap);
@@ -1343,7 +1399,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
-                        addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
+                        addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
                         size_t n = och->notes().size();
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
@@ -1363,7 +1419,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                                 }
                             }
                         }
-                        addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
+                        addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                         addTremoloTwoChord(och, nch, prevTremolo);
 
                         // Check grace note staff move validity
@@ -1477,15 +1533,6 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         score->undoAddElement(element, false /*addToLinkedStaves*/);
     };
 
-    auto updateSpatium = [](void* oldElement, EngravingItem* newElement)
-    {
-        double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
-        double newSpatium = newElement->spatium();
-        if (!muse::RealIsEqual(oldSpatium, newSpatium)) {
-            newElement->spatiumChanged(oldSpatium, newSpatium);
-        }
-    };
-
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1495,6 +1542,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 continue;
             }
             if (oldEl->systemFlag() && dstStaffIdx != 0) {
+                continue;
+            }
+            bool alreadyCloned = oldEl->systemFlag() && oldEl->findLinkedInScore(score);
+            if (alreadyCloned) {
                 continue;
             }
             EngravingItem* newEl = oldEl->linkedClone();
@@ -1534,7 +1585,11 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
                     bool systemObject = e->systemFlag() && e->track() == 0;
                     EngravingItem* linkedElement = e->findLinkedInScore(score);
-                    bool alreadyCloned = linkedElement && linkedElement->parent() == ns;
+                    Segment* linkedParent = linkedElement ? toSegment(linkedElement->parent()) : nullptr;
+                    bool alreadyCloned = linkedParent && (linkedParent == ns
+                                                          || (linkedParent->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)
+                                                              && ns->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)
+                                                              && linkedParent->tick() == ns->tick()));
                     bool cloneAnnotation = !alreadyCloned && (e->elementAppliesToTrack(srcTrack) || systemObject);
 
                     if (!cloneAnnotation) {
@@ -1563,44 +1618,20 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
                     ChordRest* ncr = toChordRest(ne);
-                    Tuplet* ot     = ocr->tuplet();
+                    Tuplet* ot = ocr->tuplet();
                     if (ot) {
-                        Tuplet* nt = tupletMap.findNew(ot);
-                        if (nt == 0) {
-                            // nt = new Tuplet(*ot);
-                            nt = toTuplet(ot->linkedClone());
-                            nt->clear();
-                            nt->setTrack(dstTrack);
-                            nt->setParent(nm);
-                            nt->styleChanged();
-                            nt->scanElements(ot, updateSpatium);
-                            tupletMap.add(ot, nt);
-                        }
-                        ncr->setTuplet(nt);
-                        nt->add(ncr);
+                        cloneTuplets(ocr, ncr, ot, tupletMap, nm, dstTrack);
                     }
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
-                        addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
+                        addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
                         size_t n = och->notes().size();
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
                             Note* nn = nch->notes().at(i);
                             addTies(on, nn, tieMap, score);
-                            // add back spanners (going back from end to start spanner element
-                            // makes sure the 'other' spanner anchor element is already set up)
-                            // 'on' is the old spanner end note and 'nn' is the new spanner end note
-                            for (Spanner* oldSp : on->spannerBack()) {
-                                Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
-                                if (newStart != nullptr) {
-                                    Spanner* newSp = toSpanner(oldSp->linkedClone());
-                                    newSp->setNoteSpan(newStart, nn);
-                                    score->addElement(newSp);
-                                } else {
-                                    LOGD("cloneStaff2: cannot find spanner start note");
-                                }
-                            }
+                            addBackSpanners(on, nn, score);
                             GuitarBend* bendBack = on->bendBack();
                             Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
                             if (bendBack && newStartNote) {
@@ -1627,7 +1658,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                 nn->addSpannerFor(newBend);
                             }
                         }
-                        addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
+                        addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                         addTremoloTwoChord(och, nch, prevTremolo);
                     }
                 }
@@ -1646,7 +1677,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     for (auto i : oscore->spanner()) {
         Spanner* s = i.second;
-        if (!(s->tick() >= startTick && s->tick2() < endTick) || s->excludeFromOtherParts()) {
+        if (!(s->tick() >= startTick && s->tick2() <= endTick) || s->excludeFromOtherParts()) {
             continue;
         }
 

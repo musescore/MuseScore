@@ -31,9 +31,13 @@
 //
 // This file implements MOCK_METHOD.
 
-#ifndef GOOGLEMOCK_INCLUDE_GMOCK_INTERNAL_GMOCK_FUNCTION_MOCKER_H_  // NOLINT
-#define GOOGLEMOCK_INCLUDE_GMOCK_INTERNAL_GMOCK_FUNCTION_MOCKER_H_  // NOLINT
+// IWYU pragma: private, include "gmock/gmock.h"
+// IWYU pragma: friend gmock/.*
 
+#ifndef GOOGLEMOCK_INCLUDE_GMOCK_GMOCK_FUNCTION_MOCKER_H_
+#define GOOGLEMOCK_INCLUDE_GMOCK_GMOCK_FUNCTION_MOCKER_H_
+
+#include <cstddef>
 #include <type_traits>  // IWYU pragma: keep
 #include <utility>      // IWYU pragma: keep
 
@@ -66,22 +70,22 @@ constexpr bool PrefixOf(const char* a, const char* b) {
   return *a == 0 || (*a == *b && internal::PrefixOf(a + 1, b + 1));
 }
 
-template <int N, int M>
+template <size_t N, size_t M>
 constexpr bool StartsWith(const char (&prefix)[N], const char (&str)[M]) {
   return N <= M && internal::PrefixOf(prefix, str);
 }
 
-template <int N, int M>
+template <size_t N, size_t M>
 constexpr bool EndsWith(const char (&suffix)[N], const char (&str)[M]) {
   return N <= M && internal::PrefixOf(suffix, str + M - N);
 }
 
-template <int N, int M>
+template <size_t N, size_t M>
 constexpr bool Equals(const char (&a)[N], const char (&b)[M]) {
   return N == M && internal::PrefixOf(a, b);
 }
 
-template <int N>
+template <size_t N>
 constexpr bool ValidateSpec(const char (&spec)[N]) {
   return internal::Equals("const", spec) ||
          internal::Equals("override", spec) ||
@@ -105,8 +109,11 @@ constexpr bool ValidateSpec(const char (&spec)[N]) {
 using internal::FunctionMocker;
 }  // namespace testing
 
-#define MOCK_METHOD(...) \
-  GMOCK_PP_VARIADIC_CALL(GMOCK_INTERNAL_MOCK_METHOD_ARG_, __VA_ARGS__)
+#define MOCK_METHOD(...)                                               \
+  GMOCK_INTERNAL_WARNING_PUSH()                                        \
+  GMOCK_INTERNAL_WARNING_CLANG(ignored, "-Wunused-member-function")    \
+  GMOCK_PP_VARIADIC_CALL(GMOCK_INTERNAL_MOCK_METHOD_ARG_, __VA_ARGS__) \
+  GMOCK_INTERNAL_WARNING_POP()
 
 #define GMOCK_INTERNAL_MOCK_METHOD_ARG_1(...) \
   GMOCK_INTERNAL_WRONG_ARITY(__VA_ARGS__)
@@ -174,8 +181,9 @@ using internal::FunctionMocker;
       _Signature)>::Result                                                     \
   GMOCK_INTERNAL_EXPAND(_CallType)                                             \
       _MethodName(GMOCK_PP_REPEAT(GMOCK_INTERNAL_PARAMETER, _Signature, _N))   \
-          GMOCK_PP_IF(_Constness, const, ) _RefSpec _NoexceptSpec              \
-          GMOCK_PP_IF(_Override, override, ) GMOCK_PP_IF(_Final, final, ) {    \
+          GMOCK_PP_IF(_Constness, const, )                                     \
+              _RefSpec _NoexceptSpec GMOCK_PP_IF(_Override, override, )        \
+                  GMOCK_PP_IF(_Final, final, ) {                               \
     GMOCK_MOCKER_(_N, _Constness, _MethodName)                                 \
         .SetOwnerAndName(this, #_MethodName);                                  \
     return GMOCK_MOCKER_(_N, _Constness, _MethodName)                          \
@@ -198,7 +206,7 @@ using internal::FunctionMocker;
             GMOCK_INTERNAL_A_MATCHER_ARGUMENT, _Signature, _N));               \
   }                                                                            \
   mutable ::testing::FunctionMocker<GMOCK_PP_REMOVE_PARENS(_Signature)>        \
-      GMOCK_MOCKER_(_N, _Constness, _MethodName)
+  GMOCK_MOCKER_(_N, _Constness, _MethodName)
 
 #define GMOCK_INTERNAL_EXPAND(...) __VA_ARGS__
 
@@ -508,4 +516,4 @@ using internal::FunctionMocker;
 #define GMOCK_MOCKER_(arity, constness, Method) \
   GTEST_CONCAT_TOKEN_(gmock##constness##arity##_##Method##_, __LINE__)
 
-#endif  // GOOGLEMOCK_INCLUDE_GMOCK_INTERNAL_GMOCK_FUNCTION_MOCKER_H_
+#endif  // GOOGLEMOCK_INCLUDE_GMOCK_GMOCK_FUNCTION_MOCKER_H_

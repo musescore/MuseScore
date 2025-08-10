@@ -30,14 +30,18 @@ public:
     NotationPlaybackStub();
 
     void init() override;
+    void reload() override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
     engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const override;
     bool isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const override;
 
     const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
-    void triggerEventsForItems(const std::vector<const EngravingItem*>& items) override;
-    void triggerMetronome(int tick) override;
+
+    void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound) override;
+    void triggerMetronome(muse::midi::tick_t tick) override;
+    void triggerCountIn(muse::midi::tick_t tick, muse::secs_t& totalCountInDuration) override;
+    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
 
     engraving::InstrumentTrackIdSet existingTrackIdSet() const override;
     muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const override;
@@ -58,7 +62,7 @@ public:
     const LoopBoundaries& loopBoundaries() const override;
     muse::async::Notification loopBoundariesChanged() const override;
 
-    const Tempo& tempo(muse::midi::tick_t tick) const override;
+    const Tempo& multipliedTempo(muse::midi::tick_t tick) const override;
     MeasureBeat beat(muse::midi::tick_t tick) const override;
     muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const override;
 

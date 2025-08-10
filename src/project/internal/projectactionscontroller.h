@@ -43,7 +43,8 @@
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
-#include "update/imusesoundscheckupdatescenario.h"
+#include "musesounds/imusesoundscheckupdatescenario.h"
+#include "musesounds/imusesamplercheckupdatescenario.h"
 #include "extensions/iextensionsprovider.h"
 #include "tours/itoursservice.h"
 
@@ -76,7 +77,8 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::Inject<playback::IPlaybackController> playbackController = { this };
     muse::Inject<print::IPrintProvider> printProvider = { this };
     muse::Inject<muse::io::IFileSystem> fileSystem = { this };
-    muse::Inject<muse::update::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
+    muse::Inject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
+    muse::Inject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario = { this };
     muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     muse::Inject<muse::tours::IToursService> toursService = { this };
 
@@ -92,7 +94,7 @@ public:
     bool isUrlSupported(const QUrl& url) const override;
     bool isFileSupported(const muse::io::path_t& path) const override;
     muse::Ret openProject(const ProjectFile& file) override;
-    bool closeOpenedProject(bool quitApp = false) override;
+    bool closeOpenedProject(bool goToHome = true) override;
     bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
     bool saveProjectLocally(
         const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
@@ -121,7 +123,7 @@ private:
     muse::Ret openMuseScoreUrl(const QUrl& url);
     muse::Ret openScoreFromMuseScoreCom(const QUrl& url);
 
-    bool checkCanIgnoreError(const muse::Ret& ret, const muse::io::path_t& filepath);
+    bool shouldRetryLoadAfterError(const muse::Ret& ret, const muse::io::path_t& filepath);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
     void warnFileTooNew(const muse::io::path_t& filepath);
     bool askIfUserAgreesToOpenCorruptedProject(const muse::String& projectName, const std::string& errorText);
@@ -132,6 +134,9 @@ private:
 
     muse::Ret canSaveProject() const;
     bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
+    void saveProjectAt(const muse::actions::ActionData& args);
+    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
+    bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
 
     struct AudioFile {
         QString format;
@@ -148,10 +153,6 @@ private:
     void publish();
     void shareAudio(const AudioFile& existingAudio);
     void shareAudio() { shareAudio(AudioFile()); }
-
-    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
-    bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
-
     void alsoShareAudioCom(const AudioFile& audio);
 
     muse::Ret askAudioGenerationSettings() const;
@@ -199,10 +200,12 @@ private:
 
     void openProjectProperties();
 
-    muse::io::path_t selectScoreOpeningFile();
+    muse::async::Promise<muse::io::path_t> selectScoreOpeningFile() const;
     muse::io::path_t selectScoreSavingFile(const muse::io::path_t& defaultFilePath, const QString& saveTitle);
 
     muse::RetVal<INotationProjectPtr> loadProject(const muse::io::path_t& filePath);
+    muse::Ret loadWithFallback(const std::shared_ptr<INotationProject>& project, const muse::io::path_t& loadPath,
+                               const std::string& format);
     muse::Ret doOpenProject(const muse::io::path_t& filePath);
     muse::Ret doOpenCloudProject(const muse::io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
     muse::Ret doOpenCloudProjectOffline(const muse::io::path_t& filePath, const QString& displayNameOverride);

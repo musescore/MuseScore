@@ -321,12 +321,19 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
             if (s.at(c).isDigit()) {
                 int alter = 0;
                 size_t cutoff = c;
-                int deg = s.right(s.size() - c).toInt();
+                String degreeString = s;
+                static const std::wregex NOT_DIGITS = std::wregex(L"[^0-9]+");
+                degreeString.remove(NOT_DIGITS);
+                int deg = degreeString.toInt();
                 //account for if the flat/sharp is stuck to the end of add
                 if (c) {
                     if (s.at(c - 1) == u'#') {
                         cutoff -= 1;
-                        alter = +1;
+                        if (deg == 7) {
+                            alter = 0;
+                        } else {
+                            alter = +1;
+                        }
                     } else if (s.at(c - 1) == u'b') {
                         cutoff -= 1;
                         alter = -1;

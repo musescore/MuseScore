@@ -21,7 +21,7 @@
  */
 #include "uri.h"
 
-#include "../stringutils.h"
+#include "global/stringutils.h"
 
 #include "log.h"
 
@@ -228,6 +228,18 @@ Val UriQuery::param(const std::string& key, const Val& def) const
 void UriQuery::addParam(const std::string& key, const Val& val)
 {
     m_params[key] = val;
+}
+
+UriQuery& UriQuery::set(const ValMap& vals)
+{
+    m_params = vals;
+    return *this;
+}
+
+UriQuery& UriQuery::set(const std::string& key, const Val& val)
+{
+    m_params[key] = val;
+    return *this;
 }
 
 UriQuery UriQuery::addingParam(const std::string& key, const Val& val) const

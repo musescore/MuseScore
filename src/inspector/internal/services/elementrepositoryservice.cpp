@@ -23,6 +23,7 @@
 
 #include "types/texttypes.h"
 
+#include "engraving/dom/barline.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/bracketItem.h"
@@ -32,16 +33,18 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/hook.h"
 #include "engraving/dom/layoutbreak.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/note.h"
 #include "engraving/dom/pedal.h"
+#include "engraving/dom/playcounttext.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stem.h"
+#include "engraving/dom/text.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/volta.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/lyrics.h"
 
 #include "log.h"
 
@@ -104,11 +107,13 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::TEXTLINE:
     case mu::engraving::ElementType::NOTELINE:
     case mu::engraving::ElementType::SLUR:
+    case mu::engraving::ElementType::HAMMER_ON_PULL_OFF:
     case mu::engraving::ElementType::TIE:
     case mu::engraving::ElementType::LAISSEZ_VIB:
     case mu::engraving::ElementType::PARTIAL_TIE:
     case mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE:
     case mu::engraving::ElementType::PALM_MUTE: return findLines(elementType);
+    // case mu::engraving::ElementType::PLAY_COUNT_TEXT: return findPlayCountText();
     default:
         QList<mu::engraving::EngravingItem*> resultList;
 
@@ -323,6 +328,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findLines(mu::eng
         { mu::engraving::ElementType::TEXTLINE, mu::engraving::ElementType::TEXTLINE_SEGMENT },
         { mu::engraving::ElementType::NOTELINE, mu::engraving::ElementType::NOTELINE_SEGMENT },
         { mu::engraving::ElementType::SLUR, mu::engraving::ElementType::SLUR_SEGMENT },
+        { mu::engraving::ElementType::HAMMER_ON_PULL_OFF, mu::engraving::ElementType::HAMMER_ON_PULL_OFF_SEGMENT },
         { mu::engraving::ElementType::TIE, mu::engraving::ElementType::TIE_SEGMENT },
         { mu::engraving::ElementType::LAISSEZ_VIB, mu::engraving::ElementType::LAISSEZ_VIB_SEGMENT },
         { mu::engraving::ElementType::PARTIAL_TIE, mu::engraving::ElementType::PARTIAL_TIE_SEGMENT },
@@ -386,13 +392,27 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findSectionBreaks
     return resultList;
 }
 
+EngravingItem* ElementRepositoryService::findTextDelegate(EngravingItem* element) const
+{
+    if (!element->isBarLine()) {
+        return element;
+    }
+
+    if (PlayCountText* playCount = toBarLine(element)->playCountText()) {
+        return playCount;
+    }
+
+    return element;
+}
+
 QList<mu::engraving::EngravingItem*> ElementRepositoryService::findTexts() const
 {
     QList<mu::engraving::EngravingItem*> resultList;
 
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
-        if (TEXT_ELEMENT_TYPES.contains(element->type())) {
-            resultList << element;
+        EngravingItem* el = findTextDelegate(element);
+        if (TEXT_ELEMENT_TYPES.contains(el->type())) {
+            resultList << el;
         }
     }
 

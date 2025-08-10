@@ -51,6 +51,6 @@ static muse::testing::SuiteEnvironment musicxml_se(
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;
 
-    loadInstrumentTemplates(":/data/instruments.xml");
+    loadInstrumentTemplates(":/engraving/instruments/instruments.xml");
 }
     );

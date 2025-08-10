@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UI_IUICONFIGURATION_H
-#define MUSE_UI_IUICONFIGURATION_H
+#pragma once
 
 #include <optional>
 
@@ -46,8 +45,9 @@ public:
     virtual ~IUiConfiguration() = default;
 
     virtual ThemeList themes() const = 0;
-    virtual QStringList possibleFontFamilies() const = 0;
     virtual QStringList possibleAccentColors() const = 0;
+    virtual QStringList possibleFontFamilies() const = 0;
+    virtual void setNonTextFonts(const QStringList& fontFamilies) = 0;
 
     virtual bool isDarkMode() const = 0;
     virtual void setIsDarkMode(bool dark) = 0;
@@ -75,9 +75,15 @@ public:
     virtual int iconsFontSize(IconSizeType type) const = 0;
     virtual async::Notification iconsFontChanged() const = 0;
 
+    virtual io::path_t appIconPath() const = 0;
+
     virtual std::string musicalFontFamily() const = 0;
     virtual int musicalFontSize() const = 0;
     virtual async::Notification musicalFontChanged() const = 0;
+
+    virtual std::string musicalTextFontFamily() const = 0;
+    virtual int musicalTextFontSize() const = 0;
+    virtual async::Notification musicalTextFontChanged() const = 0;
 
     virtual std::string defaultFontFamily() const = 0;
     virtual int defaultFontSize() const = 0;
@@ -99,12 +105,17 @@ public:
     virtual async::Notification windowGeometryChanged() const = 0;
 
     virtual bool isGlobalMenuAvailable() const = 0;
+    virtual bool isSystemDragSupported() const = 0;
 
     virtual void applyPlatformStyle(QWindow* window) = 0;
 
     virtual bool isVisible(const QString& key, bool def = true) const = 0;
     virtual void setIsVisible(const QString& key, bool val) = 0;
     virtual async::Notification isVisibleChanged(const QString& key) const = 0;
+
+    virtual QString uiItemState(const QString& itemName) const = 0;
+    virtual void setUiItemState(const QString& itemName, const QString& value) = 0;
+    virtual async::Notification uiItemStateChanged(const QString& itemName) const = 0;
 
     virtual ToolConfig toolConfig(const QString& toolName, const ToolConfig& defaultConfig) const = 0;
     virtual void setToolConfig(const QString& toolName, const ToolConfig& config) = 0;
@@ -115,5 +126,3 @@ public:
     virtual int tooltipDelay() const = 0;
 };
 }
-
-#endif // MUSE_UI_IUICONFIGURATION_H

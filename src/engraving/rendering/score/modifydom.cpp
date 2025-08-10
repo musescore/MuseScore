@@ -209,6 +209,8 @@ void ModifyDom::setTrackForChordGraceNotes(Measure* measure, const DomAccessor& 
 
 void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
 {
+    measure = measure->coveringMMRestOrThis();
+
     // Move segments between measure which need to move
 
     // Move key and time signature segments to the correct measure.
@@ -221,7 +223,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         // Check if the change applies to the beginning of the repeat section as well as the continuation
         const std::vector<Measure*> measures = findFollowingRepeatMeasures(measure);
         for (const Measure* repeatMeasure : measures) {
-            if (repeatMeasure == measure->nextMeasure()) {
+            if (repeatMeasure == measure->nextMeasureMM()) {
                 continue;
             }
             const Fraction startTick = repeatMeasure->tick();
@@ -271,10 +273,17 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         return ClefToBarlinePosition::AUTO;
     };
 
-    Measure* nextMeasure = measure->nextMeasure();
+    MeasureBase* nextMb = measure->nextMM();
+
+    if (!nextMb || !nextMb->isMeasure()) {
+        return;
+    }
+
+    Measure* nextMeasure = toMeasure(nextMb);
 
     const bool sigsShouldBeInThisMeasure = ((measure->repeatEnd() && ctx.conf().styleB(Sid::changesBeforeBarlineRepeats))
                                             || (measure->repeatJump() && ctx.conf().styleB(Sid::changesBeforeBarlineOtherJumps)));
+    std::vector<Segment*> segsToRemove;
 
     std::vector<Segment*> segsToMoveToNextMeasure;
     for (Segment& seg : measure->segments()) {
@@ -308,7 +317,12 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         }
 
         // Move key sigs and time sigs at the end of this measure into the next measure
-        if ((seg.isKeySigType() || seg.isTimeSigType()) && (!sigsShouldBeInThisMeasure || !changeAppliesToRepeatAndContinuation(seg))) {
+        if ((seg.isKeySigType() || seg.isTimeSigType()) && !seg.header() && !seg.trailer()
+            && (!sigsShouldBeInThisMeasure || !changeAppliesToRepeatAndContinuation(seg))) {
+            if (nextMeasure && nextMeasure->findSegmentR(seg.segmentType(), Fraction(0, 1))) {
+                segsToRemove.push_back(&seg);
+                continue;
+            }
             segsToMoveToNextMeasure.push_back(&seg);
         }
     }
@@ -327,7 +341,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
             continue;
         }
 
-        // Move clefs at the beginning of this measure into the previous measure
+        // Move clefs at the beginning of the next measure into this measure
         if (seg.isClefType()) {
             ClefToBarlinePosition pos = clefSegBarlinePosition(seg);
             // Clef position explicitly set by user
@@ -352,9 +366,19 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         }
 
         // Move key sigs and time sigs at the start of the next measure to the end of this measure
-        if ((seg.isTimeSigType() || seg.isKeySigType()) && sigsShouldBeInThisMeasure && changeAppliesToRepeatAndContinuation(seg)) {
+        if ((seg.isTimeSigType() || seg.isKeySigType()) && !seg.header() && !seg.trailer()
+            && sigsShouldBeInThisMeasure && changeAppliesToRepeatAndContinuation(seg)) {
+            if (measure->findSegmentR(seg.segmentType(), measure->ticks())) {
+                segsToRemove.push_back(&seg);
+                continue;
+            }
             segsToMoveToThisMeasure.push_back(&seg);
         }
+    }
+
+    for (Segment* seg : segsToRemove) {
+        // Don't add duplicate segs to a measure
+        ctx.mutDom().doUndoRemoveElement(seg);
     }
 
     for (Segment* seg : segsToMoveToNextMeasure) {
@@ -379,7 +403,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     // Sort segments at start of first measure
     Measure* prevMeasure = measure->prevMeasure();
     if (prevMeasure && prevMeasure == ctx.dom().firstMeasure()) {
-        ModifyDom::removeAndAddBeginSegments(prevMeasure);
+        removeAndAddBeginSegments(prevMeasure);
     }
 }
 

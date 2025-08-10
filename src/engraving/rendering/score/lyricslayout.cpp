@@ -126,26 +126,16 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         }
     }
 
-    bool styleDidChange = false;
-    if (item->isEven() && (item->textStyleType() != TextStyleType::LYRICS_EVEN)) {
-        item->initTextStyleType(TextStyleType::LYRICS_EVEN, /* preserveDifferent */ true);
-        styleDidChange = true;
-    }
-    if (!item->isEven() && (item->textStyleType() != TextStyleType::LYRICS_ODD)) {
-        item->initTextStyleType(TextStyleType::LYRICS_ODD, /* preserveDifferent */ true);
-        styleDidChange = true;
-    }
-
-    if (styleDidChange) {
-        item->styleChanged();
-    }
-
     createOrRemoveLyricsLine(item, ctx);
 
     if (item->isMelisma() || hasNumber) {
         // use the melisma style alignment setting
         if (item->isStyled(Pid::ALIGN)) {
-            item->setAlign(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>());
+            if (ctx.conf().styleB(Sid::lyricsCenterDashedSyllables) && !(item->separator() && item->separator()->isEndMelisma())) {
+                item->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
+            } else {
+                item->setAlign(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>());
+            }
         }
     } else {
         // use the text style alignment setting
@@ -224,7 +214,16 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
         Fraction endTick = item->tick();
         const Measure* lyricsMeasure = item->lyrics()->segment()->measure();
         const Segment* endCRSeg = lyricsMeasure ? lyricsMeasure->last(SegmentType::ChordRest) : nullptr;
-        const ChordRest* endCR = endCRSeg && !endCRSeg->empty() ? toChordRest(endCRSeg->elist().front()) : nullptr;
+
+        const ChordRest* endCR = nullptr;
+        if (endCRSeg && !endCRSeg->empty()) {
+            for (EngravingItem* cr : endCRSeg->elist()) {
+                if (cr && cr->isChordRest()) {
+                    endCR = toChordRest(cr);
+                    break;
+                }
+            }
+        }
 
         if (item->nextLyrics()) {
             endTick = item->nextLyrics()->tick();
@@ -302,15 +301,24 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     const bool isPartialLyricsLine = item->isPartialLyricsLineSegment();
     LyricsLine* lyricsLine = item->lyricsLine();
 
-    ChordRest* endChordRest = toChordRest(lyricsLine->endElement());
+    ChordRest* endCR = lyricsLine->endElement()
+                       && lyricsLine->endElement()->isChordRest() ? toChordRest(lyricsLine->endElement()) : nullptr;
     Lyrics* endLyrics = nullptr;
-    for (Lyrics* lyr : endChordRest->lyrics()) {
-        if (lyr->no() == item->no()) {
-            endLyrics = lyr;
-            break;
+    if (endCR) {
+        for (Lyrics* lyr : endCR->lyrics()) {
+            if (lyr->no() == item->no()) {
+                endLyrics = lyr;
+                break;
+            }
         }
     }
-    if (!endLyrics && !isPartialLyricsLine && !endChordRest->hasFollowingJumpItem()) {
+
+    // When the end element is a timetick segment rather than a chordrest, the start element should be a chord with a following repeat
+    ChordRest* startCR = lyricsLine->startElement()
+                         && lyricsLine->startElement()->isChordRest() ? toChordRest(lyricsLine->startElement()) : nullptr;
+    bool hasFollowingJump = endCR ? endCR->hasFollowingJumpItem() : (startCR ? startCR->hasFollowingJumpItem() : false);
+
+    if (!endLyrics && !isPartialLyricsLine && !hasFollowingJump) {
         return;
     }
 
@@ -321,7 +329,12 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     const MStyle& style = item->style();
 
     double startX = lyricsLineStartX(item);
-    double endX = lyricsLineEndX(item, endLyrics);
+    double endX = 0.0;
+    if (endCR) {
+        endX = lyricsLineEndX(item, endLyrics);
+    } else {
+        endX = startCR ? startCR->measure()->endingXForOpenEndedLines() : endX;
+    }
 
     adjustLyricsLineYOffset(item, endLyrics);
 
@@ -342,6 +355,10 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
 
     if (curLength > dashMinLength || forceDash) {
         dashCount = std::max(dashCount, 1);
+    }
+
+    if (style.styleB(Sid::lyricsLimitDashCount)) {
+        dashCount = std::min(dashCount, style.styleI(Sid::lyricsMaxDashCount));
     }
 
     if (curLength < dashMinLength && dashCount > 0) {
@@ -382,6 +399,9 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
 
 Lyrics* LyricsLayout::findNextLyrics(const ChordRest* endChordRest, int verseNumber)
 {
+    if (!endChordRest) {
+        return nullptr;
+    }
     for (Segment* segment = endChordRest->segment()->next1(SegmentType::ChordRest); segment;
          segment = segment->next1(SegmentType::ChordRest)) {
         if (!segment->elementAt(endChordRest->track())) {
@@ -849,7 +869,8 @@ double LyricsLayout::lyricsLineEndX(const LyricsLineSegment* item, const Lyrics*
 void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics* endLyrics)
 {
     const LyricsLine* lyricsLine = item->lyricsLine();
-    const ChordRest* endChordRest = toChordRest(lyricsLine->endElement());
+    ChordRest* endChordRest = lyricsLine->endElement()
+                              && lyricsLine->endElement()->isChordRest() ? toChordRest(lyricsLine->endElement()) : nullptr;
     const Lyrics* startLyrics = lyricsLine->lyrics();
     const bool melisma = lyricsLine->isEndMelisma();
 

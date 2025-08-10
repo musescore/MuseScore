@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_GUITARBENDLAYOUT_DEV_H
-#define MU_ENGRAVING_GUITARBENDLAYOUT_DEV_H
+#pragma once
 
 #include "layoutcontext.h"
 
@@ -57,5 +55,3 @@ private:
     static void checkConflictWithOtherBends(GuitarBendSegment* item);
 };
 }
-
-#endif // MU_ENGRAVING_GUITARBENDLAYOUT_DEV_H

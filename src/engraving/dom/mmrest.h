@@ -28,7 +28,6 @@
 #include "utils.h"
 
 namespace mu::engraving {
-/// This class implements a multimeasure rest.
 class MMRest final : public Rest
 {
     OBJECT_ALLOCATOR(engraving, MMRest)
@@ -41,7 +40,6 @@ public:
     MMRest* clone() const override { return new MMRest(*this, false); }
     EngravingItem* linkedClone() override { return new MMRest(*this, true); }
 
-    bool numberVisible() const { return m_numberVisible; }
     bool shouldShowNumber() const;
 
     PropertyValue propertyDefault(Pid) const override;

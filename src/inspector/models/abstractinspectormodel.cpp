@@ -20,13 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "abstractinspectormodel.h"
+#include "dom/barline.h"
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/property.h"
 
 #include "shortcuts/shortcutstypes.h"
 
 #include "types/texttypes.h"
 
-#include "dom/tempotext.h"
+#include "engraving/dom/tempotext.h"
 
 #include "log.h"
 
@@ -49,6 +51,8 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::VIBRATO_SEGMENT, InspectorModelType::TYPE_VIBRATO },
     { mu::engraving::ElementType::SLUR, InspectorModelType::TYPE_SLUR },
     { mu::engraving::ElementType::SLUR_SEGMENT, InspectorModelType::TYPE_SLUR },
+    { mu::engraving::ElementType::HAMMER_ON_PULL_OFF, InspectorModelType::TYPE_HAMMER_ON_PULL_OFF },
+    { mu::engraving::ElementType::HAMMER_ON_PULL_OFF_SEGMENT, InspectorModelType::TYPE_HAMMER_ON_PULL_OFF },
     { mu::engraving::ElementType::TIE, InspectorModelType::TYPE_TIE },
     { mu::engraving::ElementType::TIE_SEGMENT, InspectorModelType::TYPE_TIE },
     { mu::engraving::ElementType::LAISSEZ_VIB, InspectorModelType::TYPE_LAISSEZ_VIB },
@@ -59,6 +63,7 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
     { mu::engraving::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
     { mu::engraving::ElementType::BAR_LINE, InspectorModelType::TYPE_BARLINE },
+    { mu::engraving::ElementType::PLAY_COUNT_TEXT, InspectorModelType::TYPE_PLAY_COUNT_TEXT },
     { mu::engraving::ElementType::MARKER, InspectorModelType::TYPE_MARKER },
     { mu::engraving::ElementType::JUMP, InspectorModelType::TYPE_JUMP },
     { mu::engraving::ElementType::KEYSIG, InspectorModelType::TYPE_KEYSIGNATURE },
@@ -82,7 +87,10 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::TBOX, InspectorModelType::TYPE_TEXT_FRAME },// text frame
     { mu::engraving::ElementType::VBOX, InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
     { mu::engraving::ElementType::HBOX, InspectorModelType::TYPE_HORIZONTAL_FRAME },// horizontal frame
+    { mu::engraving::ElementType::FBOX, InspectorModelType::TYPE_FRET_FRAME },// fret diagram legend
     { mu::engraving::ElementType::ARTICULATION, InspectorModelType::TYPE_ARTICULATION },
+    { mu::engraving::ElementType::TAPPING,      InspectorModelType::TYPE_TAPPING },
+    { mu::engraving::ElementType::TAPPING_HALF_SLUR_SEGMENT, InspectorModelType::TYPE_TAPPING },
     { mu::engraving::ElementType::ORNAMENT, InspectorModelType::TYPE_ORNAMENT },
     { mu::engraving::ElementType::TRILL, InspectorModelType::TYPE_ORNAMENT },
     { mu::engraving::ElementType::TRILL_SEGMENT, InspectorModelType::TYPE_ORNAMENT },
@@ -121,9 +129,9 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
 
 static const QMap<mu::engraving::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
     { mu::engraving::HairpinType::CRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
-    { mu::engraving::HairpinType::DECRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { mu::engraving::HairpinType::DIM_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
     { mu::engraving::HairpinType::CRESC_LINE, InspectorModelType::TYPE_CRESCENDO },
-    { mu::engraving::HairpinType::DECRESC_LINE, InspectorModelType::TYPE_DIMINUENDO },
+    { mu::engraving::HairpinType::DIM_LINE, InspectorModelType::TYPE_DIMINUENDO },
 };
 
 static const QMap<mu::engraving::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
@@ -173,19 +181,44 @@ void AbstractInspectorModel::onCurrentNotationChanged()
         onNotationChanged({}, {});
     });
 
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& range) {
-        if (range.changedPropertyIdSet.empty() && range.changedStyleIdSet.empty()) {
+    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+        if (changes.isTextEditing) {
+            return;
+        }
+
+        if (changes.changedPropertyIdSet.empty() && changes.changedStyleIdSet.empty()) {
             return;
         }
 
         if (m_updatePropertiesAllowed && !isEmpty()) {
-            PropertyIdSet expandedPropertyIdSet = propertyIdSetFromStyleIdSet(range.changedStyleIdSet);
-            expandedPropertyIdSet.insert(range.changedPropertyIdSet.cbegin(), range.changedPropertyIdSet.cend());
-            onNotationChanged(expandedPropertyIdSet, range.changedStyleIdSet);
+            PropertyIdSet expandedPropertyIdSet = propertyIdSetFromStyleIdSet(changes.changedStyleIdSet);
+            expandedPropertyIdSet.insert(changes.changedPropertyIdSet.cbegin(), changes.changedPropertyIdSet.cend());
+            onNotationChanged(expandedPropertyIdSet, changes.changedStyleIdSet);
         }
 
         m_updatePropertiesAllowed = true;
     });
+}
+
+bool AbstractInspectorModel::isSystemObjectBelowBottomStaff() const
+{
+    return m_isSystemObjectBelowBottomStaff;
+}
+
+void AbstractInspectorModel::updateIsSystemObjectBelowBottomStaff()
+{
+    bool soBelowBottomStaff = false;
+    for (EngravingItem* item : m_elementList) {
+        if (item->isSystemObjectBelowBottomStaff()) {
+            soBelowBottomStaff = true;
+            break;
+        }
+    }
+
+    if (m_isSystemObjectBelowBottomStaff != soBelowBottomStaff) {
+        m_isSystemObjectBelowBottomStaff = soBelowBottomStaff;
+        emit isSystemObjectBelowBottomStaffChanged(m_isSystemObjectBelowBottomStaff);
+    }
 }
 
 void AbstractInspectorModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
@@ -284,6 +317,25 @@ static bool isPureDynamics(const QList<mu::engraving::EngravingItem*>& selectedE
     return true;
 }
 
+static bool barlineWithPlayText(const QList<mu::engraving::EngravingItem*>& selectedElementList)
+{
+    if (selectedElementList.empty()) {
+        return false;
+    }
+
+    for (const EngravingItem* item : selectedElementList) {
+        if (!item->isBarLine()) {
+            continue;
+        }
+
+        if (toBarLine(item)->playCountText()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
                                                                           const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
@@ -296,7 +348,7 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         }
 
         // Don't show the "Text" inspector panel for "pure" dynamics (i.e. without custom text)
-        if (TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) {
+        if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) || barlineWithPlayText(selectedElementList)) {
             types << InspectorSectionType::SECTION_TEXT;
         }
 
@@ -307,6 +359,7 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
 
     if (isRange) {
         types << InspectorSectionType::SECTION_MEASURES;
+        types << InspectorSectionType::SECTION_EMPTY_STAVES;
     }
 
     if (showPartsSection(selectedElementList)) {
@@ -376,7 +429,7 @@ void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingIt
         return;
     }
 
-    beginCommand(TranslatableString("undoableAction", "Edit element property"));
+    beginCommand(TranslatableString("undoableAction", "Edit %1").arg(propertyUserName(pid)));
 
     for (mu::engraving::EngravingItem* item : items) {
         IF_ASSERT_FAILED(item) {

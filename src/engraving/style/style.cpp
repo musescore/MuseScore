@@ -32,7 +32,6 @@
 
 #include "dom/mscore.h"
 #include "dom/pedal.h"
-#include "dom/types.h"
 
 #include "defaultstyle.h"
 
@@ -145,6 +144,10 @@ bool MStyle::readProperties(XmlReader& e)
                 Align align = TConv::fromXml(e.readText(), Align());
                 set(idx, align);
             } break;
+            case P_TYPE::ALIGN_H: {
+                AlignH align = TConv::fromXml(e.readAsciiText(), AlignH::HCENTER);
+                set(idx, align);
+            } break;
             case P_TYPE::POINT: {
                 double x = e.doubleAttribute("x", 0.0);
                 double y = e.doubleAttribute("y", 0.0);
@@ -207,6 +210,27 @@ bool MStyle::readProperties(XmlReader& e)
                 break;
             case P_TYPE::TIMESIG_MARGIN:
                 set(idx, TConv::fromXml(e.readAsciiText(), TimeSigVSMargin::RIGHT_ALIGN_TO_BARLINE));
+                break;
+            case P_TYPE::NOTE_SPELLING_TYPE:
+                set(idx, TConv::fromXml(e.readAsciiText(), NoteSpellingType::STANDARD));
+                break;
+            case P_TYPE::CHORD_PRESET_TYPE:
+                set(idx, TConv::fromXml(e.readAsciiText(), ChordStylePreset::STANDARD));
+                break;
+            case P_TYPE::PARENTHESES_MODE:
+                set(idx, TConv::fromXml(e.readAsciiText(), ParenthesesMode::NONE));
+                break;
+            case P_TYPE::LH_TAPPING_SYMBOL:
+                set(idx, TConv::fromXml(e.readAsciiText(), LHTappingSymbol::DOT));
+                break;
+            case P_TYPE::RH_TAPPING_SYMBOL:
+                set(idx, TConv::fromXml(e.readAsciiText(), RHTappingSymbol::T));
+                break;
+            case P_TYPE::TEXT_STYLE:
+                set(idx, TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT));
+                break;
+            case P_TYPE::PLAY_COUNT_PRESET:
+                set(idx, TConv::fromXml(e.readAsciiText(), RepeatPlayCountPreset::X_N));
                 break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
@@ -309,8 +333,6 @@ bool MStyle::read(IODevice* device, bool ign)
             readVersion(e.attribute("version"));
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
-                    m_preset = TConv::fromXml(e.asciiAttribute("preset", "Default"), ScoreStylePreset::DEFAULT);
-                    m_presetEdited = e.attribute("edited", String(u"false")) == "true";
                     read(e, nullptr);
                 } else {
                     e.unknown();
@@ -540,15 +562,115 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::articulationAnchorOther, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
         } else if (tag == "lineEndToSystemEndDistance") { // renamed in 4.5
             set(Sid::lineEndToBarlineDistance, Spatium(e.readDouble()));
+        } else if (tag == "useStandardNoteNames") {     // These settings were collapsed into one enum in 4.6
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::STANDARD);
+            }
+        } else if (tag == "useGermanNoteNames") {
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::GERMAN);
+            }
+        } else if (tag == "useFullGermanNoteNames") {
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::GERMAN_PURE);
+            }
+        } else if (tag == "useSolfeggioNoteNames") {
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::SOLFEGGIO);
+            }
+        } else if (tag == "useFrenchNoteNames") {
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::FRENCH);
+            }
+        } else if (tag == "chordModifierAdjust" && m_version < 460) {
+            set(Sid::chordModifierAdjust, compat::CompatUtils::convertChordExtModUnits(e.readDouble()));
+        } else if (tag == "chordExtensionAdjust" && m_version < 460) {
+            set(Sid::chordExtensionAdjust, compat::CompatUtils::convertChordExtModUnits(e.readDouble()));
+        } else if (tag == "chordDescriptionFile" && m_version < 460) {
+            AsciiStringView val = e.readAsciiText();
+            if (val == "chords_std.xml") {
+                set(Sid::chordDescriptionFile, String(u"chords_legacy.xml"));
+            } else {
+                set(Sid::chordDescriptionFile, String::fromAscii(val.ascii()));
+            }
+        } else if (tag == "chordStyle" && m_version < 460) {
+            AsciiStringView val = e.readAsciiText();
+            if (val == "std") {
+                set(Sid::chordStyle, ChordStylePreset::LEGACY);
+            } else {
+                set(Sid::chordStyle, TConv::fromXml(val, ChordStylePreset::STANDARD));
+            }
+        } else if (tag == "fretFrets" && m_version < 460) {
+            e.skipCurrentElement();
+        } else if (tag == "measureNumberHPlacement" && m_version < 460) {
+            // Before 460 PlacementH was used instead of AlignH, and was written as integer.
+            // We can't directly map the integer to AlignH because it's enumerated differently.
+            PlacementH hPlacement = PlacementH(e.readInt());
+            AlignH hAlign = hPlacement == PlacementH::LEFT ? AlignH::LEFT
+                            : hPlacement == PlacementH::CENTER ? AlignH::HCENTER : AlignH::RIGHT;
+            set(Sid::measureNumberHPlacement, hAlign);
+
+            if (value(Sid::measureNumberHPlacement).value<AlignH>() != AlignH::LEFT) {
+                // In this case it was assumed to be centered on the measure
+                set(Sid::measureNumberAlignToBarline, false);
+            }
+        } else if (tag == "mmRestRangeHPlacement" && m_version < 460) {
+            // Before 460 PlacementH was used instead of AlignH, and was written as integer.
+            // We can't directly map the integer to AlignH because it's enumerated differently.
+            PlacementH hPlacement = PlacementH(e.readInt());
+            AlignH hAlign = hPlacement == PlacementH::LEFT ? AlignH::LEFT
+                            : hPlacement == PlacementH::CENTER ? AlignH::HCENTER : AlignH::RIGHT;
+            set(Sid::mmRestRangeHPlacement, hAlign);
         } else if (!readProperties(e)) {
             e.unknown();
         }
+    }
+
+    if (m_version < 460) {
+        bool verticalChordAlign = value(Sid::maxChordShiftAbove).value<Spatium>() != Spatium(0.0)
+                                  || value(Sid::maxChordShiftBelow).value<Spatium>() != Spatium(0.0)
+                                  || value(Sid::maxFretShiftAbove).value<Spatium>() != Spatium(0.0)
+                                  || value(Sid::maxFretShiftBelow).value<Spatium>() != Spatium(0.0);
+        set(Sid::verticallyAlignChordSymbols, verticalChordAlign);
+        // Make sure new position styles are initially the same as align values
+        for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
+            Sid positionSid = compat::CompatUtils::positionStyleFromAlign(st.styleIdx());
+            if (positionSid == Sid::NOSTYLE) {
+                continue;
+            }
+            AlignH val = value(st.styleIdx()).value<Align>().horizontal;
+            set(positionSid, val);
+        }
+
+        if (value(Sid::measureNumberPosition).value<AlignH>() == AlignH::HCENTER) {
+            set(Sid::measureNumberHPlacement, AlignH::HCENTER);
+        }
+
+        if (value(Sid::pedalPlacement).value<PlacementV>() == PlacementV::BELOW
+            && value(Sid::pedalHookHeight).value<Spatium>().val() < 0) {
+            set(Sid::pedalHookHeight, -value(Sid::pedalHookHeight).value<Spatium>());
+        }
+        if (value(Sid::ottavaHookBelow).value<Spatium>().val() < 0) {
+            set(Sid::ottavaHookBelow, -value(Sid::ottavaHookBelow).value<Spatium>());
+        }
+        set(Sid::repeatPlayCountShow, false);
+    }
+
+    if (m_version == 450) {
+        // 450 spacing was a bit narrower
+        set(Sid::spacingDensity, 1.30);
     }
 
     if (m_version < 450) {
         // Didn't exist before 4.5. Default to false for compatibility.
         set(Sid::scaleRythmicSpacingForSmallNotes, false);
         set(Sid::maskBarlinesForText, false);
+        set(Sid::showCourtesiesRepeats, false);
+        set(Sid::showCourtesiesOtherJumps, false);
+        set(Sid::showCourtesiesAfterCancellingRepeats, false);
+        set(Sid::showCourtesiesAfterCancellingOtherJumps, false);
+        set(Sid::changesBeforeBarlineRepeats, false);
+        set(Sid::changesBeforeBarlineOtherJumps, false);
     }
 
     if (m_version < 420 && !MScore::testMode) {
@@ -574,17 +696,7 @@ bool MStyle::write(IODevice* device)
 
 void MStyle::save(XmlWriter& xml, bool optimize)
 {
-    muse::XmlStreamWriter::Attributes attributes;
-
-    if (preset() != ScoreStylePreset::DEFAULT) {
-        attributes.push_back({ "preset", TConv::toXml(preset()) });
-    }
-
-    if (presetEdited()) {
-        attributes.push_back({ "edited", String(u"true") });
-    }
-
-    xml.startElement("Style", attributes);
+    xml.startElement("Style");
 
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
         Sid idx = st.styleIdx();
@@ -606,6 +718,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
                 continue;
             }
             xml.tag(st.name(), TConv::toXml(a));
+        } else if (P_TYPE::ALIGN_H == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<AlignH>()));
         } else if (P_TYPE::LINE_TYPE == type) {
             xml.tagProperty(st.name(), value(idx));
         } else if (P_TYPE::TIE_PLACEMENT == type) {
@@ -618,6 +732,20 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigStyle>()));
         } else if (P_TYPE::TIMESIG_MARGIN == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigVSMargin>()));
+        } else if (P_TYPE::CHORD_PRESET_TYPE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<ChordStylePreset>()));
+        } else if (P_TYPE::NOTE_SPELLING_TYPE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<NoteSpellingType>()));
+        } else if (P_TYPE::LH_TAPPING_SYMBOL == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<LHTappingSymbol>()));
+        } else if (P_TYPE::RH_TAPPING_SYMBOL == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<RHTappingSymbol>()));
+        } else if (P_TYPE::TEXT_STYLE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TextStyleType>()));
+        } else if (P_TYPE::PARENTHESES_MODE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<ParenthesesMode>()));
+        } else if (P_TYPE::PLAY_COUNT_PRESET == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<RepeatPlayCountPreset>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

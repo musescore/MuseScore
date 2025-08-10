@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_BARLINE_H
-#define MU_ENGRAVING_BARLINE_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -53,6 +52,19 @@ static constexpr int BARLINE_SPAN_SHORT2_TO         = -1;
 struct BarLineTableItem {
     BarLineType type;
     const muse::TranslatableString& userName;
+};
+
+//---------------------------------------------------------
+//   BarLineEditData
+//---------------------------------------------------------
+
+class BarLineEditData : public ElementEditData
+{
+    OBJECT_ALLOCATOR(engraving, BarLineEditData)
+public:
+    double yoff1;
+    double yoff2;
+    virtual EditDataType type() override { return EditDataType::BarLineEditData; }
 };
 
 //---------------------------------------------------------
@@ -92,7 +104,7 @@ public:
     bool isEditable() const override { return true; }
 
     Segment* segment() const { return toSegment(explicitParent()); }
-    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
+    Measure* measure() const { return explicitParent() ? toMeasure(explicitParent()->explicitParent()) : nullptr; }
 
     void setSpanStaff(int val) { m_spanStaff = val; }
     void setSpanFrom(int val) { m_spanFrom = val; }
@@ -119,6 +131,9 @@ public:
     bool isTop() const;
     bool isBottom() const;
 
+    void setPlayCountTextSetting(const AutoCustomHide& v) { m_playCountTextSetting = v; }
+    AutoCustomHide playCountTextSetting() const { return m_playCountTextSetting; }
+
     int subtype() const override { return int(m_barLineType); }
     TranslatableString subtypeUserName() const override;
 
@@ -127,6 +142,15 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
+    EngravingItem* propertyDelegate(Pid) override;
+
+    PlayCountText* playCountText() const { return m_playCountText; }
+    void setPlayCountText(PlayCountText* text);
+    String playCountCustomText() const { return m_playCountCustomText; }
+    void setPlayCountCustomText(const String& v) { m_playCountCustomText = v; }
+
+    void setPlayCount(int playCount) { m_playCount = playCount; }
+    int playCount() const { return m_playCount; }
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
@@ -134,11 +158,14 @@ public:
     String accessibleInfo() const override;
     String accessibleExtraInfo() const override;
 
+    void setSelected(bool f) override;
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<PointF> gripsPositions(const EditData&) const override;
+
+    void styleChanged() override;
 
     static const std::vector<BarLineTableItem> barLineTable;
 
@@ -157,15 +184,16 @@ private:
     BarLine(Segment* parent);
     BarLine(const BarLine&);
 
-    void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
-
     int m_spanStaff = 0;         // span barline to next staff if true, values > 1 are used for importing from 2.x
-    int m_spanFrom = 0;         // line number on start and end staves
+    int m_spanFrom = 0;          // line number on start and end staves
     int m_spanTo = 0;
     BarLineType m_barLineType = BarLineType::NORMAL;
 
     ElementList m_el;          ///< fermata or other articulations
+
+    PlayCountText* m_playCountText = nullptr;     // Play count text for barlines on system object staves
+    AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
+    String m_playCountCustomText = u"";
+    int m_playCount = -1;                 // For use during copy & paste
 };
 } // namespace mu::engraving
-
-#endif

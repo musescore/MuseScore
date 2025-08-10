@@ -23,7 +23,6 @@
 #pragma once
 
 #include "../types/types.h"
-#include "types.h"
 
 #include "interval.h"
 
@@ -32,6 +31,7 @@
 namespace mu::engraving {
 class Score;
 class Chord;
+class ChordRest;
 class EngravingItem;
 class KeySig;
 class Note;
@@ -39,6 +39,7 @@ class Rest;
 class Measure;
 class Score;
 class Segment;
+class Spanner;
 class System;
 class Staff;
 class Tuplet;
@@ -60,6 +61,7 @@ extern String convertPitchStringFlatsAndSharpsToUnicode(const String& str);
 
 extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval, bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
+extern int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegrees, bool useDoubleSharpsFlats);
 
 constexpr int intervalListSize = 26;
 extern Interval intervalList[intervalListSize];
@@ -73,9 +75,7 @@ extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s);
 extern Segment* prevSeg1(Segment* seg);
 
-extern Volta* findVolta(const Segment* seg, const Score* score);
 extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr, const bool disableOverRepeats = true);
-extern Note* searchTieNote114(Note* note);
 
 extern int absStep(int pitch);
 extern int absStep(int tpc, int pitch);
@@ -102,6 +102,13 @@ extern bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff
 extern void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords, std::vector<Rest*>& rests);
 extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords);
 extern std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::vector<Staff*>& staves = {});
+extern std::unordered_set<EngravingItem*> collectElementsAnchoredToChordRest(const ChordRest* cr);
+extern std::unordered_set<EngravingItem*> collectElementsAnchoredToNote(const Note* cr, bool includeForwardTiesSpanners,
+                                                                        bool includeBackwardTiesSpanners);
+
+extern EngravingItem* findNewSystemMarkingParent(const EngravingItem* item, const Staff* staff);
+
+extern bool noteAnchoredSpannerIsInRange(const Spanner*, const Fraction& rangeStart, const Fraction& rangeEnd);
 
 extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
 
@@ -117,6 +124,5 @@ extern std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure)
 extern std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure);
 extern bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
 extern bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment* secondSeg);
-
-extern bool chordContainsNoteVal(const Chord* chord, const NoteVal& nval);
+extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg);
 } // namespace mu::engraving

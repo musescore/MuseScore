@@ -71,8 +71,6 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     WidgetUtils::setWidgetIcon(previousButton, IconCode::Code::ARROW_LEFT);
     WidgetUtils::setWidgetIcon(nextButton, IconCode::Code::ARROW_RIGHT);
 
-    WidgetStateStore::restoreGeometry(this);
-
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
 
@@ -346,6 +344,12 @@ void MeasurePropertiesDialog::apply()
 
     m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::SINGLE, 0);
     m_notation->notationChanged().notify();
+}
+
+void MeasurePropertiesDialog::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(event);
 }
 
 void MeasurePropertiesDialog::hideEvent(QHideEvent* event)

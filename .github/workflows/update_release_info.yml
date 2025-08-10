@@ -33,7 +33,7 @@ defaults:
 
 jobs:
   update-release-info:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     environment:
       name: ${{ inputs.environment }} # can be empty/blank (if so, URL will not be shown)
       url: ${{ github.server_url }}/${{ github.repository }}/releases/${{ inputs.tag && format('tag/{0}', inputs.tag) || 'latest' }} # show on run page
@@ -56,12 +56,12 @@ jobs:
             --repo ${{ github.repository }} \
             --release_tag ${{ inputs.tag }}
 
-          bash ./buildscripts/ci/tools/s3_push_file.sh \
+          bash ./buildscripts/ci/release/push_file_to_s3.sh \
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
             --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
             --s3_url ${S3_URL} \
             --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
-            --file_path "build.artifacts/release_info.json"
+            --file_name "release_info.json"
 
           bash ./buildscripts/ci/release/make_previous_releases_notes.sh \
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
@@ -71,9 +71,9 @@ jobs:
             --current_file_name "release_info.json" \
             --previous_file_name "previous_releases_notes.json"
 
-          bash ./buildscripts/ci/tools/s3_push_file.sh \
+          bash ./buildscripts/ci/release/push_file_to_s3.sh \
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
             --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
             --s3_url ${S3_ALL_URL} \
             --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
-            --file_path "build.artifacts/previous_releases_notes.json"
+            --file_name "previous_releases_notes.json"

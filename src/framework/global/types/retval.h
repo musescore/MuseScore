@@ -39,8 +39,29 @@ struct RetVal {
     static RetVal<T> make_ok(const T& v)
     {
         RetVal<T> rv;
-        rv.ret = make_ret(Ret::Code::Ok);
+        rv.ret = muse::make_ret(Ret::Code::Ok);
         rv.val = v;
+        return rv;
+    }
+
+    static RetVal<T> make_ret(const Ret& ret)
+    {
+        RetVal<T> rv;
+        rv.ret = ret;
+        return rv;
+    }
+
+    static RetVal<T> make_ret(const Ret::Code& code)
+    {
+        RetVal<T> rv;
+        rv.ret = muse::make_ret(code);
+        return rv;
+    }
+
+    static RetVal<T> make_ret(int code, const std::string& text = "")
+    {
+        RetVal<T> rv;
+        rv.ret = Ret(code, text);
         return rv;
     }
 };
@@ -50,6 +71,29 @@ struct RetVal2 {
     Ret ret;
     T1 val1;
     T2 val2;
+
+    static RetVal2<T1, T2> make_ok(const T1& v1, const T2& v2)
+    {
+        RetVal2<T1, T2> rv;
+        rv.ret = muse::make_ret(Ret::Code::Ok);
+        rv.val1 = v1;
+        rv.val2 = v2;
+        return rv;
+    }
+
+    static RetVal2<T1, T2> make_ret(const Ret& ret)
+    {
+        RetVal2<T1, T2> rv;
+        rv.ret = ret;
+        return rv;
+    }
+
+    static RetVal2<T1, T2> make_ret(int code, const std::string& text = "")
+    {
+        RetVal2<T1, T2> rv;
+        rv.ret = Ret(code, text);
+        return rv;
+    }
 };
 
 template<typename T>

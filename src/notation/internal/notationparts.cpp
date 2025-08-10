@@ -21,6 +21,7 @@
  */
 #include "notationparts.h"
 
+#include "dom/barline.h"
 #include "translation.h"
 
 #include "engraving/dom/factory.h"
@@ -242,8 +243,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
     updateSoloist(parts);
     sortParts(parts);
     setBracketsAndBarlines();
-    updatePartList();
-    updateSystemObjectStaves();
+    updatePartsAndSystemObjectStaves();
 
     apply();
 }
@@ -282,6 +282,12 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     startEdit(actionName);
 
     part->undoChangeProperty(mu::engraving::Pid::VISIBLE, visible);
+
+    if (visible) {
+        score()->removeSystemLocksContainingMMRests();
+    } else if (score()->visibleStavesCount() == 0) {
+        score()->undoRemoveAllLocks();
+    }
 
     apply();
 
@@ -330,11 +336,10 @@ void NotationParts::listenUndoStackChanges()
         return;
     }
 
-    updatePartList();
-    updateSystemObjectStaves();
+    updatePartsAndSystemObjectStaves();
 
-    m_undoStack->changesChannel().onReceive(this, [this](const ChangesRange& range) {
-        if (range.changedTypes.empty()) {
+    m_undoStack->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+        if (changes.isTextEditing || changes.changedTypes.empty() || m_ignoreUndoStackChanges) {
             return;
         }
 
@@ -345,24 +350,15 @@ void NotationParts::listenUndoStackChanges()
         };
 
         for (ElementType type : TYPES_TO_CHECK) {
-            if (muse::contains(range.changedTypes, type)) {
-                updatePartList();
-                updateSystemObjectStaves();
+            if (muse::contains(changes.changedTypes, type)) {
+                updatePartsAndSystemObjectStaves(changes);
                 return;
             }
         }
     });
 }
 
-void NotationParts::updatePartList()
-{
-    if (m_parts != score()->parts()) {
-        m_parts = score()->parts();
-        m_partChangedNotifier.changed();
-    }
-}
-
-void NotationParts::updateSystemObjectStaves()
+void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes)
 {
     const auto systemObjectStavesWithTopStaff = [this]() {
         std::vector<Staff*> result;
@@ -375,11 +371,44 @@ void NotationParts::updateSystemObjectStaves()
         return result;
     };
 
-    std::vector<Staff*> newSystemObjectStaves = systemObjectStavesWithTopStaff();
+    const bool partsChanged = m_parts != score()->parts();
+    m_parts = score()->parts();
 
-    if (m_systemObjectStaves != newSystemObjectStaves) {
-        m_systemObjectStaves = std::move(newSystemObjectStaves);
+    std::vector<Staff*> newSystemObjectStaves = systemObjectStavesWithTopStaff();
+    const bool systemObjectStavesChanged = m_systemObjectStaves != newSystemObjectStaves;
+    m_systemObjectStaves = std::move(newSystemObjectStaves);
+
+    if (partsChanged) {
+        m_partChangedNotifier.changed();
+    }
+
+    if (systemObjectStavesChanged) {
         m_systemObjectStavesChanged.notify();
+    }
+
+    std::vector<Staff*> removedStaves;
+    std::vector<Staff*> addedStaves;
+
+    for (auto& pair : changes.changedItems) {
+        if (!pair.first || !pair.first->isStaff()) {
+            continue;
+        }
+
+        Staff* staff = toStaff(pair.first);
+
+        if (muse::contains(pair.second, CommandType::RemoveStaff)) {
+            removedStaves.push_back(staff);
+        } else if (muse::contains(pair.second, CommandType::InsertStaff)) {
+            addedStaves.push_back(staff);
+        }
+    }
+
+    for (Staff* staff : removedStaves) {
+        notifyAboutStaffRemoved(staff);
+    }
+
+    for (Staff* staff: addedStaves) {
+        notifyAboutStaffAdded(staff);
     }
 }
 
@@ -470,7 +499,13 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 
     score()->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
 
+    //! HACK: Excerpt::setVoiceVisible recreates the staff,
+    //! so later in listenUndoStackChanges() we will call notifyAboutStaffRemoved() and notifyAboutStaffAdded(),
+    //! which will result in the wrong UI state in the Layout panel.
+    //! We should not recreate the staff here, only update it
+    m_ignoreUndoStackChanges = true;
     apply();
+    m_ignoreUndoStackChanges = false;
 
     Staff* newStaff = staffModifiable(staffId);
     notifyAboutStaffChanged(newStaff);
@@ -500,6 +535,12 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 
     config.visible = visible;
     doSetStaffConfig(staff, config);
+
+    if (visible) {
+        score()->removeSystemLocksContainingMMRests();
+    } else if (score()->visibleStavesCount() == 0) {
+        score()->undoRemoveAllLocks();
+    }
 
     apply();
 
@@ -569,8 +610,6 @@ bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     doAppendStaff(staff, destinationPart);
     apply();
 
-    notifyAboutStaffAdded(staff, destinationPartId);
-
     return true;
 }
 
@@ -590,15 +629,13 @@ bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffI
 
     startEdit(TranslatableString("undoableAction", "Add linked staff"));
 
-    doAppendStaff(staff, destinationPart);
+    doAppendStaff(staff, destinationPart, false);
 
     ///! NOTE: need to unlink before linking
     staff->setLinks(nullptr);
     mu::engraving::Excerpt::cloneStaff(sourceStaff, staff);
 
     apply();
-
-    notifyAboutStaffAdded(staff, destinationPartId);
 
     return true;
 }
@@ -612,6 +649,8 @@ void NotationParts::insertPart(Part* part, size_t index)
     }
 
     startEdit(TranslatableString("undoableAction", "Add instrument"));
+
+    score()->removeSystemLocksContainingMMRests();
 
     doInsertPart(part, index);
 
@@ -693,21 +732,26 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
         return;
     }
 
-    mu::engraving::Instrument* instrument = part->instrument(instrumentKey.tick);
-    if (!instrument) {
-        return;
-    }
-
+    // Update all identical drumsets in the part...
     if (undoable) {
         startEdit(TranslatableString("undoableAction", "Edit drumset"));
-        score()->undo(new mu::engraving::ChangeDrumset(instrument, newDrumset, part));
+        for (auto pair : part->instruments()) {
+            Instrument* instrument = pair.second;
+            if (instrument && instrument->drumset() && instrument->id() == instrumentKey.instrumentId) {
+                score()->undo(new mu::engraving::ChangeDrumset(instrument, newDrumset, part));
+            }
+        }
         apply();
     } else {
-        instrument->setDrumset(&newDrumset);
+        for (auto pair : part->instruments()) {
+            Instrument* instrument = pair.second;
+            if (instrument && instrument->drumset() && instrument->id() == instrumentKey.instrumentId) {
+                instrument->setDrumset(&newDrumset);
+            }
+        }
     }
 
     notifyAboutPartChanged(part);
-
     m_interaction->noteInput()->stateChanged().notify();
 }
 
@@ -731,7 +775,7 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
     Score* score = this->score();
     std::vector<EngravingItem*> topSystemObjects = engraving::collectSystemObjects(score);
 
-    startEdit(TranslatableString("undoableAction", "Add system objects"));
+    startEdit(TranslatableString("undoableAction", "Add system markings"));
 
     for (Staff* staff : staves) {
         if (score->isSystemObjectStaff(staff)) {
@@ -746,8 +790,14 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
                 obj->triggerLayout();
                 continue;
             }
-            EngravingItem* copy = obj->linkedClone();
+            bool shouldLink = !obj->isPlayCountText();
+            EngravingItem* copy = shouldLink ? obj->linkedClone() : obj->clone();
             copy->setStaffIdx(staffIdx);
+
+            if (!obj->parent()->isSegment() && !obj->parent()->isMeasure()) {
+                copy->setParent(engraving::findNewSystemMarkingParent(obj, staff));
+            }
+
             score->undoAddElement(copy, false /*addToLinkedStaves*/);
         }
     }
@@ -765,10 +815,11 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
     Score* score = this->score();
     std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score, staves);
 
-    startEdit(TranslatableString("undoableAction", "Remove system objects"));
+    startEdit(TranslatableString("undoableAction", "Remove system markings"));
 
     for (Staff* staff : staves) {
         if (score->isSystemObjectStaff(staff)) {
+            staff->undoResetProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF);
             score->undo(new mu::engraving::RemoveSystemObjectStaff(staff));
         }
     }
@@ -778,6 +829,7 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
             obj->triggerLayout();
             continue;
         }
+        obj->undoUnlink();
         score->undoRemoveElement(obj, false /*removeLinked*/);
     }
 
@@ -799,24 +851,61 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
     const std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score(), { srcStaff, dstStaff });
     const staff_idx_t dstStaffIdx = dstStaff->idx();
 
-    startEdit(TranslatableString("undoableAction", "Move system objects"));
+    startEdit(TranslatableString("undoableAction", "Move system markings"));
 
     score()->undo(new mu::engraving::RemoveSystemObjectStaff(srcStaff));
-    if (!score()->isSystemObjectStaff(dstStaff)) {
+    if (!score()->isSystemObjectStaff(dstStaff) && dstStaffIdx != 0) {
         score()->undo(new mu::engraving::AddSystemObjectStaff(dstStaff));
+    } else {
+        dstStaff->undoResetProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF);
     }
 
+    // Remove items first
     for (EngravingItem* item : systemObjects) {
         if (item->isTimeSig()) {
             item->triggerLayout();
             continue;
         }
+
         if (item->staff() == srcStaff) {
+            continue;
+        }
+        item->undoUnlink();
+        score()->undoRemoveElement(item, false /*removeLinked*/);
+    }
+
+    // Move items
+    for (EngravingItem* item : systemObjects) {
+        if (item->isTimeSig()) {
+            continue;
+        }
+
+        if (item->staff() == srcStaff) {
+            if (!item->parent()->isSegment() && !item->parent()->isMeasure()) {
+                score()->undoChangeParent(item, engraving::findNewSystemMarkingParent(item, dstStaff), dstStaffIdx);
+                item->triggerLayout();
+            }
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
-        } else {
-            score()->undoRemoveElement(item, false /*removeLinked*/);
         }
     }
+
+    apply();
+}
+
+void NotationParts::moveSystemObjectLayerBelowBottomStaff()
+{
+    startEdit(TranslatableString("undoableAction", "Add system object layer below the bottom staff"));
+
+    score()->staves().back()->undoChangeProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, true);
+
+    apply();
+}
+
+void NotationParts::moveSystemObjectLayerAboveBottomStaff()
+{
+    startEdit(TranslatableString("undoableAction", "Remove system object layer below the bottom staff"));
+
+    score()->staves().back()->undoChangeProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, false);
 
     apply();
 }
@@ -906,7 +995,7 @@ void NotationParts::onPartsRemoved(const std::vector<Part*>&)
 {
 }
 
-void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
+void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart, bool createRests)
 {
     staff_idx_t staffLocalIndex = destinationPart->nstaves();
     mu::engraving::KeyList keyList = *destinationPart->staff(staffLocalIndex - 1)->keyList();
@@ -914,7 +1003,7 @@ void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
     staff->setScore(score());
     staff->setPart(destinationPart);
 
-    insertStaff(staff, staffLocalIndex);
+    insertStaff(staff, staffLocalIndex, createRests);
 
     staff_idx_t staffGlobalIndex = staff->idx();
     score()->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
@@ -973,7 +1062,7 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         staffCopy->setPart(part);
         staffCopy->init(staff);
 
-        insertStaff(staffCopy, static_cast<int>(staffIndex));
+        insertStaff(staffCopy, static_cast<int>(staffIndex), /* createRests = */ false);
         score()->undo(new mu::engraving::Link(staffCopy, staff));
 
         mu::engraving::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
@@ -1001,10 +1090,6 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     setBracketsAndBarlines();
 
     apply();
-
-    for (const Staff* staff : stavesToRemove) {
-        notifyAboutStaffRemoved(staff);
-    }
 }
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
@@ -1133,11 +1218,11 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
     score()->adjustKeySigs(firstStaffIndex, endStaffIndex, keyList);
 }
 
-void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex)
+void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex, bool createRest)
 {
     TRACEFUNC;
 
-    score()->undoInsertStaff(staff, destinationStaffIndex);
+    score()->undoInsertStaff(staff, destinationStaffIndex, createRest);
 }
 
 void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex)
@@ -1354,19 +1439,19 @@ void NotationParts::notifyAboutStaffChanged(const Staff* staff) const
     notifier.itemChanged(staff);
 }
 
-void NotationParts::notifyAboutStaffAdded(const Staff* staff, const ID& partId) const
+void NotationParts::notifyAboutStaffAdded(const Staff* staff) const
 {
-    IF_ASSERT_FAILED(staff) {
+    IF_ASSERT_FAILED(staff && staff->part()) {
         return;
     }
 
-    ChangedNotifier<const Staff*>& notifier = m_staffChangedNotifierMap[partId];
+    ChangedNotifier<const Staff*>& notifier = m_staffChangedNotifierMap[staff->part()->id()];
     notifier.itemAdded(staff);
 }
 
 void NotationParts::notifyAboutStaffRemoved(const Staff* staff) const
 {
-    IF_ASSERT_FAILED(staff) {
+    IF_ASSERT_FAILED(staff && staff->part()) {
         return;
     }
 

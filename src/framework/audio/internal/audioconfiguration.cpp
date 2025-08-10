@@ -26,7 +26,7 @@
 
 #include "global/settings.h"
 
-#include "soundfonttypes.h"
+#include "audio/common/soundfonttypes.h"
 
 #include "log.h"
 
@@ -43,6 +43,8 @@ static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "io/bufferSize");
 static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
 static const Settings::Key AUDIO_MEASURE_INPUT_LAG("audio", "io/measureInputLag");
 static const Settings::Key AUDIO_DESIRED_THREAD_NUMBER_KEY("audio", "io/audioThreads");
+
+static const Settings::Key ONLINE_SOUNDS_PROCESS_IN_BACKGROUND("audio", "io/onlineSounds/processInBackground");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
@@ -93,6 +95,11 @@ void AudioConfiguration::init()
     settings()->setDefaultValue(AUDIO_MEASURE_INPUT_LAG, Val(false));
 
     settings()->setDefaultValue(AUDIO_DESIRED_THREAD_NUMBER_KEY, Val(0));
+
+    settings()->setDefaultValue(ONLINE_SOUNDS_PROCESS_IN_BACKGROUND, Val(true));
+    settings()->valueChanged(ONLINE_SOUNDS_PROCESS_IN_BACKGROUND).onReceive(nullptr, [this](const Val& val) {
+        m_autoProcessOnlineSoundsInBackgroundChanged.send(val.toBool());
+    });
 
     updateSamplesToPreallocate();
 }
@@ -242,6 +249,21 @@ void AudioConfiguration::setUserSoundFontDirectories(const io::paths_t& paths)
 async::Channel<io::paths_t> AudioConfiguration::soundFontDirectoriesChanged() const
 {
     return m_soundFontDirsChanged;
+}
+
+bool AudioConfiguration::autoProcessOnlineSoundsInBackground() const
+{
+    return settings()->value(ONLINE_SOUNDS_PROCESS_IN_BACKGROUND).toBool();
+}
+
+void AudioConfiguration::setAutoProcessOnlineSoundsInBackground(bool value)
+{
+    settings()->setSharedValue(ONLINE_SOUNDS_PROCESS_IN_BACKGROUND, Val(value));
+}
+
+async::Channel<bool> AudioConfiguration::autoProcessOnlineSoundsInBackgroundChanged() const
+{
+    return m_autoProcessOnlineSoundsInBackgroundChanged;
 }
 
 bool AudioConfiguration::shouldMeasureInputLag() const

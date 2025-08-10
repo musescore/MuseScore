@@ -63,6 +63,8 @@ public:
     bool valid() const;
     QString actionName() const;
 
+    void setPaletteIndex(QPersistentModelIndex paletteIndex);
+
     Q_INVOKABLE void open();
 
 private:
@@ -127,6 +129,9 @@ public:
     }
 
     Q_INVOKABLE mu::palette::PaletteElementEditor* elementEditor(const QModelIndex& index);
+
+private:
+    QMap<Palette::Type, PaletteElementEditor*> m_paletteElementEditorMap;
 };
 
 // ========================================================
@@ -238,9 +243,8 @@ public:
 
     Q_INVOKABLE QAbstractItemModel* availableExtraPalettesModel() const;
     Q_INVOKABLE bool addPalette(const QPersistentModelIndex&);
-    Q_INVOKABLE bool removeCustomPalette(const QPersistentModelIndex&);
 
-    Q_INVOKABLE bool resetPalette(const QModelIndex&);
+    Q_INVOKABLE void resetPalette(const QModelIndex&);
 
     Q_INVOKABLE bool savePalette(const QModelIndex&);
     Q_INVOKABLE bool loadPalette(const QModelIndex&);
@@ -293,6 +297,8 @@ private:
     AbstractPaletteController* customElementsPaletteController();
 
     QString getPaletteFilename(bool open, const QString& name = "") const;
+
+    void doResetPalette(const QModelIndex& index);
 
     PaletteTreeModel* m_userPaletteModel;
     PaletteTreeModel* m_masterPaletteModel;

@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/Main.wasm.qml</file>
         <file>qml/MainToolBar.qml</file>
         <file>qml/HomePage/HomeMenu.qml</file>
         <file>qml/DevTools/Interactive/SampleDialog.qml</file>
@@ -73,7 +72,6 @@
         <file>qml/platform/mac/Main.qml</file>
         <file>qml/platform/win/Main.qml</file>
         <file>resources/win_opengl_buglist.json</file>
-        <file>resources/tours.json</file>
         <file>qml/Preferences/internal/BaseSection.qml</file>
         <file>qml/Preferences/internal/LanguagesSection.qml</file>
         <file>qml/Preferences/internal/AutoSaveSection.qml</file>
@@ -89,6 +87,7 @@
         <file>qml/Preferences/internal/NoteInput/NotePreviewSection.qml</file>
         <file>qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml</file>
         <file>qml/Preferences/internal/NoteInput/NoteColorsSection.qml</file>
+        <file>qml/Preferences/internal/NoteInput/FretboardDiagramsSection.qml</file>
         <file>qml/Preferences/internal/DefaultFilesSection.qml</file>
         <file>qml/Preferences/internal/AutomaticUpdateSection.qml</file>
         <file>qml/platform/win/AppTitleBar.qml</file>
@@ -98,12 +97,14 @@
         <file>qml/platform/AppMenuBar.qml</file>
         <file>qml/platform/AppButtonBackground.qml</file>
         <file>resources/LoadingScreen.svg</file>
+        <file>resources/OnlineSoundsPreview.gif</file>
         <file>qml/Preferences/BraillePreferencesPage.qml</file>
         <file>qml/Preferences/internal/BrailleSection.qml</file>
         <file>qml/Preferences/internal/BrailleAdvancedSection.qml</file>
         <file>qml/Preferences/internal/MeiSection.qml</file>
         <file>qml/Preferences/internal/PublishMuseScoreComSection.qml</file>
         <file>qml/Preferences/internal/MixerSection.qml</file>
+        <file>qml/Preferences/internal/OnlineSoundsSection.qml</file>
         <file>qml/DevTools/Extensions/ExtensionsListView.qml</file>
         <file>qml/platform/PlatformMenuBar.qml</file>
         <file>qml/Preferences/PercussionPreferencesPage.qml</file>

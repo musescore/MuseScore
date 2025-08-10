@@ -22,11 +22,7 @@
 #include "scorecallbacks.h"
 
 #include "engraving/dom/engravingitem.h"
-#include "engraving/dom/lyrics.h"
-#include "engraving/dom/system.h"
-
 #include "inotationinteraction.h"
-#include "igetscore.h"
 
 #include "log.h"
 
@@ -45,12 +41,6 @@ void ScoreCallbacks::updateAll()
 void ScoreCallbacks::drawBackground(muse::draw::Painter*, const muse::RectF&) const
 {
     NOT_IMPLEMENTED;
-}
-
-const muse::Rect ScoreCallbacks::geometry() const
-{
-    NOT_IMPLEMENTED;
-    return muse::Rect();
 }
 
 qreal ScoreCallbacks::selectionProximity() const

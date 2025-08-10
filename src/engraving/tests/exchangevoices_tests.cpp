@@ -79,6 +79,36 @@ TEST_F(Engraving_ExchangevoicesTests, glissandi)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-gliss.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-gliss-ref.mscx"));
 }
 
+TEST_F(Engraving_ExchangevoicesTests, rangeSelection)
+{
+    // Change voice of range selection including lyrics, lyrics lines, partial ties, slur, glissando, note anchored line, dynamics
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + u"exchangevoices-range.mscx");
+    EXPECT_TRUE(score);
+    score->doLayout();
+
+    score->startCmd(TranslatableString::untranslatable("Exchange voices select all"));
+    score->cmdSelectAll();
+    score->endCmd();
+
+    score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
+    score->cmdExchangeVoice(0, 1);
+    score->endCmd();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-range.mscx",
+                                            EXCHVOICES_DATA_DIR + u"exchangevoices-range-ref.mscx"));
+
+    EditData ed;
+    score->undoStack()->undo(&ed);
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-range.mscx",
+                                            EXCHVOICES_DATA_DIR + u"exchangevoices-range.mscx"));
+
+    MScore::useRead302InTestMode = use302;
+}
+
 TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
 {
     String readFile(EXCHVOICES_DATA_DIR + u"undoChangeVoice.mscx");

@@ -19,13 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_VST_VSTSYNTHESISER_H
-#define MUSE_VST_VSTSYNTHESISER_H
+#pragma once
 
 #include <memory>
 
-#include "audio/internal/abstractsynthesizer.h"
+#include "audio/worker/internal/synthesizers/abstractsynthesizer.h"
 #include "audio/iaudioconfiguration.h"
 #include "audio/audiotypes.h"
 #include "modularity/ioc.h"
@@ -92,5 +90,3 @@ private:
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;
 }
-
-#endif // MUSE_VST_VSTSYNTHESISER_H

@@ -93,6 +93,7 @@ public:
     bool closable() const;
     bool resizable() const;
     bool separatorsVisible() const;
+    bool defaultVisibility() const;
 
     bool isCompact() const;
     int compactPriorityOrder() const;
@@ -184,6 +185,8 @@ protected:
     DockType type() const;
     KDDockWidgets::DockWidgetQuick* dockWidget() const;
 
+    void doSetFloating(bool floating);
+
 protected slots:
     void applySizeConstraints();
 
@@ -193,7 +196,6 @@ private slots:
 
 private:
     void setUpFrameConnections();
-    void doSetFloating(bool floating);
 
     void writeProperties();
 

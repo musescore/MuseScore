@@ -25,8 +25,6 @@ import QtQuick 2.15
 import Muse.UiComponents 1.0
 import Muse.Shortcuts 1.0
 
-import MuseScore.NotationScene 1.0
-
 StyledDialogView {
     id: root
 
@@ -63,7 +61,8 @@ StyledDialogView {
 
         headerText: qsTrc("shortcuts", "Define keyboard shortcut")
 
-        originShortcutText: editShortcutModel.originSequence
+        //! NOTE: There's no need to actually clear the origin shortcut, we can simply hide it for aesthetic purposes...
+        originShortcutText: !editShortcutModel.cleared ? editShortcutModel.originSequence : ""
         newShortcutText: editShortcutModel.newSequence
         informationText: editShortcutModel.conflictWarning
 
@@ -74,6 +73,10 @@ StyledDialogView {
 
         onCancelRequested: {
             root.reject()
+        }
+
+        onClearRequested: {
+            editShortcutModel.clear()
         }
 
         onKeyPressed: function(event) {

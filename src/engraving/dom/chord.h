@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_CHORD_H
-#define MU_ENGRAVING_CHORD_H
+#pragma once
 
 /**
  \file
@@ -32,10 +31,8 @@
 #include <set>
 #include <vector>
 
-#include "chordrest.h"
-
 #include "articulation.h"
-#include "types.h"
+#include "chordrest.h"
 
 #include "draw/types/color.h"
 
@@ -49,9 +46,40 @@ class Note;
 class NoteEventList;
 class Stem;
 class StemSlash;
-class StretchedBend;
 class TremoloTwoChord;
 class TremoloSingleChord;
+
+enum class NoteType : unsigned char {
+    ///.\{
+    NORMAL        = 0,
+    ACCIACCATURA  = 0x1,
+    APPOGGIATURA  = 0x2,         // grace notes
+    GRACE4        = 0x4,
+    GRACE16       = 0x8,
+    GRACE32       = 0x10,
+    GRACE8_AFTER  = 0x20,
+    GRACE16_AFTER = 0x40,
+    GRACE32_AFTER = 0x80,
+    INVALID       = 0xFF
+                    ///\}
+};
+
+constexpr NoteType operator|(NoteType t1, NoteType t2)
+{
+    return static_cast<NoteType>(static_cast<unsigned char>(t1) | static_cast<unsigned char>(t2));
+}
+
+constexpr bool operator&(NoteType t1, NoteType t2)
+{
+    return static_cast<unsigned char>(t1) & static_cast<unsigned char>(t2);
+}
+
+enum class PlayEventType : unsigned char {
+    ///.\{
+    Auto,         ///< Play events for all notes are calculated by MuseScore.
+    User,         ///< Some play events are modified by user. Those events are written into the mscx file.
+    ///.\}
+};
 
 class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
 {
@@ -124,15 +152,12 @@ public:
     void setIsUiItem(bool val) { m_isUiItem = val; }
 
     const std::vector<LedgerLine*>& ledgerLines() const { return m_ledgerLines; }
+    std::vector<LedgerLine*>& ledgerLines() { return m_ledgerLines; }
     void resizeLedgerLinesTo(size_t newSize);
-    void updateLedgerLines();
 
     double defaultStemLength() const { return m_defaultStemLength; }
     void setDefaultStemLength(double l) { m_defaultStemLength = l; }
-    double minStemLength() const { return m_minStemLength; }
     void setBeamExtension(double extension);
-    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams,
-                               bool isFullSize);
 
     std::vector<Note*>& notes() { return m_notes; }
     const std::vector<Note*>& notes() const { return m_notes; }
@@ -195,9 +220,6 @@ public:
     int line() const { return ldata()->up ? upLine() : downLine(); }
     int upLine() const;
     int downLine() const;
-    PointF stemPos() const override;            ///< page coordinates
-    PointF stemPosBeam() const override;        ///< page coordinates
-    double stemPosX() const override;
     double rightEdge() const override;
 
     bool underBeam() const;
@@ -255,6 +277,7 @@ public:
     const std::vector<Articulation*>& articulations() const { return m_articulations; }
     std::set<SymId> articulationSymbolIds() const;
     Articulation* hasArticulation(const Articulation*);
+    Tapping* tapping() const;
     bool hasSingleArticulation() const { return m_articulations.size() == 1; }
 
     void updateArticulations(const std::set<SymId>& newArticulationIds,
@@ -264,6 +287,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+    bool isUserModified() const override;
 
     void reset() override;
 
@@ -316,9 +340,6 @@ public:
 
     double upPos()   const override;
     double downPos() const override;
-    double centerX() const;
-
-    double calcDefaultStemLength();
 
     struct StartEndSlurs {
         bool startUp = false;
@@ -336,18 +357,14 @@ public:
 
     StartEndSlurs& startEndSlurs() { return m_startEndSlurs; }
 
+    bool allNotesTiedToNext() const;
+
 private:
 
     friend class Factory;
 
     Chord(Segment* parent = 0);
     Chord(const Chord&, bool link = false);
-
-    int stemLengthBeamAddition() const;
-    int maxReduction(int extensionOutsideStaff) const;
-    int stemOpticalAdjustment(int stemEndPosition) const;
-    int calcMinStemLength();
-    int calc4BeamsException(int stemLength) const;
 
     // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
     void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
@@ -383,7 +400,6 @@ private:
     double m_spaceRw = 0.0;
 
     double m_defaultStemLength = 0.0;
-    double m_minStemLength = 0.0;
 
     bool m_isUiItem = false;
 
@@ -402,4 +418,8 @@ private:
     std::vector<Articulation*> m_articulations;
 };
 } // namespace mu::engraving
+
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::NoteType)
+Q_DECLARE_METATYPE(mu::engraving::PlayEventType)
 #endif

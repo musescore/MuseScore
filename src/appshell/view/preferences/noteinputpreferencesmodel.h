@@ -47,7 +47,7 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
 
     Q_PROPERTY(bool midiInputEnabled READ midiInputEnabled WRITE setMidiInputEnabled NOTIFY midiInputEnabledChanged)
     Q_PROPERTY(
-        bool startNoteInputAtSelectionWhenPressingMidiKey READ startNoteInputAtSelectionWhenPressingMidiKey WRITE setStartNoteInputAtSelectionWhenPressingMidiKey NOTIFY startNoteInputAtSelectionWhenPressingMidiKeyChanged)
+        bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey READ startNoteInputAtSelectedNoteRestWhenPressingMidiKey WRITE setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey NOTIFY startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged)
     Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
     Q_PROPERTY(
@@ -66,7 +66,16 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(
         bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY playChordSymbolWhenEditingChanged)
     Q_PROPERTY(
+        bool playPreviewNotesWithScoreDynamics READ playPreviewNotesWithScoreDynamics WRITE setPlayPreviewNotesWithScoreDynamics NOTIFY playPreviewNotesWithScoreDynamicsChanged)
+    Q_PROPERTY(bool playNotesOnMidiInput READ playNotesOnMidiInput WRITE setPlayNotesOnMidiInput NOTIFY playNotesOnMidiInputChanged)
+    Q_PROPERTY(
+        bool useMidiVelocityAndDurationDuringNoteInput READ useMidiVelocityAndDurationDuringNoteInput WRITE setUseMidiVelocityAndDurationDuringNoteInput NOTIFY useMidiVelocityAndDurationDuringNoteInputChanged)
+
+    Q_PROPERTY(
         bool dynamicsApplyToAllVoices READ dynamicsApplyToAllVoices WRITE setDynamicsApplyToAllVoices NOTIFY dynamicsApplyToAllVoicesChanged FINAL)
+
+    Q_PROPERTY(
+        bool autoUpdateFretboardDiagrams READ autoUpdateFretboardDiagrams WRITE setAutoUpdateFretboardDiagrams NOTIFY autoUpdateFretboardDiagramsChanged FINAL)
 
     muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
     muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
@@ -86,7 +95,7 @@ public:
     bool useNoteInputCursorInInputByDuration() const;
 
     bool midiInputEnabled() const;
-    bool startNoteInputAtSelectionWhenPressingMidiKey() const;
+    bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const;
     bool advanceToNextNoteOnKeyRelease() const;
     int delayBetweenNotesInRealTimeModeMilliseconds() const;
 
@@ -95,11 +104,16 @@ public:
     int notePlayDurationMilliseconds() const;
     bool playChordWhenEditing() const;
     bool playChordSymbolWhenEditing() const;
+    bool playPreviewNotesWithScoreDynamics() const;
+    bool playNotesOnMidiInput() const;
+    bool useMidiVelocityAndDurationDuringNoteInput() const;
 
     bool dynamicsApplyToAllVoices() const;
 
     bool colorNotesOutsideOfUsablePitchRange() const;
     bool warnGuitarBends() const;
+
+    bool autoUpdateFretboardDiagrams() const;
 
 public slots:
     void setDefaultNoteInputMethod(int value);
@@ -107,7 +121,7 @@ public slots:
     void setUseNoteInputCursorInInputByDuration(bool value);
 
     void setMidiInputEnabled(bool value);
-    void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value);
+    void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value);
     void setAdvanceToNextNoteOnKeyRelease(bool value);
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delay);
 
@@ -116,11 +130,16 @@ public slots:
     void setNotePlayDurationMilliseconds(int duration);
     void setPlayChordWhenEditing(bool value);
     void setPlayChordSymbolWhenEditing(bool value);
+    void setPlayPreviewNotesWithScoreDynamics(bool value);
+    void setPlayNotesOnMidiInput(bool value);
+    void setUseMidiVelocityAndDurationDuringNoteInput(bool value);
 
     void setDynamicsApplyToAllVoices(bool value);
 
     void setColorNotesOutsideOfUsablePitchRange(bool value);
     void setWarnGuitarBends(bool value);
+
+    void setAutoUpdateFretboardDiagrams(bool value);
 
 signals:
     void defaultNoteInputMethodChanged(int value);
@@ -128,7 +147,7 @@ signals:
     void useNoteInputCursorInInputByDurationChanged(bool value);
 
     void midiInputEnabledChanged(bool value);
-    void startNoteInputAtSelectionWhenPressingMidiKeyChanged(bool value);
+    void startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged(bool value);
     void advanceToNextNoteOnKeyReleaseChanged(bool value);
     void delayBetweenNotesInRealTimeModeMillisecondsChanged(int delay);
 
@@ -137,11 +156,16 @@ signals:
     void notePlayDurationMillisecondsChanged(int duration);
     void playChordWhenEditingChanged(bool value);
     void playChordSymbolWhenEditingChanged(bool value);
+    void playPreviewNotesWithScoreDynamicsChanged(bool value);
+    void playNotesOnMidiInputChanged(bool value);
+    void useMidiVelocityAndDurationDuringNoteInputChanged(bool value);
 
     void dynamicsApplyToAllVoicesChanged(bool value);
 
     void colorNotesOutsideOfUsablePitchRangeChanged(bool value);
     void warnGuitarBendsChanged(bool value);
+
+    void autoUpdateFretboardDiagramsChanged(bool value);
 };
 }
 

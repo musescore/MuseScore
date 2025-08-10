@@ -28,6 +28,7 @@
 #include "types/retval.h"
 #include "types/uri.h"
 #include "types/flags.h"
+#include "types/color.h"
 #include "async/promise.h"
 #include "progress.h"
 
@@ -112,6 +113,7 @@ public:
     struct Text {
         std::string text;
         TextFormat format = TextFormat::Auto;
+        std::string detailedText;
 
         Text() = default;
         Text(const char* t)
@@ -130,6 +132,8 @@ public:
 
         Button standardButton() const { return static_cast<Button>(m_button); }
         int button() const { return m_button; }
+        bool isButton(int b) const { return b == m_button; }
+        bool isButton(Button b) const { return static_cast<int>(b) == m_button; }
 
         bool showAgain() const { return m_showAgain; }
 
@@ -145,81 +149,101 @@ public:
     };
     DECLARE_FLAGS(Options, Option)
 
-    virtual Result question(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                            const Button& def = Button::NoButton, const Options& options = {},
-                            const std::string& dialogTitle = "") const = 0;
-
-    virtual Result question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                            int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
-
+    // buttons data
     virtual ButtonData buttonData(Button b) const = 0;
+    inline ButtonDatas buttonDataList(const Buttons& buttons) const
+    {
+        ButtonDatas result;
+        result.reserve(buttons.size());
+
+        for (Button b : buttons) {
+            result.push_back(buttonData(b));
+        }
+
+        return result;
+    }
+
+    // question
+    virtual async::Promise<Result> question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                            int defBtn = int(Button::NoButton), const Options& options = {},
+                                            const std::string& dialogTitle = "") = 0;
+
+    async::Promise<Result> question(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                    Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return question(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
 
     // info
-    virtual Result info(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
-                        int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
+    virtual async::Promise<Result> info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                        int defBtn = int(Button::NoButton), const Options& options = {},
+                                        const std::string& dialogTitle = "") = 0;
 
-    virtual Result info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                        int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
+    async::Promise<Result> info(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                Button defBtn, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return info(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
 
     // warning
-    virtual Result warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
-                           const Button& def = Button::NoButton, const Options& options = { WithIcon },
-                           const std::string& dialogTitle = "") const = 0;
+    virtual async::Promise<Result> warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                           int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                                           const std::string& dialogTitle = "") = 0;
 
-    virtual Result warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                           int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                           const std::string& dialogTitle = "") const = 0;
-
-    virtual Result warning(const std::string& contentTitle, const Text& text, const std::string& detailedText,
-                           const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                           const std::string& dialogTitle = "") const = 0;
+    async::Promise<Result> warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                   Button defBtn = Button::NoButton, const Options& options = { WithIcon },
+                                   const std::string& dialogTitle = "")
+    {
+        return warning(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
 
     // error
-    virtual Result error(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
-                         const Button& def = Button::NoButton, const Options& options = { WithIcon },
-                         const std::string& dialogTitle = "") const = 0;
+    virtual async::Promise<Result> error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                         int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                                         const std::string& dialogTitle = "") = 0;
 
-    virtual Result error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                         int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                         const std::string& dialogTitle = "") const = 0;
-
-    virtual Result error(const std::string& contentTitle, const Text& text, const std::string& detailedText,
-                         const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                         const std::string& dialogTitle = "") const = 0;
+    async::Promise<Result> error(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                 Button defBtn = Button::NoButton, const Options& options = { WithIcon },
+                                 const std::string& dialogTitle = "")
+    {
+        return error(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
 
     // progress
-    virtual Ret showProgress(const std::string& title, Progress* progress) const = 0;
+    virtual void showProgress(const std::string& title, Progress* progress) = 0;
 
     // files
-    virtual io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;
-    virtual io::path_t selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                        bool confirmOverwrite = true) = 0;
+    virtual async::Promise<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
+                                                         const std::vector<std::string>& filter) = 0;
+    virtual io::path_t selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;
+    virtual io::path_t selectSavingFileSync(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
+                                            bool confirmOverwrite = true) = 0;
 
     // dirs
-    virtual io::path_t selectDirectory(const QString& title, const io::path_t& dir) = 0;
-    virtual io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories) = 0;
+    virtual io::path_t selectDirectory(const std::string& title, const io::path_t& dir) = 0;
+    virtual io::paths_t selectMultipleDirectories(const std::string& title, const io::path_t& dir,
+                                                  const io::paths_t& selectedDirectories) = 0;
 
     // color
-    virtual QColor selectColor(const QColor& color = Qt::white, const QString& title = "") = 0;
+    virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") = 0;
     virtual bool isSelectColorOpened() const = 0;
 
     // custom
-    virtual RetVal<Val> open(const std::string& uri) const = 0;
-    virtual RetVal<Val> open(const Uri& uri) const = 0;
-    virtual RetVal<Val> open(const UriQuery& uri) const = 0;
-    virtual RetVal<bool> isOpened(const std::string& uri) const = 0;
-    virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
+    virtual async::Promise<Val> open(const UriQuery& uri) = 0;
+    async::Promise<Val> open(const std::string& uri) { return open(UriQuery(uri)); }
+    async::Promise<Val> open(const Uri& uri) { return open(UriQuery(uri)); }
     virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;
+    virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
     virtual async::Channel<Uri> opened() const = 0;
 
     virtual void raise(const UriQuery& uri) = 0;
 
-    virtual void close(const std::string& uri) = 0;
-    virtual void close(const Uri& uri) = 0;
     virtual void close(const UriQuery& uri) = 0;
+    virtual void close(const Uri& uri) = 0;
     virtual void closeAllDialogs() = 0;
 
     virtual ValCh<Uri> currentUri() const = 0;
+    virtual RetVal<bool> isCurrentUriDialog() const = 0;
     virtual std::vector<Uri> stack() const = 0;
 
     virtual Ret openUrl(const std::string& url) const = 0;
@@ -232,6 +256,52 @@ public:
     /// Opens a file browser at the parent directory of filePath,
     /// and selects the file at filePath on OSs that support it
     virtual Ret revealInFileBrowser(const io::path_t& filePath) const = 0;
+
+    //! =================================
+    //! NOTE Please don't use this
+    //! =================================
+    virtual Result questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
+
+    Result questionSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                        const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return questionSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
+
+    virtual Result infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                            int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
+
+    Result infoSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                    const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
+
+    virtual Result warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                               int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                               const std::string& dialogTitle = "") = 0;
+
+    Result warningSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                       const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = "")
+    {
+        return warningSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
+
+    virtual Result errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                             int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                             const std::string& dialogTitle = "") = 0;
+
+    Result errorSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                     const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = "")
+    {
+        return errorSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
+
+    virtual RetVal<Val> openSync(const UriQuery& uri) = 0;
+    RetVal<Val> openSync(const std::string& uri) { return openSync(UriQuery(uri)); }
+    RetVal<Val> openSync(const Uri& uri) { return openSync(UriQuery(uri)); }
+    //! ==============================
 };
 DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
 }

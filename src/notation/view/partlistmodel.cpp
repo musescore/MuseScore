@@ -71,7 +71,7 @@ void PartListModel::load()
 
     masterNotation->sortExcerpts(excerpts);
 
-    for (IExcerptNotationPtr excerpt : excerpts) {
+    for (const IExcerptNotationPtr& excerpt : excerpts) {
         m_excerpts.push_back(excerpt);
     }
 
@@ -154,16 +154,17 @@ void PartListModel::resetPart(int partIndex)
     if (!m_excerpts[partIndex]->isEmpty()) {
         std::string question = muse::trc("notation", "Are you sure you want to reset this part?");
 
-        IInteractive::Button btn = interactive()->question("", question, {
+        interactive()->question("", question, {
             IInteractive::Button::Yes, IInteractive::Button::No
-        }).standardButton();
-
-        if (btn != IInteractive::Button::Yes) {
-            return;
-        }
+        })
+        .onResolve(this, [this, partIndex](const IInteractive::Result& res) {
+            if (res.isButton(IInteractive::Button::Yes)) {
+                doResetPart(partIndex);
+            }
+        });
+    } else {
+        doResetPart(partIndex);
     }
-
-    doResetPart(partIndex);
 }
 
 void PartListModel::doResetPart(int partIndex)
@@ -186,16 +187,17 @@ void PartListModel::removePart(int partIndex)
     if (!m_excerpts[partIndex]->isEmpty()) {
         std::string question = muse::trc("notation", "Are you sure you want to delete this part?");
 
-        IInteractive::Button btn = interactive()->question("", question, {
+        interactive()->question("", question, {
             IInteractive::Button::Yes, IInteractive::Button::No
-        }).standardButton();
-
-        if (btn != IInteractive::Button::Yes) {
-            return;
-        }
+        })
+        .onResolve(this, [this, partIndex](const IInteractive::Result& res) {
+            if (res.isButton(IInteractive::Button::Yes)) {
+                doRemovePart(partIndex);
+            }
+        });
+    } else {
+        doRemovePart(partIndex);
     }
-
-    doRemovePart(partIndex);
 }
 
 void PartListModel::doRemovePart(int partIndex)

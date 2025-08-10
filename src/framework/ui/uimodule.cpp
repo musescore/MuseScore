@@ -33,22 +33,24 @@
 #include "internal/uiactionsregister.h"
 #include "internal/navigationcontroller.h"
 #include "internal/navigationuiactions.h"
+#include "internal/dragcontroller.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
+#include "internal/windowscontroller.h"
 #include "view/platform/macos/macosmainwindowbridge.h"
 #elif defined(Q_OS_WIN)
 #include "internal/platform/windows/windowsplatformtheme.h"
+#include "internal/platform/windows/winwindowscontroller.h"
 #include "view/mainwindowbridge.h"
 #elif defined(Q_OS_LINUX)
 #include "internal/platform/linux/linuxplatformtheme.h"
+#include "internal/windowscontroller.h"
 #include "view/mainwindowbridge.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
 #include "view/mainwindowbridge.h"
 #endif
-
-#include "internal/uiengine.h"
 
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
@@ -60,6 +62,8 @@
 #include "view/navigationevent.h"
 #include "view/qmlaccessible.h"
 #include "view/focuslistener.h"
+#include "view/qmldrag.h"
+#include "view/windowsmodel.h"
 
 #include "view/internal/errordetailsmodel.h"
 #include "view/internal/progressdialogmodel.h"
@@ -96,10 +100,13 @@ void UiModule::registerExports()
 
     #ifdef Q_OS_MAC
     m_platformTheme = std::make_shared<MacOSPlatformTheme>();
+    m_windowsController = std::make_shared<WindowsController>();
     #elif defined(Q_OS_WIN)
     m_platformTheme = std::make_shared<WindowsPlatformTheme>();
+    m_windowsController = std::make_shared<WinWindowsController>();
     #elif defined(Q_OS_LINUX)
     m_platformTheme = std::make_shared<LinuxPlatformTheme>();
+    m_windowsController = std::make_shared<WindowsController>();
     #else
     m_platformTheme = std::make_shared<StubPlatformTheme>();
     #endif
@@ -112,6 +119,8 @@ void UiModule::registerExports()
     ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
     ioc()->registerExport<IUiActionsRegister>(moduleName(), m_uiactionsRegister);
     ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
+    ioc()->registerExport<IDragController>(moduleName(), new DragController());
+    ioc()->registerExport<IWindowsController>(moduleName(), m_windowsController);
 }
 
 void UiModule::resolveImports()
@@ -123,6 +132,11 @@ void UiModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
+        ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse/Ui/internal/StandardDialog.qml");
+        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse/Ui/internal/ProgressDialog.qml");
+        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse/Ui/internal/FileDialog.qml");
+        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse/Ui/internal/FolderDialog.qml");
+
         ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
         ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
     }
@@ -164,8 +178,11 @@ void UiModule::registerUiTypes()
     qmlRegisterType<NavigationControl>("Muse.Ui", 1, 0, "NavigationControl");
     qmlRegisterType<AccessibleItem>("Muse.Ui", 1, 0, "AccessibleItem");
     qmlRegisterUncreatableType<MUAccessible>("Muse.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
+    qmlRegisterType<QmlDrag>("Muse.Ui", 1, 0, "CppDrag");
 
     qmlRegisterType<FocusListener>("Muse.Ui", 1, 0, "FocusListener");
+
+    qmlRegisterType<WindowsModel>("Muse.Ui", 1, 0, "WindowsModel");
 
 #ifdef Q_OS_MAC
     qmlRegisterType<MacOSMainWindowBridge>("Muse.Ui", 1, 0, "MainWindowBridge");

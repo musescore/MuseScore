@@ -38,8 +38,10 @@
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/fingering.h"
+#include "engraving/dom/glissando.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/keysig.h"
@@ -387,6 +389,7 @@ bool MeiExporter::writePgHead(const VBox* vBox)
     m_currentNode = m_currentNode.append_child();
 
     libmei::PgHead pgHead;
+    pgHead.SetFunc(libmei::PGFUNC_first);
     pgHead.Write(m_currentNode);
 
     std::list<std::pair<libmei::Rend, String> > cells[CellCount];
@@ -613,7 +616,7 @@ bool MeiExporter::writeStaffGrpStart(const Staff* staff, std::vector<int>& ends,
 
     for (size_t j = 0; j < staff->bracketLevels() + 1; j++) {
         if (staff->bracketType(j) != BracketType::NO_BRACKET) {
-            libmei::StaffGrp meiStaffGrp = Convert::bracketToMEI(staff->bracketType(j), staff->barLineSpan());
+            libmei::StaffGrp meiStaffGrp = Convert::staffGrpToMEI(staff->bracketType(j), staff->barLineSpan());
             // mark at which staff we will need to close the staffGrp
             int end = static_cast<int>(staff->idx() + staff->bracketSpan(j)) - 1;
             // Something is wrong, maybe a staff was delete in the MuseScore file?
@@ -869,10 +872,14 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeFb(dynamic_cast<const FiguredBass*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFingering()) {
             success = success && this->writeFing(dynamic_cast<const Fingering*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isGlissando()) {
+            success = success && this->writeGliss(dynamic_cast<const Glissando*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHairpin()) {
             success = success && this->writeHairpin(dynamic_cast<const Hairpin*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
             success = success && this->writeHarm(dynamic_cast<const Harmony*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isHarpPedalDiagram()) {
+            success = success && this->writeHarpPedal(dynamic_cast<const HarpPedalDiagram*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOrnament()) {
             success = success && this->writeOrnament(dynamic_cast<const Ornament*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOttava()) {
@@ -1331,6 +1338,10 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->writeArtics(chord);
         this->writeVerses(chord);
     }
+    const int velocity = note->userVelocity();
+    if (velocity != 0) {
+        meiNote.SetVel(velocity);
+    }
     Convert::colorToMEI(note, meiNote);
     std::string xmlId = this->getXmlIdFor(note, 'n');
     meiNote.Write(m_currentNode, xmlId);
@@ -1343,6 +1354,17 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
     }
     if (note->tieBack()) {
         m_endingControlEventMap[note->tieBack()] = "#" + xmlId;
+    }
+
+    for (Spanner* spanner : note->spannerFor()) {
+        if (spanner->isGlissando()) {
+            m_startingControlEventList.push_back(std::make_pair(spanner, "#" + xmlId));
+        }
+    }
+    for (Spanner* spanner : note->spannerBack()) {
+        if (spanner->isGlissando()) {
+            m_endingControlEventMap[spanner] = "#" + xmlId;
+        }
     }
 
     for (const EngravingItem* element : note->el()) {
@@ -1707,7 +1729,7 @@ bool MeiExporter::writeF(const FiguredBassItem* figuredBassItem)
 }
 
 /**
- * Write a fb (FigureBass).
+ * Write a fb (figured bass).
  */
 
 bool MeiExporter::writeFb(const FiguredBass* figuredBass, const std::string& startid)
@@ -1802,6 +1824,32 @@ bool MeiExporter::writeFing(const Fingering* fing, const std::string& startid)
 }
 
 /**
+ * Write a gliss and its text content.
+ */
+
+bool MeiExporter::writeGliss(const Glissando* gliss, const std::string& startid)
+{
+    IF_ASSERT_FAILED(gliss) {
+        return false;
+    }
+
+    pugi::xml_node glissNode = m_currentNode.append_child();
+    String text = gliss->text();
+    libmei::Gliss meiGliss = Convert::glissToMEI(gliss);
+    meiGliss.SetStartid(startid);
+    meiGliss.Write(glissNode, this->getXmlIdFor(gliss, 'g'));
+
+    if (text.size() > 0) {
+        glissNode.text().set(text.toStdString().c_str());
+    }
+
+    // Add the node to the map of open control events
+    this->addNodeToOpenControlEvents(glissNode, gliss, startid);
+
+    return true;
+}
+
+/**
  * Write a hairpin.
  */
 
@@ -1844,6 +1892,27 @@ bool MeiExporter::writeHarm(const Harmony* harmony, const std::string& startid)
     meiHarm.Write(harmNode, this->getXmlIdFor(harmony, 'h'));
 
     this->writeLines(harmNode, meiLines);
+
+    return true;
+}
+
+/**
+ * Write a harpPedal.
+ */
+
+bool MeiExporter::writeHarpPedal(const HarpPedalDiagram* harpPedalDiagram, const std::string& startid)
+{
+    IF_ASSERT_FAILED(harpPedalDiagram) {
+        return false;
+    }
+    if (!harpPedalDiagram->isDiagram()) {
+        return true;
+    }
+
+    pugi::xml_node harpPedalNode = m_currentNode.append_child();
+    libmei::HarpPedal meiHarpPedal = Convert::harpPedalToMEI(harpPedalDiagram);
+    meiHarpPedal.SetStartid(startid);
+    meiHarpPedal.Write(harpPedalNode, this->getXmlIdFor(harpPedalDiagram, 'h'));
 
     return true;
 }
@@ -2218,12 +2287,14 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
 
     track_idx_t trackIdx = chordRest->track();
 
-    for (const EngravingItem* element : chordRest->segment()->annotations()) {
-        if (element->track() == trackIdx) {
-            m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
+    if (!chordRest->isGrace()) {
+        for (const EngravingItem* element : chordRest->segment()->annotations()) {
+            if (element->track() == trackIdx) {
+                m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
+            }
         }
     }
-    // Breath a handled differently
+    // Breath is handled differently
     const Breath* breath = chordRest->hasBreathMark();
     if (breath) {
         m_startingControlEventList.push_back(std::make_pair(breath, "#" + xmlId));

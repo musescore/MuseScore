@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONTYPES_H
-#define MU_NOTATION_NOTATIONTYPES_H
+#pragma once
 
 #include <QPixmap>
 #include <QDate>
@@ -35,6 +34,7 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/durationtype.h"
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/hook.h"
@@ -57,6 +57,7 @@
 #include "engraving/dom/stem.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/dom/tuplet.h"
 
 #include "engraving/rendering/layoutoptions.h"
 
@@ -90,7 +91,7 @@ using TransposeMode = mu::engraving::TransposeMode;
 using TransposeDirection = mu::engraving::TransposeDirection;
 using Fraction = mu::engraving::Fraction;
 using ElementPattern = mu::engraving::ElementPattern;
-using SelectionFilterType = mu::engraving::SelectionFilterType;
+using SelectionFilterTypesVariant = mu::engraving::SelectionFilterTypesVariant;
 using Chord = mu::engraving::Chord;
 using ChordRest = mu::engraving::ChordRest;
 using Harmony = mu::engraving::Harmony;
@@ -146,7 +147,7 @@ using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
 using staff_idx_t = mu::engraving::staff_idx_t;
-using ChangesRange = mu::engraving::ScoreChangesRange;
+using ScoreChanges = mu::engraving::ScoreChanges;
 using GuitarBendType = mu::engraving::GuitarBendType;
 using engraving::LoopBoundaryType;
 using Pid = mu::engraving::Pid;
@@ -203,7 +204,8 @@ enum class BoxType : unsigned char
     Vertical,
     Horizontal,
     Measure,
-    Text
+    Text,
+    Fret
 };
 
 enum class AddBoxesTarget : unsigned char {
@@ -411,7 +413,7 @@ struct FilterNotesOptions : FilterElementsOptions
 struct StaffConfig
 {
     bool visible = false;
-    qreal userDistance = 0.0;
+    engraving::Spatium userDistance = engraving::Spatium(0.0);
     bool cutaway = false;
     bool showIfEmpty = false;
     bool hideSystemBarline = false;
@@ -424,7 +426,7 @@ struct StaffConfig
     bool operator==(const StaffConfig& conf) const
     {
         bool equal = visible == conf.visible;
-        equal &= muse::RealIsEqual(userDistance, conf.userDistance);
+        equal &= userDistance == conf.userDistance;
         equal &= cutaway == conf.cutaway;
         equal &= showIfEmpty == conf.showIfEmpty;
         equal &= hideSystemBarline == conf.hideSystemBarline;
@@ -532,7 +534,7 @@ struct MeasureBeat
 {
     int measureIndex = 0;
     int maxMeasureIndex = 0;
-    int beatIndex = 0;
+    float beat = 0.f;
     int maxBeatIndex = 0;
 };
 
@@ -621,6 +623,9 @@ enum class PercussionPanelAutoShowMode {
     UNPITCHED_STAFF_NOTE_INPUT,
     NEVER,
 };
-}
 
-#endif // MU_NOTATION_NOTATIONTYPES_H
+static const mu::engraving::ElementTypeSet NOTE_REST_TYPES {
+    mu::engraving::ElementType::NOTE,
+    mu::engraving::ElementType::REST,
+};
+}

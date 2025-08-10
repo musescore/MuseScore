@@ -64,27 +64,27 @@ bool UpdateScenario::isCheckStarted() const
 void UpdateScenario::doCheckForUpdate(bool manual)
 {
     m_checkProgressChannel = std::make_shared<Progress>();
-    m_checkProgressChannel->started.onNotify(this, [this]() {
+    m_checkProgressChannel->started().onNotify(this, [this]() {
         m_checkProgress = true;
     });
 
-    m_checkProgressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
+    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
             m_checkProgress = false;
         };
 
-        if (!res.ret) {
+        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+        if (!noUpdate && !res.ret) {
             LOGE() << "Unable to check for update, error: " << res.ret.toString();
 
             if (manual) {
-                processUpdateResult(res.ret.code());
+                showServerErrorMsg();
             }
 
             return;
         }
 
         ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
         if (!manual) {
             bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
             if (noUpdate || shouldIgnoreUpdate) {
@@ -103,7 +103,7 @@ void UpdateScenario::doCheckForUpdate(bool manual)
 
 void UpdateScenario::th_checkForUpdate()
 {
-    m_checkProgressChannel->started.notify();
+    m_checkProgressChannel->start();
 
     RetVal<ReleaseInfo> retVal = service()->checkForUpdate();
 
@@ -111,7 +111,7 @@ void UpdateScenario::th_checkForUpdate()
     result.ret = retVal.ret;
     result.val = Val(releaseInfoToValMap(retVal.val));
 
-    m_checkProgressChannel->finished.send(result);
+    m_checkProgressChannel->finish(result);
 }
 
 void UpdateScenario::processUpdateResult(int errorCode)
@@ -138,7 +138,7 @@ void UpdateScenario::processUpdateResult(int errorCode)
 void UpdateScenario::showNoUpdateMsg()
 {
     QString str = muse::qtrc("update", "You already have the latest version of MuseScore Studio. "
-                                       "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
+                                       "Please visit <a href=\"%1\">MuseScore.org</a> for news on what’s coming next.")
                   .arg(QString::fromStdString(configuration()->museScoreUrl()));
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
@@ -154,7 +154,7 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     query.addParam("notes", Val(info.notes));
     query.addParam("previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)));
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         LOGD() << rv.ret.toString();
         return;
@@ -179,7 +179,7 @@ void UpdateScenario::showServerErrorMsg()
 
 void UpdateScenario::downloadRelease()
 {
-    RetVal<Val> rv = interactive()->open("muse://update?mode=download");
+    RetVal<Val> rv = interactive()->openSync("muse://update?mode=download");
     if (!rv.ret) {
         processUpdateResult(rv.ret.code());
         return;
@@ -193,18 +193,19 @@ void UpdateScenario::closeAppAndStartInstallation(const muse::io::path_t& instal
     std::string info = muse::trc("update", "MuseScore Studio needs to close to complete the installation. "
                                            "If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.");
     int closeBtn = int(IInteractive::Button::CustomButton) + 1;
-    IInteractive::Result result = interactive()->info("", info,
-                                                      { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                        IInteractive::ButtonData(closeBtn, muse::trc("update", "Close"), true) },
-                                                      closeBtn);
+    auto promise = interactive()->info("", info,
+                                       { interactive()->buttonData(IInteractive::Button::Cancel),
+                                         IInteractive::ButtonData(closeBtn, muse::trc("update", "Close"), true) },
+                                       closeBtn);
+    promise.onResolve(this, [this, installerPath](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Cancel)) {
+            return;
+        }
 
-    if (result.standardButton() == IInteractive::Button::Cancel) {
-        return;
-    }
+        if (multiInstancesProvider()->instances().size() != 1) {
+            multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
+        }
 
-    if (multiInstancesProvider()->instances().size() != 1) {
-        multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
-    }
-
-    dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
+        dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
+    });
 }

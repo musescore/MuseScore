@@ -156,6 +156,10 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
+    case IAccessible::Role::SilentRole: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
     case IAccessible::Role::List: {
         state.active = item->accessibleState(IAccessible::State::Active);
     } break;
@@ -192,6 +196,10 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
+    case IAccessible::Role::SpinBox: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
     case IAccessible::Role::Range: {
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
@@ -217,6 +225,23 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::Dialog: return QAccessible::Dialog;
     case IAccessible::Role::Panel: return QAccessible::Pane;
     case IAccessible::Role::StaticText: return QAccessible::StaticText;
+    case IAccessible::Role::SilentRole: {
+        // See https://doc.qt.io/qt-5/qaccessible.html#Role-enum
+        // We want the screen reader to say the name of the current item and
+        // nothing else (i.e. not the name followed by "button" or "text").
+#if defined(Q_OS_MACOS)
+        // Good on macOS with VoiceOver.
+        return QAccessible::StaticText;
+        // VoiceOver gives unwanted additional output if ListItem is used, and it
+        // doesn't work at all if the role is TreeItem or Cell.
+#else
+        // Good on Windows with Narrator, NVDA, or JAWS; and on Linux with Orca.
+        return QAccessible::ListItem;
+        // Orca is equally happy with the roles TreeItem or Cell, but these cause
+        // unwanted additional ouput on Windows. StaticText causes unwanted
+        // additional output on both Linux and Windows.
+#endif
+    }
     case IAccessible::Role::EditableText: return QAccessible::EditableText;
     case IAccessible::Role::Button: return QAccessible::Button;
     case IAccessible::Role::CheckBox: return QAccessible::CheckBox;
@@ -225,6 +250,7 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::List: return QAccessible::List;
     case IAccessible::Role::ListItem: return QAccessible::ListItem;
     case IAccessible::Role::MenuItem: return QAccessible::MenuItem;
+    case IAccessible::Role::SpinBox: return QAccessible::SpinBox;
     case IAccessible::Role::Range: return QAccessible::Slider;
     case IAccessible::Role::Group:
     case IAccessible::Role::Information:

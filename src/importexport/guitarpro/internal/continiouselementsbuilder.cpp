@@ -69,6 +69,8 @@ static mu::engraving::ElementType muTypeFromImportType(ContiniousElementsBuilder
 
     case import_t::TRILL:
         return ElementType::TRILL;
+    case import_t::HAMMER_ON_PULL_OFF:
+        return ElementType::HAMMER_ON_PULL_OFF;
 
     case import_t::HAIRPIN_CRESCENDO:
     case import_t::HAIRPIN_DIMINUENDO:
@@ -149,6 +151,7 @@ static bool shouldSplitByRests(mu::engraving::ElementType muType)
     case ElementType::TRILL:
     case ElementType::HARMONIC_MARK:
     case ElementType::VIBRATO:
+    case ElementType::HAMMER_ON_PULL_OFF:
         return true;
 
     default:
@@ -159,12 +162,12 @@ static bool shouldSplitByRests(mu::engraving::ElementType muType)
 void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementType muType, ImportType importType, bool elemExists,
                                                        sub_type_t subType)
 {
-    auto setStartCR = [](SLine* elem, ChordRest* cr) {
+    auto setStartCR = [](Spanner* elem, ChordRest* cr) {
         elem->setTick(cr->tick());
         elem->setStartElement(cr);
     };
 
-    auto setEndCR = [](SLine* elem, ChordRest* cr) {
+    auto setEndCR = [](Spanner* elem, ChordRest* cr) {
         elem->setTick2(cr->tick() + cr->actualTicks());
         elem->setEndElement(cr);
     };
@@ -217,7 +220,7 @@ void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementTyp
                 /// removing info about the Rest and updating last element's ticks
                 if (lastTypeElementsToAdd.endedOnRest) {
                     lastTypeElementsToAdd.endedOnRest = false;
-                    SLine* prevElem = lastTypeElementsToAdd.elements.back();
+                    Spanner* prevElem = lastTypeElementsToAdd.elements.back();
                     if (!prevElem) {
                         LOGE() << "error while importing";
                         return;
@@ -241,7 +244,7 @@ void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementTyp
     {
         EngravingItem* engItem = Factory::createItem(muType, m_score->dummy());
 
-        SLine* newElem = dynamic_cast<SLine*>(engItem);
+        Spanner* newElem = dynamic_cast<Spanner*>(engItem);
         IF_ASSERT_FAILED(newElem) {
             return;
         }
@@ -280,9 +283,53 @@ void ContiniousElementsBuilder::notifyUncompletedMeasure()
     }
 }
 
+static Chord* searchEndChord(Chord* startChord)
+{
+    ChordRest* nextCr = nullptr;
+    if (startChord->isGrace()) {
+        //! this case when start note is a grace note so end note can be next note in grace notes
+        //! or parent note of grace notes
+        Chord* parentGrace = static_cast<Chord*>(startChord->parent());
+
+        auto it = parentGrace->graceNotes().begin();
+        for (; it != parentGrace->graceNotes().end(); ++it) {
+            if (*it == startChord) {
+                break;
+            }
+        }
+
+        if (it == parentGrace->graceNotes().end()) {
+            nextCr = nullptr;
+        } else if (std::next(it) == parentGrace->graceNotes().end()) {
+            nextCr = parentGrace;
+        } else {
+            nextCr = *(++it);
+        }
+    } else {
+        nextCr = startChord->segment()->next1()->nextChordRest(startChord->track());
+        if (!nextCr) {
+            return nullptr;
+        }
+
+        if (nextCr->isChord() && !static_cast<Chord*>(nextCr)->graceNotes().empty()) {
+            nextCr = static_cast<Chord*>(nextCr)->graceNotes().front();
+        }
+    }
+
+    return (nextCr && nextCr->isChord()) ? toChord(nextCr) : nullptr;
+}
+
 void ContiniousElementsBuilder::addElementsToScore()
 {
-    for (SLine* elem : m_orderedAddedElements) {
+    for (auto& trackMaps: m_spannersWithoutEndElement) {
+        for (auto& typeMaps : trackMaps.second) {
+            for (Spanner* elem : typeMaps.second) {
+                elem->setEndElement(searchEndChord(elem->endChord()));
+            }
+        }
+    }
+
+    for (Spanner* elem : m_orderedAddedElements) {
         m_score->addElement(elem);
     }
 }
@@ -321,7 +368,7 @@ void ContiniousElementsBuilder::setupAddedElement(track_idx_t trackIdx, ImportTy
 {
     ElementType muType = muTypeFromImportType(importType);
 
-    SLine* lineElem = m_elementsByType[importType][trackIdx];
+    Spanner* lineElem = m_elementsByType[importType][trackIdx];
     if (!lineElem) {
         return;
     }
@@ -339,7 +386,7 @@ void ContiniousElementsBuilder::setupAddedElement(track_idx_t trackIdx, ImportTy
     {
         if (lineElem->isHairpin()) {
             toHairpin(lineElem)->setHairpinType(
-                importType == ImportType::HAIRPIN_CRESCENDO ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
+                importType == ImportType::HAIRPIN_CRESCENDO ? HairpinType::CRESC_HAIRPIN : HairpinType::DIM_HAIRPIN);
         }
 
         break;
@@ -372,6 +419,9 @@ void ContiniousElementsBuilder::setupAddedElement(track_idx_t trackIdx, ImportTy
             toVibrato(lineElem)->setVibratoType(vibratoTypeFromImportType(importType));
         }
 
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF:
+        m_spannersWithoutEndElement[trackIdx][importType].insert(lineElem);
         break;
     default:
         break;

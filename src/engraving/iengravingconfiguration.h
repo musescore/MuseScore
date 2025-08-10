@@ -29,10 +29,6 @@
 #include "async/notification.h"
 #include "engraving/types/types.h"
 
-namespace muse::draw {
-class Color;
-}
-
 namespace mu::engraving {
 class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
 {
@@ -80,6 +76,10 @@ public:
     virtual void setDynamicsApplyToAllVoices(bool v) = 0;
     virtual muse::async::Channel<bool> dynamicsApplyToAllVoicesChanged() const = 0;
 
+    virtual bool autoUpdateFretboardDiagrams() const = 0;
+    virtual void setAutoUpdateFretboardDiagrams(bool v) = 0;
+    virtual muse::async::Channel<bool> autoUpdateFretboardDiagramsChanged() const = 0;
+
     virtual Color formattingColor() const = 0;
     virtual muse::async::Channel<Color> formattingColorChanged() const = 0;
 
@@ -104,7 +104,9 @@ public:
         bool showSkylines = false;
         bool showSystemBoundingRects = false;
         bool showElementMasks = false;
-        bool showCorruptedMeasures = true;
+        bool showLineAttachPoints = false;
+        bool markEmptyStaffVisibilityOverrides = false;
+        bool markCorruptedMeasures = true;
 
         bool anyEnabled() const
         {
@@ -115,9 +117,9 @@ public:
                    || showSkylines
                    || showSystemBoundingRects
                    || showElementMasks
-#ifndef NDEBUG
-                   || showCorruptedMeasures
-#endif
+                   || showLineAttachPoints
+                   || markEmptyStaffVisibilityOverrides
+                   || markCorruptedMeasures
             ;
         }
     };
@@ -133,12 +135,9 @@ public:
 
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
-    virtual bool experimentalGuitarBendImport() const = 0;
-    virtual void setExperimentalGuitarBendImport(bool enabled) = 0;
     virtual bool shouldAddParenthesisOnStandardStaff() const = 0;
     virtual bool negativeFretsAllowed() const = 0;
     virtual bool crossNoteHeadAlwaysBlack() const = 0;
-    virtual bool enableExperimentalFretCircle() const = 0;
     virtual void setGuitarProMultivoiceEnabled(bool multiVoice) = 0;
     virtual bool guitarProMultivoiceEnabled() const = 0;
     virtual bool minDistanceForPartialSkylineCalculated() const = 0;

@@ -34,7 +34,7 @@ RadioDelegate {
 
     ButtonGroup.group: ListView.view && ListView.view instanceof RadioButtonGroup ? ListView.view.radioButtonGroup : null
 
-    implicitWidth: leftPadding + implicitIndicatorWidth + spacing + implicitContentWidth + rightPadding
+    implicitWidth: leftPadding + implicitIndicatorWidth + (implicitIndicatorWidth > 0 && implicitContentWidth > 0 ? spacing : 0) + implicitContentWidth + rightPadding
     implicitHeight: topPadding + Math.max(implicitIndicatorHeight, implicitContentHeight) + bottomPadding
 
     spacing: 6
@@ -43,6 +43,8 @@ RadioDelegate {
     font: ui.theme.bodyFont
 
     hoverEnabled: root.enabled
+
+    opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
     onToggled: {
         navigation.requestActiveByInteraction()

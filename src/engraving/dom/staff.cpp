@@ -218,6 +218,35 @@ bool Staff::trackHasLinksInVoiceZero(track_idx_t track)
     return false;
 }
 
+void Staff::undoSetShowMeasureNumbers(bool show)
+{
+    bool isTopStave = score()->staves().front() == this;
+    if (show) {
+        undoChangeProperty(Pid::SHOW_MEASURE_NUMBERS, isTopStave ? AutoOnOff::AUTO : AutoOnOff::ON);
+    } else {
+        undoChangeProperty(Pid::SHOW_MEASURE_NUMBERS, isTopStave ? AutoOnOff::OFF : AutoOnOff::AUTO);
+    }
+}
+
+bool Staff::shouldShowMeasureNumbers() const
+{
+    if (style().styleB(Sid::measureNumberAllStaves)) {
+        return true;
+    }
+
+    bool isTopStave = score()->staves().front() == this;
+    bool isSystemObjectStaff = muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
+    return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff && m_showMeasureNumbers == AutoOnOff::ON);
+}
+
+bool Staff::shouldShowPlayCount() const
+{
+    bool isTopStave = score()->staves().front() == this;
+    bool isSystemObjectStaff = muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
+
+    return isTopStave || isSystemObjectStaff;
+}
+
 //---------------------------------------------------------
 //   fillBrackets
 //    make sure index idx is valid
@@ -1194,7 +1223,9 @@ void Staff::staffTypeListChanged(const Fraction& tick)
 
 StaffType* Staff::setStaffType(const Fraction& tick, const StaffType& nst)
 {
-    return m_staffTypeList.setStaffType(tick, nst);
+    StaffType* stt = m_staffTypeList.setStaffType(tick, nst);
+    stt->setScore(score());
+    return stt;
 }
 
 //---------------------------------------------------------
@@ -1243,7 +1274,11 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 void Staff::init(const Staff* s)
 {
     m_id                = s->m_id;
-    m_staffTypeList     = s->m_staffTypeList;
+    for (const auto& stPair : s->m_staffTypeList.staffTypeChanges()) {
+        const StaffType& st = stPair.second;
+        StaffType newStaffType(st);
+        setStaffType(Fraction::fromTicks(stPair.first), newStaffType);
+    }
     setDefaultClefType(s->defaultClefType());
     m_barLineFrom       = s->m_barLineFrom;
     m_barLineTo         = s->m_barLineTo;
@@ -1289,15 +1324,6 @@ void Staff::initFromStaffType(const StaffType* staffType)
 
     // use selected staff type
     setStaffType(Fraction(0, 1), *staffType);
-}
-
-//---------------------------------------------------------
-//   spatiumChanged
-//---------------------------------------------------------
-
-void Staff::spatiumChanged(double oldValue, double newValue)
-{
-    m_userDist = (m_userDist / oldValue) * newValue;
 }
 
 //---------------------------------------------------------
@@ -1531,6 +1557,10 @@ PropertyValue Staff::getProperty(Pid id) const
         return userDist();
     case Pid::GENERATED:
         return false;
+    case Pid::SHOW_MEASURE_NUMBERS:
+        return m_showMeasureNumbers;
+    case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
+        return m_systemObjectsBelowBottomStaff;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();
@@ -1602,7 +1632,13 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         setBarLineTo(v.toInt());
         break;
     case Pid::STAFF_USERDIST:
-        setUserDist(v.value<Millimetre>());
+        setUserDist(v.value<Spatium>());
+        break;
+    case Pid::SHOW_MEASURE_NUMBERS:
+        m_showMeasureNumbers = v.value<AutoOnOff>();
+        break;
+    case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
+        m_systemObjectsBelowBottomStaff = v.toBool();
         break;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
@@ -1636,7 +1672,11 @@ PropertyValue Staff::propertyDefault(Pid id) const
     case Pid::STAFF_BARLINE_SPAN_TO:
         return 0;
     case Pid::STAFF_USERDIST:
-        return Millimetre(0.0);
+        return Spatium(0.0);
+    case Pid::SHOW_MEASURE_NUMBERS:
+        return AutoOnOff::AUTO;
+    case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
+        return false;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();

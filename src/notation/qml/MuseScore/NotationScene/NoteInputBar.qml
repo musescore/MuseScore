@@ -155,20 +155,13 @@ Item {
                 }
             }
 
-            Connections {
-                target: btn.mouseArea
-
-                // Make sure we only connect to `pressAndHold` if necessary
-                // See https://github.com/musescore/MuseScore/issues/16012
-                enabled: btn.hasMenu && !menuLoader.isMenuOpened
-
-                function onPressAndHold() {
-                    if (menuLoader.isMenuOpened || !btn.hasMenu) {
-                        return
-                    }
-
-                    btn.toggleMenuOpened()
+            mouseArea.onPressAndHold: function(event) {
+                if (menuLoader.isMenuOpened || !btn.hasMenu) {
+                    event.accepted = false // do not suppress the click event
+                    return
                 }
+
+                btn.toggleMenuOpened()
             }
 
             StyledMenuLoader {

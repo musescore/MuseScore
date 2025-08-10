@@ -39,7 +39,7 @@ MessageBox::Button MessageBox::warning(const std::string& title, const std::stri
         realButtons.push_back(IInteractive::Button::Ok);
     }
 
-    IInteractive::Result res = interactive()->warning(title, text, realButtons);
+    IInteractive::Result res = interactive()->warningSync(title, text, realButtons);
     if (res.standardButton() == IInteractive::Button::Ok) {
         return MessageBox::Button::Ok;
     }

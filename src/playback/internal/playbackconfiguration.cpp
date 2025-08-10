@@ -37,6 +37,7 @@ static const std::string moduleName("playback");
 
 static const Settings::Key PLAYBACK_CURSOR_TYPE_KEY(moduleName, "application/playback/cursorType");
 static const Settings::Key PLAY_NOTES_WHEN_EDITING(moduleName, "score/note/playOnClick");
+static const Settings::Key PLAY_NOTES_ON_MIDI_INPUT(moduleName, "score/note/playOnMidiInput");
 static const Settings::Key PLAY_CHORD_WHEN_EDITING(moduleName, "score/chord/playOnAddNote");
 static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/play/onedit");
 
@@ -56,11 +57,15 @@ static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING(mod
 static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING(moduleName,
                                                                                         "playback/mixer/needToShowAboutResetSoundFlagsWhwnChangePlaybackProfileWarning");
 
+static const Settings::Key ONLINE_SOUNDS_CONNECTION_WARNING(moduleName, "playback/onlineSounds/showConnectionWarning");
+static const Settings::Key ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE(moduleName, "playback/onlineSounds/showProgressBarMode");
+
 static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/muteHiddenInstruments");
 
 static const Settings::Key DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS(moduleName, "playback/profiles/defaultProfileName");
 static const SoundProfileName BASIC_PROFILE_NAME(u"MuseScore Basic");
-static const SoundProfileName MUSE_PROFILE_NAME(u"Muse Sounds");
+static const SoundProfileName MUSESOUNDS_PROFILE_NAME(u"MuseSounds");
+static const SoundProfileName COMPAT_MUSESOUNDS_PROFILE_NAME(u"Muse Sounds");
 
 static Settings::Key mixerSectionVisibleKey(MixerSectionType sectionType)
 {
@@ -103,6 +108,10 @@ void PlaybackConfiguration::init()
     settings()->valueChanged(PLAY_HARMONY_WHEN_EDITING).onReceive(this, [this](const Val& val) {
         m_playHarmonyWhenEditingChanged.send(val.toBool());
     });
+    settings()->setDefaultValue(PLAY_NOTES_ON_MIDI_INPUT, Val(true));
+    settings()->valueChanged(PLAY_NOTES_ON_MIDI_INPUT).onReceive(this, [this](const Val& val) {
+        m_playNotesOnMidiInputChanged.send(val.toBool());
+    });
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
     settings()->setDefaultValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(false));
     settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING, Val(true));
@@ -138,6 +147,13 @@ void PlaybackConfiguration::init()
             m_isAuxChannelVisibleChanged.send(idx, val.toBool());
         });
     }
+
+    settings()->setDefaultValue(ONLINE_SOUNDS_CONNECTION_WARNING, Val(true));
+
+    settings()->setDefaultValue(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE, Val(static_cast<int>(OnlineSoundsShowProgressBarMode::Always)));
+    settings()->valueChanged(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE).onReceive(nullptr, [this](const Val&) {
+        m_onlineSoundsShowProgressBarModeChanged.notify();
+    });
 }
 
 bool PlaybackConfiguration::playNotesWhenEditing() const
@@ -183,6 +199,21 @@ void PlaybackConfiguration::setPlayHarmonyWhenEditing(bool value)
 async::Channel<bool> PlaybackConfiguration::playHarmonyWhenEditingChanged() const
 {
     return m_playHarmonyWhenEditingChanged;
+}
+
+bool PlaybackConfiguration::playNotesOnMidiInput() const
+{
+    return settings()->value(PLAY_NOTES_ON_MIDI_INPUT).toBool();
+}
+
+void PlaybackConfiguration::setPlayNotesOnMidiInput(bool value)
+{
+    settings()->setSharedValue(PLAY_NOTES_ON_MIDI_INPUT, Val(value));
+}
+
+muse::async::Channel<bool> PlaybackConfiguration::playNotesOnMidiInputChanged() const
+{
+    return m_playNotesOnMidiInputChanged;
 }
 
 PlaybackCursorType PlaybackConfiguration::cursorType() const
@@ -274,9 +305,14 @@ const SoundProfileName& PlaybackConfiguration::basicSoundProfileName() const
     return BASIC_PROFILE_NAME;
 }
 
-const SoundProfileName& PlaybackConfiguration::museSoundProfileName() const
+const SoundProfileName& PlaybackConfiguration::museSoundsProfileName() const
 {
-    return MUSE_PROFILE_NAME;
+    return MUSESOUNDS_PROFILE_NAME;
+}
+
+const SoundProfileName& PlaybackConfiguration::compatMuseSoundsProfileName() const
+{
+    return COMPAT_MUSESOUNDS_PROFILE_NAME;
 }
 
 SoundProfileName PlaybackConfiguration::defaultProfileForNewProjects() const
@@ -319,6 +355,31 @@ void PlaybackConfiguration::setNeedToShowResetSoundFlagsWhenChangePlaybackProfil
     settings()->setSharedValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING, Val(show));
 }
 
+bool PlaybackConfiguration::needToShowOnlineSoundsConnectionWarning() const
+{
+    return settings()->value(ONLINE_SOUNDS_CONNECTION_WARNING).toBool();
+}
+
+void PlaybackConfiguration::setNeedToShowOnlineSoundsConnectionWarning(bool show)
+{
+    settings()->setSharedValue(ONLINE_SOUNDS_CONNECTION_WARNING, Val(show));
+}
+
+OnlineSoundsShowProgressBarMode PlaybackConfiguration::onlineSoundsShowProgressBarMode() const
+{
+    return static_cast<OnlineSoundsShowProgressBarMode>(settings()->value(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE).toInt());
+}
+
+void PlaybackConfiguration::setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode mode)
+{
+    settings()->setSharedValue(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE, Val(static_cast<int>(mode)));
+}
+
+muse::async::Notification PlaybackConfiguration::onlineSoundsShowProgressBarModeChanged() const
+{
+    return m_onlineSoundsShowProgressBarModeChanged;
+}
+
 bool PlaybackConfiguration::shouldMeasureInputLag() const
 {
     return audioConfiguration()->shouldMeasureInputLag();
@@ -327,7 +388,7 @@ bool PlaybackConfiguration::shouldMeasureInputLag() const
 const SoundProfileName& PlaybackConfiguration::fallbackSoundProfileStr() const
 {
     if (musesamplerInfo() && musesamplerInfo()->isInstalled()) {
-        return MUSE_PROFILE_NAME;
+        return MUSESOUNDS_PROFILE_NAME;
     }
 
     return BASIC_PROFILE_NAME;

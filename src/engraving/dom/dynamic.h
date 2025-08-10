@@ -72,14 +72,10 @@ public:
     int subtype() const override { return static_cast<int>(m_dynamicType); }
     TranslatableString subtypeUserName() const override;
 
-    double customTextOffset() const;
-
     void reset() override;
 
     void setVelocity(int v) { m_velocity = v; }
     int velocity() const;
-    DynamicRange dynRange() const { return m_dynRange; }
-    void setDynRange(DynamicRange t);
 
     int changeInVelocity() const;
     void setChangeInVelocity(int val);
@@ -99,8 +95,6 @@ public:
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
 
-    void manageBarlineCollisions();
-
     static String dynamicText(DynamicType t);
     bool hasCustomText() const { return dynamicText(m_dynamicType) != xmlText(); }
 
@@ -118,11 +112,14 @@ public:
 
     bool hasVoiceAssignmentProperties() const override { return true; }
 
+    void startEdit(EditData&) override;
+    void endEdit(EditData&) override;
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
     void editDrag(EditData& editData) override;
     void endEditDrag(EditData&) override;
-    void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
+
+    bool isEditAllowed(EditData&) const override;
 
     Hairpin* leftHairpin() const { return m_leftHairpin; }
     Hairpin* rightHairpin() const { return m_rightHairpin; }
@@ -138,6 +135,10 @@ public:
 
     void findAdjacentHairpins();
 
+    Shape symShapeWithCutouts(SymId id) const override;
+
+    static Dyn dynInfo(DynamicType type);
+
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
@@ -150,7 +151,6 @@ private:
 
     mutable PointF m_dragOffset;
     int m_velocity = -1;           // associated midi velocity 0-127
-    DynamicRange m_dynRange = DynamicRange::PART; // STAFF, PART, SYSTEM
 
     int m_changeInVelocity = 128;
     DynamicSpeed m_velChangeSpeed = DynamicSpeed::NORMAL;

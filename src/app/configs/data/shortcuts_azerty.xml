@@ -372,6 +372,10 @@
     <seq>X</seq>
     </SC>
   <SC>
+    <key>flip-horizontally</key>
+    <seq>Alt+X</seq>
+    </SC>
+  <SC>
     <key>pitch-up</key>
     <seq>Up</seq>
     </SC>
@@ -546,6 +550,10 @@
   <SC>
     <key>add-slur</key>
     <seq>S</seq>
+    </SC>
+  <SC>
+    <key>add-dynamic</key>
+    <seq>Ctrl+D</seq>
     </SC>
   <SC>
     <key>add-hairpin</key>
@@ -770,10 +778,6 @@
     <seq>Ctrl+T</seq>
     </SC>
   <SC>
-    <key>dynamics</key>
-    <seq>Ctrl+D</seq>
-    </SC>
-  <SC>
     <key>expression-text</key>
     <seq>Ctrl+E</seq>
     </SC>
@@ -788,6 +792,11 @@
   <SC>
     <key>play</key>
     <seq>Space</seq>
+    <autorepeat>0</autorepeat>
+    </SC>
+  <SC>
+    <key>pause-and-select</key>
+    <seq>Ctrl+Space</seq>
     <autorepeat>0</autorepeat>
     </SC>
   <SC>
@@ -919,6 +928,10 @@
   <SC>
     <key>toggle-piano-keyboard</key>
     <seq>P</seq>
+    </SC>
+  <SC>
+    <key>toggle-percussion-panel</key>
+    <seq>O</seq>
     </SC>
   <SC>
     <key>next-score</key>

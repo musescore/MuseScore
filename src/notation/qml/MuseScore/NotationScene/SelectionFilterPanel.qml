@@ -19,57 +19,282 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts
 
 import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
+import "internal"
+
 Item {
     id: root
-    enabled: selectionFilterModel.enabled
 
-    property alias navigationSection: navPanel.section
-    property alias navigationOrderStart: navPanel.order
+    property NavigationSection navigationSection: null
+    property int navigationOrderStart: 0
 
-    NavigationPanel {
-        id: navPanel
-        name: "SelectionFilter"
-        direction: NavigationPanel.Vertical
-        enabled: root.enabled && root.visible
-    }
+    readonly property bool isAllSelected: notesInChordModel.isAllSelected && elementsModel.isAllSelected
+    readonly property bool isNoneSelected: notesInChordModel.isNoneSelected && elementsModel.isNoneSelected
 
-    Component.onCompleted: {
-        selectionFilterModel.load()
-    }
+    StyledFlickable {
+        id: flickable
 
-    StyledListView {
-        anchors.fill: parent
-
-        topMargin: 12
-        leftMargin: topMargin
-        rightMargin: topMargin
-        bottomMargin: topMargin
-
-        spacing: 12
-
-        model: SelectionFilterModel {
-            id: selectionFilterModel
+        anchors {
+            top: root.top
+            left: root.left
+            bottom: clearAllSelectAllRow.top
         }
 
-        delegate: CheckBox {
-            width: ListView.view.width
+        width: root.width
 
-            text: model.title
+        contentWidth: flickable.width
+        contentHeight: contentColumn.implicitHeight
 
-            navigation.panel: navPanel
-            navigation.order: model.index
+        Component.onCompleted: {
+            voicesModel.load()
+            notesInChordModel.load()
+            elementsModel.load()
+        }
 
-            checked: model.isSelected
-            isIndeterminate: model.isIndeterminate
+        Column {
+            id: contentColumn
+
+            readonly property real buttonHeight: 24
+
+            anchors {
+                fill: parent
+                leftMargin: 12
+                rightMargin: 12
+            }
+
+            spacing: 10
+
+            SelectionFilterSection {
+                id: voicesSection
+
+                sectionTitle: qsTrc("notation", "Voices")
+
+                navigation {
+                    section: root.navigationSection
+                    order: root.navigationOrderStart + 1
+                    direction: NavigationPanel.Horizontal
+                }
+
+                RowLayout {
+                    id: voiceButtonsRow
+
+                    width: parent.width
+                    spacing: voicesSection.spacing
+
+                    Repeater {
+                        model: VoicesSelectionFilterModel {
+                            id: voicesModel
+                        }
+
+                        delegate: FlatButton {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: contentColumn.buttonHeight
+
+                            text: model.title
+
+                            navigation.panel: voicesSection.navigation
+                            navigation.column: model.index
+
+                            accentButton: model.isSelected
+                            onClicked: {
+                                model.isSelected = !model.isSelected
+                            }
+                        }
+                    }
+                }
+            }
+
+            SeparatorLine {}
+
+            SelectionFilterSection {
+                id: notesInChordSection
+
+                visible: notesInChordModel.enabled
+                sectionTitle: qsTrc("notation", "Chords")
+
+                navigation {
+                    section: root.navigationSection
+                    order: root.navigationOrderStart + 2
+                    direction: NavigationPanel.Vertical
+                }
+
+                ColumnLayout {
+                    id: notesInChordButtonsColumn
+
+                    width: parent.width
+                    spacing: 6
+
+                    Repeater {
+                        model: NotesInChordSelectionFilterModel {
+                            id: notesInChordModel
+                        }
+
+                        delegate: FlatButton {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: contentColumn.buttonHeight
+
+                            visible: model.isAllowed
+                            text: model.title
+
+                            navigation.panel: notesInChordSection.navigation
+                            navigation.row: model.index
+
+                            accentButton: model.isSelected
+                            onClicked: {
+                                model.isSelected = !model.isSelected
+                            }
+                        }
+                    }
+
+                    Row {
+                        id: singleNotesToggleRow
+
+                        height: singleNotesToggle.height
+                        width: parent.width
+
+                        spacing: notesInChordSection.spacing
+
+                        ToggleButton {
+                            id: singleNotesToggle
+
+                            checked: notesInChordModel.includeSingleNotes
+
+                            navigation.name: "SingleNotesToggle"
+                            navigation.panel: notesInChordSection.navigation
+                            navigation.row: 100
+
+                            onToggled: {
+                                notesInChordModel.includeSingleNotes = !notesInChordModel.includeSingleNotes
+                            }
+                        }
+
+                        StyledTextLabel {
+                            id: singleNotesInfo
+
+                            height: parent.height
+
+                            horizontalAlignment: Text.AlignLeft
+                            verticalAlignment: Text.AlignVCenter
+
+                            wrapMode: Text.Wrap
+                            text: qsTrc("notation", "Include single notes")
+                        }
+                    }
+
+                }
+            }
+
+            SeparatorLine { visible: notesInChordModel.enabled }
+
+            SelectionFilterSection {
+                id: notationElementsSection
+
+                sectionTitle: qsTrc("notation", "Notation elements")
+
+                navigation {
+                    section: root.navigationSection
+                    order: root.navigationOrderStart + 3
+                    direction: NavigationPanel.Vertical
+                }
+
+                StyledListView {
+                    width: parent.width
+                    height: contentHeight
+
+                    spacing: notationElementsSection.spacing
+                    clip: false
+
+                    model: ElementsSelectionFilterModel {
+                        id: elementsModel
+                    }
+
+                    interactive: false
+
+                    delegate: CheckBox {
+                        width: ListView.view.width
+
+                        text: model.title
+
+                        navigation.panel: notationElementsSection.navigation
+                        navigation.row: model.index
+
+                        checked: model.isSelected
+                        isIndeterminate: model.isIndeterminate
+                        onClicked: {
+                            model.isSelected = !checked
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Row {
+        id: clearAllSelectAllRow
+
+        property NavigationPanel navigation: NavigationPanel {
+            name: "ClearAllSelectAllRow"
+            section: root.navigationSection
+            order: root.navigationOrderStart + 4
+            direction: NavigationPanel.Horizontal
+        }
+
+        readonly property real buttonHeight: 30
+        readonly property real buttonWidth: (clearAllSelectAllRow.width / 2) - (clearAllSelectAllRow.spacing / 2)
+
+        topPadding: 12
+
+        spacing: 8
+        anchors {
+            margins: 12
+            bottom: root.bottom
+            left: root.left
+            right: root.right
+        }
+
+        FlatButton {
+            id: clearAllbutton
+
+            navigation.panel: clearAllSelectAllRow.navigation
+            navigation.column: 0
+
+            height: clearAllSelectAllRow.buttonHeight
+            width: clearAllSelectAllRow.buttonWidth
+
+            text: qsTrc("notation", "Clear all")
+            enabled: !root.isNoneSelected
+
             onClicked: {
-                model.isSelected = !checked
+                //! NOTE: By design voicesModel is exempt from clear/select all
+                notesInChordModel.clearAll()
+                elementsModel.clearAll()
+            }
+        }
+
+        FlatButton {
+            id: selectAllButton
+
+            navigation.panel: clearAllSelectAllRow.navigation
+            navigation.column: 1
+
+            height: clearAllSelectAllRow.buttonHeight
+            width: clearAllSelectAllRow.buttonWidth
+
+            text: qsTrc("notation", "Select all")
+            enabled: !root.isAllSelected
+
+            onClicked: {
+                //! NOTE: By design voicesModel is exempt from clear/select all
+                notesInChordModel.selectAll()
+                elementsModel.selectAll()
             }
         }
     }

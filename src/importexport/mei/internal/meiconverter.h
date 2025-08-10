@@ -25,6 +25,7 @@
 
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/interval.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
@@ -118,6 +119,7 @@ public:
         int lines;
         bool invisible;
         double scale;
+        engraving::Color color;
         engraving::Interval interval;
     };
 
@@ -168,9 +170,6 @@ public:
     static engraving::BeamMode breaksecFromMEI(int breaksec, bool& warning);
     static int breaksecToMEI(engraving::BeamMode beamMode);
 
-    static BracketStruct bracketFromMEI(const libmei::StaffGrp& meiStaffGrp);
-    static libmei::StaffGrp bracketToMEI(const engraving::BracketType, int barLineSpan);
-
     static void breathFromMEI(engraving::Breath* breath, const libmei::Breath& meiBreath, bool& warning);
     static libmei::Breath breathToMEI(const engraving::Breath* breath);
 
@@ -219,6 +218,9 @@ public:
     static void fingFromMEI(engraving::Fingering* fing, const muse::StringList& meiLines, const libmei::Fing& meiFing, bool& warning);
     static libmei::Fing fingToMEI(const engraving::Fingering* fing, muse::StringList& meiLines);
 
+    static void glissFromMEI(engraving::Glissando* gliss, const libmei::Gliss& meiGliss, bool& warning);
+    static libmei::Gliss glissToMEI(const engraving::Glissando* gliss);
+
     static std::pair<bool, engraving::NoteType> gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach,
                                                                 const libmei::data_GRACE meiGrace, bool& warning);
     static std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> gracegrpToMEI(bool isAfter, engraving::NoteType noteType);
@@ -228,6 +230,12 @@ public:
 
     static void harmFromMEI(engraving::Harmony* harmony, const muse::StringList& meiLines, const libmei::Harm& meiHarm, bool& warning);
     static libmei::Harm harmToMEI(const engraving::Harmony* harmony, muse::StringList& meiLines);
+
+    static void harpPedalFromMEI(engraving::HarpPedalDiagram* harpPedalDiagram, const libmei::HarpPedal& meiHarpPedal, bool& warning);
+    static libmei::HarpPedal harpPedalToMEI(const engraving::HarpPedalDiagram* harpPedalDiagram);
+
+    static engraving::PedalPosition harpPedalPositionFromMEI(const libmei::data_HARPPEDALPOSITION& pedalPosition);
+    static libmei::data_HARPPEDALPOSITION harpPedalPositionToMEI(const engraving::PedalPosition& pedalPosition);
 
     static void layerIdentFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement);
     static void layerIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
@@ -289,6 +297,9 @@ public:
     static StaffStruct staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef staffToMEI(const engraving::Staff* staff);
 
+    static BracketStruct staffGrpFromMEI(const libmei::StaffGrp& meiStaffGrp);
+    static libmei::StaffGrp staffGrpToMEI(const engraving::BracketType, int barLineSpan);
+
     static void staffIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
 
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
@@ -299,6 +310,9 @@ public:
 
     static void sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, ElisionType elision, bool& warning);
     static libmei::Syl sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision);
+
+    static engraving::BracketType symbolFromMEI(const libmei::staffGroupingSym_SYMBOL meiGrpSym);
+    static libmei::staffGroupingSym_SYMBOL symbolToMEI(const engraving::BracketType bracket);
 
     static void tempoFromMEI(engraving::TempoText* tempo, const muse::StringList& meiLines, const libmei::Tempo& meiTempo, bool& warning);
     static libmei::Tempo tempoToMEI(const engraving::TempoText* tempoText, muse::StringList& meiLines);

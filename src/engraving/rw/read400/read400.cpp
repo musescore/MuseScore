@@ -47,6 +47,8 @@
 #include "dom/figuredbass.h"
 #include "dom/tremolotwochord.h"
 
+#include "engravingerrors.h"
+
 #include "staffrw.h"
 #include "tread.h"
 
@@ -504,7 +506,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             if (cr->isChord()) {
                                 Chord* c = toChord(cr);
                                 for (Note* note: c->notes()) {
-                                    Tie* tie = note->tieFor();
+                                    Tie* tie = note->tieForNonPartial();
                                     if (tie) {
                                         note->setTieFor(0);
                                         delete tie;
@@ -562,9 +564,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Interval interval = staffDest->transpose(tick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
-                        int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
-                        score->undoTransposeHarmony(harmony, rootTpc, baseTpc);
+                        score->undoTransposeHarmony(harmony, interval);
                     }
 
                     // remove pre-existing chords on this track
@@ -831,9 +831,7 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         Interval interval = staffDest->transpose(destTick);
                         if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                             interval.flip();
-                            int rootTpc = transposeTpc(el->rootTpc(), interval, true);
-                            int baseTpc = transposeTpc(el->baseTpc(), interval, true);
-                            score->undoTransposeHarmony(el, rootTpc, baseTpc);
+                            score->undoTransposeHarmony(el, interval);
                         }
                         el->setParent(harmSegm);
                         score->undoAddElement(el);

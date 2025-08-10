@@ -24,7 +24,7 @@
 
 #include "mscore.h"
 #include "pitchspelling.h"
-#include "types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -34,6 +34,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 struct NoteVal {
     int pitch = -1;
+    int velocityOverride = 0;
     int tpc1 = Tpc::TPC_INVALID;
     int tpc2 = Tpc::TPC_INVALID;
     int fret = INVALID_FRET_INDEX;
@@ -47,6 +48,7 @@ struct NoteVal {
     bool operator==(const NoteVal& v) const
     {
         return pitch == v.pitch
+               && velocityOverride == v.velocityOverride
                && tpc1 == v.tpc1
                && tpc2 == v.tpc2
                && fret == v.fret

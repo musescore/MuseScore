@@ -19,13 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UICOMPONENTS_ABSTRACTMENUMODEL_H
-#define MUSE_UICOMPONENTS_ABSTRACTMENUMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
 #include "async/asyncable.h"
-#include "ui/uitypes.h"
 #include "menuitem.h"
 
 #include "modularity/ioc.h"
@@ -63,7 +61,7 @@ public:
 
 signals:
     void itemsChanged();
-    void itemChanged(uicomponents::MenuItem* item);
+    void itemChanged(muse::uicomponents::MenuItem* item);
 
 protected:
     enum Roles {
@@ -85,6 +83,7 @@ protected:
 
     MenuItem& findItem(const QString& itemId);
     MenuItem& findItem(const muse::actions::ActionCode& actionCode);
+    MenuItemList findItems(const muse::actions::ActionCode& actionCode);
     MenuItem& findMenu(const QString& menuId);
 
     MenuItem* makeMenu(const TranslatableString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true);
@@ -98,8 +97,11 @@ protected:
 
 private:
     MenuItem& item(MenuItemList& items, const QString& itemId);
-    MenuItem& item(MenuItemList& items, const muse::actions::ActionCode& actionCode);
+    MenuItemList items(MenuItemList& items, const muse::actions::ActionCode& actionCode);
     MenuItem& menu(MenuItemList& items, const QString& menuId);
+
+    void updateState(MenuItemList& items, const muse::actions::ActionCodeList& codes, std::map<muse::actions::ActionCode,
+                                                                                               muse::ui::UiActionState>& states);
 
     void updateShortcutsAll();
     void updateShortcuts(MenuItem* item);
@@ -107,5 +109,3 @@ private:
     MenuItemList m_items;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_ABSTRACTMENUMODEL_H

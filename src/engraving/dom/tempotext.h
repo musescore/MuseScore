@@ -108,6 +108,7 @@ protected:
     bool m_playTempoText = true;
     double m_relative = 0.0;
     bool m_isRelative = false;
+    bool m_alignRightOfRehearsalMark = true;
 };
 } // namespace mu::engraving
 #endif

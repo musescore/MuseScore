@@ -68,7 +68,7 @@ PreferencesPage {
 
         MidiInputSection {
             midiInputEnabled: noteInputModel.midiInputEnabled
-            startNoteInputWhenPressingKey: noteInputModel.startNoteInputAtSelectionWhenPressingMidiKey
+            startNoteInputWhenPressingKey: noteInputModel.startNoteInputAtSelectedNoteRestWhenPressingMidiKey
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
             delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
 
@@ -80,7 +80,7 @@ PreferencesPage {
             }
 
             onStartNoteInputWhenPressingKeyChangeRequested: function(start) {
-                noteInputModel.startNoteInputAtSelectionWhenPressingMidiKey = start
+                noteInputModel.startNoteInputAtSelectedNoteRestWhenPressingMidiKey = start
             }
 
             onAdvanceToNextNoteChangeRequested: function(advance) {
@@ -95,11 +95,18 @@ PreferencesPage {
         SeparatorLine {}
 
         NotePreviewSection {
+            id: notePreviewSection
+
             playNotesWhenEditing: noteInputModel.playNotesWhenEditing
-            playChordWhenEditing: noteInputModel.playChordWhenEditing
             playPreviewNotesInInputByDuration: noteInputModel.playPreviewNotesInInputByDuration
-            playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing
+            playChordWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordWhenEditing : false
+            playChordSymbolWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordSymbolWhenEditing : false
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
+            playNotesWithScoreDynamics: noteInputModel.playPreviewNotesWithScoreDynamics
+
+            playNotesOnMidiInputBoxEnabled: noteInputModel.midiInputEnabled && noteInputModel.playNotesWhenEditing
+            playNotesOnMidiInput: notePreviewSection.playNotesOnMidiInputBoxEnabled && noteInputModel.playNotesOnMidiInput
+            useMidiVelocityAndDurationDuringNoteInput: notePreviewSection.playNotesOnMidiInputBoxEnabled && noteInputModel.useMidiVelocityAndDurationDuringNoteInput
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 3
@@ -123,6 +130,18 @@ PreferencesPage {
             onNotePlayDurationChangeRequested: function(duration) {
                 noteInputModel.notePlayDurationMilliseconds = duration
             }
+
+            onPlayNotesWithScoreDynamicsChangeRequested: function(play) {
+                noteInputModel.playPreviewNotesWithScoreDynamics = play
+            }
+
+            onPlayNotesOnMidiInputChangeRequested: function(play) {
+                noteInputModel.playNotesOnMidiInput = play
+            }
+
+            onUseMidiVelocityAndDurationDuringNoteInputChangeRequested: function(use) {
+                noteInputModel.useMidiVelocityAndDurationDuringNoteInput = use
+            }
         }
 
         SeparatorLine {}
@@ -142,6 +161,21 @@ PreferencesPage {
 
         SeparatorLine {}
 
+        FretboardDiagramsSection {
+            width: parent.width
+
+            autoUpdateFretboardDiagrams: noteInputModel.autoUpdateFretboardDiagrams
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 5
+
+            onAutoUpdateFretboardDiagramsChangeRequested: function(update) {
+                noteInputModel.autoUpdateFretboardDiagrams = update
+            }
+        }
+
+        SeparatorLine {}
+
         NoteColorsSection {
             width: parent.width
 
@@ -149,7 +183,7 @@ PreferencesPage {
             warnGuitarBends: noteInputModel.warnGuitarBends
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 5
+            navigation.order: root.navigationOrderStart + 6
 
             onColorNotesChangeRequested: function(color) {
                 noteInputModel.colorNotesOutsideOfUsablePitchRange = color
@@ -158,7 +192,6 @@ PreferencesPage {
             onWarnGuitarBendsChangeRequested: function(warn) {
                 noteInputModel.warnGuitarBends = warn
             }
-
         }
     }
 }

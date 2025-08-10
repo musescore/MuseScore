@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MIDISHARED_MIDIFILE_H
-#define MIDISHARED_MIDIFILE_H
+#pragma once
 
 #include <vector>
 #include <QIODevice>
@@ -29,20 +27,6 @@
 #include "../midishared/midievent.h"
 
 namespace mu::iex::midi {
-//---------------------------------------------------------
-//   MidiType
-//---------------------------------------------------------
-
-enum class MidiType : char {
-    UNKNOWN = 0, GM = 1, GS = 2, XG = 4
-};
-
-class MidiFile;
-
-//---------------------------------------------------------
-//   MidiTrack
-//---------------------------------------------------------
-
 class MidiTrack
 {
     std::multimap<int, MidiEvent> _events;
@@ -66,7 +50,7 @@ public:
     bool drumTrack() const { return _drumTrack; }
 
     void insert(int tick, const MidiEvent&);
-    void mergeNoteOnOffAndFindMidiType(MidiType* mt);
+    void mergeNoteOnOff();
 };
 
 //---------------------------------------------------------
@@ -81,7 +65,6 @@ class MidiFile
     bool _isDivisionInTps;         ///< ticks per second, alternative - ticks per beat
     int _format;                 ///< midi file format (0-2)
     bool _noRunningStatus;       ///< do not use running status on output
-    MidiType _midiType;
 
     // values used during read()
     int status;                  ///< running status
@@ -119,9 +102,6 @@ public:
     std::vector<MidiTrack>& tracks() { return _tracks; }
     const std::vector<MidiTrack>& tracks() const { return _tracks; }
 
-    MidiType midiType() const { return _midiType; }
-    void setMidiType(MidiType mt) { _midiType = mt; }
-
     int format() const { return _format; }
     void setFormat(int fmt) { _format = fmt; }
 
@@ -131,5 +111,3 @@ public:
     void separateChannel();
 };
 }
-
-#endif // MIDISHARED_MIDIFILE_H

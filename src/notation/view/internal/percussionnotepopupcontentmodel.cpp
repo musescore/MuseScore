@@ -191,17 +191,9 @@ int PercussionNotePopupContentModel::currentDrumPitch() const
 
     //  First check whether a drum note has been specified in the input state, and whether it's valid...
     const int noteInputPitch = noteInput()->state().drumNote();
-    if (noteInputPitch > 0 && ds->isValid(noteInputPitch) && ds->line(noteInputPitch) == shadowNoteLine) {
+    if (ds->isValid(noteInputPitch) && ds->line(noteInputPitch) == shadowNoteLine) {
         return noteInputPitch;
     }
 
-    // Otherwise just return the first pitch that matches the line that the shadowNote is currently on...
-    for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
-        if (!ds->isValid(pitch) || ds->line(pitch) != shadowNoteLine) {
-            continue;
-        }
-        return pitch;
-    }
-
-    return -1;
+    return ds->defaultPitchForLine(shadowNoteLine);
 }

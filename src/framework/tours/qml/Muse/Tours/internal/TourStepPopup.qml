@@ -24,36 +24,39 @@ import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import Muse.GraphicalEffects 1.0
 
 StyledPopupView {
     id: root
 
     property alias title: titleLabel.text
     property alias description: descriptionLabel.text
+    property string previewImageOrGifUrl: ""
     property string videoExplanationUrl: ""
 
     property int index: 0
     property int total: 0
 
+    contentWidth: Math.min(content.implicitWidth, 300 - margins * 2)
+    contentHeight: content.implicitHeight
+
+    x: root.parent.width / 2 - (contentWidth + padding * 2 + margins * 2) / 2
+    y: root.parent.height
+
     padding: 8
-    margins: 8
+    margins: 12
+
+    background.border.color: ui.theme.accentColor
+    anchorItem: ui.rootItem
 
     signal hideRequested()
     signal nextRequested()
-
-    function calculateSize() {
-        contentWidth = Math.min(content.implicitWidth, 300 - margins * 2)
-        contentHeight = content.implicitHeight
-
-        x = root.parent.width / 2 - (contentWidth + padding * 2 + margins * 2) / 2
-        y = root.parent.height
-    }
 
     ColumnLayout {
         id: content
 
         anchors.fill: parent
-        spacing: 8
+        spacing: 0
 
         RowLayout {
             id: row
@@ -65,26 +68,8 @@ StyledPopupView {
 
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
-                wrapMode: Text.Wrap
-                maximumLineCount: 3
-            }
-
-            Rectangle {
-                Layout.preferredWidth: newLabel.implicitWidth + 4
-                Layout.preferredHeight: newLabel.implicitHeight + 4
-
-                color: ui.theme.fontPrimaryColor
-                radius: 2
-
-                StyledTextLabel {
-                    id: newLabel
-
-                    anchors.centerIn: parent
-
-                    text: qsTrc("tours", "New")
-                    font: ui.theme.bodyBoldFont
-                    color: ui.theme.backgroundPrimaryColor
-                }
+                wrapMode: Text.WordWrap
+                maximumLineCount: 2
             }
 
             Item {
@@ -101,7 +86,9 @@ StyledPopupView {
 
         StyledTextLabel {
             id: descriptionLabel
+
             Layout.fillWidth: true
+            Layout.topMargin: 4
 
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.Wrap
@@ -109,10 +96,43 @@ StyledPopupView {
             visible: Boolean(root.description)
         }
 
+        Rectangle {
+            id: previewRect
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: 120
+            Layout.topMargin: 8
+            Layout.leftMargin: -4 // same hack as for ButtonBox
+
+            border.width: 1
+            border.color: ui.theme.strokeColor
+
+            radius: 3
+
+            visible: root.previewImageOrGifUrl !== ""
+
+            AnimatedImage {
+                anchors.fill: parent
+                anchors.margins: 1
+
+                source: root.previewImageOrGifUrl
+
+                layer.enabled: ui.isEffectsAllowed
+                layer.effect: EffectOpacityMask {
+                    maskSource: Rectangle {
+                        width: previewRect.width
+                        height: previewRect.height
+                        radius: previewRect.radius
+                    }
+                }
+            }
+        }
+
         ButtonBox {
             id: box
 
             Layout.fillWidth: true
+            Layout.topMargin: 8
             //! hack: it looks like ButtonBox doesn't work well in ColumnLayout
             Layout.leftMargin: -4
 
@@ -138,7 +158,7 @@ StyledPopupView {
             }
 
             FlatButton {
-                Layout.preferredWidth: watchVideoBtn.visible ? (content.width - box.spacing) / 2 : 54
+                Layout.preferredWidth: watchVideoBtn.visible ? (content.width - box.spacing) / 2 : content.width
                 Layout.alignment: Qt.AlignRight
 
                 property bool isLastStep: root.index == root.total

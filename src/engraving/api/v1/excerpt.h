@@ -45,9 +45,9 @@ class Score;
 class Excerpt : public QObject
 {
     Q_OBJECT
-    /** The score object for this part */
+    /// The score object for this part
     Q_PROPERTY(apiv1::Score * partScore READ partScore)
-    /** The title of this part */
+    /// The title of this part
     Q_PROPERTY(QString title READ title)
 
 protected:
@@ -57,8 +57,8 @@ protected:
 
 public:
     /// \cond MS_INTERNAL
-    Excerpt(mu::engraving::Excerpt* _e = nullptr)
-        : QObject(), e(_e) {}
+    Excerpt(mu::engraving::Excerpt* m_e = nullptr)
+        : QObject(), e(m_e) {}
     Excerpt(const Excerpt&) = delete;
     Excerpt& operator=(const Excerpt&) = delete;
     virtual ~Excerpt() {}
@@ -116,7 +116,7 @@ public:
     }
 };
 
-/** \cond PLUGIN_API \private \endcond */
+/// \cond PLUGIN_API \private \endcond
 template<typename T, class Container>
 QmlExcerptsListAccess<T, Container> wrapExcerptsContainerProperty(QObject* obj, Container& c)
 {

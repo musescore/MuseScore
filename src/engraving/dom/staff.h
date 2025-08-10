@@ -216,10 +216,9 @@ public:
     Staff* primaryStaff() const;
     bool isPrimaryStaff() const;
 
-    Millimetre userDist() const { return m_userDist; }
-    void setUserDist(Millimetre val) { m_userDist = val; }
+    Spatium userDist() const { return m_userDist; }
+    void setUserDist(Spatium val) { m_userDist = val; }
 
-    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
@@ -265,6 +264,13 @@ public:
     track_idx_t getLinkedTrackInStaff(const Staff* linkedStaff, const track_idx_t strack) const;
     bool trackHasLinksInVoiceZero(track_idx_t track);
 
+    void undoSetShowMeasureNumbers(bool show);
+    bool shouldShowMeasureNumbers() const;
+    bool shouldShowPlayCount() const;
+
+    void setSystemObjectsBelowBottomStaff(bool v) { m_systemObjectsBelowBottomStaff = v; }
+    bool systemObjectsBelowBottomStaff() const { return m_systemObjectsBelowBottomStaff; }
+
 private:
 
     friend class Factory;
@@ -301,7 +307,7 @@ private:
     HideMode m_hideWhenEmpty = HideMode::AUTO;      // hide empty staves
 
     Color m_color;
-    Millimetre m_userDist     { Millimetre(0.0) };           ///< user edited extra distance
+    Spatium m_userDist     { Spatium(0.0) };           ///< user edited extra distance
 
     StaffTypeList m_staffTypeList;
 
@@ -314,6 +320,9 @@ private:
     PitchList m_pitchOffsets;               // cached value
 
     bool m_reflectTranspositionInLinkedTab = true;
+
+    AutoOnOff m_showMeasureNumbers = AutoOnOff::AUTO;
+    bool m_systemObjectsBelowBottomStaff = false;
 };
 } // namespace mu::engraving
 #endif

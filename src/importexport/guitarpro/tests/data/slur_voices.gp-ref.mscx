@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -48,27 +50,34 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
+            <eid>E_E</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>G_G</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
+            <eid>H_H</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>J_J</eid>
                 </Slur>
               <next>
                 <location>
@@ -77,6 +86,7 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>K_K</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
@@ -84,6 +94,7 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -93,6 +104,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>M_M</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -100,9 +112,11 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>O_O</eid>
                 </Slur>
               <next>
                 <location>
@@ -111,6 +125,7 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>P_P</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
@@ -118,6 +133,7 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -127,6 +143,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>R_R</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -134,28 +151,35 @@
               </Note>
             </Chord>
           <BarLine>
+            <eid>S_S</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
+        <eid>T_T</eid>
         <voice>
           <Rest>
+            <eid>U_U</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         <voice>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>W_W</eid>
             </Dynamic>
           <Chord>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>Y_Y</eid>
                 </Slur>
               <next>
                 <location>
@@ -164,6 +188,7 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -171,6 +196,7 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -180,6 +206,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>b_b</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -187,9 +214,11 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>d_d</eid>
                 </Slur>
               <next>
                 <location>
@@ -198,6 +227,7 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>e_e</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -205,6 +235,7 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -214,6 +245,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>g_g</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -223,13 +255,16 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>h_h</eid>
         <voice>
           <Rest>
+            <eid>i_i</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <eid>j_j</eid>
             </BarLine>
           </voice>
         <voice/>
@@ -237,11 +272,14 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>k_k</eid>
             </Dynamic>
           <Chord>
+            <eid>l_l</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>m_m</eid>
                 </Slur>
               <next>
                 <location>
@@ -250,6 +288,7 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>n_n</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -257,6 +296,7 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>o_o</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -266,6 +306,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>p_p</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -273,9 +314,11 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>q_q</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>r_r</eid>
                 </Slur>
               <next>
                 <location>
@@ -284,6 +327,7 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>s_s</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -291,6 +335,7 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>t_t</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -300,6 +345,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>u_u</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -309,13 +355,16 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>v_v</eid>
         <voice>
           <Rest>
+            <eid>w_w</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <eid>x_x</eid>
             </BarLine>
           </voice>
         <voice/>
@@ -324,11 +373,14 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>y_y</eid>
             </Dynamic>
           <Chord>
+            <eid>z_z</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>0_0</eid>
                 </Slur>
               <next>
                 <location>
@@ -337,6 +389,7 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>1_1</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -344,6 +397,7 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>2_2</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -353,6 +407,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>3_3</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -360,9 +415,11 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>4_4</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>5_5</eid>
                 </Slur>
               <next>
                 <location>
@@ -371,6 +428,7 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>6_6</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -378,6 +436,7 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>7_7</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -387,6 +446,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>8_8</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -396,12 +456,22 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>9_9</eid>
         <voice>
           <Chord>
+            <eid>+_+</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>/_/</eid>
+                <HammerOnPullOffSegment no="0">
+                  <HammerOnPullOffText idx="0">
+                    <eid>AB_AB</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>BB_BB</eid>
+                  </HammerOnPullOffSegment>
+                </HammerOnPullOff>
               <next>
                 <location>
                   <fractions>1/4</fractions>
@@ -409,24 +479,17 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>CB_CB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>H</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
           <Chord>
+            <eid>DB_DB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
+            <Spanner type="HammerOnPullOff">
               <prev>
                 <location>
                   <fractions>-1/4</fractions>
@@ -434,6 +497,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>EB_EB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -441,10 +505,19 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>FB_FB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>GB_GB</eid>
+                <HammerOnPullOffSegment no="0">
+                  <HammerOnPullOffText idx="0">
+                    <eid>HB_HB</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>IB_IB</eid>
+                  </HammerOnPullOffSegment>
+                </HammerOnPullOff>
               <next>
                 <location>
                   <fractions>1/4</fractions>
@@ -452,24 +525,17 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>JB_JB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>P</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
           <Chord>
+            <eid>KB_KB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
+            <Spanner type="HammerOnPullOff">
               <prev>
                 <location>
                   <fractions>-1/4</fractions>
@@ -477,6 +543,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>LB_LB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -484,25 +551,38 @@
               </Note>
             </Chord>
           <BarLine>
+            <eid>MB_MB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
+        <eid>NB_NB</eid>
         <voice>
           <Rest>
+            <eid>OB_OB</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <eid>PB_PB</eid>
             </BarLine>
           </voice>
         <voice>
           <Chord>
+            <eid>QB_QB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>RB_RB</eid>
+                <HammerOnPullOffSegment no="0">
+                  <HammerOnPullOffText idx="0">
+                    <eid>SB_SB</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>TB_TB</eid>
+                  </HammerOnPullOffSegment>
+                </HammerOnPullOff>
               <next>
                 <location>
                   <fractions>1/4</fractions>
@@ -510,24 +590,17 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>UB_UB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>H</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
           <Chord>
+            <eid>VB_VB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
+            <Spanner type="HammerOnPullOff">
               <prev>
                 <location>
                   <fractions>-1/4</fractions>
@@ -535,6 +608,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>WB_WB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -542,10 +616,19 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>XB_XB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>YB_YB</eid>
+                <HammerOnPullOffSegment no="0">
+                  <HammerOnPullOffText idx="0">
+                    <eid>ZB_ZB</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>aB_aB</eid>
+                  </HammerOnPullOffSegment>
+                </HammerOnPullOff>
               <next>
                 <location>
                   <fractions>1/4</fractions>
@@ -553,24 +636,17 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>bB_bB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>P</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
           <Chord>
+            <eid>cB_cB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
+            <Spanner type="HammerOnPullOff">
               <prev>
                 <location>
                   <fractions>-1/4</fractions>
@@ -578,106 +654,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <visible>0</visible>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
-            </BarLine>
-          </voice>
-        <voice/>
-        <voice>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>H</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
-              <next>
-                <location>
-                  <fractions>1/4</fractions>
-                  </location>
-                </next>
-              </Spanner>
-            <Note>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              <fret>5</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>P</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <fractions>-1/4</fractions>
-                  </location>
-                </prev>
-              </Spanner>
-            <Note>
+              <eid>dB_dB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -687,8 +664,119 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>eB_eB</eid>
         <voice>
           <Rest>
+            <eid>fB_fB</eid>
+            <visible>0</visible>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <eid>gB_gB</eid>
+            </BarLine>
+          </voice>
+        <voice/>
+        <voice>
+          <Chord>
+            <eid>hB_hB</eid>
+            <durationType>quarter</durationType>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>iB_iB</eid>
+                <HammerOnPullOffSegment no="0">
+                  <HammerOnPullOffText idx="0">
+                    <eid>jB_jB</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>kB_kB</eid>
+                  </HammerOnPullOffSegment>
+                </HammerOnPullOff>
+              <next>
+                <location>
+                  <fractions>1/4</fractions>
+                  </location>
+                </next>
+              </Spanner>
+            <Note>
+              <eid>lB_lB</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>mB_mB</eid>
+            <durationType>quarter</durationType>
+            <Spanner type="HammerOnPullOff">
+              <prev>
+                <location>
+                  <fractions>-1/4</fractions>
+                  </location>
+                </prev>
+              </Spanner>
+            <Note>
+              <eid>nB_nB</eid>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>oB_oB</eid>
+            <durationType>quarter</durationType>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>pB_pB</eid>
+                <HammerOnPullOffSegment no="0">
+                  <HammerOnPullOffText idx="0">
+                    <eid>qB_qB</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>rB_rB</eid>
+                  </HammerOnPullOffSegment>
+                </HammerOnPullOff>
+              <next>
+                <location>
+                  <fractions>1/4</fractions>
+                  </location>
+                </next>
+              </Spanner>
+            <Note>
+              <eid>sB_sB</eid>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>5</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>tB_tB</eid>
+            <durationType>quarter</durationType>
+            <Spanner type="HammerOnPullOff">
+              <prev>
+                <location>
+                  <fractions>-1/4</fractions>
+                  </location>
+                </prev>
+              </Spanner>
+            <Note>
+              <eid>uB_uB</eid>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>vB_vB</eid>
+        <voice>
+          <Rest>
+            <eid>wB_wB</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -698,10 +786,19 @@
         <voice/>
         <voice>
           <Chord>
+            <eid>xB_xB</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>yB_yB</eid>
+                <HammerOnPullOffSegment no="0">
+                  <HammerOnPullOffText idx="0">
+                    <eid>zB_zB</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>0B_0B</eid>
+                  </HammerOnPullOffSegment>
+                </HammerOnPullOff>
               <next>
                 <location>
                   <fractions>1/4</fractions>
@@ -709,24 +806,17 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>1B_1B</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>H</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
           <Chord>
+            <eid>2B_2B</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
+            <Spanner type="HammerOnPullOff">
               <prev>
                 <location>
                   <fractions>-1/4</fractions>
@@ -734,6 +824,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>3B_3B</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -741,10 +832,19 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>4B_4B</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>5B_5B</eid>
+                <HammerOnPullOffSegment no="0">
+                  <HammerOnPullOffText idx="0">
+                    <eid>6B_6B</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>7B_7B</eid>
+                  </HammerOnPullOffSegment>
+                </HammerOnPullOff>
               <next>
                 <location>
                   <fractions>1/4</fractions>
@@ -752,24 +852,17 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>8B_8B</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
               <string>1</string>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <StaffText>
-            <text>P</text>
-            </StaffText>
-          <location>
-            <fractions>1/8</fractions>
-            </location>
           <Chord>
+            <eid>9B_9B</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
+            <Spanner type="HammerOnPullOff">
               <prev>
                 <location>
                   <fractions>-1/4</fractions>
@@ -777,6 +870,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>+B_+B</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>

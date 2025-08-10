@@ -46,5 +46,7 @@ private:
 
     std::unordered_map<EID, EngravingObject*> m_eidToItem;
     std::unordered_map<EngravingObject*, EID> m_itemToEid;
+
+    uint64_t m_maxValTestMode = 0;
 };
 }

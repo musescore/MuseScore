@@ -54,22 +54,43 @@ void PercussionPreferencesModel::init()
 
 QVariantList PercussionPreferencesModel::autoShowModes() const
 {
-    QVariantList result;
+    static const QVariantList modes {
+        QVariantMap {
+            { QStringLiteral("title"), muse::qtrc("notation/percussion", "When an unpitched percussion staff is selected") },
+            { QStringLiteral("value"), int(PercussionPanelAutoShowMode::UNPITCHED_STAFF) }
+        },
 
-    for (const AutoShowMode& mode: allAutoShowModes()) {
-        QVariantMap obj;
-        obj["title"] = mode.title;
-        obj["checked"] = mode.checked;
+        QVariantMap {
+            { QStringLiteral("title"), muse::qtrc("notation/percussion", "When inputting notation on an unpitched percussion staff") },
+            { QStringLiteral("value"), int(PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT) }
+        },
 
-        result << obj;
-    }
+        QVariantMap {
+            { QStringLiteral("title"), muse::qtrc("notation/percussion", "Never") },
+            { QStringLiteral("value"), int(PercussionPanelAutoShowMode::NEVER) }
+        },
+    };
 
-    return result;
+    return modes;
+}
+
+int PercussionPreferencesModel::autoShowMode() const
+{
+    return static_cast<int>(configuration()->percussionPanelAutoShowMode());
 }
 
 bool PercussionPreferencesModel::neverAutoShow() const
 {
     return configuration()->percussionPanelAutoShowMode() == PercussionPanelAutoShowMode::NEVER;
+}
+
+void PercussionPreferencesModel::setAutoShowMode(int mode)
+{
+    if (mode == autoShowMode()) {
+        return;
+    }
+
+    configuration()->setPercussionPanelAutoShowMode(static_cast<PercussionPanelAutoShowMode>(mode));
 }
 
 bool PercussionPreferencesModel::autoClosePercussionPanel() const
@@ -80,22 +101,6 @@ bool PercussionPreferencesModel::autoClosePercussionPanel() const
 void PercussionPreferencesModel::setAutoClosePercussionPanel(bool autoClose)
 {
     configuration()->setAutoClosePercussionPanel(autoClose);
-}
-
-void PercussionPreferencesModel::setAutoShowMode(int modeIndex)
-{
-    QList<AutoShowMode> modes = allAutoShowModes();
-
-    if (modeIndex < 0 || modeIndex >= modes.size()) {
-        return;
-    }
-
-    const PercussionPanelAutoShowMode selectedMode = modes[modeIndex].type;
-    if (selectedMode == configuration()->percussionPanelAutoShowMode()) {
-        return;
-    }
-
-    configuration()->setPercussionPanelAutoShowMode(selectedMode);
 }
 
 bool PercussionPreferencesModel::useNewPercussionPanel() const

@@ -24,6 +24,11 @@
 using namespace mu;
 using namespace mu::notation;
 
+QColor NotationConfigurationStub::notationColor() const
+{
+    return QColor();
+}
+
 QColor NotationConfigurationStub::backgroundColor() const
 {
     return QColor();
@@ -151,6 +156,11 @@ bool NotationConfigurationStub::thinNoteInputCursor() const
 }
 
 QColor NotationConfigurationStub::selectionColor(engraving::voice_idx_t) const
+{
+    return QColor();
+}
+
+QColor NotationConfigurationStub::highlightSelectionColor(engraving::voice_idx_t) const
 {
     return QColor();
 }
@@ -349,16 +359,16 @@ muse::async::Notification NotationConfigurationStub::isMidiInputEnabledChanged()
     return n;
 }
 
-bool NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKey() const
+bool NotationConfigurationStub::startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const
 {
     return false;
 }
 
-void NotationConfigurationStub::setStartNoteInputAtSelectionWhenPressingMidiKey(bool)
+void NotationConfigurationStub::setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool)
 {
 }
 
-muse::async::Notification NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKeyChanged() const
+muse::async::Notification NotationConfigurationStub::startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const
 {
     static muse::async::Notification n;
     return n;
@@ -418,6 +428,20 @@ muse::async::Notification NotationConfigurationStub::isPlayPreviewNotesInInputBy
     return n;
 }
 
+bool NotationConfigurationStub::playPreviewNotesWithScoreDynamics() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setPlayPreviewNotesWithScoreDynamics(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::playPreviewNotesWithScoreDynamicsChanged() const
+{
+    return {};
+}
+
 bool NotationConfigurationStub::isMetronomeEnabled() const
 {
     return false;
@@ -425,6 +449,12 @@ bool NotationConfigurationStub::isMetronomeEnabled() const
 
 void NotationConfigurationStub::setIsMetronomeEnabled(bool)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::isMetronomeEnabledChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 bool NotationConfigurationStub::isCountInEnabled() const
@@ -499,6 +529,20 @@ muse::async::Channel<int> NotationConfigurationStub::delayBetweenNotesInRealTime
 {
     static muse::async::Channel<int> ch;
     return ch;
+}
+
+bool NotationConfigurationStub::useMidiVelocityAndDurationDuringNoteInput() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setUseMidiVelocityAndDurationDuringNoteInput(bool)
+{
+}
+
+muse::async::Channel<bool> NotationConfigurationStub::useMidiVelocityAndDurationDuringNoteInputChanged() const
+{
+    return {};
 }
 
 int NotationConfigurationStub::notePlayDurationMilliseconds() const
@@ -624,6 +668,21 @@ void NotationConfigurationStub::setUseNewPercussionPanel(bool)
 }
 
 muse::async::Notification NotationConfigurationStub::useNewPercussionPanelChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::percussionPanelUseNotationPreview() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setPercussionPanelUseNotationPreview(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::percussionPanelUseNotationPreviewChanged() const
 {
     static muse::async::Notification n;
     return n;

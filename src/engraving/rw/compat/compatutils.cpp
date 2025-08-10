@@ -26,6 +26,7 @@
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/expression.h"
+#include "dom/harmony.h"
 #include "dom/laissezvib.h"
 #include "dom/masterscore.h"
 #include "dom/note.h"
@@ -44,6 +45,7 @@
 #include "dom/capo.h"
 #include "dom/noteline.h"
 #include "dom/textline.h"
+#include "style/styledef.h"
 
 #include "engraving/style/textstyle.h"
 
@@ -76,6 +78,71 @@ const std::set<SymId> CompatUtils::ORNAMENT_IDS {
     SymId::ornamentShakeMuffat1,
     SymId::ornamentTremblementCouperin,
     SymId::ornamentPinceCouperin
+};
+
+const std::map<Sid, Sid> CompatUtils::ALIGN_VALS_TO_CONVERT {
+    { Sid::defaultAlign, Sid::defaultPosition },
+    { Sid::titleAlign, Sid::titlePosition },
+    { Sid::subTitleAlign, Sid::subTitlePosition },
+    { Sid::composerAlign, Sid::composerPosition },
+    { Sid::lyricistAlign, Sid::lyricistPosition },
+    { Sid::lyricsEvenAlign, Sid::lyricsEvenPosition },
+    { Sid::lyricsOddAlign, Sid::lyricsOddPosition },
+    { Sid::fingeringAlign, Sid::fingeringPosition },
+    { Sid::lhGuitarFingeringAlign, Sid::lhGuitarFingeringPosition },
+    { Sid::rhGuitarFingeringAlign, Sid::rhGuitarFingeringPosition },
+    { Sid::hammerOnPullOffTappingAlign, Sid::hammerOnPullOffTappingPosition },
+    { Sid::stringNumberAlign, Sid::stringNumberPosition },
+    { Sid::staffTextAlign, Sid::staffTextPosition },
+    { Sid::fretDiagramFingeringAlign, Sid::fretDiagramFingeringPosition },
+    { Sid::fretDiagramFretNumberAlign, Sid::fretDiagramFretNumberPosition },
+    { Sid::harpPedalDiagramAlign, Sid::harpPedalDiagramPosition },
+    { Sid::harpPedalTextDiagramAlign, Sid::harpPedalTextDiagramPosition },
+    { Sid::longInstrumentAlign, Sid::longInstrumentPosition },
+    { Sid::shortInstrumentAlign, Sid::shortInstrumentPosition },
+    { Sid::partInstrumentAlign, Sid::partInstrumentPosition },
+    { Sid::dynamicsAlign, Sid::dynamicsPosition },
+    { Sid::expressionAlign, Sid::expressionPosition },
+    { Sid::tempoAlign, Sid::tempoPosition },
+    { Sid::tempoChangeAlign, Sid::tempoChangePosition },
+    { Sid::metronomeAlign, Sid::metronomePosition },
+    { Sid::measureNumberAlign, Sid::measureNumberPosition },
+    { Sid::mmRestRangeAlign, Sid::mmRestRangePosition },
+    { Sid::translatorAlign, Sid::translatorPosition },
+    { Sid::tupletAlign, Sid::tupletPosition },
+    { Sid::systemTextAlign, Sid::systemTextPosition },
+    { Sid::chordSymbolAAlign, Sid::chordSymPosition },
+    { Sid::repeatLeftAlign, Sid::repeatLeftPosition },
+    { Sid::repeatRightAlign, Sid::repeatRightPosition },
+    { Sid::frameAlign, Sid::framePosition },
+    { Sid::textLineTextAlign, Sid::textLinePosition },
+    { Sid::noteLineAlign, Sid::noteLinePosition },
+    { Sid::glissandoAlign, Sid::glissandoPosition },
+    { Sid::ottavaTextAlignAbove, Sid::ottavaPosition },
+    { Sid::voltaAlign, Sid::voltaPosition },
+    { Sid::pedalTextAlign, Sid::pedalPosition },
+    { Sid::letRingTextAlign, Sid::letRingPosition },
+    { Sid::palmMuteTextAlign, Sid::palmMutePosition },
+    { Sid::hairpinTextAlign, Sid::hairpinPosition },
+    { Sid::bendAlign, Sid::bendPosition },
+    { Sid::headerAlign, Sid::headerPosition },
+    { Sid::footerAlign, Sid::footerPosition },
+    { Sid::copyrightAlign, Sid::copyrightPosition },
+    { Sid::pageNumberAlign, Sid::pageNumberPosition },
+    { Sid::instrumentChangeAlign, Sid::instrumentChangePosition },
+    { Sid::stickingAlign, Sid::stickingPosition },
+    { Sid::user1Align, Sid::user1Position },
+    { Sid::user2Align, Sid::user2Position },
+    { Sid::user3Align, Sid::user3Position },
+    { Sid::user4Align, Sid::user4Position },
+    { Sid::user5Align, Sid::user5Position },
+    { Sid::user6Align, Sid::user6Position },
+    { Sid::user7Align, Sid::user7Position },
+    { Sid::user8Align, Sid::user8Position },
+    { Sid::user9Align, Sid::user9Position },
+    { Sid::user10Align, Sid::user10Position },
+    { Sid::user11Align, Sid::user11Position },
+    { Sid::user12Align, Sid::user12Position },
 };
 
 void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
@@ -415,7 +482,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
             newArtic->setPlayArticulation(combinedArtic->playArticulation());
             newArtic->setVisible(combinedArtic->visible());
             newArtic->setOrnamentStyle(combinedArtic->ornamentStyle());
-            LinkedObjects* links = new LinkedObjects(masterScore);
+            LinkedObjects* links = new LinkedObjects();
             links->push_back(newArtic);
             newArtic->setLinks(links);
             parentChord->add(newArtic);
@@ -508,6 +575,19 @@ ArticulationAnchor CompatUtils::translateToNewArticulationAnchor(int anchor)
         return ArticulationAnchor::AUTO;
         break;
     }
+}
+
+double CompatUtils::convertChordExtModUnits(double val)
+{
+    // Pre 4.6 this value was in 1/5 of a spatium
+    // After 4.6 this is in % of root cap height
+    // The best we can do for conversion of old files is to assume a default spatium of 1.75mm and a default font size of 10pt
+    // The height value is calculated from Edwin at 10pt using FontMetrics::capHeight
+    constexpr double DEFAULT_STAVE_SPACE_MM = 1.75;
+    constexpr double DEFAULT_SPATIUM = DEFAULT_STAVE_SPACE_MM * DPMM;
+    constexpr double DEFAULT_FONT_CAP_HEIGHT = 35.3795;
+
+    return ((val / 5) * DEFAULT_SPATIUM) / DEFAULT_FONT_CAP_HEIGHT;
 }
 
 void CompatUtils::resetRestVerticalOffset(MasterScore* masterScore)
@@ -865,4 +945,17 @@ void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
 
         delete oldArtic;
     }
+}
+
+void CompatUtils::setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s)
+{
+    Key key = Key::INVALID;
+    const Staff* st = h->staff();
+    key = st ? st->key(h->tick()) : Key::INVALID;
+    info->setRootTpc(function2Tpc(s, key));
+}
+
+Sid CompatUtils::positionStyleFromAlign(Sid align)
+{
+    return muse::value(ALIGN_VALS_TO_CONVERT, align, Sid::NOSTYLE);
 }

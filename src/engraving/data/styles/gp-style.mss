@@ -22,9 +22,9 @@
     <rasgueadoShowTabSimple>0</rasgueadoShowTabSimple>
     <rasgueadoShowTabCommon>1</rasgueadoShowTabCommon>
     <mordentShowTabSimple>0</mordentShowTabSimple>
-    <mordentShowTabCommon>0</mordentShowTabCommon>
+    <mordentShowTabCommon>1</mordentShowTabCommon>
     <turnShowTabSimple>0</turnShowTabSimple>
-    <turnShowTabCommon>0</turnShowTabCommon>
+    <turnShowTabCommon>1</turnShowTabCommon>
     <wahShowTabSimple>0</wahShowTabSimple>
     <wahShowTabCommon>1</wahShowTabCommon>
     <golpeShowTabSimple>0</golpeShowTabSimple>
@@ -32,5 +32,16 @@
     <tabShowTiedFret>1</tabShowTiedFret>
     <tabParenthesizeTiedFret>1</tabParenthesizeTiedFret>
     <parenthesizeTiedFretIfArticulation>1</parenthesizeTiedFretIfArticulation>
-  </Style>
+    <hopoShowOnStandardStaves>0</hopoShowOnStandardStaves>
+    <hopoShowOnTabStaves>1</hopoShowOnTabStaves>
+    <hopoUpperCase>1</hopoUpperCase>
+    <hopoShowAll>0</hopoShowAll>
+    <lhTappingSymbolNormalStave>circledT</lhTappingSymbolNormalStave>
+    <lhTappingSymbolTab>circledT</lhTappingSymbolTab>
+    <lhTappingShowItemsNormalStave>0</lhTappingShowItemsNormalStave>
+    <lhTappingShowItemsTab>2</lhTappingShowItemsTab>
+    <lhTappingSlurTopAndBottomNoteOnTab>1</lhTappingSlurTopAndBottomNoteOnTab>
+    <rhTappingSymbolNormalStave>T</rhTappingSymbolNormalStave>
+    <rhTappingSymbolTab>T</rhTappingSymbolTab>
+    </Style>
 </museScore>

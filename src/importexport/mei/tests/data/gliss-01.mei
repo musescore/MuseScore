@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title type="main">Glissando test</title>
+            <respStmt>
+               <persName role="composer">Klaus Rettinghaus</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2024-11-16T17:10:13" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead func="first">
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Glissando test</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Klaus Rettinghaus</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <label>Piano</label>
+                        <labelAbbr>Pno.</labelAbbr>
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m1mzzq1e" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <note xml:id="n12l70h9" dur="4" pname="g" oct="3" />
+                           <note xml:id="nsdv8xn" dur="4" pname="a" oct="5" />
+                           <note xml:id="n1hrtq3g" dur="4" pname="g" oct="4">
+                              <accid xml:id="a1ubbu37" accid="s" />
+                           </note>
+                           <note xml:id="ndd9dr5" dur="4" pname="d" oct="5">
+                              <accid xml:id="a1mn7y41" accid="f" />
+                           </note>
+                        </layer>
+                     </staff>
+                     <gliss xml:id="g1rm3kke" startid="#n12l70h9" color="#80FF80" lform="solid" endid="#nsdv8xn">slide</gliss>
+                     <gliss xml:id="g1rc68vo" startid="#nsdv8xn" color="#8000FF" lform="solid" endid="#n1hrtq3g">gliss.</gliss>
+                     <gliss xml:id="gacuj1y" startid="#n1hrtq3g" lform="solid" endid="#ndd9dr5">gliss.</gliss>
+                  </measure>
+                  <measure xml:id="mmnmswk" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <note xml:id="nkg66k7" dur="4" pname="a" oct="4" />
+                           <note xml:id="n1pvinv0" dur="4" pname="g" oct="3">
+                              <accid xml:id="awoexeg" accid="f" />
+                           </note>
+                           <note xml:id="n1l97nt" dur="4" pname="g" oct="4">
+                              <accid xml:id="a1av3umb" accid="s" />
+                           </note>
+                           <note xml:id="ncl313f" dur="4" pname="d" oct="4" />
+                        </layer>
+                     </staff>
+                     <gliss xml:id="g132cypn" startid="#nkg66k7" lform="wavy" endid="#n1pvinv0" />
+                     <gliss xml:id="geumpou" startid="#n1pvinv0" lform="wavy" endid="#n1l97nt" />
+                     <gliss xml:id="g19kqkyk" startid="#n1l97nt" color="#00FF00" lform="wavy" endid="#ncl313f" />
+                  </measure>
+                  <measure xml:id="m14lslmx" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <note xml:id="n1jgkffs" dur="4" pname="g" oct="4" />
+                           <note xml:id="n1bl1vw" dur="4" pname="f" oct="2" />
+                           <note xml:id="n1ch40c5" dur="4" pname="b" oct="4" />
+                           <note xml:id="n1ybefit" dur="4" pname="b" oct="4">
+                              <accid xml:id="a20r0dr" accid="f" />
+                           </note>
+                        </layer>
+                     </staff>
+                     <gliss xml:id="g146nnw1" startid="#n1jgkffs" color="#0000FF" lform="solid" endid="#n1ch40c5" />
+                     <gliss xml:id="g17ctyy7" startid="#n1bl1vw" lform="solid" endid="#n1ybefit" />
+                  </measure>
+                  <measure xml:id="m15cprg0" n="4">
+                     <staff xml:id="m4s1" n="1">
+                        <layer xml:id="m4s1l1" n="1">
+                           <note xml:id="nz4o70s" dots="1" dur="4" pname="g" oct="4" />
+                           <note xml:id="n1uw3wnu" dur="8" pname="a" oct="4" />
+                           <note xml:id="nyszdsr" dots="1" dur="4" pname="f" oct="4" />
+                           <note xml:id="nw5i32s" dur="8" pname="c" oct="5">
+                              <accid xml:id="a7sunkf" accid="s" />
+                           </note>
+                        </layer>
+                     </staff>
+                     <gliss xml:id="gcee4re" startid="#nz4o70s" lform="solid" endid="#n1uw3wnu" />
+                     <gliss xml:id="gatrhrs" startid="#nyszdsr" lform="solid" endid="#nw5i32s" />
+                  </measure>
+                  <measure xml:id="m1yfd44t" n="5">
+                     <staff xml:id="m5s1" n="1">
+                        <layer xml:id="m5s1l1" n="1">
+                           <note xml:id="n1o7d47v" dots="1" dur="4" pname="g" oct="4" />
+                           <note xml:id="n27nw41" dur="8" pname="d" oct="5">
+                              <accid xml:id="a8use84" accid="ff" />
+                           </note>
+                           <note xml:id="nsvswm7" dots="1" dur="4" pname="g" oct="4" />
+                           <note xml:id="n1ajq6be" dur="8" pname="d" oct="5">
+                              <accid xml:id="aanj4aa" accid="f" />
+                           </note>
+                        </layer>
+                     </staff>
+                     <gliss xml:id="g1675e2u" startid="#n1o7d47v" lform="solid" endid="#n27nw41" />
+                     <gliss xml:id="g161bn5k" startid="#nsvswm7" lform="solid" endid="#n1ajq6be" />
+                     <gliss xml:id="ggsvjgh" startid="#n1ajq6be" lform="wavy" endid="#n12f13d8" />
+                  </measure>
+                  <measure xml:id="m7x94p3" right="end" n="6">
+                     <staff xml:id="m6s1" n="1">
+                        <layer xml:id="m6s1l1" n="1">
+                           <note xml:id="n12f13d8" dur="4" pname="g" oct="4" />
+                           <chord xml:id="c1tu8yxt" dur="4">
+                              <note xml:id="nst1qt2" pname="c" oct="4" />
+                              <note xml:id="nyf172v" pname="e" oct="4" />
+                              <note xml:id="n1rvim65" pname="b" oct="4" />
+                           </chord>
+                           <chord xml:id="c20sipg" dur="4">
+                              <note xml:id="n1y1e42e" pname="g" oct="4" />
+                              <note xml:id="nrvdj01" pname="a" oct="4" />
+                              <note xml:id="n2hdeo6" pname="f" oct="5" />
+                           </chord>
+                           <chord xml:id="c16s6n0d" dur="4">
+                              <note xml:id="n4vn6ni" pname="g" oct="4" />
+                              <note xml:id="nyjl286" pname="d" oct="5" />
+                              <note xml:id="n1447sy3" pname="c" oct="6" />
+                           </chord>
+                        </layer>
+                     </staff>
+                     <gliss xml:id="gbjmjmi" startid="#nst1qt2" lform="solid" endid="#n1y1e42e" />
+                     <gliss xml:id="gu39m0r" startid="#nyf172v" lform="solid" endid="#nrvdj01" />
+                     <gliss xml:id="g1g0794l" startid="#n1rvim65" lform="solid" endid="#n2hdeo6" />
+                     <gliss xml:id="g1h3gp5v" startid="#n1y1e42e" lform="solid" endid="#n4vn6ni" />
+                     <gliss xml:id="g13073l9" startid="#nrvdj01" lform="solid" endid="#nyjl286" />
+                     <gliss xml:id="g178rk4s" startid="#n2hdeo6" lform="solid" endid="#n1447sy3" />
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

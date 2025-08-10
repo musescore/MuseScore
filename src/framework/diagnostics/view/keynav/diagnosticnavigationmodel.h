@@ -45,6 +45,8 @@ public:
 
     Q_INVOKABLE void reload();
 
+    Q_INVOKABLE void copyToClipboard(const QVariant& section, const QVariant& panel, const QVariant& control);
+
 signals:
     void beforeReload();
     void afterReload();

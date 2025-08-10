@@ -40,62 +40,52 @@ class Selection : public QObject
     /// \since MuseScore 3.3
     Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> elements READ elements)
 
-    /**
-     * Whether this selection covers a range of a score, as opposed to
-     * a list of distinct elements.
-     * \since MuseScore 3.5
-     */
+    /// Whether this selection covers a range of a score, as opposed to
+    /// a list of distinct elements.
+    /// \since MuseScore 3.5
     Q_PROPERTY(bool isRange READ isRange)
-    /**
-     * Start segment of selection, included. This property is valid
-     * only for range selection.
-     * \since MuseScore 3.5
-     * \see \ref isRange
-     */
+    /// Start segment of selection, included. This property is valid
+    /// only for range selection.
+    /// \since MuseScore 3.5
+    /// \see \ref isRange
     Q_PROPERTY(apiv1::Segment * startSegment READ startSegment)
-    /**
-     * End segment of selection, excluded. This property is valid
-     * only for range selection.
-     * \since MuseScore 3.5
-     * \see \ref isRange
-     */
+    /// End segment of selection, excluded. This property is valid
+    /// only for range selection.
+    /// \since MuseScore 3.5
+    /// \see \ref isRange
     Q_PROPERTY(apiv1::Segment * endSegment READ endSegment)
-    /**
-     * First staff of selection, included. This property is valid
-     * only for range selection.
-     * \since MuseScore 3.5
-     * \see \ref isRange
-     */
+    /// First staff of selection, included. This property is valid
+    /// only for range selection.
+    /// \since MuseScore 3.5
+    /// \see \ref isRange
     Q_PROPERTY(int startStaff READ startStaff)
-    /**
-     * End staff of selection, included. This property is valid
-     * only for range selection.
-     * \since MuseScore 3.5
-     * \see \ref isRange
-     */
+    /// End staff of selection, included. This property is valid
+    /// only for range selection.
+    /// \since MuseScore 3.5
+    /// \see \ref isRange
     Q_PROPERTY(int endStaff READ endStaff)
 
 protected:
     /// \cond MS_INTERNAL
-    mu::engraving::Selection* _select;
+    mu::engraving::Selection* m_selection;
 
     bool checkSelectionIsNotLocked() const;
     /// \endcond
 public:
     /// \cond MS_INTERNAL
-    Selection(mu::engraving::Selection* select)
-        : QObject(), _select(select) {}
+    Selection(mu::engraving::Selection* selection)
+        : QObject(), m_selection(selection) {}
     virtual ~Selection() { }
 
     QQmlListProperty<EngravingItem> elements()
-    { return wrapContainerProperty<EngravingItem>(this, _select->elements()); }
+    { return wrapContainerProperty<EngravingItem>(this, m_selection->elements()); }
 
-    bool isRange() const { return _select->isRange(); }
+    bool isRange() const { return m_selection->isRange(); }
 
-    Segment* startSegment() const { return wrap<Segment>(_select->startSegment()); }
-    Segment* endSegment() const { return wrap<Segment>(_select->endSegment()); }
-    int startStaff() const { return static_cast<int>(_select->staffStart()); }
-    int endStaff() const { return static_cast<int>(_select->staffEnd()); }
+    Segment* startSegment() const { return wrap<Segment>(m_selection->startSegment()); }
+    Segment* endSegment() const { return wrap<Segment>(m_selection->endSegment()); }
+    int startStaff() const { return static_cast<int>(m_selection->staffStart()); }
+    int endStaff() const { return static_cast<int>(m_selection->staffEnd()); }
     /// \endcond
 
     Q_INVOKABLE bool select(apiv1::EngravingItem* e, bool add = false);
@@ -104,7 +94,7 @@ public:
     Q_INVOKABLE bool clear();
 };
 
-extern Selection* selectionWrap(mu::engraving::Selection* select);
+extern Selection* selectionWrap(mu::engraving::Selection* selection);
 }
 
 #endif

@@ -27,6 +27,7 @@
 using namespace muse;
 using namespace muse::vst;
 
+static constexpr ControlIdx MODWHEEL_IDX = static_cast<ControlIdx>(Steinberg::Vst::kCtrlModWheel);
 static constexpr ControlIdx SUSTAIN_IDX = static_cast<ControlIdx>(Steinberg::Vst::kCtrlSustainOnOff);
 static constexpr ControlIdx SOSTENUTO_IDX = static_cast<ControlIdx>(Steinberg::Vst::kCtrlSustenutoOnOff);
 static constexpr ControlIdx PITCH_BEND_IDX = static_cast<ControlIdx>(Steinberg::Vst::kPitchBend);
@@ -54,42 +55,39 @@ void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
     m_useDynamicEvents = useDynamicEvents;
     m_inited = true;
 
-    updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics, m_playbackData.params);
+    updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics);
 }
 
-void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList&)
+void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics)
 {
-    m_offStreamEvents.clear();
+    addPlaybackEvents(m_offStreamEvents, events);
 
-    if (m_onOffStreamFlushed) {
-        m_onOffStreamFlushed();
+    if (m_useDynamicEvents) {
+        addDynamicEvents(m_offStreamEvents, dynamics);
     }
 
-    updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }
 
-void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                          const mpe::PlaybackParamLayers&)
+void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics)
 {
     if (!m_inited) {
         return;
     }
 
     m_mainStreamEvents.clear();
-    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
-    updatePlaybackEvents(m_mainStreamEvents, events);
-    updateMainSequenceIterator();
+    addPlaybackEvents(m_mainStreamEvents, events);
 
     if (m_useDynamicEvents) {
-        updateDynamicEvents(m_dynamicEvents, dynamics);
-        updateDynamicChangesIterator();
+        addDynamicEvents(m_mainStreamEvents, dynamics);
     }
+
+    updateMainSequenceIterator();
 }
 
 muse::audio::gain_t VstSequencer::currentGain() const
@@ -102,55 +100,24 @@ muse::audio::gain_t VstSequencer::currentGain() const
     return 0.5f;
 }
 
-void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events)
+void VstSequencer::addPlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events)
 {
     SostenutoTimeAndDurations sostenutoTimeAndDurations;
 
-    for (const auto& pair : events) {
-        for (const mpe::PlaybackEvent& event : pair.second) {
-            if (!std::holds_alternative<mpe::NoteEvent>(event)) {
-                continue;
-            }
-
-            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-
-            mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-            mpe::timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
-
-            int32_t noteId = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
-            float velocityFraction = noteVelocityFraction(noteEvent);
-            float tuning = noteTuning(noteEvent, noteId);
-
-            destination[timestampFrom].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
-            destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
-
-            for (const auto& pair : noteEvent.expressionCtx().articulations) {
-                const mpe::ArticulationMeta& meta = pair.second.meta;
-
-                if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
-                    appendPitchBend(destination, noteEvent, meta);
-                    continue;
-                }
-
-                if (muse::contains(SUSTAIN_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
-                    appendParamChange(destination, meta.timestamp, SUSTAIN_IDX, 1);
-                    appendParamChange(destination, meta.timestamp + meta.overallDuration, SUSTAIN_IDX, 0);
-                    continue;
-                }
-
-                if (muse::contains(SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
-                    const mpe::timestamp_t timestamp = timestampFrom + noteEvent.arrangementCtx().actualDuration * 0.1; // add offset for Sostenuto to take effect
-                    sostenutoTimeAndDurations.push_back(mpe::TimestampAndDuration { timestamp, meta.overallDuration });
-                    continue;
-                }
+    for (const auto& evPair : events) {
+        for (const mpe::PlaybackEvent& event : evPair.second) {
+            if (std::holds_alternative<mpe::NoteEvent>(event)) {
+                addNoteEvent(destination, std::get<mpe::NoteEvent>(event), sostenutoTimeAndDurations);
+            } else if (std::holds_alternative<mpe::ControllerChangeEvent>(event)) {
+                addControlChangeEvent(destination, evPair.first, std::get<mpe::ControllerChangeEvent>(event));
             }
         }
     }
 
-    appendSostenutoEvents(destination, sostenutoTimeAndDurations);
+    addSostenutoEvents(destination, sostenutoTimeAndDurations);
 }
 
-void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers)
+void VstSequencer::addDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers)
 {
     for (const auto& layer : layers) {
         for (const auto& dynamic : layer.second) {
@@ -159,8 +126,65 @@ void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe:
     }
 }
 
-void VstSequencer::appendParamChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
-                                     const ControlIdx controlIdx, const PluginParamValue value)
+void VstSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
+                                SostenutoTimeAndDurations& sostenutoTimeAndDurations)
+{
+    const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    const int32_t noteId = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
+    const float velocityFraction = noteVelocityFraction(noteEvent);
+    const float tuning = noteTuning(noteEvent, noteId);
+
+    if (arrangementCtx.hasStart()) {
+        destination[arrangementCtx.actualTimestamp].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
+    }
+
+    if (arrangementCtx.hasEnd()) {
+        const mpe::timestamp_t timestampTo = arrangementCtx.actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+        destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
+    }
+
+    for (const auto& articPair : noteEvent.expressionCtx().articulations) {
+        const mpe::ArticulationMeta& meta = articPair.second.meta;
+
+        if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
+            addPitchCurve(destination, noteEvent, meta);
+            continue;
+        }
+
+        if (muse::contains(SUSTAIN_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
+            addParamChange(destination, meta.timestamp, SUSTAIN_IDX, 1);
+            addParamChange(destination, meta.timestamp + meta.overallDuration, SUSTAIN_IDX, 0);
+            continue;
+        }
+
+        if (muse::contains(SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
+            const mpe::timestamp_t timestamp = arrangementCtx.actualTimestamp + noteEvent.arrangementCtx().actualDuration * 0.1; // add offset for Sostenuto to take effect
+            sostenutoTimeAndDurations.push_back(mpe::TimestampAndDuration { timestamp, meta.overallDuration });
+            continue;
+        }
+    }
+}
+
+void VstSequencer::addControlChangeEvent(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
+                                         const mpe::ControllerChangeEvent& event)
+{
+    switch (event.type) {
+    case mpe::ControllerChangeEvent::Modulation:
+        addParamChange(destination, timestamp, MODWHEEL_IDX, event.val);
+        break;
+    case mpe::ControllerChangeEvent::SustainPedalOnOff:
+        addParamChange(destination, timestamp, SUSTAIN_IDX, event.val);
+        break;
+    case mpe::ControllerChangeEvent::PitchBend:
+        addParamChange(destination, timestamp, PITCH_BEND_IDX, event.val);
+        break;
+    case mpe::ControllerChangeEvent::Undefined:
+        break;
+    }
+}
+
+void VstSequencer::addParamChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
+                                  const ControlIdx controlIdx, const PluginParamValue value)
 {
     auto controlIt = m_mapping.find(controlIdx);
     if (controlIt == m_mapping.cend()) {
@@ -170,8 +194,8 @@ void VstSequencer::appendParamChange(EventSequenceMap& destination, const mpe::t
     destination[timestamp].emplace(ParamChangeEvent { controlIt->second, value });
 }
 
-void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                   const mpe::ArticulationMeta& artMeta)
+void VstSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
+                                 const mpe::ArticulationMeta& artMeta)
 {
     auto pitchBendIt = m_mapping.find(PITCH_BEND_IDX);
     if (pitchBendIt == m_mapping.cend() || noteEvent.pitchCtx().pitchCurve.empty()) {
@@ -223,22 +247,22 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
     }
 }
 
-void VstSequencer::appendSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations)
+void VstSequencer::addSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations)
 {
     for (size_t i = 0; i < sostenutoTimeAndDurations.size(); ++i) {
         const mpe::TimestampAndDuration& currentTnD = sostenutoTimeAndDurations.at(i);
         const mpe::timestamp_t timestampTo = currentTnD.timestamp + currentTnD.duration;
 
-        appendParamChange(destination, currentTnD.timestamp, SOSTENUTO_IDX, 1);
+        addParamChange(destination, currentTnD.timestamp, SOSTENUTO_IDX, 1);
 
         if (i == sostenutoTimeAndDurations.size() - 1) {
-            appendParamChange(destination, timestampTo, SOSTENUTO_IDX, 0);
+            addParamChange(destination, timestampTo, SOSTENUTO_IDX, 0);
             continue;
         }
 
         const mpe::TimestampAndDuration& nextTnD = sostenutoTimeAndDurations.at(i + 1);
         if (timestampTo <= nextTnD.timestamp) { // handle potential overlap
-            appendParamChange(destination, timestampTo, SOSTENUTO_IDX, 0);
+            addParamChange(destination, timestampTo, SOSTENUTO_IDX, 0);
         }
     }
 }

@@ -43,7 +43,7 @@ class PercussionPanelPadListModel : public QAbstractListModel, public muse::Inje
 
     Q_OBJECT
 
-    Q_PROPERTY(int numColumns READ numColumns CONSTANT)
+    Q_PROPERTY(int numColumns READ numColumns NOTIFY numColumnsChanged)
     Q_PROPERTY(int numPads READ numPads NOTIFY numPadsChanged)
 
 public:
@@ -61,15 +61,13 @@ public:
 
     void removeEmptyRows();
 
-    Q_INVOKABLE bool rowIsEmpty(int row) const;
-
     Q_INVOKABLE void startPadSwap(int startIndex);
     Q_INVOKABLE void endPadSwap(int endIndex);
     bool swapInProgress() const { return indexIsValid(m_padSwapStartIndex); }
 
     bool hasActivePads() const { return m_drumset; }
 
-    int numColumns() const { return NUM_COLUMNS; }
+    int numColumns() const { return m_drumset ? static_cast<int>(m_drumset->percussionPanelColumns()) : DEFAULT_NUM_COLUMNS; }
     int numPads() const { return m_padModels.count(); }
 
     void setDrumset(const engraving::Drumset* drumset);
@@ -89,11 +87,11 @@ public:
 
 signals:
     void numPadsChanged();
-    void rowIsEmptyChanged(int row, bool empty);
+    void numColumnsChanged();
     void padFocusRequested(int padIndex); //! NOTE: This won't work if it is called immediately before a layoutChange
 
 private:
-    static constexpr int NUM_COLUMNS = 8;
+    static constexpr int DEFAULT_NUM_COLUMNS = 8;
 
     enum Roles {
         PadModelRole = Qt::UserRole + 1,

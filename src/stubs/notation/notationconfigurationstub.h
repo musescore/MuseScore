@@ -30,6 +30,8 @@ class NotationConfigurationStub : public INotationConfiguration
 public:
     NotationConfigurationStub() = default;
 
+    QColor notationColor() const override;
+
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color)  override;
 
@@ -72,6 +74,7 @@ public:
     bool thinNoteInputCursor() const override;
 
     QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
+    QColor highlightSelectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
     QColor dropRectColor() const override;
 
@@ -129,9 +132,9 @@ public:
     void setIsMidiInputEnabled(bool enabled)  override;
     muse::async::Notification isMidiInputEnabledChanged() const override;
 
-    bool startNoteInputAtSelectionWhenPressingMidiKey() const override;
-    void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) override;
-    muse::async::Notification startNoteInputAtSelectionWhenPressingMidiKeyChanged() const override;
+    bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const override;
+    void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value) override;
+    muse::async::Notification startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const override;
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled)  override;
@@ -148,8 +151,13 @@ public:
     void setIsPlayPreviewNotesInInputByDuration(bool play) override;
     muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const override;
 
+    bool playPreviewNotesWithScoreDynamics() const override;
+    void setPlayPreviewNotesWithScoreDynamics(bool use) override;
+    muse::async::Notification playPreviewNotesWithScoreDynamicsChanged() const override;
+
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled)  override;
+    muse::async::Notification isMetronomeEnabledChanged() const override;
 
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled)  override;
@@ -171,6 +179,10 @@ public:
     int delayBetweenNotesInRealTimeModeMilliseconds() const override;
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs)  override;
     muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const override;
+
+    bool useMidiVelocityAndDurationDuringNoteInput() const override;
+    void setUseMidiVelocityAndDurationDuringNoteInput(bool use) override;
+    muse::async::Channel<bool> useMidiVelocityAndDurationDuringNoteInputChanged() const override;
 
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs)  override;
@@ -211,6 +223,10 @@ public:
     bool useNewPercussionPanel() const override;
     void setUseNewPercussionPanel(bool use) override;
     muse::async::Notification useNewPercussionPanelChanged() const override;
+
+    bool percussionPanelUseNotationPreview() const override;
+    void setPercussionPanelUseNotationPreview(bool use);
+    muse::async::Notification percussionPanelUseNotationPreviewChanged() const override;
 
     PercussionPanelAutoShowMode percussionPanelAutoShowMode() const override;
     void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode) override;

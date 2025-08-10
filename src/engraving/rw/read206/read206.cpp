@@ -35,8 +35,8 @@
 #include "style/style.h"
 #include "style/textstyle.h"
 
-#include "types/symnames.h"
 #include "types/typesconv.h"
+#include "types/symnames.h"
 
 #include "dom/accidental.h"
 #include "dom/ambitus.h"
@@ -347,6 +347,10 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         ts = textStyle(ss);
     }
     for (const auto& i : *ts) {
+        if (ctx.shouldSkipProperty(i.pid)) {
+            continue;
+        }
+
         PropertyValue value;
         if (i.sid == Sid::NOSTYLE) {
             break;
@@ -396,6 +400,9 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         case Pid::END_TEXT_ALIGN:
         case Pid::ALIGN:
             value = PropertyValue::fromValue(align);
+            break;
+        case Pid::POSITION:
+            value = PropertyValue::fromValue(align.horizontal);
             break;
         case Pid::SYSTEM_FLAG:
             value = systemFlag;
@@ -488,6 +495,19 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+VoiceAssignment Read206::readDynamicRange(int i)
+{
+    switch (i) {
+    case 0:
+        return VoiceAssignment::ALL_VOICE_IN_STAFF;
+    case 1:
+    case 2:
+        break;
+    }
+
+    return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
 }
 
 NoteHeadGroup Read206::convertHeadGroup(int i)
@@ -660,7 +680,7 @@ static void readDrumset206(Drumset* ds, XmlReader& e)
                     ds->drum(pitch).addVariant(div);
                 }
             }
-        } else if (ds->readProperties(e, pitch)) {
+        } else if (ds->readDrumProperties(e, pitch)) {
         } else {
             e.unknown();
         }
@@ -1028,7 +1048,15 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         Symbol* s = new Symbol(note);
         s->setTrack(note->track());
         read400::TRead::read(s, e, ctx);
-        note->add(s);
+        if (s->sym() == SymId::noteheadParenthesisLeft) {
+            note->setParenthesesMode(note->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT);
+            ctx.score()->deleteLater(s);
+        } else if (s->sym() == SymId::noteheadParenthesisRight) {
+            note->setParenthesesMode(note->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT);
+            ctx.score()->deleteLater(s);
+        } else {
+            note->add(s);
+        }
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();
@@ -1417,7 +1445,7 @@ static void readDynamic(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "velocity") {
             d->setVelocity(tctx.reader().readInt());
         } else if (tag == "dynType") {
-            d->setDynRange(TConv::fromXml(tctx.reader().readAsciiText(), DynamicRange::STAFF));
+            d->setVoiceAssignment(Read206::readDynamicRange(tctx.reader().readInt()));
         } else if (tag == "size") {
             e.skipCurrentElement();
         } else if (!readTextProperties206(tctx.reader(), ctx, d)) {
@@ -1859,9 +1887,8 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
 //    symbols which were not available for use prior to 3.0
 //---------------------------------------------------------
 
-static void convertDoubleArticulations(Chord* chord, XmlReader& e, ReadContext& ctx)
+static void convertDoubleArticulations(Chord* chord)
 {
-    UNUSED(e);
     std::vector<Articulation*> pairableArticulations;
     for (Articulation* a : chord->articulations()) {
         if (a->isStaccato() || a->isTenuto()
@@ -1906,9 +1933,6 @@ static void convertDoubleArticulations(Chord* chord, XmlReader& e, ReadContext& 
         for (Articulation* a : pairableArticulations) {
             chord->remove(a);
             if (a != newArtic) {
-                if (LinkedObjects* link = a->links()) {
-                    muse::remove(ctx.linkIds(), link->lid());
-                }
                 delete a;
             }
         }
@@ -1978,7 +2002,7 @@ static void readChord(Chord* chord, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    convertDoubleArticulations(chord, e, ctx);
+    convertDoubleArticulations(chord);
     fixTies(chord);
 }
 
@@ -2165,13 +2189,13 @@ void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
         } else if (tag == "veloChange") {
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") {
-            h->setDynRange(DynamicRange(e.readInt()));
+            h->setVoiceAssignment(readDynamicRange(e.readInt()));
         } else if (tag == "useTextLine") {        // < 206
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                 h->setHairpinType(HairpinType::CRESC_LINE);
-            } else if (h->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
-                h->setHairpinType(HairpinType::DECRESC_LINE);
+            } else if (h->hairpinType() == HairpinType::DIM_HAIRPIN) {
+                h->setHairpinType(HairpinType::DIM_LINE);
             }
             useText = true;
         } else if (!readTextLineProperties(e, ctx, h)) {
@@ -2343,7 +2367,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
             case SymId::fermataLongBelow:
             case SymId::fermataVeryLongAbove:
             case SymId::fermataVeryLongBelow: {
-                Fermata* fe = Factory::createFermata(ctx.dummy());
+                Fermata* fe = Factory::createFermata(ctx.dummy()->segment());
                 fe->setSymIdAndTimeStretch(sym);
                 el = fe;
             } break;
@@ -2381,7 +2405,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
     }
     // Special case for "no type" = ufermata, with missing subtype tag
     if (!el) {
-        Fermata* f = Factory::createFermata(ctx.dummy());
+        Fermata* f = Factory::createFermata(ctx.dummy()->segment());
         f->setSymIdAndTimeStretch(sym);
         el = f;
     }
@@ -2470,7 +2494,6 @@ void Read206::readTie206(XmlReader& e, ReadContext& ctx, Tie* t)
 static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
 {
     Segment* segment = 0;
-    double _spatium = m->spatium();
 
     std::vector<Chord*> graceNotes;
     ctx.tuplets().clear();
@@ -2742,10 +2765,6 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 if (ctx.staff(staffIdx)->clef(Fraction(0, 1)) != clef->clefType()) {
                     ctx.staff(staffIdx)->setDefaultClefType(clef->clefType());
                 }
-                if (clef->links() && clef->links()->size() == 1) {
-                    muse::remove(ctx.linkIds(), clef->links()->lid());
-                    LOGD("remove link %d", clef->links()->lid());
-                }
                 delete clef;
                 continue;
             }
@@ -2863,8 +2882,6 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (t->empty()) {
                 if (t->links()) {
                     if (t->links()->size() == 1) {
-                        LOGD("reading empty text: deleted lid = %d", t->links()->lid());
-                        muse::remove(ctx.linkIds(), t->links()->lid());
                         delete t;
                     }
                 }
@@ -2973,7 +2990,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerDown(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
+            m->vspacerDown(staffIdx)->setGap(Spatium(e.readDouble()));
         } else if (tag == "vspacer" || tag == "vspacerUp") {
             if (!m->vspacerUp(staffIdx)) {
                 Spacer* spacer = Factory::createSpacer(m);
@@ -2981,7 +2998,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerUp(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
+            m->vspacerUp(staffIdx)->setGap(Spatium(e.readDouble()));
         } else if (tag == "visible") {
             m->setStaffVisible(staffIdx, e.readInt());
         } else if (tag == "slashStyle") {
@@ -3003,7 +3020,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             readText206(e, ctx, noText, m);
             noText->setTrack(ctx.track());
             noText->setParent(m);
-            m->setNoText(noText->staffIdx(), noText);
+            m->setMeasureNumber(noText->staffIdx(), noText);
         } else if (tag == "SystemDivider") {
             SystemDivider* sd = new SystemDivider(ctx.dummy()->system());
             read400::TRead::read(sd, e, ctx);
@@ -3107,7 +3124,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 readMeasure206(measure, staff, e, ctx);
                 measure->checkMeasure(staff);
                 if (!measure->isMMRest()) {
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                     if (m && m->mmRest()) {
                         m->mmRest()->setNext(measure);
                     }
@@ -3128,7 +3145,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 Box* b = toBox(Factory::createItemByName(tag, score->dummy()));
                 readBox(b, e, ctx);
                 b->setTick(ctx.tick());
-                score->measures()->add(b);
+                score->measures()->append(b);
 
                 // If it's the first box, and comes before any measures, reset to
                 // 301 default.
@@ -3157,7 +3174,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                     LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(score->dummy()->system());
                     measure->setTick(ctx.tick());
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                 }
                 ctx.setTick(measure->tick());
                 readMeasure206(measure, staff, e, ctx);
@@ -3227,6 +3244,26 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, ReadChor
             } else {
                 style->set(Sid::harmonyPlacement, PlacementV::ABOVE);
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
+            }
+        } else if (tag == "useStandardNoteNames") {     // These settings were collapsed into one enum in 4.6
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::STANDARD);
+            }
+        } else if (tag == "useGermanNoteNames") {
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::GERMAN);
+            }
+        } else if (tag == "useFullGermanNoteNames") {
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::GERMAN_PURE);
+            }
+        } else if (tag == "useSolfeggioNoteNames") {
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::SOLFEGGIO);
+            }
+        } else if (tag == "useFrenchNoteNames") {
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::FRENCH);
             }
         } else {
             if (!ReadStyleHook::readStyleProperties(style, e)) {
@@ -3456,12 +3493,6 @@ Ret Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "Revision") {
             e.skipCurrentElement();
         }
-    }
-
-    int id = 1;
-    for (auto& p : ctx.linkIds()) {
-        LinkedObjects* le = p.second;
-        le->setLid(score, id++);
     }
 
     for (Staff* s : score->staves()) {

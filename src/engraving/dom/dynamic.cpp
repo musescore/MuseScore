@@ -121,7 +121,6 @@ Dynamic::Dynamic(Segment* parent)
     : TextBase(ElementType::DYNAMIC, parent, TextStyleType::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     m_velocity    = -1;
-    m_dynRange    = DynamicRange::PART;
     m_dynamicType = DynamicType::OTHER;
     m_changeInVelocity = 128;
     m_velChangeSpeed = DynamicSpeed::NORMAL;
@@ -133,7 +132,6 @@ Dynamic::Dynamic(const Dynamic& d)
 {
     m_dynamicType = d.m_dynamicType;
     m_velocity    = d.m_velocity;
-    m_dynRange    = d.m_dynRange;
     m_changeInVelocity = d.m_changeInVelocity;
     m_velChangeSpeed = d.m_velChangeSpeed;
     _avoidBarLines = d._avoidBarLines;
@@ -148,13 +146,6 @@ Dynamic::Dynamic(const Dynamic& d)
 int Dynamic::velocity() const
 {
     return m_velocity <= 0 ? DYN_LIST[int(dynamicType())].velocity : m_velocity;
-}
-
-void Dynamic::setDynRange(DynamicRange range)
-{
-    m_dynRange = range;
-
-    setVoiceAssignment(dynamicRangeToVoiceAssignment(range));
 }
 
 //---------------------------------------------------------
@@ -190,7 +181,7 @@ Fraction Dynamic::velocityChangeLength() const
         return Fraction::fromTicks(0);
     }
 
-    double ratio = score()->tempomap()->tempo(segment()->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
+    double ratio = score()->tempomap()->multipliedTempo(segment()->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
     double speedMult;
     switch (velChangeSpeed()) {
     case DynamicSpeed::SLOW:
@@ -233,171 +224,6 @@ bool Dynamic::isVelocityChangeAvailable() const
         return true;
     default:
         return false;
-    }
-}
-
-double Dynamic::customTextOffset() const
-{
-    if (!_centerOnNotehead || m_dynamicType == DynamicType::OTHER) {
-        return 0.0;
-    }
-
-    String referenceString = String::fromUtf8(DYN_LIST[int(m_dynamicType)].text);
-    if (xmlText() == referenceString) {
-        return 0.0;
-    }
-
-    Dynamic referenceDynamic(*this);
-    referenceDynamic.setXmlText(referenceString);
-    renderer()->layoutItem(toTextBase(&referenceDynamic));
-
-    TextFragment referenceFragment;
-    if (!referenceDynamic.ldata()->blocks.empty()) {
-        TextBlock referenceBlock = referenceDynamic.ldata()->blocks.front();
-        if (!referenceBlock.fragments().empty()) {
-            referenceFragment = referenceDynamic.ldata()->blocks.front().fragments().front();
-        }
-    }
-
-    const LayoutData* ldata = this->ldata();
-    IF_ASSERT_FAILED(ldata) {
-        return 0.0;
-    }
-    for (const TextBlock& block : ldata->blocks) {
-        for (const TextFragment& fragment : block.fragments()) {
-            if (fragment.text == referenceFragment.text) {
-                return fragment.pos.x() - referenceFragment.pos.x();
-            }
-        }
-    }
-
-    return 0.0;
-}
-
-//-------------------------------------------------------------------
-//   doAutoplace
-//
-//    Move Dynamic up or down to avoid collisions with other elements.
-//-------------------------------------------------------------------
-
-//void Dynamic::doAutoplace()
-//{
-//    Segment* s = segment();
-//    if (!(s && autoplace())) {
-//        return;
-//    }
-
-//    double minDistance = style().styleS(Sid::dynamicsMinDistance).val() * spatium();
-//    RectF r = bbox().translated(pos() + s->pos() + s->measure()->pos());
-//    double yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
-//    r.translate(0.0, -yOff);
-
-//    Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
-//    SkylineLine sk(!placeAbove());
-//    sk.add(r);
-
-//    if (placeAbove()) {
-//        double d = sk.minDistance(sl.north());
-//        if (d > -minDistance) {
-//            movePosY(-(d + minDistance));
-//        }
-//    } else {
-//        double d = sl.south().minDistance(sk);
-//        if (d > -minDistance) {
-//            movePosY(d + minDistance);
-//        }
-//    }
-//}
-
-//--------------------------------------------------------------------------
-//   manageBarlineCollisions
-//      If necessary, offset dynamic left/right to clear barline collisions
-//--------------------------------------------------------------------------
-
-void Dynamic::manageBarlineCollisions()
-{
-    if (!_avoidBarLines || score()->nstaves() <= 1 || anchorToEndOfPrevious() || !isStyled(Pid::OFFSET)) {
-        return;
-    }
-
-    Segment* thisSegment = segment();
-    if (!thisSegment) {
-        return;
-    }
-
-    System* system = measure()->system();
-    if (!system) {
-        return;
-    }
-
-    staff_idx_t barLineStaff = muse::nidx;
-    if (placeAbove()) {
-        // need to find the barline from the staff above
-        // taking into account there could be invisible staves
-        if (staffIdx() == 0) {
-            return;
-        }
-        for (int staffIndex = static_cast<int>(staffIdx()) - 1; staffIndex >= 0; --staffIndex) {
-            if (system->staff(staffIndex)->show()) {
-                barLineStaff = staffIndex;
-                break;
-            }
-        }
-    } else {
-        barLineStaff = staffIdx();
-    }
-
-    if (barLineStaff == muse::nidx) {
-        return;
-    }
-
-    if (score()->staff(barLineStaff)->barLineSpan() < 1) {
-        return; // Barline doesn't extend through staves
-    }
-
-    const double minBarLineDistance = 0.25 * spatium();
-
-    // Check barlines to the left
-    Segment* leftBarLineSegment = nullptr;
-    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->prev1enabled()) {
-        if (segment->segmentType() & SegmentType::BarLineType) {
-            leftBarLineSegment = segment;
-            break;
-        }
-    }
-    if (leftBarLineSegment) {
-        EngravingItem* e = leftBarLineSegment->elementAt(barLineStaff * VOICES);
-        if (e) {
-            double leftMargin = ldata()->bbox().translated(pagePos() - offset()).left()
-                                - e->ldata()->bbox().translated(e->pagePos()).right()
-                                - minBarLineDistance;
-            if (leftMargin < 0) {
-                mutldata()->moveX(-leftMargin);
-                return;
-            }
-        }
-    }
-
-    // Check barlines to the right
-    Segment* rightBarLineSegment = nullptr;
-    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->next1enabled()) {
-        if (segment->segmentType() & SegmentType::BarLineType) {
-            rightBarLineSegment = segment;
-            break;
-        }
-    }
-
-    if (rightBarLineSegment) {
-        EngravingItem* e = rightBarLineSegment->elementAt(barLineStaff * VOICES);
-        if (e) {
-            double rightMargin = e->ldata()->bbox().translated(e->pagePos()).left()
-                                 - ldata()->bbox().translated(pagePos() - offset()).right()
-                                 - minBarLineDistance;
-            if (rightMargin < 0) {
-                mutldata()->moveX(rightMargin);
-                return;
-            }
-        }
     }
 }
 
@@ -516,6 +342,24 @@ EngravingItem* Dynamic::drop(EditData& ed)
 int Dynamic::dynamicVelocity(DynamicType t)
 {
     return DYN_LIST[int(t)].velocity;
+}
+
+void Dynamic::startEdit(EditData& ed)
+{
+    if (ed.curGrip != Grip::NO_GRIP) {
+        EngravingItem::startEdit(ed);
+    } else {
+        TextBase::startEdit(ed);
+    }
+}
+
+void Dynamic::endEdit(EditData& ed)
+{
+    if (cursor() && cursor()->editing()) {
+        TextBase::endEdit(ed);
+    } else {
+        EngravingItem::endEdit(ed);
+    }
 }
 
 TranslatableString Dynamic::subtypeUserName() const
@@ -751,17 +595,13 @@ String Dynamic::screenReaderInfo() const
 }
 }
 
-//---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void Dynamic::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
+bool Dynamic::isEditAllowed(EditData& ed) const
 {
-    if (ed.editTextualProperties) {
-        TextBase::drawEditMode(p, ed, currentViewScaling);
-    } else {
-        EngravingItem::drawEditMode(p, ed, currentViewScaling);
+    if (ed.key == Key_Tab) {
+        return false;
     }
+
+    return TextBase::isEditAllowed(ed);
 }
 
 //---------------------------------------------------------
@@ -809,6 +649,23 @@ void Dynamic::findAdjacentHairpins()
             }
         }
     }
+}
+
+Shape Dynamic::symShapeWithCutouts(SymId id) const
+{
+    Staff* stf = staff();
+    double staffMag = stf ? stf->staffMag(tick()) : 1.0;
+    Shape shape = score()->engravingFont()->shapeWithCutouts(id, magS() * staffMag * dynamicsSize());
+    for (ShapeElement& element : shape.elements()) {
+        element.setItem(this);
+    }
+
+    return shape;
+}
+
+Dyn Dynamic::dynInfo(DynamicType type)
+{
+    return DYN_LIST[static_cast<int>(type)];
 }
 
 //---------------------------------------------------------

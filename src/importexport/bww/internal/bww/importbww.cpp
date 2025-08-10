@@ -224,7 +224,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     currentMeasure->setTick(tick);
     currentMeasure->setTimesig(mu::engraving::Fraction(beats, beat));
     currentMeasure->setNo(measureNumber);
-    score->measures()->add(currentMeasure);
+    score->measures()->append(currentMeasure);
 
     if (mbf.repeatBegin) {
         currentMeasure->setRepeatStart(true);
@@ -457,7 +457,7 @@ void MsScWriter::header(const QString title, const QString type,
     // addText(vbox, score, strTranslator, mu::engraving::TextStyleName::TRANSLATOR);
     if (vbox) {
         vbox->setTick(mu::engraving::Fraction(0, 1));
-        score->measures()->add(vbox);
+        score->measures()->append(vbox);
     }
     if (!footer.isEmpty()) {
         score->style().set(mu::engraving::Sid::oddFooterC, footer);

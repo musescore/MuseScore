@@ -70,6 +70,7 @@ void MultiInstancesProvider::init()
 
     m_ipcChannel = new IpcChannel();
     m_selfID = m_ipcChannel->selfID().toStdString();
+    LOGI() << "our instance id is: " << m_selfID;
 
     m_ipcChannel->msgReceived().onReceive(this, [this](const Msg& msg) { onMsg(msg); });
     m_ipcChannel->instancesChanged().onNotify(this, [this]() { m_instancesChanged.notify(); });

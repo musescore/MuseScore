@@ -68,6 +68,21 @@ muse::async::Channel<bool> PlaybackConfigurationStub::playHarmonyWhenEditingChan
     return ch;
 }
 
+bool PlaybackConfigurationStub::playNotesOnMidiInput() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setPlayNotesOnMidiInput(bool)
+{
+}
+
+muse::async::Channel<bool> PlaybackConfigurationStub::playNotesOnMidiInputChanged() const
+{
+    static muse::async::Channel<bool> ch;
+    return ch;
+}
+
 PlaybackCursorType PlaybackConfigurationStub::cursorType() const
 {
     return PlaybackCursorType::SMOOTH;
@@ -141,10 +156,16 @@ const SoundProfileName& PlaybackConfigurationStub::basicSoundProfileName() const
     return basic;
 }
 
-const SoundProfileName& PlaybackConfigurationStub::museSoundProfileName() const
+const SoundProfileName& PlaybackConfigurationStub::museSoundsProfileName() const
 {
     static const SoundProfileName museSounds;
     return museSounds;
+}
+
+const SoundProfileName& PlaybackConfigurationStub::compatMuseSoundsProfileName() const
+{
+    static const SoundProfileName compatMuseSounds;
+    return compatMuseSounds;
 }
 
 SoundProfileName PlaybackConfigurationStub::defaultProfileForNewProjects() const
@@ -181,6 +202,29 @@ bool PlaybackConfigurationStub::needToShowResetSoundFlagsWhenChangePlaybackProfi
 
 void PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool)
 {
+}
+
+bool PlaybackConfigurationStub::needToShowOnlineSoundsConnectionWarning() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setNeedToShowOnlineSoundsConnectionWarning(bool)
+{
+}
+
+OnlineSoundsShowProgressBarMode PlaybackConfigurationStub::onlineSoundsShowProgressBarMode() const
+{
+    return OnlineSoundsShowProgressBarMode::Never;
+}
+
+void PlaybackConfigurationStub::setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode)
+{
+}
+
+muse::async::Notification PlaybackConfigurationStub::onlineSoundsShowProgressBarModeChanged() const
+{
+    return {};
 }
 
 bool PlaybackConfigurationStub::shouldMeasureInputLag() const

@@ -58,7 +58,7 @@ ManifestList ExtensionsLoader::loadManifestList(const io::path_t& defPath, const
         retList.push_back(m);
     }
 
-    for (const Manifest& m : externalManifests) {
+    for (Manifest& m : externalManifests) {
         if (!m.isValid()) {
             continue;
         }
@@ -67,6 +67,7 @@ ManifestList ExtensionsLoader::loadManifestList(const io::path_t& defPath, const
             continue;
         }
 
+        m.isRemovable = true;
         retList.push_back(m);
     }
 
@@ -80,6 +81,7 @@ ManifestList ExtensionsLoader::manifestList(const io::path_t& rootPath) const
     for (const io::path_t& path : paths) {
         LOGD() << "parsing manifest: " << path;
         Manifest manifest = parseManifest(path);
+        manifest.path = path;
         resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
     }
@@ -124,6 +126,7 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
     m.description = obj.value("description").toString();
     m.category = obj.value("category").toString();
     m.thumbnail = obj.value("thumbnail").toStdString();
+    m.version = obj.value("version").toString();
     m.apiversion = obj.value("apiversion", DEFAULT_API_VERSION).toInt();
 
     String uiCtx = obj.value("ui_context", String(DEFAULT_UI_CONTEXT)).toString();

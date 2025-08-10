@@ -23,7 +23,8 @@
 #define MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
-#include "types/retval.h"
+#include "async/channel.h"
+#include "async/notification.h"
 #include "playbacktypes.h"
 
 namespace mu::playback {
@@ -45,6 +46,10 @@ public:
     virtual bool playHarmonyWhenEditing() const = 0;
     virtual void setPlayHarmonyWhenEditing(bool value) = 0;
     virtual muse::async::Channel<bool> playHarmonyWhenEditingChanged() const = 0;
+
+    virtual bool playNotesOnMidiInput() const = 0;
+    virtual void setPlayNotesOnMidiInput(bool value) = 0;
+    virtual muse::async::Channel<bool> playNotesOnMidiInputChanged() const = 0;
 
     virtual PlaybackCursorType cursorType() const = 0;
 
@@ -68,7 +73,8 @@ public:
     virtual muse::async::Channel<bool> muteHiddenInstrumentsChanged() const = 0;
 
     virtual const SoundProfileName& basicSoundProfileName() const = 0;
-    virtual const SoundProfileName& museSoundProfileName() const = 0;
+    virtual const SoundProfileName& museSoundsProfileName() const = 0;
+    virtual const SoundProfileName& compatMuseSoundsProfileName() const = 0;
 
     virtual SoundProfileName defaultProfileForNewProjects() const = 0;
     virtual void setDefaultProfileForNewProjects(const SoundProfileName& name) = 0;
@@ -81,6 +87,13 @@ public:
 
     virtual bool needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const = 0;
     virtual void setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show) = 0;
+
+    virtual bool needToShowOnlineSoundsConnectionWarning() const = 0;
+    virtual void setNeedToShowOnlineSoundsConnectionWarning(bool show) = 0;
+
+    virtual OnlineSoundsShowProgressBarMode onlineSoundsShowProgressBarMode() const = 0;
+    virtual void setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode mode) = 0;
+    virtual muse::async::Notification onlineSoundsShowProgressBarModeChanged() const = 0;
 
     virtual bool shouldMeasureInputLag() const = 0;
 };

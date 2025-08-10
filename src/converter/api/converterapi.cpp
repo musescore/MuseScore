@@ -33,7 +33,7 @@ ConverterApi::ConverterApi(muse::api::IApiEngine* e)
 
 QString ConverterApi::selectDir(const QString& title, const QString& dir) const
 {
-    io::path_t path = interactive()->selectDirectory(title, dir);
+    io::path_t path = interactive()->selectDirectory(title.toStdString(), dir);
     return path.toQString();
 }
 
@@ -74,7 +74,7 @@ bool ConverterApi::batch(const QString& outDir, const QString& job, const QStrin
     }
 
     muse::ProgressPtr progress = std::make_shared<muse::Progress>();
-    progress->progressChanged.onReceive(this, [progressCallback](int64_t current, int64_t total, const std::string& title) {
+    progress->progressChanged().onReceive(this, [progressCallback](int64_t current, int64_t total, const std::string& title) {
         QCoreApplication::processEvents();
         if (progressCallback.isCallable()) {
             QJSValueList args;

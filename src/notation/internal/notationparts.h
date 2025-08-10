@@ -81,6 +81,8 @@ public:
     void addSystemObjects(const muse::IDList& stavesIds) override;
     void removeSystemObjects(const muse::IDList& stavesIds) override;
     void moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId) override;
+    void moveSystemObjectLayerBelowBottomStaff() override;
+    void moveSystemObjectLayerAboveBottomStaff() override;
 
     muse::async::Notification partsChanged() const override;
     muse::async::Notification scoreOrderChanged() const override;
@@ -101,13 +103,11 @@ private:
     friend class MasterNotationParts;
 
     void listenUndoStackChanges();
-
-    void updatePartList();
-    void updateSystemObjectStaves();
+    void updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes = {});
 
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);
-    void doAppendStaff(Staff* staff, Part* destinationPart);
+    void doAppendStaff(Staff* staff, Part* destinationPart, bool createRests=true);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
     void doInsertPart(Part* part, size_t index);
 
@@ -119,7 +119,7 @@ private:
     mu::engraving::InstrumentChange* findInstrumentChange(const Part* part, const Fraction& tick) const;
 
     void appendStaves(Part* part, const InstrumentTemplate& templ, const mu::engraving::KeyList& keyList);
-    void insertStaff(Staff* staff, engraving::staff_idx_t destinationStaffIndex);
+    void insertStaff(Staff* staff, engraving::staff_idx_t destinationStaffIndex, bool createRests=true);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& newParts);
@@ -139,7 +139,7 @@ private:
     void notifyAboutPartRemoved(const Part* part) const;
     void notifyAboutPartReplaced(const Part* oldPart, const Part* newPart) const;
     void notifyAboutStaffChanged(const Staff* staff) const;
-    void notifyAboutStaffAdded(const Staff* staff, const muse::ID& partId) const;
+    void notifyAboutStaffAdded(const Staff* staff) const;
     void notifyAboutStaffRemoved(const Staff* staff) const;
 
     IGetScore* m_getScore = nullptr;
@@ -149,9 +149,10 @@ private:
     muse::async::Notification m_scoreOrderChanged;
 
     std::vector<Part*> m_parts;
-
     std::vector<Staff*> m_systemObjectStaves;
     muse::async::Notification m_systemObjectStavesChanged;
+
+    bool m_ignoreUndoStackChanges = false;
 
     mutable muse::async::ChangedNotifier<const Part*> m_partChangedNotifier;
     mutable std::map<muse::ID, muse::async::ChangedNotifier<const Staff*> > m_staffChangedNotifierMap;

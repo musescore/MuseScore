@@ -25,7 +25,7 @@
 
 #include <map>
 
-#include "audio/iplayback.h"
+#include "audio/main/iplayback.h"
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 

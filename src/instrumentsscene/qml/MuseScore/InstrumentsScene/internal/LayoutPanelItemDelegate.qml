@@ -54,7 +54,8 @@ FocusableControl {
     signal popupOpened(var popupX, var popupY, var popupHeight)
     signal popupClosed()
 
-    signal visibilityChanged(bool visible)
+    signal changeVisibilityOfSelectedRowsRequested(bool visible)
+    signal changeVisibilityRequested(var index, bool visible)
 
     signal dragStarted()
     signal dropped()
@@ -215,6 +216,8 @@ FocusableControl {
         spacing: 2
 
         VisibilityBox {
+            id: visibilityBox
+            visible: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: width
 
@@ -231,11 +234,19 @@ FocusableControl {
                 }
 
                 if (root.isSelected) {
-                    root.visibilityChanged(!isVisible)
+                    root.changeVisibilityOfSelectedRowsRequested(!isVisible)
                 } else {
-                    model.itemRole.isVisible = !isVisible
+                    root.changeVisibilityRequested(styleData.index, !isVisible)
                 }
             }
+        }
+
+        StyledIconLabel {
+            Layout.preferredWidth: visibilityBox.width
+            visible: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
+            Layout.alignment: Qt.AlignCenter
+            iconCode: IconCode.MINUS
+            opacity: model && model.itemRole.isVisible ? 1 : 0.75
         }
 
         Item {
@@ -434,17 +445,6 @@ FocusableControl {
             when: root.visible && !root.isSelected &&
                   (root.type === LayoutPanelItemType.INSTRUMENT ||
                    root.type === LayoutPanelItemType.STAFF)
-
-            PropertyChanges {
-                target: root.background
-                color: ui.theme.textFieldColor
-                opacity: 1
-            }
-        },
-
-        State {
-            name: "SYSTEM_OBJECTS_LAYER_NORMAL"
-            when: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
             PropertyChanges {
                 target: root.background

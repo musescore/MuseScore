@@ -31,6 +31,8 @@ MenuButton {
     signal addInstrumentRequested()
     signal addSystemMarkingsRequested()
 
+    property bool addSystemMarkingsAvailable: true
+
     //: Keep in sync with the message that appears if there are no instruments in the score (LayoutPanel.qml)
     text: qsTrc("layoutpanel", "Add")
 
@@ -44,7 +46,7 @@ MenuButton {
     menuModel: [
         { id: "ADD_INSTRUMENT", title: qsTrc("layoutpanel", "New instrument")  },
         {},
-        { id: "ADD_SYSTEM_MARKINGS", title: qsTrc("layoutpanel", "System markings (tempo, rehearsal, etc.)") },
+        { id: "ADD_SYSTEM_MARKINGS", title: qsTrc("layoutpanel", "System markings (tempo, rehearsal marks, etc.)"), enabled: root.addSystemMarkingsAvailable },
     ]
 
     onHandleMenuItem: function(itemId) {

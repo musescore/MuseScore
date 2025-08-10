@@ -22,7 +22,7 @@ public:
     QPointF dialogPosition() const;
 
     Q_INVOKABLE void init() override;
-    Q_INVOKABLE void toggleItemChecked(QString& id);
+    Q_INVOKABLE void toggleItemChecked(const QString& id);
 
     Q_INVOKABLE void onClosed();
 

@@ -40,6 +40,8 @@ class INotationConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~INotationConfiguration() = default;
 
+    virtual QColor notationColor() const = 0;
+
     virtual QColor backgroundColor() const = 0;
     virtual void setBackgroundColor(const QColor& color) = 0;
 
@@ -80,6 +82,7 @@ public:
     virtual bool thinNoteInputCursor() const = 0;
 
     virtual QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
+    virtual QColor highlightSelectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
 
     virtual QColor dropRectColor() const = 0;
 
@@ -132,13 +135,17 @@ public:
     virtual void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) = 0;
     virtual muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const = 0;
 
+    virtual muse::io::path_t userMusicFontsPath() const = 0;
+    virtual void setUserMusicFontsPath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> userMusicFontsPathChanged() const = 0;
+
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
     virtual muse::async::Notification isMidiInputEnabledChanged() const = 0;
 
-    virtual bool startNoteInputAtSelectionWhenPressingMidiKey() const = 0;
-    virtual void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) = 0;
-    virtual muse::async::Notification startNoteInputAtSelectionWhenPressingMidiKeyChanged() const = 0;
+    virtual bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const = 0;
+    virtual void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value) = 0;
+    virtual muse::async::Notification startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const = 0;
 
     virtual bool isAutomaticallyPanEnabled() const = 0;
     virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;
@@ -158,8 +165,13 @@ public:
     virtual void setIsPlayPreviewNotesInInputByDuration(bool play) = 0;
     virtual muse::async::Notification isPlayPreviewNotesInInputByDurationChanged() const = 0;
 
+    virtual bool playPreviewNotesWithScoreDynamics() const = 0;
+    virtual void setPlayPreviewNotesWithScoreDynamics(bool use) = 0;
+    virtual muse::async::Notification playPreviewNotesWithScoreDynamicsChanged() const = 0;
+
     virtual bool isMetronomeEnabled() const = 0;
     virtual void setIsMetronomeEnabled(bool enabled) = 0;
+    virtual muse::async::Notification isMetronomeEnabledChanged() const = 0;
 
     virtual bool isCountInEnabled() const = 0;
     virtual void setIsCountInEnabled(bool enabled) = 0;
@@ -185,6 +197,10 @@ public:
     virtual int delayBetweenNotesInRealTimeModeMilliseconds() const = 0;
     virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
     virtual muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const = 0;
+
+    virtual bool useMidiVelocityAndDurationDuringNoteInput() const = 0;
+    virtual void setUseMidiVelocityAndDurationDuringNoteInput(bool use) = 0;
+    virtual muse::async::Channel<bool> useMidiVelocityAndDurationDuringNoteInputChanged() const = 0;
 
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
@@ -230,6 +246,10 @@ public:
     virtual bool useNewPercussionPanel() const = 0;
     virtual void setUseNewPercussionPanel(bool use) = 0;
     virtual muse::async::Notification useNewPercussionPanelChanged() const = 0;
+
+    virtual bool percussionPanelUseNotationPreview() const = 0;
+    virtual void setPercussionPanelUseNotationPreview(bool use) = 0;
+    virtual muse::async::Notification percussionPanelUseNotationPreviewChanged() const = 0;
 
     virtual PercussionPanelAutoShowMode percussionPanelAutoShowMode() const = 0;
     virtual void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode) = 0;

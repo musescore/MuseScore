@@ -42,7 +42,7 @@ void PlayEvent::setPitch(int v)
     if (!ne || ne->pitch() == v) {
         return;                                       // Value hasn't changed so no need to do more.
     }
-    if (parentNote == nullptr) {
+    if (!parentNote) {
         // We can't check against a parent note we don't have so
         // we check against the absolute range. When this NoteEvent
         // is added to an actual note the range should be checked
@@ -87,7 +87,7 @@ void PlayEvent::setOntime(int v)
         LOGW("PluginAPI::PlayEvent::setOntime: Invalid value.");
         return;
     }
-    if (parentNote == nullptr) {
+    if (!parentNote) {
         // Unowned floating value in QML context.
         ne->setOntime(v);                             // Set new ontTime value
     } else {
@@ -115,7 +115,7 @@ void PlayEvent::setLen(int v)
         LOGW("PluginAPI::PlayEvent::setLen: Invalid value.");
         return;
     }
-    if (parentNote == nullptr) {
+    if (!parentNote) {
         ne->setLen(v);                                // Set new length value
     } else {
         mu::engraving::Score* score = parentNote->note()->score();

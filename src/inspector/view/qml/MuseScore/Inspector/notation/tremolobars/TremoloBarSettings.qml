@@ -37,7 +37,7 @@ Item {
 
     objectName: "TremoloBarSettings"
 
-    height: content.implicitHeight
+    implicitHeight: root.model && root.model.areSettingsAvailable ? content.height : multipleBarsError.implicitHeight
 
     function focusOnFirst() {
         tremoloBarTypeSection.focusOnFirst()
@@ -50,9 +50,10 @@ Item {
 
         spacing: 12
 
+        visible: root.model ? root.model.areSettingsAvailable : false
+
         DropdownPropertyView {
             id: tremoloBarTypeSection
-            visible: root.model ? root.model.areSettingsAvailable : false
 
             titleText: qsTrc("inspector", "Tremolo bar type")
             propertyItem: root.model ? root.model.type : null
@@ -73,7 +74,6 @@ Item {
 
         InspectorPropertyView {
             id: tremoloBarCurve
-            visible: root.model ? root.model.areSettingsAvailable : false
 
             titleText: qsTrc("inspector", "Click to add or remove points")
             propertyItem: root.model ? root.model.curve : null
@@ -104,8 +104,6 @@ Item {
         Item {
             height: childrenRect.height
             width: parent.width
-
-            visible: root.model ? root.model.areSettingsAvailable : false
 
             SpinBoxPropertyView {
                 id: lineThicknessSection
@@ -145,7 +143,8 @@ Item {
     }
 
     StyledTextLabel {
-        anchors.fill: parent
+        id: multipleBarsError
+        width: parent.width
 
         wrapMode: Text.Wrap
         text: qsTrc("inspector", "You have multiple tremolo bars selected. Select a single one to edit its settings.")

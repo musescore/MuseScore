@@ -244,6 +244,24 @@ bool StringTunings::noStringVisible() const
     return m_noStringVisible;
 }
 
+void StringTunings::triggerLayout() const
+{
+    if (!part()) {
+        return StaffTextBase::triggerLayout();
+    }
+
+    Fraction startTick = tick();
+
+    const std::map<int, StringTunings*>& allStringTuningsOnThisPart = part()->stringTunings();
+    auto iterOfNextStringTuningOnThisPart = allStringTuningsOnThisPart.upper_bound(startTick.ticks());
+    StringTunings* nextStringTuning = iterOfNextStringTuningOnThisPart != allStringTuningsOnThisPart.end()
+                                      ? iterOfNextStringTuningOnThisPart->second : nullptr;
+
+    Fraction endTick = nextStringTuning ? nextStringTuning->tick() : score()->endTick();
+
+    score()->setLayout(startTick, endTick, staffIdx(), staffIdx(), this);
+}
+
 String StringTunings::generateText() const
 {
     const StringData* stringData = this->stringData();

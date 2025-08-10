@@ -1,5 +1,4 @@
-
-declare_module(beatroot)
+declare_thirdparty_module(beatroot)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/Agent.cpp

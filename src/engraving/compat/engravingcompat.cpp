@@ -23,7 +23,9 @@
 #include "engravingcompat.h"
 
 #include "dom/marker.h"
+#include "dom/system.h"
 #include "engraving/dom/beam.h"
+#include "engraving/dom/box.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/masterscore.h"
@@ -37,22 +39,21 @@ using namespace mu::engraving;
 namespace mu::engraving::compat {
 void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
 {
-    if (score->mscVersion() < 450) {
-        replaceEmptyCRSegmentsWithTimeTick(score);
-    }
+    int mscVersion = score->mscVersion();
 
-    if (score->mscVersion() >= 440) {
+    if (mscVersion < 460) {
         resetMarkerLeftFontSize(score);
-        return;
+        resetRestVerticalOffsets(score);
+        adjustVBoxDistances(score);
     }
 
-    correctPedalEndPoints(score);
-
-    if (score->mscVersion() >= 420) {
-        undoStaffTextExcludeFromPart(score);
+    if (mscVersion < 440) {
+        correctPedalEndPoints(score);
+        migrateDynamicPosOnVocalStaves(score);
+        if (mscVersion >= 420) {
+            undoStaffTextExcludeFromPart(score);
+        }
     }
-
-    migrateDynamicPosOnVocalStaves(score);
 }
 
 void EngravingCompat::correctPedalEndPoints(MasterScore* score)
@@ -181,37 +182,50 @@ void EngravingCompat::resetMarkerLeftFontSize(MasterScore* masterScore)
     }
 }
 
-void EngravingCompat::replaceEmptyCRSegmentsWithTimeTick(MasterScore* masterScore)
+void EngravingCompat::resetRestVerticalOffsets(MasterScore* masterScore)
 {
-    auto segmentHasNoChordRest = [](const Segment* segment) {
-        for (EngravingItem* item : segment->elist()) {
-            if (item && item->isChordRest()) {
-                return false;
-            }
-        }
-        return true;
-    };
-
     for (Score* score : masterScore->scoreList()) {
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             if (!mb->isMeasure()) {
                 continue;
             }
             Measure* measure = toMeasure(mb);
-            for (Segment* segment = measure->first(SegmentType::ChordRest); segment;) {
-                Segment* next = segment->next(SegmentType::ChordRest);
-                if (segmentHasNoChordRest(segment)) {
-                    measure->remove(segment);
-                    Segment* timeTickSegment = measure->getSegmentR(SegmentType::TimeTick, segment->rtick());
-                    std::vector<EngravingItem*> annotations = segment->annotations();
-                    for (EngravingItem* annotation : annotations) {
-                        segment->remove(annotation);
-                        annotation->setParent(timeTickSegment);
-                        timeTickSegment->add(annotation);
-                    }
-                    delete segment;
+            for (staff_idx_t staff = 0; staff < score->nstaves(); ++staff) {
+                if (!measure->hasVoices(staff)) {
+                    continue;
                 }
-                segment = next;
+                track_idx_t startTrack = staff2track(staff);
+                track_idx_t endTrack = startTrack + VOICES;
+                for (Segment& seg : measure->segments()) {
+                    if (!seg.isChordRestType()) {
+                        continue;
+                    }
+                    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+                        EngravingItem* item = seg.element(track);
+                        if (item && item->isRest()) {
+                            item->resetProperty(Pid::OFFSET);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            MeasureBase* nextmb = mb->next();
+            if (mb->isVBoxBase()) {
+                VBox* vbox = static_cast<VBox*>(mb);
+                vbox->setProperty(Pid::PADDING_TO_NOTATION_ABOVE, Spatium()); // Because pre-4.6 these didn't exist
+                vbox->setProperty(Pid::PADDING_TO_NOTATION_BELOW, Spatium());
+                if (nextmb && nextmb->isVBoxBase()) {
+                    VBox* first = static_cast<VBox*>(mb);
+                    VBox* second = static_cast<VBox*>(nextmb);
+                    first->setBottomGap(first->bottomGap() + second->topGap()); // Because pre-4.6 these used to be added
+                }
             }
         }
     }
@@ -219,16 +233,17 @@ void EngravingCompat::replaceEmptyCRSegmentsWithTimeTick(MasterScore* masterScor
 
 void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
-    if (score->mscVersion() >= 440) {
-        return;
-    }
-
     bool needRelayout = false;
 
-    if (relayoutUserModifiedCrossStaffBeams(score)) {
-        needRelayout = true;
+    int mscVersion = score->mscVersion();
+
+    if (mscVersion < 460) {
+        needRelayout |= resetHookHeightSign(score);
     }
-    // As we progress, likely that more things will be done here
+
+    if (mscVersion < 440) {
+        needRelayout |= relayoutUserModifiedCrossStaffBeams(score);
+    }
 
     if (needRelayout) {
         score->update();
@@ -237,6 +252,9 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
 bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
 {
+    if (score->mscVersion() >= 440) {
+        return false;
+    }
     bool found = false;
 
     auto findBeam = [&found](ChordRest* cr) {
@@ -270,5 +288,37 @@ bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
     }
 
     return found;
+}
+
+bool EngravingCompat::resetHookHeightSign(MasterScore* masterScore)
+{
+    bool needRelayout = false;
+
+    for (Score* score : masterScore->scoreList()) {
+        for (auto pair : score->spanner()) {
+            Spanner* spanner = pair.second;
+            if (spanner->isTextLineBase()) {
+                for (SpannerSegment* spannerSeg : spanner->spannerSegments()) {
+                    TextLineBaseSegment* textLineSeg = static_cast<TextLineBaseSegment*>(spannerSeg);
+                    if (textLineSeg->placeBelow()) {
+                        if (!textLineSeg->isStyled(Pid::BEGIN_HOOK_HEIGHT)) {
+                            Spatium beginHookHeight = textLineSeg->getProperty(Pid::BEGIN_HOOK_HEIGHT).value<Spatium>();
+                            textLineSeg->setProperty(Pid::BEGIN_HOOK_HEIGHT, -beginHookHeight);
+                            spanner->triggerLayout();
+                            needRelayout = true;
+                        }
+                        if (!textLineSeg->isStyled(Pid::END_HOOK_HEIGHT)) {
+                            Spatium endHookHeight = textLineSeg->getProperty(Pid::END_HOOK_HEIGHT).value<Spatium>();
+                            textLineSeg->setProperty(Pid::END_HOOK_HEIGHT, -endHookHeight);
+                            spanner->triggerLayout();
+                            needRelayout = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return needRelayout;
 }
 } // namespace mu::engraving::compat

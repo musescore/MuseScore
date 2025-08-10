@@ -35,7 +35,7 @@
 #include "iappshellconfiguration.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "project/iprojectfilescontroller.h"
-#include "audio/isoundfontrepository.h"
+#include "audio/main/isoundfontcontroller.h"
 #include "istartupscenario.h"
 #include "iapplication.h"
 #include "extensions/iextensioninstaller.h"
@@ -56,7 +56,7 @@ class ApplicationActionController : public QObject, public muse::Injectable, pub
     muse::Inject<IAppShellConfiguration> configuration = { this };
     muse::Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider = { this };
     muse::Inject<project::IProjectFilesController> projectFilesController = { this };
-    muse::Inject<muse::audio::ISoundFontRepository> soundFontRepository = { this };
+    muse::Inject<muse::audio::ISoundFontController> soundFontController = { this };
     muse::Inject<IStartupScenario> startupScenario = { this };
     muse::Inject<muse::IApplication> application = { this };
     muse::Inject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };

@@ -29,8 +29,6 @@ StyledToolBarView {
 
     id: root
 
-    property alias isEmpty: extModel.isEmpty
-
     navigationPanel.name: "ExtensionsToolBar"
     navigationPanel.accessible.name: qsTrc("notation", "Extensions toolbar")
 

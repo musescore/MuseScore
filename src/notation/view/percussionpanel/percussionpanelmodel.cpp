@@ -22,9 +22,11 @@
 
 #include "percussionpanelmodel.h"
 
+#include <QCoreApplication>
+#include <QKeyEvent>
+
 #include "notation/utilities/percussionutilities.h"
 
-#include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
 
 #include "engraving/dom/factory.h"
@@ -35,6 +37,7 @@
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
+static const QString SET_COLUMNS_CODE("percussion-set-columns");
 static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
 static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
 
@@ -106,17 +109,27 @@ void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode)
 
 bool PercussionPanelModel::useNotationPreview() const
 {
-    return m_useNotationPreview;
+    return configuration()->percussionPanelUseNotationPreview();
 }
 
 void PercussionPanelModel::setUseNotationPreview(bool useNotationPreview)
 {
-    if (m_useNotationPreview == useNotationPreview) {
+    if (configuration()->percussionPanelUseNotationPreview() == useNotationPreview) {
         return;
     }
+    configuration()->setPercussionPanelUseNotationPreview(useNotationPreview);
+}
 
-    m_useNotationPreview = useNotationPreview;
-    emit useNotationPreviewChanged(m_useNotationPreview);
+int PercussionPanelModel::notationPreviewNumStaffLines() const
+{
+    if (!interaction()) {
+        return 0;
+    }
+
+    const NoteInputState& inputState = interaction()->noteInput()->state();
+    const Staff* staff = inputState.staff();
+
+    return staff ? staff->lines(inputState.tick()) : 0;
 }
 
 PercussionPanelPadListModel* PercussionPanelModel::padListModel() const
@@ -142,14 +155,27 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
     static constexpr int editLayoutIcon = static_cast<int>(IconCode::Code::CONFIGURE);
     static constexpr int resetLayoutIcon = static_cast<int>(IconCode::Code::UNDO);
 
+    const QVariantList columnsSubmenu = {
+        createColumnSubItem(4),
+        createColumnSubItem(6),
+        createColumnSubItem(8),
+        createColumnSubItem(12),
+        createColumnSubItem(16),
+        createColumnSubItem(20),
+        createColumnSubItem(24),
+    };
+
     QList<QVariantMap> menuItems = {
         { { "id", PAD_NAMES_CODE }, { "title", muse::qtrc("notation/percussion", "Pad names") },
-            { "checkable", true }, { "checked", !m_useNotationPreview }, { "enabled", true } },
+            { "checkable", true }, { "checked", !useNotationPreview() }, { "enabled", true } },
 
         { { "id", NOTATION_PREVIEW_CODE }, { "title", muse::qtrc("notation/percussion", "Notation preview") },
-            { "checkable", true }, { "checked", m_useNotationPreview }, { "enabled", true } },
+            { "checkable", true }, { "checked", useNotationPreview() }, { "enabled", true } },
 
         { }, // separator
+
+        { { "title", muse::qtrc("notation/percussion",  "%1 columns").arg(m_padListModel->numColumns()) },
+            { "subitems", columnsSubmenu }, { "enabled", true } },
 
         { { "id", EDIT_LAYOUT_CODE },
             { "title", editLayoutTitle }, { "icon", editLayoutIcon }, { "enabled", true } },
@@ -159,6 +185,14 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
     };
 
     return menuItems;
+}
+
+QVariantMap PercussionPanelModel::createColumnSubItem(int numColumns) const
+{
+    const QString title = QString::number(numColumns);
+    const QString id = SET_COLUMNS_CODE + "-" + title;
+    return { { "id", id }, { "title", title },
+        { "checkable", true }, { "checked", m_padListModel->numColumns() == numColumns }, { "enabled", true } };
 }
 
 void PercussionPanelModel::handleMenuItem(const QString& itemId)
@@ -177,6 +211,11 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
         m_padListModel->padFocusRequested(0);
     } else if (itemId == RESET_LAYOUT_CODE) {
         resetLayout();
+    } else if (itemId.contains(SET_COLUMNS_CODE)) {
+        //! NOTE: In this case, the last section of the itemId refers to the number of columns
+        auto stringSection = itemId.section(u'-', -1, -1);
+        const int num = stringSection.toInt();
+        setColumns(num);
     }
 }
 
@@ -231,11 +270,8 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         return;
     }
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion panel layout"));
-    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 
     m_padListModel->focusLastActivePad();
 }
@@ -248,6 +284,8 @@ void PercussionPanelModel::customizeKit()
 void PercussionPanelModel::setUpConnections()
 {
     const auto updatePadModels = [this](Drumset* drumset) {
+        emit notationPreviewNumStaffLinesChanged();
+
         if (drumset && m_padListModel->drumset() && *drumset == *m_padListModel->drumset()) {
             return;
         }
@@ -304,15 +342,18 @@ void PercussionPanelModel::setUpConnections()
         }
     });
 
-    if (!audioSettings()) {
-        return;
+    if (audioSettings()) {
+        audioSettings()->trackInputParamsChanged().onReceive(this, [this](InstrumentTrackId trackId) {
+            if (trackId != currentTrackId()) {
+                return;
+            }
+            updateSoundTitle(trackId);
+        });
     }
 
-    audioSettings()->trackInputParamsChanged().onReceive(this, [this](InstrumentTrackId trackId) {
-        if (trackId != currentTrackId()) {
-            return;
-        }
-        updateSoundTitle(trackId);
+    configuration()->percussionPanelUseNotationPreviewChanged().onNotify(this, [this]() {
+        const bool useNotationPreview = configuration()->percussionPanelUseNotationPreview();
+        emit useNotationPreviewChanged(useNotationPreview);
     });
 }
 
@@ -343,15 +384,25 @@ void PercussionPanelModel::updateSoundTitle(const InstrumentTrackId& trackId)
     }
 
     const audio::AudioInputParams& params = audioSettings()->trackInputParams(trackId);
-
     const QString name = muse::audio::audioSourceName(params).toQString();
-    const QString category = muse::audio::audioSourceCategoryName(params).toQString();
-    if (name.isEmpty() || category.isEmpty()) {
+    if (name.isEmpty()) {
         setSoundTitle(QString());
         return;
     }
 
-    setSoundTitle(category + ": " + name);
+    const QString pack = muse::audio::audioSourcePackName(params).toQString();
+    if (!pack.isEmpty() && pack != name) {
+        setSoundTitle(pack + ": " + name);
+        return;
+    }
+
+    const QString category = muse::audio::audioSourceCategoryName(params).toQString();
+    if (!category.isEmpty() && category != name) {
+        setSoundTitle(category + ": " + name);
+        return;
+    }
+
+    setSoundTitle(name);
 }
 
 bool PercussionPanelModel::eventFilter(QObject* watched, QEvent* event)
@@ -411,11 +462,8 @@ void PercussionPanelModel::onDuplicatePadRequested(int pitch)
 
     updatedDrumset.setDrum(nextAvailablePitch, duplicateDrum);
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Duplicate percussion panel pad"));
-    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 }
 
 void PercussionPanelModel::onDeletePadRequested(int pitch)
@@ -431,11 +479,8 @@ void PercussionPanelModel::onDeletePadRequested(int pitch)
     Drumset updatedDrumset = *m_padListModel->drumset();
     updatedDrumset.setDrum(pitch, engraving::DrumInstrument());
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Delete percussion panel pad"));
-    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 }
 
 void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
@@ -448,13 +493,12 @@ void PercussionPanelModel::onDefinePadShortcutRequested(int pitch)
     }
 
     Drumset updatedDrumset = *m_padListModel->drumset();
-    PercussionUtilities::editPercussionShortcut(updatedDrumset, pitch);
+    if (!PercussionUtilities::editPercussionShortcut(updatedDrumset, pitch)) {
+        return;
+    }
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion shortcut"));
-    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 }
 
 void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMode)
@@ -513,11 +557,8 @@ void PercussionPanelModel::resetLayout()
         return;
     }
 
-    INotationUndoStackPtr undoStack = notation()->undoStack();
-
-    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Reset percussion panel layout"));
-    score()->undo(new engraving::ChangeDrumset(inst, defaultLayout, part));
-    undoStack->commitChanges();
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, defaultLayout);
 }
 
 Drumset PercussionPanelModel::standardDefaultDrumset() const
@@ -557,6 +598,46 @@ Drumset PercussionPanelModel::museSamplerDefaultDrumset() const
     PercussionUtilities::readDrumset(drumMapping, defaultDrumset);
 
     return defaultDrumset;
+}
+
+void PercussionPanelModel::setColumns(int numColumns)
+{
+    IF_ASSERT_FAILED(numColumns > 0) {
+        return;
+    }
+
+    if (numColumns == m_padListModel->numColumns()) {
+        return;
+    }
+
+    if (m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT) {
+        finishEditing(/*discardChanges*/ true);
+    }
+
+    const std::pair<Instrument*, Part*> instAndPart = getCurrentInstrumentAndPart();
+    Instrument* inst = instAndPart.first;
+    Part* part = instAndPart.second;
+    IF_ASSERT_FAILED(inst && inst->drumset() && part) {
+        return;
+    }
+
+    Drumset updatedDrumset = *m_padListModel->drumset();
+
+    // Calculate new values for panelRow & panelColumn...
+    for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
+        if (!updatedDrumset.isValid(pitch)) {
+            continue;
+        }
+        mu::engraving::DrumInstrument& drum = updatedDrumset.drum(pitch);
+        const int index = drum.panelRow * static_cast<int>(updatedDrumset.percussionPanelColumns()) + drum.panelColumn;
+        drum.panelRow = index / numColumns;
+        drum.panelColumn = index % numColumns;
+    }
+
+    updatedDrumset.setPercussionPanelColumns(numColumns);
+
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 }
 
 InstrumentTrackId PercussionPanelModel::currentTrackId() const

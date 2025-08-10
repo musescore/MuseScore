@@ -45,7 +45,6 @@ public:
     virtual bool edit(EditData&) override;
     virtual void startEditDrag(EditData&) override;
     virtual void editDrag(EditData&) override;
-    virtual void endEdit(EditData&) override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
@@ -159,10 +158,18 @@ public:
 
     PropertyValue getProperty(Pid propertyId) const override;
     PropertyValue propertyDefault(Pid) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
 
     void startEditDrag(EditData&) override;
 
     std::vector<PointF> gripsPositions(const EditData&) const override;
+
+    Spatium paddingToNotationAbove() const { return m_paddingToNotationAbove; }
+    Spatium paddingToNotationBelow() const { return m_paddingToNotationBelow; }
+
+private:
+    Spatium m_paddingToNotationAbove;
+    Spatium m_paddingToNotationBelow;
 };
 
 //---------------------------------------------------------
@@ -176,12 +183,44 @@ class FBox : public VBox
     DECLARE_CLASSOF(ElementType::FBOX)
 
 public:
-    FBox(System* parent)
-        : VBox(ElementType::FBOX, parent) {}
-
+    FBox(System* parent);
     FBox* clone() const override { return new FBox(*this); }
 
+    void init();
+
     void add(EngravingItem*) override;
+
+    double textScale() const { return m_textScale; }
+    double diagramScale() const { return m_diagramScale; }
+    Spatium columnGap() const { return m_columnGap; }
+    Spatium rowGap() const { return m_rowGap; }
+    int chordsPerRow() const { return m_chordsPerRow; }
+    AlignH contentHorizontalAlignment() const { return m_contentAlignmentH; }
+
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& val) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+
+    int gripsCount() const override;
+    Grip initialEditModeGrip() const override;
+    Grip defaultGrip() const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
+
+    void undoReorderElements(const StringList& newOrder);
+    StringList diagramsOrder() const { return m_diagramsOrder; }
+
+    ElementList orderedElements() const;
+
+private:
+    double m_textScale = 0.0;
+    double m_diagramScale = 0.0;
+    Spatium m_columnGap;
+    Spatium m_rowGap;
+    int m_chordsPerRow = 0;
+
+    AlignH m_contentAlignmentH = AlignH::HCENTER;
+
+    StringList /*harmonyNames*/ m_diagramsOrder;
 };
 
 //---------------------------------------------------------

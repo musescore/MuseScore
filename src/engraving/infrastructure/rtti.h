@@ -19,11 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_RTTI_H
-#define MU_ENGRAVING_RTTI_H
+#pragma once
 
-#include "global/runtime.h"
-#include "../types/types.h"
 #include "log.h"
 
 namespace mu::engraving {
@@ -133,5 +130,3 @@ private:
     }
 };
 }
-
-#endif // MU_ENGRAVING_RTTI_H

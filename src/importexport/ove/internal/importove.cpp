@@ -328,7 +328,7 @@ void OveToMScore::createStructure()
         int tick = m_mtt->getTick(i, 0);
         measure->setTick(Fraction::fromTicks(tick));
         measure->setNo(i);
-        m_score->measures()->add(measure);
+        m_score->measures()->append(measure);
     }
 }
 
@@ -403,7 +403,7 @@ void OveToMScore::convertHeader()
 
     if (vbox) {
         vbox->setTick(Fraction(0, 1));
-        m_score->measures()->add(vbox);
+        m_score->measures()->append(vbox);
     }
 }
 
@@ -1548,8 +1548,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (!isRestDefaultLine(notePtr, container->getNoteType()) && notePtr->getLine() != 0) {
                     double yOffset = -(double)(notePtr->getLine());
                     int stepOffset = cr->staff()->staffType(cr->tick())->stepOffset();
-                    int lineOffset = toRest(cr)->computeVoiceOffset(5, toRest(cr)->mutldata());
-                    yOffset -= qreal(lineOffset + stepOffset);
+                    yOffset -= qreal(stepOffset);
                     yOffset *= m_score->style().spatium() / 2.0;
                     cr->ryoffset() = yOffset;
                     cr->setAutoplace(false);
@@ -1627,7 +1626,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (clefType == ovebase::ClefType::Percussion1 || clefType == ovebase::ClefType::Percussion2) {
                     Drumset* drumset = getDrumset(m_score, part);
                     if (drumset != 0) {
-                        if (!drumset->isValid(pitch) || pitch == -1) {
+                        if (!drumset->isValid(pitch)) {
                             LOGD("unmapped drum note 0x%02x %d", note->pitch(), note->pitch());
                         } else {
                             note->setHeadGroup(drumset->noteHead(pitch));
@@ -2085,6 +2084,19 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
     }
 }
 
+static const ChordDescription* harmonyFromXml(Harmony* h, const muse::String& kind)
+{
+    String lowerCaseKind = kind.toLower();
+    const ChordList* cl = h->score()->chordList();
+    for (const auto& p : *cl) {
+        const ChordDescription& cd = p.second;
+        if (lowerCaseKind == cd.xmlKind) {
+            return &cd;
+        }
+    }
+    return nullptr;
+}
+
 void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int track)
 {
     ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
@@ -2099,25 +2111,27 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
         int absTick = m_mtt->getTick(measure->no(), harmonyPtr->getTick());
 
         Harmony* harmony = Factory::createHarmony(m_score->dummy()->segment());
+        HarmonyInfo* info = new HarmonyInfo(measure->score());
 
         // TODO - does this need to be key-aware?
         harmony->setTrack(track);
-        harmony->setRootTpc(step2tpc(harmonyPtr->getRoot(), AccidentalVal(harmonyPtr->getAlterRoot())));
+        info->setRootTpc(step2tpc(harmonyPtr->getRoot(), AccidentalVal(harmonyPtr->getAlterRoot())));
         if (harmonyPtr->getBass() != ovebase::INVALID_NOTE
             && (harmonyPtr->getBass() != harmonyPtr->getRoot()
                 || (harmonyPtr->getBass() == harmonyPtr->getRoot()
                     && harmonyPtr->getAlterBass() != harmonyPtr->getAlterRoot()))) {
-            harmony->setBaseTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
+            info->setBassTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
         }
-        const ChordDescription* d = harmony->fromXml(harmonyPtr->getHarmonyType());
+        const ChordDescription* d = harmonyFromXml(harmony, harmonyPtr->getHarmonyType());
         if (d != 0) {
-            harmony->setId(d->id);
-            harmony->setTextName(d->names.front());
+            info->setId(d->id);
+            info->setTextName(d->names.front());
         } else {
-            harmony->setId(-1);
-            harmony->setTextName(harmonyPtr->getHarmonyType());
+            info->setId(-1);
+            info->setTextName(harmonyPtr->getHarmonyType());
         }
-        harmony->render();
+
+        harmony->addChord(info);
 
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
         s->add(harmony);
@@ -2450,7 +2464,7 @@ static HairpinType OveWedgeType_To_Type(ovebase::WedgeType type)
 {
     HairpinType subtype = HairpinType::CRESC_HAIRPIN;
     switch (type) {
-    case ovebase::WedgeType::Cres_Line: {
+    case ovebase::WedgeType::Cresc_Line: {
         subtype = HairpinType::CRESC_HAIRPIN;
         break;
     }
@@ -2458,16 +2472,16 @@ static HairpinType OveWedgeType_To_Type(ovebase::WedgeType type)
         subtype = HairpinType::CRESC_HAIRPIN;
         break;
     }
-    case ovebase::WedgeType::Decresc_Line: {
-        subtype = HairpinType::DECRESC_HAIRPIN;
+    case ovebase::WedgeType::Dim_Line: {
+        subtype = HairpinType::DIM_HAIRPIN;
         break;
     }
-    case ovebase::WedgeType::Cres: {
+    case ovebase::WedgeType::Cresc: {
         subtype = HairpinType::CRESC_HAIRPIN;
         break;
     }
-    case ovebase::WedgeType::Decresc: {
-        subtype = HairpinType::DECRESC_HAIRPIN;
+    case ovebase::WedgeType::Dim: {
+        subtype = HairpinType::DIM_HAIRPIN;
         break;
     }
     default:

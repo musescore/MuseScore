@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_TRANSPOSEDIALOG_H
-#define MU_NOTATION_TRANSPOSEDIALOG_H
+#pragma once
 
 #include "ui_transposedialog.h"
 
@@ -48,6 +47,7 @@ private slots:
     void apply();
 
 private:
+    void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
 
     INotationPtr notation() const;
@@ -70,5 +70,3 @@ private:
     bool m_allSelected = false;
 };
 }
-
-#endif // MU_NOTATION_TRANSPOSEDIALOG_H

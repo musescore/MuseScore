@@ -26,9 +26,8 @@
 #include <alsa/seq_midi_event.h>
 
 #include "midierrors.h"
-#include "stringutils.h"
-#include "translation.h"
-#include "defer.h"
+#include "global/translation.h"
+#include "global/defer.h"
 #include "log.h"
 
 struct muse::midi::AlsaMidiInPort::Alsa {
@@ -77,8 +76,8 @@ MidiDeviceList AlsaMidiInPort::availableDevices() const
 
     int streams = SND_SEQ_OPEN_INPUT;
     const unsigned int cap = SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_READ;
-    const unsigned int type_hw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
-    const unsigned int type_sw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_SOFTWARE;
+    const unsigned int type_hw = SND_SEQ_PORT_TYPE_HARDWARE;
+    const unsigned int type_sw = SND_SEQ_PORT_TYPE_SOFTWARE;
 
     MidiDeviceList ret;
 
@@ -336,7 +335,7 @@ void AlsaMidiInPort::doProcess()
             continue;
         }
 
-        e = Event::fromMIDI10Package(data);
+        e = Event::fromMidi10Package(data);
 
         e = e.toMIDI20();
         if (e) {

@@ -151,7 +151,7 @@ void NoteArticulationsParser::parsePersistentMeta(const RenderingContext& ctx, m
 
 void NoteArticulationsParser::parseGhostNote(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    if (!note->ghost() && !note->headHasParentheses()) {
+    if (!note->ghost() && !note->bothParentheses()) {
         return;
     }
 
@@ -219,7 +219,8 @@ void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingCon
             spannerDurationTicks = ctx.nominalDurationTicks;
         }
 
-        auto spannerTnD = timestampAndDurationFromStartAndDurationTicks(ctx.score, spannerFrom, spannerDurationTicks, 0);
+        auto spannerTnD
+            = timestampAndDurationFromStartAndDurationTicks(ctx.score, spannerFrom, spannerDurationTicks, ctx.positionTickOffset);
 
         RenderingContext spannerContext = ctx;
         spannerContext.nominalTimestamp = spannerTnD.timestamp;

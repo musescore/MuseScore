@@ -29,7 +29,7 @@
 #include "notation/iselectinstrumentscenario.h"
 
 namespace mu::instrumentsscene {
-class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Injectable
+class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -59,12 +59,15 @@ public:
     Q_INVOKABLE void resetAllFormatting();
 
 private:
+    void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
+
     void listenVisibilityChanged();
     void createAndAddPart(const muse::ID& masterPartId);
 
     size_t resolveNewPartIndex(const muse::ID& partId) const;
 
     const notation::Part* m_part = nullptr;
-    bool m_isInited = false;
+    bool m_ignoreVisibilityChange = true;
+    bool m_partExists = false;
 };
 }

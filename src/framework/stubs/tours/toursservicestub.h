@@ -28,6 +28,7 @@ namespace muse::tours {
 class ToursServiceStub : public IToursService
 {
 public:
+    void registerTour(const String& eventCode, const Tour& tour) override;
     void onEvent(const String& eventCode) override;
 };
 }

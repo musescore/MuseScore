@@ -1,10 +1,42 @@
 #include "compatmidirender.h"
 
+#include <cmath>
+#include <tuple>
+
 #include "global/realfn.h"
 
+#include "types/constants.h"
+
+#include "dom/arpeggio.h"
+#include "dom/articulation.h"
+#include "dom/chord.h"
+#include "dom/durationtype.h"
+#include "dom/dynamic.h"
+#include "dom/easeInOut.h"
+#include "dom/glissando.h"
+#include "dom/instrument.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/measurerepeat.h"
+#include "dom/navigate.h"
+#include "dom/note.h"
+#include "dom/noteevent.h"
+#include "dom/part.h"
+#include "dom/repeatlist.h"
+#include "dom/score.h"
+#include "dom/segment.h"
+#include "dom/slur.h"
+#include "dom/staff.h"
+#include "dom/swing.h"
+#include "dom/synthesizerstate.h"
+#include "dom/tempo.h"
+#include "dom/tie.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
-#include "dom/navigate.h"
+#include "dom/trill.h"
+#include "dom/undo.h"
+#include "dom/utils.h"
+#include "dom/volta.h"
 
 namespace mu::engraving {
 static int slideTicks(const Chord* chord);
@@ -203,6 +235,9 @@ std::vector<NoteEventList> CompatMidiRender::renderChord(const CompatMidiRendere
         CompatMidiRender::renderChordArticulation(context, chord, ell, gateTime, (double)ontime / NoteEvent::NOTE_LENGTH, tremolo);
     }
 
+    bool chordHasHammer
+        = (context.instrumentsHaveEffects && muse::contains(context.chordsWithHammerOnPullOff, const_cast<const Chord*>(chord)));
+
     // Check each note and apply gateTime
     for (size_t i : getNotesIndexesToRender(chord)) {
         mu::engraving::Note* note = chord->notes()[i];
@@ -226,7 +261,7 @@ std::vector<NoteEventList> CompatMidiRender::renderChord(const CompatMidiRendere
 
         CompatMidiRender::createSlideInNotePlayEvents(note, prevChord, el);
 
-        if (note->isHammerOn() && el->size() == 1) {
+        if (chordHasHammer && el->size() == 1) {
             el->front().setHammerPull(true);
         }
 
@@ -274,7 +309,7 @@ void CompatMidiRender::renderArpeggio(Chord* chord, std::vector<NoteEventList>& 
         NoteEventList* events = &(ell)[i];
         events->clear();
 
-        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
+        auto tempoRatio = chord->score()->tempomap()->multipliedTempo(chord->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
         ot = std::clamp(ot + ontime, ot, 1000);
@@ -522,7 +557,7 @@ void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Frac
 
     int graceDuration = 0;
     bool drumset = (CompatMidiRender::getDrumset(chord) != nullptr);
-    const double ticksPerSecond = score->tempo(tick).val * Constants::DIVISION;
+    const double ticksPerSecond = score->multipliedTempo(tick).val * Constants::DIVISION;
     const double chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
     if (drumset) {
         int flamDuration = 15;         //ms
@@ -575,7 +610,18 @@ void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Frac
 
         on += graceDuration;
     }
-    if (na) {
+
+    bool graceBendAfter = std::any_of(gna.begin(), gna.end(), [](const Chord* graceChord) {
+        for (Note* note : graceChord->notes()) {
+            if (note->bendBack()) {
+                return true;
+            }
+        }
+
+        return false;
+    });
+
+    if (!graceBendAfter && na) {
         if (chord->dots() == 1) {
             trailtime = floor(667 * weighta);
         } else if (chord->dots() == 2) {
@@ -661,7 +707,7 @@ bool CompatMidiRender::renderNoteArticulation(NoteEventList* events, Note* note,
     }
 
     Fraction tick = chord->tick();
-    BeatsPerSecond tempo = chord->score()->tempo(tick);
+    BeatsPerSecond tempo = chord->score()->multipliedTempo(tick);
     int ticksPerSecond = tempo.val * Constants::DIVISION;
 
     int minTicksPerNote = int(ticksPerSecond / fastestFreq);

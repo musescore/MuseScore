@@ -23,7 +23,6 @@
 #ifndef MUSE_MPE_PLAYBACKSETUPDATA_H
 #define MUSE_MPE_PLAYBACKSETUPDATA_H
 
-#include <variant>
 #include <optional>
 
 #include "soundid.h"
@@ -36,6 +35,8 @@ struct PlaybackSetupData
     StringList subCategories;
 
     bool supportsSingleNoteDynamics = false;
+
+    std::optional<std::string> scoreId;
     std::optional<std::string> musicXmlSoundId;
 
     PlaybackSetupData() = default;

@@ -19,15 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_FRACTION_H
-#define MU_ENGRAVING_FRACTION_H
+#pragma once
 
 #include <cstdint>
+#include <cmath>
 #include <limits>
 #include <numeric>
 
-#include "../types/types.h"
+#include "global/types/string.h"
 
 #include "constants.h"
 
@@ -284,5 +283,3 @@ public:
 constexpr Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
 constexpr Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
 }
-
-#endif // MU_ENGRAVING_FRACTION_H

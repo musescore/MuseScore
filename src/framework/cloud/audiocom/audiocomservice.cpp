@@ -120,11 +120,10 @@ AbstractCloudService::ServerConfig AudioComService::serverConfig() const
 
 RequestHeaders AudioComService::headers(const QString& token) const
 {
-    RequestHeaders headers;
+    RequestHeaders headers = defaultHeaders();
     headers.rawHeaders["Accept"] = "application/json";
     headers.rawHeaders["Content-Type"] = "application/json";
     headers.rawHeaders["Authorization"] = QString("Bearer " + (!token.isEmpty() ? token : accessToken())).toUtf8();
-    headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
 
     return headers;
 }
@@ -142,8 +141,13 @@ Ret AudioComService::downloadAccountInfo()
         return ret;
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject user = document.object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject user = doc.object();
 
     AccountInfo info;
     info.id = user.value("id").toString();
@@ -205,8 +209,8 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     auto createAudioCallback = [this, manager, &audioData, title, audioFormat, existingUrl, visibility, replaceExisting]() {
@@ -219,7 +223,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
     };
 
     async::Async::call(this, [this, progress, createAudioCallback, uploadCallback]() {
-        progress->started.notify();
+        progress->start();
 
         ProgressResult result;
 
@@ -241,7 +245,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
         m_currentUploadingAudioId.clear();
         m_currentUploadingAudioInfo = {};
 
-        progress->finished.send(result);
+        progress->finish(result);
     });
 
     return progress;
@@ -276,8 +280,7 @@ Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager, QI
         token = extra.value("token").toString();
     }
 
-    RequestHeaders headers;
-    headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
+    RequestHeaders headers = defaultHeaders();
     headers.knownHeaders[QNetworkRequest::ContentTypeHeader] = audioMime(audioFormat);
 
     Ret ret(true);
@@ -359,7 +362,13 @@ Ret AudioComService::doCreateAudio(network::INetworkManagerPtr manager, const QS
         return ret;
     }
 
-    m_currentUploadingAudioInfo = QJsonDocument::fromJson(receivedData.data()).object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    m_currentUploadingAudioInfo = doc.object();
 
     return ret;
 }

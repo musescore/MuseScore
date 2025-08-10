@@ -65,6 +65,10 @@ private:
     Note* addNoteToScore(const muse::midi::Event& e);
     Note* makePreviewNote(const muse::midi::Event& e);
 
+    using ControllerEventMap = std::map<muse::midi::Event::Opcode, muse::midi::Event>;
+    void triggerControllers(const ControllerEventMap& events);
+    void releasePlayingNotes(const std::vector<int>& pitches, bool deleteNotes = false);
+
     void enableMetronome();
     void disableMetronome();
 
@@ -95,6 +99,9 @@ private:
     bool m_allowRealtimeRests = false;
 
     bool m_shouldDisableMetronome = false;
+    bool m_holdingNotesInInputByDuration = false;
+
+    std::map<int, Note*> m_playingNotes;
 };
 }
 

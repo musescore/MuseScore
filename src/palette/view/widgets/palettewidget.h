@@ -65,7 +65,7 @@ private:
     PaletteWidget* m_palette = nullptr;
 };
 
-class PaletteWidget : public QWidget
+class PaletteWidget : public QWidget, public muse::async::Asyncable
 {
     Q_OBJECT
 

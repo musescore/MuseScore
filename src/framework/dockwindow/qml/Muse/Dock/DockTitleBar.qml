@@ -44,6 +44,12 @@ Item {
 
     visible: Boolean(titleBarCpp)
 
+    function doubleClicked(pos) {
+        if (root.titleBarCpp) {
+            root.titleBarCpp.doubleClicked(pos)
+        }
+    }
+
     Loader {
         id: titleBarLoader
         anchors.fill: parent

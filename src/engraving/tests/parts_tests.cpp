@@ -184,6 +184,9 @@ void Engraving_PartsTests::testPartCreation(const String& test)
 
 TEST_F(Engraving_PartsTests, appendMeasure)
 {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
     ASSERT_TRUE(score);
 
@@ -199,6 +202,7 @@ TEST_F(Engraving_PartsTests, appendMeasure)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-all-uappendmeasures.mscx", PARTS_DATA_DIR + u"part-all-uappendmeasures.mscx"));
     delete score;
+    MScore::useRead302InTestMode = use302;
 }
 
 //---------------------------------------------------------
@@ -207,6 +211,9 @@ TEST_F(Engraving_PartsTests, appendMeasure)
 
 TEST_F(Engraving_PartsTests, insertMeasure)
 {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
     ASSERT_TRUE(score);
 
@@ -223,6 +230,8 @@ TEST_F(Engraving_PartsTests, insertMeasure)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-all-uinsertmeasures.mscx", PARTS_DATA_DIR + u"part-all-uinsertmeasures.mscx"));
     delete score;
+
+    MScore::useRead302InTestMode = use302;
 }
 
 //---------------------------------------------------------
@@ -304,7 +313,10 @@ TEST_F(Engraving_PartsTests, createPart1)
 
 TEST_F(Engraving_PartsTests, createPart2)
 {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
     testPartCreation(u"part-all");
+    MScore::useRead302InTestMode = use302;
 }
 
 TEST_F(Engraving_PartsTests, createPart3)
@@ -1124,6 +1136,7 @@ TEST_F(Engraving_PartsTests, partExclusion)
     Score* partScore = TestUtils::createPart(masterScore);
     EXPECT_TRUE(partScore);
 
+    ScoreRW::saveScore(masterScore, u"partExclusion.mscx");
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
 
     // Collect the relevant items
@@ -1169,7 +1182,8 @@ TEST_F(Engraving_PartsTests, partExclusion)
         item->undoChangeProperty(Pid::EXCLUDE_FROM_OTHER_PARTS, !exclude);
     }
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
+    // Not applicable anymore because creating new elements creates new EIDs too
+    //EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
 }
 
 TEST_F(Engraving_PartsTests, partPropertyLinking)
@@ -1181,6 +1195,7 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
     Score* partScore = TestUtils::createPart(masterScore);
     EXPECT_TRUE(partScore);
 
+    ScoreRW::saveScore(masterScore, u"partPropertyLinking.mscx");
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-0.mscx",
                                             PARTS_DATA_DIR + u"partPropertyLinking-part-0.mscx"));
 
@@ -1256,11 +1271,11 @@ TEST_F(Engraving_PartsTests, partVisibleTracks) {
     part->changeSelectedElementsVoice(1);
     part->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(part, u"part-visible-tracks-part.mscx",
-                                            PARTS_DATA_DIR + u"part-visible-tracks-part-ref.mscx"));
-    // score->undoRedo(true, 0);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-visible-tracks-score.mscx",
                                             PARTS_DATA_DIR + u"part-visible-tracks-score-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(part, u"part-visible-tracks-part.mscx",
+                                            PARTS_DATA_DIR + u"part-visible-tracks-part-ref.mscx"));
 }
 
 TEST_F(Engraving_PartsTests, inputFromParts) {

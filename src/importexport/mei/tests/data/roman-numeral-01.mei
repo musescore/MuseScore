@@ -20,7 +20,7 @@
          <mdiv>
             <score>
                <scoreDef>
-                  <pgHead>
+                  <pgHead func="first">
                      <rend halign="center" valign="top">
                         <rend type="title" fontsize="x-large">Roman numerals</rend>
                         <lb />
@@ -131,10 +131,10 @@
                            </beam>
                         </layer>
                      </staff>
-                     <harm xml:id="h11isqcg" type="mscore-roman" startid="#cfp4mbz">E.I7{</harm>
-                     <harm xml:id="hqd5b29" type="mscore-roman" startid="#coo81qj">bVII7(b9)</harm>
-                     <harm xml:id="h1ouzwgk" type="mscore-roman" startid="#c1ume9sq">V7(-5)/bIII</harm>
-                     <harm xml:id="h1c6oiqa" type="mscore-roman" startid="#c18zaam0">VI7(b5b4)</harm>
+                     <harm xml:id="h11isqcg" type="mscore-roman" staff="2" startid="#cfp4mbz">E.I7{</harm>
+                     <harm xml:id="hqd5b29" type="mscore-roman" staff="2" startid="#coo81qj">bVII7(b9)</harm>
+                     <harm xml:id="h1ouzwgk" type="mscore-roman" staff="2" startid="#c1ume9sq">V7(-5)/bIII</harm>
+                     <harm xml:id="h1c6oiqa" type="mscore-roman" staff="2" startid="#c18zaam0">VI7(b5b4)</harm>
                   </measure>
                   <measure xml:id="m1msh5yn" n="2">
                      <staff xml:id="m2s1" n="1">
@@ -410,10 +410,10 @@
                            </beam>
                         </layer>
                      </staff>
-                     <harm xml:id="h1874to2" type="mscore-roman" startid="#c1xrr9sz">I.bVI+6</harm>
-                     <harm xml:id="h1v3iy05" type="mscore-roman" startid="#cpqgpn9">v%43(-3)</harm>
-                     <harm xml:id="hwsyu0q" type="mscore-roman" startid="#coj5usf">V7/V</harm>
-                     <harm xml:id="h154c0h8" type="mscore-roman" startid="#c18vo3yk">bI+6(+4)</harm>
+                     <harm xml:id="h1874to2" type="mscore-roman" staff="1" startid="#c1xrr9sz">I.bVI+6</harm>
+                     <harm xml:id="h1v3iy05" type="mscore-roman" staff="1" startid="#cpqgpn9">v%43(-3)</harm>
+                     <harm xml:id="hwsyu0q" type="mscore-roman" staff="1" startid="#coj5usf">V7/V</harm>
+                     <harm xml:id="h154c0h8" type="mscore-roman" staff="1" startid="#c18vo3yk">bI+6(+4)</harm>
                   </measure>
                   <measure xml:id="mx37hco" n="5">
                      <staff xml:id="m5s1" n="1">
@@ -509,10 +509,10 @@
                            </beam>
                         </layer>
                      </staff>
-                     <harm xml:id="h19k4fue" type="mscore-roman" startid="#c1djk3s0">N7(+6)</harm>
-                     <harm xml:id="h1janxng" type="mscore-roman" startid="#coe4rhe">I7(+#6#4)</harm>
-                     <harm xml:id="h974j5y" type="mscore-roman" startid="#c1kk682t">V7(v##6)/III</harm>
-                     <harm xml:id="hjfstls" type="mscore-roman" startid="#c1066e1z">bII7(+#6##3##1)/V/V/V</harm>
+                     <harm xml:id="h19k4fue" type="mscore-roman" staff="2" startid="#c1djk3s0">N7(+6)</harm>
+                     <harm xml:id="h1janxng" type="mscore-roman" staff="2" startid="#coe4rhe">I7(+#6#4)</harm>
+                     <harm xml:id="h974j5y" type="mscore-roman" staff="2" startid="#c1kk682t">V7(v##6)/III</harm>
+                     <harm xml:id="hjfstls" type="mscore-roman" staff="2" startid="#c1066e1z">bII7(+#6##3##1)/V/V/V</harm>
                   </measure>
                   <measure xml:id="m17w0b7o" right="end" n="6">
                      <staff xml:id="m6s1" n="1">
@@ -600,9 +600,9 @@
                         </layer>
                      </staff>
                      <caesura xml:id="ct7c3el" startid="#cg7p1d9" />
-                     <harm xml:id="hpsp4ra" type="mscore-roman" startid="#c18b26o0">V7/V/V</harm>
-                     <harm xml:id="hbo8vux" type="mscore-roman" startid="#c1uxt5we">Fr(+#5)</harm>
-                     <harm xml:id="h1blah3y" type="mscore-roman" startid="#c119yffs">V7|HC}</harm>
+                     <harm xml:id="hpsp4ra" type="mscore-roman" staff="2" startid="#c18b26o0">V7/V/V</harm>
+                     <harm xml:id="hbo8vux" type="mscore-roman" staff="2" startid="#c1uxt5we">Fr(+#5)</harm>
+                     <harm xml:id="h1blah3y" type="mscore-roman" staff="2" startid="#c119yffs">V7|HC}</harm>
                      <caesura xml:id="crg1jce" startid="#c119yffs" />
                   </measure>
                </section>

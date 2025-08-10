@@ -19,17 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_GUITARBEND_H
-#define MU_ENGRAVING_GUITARBEND_H
+#pragma once
 
 #include "engravingitem.h"
 #include "line.h"
 #include "property.h"
 #include "textbase.h"
-#include "types.h"
 
 namespace mu::engraving {
+enum class GuitarBendType : unsigned char {
+    BEND,
+    PRE_BEND,
+    GRACE_NOTE_BEND,
+    SLIGHT_BEND,
+};
+
+enum class GuitarBendShowHoldLine : unsigned char {
+    AUTO,
+    SHOW,
+    HIDE,
+};
+
 enum class QuarterOffset : unsigned char {
     QUARTER_FLAT,
     NONE,
@@ -251,7 +261,7 @@ class GuitarBendText final : public TextBase
 public:
     GuitarBendText(GuitarBendSegment* parent);
     GuitarBendText* clone() const override { return new GuitarBendText(*this); }
-};
-} // namespace mu::engraving
 
-#endif // MU_ENGRAVING_GUITARBEND_H
+    bool isEditable() const override { return false; }
+};
+}

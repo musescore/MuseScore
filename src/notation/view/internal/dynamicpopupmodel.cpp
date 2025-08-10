@@ -66,7 +66,7 @@ static const QList<QList<DynamicPopupModel::PageItem> > DYN_POPUP_PAGES = {
     },
     {   // Page 6 - Hairpins
         { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Crescendo },
-        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Decrescendo },
+        { DynamicType::OTHER,  62, 0.0, DynamicPopupModel::Diminuendo },
     },
     {   // Page 7
         { DynamicType::PPPPP,  64, 2.0, DynamicPopupModel::Dynamic },
@@ -156,10 +156,19 @@ void DynamicPopupModel::addOrChangeDynamic(int page, int index)
         return;
     }
 
-    beginCommand(TranslatableString::untranslatable("Add dynamic"));
+    beginCommand(TranslatableString("undoableAction", "Add dynamic"));
     m_item->undoChangeProperty(Pid::TEXT, Dynamic::dynamicText(DYN_POPUP_PAGES[page][index].dynType));
     m_item->undoChangeProperty(Pid::DYNAMIC_TYPE, DYN_POPUP_PAGES[page][index].dynType);
     endCommand();
+
+    INotationInteractionPtr interaction = currentNotation()->interaction();
+
+    interaction->autoFlipHairpinsType(toDynamic(m_item));
+
+    // Hide the bounding box which appears when called using Ctrl+D shortcut
+    if (interaction->isTextEditingStarted()) {
+        interaction->startEditGrip(m_item, Grip::DRAG);
+    }
 
     updateNotation();
 }
@@ -170,17 +179,29 @@ void DynamicPopupModel::addHairpinToDynamic(ItemType itemType)
         return;
     }
 
-    beginCommand(TranslatableString("undoableAction", "Add hairpin"));
+    engraving::Dynamic* dynamic = toDynamic(m_item);
 
-    Hairpin* pin = Factory::createHairpin(m_item->score()->dummy()->segment());
-    if (itemType == ItemType::Crescendo) {
-        pin->setHairpinType(HairpinType::CRESC_HAIRPIN);
-    } else if (itemType == ItemType::Decrescendo) {
-        pin->setHairpinType(HairpinType::DECRESC_HAIRPIN);
+    HairpinType hairpinType = itemType == ItemType::Crescendo
+                              ? HairpinType::CRESC_HAIRPIN
+                              : HairpinType::DIM_HAIRPIN;
+
+    if (Hairpin* existingHairpin = dynamic->rightHairpin()) {
+        if (existingHairpin->hairpinType() == hairpinType) {
+            beginCommand(TranslatableString("undoableAction", "Remove hairpin"));
+            m_item->score()->undoRemoveElement(existingHairpin);
+        } else {
+            beginCommand(TranslatableString("undoableAction", "Change hairpin type"));
+            existingHairpin->undoChangeProperty(Pid::HAIRPIN_TYPE, int(hairpinType));
+        }
+        endCommand();
+        updateNotation();
+        return;
     }
 
-    m_item->score()->addHairpinToDynamic(pin, toDynamic(m_item));
-
+    beginCommand(TranslatableString("undoableAction", "Add hairpin"));
+    Hairpin* hairpin = Factory::createHairpin(m_item->score()->dummy()->segment());
+    hairpin->setHairpinType(hairpinType);
+    m_item->score()->addHairpinToDynamic(hairpin, dynamic);
     endCommand();
     updateNotation();
 }

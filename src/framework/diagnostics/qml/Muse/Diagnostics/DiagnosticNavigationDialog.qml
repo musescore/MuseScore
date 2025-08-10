@@ -36,6 +36,8 @@ StyledDialogView {
     //! NOTE It is necessary that it can be determined that this is an object for diagnostics
     contentItem.objectName: panel.objectName
 
+    navigationSection.type: NavigationSection.Ignore
+
     DiagnosticNavigationPanel {
         id: panel
         anchors.fill: parent

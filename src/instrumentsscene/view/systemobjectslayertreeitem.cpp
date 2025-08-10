@@ -23,6 +23,7 @@
 #include "systemobjectslayertreeitem.h"
 
 #include "engraving/dom/timesig.h"
+#include "engraving/dom/undo.h"
 
 #include "layoutpanelutils.h"
 #include "translation.h"
@@ -35,37 +36,47 @@ using namespace mu::engraving;
 static QString formatLayerTitle(const SystemObjectGroups& groups)
 {
     if (groups.empty()) {
-        return muse::qtrc("layoutpanel", "System objects");
+        return muse::qtrc("layoutpanel", "System markings");
     }
 
-    QString title;
+    // pointers are used here to avoid copying the groups
+    const std::vector<const SystemObjectsGroup*> visibleGroups = [&] {
+        std::vector<const SystemObjectsGroup*> v;
+        v.reserve(groups.size());
 
-    const size_t lastIdx = groups.size() - 1;
-    for (size_t i = 0; i <= lastIdx; ++i) {
-        const SystemObjectsGroup& group = groups.at(i);
-        if (!isSystemObjectsGroupVisible(group)) {
-            continue;
+        for (const auto& group : groups) {
+            if (isSystemObjectsGroupVisible(group)) {
+                v.push_back(&group);
+            }
         }
 
-        if (title.isEmpty()) {
-            title = translatedSystemObjectsGroupName(group);
-            continue;
-        }
+        return v;
+    }();
 
-        if (i == lastIdx) {
-            title += " & ";
-        } else {
-            title += ", ";
-        }
-
-        title += translatedSystemObjectsGroupName(group).toLower();
+    if (visibleGroups.empty()) {
+        return muse::qtrc("layoutpanel", "System markings hidden");
     }
 
-    if (title.isEmpty()) {
-        title = muse::qtrc("layoutpanel", "System objects hidden");
+    QString title = translatedSystemObjectsGroupCapitalizedName(*visibleGroups.front());
+
+    if (visibleGroups.size() == 1) {
+        return title;
     }
 
-    return title;
+    // has at least 2 visible groups. Build list of the form <First>[, <middle>...] & <last>
+
+    //: %1 is the system markings list, %2 is the next system marking name to add to list
+    const QString middleItem = muse::qtrc("layoutpanel", "%1, %2");
+    //: %1 is the system markings list, %2 is the last system marking name to add to list
+    const QString lastItem = muse::qtrc("layoutpanel", "%1 & %2");
+
+    const size_t lastIdx = visibleGroups.size() - 1;
+    for (size_t i = 1; i < lastIdx; ++i) {
+        const QString name = translatedSystemObjectsGroupName(*visibleGroups.at(i));
+        title = middleItem.arg(title, name);
+    }
+
+    return lastItem.arg(title, translatedSystemObjectsGroupName(*visibleGroups.back()));
 }
 
 static bool isLayerVisible(const SystemObjectGroups& groups)
@@ -76,7 +87,7 @@ static bool isLayerVisible(const SystemObjectGroups& groups)
         }
     }
 
-    return true;
+    return false;
 }
 
 SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
@@ -88,29 +99,16 @@ SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr master
 
 void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGroups& systemObjects)
 {
-    m_systemObjectGroups = systemObjects;
-
     setStaff(staff);
+    setSystemObjects(systemObjects);
 
     bool isTopLayer = staff->score()->staff(0) == staff;
     setIsRemovable(!isTopLayer);
     setIsSelectable(!isTopLayer);
-
-    updateState();
-
-    notation()->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& changes) {
-        onUndoStackChanged(changes);
-    });
-
-    connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
-        onVisibleChanged(isVisible);
-    });
 }
 
 const Staff* SystemObjectsLayerTreeItem::staff() const
 {
-    const_cast<SystemObjectsLayerTreeItem*>(this)->updateStaff();
-
     return m_staff;
 }
 
@@ -127,23 +125,24 @@ void SystemObjectsLayerTreeItem::setStaff(const Staff* staff)
     }
 }
 
+void SystemObjectsLayerTreeItem::setSystemObjects(const SystemObjectGroups& systemObjects)
+{
+    m_systemObjectGroups = systemObjects;
+    updateState();
+}
+
 QString SystemObjectsLayerTreeItem::staffId() const
 {
-    const Staff* s = staff();
-    return s ? s->id().toQString() : QString();
+    return m_staff ? m_staff->id().toQString() : QString();
 }
 
 bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
 {
-    return false;
+    return m_staffIdx != 0; // all except the first
 }
 
-void SystemObjectsLayerTreeItem::onUndoStackChanged(const mu::engraving::ScoreChangesRange& changes)
+void SystemObjectsLayerTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& changes)
 {
-    if (muse::contains(changes.changedPropertyIdSet, Pid::TRACK)) {
-        updateStaff();
-    }
-
     if (muse::contains(changes.changedStyleIdSet, Sid::timeSigPlacement)) {
         m_systemObjectGroups = collectSystemObjectGroups(m_staff);
         updateState();
@@ -158,20 +157,37 @@ void SystemObjectsLayerTreeItem::onUndoStackChanged(const mu::engraving::ScoreCh
 
     for (const auto& pair : changes.changedItems) {
         EngravingItem* item = pair.first;
+        if (!item) {
+            continue;
+        }
 
         bool isSystemObj = item->systemFlag();
         if (!isSystemObj && item->isTimeSig()) {
             isSystemObj = toTimeSig(item)->timeSigPlacement() != TimeSigPlacement::NORMAL;
         }
 
-        if (!isSystemObj || item->staffIdx() != m_staffIdx) {
+        if (!isSystemObj || item->isLayoutBreak()) {
             continue;
+        }
+
+        if (muse::contains(pair.second, CommandType::RemoveElement)) {
+            shouldUpdateState |= removeSystemObject(item);
+            continue;
+        }
+
+        if (item->staffIdx() != m_staffIdx) {
+            continue;
+        }
+
+        if (item->isTextBase()) {
+            const TextBase* text = toTextBase(item);
+            if (text->empty()) {
+                continue;
+            }
         }
 
         if (muse::contains(pair.second, CommandType::AddElement)) {
             shouldUpdateState |= addSystemObject(item);
-        } else if (muse::contains(pair.second, CommandType::RemoveElement)) {
-            shouldUpdateState |= removeSystemObject(item);
         } else if (muse::contains(pair.second, CommandType::ChangeProperty)) {
             shouldUpdateState |= muse::contains(changes.changedPropertyIdSet, Pid::VISIBLE);
         }
@@ -180,28 +196,6 @@ void SystemObjectsLayerTreeItem::onUndoStackChanged(const mu::engraving::ScoreCh
     if (shouldUpdateState) {
         updateState();
     }
-}
-
-void SystemObjectsLayerTreeItem::onVisibleChanged(bool isVisible)
-{
-    if (m_ignoreVisibilityChanges || m_systemObjectGroups.empty()) {
-        return;
-    }
-
-    const muse::TranslatableString actionName = isVisible
-                                                ? TranslatableString("undoableAction", "Make system object(s) visible")
-                                                : TranslatableString("undoableAction", "Make system object(s) invisible");
-
-    notation()->undoStack()->prepareChanges(actionName);
-
-    for (const SystemObjectsGroup& group : m_systemObjectGroups) {
-        for (engraving::EngravingItem* item : group.items) {
-            item->undoSetVisible(isVisible);
-        }
-    }
-
-    notation()->undoStack()->commitChanges();
-    notation()->notationChanged().notify();
 }
 
 bool SystemObjectsLayerTreeItem::addSystemObject(engraving::EngravingItem* obj)
@@ -241,22 +235,9 @@ bool SystemObjectsLayerTreeItem::removeSystemObject(engraving::EngravingItem* ob
     return false;
 }
 
-void SystemObjectsLayerTreeItem::updateStaff()
-{
-    if (!m_systemObjectGroups.empty()) {
-        const SystemObjectsGroup& firstGroup = m_systemObjectGroups.front();
-        if (!firstGroup.items.empty()) {
-            setStaff(firstGroup.items.front()->staff());
-        }
-    }
-}
-
 void SystemObjectsLayerTreeItem::updateState()
 {
     setTitle(formatLayerTitle(m_systemObjectGroups));
     setSettingsEnabled(!m_systemObjectGroups.empty());
-
-    m_ignoreVisibilityChanges = true;
     setIsVisible(isLayerVisible(m_systemObjectGroups));
-    m_ignoreVisibilityChanges = false;
 }

@@ -126,6 +126,10 @@ void FrameQuick::insertDockWidget_impl(DockWidgetBase *dw, int index)
     if (m_tabWidget->insertDockWidget(index, dw, {}, {})) {
         dw->setParent(m_stackLayout);
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
+        m_stackLayout->ensurePolished();
+#endif
+
         QMetaObject::Connection conn = connect(dw, &DockWidgetBase::parentChanged, this, [dw, this] {
             if (dw->parent() != m_stackLayout)
                 removeWidget_impl(dw);

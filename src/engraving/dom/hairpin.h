@@ -33,9 +33,9 @@ class Hairpin;
 enum class HairpinType : signed char {
     INVALID = -1,
     CRESC_HAIRPIN,
-    DECRESC_HAIRPIN,
+    DIM_HAIRPIN,
     CRESC_LINE,
-    DECRESC_LINE
+    DIM_LINE
 };
 
 //---------------------------------------------------------
@@ -63,9 +63,6 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    int subtype() const override;
-    TranslatableString subtypeUserName() const override;
-
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
@@ -75,6 +72,8 @@ public:
 
     EngravingItem* findElementToSnapBefore(bool ignoreInvisible = true) const;
     EngravingItem* findElementToSnapAfter(bool ignoreInvisible = true) const;
+
+    void endEditDrag(EditData& ed) override;
 
 private:
     TextBase* findStartDynamicOrExpression(bool ignoreInvisible = true) const;
@@ -97,8 +96,7 @@ private:
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//   @P dynRange     enum (Dynamic.STAFF, Dynamic.PART, Dynamic.SYSTEM)
-//   @P hairpinType  enum (Hairpin.CRESCENDO, Hairpin.DECRESCENDO)
+//   @P hairpinType  enum (Hairpin.CRESCENDO, Hairpin.DIMINUENDO)
 //   @P veloChange   int
 //---------------------------------------------------------
 
@@ -108,17 +106,19 @@ class Hairpin final : public TextLineBase
     DECLARE_CLASSOF(ElementType::HAIRPIN)
 
 public:
-    Hairpin(Segment* parent);
+    Hairpin(EngravingItem* parent);
 
     Hairpin* clone() const override { return new Hairpin(*this); }
 
     DynamicType dynamicTypeFrom() const;
     DynamicType dynamicTypeTo() const;
 
+    const Dynamic* dynamicSnappedBefore() const;
+    const Dynamic* dynamicSnappedAfter() const;
+
     HairpinType hairpinType() const { return m_hairpinType; }
     void setHairpinType(HairpinType val);
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
     LineSegment* createLineSegment(System* parent) override;
 
     bool hairpinCircledTip() const { return m_hairpinCircledTip; }
@@ -126,9 +126,6 @@ public:
 
     int veloChange() const { return m_veloChange; }
     void setVeloChange(int v) { m_veloChange = v; }
-
-    DynamicRange dynRange() const { return m_dynRange; }
-    void setDynRange(DynamicRange t);
 
     Spatium hairpinHeight() const { return m_hairpinHeight; }
     void setHairpinHeight(Spatium val) { m_hairpinHeight = val; }
@@ -149,7 +146,7 @@ public:
 
     bool isDecrescendo() const
     {
-        return m_hairpinType == HairpinType::DECRESC_HAIRPIN || m_hairpinType == HairpinType::DECRESC_LINE;
+        return m_hairpinType == HairpinType::DIM_HAIRPIN || m_hairpinType == HairpinType::DIM_LINE;
     }
 
     PropertyValue getProperty(Pid id) const override;
@@ -159,7 +156,7 @@ public:
     String accessibleInfo() const override;
     bool isLineType() const
     {
-        return m_hairpinType == HairpinType::CRESC_LINE || m_hairpinType == HairpinType::DECRESC_LINE;
+        return m_hairpinType == HairpinType::CRESC_LINE || m_hairpinType == HairpinType::DIM_LINE;
     }
 
     PointF linePos(Grip grip, System** system) const override;
@@ -190,7 +187,6 @@ private:
     HairpinType m_hairpinType = HairpinType::INVALID;
     int m_veloChange = 0;
     bool m_hairpinCircledTip = false;
-    DynamicRange m_dynRange = DynamicRange::PART;
     bool m_singleNoteDynamics = false;
     ChangeMethod m_veloChangeMethod = ChangeMethod::NORMAL;
 

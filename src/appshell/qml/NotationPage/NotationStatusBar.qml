@@ -52,10 +52,6 @@ Item {
         section: navSec
     }
 
-    Component.onCompleted: {
-        model.load()
-    }
-
     RowLayout {
         id: statusBarRow
 
@@ -102,6 +98,16 @@ Item {
             visible: !hiddenControlsMenuButton.visible
         }
 
+        OnlineSoundsStatusView {
+            id: onlineSoundsStatusView
+
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredHeight: 28
+
+            navigationPanel: navPanel
+            navigationOrder: 1
+        }
+
         SeparatorLine { orientation: Qt.Vertical; visible: workspaceControl.visible }
 
         FlatButton {
@@ -110,14 +116,27 @@ Item {
             Layout.preferredHeight: 28
 
             text: model.currentWorkspaceItem.title
+            icon: IconCode.WORKSPACE
+            orientation: Qt.Horizontal
+
             transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 
             navigation.panel: navPanel
-            navigation.order: 1
+            navigation.order: 2
 
             onClicked: {
-                Qt.callLater(model.selectWorkspace)
+                menuLoader.toggleOpened(model.currentWorkspaceItem.subitems)
+            }
+
+            StyledMenuLoader {
+                id: menuLoader
+
+                menuAnchorItem: ui.rootItem
+
+                onHandleMenuItem: function(itemId) {
+                    Qt.callLater(model.handleWorkspacesMenuItem, itemId)
+                }
             }
         }
 
@@ -135,7 +154,7 @@ Item {
             visible: statusBarRow.remainingSpace > width
 
             navigation.panel: navPanel
-            navigation.order: 2
+            navigation.order: 3
 
             onToggleConcertPitchRequested: {
                 model.toggleConcertPitch()
@@ -153,7 +172,7 @@ Item {
             availableViewModeList: model.availableViewModeList
 
             navigation.panel: navPanel
-            navigation.order: 3
+            navigation.order: 4
 
             onChangeCurrentViewModeRequested: function(newViewMode) {
                 model.setCurrentViewMode(newViewMode)
@@ -172,7 +191,7 @@ Item {
             availableZoomList: model.availableZoomList
 
             navigationPanel: navPanel
-            navigationOrderMin: 4
+            navigationOrderMin: 5
 
             onChangeZoomPercentageRequested: function(newZoomPercentage) {
                 model.currentZoomPercentage = newZoomPercentage
@@ -224,7 +243,7 @@ Item {
                     model.handleAction(model.concertPitchItem.code)
                     break
                 case model.currentWorkspaceItem.id:
-                    model.handleAction(model.concertPitchItem.code)
+                    model.handleAction(model.currentWorkspaceItem.code)
                     break
                 }
             }

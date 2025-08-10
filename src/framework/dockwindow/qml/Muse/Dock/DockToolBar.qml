@@ -42,18 +42,17 @@ DockToolBarView {
     minimumHeight: root.inited ? Math.min(root.contentHeight, root.maximumHeight) : prv.minimumLength
 
     onFloatingChanged: {
-        if (!root.floating) {
-            //! NOTE: The dock widgets system determines the position of a toolbar
-            //  when inserting the toolbar into the app window.
-            //  It may be that the grip button can be moved to a different
-            //  location from where a user wanted to place it.
-            //  Because of this, the mouse area does not emit a signal
-            //  that the user has moved the mouse outside the grip button.
-            //  Therefore, the hover state of the grip button is not reset.
-            //  The hack is to hide and show the grip button to reset the hover state.
-            gripButton.visible = false
-            gripButton.visible = true
-        }
+        //! NOTE: The dock widgets system determines the position of a toolbar
+        //  when inserting the toolbar into the app window.
+        //  It may be that the grip button can be moved to a different
+        //  location from where a user wanted to place it.
+        //  Because of this, the mouse area does not emit a signal
+        //  that the user has moved the mouse outside the grip button.
+        //  Therefore, the hover state of the grip button is not reset.
+        //  Disabling and enabling the mousearea does not reset the hover state.
+        //  The hack is to hide and show the grip button's mousearea to reset the hover state.
+        gripButton.mouseArea.visible = false
+        gripButton.mouseArea.visible = true
     }
 
     QtObject {
@@ -62,8 +61,8 @@ DockToolBarView {
         readonly property int minimumLength: 10
         readonly property int maximumLength: 16777215
 
-        readonly property int gripButtonWidth: gripButton.visible ? gripButton.width + 2 * root.gripButtonPadding : 0
-        readonly property int gripButtonHeight: gripButton.visible ? gripButton.height + 2 * root.gripButtonPadding : 0
+        readonly property int gripButtonWidth: gripButton.visible ? gripButton.gripSize + 2 * root.gripButtonPadding : 0
+        readonly property int gripButtonHeight: gripButton.visible ? gripButton.gripSize + 2 * root.gripButtonPadding : 0
     }
 
     Item {
@@ -76,8 +75,10 @@ DockToolBarView {
         FlatButton {
             id: gripButton
 
-            width: root.isVertical ? 30 : 24
-            height: root.isVertical ? 24 : 30
+            readonly property int gripSize: 24
+
+            width: root.isVertical ? parent.width : gripSize
+            height: root.isVertical ? gripSize : parent.height
 
             visible: root.floatable
 
@@ -93,10 +94,16 @@ DockToolBarView {
             Component.onCompleted: {
                 root.setDraggableMouseArea(gripButton.mouseArea)
             }
+
+            mouseArea.onDoubleClicked: {
+                root.onGripDoubleClicked()
+            }
         }
 
         Loader {
             id: contentLoader
+
+            active: root.visible
         }
     }
 
@@ -111,8 +118,8 @@ DockToolBarView {
                 contentWidth: prv.gripButtonWidth + contentLoader.implicitWidth
                 contentHeight: Math.max(prv.gripButtonHeight, contentLoader.implicitHeight + root.contentBottomPadding + root.contentTopPadding)
 
-                maximumWidth: root.floating ? root.contentWidth : prv.maximumLength
-                maximumHeight: root.floating ? root.contentHeight : root.thickness
+                maximumWidth: (root.inited && root.floating && !root.resizable) ? root.contentWidth : prv.maximumLength
+                maximumHeight: (root.inited && root.floating && !root.resizable) ? root.contentHeight : root.thickness
             }
 
             PropertyChanges {

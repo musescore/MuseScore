@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.26997</pageWidth>
@@ -20,6 +21,7 @@
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
+      <articulationFontSize>10</articulationFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <tempoFontSize>10</tempoFontSize>
       <tempoChangeFontSize>10</tempoChangeFontSize>
@@ -27,8 +29,6 @@
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
@@ -52,7 +52,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="percussion">
           <name>perc5Line</name>
           <keysig>0</keysig>
@@ -60,16 +61,13 @@
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Percussion</trackName>
-      <Instrument id="strings">
+      <Instrument id="percussion">
         <longName>Percussion</longName>
         <shortName>Perc.</shortName>
-        <trackName>Closed Hi-Hat</trackName>
-        <minPitchP>24</minPitchP>
-        <maxPitchP>108</maxPitchP>
-        <minPitchA>24</minPitchA>
-        <maxPitchA>108</maxPitchA>
-        <instrumentId>strings.group</instrumentId>
+        <trackName>Percussion</trackName>
+        <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="27">
           <head>normal</head>
           <line>0</line>
@@ -217,7 +215,7 @@
           <name>Castanets</name>
           <stem>0</stem>
           </Drum>
-        <clef staff="2">F</clef>
+        <clef>PERC</clef>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -258,168 +256,194 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel name="arco">
+        <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="48"/>
           <controller ctrl="10" value="63"/>
-          </Channel>
-        <Channel name="pizzicato">
-          <program value="45"/>
-          </Channel>
-        <Channel name="tremolo">
-          <program value="44"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Untitled score</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>PERC</concertClefType>
             <transposingClefType>PERC</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
           <KeySig>
+            <eid>I_I</eid>
             <custom>1</custom>
             <mode>none</mode>
             </KeySig>
           <TimeSig>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Sticking>
+            <eid>K_K</eid>
             <text>L</text>
             </Sticking>
           <Beam>
+            <eid>L_L</eid>
             <StemDirection>up</StemDirection>
             <l1>-12</l1>
             <l2>-12</l2>
             </Beam>
           <Chord>
+            <eid>M_M</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Note>
+              <eid>N_N</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>O_O</eid>
             <text>R</text>
             </Sticking>
           <Chord>
+            <eid>P_P</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>R_R</eid>
             <text>L</text>
             </Sticking>
           <Chord>
+            <eid>S_S</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Note>
+              <eid>T_T</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>U_U</eid>
             <text>B</text>
             </Sticking>
           <Chord>
+            <eid>V_V</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>W_W</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>X_X</eid>
             <text>l</text>
             </Sticking>
           <Beam>
+            <eid>Y_Y</eid>
             <StemDirection>up</StemDirection>
             <l1>-12</l1>
             <l2>-12</l2>
             </Beam>
           <Chord>
+            <eid>Z_Z</eid>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Note>
+              <eid>a_a</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>b_b</eid>
             <text>r</text>
             </Sticking>
           <Chord>
+            <eid>c_c</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Note>
+              <eid>d_d</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>e_e</eid>
             <text>l</text>
             </Sticking>
           <Chord>
+            <eid>f_f</eid>
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Note>
+              <eid>g_g</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>h_h</eid>
             <text>b</text>
             </Sticking>
           <Chord>
+            <eid>i_i</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>j_j</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>k_k</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>l_l</eid>
         <voice>
           <Sticking>
+            <eid>m_m</eid>
             <offset x="-2" y="0"/>
             <text>L</text>
             </Sticking>
           <Sticking>
+            <eid>n_n</eid>
             <text>R</text>
             </Sticking>
           <Chord>
+            <eid>o_o</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>p_p</eid>
                 </Slur>
               <next>
                 <location>
@@ -428,22 +452,24 @@
               </Spanner>
             <acciaccatura/>
             <Note>
+              <eid>q_q</eid>
               <Events>
                 <Event>
                   <len>0</len>
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Beam>
+            <eid>r_r</eid>
             <StemDirection>up</StemDirection>
             <l1>-10</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
+            <eid>s_s</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
@@ -456,52 +482,62 @@
             <Articulation>
               <subtype>articAccentAbove</subtype>
               <anchor>0</anchor>
+              <eid>t_t</eid>
               </Articulation>
             <Note>
+              <eid>u_u</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>v_v</eid>
             <text>L</text>
             </Sticking>
           <Chord>
+            <eid>w_w</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>x_x</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>y_y</eid>
             <text>R</text>
             </Sticking>
           <Beam>
+            <eid>z_z</eid>
             <StemDirection>up</StemDirection>
             <l1>-10</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
+            <eid>0_0</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>1_1</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>2_2</eid>
             <offset x="-2" y="0"/>
             <text>L</text>
             </Sticking>
           <Sticking>
+            <eid>3_3</eid>
             <text>R</text>
             </Sticking>
           <Chord>
+            <eid>4_4</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>5_5</eid>
                 </Slur>
               <next>
                 <location>
@@ -510,17 +546,18 @@
               </Spanner>
             <acciaccatura/>
             <Note>
+              <eid>6_6</eid>
               <Events>
                 <Event>
                   <len>0</len>
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>7_7</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
@@ -532,120 +569,138 @@
             <Articulation>
               <subtype>articAccentAbove</subtype>
               <anchor>0</anchor>
+              <eid>8_8</eid>
               </Articulation>
             <Note>
+              <eid>9_9</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>+_+</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>/_/</eid>
         <voice>
           <Sticking>
+            <eid>AB_AB</eid>
             <offset x="-5" y="0"/>
             <text>l</text>
             </Sticking>
           <Sticking>
+            <eid>BB_BB</eid>
             <offset x="-4" y="0"/>
             <text>r</text>
             </Sticking>
           <Sticking>
+            <eid>CB_CB</eid>
             <offset x="-2.5" y="0"/>
             <text>l</text>
             </Sticking>
           <Sticking>
+            <eid>DB_DB</eid>
             <offset x="-1" y="0"/>
             <text>r</text>
             </Sticking>
           <Sticking>
+            <eid>EB_EB</eid>
             <text>l</text>
             </Sticking>
           <Beam>
+            <eid>FB_FB</eid>
             <l1>-6</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
+            <eid>GB_GB</eid>
             <durationType>16th</durationType>
             <grace16/>
             <Note>
+              <eid>HB_HB</eid>
               <Events>
                 <Event>
                   <len>0</len>
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>IB_IB</eid>
             <durationType>16th</durationType>
             <grace16/>
             <Note>
+              <eid>JB_JB</eid>
               <Events>
                 <Event>
                   <len>0</len>
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>KB_KB</eid>
             <durationType>16th</durationType>
             <grace16/>
             <Note>
+              <eid>LB_LB</eid>
               <Events>
                 <Event>
                   <len>0</len>
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>MB_MB</eid>
             <durationType>16th</durationType>
             <grace16/>
             <Note>
+              <eid>NB_NB</eid>
               <Events>
                 <Event>
                   <len>0</len>
                   </Event>
                 </Events>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>OB_OB</eid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
               <anchor>0</anchor>
+              <eid>PB_PB</eid>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>QB_QB</eid>
               <pitch>38</pitch>
-              <tpc>-9</tpc>
-              <tpc2>16</tpc2>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>RB_RB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>SB_SB</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>TB_TB</eid>
             </BarLine>
           </voice>
         </Measure>

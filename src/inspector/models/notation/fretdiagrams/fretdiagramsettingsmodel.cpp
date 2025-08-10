@@ -92,6 +92,8 @@ void FretDiagramSettingsModel::createProperties()
     connect(m_fingerings, &PropertyItem::valueChanged, this, [this]() {
         emit fingeringsChanged(fingerings());
     });
+
+    m_verticalAlign = buildPropertyItem(mu::engraving::Pid::EXCLUDE_VERTICAL_ALIGN);
 }
 
 void FretDiagramSettingsModel::requestElements()
@@ -120,6 +122,7 @@ void FretDiagramSettingsModel::loadProperties()
     loadPropertyItem(m_showFingerings);
     loadPropertyItem(m_fingerings);
     emit fingeringsChanged(fingerings());
+    loadPropertyItem(m_verticalAlign);
 }
 
 void FretDiagramSettingsModel::resetProperties()
@@ -131,6 +134,7 @@ void FretDiagramSettingsModel::resetProperties()
     m_isNutVisible->resetToDefault();
     m_placement->resetToDefault();
     m_showFingerings->resetToDefault();
+    m_verticalAlign->resetToDefault();
 }
 
 PropertyItem* FretDiagramSettingsModel::scale() const
@@ -166,6 +170,11 @@ PropertyItem* FretDiagramSettingsModel::placement() const
 PropertyItem* FretDiagramSettingsModel::orientation() const
 {
     return m_orientation;
+}
+
+PropertyItem* FretDiagramSettingsModel::verticalAlign() const
+{
+    return m_verticalAlign;
 }
 
 PropertyItem* FretDiagramSettingsModel::showFingerings() const

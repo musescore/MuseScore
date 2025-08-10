@@ -27,6 +27,8 @@ BusyIndicator {
 
     padding: 0
 
+    property color backgroundColor: ui.theme.strokeColor
+
     contentItem: Rectangle {
         id: backgroundCircle
         implicitWidth: 20
@@ -40,7 +42,7 @@ BusyIndicator {
         radius: width / 2
 
         color: "transparent"
-        border.color: ui.theme.strokeColor
+        border.color: root.backgroundColor
         border.width: width / 10
 
         RotationAnimator {

@@ -164,6 +164,10 @@ TEST_F(Capella_Tests, capxTestTuplet2) {
     // generates different beaming with respect to the original
     capxReadTest("testTuplet2");
 }
+TEST_F(Capella_Tests, capxTestTuplet3) {
+    // generates different beaming with respect to the original
+    capxReadTest("testTuplet3");
+}
 TEST_F(Capella_Tests, capxTestVolta1) {
     capxReadTest("testVolta1");
 }

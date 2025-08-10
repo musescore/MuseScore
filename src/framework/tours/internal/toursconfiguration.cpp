@@ -23,10 +23,6 @@
 
 #include "settings.h"
 
-#include "global/configreader.h"
-
-#include "log.h"
-
 using namespace muse;
 using namespace muse::tours;
 using namespace muse::async;
@@ -66,11 +62,6 @@ void ToursConfiguration::setLastShownTourIdForEvent(const String& eventCode, con
     }
 
     settings()->setSharedValue(UI_LAST_SHOWN_TOURS_KEY, Val(allLastShownTours.join(u",").toStdString()));
-}
-
-io::path_t ToursConfiguration::toursFilePath() const
-{
-    return ":/resources/tours.json";
 }
 
 StringList ToursConfiguration::lastShownTours() const

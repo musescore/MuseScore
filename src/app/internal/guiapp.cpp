@@ -2,14 +2,17 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
-#include <QThreadPool>
 #include <QQuickWindow>
 
 #include "appshell/view/internal/splashscreen/splashscreen.h"
 #include "ui/iuiengine.h"
+#include "ui/graphicsapiprovider.h"
 
 #include "muse_framework_config.h"
-#include "ui/graphicsapiprovider.h"
+#include "app_config.h"
+#ifdef QT_CONCURRENT_SUPPORTED
+#include <QThreadPool>
+#endif
 
 #include "log.h"
 
@@ -65,6 +68,7 @@ void GuiApp::perform()
         }
 
         LOGI() << "Using graphics api: " << GraphicsApiProvider::graphicsApiName();
+        LOGI() << "Gui platform: " << QGuiApplication::platformName();
 
         if (GraphicsApiProvider::graphicsApi() == GraphicsApi::Software) {
             gApiProvider->destroy();
@@ -146,7 +150,8 @@ void GuiApp::engineLoadedWork() {
         // Checks that the correct file was loaded
         bool correctFileWasLoaded = url == objUrl;
 
-        if (noObjectExists && correctFileWasLoaded) {
+        if (!correctFileWasLoaded) return;
+        if (noObjectExists) {
             LOGE() << "failed Qml load\n";
             QCoreApplication::exit(-1);
             return;
@@ -162,8 +167,6 @@ void GuiApp::engineLoadedWork() {
 
             hideSplashScreen();
 
-            startupScenario()->runAfterSplashScreen();
-        }
         }, Qt::QueuedConnection);
 }
 
@@ -239,6 +242,16 @@ void GuiApp::setupModules() {
     // We always init the global module first
     // Synchronously, so the other modules can access it
 
+// Wait Thread Poll
+// FIXME(kaixoo12): I don't know what to do with this
+/*#ifdef QT_CONCURRENT_SUPPORTED
+    QThreadPool* globalThreadPool = QThreadPool::globalInstance();
+    if (globalThreadPool) {
+        LOGI() << "activeThreadCount: " << globalThreadPool->activeThreadCount();
+        globalThreadPool->waitForDone();
+    }*/
+  
+  
     m_globalModule.setApplication(shared_from_this());
     m_globalModule.registerResources();
     m_globalModule.registerExports();
@@ -247,7 +260,6 @@ void GuiApp::setupModules() {
     for (modularity::IModuleSetup* m : m_modules) {
         m->setApplication(shared_from_this());
         m->registerResources();
-    }
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->registerExports();

@@ -81,7 +81,7 @@ MenuItemRole MenuItem::role() const
     return m_role;
 }
 
-QList<MenuItem*> MenuItem::subitems() const
+MenuItemList MenuItem::subitems() const
 {
     return m_subitems;
 }
@@ -179,6 +179,26 @@ void MenuItem::setSelected(bool selected)
 
     m_selected = selected;
     emit selectedChanged(m_selected);
+}
+
+void MenuItem::setCheckable(bool checkable)
+{
+    const Checkable actionCeckable = checkable ? Checkable::Yes : Checkable::No;
+    if (m_action.checkable == actionCeckable) {
+        return;
+    }
+
+    m_action.checkable = actionCeckable;
+}
+
+void MenuItem::setChecked(bool checked)
+{
+    if (m_state.checked == checked) {
+        return;
+    }
+
+    m_state.checked = checked;
+    emit stateChanged();
 }
 
 void MenuItem::setRole(MenuItemRole role)

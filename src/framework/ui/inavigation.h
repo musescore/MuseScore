@@ -33,6 +33,7 @@
 #include "async/notification.h"
 
 class QWindow;
+class QQuickItem;
 
 namespace muse::ui {
 class INavigationSection;
@@ -117,6 +118,8 @@ public:
     virtual INavigationPanel* panel() const = 0;
 
     virtual void trigger() = 0;
+    virtual async::Notification triggered() const = 0;
+
     virtual void requestActive(bool enableHighlight = false) = 0;
 };
 
@@ -154,7 +157,10 @@ public:
         Regular = 0,
         //! NOTE If activated exclusive section, we shouldn't navigate to another section.
         //! Typically exclusive section - this is dialog
-        Exclusive
+        Exclusive,
+        //! NOTE If the type is Ignore, then the section is ignored (not registered),
+        //! usually it is necessary to remove sections from diagnostics
+        Ignore
     };
 
     virtual Type type() const = 0;

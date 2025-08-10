@@ -21,11 +21,16 @@
  */
 #include "uiactionsregister.h"
 
+#include <QTimer>
+
 #include "log.h"
 
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
+
+//! NOTE Prevents repeated updates when it is requested multiple times in a row
+constexpr int REQUEST_UPDATE_TIMEOUT = 16; // msec
 
 void UiActionsRegister::init()
 {
@@ -36,13 +41,17 @@ void UiActionsRegister::init()
     updateShortcutsAll();
 
     // listen
-    uicontextResolver()->currentUiContextChanged().onNotify(this, [this]() {
-        updateEnabledAll();
-    });
+    if (uicontextResolver()) {
+        uicontextResolver()->currentUiContextChanged().onNotify(this, [this]() {
+            requestUpdateEnabledAll();
+        });
+    }
 
-    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
-        updateShortcutsAll();
-    });
+    if (shortcutsRegister()) {
+        shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+            updateShortcutsAll();
+        });
+    }
 }
 
 void UiActionsRegister::reg(const IUiActionsModulePtr& module)
@@ -142,6 +151,10 @@ UiActionState UiActionsRegister::actionState(const ActionCode& code) const
 
 void UiActionsRegister::updateShortcuts(const ActionCodeList& codes)
 {
+    if (!shortcutsRegister()) {
+        return;
+    }
+
     auto screg = shortcutsRegister();
     for (const ActionCode& code : codes) {
         Info& inf = info(code);
@@ -156,6 +169,10 @@ void UiActionsRegister::updateShortcuts(const ActionCodeList& codes)
 void UiActionsRegister::updateShortcutsAll()
 {
     TRACEFUNC;
+
+    if (!shortcutsRegister()) {
+        return;
+    }
 
     auto screg = shortcutsRegister();
     for (auto it = m_actions.begin(); it != m_actions.end(); ++it) {
@@ -205,6 +222,10 @@ void UiActionsRegister::updateEnabled(const ActionCodeList& codes)
 {
     TRACEFUNC;
 
+    if (!uicontextResolver()) {
+        return;
+    }
+
     ActionCodeList changedList;
     auto ctxResolver = uicontextResolver();
     ui::UiContext currentCtx = ctxResolver->currentUiContext();
@@ -222,9 +243,26 @@ void UiActionsRegister::updateEnabled(const ActionCodeList& codes)
     }
 }
 
+void UiActionsRegister::requestUpdateEnabledAll()
+{
+    if (m_isUpdateEnabledAllRequested) {
+        return;
+    }
+
+    m_isUpdateEnabledAllRequested = true;
+    QTimer::singleShot(REQUEST_UPDATE_TIMEOUT, [this]() {
+        updateEnabledAll();
+        m_isUpdateEnabledAllRequested = false;
+    });
+}
+
 void UiActionsRegister::updateEnabledAll()
 {
     TRACEFUNC;
+
+    if (!uicontextResolver()) {
+        return;
+    }
 
     ActionCodeList changedList;
     auto ctxResolver = uicontextResolver();

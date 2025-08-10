@@ -61,6 +61,12 @@ ListView {
         onCloseOpenedMenuRequested: {
             menuLoader.close()
         }
+
+        onNavigateWithSymbolRequested: function(symbol) {
+            if (menuLoader.isMenuOpened) {
+                menuLoader.menu.navigateWithSymbolRequested(symbol, appMenuModel)
+            }
+        }
     }
 
     AccessibleItem {
@@ -167,18 +173,9 @@ ListView {
         contentItem: StyledTextLabel {
             id: textLabel
 
-            width: textMetrics.width
-
             text: appMenuModel.isNavigationStarted ? radioButtonDelegate.titleWithMnemonicUnderline : radioButtonDelegate.title
             textFormat: Text.RichText
             font: ui.theme.defaultFont
-
-            TextMetrics {
-                id: textMetrics
-
-                font: textLabel.font
-                text: radioButtonDelegate.title
-            }
         }
 
         backgroundItem: AppButtonBackground {

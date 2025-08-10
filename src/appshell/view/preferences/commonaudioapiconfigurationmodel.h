@@ -38,11 +38,11 @@ class CommonAudioApiConfigurationModel : public QObject, public muse::Injectable
     Q_PROPERTY(QString currentDeviceId READ currentDeviceId NOTIFY currentDeviceIdChanged)
     Q_PROPERTY(QVariantList deviceList READ deviceList NOTIFY deviceListChanged)
 
-    Q_PROPERTY(unsigned int sampleRate READ sampleRate NOTIFY sampleRateChanged)
-    Q_PROPERTY(QList<unsigned int> sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
-
     Q_PROPERTY(unsigned int bufferSize READ bufferSize NOTIFY bufferSizeChanged)
     Q_PROPERTY(QList<unsigned int> bufferSizeList READ bufferSizeList NOTIFY bufferSizeListChanged)
+
+    Q_PROPERTY(unsigned int sampleRate READ sampleRate NOTIFY sampleRateChanged)
+    Q_PROPERTY(QList<unsigned int> sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
 
     muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
     muse::Inject<muse::audio::IAudioDriver> audioDriver = { this };

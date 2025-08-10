@@ -25,12 +25,15 @@
 
 #include "log.h"
 
+static const QString POPUP_WINDOW_NAME("PopupWindow");
+static const QString POPUP_WINDOW_VIEW_NAME(POPUP_WINDOW_NAME + "_QQuickView");
+
 using namespace muse::uicomponents;
 
 PopupWindow_QQuickView::PopupWindow_QQuickView(const modularity::ContextPtr& iocCtx, QObject* parent)
     : IPopupWindow(parent), muse::Injectable(iocCtx)
 {
-    setObjectName("PopupWindow");
+    setObjectName(POPUP_WINDOW_NAME);
 }
 
 PopupWindow_QQuickView::~PopupWindow_QQuickView()
@@ -50,7 +53,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     //! Otherwise, the garbage collector may take ownership of the view and destroy it when we don't expect it
     m_view->QObject::setParent(this);
 
-    m_view->setObjectName("PopupWindow_QQuickView");
+    m_view->setObjectName(POPUP_WINDOW_VIEW_NAME);
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
     //! NOTE It is important that there is a connection to this signal with an error,
@@ -63,6 +66,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     // dialog
     if (isDialogMode) {
         m_view->setFlags(Qt::Dialog);
+        m_view->setIcon(QIcon(uiConfiguration()->appIconPath().toString()));
 
         if (isFrameless) {
             m_view->setColor(QColor(Qt::transparent));
@@ -84,10 +88,10 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     // popup
     else {
         Qt::WindowFlags flags(
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
-            Qt::Tool
-#else
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
             Qt::Popup // Popups can't be Qt::Tool on Linux Wayland, or they can't be relatvely positioned.
+#else
+            Qt::Tool
 #endif
             | Qt::FramelessWindowHint            // Without border
             | Qt::NoDropShadowWindowHint         // Without system shadow

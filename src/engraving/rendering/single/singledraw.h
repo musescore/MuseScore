@@ -71,6 +71,8 @@ class GuitarBendSegment;
 
 class Hairpin;
 class HairpinSegment;
+class HammerOnPullOffSegment;
+class HammerOnPullOffText;
 class HarpPedalDiagram;
 class HarmonicMarkSegment;
 class Harmony;
@@ -99,6 +101,7 @@ class MeasureRepeat;
 
 class Note;
 class NoteHead;
+class NoteLineSegment;
 
 class Ornament;
 class Ottava;
@@ -109,6 +112,7 @@ class PalmMuteSegment;
 class Pedal;
 class PedalSegment;
 class PickScrapeSegment;
+class PlayCountText;
 class PlayTechAnnotation;
 
 class RasgueadoSegment;
@@ -127,13 +131,13 @@ class StaffTypeChange;
 class Stem;
 class StemSlash;
 class Sticking;
-class StretchedBend;
 class StringTunings;
 class Symbol;
 class SystemDivider;
 class SystemText;
 
 class TabDurationSymbol;
+class Tapping;
 class TempoText;
 class Text;
 class TextBase;
@@ -199,6 +203,8 @@ private:
     static void draw(const GuitarBendSegment* item, muse::draw::Painter* painter);
 
     static void draw(const HairpinSegment* item, muse::draw::Painter* painter);
+    static void draw(const HammerOnPullOffSegment* item, muse::draw::Painter* painter);
+    static void draw(const HammerOnPullOffText* item, muse::draw::Painter* painter);
     static void draw(const HarpPedalDiagram* item, muse::draw::Painter* painter);
     static void draw(const HarmonicMarkSegment* item, muse::draw::Painter* painter);
     static void draw(const Harmony* item, muse::draw::Painter* painter);
@@ -223,6 +229,7 @@ private:
 
     static void draw(const Note* item, muse::draw::Painter* painter);
     static void draw(const NoteHead* item, muse::draw::Painter* painter);
+    static void draw(const NoteLineSegment* item, muse::draw::Painter* painter);
 
     static void draw(const Ornament* item, muse::draw::Painter* painter);
     static void draw(const OttavaSegment* item, muse::draw::Painter* painter);
@@ -230,6 +237,7 @@ private:
     static void draw(const PalmMuteSegment* item, muse::draw::Painter* painter);
     static void draw(const PedalSegment* item, muse::draw::Painter* painter);
     static void draw(const PickScrapeSegment* item, muse::draw::Painter* painter);
+    static void draw(const PlayCountText* item, muse::draw::Painter* painter);
     static void draw(const PlayTechAnnotation* item, muse::draw::Painter* painter);
 
     static void draw(const RasgueadoSegment* item, muse::draw::Painter* painter);
@@ -247,13 +255,13 @@ private:
     static void draw(const StemSlash* item, muse::draw::Painter* painter);
     static void draw(const Sticking* item, muse::draw::Painter* painter);
     static void draw(const StringTunings* item, muse::draw::Painter* painter);
-    static void draw(const StretchedBend* item, muse::draw::Painter* painter);
     static void draw(const Symbol* item, muse::draw::Painter* painter);
     static void draw(const FSymbol* item, muse::draw::Painter* painter);
     static void draw(const SystemDivider* item, muse::draw::Painter* painter);
     static void draw(const SystemText* item, muse::draw::Painter* painter);
     static void draw(const SoundFlag* item, muse::draw::Painter* painter);
 
+    static void draw(const Tapping* item, muse::draw::Painter* painter);
     static void draw(const TempoText* item, muse::draw::Painter* painter);
     static void draw(const Text* item, muse::draw::Painter* painter);
     static void draw(const TextLineSegment* item, muse::draw::Painter* painter);

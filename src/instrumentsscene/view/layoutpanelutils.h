@@ -29,6 +29,7 @@ namespace mu::instrumentsscene {
 struct SystemObjectsGroup {
     mu::engraving::ElementType type = mu::engraving::ElementType::INVALID;
     std::vector<mu::engraving::EngravingItem*> items;
+    mu::engraving::Staff* staff = nullptr;
 };
 
 using SystemObjectGroups = std::vector<SystemObjectsGroup>;
@@ -53,8 +54,13 @@ inline SystemObjectGroupsByStaff collectSystemObjectGroups(const std::vector<mu:
         if (it != groups.end()) {
             it->items.push_back(obj);
         } else {
-            groups.emplace_back(SystemObjectsGroup { obj->type(), { obj } });
+            groups.emplace_back(SystemObjectsGroup { obj->type(), { obj }, obj->staff() });
         }
+    }
+
+    for (mu::engraving::Staff* staff : staves) {
+        SystemObjectGroups& systemObjectGroups = result[staff];
+        systemObjectGroups.push_back(SystemObjectsGroup { mu::engraving::ElementType::MEASURE_NUMBER, {}, staff });
     }
 
     return result;
@@ -72,6 +78,10 @@ inline SystemObjectGroups collectSystemObjectGroups(const mu::engraving::Staff* 
 
 inline bool isSystemObjectsGroupVisible(const SystemObjectsGroup& group)
 {
+    if (group.type == mu::engraving::ElementType::MEASURE_NUMBER) {
+        return group.staff && group.staff->shouldShowMeasureNumbers();
+    }
+
     for (const mu::engraving::EngravingItem* item : group.items) {
         if (item->visible()) {
             return true;
@@ -83,7 +93,17 @@ inline bool isSystemObjectsGroupVisible(const SystemObjectsGroup& group)
 
 inline muse::String translatedSystemObjectsGroupName(const SystemObjectsGroup& group)
 {
-    const bool plural = group.items.size() > 1;
-    return mu::engraving::TConv::userName(group.type, plural).translated();
+    const muse::TranslatableString& name = mu::engraving::TConv::userName(group.type);
+    const int n = static_cast<int>(group.items.size());
+
+    return name.translated(n);
+}
+
+inline muse::String translatedSystemObjectsGroupCapitalizedName(const SystemObjectsGroup& group)
+{
+    const muse::TranslatableString& name = mu::engraving::TConv::capitalizedUserName(group.type);
+    const int n = static_cast<int>(group.items.size());
+
+    return name.translated(n);
 }
 }

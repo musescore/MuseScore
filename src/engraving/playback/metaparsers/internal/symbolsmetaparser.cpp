@@ -27,6 +27,26 @@
 using namespace mu::engraving;
 using namespace muse;
 
+static mpe::ArticulationType textTypeToArticulationType(ArticulationTextType textType)
+{
+    switch (textType) {
+    case ArticulationTextType::NO_TEXT: return mpe::ArticulationType::Standard;
+    case ArticulationTextType::SLAP: return mpe::ArticulationType::Slap;
+    case ArticulationTextType::POP: return mpe::ArticulationType::Pop;
+    case ArticulationTextType::LV: return mpe::ArticulationType::LaissezVibrer;
+    case ArticulationTextType::R: return mpe::ArticulationType::Ring;
+    case ArticulationTextType::TD: return mpe::ArticulationType::ThumbDamp;
+    case ArticulationTextType::BD: return mpe::ArticulationType::BrushDamp;
+    case ArticulationTextType::RT: return mpe::ArticulationType::RingTouch;
+    case ArticulationTextType::PL: return mpe::ArticulationType::Pluck;
+    case ArticulationTextType::SB: return mpe::ArticulationType::SingingBell;
+    case ArticulationTextType::VIB: return mpe::ArticulationType::SingingVibrate;
+    }
+
+    UNREACHABLE;
+    return mpe::ArticulationType::Undefined;
+}
+
 mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, OrnamentStyle ornamentStyle)
 {
     mpe::ArticulationTypeSet types;
@@ -129,7 +149,6 @@ mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, O
         break;
     case SymId::stringsMuteOn:
     case SymId::elecMute:
-    case SymId::handbellsMutedMartellato:
     case SymId::brassMuteHalfClosed:
     case SymId::brassMuteClosed:
     case SymId::brassHarmonMuteStemHalfRight:
@@ -316,7 +335,7 @@ mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, O
         types.emplace(mpe::ArticulationType::Crescendo);
         break;
     case SymId::dynamicDiminuendoHairpin:
-        types.emplace(mpe::ArticulationType::Decrescendo);
+        types.emplace(mpe::ArticulationType::Diminuendo);
         break;
     case SymId::ornamentUpPrall:
         types.emplace(mpe::ArticulationType::UpPrall);
@@ -344,10 +363,13 @@ mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, O
         types.emplace(mpe::ArticulationType::DownMordent);
         break;
     case SymId::ornamentTurn:
+    case SymId::ornamentTurnUp:
+    case SymId::ornamentHaydn:
     case SymId::brassJazzTurn:
         types.emplace(mpe::ArticulationType::Turn);
         break;
     case SymId::ornamentTurnInverted:
+    case SymId::ornamentTurnUpS:
     case SymId::ornamentTurnSlash:
         types.emplace(mpe::ArticulationType::InvertedTurn);
         break;
@@ -439,6 +461,33 @@ mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, O
     case SymId::wiggleVibratoWide:
         types.emplace(mpe::ArticulationType::WideVibrato);
         break;
+    case SymId::handbellsMalletBellOnTable:
+        types.emplace(mpe::ArticulationType::MalletBellOnTable);
+        break;
+    case SymId::handbellsMalletBellSuspended:
+        types.emplace(mpe::ArticulationType::MalletBellSuspended);
+        break;
+    case SymId::handbellsMalletLft:
+        types.emplace(mpe::ArticulationType::MalletLift);
+        break;
+    case SymId::handbellsPluckLift:
+        types.emplace(mpe::ArticulationType::PluckLift);
+        break;
+    case SymId::handbellsGyro:
+        types.emplace(mpe::ArticulationType::Gyro);
+        break;
+    case SymId::handbellsMartellato:
+        types.emplace(mpe::ArticulationType::Martellato);
+        break;
+    case SymId::handbellsMartellatoLift:
+        types.emplace(mpe::ArticulationType::MartellatoLift);
+        break;
+    case SymId::handbellsHandMartellato:
+        types.emplace(mpe::ArticulationType::HandMartellato);
+        break;
+    case SymId::handbellsMutedMartellato:
+        types.emplace(mpe::ArticulationType::MutedMartellato);
+        break;
     default:
         break;
     }
@@ -453,15 +502,20 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
     }
 
     const Articulation* articulationSymbol = toArticulation(item);
-
     if (!articulationSymbol->playArticulation()) {
         return;
     }
 
-    mpe::ArticulationTypeSet types = symbolToArticulations(articulationSymbol->symId(), articulationSymbol->ornamentStyle());
+    mpe::ArticulationTypeSet types;
+
+    if (articulationSymbol->textType() != ArticulationTextType::NO_TEXT) {
+        types.insert(textTypeToArticulationType(articulationSymbol->textType()));
+    } else {
+        types = symbolToArticulations(articulationSymbol->symId(), articulationSymbol->ornamentStyle());
+    }
 
     for (mpe::ArticulationType type : types) {
-        const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type);
+        const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type, mpe::ArticulationType::Standard);
         if (pattern.empty()) {
             continue;
         }

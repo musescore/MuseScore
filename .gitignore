@@ -76,3 +76,9 @@ __pycache__/
 
 # Stuff from 3.x builds
 /share/sound/MuseScore_General*
+
+# User overrides of SetupBuildEnvironment
+/buildscripts/cmake/SetupBuildEnvironment.user.cmake
+
+# CMake User presets
+CMakeUserPresets.json

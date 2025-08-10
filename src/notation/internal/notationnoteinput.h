@@ -37,7 +37,6 @@ class Score;
 }
 
 namespace mu::notation {
-class ScoreCallbacks;
 class NotationNoteInput : public INotationNoteInput, public muse::Injectable, public muse::async::Asyncable
 {
     muse::Inject<INotationConfiguration> configuration = { this };
@@ -45,7 +44,6 @@ class NotationNoteInput : public INotationNoteInput, public muse::Injectable, pu
 public:
     NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack,
                       const muse::modularity::ContextPtr& iocCtx);
-    ~NotationNoteInput() override;
 
     bool isNoteInputMode() const override;
 
@@ -80,6 +78,7 @@ public:
     void setInputNotes(const NoteValList& notes) override;
     void moveInputNotes(bool up, PitchMode mode) override;
 
+    void setRestMode(bool rest) override;
     void setAccidental(AccidentalType accidentalType) override;
     void setArticulation(SymbolId articulationSymbolId) override;
     void setDrumNote(int note) override;
@@ -121,7 +120,6 @@ private:
     muse::async::Channel</*focusNotation*/ bool> m_noteInputStarted;
     muse::async::Notification m_noteInputEnded;
 
-    ScoreCallbacks* m_scoreCallbacks = nullptr;
     std::function<muse::RectF()> m_getViewRectFunc;
 };
 }

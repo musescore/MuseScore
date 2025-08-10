@@ -25,7 +25,9 @@
 
 #include "dom/dynamic.h"
 #include "dom/expression.h"
+#include "dom/fret.h"
 #include "dom/hairpin.h"
+#include "dom/harmony.h"
 #include "dom/system.h"
 #include "dom/text.h"
 
@@ -117,6 +119,28 @@ void AlignmentLayout::alignStaffCenteredItems(const std::vector<EngravingItem*>&
     }
 }
 
+void AlignmentLayout::alignItemsForSystem(const std::vector<EngravingItem*>& elements, const System* system)
+{
+    struct StaffItemGroups {
+        std::vector<EngravingItem*> itemsAbove;
+        std::vector<EngravingItem*> itemsBelow;
+    };
+
+    std::map<staff_idx_t, StaffItemGroups> staffItems;
+
+    for (EngravingItem* item : elements) {
+        if (item->addToSkyline() && !item->excludeVerticalAlign()) {
+            item->placeAbove() ? staffItems[item->staffIdx()].itemsAbove.push_back(item)
+            : staffItems[item->staffIdx()].itemsBelow.push_back(item);
+        }
+    }
+
+    for (const auto& staffItem : staffItems) {
+        AlignmentLayout::alignItemsGroup(staffItem.second.itemsAbove, system);
+        AlignmentLayout::alignItemsGroup(staffItem.second.itemsBelow, system);
+    }
+}
+
 void AlignmentLayout::moveItemToY(EngravingItem* item, double y, const System* system)
 {
     double curY = yOpticalCenter(item);
@@ -168,6 +192,17 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
                 curY -= 0.5 * item->spatium();
             }
         }
+        break;
+    }
+    case ElementType::FRET_DIAGRAM:
+        curY += toFretDiagram(item)->ldata()->gridHeight;
+        break;
+    case ElementType::HARMONY: {
+        EngravingItem* parentItem = toHarmony(item)->parentItem();
+        if (parentItem && parentItem->isFretDiagram()) {
+            curY += parentItem->pos().y();
+        }
+        break;
     }
     default:
         break;

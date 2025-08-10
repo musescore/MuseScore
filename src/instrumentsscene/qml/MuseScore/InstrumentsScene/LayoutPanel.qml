@@ -98,6 +98,7 @@ Item {
             isMovingUpAvailable: treeModel.isMovingUpAvailable
             isMovingDownAvailable: treeModel.isMovingDownAvailable
             isAddingAvailable: treeModel.isAddingAvailable
+            isAddingSystemMarkingsAvailable: treeModel.isAddingSystemMarkingsAvailable
             isRemovingAvailable: treeModel.isRemovingAvailable
             selectedItemsType: treeModel.selectedItemsType
 
@@ -319,8 +320,12 @@ Item {
                                     flickable.contentY = contentYBackup
                                 }
 
-                                onVisibilityChanged: function(visible) {
-                                    treeModel.toggleVisibilityOfSelectedRows(visible);
+                                onChangeVisibilityOfSelectedRowsRequested: function(visible) {
+                                    treeModel.changeVisibilityOfSelectedRows(visible);
+                                }
+
+                                onChangeVisibilityRequested: function(index, visible) {
+                                    treeModel.changeVisibility(index, visible)
                                 }
 
                                 onDragStarted: {
@@ -356,11 +361,16 @@ Item {
                             return
                         }
 
-                        treeModel.moveRows(drag.source.index.parent,
-                                                     drag.source.index.row,
-                                                     1,
-                                                     styleData.index.parent,
-                                                     styleData.index.row)
+                        if (drag.source.index.row < 0 || styleData.index.row < 0) {
+                            return;
+                        }
+
+                        Qt.callLater(treeModel.moveRows,
+                                     drag.source.index.parent,
+                                     drag.source.index.row,
+                                     1,
+                                     styleData.index.parent,
+                                     styleData.index.row)
                     }
                 }
             }

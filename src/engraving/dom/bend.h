@@ -26,7 +26,7 @@
 #include "draw/types/font.h"
 
 #include "engravingitem.h"
-#include "types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class Note;

@@ -112,6 +112,7 @@ void ThemeApi::init()
     initUiFonts();
     initIconsFont();
     initMusicalFont();
+    initMusicalTextFont();
     calculateDefaultButtonSize();
 
     setupWidgetTheme();
@@ -284,6 +285,11 @@ QFont ThemeApi::musicalFont() const
     return m_musicalFont;
 }
 
+QFont ThemeApi::musicalTextFont() const
+{
+    return m_musicalTextFont;
+}
+
 QFont ThemeApi::defaultFont() const
 {
     return m_defaultFont;
@@ -379,9 +385,19 @@ void ThemeApi::initMusicalFont()
     });
 }
 
+void ThemeApi::initMusicalTextFont()
+{
+    setupMusicTextFont();
+
+    configuration()->musicalTextFontChanged().onNotify(this, [this]() {
+        setupMusicTextFont();
+        update();
+    });
+}
+
 void ThemeApi::setupUiFonts()
 {
-    QMap<QFont*, FontConfig> fonts {
+    const std::vector<std::pair<QFont*, FontConfig> > fonts {
         { &m_bodyFont, { QFont::Normal, FontSizeType::BODY } },
         { &m_bodyBoldFont, { QFont::DemiBold, FontSizeType::BODY } },
         { &m_largeBodyFont, { QFont::Normal, FontSizeType::BODY_LARGE } },
@@ -393,14 +409,13 @@ void ThemeApi::setupUiFonts()
         { &m_titleBoldFont, { QFont::DemiBold, FontSizeType::TITLE } },
     };
 
-    for (QFont* font : fonts.keys()) {
+    for (const auto& [font, fontConfig] : fonts) {
         std::string family = configuration()->fontFamily();
-        int size = configuration()->fontSize(fonts[font].sizeType);
-        QFont::Weight weight = fonts[font].weight;
+        int size = configuration()->fontSize(fontConfig.sizeType);
 
         font->setPixelSize(size);
         font->setFamily(QString::fromStdString(family));
-        font->setWeight(weight);
+        font->setWeight(fontConfig.weight);
     }
 
     m_defaultFont.setFamily(QString::fromStdString(configuration()->defaultFontFamily()));
@@ -422,6 +437,12 @@ void ThemeApi::setupMusicFont()
 {
     m_musicalFont.setFamily(QString::fromStdString(configuration()->musicalFontFamily()));
     m_musicalFont.setPixelSize(configuration()->musicalFontSize());
+}
+
+void ThemeApi::setupMusicTextFont()
+{
+    m_musicalTextFont.setFamily(QString::fromStdString(configuration()->musicalTextFontFamily()));
+    m_musicalTextFont.setPixelSize(configuration()->musicalTextFontSize());
 }
 
 void ThemeApi::calculateDefaultButtonSize()
@@ -626,7 +647,7 @@ void ProxyStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOpt
 
     // GroupBox
     case QStyle::PE_FrameGroupBox: {
-        drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, QBrush("#03000000"),
+        drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, QBrush(QColor::fromRgba(0x03000000)),
                         QPen(m_theme->strokeColor(), fmax(m_theme->borderWidth(), 1.0)));
     } break;
 
@@ -809,7 +830,11 @@ QSize ProxyStyle::sizeFromContents(QStyle::ContentsType type, const QStyleOption
     case CT_LineEdit:
         return proxyStyleSize.expandedTo(QSize(30, 30));
     case CT_SpinBox:
-        return QSize(proxyStyleSize.width(), 32); // results in the height begin 30
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+        return QSize(proxyStyleSize.width(), 26); // results in a height of 30
+#else
+        return QSize(proxyStyleSize.width(), 32); // results in a height of 30
+#endif
     case CT_GroupBox: {
         const QGroupBox* groupBox = qobject_cast<const QGroupBox*>(widget);
         const bool checkable = groupBox && groupBox->isCheckable();

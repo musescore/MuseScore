@@ -23,7 +23,6 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import Muse.GraphicalEffects 1.0
 import MuseScore.NotationScene 1.0
 
 DropArea {
@@ -35,6 +34,7 @@ DropArea {
 
     property int panelMode: -1
     property bool useNotationPreview: false
+    property int notationPreviewNumStaffLines: 0
     property bool showEditOutline: false
 
     property alias totalBorderWidth: padLoader.anchors.margins
@@ -65,15 +65,38 @@ DropArea {
         readonly property color enabledBackgroundColor: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityNormal)
         readonly property color disabledBackgroundColor: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.itemOpacityDisabled)
         readonly property real footerHeight: 24
-        readonly property string accessibleDescription: {
+
+        readonly property string accessibleDetailsString: {
+            if (!Boolean(root.padModel)) {
+                return ""
+            }
+
+            //: %1 will be the MIDI note for a drum (displayed in the percussion panel)
+            let line1 = qsTrc("notation/percussion", "MIDI %1").arg(root.padModel.midiNote)
+
+            let shortcut = root.padModel.keyboardShortcut
+            if (shortcut === "") {
+                return line1
+            }
+
+
+            //: %1 will be the shortcut for a drum (displayed in the percussion panel)
+            let line2 = qsTrc("notation/percussion", "Shortcut %1").arg(shortcut)
+
+            return line2 + ", " + line1
+        }
+
+        readonly property string accessibleRowColumnString: {
             //: %1 will be the row number of a percussion panel pad
-            let line1 = qsTrc("notation/percussion", "Row: %1").arg(root.navigationRow + 1)
+            let line1 = qsTrc("notation/percussion", "Row %1").arg(root.navigationRow + 1)
 
             //: %1 will be the column number of a percussion panel pad
-            let line2 = qsTrc("notation/percussion", "Column: %1").arg(root.navigationColumn + 1)
+            let line2 = qsTrc("notation/percussion", "Column %1").arg(root.navigationColumn + 1)
 
-            return line1 + ", " + line2
+            return line1 + " " + line2
         }
+
+        readonly property string fullAccessibleString: prv.accessibleDetailsString + ", " + prv.accessibleRowColumnString
     }
 
     NavigationControl {
@@ -87,10 +110,10 @@ DropArea {
         // Only navigate to empty slots when we're in edit mode
         enabled: Boolean(root.padModel) || root.panelMode === PanelMode.EDIT_LAYOUT
 
-        accessible.role: MUAccessible.Button
+        accessible.role: MUAccessible.SilentRole
         accessible.name: Boolean(root.padModel) ? root.padModel.padName : qsTrc("notation/percussion", "Empty pad")
 
-        accessible.description: prv.accessibleDescription
+        accessible.description: Boolean(root.padModel) ? prv.fullAccessibleString : prv.accessibleRowColumnString
 
         accessible.visualItem: padFocusBorder
         accessible.enabled: padNavCtrl.enabled
@@ -114,10 +137,8 @@ DropArea {
 
         enabled: Boolean(root.padModel)
 
-        accessible.role: MUAccessible.Button
-        accessible.name: Boolean(root.padModel) ? root.padModel.padName + " " + qsTrc("notation/percussion", "footer") : ""
-
-        accessible.description: prv.accessibleDescription
+        accessible.role: MUAccessible.SilentRole
+        accessible.name: Boolean(root.padModel) ? root.padModel.padName + " " + qsTrc("notation/percussion", "options") : ""
 
         accessible.visualItem: footerFocusBorder
         accessible.enabled: footerNavCtrl.enabled
@@ -164,19 +185,11 @@ DropArea {
             // Loads either an empty slot or the pad content
             id: padLoader
 
+            readonly property real cornerRadius: swappableArea.radius - padLoader.anchors.margins
+
             anchors.fill: parent
             // Defined as 1 in the spec, but causes some aliasing in practice...
             anchors.margins: 2 + swappableArea.border.width
-
-            // Can't simply use clip as this won't take into account radius...
-            layer.enabled: ui.isEffectsAllowed
-            layer.effect: EffectOpacityMask {
-                maskSource: Rectangle {
-                    width: padLoader.width
-                    height: padLoader.height
-                    radius: swappableArea.radius - padLoader.anchors.margins
-                }
-            }
 
             sourceComponent: Boolean(root.padModel) ? padContentComponent : emptySlotComponent
 
@@ -189,15 +202,18 @@ DropArea {
                     padModel: root.padModel
                     panelMode: root.panelMode
                     useNotationPreview: root.useNotationPreview
+                    notationPreviewNumStaffLines: root.notationPreviewNumStaffLines
 
                     footerHeight: prv.footerHeight
 
                     padSwapActive: dragHandler.active
 
+                    cornerRadius: padLoader.cornerRadius
+
                     Connections {
                         target: footerNavCtrl
                         function onTriggered() {
-                            padContent.openFooterContextMenu()
+                            padContent.openContextMenu(null)
                         }
                     }
                 }
@@ -209,6 +225,7 @@ DropArea {
                 Rectangle {
                     id: emptySlotBackground
                     color: root.panelEnabled ? prv.enabledBackgroundColor : prv.disabledBackgroundColor
+                    radius: padLoader.cornerRadius
                 }
             }
         }

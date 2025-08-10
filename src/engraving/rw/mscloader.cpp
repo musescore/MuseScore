@@ -26,6 +26,8 @@
 #include "global/io/buffer.h"
 #include "global/types/retval.h"
 
+#include "../engravingerrors.h"
+
 #include "../types/types.h"
 
 #include "../dom/masterscore.h"
@@ -115,7 +117,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
             MStyle& style = masterScore->style();
             ChordList* chordList = masterScore->chordList();
 
-            bool custom = style.styleSt(Sid::chordStyle) == "custom";
+            bool custom = style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM;
             chordList->setCustomChordList(custom);
 
             // Ensure that `checkChordList` loads the default chord list

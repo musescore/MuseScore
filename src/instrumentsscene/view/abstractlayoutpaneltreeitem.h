@@ -37,10 +37,13 @@ struct MoveParams {
     muse::ID destinationObjectId;
     LayoutPanelItemType::ItemType objectsType = LayoutPanelItemType::UNDEFINED;
     notation::INotationParts::InsertMode insertMode = notation::INotationParts::InsertMode::Before;
+    bool moveSysObjBelowBottomStaff = false;
+    bool moveSysObjAboveBottomStaff = false;
 
     bool isValid() const
     {
-        return !objectIdListToMove.empty() && destinationObjectId.isValid() && objectsType != LayoutPanelItemType::UNDEFINED;
+        return !objectIdListToMove.empty() && (destinationObjectId.isValid() || moveSysObjBelowBottomStaff)
+               && objectsType != LayoutPanelItemType::UNDEFINED;
     }
 };
 
@@ -51,7 +54,7 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(QString id READ idStr CONSTANT)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(int type READ typeInt CONSTANT)
-    Q_PROPERTY(bool isVisible READ isVisible WRITE setIsVisible NOTIFY isVisibleChanged)
+    Q_PROPERTY(bool isVisible READ isVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
     Q_PROPERTY(bool isRemovable READ isRemovable NOTIFY isRemovableChanged)
     Q_PROPERTY(bool isSelectable READ isSelectable CONSTANT)
@@ -90,6 +93,8 @@ public:
     virtual void moveChildrenOnScore(const MoveParams& params);
 
     virtual void removeChildren(int row, int count = 1, bool deleteChild = false);
+
+    virtual void onScoreChanged(const mu::engraving::ScoreChanges& changes);
 
     AbstractLayoutPanelTreeItem* parentItem() const;
     void setParentItem(AbstractLayoutPanelTreeItem* parent);

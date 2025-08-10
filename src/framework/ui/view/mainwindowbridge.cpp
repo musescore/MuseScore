@@ -55,10 +55,19 @@ void MainWindowBridge::setWindow(QWindow* window)
         return;
     }
 
+    if (m_window) {
+        windowsController()->unregWindow(m_window->winId());
+    }
+
     m_window = window;
+
     emit windowChanged();
 
     init();
+
+    if (m_window) {
+        windowsController()->regWindow(m_window->winId());
+    }
 }
 
 void MainWindowBridge::init()

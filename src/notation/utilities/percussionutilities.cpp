@@ -41,7 +41,9 @@ void PercussionUtilities::readDrumset(const muse::ByteArray& drumMapping, Drumse
         if (reader.name() == "museScore") {
             while (reader.readNextStartElement()) {
                 if (reader.name() == "Drum") {
-                    drumset.load(reader);
+                    drumset.loadDrum(reader);
+                } else if (reader.name() == "percussionPanelColumns") {
+                    drumset.setPercussionPanelColumns(reader.readInt());
                 } else {
                     reader.unknown();
                 }
@@ -97,7 +99,7 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
 
     Stem* stem = Factory::createStem(chord.get());
     stem->setParent(chord.get());
-    stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * _spatium));
+    stem->setBaseLength(Spatium(up ? -3.0 : 3.0));
     engravingRender()->layoutItem(stem);
     chord->add(stem);
 
@@ -105,15 +107,15 @@ std::shared_ptr<Chord> PercussionUtilities::getDrumNoteForPreview(const Drumset*
 }
 
 /// Opens the percussion shortcut dialog, modifies drumset with user input
-void PercussionUtilities::editPercussionShortcut(Drumset& drumset, int originPitch)
+bool PercussionUtilities::editPercussionShortcut(Drumset& drumset, int originPitch)
 {
     IF_ASSERT_FAILED(drumset.isValid(originPitch)) {
-        return;
+        return false;
     }
 
     const muse::RetVal<muse::Val> rv = openPercussionShortcutDialog(drumset, originPitch);
     if (!rv.ret) {
-        return;
+        return false;
     }
 
     const QVariantMap vals = rv.val.toQVariant().toMap();
@@ -121,9 +123,11 @@ void PercussionUtilities::editPercussionShortcut(Drumset& drumset, int originPit
     drumset.drum(originPitch).shortcut = vals.value("newShortcut").toString();
 
     const int conflictShortcutPitch = vals.value("conflictDrumPitch").toInt();
-    if (conflictShortcutPitch > -1 && drumset.isValid(conflictShortcutPitch)) {
+    if (drumset.isValid(conflictShortcutPitch)) {
         drumset.drum(conflictShortcutPitch).shortcut.clear();
     }
+
+    return true;
 }
 
 muse::RetVal<muse::Val> PercussionUtilities::openPercussionShortcutDialog(const Drumset& drumset, int originPitch)
@@ -158,7 +162,7 @@ muse::RetVal<muse::Val> PercussionUtilities::openPercussionShortcutDialog(const 
     }
     query.addParam("applicationShortcuts", muse::Val::fromQVariant(applicationShortcuts));
 
-    return interactive()->open(query);
+    return interactive()->openSync(query);
 }
 
 QVariantMap PercussionUtilities::drumToQVariantMap(int pitch, const engraving::DrumInstrument& drum)

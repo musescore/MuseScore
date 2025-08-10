@@ -695,7 +695,7 @@
         <root>
           <root-step>C</root-step>
           </root>
-        <kind text="sus">suspended-fourth</kind>
+        <kind>suspended-fourth</kind>
         </harmony>
       <note>
         <pitch>

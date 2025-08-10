@@ -67,8 +67,8 @@ protected:
 
 public:
 
-    PlayEvent(mu::engraving::NoteEvent* _ne = new mu::engraving::NoteEvent(), Note* _parent = nullptr)
-        : QObject(), ne(_ne), parentNote(_parent) {}
+    PlayEvent(mu::engraving::NoteEvent* m_ne = new mu::engraving::NoteEvent(), Note* m_parent = nullptr)
+        : QObject(), ne(m_ne), parentNote(m_parent) {}
     // Delete the NoteEvent if parentless.
     virtual ~PlayEvent()
     {
@@ -131,7 +131,7 @@ public:
     static void append(QQmlListProperty<PlayEvent>* l, PlayEvent* v);
 };
 
-/** \cond PLUGIN_API \private \endcond */
+/// \cond PLUGIN_API \private \endcond
 inline QmlPlayEventsListAccess wrapPlayEventsContainerProperty(QObject* obj, engraving::NoteEventList& c)
 {
     return QmlPlayEventsListAccess(obj, c);

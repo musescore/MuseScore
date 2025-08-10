@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_SPECIALCHARACTERSDIALOG_H
-#define MU_PALETTE_SPECIALCHARACTERSDIALOG_H
+#pragma once
 
 #include "ui_specialcharactersdialog.h"
 
@@ -53,6 +52,7 @@ private slots:
     void populateUnicode();
 
 private:
+    void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
 
     void setFont(const muse::draw::Font& font);
@@ -66,5 +66,3 @@ private:
     QListWidget* m_lwu = nullptr;
 };
 }
-
-#endif // MU_PALETTE_SPECIALCHARACTERSDIALOG_H

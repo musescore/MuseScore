@@ -504,15 +504,6 @@ TEST_F(Engraving_MeasureTests, measureNumbers)
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measurenumber.mscx");
     EXPECT_TRUE(score);
 
-    MeasureNumber* measureNumber = new MeasureNumber(score->dummy()->measure());
-
-    // horizontal placement
-    measureNumber->setHPlacement(PlacementH::CENTER);
-    measureNumber->setPropertyFlags(Pid::HPLACEMENT, PropertyFlags::UNSTYLED);
-    MeasureNumber* mn = static_cast<MeasureNumber*>(ScoreRW::writeReadElement(measureNumber));
-    EXPECT_EQ(mn->hPlacement(), PlacementH::CENTER);
-    delete mn;
-
     // Place measure numbers below
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
     score->undoChangeStyleVal(Sid::measureNumberVPlacement, PlacementV::BELOW);
@@ -522,7 +513,7 @@ TEST_F(Engraving_MeasureTests, measureNumbers)
 
     // center measure numbers
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
-    score->undoChangeStyleVal(Sid::measureNumberHPlacement, PlacementH::CENTER);
+    score->undoChangeStyleVal(Sid::measureNumberHPlacement, AlignH::HCENTER);
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-2.mscx", MEASURE_DATA_DIR + u"measurenumber-2-ref.mscx"));
@@ -605,4 +596,88 @@ TEST_F(Engraving_MeasureTests, measureSplit) {
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measureSplit.mscx", MEASURE_DATA_DIR + u"measureSplit-ref.mscx"));
+}
+
+TEST_F(Engraving_MeasureTests, MMRestEndOfMeasureTS) {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrEndOfMeasureTimeSig.mscz");
+    EXPECT_TRUE(score);
+
+    Measure* m3 = score->crMeasure(2);
+    EXPECT_TRUE(m3 && !m3->isMMRest());
+    Segment* tsSeg = m3->findSegmentR(SegmentType::TimeSig, m3->ticks());
+    EXPECT_TRUE(tsSeg);
+    EngravingItem* tsItem = tsSeg->element(0);
+    EXPECT_TRUE(tsItem && tsItem->isTimeSig());
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    score->setLayoutAll();
+    score->endCmd();
+
+    Measure* m3MMR = m3->mmRest();
+    EXPECT_TRUE(m3MMR && m3MMR->isMMRest());
+    Segment* tsSegMMR = m3MMR->findSegmentR(SegmentType::TimeSig, m3MMR->ticks());
+    EXPECT_TRUE(tsSegMMR && tsSegMMR->endOfMeasureChange());
+    EngravingItem* tsItemMMR = tsSeg->element(0);
+    EXPECT_TRUE(tsItemMMR && tsItemMMR->isTimeSig());
+
+    MScore::useRead302InTestMode = use302;
+}
+
+TEST_F(Engraving_MeasureTests, MMRestContinuationCourtesies) {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrContinuationCourtesies.mscz");
+    EXPECT_TRUE(score);
+
+    auto checkSegmentsAndItems = [](Measure* m, bool continuationRepeat) {
+        Fraction tick = continuationRepeat ? Fraction(0, 0) : m->ticks();
+
+        SegmentType timeSegType = continuationRepeat ? SegmentType::TimeSigStartRepeatAnnounce : SegmentType::TimeSigRepeatAnnounce;
+        Segment* tsSeg = m->findSegmentR(timeSegType, tick);
+        EXPECT_TRUE(tsSeg);
+        EngravingItem* tsItem = tsSeg->element(0);
+        EXPECT_TRUE(tsItem && tsItem->isTimeSig());
+
+        SegmentType keySegType = continuationRepeat ? SegmentType::KeySigStartRepeatAnnounce : SegmentType::KeySigRepeatAnnounce;
+        Segment* ksSeg = m->findSegmentR(keySegType, tick);
+        EXPECT_TRUE(ksSeg);
+        EngravingItem* ksItem = ksSeg->element(0);
+        EXPECT_TRUE(ksItem && ksItem->isKeySig());
+
+        SegmentType clefSegType = continuationRepeat ? SegmentType::ClefStartRepeatAnnounce : SegmentType::ClefRepeatAnnounce;
+        Segment* clefSeg = m->findSegmentR(clefSegType, tick);
+        EXPECT_TRUE(clefSeg);
+        EngravingItem* clefItem = clefSeg->element(0);
+        EXPECT_TRUE(clefItem && clefItem->isClef());
+    };
+
+    // Check end of measure courtesies
+    Measure* m2 = score->crMeasure(1);
+    EXPECT_TRUE(m2 && !m2->isMMRest());
+    checkSegmentsAndItems(m2, false);
+
+    // Check continuation courtesies
+    Measure* m3 = m2->nextMeasure();
+    EXPECT_TRUE(m3 && !m3->isMMRest());
+    checkSegmentsAndItems(m3, true);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    score->setLayoutAll();
+    score->endCmd();
+
+    Measure* m2MMR = m2->mmRest();
+    EXPECT_TRUE(m2MMR && m2MMR->isMMRest());
+    checkSegmentsAndItems(m2MMR, false);
+
+    Measure* m3MMR = m3->mmRest();
+    EXPECT_TRUE(m3MMR && m3MMR->isMMRest());
+    checkSegmentsAndItems(m3MMR, true);
+
+    MScore::useRead302InTestMode = use302;
 }

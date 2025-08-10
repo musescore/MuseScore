@@ -42,10 +42,16 @@ static const Settings::Key HAS_COMPLETED_FIRST_LAUNCH_SETUP(module_name, "applic
 static const Settings::Key STARTUP_MODE_TYPE(module_name, "application/startup/modeStart");
 static const Settings::Key STARTUP_SCORE_PATH(module_name, "application/startup/startScore");
 
-static const std::string MUSESCORE_ONLINE_HANDBOOK_URL_PATH("/handbook/4");
+static const std::string MUSESCORE_ONLINE_HANDBOOK_URL("https://handbook.musescore.org");
+
 static const std::string MUSESCORE_ASK_FOR_HELP_URL_PATH("/redirect/post/question");
 static const std::string MUSESCORE_FORUM_URL_PATH("/forum");
 static const std::string MUSESCORE_CONTRIBUTE_URL_PATH("/contribute");
+static const std::string MUSEHUB_FREE_MUSE_SOUNDS_URL("https://www.musehub.com/free-musesounds"
+                                                      "?utm_source=mss-app-dialog-ms-free"
+                                                      "&utm_medium=mss-app-dialog-ms-free"
+                                                      "&utm_campaign=mss-app-dialog-ms-free"
+                                                      "&utm_id=mss-app-dialog");
 static const std::string MUSICXML_URL("https://w3.org");
 static const std::string MUSICXML_LICENSE_URL(MUSICXML_URL + "/community/about/process/final/");
 static const std::string MUSICXML_LICENSE_DEED_URL(MUSICXML_URL + "/community/about/process/fsa-deed/");
@@ -77,7 +83,11 @@ void AppShellConfiguration::init()
 
 bool AppShellConfiguration::hasCompletedFirstLaunchSetup() const
 {
+#ifdef Q_OS_WASM
+    return true;
+#else
     return settings()->value(HAS_COMPLETED_FIRST_LAUNCH_SETUP).toBool();
+#endif
 }
 
 void AppShellConfiguration::setHasCompletedFirstLaunchSetup(bool has)
@@ -131,7 +141,7 @@ std::string AppShellConfiguration::handbookUrl() const
         QString::fromStdString(utm)
     };
 
-    return museScoreUrl() + MUSESCORE_ONLINE_HANDBOOK_URL_PATH + "?" + params.join("&").toStdString();
+    return MUSESCORE_ONLINE_HANDBOOK_URL + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::askForHelpUrl() const
@@ -158,6 +168,11 @@ std::string AppShellConfiguration::museScoreForumUrl() const
 std::string AppShellConfiguration::museScoreContributionUrl() const
 {
     return museScoreUrl() + MUSESCORE_CONTRIBUTE_URL_PATH;
+}
+
+std::string AppShellConfiguration::museHubFreeMuseSoundsUrl() const
+{
+    return MUSEHUB_FREE_MUSE_SOUNDS_URL;
 }
 
 std::string AppShellConfiguration::musicXMLLicenseUrl() const

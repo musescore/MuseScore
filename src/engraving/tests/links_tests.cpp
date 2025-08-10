@@ -31,6 +31,7 @@
 #include "dom/part.h"
 #include "dom/segment.h"
 #include "dom/tempotext.h"
+#include "dom/text.h"
 #include "dom/undo.h"
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -470,8 +471,12 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(score->excerpts().size() == 1);
 }
 
-TEST_F(Engraving_LinksTests, testMMRestLink)
+TEST_F(Engraving_LinksTests, DISABLED_testMMRestLink)
 {
+    // NOTE: Temporarily disabling this test because it assumes that the loaded score has multiMeasureRests active,
+    // but that is not the case because the mscx file *doesn't contain the style information*, so this
+    // score gets actually loaded *without* mmRest, making the test invalid. [M.S.]
+
     MasterScore* score = ScoreRW::readScore(LINKS_DATA_DIR + u"testMMRestLink.mscx");
     ASSERT_TRUE(score);
 
@@ -505,5 +510,38 @@ TEST_F(Engraving_LinksTests, testMMRestLink)
         EngravingItem* linkedItem = toEngravingItem(linkedObj);
         EXPECT_FALSE(linkedItem->visible());
     }
+    delete score;
+}
+
+TEST_F(Engraving_LinksTests, testPickupLinkedStaff) {
+    // Read test score file in
+    MasterScore* score = ScoreRW::readScore(LINKS_DATA_DIR + u"testPickupLinkedStaff.mscx");
+    ASSERT_TRUE(score);
+
+    // Create an original staff and a clone of that staff
+    Staff* ostaff = score->staff(0);
+    Staff* staff = ostaff->clone();
+    // Set the cloned staff to same score
+    staff->setScore(score);
+    ASSERT_TRUE(staff->score() == score);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
+    staff->setPart(ostaff->part());
+    score->undoInsertStaff(staff, 1, /* createRests = */ false);
+    Excerpt::cloneStaff(ostaff, staff);
+    score->endCmd();
+
+    // Check number of staves
+    EXPECT_EQ(score->staves().size(), 2);
+
+    String outputPath = u"testPickupLinkedStaffCloned.mscx";
+
+    String referencePath = LINKS_DATA_DIR + u"testPickupLinkedStaff-ref.mscx";
+
+    // Save Cloned staff file, and compare with reference file
+    bool saveAndCompare = ScoreComp::saveCompareScore(score, outputPath, referencePath);
+
+    EXPECT_TRUE(saveAndCompare);
+
     delete score;
 }

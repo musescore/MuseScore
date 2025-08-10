@@ -53,7 +53,6 @@ class BagpipeEmbellishment;
 class BarLine;
 class Beam;
 class Bend;
-class StretchedBend;
 class Box;
 class HBox;
 class VBox;
@@ -193,7 +192,6 @@ public:
     static void read(BarLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Beam* b, XmlReader& xml, ReadContext& ctx);
     static void read(Bend* b, XmlReader& xml, ReadContext& ctx);
-    static void read(StretchedBend* b, XmlReader& xml, ReadContext& ctx);
     static void read(Box* b, XmlReader& xml, ReadContext& ctx);
     static void read(HBox* b, XmlReader& xml, ReadContext& ctx);
     static void read(VBox* b, XmlReader& xml, ReadContext& ctx);

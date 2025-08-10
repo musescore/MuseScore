@@ -19,28 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "eid.h"
+
 #include <string>
 #include <random>
 
-#include <logger.h>
-
-#include "eid.h"
+#include "global/log.h"
 
 using namespace mu::engraving;
 
 static constexpr char SEPARATOR = '_';
 
-static std::string int64ToBase64Str(uint64_t n)
+static char* toBase64Chars(char* const first, char* const last, uint64_t n)
 {
     static constexpr char CHARS[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-    std::stringstream ss;
+    IF_ASSERT_FAILED(static_cast<size_t>(last - first) >= EID::MAX_UINT64_BASE64_SIZE) {
+        return first;
+    }
+
+    char* it = first;
     do {
-        ss << CHARS[n & 63];
-        n = n >> 6;
+        *it++ = CHARS[n % 64];
+        n = n / 64;
     } while (n != 0);
 
-    return ss.str();
+    return it;
 }
 
 static constexpr uint64_t charToInt(char c)
@@ -128,11 +132,26 @@ static uint64_t base64StrToInt64(const std::string& s)
     return result;
 }
 
+char* EID::toChars(char* const first, char* const last) const
+{
+    IF_ASSERT_FAILED(static_cast<size_t>(last - first) >= MAX_STR_SIZE) {
+        return first;
+    }
+
+    char* it = toBase64Chars(first, last, m_first);
+    *it++ = SEPARATOR;
+    it = toBase64Chars(it, last, m_second);
+
+    return it;
+}
+
 std::string EID::toStdString() const
 {
-    std::stringstream ss;
-    ss << int64ToBase64Str(m_first) << SEPARATOR << int64ToBase64Str(m_second);
-    return ss.str();
+    std::string base64Repr(MAX_STR_SIZE, char {});
+    const char* last = toChars(base64Repr.data(), base64Repr.data() + base64Repr.size());
+    base64Repr.resize(last - base64Repr.data());
+
+    return base64Repr;
 }
 
 EID EID::fromStdString(const std::string& s)
@@ -167,4 +186,19 @@ EID EID::newUnique()
     static std::uniform_int_distribution<uint64_t> s_unifDist;
 
     return EID(s_unifDist(s_engine), s_unifDist(s_engine));
+}
+
+// FOR UNIT TESTING
+// EIDs are creates sequentially instead of randomly for test repeatability
+
+EID EID::newUniqueTestMode(uint64_t& maxVal)
+{
+    ++maxVal;
+    return EID(maxVal, maxVal);
+}
+
+void EID::updateMaxValTestMode(const EID& curEID, uint64_t& maxVal)
+{
+    maxVal = std::max(maxVal, curEID.m_first);
+    maxVal = std::max(maxVal, curEID.m_second);
 }

@@ -36,6 +36,7 @@
 #include "barline.h"
 #include "excerpt.h"
 #include "factory.h"
+#include "box.h"
 #include "linkedobjects.h"
 #include "repeatlist.h"
 #include "rest.h"

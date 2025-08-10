@@ -91,7 +91,7 @@ String TieJumpPoint::precedingJumpItemName() const
         }
 
         const Marker* marker = toMarker(e);
-        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+        if (marker->isRightMarker()) {
             continue;
         }
 

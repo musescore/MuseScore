@@ -20,13 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_FRET_H
-#define MU_ENGRAVING_FRET_H
+#pragma once
 
 #include <vector>
 
 #include "engravingitem.h"
-#include "harmony.h"
 
 #include "draw/types/font.h"
 
@@ -34,6 +32,7 @@ namespace mu::engraving {
 class Factory;
 class StringData;
 class Chord;
+class Harmony;
 
 // Keep this in order - not used directly for comparisons, but the dots will appear in
 // this order in fret multidot mode. See fretproperties.cpp.
@@ -131,12 +130,9 @@ private:
     int m_fretOffset = 0;
     int m_maxFrets = 0;
     bool m_showNut = true;
-    Orientation m_orientation = Orientation::VERTICAL;
-
-    double m_userMag = 1.0;
-    int m_numPos = 0;
-
     bool m_showFingering = false;
+    Orientation m_orientation = Orientation::VERTICAL;
+    double m_userMag = 1.0;
 };
 
 //---------------------------------------------------------
@@ -167,9 +163,9 @@ public:
     EngravingItem* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
-    Segment* segment() const { return toSegment(explicitParent()); }
+    Segment* segment() const;
 
-    static std::shared_ptr<FretDiagram> createFromString(Score* score, const String& s);
+    static String patternFromDiagram(const FretDiagram* diagram);
 
     void updateDiagram(const String& harmonyName);
 
@@ -202,13 +198,15 @@ public:
     void setShowNut(bool val) { m_showNut = val; }
     double userMag() const { return m_userMag; }
     void setUserMag(double m) { m_userMag = m; }
-    int numPos() const { return m_numPos; }
+    int numPos() const;
 
     Orientation orientation() const { return m_orientation; }
 
-    String harmonyText() const { return m_harmony ? m_harmony->plainText() : String(); }
-    void setHarmony(String harmonyText);
+    String harmonyText() const;
     Harmony* harmony() const { return m_harmony; }
+    void setHarmony(String harmonyText);
+    void linkHarmony(Harmony* harmony);
+    void unlinkHarmony();
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
     FretItem::Marker marker(int s) const;
@@ -225,15 +223,17 @@ public:
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
 
+    RectF drag(EditData&) override;
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    void endEditDrag(EditData& editData) override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+
+    void setTrack(track_idx_t val) override;
 
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
@@ -242,6 +242,13 @@ public:
     void setShowFingering(bool v) { m_showFingering = v; }
     const std::vector<int>& fingering() const { return m_fingering; }
     void setFingering(std::vector<int> v);
+
+    static FretDiagram* makeFromHarmonyOrFretDiagram(const EngravingItem* harmonyOrFretDiagram);
+
+    bool isInFretBox() const;
+    bool isCustom(const String& harmonyNameForCompare) const;
+
+    bool allowTimeAnchor() const override { return explicitParent() && parent()->isSegment(); }
 
     friend class FretUndoData;
 
@@ -264,6 +271,7 @@ public:
         double stringExtendBottom = 0.0;
         double dotDiameter = 0.0;
         double fretNumPadding = 0.0;
+        double gridHeight = 0.0;
         std::vector<FingeringItem> fingeringItems;
         PainterPath slurPath = PainterPath();
         String fretText = String();
@@ -276,7 +284,7 @@ private:
     FretDiagram(Segment* parent = nullptr);
     FretDiagram(const FretDiagram&);
 
-    void readHarmonyToDiagramFile(const muse::io::path_t& filePath);
+    void readHarmonyToDiagramFile(const muse::io::path_t& filePath) const;
 
     void initDefaultValues();
 
@@ -287,6 +295,8 @@ private:
     void removeDotsMarkers(int ss, int es, int fret);
 
     static void applyDiagramPattern(FretDiagram* diagram, const String& pattern);
+
+    void applyAlignmentToHarmony();
 
     int m_strings = 0;
     int m_frets = 0;
@@ -307,7 +317,6 @@ private:
     Harmony* m_harmony = nullptr;
 
     double m_userMag = 1.0;                 // allowed 0.1 - 10.0
-    int m_numPos = 0;
 
     bool m_showFingering = false;
     std::vector<int> m_fingering = std::vector<int>(m_strings, 0);
@@ -316,6 +325,4 @@ private:
 
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::FretDiagram*)
-#endif
-
 #endif

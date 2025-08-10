@@ -37,8 +37,9 @@ using namespace muse;
 
 bool SpannersMetaParser::isAbleToParse(const EngravingItem* spannerItem)
 {
-    static const std::unordered_set<ElementType> SUPPORTED_TYPES = {
+    static const std::unordered_set<ElementType> SUPPORTED_TYPES {
         ElementType::SLUR,
+        ElementType::HAMMER_ON_PULL_OFF,
         ElementType::PEDAL,
         ElementType::LET_RING,
         ElementType::PALM_MUTE,
@@ -48,7 +49,7 @@ bool SpannersMetaParser::isAbleToParse(const EngravingItem* spannerItem)
         ElementType::VIBRATO,
     };
 
-    return SUPPORTED_TYPES.find(spannerItem->type()) != SUPPORTED_TYPES.cend();
+    return muse::contains(SUPPORTED_TYPES, spannerItem->type());
 }
 
 void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingContext& spannerCtx, mpe::ArticulationMap& result)
@@ -62,14 +63,15 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         return;
     }
 
-    mpe::ArticulationType type = mpe::ArticulationType::Undefined;
+    const int overallDurationTicks = SpannerFilter::spannerActualDurationTicks(spanner, spannerCtx.nominalDurationTicks);
 
+    mpe::ArticulationType type = mpe::ArticulationType::Undefined;
     mpe::pitch_level_t overallPitchRange = 0;
     mpe::dynamic_level_t overallDynamicRange = 0;
-    int overallDurationTicks = SpannerFilter::spannerActualDurationTicks(spanner, spannerCtx.nominalDurationTicks);
 
     switch (spanner->type()) {
-    case ElementType::SLUR: {
+    case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF: {
         type = mpe::ArticulationType::Legato;
         break;
     }
@@ -153,18 +155,10 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     articulationMeta.timestamp = spannerCtx.nominalTimestamp;
     articulationMeta.overallPitchChangesRange = overallPitchRange;
     articulationMeta.overallDynamicChangesRange = overallDynamicRange;
-    articulationMeta.overallDuration = spannerDuration(spannerCtx.score,
-                                                       spannerCtx.nominalPositionStartTick,
-                                                       overallDurationTicks);
+    articulationMeta.overallDuration = durationFromStartAndTicks(spannerCtx.score,
+                                                                 spannerCtx.nominalPositionStartTick,
+                                                                 overallDurationTicks,
+                                                                 spannerCtx.positionTickOffset);
 
     appendArticulationData(std::move(articulationMeta), result);
-}
-
-mpe::duration_t SpannersMetaParser::spannerDuration(const Score* score, const int positionTick, const int durationTicks)
-{
-    if (!score) {
-        return 0;
-    }
-
-    return durationFromStartAndTicks(score, positionTick, durationTicks, 0);
 }

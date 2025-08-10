@@ -2,10 +2,11 @@ name: 'Build: Without Qt'
 
 on:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   run_tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1

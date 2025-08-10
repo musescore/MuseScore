@@ -149,7 +149,7 @@ void TestCaseRunModel::updateStep(const StepInfo& stepInfo, const Ret& ret)
     StepItem& s = m_steps[idx];
     s.status = stepStatusToString(stepInfo.status);
     if (stepInfo.status == StepStatus::Error) {
-        s.status = std::any_cast<QString>(ret.data("err"));
+        s.status = ret.data<QString>("err", QString("Unknown error"));
     }
 
     if (stepInfo.durationMsec) {

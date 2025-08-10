@@ -38,10 +38,12 @@ FlatRadioButton {
 
     signal closeRequested()
 
-    width: Math.min(200, implicitContentWidth)
+    implicitWidth: Math.min(200, implicitContentWidth)
+    implicitHeight: ListView.view.height
 
-    RowLayout {
-        id: contentRow
+    padding: 0
+
+    contentItem: RowLayout {
         anchors.fill: parent
         spacing: 4
 
@@ -110,14 +112,21 @@ FlatRadioButton {
 
 
         MouseArea {
-            id: rightClickArea
             anchors.fill: parent
 
-            acceptedButtons: Qt.RightButton
+            acceptedButtons: Qt.RightButton | Qt.MiddleButton
 
             onClicked: function(mouse) {
-                contextMenuItemsRequested()
-                contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+                if (mouse.button === Qt.RightButton) {
+                    contextMenuItemsRequested()
+                    contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+
+                    return
+                }
+
+                if (mouse.button === Qt.MiddleButton) {
+                    root.closeRequested()
+                }
             }
 
             ContextMenuLoader {

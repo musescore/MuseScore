@@ -54,10 +54,6 @@ FlatButton {
         property bool needActiveFirstItem: false
     }
 
-    Component.onCompleted: {
-        popupController.load()
-    }
-
     onClicked: {
         prv.needActiveFirstItem = root.navigation.highlight
         contentLoader.active = !contentLoader.active
@@ -72,7 +68,12 @@ FlatButton {
         contentWidth: contentLoader.width
         contentHeight: contentLoader.height
 
+        placementPolicies: PopupView.PreferBelow | PopupView.IgnoreFit
+
         closePolicies: PopupView.NoAutoClose
+
+        openPolicies: PopupView.Default | PopupView.OpenOnContentReady
+        isContentReady: false
 
         contentData: Loader {
             id: contentLoader
@@ -83,14 +84,24 @@ FlatButton {
             height: implicitHeight
 
             sourceComponent: root.popupContent
+
+            onStatusChanged: {
+                if (contentLoader.status == Loader.Ready) {
+                    Qt.callLater(popup.markContentIsReady)
+                }
+            }
         }
 
         onContentHeightChanged: {
-            checkForInsufficientSpace()
+            if (contentHeight > 0) {
+                Qt.callLater(checkForInsufficientSpace)
+            }
         }
 
         onOpened: {
-            Qt.callLater(checkForInsufficientSpace)
+            if (contentHeight > 0) {
+                Qt.callLater(checkForInsufficientSpace)
+            }
 
             if (prv.needActiveFirstItem) {
                 forceFocusIn()
@@ -101,8 +112,7 @@ FlatButton {
 
         onClosed: {
             contentLoader.active = false
-
-            root.ensureContentVisibleRequested(root.anchorItem.height) // reset contentY
+            popup.isContentReady = false
         }
 
         function forceFocusIn() {
@@ -112,15 +122,22 @@ FlatButton {
         }
 
         function checkForInsufficientSpace() {
-            if (!isOpened) {
+            var buttonGlobalPos = root.mapToItem(root.anchorItem, Qt.point(0, 0))
+            var popupHeight = contentHeight + padding*2 + margins*2
+
+            var buttonBottom = buttonGlobalPos.y + root.height
+            var spaceBelow = root.anchorItem.height - buttonBottom
+            if (spaceBelow > popupHeight) {
                 return
             }
 
-            var buttonGlobalPos = root.mapToItem(root.anchorItem, Qt.point(0, 0))
-            var popupHeight = contentHeight + padding*2 + margins*2
-            var invisibleContentHeight = root.anchorItem.height - (buttonGlobalPos.y + root.height + popupHeight)
+            var invisibleContentHeight = spaceBelow - popupHeight
 
             root.ensureContentVisibleRequested(invisibleContentHeight)
+        }
+
+        function markContentIsReady() {
+            popup.isContentReady = true
         }
 
         property NavigationPanel navigationPanel: NavigationPanel {

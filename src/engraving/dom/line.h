@@ -45,7 +45,6 @@ class LineSegment : public SpannerSegment
     OBJECT_ALLOCATOR(engraving, LineSegment)
 protected:
     virtual void editDrag(EditData&) override;
-    void updateAnchors(EditData& ed) const;
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
     std::vector<LineF> gripAnchorLines(Grip) const override;

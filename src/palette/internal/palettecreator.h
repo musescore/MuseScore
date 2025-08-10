@@ -57,11 +57,12 @@ public:
     static PalettePtr newAccidentalsPalette(bool defaultPalette = false);
     static PalettePtr newBarLinePalette(bool defaultPalette = false);
     static PalettePtr newLinesPalette(bool defaultPalette = false);
-    static PalettePtr newFretboardDiagramPalette();
+    static PalettePtr newFretboardDiagramPalette(bool defaultPalette = false);
     static PalettePtr newGuitarPalette(bool defaultPalette = false);
     static PalettePtr newKeyboardPalette();
     static PalettePtr newPitchPalette(bool defaultPalette = false);
     static PalettePtr newHarpPalette();
+    static PalettePtr newHandbellsPalette(bool defaultPalette = false);
 
     static PaletteTreePtr newMasterPaletteTree();
     static PaletteTreePtr newDefaultPaletteTree();

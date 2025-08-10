@@ -24,20 +24,18 @@
 
 #include "containers.h"
 
-#include "engraving/dom/factory.h"
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/barline.h"
-#include "engraving/dom/box.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/glissando.h"
-#include "engraving/dom/harmony.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/lyrics.h"
@@ -46,8 +44,8 @@
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/notedot.h"
-#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
@@ -56,14 +54,14 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stringdata.h"
-#include "types/symid.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
-#include "engraving/dom/fretcircle.h"
+#include "engraving/types/symid.h"
 
+#include "guitarprodrumset.h"
 #include "utils.h"
 
 #include "log.h"
@@ -100,7 +98,7 @@ void GuitarPro5::readInfo()
     artist       = readDelphiString();
     album        = readDelphiString();
     composer     = readDelphiString();
-    readDelphiString();
+    poet         = readDelphiString();
     String copyright = readDelphiString();
     if (!copyright.isEmpty()) {
         score->setMetaTag(u"copyright", copyright);
@@ -197,6 +195,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     uint8_t beatBits = readUInt8();
     bool dotted    = beatBits & BEAT_DOTTED;
     bool hasSlur = false;
+    bool hasHammerOnPullOff = false;
     bool hasLetRing = false;
     bool hasPalmMute = false;
     bool hasTrill = false;
@@ -346,7 +345,8 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 toChord(cr)->add(note);
 
                 ReadNoteResult readResult = readNote(6 - i, note);
-                hasSlur = readResult.slur;
+                hasSlur = readResult.slur || hasSlur;
+                hasHammerOnPullOff = readResult.hammerOnPullOff || hasHammerOnPullOff;
                 hasLetRing = readResult.letRing || hasLetRing;
                 hasPalmMute = readResult.palmMute || hasPalmMute;
                 hasTrill = readResult.trill || hasTrill;
@@ -395,11 +395,6 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     if (cr && cr->isChord()) {
         Chord* chord = toChord(cr);
 
-        if (engravingConfiguration()->enableExperimentalFretCircle()) {
-            FretCircle* c = Factory::createFretCircle(chord);
-            chord->add(c);
-        }
-
         bool hasVibratoLeftHandOnBeat = false;
         bool hasVibratoWTremBarOnBeat = false;
 
@@ -424,6 +419,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         addLetRing(cr, hasLetRing);
         addPalmMute(cr, hasPalmMute);
         addTrill(cr, hasTrill);
+        addHammerOnPullOff(cr, hasHammerOnPullOff);
         addRasgueado(cr, m_currentBeatHasRasgueado);
         addVibratoLeftHand(cr, hasVibratoLeftHand);
         addVibratoWTremBar(cr, hasVibratoWTremBar);
@@ -849,9 +845,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 bool GuitarPro5::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
-    }
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
 
     f = io;
 
@@ -899,10 +893,7 @@ bool GuitarPro5::read(IODevice* io)
         }
     }
 
-    slurs = new Slur*[staves];
-    for (size_t i = 0; i < staves; ++i) {
-        slurs[i] = 0;
-    }
+    slurs.resize(staves, nullptr);
 
     int tnumerator   = 4;
     int tdenominator = 4;
@@ -923,7 +914,7 @@ bool GuitarPro5::read(IODevice* io)
         }
         if (barBits & SCORE_REPEAT_END) {                    // number of repeats
             bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::END;
-            bar.repeats = readUInt8() + 1;
+            bar.repeats = readUInt8();
         }
         if (barBits & SCORE_MARKER) {
             bar.marker = readDelphiString();           // new section?
@@ -937,6 +928,7 @@ bool GuitarPro5::read(IODevice* io)
                 bar.volta.voltaInfo.push_back(voltaNumber & 1);
                 voltaNumber >>= 1;
             }
+            bar.repeats = static_cast<int>(bar.volta.voltaInfo.size()) + 1;
         }
         if (barBits & SCORE_KEYSIG) {
             int currentKey = readUInt8();
@@ -1087,9 +1079,7 @@ bool GuitarPro5::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->applyBendsToChords();
-    }
+    m_guitarBendImporter->applyBendsToChords();
 
     return true;
 }
@@ -1111,7 +1101,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         bendParent = note;
     }
     if (modMask1 & EFFECT_HAMMER) {
-        result.slur = true;
+        result.hammerOnPullOff = true;
     }
     if (modMask1 & EFFECT_LET_RING) {
         result.letRing = true;
@@ -1275,8 +1265,8 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             Note* harmonicNote = Factory::createNote(note->chord());
 
             harmonicNote->setHarmonic(true);
-            harmonicNote->setPlay(true);
-            note->setPlay(false);
+            harmonicNote->setPlay(false);
+            note->setPlay(true);
             /// @note option to show or not additional harmonic fret in "<>" to be implemented
             ///harmonicNote->setDisplayFret(Note::DisplayFretOption::ArtificialHarmonic);
             ///note->setDisplayFret(Note::DisplayFretOption::Hide);
@@ -1321,6 +1311,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
 
             harmonicNote->setPitch(std::clamp(pitch, 0, 127));
             harmonicNote->setTpcFromPitch(Prefer::SHARPS);
+            note->setHarmonicPitchOffset(harmonicNote->pitch() - note->pitch());
             note->chord()->add(harmonicNote);
 
             switch (type) {
@@ -1336,10 +1327,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             case HARMONIC_MARK_SEMI:
                 result.harmonicSemi = true;
                 break;
-            }
-
-            if (!bendData.empty()) {
-                bendParent = harmonicNote;
             }
         }
     }

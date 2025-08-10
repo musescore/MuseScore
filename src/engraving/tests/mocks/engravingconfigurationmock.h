@@ -66,6 +66,10 @@ public:
     MOCK_METHOD(void, setDynamicsApplyToAllVoices, (bool), (override));
     MOCK_METHOD((muse::async::Channel<bool>), dynamicsApplyToAllVoicesChanged, (), (const, override));
 
+    MOCK_METHOD(bool, autoUpdateFretboardDiagrams, (), (const, override));
+    MOCK_METHOD(void, setAutoUpdateFretboardDiagrams, (bool), (override));
+    MOCK_METHOD((muse::async::Channel<bool>), autoUpdateFretboardDiagramsChanged, (), (const, override));
+
     MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
     MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));
@@ -96,12 +100,9 @@ public:
     MOCK_METHOD(void, setDoNotSaveEIDsForBackCompat, (bool), (override));
 
     MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
-    MOCK_METHOD(bool, experimentalGuitarBendImport, (), (const, override));
-    MOCK_METHOD(void, setExperimentalGuitarBendImport, (bool), (override));
     MOCK_METHOD(bool, shouldAddParenthesisOnStandardStaff, (), (const, override));
     MOCK_METHOD(bool, negativeFretsAllowed, (), (const, override));
     MOCK_METHOD(bool, crossNoteHeadAlwaysBlack, (), (const, override));
-    MOCK_METHOD(bool, enableExperimentalFretCircle, (), (const, override));
     MOCK_METHOD(void, setGuitarProMultivoiceEnabled, (bool), (override));
     MOCK_METHOD(bool, guitarProMultivoiceEnabled, (), (const, override));
     MOCK_METHOD(bool, minDistanceForPartialSkylineCalculated, (), (const, override));

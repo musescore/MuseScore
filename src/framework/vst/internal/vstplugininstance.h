@@ -31,8 +31,8 @@
 #include "async/asyncable.h"
 #include "async/notification.h"
 #include "async/channel.h"
-#include "audio/iaudiothreadsecurer.h"
-#include "audio/audiotypes.h"
+#include "audio/common/iaudiothreadsecurer.h"
+#include "audio/common/audiotypes.h"
 
 #include "../ivstmodulesrepository.h"
 #include "../vsttypes.h"
@@ -71,7 +71,7 @@ public:
 
     async::Notification loadingCompleted() const override;
 
-    async::Channel<muse::audio::AudioUnitConfig> pluginSettingsChanged() const;
+    async::Channel<muse::audio::AudioUnitConfig> pluginSettingsChanged() const override;
 
 private:
     void rescanParams();

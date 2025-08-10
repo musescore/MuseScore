@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -41,7 +41,7 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
-        <mergeMatchingRests>1</mergeMatchingRests>
+        <mergeMatchingRests>on</mergeMatchingRests>
         <bracket type="0" span="2" col="0"/>
         </Staff>
       <trackName>TENOR LEAD</trackName>
@@ -115,7 +115,7 @@ LEAD</longName>
           </StaffType>
         <defaultConcertClef>G8vb</defaultConcertClef>
         <defaultTransposingClef>F</defaultTransposingClef>
-        <mergeMatchingRests>1</mergeMatchingRests>
+        <mergeMatchingRests>on</mergeMatchingRests>
         </Staff>
       <trackName>BARITONE BASS</trackName>
       <Instrument id="bass">

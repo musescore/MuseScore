@@ -26,7 +26,9 @@
 #include "dom/chord.h"
 #include "dom/lyrics.h"
 #include "dom/measure.h"
+#include "dom/measurenumber.h"
 #include "dom/note.h"
+#include "dom/parenthesis.h"
 #include "dom/segment.h"
 #include "dom/staff.h"
 #include "dom/stafflines.h"
@@ -41,14 +43,6 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
 {
     TRACEFUNC;
 
-    std::vector<staff_idx_t> tabStaves;
-    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        const Staff* staff = ctx.dom().staff(staffIdx);
-        if (staff->isTabStaff(Fraction())) {
-            tabStaves.push_back(staffIdx);
-        }
-    }
-
     bool maskBarlines = ctx.conf().styleB(Sid::maskBarlinesForText);
 
     for (const System* system : page->systems()) {
@@ -59,10 +53,6 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 continue;
             }
             Measure* measure = toMeasure(mb);
-
-            for (staff_idx_t staffIdx : tabStaves) {
-                maskTABStringLinesForFrets(measure, staffIdx, ctx);
-            }
 
             if (maskBarlines) {
                 for (const Segment& seg : measure->segments()) {
@@ -111,7 +101,7 @@ void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase
 
     for (TextBase* text : allSystemText) {
         const double fontSizeScaleFactor = text->size() / 10.0;
-        const double collisionPadding = 0.25 * spatium * fontSizeScaleFactor;
+        const double collisionPadding = 0.2 * spatium * fontSizeScaleFactor;
         const bool hasFrame = text->frameType() != FrameType::NO_FRAME;
         const bool useHighResShape = !text->isDynamic() && !text->hasFrame();
         const double maskPadding = hasFrame ? 0.0 : std::clamp(0.5 * spatium * fontSizeScaleFactor, 0.1 * spatium, spatium);
@@ -141,6 +131,7 @@ void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase
     }
 
     if (mask.empty()) {
+        barline->mutldata()->setMask(mask);
         return;
     }
 
@@ -155,7 +146,7 @@ void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase
 
 void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFragmentLength)
 {
-    for (int i = 0; i < mask.size(); ++i) {
+    for (size_t i = 0; i < mask.size(); ++i) {
         ShapeElement& el = mask.elements()[i];
 
         if (el.top() - itemShape.top() < minFragmentLength) {
@@ -172,7 +163,7 @@ void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFrag
             el.adjust(0.0, 0.0, minFragmentLength, 0.0);
         }
 
-        for (int j = i + 1; j < mask.size(); ++j) {
+        for (size_t j = i + 1; j < mask.size(); ++j) {
             ShapeElement& otherEl = mask.elements()[j];
             if (intersects(el.left(), el.right(), otherEl.left(), otherEl.right())) {
                 bool otherIsBelow = otherEl.y() > el.y();
@@ -202,6 +193,11 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
         if (!mb->isMeasure()) {
             continue;
         }
+        for (const MStaff* mstaff : toMeasure(mb)->mstaves()) {
+            if (MeasureNumber* measureNumber = mstaff->measureNumber()) {
+                allText.push_back(measureNumber);
+            }
+        }
         for (const Segment& s : toMeasure(mb)->segments()) {
             if (!s.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE) || !s.enabled()) {
                 continue;
@@ -228,7 +224,8 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
     }
 
     for (SpannerSegment* spannerSegment : system->spannerSegments()) {
-        if (!spannerSegment->isTextLineBaseSegment() || !system->staff(spannerSegment->staffIdx())->show()) {
+        if (!spannerSegment->isTextLineBaseSegment() || !system->staff(spannerSegment->staffIdx())->show()
+            || !spannerSegment->getProperty(Pid::VISIBLE).toBool()) {
             continue;
         }
         TextLineBaseSegment* textLineBaseSegment = static_cast<TextLineBaseSegment*>(spannerSegment);
@@ -245,11 +242,11 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
     return allText;
 }
 
-void MaskLayout::maskTABStringLinesForFrets(Measure* measure, staff_idx_t staffIdx, const LayoutContext& ctx)
+void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const LayoutContext& ctx)
 {
+    staff_idx_t staffIdx = staffLines->staffIdx();
     bool linesThrough = ctx.dom().staff(staffIdx)->staffType(Fraction())->linesThrough();
 
-    StaffLines* staffLines = measure->staffLines(staffIdx);
     PointF staffLinesPos = staffLines->pagePos();
 
     double padding = ctx.conf().styleMM(Sid::tabFretPadding);
@@ -262,13 +259,24 @@ void MaskLayout::maskTABStringLinesForFrets(Measure* measure, staff_idx_t staffI
     auto maskFret = [&mask, linesThrough, padding, staffLinesPos] (Chord* chord) {
         for (Note* note : chord->notes()) {
             if (note->visible() && !note->shouldHideFret() && (!linesThrough || note->fretConflict())) {
-                RectF noteShape = note->ldata()->bbox().translated(note->pagePos());
+                Shape noteShape = note->ldata()->bbox();
+                const Parenthesis* leftParen = note->leftParen();
+                if (leftParen && leftParen->addToSkyline()) {
+                    noteShape.add(leftParen->ldata()->bbox().translated(leftParen->pos()));
+                }
+                const Parenthesis* rightParen = note->rightParen();
+                if (rightParen && rightParen->addToSkyline()) {
+                    noteShape.add(rightParen->ldata()->bbox().translated(rightParen->pos()));
+                }
+                noteShape.translate(note->pagePos());
+
                 noteShape.pad(padding);
                 mask.add(noteShape.translated(-staffLinesPos));
             }
         }
     };
 
+    const Measure* measure = staffLines->measure();
     for (Segment* seg = measure->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
         for (track_idx_t track = startTrack; track < endTrack; ++track) {
             EngravingItem* el = seg->element(track);

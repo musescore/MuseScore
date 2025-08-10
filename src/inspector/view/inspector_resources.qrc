@@ -25,6 +25,7 @@
         <file>qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml</file>
         <file>qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml</file>
+        <file>qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/common/PopupViewButton.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorTabBar.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorTabButton.qml</file>
@@ -50,7 +51,6 @@
         <file>qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml</file>
-        <file>qml/MuseScore/Inspector/score/ScoreAccessibilityInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/common/TextSection.qml</file>
@@ -99,6 +99,9 @@
         <file>qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/AppearanceSettings.qml</file>
         <file>qml/MuseScore/Inspector/text/TextSettings.qml</file>
+        <file>qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml</file>
+        <file>qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml</file>
+        <file>qml/MuseScore/Inspector/text/textstylepopup/FrameSubPopup.qml</file>
         <file>qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/rests/RestBeamSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/rests/RestSettings.qml</file>
@@ -117,5 +120,14 @@
         <file>qml/MuseScore/Inspector/notation/lines/GradualTempoChangeSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangeStyleTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/FretFrameSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameScalesSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsView.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/playcounttext/PlayCountSettings.qml</file>
     </qresource>
 </RCC>

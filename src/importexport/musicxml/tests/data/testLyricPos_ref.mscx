@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.26998</pageWidth>
@@ -20,6 +21,7 @@
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
+      <articulationFontSize>10</articulationFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <tempoFontSize>10</tempoFontSize>
       <tempoChangeFontSize>10</tempoChangeFontSize>
@@ -27,8 +29,6 @@
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
@@ -52,7 +52,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Lyric position</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -118,119 +119,150 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Lyric position</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <text>James Mizen</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>K_K</eid>
               <placement>above</placement>
               <text>Lyrics</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>L_L</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>N_N</eid>
               <placement>above</placement>
               <text>above</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>O_O</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>Q_Q</eid>
               <placement>above</placement>
               <text>the</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>R_R</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>T_T</eid>
               <placement>above</placement>
               <text>stave</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>U_U</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         <voice>
           <Chord>
+            <eid>W_W</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>X_X</eid>
               <text>Lyrics</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>Y_Y</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>Z_Z</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>a_a</eid>
               <text>below</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>b_b</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>d_d</eid>
               <text>the</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>e_e</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>g_g</eid>
               <text>stave!</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>h_h</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>

@@ -22,11 +22,9 @@
 
 #include "engravingobject.h"
 
-#include <iterator>
-#include <unordered_set>
+#include "global/containers.h"
 
 #include "style/textstyle.h"
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "bracketItem.h"
@@ -42,11 +40,6 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 ElementStyle const EngravingObject::EMPTY_STYLE;
-
-EngravingObject* EngravingObjectList::at(size_t i) const
-{
-    return *std::next(begin(), i);
-}
 
 EngravingObject::EngravingObject(const ElementType& type, EngravingObject* parent)
     : m_type(type)
@@ -117,6 +110,7 @@ EngravingObject::~EngravingObject()
                               && !this->isType(ElementType::SCORE)
                               && score()->rootItem() && score()->rootItem()->dummy();
 
+        // copy because moveToDummy might modify children
         EngravingObjectList children = m_children;
         for (EngravingObject* c : children) {
             if (canMoveToDummy) {
@@ -223,7 +217,7 @@ void EngravingObject::removeChild(EngravingObject* o)
         return;
     }
     o->m_parent = nullptr;
-    m_children.remove(o);
+    muse::remove(m_children, o);
 }
 
 EngravingObject* EngravingObject::parent() const
@@ -533,11 +527,7 @@ void EngravingObject::linkTo(EngravingObject* element)
         setLinks(element->m_links);
         assert(m_links->contains(element));
     } else {
-        if (isStaff()) {
-            setLinks(new LinkedObjects(score(), -1));       // don’t use lid
-        } else {
-            setLinks(new LinkedObjects(score()));
-        }
+        setLinks(new LinkedObjects());
         m_links->push_back(element);
         element->setLinks(m_links);
     }
@@ -697,7 +687,7 @@ const char* EngravingObject::typeName() const
 
 TranslatableString EngravingObject::typeUserName() const
 {
-    return TConv::userName(type());
+    return TConv::capitalizedUserName(type());
 }
 
 String EngravingObject::translatedTypeUserName() const
@@ -749,6 +739,7 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::STAFF_TEXT
            || type() == ElementType::SYSTEM_TEXT
            || type() == ElementType::TRIPLET_FEEL
+           || type() == ElementType::PLAY_COUNT_TEXT
            || type() == ElementType::PLAYTECH_ANNOTATION
            || type() == ElementType::CAPO
            || type() == ElementType::STRING_TUNINGS
@@ -761,7 +752,8 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::MMREST_RANGE
            || type() == ElementType::STICKING
            || type() == ElementType::HARP_DIAGRAM
-           || type() == ElementType::GUITAR_BEND_TEXT;
+           || type() == ElementType::GUITAR_BEND_TEXT
+           || type() == ElementType::HAMMER_ON_PULL_OFF_TEXT;
 }
 
 //---------------------------------------------------------

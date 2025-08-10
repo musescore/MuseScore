@@ -46,8 +46,8 @@ using namespace mu::engraving;
 using namespace muse::draw;
 
 namespace mu::engraving {
-SlurSegment::SlurSegment(System* parent)
-    : SlurTieSegment(ElementType::SLUR_SEGMENT, parent)
+SlurSegment::SlurSegment(System* parent, ElementType type)
+    : SlurTieSegment(type, parent)
 {
 }
 
@@ -251,39 +251,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
     }
 
     // update start/end elements (which could be grace notes)
-    for (EngravingObject* lsp : spanner()->linkList()) {
-        Spanner* sp = static_cast<Spanner*>(lsp);
-        if (sp == spanner()) {
-            score()->undo(new ChangeSpannerElements(sp, scr, ecr));
-        } else {
-            EngravingItem* se = 0;
-            EngravingItem* ee = 0;
-            if (scr) {
-                std::list<EngravingObject*> sel = scr->linkList();
-                for (EngravingObject* lcr : sel) {
-                    EngravingItem* le = toEngravingItem(lcr);
-                    if (le->score() == sp->score() && le->track() == sp->track()) {
-                        se = le;
-                        break;
-                    }
-                }
-            }
-            if (ecr) {
-                std::list<EngravingObject*> sel = ecr->linkList();
-                for (EngravingObject* lcr : sel) {
-                    EngravingItem* le = toEngravingItem(lcr);
-                    if (le->score() == sp->score() && le->track() == sp->track2()) {
-                        ee = le;
-                        break;
-                    }
-                }
-            }
-            if (se && ee) {
-                score()->undo(new ChangeStartEndSpanner(sp, se, ee));
-                renderer()->layoutItem(sp);
-            }
-        }
-    }
+    slur()->undoChangeStartEndElements(scr, ecr);
 
     const size_t segments  = spanner()->spannerSegments().size();
     ups(ed.curGrip).off = PointF();
@@ -390,10 +358,14 @@ double SlurSegment::dottedWidth() const
     return style().styleMM(Sid::slurDottedWidth);
 }
 
+Color SlurSegment::curColor() const
+{
+    return EngravingItem::curColor(getProperty(Pid::VISIBLE).toBool(), getProperty(Pid::COLOR).value<Color>());
+}
+
 Slur::Slur(const Slur& s)
     : SlurTie(s)
 {
-    _sourceStemArrangement = s._sourceStemArrangement;
     _connectedElement = s._connectedElement;
     _partialSpannerDirection = s._partialSpannerDirection;
 }
@@ -402,20 +374,10 @@ Slur::Slur(const Slur& s)
 //   Slur
 //---------------------------------------------------------
 
-Slur::Slur(EngravingItem* parent)
-    : SlurTie(ElementType::SLUR, parent)
+Slur::Slur(EngravingItem* parent, ElementType type)
+    : SlurTie(type, parent)
 {
     setAnchor(Anchor::CHORD);
-}
-
-//---------------------------------------------------------
-//   calcStemArrangement
-//---------------------------------------------------------
-
-int Slur::calcStemArrangement(EngravingItem* start, EngravingItem* end)
-{
-    return (start && start->isChord() && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
-           + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
 }
 
 double Slur::scalingFactor() const
@@ -448,6 +410,38 @@ void Slur::undoSetIncoming(bool incoming)
         return;
     }
 
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, calcIncomingDirection(incoming), PropertyFlags::UNSTYLED);
+}
+
+void Slur::undoSetOutgoing(bool outgoing)
+{
+    if (outgoing == isOutgoing()) {
+        return;
+    }
+
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, calcOutgoingDirection(outgoing), PropertyFlags::UNSTYLED);
+}
+
+void Slur::setIncoming(bool incoming)
+{
+    if (incoming == isIncoming()) {
+        return;
+    }
+
+    _partialSpannerDirection = calcIncomingDirection(incoming);
+}
+
+void Slur::setOutgoing(bool outgoing)
+{
+    if (outgoing == isOutgoing()) {
+        return;
+    }
+
+    _partialSpannerDirection = calcOutgoingDirection(outgoing);
+}
+
+PartialSpannerDirection Slur::calcIncomingDirection(bool incoming)
+{
     PartialSpannerDirection dir = PartialSpannerDirection::INCOMING;
     if (incoming) {
         SlurSegment* firstSeg = nsegments() > 0 ? frontSegment() : nullptr;
@@ -459,15 +453,11 @@ void Slur::undoSetIncoming(bool incoming)
     } else {
         dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::OUTGOING : PartialSpannerDirection::NONE;
     }
-    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, dir, PropertyFlags::UNSTYLED);
+    return dir;
 }
 
-void Slur::undoSetOutgoing(bool outgoing)
+PartialSpannerDirection Slur::calcOutgoingDirection(bool outgoing)
 {
-    if (outgoing == isOutgoing()) {
-        return;
-    }
-
     PartialSpannerDirection dir = PartialSpannerDirection::OUTGOING;
     if (outgoing) {
         SlurSegment* lastSeg = nsegments() > 0 ? backSegment() : nullptr;
@@ -479,7 +469,7 @@ void Slur::undoSetOutgoing(bool outgoing)
     } else {
         dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::INCOMING : PartialSpannerDirection::NONE;
     }
-    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, dir, PropertyFlags::UNSTYLED);
+    return dir;
 }
 
 bool Slur::isIncoming() const
@@ -490,6 +480,43 @@ bool Slur::isIncoming() const
 bool Slur::isOutgoing() const
 {
     return _partialSpannerDirection == PartialSpannerDirection::BOTH || _partialSpannerDirection == PartialSpannerDirection::OUTGOING;
+}
+
+void Slur::undoChangeStartEndElements(ChordRest* scr, ChordRest* ecr)
+{
+    for (EngravingObject* lsp : linkList()) {
+        Spanner* sp = static_cast<Spanner*>(lsp);
+        if (sp == this) {
+            score()->undo(new ChangeSpannerElements(this, scr, ecr));
+        } else {
+            EngravingItem* se = 0;
+            EngravingItem* ee = 0;
+            if (scr) {
+                std::list<EngravingObject*> sel = scr->linkList();
+                for (EngravingObject* lcr : sel) {
+                    EngravingItem* le = toEngravingItem(lcr);
+                    if (le->score() == sp->score() && le->track() == sp->track()) {
+                        se = le;
+                        break;
+                    }
+                }
+            }
+            if (ecr) {
+                std::list<EngravingObject*> sel = ecr->linkList();
+                for (EngravingObject* lcr : sel) {
+                    EngravingItem* le = toEngravingItem(lcr);
+                    if (le->score() == sp->score() && le->track() == sp->track2()) {
+                        ee = le;
+                        break;
+                    }
+                }
+            }
+            if (se && ee) {
+                score()->undo(new ChangeStartEndSpanner(sp, se, ee));
+                renderer()->layoutItem(sp);
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------

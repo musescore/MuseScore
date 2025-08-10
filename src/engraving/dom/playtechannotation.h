@@ -41,6 +41,9 @@ public:
 
     PlayTechAnnotation* clone() const override;
 
+    bool isHandbellsSymbol() const;
+    bool isEditable() const override { return !isHandbellsSymbol(); }
+
 private:
 
     PropertyValue getProperty(Pid id) const override;

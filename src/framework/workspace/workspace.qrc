@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Muse/Workspace/qmldir</file>
+        <file>qml/Muse/Workspace/WorkspacesDialog.qml</file>
+        <file>qml/Muse/Workspace/NewWorkspaceDialog.qml</file>
+        <file>qml/Muse/Workspace/internal/WorkspacesTopPanel.qml</file>
+        <file>qml/Muse/Workspace/internal/WorkspacesView.qml</file>
+    </qresource>
+</RCC>

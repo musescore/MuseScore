@@ -117,30 +117,210 @@ private:
 
 //---------------------------------------------------------
 //   RenderAction
+//    Render commands to be passed to and executed by Harmony
 //---------------------------------------------------------
 
-struct RenderAction {
+struct RenderAction
+{
     enum class RenderActionType : char {
-        SET, MOVE, PUSH, POP,
-        NOTE, ACCIDENTAL
+        SET, MOVE, MOVEXHEIGHT, PUSH, POP, NOTE, ACCIDENTAL, STOPHALIGN, SCALE, PAREN
     };
 
-    RenderActionType type = RenderActionType::SET;
-    double movex = 0.0, movey = 0.0; // MOVE
-    String text;                    // SET
+    virtual RenderActionType actionType() const = 0;
 
-    RenderAction() {}
-    RenderAction(RenderActionType t)
-        : type(t) {}
-    void print() const;
+    virtual void print() const { print(actionType(), u""); }
+
+    virtual ~RenderAction() {}
+
+protected:
+    void print(RenderActionType type, const String& info) const;
 };
+
+struct RenderActionMove : RenderAction
+{
+    RenderActionMove() {}
+    RenderActionMove(double movex, double movey)
+        : m_vec(PointF(movex, movey)) {}
+
+    RenderActionType actionType() const override { return RenderActionType::MOVE; }
+    void print() const override;
+
+    double x() const { return m_vec.x(); }
+    double y() const { return m_vec.y(); }
+    PointF vec() const { return m_vec; }
+    bool scaled() const { return m_scaled; }
+
+protected:
+    RenderActionMove(double movex, double movey, bool scaled)
+        : m_vec(PointF(movex, movey)), m_scaled(scaled) {}
+
+private:
+    PointF m_vec = PointF(0.0, 0.0);
+    bool m_scaled = false;
+};
+
+struct RenderActionMoveScaled : RenderActionMove
+{
+    RenderActionMoveScaled(double movex, double movey)
+        : RenderActionMove(movex, movey, true) {}
+
+    void print() const override;
+};
+
+struct RenderActionMoveXHeight : RenderAction
+{
+    RenderActionMoveXHeight(bool up)
+        : m_up(up) {}
+    RenderActionType actionType() const override { return RenderActionType::MOVEXHEIGHT; }
+
+    bool up() const { return m_up; }
+    bool scaled() const { return m_scaled; }
+    void print() const override;
+
+protected:
+    RenderActionMoveXHeight(bool up, bool scaled)
+        : m_up(up), m_scaled(scaled) {}
+
+private:
+    bool m_up = true;
+    bool m_scaled = false;
+};
+
+struct RenderActionMoveXHeightScaled : RenderActionMoveXHeight
+{
+    RenderActionMoveXHeightScaled(bool up)
+        : RenderActionMoveXHeight(up, true) {}
+};
+
+struct RenderActionSet : RenderAction
+{
+    RenderActionSet() {}
+    RenderActionSet(String s)
+        : m_text(s) {}
+
+    RenderActionType actionType() const override { return RenderActionType::SET; }
+    void print() const override;
+
+    const String& text() const { return m_text; }
+    bool renderText() const { return m_renderText; }
+
+protected:
+    RenderActionSet(String s, bool renderText)
+        : m_text(s), m_renderText(renderText) {}
+
+private:
+    String m_text;
+    bool m_renderText = true;
+};
+
+struct RenderActionMoveTextWidth : RenderActionSet
+{
+    RenderActionMoveTextWidth(String s)
+        : RenderActionSet(s, false) {}
+};
+
+struct RenderActionPush : RenderAction
+{
+    RenderActionPush() {}
+    RenderActionType actionType() const override { return RenderActionType::PUSH; }
+};
+
+struct RenderActionPop : RenderAction
+{
+    RenderActionPop() {}
+
+    RenderActionType actionType() const override { return RenderActionType::POP; }
+    void print() const override;
+
+    double popX() const { return m_popx; }
+    double popY() const { return m_popy; }
+protected:
+    RenderActionPop(bool popx, bool popy)
+        : m_popx(popx), m_popy(popy) {}
+private:
+    bool m_popx = true, m_popy = true;
+};
+
+struct RenderActionPopX : RenderActionPop
+{
+    RenderActionPopX()
+        : RenderActionPop(true, false) {}
+};
+
+struct RenderActionPopY : RenderActionPop
+{
+    RenderActionPopY()
+        : RenderActionPop(false, true) {}
+};
+
+struct RenderActionNote : RenderAction
+{
+    RenderActionNote() {}
+    RenderActionType actionType() const override { return RenderActionType::NOTE; }
+};
+
+struct RenderActionAccidental : RenderAction
+{
+    RenderActionAccidental() {}
+    RenderActionType actionType() const override { return RenderActionType::ACCIDENTAL; }
+};
+
+struct RenderActionStopHAlign : RenderAction
+{
+    RenderActionStopHAlign() {}
+    RenderActionType actionType() const override { return RenderActionType::STOPHALIGN; }
+};
+
+struct RenderActionScale : RenderAction
+{
+    RenderActionScale() {}
+    RenderActionScale(double scale)
+        : m_scale(scale) {}
+    RenderActionType actionType() const override { return RenderActionType::SCALE; }
+
+    double scale() const { return m_scale; }
+
+    void print() const override;
+
+private:
+    double m_scale = 1.0;
+};
+
+struct RenderActionParen : RenderAction
+{
+    virtual DirectionH direction() const = 0;
+    RenderActionType actionType() const override { return RenderActionType::PAREN; }
+
+    void print() const override;
+};
+
+struct RenderActionParenLeft : RenderActionParen
+{
+    RenderActionParenLeft() {}
+    DirectionH direction() const override { return DirectionH::LEFT; }
+};
+
+struct RenderActionParenRight : RenderActionParen
+{
+    RenderActionParenRight() {}
+    DirectionH direction() const override { return DirectionH::RIGHT; }
+};
+
+using RenderActionPtr = std::shared_ptr<RenderAction>;
+using RenderActionMovePtr = std::shared_ptr<RenderActionMove>;
+using RenderActionMoveXHeightPtr = std::shared_ptr<RenderActionMoveXHeight>;
+using RenderActionPopPtr = std::shared_ptr<RenderActionPop>;
+using RenderActionScalePtr = std::shared_ptr<RenderActionScale>;
+using RenderActionSetPtr = std::shared_ptr<RenderActionSet>;
+using RenderActionParenPtr = std::shared_ptr<RenderActionParen>;
 
 //---------------------------------------------------------
 //   ChordToken
+//    Reads/represents the <token> tag in chord XML files
 //---------------------------------------------------------
 
 enum class ChordTokenClass : char {
-    ALL, QUALITY, EXTENSION, MODIFIER, ALTERATION, ADJUST, MODE, SUSPENSION, ADDITION, SUBTRACTION
+    ALL, QUALITY, EXTENSION, MODIFIER, TYPE, ACCIDENTAL
 };
 
 class ChordToken
@@ -148,13 +328,16 @@ class ChordToken
 public:
     ChordTokenClass tokenClass;
     StringList names;
-    std::list<RenderAction> renderList;
-    void read(XmlReader&);
+    std::list<RenderActionPtr > renderList;
+    void read(XmlReader&, int mscVersion);
     void write(XmlWriter&) const;
+    bool isValid() const { return !names.empty(); }
 };
 
 //---------------------------------------------------------
 //   ParsedChord
+//    Extracts quality, extension & modifiers from a string eg. "m7#11"
+//    Generates a list of render instructions to lay this chord out
 //---------------------------------------------------------
 
 class ParsedChord
@@ -164,7 +347,7 @@ public:
 
     bool parse(const String&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
     String fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&, const ChordList*);
-    const std::list<RenderAction>& renderList(const ChordList*);
+    const std::list<RenderActionPtr >& renderList(const ChordList* cl, bool stacked);
     bool parseable() const { return m_parseable; }
     bool understandable() const { return m_understandable; }
     const String& name() const { return m_name; }
@@ -197,13 +380,13 @@ private:
     String m_modifiers;
     StringList m_modifierList;
     std::list<ChordToken> m_tokenList;
-    std::list<RenderAction> m_renderList;
+    std::list<RenderActionPtr > m_renderList;
     String m_xmlKind;
     String m_xmlText;
     String m_xmlSymbols;
     String m_xmlParens;
     StringList m_xmlDegrees;
-    StringList m_major, m_minor, m_diminished, m_augmented, m_lower, m_raise, m_mod1, m_mod2, m_symbols;
+    StringList m_major, m_minor, m_diminished, m_augmented, m_lower, m_raise, m_mod, m_symbols;
     HChord m_chord;
     bool m_parseable = false;
     bool m_understandable = false;
@@ -211,6 +394,7 @@ private:
 
 //---------------------------------------------------------
 //   ChordDescription
+//    Describes chord quality, extensions and modifiers. eg. m7#11
 //---------------------------------------------------------
 
 struct ChordDescription {
@@ -225,7 +409,8 @@ struct ChordDescription {
     String xmlParens;        // MusicXML: kind parentheses-degrees=
     StringList xmlDegrees;   // MusicXML: list of degrees (if any)
     HChord chord;             // C based chord
-    std::list<RenderAction> renderList;
+    std::list<RenderActionPtr > renderList;
+    std::list<RenderActionPtr > renderListStacked;
     bool generated = false;
     bool renderListGenerated = false;
     bool exportOk = false;
@@ -235,7 +420,7 @@ struct ChordDescription {
     ChordDescription(const String&);
     String quality() const { return m_quality; }
     void complete(ParsedChord* pc, const ChordList*);
-    void read(XmlReader&);
+    void read(XmlReader&, int mscVersion);
     void write(XmlWriter&) const;
 
 private:
@@ -244,6 +429,7 @@ private:
 
 //---------------------------------------------------------
 //   ChordSymbol
+//    Represents the <sym> tag in chord XML files
 //---------------------------------------------------------
 
 struct ChordSymbol {
@@ -257,16 +443,19 @@ struct ChordSymbol {
 
 //---------------------------------------------------------
 //   ChordFont
+//    Represents the <font> tag in chord XML files
 //---------------------------------------------------------
 
 struct ChordFont {
     String family;
     String fontClass;
     double mag = 1.0;
+    bool musicSymbolText = false;
 };
 
 //---------------------------------------------------------
 //   ChordList
+//    Reads chord XML files and stores the list of known chords
 //---------------------------------------------------------
 
 class ChordList : public std::map<int, ChordDescription>
@@ -275,20 +464,25 @@ class ChordList : public std::map<int, ChordDescription>
 
 public:
     std::list<ChordFont> fonts;
-    std::list<RenderAction> renderListRoot;
-    std::list<RenderAction> renderListFunction;
-    std::list<RenderAction> renderListBase;
+    std::list<RenderActionPtr > renderListRoot;
+    std::list<RenderActionPtr > renderListFunction;
+    std::list<RenderActionPtr > renderListBass;
+    std::list<RenderActionPtr > renderListBassOffset;
     std::list<ChordToken> chordTokenList;
     static int privateID;
 
     bool autoAdjust() const { return m_autoAdjust; }
     double nominalMag() const { return m_nmag; }
     double nominalAdjust() const { return m_nadjust; }
-    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0);
-    double position(const StringList& names, ChordTokenClass ctc) const;
+    bool stackModifiers() const { return m_stackModifiers; }
+    bool excludeModsHAlign() const { return m_excludeModsHAlign; }
+    double stackedModifierMag() const { return m_stackedmmag; }
+    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, double stackedmmag = 0.0,
+                             bool stackModifiers = false, bool excludeModsHAlign = false, String symbolFont = u"");
+    double position(const StringList& names, bool stackModifiers, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const;
 
-    void checkChordList(const muse::io::path_t& appDataPath, const MStyle& style);
-    bool read(const muse::io::path_t& appDataPath, const String& name);
+    void checkChordList(const MStyle& style);
+    bool read(const String& name);
     bool read(muse::io::IODevice* device);
     bool write(const String&) const;
     bool write(muse::io::IODevice* device) const;
@@ -297,6 +491,7 @@ public:
 
     const ChordDescription* description(int id) const;
     ChordSymbol symbol(const String& s) const { return muse::value(m_symbols, s); }
+    ChordToken token(const String& s, ChordTokenClass) const;
 
     void setCustomChordList(bool t) { m_customChordList = t; }
     bool customChordList() const { return m_customChordList; }
@@ -310,11 +505,14 @@ private:
 
     std::map<String, ChordSymbol> m_symbols;
     bool m_autoAdjust = false;
-    double m_nmag = 1.0, m_nadjust = 0.0;
-    double m_emag = 1.0, m_eadjust = 0.0;
-    double m_mmag = 1.0, m_madjust = 0.0;
+    bool m_stackModifiers = false;
+    bool m_excludeModsHAlign = false;
+    double m_nmag = 1.0, m_nadjust = 0.0;   // adjust values are measured in percentage
+    double m_emag = 1.0, m_eadjust = 0.0;   // (which is then applied to the height of the font)
+    double m_mmag = 1.0, m_madjust = 0.0, m_stackedmmag = 0.0;
+    String m_symbolTextFont = u"";
 
-    bool m_customChordList = false; // if true, chordlist will be saved as part of score
+    bool m_customChordList = false;         // if true, chordlist will be saved as part of score
 };
 } // namespace mu::engraving
 #endif

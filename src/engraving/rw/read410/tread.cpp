@@ -83,7 +83,6 @@
 #include "../../dom/barline.h"
 #include "../../dom/chord.h"
 #include "../../dom/bend.h"
-#include "../../dom/stretchedbend.h"
 #include "../../dom/box.h"
 #include "../../dom/laissezvib.h"
 #include "../../dom/layoutbreak.h"
@@ -173,8 +172,6 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::BEAM: read(item_cast<Beam*>(item), xml, ctx);
         break;
     case ElementType::BEND: read(item_cast<Bend*>(item), xml, ctx);
-        break;
-    case ElementType::STRETCHED_BEND: read(item_cast<StretchedBend*>(item), xml, ctx);
         break;
     case ElementType::HBOX: read(item_cast<HBox*>(item), xml, ctx);
         break;
@@ -548,7 +545,7 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
             }
         }
         if (tag == "linkedMain") {
-            item->setLinks(new LinkedObjects(item->score()));
+            item->setLinks(new LinkedObjects());
             item->links()->push_back(item);
 
             ctx.addLink(s, item->links(), ctx.location(true));
@@ -602,35 +599,6 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::POSITION_LINKED_TO_MASTER)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::APPEARANCE_LINKED_TO_MASTER)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::EXCLUDE_FROM_OTHER_PARTS)) {
-    } else if (tag == "lid") {
-        if (ctx.mscVersion() >= 301) {
-            e.skipCurrentElement();
-            return true;
-        }
-        int id = e.readInt();
-        item->setLinks(muse::value(ctx.linkIds(), id, nullptr));
-        if (!item->links()) {
-            if (!ctx.isMasterScore()) {       // DEBUG
-                LOGD() << "not found link, id: " << id << ", count: " << ctx.linkIds().size() << ", item: " << item->typeName();
-            }
-            item->setLinks(new LinkedObjects(item->score(), id));
-            ctx.linkIds().insert({ id, item->links() });
-        }
-#ifndef NDEBUG
-        else {
-            for (EngravingObject* eee : *item->links()) {
-                EngravingItem* ee = static_cast<EngravingItem*>(eee);
-                if (ee->type() != item->type()) {
-                    ASSERT_X(String(u"link %1(%2) type mismatch %3 linked to %4")
-                             .arg(String::fromAscii(ee->typeName()))
-                             .arg(id)
-                             .arg(String::fromAscii(ee->typeName()), String::fromAscii(item->typeName())));
-                }
-            }
-        }
-#endif
-        DO_ASSERT(!item->links()->contains(item));
-        item->links()->push_back(item);
     } else if (tag == "tick") {
         int val = e.readInt();
         if (val >= 0) {
@@ -796,7 +764,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setVelocity(e.readInt());
         } else if (tag == "dynType") { // obsolete
             if (mscVersion < 440) {
-                d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+                d->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
             } else {
                 e.skipCurrentElement();
             }
@@ -950,7 +918,7 @@ void TRead::read(TremoloBar* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "play") {
             b->setPlay(e.readInt());
         } else if (TRead::readProperty(b, tag, e, ctx, Pid::LINE_WIDTH)) {
-        } else {
+        } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -1073,8 +1041,7 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
             item->setDrumset(new Drumset(*smDrumset));
         }
     } else if (tag == "Drum") {
-        // if we see on of this tags, a custom drumset will
-        // be created
+        // if we see one of these tags, a custom drumset will be created
         if (!item->drumset()) {
             item->setDrumset(new Drumset(*smDrumset));
         }
@@ -1082,7 +1049,17 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
             const_cast<Drumset*>(item->drumset())->clear();
             *customDrumset = true;
         }
-        const_cast<Drumset*>(item->drumset())->load(e);
+        const_cast<Drumset*>(item->drumset())->loadDrum(e);
+    } else if (tag == "percussionPanelColumns") {
+        // if we see one of these tags, a custom drumset will be created
+        if (!item->drumset()) {
+            item->setDrumset(new Drumset(*smDrumset));
+        }
+        if (!(*customDrumset)) {
+            const_cast<Drumset*>(item->drumset())->clear();
+            *customDrumset = true;
+        }
+        item->drumset()->setPercussionPanelColumns(e.readInt());
     }
     // support tag "Tablature" for a while for compatibility with existent 2.0 scores
     else if (tag == "Tablature" || tag == "StringData") {
@@ -2252,14 +2229,6 @@ void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(StretchedBend* b, XmlReader& xml, ReadContext& ctx)
-{
-    UNUSED(b);
-    UNUSED(xml);
-    UNUSED(ctx);
-    // not implemented
-}
-
 void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -2309,7 +2278,19 @@ void TRead::read(VBox* b, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(FBox* b, XmlReader& xml, ReadContext& ctx)
 {
-    TRead::read(static_cast<Box*>(b), xml, ctx);
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_TEXT_SCALE)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_DIAGRAM_SCALE)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_COLUMN_GAP)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_ROW_GAP)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_CHORDS_PER_ROW)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_H_ALIGN)) {
+        } else if (TRead::readProperties(static_cast<Box*>(b), xml, ctx)) {
+        } else {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(TBox* b, XmlReader& e, ReadContext& ctx)
@@ -3027,7 +3008,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "text") {
-            g->setShowText(true);
             textRead = true;
             TRead::readProperty(g, e, ctx, Pid::GLISS_TEXT);
         } else if (tag == "isHarpGliss" && ctx.pasteMode()) {
@@ -3166,7 +3146,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") { // obsolete
             if (mscVersion < 440) {
-                h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+                h->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
             } else {
                 e.skipCurrentElement();
             }
@@ -3174,8 +3154,8 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                 h->setHairpinType(HairpinType::CRESC_LINE);
-            } else if (h->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
-                h->setHairpinType(HairpinType::DECRESC_LINE);
+            } else if (h->hairpinType() == HairpinType::DIM_HAIRPIN) {
+                h->setHairpinType(HairpinType::DIM_LINE);
             }
         } else if (tag == "singleNoteDynamics") {
             h->setSingleNoteDynamics(e.readBool());
@@ -3196,22 +3176,23 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
 {
+    HarmonyInfo* info = new HarmonyInfo(ctx.score());
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {
-            h->setBaseTpc(e.readInt());
+            info->setBassTpc(e.readInt());
         } else if (tag == "baseCase") {
-            h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
+            h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
-            h->setId(e.readInt());
+            info->setId(e.readInt());
         } else if (tag == "name") {
-            h->setTextName(e.readText());
+            info->setTextName(e.readText());
         } else if (tag == "root") {
-            h->setRootTpc(e.readInt());
+            info->setRootTpc(e.readInt());
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "function") {
-            h->setFunction(e.readText());
+            compat::CompatUtils::setHarmonyRootTpcFromFunction(info, h, e.readText());
         } else if (tag == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;
@@ -3243,10 +3224,10 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
                 }
             }
         } else if (tag == "leftParen") {
-            h->setLeftParen(true);
+            h->setParenthesesMode(ParenthesesMode::LEFT, true, true);
             e.readNext();
         } else if (tag == "rightParen") {
-            h->setRightParen(true);
+            h->setParenthesesMode(ParenthesesMode::RIGHT, true, true);
             e.readNext();
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
@@ -3258,6 +3239,8 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    h->addChord(info);
 
     h->afterRead();
 }
@@ -3584,7 +3567,15 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         Symbol* s = new Symbol(n);
         s->setTrack(n->track());
         TRead::read(s, e, ctx);
-        n->add(s);
+        if (s->sym() == SymId::noteheadParenthesisLeft) {
+            n->setParenthesesMode(n->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT);
+            ctx.score()->deleteLater(s);
+        } else if (s->sym() == SymId::noteheadParenthesisRight) {
+            n->setParenthesesMode(n->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT);
+            ctx.score()->deleteLater(s);
+        } else {
+            n->add(s);
+        }
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();
@@ -4032,10 +4023,7 @@ void TRead::read(Slur* s, XmlReader& e, ReadContext& ctx)
 bool TRead::readProperties(Slur* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
-    if (tag == "stemArr") {
-        s->setSourceStemArrangement(e.readInt());
-        return true;
-    } else if (TRead::readProperty(s, tag, e, ctx, Pid::PARTIAL_SPANNER_DIRECTION)) {
+    if (TRead::readProperty(s, tag, e, ctx, Pid::PARTIAL_SPANNER_DIRECTION)) {
         return true;
     }
 
@@ -4116,12 +4104,11 @@ void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
         if (tag == "subtype") {
             s->setSpacerType(SpacerType(e.readInt()));
         } else if (tag == "space") {
-            s->setGap(Millimetre(e.readDouble() * s->spatium()));
+            s->setGap(Spatium(e.readDouble()));
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
     }
-    s->layout0();
 }
 
 void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
@@ -4131,6 +4118,8 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
     if (t->group() == StaffGroup::TAB) {
         t->setGenKeysig(false);
     }
+
+    t->setFretUseTextStyle(false);
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -4178,7 +4167,7 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
         } else if (tag == "durationFontY") {
             t->setDurationFontUserY(e.readDouble());
         } else if (tag == "fretFontName") {
-            t->setFretFontName(e.readText());
+            t->setFretPreset(e.readText());
         } else if (tag == "fretFontSize") {
             t->setFretFontSize(e.readDouble());
         } else if (tag == "fretFontY") {
@@ -4287,7 +4276,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "barLineSpanTo") {
         s->setBarLineTo(e.readInt());
     } else if (tag == "distOffset") {
-        s->setUserDist(Millimetre(e.readDouble() * s->style().spatium()));
+        s->setUserDist(Spatium(e.readDouble()));
     } else if (tag == "mag") {
         /*_userMag =*/
         e.readDouble(0.1, 10.0);
@@ -4735,6 +4724,14 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
     const AsciiStringView tag(e.name());
     for (Pid i : TextBasePropertyId) {
         if (TRead::readProperty(t, tag, e, ctx, i)) {
+            if (tag != "align") {
+                return true;
+            }
+
+            t->setPosition(t->align().horizontal);
+            if (t->position() != t->propertyDefault(Pid::POSITION).value<AlignH>()) {
+                t->setPropertyFlags(Pid::POSITION, PropertyFlags::UNSTYLED);
+            }
             return true;
         }
     }

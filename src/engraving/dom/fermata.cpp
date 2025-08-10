@@ -87,18 +87,6 @@ muse::TranslatableString Fermata::subtypeUserName() const
 }
 
 //---------------------------------------------------------
-//   chordRest
-//---------------------------------------------------------
-
-ChordRest* Fermata::chordRest() const
-{
-    if (explicitParent() && explicitParent()->isChordRest()) {
-        return toChordRest(explicitParent());
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
 
@@ -263,7 +251,11 @@ Sid Fermata::getPropertyStyle(Pid pid) const
 
 double Fermata::mag() const
 {
-    return staff() ? staff()->staffMag(tick()) * style().styleD(Sid::articulationMag) : 1.0;
+    double m = staff() ? staff()->staffMag(tick()) * style().styleD(Sid::articulationMag) : 1.0;
+    if (segment() && segment()->isChordRestType() && segment()->element(track())) {
+        m *= toChordRest(segment()->element(track()))->mag();
+    }
+    return m;
 }
 
 void Fermata::setSymIdAndTimeStretch(SymId id)

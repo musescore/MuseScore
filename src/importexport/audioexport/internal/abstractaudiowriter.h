@@ -24,7 +24,7 @@
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "audio/iplayback.h"
+#include "audio/main/iplayback.h"
 #include "iaudioexportconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "playback/iplaybackcontroller.h"
@@ -58,6 +58,8 @@ protected:
     muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
 
 private:
+    void doWrite(const QString& path, const muse::audio::SoundTrackFormat& format, bool startProgress = true);
+
     UnitType unitTypeFromOptions(const Options& options) const;
 
     muse::Progress m_progress;

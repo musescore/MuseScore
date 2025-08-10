@@ -53,6 +53,7 @@ static const Settings::Key INVISIBLE_COLOR("engraving", "engraving/colors/invisi
 static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinkedColor");
 
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
+static const Settings::Key FRETBOARD_DIAGRAMS_AUTO_UPDATE("engraving", "score/fretboardDiagramsAutoUpdate");
 
 static const Settings::Key DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT("engraving", "engraving/compat/doNotSaveEIDsForBackCompat");
 
@@ -123,6 +124,11 @@ void EngravingConfiguration::init()
         m_dynamicsApplyToAllVoicesChanged.send(val.toBool());
     });
 
+    settings()->setDefaultValue(FRETBOARD_DIAGRAMS_AUTO_UPDATE, Val(true));
+    settings()->valueChanged(FRETBOARD_DIAGRAMS_AUTO_UPDATE).onReceive(this, [this](const Val& val) {
+        m_fretboardDiagramsAutoUpdateChanged.send(val.toBool());
+    });
+
     settings()->setDefaultValue(FRAME_COLOR, Val(Color("#A0A0A4").toQColor()));
     settings()->setDescription(FRAME_COLOR, muse::trc("engraving", "Frame color"));
     settings()->setCanBeManuallyEdited(FRAME_COLOR, true);
@@ -158,8 +164,6 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(false));
     settings()->setDescription(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, muse::trc("engraving", "Do not save EIDs"));
     settings()->setCanBeManuallyEdited(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, false);
-
-    setExperimentalGuitarBendImport(guitarProImportExperimental());
 }
 
 muse::io::path_t EngravingConfiguration::appDataPath() const
@@ -356,6 +360,21 @@ muse::async::Channel<bool> EngravingConfiguration::dynamicsApplyToAllVoicesChang
     return m_dynamicsApplyToAllVoicesChanged;
 }
 
+bool EngravingConfiguration::autoUpdateFretboardDiagrams() const
+{
+    return settings()->value(FRETBOARD_DIAGRAMS_AUTO_UPDATE).toBool();
+}
+
+void EngravingConfiguration::setAutoUpdateFretboardDiagrams(bool v)
+{
+    settings()->setSharedValue(FRETBOARD_DIAGRAMS_AUTO_UPDATE, Val(v));
+}
+
+muse::async::Channel<bool> EngravingConfiguration::autoUpdateFretboardDiagramsChanged() const
+{
+    return m_fretboardDiagramsAutoUpdateChanged;
+}
+
 muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
 {
     return m_scoreInversionChanged;
@@ -441,16 +460,6 @@ bool EngravingConfiguration::guitarProImportExperimental() const
     return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
 }
 
-bool EngravingConfiguration::experimentalGuitarBendImport() const
-{
-    return m_experimentalGuitarBendImport;
-}
-
-void EngravingConfiguration::setExperimentalGuitarBendImport(bool enabled)
-{
-    m_experimentalGuitarBendImport = enabled;
-}
-
 bool EngravingConfiguration::shouldAddParenthesisOnStandardStaff() const
 {
     return guitarProImportExperimental();
@@ -464,11 +473,6 @@ bool EngravingConfiguration::negativeFretsAllowed() const
 bool EngravingConfiguration::crossNoteHeadAlwaysBlack() const
 {
     return guitarProImportExperimental();
-}
-
-bool EngravingConfiguration::enableExperimentalFretCircle() const
-{
-    return false;
 }
 
 void EngravingConfiguration::setGuitarProMultivoiceEnabled(bool multiVoice)

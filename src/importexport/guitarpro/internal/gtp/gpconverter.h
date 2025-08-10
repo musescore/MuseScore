@@ -1,18 +1,18 @@
-#ifndef MU_IMPORTEXPORT_GPCONVERTER_H
-#define MU_IMPORTEXPORT_GPCONVERTER_H
+#pragma once
 
 #include <unordered_map>
 
-#include "gpmasterbar.h"
+#include "modularity/ioc.h"
+#include "engraving/iengravingconfiguration.h"
+#include "engraving/types/fraction.h"
+
+#include "../continiouselementsbuilder.h"
+#include "../guitarbendimport/guitarbendimporter.h"
 #include "gpbar.h"
 #include "gpbeat.h"
 #include "gpdrumsetresolver.h"
+#include "gpmasterbar.h"
 #include "gpmastertracks.h"
-#include "../continiouselementsbuilder.h"
-#include "../guitarbendimport/guitarbendimporter.h"
-#include "types/fraction.h"
-
-#include "iengravingconfiguration.h"
 
 namespace mu::iex::guitarpro {
 class GPScore;
@@ -92,9 +92,10 @@ private:
     Note* addHarmonic(const GPNote* gpnote, Note* note);
     void addFingering(const GPNote* gpnote, Note* note);
     void addAccent(const GPNote* gpnote, Note* note);
-    void addLeftHandTapping(const GPNote* gpnote, Note* note);
     void addStringNumber(const GPNote* gpnote, Note* note);
-    void addTapping(const GPNote* gpnote, Note* note);
+    void addTapping(const GPNote* gpnote, Note* note, engraving::TappingHand hand);
+    void addLeftHandTapping(const GPNote* gpnote);
+    void addRightHandTapping(const GPNote* gpnote);
     void addSlide(const GPNote* gpnote, Note* note);
     void addSingleSlide(const GPNote* gpnote, Note* note);
     void addPickScrape(const GPNote* gpnote, Note* note);
@@ -111,6 +112,7 @@ private:
     void addLegato(const GPBeat* beat, ChordRest* cr);
     void addOttava(const GPBeat* gpb, ChordRest* cr);
     void addDynamic(const GPBeat* beat, ChordRest* cr);
+    void addTapping(const GPBeat* beat, ChordRest* cr);
     void addSlapped(const GPBeat* beat, ChordRest* cr);
     void addPopped(const GPBeat* beat, ChordRest* cr);
     void addBrush(const GPBeat* beat, ChordRest* cr);
@@ -206,5 +208,4 @@ private:
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
     std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
 };
-} // namespace mu::iex::guitarpro
-#endif // MU_IMPORTEXPORT_GPCONVERTER_H
+}

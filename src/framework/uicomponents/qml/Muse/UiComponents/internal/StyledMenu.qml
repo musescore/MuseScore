@@ -89,6 +89,64 @@ MenuView {
         y = parent.height
     }
 
+    function navigateWithSymbolRequested(symbol, requestingMenuModel) {
+        // If this menu does not have the focus, pass on to the next open menu.
+        if (!content.navigationSection.active) {
+            if (root.subMenuLoader.isMenuOpened) {
+                root.subMenuLoader.menu.navigateWithSymbolRequested(symbol, requestingMenuModel)
+            }
+            return
+        }
+
+        // Find the currently active item (if any). The search will start from the item
+        // following it and will wrap from the beginning once the last item is reached.
+        let startingIndex = 0
+        for (let i = 0; i < view.count; ++i) {
+            let loader = view.itemAtIndex(i)
+            if (loader && !loader.isSeparator && loader.item && loader.item.navigation.active) {
+                startingIndex = i + 1
+                break
+            }
+        }
+
+        // Find the first menu item that matches the given underlined symbol (letter).
+        let firstMatchingIndex = -1
+        let isSingleMatch = true
+        for (let j = 0; j < view.count; ++j) {
+            let index = startingIndex + j
+            if (index >= view.count) {
+                index -= view.count
+            }
+
+            let item = Boolean(model.get) ? model.get(index).itemRole : model[index]
+            if (item && item.enabled && requestingMenuModel.menuItemMatchesSymbol(item, symbol)) {
+                if (firstMatchingIndex === -1) {
+                    firstMatchingIndex = index
+                } else {
+                    isSingleMatch = false
+                    break
+                }
+            }
+        }
+
+        // Highlight the first matching menu item. If it is the only match, click it.
+        // Otheriwise do nothing and give the user a chance to navigate to the other matches.
+        if (firstMatchingIndex !== -1) {
+            let loader = view.itemAtIndex(firstMatchingIndex)
+            if (loader) {
+                if (root.subMenuLoader.isMenuOpened && root.subMenuLoader.parent !== loader.item) {
+                    root.subMenuLoader.close()
+                }
+
+                loader.item.navigation.requestActive()
+
+                if (isSingleMatch) {
+                    Qt.callLater(loader.item.clicked, null)
+                }
+            }
+        }
+    }
+
     onAboutToClose: function(closeEvent) {
         closeSubMenu()
     }

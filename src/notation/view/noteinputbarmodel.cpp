@@ -570,7 +570,8 @@ MenuItemList NoteInputBarModel::makeAddItems()
         makeMenu(TranslatableString("notation", "Measures"), makeMeasuresItems()),
         makeMenu(TranslatableString("notation", "Frames"), makeFramesItems()),
         makeMenu(TranslatableString("notation", "Text"), makeTextItems()),
-        makeMenu(TranslatableString("notation", "Lines"), makeLinesItems())
+        makeMenu(TranslatableString("notation", "Lines"), makeLinesItems()),
+        makeMenu(TranslatableString("notation", "Chords and fretboard diagrams"), makeChordAndFretboardDiagramsItems()),
     };
 
     return items;
@@ -644,10 +645,21 @@ MenuItemList NoteInputBarModel::makeFramesItems()
         makeMenuItem("insert-hbox"),
         makeMenuItem("insert-vbox"),
         makeMenuItem("insert-textframe"),
+        makeMenuItem("insert-fretframe"),
         makeSeparator(),
+        makeMenu(TranslatableString("notation", "Insert at end of score"), makeFramesAppendItems())
+    };
+
+    return items;
+}
+
+MenuItemList NoteInputBarModel::makeFramesAppendItems()
+{
+    MenuItemList items {
         makeMenuItem("append-hbox"),
         makeMenuItem("append-vbox"),
-        makeMenuItem("append-textframe")
+        makeMenuItem("append-textframe"),
+        makeMenuItem("append-fretframe")
     };
 
     return items;
@@ -664,7 +676,7 @@ MenuItemList NoteInputBarModel::makeTextItems()
         makeSeparator(),
         makeMenuItem("system-text"),
         makeMenuItem("staff-text"),
-        makeMenuItem("dynamics"),
+        makeMenuItem("add-dynamic"),
         makeMenuItem("expression-text"),
         makeMenuItem("rehearsalmark-text"),
         makeMenuItem("instrument-change-text"),
@@ -691,6 +703,18 @@ MenuItemList NoteInputBarModel::makeLinesItems()
         makeMenuItem("add-8va"),
         makeMenuItem("add-8vb"),
         makeMenuItem("add-noteline")
+    };
+
+    return items;
+}
+
+MenuItemList NoteInputBarModel::makeChordAndFretboardDiagramsItems()
+{
+    MenuItemList items {
+        makeMenuItem("chord-text"),
+        makeMenuItem("add-fretboard-diagram"),
+        makeSeparator(),
+        makeMenuItem("insert-fretframe", TranslatableString("notation", "Fretboard diagram legend"))
     };
 
     return items;

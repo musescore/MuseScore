@@ -20,25 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTGTP_H__
-#define __IMPORTGTP_H__
+#pragma once
 
-#include <vector>
 #include <map>
+#include <vector>
 
-#include "io/file.h"
-#include "engraving/dom/measurebase.h"
-
-#include "gtp/gp67dombuilder.h"
-#include "continiouselementsbuilder.h"
-#include "guitarbendimport/guitarbendimporter.h"
-#include "engraving/types/types.h"
-#include "engraving/engravingerrors.h"
-
+#include "io/iodevice.h"
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+#include "types/bytearray.h"
+#include "types/string.h"
 
-#include "guitarprodrumset.h"
+#include "engraving/dom/measurebase.h"
+#include "engraving/engravingerrors.h"
+#include "engraving/iengravingconfiguration.h"
+#include "engraving/types/types.h"
+
+#include "continiouselementsbuilder.h"
+#include "gtp/igpdombuilder.h"
+#include "guitarbendimport/guitarbendimporter.h"
 
 namespace mu::engraving {
 class Chord;
@@ -141,6 +140,7 @@ protected:
     using Fraction = mu::engraving::Fraction;
     using Measure = mu::engraving::Measure;
     using ChordRest = mu::engraving::ChordRest;
+    using Chord = mu::engraving::Chord;
     using Note = mu::engraving::Note;
 
     enum class TabImportOption {
@@ -155,6 +155,7 @@ protected:
 
     struct ReadNoteResult {
         bool slur = false;
+        bool hammerOnPullOff = false;
         bool letRing = false;
         bool palmMute = false;
         bool trill = false;
@@ -266,7 +267,7 @@ protected:
     GPLyrics gpLyrics;
     int slide = 0;
     int voltaSequence = 0;
-    mu::engraving::Slur** slurs = nullptr;
+    std::vector<mu::engraving::Slur*> slurs;
 
     void skip(int64_t len);
     void read(void* p, int64_t len);
@@ -302,11 +303,12 @@ protected:
     void addPalmMute(ChordRest* cr, bool hasPalmMute);
     void addLetRing(ChordRest* cr, bool hasPalmMute);
     void addTrill(ChordRest* cr, bool hasTrill);
+    void addHammerOnPullOff(ChordRest* cr, bool hasHammerOnPullOff);
     void addRasgueado(ChordRest* cr, bool hasRasgueado);
     void addVibratoLeftHand(ChordRest* cr, bool hasVibratoLeftHand);
     void addVibratoWTremBar(ChordRest* cr, bool hasVibratoWTremBar);
     void addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool hasHarmonicPinch, bool hasHarmonicTap, bool hasHarmonicSemi);
-    void addTap(Note*);
+    void addTap(Chord*);
     void addSlap(Note*);
     void addPop(Note*);
     bool createTuningString(int strings, int tuning[]); // returns useFlats
@@ -317,7 +319,7 @@ public:
     std::vector<std::string> tunings;
 
     void setTempo(int n, Measure* measure);
-    muse::String title, subtitle, artist, album, composer;
+    muse::String title, subtitle, artist, album, composer, poet;
     muse::StringList comments;
     GpTrack channelDefaults[GP_MAX_TRACK_NUMBER * 2];
     size_t staves = 0;
@@ -332,7 +334,7 @@ public:
     };
 
     GuitarPro(mu::engraving::MasterScore*, int v, const muse::modularity::ContextPtr& iocCtx);
-    virtual ~GuitarPro();
+    virtual ~GuitarPro() {}
     virtual bool read(muse::io::IODevice*) = 0;
     muse::String error(GuitarProError n) const { return muse::String::fromUtf8(errmsg[int(n)]); }
 };
@@ -496,5 +498,4 @@ public:
     bool read(muse::io::IODevice*) override;
     GPProperties readProperties(muse::ByteArray* data);
 };
-} // namespace mu::iex::guitarpro
-#endif
+}

@@ -702,14 +702,14 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
     return EngravingItem::getPropertyStyle(id);
 }
 
-void FiguredBass::startEditTextual(EditData& ed)
+void FiguredBass::startEdit(EditData& ed)
 {
     clearItems();
     renderer()->layoutText1(this);   // re-layout without F.B.-specific formatting.
-    TextBase::startEditTextual(ed);
+    TextBase::startEdit(ed);
 }
 
-bool FiguredBass::isTextualEditAllowed(EditData& ed) const
+bool FiguredBass::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
         return false;
@@ -719,12 +719,12 @@ bool FiguredBass::isTextualEditAllowed(EditData& ed) const
         return false;
     }
 
-    return TextBase::isTextualEditAllowed(ed);
+    return TextBase::isEditAllowed(ed);
 }
 
-void FiguredBass::endEditTextual(EditData& ed)
+void FiguredBass::endEdit(EditData& ed)
 {
-    TextBase::endEditTextual(ed);
+    TextBase::endEdit(ed);
     regenerateText();
 }
 
@@ -770,47 +770,6 @@ void FiguredBass::regenerateText()
     score()->startCmd(TranslatableString("undoableAction", "Regenerate figured bass text"));
     triggerLayout();
     score()->endCmd();
-}
-
-void FiguredBass::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
-{
-    Segment* oldSeg = segment();
-
-    TextBase::undoMoveSegment(newSeg, tickDiff);
-
-    track_idx_t startTrack = staff2track(staffIdx());
-    track_idx_t endTrack = startTrack + VOICES;
-
-    // Shorten this if needed
-    if (newSeg->tick() > oldSeg->tick()) {
-        FiguredBass* nextFB = nullptr;
-        Fraction endTick = newSeg->tick() + m_ticks;
-        for (Segment* seg = newSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->tick() <= endTick;
-             seg = seg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
-            nextFB = toFiguredBass(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
-            if (nextFB) {
-                break;
-            }
-        }
-        if (nextFB) {
-            setTicks(nextFB->tick() - newSeg->tick());
-        }
-    }
-
-    // Shorten previous if needed
-    if (newSeg->tick() < oldSeg->tick()) {
-        FiguredBass* prevFB = nullptr;
-        for (Segment* seg = newSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->measure()->isAfterOrEqual(newSeg->measure());
-             seg = seg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
-            prevFB = (FiguredBass*)(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
-            if (prevFB) {
-                break;
-            }
-        }
-        if (prevFB) {
-            prevFB->setTicks(std::min(prevFB->ticks(), newSeg->tick() - prevFB->tick()));
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -1255,7 +1214,7 @@ bool FiguredBass::fontData(int nIdx, String* pFamily, String* pDisplayName,
 //   return true if any FiguredBassItem starts with a parenthesis
 //---------------------------------------------------------
 
-bool FiguredBass::hasParentheses() const
+bool FiguredBass::parenthesesMode() const
 {
     for (FiguredBassItem* item : m_items) {
         if (item->startsWithParenthesis()) {

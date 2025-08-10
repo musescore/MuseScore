@@ -32,6 +32,7 @@
 #include "chord.h"
 #include "durationelement.h"
 #include "fret.h"
+#include "harmony.h"
 #include "hook.h"
 #include "instrumentname.h"
 #include "ledgerline.h"
@@ -42,6 +43,7 @@
 #include "note.h"
 #include "notedot.h"
 #include "page.h"
+#include "playcounttext.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
@@ -54,7 +56,6 @@
 #include "system.h"
 #include "systemdivider.h"
 #include "text.h"
-#include "tie.h"
 
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
@@ -123,11 +124,11 @@ EngravingObjectList System::scanChildren() const
         children.push_back(bracket);
     }
 
-    if (auto dividerLeft = systemDividerLeft()) {
+    if (SystemDivider* dividerLeft = systemDividerLeft()) {
         children.push_back(dividerLeft);
     }
 
-    if (auto dividerRight = systemDividerRight()) {
+    if (SystemDivider* dividerRight = systemDividerRight()) {
         children.push_back(dividerRight);
     }
 
@@ -208,23 +209,23 @@ EngravingObjectList Measure::scanChildren() const
 
     size_t nstaves = score()->nstaves();
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        if (auto _staffLines = m_mstaves[staffIdx]->lines()) {
+        if (StaffLines* _staffLines = m_mstaves[staffIdx]->lines()) {
             children.push_back(_staffLines);
         }
 
-        if (auto _vspacerUp = vspacerUp(staffIdx)) {
+        if (Spacer* _vspacerUp = vspacerUp(staffIdx)) {
             children.push_back(_vspacerUp);
         }
 
-        if (auto _vspacerDown = vspacerDown(staffIdx)) {
+        if (Spacer* _vspacerDown = vspacerDown(staffIdx)) {
             children.push_back(_vspacerDown);
         }
 
-        if (auto _noText = noText(staffIdx)) {
+        if (MeasureNumber* _noText = measureNumber(staffIdx)) {
             children.push_back(_noText);
         }
 
-        if (auto _mmRangeText = mmRangeText(staffIdx)) {
+        if (MMRestRange* _mmRangeText = mmRangeText(staffIdx)) {
             children.push_back(_mmRangeText);
         }
     }
@@ -459,10 +460,6 @@ EngravingObjectList Note::scanChildren() const
         children.push_back(noteDot);
     }
 
-    if (m_tieFor) {
-        children.push_back(m_tieFor);
-    }
-
     for (EngravingItem* element : el()) {
         children.push_back(element);
     }
@@ -636,6 +633,10 @@ EngravingObjectList BarLine::scanChildren() const
 
     for (EngravingItem* element : m_el) {
         children.push_back(element);
+    }
+
+    if (m_playCountText) {
+        children.push_back(m_playCountText);
     }
 
     return children;

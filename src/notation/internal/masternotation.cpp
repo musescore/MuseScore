@@ -131,8 +131,10 @@ void MasterNotation::initAfterSettingScore(const MasterScore* score)
 
     TRACEFUNC;
 
-    score->changesChannel().onReceive(this, [this](const ScoreChangesRange&) {
-        updateExcerpts();
+    score->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+        if (!changes.isTextEditing) {
+            updateExcerpts();
+        }
     });
 
     m_notationPlayback->init();
@@ -227,7 +229,7 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                 measure->setTicks(mu::engraving::Fraction(scoreOptions.measureTimesigNumerator,
                                                           scoreOptions.measureTimesigDenominator));
             }
-            _score->measures()->add(measure);
+            _score->measures()->append(measure);
 
             for (mu::engraving::Staff* staff : _score->staves()) {
                 mu::engraving::staff_idx_t staffIdx = staff->idx();
@@ -388,7 +390,6 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
                 nm->setExcludeFromOtherParts(false);
                 nm->setNext(measure);
                 score->measures()->add(nm);
-                measure = nm;
             } else if (nvb) {
                 delete nvb;
             }
@@ -497,7 +498,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
 
 void MasterNotation::unloadExcerpts(ExcerptNotationList& excerpts)
 {
-    for (IExcerptNotationPtr ptr : excerpts) {
+    for (const IExcerptNotationPtr& ptr : excerpts) {
         Excerpt* excerpt = get_impl(ptr)->excerpt();
         if (!excerpt) {
             continue;
@@ -514,7 +515,7 @@ void MasterNotation::unloadExcerpts(ExcerptNotationList& excerpts)
 
 void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
 {
-    for (IExcerptNotationPtr excerptNotation : excerpts) {
+    for (const IExcerptNotationPtr& excerptNotation : excerpts) {
         ExcerptNotation* impl = get_impl(excerptNotation);
 
         masterScore()->initExcerpt(impl->excerpt());
@@ -538,7 +539,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
     undoStack()->prepareChanges(TranslatableString("undoableAction", "Add/remove parts"));
 
     // Delete old excerpts (that are not included in the new list)
-    for (IExcerptNotationPtr excerptNotation : m_excerpts) {
+    for (const IExcerptNotationPtr& excerptNotation : m_excerpts) {
         auto it = std::find(excerpts.begin(), excerpts.end(), excerptNotation);
         if (it != excerpts.end()) {
             continue;
@@ -663,7 +664,7 @@ void MasterNotation::updateExcerpts()
     const std::vector<mu::engraving::Excerpt*>& excerpts = masterScore()->excerpts();
 
     // exclude notations for old excerpts
-    for (IExcerptNotationPtr excerptNotation : m_excerpts) {
+    for (const IExcerptNotationPtr& excerptNotation : m_excerpts) {
         ExcerptNotation* impl = get_impl(excerptNotation);
 
         if (muse::contains(excerpts, impl->excerpt())) {
@@ -785,6 +786,30 @@ Notification MasterNotation::hasPartsChanged() const
 INotationPlaybackPtr MasterNotation::playback() const
 {
     return m_notationPlayback;
+}
+
+void MasterNotation::initNotationSoloMuteState(const INotationPtr notation)
+{
+    IF_ASSERT_FAILED(notation) {
+        return;
+    }
+
+    const INotationSoloMuteStatePtr excerptSoloMuteState = notation->soloMuteState();
+
+    // Iterate over all parts (not just the excerpt parts) - tracks that do exist in the master notation but
+    // not in the excerpt should be muted in the excerpt...
+    for (const Part* masterPart : parts()->partList()) {
+        const Part* excerptPart = notation->parts()->part(masterPart->id());
+        const bool shouldMute = !excerptPart || !excerptPart->isVisible();
+        const INotationSoloMuteState::SoloMuteState state = { shouldMute, /*solo*/ false };
+        for (const InstrumentTrackId& trackId : masterPart->instrumentTrackIdSet()) {
+            excerptSoloMuteState->setTrackSoloMuteState(trackId, state);
+        }
+        if (masterPart->hasChordSymbol()) {
+            const InstrumentTrackId& chordsId = playback()->chordSymbolsTrackId(masterPart->id());
+            excerptSoloMuteState->setTrackSoloMuteState(chordsId, state);
+        }
+    }
 }
 
 const ExcerptNotationList& MasterNotation::potentialExcerpts() const

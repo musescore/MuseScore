@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_EDITSTRINGDATA_H
-#define MU_NOTATION_EDITSTRINGDATA_H
+#pragma once
 
 #include <QDialog>
 
@@ -61,7 +60,8 @@ private:
     void init();
     void initStringsData();
 
-    virtual void hideEvent(QHideEvent*) override;
+    void showEvent(QShowEvent*) override;
+    void hideEvent(QHideEvent*) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
 
     QString openColumnAccessibleText(const QTableWidgetItem* item) const;
@@ -77,5 +77,3 @@ private:
     Instrument* m_instrument = nullptr;
 };
 }
-
-#endif // MU_NOTATION_EDITSTRINGDATA_H

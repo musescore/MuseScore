@@ -22,6 +22,8 @@
 
 #include "braillepreferencesmodel.h"
 
+#include <QVariant>
+
 #include "translation.h"
 
 using namespace mu::appshell;

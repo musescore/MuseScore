@@ -30,6 +30,8 @@ using namespace muse;
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractLayoutPanelTreeItem(LayoutPanelItemType::PART, masterNotation, notation, parent), Injectable(iocCtxForQmlObject(this))
 {
+    setIsSelectable(true);
+
     listenVisibilityChanged();
 }
 
@@ -40,24 +42,23 @@ void PartTreeItem::init(const notation::Part* masterPart)
     }
 
     const Part* part = notation()->parts()->part(masterPart->id());
-    bool partExists = part != nullptr;
-    bool visible = partExists && part->show();
+    m_partExists = part != nullptr;
+    bool visible = m_partExists && part->show();
 
-    if (!partExists) {
+    if (!m_partExists) {
         part = masterPart;
     }
 
     setId(part->id());
     setTitle(part->instrument()->nameAsPlainText());
     setIsVisible(visible);
-    setSettingsAvailable(partExists);
-    setSettingsEnabled(partExists);
-    setIsExpandable(partExists);
-    setIsRemovable(partExists);
-    setIsSelectable(partExists);
+    setSettingsAvailable(m_partExists);
+    setSettingsEnabled(m_partExists);
+    setIsExpandable(m_partExists);
+    setIsRemovable(m_partExists);
 
     m_part = part;
-    m_isInited = true;
+    m_ignoreVisibilityChange = false;
 }
 
 const Part* PartTreeItem::part() const
@@ -65,10 +66,23 @@ const Part* PartTreeItem::part() const
     return m_part;
 }
 
+void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
+{
+    if (!m_part) {
+        return;
+    }
+
+    setTitle(m_part->instrument()->nameAsPlainText());
+
+    m_ignoreVisibilityChange = true;
+    setIsVisible(m_partExists && m_part->show());
+    m_ignoreVisibilityChange = false;
+}
+
 void PartTreeItem::listenVisibilityChanged()
 {
     connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
-        if (!m_isInited) {
+        if (m_ignoreVisibilityChange) {
             return;
         }
 
@@ -188,11 +202,13 @@ void PartTreeItem::removeChildren(int row, int count, bool deleteChild)
         stavesIds.push_back(childAtRow(i)->id());
     }
 
+    // Remove the children first, then remove the staves
+    // so we don't try to remove them twice when notified by removeStaves()
+    AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);
+
     if (deleteChild) {
         masterNotation()->parts()->removeStaves(stavesIds);
     }
-
-    AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);
 }
 
 bool PartTreeItem::canAcceptDrop(const QVariant& obj) const
@@ -218,20 +234,17 @@ void PartTreeItem::replaceInstrument()
     instrumentKey.instrumentId = instrumentId();
     instrumentKey.tick = Part::MAIN_INSTRUMENT_TICK;
 
-    RetVal<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(instrumentKey);
-    if (!templ.ret) {
-        LOGE() << templ.ret.toString();
-        return;
-    }
+    async::Promise<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(instrumentKey);
+    templ.onResolve(this, [this, instrumentKey](const InstrumentTemplate& val) {
+        Instrument instrument = Instrument::fromTemplate(&val);
 
-    Instrument instrument = Instrument::fromTemplate(&templ.val);
+        const StaffType* staffType = val.staffTypePreset;
+        if (!staffType) {
+            staffType = StaffType::getDefaultPreset(val.staffGroup);
+        }
 
-    const StaffType* staffType = templ.val.staffTypePreset;
-    if (!staffType) {
-        staffType = StaffType::getDefaultPreset(templ.val.staffGroup);
-    }
-
-    masterNotation()->parts()->replaceInstrument(instrumentKey, instrument, staffType);
+        masterNotation()->parts()->replaceInstrument(instrumentKey, instrument, staffType);
+    });
 }
 
 void PartTreeItem::resetAllFormatting()
@@ -239,15 +252,14 @@ void PartTreeItem::resetAllFormatting()
     std::string title = muse::trc("layoutpanel", "Are you sure you want to reset all formatting?");
     std::string body = muse::trc("layoutpanel", "This action can not be undone");
 
-    IInteractive::Button button = interactive()->question(title, body, {
+    interactive()->question(title, body, {
         IInteractive::Button::No,
         IInteractive::Button::Yes
-    }).standardButton();
-
-    if (button != IInteractive::Button::Yes) {
-        return;
-    }
-
-    const Part* masterPart = masterNotation()->parts()->part(id());
-    notation()->parts()->replacePart(id(), masterPart->clone());
+    })
+    .onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            const Part* masterPart = masterNotation()->parts()->part(id());
+            notation()->parts()->replacePart(id(), masterPart->clone());
+        }
+    });
 }

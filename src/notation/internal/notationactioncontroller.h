@@ -102,7 +102,7 @@ private:
     bool moveSelectionAvailable(MoveSelectionType type) const;
     void moveSelection(MoveSelectionType type, MoveDirection direction);
     void move(MoveDirection direction, bool quickly = false);
-    void moveInputNotes(bool up, bool quickly = false);
+    void moveInputNotes(bool up, PitchMode mode);
     void movePitchDiatonic(MoveDirection direction, bool);
     void moveWithinChord(MoveDirection direction);
     void selectTopOrBottomOfChord(MoveDirection direction);
@@ -115,18 +115,18 @@ private:
     void chordTie();
     void addLaissezVib();
     void addSlur();
+    void addHammerOnPullOff();
     void addFret(int num);
 
     void insertClef(mu::engraving::ClefType type);
 
-    muse::IInteractive::Result showErrorMessage(const std::string& message) const;
-
-    bool isElementsSelected(const std::vector<ElementType>& elementsTypes) const;
+    muse::async::Promise<muse::IInteractive::Result> showErrorMessage(const std::string& message);
 
     void addText(TextStyleType type);
     void addImage();
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
+    void addFretboardDiagram();
 
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
@@ -206,7 +206,8 @@ private:
     void navigateToTextElementByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
 
-    void startNoteInputIfNeed();
+    bool startNoteInputAllowed() const;
+    void startNoteInput();
 
     bool hasSelection() const;
     mu::engraving::EngravingItem* selectedElement() const;
@@ -220,8 +221,10 @@ private:
     bool canRedo() const;
 
     bool isNotationPage() const;
-    bool isStandardStaff() const;
     bool isTablatureStaff() const;
+
+    void checkForScoreCorruptions();
+
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(const muse::actions::ActionData& data),
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(),
@@ -232,8 +235,14 @@ private:
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool), MoveDirection, bool,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+    void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(),
+                        muse::Ret (INotationInteraction::*)() const);
+    void registerAction(const muse::actions::ActionCode&, std::function<void()>,
+                        muse::Ret (INotationInteraction::*)() const);
 
     void registerNoteInputAction(const muse::actions::ActionCode&, NoteInputMethod inputMethod);
+
+    bool noteInputActionAllowed() const;
     void registerNoteAction(const muse::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
 
     void registerPadNoteAction(const muse::actions::ActionCode&, Pad padding);

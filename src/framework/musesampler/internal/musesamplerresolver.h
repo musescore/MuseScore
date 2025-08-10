@@ -23,15 +23,17 @@
 #ifndef MUSE_MUSESAMPLER_MUSESAMPLERRESOLVER_H
 #define MUSE_MUSESAMPLER_MUSESAMPLERRESOLVER_H
 
-#include "audio/isynthresolver.h"
+#include "audio/worker/isynthresolver.h"
 #include "modularity/ioc.h"
 
 #include "libhandler.h"
 #include "imusesamplerconfiguration.h"
 #include "imusesamplerinfo.h"
 
+#include "async/notification.h"
+
 namespace muse::musesampler {
-class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Injectable
+class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Injectable
 {
     Inject<IMuseSamplerConfiguration> configuration = { this };
 
@@ -41,7 +43,11 @@ public:
         : Injectable(iocCtx) {}
 
     void init();
-    bool reloadMuseSampler();
+
+    bool reloadAllInstruments();
+    void processOnlineSounds();
+
+    int buildNumber() const;
 
     muse::audio::synth::ISynthesizerPtr resolveSynth(const muse::audio::TrackId trackId,
                                                      const muse::audio::AudioInputParams& params) const override;
@@ -60,13 +66,12 @@ public:
     std::vector<Instrument> instruments() const override;
 
 private:
-    bool doInit(const io::path_t& libPath);
-
     void loadSoundPresetAttributes(muse::audio::SoundPresetAttributes& attributes, int instrumentId, const char* presetCode) const;
 
     String buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const;
 
     MuseSamplerLibHandlerPtr m_libHandler = nullptr;
+    async::Notification m_processOnlineSoundsRequested;
 };
 }
 

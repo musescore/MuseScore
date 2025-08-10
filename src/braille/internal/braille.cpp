@@ -62,7 +62,6 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/types.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
 
@@ -2842,9 +2841,10 @@ QString Braille::brailleVolta(Measure* measure, Volta* volta, int staffCount)
 
     // 17.1.1. Page 121. Music Braille Code 2015.
     resetOctave(staffCount);
-    QStringList voltaNumbers = volta->text().toQString().split(QRegularExpression("(,|\\.| )"));
+    static const QRegularExpression regex("(,|\\.| )");
+    const QStringList voltaNumbers = volta->text().toQString().split(regex);
     QString result = QString();
-    for (QString voltaNumber : voltaNumbers) {
+    for (const QString& voltaNumber : voltaNumbers) {
         if (voltaNumber.isEmpty()) {
             continue;
         }
@@ -2888,12 +2888,12 @@ QString Braille::brailleHairpinBefore(ChordRest* chordRest, const std::vector<Ha
             result += beginTextBraille + BRAILLE_HAIRPIN_DIV_START;
             resetOctave(hairpin->staffIdx());
             break;
-        case HairpinType::DECRESC_HAIRPIN:
+        case HairpinType::DIM_HAIRPIN:
             result += beginTextBraille + BRAILLE_HAIRPIN_CONV_START;
             resetOctave(hairpin->staffIdx());
             break;
         case HairpinType::CRESC_LINE:
-        case HairpinType::DECRESC_LINE:
+        case HairpinType::DIM_LINE:
             result += beginTextBraille + BRAILLE_LINE_CONT_START_1;
             resetOctave(hairpin->staffIdx());
             break;
@@ -2925,12 +2925,12 @@ QString Braille::brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hai
             result += BRAILLE_HAIRPIN_DIV_END;
             resetOctave(hairpin->staffIdx());
             break;
-        case HairpinType::DECRESC_HAIRPIN:
+        case HairpinType::DIM_HAIRPIN:
             result += BRAILLE_HAIRPIN_CONV_END;
             resetOctave(hairpin->staffIdx());
             break;
         case HairpinType::CRESC_LINE:
-        case HairpinType::DECRESC_LINE:
+        case HairpinType::DIM_LINE:
             result += BRAILLE_LINE_CONT_END_1;
             resetOctave(hairpin->staffIdx());
             break;

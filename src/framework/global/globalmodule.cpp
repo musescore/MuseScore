@@ -145,10 +145,13 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread|15} | ${tag|15} | ${message}")));
     }
 
+    //! Log file
+    io::path_t logFilePath = "none";
+#ifndef Q_OS_WASM
     io::path_t logPath = m_configuration->userAppDataPath() + "/logs";
     fileSystem()->makePath(logPath);
 
-    io::path_t logFilePath = logPath;
+    logFilePath = logPath;
     String logFileNamePattern;
 
     if (mode == IApplication::RunMode::AudioPluginRegistration) {
@@ -174,6 +177,8 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
                                            LogLayout("${datetime} | ${type|5} | ${thread|15} | ${tag|15} | ${message}"));
 
     logger->addDest(logFile);
+    LOGI() << "log path: " << logFilePath;
+#endif
 
     if (m_loggerLevel) {
         logger->setLevel(m_loggerLevel.value());
@@ -185,7 +190,6 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 #endif
     }
 
-    LOGI() << "log path: " << logFilePath;
     LOGI() << "=== Started " << m_application->title()
            << " " << m_application->fullVersion().toString()
            << ", build: " << m_application->build() << " ===";
@@ -194,8 +198,8 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     using namespace muse::profiler;
     struct MyPrinter : public Profiler::Printer
     {
-        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", Color::Magenta)() << str; }
-        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", Color::Magenta)() << str; }
+        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", logger::Color::Magenta)() << str; }
+        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", logger::Color::Magenta)() << str; }
     };
 
     Profiler::Options profOpt;

@@ -49,6 +49,7 @@
 #include "harmony.h"
 #include "key.h"
 #include "laissezvib.h"
+#include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
 #include "masterscore.h"
@@ -79,7 +80,6 @@
 #include "timesig.h"
 
 #include "tuplet.h"
-#include "types.h"
 #include "undo.h"
 #include "utils.h"
 
@@ -111,7 +111,7 @@ static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack, bool undo = fa
     return actualMacro->changesInfo(undo);
 }
 
-static ScoreChangesRange buildChangesRange(const CmdState& cmdState, const UndoMacro::ChangesInfo& changes)
+static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoMacro::ChangesInfo& changes)
 {
     int startTick = cmdState.startTick().ticks();
     int endTick = cmdState.endTick().ticks();
@@ -130,6 +130,7 @@ static ScoreChangesRange buildChangesRange(const CmdState& cmdState, const UndoM
 
     return { startTick, endTick,
              cmdState.startStaff(), cmdState.endStaff(),
+             changes.isTextEditing,
              std::move(changes.changedItems),
              std::move(changes.changedObjectTypes),
              std::move(changes.changedPropertyIdSet),
@@ -377,8 +378,8 @@ void Score::undoRedo(bool undo, EditData* ed)
     masterScore()->setPlaylistDirty();    // TODO: flag all individual operations
     updateSelection();
 
-    ScoreChangesRange range = buildChangesRange(cmdState(), changes);
-    changesChannel().send(range);
+    ScoreChanges result = buildScoreChanges(cmdState(), changes);
+    changesChannel().send(result);
 }
 
 //---------------------------------------------------------
@@ -409,9 +410,9 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
 
     update(false, layoutAllParts);
 
-    ScoreChangesRange range;
+    ScoreChanges changes;
     if (!rollback) {
-        range = buildChangesRange(cmdState(), changesInfo(undoStack()));
+        changes = buildScoreChanges(cmdState(), changesInfo(undoStack()));
     }
 
     LOGD() << "Undo stack current macro child count: " << undoStack()->activeCommand()->childCount();
@@ -426,7 +427,7 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
     cmdState().reset();
 
     if (!isCurrentCommandEmpty && !rollback) {
-        changesChannel().send(range);
+        changesChannel().send(changes);
     }
 }
 
@@ -1367,11 +1368,15 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             Fraction tick = cr->tick() + actualTicks(sd, tuplet, timeStretch);
 
             std::vector<TDuration> dList;
-            if (tuplet || staff(track / VOICES)->isLocalTimeSignature(tick)) {
+            if (tuplet) {
                 dList = toDurationList(rd, false);
                 std::reverse(dList.begin(), dList.end());
             } else {
-                dList = toRhythmicDurationList(rd, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, 0);
+                Staff* stf = staff(track2staff(track));
+                TimeSig* timeSig = stf->timeSig(tick);
+                TimeSigFrac refTimeSig = timeSig ? timeSig->sig() : sigmap()->timesig(tick).nominal();
+                Fraction rTickStart = (tick - measure->tick()) * stf->timeStretch(tick);
+                dList = toRhythmicDurationList(rd, true, rTickStart, refTimeSig, measure, 0);
             }
             if (dList.empty()) {
                 break;
@@ -1410,9 +1415,11 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
     if (t1 < t2) {
         Segment* s1 = tick2rightSegment(t1);
         Segment* s2 = tick2rightSegment(t2);
-        typedef SelectionFilterType Sel;
+
+        SelectionFilter filter;
         // chord symbols can exist without chord/rest so they should not be removed
-        constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
+        filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
+
         deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
         deleteSlursFromRange(t1, t2, track, track + 1, filter);
     }
@@ -1454,14 +1461,16 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
 
         if (newLen > Fraction(0, 1)) {
             const Fraction endTick = tick + newLen;
-            typedef SelectionFilterType Sel;
+
+            SelectionFilter filter;
             // chord symbols can exist without chord/rest so they should not be removed
-            constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
+            filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
+
             deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
             deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
         }
 
-        seg = m->undoGetSegment(SegmentType::ChordRest, tick);
+        seg = tm->undoGetSegment(SegmentType::ChordRest, tick);
         bool result = makeGapVoice(seg, track, newLen, tick);
         if (track == strack && !result) {   // makeGap failed for first voice
             return false;
@@ -1808,7 +1817,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     connectTies();
 
     if (elementToSelect) {
-        if (containsElement(elementToSelect)) {
+        if (canReselectItem(elementToSelect)) {
             select(elementToSelect, SelectType::SINGLE, 0);
         }
     }
@@ -2290,7 +2299,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
 
 void Score::changeAccidental(Note* note, AccidentalType accidental)
 {
-    Chord* chord = note->chord();
+    Chord* chord = note ? note->chord() : nullptr;
     if (!chord) {
         return;
     }
@@ -2398,6 +2407,13 @@ bool Score::toggleArticulation(EngravingItem* el, Articulation* a)
     if (oa) {
         undoRemoveElement(oa);
         return false;
+    }
+
+    Tapping* tap = c->tapping();
+    if (tap) {
+        // If we got here it means that the user is entering a tap
+        // of different hand, so replace the old one
+        undoRemoveElement(tap);
     }
 
     if (!a->isDouble()) {
@@ -2592,11 +2608,7 @@ void Score::cmdResetToDefaultLayout()
         Sid::genCourtesyClef,
         Sid::swingRatio,
         Sid::swingUnit,
-        Sid::useStandardNoteNames,
-        Sid::useGermanNoteNames,
-        Sid::useFullGermanNoteNames,
-        Sid::useSolfeggioNoteNames,
-        Sid::useFrenchNoteNames,
+        Sid::chordSymbolSpelling,
         Sid::automaticCapitalization,
         Sid::lowerCaseMinorChords,
         Sid::lowerCaseBassNotes,
@@ -2694,10 +2706,13 @@ void Score::cmdResetBeamMode()
         return;
     }
 
-    Fraction endTick = selection().tickEnd();
+    const staff_idx_t staffStart = selection().staffStart();
+    const staff_idx_t staffEnd = selection().staffEnd();
+    const Fraction endTick = selection().tickEnd();
 
-    for (Segment* seg = selection().firstChordRestSegment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
-        for (track_idx_t track = selection().staffStart() * VOICES; track < selection().staffEnd() * VOICES; ++track) {
+    for (track_idx_t track = staff2track(staffStart); track < staff2track(staffEnd); ++track) {
+        ChordRest* firstCR = selection().firstChordRest(track);
+        for (Segment* seg = firstCR->segment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
             ChordRest* cr = toChordRest(seg->element(track));
             if (!cr) {
                 continue;
@@ -2713,6 +2728,7 @@ void Score::cmdResetBeamMode()
             }
         }
     }
+
     if (noSelection) {
         deselectAll();
     }
@@ -2771,7 +2787,7 @@ void Score::cmdResetMeasuresLayout()
         }
 
         for (EngravingItem* item : mb->el()) {
-            if (item->isLayoutBreak()) {
+            if (item->isLayoutBreak() && !toLayoutBreak(item)->isSectionBreak()) {
                 itemsToRemove.push_back(item);
             }
         }
@@ -2948,6 +2964,7 @@ EngravingItem* Score::move(const String& cmd)
         case ElementType::HBOX:           // fallthrough
         case ElementType::VBOX:           // fallthrough
         case ElementType::TBOX:
+        case ElementType::FBOX:
             box = toBox(el);
             break;
         default:                                // on anything else, return failure
@@ -3244,15 +3261,15 @@ void Score::cmdMirrorNoteHead()
             HairpinType st = h->hairpinType();
             switch (st) {
             case HairpinType::CRESC_HAIRPIN:
-                st = HairpinType::DECRESC_HAIRPIN;
+                st = HairpinType::DIM_HAIRPIN;
                 break;
-            case HairpinType::DECRESC_HAIRPIN:
+            case HairpinType::DIM_HAIRPIN:
                 st = HairpinType::CRESC_HAIRPIN;
                 break;
             case HairpinType::CRESC_LINE:
-                st = HairpinType::DECRESC_LINE;
+                st = HairpinType::DIM_LINE;
                 break;
-            case HairpinType::DECRESC_LINE:
+            case HairpinType::DIM_LINE:
                 st = HairpinType::CRESC_LINE;
                 break;
             case HairpinType::INVALID:
@@ -3285,18 +3302,17 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     ChordRest* cr = toChordRest(el);
 
     // if measure rest is selected as input, then the correct initialDuration will be the
-    // duration of the measure's time signature, else is just the input state's duration
-    TDuration initialDuration;
-    if (cr->durationType() == DurationType::V_MEASURE) {
+    // duration of the measure's time signature, else is just the ChordRest's duration
+    TDuration initialDuration = cr->durationType();
+    if (initialDuration == DurationType::V_MEASURE) {
         initialDuration = TDuration(cr->measure()->timesig(), true);
 
         if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
             // Duration already shortened by truncation; shorten one step less
             --nSteps;
         }
-    } else {
-        initialDuration = m_is.duration();
     }
+
     TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
     if (!d.isValid()) {
         return;
@@ -3340,20 +3356,15 @@ void Score::cmdAddParentheses()
 
 void Score::cmdAddParentheses(EngravingItem* el)
 {
-    if (el->type() == ElementType::NOTE) {
-        Note* n = toNote(el);
-        n->undoChangeProperty(Pid::HEAD_HAS_PARENTHESES, !n->headHasParentheses());
-    } else if (el->type() == ElementType::ACCIDENTAL) {
+    if (el->type() == ElementType::ACCIDENTAL) {
         Accidental* acc = toAccidental(el);
         acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
-    } else if (el->type() == ElementType::HARMONY) {
-        Harmony* h = toHarmony(el);
-        h->setLeftParen(true);
-        h->setRightParen(true);
-        h->render();
     } else if (el->type() == ElementType::TIMESIG) {
         TimeSig* ts = toTimeSig(el);
         ts->setLargeParentheses(true);
+    } else {
+        ParenthesesMode p = el->leftParen() || el->rightParen() ? ParenthesesMode::NONE : ParenthesesMode::BOTH;
+        el->undoChangeProperty(Pid::HAS_PARENTHESES, p);
     }
 }
 
@@ -4282,7 +4293,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             if (!concertPitch) {
                 offset = interval.chromatic;
             }
-            notes = r.generateNotes(h->rootTpc(), h->baseTpc(),
+            notes = r.generateNotes(h->rootTpc(), h->bassTpc(),
                                     literal, voicing, offset);
         }
 
@@ -4297,6 +4308,12 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             }
             chord->add(note);       //add note first to set track and such
             note->setNval(nval, tick);
+        }
+
+        if (!seg->isChordRestType()) {
+            Segment* newCrSeg = seg->measure()->undoGetSegment(SegmentType::ChordRest, seg->tick());
+            newCrSeg->setTicks(seg->ticks());
+            seg = newCrSeg;
         }
 
         setChord(this, seg, h->track(), chord, duration);     //add chord using template
@@ -4618,6 +4635,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             case ElementType::HBOX:
             case ElementType::VBOX:
             case ElementType::TBOX:
+            case ElementType::FBOX:
                 mb = toMeasureBase(el);
                 break;
             default: {
@@ -5000,7 +5018,7 @@ bool Score::resolveNoteInputParams(int note, bool addFlag, NoteInputParams& out)
 //   cmdAddPitch
 ///   insert note or add note to chord
 //---------------------------------------------------------
-void Score::cmdAddPitch(const EditData& ed, const NoteInputParams& params, bool addFlag, bool insert)
+void Score::cmdAddPitch(const NoteInputParams& params, bool addFlag, bool insert)
 {
     InputState& is = inputState();
     if (!is.isValid()) {
@@ -5014,26 +5032,9 @@ void Score::cmdAddPitch(const EditData& ed, const NoteInputParams& params, bool 
     if (ds) {
         is.setDrumNote(params.drumPitch);
         is.setVoice(ds->voice(params.drumPitch));
-
-        if (is.segment()) {
-            Segment* seg = is.segment();
-            while (seg) {
-                if (seg->element(is.track())) {
-                    break;
-                }
-                seg = seg->prev(SegmentType::ChordRest);
-            }
-            if (seg) {
-                is.setSegment(seg);
-            } else {
-                is.setSegment(is.segment()->measure()->first(SegmentType::ChordRest));
-            }
-        }
     }
 
     cmdAddPitch(params.step, addFlag, insert);
-
-    ed.view()->adjustCanvasPosition(is.cr());
 }
 
 void Score::cmdAddPitch(int step, bool addFlag, bool insert)

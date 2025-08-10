@@ -77,6 +77,12 @@ bool RehearsalMark::isEditAllowed(EditData& ed) const
     return TextBase::isEditAllowed(ed);
 }
 
+RectF RehearsalMark::drag(EditData& ed)
+{
+    // Not TextBase::drag because we don't allow reanchoring on drag
+    return EngravingItem::drag(ed);
+}
+
 //---------------------------------------------------------
 //   setType
 //---------------------------------------------------------

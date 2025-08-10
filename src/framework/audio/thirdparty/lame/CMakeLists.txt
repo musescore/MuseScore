@@ -1,5 +1,4 @@
-
-declare_module(lame)
+declare_thirdparty_module(lame)
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -56,7 +55,6 @@ set (MODULE_SRC
     ${SOURCE_LIB}
     )
 
-set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
 set(MODULE_USE_COVERAGE OFF)
 
@@ -83,3 +81,4 @@ target_no_warning(${MODULE} -WMSVC-no-assignment-within-conditional-expression)
 target_no_warning(${MODULE} -WMSVC-no-hides-previous)
 target_no_warning(${MODULE} -WMSVC-no-undefined-assuming-extern)
 target_no_warning(${MODULE} -WMSVC-named-type-definition-in-parentheses)
+target_no_warning(${MODULE} -WMSVC-no-benign-redefinition)

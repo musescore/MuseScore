@@ -79,8 +79,8 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     zText->setText(m_editedTimeSig->numeratorString());
     nText->setText(m_editedTimeSig->denominatorString());
     // set validators for numerator and denominator strings
-    // which only accept '+', '(', ')', digits and some time symb conventional representations
-    QRegularExpression regex("[0-9+CO()\\x00A2\\x00D8\\x00BD\\x00BC]*");
+    // which only accept '+', '*' (or 'x'), '(', ')', digits and some time symb conventional representations
+    QRegularExpression regex("[0-9+COXx()\\*\\x00A2\\x00D7\\x00D8\\x00BD\\x00BC]*");
     QValidator* validator = new QRegularExpressionValidator(regex, this);
     zText->setValidator(validator);
     nText->setValidator(validator);
@@ -154,13 +154,17 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
         g = Groups::endings(m_editedTimeSig->sig()); // initialize with default
     }
     groups->setSig(m_editedTimeSig->sig(), g, m_editedTimeSig->numeratorString(), m_editedTimeSig->denominatorString());
-
-    WidgetStateStore::restoreGeometry(this);
 }
 
 TimeSignaturePropertiesDialog::~TimeSignaturePropertiesDialog()
 {
     delete m_editedTimeSig;
+}
+
+void TimeSignaturePropertiesDialog::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(event);
 }
 
 void TimeSignaturePropertiesDialog::hideEvent(QHideEvent* event)

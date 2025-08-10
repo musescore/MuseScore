@@ -38,7 +38,11 @@ public:
     Ret setWorkspaces(const IWorkspacePtrList& workspaces) override;
     async::Notification workspacesListChanged() const override;
 
-    IWorkspacePtr newWorkspace(const std::string& workspaceName) const override;
+    IWorkspacePtr cloneWorkspace(const IWorkspacePtr& workspace, const std::string& newWorkspaceName) const override;
+
+    void changeCurrentWorkspace(const std::string& newWorkspaceName) override;
+    void createAndAppendNewWorkspace() override;
+    void openConfigureWorkspacesDialog() override;
 };
 }
 

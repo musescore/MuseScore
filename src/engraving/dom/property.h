@@ -99,7 +99,7 @@ enum class Pid {
     SLUR_DIRECTION,
     LEADING_SPACE,
     MIRROR_HEAD,
-    HEAD_HAS_PARENTHESES,
+    HAS_PARENTHESES,
     DOT_POSITION,
     COMBINE_VOICE,
     TUNING,
@@ -136,12 +136,22 @@ enum class Pid {
     RIGHT_MARGIN,
     TOP_MARGIN,
     BOTTOM_MARGIN,
+    PADDING_TO_NOTATION_ABOVE,
+    PADDING_TO_NOTATION_BELOW,
     LAYOUT_BREAK,
     AUTOSCALE,
     SIZE,
     IMAGE_HEIGHT,
     IMAGE_WIDTH,
     IMAGE_FRAMED,
+
+    FRET_FRAME_TEXT_SCALE,
+    FRET_FRAME_DIAGRAM_SCALE,
+    FRET_FRAME_COLUMN_GAP,
+    FRET_FRAME_ROW_GAP,
+    FRET_FRAME_CHORDS_PER_ROW,
+    FRET_FRAME_H_ALIGN,
+    FRET_FRAME_DIAGRAMS_ORDER,
 
     SCALE,
     LOCK_ASPECT_RATIO,
@@ -159,6 +169,7 @@ enum class Pid {
     SPACE,            // used for spacer
     TEMPO,
     TEMPO_FOLLOW_TEXT,
+    TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK,
     ACCIDENTAL_BRACKET,
     ACCIDENTAL_TYPE,
     ACCIDENTAL_STACKING_ORDER_OFFSET,
@@ -199,6 +210,8 @@ enum class Pid {
     CONTINUE_AT,
     LABEL,
     MARKER_TYPE,
+    MARKER_SYMBOL_SIZE,
+    MARKER_CENTER_ON_SYMBOL,
     ARP_USER_LEN1,
     ARP_USER_LEN2,
     REPEAT_END,
@@ -226,7 +239,6 @@ enum class Pid {
     START_ON_UPPER_NOTE,
 
     TIMESIG,
-    TIMESIG_GLOBAL,
     TIMESIG_STRETCH,
     TIMESIG_TYPE,
     SPANNER_TICK,
@@ -274,6 +286,8 @@ enum class Pid {
     HARMONY_VOICE_LITERAL,
     HARMONY_VOICING,
     HARMONY_DURATION,
+    HARMONY_BASS_SCALE,
+    HARMONY_DO_NOT_STACK_MODIFIERS,
 
     SYSTEM_BRACKET,
     GAP,
@@ -459,6 +473,16 @@ enum class Pid {
 
     IS_COURTESY,
 
+    EXCLUDE_VERTICAL_ALIGN,
+
+    SHOW_MEASURE_NUMBERS,
+    SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF,
+
+    PLAY_COUNT_TEXT_SETTING,
+    PLAY_COUNT_TEXT,
+
+    ALIGN_WITH_OTHER_RESTS,
+
     END
 };
 
@@ -484,6 +508,7 @@ extern String propertyToString(Pid, const PropertyValue& value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
+extern bool propertyLinkSameScore(Pid id);
 extern PropertyGroup propertyGroup(Pid id);
 extern Pid propertyId(const muse::AsciiStringView& name);
 extern String propertyUserName(Pid);

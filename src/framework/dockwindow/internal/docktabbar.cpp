@@ -32,9 +32,11 @@ DockTabBar::DockTabBar(KDDockWidgets::TabWidget* parent)
 bool DockTabBar::event(QEvent* event)
 {
     switch (event->type()) {
-    //! NOTE: see https://github.com/musescore/MuseScore/issues/8164
-    case QEvent::MouseButtonDblClick:
+    case QEvent::MouseButtonDblClick: {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        doubleClicked(mouseEvent->pos());
         return true;
+    }
     case QEvent::MouseButtonPress: {
         QQuickItem* tabBar = tabBarQmlItem();
         if (tabBar) {
@@ -57,6 +59,13 @@ bool DockTabBar::event(QEvent* event)
     }
 
     return KDDockWidgets::TabBarQuick::event(event);
+}
+
+void DockTabBar::doubleClicked(const QPoint& pos) const
+{
+    if (KDDockWidgets::DockWidgetBase* dw = dockWidgetAt(pos)) {
+        dw->setFloating(!dw->isFloating());
+    }
 }
 
 bool DockTabBar::isPositionDraggable(QPoint localPos) const

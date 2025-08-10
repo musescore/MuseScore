@@ -27,7 +27,7 @@ OutputResourceItem::OutputResourceItem(QObject* parent, const audio::AudioFxPara
 
 void OutputResourceItem::requestAvailableResources()
 {
-    playback()->audioOutput()->availableOutputResources()
+    playback()->availableOutputResources()
     .onResolve(this, [this](const AudioResourceMetaList& availableFxResources) {
         updateAvailableFxVendorsMap(availableFxResources);
 
@@ -170,12 +170,14 @@ void OutputResourceItem::updateCurrentFxParams(const AudioResourceMeta& newMeta)
         return;
     }
 
+    requestToCloseNativeEditorView();
+
     audio::AudioFxParams newParams = m_currentFxParams;
     newParams.resourceMeta = newMeta;
     newParams.active = newMeta.isValid();
 
     setParams(newParams);
-    updateNativeEditorView();
+    requestToLaunchNativeEditorView();
 }
 
 void OutputResourceItem::updateAvailableFxVendorsMap(const audio::AudioResourceMetaList& availableFxResources)

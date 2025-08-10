@@ -37,6 +37,7 @@
 #include "chordrest.h"
 #include "clef.h"
 #include "engravingitem.h"
+#include "hammeronpulloff.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
@@ -358,6 +359,17 @@ Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segTyp
     return next;
 }
 
+Segment* Segment::next1WithElemsOnTrack(track_idx_t trackIdx, SegmentType segType) const
+{
+    Segment* next = next1(segType);
+
+    while (next && !next->hasElements(trackIdx, trackIdx)) {
+        next = next->next1(segType);
+    }
+
+    return next;
+}
+
 Segment* Segment::next1MM(SegmentType types) const
 {
     for (Segment* s = next1MM(); s; s = s->next1MM()) {
@@ -421,6 +433,17 @@ Segment* Segment::prev(SegmentType types) const
         }
     }
     return 0;
+}
+
+Segment* Segment::prevWithElementsOnTrack(track_idx_t trackIdx, SegmentType segType) const
+{
+    Segment* prevSeg = prev(segType);
+
+    while (prevSeg && !prevSeg->element(trackIdx)) {
+        prevSeg = prevSeg->prev(segType);
+    }
+
+    return prevSeg;
 }
 
 //---------------------------------------------------------
@@ -730,7 +753,6 @@ void Segment::add(EngravingItem* el)
     case ElementType::FIGURED_BASS:
     case ElementType::FERMATA:
     case ElementType::STICKING:
-    case ElementType::PARENTHESIS:
         m_annotations.push_back(el);
         break;
 
@@ -923,7 +945,6 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TREMOLOBAR:
     case ElementType::FERMATA:
     case ElementType::STICKING:
-    case ElementType::PARENTHESIS:
         removeAnnotation(el);
         break;
 
@@ -1093,6 +1114,33 @@ double Segment::xPosInSystemCoords() const
 void Segment::setXPosInSystemCoords(double x)
 {
     mutldata()->setPosX(x - measure()->x());
+}
+
+bool Segment::isTupletSubdivision() const
+{
+    int denom = tick().reduced().denominator();
+    bool denomIsPowOfTwo = (denom & (denom - 1)) == 0;
+    // A non-power-of-two denominator is possible only with tuplets
+    return !denomIsPowOfTwo;
+}
+
+bool Segment::isInsideTupletOnStaff(staff_idx_t staffIdx) const
+{
+    const Segment* refCRSeg = isChordRestType() && hasElements(staffIdx) ? this : prev1WithElemsOnStaff(staffIdx, SegmentType::ChordRest);
+    if (!refCRSeg || refCRSeg->measure() != measure()) {
+        return false;
+    }
+
+    track_idx_t startTrack = staff2track(staffIdx);
+    track_idx_t endTrack = startTrack + VOICES;
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        ChordRest* chordRest = toChordRest(refCRSeg->elementAt(track));
+        if (chordRest && chordRest->tuplet() && tick() != chordRest->topTuplet()->tick()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------
@@ -1699,6 +1747,10 @@ EngravingItem* Segment::firstInNextSegments(staff_idx_t activeStaff) const
 
 EngravingItem* Segment::firstElementOfSegment(staff_idx_t activeStaff) const
 {
+    if (isTimeTickType()) {
+        return nullptr;
+    }
+
     for (auto i: m_elist) {
         if (i && i->staffIdx() == activeStaff) {
             if (i->isDurationElement()) {
@@ -1853,6 +1905,10 @@ EngravingItem* Segment::prevElementOfSegment(EngravingItem* e, staff_idx_t activ
 
 EngravingItem* Segment::lastElementOfSegment(staff_idx_t activeStaff) const
 {
+    if (isTimeTickType()) {
+        return nullptr;
+    }
+
     const std::vector<EngravingItem*>& elements = m_elist;
     for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
         EngravingItem* item = *it;
@@ -1865,7 +1921,16 @@ EngravingItem* Segment::lastElementOfSegment(staff_idx_t activeStaff) const
 
                 const std::vector<Articulation*>& articulations = chord->articulations();
                 if (!articulations.empty()) {
-                    return articulations.back();
+                    Articulation* lastArtic = articulations.back();
+                    if (lastArtic->isTapping()) {
+                        Tapping* tap = toTapping(lastArtic);
+                        if (tap->halfSlurBelow()) {
+                            return tap->halfSlurBelow()->frontSegment();
+                        } else if (tap->halfSlurAbove()) {
+                            return tap->halfSlurAbove()->frontSegment();
+                        }
+                    }
+                    return lastArtic;
                 }
                 return chord->upNote();
             }
@@ -1975,7 +2040,6 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
-    case ElementType::PARENTHESIS:
     case ElementType::TEXT:
     case ElementType::TREMOLOBAR:
     case ElementType::TAB_DURATION_SYMBOL:
@@ -1988,6 +2052,13 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         EngravingItem* next = nullptr;
         if (e->explicitParent() == this) {
             next = nextAnnotation(e);
+
+            if (next && next->isFretDiagram()) {
+                FretDiagram* fretDiagram = toFretDiagram(next);
+                if (fretDiagram->harmony()) {
+                    next = fretDiagram->harmony();
+                }
+            }
         }
         if (next) {
             return next;
@@ -2003,6 +2074,18 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
             if (nextEl) {
                 return nextEl;
             }
+
+            if (EngravingItem* annotation = nextSegment->firstAnnotation(activeStaff)) {
+                if (annotation && annotation->isFretDiagram()) {
+                    FretDiagram* fretDiagram = toFretDiagram(annotation);
+                    if (fretDiagram->harmony()) {
+                        annotation = fretDiagram->harmony();
+                    }
+                }
+
+                return annotation;
+            }
+
             nextSegment = nextSegment->next1MMenabled();
         }
         break;
@@ -2011,6 +2094,12 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         if (!m_annotations.empty()) {
             EngravingItem* next = firstAnnotation(activeStaff);
             if (next) {
+                if (next->isFretDiagram()) {
+                    if (Harmony* harmony = toFretDiagram(next)->harmony()) {
+                        return harmony;
+                    }
+                }
+
                 return next;
             }
         }
@@ -2021,6 +2110,10 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
 
         Segment* nextSegment = this->next1MMenabled();
         while (nextSegment) {
+            if (EngravingItem* annotation = nextSegment->firstAnnotation(activeStaff)) {
+                return annotation;
+            }
+
             EngravingItem* nextEl = nextSegment->firstElementOfSegment(activeStaff);
             if (nextEl) {
                 return nextEl;
@@ -2059,6 +2152,11 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
                         return soundFlag;
                     }
                 }
+                if (next->isFretDiagram()) {
+                    if (Harmony* harmony = toFretDiagram(next)->harmony()) {
+                        return harmony;
+                    }
+                }
 
                 return next;
             }
@@ -2067,6 +2165,17 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         if (s) {
             return s->spannerSegments().front();
         }
+
+        for (SpannerSegment* spannerSeg : system()->spannerSegments()) {
+            if (spannerSeg->staffIdx() == activeStaff && spannerSeg->isHammerOnPullOffSegment()) {
+                for (HammerOnPullOffText* hopoText : toHammerOnPullOffSegment(spannerSeg)->hopoText()) {
+                    if (hopoText->startChord() && hopoText->startChord()->segment() == this) {
+                        return hopoText;
+                    }
+                }
+            }
+        }
+
         Segment* nextSegment = seg->next1MMenabled();
         for (; nextSegment && nextSegment->isTimeTickType(); nextSegment = nextSegment->next1MMenabled()) {
             if (EngravingItem* annotation = nextSegment->firstAnnotation(activeStaff)) {
@@ -2106,6 +2215,11 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
             if (nextEl) {
                 return nextEl;
             }
+
+            if (EngravingItem* annotation = nextSegment->firstAnnotation(activeStaff)) {
+                return annotation;
+            }
+
             nextSegment = nextSegment->next1MMenabled();
         }
     }
@@ -2144,7 +2258,6 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::STRING_TUNINGS:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
-    case ElementType::PARENTHESIS:
     case ElementType::IMAGE:
     case ElementType::TEXT:
     case ElementType::TREMOLOBAR:
@@ -2164,6 +2277,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         if (e->explicitParent() == this) {
             prev = prevAnnotation(e);
         }
+
         if (prev) {
             return prev;
         }
@@ -2173,11 +2287,22 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
                 return lastEl;
             }
         }
+        if (isTimeTickType()) {
+            Segment* prevSeg = prev1MMenabled();
+            return prevSeg ? prevSeg->lastElementOfSegment(activeStaff) : nullptr;
+        }
         track_idx_t track = score()->nstaves() * VOICES - 1;
         Segment* s = this;
         EngravingItem* el = s->element(track);
         while (track > 0 && (!el || el->staffIdx() != activeStaff)) {
+            if (s != this) {
+                if (EngravingItem* annotation = s->lastAnnotation(activeStaff)) {
+                    return annotation;
+                }
+            }
+
             el = s->element(--track);
+
             if (track == 0) {
                 track = score()->nstaves() * VOICES - 1;
                 s = s->prev1MMenabled();
@@ -2249,7 +2374,19 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             } else {
                 return prev;
             }
+        } else {
+            System* system = seg->system();
+            for (SpannerSegment* spannerSeg : system->spannerSegments()) {
+                if (spannerSeg->staffIdx() == activeStaff && spannerSeg->isHammerOnPullOffSegment()) {
+                    for (HammerOnPullOffText* hopoText : toHammerOnPullOffSegment(spannerSeg)->hopoText()) {
+                        if (hopoText->endChord() && hopoText->endChord()->segment() == seg) {
+                            return hopoText;
+                        }
+                    }
+                }
+            }
         }
+
         Segment* prevSeg = seg->prev1MMenabled();
         for (; prevSeg && prevSeg->isTimeTickType(); prevSeg = prevSeg->prev1MMenabled()) {
             if (Spanner* spanner = prevSeg->lastSpanner(activeStaff)) {
@@ -2284,10 +2421,21 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             }
         }
 
-        prev = prevSeg->lastElementOfSegment(activeStaff);
+        if (EngravingItem* annotation = prevSeg->lastAnnotation(activeStaff)) {
+            return annotation;
+        }
+        if (!prev) {
+            prev = prevSeg->lastElementOfSegment(activeStaff);
+        }
+
         while (!prev && prevSeg) {
             prevSeg = prevSeg->prev1MMenabled();
-            prev = prevSeg->lastElementOfSegment(activeStaff);
+
+            if (EngravingItem* annotation = prevSeg->lastAnnotation(activeStaff)) {
+                prev = annotation;
+            } else {
+                prev = prevSeg->lastElementOfSegment(activeStaff);
+            }
         }
         if (!prevSeg) {
             return score()->firstElement();
@@ -2471,7 +2619,6 @@ void Segment::createShapes()
     for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         createShape(staffIdx);
     }
-    addPreAppendedToShape();
 }
 
 //---------------------------------------------------------
@@ -2491,17 +2638,6 @@ void Segment::createShape(staff_idx_t staffIdx)
         }
     }
 
-    if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
-        setVisible(true);
-        BarLine* bl = toBarLine(element(staffIdx * VOICES));
-        if (bl) {
-            rendering::score::LayoutContext lctx(score());
-            RectF r = rendering::score::TLayout::layoutRect(bl, lctx);
-            s.add(r.translated(bl->pos() + bl->staffOffset()), bl);
-        }
-        return;
-    }
-
     if (!score()->staff(staffIdx)->show()) {
         return;
     }
@@ -2515,23 +2651,19 @@ void Segment::createShape(staff_idx_t staffIdx)
         track_idx_t effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
         if (effectiveTrack >= strack && effectiveTrack < etrack) {
             setVisible(true);
-            if (e->isRest() && toRest(e)->ticks() >= measure()->ticks() && measure()->hasVoices(e->staffIdx())) {
+            if (e->isRest() && toRest(e)->isFullMeasureRest() && measure()->hasVoices(e->staffIdx())) {
                 // A full measure rest in a measure with multiple voices must be ignored
                 continue;
             }
             if (e->isMMRest() || (e->isMeasureRepeat() && toMeasureRepeat(e)->numMeasures() > 1)) {
                 continue;
             }
-            if (e->addToSkyline()) {
+            if (e->addToSkyline() || (e->isChordRest() && toChordRest(e)->lyrics().size() > 0)) {
                 s.add(e->shape().translate((e->isClef() ? e->ldata()->pos() : e->pos()) + e->staffOffset()));
             }
             // Non-standard trills display a cue note that we must add to shape here
             if (e->isChord()) {
-                Ornament* orn = toChord(e)->findOrnament();
-                Chord* cueNoteChord = orn ? orn->cueNoteChord() : nullptr;
-                if (cueNoteChord && cueNoteChord->upNote()->visible()) {
-                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
-                }
+                addArticulationsToShape(toChord(e), s);
             }
         }
     }
@@ -2547,13 +2679,16 @@ void Segment::createShape(staff_idx_t staffIdx)
             continue;
         }
 
-        if (e->isHarmony()) {
-            // use same spacing calculation as for chordrest
-            renderer()->layoutItem(toHarmony(e));
-
-            double x1 = e->ldata()->bbox().x() + e->pos().x();
-            double x2 = e->ldata()->bbox().x() + e->ldata()->bbox().width() + e->pos().x();
-            s.addHorizontalSpacing(e, x1, x2);
+        if (e->isHarmony() || e->isFretDiagram()) {
+            // TODO: eliminate once and for all this addHorizontalSpace hack [M.S.]
+            RectF bbox = e->ldata()->bbox().translated(e->pos());
+            s.addHorizontalSpacing(e, bbox.left(), bbox.right());
+            if (e->isFretDiagram()) {
+                if (Harmony* harmony = toFretDiagram(e)->harmony()) {
+                    RectF harmBbox = harmony->ldata()->bbox().translated(harmony->pos() + e->pos());
+                    s.addHorizontalSpacing(harmony, harmBbox.left(), harmBbox.right());
+                }
+            }
         } else if (!e->isRehearsalMark()
                    && !e->isFretDiagram()
                    && !e->isHarmony()
@@ -2567,23 +2702,17 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isTripletFeel()
                    && !e->isInstrumentChange()
                    && !e->isArticulationFamily()
-                   && !e->isFermata()
                    && !e->isStaffText()
                    && !e->isHarpPedalDiagram()
                    && !e->isPlayTechAnnotation()
                    && !e->isCapo()
                    && !e->isStringTunings()) {
             // annotations added here are candidates for collision detection
-            // lyrics, ...
             s.add(e->shape().translate(e->pos() + e->staffOffset()));
         }
     }
-}
 
-void Segment::addPreAppendedToShape()
-{
-    track_idx_t tracks = score()->ntracks();
-    for (unsigned track = 0; track < tracks; ++track) {
+    for (track_idx_t track = strack; track < etrack; ++track) {
         if (!m_preAppendedItems[track]) {
             continue;
         }
@@ -2597,6 +2726,42 @@ void Segment::addPreAppendedToShape()
     }
 }
 
+void Segment::addArticulationsToShape(const Chord* chord, Shape& shape)
+{
+    auto addTappingHalfSlurToShape = [&] (TappingHalfSlur* slur) {
+        IF_ASSERT_FAILED(!slur->segmentsEmpty()) {
+            return;
+        }
+        TappingHalfSlurSegment* slurSeg = toTappingHalfSlurSegment(slur->frontSegment());
+        Shape slurSegShape = slurSeg->shape();
+        // Semi-hack: we don't know the exact position at this stage, but we know that it
+        // must end approx on the center of the notehead
+        Note* note = slur->up() ? chord->upNote() : chord->downNote();
+        double approxPosX = chord->x() + note->x() + 0.5 * note->headWidth() - slurSegShape.right();
+        slurSegShape.translateX(approxPosX);
+        shape.add(slurSegShape);
+    };
+
+    for (Articulation* art : chord->articulations()) {
+        if (art->isOrnament()) {
+            Chord* cueNoteChord = toOrnament(art)->cueNoteChord();
+            if (cueNoteChord && cueNoteChord->upNote()->visible()) {
+                shape.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
+            }
+        } else if (art->addToSkyline()) {
+            shape.add(art->shape().translated(art->pos() + chord->pos()));
+            if (art->isTapping()) {
+                if (TappingHalfSlur* halfSlur = toTapping(art)->halfSlurAbove()) {
+                    addTappingHalfSlurToShape(halfSlur);
+                }
+                if (TappingHalfSlur* halfSlur = toTapping(art)->halfSlurBelow()) {
+                    addTappingHalfSlurToShape(halfSlur);
+                }
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   minRight
 //    calculate minimum distance needed to the right
@@ -2605,7 +2770,8 @@ void Segment::addPreAppendedToShape()
 double Segment::minRight() const
 {
     double distance = 0.0;
-    for (const Shape& sh : shapes()) {
+    for (Shape sh : shapes()) {
+        sh.remove_if([](ShapeElement& el) { return el.item() && el.item()->isArticulationOrFermata(); });
         distance = std::max(distance, sh.right());
     }
     return distance;
@@ -2614,7 +2780,8 @@ double Segment::minRight() const
 double Segment::minLeft() const
 {
     double distance = -DBL_MAX;
-    for (const Shape& sh : shapes()) {
+    for (Shape sh : shapes()) {
+        sh.remove_if([](ShapeElement& el) { return el.item() && el.item()->isArticulationOrFermata(); });
         double l = sh.left();
         if (l > distance) {
             distance = l;
@@ -2846,14 +3013,14 @@ bool Segment::goesBefore(const Segment* nextSegment) const
         return clefPos == ClefToBarlinePosition::AFTER;
     }
 
-    if (thisIsClef && (nextIsKeySig || nextIsTimeSig)
-        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1) && !nextIsHeader) {
+    if (thisIsClef && (nextIsKeySig || nextIsTimeSig) && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)
+        && !nextIsHeader && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
         // Between repeats
         return true;
     }
 
-    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef
-        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1) && !thisIsHeader) {
+    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)
+        && !thisIsHeader && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
         // Between repeats
         return false;
     }

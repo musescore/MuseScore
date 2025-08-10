@@ -26,6 +26,7 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/view/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inspectormodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/inspectormodule.h
+
     ${CMAKE_CURRENT_LIST_DIR}/types/accidentaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ambitustypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/articulationtypes.h
@@ -49,6 +50,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolobartypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/voicetypes.h
+
     ${CMAKE_CURRENT_LIST_DIR}/models/iinspectormodelcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.h
@@ -84,10 +86,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/gradualtempochangeplaybackmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/measures/measuressettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/measures/measuressettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/emptystaves/emptystavesvisiblitysettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/emptystaves/emptystavesvisiblitysettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreappearancesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreappearancesettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreaccessibilitysettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreaccessibilitysettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoredisplaysettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoredisplaysettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/internal/pagetypelistmodel.cpp
@@ -96,6 +98,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/parts/partssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/text/textsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/text/textsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/text/textstylepopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/text/textstylepopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/fretcanvas.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/fretcanvas.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/bendgridcanvas.cpp
@@ -112,8 +116,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/articulations/articulationsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsproxymodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/beams/beammodesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/beams/beammodesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/bends/bendsettingsmodel.cpp
@@ -136,6 +138,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/textframesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/verticalframesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/verticalframesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframesettingsproxymodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframesettingsproxymodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechordssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechordssettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechordlistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechordlistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechorditem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechorditem.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.cpp
@@ -176,8 +188,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/spacers/spacersettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/spacers/spacersettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/staffs/staffsettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/staffs/staffsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/stafftype/stafftypesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/stafftype/stafftypesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/symbols/symbolsettingsmodel.cpp
@@ -208,6 +218,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/mmrests/mmrestsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/playcounttext/playcounttextsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/playcounttext/playcounttextsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/instrumentname/instrumentnamesettingsmodel.cpp
@@ -216,6 +228,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/rests/beams/restbeamsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/rests/restsettingsproxymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/rests/restsettingsproxymodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/rests/restsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/rests/restsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/dynamics/dynamicsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/dynamics/dynamicsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/expressions/expressionsettingsmodel.h
@@ -229,15 +243,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/interfaces/ielementrepositoryservice.h
     )
 
-set(MODULE_UI ${inspector_UI} )
-
-if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
-endif (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
-
 set(MODULE_LINK
     muse::uicomponents
     engraving
+    Qt::Quick
     )
 
 setup_module()

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -75,7 +76,8 @@
         </section>
       </Order>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>QB_QB</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -98,7 +100,8 @@
         </Instrument>
       </Part>
     <Part id="2">
-      <Staff id="2">
+      <Staff>
+        <eid>RB_RB</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -120,17 +123,21 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <eid>H_H</eid>
               </HairPin>
             <next>
               <location>
@@ -139,9 +146,11 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>J_J</eid>
                 </Slur>
               <next>
                 <location>
@@ -150,11 +159,13 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>K_K</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -164,17 +175,21 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>M_M</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>O_O</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <Spanner type="Glissando">
                 <Glissando>
+                  <eid>P_P</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -186,8 +201,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>R_R</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <Spanner type="Glissando">
@@ -202,6 +219,7 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>S_S</eid>
         <voice>
           <Spanner type="HairPin">
             <prev>
@@ -219,6 +237,7 @@
               <beginText>rit.</beginText>
               <beginTextOffset x="0" y="0"/>
               <continueText>(rit.)</continueText>
+              <eid>T_T</eid>
               </GradualTempoChange>
             <next>
               <location>
@@ -227,29 +246,36 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>U_U</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
+              <eid>V_V</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c16</subtype>
+              <eid>W_W</eid>
               <l1>0</l1>
               <l2>2</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
+            <eid>X_X</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
+              <eid>Y_Y</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>Z_Z</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>a_a</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <Spanner type="GuitarBend">
@@ -257,6 +283,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>b_b</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -268,8 +295,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>d_d</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <Spanner type="GuitarBend">
@@ -284,6 +313,7 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>e_e</eid>
         <voice>
           <Spanner type="GradualTempoChange">
             <prev>
@@ -293,16 +323,28 @@
               </prev>
             </Spanner>
           <Chord>
+            <eid>f_f</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
+              <eid>g_g</eid>
+              <parentheses>both</parentheses>
+              <Parenthesis>
+                <eid>SB_SB</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>TB_TB</eid>
+                </Parenthesis>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
+                <eid>h_h</eid>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
+                <eid>i_i</eid>
                 </Symbol>
               <pitch>65</pitch>
               <tpc>13</tpc>
@@ -312,6 +354,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>j_j</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -322,8 +365,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>l_l</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <string>0</string>
@@ -337,10 +382,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>m_m</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>n_n</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>o_o</eid>
                   </Tie>
                 <next>
                   <location>
@@ -353,8 +401,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>p_p</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>q_q</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -367,6 +417,7 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>r_r</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -376,15 +427,18 @@
       <Measure>
         <voice>
           <KeySig>
+            <eid>s_s</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>t_t</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <eid>u_u</eid>
               </HairPin>
             <next>
               <location>
@@ -393,9 +447,11 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>v_v</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>w_w</eid>
                 </Slur>
               <next>
                 <location>
@@ -404,11 +460,13 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>x_x</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>y_y</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -418,17 +476,21 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>z_z</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>0_0</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>1_1</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <Spanner type="Glissando">
                 <Glissando>
+                  <eid>2_2</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -440,8 +502,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>3_3</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>4_4</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <Spanner type="Glissando">
@@ -465,29 +529,36 @@
               </prev>
             </Spanner>
           <Chord>
+            <eid>5_5</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
+              <eid>6_6</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c16</subtype>
+              <eid>7_7</eid>
               <l1>0</l1>
               <l2>2</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
+            <eid>8_8</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
+              <eid>9_9</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>+_+</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>/_/</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <Spanner type="GuitarBend">
@@ -495,6 +566,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>AB_AB</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -506,8 +578,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>BB_BB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>CB_CB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <Spanner type="GuitarBend">
@@ -524,16 +598,28 @@
       <Measure>
         <voice>
           <Chord>
+            <eid>DB_DB</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
+              <eid>EB_EB</eid>
+              <parentheses>both</parentheses>
+              <Parenthesis>
+                <eid>UB_UB</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>VB_VB</eid>
+                </Parenthesis>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
+                <eid>FB_FB</eid>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
+                <eid>GB_GB</eid>
                 </Symbol>
               <pitch>65</pitch>
               <tpc>13</tpc>
@@ -543,6 +629,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>HB_HB</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -553,8 +640,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>IB_IB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>JB_JB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <string>0</string>
@@ -568,10 +657,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>KB_KB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>LB_LB</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>MB_MB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -584,8 +676,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>NB_NB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>OB_OB</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -598,6 +692,7 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>PB_PB</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
+      <repeatPlayCountShow>0</repeatPlayCountShow>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -24,7 +33,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -79,27 +89,31 @@
       <VBox>
         <height>10</height>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <linkedMain/>
+        <eid>D_D</eid>
         </VBox>
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <linkedMain/>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>17</root>
-            <name>7</name>
-            <linkedMain/>
+            <harmonyInfo>
+              <name>7</name>
+              <root>17</root>
+              </harmonyInfo>
+            <eid>G_G</eid>
             </Harmony>
           <Chord>
-            <linkedMain/>
+            <eid>H_H</eid>
             <durationType>whole</durationType>
             <Note>
-              <linkedMain/>
+              <eid>I_I</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>J_J</eid>
                 </Accidental>
               <pitch>73</pitch>
               <tpc>21</tpc>
@@ -108,16 +122,19 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>K_K</eid>
         <voice>
           <Harmony>
-            <root>16</root>
-            <linkedMain/>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
+            <eid>L_L</eid>
             </Harmony>
           <Chord>
-            <linkedMain/>
+            <eid>M_M</eid>
             <durationType>whole</durationType>
             <Note>
-              <linkedMain/>
+              <eid>N_N</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -126,13 +143,22 @@
         </Measure>
       </Staff>
     <Score>
+      <eid>O_O</eid>
       <name>Flute</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
         <maskBarlinesForText>0</maskBarlinesForText>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+        <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
+        <showCourtesiesRepeats>0</showCourtesiesRepeats>
+        <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+        <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+        <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
+        <repeatPlayCountShow>0</repeatPlayCountShow>
         <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -140,8 +166,9 @@
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
       <Part id="1">
-        <Staff id="1">
-          <linkedTo>1</linkedTo>
+        <Staff>
+          <eid>P_P</eid>
+          <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
@@ -196,36 +223,41 @@
         <VBox>
           <height>10</height>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <linked>
-            </linked>
+          <eid>Q_Q</eid>
+          <linkedTo>D_D</linkedTo>
           <Text>
+            <eid>R_R</eid>
             <style>instrument_excerpt</style>
             <text>Flute</text>
             </Text>
           </VBox>
         <Measure>
+          <eid>S_S</eid>
           <voice>
             <TimeSig>
-              <linked>
-                </linked>
+              <eid>T_T</eid>
+              <linkedTo>F_F</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Harmony>
-              <root>17</root>
-              <name>7</name>
-              <linked>
-                </linked>
+              <harmonyInfo>
+                <name>7</name>
+                <root>17</root>
+                </harmonyInfo>
+              <eid>U_U</eid>
+              <linkedTo>G_G</linkedTo>
               </Harmony>
             <Chord>
-              <linked>
-                </linked>
+              <eid>V_V</eid>
+              <linkedTo>H_H</linkedTo>
               <durationType>whole</durationType>
               <Note>
-                <linked>
-                  </linked>
+                <eid>W_W</eid>
+                <linkedTo>I_I</linkedTo>
                 <Accidental>
                   <subtype>accidentalSharp</subtype>
+                  <eid>X_X</eid>
                   </Accidental>
                 <pitch>73</pitch>
                 <tpc>21</tpc>
@@ -234,19 +266,22 @@
             </voice>
           </Measure>
         <Measure>
+          <eid>Y_Y</eid>
           <voice>
             <Harmony>
-              <root>16</root>
-              <linked>
-                </linked>
+              <harmonyInfo>
+                <root>16</root>
+                </harmonyInfo>
+              <eid>Z_Z</eid>
+              <linkedTo>L_L</linkedTo>
               </Harmony>
             <Chord>
-              <linked>
-                </linked>
+              <eid>a_a</eid>
+              <linkedTo>M_M</linkedTo>
               <durationType>whole</durationType>
               <Note>
-                <linked>
-                  </linked>
+                <eid>b_b</eid>
+                <linkedTo>N_N</linkedTo>
                 <pitch>74</pitch>
                 <tpc>16</tpc>
                 </Note>

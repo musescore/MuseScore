@@ -28,7 +28,7 @@
 #include <QDir>
 #include <QQmlContext>
 
-#include "draw/types/color.h"
+#include "global/types/color.h"
 #include "graphicsapiprovider.h"
 
 #include "log.h"
@@ -161,6 +161,11 @@ bool UiEngine::isEffectsAllowed() const
     return m_isEffectsAllowed;
 }
 
+bool UiEngine::isSystemDragSupported() const
+{
+    return configuration()->isSystemDragSupported();
+}
+
 void UiEngine::addSourceImportPath(const QString& path)
 {
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
@@ -220,12 +225,12 @@ Qt::LayoutDirection UiEngine::currentLanguageLayoutDirection() const
 
 QColor UiEngine::blendColors(const QColor& c1, const QColor& c2) const
 {
-    return draw::blendQColors(c1, c2);
+    return muse::blendQColors(c1, c2);
 }
 
 QColor UiEngine::blendColors(const QColor& c1, const QColor& c2, float alpha) const
 {
-    return draw::blendQColors(c1, c2, alpha);
+    return muse::blendQColors(c1, c2, alpha);
 }
 
 QColor UiEngine::colorWithAlphaF(const QColor& src, float alpha) const

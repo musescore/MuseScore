@@ -127,6 +127,7 @@ QVariant PropertyValue::toQVariant() const
         Align a = value<Align>();
         return QVariantList({ static_cast<int>(a.horizontal), static_cast<int>(a.vertical) });
     } break;
+    case P_TYPE::ALIGN_H:     return static_cast<int>(value<AlignH>());
     case P_TYPE::PLACEMENT_V: return static_cast<int>(value<PlacementV>());
     case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
     case P_TYPE::TEXT_PLACE:  return static_cast<int>(value<TextPlace>());
@@ -172,9 +173,16 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::TIMESIG_PLACEMENT: return static_cast<int>(value<TimeSigPlacement>());
     case P_TYPE::TIMESIG_STYLE:    return static_cast<int>(value<TimeSigStyle>());
     case P_TYPE::TIMESIG_MARGIN: return static_cast<int>(value<TimeSigVSMargin>());
+    case P_TYPE::NOTE_SPELLING_TYPE: return static_cast<int>(value<NoteSpellingType>());
+    case P_TYPE::CHORD_PRESET_TYPE: return static_cast<int>(value<ChordStylePreset>());
+    case P_TYPE::LH_TAPPING_SYMBOL: return static_cast<int>(value<LHTappingSymbol>());
+    case P_TYPE::RH_TAPPING_SYMBOL: return static_cast<int>(value<RHTappingSymbol>());
+    case P_TYPE::PARENTHESES_MODE: return static_cast<int>(value<ParenthesesMode>());
+    case P_TYPE::PLAY_COUNT_PRESET: return static_cast<int>(value<RepeatPlayCountPreset>());
 
     case P_TYPE::VOICE_ASSIGNMENT: return static_cast<int>(value<VoiceAssignment>());
     case P_TYPE::AUTO_ON_OFF:       return static_cast<int>(value<AutoOnOff>());
+    case P_TYPE::AUTO_CUSTOM_HIDE:  return static_cast<int>(value<AutoCustomHide>());
 
     // Other
     case P_TYPE::GROUPS: {
@@ -238,6 +246,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
         }
         return PropertyValue(Align(AlignH(l.at(0).toInt()), AlignV(l.at(1).toInt())));
     } break;
+    case P_TYPE::ALIGN_H:       return PropertyValue(AlignH(v.toInt()));
     case P_TYPE::PLACEMENT_V:   return PropertyValue(PlacementV(v.toInt()));
     case P_TYPE::PLACEMENT_H:   return PropertyValue(PlacementH(v.toInt()));
     case P_TYPE::TEXT_PLACE:    return PropertyValue(TextPlace(v.toInt()));
@@ -282,9 +291,16 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::PARTIAL_SPANNER_DIRECTION:    return PropertyValue(PartialSpannerDirection(v.toInt()));
     case P_TYPE::VOICE_ASSIGNMENT: return PropertyValue(VoiceAssignment(v.toInt()));
     case P_TYPE::AUTO_ON_OFF:      return PropertyValue(AutoOnOff(v.toInt()));
+    case P_TYPE::AUTO_CUSTOM_HIDE: return PropertyValue(AutoCustomHide(v.toInt()));
     case P_TYPE::TIMESIG_PLACEMENT: return PropertyValue(TimeSigPlacement(v.toInt()));
     case P_TYPE::TIMESIG_STYLE:    return PropertyValue(TimeSigStyle(v.toInt()));
     case P_TYPE::TIMESIG_MARGIN:   return PropertyValue(TimeSigVSMargin(v.toInt()));
+    case P_TYPE::NOTE_SPELLING_TYPE:   return PropertyValue(NoteSpellingType(v.toInt()));
+    case P_TYPE::CHORD_PRESET_TYPE:   return PropertyValue(ChordStylePreset(v.toInt()));
+    case P_TYPE::LH_TAPPING_SYMBOL: return PropertyValue(LHTappingSymbol(v.toInt()));
+    case P_TYPE::RH_TAPPING_SYMBOL: return PropertyValue(RHTappingSymbol(v.toInt()));
+    case P_TYPE::PARENTHESES_MODE:   return PropertyValue(ParenthesesMode(v.toInt()));
+    case P_TYPE::PLAY_COUNT_PRESET:   return PropertyValue(RepeatPlayCountPreset(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {

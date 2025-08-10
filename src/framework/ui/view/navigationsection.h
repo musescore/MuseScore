@@ -50,7 +50,8 @@ public:
     //! NOTE Please sync with INavigationSection::Type
     enum QmlType {
         Regular = 0,
-        Exclusive
+        Exclusive,
+        Ignore
     };
     Q_ENUM(QmlType)
 

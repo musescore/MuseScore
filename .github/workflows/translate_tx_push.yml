@@ -29,10 +29,8 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
 
-      - name: Setup environment
-        run: |
-          bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
-
-      - name: Push strings to Transifex
-        run: |
-          bash ./buildscripts/ci/translation/tx_push.sh
+      - name: Push strings to Transifex (tx push)
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+          args: "push -s"

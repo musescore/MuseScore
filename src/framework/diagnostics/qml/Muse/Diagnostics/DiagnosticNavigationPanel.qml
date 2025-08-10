@@ -79,7 +79,7 @@ Rectangle {
         spacing: 8
 
         //model: keynavModel.sections
-        delegate: Item {
+        delegate: Rectangle {
 
             id: item
 
@@ -94,12 +94,10 @@ Rectangle {
             width: parent ? parent.width : 0
             height: 48 + subView.height
 
-            Rectangle {
-                anchors.fill: parent
-                color: item.section.enabled ? "#fcaf3e" : "#eeeeec"
-                border.width: item.section.highlight ? 2 : 0
-                border.color: ui.theme.focusColor
-            }
+            color: ui.theme.buttonColor
+            opacity: item.section.enabled ? 1.0 : ui.theme.itemOpacityDisabled
+            border.width: item.section.active ? 3 : 0
+            border.color: ui.theme.fontPrimaryColor
 
             StyledTextLabel {
                 id: secLabel
@@ -126,7 +124,7 @@ Rectangle {
                 spacing: 8
 
                 model: item.section.subsections
-                delegate: Item {
+                delegate: Rectangle {
 
                     id: subitem
 
@@ -136,12 +134,10 @@ Rectangle {
                     anchors.right: parent.right
                     height: 48 + ctrlView.height
 
-                    Rectangle {
-                        anchors.fill: parent
-                        color: subitem.panel.enabled ? "#729fcf" : "#eeeeec"
-                        border.width: subitem.panel.highlight ? 2 : 0
-                        border.color: ui.theme.focusColor
-                    }
+                    color: ui.theme.buttonColor
+                    opacity: subitem.panel.enabled ? 1.0 : ui.theme.itemOpacityDisabled
+                    border.width: subitem.panel.active ? 3 : 0
+                    border.color: ui.theme.fontPrimaryColor
 
                     StyledTextLabel {
                         id: subLabel
@@ -180,10 +176,13 @@ Rectangle {
                             height: 28
                             width: 64
                             radius: 4
-                            color: control.enabled ? "#73d216" : "#eeeeec"
+
                             enabled: control.enabled
-                            border.width: control.highlight ? 2 : 1
-                            border.color: control.highlight ? ui.theme.focusColor : "#2e3436"
+
+                            color: ui.theme.buttonColor
+                            opacity: gridItem.control.enabled ? 1.0 : ui.theme.itemOpacityDisabled
+                            border.width: gridItem.control.active ? 3 : 1
+                            border.color: ui.theme.fontPrimaryColor
 
                             Column {
                                 anchors.fill: parent
@@ -211,6 +210,7 @@ Rectangle {
                                 anchors.fill: parent
 
                                 enabled: gridItem.enabled
+                                acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 hoverEnabled: true
                                 onContainsMouseChanged: {
                                     if (containsMouse) {
@@ -224,9 +224,16 @@ Rectangle {
                                     }
                                 }
 
-                                onClicked: {
-                                    control.requestActive()
-                                    control.trigger()
+                                onClicked: function(e) {
+                                    switch (e.button) {
+                                    case Qt.LeftButton: {
+                                        control.requestActive()
+                                        control.trigger()
+                                    } break;
+                                    case Qt.RightButton: {
+                                        keynavModel.copyToClipboard(item.section, subitem.panel, gridItem.control)
+                                    } break;
+                                    }
                                 }
                             }
                         }

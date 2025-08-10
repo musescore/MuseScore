@@ -25,7 +25,7 @@
 #include "engravingitem.h"
 #include "line.h"
 #include "property.h"
-#include "types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class Glissando;

@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "types/fraction.h"
+#include "types/types.h"
 
 namespace mu::engraving {
 class Chord;
@@ -33,7 +33,6 @@ class Rest;
 class Shape;
 class StemSlash;
 class Segment;
-struct Spring;
 class Measure;
 class System;
 enum class ElementType : unsigned char;
@@ -47,7 +46,7 @@ public:
 
     static double computeSpacingForFullSystem(System* system, double stretchReduction = 1.0, double squeezeFactor = 1.0,
                                               bool overrideMinMeasureWidth = false);
-    static double updateSpacingForLastAddedMeasure(System* system);
+    static double updateSpacingForLastAddedMeasure(System* system, bool startOfContinuousLayoutRegion = false);
     static void squeezeSystemToFit(System* system, double& curSysWidth, double targetSysWidth);
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
 
@@ -72,14 +71,26 @@ private:
         Measure* startMeas = nullptr;
         double stretchReduction = 1.0;
         double squeezeFactor = 1.0;
+        double spacingDensity = 1.0;
         bool overrideMinMeasureWidth = false;
     };
 
     struct SegmentPosition {
         Segment* segment;
         double xPosInSystemCoords;
-        SegmentPosition(Segment* s, double x)
-            : segment(s), xPosInSystemCoords(x) {}
+        bool ignoreForSpacing;
+        SegmentPosition(Segment* s, double x, bool ignoreForSpacing = false)
+            : segment(s), xPosInSystemCoords(x), ignoreForSpacing(ignoreForSpacing) {}
+    };
+
+    struct Spring
+    {
+        double springConst = 0.0;
+        double width = 0.0;
+        double preTension = 0.0;
+        Segment* segment = nullptr;
+        Spring(double sc, double w, double pt, Segment* s)
+            : springConst(sc), width(w), preTension(pt),  segment(s) {}
     };
 
     struct CrossBeamSpacing
@@ -113,9 +124,11 @@ private:
     static double durationStretchForMMRests(const Segment* segment);
     static double durationStretchForTicks(double slope, const Fraction& ticks);
     static bool needsCueSizeSpacing(const Segment* segment);
+    static bool needsHeaderSpacingExceptions(const Segment* seg, const Segment* nextSeg);
 
     static void applyCrossBeamSpacingCorrection(Segment* thisSeg, Segment* nextSeg, double& width);
     static CrossBeamSpacing computeCrossBeamSpacing(Segment* thisSeg, Segment* nextSeg);
+    static double minStemDistOnNonAdjacentCross(const Segment* thisSeg, const Segment* nextSeg);
 
     static void enforceMinimumMeasureWidths(const std::vector<Measure*> measureGroup);
     static double computeMinMeasureWidth(Measure* m);
@@ -140,8 +153,9 @@ private:
     static KerningType computeNoteKerningType(const Note* note, const EngravingItem* item2);
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
     static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
+    static KerningType computeArticulationAndFermataKerning(const EngravingItem* item1, const EngravingItem* item2);
 
     static void computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,
                                         bool systemEnd);
 };
-} // namespace mu::engraving::layout
+}

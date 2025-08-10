@@ -150,25 +150,35 @@ struct Action {
 
     struct Config {
         ExecPointName execPoint = EXEC_DISABLED;
-        std::string shortcut;
     };
 
     bool isValid() const { return type != Type::Undefined && !code.empty(); }
 };
 
-inline actions::ActionQuery makeActionQuery(const Uri& uri, const std::string& actionCode)
+inline actions::ActionQuery makeActionQueryBase(const Uri& uri)
 {
     UriQuery q(uri);
     q.setScheme("action");
+    return q;
+}
+
+inline actions::ActionQuery makeActionQuery(const Uri& uri, const std::string& actionCode)
+{
+    UriQuery q = makeActionQueryBase(uri);
     q.addParam("action", Val(actionCode));
     return q;
 }
 
 inline UriQuery uriQueryFromActionQuery(const actions::ActionQuery& a)
 {
-    UriQuery q(a.toString());
+    UriQuery q(a);
     q.setScheme("musescore");
     return q;
+}
+
+inline actions::ActionCode makeActionCodeBase(const Uri& uri)
+{
+    return makeActionQueryBase(uri).toString();
 }
 
 inline actions::ActionCode makeActionCode(const Uri& uri, const std::string& extActionCode)
@@ -196,9 +206,6 @@ struct Manifest {
     struct Config {
         std::map<std::string /*action*/, Action::Config> actions;
 
-        //! TODO remove
-        std::string shortcuts;
-
         const Action::Config& aconfig(const std::string& code) const
         {
             auto it = actions.find(code);
@@ -211,6 +218,7 @@ struct Manifest {
     };
 
     Uri uri;
+    io::path_t path;
     Type type = Type::Undefined;
     String title;
     String description;
@@ -219,6 +227,7 @@ struct Manifest {
     String version;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
+    bool isRemovable = false;
 
     std::vector<Action> actions;
 

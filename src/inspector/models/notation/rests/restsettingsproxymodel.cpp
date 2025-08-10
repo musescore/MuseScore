@@ -20,14 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "restsettingsproxymodel.h"
+#include "beams/restbeamsettingsmodel.h"
+#include "restsettingsmodel.h"
+
+#include "dom/rest.h"
 
 #include "translation.h"
 
 using namespace mu::inspector;
-
-static const QMap<mu::engraving::ElementType, InspectorModelType> REST_PART_TYPES {
-    { mu::engraving::ElementType::REST, InspectorModelType::TYPE_REST_BEAM }
-};
+using namespace mu::engraving;
 
 RestSettingsProxyModel::RestSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent, repository)
@@ -36,37 +37,14 @@ RestSettingsProxyModel::RestSettingsProxyModel(QObject* parent, IElementReposito
     setTitle(muse::qtrc("inspector", "Rest"));
     setIcon(muse::ui::IconCode::Code::REST_8TH);
 
-    QList<AbstractInspectorModel*> models;
-    for (InspectorModelType modelType : REST_PART_TYPES) {
-        models << inspectorModelCreator()->newInspectorModel(modelType, this, repository);
-    }
+    QList<AbstractInspectorModel*> models {
+        new RestBeamSettingsModel(this, repository),
+        new RestSettingsModel(this, repository)
+    };
 
     for (AbstractInspectorModel* model : models) {
         model->init();
     }
 
     setModels(models);
-
-    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<mu::engraving::EngravingItem*>&)), this,
-            SLOT(onElementsUpdated(const QList<mu::engraving::EngravingItem*>&)));
-}
-
-void RestSettingsProxyModel::onElementsUpdated(const QList<mu::engraving::EngravingItem*>& newElements)
-{
-    InspectorModelType defaultType = resolveDefaultSubModelType(newElements);
-
-    setDefaultSubModelType(defaultType);
-}
-
-InspectorModelType RestSettingsProxyModel::resolveDefaultSubModelType(const QList<mu::engraving::EngravingItem*>& newElements) const
-{
-    InspectorModelType defaultModelType = InspectorModelType::TYPE_REST;
-
-    for (const mu::engraving::EngravingItem* element : newElements) {
-        if (REST_PART_TYPES.contains(element->type())) {
-            defaultModelType = REST_PART_TYPES[element->type()];
-        }
-    }
-
-    return defaultModelType;
 }

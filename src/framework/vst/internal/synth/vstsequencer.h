@@ -23,7 +23,7 @@
 #ifndef MUSE_VST_VSTSEQUENCER_H
 #define MUSE_VST_VSTSEQUENCER_H
 
-#include "audio/internal/abstracteventsequencer.h"
+#include "audio/worker/internal/abstracteventsequencer.h"
 
 #include "vsttypes.h"
 
@@ -54,7 +54,7 @@ struct std::less<VstSequencerEvent>
 };
 
 namespace muse::vst {
-class VstSequencer : public muse::audio::AbstractEventSequencer<VstEvent, ParamChangeEvent, muse::audio::gain_t>
+class VstSequencer : public muse::audio::worker::AbstractEventSequencer<VstEvent, ParamChangeEvent, muse::audio::gain_t>
 {
 public:
     void init(ParamsMapping&& mapping, bool useDynamicEvents);
@@ -62,19 +62,19 @@ public:
     muse::audio::gain_t currentGain() const;
 
 private:
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                const mpe::PlaybackParamLayers& params) override;
-
-    void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events);
-    void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers);
-
-    void appendParamChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp, const ControlIdx controlIdx,
-                           const PluginParamValue value);
-    void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta);
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
 
     using SostenutoTimeAndDurations = std::vector<mpe::TimestampAndDuration>;
-    void appendSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations);
+
+    void addPlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events);
+    void addDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers);
+    void addNoteEvent(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, SostenutoTimeAndDurations& sostenutoTimeAndDurations);
+    void addControlChangeEvent(EventSequenceMap& destination, const mpe::timestamp_t timestamp, const mpe::ControllerChangeEvent& event);
+    void addParamChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp, const ControlIdx controlIdx,
+                        const PluginParamValue value);
+    void addPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta);
+    void addSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations);
 
     VstEvent buildEvent(const Steinberg::Vst::Event::EventTypes type, const int32_t noteIdx, const float velocityFraction,
                         const float tuning) const;

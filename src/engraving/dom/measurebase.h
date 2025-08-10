@@ -201,7 +201,6 @@ public:
     bool isEndOfSystemLock() const;
 
 protected:
-
     MeasureBase(const ElementType& type, System* system = 0);
     MeasureBase(const MeasureBase&);
 
@@ -216,7 +215,6 @@ private:
     Fraction m_tick = Fraction(0, 1);
     int m_no = 0;                         // Measure number, counting from zero
     int m_noOffset = 0;                   // Offset to measure number
-    double m_oldWidth = 0.0;              // Used to restore layout during recalculations in Score::collectSystem()
 };
 
 //---------------------------------------------------------
@@ -229,7 +227,7 @@ public:
     MeasureBaseList();
     MeasureBase* first() const { return m_first; }
     MeasureBase* last()  const { return m_last; }
-    void clear() { m_first = m_last = 0; m_size = 0; }
+    void clear();
     void add(MeasureBase*);
     void remove(MeasureBase*);
     void insert(MeasureBase*, MeasureBase*);
@@ -238,13 +236,25 @@ public:
     int size() const { return m_size; }
     bool empty() const { return m_size == 0; }
 
+    void append(MeasureBase*);
+
+    void updateTickIndex();
+
+    Measure* measureByTick(int tick) const;
+    std::vector<MeasureBase*> measureBasesAtTick(int tick) const;
+
 private:
-    void push_back(MeasureBase* e);
-    void push_front(MeasureBase* e);
+    void push_back(MeasureBase* m);
+    void push_front(MeasureBase* m);
 
     int m_size = 0;
     MeasureBase* m_first = nullptr;
     MeasureBase* m_last = nullptr;
+
+    // At a tick there can be any number of MeasureBases
+    // There can only be one Measure
+    // There can be any number of Boxes
+    std::multimap<int, MeasureBase*> m_tickIndex;
 };
 } // namespace mu::engraving
 #endif

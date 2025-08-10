@@ -60,6 +60,8 @@ public:
 
     bool noStringVisible() const;
 
+    void triggerLayout() const override;
+
 private:
     String generateText() const;
 

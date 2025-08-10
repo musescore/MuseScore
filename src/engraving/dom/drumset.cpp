@@ -40,6 +40,11 @@ using namespace mu::engraving;
 namespace mu::engraving {
 Drumset* smDrumset = nullptr;           // standard midi drumset
 
+bool Drumset::isValid(int pitch) const
+{
+    return pitch >= 0 && pitch < DRUM_INSTRUMENTS && !m_drums[pitch].name.empty();
+}
+
 String Drumset::translatedName(int pitch) const
 {
     return muse::mtrc("engraving/drumset", name(pitch));
@@ -66,12 +71,33 @@ int Drumset::pitchForShortcut(const String& shortcut) const
     return -1;
 }
 
+int Drumset::defaultPitchForLine(int val) const
+{
+    int firstValidPitch = -1;
+    for (int pitch = 0; pitch < DRUM_INSTRUMENTS; ++pitch) {
+        if (!isValid(pitch) || line(pitch) != val) {
+            continue;
+        }
+
+        if (firstValidPitch < 0) {
+            firstValidPitch = pitch;
+        }
+
+        const NoteHeadGroup headGroup = noteHead(pitch);
+        if (headGroup == NoteHeadGroup::HEAD_NORMAL) {
+            return pitch;
+        }
+    }
+    return firstValidPitch;
+}
+
 //---------------------------------------------------------
 //   save
 //---------------------------------------------------------
 
 void Drumset::save(XmlWriter& xml) const
 {
+    xml.tag("percussionPanelColumns", m_percussionPanelColumns);
     for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
         if (!isValid(i)) {
             continue;
@@ -118,7 +144,7 @@ void Drumset::save(XmlWriter& xml) const
     }
 }
 
-bool Drumset::readProperties(XmlReader& e, int pitch)
+bool Drumset::readDrumProperties(XmlReader& e, int pitch)
 {
     if (pitch < 0 || pitch > DRUM_INSTRUMENTS - 1) {
         return false;
@@ -179,7 +205,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
 //   load
 //---------------------------------------------------------
 
-void Drumset::load(XmlReader& e)
+void Drumset::loadDrum(XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
     if (pitch < 0 || pitch > DRUM_INSTRUMENTS - 1) {
@@ -187,7 +213,7 @@ void Drumset::load(XmlReader& e)
         return;
     }
     while (e.readNextStartElement()) {
-        if (readProperties(e, pitch)) {
+        if (readDrumProperties(e, pitch)) {
         } else {
             e.unknown();
         }
@@ -466,7 +492,7 @@ void Drumset::initDrumset()
     smDrumset->drum(41) = DrumInstrument(
         TConv::userName(DrumNum(41)),
         NoteHeadGroup::HEAD_NORMAL,
-        /*line*/ 5,
+        /*line*/ 6,
         DirectionV::UP,
         /*panelRow*/ 1,
         /*panelColumn*/ 6,
@@ -488,7 +514,7 @@ void Drumset::initDrumset()
     smDrumset->drum(43) = DrumInstrument(
         TConv::userName(DrumNum(43)),
         NoteHeadGroup::HEAD_NORMAL,
-        /*line*/ 6,
+        /*line*/ 5,
         DirectionV::UP,
         /*panelRow*/ 2,
         /*panelColumn*/ 0,

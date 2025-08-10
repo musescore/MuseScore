@@ -67,7 +67,6 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
 
-    ChordRest* chordRest() const;
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const;
     System* system() const;

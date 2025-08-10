@@ -53,6 +53,8 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(InspectorModelType modelType READ modelType CONSTANT)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
+    Q_PROPERTY(bool isSystemObjectBelowBottomStaff READ isSystemObjectBelowBottomStaff NOTIFY isSystemObjectBelowBottomStaffChanged)
+
 public:
     INJECT(context::IGlobalContext, context)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
@@ -63,11 +65,11 @@ public:
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
         SECTION_MEASURES,
+        SECTION_EMPTY_STAVES,
         SECTION_NOTATION,
         SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
         SECTION_SCORE_APPEARANCE,
-        SECTION_SCORE_ACCESSIBILITY,
         SECTION_PARTS,
     };
     Q_ENUM(InspectorSectionType)
@@ -87,7 +89,6 @@ public:
         TYPE_GLISSANDO,
         TYPE_BARLINE,
         TYPE_BREATH,
-        TYPE_STAFF,
         TYPE_MARKER,
         TYPE_SECTIONBREAK,
         TYPE_JUMP,
@@ -105,6 +106,7 @@ public:
         TYPE_VOLTA,
         TYPE_VIBRATO,
         TYPE_SLUR,
+        TYPE_HAMMER_ON_PULL_OFF,
         TYPE_TIE,
         TYPE_LAISSEZ_VIB,
         TYPE_PARTIAL_TIE,
@@ -114,8 +116,12 @@ public:
         TYPE_TEXT_FRAME,
         TYPE_VERTICAL_FRAME,
         TYPE_HORIZONTAL_FRAME,
+        TYPE_FRET_FRAME,
+        TYPE_FRET_FRAME_CHORDS,
+        TYPE_FRET_FRAME_SETTINGS,
         TYPE_ARTICULATION,
         TYPE_ORNAMENT,
+        TYPE_TAPPING,
         TYPE_AMBITUS,
         TYPE_IMAGE,
         TYPE_CHORD_SYMBOL,
@@ -135,9 +141,11 @@ public:
         TYPE_LYRICS,
         TYPE_REST,
         TYPE_REST_BEAM,
+        TYPE_REST_REST,
         TYPE_STRING_TUNINGS,
         TYPE_SYMBOL,
         TYPE_NOTELINE,
+        TYPE_PLAY_COUNT_TEXT
     };
     Q_ENUM(InspectorModelType)
 
@@ -170,6 +178,8 @@ public:
 
     virtual void onCurrentNotationChanged();
 
+    bool isSystemObjectBelowBottomStaff() const;
+
 public slots:
     void setTitle(QString title);
     void setIcon(muse::ui::IconCode::Code icon);
@@ -183,6 +193,10 @@ signals:
     void isEmptyChanged();
 
     void requestReloadPropertyItems();
+
+    void requestReloadInspectorListModel();
+
+    void isSystemObjectBelowBottomStaffChanged(bool isSystemObjectBelowBottomStaff);
 
 protected:
     void setElementType(mu::engraving::ElementType type);
@@ -233,6 +247,7 @@ protected slots:
     void onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue);
     void setPropertyValue(const QList<mu::engraving::EngravingItem*>& items, const mu::engraving::Pid pid, const QVariant& newValue);
     void updateProperties();
+    void updateIsSystemObjectBelowBottomStaff();
 
 private:
     void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
@@ -249,6 +264,8 @@ private:
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     mu::engraving::ElementType m_elementType = mu::engraving::ElementType::INVALID;
     bool m_updatePropertiesAllowed = false;
+
+    bool m_isSystemObjectBelowBottomStaff = false;
 };
 
 using InspectorModelType = AbstractInspectorModel::InspectorModelType;

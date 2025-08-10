@@ -19,14 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#ifndef MU_ENGRAVING_APIV1_CURSOR_H
-#define MU_ENGRAVING_APIV1_CURSOR_H
-
-#include "fraction.h"
+#include "apistructs.h"
 
 #include "engraving/dom/input.h"
-#include "engraving/dom/types.h"
 
 Q_MOC_INCLUDE("engraving/api/v1/elements.h")
 Q_MOC_INCLUDE("engraving/api/v1/score.h")
@@ -51,6 +48,7 @@ class EngravingItem;
 class Measure;
 class Segment;
 class Score;
+class Staff;
 
 //---------------------------------------------------------
 //   @@ Cursor
@@ -68,47 +66,55 @@ class Score;
 class Cursor : public QObject
 {
     Q_OBJECT
-    /** Current track */
+    /// Current track
     Q_PROPERTY(int track READ track WRITE setTrack)
-    /** Current staff (#track / 4) */
+    /// Current staff number (#track / 4)
     Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx)
-    /** Current voice (#track % 4) */
+    /// Current \ref Staff the cursor is on.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::Staff * staff READ staff WRITE setStaff)
+    /// Current voice (#track % 4)
     Q_PROPERTY(int voice READ voice WRITE setVoice)
-    /**
-     * Segment type filter, a bitmask from
-     * PluginAPI::PluginAPI::Segment values.
-     * Determines which segments this cursor will move to
-     * on next() and nextMeasure() operations. The default
-     * value is mu::engraving::SegmentType::ChordRest so only segments
-     * containing chords and rests are handled by default.
-     */
+    /// Segment type filter, a bitmask from
+    /// PluginAPI::PluginAPI::Segment values.
+    /// Determines which segments this cursor will move to
+    /// on next() and nextMeasure() operations. The default
+    /// value is mu::engraving::SegmentType::ChordRest so only segments
+    /// containing chords and rests are handled by default.
     Q_PROPERTY(int filter READ filter WRITE setFilter)
 
-    /** MIDI tick position, read only */
-    Q_PROPERTY(int tick READ tick)           // FIXME: fraction transition
-    /** Time at tick position, read only */
-    Q_PROPERTY(double time READ time)
+    /// MIDI tick position, read only
+    /// As of MuseScore 4.6, this property is deprecated and should
+    /// not be used to read the cursor position. Use \ref cursor.fraction
+    /// instead. However, this property can still sometimes be useful to
+    /// compare position values using operators.
+    Q_PROPERTY(int tick READ tick)
+    /// MIDI tick position, accounting for repeats.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(int utick READ utick)
+    /// Time position in this score, measured as a fraction of a
+    /// whole note (the same units MuseScore's code uses internally).
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::FractionWrapper * fraction READ qmlFraction)
 
-    /** Tempo at current tick, read only */
+    /// Tempo at current tick, read only
     Q_PROPERTY(qreal tempo READ tempo)
 
-    /** Key signature of current staff at tick pos. (read only) */
+    /// Key signature of current staff at tick pos. (read only)
     Q_PROPERTY(int keySignature READ qmlKeySignature)
-    /** Associated score */
+    /// Associated score
     Q_PROPERTY(apiv1::Score * score READ score WRITE setScore)
 
-    /** Current element at track, read only */
-    Q_PROPERTY(apiv1::EngravingItem * element READ element)
-    /** Current segment, read only */
+    /// Current element at track, read only
+    Q_PROPERTY(apiv1::EngravingItem * element READ element) //todo set
+    /// Current segment, read only
     Q_PROPERTY(apiv1::Segment * segment READ qmlSegment)
-    /** Current measure, read only */
+    /// Current measure, read only
     Q_PROPERTY(apiv1::Measure * measure READ measure)
-    /**
-     * A physical string number where this cursor currently at. This is useful
-     * in conjunction with \ref InputStateMode.INPUT_STATE_SYNC_WITH_SCORE
-     * cursor mode.
-     * \since MuseScore 3.5
-     */
+    /// A physical string number where this cursor currently at. This is useful
+    /// in conjunction with \ref InputStateMode.INPUT_STATE_SYNC_WITH_SCORE
+    /// cursor mode.
+    /// \since MuseScore 3.5
     Q_PROPERTY(int stringNumber READ inputStateString WRITE setInputStateString)
 
 public:
@@ -119,7 +125,7 @@ public:
     };
     Q_ENUM(RewindMode);
 
-    /** \since MuseScore 3.5 */
+    /// \since MuseScore 3.5
     enum InputStateMode {
         INPUT_STATE_INDEPENDENT,     ///< Input state of cursor is independent of score input state (default)
         INPUT_STATE_SYNC_WITH_SCORE     ///< Input state of cursor is synchronized with score input state
@@ -127,19 +133,17 @@ public:
     Q_ENUM(InputStateMode);
 
 private:
-    /**
-     * Behavior of input state (position, notes duration etc.) of this cursor
-     * with respect to input state of the score. By default any changes in
-     * score and in this Cursor are not synchronized.
-     * \since MuseScore 3.5
-     */
+    /// Behavior of input state (position, notes duration etc.) of this cursor
+    /// with respect to input state of the score. By default any changes in
+    /// score and in this Cursor are not synchronized.
+    /// \since MuseScore 3.5
     Q_PROPERTY(InputStateMode inputStateMode READ inputStateMode WRITE setInputStateMode)
 
-    mu::engraving::Score* _score = nullptr;
-//       bool _expandRepeats; // used?
-    engraving::SegmentType _filter;
+    mu::engraving::Score* m_score = nullptr;
+//       bool m_expandRepeats; // used?
+    engraving::SegmentType m_filter;
     std::unique_ptr<engraving::InputState> is;
-    InputStateMode _inputStateMode = INPUT_STATE_INDEPENDENT;
+    InputStateMode m_inputStateMode = INPUT_STATE_INDEPENDENT;
 
     // utility methods
     void prevInTrack();
@@ -152,6 +156,8 @@ private:
 
     mu::engraving::Segment* segment() const;
     void setSegment(mu::engraving::Segment* seg);
+
+    mu::engraving::Fraction fraction() const;
 
     int inputStateString() const;
     void setInputStateString(int);
@@ -170,13 +176,16 @@ public:
     int staffIdx() const;
     void setStaffIdx(int v);
 
+    Staff* staff() const;
+    void setStaff(Staff* s);
+
     int voice() const;
     void setVoice(int v);
 
-    int filter() const { return int(_filter); }
-    void setFilter(int f) { _filter = engraving::SegmentType(f); }
+    int filter() const { return int(m_filter); }
+    void setFilter(int f) { m_filter = engraving::SegmentType(f); }
 
-    InputStateMode inputStateMode() const { return _inputStateMode; }
+    InputStateMode inputStateMode() const { return m_inputStateMode; }
     void setInputStateMode(InputStateMode val);
 
     EngravingItem* element() const;
@@ -184,7 +193,8 @@ public:
     Measure* measure() const;
 
     int tick();
-    double time();
+    int utick();
+    FractionWrapper* qmlFraction() const;
     qreal tempo();
 
     int qmlKeySignature();
@@ -192,6 +202,8 @@ public:
 
     Q_INVOKABLE void rewind(RewindMode mode);
     Q_INVOKABLE void rewindToTick(int tick);
+    Q_INVOKABLE void rewindToFraction(apiv1::FractionWrapper* f);
+    Q_INVOKABLE double time(bool includeRepeats = false);
 
     Q_INVOKABLE bool next();
     Q_INVOKABLE bool nextMeasure();
@@ -209,5 +221,3 @@ public:
     Q_INVOKABLE void setDuration(int z, int n);
 };
 }
-
-#endif

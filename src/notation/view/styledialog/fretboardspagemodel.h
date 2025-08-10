@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_FRETBOARDSPAGEMODEL_H
-#define MU_NOTATION_FRETBOARDSPAGEMODEL_H
+#pragma once
 
 #include "abstractstyledialogmodel.h"
 
@@ -44,8 +43,6 @@ class FretboardsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * fretStyleExtended READ fretStyleExtended CONSTANT)
     Q_PROPERTY(StyleItem * fretStringSpacing READ fretStringSpacing CONSTANT)
     Q_PROPERTY(StyleItem * fretFretSpacing READ fretFretSpacing CONSTANT)
-    Q_PROPERTY(StyleItem * maxFretShiftAbove READ maxFretShiftAbove CONSTANT)
-    Q_PROPERTY(StyleItem * maxFretShiftBelow READ maxFretShiftBelow CONSTANT)
 
 public:
     explicit FretboardsPageModel(QObject* parent = nullptr);
@@ -64,9 +61,5 @@ public:
     StyleItem* fretStyleExtended() const;
     StyleItem* fretStringSpacing() const;
     StyleItem* fretFretSpacing() const;
-    StyleItem* maxFretShiftAbove() const;
-    StyleItem* maxFretShiftBelow() const;
 };
 }
-
-#endif // MU_NOTATION_FRETBOARDSPAGEMODEL_H

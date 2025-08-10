@@ -83,13 +83,17 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     connect(swingSixteenth, &QRadioButton::toggled, this, &StaffTextPropertiesDialog::setSwingControls);
 
     connect(this, &QDialog::accepted, this, &StaffTextPropertiesDialog::saveValues);
-
-    muse::ui::WidgetStateStore::restoreGeometry(this);
 }
 
 StaffTextPropertiesDialog::~StaffTextPropertiesDialog()
 {
     delete m_staffText;
+}
+
+void StaffTextPropertiesDialog::showEvent(QShowEvent* event)
+{
+    muse::ui::WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(event);
 }
 
 void StaffTextPropertiesDialog::hideEvent(QHideEvent* event)

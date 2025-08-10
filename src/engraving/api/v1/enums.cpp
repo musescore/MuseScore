@@ -22,6 +22,8 @@
 
 #include "enums.h"
 
+#include <QVariant>
+
 #include "log.h"
 
 using namespace mu::engraving::apiv1;
@@ -30,20 +32,23 @@ using namespace mu::engraving::apiv1;
 //   Enum::Enum
 //---------------------------------------------------------
 
-Enum::Enum(const QMetaEnum& _enum, QObject* parent)
+Enum::Enum(const QMetaEnum& m_enum, QObject* parent)
     : QQmlPropertyMap(this, parent)
 {
-    add(_enum);
+    add(m_enum);
 }
 
-void Enum::add(const QMetaEnum& _enum)
+void Enum::add(const QMetaEnum& m_enum)
 {
-    IF_ASSERT_FAILED(_enum.isValid()) {
+    IF_ASSERT_FAILED(m_enum.isValid()) {
         return;
     }
 
-    const int nkeys = _enum.keyCount();
+    QVariantHash enumValues;
+    const int nkeys = m_enum.keyCount();
     for (int i = 0; i < nkeys; ++i) {
-        insert(_enum.key(i), _enum.value(i));
+        enumValues.insert(m_enum.key(i), m_enum.value(i));
     }
+
+    insert(enumValues);
 }

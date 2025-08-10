@@ -55,16 +55,19 @@ BaseSection {
             navigation.panel: root.navigation
             navigation.row: 0
 
+            navigation.accessible.name: enableMidiInputLabel.text
+
             onToggled: {
                 root.midiInputEnabledChangeRequested(!checked)
             }
         }
 
         StyledTextLabel {
-            height: parent.height
+            id: enableMidiInputLabel
 
+            anchors.verticalCenter: parent.verticalCenter
             horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.Wrap
 
             text: qsTrc("appshell/preferences", "Enable MIDI input")
         }

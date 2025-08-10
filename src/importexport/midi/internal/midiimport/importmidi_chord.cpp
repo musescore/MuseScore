@@ -20,44 +20,62 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "importmidi_chord.h"
+
+#include <array>
+
+#include "global/containers.h"
+
 #include "importmidi_inner.h"
 #include "importmidi_chord.h"
-#include "importmidi_clef.h"
 #include "importmidi_operations.h"
 #include "importmidi_quant.h"
-#include "engraving/dom/mscore.h"
 #include "engraving/dom/sig.h"
-
-#include <set>
 
 #include "log.h"
 
 namespace mu::iex::midi {
 namespace MChord {
-bool isGrandStaffProgram(int program)
+bool isGrandStaffProgram(GM1Program program)
 {
-    const static std::set<int> grandStaffPrograms = {
-        // Piano
-        0, 1, 2, 3, 4, 5, 6, 7
-        // Chromatic Percussion
-        , 8, 10, 11, 12, 13, 15
-        // Organ
-        , 16, 17, 18, 19, 20, 21, 23
-        // Strings
-        , 46
-        // Ensemble
-        , 50, 51, 54
-        // Brass
-        , 62, 63
-        // Synth Lead
-        , 80, 81, 82, 83, 84, 85, 86, 87
-        // Synth Pad
-        , 88, 89, 90, 91, 92, 93, 94, 95
-        // Synth Effects
-        , 96, 97, 98, 99, 100, 101, 102, 103
+    static constexpr std::array grandStaffPrograms = {
+        GM1Program::AcousticGrandPiano, GM1Program::BrightAcousticPiano,
+        GM1Program::ElectricGrandPiano, GM1Program::HonkyTonkPiano,
+        GM1Program::ElectricPiano1,     GM1Program::ElectricPiano2,
+        GM1Program::Harpsichord,        GM1Program::Clavi,
+
+        GM1Program::Celesta,    GM1Program::MusicBox,
+        GM1Program::Vibraphone, GM1Program::Marimba,
+        GM1Program::Xylophone,  GM1Program::Dulcimer,
+
+        GM1Program::DrawbarOrgan,   GM1Program::PercussiveOrgan,
+        GM1Program::RockOrgan,      GM1Program::ChurchOrgan,
+        GM1Program::ReedOrgan,      GM1Program::Accordion,
+        GM1Program::TangoAccordion,
+
+        GM1Program::OrchestralHarp,
+
+        GM1Program::SynthStrings1, GM1Program::SynthStrings2,
+        GM1Program::SynthVoice,
+
+        GM1Program::SynthBrass1, GM1Program::SynthBrass2,
+
+        GM1Program::Lead1Square,   GM1Program::Lead2Sawtooth,
+        GM1Program::Lead3Calliope, GM1Program::Lead4Chiff,
+        GM1Program::Lead5Charang,  GM1Program::Lead6Voice,
+        GM1Program::Lead7Fifths,   GM1Program::Lead8BassAndLead,
+
+        GM1Program::Pad1NewAge,    GM1Program::Pad2Warm,
+        GM1Program::Pad3Polysynth, GM1Program::Pad4Choir,
+        GM1Program::Pad5Bowed,     GM1Program::Pad6Metallic,
+        GM1Program::Pad7Halo,      GM1Program::Pad8Sweep,
+
+        GM1Program::FX1Rain,       GM1Program::FX2Soundtrack,
+        GM1Program::FX3Crystal,    GM1Program::FX4Atmosphere,
+        GM1Program::FX5Brightness, GM1Program::FX6Goblins,
+        GM1Program::FX7Echoes,     GM1Program::FX8SciFi,
     };
 
-    return grandStaffPrograms.find(program) != grandStaffPrograms.end();
+    return muse::contains(grandStaffPrograms, program);
 }
 
 std::multimap<ReducedFraction, MidiChord>::iterator

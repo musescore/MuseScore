@@ -298,10 +298,14 @@ int RepeatList::utime2utick(double secs) const
 ///
 std::vector<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTick(int utick) const
 {
-    return std::lower_bound(this->cbegin(), this->cend(), utick, [](RepeatSegment const* rs, int utick) {
-        // Skip RS where endtick is less than us
-        return utick > (rs->utick + rs->len());
-    });
+    for (auto it = cbegin(); it != cend(); ++it) {
+        const RepeatSegment* seg = *it;
+        if (utick >= seg->utick && utick < seg->utick + seg->len()) {
+            return it;
+        }
+    }
+
+    return cend();
 }
 
 //---------------------------------------------------------
@@ -519,6 +523,10 @@ void RepeatList::collectRepeatListElements()
             }
             // Jumps and Markers
             for (EngravingItem* e : mb->el()) {
+                if (e->systemFlag() && !e->isTopSystemObject()) {
+                    continue;
+                }
+
                 if (e->isJump()) {
                     sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::JUMP, e, toMeasure(mb)));
                     if (volta != nullptr) {
@@ -543,23 +551,17 @@ void RepeatList::collectRepeatListElements()
                     }
                 } else if (e->isMarker()) {
                     RepeatListElement* markerRLE = new RepeatListElement(RepeatListElementType::MARKER, e, toMeasure(mb));
-                    // There may be multiple markers in the same measure and there is no guarantee we're reading
-                    // them from left to right. The only way available to guess their order is to look at their
-                    // text alignment and order them left to right
+                    // There may be multiple markers in the same measure. Make sure we place right markers before left
                     // At the same time, we should ensure Markers are evaluated before Jumps
-                    Align markerRLEalignmentH = toMarker(e)->align();
+                    bool markerRLEisRight = toMarker(e)->isRightMarker();
                     auto insertionIt = sectionRLElements.end() - 1;
                     while ((*insertionIt)->measure == markerRLE->measure) {
                         bool markerShouldGoBefore = false;
                         if (((*insertionIt)->repeatListElementType == RepeatListElementType::MARKER)
-                            && (markerRLEalignmentH != AlignH::RIGHT) // We can be the end when right aligned
+                            && (!markerRLEisRight) // We can be the end when right aligned
                             ) {
-                            Align storedMarkerAlignmentH = toMarker((*insertionIt)->element)->align();
-                            if (markerRLEalignmentH == AlignH::HCENTER) {
-                                markerShouldGoBefore = (storedMarkerAlignmentH == AlignH::RIGHT);
-                            } else { //(markerRLEalignmentH == Align::LEFT)
-                                markerShouldGoBefore = (storedMarkerAlignmentH != AlignH::LEFT);
-                            }
+                            bool storedMarkerIsRight = toMarker((*insertionIt)->element)->isRightMarker();
+                            markerShouldGoBefore = storedMarkerIsRight;
                         }
                         if (markerShouldGoBefore
                             || ((*insertionIt)->repeatListElementType == RepeatListElementType::JUMP)

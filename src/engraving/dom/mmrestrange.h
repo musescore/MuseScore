@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_MMRESTRANGE_H
-#define MU_ENGRAVING_MMRESTRANGE_H
+#pragma once
 
 #include "measurenumberbase.h"
 #include "property.h"
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   MMRestRange
-//---------------------------------------------------------
+enum class MMRestRangeBracketType : unsigned char {
+    BRACKETS,
+    PARENTHESES,
+    NONE
+};
 
 class MMRestRange : public MeasureNumberBase
 {
@@ -47,10 +47,7 @@ public:
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid id, const PropertyValue& val) override;
-    PropertyValue propertyDefault(Pid id) const override;
 
     void setXmlText(const String&) override;
 };
-} // namespace mu::engraving
-
-#endif
+}

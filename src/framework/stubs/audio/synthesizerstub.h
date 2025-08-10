@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_SYNTHESIZERSTUB_H
 #define MU_AUDIO_SYNTHESIZERSTUB_H
 
-#include "audio/isynthesizer.h"
+#include "audio/worker/isynthesizer.h"
 
 namespace muse::audio::synth {
 class SynthesizerStub : public ISynthesizer
@@ -50,12 +50,18 @@ public:
     msecs_t playbackPosition() const override;
     void setPlaybackPosition(const msecs_t newPosition) override;
 
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+    async::Notification readyToPlayChanged() const override;
+
     void revokePlayingNotes() override;
     void flushSound() override;
 
     bool isValid() const override;
     bool isActive() const override;
     void setIsActive(bool arg) override;
+
+    InputProcessingProgress inputProcessingProgress() const override;
 
 private:
     audio::AudioInputParams m_params;

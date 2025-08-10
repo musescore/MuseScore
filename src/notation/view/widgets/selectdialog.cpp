@@ -46,7 +46,16 @@ SelectDialog::SelectDialog(QWidget* parent)
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    m_element = contextItem(globalContext()->currentNotation()->interaction());
+    const INotationInteractionPtr interaction = globalContext()->currentNotation()->interaction();
+    IF_ASSERT_FAILED(interaction) {
+        return;
+    }
+
+    m_element = interaction->contextItem();
+    IF_ASSERT_FAILED(m_element) {
+        return;
+    }
+
     type->setText(m_element->translatedTypeUserName().toQString());
     subtype->setText(m_element->translatedSubtypeUserName().toQString());
 
@@ -60,8 +69,6 @@ SelectDialog::SelectDialog(QWidget* parent)
     sameDuration->setEnabled(m_element->isRest());
 
     connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectDialog::buttonClicked);
-
-    WidgetStateStore::restoreGeometry(this);
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
@@ -183,6 +190,16 @@ void SelectDialog::buttonClicked(QAbstractButton* button)
 }
 
 //---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void SelectDialog::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(event);
+}
+
+//---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
@@ -225,7 +242,7 @@ void SelectDialog::apply() const
         return;
     }
 
-    EngravingItem* selectedElement = contextItem(interaction);
+    EngravingItem* selectedElement = interaction->contextItem();
     if (!selectedElement) {
         return;
     }

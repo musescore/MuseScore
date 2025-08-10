@@ -41,6 +41,7 @@
 
 #include "engraving/style/defaultstyle.h"
 
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/drumset.h"
@@ -49,6 +50,7 @@
 
 #include "rendering/score/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
+#include "rendering/editmode/editmoderenderer.h"
 
 #include "compat/scoreaccess.h"
 
@@ -116,6 +118,7 @@ void EngravingModule::registerExports()
     // internal
     ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::score::ScoreRenderer());
     ioc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());
+    ioc()->registerExport<rendering::IEditModeRenderer>(moduleName(), new rendering::editmode::EditModeRenderer());
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
@@ -182,15 +185,15 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         // MusicSymbol[Text]
         auto addMusicFont = [this, fdb](const std::string& name, const FontDataKey& fontDataKey, const muse::io::path_t& filePath){
             fdb->addFont(FontDataKey(fontDataKey), filePath);
-            m_engravingfonts->addFont(name, fontDataKey.family().id().toStdString(), filePath);
+            m_engravingfonts->addInternalFont(name, fontDataKey.family().id().toStdString(), filePath);
         };
 
         addMusicFont("Bravura", FontDataKey(u"Bravura"), ":/fonts/bravura/Bravura.otf");
         fdb->addFont(FontDataKey(u"Bravura Text"), ":/fonts/bravura/BravuraText.otf");
         addMusicFont("Leland", FontDataKey(u"Leland"), ":/fonts/leland/Leland.otf");
         fdb->addFont(FontDataKey(u"Leland Text"), ":/fonts/leland/LelandText.otf");
-        addMusicFont("Emmentaler", FontDataKey(u"MScore"), ":/fonts/mscore/mscore.ttf");
-        fdb->addFont(FontDataKey(u"MScore Text"), ":/fonts/mscore/MScoreText.ttf");
+        addMusicFont("Emmentaler", FontDataKey(u"MScore"), ":/fonts/mscore/MScore.otf");
+        fdb->addFont(FontDataKey(u"MScore Text"), ":/fonts/mscore/MScoreText.otf");
         addMusicFont("Gonville", FontDataKey(u"Gootville"), ":/fonts/gootville/Gootville.otf");
         fdb->addFont(FontDataKey(u"Gootville Text"), ":/fonts/gootville/GootvilleText.otf");
         addMusicFont("MuseJazz", FontDataKey(u"MuseJazz"), ":/fonts/musejazz/MuseJazz.otf");
@@ -256,7 +259,6 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
     // initialize dom
 
-    MScore::defaultPlayDuration = 300;            // ms
     MScore::warnPitchRange      = true;
     MScore::warnGuitarBends     = true;
     MScore::pedalEventsMinTicks = 1;

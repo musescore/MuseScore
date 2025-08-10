@@ -29,6 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
+#include "tours/itoursservice.h"
 
 #include "internal/dockbase.h"
 #include "docktypes.h"
@@ -58,7 +59,10 @@ class DockPageView : public QQuickItem, public muse::Injectable
     Q_PROPERTY(muse::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
     Q_PROPERTY(muse::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
 
+    Q_PROPERTY(QVariant tours READ tours WRITE setTours NOTIFY toursChanged)
+
     Inject<ui::INavigationController> navigationController = { this };
+    Inject<tours::IToursService> toursService = { this };
 
 public:
     explicit DockPageView(QQuickItem* parent = nullptr);
@@ -87,9 +91,11 @@ public:
 
     DockBase* dockByName(const QString& dockName) const;
     DockingHolderView* holder(DockType type, Location location) const;
-    QList<DockPanelView*> possiblePanelsForTab(const DockPanelView* tab) const;
 
-    bool isDockOpenAndCurrentInFrame(const QString& dockName) const;
+    QList<DockPanelView*> findPanelsForDropping(const DockPanelView* panel) const;
+    DockPanelView* findPanelForTab(const DockPanelView* tab) const;
+
+    bool isDockOpen(const QString& dockName) const;
     void toggleDock(const QString& dockName);
     void setDockOpen(const QString& dockName, bool open);
 
@@ -97,6 +103,11 @@ public:
     void toggleDockFloating(const QString& dockName);
 
     Q_INVOKABLE void setDefaultNavigationControl(muse::ui::NavigationControl* control);
+
+    Q_INVOKABLE void forceLayout();
+
+    QVariant tours() const;
+    void setTours(const QVariant& newTours);
 
 public slots:
     void setUri(const QString& uri);
@@ -110,10 +121,11 @@ signals:
     void centralDockChanged(DockCentralView* central);
     void statusBarChanged(DockStatusBarView* statusBar);
 
+    void toursChanged();
+    void layoutRequested();
+
 private:
     void componentComplete() override;
-
-    DockPanelView* findPanelForTab(const DockPanelView* tab) const;
 
     void reorderSections();
     void doReorderSections();
@@ -128,6 +140,8 @@ private:
     uicomponents::QmlListProperty<DockingHolderView> m_panelsDockingHolders;
     DockCentralView* m_central = nullptr;
     DockStatusBarView* m_statusBar = nullptr;
+
+    QVariant m_tours;
 };
 }
 

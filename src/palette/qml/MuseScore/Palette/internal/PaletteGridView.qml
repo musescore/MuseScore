@@ -460,7 +460,11 @@ StyledGridView {
         height: paletteView.cellHeight
 
         backgroundColor: Utils.colorWithAlpha(ui.theme.textFieldColor, 0.5)
+
         visible: false
+
+        CppDrag.active: Drag.active
+        CppDrag.mimeData: Drag.mimeData
     }
 
     MouseArea {
@@ -561,12 +565,24 @@ StyledGridView {
 
             // leftClickArea
             mouseArea.drag.target: draggedIcon
-            mouseArea.onPressed: {
+            property bool dragActive: mouseArea.drag.active
+            onDragActiveChanged: {
+                if (!ui.isSystemDragSupported) {
+                    draggedIcon.Drag.mimeData = model.mimeData
+                    draggedIcon.Drag.active = dragActive
+                }
+            }
+
+            mouseArea.onPressed: function(e) {
                 paletteCell.beginDrag()
             }
 
+            mouseArea.onReleased: {
+                paletteCell.endDrag()
+            }
+
             onClicked: {
-                paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())
+                Qt.callLater(paletteView.paletteController.applyPaletteElement, paletteCell.modelIndex, ui.keyboardModifiers())
 
                 updateSelection()
             }
@@ -579,10 +595,12 @@ StyledGridView {
                 removeSelectedCells()
             }
 
-            Drag.active: mouseArea.drag.active
-            Drag.dragType: Drag.Automatic
+            Drag.active: ui.isSystemDragSupported ? mouseArea.drag.active : false
+            Drag.dragType: ui.isSystemDragSupported ? Drag.Automatic : Drag.Internal
             Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
             Drag.mimeData: Drag.active ? mimeData : {}
+            CppDrag.active: Drag.active
+            CppDrag.mimeData: Drag.mimeData
 
             onInternalDragChanged: {
                 if (internalDrag && dragDropReorderTimer.running) {
@@ -625,12 +643,32 @@ StyledGridView {
             function beginDrag() {
                 draggedIcon.icon = model.decoration
 
-                draggedIcon.grabToImage(function(result) {
-                    Drag.imageSource = result.url
-                    Drag.hotSpot.x = paletteCell.mouseArea.mouseX
-                    Drag.hotSpot.y = paletteCell.mouseArea.mouseY
-                    dragDropReorderTimer.restart();
-                })
+                console.log("isSystemDragSupported: ", ui.isSystemDragSupported)
+
+                if (ui.isSystemDragSupported) {
+
+                    draggedIcon.grabToImage(function(result) {
+                        Drag.imageSource = result.url
+                        Drag.hotSpot.x = paletteCell.mouseArea.mouseX
+                        Drag.hotSpot.y = paletteCell.mouseArea.mouseY
+                        dragDropReorderTimer.restart();
+                    })
+
+                } else {
+
+                    draggedIcon.parent = ui.rootItem
+                    var p = mapToItem(draggedIcon, 0, 0)
+                    draggedIcon.x = p.x
+                    draggedIcon.y = p.y
+                    draggedIcon.visible = true
+                }
+            }
+
+            function endDrag() {
+                draggedIcon.visible = false
+                draggedIcon.parent = grid
+                draggedIcon.x = 0
+                draggedIcon.y = 0
             }
 
             /* TODO?

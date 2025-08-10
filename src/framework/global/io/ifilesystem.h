@@ -45,6 +45,7 @@ public:
     virtual Ret move(const io::path_t& src, const io::path_t& dst, bool replace = false) = 0;
 
     virtual Ret makePath(const io::path_t& path) const = 0;
+    virtual Ret makeLink(const io::path_t& targetPath, const io::path_t& linkPath) const = 0;
 
     virtual EntryType entryType(const io::path_t& path) const = 0;
 
@@ -62,7 +63,7 @@ public:
 
     virtual RetVal<ByteArray> readFile(const io::path_t& filePath) const = 0;
     virtual Ret readFile(const io::path_t& filePath, ByteArray& data) const = 0;
-    virtual Ret writeFile(const io::path_t& filePath, const ByteArray& data) const = 0;
+    virtual Ret writeFile(const io::path_t& filePath, const ByteArray& data) = 0;
 
     //! NOTE File info
     virtual io::path_t canonicalFilePath(const io::path_t& filePath) const = 0;

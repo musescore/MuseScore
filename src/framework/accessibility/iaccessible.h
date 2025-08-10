@@ -48,6 +48,7 @@ public:
         Panel,
         StaticText,
         EditableText,
+        SilentRole, // avoids reading "button", "text", etc. after item name
         Button,
         CheckBox,
         RadioButton,
@@ -55,6 +56,7 @@ public:
         List,
         ListItem,
         MenuItem,
+        SpinBox,
         Range,
         Group,
 

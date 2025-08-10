@@ -34,8 +34,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/istartupscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.h
@@ -92,8 +90,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/framelesswindow/framelesswindowmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/framelesswindow/framelesswindowmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/iappmenumodelhook.h
@@ -107,7 +103,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/newinstanceloadingscreenview.h
     )
 
-
 set(MODULE_LINK
     muse::ui
     muse::uicomponents
@@ -118,9 +113,15 @@ if (OS_IS_MAC)
     set(MODULE_SRC ${MODULE_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.mm
         ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.h
-        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosscrollinghook.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosscrollinghook.h
     )
+
+    if (${Qt6_VERSION} VERSION_LESS "6.9.0")
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosscrollinghook.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosscrollinghook.h
+        )
+    endif()
+
     set_source_files_properties(
         ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.mm
         PROPERTIES
@@ -128,15 +129,6 @@ if (OS_IS_MAC)
         SKIP_PRECOMPILE_HEADERS ON
         )
 endif(OS_IS_MAC)
-
-if (OS_IS_WIN)
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winframelesswindowcontroller.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winframelesswindowcontroller.h
-    )
-
-    set(MODULE_LINK ${MODULE_LINK} dwmapi)
-endif(OS_IS_WIN)
 
 if (NOT OS_IS_MAC)
     set(MODULE_SRC ${MODULE_SRC}
@@ -147,5 +139,9 @@ if (NOT OS_IS_MAC)
     # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
     set(MODULE_INCLUDE_PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
 endif(NOT OS_IS_MAC)
+
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Core5Compat Qt::Quick Qt::Svg Qt::Widgets)
+endif()
 
 setup_module()

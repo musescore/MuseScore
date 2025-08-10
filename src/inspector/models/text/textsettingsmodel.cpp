@@ -210,6 +210,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     updateStaffPropertiesAvailability();
     updateIsDynamicSpecificSettings();
     updateIsHorizontalAlignmentAvailable();
+    updateIsSystemObjectBelowBottomStaff();
 }
 
 void TextSettingsModel::resetProperties()

@@ -26,23 +26,33 @@
 
 using namespace muse::musesampler;
 
-void MuseSamplerActionController::init(const ReloadMuseSamplerFunc& reloadMuseSampler)
+void MuseSamplerActionController::init(std::weak_ptr<MuseSamplerResolver> resolver)
 {
-    m_reloadMuseSampler = reloadMuseSampler;
+    m_museSamplerResolver = resolver;
 
     dispatcher()->reg(this, "musesampler-check", this, &MuseSamplerActionController::checkLibraryIsDetected);
     dispatcher()->reg(this, "musesampler-reload", this, &MuseSamplerActionController::reloadMuseSampler);
+    dispatcher()->reg(this, "process-online-sounds", this, &MuseSamplerActionController::processOnlineSounds);
 }
 
 void MuseSamplerActionController::checkLibraryIsDetected()
 {
-    std::string libVersion = museSamplerInfo()->version();
+    std::shared_ptr<MuseSamplerResolver> resolver = m_museSamplerResolver.lock();
+    if (!resolver) {
+        return;
+    }
+
+    std::string libVersion = resolver->version();
     std::string status;
 
     if (libVersion.empty()) {
-        status = muse::trc("musesampler", "Muse Sampler library is not found");
+        status = muse::trc("musesampler", "MuseSampler library is not found");
     } else {
-        status = muse::qtrc("musesampler", "Muse Sampler library is detected, version %1")
+        if (configuration()->shouldShowBuildNumber()) {
+            libVersion += "." + std::to_string(resolver->buildNumber());
+        }
+
+        status = muse::qtrc("musesampler", "MuseSampler library is detected, version %1")
                  .arg(QString::fromStdString(libVersion)).toStdString();
     }
 
@@ -51,11 +61,22 @@ void MuseSamplerActionController::checkLibraryIsDetected()
 
 void MuseSamplerActionController::reloadMuseSampler()
 {
-    IF_ASSERT_FAILED(m_reloadMuseSampler) {
+    std::shared_ptr<MuseSamplerResolver> resolver = m_museSamplerResolver.lock();
+    if (!resolver) {
         return;
     }
 
-    if (!m_reloadMuseSampler()) {
-        interactive()->error("", std::string("Could not reload Muse Sampler library"));
+    if (resolver->reloadAllInstruments()) {
+        interactive()->error("", std::string("Could not reload MuseSampler library"));
     }
+}
+
+void MuseSamplerActionController::processOnlineSounds()
+{
+    std::shared_ptr<MuseSamplerResolver> resolver = m_museSamplerResolver.lock();
+    if (!resolver) {
+        return;
+    }
+
+    resolver->processOnlineSounds();
 }

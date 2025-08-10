@@ -65,7 +65,11 @@ ZipReader::~ZipReader()
 
 bool ZipReader::exists() const
 {
-    return File::exists(m_filePath);
+    if (!m_filePath.empty()) {
+        return File::exists(m_filePath);
+    }
+
+    return true;
 }
 
 void ZipReader::close()
@@ -120,11 +124,17 @@ Ret ZipUnpack::unpack(const io::path_t& zipPath, const io::path_t& dirPath)
 
     ZipReader zip(zipPath);
     for (const ZipReader::FileInfo& fi : zip.fileInfoList()) {
+        const io::path_t filePath = dirPath + "/" + fi.filePath;
+
         if (fi.isDir) {
-            ret = io::Dir::mkpath(dirPath + "/" + fi.filePath);
+            ret = io::Dir::mkpath(filePath);
         } else if (fi.isFile) {
-            ByteArray data = zip.fileData(fi.filePath.toStdString());
-            ret = io::File::writeFile(dirPath + "/" + fi.filePath, data);
+            ret = io::Dir::mkpath(io::dirpath(filePath));
+
+            if (ret) {
+                const ByteArray data = zip.fileData(fi.filePath.toStdString());
+                ret = io::File::writeFile(filePath, data);
+            }
         }
 
         if (!ret) {

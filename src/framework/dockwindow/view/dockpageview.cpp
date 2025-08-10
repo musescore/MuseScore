@@ -54,6 +54,9 @@ void DockPageView::init()
     TRACEFUNC;
 
     for (DockBase* dock : allDocks()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        dock->setParentItem(this);
+#endif
         dock->init();
 
         connect(dock, &DockBase::floatingChanged, [this](){
@@ -177,39 +180,40 @@ DockingHolderView* DockPageView::holder(DockType type, Location location) const
     return nullptr;
 }
 
-QList<DockPanelView*> DockPageView::possiblePanelsForTab(const DockPanelView* tab) const
+QList<DockPanelView*> DockPageView::findPanelsForDropping(const DockPanelView* panel) const
 {
     QList<DockPanelView*> result;
 
-    for (DockPanelView* panel : panels()) {
-        if (panel->isTabAllowed(tab)) {
-            result << panel;
+    for (DockPanelView* destinationPanel : panels()) {
+        if (destinationPanel->isTabAllowed(panel)) {
+            result << destinationPanel;
         }
     }
 
     return result;
 }
 
-bool DockPageView::isDockOpenAndCurrentInFrame(const QString& dockName) const
+DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
+{
+    for (DockPanelView* destinationPanel: panels()) {
+        if (destinationPanel->isTabAllowed(tab)
+            && destinationPanel->location() == tab->location()) {
+            return destinationPanel;
+        }
+    }
+
+    return nullptr;
+}
+
+bool DockPageView::isDockOpen(const QString& dockName) const
 {
     const DockBase* dock = dockByName(dockName);
-    if (!dock) {
-        return false;
-    }
-
-    const bool isDockOpen = dock && dock->isOpen();
-
-    const DockPanelView* panel = dynamic_cast<const DockPanelView*>(dock);
-    if (panel) {
-        return isDockOpen && panel->isCurrentTabInFrame();
-    }
-
-    return isDockOpen;
+    return dock && dock->isOpen();
 }
 
 void DockPageView::toggleDock(const QString& dockName)
 {
-    setDockOpen(dockName, !isDockOpenAndCurrentInFrame(dockName));
+    setDockOpen(dockName, !isDockOpen(dockName));
 }
 
 void DockPageView::setDockOpen(const QString& dockName, bool open)
@@ -233,16 +237,9 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
     DockPanelView* destinationPanel = findPanelForTab(panel);
     if (destinationPanel) {
         destinationPanel->addPanelAsTab(panel);
-        panel->makeCurrentTabInFrame();
     } else {
         panel->open();
     }
-}
-
-DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
-{
-    QList<DockPanelView*> panels = possiblePanelsForTab(tab);
-    return !panels.isEmpty() ? panels.first() : nullptr;
 }
 
 void DockPageView::reorderSections()
@@ -292,6 +289,10 @@ void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks
 {
     std::sort(sectionDocks.begin(), sectionDocks.end(), [](DockBase* dock1, DockBase* dock2) {
         if (!dock1->navigationSection() || !dock2->navigationSection()) {
+            return false;
+        }
+
+        if (dock1 == dock2) {
             return false;
         }
 
@@ -425,4 +426,53 @@ void DockPageView::setDefaultNavigationControl(muse::ui::NavigationControl* cont
 {
     muse::ui::INavigationControl* _control = dynamic_cast<muse::ui::INavigationControl*>(control);
     navigationController()->setDefaultNavigationControl(_control);
+}
+
+void DockPageView::forceLayout()
+{
+    emit layoutRequested();
+}
+
+QVariant DockPageView::tours() const
+{
+    return m_tours;
+}
+
+void DockPageView::setTours(const QVariant& newTours)
+{
+    if (m_tours == newTours) {
+        return;
+    }
+
+    for (const QVariant& tourVar: newTours.toList()) {
+        QVariantMap tourMap = tourVar.toMap();
+
+        String eventCode = tourMap.value("eventCode").toString();
+
+        QVariantMap tourInfoMap = tourMap.value("tour").toMap();
+
+        tours::Tour tour;
+
+        tour.id = tourInfoMap.value("id").toString();
+
+        for (const QVariant& stepVar: tourInfoMap.value("steps").toList()) {
+            QVariantMap stepMap = stepVar.toMap();
+
+            tours::TourStep step;
+            step.title = stepMap.value("title").toString();
+            step.description = stepMap.value("description").toString();
+            step.previewImageOrGifUrl = stepMap.value("previewImageOrGifUrl").toString();
+            step.videoExplanationUrl = stepMap.value("videoExplanationUrl").toString();
+            step.controlUri = Uri(stepMap.value("controlUri").toString());
+
+            tour.steps.emplace_back(step);
+        }
+
+        if (!tour.steps.empty()) {
+            toursService()->registerTour(eventCode, tour);
+        }
+    }
+
+    m_tours = newTours;
+    emit toursChanged();
 }

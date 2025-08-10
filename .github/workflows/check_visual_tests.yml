@@ -2,11 +2,20 @@ name: 'Check: Visual Tests (vtest)'
 
 on:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'on'
+        required: false 
+
+env:
+  USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}  
 
 jobs:
   setup:
     name: "Setup VTests workflow"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       do_run: ${{ steps.output_data.outputs.do_run }}
       reference_sha: ${{ steps.output_data.outputs.reference_sha }}
@@ -41,9 +50,9 @@ jobs:
       if: github.event_name == 'push'
       run: |
         REFERENCE_SHA=${{ github.event.before }}
-        if [[ -z "$REFERENCE_SHA" || "$REFERENCE_SHA" == 0000000000000000000000000000000000000000 ]]; then 
-          DO_RUN='false' 
-        else 
+        if [[ -z "$REFERENCE_SHA" || "$REFERENCE_SHA" == 0000000000000000000000000000000000000000 ]]; then
+          DO_RUN='false'
+        else
           DO_RUN='true'
         fi
         echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
@@ -59,7 +68,7 @@ jobs:
 
   build_current:
     name: "Build current"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true'
     steps:
@@ -72,21 +81,30 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}/.ccache
-        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{github.workflow}}-ccache-
+        key: ${{runner.os}}-${{runner.arch}}-tests-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{runner.os}}-${{runner.arch}}-tests-ccache-
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{ env.USE_QT69 == 'on' && '6.9.1' || '6.2.4' }}
+        host: 'linux'
+        target: 'desktop'
+        arch: ${{ env.USE_QT69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh
+
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
         echo "============== ccache ==============="
-        ccache -s
+        ccache -sv
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
@@ -95,7 +113,7 @@ jobs:
 
   build_reference:
     name: "Build reference"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: setup
     if: needs.setup.outputs.do_run == 'true'
     steps:
@@ -110,21 +128,30 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}/.ccache
-        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{github.workflow}}-ccache-
+        key: ${{runner.os}}-${{runner.arch}}-tests-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{runner.os}}-${{runner.arch}}-tests-ccache-
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{ env.USE_QT69 == 'on' && '6.9.1' || '6.2.4' }}
+        host: 'linux'
+        target: 'desktop'
+        arch: ${{ env.USE_QT69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh
+
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
         echo "============== ccache ==============="
-        ccache -s
+        ccache -sv
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
@@ -133,7 +160,7 @@ jobs:
 
   generate_and_compare:
     name: "Generate and Compare"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [setup, build_current, build_reference]
     if: needs.setup.outputs.do_run == 'true'
     steps:
@@ -158,6 +185,12 @@ jobs:
       run: |
         echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
         ./vtest/vtest-compare-pngs.sh --ci 1
+    - name: Compare PNGs small
+      run: |
+        ./vtest/vtest-compare-pngs.sh --ci 1 -c ./current_pngs_small -r ./reference_pngs_small -o ./comparison/small
+    - name: Compare PNGs gp
+      run: |
+        ./vtest/vtest-compare-pngs.sh --ci 1 -c ./current_pngs_gp_small -r ./reference_pngs_gp_small -o ./comparison/gp
     - name: Upload comparison
       if: env.VTEST_DIFF_FOUND == 'true'
       uses: actions/upload-artifact@v4
@@ -188,7 +221,7 @@ jobs:
         exit 1
     - name: Comment push commit
       if: github.event_name == 'push' && contains( env.VTEST_DIFF_FOUND, 'true')
-      uses: peter-evans/commit-comment@v1.1.0
+      uses: peter-evans/commit-comment@v3.0.0
       with:
         body: |
           This is an automatic message. This commit appears to change some of the visual tests.

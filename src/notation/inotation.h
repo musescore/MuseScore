@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATION_H
-#define MU_NOTATION_INOTATION_H
+#pragma once
 
 #include <QString>
 
@@ -31,7 +30,6 @@
 #include "inotationviewstate.h"
 #include "inotationsolomutestate.h"
 #include "inotationstyle.h"
-#include "inotationplayback.h"
 #include "inotationelements.h"
 #include "inotationinteraction.h"
 #include "inotationaccessibility.h"
@@ -69,6 +67,8 @@ public:
 
     virtual bool hasVisibleParts() const = 0;
 
+    virtual bool isMaster() const = 0;
+
     // draw
     virtual ViewMode viewMode() const = 0;
     virtual void setViewMode(const ViewMode& viewMode) = 0;
@@ -105,5 +105,3 @@ public:
     virtual muse::async::Notification notationChanged() const = 0;
 };
 }
-
-#endif // MU_NOTATION_INOTATION_H

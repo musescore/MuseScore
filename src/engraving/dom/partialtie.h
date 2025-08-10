@@ -37,7 +37,6 @@ public:
     PartialTieSegment* clone() const override { return new PartialTieSegment(*this); }
 
     PartialTie* partialTie() const { return (PartialTie*)spanner(); }
-    int subtype() const override { return static_cast<int>(spanner()->type()); }
 private:
     String formatBarsAndBeats() const override;
 };
@@ -62,7 +61,7 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
 
-    SlurTieSegment* newSlurTieSegment(System* parent) override { return new PartialTieSegment(parent); }
+    SlurTieSegment* newSlurTieSegment(System* parent) override;
 
     Note* note() const { return isOutgoing() ? startNote() : endNote(); }
     void setStartNote(Note* note) override;

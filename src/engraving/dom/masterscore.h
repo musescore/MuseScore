@@ -99,7 +99,7 @@ public:
     UndoStack* undoStack() const override { return m_undoStack; }
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
-    muse::async::Channel<ScoreChangesRange> changesChannel() const override { return m_changesRangeChannel; }
+    muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }
 
     bool playlistDirty() const override { return m_playlistDirty; }
     void setPlaylistDirty() override;
@@ -199,7 +199,10 @@ private:
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
     void removeDeletedMidiMapping();
+
     int updateMidiMapping();
+    void doUpdateMidiMapping(int& maxport, std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, Part* part,
+                             InstrChannel* channel, bool useDrumset);
 
     friend class EngravingProject;
     friend class compat::ScoreAccess;
@@ -223,7 +226,7 @@ private:
     std::vector<Excerpt*> m_excerpts;
     std::vector<PartChannelSettingsLink> m_playbackSettingsLinks;
     Score* m_playbackScore = nullptr;
-    muse::async::Channel<ScoreChangesRange> m_changesRangeChannel;
+    muse::async::Channel<ScoreChanges> m_changesChannel;
 
     bool m_readOnly = false;
 

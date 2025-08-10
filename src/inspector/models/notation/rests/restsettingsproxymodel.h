@@ -31,12 +31,6 @@ class RestSettingsProxyModel : public AbstractInspectorProxyModel
 
 public:
     explicit RestSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
-
-private slots:
-    void onElementsUpdated(const QList<mu::engraving::EngravingItem*>& newElements);
-
-private:
-    InspectorModelType resolveDefaultSubModelType(const QList<mu::engraving::EngravingItem*>& newElements) const;
 };
 }
 

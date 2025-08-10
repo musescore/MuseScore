@@ -48,6 +48,9 @@ public:
     enum class Golpe {
         None, Finger, Thumb
     };
+    enum class TappingHand {
+        None, Right, Left
+    };
     enum class Rasgueado {
         None, II_1, MII_1, MII_2, PMP_1, PMP_2, PEI_1, PEI_2, PAI_1, PAI_2, AMI_1,
         AMI_2, PPP_1, AMII_1, AMIP_1, EAMI_1, EAMII_1, PEAMI_1
@@ -132,6 +135,9 @@ public:
     bool harmonicMarkTap() const { return _harmonicMarkInfo.tap; }
     bool harmonicMarkSemi() const { return _harmonicMarkInfo.semi; }
     bool harmonicMarkFeedback() const { return _harmonicMarkInfo.feedback; }
+
+    void setTappingHand(TappingHand hand) { _tappingHand = hand; }
+    TappingHand tappingHand() const { return _tappingHand; }
 
     void setSlapped(bool s) { _slapped = s; }
     bool slapped() const { return _slapped; }
@@ -276,6 +282,7 @@ private:
     bool _letRing = false;
     bool _palmMute = false;
     bool _trill = false;
+    TappingHand _tappingHand = TappingHand::None;
     bool _slapped = false;
     bool _popped = false;
     HarmonicMarkInfo _harmonicMarkInfo;

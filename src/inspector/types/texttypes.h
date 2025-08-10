@@ -160,11 +160,13 @@ static const QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
     mu::engraving::ElementType::STICKING,
     mu::engraving::ElementType::TEMPO_TEXT,
     mu::engraving::ElementType::TUPLET,
+    mu::engraving::ElementType::PLAY_COUNT_TEXT,
     mu::engraving::ElementType::PLAYTECH_ANNOTATION,
     mu::engraving::ElementType::CAPO,
     mu::engraving::ElementType::STRING_TUNINGS,
     mu::engraving::ElementType::HARP_DIAGRAM,
-    mu::engraving::ElementType::SOUND_FLAG
+    mu::engraving::ElementType::SOUND_FLAG,
+    mu::engraving::ElementType::HAMMER_ON_PULL_OFF_TEXT,
 };
 }
 

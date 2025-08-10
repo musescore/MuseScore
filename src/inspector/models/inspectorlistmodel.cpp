@@ -23,12 +23,12 @@
 
 #include "general/generalsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"
+#include "emptystaves/emptystavesvisiblitysettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
 #include "parts/partssettingsmodel.h"
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
-#include "score/scoreaccessibilitysettingsmodel.h"
 #include "notation/inotationinteraction.h"
 
 #include "internal/services/elementrepositoryservice.h"
@@ -74,8 +74,7 @@ void InspectorListModel::buildModelsForEmptySelection()
 
     static const InspectorSectionTypeSet persistentSections {
         InspectorSectionType::SECTION_SCORE_DISPLAY,
-        InspectorSectionType::SECTION_SCORE_APPEARANCE,
-        InspectorSectionType::SECTION_SCORE_ACCESSIBILITY
+        InspectorSectionType::SECTION_SCORE_APPEARANCE
     };
 
     removeUnusedModels({}, false /*isRangeSelection*/, {}, persistentSections);
@@ -83,16 +82,32 @@ void InspectorListModel::buildModelsForEmptySelection()
     createModelsBySectionType(persistentSections);
 }
 
+bool InspectorListModel::alwaysUpdateModelList(const QList<engraving::EngravingItem*>& selectedElementList)
+{
+    // Force update of the list model where sections are only relevant to the child of the selected element
+    // eg. We need to update the text section of PlayCountText when a BarLine is selected
+    for (EngravingItem* el : selectedElementList) {
+        if (el->isBarLine()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList, SelectionState selectionState)
 {
     TRACEFUNC;
+
+    bool forceUpdate = false;
 
     if (!m_modelList.isEmpty()) {
         if (context()->currentNotation() == nullptr) {
             buildModelsForEmptySelection();
         }
 
-        if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
+        forceUpdate = alwaysUpdateModelList(selectedElementList);
+        if (!m_repository->needUpdateElementList(selectedElementList, selectionState) && !forceUpdate) {
             return;
         }
     }
@@ -110,6 +125,10 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
     }
 
     m_repository->updateElementList(selectedElementList, selectionState);
+
+    if (forceUpdate) {
+        m_repository->elementsUpdated(selectedElementList);
+    }
 }
 
 int InspectorListModel::rowCount(const QModelIndex&) const
@@ -185,6 +204,9 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
         case InspectorSectionType::SECTION_MEASURES:
             newModel = new MeasuresSettingsModel(this, m_repository);
             break;
+        case InspectorSectionType::SECTION_EMPTY_STAVES:
+            newModel = new EmptyStavesVisibilitySettingsModel(this, m_repository);
+            break;
         case InspectorSectionType::SECTION_NOTATION:
             newModel = new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
             break;
@@ -197,9 +219,6 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
         case InspectorSectionType::SECTION_SCORE_APPEARANCE:
             newModel = new ScoreAppearanceSettingsModel(this, m_repository);
             break;
-        case InspectorSectionType::SECTION_SCORE_ACCESSIBILITY:
-            newModel = new ScoreAccessibilitySettingsModel(this, m_repository);
-            break;
         case InspectorSectionType::SECTION_PARTS:
             newModel = new PartsSettingsModel(this, m_repository);
             break;
@@ -208,6 +227,8 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
         }
 
         if (newModel) {
+            connect(newModel, &AbstractInspectorModel::requestReloadInspectorListModel, this,
+                    &InspectorListModel::updateElementList);
             newModel->init();
             m_modelList << newModel;
         }

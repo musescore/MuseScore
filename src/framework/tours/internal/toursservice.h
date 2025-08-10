@@ -42,13 +42,11 @@ public:
     ToursService(const muse::modularity::ContextPtr& ctx)
         : Injectable(ctx) {}
 
-    void init();
+    void registerTour(const String& eventCode, const Tour& tour) override;
 
     void onEvent(const String& eventCode) override;
 
 private:
-    void initTours();
-
     std::unordered_map<String /*eventCode*/, Tour> m_eventsMap;
 };
 }

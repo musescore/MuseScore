@@ -27,14 +27,16 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/interval.h"
+#include "engraving/types/types.h"
 
 // api
+#include "apitypes.h"
 #include "engravingapiv1.h"
 #include "score.h"
 #include "instrument.h"
 #include "cursor.h"
 #include "elements.h"
-#include "tie.h"
 #include "selection.h"
 
 #include "log.h"
@@ -44,27 +46,99 @@ using namespace mu::engraving::apiv1;
 
 Enum* PluginAPI::elementTypeEnum = nullptr;
 Enum* PluginAPI::accidentalTypeEnum = nullptr;
-Enum* PluginAPI::beamModeEnum = nullptr;
+Enum* PluginAPI::accidentalBracketEnum = nullptr;
+Enum* PluginAPI::ornamentStyleEnum = nullptr;
+Enum* PluginAPI::alignEnum = nullptr;
 Enum* PluginAPI::placementEnum = nullptr;
-Enum* PluginAPI::glissandoTypeEnum = nullptr;
-Enum* PluginAPI::layoutBreakTypeEnum = nullptr;
-Enum* PluginAPI::lyricsSyllabicEnum = nullptr;
+Enum* PluginAPI::placementHEnum = nullptr;
+Enum* PluginAPI::textPlaceEnum = nullptr;
 Enum* PluginAPI::directionEnum = nullptr;
 Enum* PluginAPI::directionHEnum = nullptr;
-Enum* PluginAPI::ornamentStyleEnum = nullptr;
+Enum* PluginAPI::orientationEnum = nullptr;
+Enum* PluginAPI::autoOnOffEnum = nullptr;
+Enum* PluginAPI::voiceAssignmentEnum = nullptr;
+Enum* PluginAPI::spacerTypeEnum = nullptr;
+Enum* PluginAPI::layoutBreakTypeEnum = nullptr;
+Enum* PluginAPI::durationTypeEnum = nullptr;
+Enum* PluginAPI::noteValueTypeEnum = nullptr;
+Enum* PluginAPI::beamModeEnum = nullptr;
+Enum* PluginAPI::glissandoTypeEnum = nullptr;
 Enum* PluginAPI::glissandoStyleEnum = nullptr;
-Enum* PluginAPI::tidEnum = nullptr;
-Enum* PluginAPI::alignEnum = nullptr;
-Enum* PluginAPI::noteTypeEnum = nullptr;
-Enum* PluginAPI::playEventTypeEnum = nullptr;
+Enum* PluginAPI::harmonyTypeEnum = nullptr;
+Enum* PluginAPI::harmonyVoicingEnum = nullptr;
+Enum* PluginAPI::hDurationEnum = nullptr;
+Enum* PluginAPI::frameTypeEnum = nullptr;
+Enum* PluginAPI::verticalAlignmentEnum = nullptr;
+Enum* PluginAPI::tremoloBarTypeEnum = nullptr;
+Enum* PluginAPI::preferSharpFlatEnum = nullptr;
 Enum* PluginAPI::noteHeadTypeEnum = nullptr;
 Enum* PluginAPI::noteHeadSchemeEnum = nullptr;
 Enum* PluginAPI::noteHeadGroupEnum = nullptr;
-Enum* PluginAPI::noteValueTypeEnum = nullptr;
+Enum* PluginAPI::noteTypeEnum = nullptr;
+Enum* PluginAPI::playEventTypeEnum = nullptr;
 Enum* PluginAPI::segmentTypeEnum = nullptr;
+Enum* PluginAPI::barLineTypeEnum = nullptr;
+Enum* PluginAPI::tidEnum = nullptr;
+Enum* PluginAPI::lyricsSyllabicEnum = nullptr;
 Enum* PluginAPI::spannerAnchorEnum = nullptr;
+Enum* PluginAPI::mMRestRangeBracketTypeEnum = nullptr;
+Enum* PluginAPI::tupletNumberTypeEnum = nullptr;
+Enum* PluginAPI::tupletBracketTypeEnum = nullptr;
+Enum* PluginAPI::tripletFeelTypeEnum = nullptr;
+Enum* PluginAPI::guitarBendTypeEnum = nullptr;
+Enum* PluginAPI::guitarBendShowHoldLineEnum = nullptr;
+Enum* PluginAPI::clefTypeEnum = nullptr;
+Enum* PluginAPI::clefToBarlinePositionEnum = nullptr;
+Enum* PluginAPI::dynamicTypeEnum = nullptr;
+Enum* PluginAPI::dynamicSpeedEnum = nullptr;
+Enum* PluginAPI::lineTypeEnum = nullptr;
+Enum* PluginAPI::hookTypeEnum = nullptr;
+Enum* PluginAPI::keyModeEnum = nullptr;
+Enum* PluginAPI::arpeggioTypeEnum = nullptr;
+Enum* PluginAPI::intervalStepEnum = nullptr;
+Enum* PluginAPI::intervalTypeEnum = nullptr;
+Enum* PluginAPI::instrumentLabelVisibilityEnum = nullptr;
+Enum* PluginAPI::ornamentShowAccidentalEnum = nullptr;
+Enum* PluginAPI::partialSpannerDirectionEnum = nullptr;
+Enum* PluginAPI::chordStylePresetEnum = nullptr;
+Enum* PluginAPI::annotationCategoryEnum = nullptr;
+Enum* PluginAPI::playingTechniqueTypeEnum = nullptr;
+Enum* PluginAPI::gradualTempoChangeTypeEnum = nullptr;
+Enum* PluginAPI::changeMethodEnum = nullptr;
+Enum* PluginAPI::changeDirectionEnum = nullptr;
+Enum* PluginAPI::accidentalRoleEnum = nullptr;
+Enum* PluginAPI::accidentalValEnum = nullptr;
+Enum* PluginAPI::fermataTypeEnum = nullptr;
+Enum* PluginAPI::chordLineTypeEnum = nullptr;
+Enum* PluginAPI::slurStyleTypeEnum = nullptr;
+Enum* PluginAPI::tremoloTypeEnum = nullptr;
+Enum* PluginAPI::tremoloChordTypeEnum = nullptr;
+Enum* PluginAPI::bracketTypeEnum = nullptr;
+Enum* PluginAPI::jumpTypeEnum = nullptr;
+Enum* PluginAPI::markerTypeEnum = nullptr;
+Enum* PluginAPI::measureNumberModeEnum = nullptr;
+Enum* PluginAPI::staffGroupEnum = nullptr;
+Enum* PluginAPI::hideModeEnum = nullptr;
+Enum* PluginAPI::ottavaTypeEnum = nullptr;
+Enum* PluginAPI::hairpinTypeEnum = nullptr;
+Enum* PluginAPI::trillTypeEnum = nullptr;
+Enum* PluginAPI::vibratoTypeEnum = nullptr;
+Enum* PluginAPI::articulationTextTypeEnum = nullptr;
+Enum* PluginAPI::lyricsDashSystemStartEnum = nullptr;
+Enum* PluginAPI::noteLineEndPlacementEnum = nullptr;
+Enum* PluginAPI::spannerSegmentTypeEnum = nullptr;
+Enum* PluginAPI::tiePlacementEnum = nullptr;
+Enum* PluginAPI::tieDotsPlacementEnum = nullptr;
+Enum* PluginAPI::timeSigTypeEnum = nullptr;
+Enum* PluginAPI::timeSigPlacementEnum = nullptr;
+Enum* PluginAPI::timeSigStyleEnum = nullptr;
+Enum* PluginAPI::timeSigVSMarginEnum = nullptr;
+Enum* PluginAPI::noteSpellingTypeEnum = nullptr;
+Enum* PluginAPI::keyEnum = nullptr;
+Enum* PluginAPI::updateModeEnum = nullptr;
+Enum* PluginAPI::layoutFlagEnum = nullptr;
+Enum* PluginAPI::layoutModeEnum = nullptr;
 Enum* PluginAPI::symIdEnum = nullptr;
-Enum* PluginAPI::harmonyTypeEnum = nullptr;
 Enum* PluginAPI::cursorEnum = nullptr;
 
 //---------------------------------------------------------
@@ -92,6 +166,8 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<EngravingItem>("MuseScore", 3);
     qmlRegisterAnonymousType<Chord>("MuseScore", 3);
     qmlRegisterAnonymousType<Note>("MuseScore", 3);
+    qmlRegisterAnonymousType<Tuplet>("MuseScore", 3);
+    qmlRegisterAnonymousType<DurationElement>("MuseScore", 3);
     qmlRegisterAnonymousType<Segment>("MuseScore", 3);
     qmlRegisterAnonymousType<Measure>("MuseScore", 3);
     qmlRegisterAnonymousType<Part>("MuseScore", 3);
@@ -102,10 +178,20 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
     qmlRegisterAnonymousType<Selection>("MuseScore", 3);
     qmlRegisterAnonymousType<Tie>("MuseScore", 3);
+    qmlRegisterAnonymousType<Drumset>("MuseScore", 3);
+    qmlRegisterAnonymousType<MeasureBase>("MuseScore", 3);
+    qmlRegisterAnonymousType<System>("MuseScore", 3);
+    qmlRegisterAnonymousType<Spanner>("MuseScore", 3);
+    qmlRegisterAnonymousType<SpannerSegment>("MuseScore", 3);
+    qmlRegisterAnonymousType<Ornament>("MuseScore", 3);
     qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
 
     qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
+    qmlRegisterAnonymousType<IntervalWrapper>("MuseScore", 3);
+    qRegisterMetaType<IntervalWrapper*>("IntervalWrapper*");
+    qmlRegisterAnonymousType<OrnamentIntervalWrapper>("MuseScore", 3);
+    qRegisterMetaType<OrnamentIntervalWrapper*>("OrnamentIntervalWrapper*");
 
     qmlTypesRegistered = true;
 }
@@ -348,6 +434,17 @@ FractionWrapper* PluginAPI::fraction(int num, int den) const
     return wrap(mu::engraving::Fraction(num, den));
 }
 
+//---------------------------------------------------------
+//   PluginAPI::fractionFromTicks
+///  Converts an integer tick value to an equivalent fraction.
+/// \since MuseScore 4.6
+//---------------------------------------------------------
+
+FractionWrapper* PluginAPI::fractionFromTicks(int ticks) const
+{
+    return wrap(mu::engraving::Fraction::fromTicks(ticks));
+}
+
 void PluginAPI::quit()
 {
     emit closeRequested();
@@ -481,4 +578,39 @@ int PluginAPI::mscoreUpdateVersion() const
 qreal PluginAPI::mscoreDPI() const
 {
     return engraving::DPI;
+}
+
+OrnamentIntervalWrapper* PluginAPI::defaultOrnamentInterval() const
+{
+    return wrap(mu::engraving::DEFAULT_ORNAMENT_INTERVAL);
+}
+
+//---------------------------------------------------------
+//   PluginAPI::ornamentInterval
+///  Creates a new ornament interval with the given step and type
+//---------------------------------------------------------
+
+OrnamentIntervalWrapper* PluginAPI::ornamentInterval(int step, int type) const
+{
+    return wrap(mu::engraving::OrnamentInterval(mu::engraving::IntervalStep(step), mu::engraving::IntervalType(type)));
+}
+
+//---------------------------------------------------------
+//   PluginAPI::interval
+///  Creates a new interval with the given chromatic and diatonic steps
+//---------------------------------------------------------
+
+IntervalWrapper* PluginAPI::interval(int diatonic, int chromatic) const
+{
+    return wrap(mu::engraving::Interval(diatonic, chromatic));
+}
+
+//---------------------------------------------------------
+//   PluginAPI::intervalFromOrnamentInterval
+///  Creates a new interval from a given ornament interval
+//---------------------------------------------------------
+
+IntervalWrapper* PluginAPI::intervalFromOrnamentInterval(OrnamentIntervalWrapper* o) const
+{
+    return wrap(mu::engraving::Interval::fromOrnamentInterval(o->ornamentInterval()));
 }

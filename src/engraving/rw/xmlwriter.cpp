@@ -211,6 +211,10 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
         element(name, TConv::toXml(data.value<Align>()));
     }
     break;
+    case P_TYPE::ALIGN_H: {
+        element(name, TConv::toXml(data.value<AlignH>()));
+    }
+    break;
     case P_TYPE::PLACEMENT_V: {
         element(name, TConv::toXml(data.value<PlacementV>()));
     }
@@ -300,11 +304,17 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::AUTO_ON_OFF: {
         element(name, TConv::toXml(data.value<AutoOnOff>()));
     } break;
+    case P_TYPE::AUTO_CUSTOM_HIDE: {
+        element(name, TConv::toXml(data.value<AutoCustomHide>()));
+    } break;
     case P_TYPE::INT_VEC: {
         element(name, TConv::toXml(data.value<std::vector<int> >()));
     } break;
     case P_TYPE::PARTIAL_SPANNER_DIRECTION: {
         element(name, TConv::toXml(data.value<PartialSpannerDirection>()));
+    } break;
+    case P_TYPE::PARENTHESES_MODE: {
+        element(name, TConv::toXml(data.value<ParenthesesMode>()));
     } break;
     default: {
         UNREACHABLE; //! TODO
@@ -346,6 +356,6 @@ void XmlWriter::comment(const String& text)
 
 String XmlWriter::xmlString(const String& s)
 {
-    return XmlStreamWriter::escapeString(s);
+    return s.toXmlEscaped();
 }
 }

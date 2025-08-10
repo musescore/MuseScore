@@ -29,14 +29,30 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imusesoundsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/imusesoundsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/musesoundstypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/musesoundserrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/imusesoundscheckupdatescenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/imusesoundscheckupdateservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/imusesamplercheckupdateservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/imusesamplercheckupdatescenario.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundsconfiguration.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdatescenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdatescenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdateservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesoundscheckupdateservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdateservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdateservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdatescenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musesamplercheckupdatescenario.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/musesoundslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/musesoundslistmodel.h
     )
+
+set(MODULE_LINK Qt::Concurrent)
 
 setup_module()

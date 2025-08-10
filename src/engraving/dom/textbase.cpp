@@ -74,7 +74,7 @@ static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 /// return true if (r1,c1) is at or before (r2,c2)
 //---------------------------------------------------------
 
-static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2)
+bool TextBase::isSorted(size_t r1, size_t c1, size_t r2, size_t c2)
 {
     if (r1 < r2) {
         return true;
@@ -92,7 +92,7 @@ static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2)
 /// swap (r1,c1) with (r2,c2)
 //---------------------------------------------------------
 
-static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
+void TextBase::swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 {
     std::swap(r1, r2);
     std::swap(c1, c2);
@@ -103,7 +103,7 @@ static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 /// swap (r1,c1) with (r2,c2) if they are not sorted
 //---------------------------------------------------------
 
-static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
+void TextBase::sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 {
     if (!isSorted(r1, c1, r2, c2)) {
         swap(r1, c1, r2, c2);
@@ -332,7 +332,7 @@ void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
     size_t c1 = selectColumn();
     size_t c2 = column();
 
-    sort(r1, c1, r2, c2);
+    TextBase::sort(r1, c1, r2, c2);
 
     for (size_t row = 0; row < ldata->blocks.size(); ++row) {
         TextBlock& t = ldata->blocks[row];
@@ -453,7 +453,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
                 size_t c1 = m_selectColumn;
                 size_t c2 = m_column;
 
-                sort(r1, c1, r2, c2);
+                TextBase::sort(r1, c1, r2, c2);
                 clearSelection();
                 m_row    = r1;
                 m_column = c1;
@@ -475,7 +475,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
                 size_t c1 = m_selectColumn;
                 size_t c2 = m_column;
 
-                sort(r1, c1, r2, c2);
+                TextBase::sort(r1, c1, r2, c2);
                 clearSelection();
                 m_row    = r2;
                 m_column = c2;
@@ -661,7 +661,7 @@ String TextCursor::selectedText(bool withFormat) const
     size_t r2 = m_row;
     size_t c1 = selectColumn();
     size_t c2 = column();
-    sort(r1, c1, r2, c2);
+    TextBase::sort(r1, c1, r2, c2);
     return extractText(static_cast<int>(r1), static_cast<int>(c1), static_cast<int>(r2), static_cast<int>(c2), withFormat);
 }
 
@@ -677,7 +677,7 @@ String TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) 
         return String();
     }
 
-    assert(isSorted(r1, c1, r2, c2));
+    assert(TextBase::isSorted(r1, c1, r2, c2));
     const std::vector<TextBlock>& tb = ldata->blocks;
 
     if (r1 == r2) {
@@ -886,6 +886,7 @@ Font TextFragment::font(const TextBase* t) const
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic()
             || t->isStringTunings()
+            || t->isPlayTechAnnotation()
             || t->textStyleType() == TextStyleType::OTTAVA
             || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM
             || t->textStyleType() == TextStyleType::TUPLET
@@ -922,6 +923,10 @@ Font TextFragment::font(const TextBase* t) const
             fontType = Font::Type::MusicSymbolText;
             // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
             m *= 5.0 / 3.0;
+        } else if (t->isMarker()) {
+            family = t->style().styleSt(Sid::musicalTextFont);
+            fontType = Font::Type::MusicSymbolText;
+            m = t->getProperty(Pid::MARKER_SYMBOL_SIZE).toDouble();
         } else {
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
@@ -1001,6 +1006,7 @@ void TextBlock::layout(const TextBase* t)
 
     double layoutWidth = 0;
     EngravingItem* e = t->parentItem();
+    // TODO - remove when position is implemented for all text items
     if (e && t->layoutToParentWidth()) {
         layoutWidth = e->width();
         switch (e->type()) {
@@ -1081,6 +1087,9 @@ void TextBlock::layout(const TextBase* t)
                 x += w;
             }
 
+            double yOffset = musicSymbolBaseLineAdjust(t, f, fi);
+            f.pos.ry() -= yOffset;
+
             RectF textBRect = fm.tightBoundingRect(f.text).translated(f.pos);
             bool useDynamicSymShape = fragmentFont.type() == Font::Type::MusicSymbol && t->isDynamic();
             if (useDynamicSymShape) {
@@ -1094,13 +1103,11 @@ void TextBlock::layout(const TextBase* t)
             } else {
                 m_shape.add(textBRect, t);
             }
-
-            Font font = f.font(t);
-            if (font.type() == Font::Type::MusicSymbol || font.type() == Font::Type::MusicSymbolText) {
+            if (fragmentFont.type() == Font::Type::MusicSymbol || fragmentFont.type() == Font::Type::MusicSymbolText) {
                 // SEMI-HACK: Music fonts can have huge linespacing because of tall symbols, so instead of using the
                 // font linespacing value we just use the height of the individual fragment with some added margin
 
-                m_lineSpacing = std::max(m_lineSpacing, 1.25 * m_shape.bbox().height());
+                m_lineSpacing = std::max(m_lineSpacing, 1.25 * (m_shape.bbox().height() - m_shape.bbox().bottom()) + yOffset);
             } else {
                 m_lineSpacing = std::max(m_lineSpacing, fm.lineSpacing());
             }
@@ -1110,25 +1117,29 @@ void TextBlock::layout(const TextBase* t)
     // Apply style/custom line spacing
     m_lineSpacing *= t->textLineSpacing();
 
-    double rx = 0;
-    AlignH alignH = t->align().horizontal;
-    bool dynamicAlwaysCentered = t->isDynamic() && t->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
+    // OLD ALIGN TEXT
+    // TODO - remove when position is implemented for all text items
+    if (!t->positionSeparateFromAlignment()) {
+        double rx = 0;
+        AlignH alignH = t->align().horizontal;
+        bool dynamicAlwaysCentered = t->isDynamic() && t->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
 
-    RectF bbox = m_shape.bbox();
-    if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
-        rx = (layoutWidth - (bbox.left() + bbox.right())) * .5;
-    } else if (alignH == AlignH::LEFT) {
-        rx = -bbox.left();
-    } else if (alignH == AlignH::RIGHT) {
-        rx = layoutWidth - bbox.right();
+        RectF bbox = m_shape.bbox();
+        if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
+            rx = (layoutWidth - (bbox.left() + bbox.right())) * .5;
+        } else if (alignH == AlignH::LEFT) {
+            rx = -bbox.left();
+        } else if (alignH == AlignH::RIGHT) {
+            rx = layoutWidth - bbox.right();
+        }
+
+        rx += lm;
+
+        for (TextFragment& f : m_fragments) {
+            f.pos.rx() += rx;
+        }
+        m_shape.translate(PointF(rx, 0.0));
     }
-
-    rx += lm;
-
-    for (TextFragment& f : m_fragments) {
-        f.pos.rx() += rx;
-    }
-    m_shape.translate(PointF(rx, 0.0));
 }
 
 //---------------------------------------------------------
@@ -1426,6 +1437,30 @@ void TextBlock::simplify()
     }
 }
 
+double TextBlock::musicSymbolBaseLineAdjust(const TextBase* t, const TextFragment& f, const std::list<TextFragment>::iterator fi)
+{
+    Font fragmentFont = f.font(t);
+    FontMetrics fm(fragmentFont);
+    const bool adjustSymbol = fragmentFont.type() == Font::Type::MusicSymbolText && t->isMarker();
+    if (!adjustSymbol) {
+        return 0.0;
+    }
+
+    // Align the x-height of the coda symbol to half the x-height of the surrounding text
+    Font refFont;
+    if (m_fragments.size() == 1) {
+        refFont = t->font();
+    } else {
+        TextFragment& refFragment = fi != m_fragments.begin() ? *(std::prev(fi)) : *(std::next(fi));
+        refFont = refFragment.font(t);
+    }
+    FontMetrics refFm(refFont);
+
+    const double middle = (fm.tightBoundingRect(f.text).height() / 2) - fm.tightBoundingRect(f.text).bottom();
+    const double refXHeight = refFm.capHeight() / 2;
+    return refXHeight - middle;
+}
+
 //---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
@@ -1662,7 +1697,7 @@ String TextBlock::text(int col1, int len, bool withFormat) const
                 if (f.format.fontFamily() == "ScoreText" && withFormat) {
                     s += toSymbolXml(c);
                 } else {
-                    s += XmlWriter::escapeSymbol(c.unicode());
+                    s += String::toXmlEscaped(c.unicode());
                 }
             }
             if (!c.isHighSurrogate()) {
@@ -1739,21 +1774,6 @@ TextBase::TextBase(const TextBase& st)
 TextBase::~TextBase()
 {
     delete m_cursor;
-}
-
-//---------------------------------------------------------
-//   drawSelection
-//---------------------------------------------------------
-
-void TextBase::drawSelection(Painter* p, const RectF& r) const
-{
-    Brush bg(configuration()->selectionColor());
-    p->setCompositionMode(CompositionMode::HardLight);
-    p->setBrush(bg);
-    p->setNoPen();
-    p->drawRect(r);
-    p->setCompositionMode(CompositionMode::SourceOver);
-    p->setPen(textColor());
 }
 
 //---------------------------------------------------------
@@ -2161,16 +2181,19 @@ String TextBase::genText(const LayoutData* ldata) const
     }
 
     String text;
-    bool bold_      = false;
-    bool italic_    = false;
-    bool underline_ = false;
-    bool strike_    = false;
+    XmlNesting xmlNesting(&text);
 
     CharFormat fmt;
     fmt.setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
     fmt.setFontSize(propertyDefault(Pid::FONT_SIZE).toReal());
     fmt.setStyle(static_cast<FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
 
+    // Prepare the initial style tags (if any).
+    // We only need those if there is any fragment in the blocks with a different style than the default one.
+    bool bold_      = false;
+    bool italic_    = false;
+    bool underline_ = false;
+    bool strike_    = false;
     for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             if (!f.format.bold() && fmt.bold()) {
@@ -2187,8 +2210,6 @@ String TextBase::genText(const LayoutData* ldata) const
             }
         }
     }
-
-    XmlNesting xmlNesting(&text);
     if (bold_) {
         xmlNesting.pushB();
     }
@@ -2202,11 +2223,14 @@ String TextBase::genText(const LayoutData* ldata) const
         xmlNesting.pushS();
     }
 
+    // And here for the actual formatting of the text.
     for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             // don't skip, empty text fragments hold information for empty lines
-//                  if (f.text.isEmpty())                     // skip empty fragments, not to
-//                        continue;                           // insert extra HTML formatting
+            //    if (f.text.isEmpty())                   // skip empty fragments, not to
+            //        continue;                           // insert extra HTML formatting
+
+            // Push or Pop XML tags according to the current format changes
             const CharFormat& format = f.format;
             if (fmt.bold() != format.bold()) {
                 if (format.bold()) {
@@ -2774,6 +2798,8 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
         return PropertyValue::fromValue(bgColor());
     case Pid::ALIGN:
         return PropertyValue::fromValue(align());
+    case Pid::POSITION:
+        return PropertyValue::fromValue(position());
     case Pid::TEXT_SCRIPT_ALIGN:
         return static_cast<int>(m_cursor->selectedFragmentsFormat().valign());
     case Pid::TEXT:
@@ -2797,12 +2823,18 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
 
 bool TextBase::setProperty(Pid pid, const PropertyValue& v)
 {
-    if (m_textInvalid) {
+    if (m_textInvalid && ldata() && ldata()->isValid()) {
         genText();
     }
 
     bool rv = true;
     switch (pid) {
+    case Pid::COLOR:
+        if (color() == frameColor()) {
+            setFrameColor(v.value<Color>());
+        }
+        EngravingItem::setProperty(pid, v);
+        break;
     case Pid::TEXT_STYLE:
         initTextStyleType(v.value<TextStyleType>());
         break;
@@ -2841,6 +2873,9 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
         break;
     case Pid::ALIGN:
         setAlign(v.value<Align>());
+        break;
+    case Pid::POSITION:
+        setPosition(v.value<AlignH>());
         break;
     case Pid::TEXT_SCRIPT_ALIGN:
         m_cursor->setFormat(FormatId::Valign, v.toInt());
@@ -3173,12 +3208,27 @@ void TextBase::initTextStyleType(TextStyleType tid, bool preserveDifferent)
 {
     if (!preserveDifferent) {
         initTextStyleType(tid);
-    } else {
-        setTextStyleType(tid);
-        for (const auto& p : *textStyle(tid)) {
-            if (getProperty(p.pid) == propertyDefault(p.pid)) {
-                setProperty(p.pid, styleValue(p.pid, p.sid));
-            }
+        return;
+    }
+
+    const LayoutData* ldata = this->ldata();
+    if (!ldata || ldata->layoutInvalid) {
+        createBlocks();
+    }
+
+    // Before setting the new style - check if any fragments contain custom formatting. If they do, preserve
+    // the old values for face, size, and style...
+    const bool hadCustomFragments = hasCustomFormatting();
+
+    setTextStyleType(tid);
+
+    for (const auto& p : *textStyle(tid)) {
+        const bool isFragmentStyle = p.pid == Pid::FONT_FACE || p.pid == Pid::FONT_SIZE || p.pid == Pid::FONT_STYLE;
+        if (isFragmentStyle && hadCustomFragments) {
+            continue;
+        }
+        if (getProperty(p.pid) == propertyDefault(p.pid)) {
+            setProperty(p.pid, styleValue(p.pid, p.sid));
         }
     }
 }
@@ -3191,71 +3241,13 @@ void TextBase::initTextStyleType(TextStyleType tid)
     }
 }
 
-void TextBase::startEdit(EditData& ed)
+RectF TextBase::drag(EditData& ed)
 {
-    if (ed.editTextualProperties) {
-        startEditTextual(ed);
-    } else {
-        startEditNonTextual(ed);
-    }
-}
+    RectF result = EngravingItem::drag(ed);
 
-bool TextBase::isEditAllowed(EditData& ed) const
-{
-    if (ed.editTextualProperties) {
-        return isTextualEditAllowed(ed);
-    } else {
-        return isNonTextualEditAllowed(ed);
-    }
-}
+    MoveElementAnchors::moveElementAnchorsOnDrag(this, ed);
 
-bool TextBase::edit(EditData& ed)
-{
-    if (ed.editTextualProperties) {
-        return editTextual(ed);
-    } else {
-        return editNonTextual(ed);
-    }
-}
-
-void TextBase::endEdit(EditData& ed)
-{
-    if (ed.editTextualProperties) {
-        endEditTextual(ed);
-    } else {
-        endEditNonTextual(ed);
-    }
-}
-
-void TextBase::editDrag(EditData& ed)
-{
-    Segment* segment = explicitParent() ? toSegment(parent()) : nullptr;
-    if (!segment) {
-        return EngravingItem::editDrag(ed);
-    }
-
-    ElementEditDataPtr eed = ed.getData(this);
-    if (!eed) {
-        return;
-    }
-
-    EditTimeTickAnchors::updateAnchors(this, track());
-
-    KeyboardModifiers km = ed.modifiers;
-    if (km & (ShiftModifier | ControlModifier)) {
-        return;
-    }
-
-    staff_idx_t si = staffIdx();
-    Segment* newSeg = nullptr;     // don't prefer any segment while dragging, just snap to the closest
-    static constexpr double spacingFactor = 0.5;
-    score()->dragPosition(canvasPos(), &si, &newSeg, spacingFactor, allowTimeAnchor());
-    if (newSeg && (newSeg != segment || staffIdx() != si)) {
-        undoMoveSegment(newSeg, newSeg->tick() - segment->tick());
-        double deltaX = newSeg->pageX() - segment->pageX();
-        PointF offsetShift = PointF(deltaX, 0.0);
-        shiftInitOffset(ed, offsetShift);
-    }
+    return result;
 }
 
 void TextBase::endDrag(EditData& ed)
@@ -3264,206 +3256,6 @@ void TextBase::endDrag(EditData& ed)
         return;
     }
     EngravingItem::endDrag(ed);
-}
-
-void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
-{
-    ElementEditDataPtr eedThis = ed.getData(this);
-    eedThis->initOffset -= offsetShift;
-
-    if (EngravingItem* itemBefore = ldata()->itemSnappedBefore()) {
-        if (itemBefore->isTextBase()) {
-            ElementEditDataPtr eedBefore = ed.getData(itemBefore);
-            if (eedBefore) {
-                eedBefore->initOffset -= offsetShift;
-            }
-        }
-    }
-
-    if (EngravingItem* itemAfter = ldata()->itemSnappedAfter()) {
-        if (itemAfter->isTextBase()) {
-            ElementEditDataPtr eedAfter = ed.getData(itemAfter);
-            if (eedAfter) {
-                eedAfter->initOffset -= offsetShift;
-            }
-        }
-    }
-}
-
-void TextBase::startEditNonTextual(EditData& ed)
-{
-    EngravingItem::startEdit(ed);
-}
-
-bool TextBase::editNonTextual(EditData& ed)
-{
-    if (!hasParentSegment()) {
-        return EngravingItem::edit(ed);
-    }
-
-    if (ed.key == Key_Shift) {
-        if (ed.isKeyRelease) {
-            score()->hideAnchors();
-        } else {
-            EditTimeTickAnchors::updateAnchors(this, track());
-        }
-        triggerLayout();
-        return true;
-    }
-
-    if (!isEditAllowed(ed)) {
-        return false;
-    }
-
-    bool leftRightKey = ed.key == Key_Left || ed.key == Key_Right;
-    bool altMod = ed.modifiers & AltModifier;
-    bool shiftMod = ed.modifiers & ShiftModifier;
-
-    bool changeAnchorType = shiftMod && altMod && leftRightKey;
-    if (changeAnchorType) {
-        undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
-    }
-    bool doesntNeedMoveSeg = changeAnchorType && ((ed.key == Key_Left && anchorToEndOfPrevious())
-                                                  || (ed.key == Key_Right && !anchorToEndOfPrevious()));
-    if (doesntNeedMoveSeg) {
-        checkMeasureBoundariesAndMoveIfNeed();
-        return true;
-    }
-
-    bool moveSeg = shiftMod && (ed.key == Key_Left || ed.key == Key_Right);
-    if (moveSeg) {
-        bool moved = moveSegment(ed);
-        EditTimeTickAnchors::updateAnchors(this, track());
-        checkMeasureBoundariesAndMoveIfNeed();
-        return moved;
-    }
-
-    if (shiftMod) {
-        return false;
-    }
-
-    if (!nudge(ed)) {
-        return false;
-    }
-
-    triggerLayout();
-    return true;
-}
-
-void TextBase::endEditNonTextual(EditData& ed)
-{
-    EngravingItem::endEdit(ed);
-}
-
-bool TextBase::isNonTextualEditAllowed(EditData& ed) const
-{
-    static const std::set<KeyboardKey> ARROW_KEYS {
-        Key_Left,
-        Key_Right,
-        Key_Up,
-        Key_Down
-    };
-
-    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key));
-}
-
-void TextBase::checkMeasureBoundariesAndMoveIfNeed()
-{
-    assert(hasParentSegment());
-
-    /* TextBase elements are always assigned to a ChordRest segment if available at this tick,
-     * EXCEPT if we are at a measure boundary. In this case, if anchorToEndOfPrevious()
-     * we must assign to a TimeTick segment at the end of previous measure, otherwise to a
-     * ChordRest segment at the start of the next measure. */
-
-    Segment* curSeg = toSegment(parent());
-    Fraction curTick = curSeg->tick();
-    Measure* curMeasure = curSeg->measure();
-    Measure* prevMeasure = curMeasure->prevMeasure();
-    bool needMoveToNext = curTick == curMeasure->endTick() && !anchorToEndOfPrevious();
-    bool needMoveToPrevious = curSeg->rtick().isZero() && anchorToEndOfPrevious() && prevMeasure;
-
-    if (!needMoveToPrevious && !needMoveToNext) {
-        return;
-    }
-
-    Segment* newSeg = nullptr;
-    if (needMoveToPrevious) {
-        newSeg = prevMeasure->findSegment(SegmentType::TimeTick, curSeg->tick());
-        if (!newSeg) {
-            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(prevMeasure, curTick - prevMeasure->tick(), staffIdx());
-            EditTimeTickAnchors::updateLayout(prevMeasure);
-            newSeg = anchor->segment();
-        }
-    } else {
-        newSeg = curSeg->next1(SegmentType::ChordRest);
-    }
-
-    if (newSeg && newSeg->tick() == curTick) {
-        undoMoveSegment(newSeg, Fraction(0, 1));
-    }
-}
-
-bool TextBase::moveSegment(const EditData& ed)
-{
-    assert(hasParentSegment());
-
-    bool forward = ed.key == Key_Right;
-    if (!(ed.modifiers & AltModifier)) {
-        if (anchorToEndOfPrevious()) {
-            undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
-            if (forward) {
-                return true;
-            }
-        }
-    }
-
-    Segment* curSeg = toSegment(parent());
-    IF_ASSERT_FAILED(curSeg) {
-        return false;
-    }
-
-    Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
-    if (!newSeg) {
-        return false;
-    }
-
-    undoMoveSegment(newSeg, newSeg->tick() - curSeg->tick());
-
-    return true;
-}
-
-void TextBase::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
-{
-    score()->undoChangeParent(this, newSeg, staffIdx());
-    moveSnappedItems(newSeg, tickDiff);
-}
-
-void TextBase::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
-{
-    if (EngravingItem* itemAfter = ldata()->itemSnappedAfter()) {
-        if (itemAfter->isTextBase() && itemAfter->parent() != newSeg) {
-            score()->undoChangeParent(itemAfter, newSeg, itemAfter->staffIdx());
-            toTextBase(itemAfter)->moveSnappedItems(newSeg, tickDiff);
-        } else if (itemAfter->isTextLineBaseSegment()) {
-            TextLineBase* textLine = ((TextLineBaseSegment*)itemAfter)->textLineBase();
-            if (textLine->tick() != newSeg->tick()) {
-                textLine->undoMoveStart(tickDiff);
-            }
-        }
-    }
-
-    if (EngravingItem* itemBefore = ldata()->itemSnappedBefore()) {
-        if (itemBefore->isTextBase() && itemBefore->parent() != newSeg) {
-            score()->undoChangeParent(itemBefore, newSeg, itemBefore->staffIdx());
-            toTextBase(itemBefore)->moveSnappedItems(newSeg, tickDiff);
-        } else if (itemBefore->isTextLineSegment()) {
-            TextLineBase* textLine = ((TextLineBaseSegment*)itemBefore)->textLineBase();
-            if (textLine->tick2() != newSeg->tick()) {
-                textLine->undoMoveEnd(tickDiff);
-            }
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -3534,79 +3326,6 @@ TextCursor* TextBase::cursorFromEditData(const EditData& ed)
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     assert(ted);
     return ted->cursor();
-}
-
-//---------------------------------------------------------
-//   drawEditMode
-//    draw edit mode decorations
-//---------------------------------------------------------
-
-void TextBase::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
-{
-    using namespace muse::draw;
-    PointF pos(canvasPos());
-    p->translate(pos);
-
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    if (!ted) {
-        LOGD("ted not found");
-        return;
-    }
-    TextCursor* cursor = ted->cursor();
-
-    const LayoutData* ldata = this->ldata();
-    IF_ASSERT_FAILED(ldata) {
-        return;
-    }
-
-    if (cursor->hasSelection()) {
-        p->setBrush(BrushStyle::NoBrush);
-        p->setPen(textColor());
-        size_t r1 = cursor->selectLine();
-        size_t r2 = cursor->row();
-        size_t c1 = cursor->selectColumn();
-        size_t c2 = cursor->column();
-
-        sort(r1, c1, r2, c2);
-        size_t row = 0;
-        for (const TextBlock& t : ldata->blocks) {
-            t.draw(p, this);
-            if (row >= r1 && row <= r2) {
-                RectF br;
-                if (row == r1 && r1 == r2) {
-                    br = t.boundingRect(static_cast<int>(c1), static_cast<int>(c2), this);
-                } else if (row == r1) {
-                    br = t.boundingRect(static_cast<int>(c1), static_cast<int>(t.columns()), this);
-                } else if (row == r2) {
-                    br = t.boundingRect(0, static_cast<int>(c2), this);
-                } else {
-                    br = t.boundingRect();
-                }
-                br.translate(0.0, t.y());
-                drawSelection(p, br);
-            }
-            ++row;
-        }
-    }
-    p->setBrush(curColor());
-    Pen pen(curColor());
-    pen.setJoinStyle(PenJoinStyle::MiterJoin);
-    p->setPen(pen);
-
-    // Don't draw cursor if there is a selection
-    if (!cursor->hasSelection()) {
-        p->drawRect(cursor->cursorRect());
-    }
-
-    p->translate(-pos);
-    p->setPen(Pen(configuration()->frameColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
-    p->setBrush(BrushStyle::NoBrush);
-
-    double m = spatium();
-    RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
-
-    p->drawRect(r);
-    pen = Pen(configuration()->defaultColor(), 0.0);
 }
 
 //---------------------------------------------------------

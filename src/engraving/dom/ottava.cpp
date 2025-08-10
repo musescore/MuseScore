@@ -389,22 +389,12 @@ muse::TranslatableString Ottava::subtypeUserName() const
     return ottavaDefault[int(ottavaType())].userName;
 }
 
-muse::TranslatableString OttavaSegment::subtypeUserName() const
-{
-    return ottava()->subtypeUserName();
-}
-
 void OttavaSegment::rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys)
 {
     if (grip == Grip::MIDDLE || grip == Grip::END) {
         ottava()->computeEndElement();
     }
     LineSegment::rebaseOffsetsOnAnchorChanged(grip, oldPos, sys);
-}
-
-int OttavaSegment::subtype() const
-{
-    return ottava()->subtype();
 }
 
 //---------------------------------------------------------
@@ -437,7 +427,9 @@ PointF Ottava::linePos(Grip grip, System** system) const
     *system = seg->measure()->system();
 
     // End 1sp after the right edge of the end chord, but don't overlap followig segments
-    double x = seg->staffShape(endCr->staffIdx()).right() + seg->x() + seg->measure()->x() + spatium();
+    Shape staffShape = seg->staffShape(endCr->staffIdx());
+    staffShape.remove_if([](ShapeElement& el) { return el.height() == 0; });
+    double x = staffShape.right() + seg->x() + seg->measure()->x() + spatium();
     Segment* followingCRseg = score()->tick2segment(endCr->tick() + endCr->actualTicks(), true, SegmentType::ChordRest);
     if (followingCRseg && followingCRseg->system() == seg->system()) {
         x = std::min(x, followingCRseg->x() + followingCRseg->measure()->x());

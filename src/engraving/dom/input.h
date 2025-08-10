@@ -25,9 +25,10 @@
 
 #include <set>
 
+#include "accidental.h"
+#include "chord.h"
 #include "durationtype.h"
 #include "mscore.h"
-#include "types.h"
 #include "noteval.h"
 
 #include "../types/types.h"

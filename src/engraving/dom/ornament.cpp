@@ -20,19 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "ornament.h"
+
 #include "accidental.h"
 #include "chord.h"
 #include "engravingitem.h"
 #include "factory.h"
 #include "key.h"
 #include "note.h"
-#include "ornament.h"
 #include "score.h"
 #include "shape.h"
 #include "staff.h"
 #include "utils.h"
 
-namespace mu::engraving {
+using namespace mu::engraving;
+
 Ornament::Ornament(ChordRest* parent)
     : Articulation(parent, ElementType::ORNAMENT)
 {
@@ -237,7 +239,7 @@ bool Ornament::hasFullIntervalChoice() const
 bool Ornament::showCueNote()
 {
     if (m_showCueNote == AutoOnOff::AUTO) {
-        return style().styleB(Sid::trillAlwaysShowCueNote) || _intervalAbove.step != IntervalStep::SECOND;
+        return (hasFullIntervalChoice() && style().styleB(Sid::trillAlwaysShowCueNote)) || _intervalAbove.step != IntervalStep::SECOND;
     }
 
     return m_showCueNote == AutoOnOff::ON;
@@ -409,7 +411,7 @@ void Ornament::updateCueNote()
     if (!m_cueNoteChord) {
         m_cueNoteChord = Factory::createChord(parentChord->segment());
         m_cueNoteChord->setSmall(true);
-        cueNote->setHeadHasParentheses(true);
+        cueNote->setParenthesesMode(ParenthesesMode::BOTH);
         cueNote->setHeadType(NoteHeadType::HEAD_QUARTER);
         m_cueNoteChord->add(cueNote);
         cueNote->setParent(m_cueNoteChord);
@@ -462,4 +464,3 @@ void Ornament::mapOldTrillAccidental(Note* note, const Note* mainNote)
         break;
     }
 }
-} // namespace mu::engraving

@@ -22,17 +22,17 @@
 
 #include "importgtp.h"
 
-#include "engraving/dom/factory.h"
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/clef.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/instrtemplate.h"
-#include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/lyrics.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/note.h"
@@ -40,17 +40,18 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
-#include "engraving/dom/masterscore.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stringdata.h"
-#include "types/symid.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/types/symid.h"
+
+#include "guitarprodrumset.h"
 
 #include "log.h"
 
@@ -292,7 +293,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
             readBend(note);
         }
         if (modMask1 & EFFECT_HAMMER) {
-            readResult.slur = true;
+            readResult.hammerOnPullOff = true;
         }
         if (modMask1 & EFFECT_LET_RING) {
             readResult.letRing = true;
@@ -614,9 +615,7 @@ int GuitarPro4::convertGP4SlideNum(int sl)
 bool GuitarPro4::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
-    }
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
 
     f      = io;
     curPos = 30;
@@ -816,13 +815,10 @@ bool GuitarPro4::read(IODevice* io)
         // missing: phase, tremolo
     }
 
-    slurs = new Slur*[staves];
+    slurs.resize(staves, nullptr);
     tupleKind.resize(staves);
     for (auto& i : tupleKind) {
         i = 0;
-    }
-    for (size_t i = 0; i < staves; ++i) {
-        slurs[i] = 0;
     }
 
     Measure* measure = score->firstMeasure();
@@ -974,6 +970,7 @@ bool GuitarPro4::read(IODevice* io)
                 Staff* staff   = cr->staff();
                 size_t numStrings = staff->part()->instrument()->stringData()->strings();
                 bool hasSlur   = false;
+                bool hasHammerOnPullOff = false;
                 bool hasLetRing = false;
                 bool hasPalmMute = false;
                 bool hasTrill = false;
@@ -1002,6 +999,7 @@ bool GuitarPro4::read(IODevice* io)
 
                             ReadNoteResult readResult = readNote(6 - i, static_cast<int>(staffIdx), note);
                             hasSlur = readResult.slur || hasSlur;
+                            hasHammerOnPullOff = readResult.hammerOnPullOff || hasHammerOnPullOff;
                             hasLetRing = readResult.letRing || hasLetRing;
                             hasPalmMute = readResult.palmMute || hasPalmMute;
                             hasTrill = readResult.trill || hasTrill;
@@ -1030,6 +1028,7 @@ bool GuitarPro4::read(IODevice* io)
                     addLetRing(cr, hasLetRing);
                     addPalmMute(cr, hasPalmMute);
                     addTrill(cr, hasTrill);
+                    addHammerOnPullOff(cr, hasHammerOnPullOff);
                     addVibratoLeftHand(cr, hasVibratoLeftHand);
                     addVibratoWTremBar(cr, hasVibratoWTremBar);
                     addHarmonicMarks(cr, hasHarmonicArtificial, hasHarmonicPinch, hasHarmonicTap, hasHarmonicSemi);
@@ -1190,10 +1189,7 @@ bool GuitarPro4::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->applyBendsToChords();
-    }
+    m_guitarBendImporter->applyBendsToChords();
 
     return true;
 }

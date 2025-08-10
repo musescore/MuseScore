@@ -42,7 +42,8 @@ public:
         Slur,
         Tie,
         LaissezVib,
-        PartialTie
+        PartialTie,
+        HammerOnPullOff,
     };
 
     explicit SlurAndTieSettingsModel(QObject* parent, IElementRepositoryService* repository, ElementType elementType);

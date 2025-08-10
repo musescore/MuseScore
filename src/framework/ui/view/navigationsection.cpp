@@ -36,6 +36,10 @@ NavigationSection::NavigationSection(QObject* parent)
 
 NavigationSection::~NavigationSection()
 {
+    if (m_type == QmlType::Ignore) {
+        return;
+    }
+
     navigationController()->unreg(this);
 }
 
@@ -47,6 +51,11 @@ void NavigationSection::componentComplete()
     }
 
     IF_ASSERT_FAILED(order() > -1) {
+        return;
+    }
+
+    if (m_type == QmlType::Ignore) {
+        LOGW() << "section is ignored, name: " << m_name;
         return;
     }
 

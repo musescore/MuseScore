@@ -32,7 +32,7 @@ using namespace mu::appshell;
 using namespace muse;
 using namespace muse::actions;
 
-static const muse::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
+static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup?floating=true");
 static const muse::Uri HOME_URI("musescore://home");
 static const muse::Uri NOTATION_URI("musescore://notation");
 
@@ -87,18 +87,20 @@ void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFi
 
 void StartupScenario::runOnSplashScreen()
 {
-    //! NOTE Registering plugins shows a window (dialog) before the main window is shown.
-    //! After closing it, the application may in a state where there are no open windows,
-    //! which leads to automatic exit from the application.
-    //! (Thanks to the splashscreen, but this is not an obvious detail)
-    qApp->setQuitLockEnabled(false);
+    if (registerAudioPluginsScenario()) {
+        //! NOTE Registering plugins shows a window (dialog) before the main window is shown.
+        //! After closing it, the application may in a state where there are no open windows,
+        //! which leads to automatic exit from the application.
+        //! (Thanks to the splashscreen, but this is not an obvious detail)
+        qApp->setQuitLockEnabled(false);
 
-    Ret ret = registerAudioPluginsScenario()->registerNewPlugins();
-    if (!ret) {
-        LOGE() << ret.toString();
+        Ret ret = registerAudioPluginsScenario()->registerNewPlugins();
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
+
+        qApp->setQuitLockEnabled(true);
     }
-
-    qApp->setQuitLockEnabled(true);
 }
 
 void StartupScenario::runAfterSplashScreen()
@@ -159,10 +161,14 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
 {
     TRACEFUNC;
 
+    bool shouldCheckForMuseSamplerUpdate = false;
+
     switch (modeType) {
     case StartupModeType::StartEmpty:
+        shouldCheckForMuseSamplerUpdate = true;
         break;
     case StartupModeType::StartWithNewScore:
+        shouldCheckForMuseSamplerUpdate = true;
         dispatcher()->dispatch("file-new");
         break;
     case StartupModeType::ContinueLastSession:
@@ -172,14 +178,17 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
-        project::ProjectFile file
-            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile(configuration()->startupScorePath());
+        project::ProjectFile file = m_startupScoreFile.isValid()
+                                    ? m_startupScoreFile
+                                    : project::ProjectFile(configuration()->startupScorePath());
         openScore(file);
     } break;
     }
 
     if (!configuration()->hasCompletedFirstLaunchSetup()) {
         interactive()->open(FIRST_LAUNCH_SETUP_URI);
+    } else if (shouldCheckForMuseSamplerUpdate) {
+        museSamplerCheckForUpdateScenario()->checkForUpdate();
     }
 }
 
@@ -205,16 +214,19 @@ void StartupScenario::openScore(const project::ProjectFile& file)
 
 void StartupScenario::restoreLastSession()
 {
-    IInteractive::Result result = interactive()->question(muse::trc("appshell", "The previous session quit unexpectedly."),
-                                                          muse::trc("appshell", "Do you want to restore the session?"),
-                                                          { IInteractive::Button::No, IInteractive::Button::Yes });
+    auto promise = interactive()->question(muse::trc("appshell", "The previous session quit unexpectedly."),
+                                           muse::trc("appshell", "Do you want to restore the session?"),
+                                           { IInteractive::Button::No, IInteractive::Button::Yes });
 
-    if (result.button() == static_cast<int>(IInteractive::Button::Yes)) {
-        sessionsManager()->restore();
-    } else {
-        removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
-        sessionsManager()->reset();
-    }
+    promise.onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            sessionsManager()->restore();
+        } else {
+            removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
+            sessionsManager()->reset();
+            museSamplerCheckForUpdateScenario()->checkForUpdate();
+        }
+    });
 }
 
 void StartupScenario::removeProjectsUnsavedChanges(const io::paths_t& projectsPaths)

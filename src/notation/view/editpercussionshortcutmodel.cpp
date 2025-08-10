@@ -44,12 +44,15 @@ void EditPercussionShortcutModel::load(const QVariant& originDrum, const QVarian
         m_drumsWithShortcut << drum;
     }
 
+    m_cleared = false;
+
     emit originShortcutTextChanged();
+    emit clearedChanged();
 }
 
 void EditPercussionShortcutModel::inputKey(Qt::Key key)
 {
-    if (shortcuts::needIgnoreKey(key)) {
+    if (needIgnoreKey(key)) {
         return;
     }
 
@@ -70,9 +73,22 @@ void EditPercussionShortcutModel::inputKey(Qt::Key key)
     emit newShortcutTextChanged();
 }
 
+void EditPercussionShortcutModel::clear()
+{
+    m_newShortcut = QKeySequence();
+    m_conflictShortcut.clear();
+
+    m_cleared = true;
+
+    emit newShortcutTextChanged();
+    emit clearedChanged();
+}
+
 bool EditPercussionShortcutModel::trySave()
 {
-    if (originShortcutText() == m_newShortcut.toString()) {
+    const QString newShortcut = m_newShortcut.toString();
+    const bool alreadyEmpty = originShortcutText().isEmpty() && m_cleared;
+    if (alreadyEmpty || originShortcutText() == newShortcut) {
         return false;
     }
 
@@ -85,7 +101,7 @@ bool EditPercussionShortcutModel::trySave()
     const QString headerText = qtrc("shortcuts", "Reassign shortcut for <b>%1</b>").arg(originTitle);
     const IInteractive::Text text(getConflictWarningText().toStdString(), IInteractive::TextFormat::RichText);
 
-    const IInteractive::Button btn = interactive()->warning(headerText.toStdString(), text, {
+    const IInteractive::Button btn = interactive()->warningSync(headerText.toStdString(), text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Ok)
     }, (int)IInteractive::Button::Ok).standardButton();
@@ -172,4 +188,36 @@ QString EditPercussionShortcutModel::getConflictWarningText() const
     const QString originTitle = m_originDrum.value("title").toString();
     return informationText() + "<br><br>" + qtrc("shortcuts", "Are you sure you want to assign it to <b>%1</b> instead?")
            .arg(originTitle);
+}
+
+bool EditPercussionShortcutModel::needIgnoreKey(const Qt::Key& key) const
+{
+    static const std::set<Qt::Key> ignoredKeys {
+        Qt::Key_Enter,
+        Qt::Key_Return,
+        Qt::Key_Delete,
+        Qt::Key_Backspace,
+        Qt::Key_Down,
+        Qt::Key_Up,
+        Qt::Key_Left,
+        Qt::Key_Right,
+        Qt::Key_Insert,
+        Qt::Key_Home,
+        Qt::Key_PageUp,
+        Qt::Key_PageDown,
+        Qt::Key_End,
+        Qt::Key_0,
+        Qt::Key_1,
+        Qt::Key_2,
+        Qt::Key_3,
+        Qt::Key_4,
+        Qt::Key_5,
+        Qt::Key_6,
+        Qt::Key_7,
+        Qt::Key_8,
+        Qt::Key_9,
+    };
+
+    const bool keyFound = ignoredKeys.find(key) != ignoredKeys.end();
+    return keyFound || shortcuts::needIgnoreKey(key);
 }

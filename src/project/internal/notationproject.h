@@ -96,6 +96,8 @@ public:
 
     muse::Ret save(
         const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
+    muse::async::Channel<muse::io::path_t, SaveMode> saveComplited() const override;
+
     muse::Ret writeToDevice(QIODevice* device) override;
 
     ProjectMeta metaInfo() const override;
@@ -137,6 +139,8 @@ private:
     muse::async::Notification m_displayNameChanged;
 
     muse::async::Notification m_needSaveNotification;
+
+    muse::async::Channel<muse::io::path_t, SaveMode> m_saved;
 
     bool m_isNewlyCreated = false; /// true if the file has never been saved yet
     bool m_isImported = false;

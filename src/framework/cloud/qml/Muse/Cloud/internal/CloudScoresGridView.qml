@@ -31,24 +31,45 @@ ScoresGridView {
     navigation.name: "OnlineScoresGrid"
     navigation.accessible.name: qsTrc("project", "Online scores grid")
 
+    isNoResultsMessageAllowed: model.state === CloudScoresModel.Fine
+
     Component.onCompleted: {
         prv.updateDesiredRowCount()
+    }
+
+    Connections {
+        target: root.model
+
+        function onStateChanged() {
+            if (root.model.state === CloudScoresModel.Fine) {
+                // After the model has loaded more, check if even more is needed
+                prv.updateDesiredRowCount();
+            }
+        }
     }
 
     QtObject {
         id: prv
 
         readonly property int remainingFullRowsBelowViewport:
-            Math.floor(root.model.rowCount / root.view.columns) - Math.ceil((root.view.contentY + root.view.height) / root.view.cellHeight)
+            Math.floor(root.view.count / root.view.columns) - Math.ceil((root.view.contentY + root.view.height) / root.view.cellHeight)
 
-        onRemainingFullRowsBelowViewportChanged: {
-            updateDesiredRowCount()
+        readonly property bool isSatisfied: remainingFullRowsBelowViewport >= 3
+
+        onIsSatisfiedChanged: {
+            if (!isSatisfied) {
+                updateDesiredRowCount();
+            }
         }
 
         property bool updateDesiredRowCountScheduled: false
 
         function updateDesiredRowCount() {
             if (updateDesiredRowCountScheduled) {
+                return
+            }
+
+            if (isSatisfied || !root.model.hasMore) {
                 return
             }
 

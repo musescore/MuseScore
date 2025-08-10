@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -49,48 +51,61 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Hey You</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <text>Rock
 Pink Floyd
 The Wall</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Music by Roger Waters</text>
           </Text>
         <Text>
+          <eid>H_H</eid>
           <style>poet</style>
           <text>Words by Roger Waters</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>I_I</eid>
         <voice>
           <KeySig>
+            <eid>J_J</eid>
             <concertKey>1</concertKey>
             <mode>minor</mode>
             </KeySig>
           <TimeSig>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>L_L</eid>
             </Dynamic>
           <Tempo>
             <tempo>1.916667</tempo>
+            <eid>M_M</eid>
             <text><sym>metNoteQuarterUp</sym> = 115</text>
             </Tempo>
           <Chord>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>O_O</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
+                <eid>P_P</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
@@ -99,6 +114,7 @@ The Wall</text>
               </Note>
             </Chord>
           <Rest>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

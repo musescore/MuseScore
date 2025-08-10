@@ -40,6 +40,8 @@ enum class Grip : signed char;
 class Note;
 class PartialTie;
 class PartialTieSegment;
+class TappingHalfSlur;
+class TappingHalfSlurSegment;
 }
 
 namespace muse::draw {
@@ -64,13 +66,17 @@ public:
     static double noteOpticalCenterForTie(const Note* note, bool up);
     static void createSlurSegments(Slur* item, LayoutContext& ctx);
 
+    static void adjustOverlappingSlurs(const std::list<SpannerSegment*>& spannerSegments);
+
     static void layoutLaissezVibChord(Chord* chord, LayoutContext& ctx);
 private:
 
     static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);
+    static void adjustForTappingHalfSlurs(TappingHalfSlur* item, SlurTiePos* sp, Note* endNote);
     static void avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
     static void adjustEndPoints(SlurSegment* slurSeg);
+    static void adjustSlurFloatingEndPointAngles(SlurSegment* slurSeg, PointF& p1, PointF& p2, bool incomingPartial, bool outgoingPartial);
 
     static void avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p2, PointF& p3, PointF& p4,
                                 muse::draw::Transform& toSystemCoordinates, double& slurAngle);
@@ -86,6 +92,7 @@ private:
     static bool stemSideStartForBeam(Slur* slur) { return stemSideForBeam(slur, true); }
     static bool stemSideEndForBeam(Slur* slur) { return stemSideForBeam(slur, false); }
     static bool isOverBeams(Slur* slur);
+    static double computeShoulderHeight(SlurSegment* slurSeg, double slurLengthInSp, PointF shoulderOffset);
 
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
     static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
@@ -103,11 +110,11 @@ private:
 
     static bool isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx);
 
-    static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
+    static void layoutSegment(SlurSegment* item, const PointF& p1, const PointF& p2);
 
     static void computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
     static void fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
-    static bool shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx);
+    static bool shouldHideSlurSegment(SlurSegment* item);
 
     static void addLineAttachPoints(TieSegment* segment);
     static void addLineAttachPoints(PartialTieSegment* segment);

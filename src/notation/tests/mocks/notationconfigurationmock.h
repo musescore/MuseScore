@@ -30,6 +30,8 @@ namespace mu::notation {
 class NotationConfigurationMock : public INotationConfiguration
 {
 public:
+    MOCK_METHOD(QColor, notationColor, (), (const, override));
+
     MOCK_METHOD(QColor, backgroundColor, (), (const, override));
     MOCK_METHOD(void, setBackgroundColor, (const QColor& color), (override));
 
@@ -70,6 +72,7 @@ public:
     MOCK_METHOD(bool, thinNoteInputCursor, (), (const, override));
 
     MOCK_METHOD(QColor, selectionColor, (engraving::voice_idx_t), (const, override));
+    MOCK_METHOD(QColor, highlightSelectionColor, (engraving::voice_idx_t), (const, override));
 
     MOCK_METHOD(QColor, dropRectColor, (), (const, override));
 
@@ -122,13 +125,17 @@ public:
     MOCK_METHOD(void, setAddAccidentalDotsArticulationsToNextNoteEntered, (bool), (override));
     MOCK_METHOD(muse::async::Notification, addAccidentalDotsArticulationsToNextNoteEnteredChanged, (), (const, override));
 
+    MOCK_METHOD(muse::io::path_t, userMusicFontsPath, (), (const, override));
+    MOCK_METHOD(void, setUserMusicFontsPath, (const muse::io::path_t&), (override));
+    MOCK_METHOD(muse::async::Channel<muse::io::path_t>, userMusicFontsPathChanged, (), (const, override));
+
     MOCK_METHOD(bool, isMidiInputEnabled, (), (const, override));
     MOCK_METHOD(void, setIsMidiInputEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isMidiInputEnabledChanged, (), (const, override));
 
-    MOCK_METHOD(bool, startNoteInputAtSelectionWhenPressingMidiKey, (), (const, override));
-    MOCK_METHOD(void, setStartNoteInputAtSelectionWhenPressingMidiKey, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, startNoteInputAtSelectionWhenPressingMidiKeyChanged, (), (const, override));
+    MOCK_METHOD(bool, startNoteInputAtSelectedNoteRestWhenPressingMidiKey, (), (const, override));
+    MOCK_METHOD(void, setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged, (), (const, override));
 
     MOCK_METHOD(bool, isAutomaticallyPanEnabled, (), (const, override));
     MOCK_METHOD(void, setIsAutomaticallyPanEnabled, (bool), (override));
@@ -148,8 +155,13 @@ public:
     MOCK_METHOD(void, setIsPlayPreviewNotesInInputByDuration, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isPlayPreviewNotesInInputByDurationChanged, (), (const, override));
 
+    MOCK_METHOD(bool, playPreviewNotesWithScoreDynamics, (), (const, override));
+    MOCK_METHOD(void, setPlayPreviewNotesWithScoreDynamics, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, playPreviewNotesWithScoreDynamicsChanged, (), (const, override));
+
     MOCK_METHOD(bool, isMetronomeEnabled, (), (const, override));
     MOCK_METHOD(void, setIsMetronomeEnabled, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, isMetronomeEnabledChanged, (), (const, override));
 
     MOCK_METHOD(bool, isCountInEnabled, (), (const, override));
     MOCK_METHOD(void, setIsCountInEnabled, (bool), (override));
@@ -175,6 +187,10 @@ public:
     MOCK_METHOD(int, delayBetweenNotesInRealTimeModeMilliseconds, (), (const, override));
     MOCK_METHOD(void, setDelayBetweenNotesInRealTimeModeMilliseconds, (int), (override));
     MOCK_METHOD((muse::async::Channel<int>), delayBetweenNotesInRealTimeModeMillisecondsChanged, (), (const, override));
+
+    MOCK_METHOD(bool, useMidiVelocityAndDurationDuringNoteInput, (), (const, override));
+    MOCK_METHOD(void, setUseMidiVelocityAndDurationDuringNoteInput, (bool), (override));
+    MOCK_METHOD(muse::async::Channel<bool>, useMidiVelocityAndDurationDuringNoteInputChanged, (), (const, override));
 
     MOCK_METHOD(int, notePlayDurationMilliseconds, (), (const, override));
     MOCK_METHOD(void, setNotePlayDurationMilliseconds, (int), (override));
@@ -220,6 +236,10 @@ public:
     MOCK_METHOD(bool, useNewPercussionPanel, (), (const, override));
     MOCK_METHOD(void, setUseNewPercussionPanel, (bool), (override));
     MOCK_METHOD(muse::async::Notification, useNewPercussionPanelChanged, (), (const, override));
+
+    MOCK_METHOD(bool, percussionPanelUseNotationPreview, (), (const, override));
+    MOCK_METHOD(void, setPercussionPanelUseNotationPreview, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, percussionPanelUseNotationPreviewChanged, (), (const, override));
 
     MOCK_METHOD(PercussionPanelAutoShowMode, percussionPanelAutoShowMode, (), (const, override));
     MOCK_METHOD(void, setPercussionPanelAutoShowMode, (PercussionPanelAutoShowMode), (override));

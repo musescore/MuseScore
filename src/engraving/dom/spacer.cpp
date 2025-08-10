@@ -42,7 +42,7 @@ Spacer::Spacer(Measure* parent)
     : EngravingItem(ElementType::SPACER, parent)
 {
     m_spacerType = SpacerType::UP;
-    m_gap = 0.0;
+    m_gap = Spatium(0.0);
     m_z = -10; // Ensure behind notation
 }
 
@@ -50,76 +50,17 @@ Spacer::Spacer(const Spacer& s)
     : EngravingItem(s)
 {
     m_gap        = s.m_gap;
-    m_path        = s.m_path;
     m_spacerType = s.m_spacerType;
-}
-
-//---------------------------------------------------------
-//   layout0
-//---------------------------------------------------------
-
-void Spacer::layout0()
-{
-    double _spatium = spatium();
-
-    m_path    = PainterPath();
-    double w = _spatium;
-    double b = w * .5;
-    double h = explicitParent() ? m_gap : std::min(m_gap.val(), spatium() * 4.0);      // limit length for palette
-
-    switch (spacerType()) {
-    case SpacerType::DOWN:
-        m_path.lineTo(w, 0.0);
-        m_path.moveTo(b, 0.0);
-        m_path.lineTo(b, h);
-        m_path.lineTo(0.0, h - b);
-        m_path.moveTo(b, h);
-        m_path.lineTo(w, h - b);
-        break;
-    case SpacerType::UP:
-        m_path.moveTo(b, 0.0);
-        m_path.lineTo(0.0, b);
-        m_path.moveTo(b, 0.0);
-        m_path.lineTo(w, b);
-        m_path.moveTo(b, 0.0);
-        m_path.lineTo(b, h);
-        m_path.moveTo(0.0, h);
-        m_path.lineTo(w, h);
-        break;
-    case SpacerType::FIXED:
-        m_path.lineTo(w, 0.0);
-        m_path.moveTo(b, 0.0);
-        m_path.lineTo(b, h);
-        m_path.moveTo(0.0, h);
-        m_path.lineTo(w, h);
-        break;
-    }
-    double lw = _spatium * 0.4;
-    RectF bb(0, 0, w, h);
-    bb.adjust(-lw, -lw, lw, lw);
-    setbbox(bb);
-
-    setZ(0.0);
 }
 
 //---------------------------------------------------------
 //   setGap
 //---------------------------------------------------------
 
-void Spacer::setGap(Millimetre sp)
+void Spacer::setGap(Spatium sp)
 {
     m_gap = sp;
-    layout0();
-}
-
-//---------------------------------------------------------
-//   spatiumChanged
-//---------------------------------------------------------
-
-void Spacer::spatiumChanged(double ov, double nv)
-{
-    m_gap = (m_gap / ov) * nv;
-    layout0();
+    renderer()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -143,16 +84,14 @@ void Spacer::editDrag(EditData& ed)
     switch (spacerType()) {
     case SpacerType::DOWN:
     case SpacerType::FIXED:
-        m_gap += s;
+        m_gap += Spatium::fromMM(s, spatium());
         break;
     case SpacerType::UP:
-        m_gap -= s;
+        m_gap -= Spatium::fromMM(s, spatium());
         break;
     }
-    if (m_gap.val() < spatium() * 2.0) {
-        m_gap = Millimetre(spatium() * 2);
-    }
-    layout0();
+    m_gap = std::max(m_gap, Spatium(2.0));
+    renderer()->layoutItem(this);
     triggerLayout();
 }
 
@@ -167,7 +106,7 @@ std::vector<PointF> Spacer::gripsPositions(const EditData&) const
     switch (spacerType()) {
     case SpacerType::DOWN:
     case SpacerType::FIXED:
-        p = PointF(_spatium * .5, m_gap);
+        p = PointF(_spatium * .5, absoluteGap());
         break;
     case SpacerType::UP:
         p = PointF(_spatium * .5, 0.0);
@@ -198,7 +137,7 @@ bool Spacer::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPACE:
-        setGap(v.value<Millimetre>());
+        setGap(v.value<Spatium>());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -206,7 +145,7 @@ bool Spacer::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     }
-    layout0();
+    renderer()->layoutItem(this);
     triggerLayout();
     setGenerated(false);
     return true;
@@ -220,7 +159,7 @@ PropertyValue Spacer::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SPACE:
-        return Millimetre(0.0);
+        return Spatium(0.0);
     default:
         return EngravingItem::propertyDefault(id);
     }

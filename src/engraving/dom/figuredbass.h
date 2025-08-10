@@ -273,12 +273,10 @@ public:
 
     void setSelected(bool f) override;
     void setVisible(bool f) override;
-    void startEditTextual(EditData& ed) override;
-    bool isTextualEditAllowed(EditData&) const override;
-    void endEditTextual(EditData&) override;
+    void startEdit(EditData& ed) override;
+    bool isEditAllowed(EditData&) const override;
+    void endEdit(EditData&) override;
     void regenerateText();
-
-    void undoMoveSegment(Segment* newSeg, Fraction tickDiff) override;
 
     bool onNote() const { return m_onNote; }
     void setOnNote(bool val) { m_onNote = val; }
@@ -302,7 +300,7 @@ public:
     // the array of configured fonts
     static const std::vector<FiguredBassFont>& FBFonts();
 
-    bool hasParentheses() const;       // read / write MusicXML support
+    bool parenthesesMode() const;       // read / write MusicXML support
 
     struct LayoutData : public TextBase::LayoutData {
         std::vector<double> lineLengths;               // lengths of duration indicator lines (in raster units)

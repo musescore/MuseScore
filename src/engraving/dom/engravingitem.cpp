@@ -57,6 +57,7 @@
 #include "mscore.h"
 #include "note.h"
 #include "page.h"
+#include "parenthesis.h"
 #include "score.h"
 #include "segment.h"
 #include "shape.h"
@@ -101,6 +102,7 @@ EngravingItem::EngravingItem(const EngravingItem& e)
     m_z          = e.m_z;
     m_color      = e.m_color;
     m_minDistance = e.m_minDistance;
+    m_excludeVerticalAlign = e.m_excludeVerticalAlign;
     itemDiscovered = false;
 
     m_accessibleEnabled = e.m_accessibleEnabled;
@@ -263,6 +265,11 @@ bool EngravingItem::offsetIsSpatiumDependent() const
     return sizeIsSpatiumDependent() || (m_flags & ElementFlag::ON_STAFF);
 }
 
+PlacementV EngravingItem::placement() const
+{
+    return flag(ElementFlag::PLACE_ABOVE) && !isSystemObjectBelowBottomStaff() ? PlacementV::ABOVE : PlacementV::BELOW;
+}
+
 //---------------------------------------------------------
 //   magS
 //---------------------------------------------------------
@@ -319,6 +326,14 @@ void EngravingItem::deleteLater()
 
 void EngravingItem::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
+    if (m_leftParenthesis) {
+        func(data, m_leftParenthesis);
+    }
+
+    if (m_rightParenthesis) {
+        func(data, m_rightParenthesis);
+    }
+
     if (scanChildren().size() == 0) {
         if (all || visible() || score()->isShowInvisible()) {
             func(data, this);
@@ -441,8 +456,12 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
     }
 
     const System* system = toSystem(findAncestor(ElementType::SYSTEM));
-    if (!system) {
+    if (!system || system->vbox()) {
         return vStaffIdx();
+    }
+
+    if (isSystemObjectBelowBottomStaff()) {
+        return system->lastVisibleStaff();
     }
 
     staff_idx_t originalStaffIdx = staffIdx();
@@ -450,29 +469,36 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
         return muse::nidx;
     }
 
-    const Staff* originalStaff = m_score->staff(originalStaffIdx);
-    if (originalStaff->show() && system->staff(originalStaffIdx)->show()) {
+    const std::vector<Staff*>& systemObjectStaves = m_score->systemObjectStaves(); // CAUTION: may not be ordered
+    if (originalStaffIdx > 0) {
+        staff_idx_t prevSysObjStaffIdx = 0;
+        for (Staff* sysObjStaff : systemObjectStaves) {
+            staff_idx_t sysObjStaffIdx = sysObjStaff->idx();
+            if (sysObjStaffIdx > prevSysObjStaffIdx && sysObjStaffIdx < originalStaffIdx) {
+                prevSysObjStaffIdx = sysObjStaffIdx;
+            }
+        }
+
+        bool omitObject = true;
+        for (staff_idx_t stfIdx = prevSysObjStaffIdx; stfIdx < originalStaffIdx; ++stfIdx) {
+            if (m_score->staff(stfIdx)->show() && system->staff(stfIdx)->show()) {
+                omitObject = false;
+                break;
+            }
+        }
+
+        if (omitObject) {
+            // If all staves between this and the previous system object are hidden
+            // we omit this object because it will be replaced by the upper one
+            return muse::nidx;
+        }
+    }
+
+    if (m_score->staff(originalStaffIdx)->show() && system->staff(originalStaffIdx)->show()) {
         return originalStaffIdx;
     }
 
-    staff_idx_t nextSystemObjectStaff = muse::nidx;
-    const std::vector<Staff*>& systemObjectStaves = m_score->systemObjectStaves();
-    for (size_t i = 1; i < systemObjectStaves.size(); ++i) {
-        staff_idx_t idx = systemObjectStaves[i]->idx();
-        if (idx > originalStaffIdx) {
-            nextSystemObjectStaff = idx;
-            break;
-        }
-    }
-
-    staff_idx_t nstaves = m_score->nstaves();
-    for (staff_idx_t staffIdx = originalStaffIdx + 1; staffIdx < nstaves && staffIdx < nextSystemObjectStaff; ++staffIdx) {
-        if (m_score->staff(staffIdx)->show() && system->staff(staffIdx)->show()) {
-            return staffIdx;
-        }
-    }
-
-    return muse::nidx;
+    return system->nextVisibleStaff(originalStaffIdx);
 }
 
 bool EngravingItem::isTopSystemObject() const
@@ -632,6 +658,25 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     return normalColor;
 }
 
+PointF EngravingItem::systemPos() const
+{
+    // Returns position in system coordinates. Only applicable to items
+    // that have a System ancestor.
+
+    IF_ASSERT_FAILED(findAncestor(ElementType::SYSTEM)) {
+        return PointF();
+    }
+
+    PointF result = pos();
+    EngravingItem* ancestor = parentItem();
+    while (ancestor && !ancestor->isSystem()) {
+        result += ancestor->pos();
+        ancestor = ancestor->parentItem();
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   pagePos
 //    return position in canvas coordinates
@@ -660,6 +705,8 @@ PointF EngravingItem::pagePos() const
         } else if (explicitParent()->isSystem()) {
             system = toSystem(explicitParent());
         } else if (explicitParent()->isFretDiagram()) {
+            return p + parentItem()->pagePos();
+        } else if (explicitParent()->isFBox()) {
             return p + parentItem()->pagePos();
         } else {
             ASSERT_X(String(u"this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
@@ -799,13 +846,6 @@ bool EngravingItem::hitShapeIntersects(const RectF& rr) const
     return hitShape().intersects(rr.translated(-pagePos()));
 }
 
-void EngravingItem::drawAt(muse::draw::Painter* p, const PointF& pt) const
-{
-    p->translate(pt);
-    renderer()->drawItem(this, p);
-    p->translate(-pt);
-}
-
 //---------------------------------------------------------
 //   remove
 ///   Remove \a el from the list. Return true on success.
@@ -854,20 +894,6 @@ Compound::Compound(const Compound& c)
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Compound::draw(Painter* painter) const
-{
-    for (EngravingItem* e : m_elements) {
-        PointF pt(e->pos());
-        painter->translate(pt);
-        renderer()->drawItem(e, painter);
-        painter->translate(-pt);
-    }
-}
-
-//---------------------------------------------------------
 //   addElement
 //---------------------------------------------------------
 
@@ -880,16 +906,6 @@ void Compound::addElement(EngravingItem* e, double x, double y)
     e->setPos(x, y);
     e->setParent(this);
     m_elements.push_back(e);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Compound::layout()
-{
-    UNREACHABLE;
-    setbbox(RectF());
 }
 
 //---------------------------------------------------------
@@ -1031,7 +1047,19 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const muse::ByteArray& 
 
 void EngravingItem::add(EngravingItem* e)
 {
-    LOGD("EngravingItem: cannot add %s to %s", e->typeName(), typeName());
+    switch (e->type()) {
+    case ElementType::PARENTHESIS: {
+        Parenthesis* p = toParenthesis(e);
+        if (p->direction() == DirectionH::LEFT) {
+            m_leftParenthesis = p;
+        } else if (p->direction() == DirectionH::RIGHT) {
+            m_rightParenthesis = p;
+        }
+        break;
+    }
+    default:
+        LOGD("EngravingItem: cannot add %s to %s", e->typeName(), typeName());
+    }
 }
 
 //---------------------------------------------------------
@@ -1040,7 +1068,19 @@ void EngravingItem::add(EngravingItem* e)
 
 void EngravingItem::remove(EngravingItem* e)
 {
-    ASSERT_X(String(u"EngravingItem: cannot remove %1 from %2").arg(String::fromAscii(e->typeName()), String::fromAscii(typeName())));
+    switch (e->type()) {
+    case ElementType::PARENTHESIS: {
+        if (e == m_leftParenthesis) {
+            m_leftParenthesis = nullptr;
+        }
+        if (e == m_rightParenthesis) {
+            m_rightParenthesis = nullptr;
+        }
+        break;
+    }
+    default:
+        ASSERT_X(String(u"EngravingItem: cannot remove %1 from %2").arg(String::fromAscii(e->typeName()), String::fromAscii(typeName())));
+    }
 }
 
 //---------------------------------------------------------
@@ -1104,8 +1144,6 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
         return track();
     case Pid::VOICE:
         return voice();
-    case Pid::POSITION:
-        return rtick();
     case Pid::GENERATED:
         return generated();
     case Pid::COLOR:
@@ -1134,6 +1172,10 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
         return _isAppearanceLinkedToMaster;
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
         return _excludeFromOtherParts;
+    case Pid::EXCLUDE_VERTICAL_ALIGN:
+        return m_excludeVerticalAlign;
+    case Pid::HAS_PARENTHESES:
+        return parenthesesMode();
     default:
         if (explicitParent()) {
             return explicitParent()->getProperty(propertyId);
@@ -1209,6 +1251,21 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
         setExcludeFromOtherParts(v.toBool());
+        break;
+    case Pid::EXCLUDE_VERTICAL_ALIGN:
+        setExcludeVerticalAlign(v.toBool());
+        break;
+    case Pid::HAS_PARENTHESES:
+        setParenthesesMode(v.value<ParenthesesMode>());
+        if (links()) {
+            for (EngravingObject* scoreElement : *links()) {
+                Note* note = toNote(scoreElement);
+                Staff* linkedStaff = note ? note->staff() : nullptr;
+                if (linkedStaff && linkedStaff->isTabStaff(tick())) {
+                    note->setGhost(v.toBool());
+                }
+            }
+        }
         break;
     default:
         if (explicitParent()) {
@@ -1442,7 +1499,11 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
     const Staff* destinationStaff = destinationItem->staff();
 
     if (sourceScore == destinationScore) {
-        if (sourceStaff != destinationStaff && (propertyId == Pid::VISIBLE || propertyGroup(propertyId) == PropertyGroup::POSITION)) {
+        const bool diffStaff = sourceStaff != destinationStaff;
+        const bool visiblePositionOrColor = propertyId == Pid::VISIBLE || propertyId == Pid::COLOR
+                                            || propertyGroup(propertyId) == PropertyGroup::POSITION;
+        const bool linkSameScore = propertyLinkSameScore(propertyId);
+        if ((diffStaff && visiblePositionOrColor) || !linkSameScore) {
             // Allow visibility and position to stay independent
             return PropertyPropagation::NONE;
         }
@@ -1542,6 +1603,10 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
         return true;
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
         return false;
+    case Pid::EXCLUDE_VERTICAL_ALIGN:
+        return false;
+    case Pid::HAS_PARENTHESES:
+        return ParenthesesMode::NONE;
     default: {
         PropertyValue v = EngravingObject::propertyDefault(pid);
 
@@ -1586,10 +1651,6 @@ bool EngravingItem::isPrintable() const
     case ElementType::SPACER:
     case ElementType::SHADOW_NOTE:
     case ElementType::LASSO:
-    case ElementType::ELEMENT_LIST:
-    case ElementType::STAFF_LIST:
-    case ElementType::MEASURE_LIST:
-    case ElementType::SELECTION:
         return false;
     default:
         return true;
@@ -1601,11 +1662,17 @@ bool EngravingItem::isPlayable() const
     switch (type()) {
     case ElementType::NOTE:
     case ElementType::CHORD:
-    case ElementType::HARMONY:
         return true;
+    case ElementType::HARMONY:
+        return explicitParent() && explicitParent()->isSegment();
     default:
         return false;
     }
+}
+
+bool EngravingItem::isSystemObjectBelowBottomStaff() const
+{
+    return systemFlag() && staff() && staff()->systemObjectsBelowBottomStaff();
 }
 
 //---------------------------------------------------------
@@ -2086,25 +2153,6 @@ void EditData::addData(std::shared_ptr<ElementEditData> ed)
 }
 
 //---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void EngravingItem::drawEditMode(Painter* p, EditData& ed, double /*currentViewScaling*/)
-{
-    using namespace muse::draw;
-    Pen pen(configuration()->defaultColor(), 0.0);
-    p->setPen(pen);
-    for (int i = 0; i < ed.grips; ++i) {
-        if (Grip(i) == ed.curGrip) {
-            p->setBrush(configuration()->scoreGreyColor());
-        } else {
-            p->setBrush(BrushStyle::NoBrush);
-        }
-        p->drawRect(ed.grip[i]);
-    }
-}
-
-//---------------------------------------------------------
 //   startDrag
 //---------------------------------------------------------
 
@@ -2117,7 +2165,6 @@ void EngravingItem::startDrag(EditData& ed)
     eed->e = this;
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::AUTOPLACE);
-    eed->initOffset = offset();
     ed.addData(eed);
     if (ed.modifiers & AltModifier) {
         setAutoplace(false);
@@ -2137,9 +2184,7 @@ RectF EngravingItem::drag(EditData& ed)
 
     const RectF r0(canvasBoundingRect());
 
-    const ElementEditDataPtr eed = ed.getData(this);
-
-    const PointF offset0 = ed.moveDelta + eed->initOffset;
+    const PointF offset0 = ed.evtDelta + offset();
     double x = offset0.x();
     double y = offset0.y();
 
@@ -2390,6 +2435,83 @@ void EngravingItem::setColorsInverionEnabled(bool enabled)
     m_colorsInversionEnabled = enabled;
 }
 
+void EngravingItem::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool generated)
+{
+    setHasLeftParenthesis(v & ParenthesesMode::LEFT, addToLinked, generated);
+    setHasRightParenthesis(v & ParenthesesMode::RIGHT, addToLinked, generated);
+}
+
+ParenthesesMode EngravingItem::parenthesesMode() const
+{
+    ParenthesesMode p = ParenthesesMode::NONE;
+    if (m_leftParenthesis) {
+        p |= ParenthesesMode::LEFT;
+    }
+    if (m_leftParenthesis) {
+        p |= ParenthesesMode::RIGHT;
+    }
+
+    return p;
+}
+
+void EngravingItem::setHasLeftParenthesis(bool v, bool addToLinked, bool generated)
+{
+    const bool hasGeneratedParen = m_leftParenthesis && m_leftParenthesis->generated();
+    const bool hasUserParen = m_leftParenthesis && !m_leftParenthesis->generated();
+
+    if (generated && v == hasGeneratedParen) {
+        return;
+    }
+
+    if (!generated && v == hasUserParen) {
+        return;
+    }
+
+    if (v) {
+        if (!m_leftParenthesis) {
+            Parenthesis* paren = Factory::createParenthesis(this);
+            paren->setParent(this);
+            paren->setTrack(track());
+            paren->setDirection(DirectionH::LEFT);
+            paren->setGenerated(generated);
+
+            score()->undoAddElement(paren, addToLinked);
+        }
+    } else {
+        score()->undoRemoveElement(m_leftParenthesis, addToLinked);
+        assert(m_leftParenthesis == nullptr);
+    }
+}
+
+void EngravingItem::setHasRightParenthesis(bool v, bool addToLinked, bool generated)
+{
+    const bool hasGeneratedParen = m_rightParenthesis && m_rightParenthesis->generated();
+    const bool hasUserParen = m_rightParenthesis && !m_rightParenthesis->generated();
+
+    if (generated && v == hasGeneratedParen) {
+        return;
+    }
+
+    if (!generated && v == hasUserParen) {
+        return;
+    }
+
+    if (v) {
+        if (!m_rightParenthesis) {
+            Parenthesis* paren = Factory::createParenthesis(this);
+            paren->setParent(this);
+            paren->setTrack(track());
+            paren->setDirection(DirectionH::RIGHT);
+            paren->setGenerated(generated);
+
+            score()->undoAddElement(paren, addToLinked);
+        }
+    } else {
+        score()->undoRemoveElement(m_rightParenthesis, addToLinked);
+        assert(m_rightParenthesis == nullptr);
+    }
+}
+
 EngravingItem::BarBeat EngravingItem::barbeat() const
 {
     EngravingItem::BarBeat barBeat = { 0, 0, 0.0F };
@@ -2478,6 +2600,17 @@ bool EngravingItem::selected() const
 void EngravingItem::setSelected(bool f)
 {
     setFlag(ElementFlag::SELECTED, f);
+}
+
+void EngravingItem::setVisible(bool f)
+{
+    setFlag(ElementFlag::INVISIBLE, !f);
+    if (m_leftParenthesis) {
+        m_leftParenthesis->setVisible(f);
+    }
+    if (m_rightParenthesis) {
+        m_rightParenthesis->setVisible(f);
+    }
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -2689,7 +2822,16 @@ const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
 Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
 {
     //! NOTE Temporary disabled CHECK - a lot of messages
-    const Shape& sh = m_shape.value(LD_ACCESS::MAYBE_NOTINITED);
+    Shape sh = m_shape.value(LD_ACCESS::MAYBE_NOTINITED);
+
+    const Parenthesis* leftParen = m_item->leftParen();
+    if (leftParen && leftParen->addToSkyline()) {
+        sh.add(leftParen->ldata()->shape().translated(leftParen->pos()));
+    }
+    const Parenthesis* rightParen = m_item->rightParen();
+    if (rightParen && rightParen->addToSkyline()) {
+        sh.add(rightParen->ldata()->shape().translated(rightParen->pos()));
+    }
 
     //! NOTE Temporary
     //! Reimplementation: done

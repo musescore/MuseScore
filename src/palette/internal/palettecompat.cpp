@@ -32,13 +32,16 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/expression.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fret.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stringtunings.h"
 #include "engraving/dom/capo.h"
+#include "engraving/dom/marker.h"
 #include "engraving/types/symid.h"
+#include "engraving/types/typesconv.h"
 
 #include "palette.h"
 #include "palettecell.h"
@@ -100,6 +103,23 @@ void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* pa
         element.reset(newPedal);
         return;
     }
+
+    if (item->isFretDiagram()) {
+        FretDiagram* newFretDiagram = Factory::createFretDiagram(paletteScore->dummy()->segment());
+        FretDiagram* oldFretDiagram = toFretDiagram(item);
+
+        String harmonyName = oldFretDiagram->harmonyText();
+
+        if (harmonyName.empty()) {
+            newFretDiagram->clear();
+        } else {
+            newFretDiagram->setHarmony(harmonyName);
+            newFretDiagram->updateDiagram(harmonyName);
+        }
+
+        element.reset(newFretDiagram);
+        return;
+    }
 }
 
 void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
@@ -111,6 +131,16 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
 
     if (palette.type() == Palette::Type::Line) {
         addNewLineItems(palette);
+        return;
+    }
+
+    if (palette.type() == Palette::Type::FretboardDiagram) {
+        addNewFretboardDiagramItems(palette, paletteScore);
+        return;
+    }
+
+    if (palette.type() == Palette::Type::Repeat) {
+        addNewRepeatItems(palette, paletteScore);
         return;
     }
 }
@@ -128,6 +158,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     bool containsCapo = false;
     bool containsStringTunings = false;
     bool containsGuitarBends = false;
+    bool containsFFrame = false;
 
     for (const PaletteCellPtr& cell : guitarPalette.cells()) {
         const ElementPtr element = cell->element;
@@ -143,6 +174,9 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
             const ActionIcon* icon = toActionIcon(element.get());
             if (muse::contains(BENDS_ACTION_TYPES, icon->actionType())) {
                 containsGuitarBends = true;
+            }
+            if (icon->actionType() == ActionIconType::FFRAME) {
+                containsFFrame = true;
             }
         }
     }
@@ -170,6 +204,10 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.25);
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
     }
+
+    if (!containsFFrame) {
+        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
+    }
 }
 
 void PaletteCompat::addNewLineItems(Palette& linesPalette)
@@ -189,6 +227,49 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette)
     if (!containsNoteAnchoredLine) {
         int defaultPosition = std::min(20, linesPalette.cellsCount());
         linesPalette.insertActionIcon(defaultPosition, ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
+    }
+}
+
+void PaletteCompat::addNewFretboardDiagramItems(Palette& fretboardDiagramPalette, engraving::Score* paletteScore)
+{
+    bool containsBlankItem = false;
+    for (const PaletteCellPtr& cell : fretboardDiagramPalette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
+        }
+
+        if (element->isFretDiagram() && toFretDiagram(element.get())->harmonyText().empty()) {
+            containsBlankItem = true;
+        }
+    }
+
+    if (!containsBlankItem) {
+        auto fret = Factory::makeFretDiagram(paletteScore->dummy()->segment());
+        fret->clear();
+        fretboardDiagramPalette.insertElement(0, fret, muse::TranslatableString("palette", "Blank"));
+    }
+}
+
+void PaletteCompat::addNewRepeatItems(Palette& repeatPalette, engraving::Score* paletteScore)
+{
+    bool containsToCodaSym = false;
+    for (const PaletteCellPtr& cell : repeatPalette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
+        }
+
+        if (element->isMarker() && toMarker(element.get())->markerType() == MarkerType::TOCODASYM) {
+            containsToCodaSym = true;
+        }
+    }
+
+    if (!containsToCodaSym) {
+        auto marker = Factory::makeMarker(paletteScore->dummy()->measure());
+        marker->setMarkerType(MarkerType::TOCODASYM);
+        marker->styleChanged();
+        repeatPalette.insertElement(5, marker, TConv::userName(MarkerType::TOCODASYM));
     }
 }
 

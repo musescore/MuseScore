@@ -21,8 +21,6 @@
  */
 #include "coremidioutport.h"
 
-#include <QString>
-
 #include <CoreAudio/HostTime.h>
 #include <CoreServices/CoreServices.h>
 #include <CoreMIDI/CoreMIDI.h>
@@ -145,15 +143,13 @@ void CoreMidiOutPort::initCore()
         }
     };
 
-    QString name = "MuseScore";
-    result = MIDIClientCreate(name.toCFString(), onCoreMidiNotificationReceived, this, &m_core->client);
+    result = MIDIClientCreate(CFSTR("MuseScore"), onCoreMidiNotificationReceived, this, &m_core->client);
     IF_ASSERT_FAILED(result == noErr) {
         LOGE() << "failed create midi output client";
         return;
     }
 
-    QString portName = "MuseScore output port";
-    result = MIDIOutputPortCreate(m_core->client, portName.toCFString(), &m_core->outputPort);
+    result = MIDIOutputPortCreate(m_core->client, CFSTR("MuseScore output port"), &m_core->outputPort);
     IF_ASSERT_FAILED(result == noErr) {
         LOGE() << "failed create midi output port";
     }
@@ -287,7 +283,7 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
-    OSStatus result;
+    OSStatus result = noErr;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
 
     // Note: there could be three cases: MIDI2+MIDIEventList, MIDI1+MIDIEventList, MIDI1+MIDIPacketList.
@@ -307,14 +303,11 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
             MIDIEventList eventList;
             MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
 
-            if (e.messageType() == Event::MessageType::ChannelVoice20 && e.opcode() == muse::midi::Event::Opcode::NoteOn
-                && e.velocity() < 128) {
-                LOG_MIDI_W() << "Detected low MIDI 2.0 ChannelVoiceMessage velocity.";
-            }
-
-            MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
+            MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.midi20Words());
 
             result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
+        } else {
+            __builtin_unreachable();
         }
     } else {
         const std::vector<Event> events = e.toMIDI10();
@@ -330,7 +323,7 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
         Byte bytesPackage[4];
 
         for (const Event& event : events) {
-            int length = event.to_MIDI10BytesPackage(bytesPackage);
+            int length = event.toMidi10Bytes(bytesPackage);
             assert(length <= 3);
             if (length == 0) {
                 LOG_MIDI_W() << "Failed Sending MIDIPacketList event: " << event.to_string();

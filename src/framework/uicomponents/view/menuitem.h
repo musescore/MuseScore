@@ -40,6 +40,8 @@ enum class MenuItemRole {
     PreferencesRole,
     QuitRole
 };
+class MenuItem;
+using MenuItemList = QList<MenuItem*>;
 
 class MenuItem : public QObject, public async::Asyncable
 {
@@ -69,7 +71,7 @@ class MenuItem : public QObject, public async::Asyncable
 
     Q_PROPERTY(int role READ role_property NOTIFY roleChanged)
 
-    Q_PROPERTY(QList<MenuItem*> subitems READ subitems NOTIFY subitemsChanged)
+    Q_PROPERTY(MenuItemList subitems READ subitems NOTIFY subitemsChanged)
 
 public:
     MenuItem(QObject* parent = nullptr);
@@ -85,7 +87,7 @@ public:
 
     MenuItemRole role() const;
 
-    QList<MenuItem*> subitems() const;
+    MenuItemList subitems() const;
 
     ui::UiAction action() const;
     ui::UiActionState state() const;
@@ -99,14 +101,16 @@ public:
 
 public slots:
     void setId(const QString& id);
-    void setTitle(const TranslatableString& title);
+    void setTitle(const muse::TranslatableString& title);
     void setSection(const QString& section);
-    void setState(const ui::UiActionState& state);
+    void setState(const muse::ui::UiActionState& state);
     void setSelectable(bool selectable);
     void setSelected(bool selected);
+    void setCheckable(bool checkable);
+    void setChecked(bool checked);
     void setRole(muse::uicomponents::MenuItemRole role);
-    void setSubitems(const QList<uicomponents::MenuItem*>& subitems);
-    void setAction(const ui::UiAction& action);
+    void setSubitems(const uicomponents::MenuItemList& subitems);
+    void setAction(const muse::ui::UiAction& action);
     void setArgs(const muse::actions::ActionData& args);
     void setQuery(const muse::actions::ActionQuery& query);
 
@@ -118,7 +122,7 @@ signals:
     void selectableChanged(bool selectable);
     void selectedChanged(bool selected);
     void roleChanged(int role);
-    void subitemsChanged(QList<uicomponents::MenuItem*> subitems, const QString& menuId);
+    void subitemsChanged(uicomponents::MenuItemList subitems, const QString& menuId);
     void actionChanged();
 
 private:
@@ -147,11 +151,10 @@ private:
     MenuItemRole m_role = MenuItemRole::NoRole;
     muse::actions::ActionData m_args;
     muse::actions::ActionQuery m_query;
-    QList<MenuItem*> m_subitems;
+    MenuItemList m_subitems;
 
     ui::UiAction m_action;
 };
-using MenuItemList = QList<MenuItem*>;
 
 inline QVariantList menuItemListToVariantList(const uicomponents::MenuItemList& list)
 {

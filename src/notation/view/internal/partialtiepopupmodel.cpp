@@ -79,7 +79,7 @@ void PartialTiePopupModel::init()
     load();
 }
 
-void PartialTiePopupModel::toggleItemChecked(QString& id)
+void PartialTiePopupModel::toggleItemChecked(const QString& id)
 {
     Tie* tieItem = tie();
     if (!tieItem || !tieItem->tieJumpPoints()) {
@@ -138,8 +138,14 @@ MenuItemList PartialTiePopupModel::makeMenuItems()
 
     MenuItemList itemList;
 
+    std::set<Note*> foundNotes;
+
     for (const TieJumpPoint* jumpPoint : *tieItem->tieJumpPoints()) {
+        if (muse::contains(foundNotes, jumpPoint->note())) {
+            continue;
+        }
         itemList << makeMenuItem(jumpPoint);
+        foundNotes.insert(jumpPoint->note());
     }
 
     return itemList;
@@ -179,7 +185,9 @@ void mu::notation::PartialTiePopupModel::onClosed()
         return;
     }
 
-    if (tieItem->allJumpPointsInactive()) {
+    Note* startNote = tieItem->startNote();
+
+    if (tieItem->allJumpPointsInactive() && startNote && startNote->tieFor() == tieItem) {
         Score* score = tieItem->score();
         beginCommand(TranslatableString("engraving", "Remove partial tie"));
         score->undoRemoveElement(tieItem);

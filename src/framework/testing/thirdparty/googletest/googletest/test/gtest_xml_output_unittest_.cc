@@ -35,18 +35,20 @@
 //
 // This program will be invoked from a Python unit test.  Don't run it
 // directly.
+// clang-format off
+
+#include <string>
 
 #include "gtest/gtest.h"
 
 using ::testing::InitGoogleTest;
+using ::testing::Test;
 using ::testing::TestEventListeners;
 using ::testing::TestWithParam;
 using ::testing::UnitTest;
-using ::testing::Test;
 using ::testing::Values;
 
-class SuccessfulTest : public Test {
-};
+class SuccessfulTest : public Test {};
 
 TEST_F(SuccessfulTest, Succeeds) {
   SUCCEED() << "This is a success.";
@@ -110,8 +112,12 @@ TEST(InvalidCharactersTest, InvalidCharactersInMessage) {
 
 class PropertyRecordingTest : public Test {
  public:
-  static void SetUpTestSuite() { RecordProperty("SetUpTestSuite", "yes"); }
+  static void SetUpTestSuite() {
+    RecordProperty("SetUpTestSuite (with whitespace)", "yes and yes");
+    RecordProperty("SetUpTestSuite", "yes");
+  }
   static void TearDownTestSuite() {
+    RecordProperty("TearDownTestSuite (with whitespace)", "aye and aye");
     RecordProperty("TearDownTestSuite", "aye");
   }
 };
@@ -156,6 +162,22 @@ TEST(NoFixtureTest, ExternalUtilityThatCallsRecordStringValuedProperty) {
   ExternalUtilityThatCallsRecordProperty("key_for_utility_string", "1");
 }
 
+// Ensures that SetUpTestSuite and TearDownTestSuite failures are reported in
+// the XML output.
+class SetupFailTest : public ::testing::Test {
+ protected:
+  static void SetUpTestSuite() { ASSERT_EQ(1, 2); }
+};
+
+TEST_F(SetupFailTest, NoopPassingTest) {}
+
+class TearDownFailTest : public ::testing::Test {
+ protected:
+  static void TearDownTestSuite() { ASSERT_EQ(1, 2); }
+};
+
+TEST_F(TearDownFailTest, NoopPassingTest) {}
+
 // Verifies that the test parameter value is output in the 'value_param'
 // XML attribute for value-parameterized tests.
 class ValueParamTest : public TestWithParam<int> {};
@@ -191,3 +213,5 @@ int main(int argc, char** argv) {
   testing::Test::RecordProperty("ad_hoc_property", "42");
   return RUN_ALL_TESTS();
 }
+
+// clang-format on

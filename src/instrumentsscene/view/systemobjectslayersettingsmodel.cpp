@@ -47,7 +47,7 @@ QVariant SystemObjectsLayerSettingsModel::data(const QModelIndex& modelIndex, in
     const SystemObjectsGroup& group = m_systemObjectGroups.at(index);
 
     switch (role) {
-    case TitleRole: return translatedSystemObjectsGroupName(group).toQString();
+    case TitleRole: return translatedSystemObjectsGroupCapitalizedName(group).toQString();
     case VisibilityRole: return isSystemObjectsGroupVisible(group);
     }
 
@@ -96,13 +96,18 @@ void SystemObjectsLayerSettingsModel::setSystemObjectsGroupVisible(int index, bo
     SystemObjectsGroup& group = m_systemObjectGroups.at(idx);
 
     const muse::TranslatableString actionName = visible
-                                                ? TranslatableString("undoableAction", "Make system object(s) visible")
-                                                : TranslatableString("undoableAction", "Make system object(s) invisible");
+                                                ? muse::TranslatableString("undoableAction", "Make system marking(s) visible")
+                                                : muse::TranslatableString("undoableAction", "Make system marking(s) invisible");
 
     notation->undoStack()->prepareChanges(actionName);
 
-    for (EngravingItem* item : group.items) {
-        item->undoSetVisible(visible);
+    if (group.type == mu::engraving::ElementType::MEASURE_NUMBER) {
+        DO_ASSERT(group.staff);
+        group.staff->undoSetShowMeasureNumbers(visible);
+    } else {
+        for (EngravingItem* item : group.items) {
+            item->undoSetVisible(visible);
+        }
     }
 
     notation->undoStack()->commitChanges();

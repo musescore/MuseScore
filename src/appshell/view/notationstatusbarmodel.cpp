@@ -24,6 +24,12 @@
 
 #include "types/translatablestring.h"
 
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_WORKSPACE
+#include "workspace/view/workspacesmenumodel.h"
+#endif
+
 #include "defer.h"
 #include "log.h"
 
@@ -33,6 +39,7 @@ using namespace muse;
 using namespace muse::actions;
 using namespace muse::ui;
 using namespace muse::uicomponents;
+using namespace muse::workspace;
 
 static const QString TITLE_KEY("title");
 static const QString ICON_KEY("icon");
@@ -69,6 +76,34 @@ static ActionCode zoomTypeToActionCode(ZoomType type)
 NotationStatusBarModel::NotationStatusBarModel(QObject* parent)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
+#ifdef MUSE_MODULE_WORKSPACE
+    m_workspacesMenuModel = std::make_shared<WorkspacesMenuModel>(this);
+#endif
+}
+
+void NotationStatusBarModel::classBegin()
+{
+    TRACEFUNC;
+
+    m_concertPitchItem = makeMenuItem(TOGGLE_CONCERT_PITCH_CODE);
+    m_currentWorkspaceItem = makeMenuItem(SELECT_WORKSPACE_CODE);
+
+    onCurrentNotationChanged();
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
+    });
+
+#ifdef MUSE_MODULE_WORKSPACE
+    m_workspacesMenuModel->load();
+    connect(m_workspacesMenuModel.get(), &WorkspacesMenuModel::itemsChanged, this, [this]() {
+        updateCurrentWorkspaceItem();
+    });
+    workspaceConfiguration()->currentWorkspaceNameChanged().onReceive(this, [this](const std::string&){
+        updateCurrentWorkspaceItem();
+    });
+#endif
+
+    updateCurrentWorkspaceItem();
 }
 
 QString NotationStatusBarModel::accessibilityInfo() const
@@ -76,34 +111,34 @@ QString NotationStatusBarModel::accessibilityInfo() const
     return accessibility() ? QString::fromStdString(accessibility()->accessibilityInfo().val) : QString();
 }
 
-QVariant NotationStatusBarModel::concertPitchItem()
+MenuItem* NotationStatusBarModel::concertPitchItem()
 {
-    if (!m_concertPitchItem) {
-        m_concertPitchItem = makeMenuItem(TOGGLE_CONCERT_PITCH_CODE);
-    }
+    return m_concertPitchItem;
+}
 
+void NotationStatusBarModel::updateConcertPitchItem()
+{
     UiActionState state;
     state.enabled = notation() ? true : false;
     state.checked = notation() ? notation()->style()->styleValue(StyleId::concertPitch).toBool() : false;
     m_concertPitchItem->setState(state);
-
-    return QVariant::fromValue(m_concertPitchItem);
 }
 
-QVariant NotationStatusBarModel::currentWorkspaceItem()
+MenuItem* NotationStatusBarModel::currentWorkspaceItem()
 {
-    if (!m_currentWorkspaceItem) {
-        m_currentWorkspaceItem = makeMenuItem(SELECT_WORKSPACE_CODE);
-    }
+    return m_currentWorkspaceItem;
+}
 
-    UiAction action;
-    action.title = muse::TranslatableString::untranslatable("%1 %2")
-                   .arg(muse::TranslatableString("workspace", "Workspace:"),
-                        String::fromStdString(workspaceConfiguration()->currentWorkspaceName()));
+void NotationStatusBarModel::updateCurrentWorkspaceItem()
+{
+    m_currentWorkspaceItem->setTitle(
+        muse::TranslatableString::untranslatable("%1 %2")
+        .arg(muse::TranslatableString("workspace", "Workspace:"),
+             String::fromStdString(workspaceConfiguration()->currentWorkspaceName())));
 
-    m_currentWorkspaceItem->setAction(action);
-
-    return QVariant::fromValue(m_currentWorkspaceItem);
+#ifdef MUSE_MODULE_WORKSPACE
+    m_currentWorkspaceItem->setSubitems(m_workspacesMenuModel->items());
+#endif
 }
 
 MenuItem* NotationStatusBarModel::makeMenuItem(const ActionCode& actionCode)
@@ -115,7 +150,7 @@ MenuItem* NotationStatusBarModel::makeMenuItem(const ActionCode& actionCode)
     return item;
 }
 
-QVariant NotationStatusBarModel::currentViewMode()
+MenuItem* NotationStatusBarModel::currentViewMode()
 {
     ViewMode viewMode = notation() ? notation()->viewMode() : ViewMode::PAGE;
 
@@ -128,11 +163,11 @@ QVariant NotationStatusBarModel::currentViewMode()
                 modeItem->setTitle(muse::TranslatableString("notation", "Continuous view"));
             }
 
-            return QVariant::fromValue(modeItem);
+            return modeItem;
         }
     }
 
-    return QVariant();
+    return nullptr;
 }
 
 void NotationStatusBarModel::initAvailableViewModeList()
@@ -205,32 +240,10 @@ ZoomType NotationStatusBarModel::currentZoomType() const
     return notation()->viewState()->zoomType().val;
 }
 
-void NotationStatusBarModel::load()
-{
-    TRACEFUNC;
-
-    onCurrentNotationChanged();
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        onCurrentNotationChanged();
-    });
-
-    workspaceConfiguration()->currentWorkspaceNameChanged().onReceive(this, [this](const std::string&) {
-        emit currentWorkspaceActionChanged();
-    });
-
-    actionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codeList) {
-        for (const ActionCode& code : codeList) {
-            if (code == SELECT_WORKSPACE_CODE) {
-                emit currentWorkspaceActionChanged();
-            }
-        }
-    });
-}
-
 void NotationStatusBarModel::onCurrentNotationChanged()
 {
     emit zoomEnabledChanged();
-    emit concertPitchActionChanged();
+    updateConcertPitchItem();
 
     initAvailableViewModeList();
     initAvailableZoomList();
@@ -239,9 +252,9 @@ void NotationStatusBarModel::onCurrentNotationChanged()
         return;
     }
 
-    notation()->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& range) {
-        if (muse::contains(range.changedStyleIdSet, mu::engraving::Sid::concertPitch)) {
-            emit concertPitchActionChanged();
+    notation()->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges& changes) {
+        if (muse::contains(changes.changedStyleIdSet, mu::engraving::Sid::concertPitch)) {
+            updateConcertPitchItem();
         }
     });
 
@@ -271,11 +284,6 @@ void NotationStatusBarModel::listenChangesInAccessibility()
     accessibility()->accessibilityInfo().ch.onReceive(this, [this](const std::string&) {
         emit accessibilityInfoChanged();
     });
-}
-
-void NotationStatusBarModel::selectWorkspace()
-{
-    dispatch(SELECT_WORKSPACE_CODE);
 }
 
 void NotationStatusBarModel::toggleConcertPitch()
@@ -398,6 +406,15 @@ void NotationStatusBarModel::zoomOut()
 void NotationStatusBarModel::handleAction(const QString& actionCode)
 {
     dispatch(codeFromQString(actionCode));
+}
+
+void NotationStatusBarModel::handleWorkspacesMenuItem(const QString& itemId)
+{
+#ifdef MUSE_MODULE_WORKSPACE
+    m_workspacesMenuModel->handleMenuItem(itemId);
+#else
+    UNUSED(itemId);
+#endif
 }
 
 INotationPtr NotationStatusBarModel::notation() const

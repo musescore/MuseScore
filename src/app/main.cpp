@@ -32,6 +32,7 @@
 #include "global/iapplication.h"
 
 #include "muse_framework_config.h"
+#include "app_config.h"
 
 #include "log.h"
 
@@ -93,9 +94,20 @@ int main(int argc, char** argv)
     qputenv("QT_STYLE_OVERRIDE", "Fusion");
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+    if (!qEnvironmentVariableIsSet("QT_QUICK_FLICKABLE_WHEEL_DECELERATION")) {
+        qputenv("QT_QUICK_FLICKABLE_WHEEL_DECELERATION", "5000");
+    }
+#endif
+
 #ifdef Q_OS_LINUX
     if (qEnvironmentVariable("QT_QPA_PLATFORM") != "offscreen") {
         qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
+    }
+
+    //! NOTE Forced X11, with Wayland there are a number of problems now
+    if (qEnvironmentVariable("QT_QPA_PLATFORM") == "") {
+        qputenv("QT_QPA_PLATFORM", "xcb");
     }
 #endif
 
@@ -105,15 +117,6 @@ int main(int argc, char** argv)
     if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
         qputenv("QT_OPENGL_BUGLIST", ":/resources/win_opengl_buglist.json");
     }
-#endif
-
-//! NOTE: For unknown reasons, Linux scaling for 1 is defined as 1.003 in fractional scaling.
-//!       Because of this, some elements are drawn with a shift on the score.
-//!       Let's make a Linux hack and round values above 0.75(see RoundPreferFloor)
-#ifdef Q_OS_LINUX
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
-#elif defined(Q_OS_WIN)
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 #endif
 
     QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
@@ -134,7 +137,7 @@ int main(int argc, char** argv)
 #ifndef MUSE_APP_INSTALL_SUFFIX
 #define MUSE_APP_INSTALL_SUFFIX ""
 #endif
-    QGuiApplication::setDesktopFileName("org.musescore.MuseScore" + QString(MUSE_APP_INSTALL_SUFFIX) + ".desktop");
+    QGuiApplication::setDesktopFileName("org.musescore.MuseScore" MUSE_APP_INSTALL_SUFFIX);
 #endif
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
@@ -180,6 +183,7 @@ int main(int argc, char** argv)
     // ====================================================
     // Parse command line options
     // ====================================================
+#ifdef MUE_ENABLE_CONSOLEAPP
     CommandLineParser commandLineParser;
     commandLineParser.init();
     commandLineParser.parse(argcFinal, argvFinal);
@@ -194,9 +198,16 @@ int main(int argc, char** argv)
     }
 
     commandLineParser.processBuiltinArgs(*qapp);
+    CmdOptions opt = commandLineParser.options();
+
+#else
+    QCoreApplication* qapp = new QApplication(argcFinal, argvFinal);
+    CmdOptions opt;
+    opt.runMode = IApplication::RunMode::GuiApp;
+#endif
 
     AppFactory f;
-    std::shared_ptr<muse::IApplication> app = f.newApp(commandLineParser.options());
+    std::shared_ptr<muse::IApplication> app = f.newApp(opt);
 
     app->perform();
 

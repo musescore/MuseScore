@@ -38,14 +38,18 @@ public:
     virtual ~INotationPlayback() = default;
 
     virtual void init() = 0;
+    virtual void reload() = 0;
 
     virtual const engraving::InstrumentTrackId& metronomeTrackId() const = 0;
     virtual engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const = 0;
     virtual bool isChordSymbolsTrack(const engraving::InstrumentTrackId& trackId) const = 0;
 
     virtual const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
-    virtual void triggerEventsForItems(const std::vector<const EngravingItem*>& items) = 0;
-    virtual void triggerMetronome(int tick) = 0;
+
+    virtual void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound) = 0;
+    virtual void triggerMetronome(muse::midi::tick_t tick) = 0;
+    virtual void triggerCountIn(muse::midi::tick_t tick, muse::secs_t& totalCountInDuration) = 0;
+    virtual void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) = 0;
 
     virtual engraving::InstrumentTrackIdSet existingTrackIdSet() const = 0;
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
@@ -72,7 +76,7 @@ public:
     virtual const LoopBoundaries& loopBoundaries() const = 0;
     virtual muse::async::Notification loopBoundariesChanged() const = 0;
 
-    virtual const Tempo& tempo(muse::midi::tick_t tick) const = 0;
+    virtual const Tempo& multipliedTempo(muse::midi::tick_t tick) const = 0;
     virtual MeasureBeat beat(muse::midi::tick_t tick) const = 0;
     virtual muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const = 0;
 

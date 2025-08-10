@@ -69,6 +69,7 @@ public:
     muse::async::Notification hasPartsChanged() const override;
 
     INotationPlaybackPtr playback() const override;
+    void initNotationSoloMuteState(const INotationPtr notation) override;
 
 private:
 

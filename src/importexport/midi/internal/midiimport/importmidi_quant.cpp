@@ -581,9 +581,9 @@ quantizeOffTimeForNonTuplet(
             ++next;
             continue;
         }
+        const bool isInSameTuplet = chord.isInTuplet && next->second.tuplet == chord.tuplet;
         const auto& tuplet = next->second.tuplet->second;
-        if (next->second.tuplet == chord.tuplet
-            || tuplet.onTime + tuplet.len <= offTime) {
+        if (isInSameTuplet || tuplet.onTime + tuplet.len <= offTime) {
             ++next;
             continue;
         }

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_SELECTDIALOG_H
-#define MU_NOTATION_SELECTDIALOG_H
+#pragma once
 
 #include "ui_selectdialog.h"
 
@@ -55,7 +54,8 @@ private slots:
     void buttonClicked(QAbstractButton* button);
 
 private:
-    virtual void hideEvent(QHideEvent*);
+    void showEvent(QShowEvent*) override;
+    void hideEvent(QHideEvent*) override;
 
     INotationPtr currentNotation() const;
     INotationInteractionPtr currentNotationInteraction() const;
@@ -68,5 +68,4 @@ private:
 
     const EngravingItem* m_element = nullptr;
 };
-} // namespace Ms
-#endif
+}

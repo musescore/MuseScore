@@ -43,7 +43,7 @@ InteractiveApi::InteractiveApi(IApiEngine* e)
 
 void InteractiveApi::info(const QString& contentTitle, const QString& text)
 {
-    interactive()->info(contentTitle.toStdString(), text.toStdString());
+    interactive()->infoSync(contentTitle.toStdString(), text.toStdString());
 }
 
 /** APIDOC method

@@ -20,12 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SHADOWNOTE_H
-#define MU_ENGRAVING_SHADOWNOTE_H
+#pragma once
 
 #include "engravingitem.h"
+
+#include "accidental.h"
 #include "durationtype.h"
-#include "types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -93,4 +94,3 @@ private:
     double m_segmentSkylineBottomY = 0.0;
 };
 } // namespace mu::engraving
-#endif

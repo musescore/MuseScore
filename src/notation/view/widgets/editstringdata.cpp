@@ -29,9 +29,9 @@
 
 #include "editpitch.h"
 
-#include "dom/stringdata.h"
-#include "dom/stringtunings.h"
-#include "dom/undo.h"
+#include "engraving/dom/stringdata.h"
+#include "engraving/dom/stringtunings.h"
+#include "engraving/dom/undo.h"
 
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetnavigationfix.h"
@@ -64,8 +64,6 @@ EditStringData::EditStringData(QWidget* parent, const std::vector<instrString>& 
 
     init();
 
-    WidgetStateStore::restoreGeometry(this);
-
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
 
@@ -82,9 +80,11 @@ int EditStringData::frets() const
     return _frets;
 }
 
-//---------------------------------------------------------
-//   hideEvent
-//---------------------------------------------------------
+void EditStringData::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(event);
+}
 
 void EditStringData::hideEvent(QHideEvent* ev)
 {

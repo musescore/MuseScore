@@ -21,7 +21,11 @@
  */
 #include "toursprovider.h"
 
+#include <QApplication>
+
 #include "log.h"
+
+static const char* SHOW_TOOLTIP_PROPERTY_NAME("toolTipShowLocked");
 
 using namespace muse;
 using namespace muse::tours;
@@ -29,7 +33,9 @@ using namespace muse::tours;
 ToursProvider::ToursProvider(const modularity::ContextPtr& iocCtx)
     : QObject(), Injectable(iocCtx)
 {
-    QObject::connect(&m_openTimer, &QTimer::timeout, this, &ToursProvider::doShow);
+    connect(&m_openTimer, &QTimer::timeout, this, &ToursProvider::doShow);
+
+    connect(qApp, &QApplication::applicationStateChanged, this, &ToursProvider::onApplicationStateChanged);
 }
 
 void ToursProvider::showTour(const Tour& tour)
@@ -43,27 +49,66 @@ void ToursProvider::showTour(const Tour& tour)
 
 void ToursProvider::showNext()
 {
+    if (m_currentStep >= m_totalSteps) {
+        clear();
+        return;
+    }
+
     m_openTimer.start();
+}
+
+void ToursProvider::onTourStepClosed(QQuickItem* parentItem)
+{
+    //! NOTE: Restore showing tooltip for tour's control
+    setBlockShowingTooltipForItem(parentItem, false);
 }
 
 void ToursProvider::doShow()
 {
     m_openTimer.stop();
 
+    if (qApp->applicationState() != Qt::ApplicationActive) {
+        m_needShowTourAfterApplicationActivation = true;
+        return;
+    }
+
     const TourStep& step = m_tour.steps[m_currentStep];
     size_t index = m_currentStep + 1;
 
     m_currentStep++;
 
-    QQuickItem* parentItem = findControl(step.controlUri);
-    IF_ASSERT_FAILED(parentItem) {
+    const ui::INavigationControl* parentControl = findControl(step.controlUri);
+    if (!parentControl) {
+        //! NOTE: It's okay that the control is not found,
+        //! for example, the user has hidded the control.
+        LOGD() << "Control not found: " << step.controlUri << ", skipping step";
+        showNext();
         return;
     }
 
-    emit openTourStep(parentItem, step.title, step.description, step.videoExplanationUrl, index, m_totalSteps);
+    QQuickItem* parentControlItem = parentControl->visualItem();
+    IF_ASSERT_FAILED(parentControlItem) {
+        return;
+    }
+
+    connect(parentControlItem, &QObject::destroyed, this, [this]() {
+        emit closeCurrentTourStep();
+        showNext();
+    });
+
+    parentControl->triggered().onNotify(this, [this]() {
+        emit closeCurrentTourStep();
+        showNext();
+    });
+
+    //! NOTE: Avoid showing tooltip for control when tour for that control is shown
+    setBlockShowingTooltipForItem(parentControlItem, true);
+
+    emit openTourStep(parentControlItem, step.title, step.description, step.previewImageOrGifUrl, step.videoExplanationUrl, index,
+                      m_totalSteps);
 }
 
-QQuickItem* ToursProvider::findControl(const Uri& controlUri)
+const ui::INavigationControl* ToursProvider::findControl(const Uri& controlUri)
 {
     String controlPath = String::fromStdString(controlUri.path());
 
@@ -77,6 +122,48 @@ QQuickItem* ToursProvider::findControl(const Uri& controlUri)
     std::string panel = pathItems[1].toStdString();
     std::string controlName = pathItems[2].toStdString();
 
-    const ui::INavigationControl* control = navigationController()->findControl(section, panel, controlName);
-    return control ? control->visualItem() : nullptr;
+    return navigationController()->findControl(section, panel, controlName);
+}
+
+void ToursProvider::clear()
+{
+    m_openTimer.stop();
+
+    m_tour = Tour();
+    m_currentStep = 0;
+    m_totalSteps = 0;
+}
+
+void ToursProvider::setBlockShowingTooltipForItem(QQuickItem* item, bool block)
+{
+    if (!item) {
+        return;
+    }
+
+    item->setProperty(SHOW_TOOLTIP_PROPERTY_NAME, QVariant::fromValue(block));
+}
+
+void ToursProvider::onApplicationStateChanged(Qt::ApplicationState state)
+{
+    if (!m_needShowTourAfterApplicationActivation) {
+        return;
+    }
+
+    m_needShowTourAfterApplicationActivation = false;
+
+    if (state == Qt::ApplicationActive) {
+        doShow();
+    }
+}
+
+bool ToursProvider::canControlTourPopupClosing() const
+{
+#ifdef Q_OS_LINUX
+    //! NOTE: There is a problem on Linux for popups that when you turn off automatic closing,
+    //! if the user switches to another program, the popup will still be shown on top of the other program.
+    //! Let's turn on automatic closing of the popup for Linux.
+    return false;
+#else
+    return true;
+#endif
 }

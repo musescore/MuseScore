@@ -50,23 +50,6 @@ static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
 static const std::string STATUS_KEY("status");
 
-QString muse::cloud::userAgent()
-{
-    static const QStringList systemInfo {
-        QSysInfo::kernelType(),
-        QSysInfo::kernelVersion(),
-        QSysInfo::productType(),
-        QSysInfo::productVersion(),
-        QSysInfo::currentCpuArchitecture()
-    };
-
-    static GlobalInject<IApplication> app;
-
-    return QString("MS_EDITOR/%1.%2 (%3)")
-           .arg(app()->version().toString(), app()->build())
-           .arg(systemInfo.join(' ')).toLatin1();
-}
-
 int muse::cloud::generateFileNameNumber()
 {
     return QRandomGenerator::global()->generate() % 100000;
@@ -110,7 +93,12 @@ void AbstractCloudService::initOAuthIfNecessary()
     m_replyHandler->setRedirectUrl(m_serverConfig.signInSuccessUrl);
 
     m_oauth2->setAuthorizationUrl(m_serverConfig.authorizationUrl);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    m_oauth2->setTokenUrl(m_serverConfig.accessTokenUrl);
+    m_oauth2->setPkceMethod(QOAuth2AuthorizationCodeFlow::PkceMethod::None);
+#else
     m_oauth2->setAccessTokenUrl(m_serverConfig.accessTokenUrl);
+#endif
     m_oauth2->setModifyParametersFunction([this](QAbstractOAuth::Stage, QMultiMap<QString, QVariant>* parameters) {
         for (const QString& key : m_serverConfig.authorizationParameters.keys()) {
             parameters->replace(key, m_serverConfig.authorizationParameters.value(key));
@@ -122,9 +110,16 @@ void AbstractCloudService::initOAuthIfNecessary()
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, &AbstractCloudService::openUrl);
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &AbstractCloudService::onUserAuthorized);
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::serverReportedErrorOccurred,
+            [](const QString& error, const QString& errorDescription, const QUrl& uri) {
+        LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
+    });
+#else
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::error, [](const QString& error, const QString& errorDescription, const QUrl& uri) {
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
+#endif
 }
 
 bool AbstractCloudService::readTokens()
@@ -145,7 +140,13 @@ bool AbstractCloudService::readTokens()
         return false;
     }
 
-    QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val.toQByteArrayNoCopy());
+    QJsonParseError err;
+    QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val.toQByteArrayNoCopy(), &err);
+    if (err.error != QJsonParseError::NoError || !tokensDoc.isObject()) {
+        LOGE() << "Error on parse tokens file: " << err.errorString();
+        return false;
+    }
+
     QJsonObject saveObject = tokensDoc.object();
 
     m_accessToken = saveObject[ACCESS_TOKEN_KEY].toString();
@@ -215,6 +216,11 @@ void AbstractCloudService::onUserAuthorized()
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+RequestHeaders AbstractCloudService::defaultHeaders() const
+{
+    return configuration()->headers();
 }
 
 RetVal<QUrl> AbstractCloudService::prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params) const
@@ -304,7 +310,7 @@ RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, cons
     query.addParam("text", Val(text));
     query.addParam("cloudCode", Val(cloudInfo().code));
     query.addParam("publishingScore", Val(publishingScore));
-    return interactive()->open(query);
+    return interactive()->openSync(query);
 }
 
 ValCh<bool> AbstractCloudService::userAuthorized() const
@@ -403,8 +409,7 @@ Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, b
 
 int AbstractCloudService::statusCode(const Ret& ret) const
 {
-    std::any status = ret.data(STATUS_KEY);
-    return status.has_value() ? std::any_cast<int>(status) : 0;
+    return ret.data<int>(STATUS_KEY, 0);
 }
 
 void AbstractCloudService::printServerReply(const QBuffer& reply) const
