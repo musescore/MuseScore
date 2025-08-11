@@ -22,12 +22,16 @@
 
 #include "wasapiaudiodriver.h"
 
-#include "global/translation.h"
+#include "muse_framework_config.h"
+#ifdef QT_CONCURRENT_SUPPORTED
+#include "concurrency/concurrent.h"
+#endif
 
 #include "wasapitypes.h"
 #include "wasapiaudioclient.h"
 #include "audiodeviceslistener.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace winrt;
@@ -62,7 +66,7 @@ WasapiAudioDriver::WasapiAudioDriver()
 
     m_devicesListener = std::make_unique<AudioDevicesListener>();
     m_devicesListener->devicesChanged().onNotify(this, [this]() {
-        m_availableOutputDevicesChanged.notify();
+        updateAvailableOutputDevices();
     });
 
     m_devicesListener->defaultDeviceChanged().onNotify(this, [this]() {
@@ -78,6 +82,7 @@ WasapiAudioDriver::WasapiAudioDriver()
 
 void WasapiAudioDriver::init()
 {
+    updateAvailableOutputDevices();
 }
 
 std::string WasapiAudioDriver::name() const
@@ -208,37 +213,8 @@ async::Notification WasapiAudioDriver::outputDeviceChanged() const
 
 AudioDeviceList WasapiAudioDriver::availableOutputDevices() const
 {
-    using namespace Windows::Devices::Enumeration;
-    using namespace winrt::Windows::Media::Devices;
-
-    AudioDeviceList result;
-
-    result.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
-
-    DeviceInformationCollection devices = nullptr;
-
-    try {
-        // Get the string identifier of the audio renderer
-        hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
-
-        winrt::Windows::Foundation::IAsyncOperation<DeviceInformationCollection> deviceRequest
-            = DeviceInformation::FindAllAsync(AudioSelector, {});
-
-        devices = deviceRequest.get();
-    } catch (...) {
-        LOGE() << to_string(hresult_error(to_hresult()).message());
-    }
-
-    if (!devices) {
-        return result;
-    }
-
-    for (const auto& deviceInfo : devices) {
-        AudioDevice device { to_string(deviceInfo.Id()), to_string(deviceInfo.Name()) };
-        result.emplace_back(std::move(device));
-    }
-
-    return result;
+    std::lock_guard lock(m_availableOutputDevicesMutex);
+    return m_availableOutputDevices;
 }
 
 async::Notification WasapiAudioDriver::availableOutputDevicesChanged() const
@@ -355,6 +331,50 @@ AudioDeviceID WasapiAudioDriver::defaultDeviceId() const
     }
 
     return result;
+}
+
+void WasapiAudioDriver::updateAvailableOutputDevices()
+{
+#ifdef QT_CONCURRENT_SUPPORTED
+    Concurrent::run([this](){
+        using namespace Windows::Devices::Enumeration;
+        using namespace winrt::Windows::Media::Devices;
+
+        AudioDeviceList result;
+
+        result.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
+
+        DeviceInformationCollection devices = nullptr;
+
+        try {
+            // Get the string identifier of the audio renderer
+            hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
+
+            winrt::Windows::Foundation::IAsyncOperation<DeviceInformationCollection> deviceRequest
+                = DeviceInformation::FindAllAsync(AudioSelector, {});
+
+            devices = deviceRequest.get();
+        } catch (...) {
+            LOGE() << to_string(hresult_error(to_hresult()).message());
+        }
+
+        if (devices) {
+            for (const auto& deviceInfo : devices) {
+                AudioDevice device { to_string(deviceInfo.Id()), to_string(deviceInfo.Name()) };
+                result.emplace_back(std::move(device));
+            }
+        }
+
+        std::lock_guard lock(m_availableOutputDevicesMutex);
+
+        if (result == m_availableOutputDevices) {
+            return;
+        }
+
+        m_availableOutputDevices = result;
+        m_availableOutputDevicesChanged.notify();
+    });
+#endif
 }
 
 unsigned int WasapiAudioDriver::minSupportedBufferSize() const

@@ -61,6 +61,10 @@ set(MODULE_LINK
     fluidsynth
     )
 
+if (QT_ADD_CONCURRENT)
+    list(APPEND MODULE_LINK Qt::Concurrent)
+endif()
+
 if (MUSE_MODULE_AUDIO_JACK)
     find_package(Jack REQUIRED)
     set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${JACK_INCLUDE_DIRS} )
