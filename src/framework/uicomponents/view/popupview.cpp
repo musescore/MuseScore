@@ -840,38 +840,22 @@ void PopupView::updateGeometry()
         moveBelow();
     } else if ((preferAbove || placementDefault) && canFitAbove) {
         moveAbove();
-    } else if ((preferLeft || placementDefault) && canFitLeft) {
+    } else if (preferLeft && canFitLeft) {
         moveLeft();
-    } else if ((preferRight || placementDefault) && canFitRight) {
+    } else if (preferRight && canFitRight) {
         moveRight();
-    } else if (!canFitBelow && (preferBelow || placementDefault)) {
-        if (canFitAbove) {
-            moveAbove();
-        } else {
-            // move to the right of the parent and move to top to an area that doesn't fit
-            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()) + padding());
-        }
-    } else if (!canFitAbove && (preferAbove || placementDefault)) {
-        if (canFitBelow) {
-            moveBelow();
-        } else {
-            // move to the left of the parent and move to bottom to an area that doesn't fit
-            movePos(parentTopLeft.x() - (viewRect.right() - anchorRect.right()) + padding(), m_globalPos.y() + parent->height());
-        }
-    } else if (!canFitLeft && (preferLeft || placementDefault)) {
-        if (canFitRight) {
-            moveRight();
-        } else {
-            // move to the top of the parent and move to right to an area that doesn't fit
-            movePos(m_globalPos.x() + parentTopLeft.x() + padding(), parentTopLeft.y() - (viewRect.bottom() - anchorRect.bottom()));
-        }
-    } else if (!canFitRight && (preferRight || placementDefault)) {
-        if (canFitLeft) {
-            moveLeft();
-        } else {
-            // move to the bottom of the parent and move to left to an area that doesn't fit
-            movePos(m_globalPos.x() - (viewRect.right() - anchorRect.right()) + padding(), parentTopLeft.y() + parent->height());
-        }
+    } else if (!canFitBelow && canFitAbove && (preferBelow || placementDefault)) {
+        moveAbove();
+    } else if (!canFitAbove && canFitBelow && (preferAbove || placementDefault)) {
+        moveBelow();
+    } else if (!canFitLeft && canFitRight && preferLeft) {
+        moveRight();
+    } else if (!canFitRight && canFitLeft && preferRight) {
+        moveLeft();
+    } else {
+        // move to the right of the parent and move to top to an area that doesn't fit
+        movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()) + padding());
+        setPopupPosition(PopupPosition::Right);
     }
 
     if (viewRect.left() < anchorRect.left()) {
