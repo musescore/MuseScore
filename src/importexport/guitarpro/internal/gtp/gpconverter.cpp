@@ -262,6 +262,7 @@ const std::unique_ptr<GPDomModel>& GPConverter::gpDom() const
 
 void GPConverter::convertGP()
 {
+    m_capos.clear();
     setUpGPScore(_gpDom->score());
     setUpTracks(_gpDom->tracks());
     collectTempoMap(_gpDom->masterTracks());
@@ -349,6 +350,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 
     addFermatas();
     addContinuousSlideHammerOn();
+    addCapos();
 }
 
 void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
@@ -758,33 +760,6 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
             }
             Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
             s->add(t);
-
-            /// adding "Capo fret" text
-            // TODO-gp: settings if we need to show capo
-            if (m_showCapo && !m_hasCapo[curTrack]) {
-                Fraction fr = { 0, 1 };
-                int capo = staff->capo(fr).fretPosition;
-
-                if (capo != 0 && !engravingConfiguration()->guitarProImportExperimental()) {
-//                    StaffText* st = Factory::createStaffText(s);
-//                    st->setTrack(curTrack);
-//                    String capoText = String(u"Capo fret %1").arg(capo);
-//                    st->setPlainText(muse::mtrc("iex_guitarpro", capoText));
-//                    s->add(st);
-                    m_hasCapo[curTrack] = true;
-                    Capo* newCapo = Factory::createCapo(s);
-
-                    CapoParams params;
-                    params.active = capo > 0;
-                    params.fretPosition = capo;
-
-                    newCapo->setTrack(curTrack);
-                    newCapo->setParams(params);
-                    newCapo->setProperty(Pid::PLACEMENT, PlacementV::ABOVE);
-
-                    s->add(newCapo);
-                }
-            }
         }
     }
 }
@@ -1174,14 +1149,8 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         auto staffProperty = tR->staffProperty();
 
         int capoFret = staffProperty[0].capoFret;
+        m_capos.insert_or_assign(idx, capoFret);
 
-        // TODO: Import capos
-//        CapoParams params;
-//        params.active = true;
-//        params.fretPosition = capoFret;
-
-//        part->staff(0)->insertCapoParams({ 0, 1 }, params);
-//        part->setCapoFret(capoFret);
         auto tunning = staffProperty[0].tunning;
         bool usePresetTable = staffProperty[0].ignoreFlats;
 
@@ -2998,5 +2967,34 @@ void GPConverter::setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measur
 
     cr->setBeamMode(m_previousBeamMode);
     m_previousBeamMode = beamMode;
+}
+
+void GPConverter::addCapos()
+{
+    Measure* fm = _score->firstMeasure();
+    if (!fm) {
+        return;
+    }
+    auto s = fm->getSegment(mu::engraving::SegmentType::ChordRest, Fraction{ 0, 1 });
+
+    for (Staff* staff : _score->staves()) {
+        for (const auto [partId, capoFret] : m_capos) {
+            if ((muse::ID)partId == staff->part()->id()) {
+                Capo* newCapo = Factory::createCapo(s);
+
+                CapoParams params;
+                params.capoTransposeState = std::make_shared<CapoTransposeStatePlaybackOnly>(capoFret);
+                params.active = true;
+                params.fretPosition = capoFret;
+                track_idx_t curTrack  = staff->idx() * VOICES;
+                newCapo->setTrack(curTrack);
+                newCapo->setParams(params);
+                newCapo->setProperty(Pid::PLACEMENT, PlacementV::ABOVE);
+
+                s->add(newCapo);
+            }
+        }
+    }
+
 }
 } // namespace mu::iex::guitarpro
