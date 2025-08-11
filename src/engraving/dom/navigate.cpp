@@ -895,6 +895,7 @@ EngravingItem* Score::nextElement()
             staffId = 0;             // otherwise it will equal -1, which breaks the navigation
             break;
         }
+        // TODO: case ElementType::STAFF_VISIBILITY_INDICATOR:
         case ElementType::SYSTEM_LOCK_INDICATOR:
         {
             staffId = 0;
@@ -1148,6 +1149,7 @@ EngravingItem* Score::prevElement()
             staffId = 0;             // otherwise it will equal -1, which breaks the navigation
             break;
         }
+        // TODO: case ElementType::STAFF_VISIBILITY_INDICATOR:
         case ElementType::SYSTEM_LOCK_INDICATOR:
         {
             staffId = 0;

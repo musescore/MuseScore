@@ -254,6 +254,8 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
 
 void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
 {
+    // TODO: layout StaffVisibilityIndicator here
+
     system->deleteLockIndicators();
 
     std::vector<const SystemLock*> systemLocks = system->score()->systemLocks()->allLocks();
@@ -261,7 +263,7 @@ void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
         SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
         lockIndicator->setParent(system);
         system->addLockIndicator(lockIndicator);
-        TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
+        TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
     }
 }
 

@@ -82,6 +82,7 @@
 #include "view/internal/stringtuningssettingsmodel.h"
 #include "view/internal/dynamicpopupmodel.h"
 #include "view/internal/partialtiepopupmodel.h"
+#include "view/internal/staffvisibilitypopupmodel.h"
 
 #include "view/internal/shadownotepopupmodel.h"
 #include "view/internal/percussionnotepopupcontentmodel.h"
@@ -219,6 +220,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<StringTuningsSettingsModel>("MuseScore.NotationScene", 1, 0, "StringTuningsSettingsModel");
     qmlRegisterType<DynamicPopupModel>("MuseScore.NotationScene", 1, 0, "DynamicPopupModel");
     qmlRegisterType<PartialTiePopupModel>("MuseScore.NotationScene", 1, 0, "PartialTiePopupModel");
+    qmlRegisterType<StaffVisibilityPopupModel>("MuseScore.NotationScene", 1, 0, "StaffVisibilityPopupModel");
+    qmlRegisterType<EmptyStavesVisibilityModel>("MuseScore.NotationScene", 1, 0, "EmptyStavesVisibilityModel");
 
     qmlRegisterUncreatableType<ShadowNotePopupContent>("MuseScore.NotationScene", 1, 0, "ShadowNotePopupContent", "Cannot create");
     qmlRegisterType<ShadowNotePopupModel>("MuseScore.NotationScene", 1, 0, "ShadowNotePopupModel");

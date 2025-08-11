@@ -4926,6 +4926,16 @@ void Score::cmdToggleHideEmpty()
     undoChangeStyleVal(Sid::hideEmptyStaves, val);
 }
 
+void Score::cmdSetHideStaffIfEmptyOverride(staff_idx_t staffIdx, System* system, engraving::AutoOnOff value)
+{
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        undo(new ChangeMStaffHideIfEmpty(engraving::toMeasure(mb), staffIdx, value));
+    }
+}
+
 //---------------------------------------------------------
 //   cmdSetVisible
 //---------------------------------------------------------

@@ -105,7 +105,7 @@ BasicTableView {
         onCollapsed: function (index) { root.collapsed(index) }
     }
 
-    __itemDelegateLoader: TreeViewItemDelegateLoader {
+    __itemDelegateLoader: LegacyTreeViewItemDelegateLoader {
         __style: root.__style
         __itemDelegate: root.itemDelegate
         __mouseArea: mouseArea
