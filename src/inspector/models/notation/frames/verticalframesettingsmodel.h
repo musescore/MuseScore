@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_VERTICALFRAMESETTINGSMODEL_H
-#define MU_INSPECTOR_VERTICALFRAMESETTINGSMODEL_H
+#pragma once
 
 #include "models/abstractinspectormodel.h"
+
+#include "engraving/dom/property.h"
 
 namespace mu::inspector {
 class VerticalFrameSettingsModel : public AbstractInspectorModel
@@ -56,6 +57,8 @@ public:
 
 private:
     void createProperties() override;
+    void onFrameHeightSet(const mu::engraving::Pid pid, const QVariant& newValue);
+    void onFrameHeightReset(const mu::engraving::Pid pid);
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
@@ -76,5 +79,3 @@ private:
     PropertyItem* m_paddingToNotationBelow = nullptr;
 };
 }
-
-#endif // MU_INSPECTOR_VERTICALFRAMESETTINGSMODEL_H
