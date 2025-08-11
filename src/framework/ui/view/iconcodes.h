@@ -508,11 +508,13 @@ public:
         HP_LOWER_CASE = 0xF49E,
         HP_UPPER_CASE = 0xF49F,
 
+        MUSESCORE_COM_LOGO = 0xF4A0,
+        AUDIO_COM_LOGO = 0xF4A2,
+
         TUPLET_GRAPHICAL_CENTER = 0xF4AC,
         TUPLET_RYTHMIC_CENTER = 0xF4AD,
 
-        MUSESCORE_COM_LOGO = 0xF4A0,
-        AUDIO_COM_LOGO = 0xF4A2,
+        EYE_OPEN_THICK = 0xF4AE,
 
         NONE = 0xFFFF
     };
