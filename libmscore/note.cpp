@@ -2675,7 +2675,7 @@ void Note::verticalDrag(EditData &ed)
             for (Note* nn : tiedNotes()) {
                   nn->setPitch(newPitch, newTpc1, newTpc2);
                   nn->triggerLayout();
-                  for (ScoreElement* se : nn->linkList()) {
+                  for (ScoreElement*& se : nn->linkList()) {
                         Note* ln = toNote(se);
                         ln->setPitch(newPitch, newTpc1, newTpc2);
                         }
