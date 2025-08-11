@@ -64,7 +64,7 @@ jobs:
   create_release:
     name: 'Create release: ${{ needs.plan.outputs.tag_name }}'
     needs:
-      - get_tag_info # to access outputs
+      - plan # to access outputs
     if: ${{ ! failure() && ! cancelled() && inputs.create_tag }} # run even if prior jobs were skipped
     runs-on: ubuntu-latest
     environment:
