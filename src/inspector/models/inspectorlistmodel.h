@@ -88,6 +88,8 @@ private:
     IElementRepositoryService* m_repository = nullptr;
 
     bool m_inspectorVisible = true;
+    mu::engraving::PropertyIdSet m_changedPropertyIdSet;
+    mu::engraving::StyleIdSet m_changedStyleIdSet;
 };
 }
 

@@ -174,6 +174,13 @@ void InspectorListModel::setInspectorVisible(bool visible)
 
     if (visible) {
         updateElementList();
+
+        if (!m_changedPropertyIdSet.empty() || !m_changedStyleIdSet.empty()) {
+            onScoreChanged(m_changedPropertyIdSet, m_changedStyleIdSet);
+
+            m_changedPropertyIdSet.clear();
+            m_changedStyleIdSet.clear();
+        }
     }
 }
 
@@ -371,6 +378,12 @@ void InspectorListModel::listenScoreChanges()
         }
 
         if (changes.changedPropertyIdSet.empty() && changes.changedStyleIdSet.empty()) {
+            return;
+        }
+
+        if (!m_inspectorVisible) {
+            m_changedPropertyIdSet.insert(changes.changedPropertyIdSet.cbegin(), changes.changedPropertyIdSet.cend());
+            m_changedStyleIdSet.insert(changes.changedStyleIdSet.cbegin(), changes.changedStyleIdSet.cend());
             return;
         }
 
