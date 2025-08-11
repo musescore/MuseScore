@@ -40,8 +40,8 @@
 #include "system.h"
 #include "undo.h"
 
+#include "rw/harmonytodiagramreader.h"
 #include "rw/read460/tread.h"
-#include "rw/read460/harmonytodiagramreader.h"
 
 #include "log.h"
 
@@ -1392,9 +1392,8 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) con
 
     XmlReader reader(&file);
 
-    std::unordered_map<String,
-                       read460::HarmonyToDiagramReader::FretDiagramInfo> harmonyToDiagramMap
-        = read460::HarmonyToDiagramReader::read(reader);
+    std::unordered_map<String, rw::HarmonyToDiagramReader::FretDiagramInfo> harmonyToDiagramMap
+        = rw::HarmonyToDiagramReader::read(reader);
 
     const ChordList* chordList = score()->chordList();
     const NoteSpellingType spellingType = NoteSpellingType::STANDARD;

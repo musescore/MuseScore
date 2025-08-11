@@ -530,15 +530,15 @@ static void readFingering114(XmlReader& e, Fingering* fing)
 
 static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
 {
-    ctx.hasAccidental = false;                       // used for userAccidental backward compatibility
+    bool hasAccidental = false; // used for userAccidental backward compatibility
 
     note->setTpc1(Tpc::TPC_INVALID);
     note->setTpc2(Tpc::TPC_INVALID);
 
-    if (e.hasAttribute("pitch")) {                   // obsolete
+    if (e.hasAttribute("pitch")) { // obsolete
         note->setPitch(e.intAttribute("pitch"));
     }
-    if (e.hasAttribute("tpc")) {                     // obsolete
+    if (e.hasAttribute("tpc")) { // obsolete
         note->setTpc1(e.intAttribute("tpc"));
     }
 
@@ -548,8 +548,8 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             // on older scores, a note could have both a <userAccidental> tag and an <Accidental> tag
             // if a userAccidental has some other property set (like for instance offset)
             Accidental* a;
-            if (ctx.hasAccidental) {                // if the other tag has already been read,
-                a = note->accidental();                // re-use the accidental it constructed
+            if (hasAccidental) { // if the other tag has already been read,
+                a = note->accidental(); // re-use the accidental it constructed
             } else {
                 a = Factory::createAccidental(note);
             }
@@ -557,10 +557,10 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             // track it belongs to (??)
             a->setTrack(note->track());
             readAccidental(a, e, ctx);
-            if (!ctx.hasAccidental) {              // only the new accidental, if it has been added previously
+            if (!hasAccidental) { // only the new accidental, if it has been added previously
                 note->add(a);
             }
-            ctx.hasAccidental = true;         // we now have an accidental
+            hasAccidental = true; // we now have an accidental
         } else if (tag == "Text") {
             Fingering* f = Factory::createFingering(note);
             readFingering114(e, f);
@@ -598,7 +598,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
                 // if a userAccidental has some other property set (like for instance offset)
                 // only construct a new accidental, if the other tag has not been read yet
                 // (<userAccidental> tag is only used in older scores: no need to check the score mscVersion)
-                if (!ctx.hasAccidental) {
+                if (!hasAccidental) {
                     Accidental* a = Factory::createAccidental(note);
                     note->add(a);
                 }
@@ -628,10 +628,10 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
                     break;
                 case 9: at = AccidentalType::MIRRORED_FLAT;
                     break;
-                case 10: at = AccidentalType::NONE;
-                    break;                                               // AccidentalType::MIRRORED_FLAT_SLASH
-                case 11: at = AccidentalType::NONE;
-                    break;                                               // AccidentalType::FLAT_FLAT_SLASH
+                case 10: at = AccidentalType::NONE; // AccidentalType::MIRRORED_FLAT_SLASH
+                    break;
+                case 11: at = AccidentalType::NONE; // AccidentalType::FLAT_FLAT_SLASH
+                    break;
 
                 case 12: at = AccidentalType::SHARP_SLASH;
                     break;
@@ -646,20 +646,20 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
                     break;
                 case 17: at = AccidentalType::SHARP_ARROW_DOWN;
                     break;
-                case 18: at = AccidentalType::NONE;
-                    break;                                               // AccidentalType::SHARP_ARROW_BOTH
+                case 18: at = AccidentalType::NONE; // AccidentalType::SHARP_ARROW_BOTH
+                    break;
                 case 19: at = AccidentalType::FLAT_ARROW_UP;
                     break;
                 case 20: at = AccidentalType::FLAT_ARROW_DOWN;
                     break;
-                case 21: at = AccidentalType::NONE;
-                    break;                                               // AccidentalType::FLAT_ARROW_BOTH
+                case 21: at = AccidentalType::NONE; // AccidentalType::FLAT_ARROW_BOTH
+                    break;
                 case 22: at = AccidentalType::NATURAL_ARROW_UP;
                     break;
                 case 23: at = AccidentalType::NATURAL_ARROW_DOWN;
                     break;
-                case 24: at = AccidentalType::NONE;
-                    break;                                               // AccidentalType::NATURAL_ARROW_BOTH
+                case 24: at = AccidentalType::NONE; // AccidentalType::NATURAL_ARROW_BOTH
+                    break;
                 case 25: at = AccidentalType::SORI;
                     break;
                 case 26: at = AccidentalType::KORON;
@@ -670,10 +670,10 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
                 note->accidental()->setBracket(AccidentalBracket(bracket));
 
                 note->accidental()->setRole(AccidentalRole::USER);
-                ctx.hasAccidental = true;           // we now have an accidental
+                hasAccidental = true; // we now have an accidental
             }
         } else if (tag == "offset") {
-            e.skipCurrentElement();       // ignore manual layout in older scores
+            e.skipCurrentElement(); // ignore manual layout in older scores
         } else if (tag == "move") {
             note->chord()->setStaffMove(e.readInt());
         } else if (tag == "head") {
