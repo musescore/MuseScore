@@ -44,8 +44,11 @@ InspectorListModel::InspectorListModel(QObject* parent)
     m_repository = new ElementRepositoryService(this);
 
     listenSelectionChanged();
+    listenScoreChanges();
+
     context()->currentNotationChanged().onNotify(this, [this]() {
         listenSelectionChanged();
+        listenScoreChanges();
 
         notifyModelsAboutNotationChanged();
     });
@@ -347,6 +350,46 @@ void InspectorListModel::listenSelectionChanged()
     notation->interaction()->selectionChanged().onNotify(this, [this]() {
         updateElementList();
     });
+}
+
+void InspectorListModel::listenScoreChanges()
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->viewModeChanged().onNotify(this, [this]() {
+        for (AbstractInspectorModel* model : m_modelList) {
+            model->onNotationChanged({}, {});
+        }
+    });
+
+    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+        if (changes.isTextEditing) {
+            return;
+        }
+
+        if (changes.changedPropertyIdSet.empty() && changes.changedStyleIdSet.empty()) {
+            return;
+        }
+
+        onScoreChanged(changes.changedPropertyIdSet, changes.changedStyleIdSet);
+    });
+}
+
+void InspectorListModel::onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                                        const mu::engraving::StyleIdSet& changedStyleIdSet)
+{
+    for (AbstractInspectorModel* model : m_modelList) {
+        if (!model->shouldUpdateOnScoreChange() || model->isEmpty()) {
+            continue;
+        }
+
+        mu::engraving::PropertyIdSet expandedPropertyIdSet = model->propertyIdSetFromStyleIdSet(changedStyleIdSet);
+        expandedPropertyIdSet.insert(changedPropertyIdSet.cbegin(), changedPropertyIdSet.cend());
+        model->onNotationChanged(expandedPropertyIdSet, changedStyleIdSet);
+    }
 }
 
 void InspectorListModel::updateElementList()

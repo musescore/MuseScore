@@ -59,8 +59,6 @@ void MeasuresSettingsModel::onCurrentNotationChanged()
 
         onNotationChanged({}, {});
     });
-
-    AbstractInspectorModel::onCurrentNotationChanged();
 }
 
 void MeasuresSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet&)

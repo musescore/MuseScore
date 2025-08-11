@@ -55,6 +55,10 @@ private:
     };
 
     void listenSelectionChanged();
+    void listenScoreChanges();
+
+    void onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet, const mu::engraving::StyleIdSet& changedStyleIdSet);
+
     void updateElementList();
 
     bool alwaysUpdateModelList(const QList<mu::engraving::EngravingItem*>& selectedElementList);
