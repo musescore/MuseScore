@@ -1929,6 +1929,27 @@ void InsertRemoveMeasures::removeMeasures()
       Fraction tick1 = fm->tick();
       Fraction tick2 = lm->endTick();
 
+      if (fm->isMeasure() && lm->isMeasure()) {
+            // remove beams from chordrests in affected area, they will be rebuilt later but we need
+            // to avoid situations where notes from deleted measures remain in beams
+            // when undoing, we need to check the previous measure as well as there could be notes in there
+            // that need to have their beams recalculated (esp. when adding time signature)
+            MeasureBase* prev = fm->prev();
+            Segment* first = toMeasure(prev && prev->isMeasure() ? prev : fm)->first();
+            for (Segment* s = first; s && s != toMeasure(lm)->last(); s = s->next1()) {
+                  if (!s)
+                        break;
+                  if (!s->isChordRestType())
+                        continue;
+
+                  for (int track = 0; track < score->ntracks(); ++track) {
+                        Element* e = s->element(track);
+                        if (e && e->isChordRest())
+                              toChordRest(e)->removeDeleteBeam(false);
+                        }
+                  }
+            }
+
       QList<System*> systemList;
       for (MeasureBase* mb = lm;; mb = mb->prev()) {
             System* system = mb->system();
@@ -1941,10 +1962,54 @@ void InsertRemoveMeasures::removeMeasures()
             if (mb == fm)
                   break;
             }
+
+      // move subsequent StaffTypeChanges
+      #if 0 // unimplemented
+      if (moveStc) {
+            for (Staff* staff : score->staves()) {
+                  Fraction tickStart = tick1;
+                  Fraction tickEnd = tick2;
+
+                  // loop trhu, until the last one
+                  auto stRange = staff->staffTypeRange(tickEnd);
+                  int moveTick = stRange.first == tickEnd.ticks() ? stRange.first : stRange.second;
+
+                  while (moveTick != -1) {
+                        Fraction tick = Fraction::fromTicks(moveTick);
+                        Fraction newTick = tick + tickStart - tickEnd;
+
+                        Measure* measure = score->tick2measure(tick);
+                        bool stIcon = false;
+
+                        staff->moveStaffType(tick, newTick);
+
+                        for (EngravingItem* el : measure->el()) {
+                              if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES) {
+                                    StaffTypeChange* stc = toStaffTypeChange(el);
+                                    stc->setStaffType(staff->staffType(newTick), false);
+                                    stIcon = true;
+                                    break;
+                                    }
+                              }
+
+                        if (!stIcon) {
+                              LOG_UNDO() << "StaffTypeChange icon is missing in measure " << measure->no();
+                              }
+
+                        stRange = staff->staffTypeRange(tick);
+                        moveTick = stRange.second;
+                        }
+                  }
+            }
+      #endif
+
       score->measures()->remove(fm, lm);
 
-      score->fixTicks();
       if (fm->isMeasure()) {
+            #if 0 // unimplemented
+            score->setUpTempoMap();
+            score->rebuildTempoAndTimeSigMaps(fm); // alternative?
+            #endif
             score->setPlaylistDirty();
 
             // check if there is a clef at the end of last measure
@@ -1965,19 +2030,19 @@ void InsertRemoveMeasures::removeMeasures()
             // remember clefs at the end of previous measure
             const auto clefs = getCourtesyClefs(toMeasure(fm));
 
-            if (score->firstMeasure())
-                  score->insertTime(tick1, -(tick2 - tick1));
+            score->insertTime(tick1, -(tick2 - tick1));
 
             // Restore clefs that were backed up. Events for them could be lost
             // as a result of the recent insertTime() call.
             for (Clef* clef : clefs)
                   clef->staff()->setClef(clef);
 
-            for (Spanner* sp : score->unmanagedSpanners()) {
-                  if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2))
+            std::set<Spanner*> spannersCopy = score->unmanagedSpanners();
+            for (Spanner* sp : spannersCopy) {
+                  if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2)) {
                         sp->removeUnmanaged();
+                        }
                   }
-            score->connectTies(true);   // ??
             }
 
       // remove empty systems

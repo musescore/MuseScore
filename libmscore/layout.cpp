@@ -1512,100 +1512,94 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
 
 void Score::connectTies(bool silent)
       {
-      int tracks = nstaves() * VOICES;
-      Measure* m = firstMeasure();
+      const int tracks = nstaves() * VOICES;
+      const Measure* m = firstMeasure();
       if (!m)
             return;
 
-      SegmentType st = SegmentType::ChordRest;
-      for (Segment* s = m->first(st); s; s = s->next1(st)) {
-            for (int i = 0; i < tracks; ++i) {
-                  Element* e = s->element(i);
-                  if (e == 0 || !e->isChord())
-                        continue;
-                  Chord* c = toChord(e);
-                  for (Note* n : c->notes()) {
-                        // connect a tie without end note
-                        Tie* tie = n->tieFor();
-                        if (tie && !tie->endNote()) {
-                              Note* nnote;
-                              if (_mscVersion <= 114)
-                                    nnote = searchTieNote114(n);
-                              else
-                                    nnote = searchTieNote(n);
-                              if (nnote == 0) {
-                                    if (!silent) {
-                                          qDebug("next note at %d track %d for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
-                                          delete tie;
-                                          n->setTieFor(0);
-                                          }
+      //---------------------------------------------------------
+      //    lambda: connectTiesForChord
+      //---------------------------------------------------------
+      auto connectTiesForChord = [silent](Chord* c, Segment* s, int track) -> void {
+            for (Note* n : c->notes()) {
+                  // Laissez Vibre not implemented
+                  // if (n->laissezVib()) {
+                  //       continue;
+                  //       }
+
+                  // connect a tie without end note
+                  Tie* tie = n->tieFor();
+
+                  // Unimplemented:
+                  // if (tie) {
+                  //       tie->updatePossibleJumpPoints();
+                  //       }
+
+                  if (tie && /*!tie->isPartialTie() && */ !tie->endNote()) {
+                        Note* nnote;
+                        nnote = searchTieNote(n);
+                        if (!nnote) {
+                              if (!silent) {
+                                    qDebug("next note at %d track %d for tie not found", s->tick().ticks(), track);
+                                    delete tie;
+                                    n->setTieFor(nullptr);
+                                    }
+                              }
+                        else {
+                              tie->setEndNote(nnote);
+                              nnote->setTieBack(tie);
+                              }
+                        }
+                  // connect a glissando without initial note (old glissando format)
+                  for (Spanner* spanner : n->spannerBack()) {
+                        if (spanner->isGlissando() && !spanner->startElement()) {
+                              Note* initialNote = Glissando::guessInitialNote(n->chord());
+                              n->removeSpannerBack(spanner);
+                              if (initialNote) {
+                                    spanner->setStartElement(initialNote);
+                                    spanner->setEndElement(n);
+                                    spanner->setTick(initialNote->chord()->tick());
+                                    spanner->setTick2(n->chord()->tick());
+                                    spanner->setTrack(n->track());
+                                    spanner->setTrack2(n->track());
+                                    spanner->setParent(initialNote);
+                                    initialNote->add(spanner);
                                     }
                               else {
-                                    tie->setEndNote(nnote);
-                                    nnote->setTieBack(tie);
-                                    }
-                              }
-                        // connect a glissando without initial note (old glissando format)
-                        for (Spanner* spanner : n->spannerBack()) {
-                              if (spanner->isGlissando() && !spanner->startElement()) {
-                                    Note* initialNote = Glissando::guessInitialNote(n->chord());
-                                    n->removeSpannerBack(spanner);
-                                    if (initialNote) {
-                                          spanner->setStartElement(initialNote);
-                                          spanner->setEndElement(n);
-                                          spanner->setTick(initialNote->chord()->tick());
-                                          spanner->setTick2(n->chord()->tick());
-                                          spanner->setTrack(n->track());
-                                          spanner->setTrack2(n->track());
-                                          spanner->setParent(initialNote);
-                                          initialNote->add(spanner);
-                                          }
-                                    else {
-                                          delete spanner;
-                                          }
-                                    }
-                              }
-                        // spanner with no end element can happen during copy/paste
-                        for (Spanner* spanner : n->spannerFor()) {
-                              if (spanner->endElement() == nullptr) {
-                                    n->removeSpannerFor(spanner);
                                     delete spanner;
                                     }
                               }
                         }
-#if 0    // chords are set in tremolo->layout()
-                  // connect two note tremolos
-                  Tremolo* tremolo = c->tremolo();
-                  if (tremolo && tremolo->twoNotes() && !tremolo->chord2()) {
-                        for (Segment* ls = s->next1(st); ls; ls = ls->next1(st)) {
-                              Element* element = ls->element(i);
-                              if (!element)
-                                    continue;
-                              if (!element->isChord())
-                                    qDebug("cannot connect tremolo");
-                              else {
-                                    Chord* nc = toChord(element);
-                                    nc->setTremolo(tremolo);
-                                    tremolo->setChords(c, nc);
-                                    // cross-measure tremolos are not supported
-                                    // but can accidentally result from copy & paste
-                                    // remove them now
-                                    if (c->measure() != nc->measure())
-                                          c->remove(tremolo);
-                                    }
-                              break;
+
+                  // spanner with no end element can happen during copy/paste
+                  for (Spanner* spanner : n->spannerFor()) {
+                        if (spanner->endElement() == nullptr) {
+                              n->removeSpannerFor(spanner);
+                              delete spanner;
                               }
                         }
-#endif
-                  for (Chord* gc : qAsConst(c->graceNotes())) {
+                  }
+            };
+
+      SegmentType st = SegmentType::ChordRest;
+      for (Segment* s = m->first(st); s; s = s->next1(st)) {
+            for (int track = 0; track < tracks; ++track) {
+                  Element* e = s->element(track);
+                  if (e == 0 || !e->isChord()) {
+                        continue;
+                        }
+                  Chord* c = toChord(e);
+                  connectTiesForChord(c, s, track);
+                  for (Chord* gc : c->graceNotes()) {
+                        connectTiesForChord(gc, s, track);
                         for (Note* n : gc->notes()) {
                               // spanner with no end element apparently happens when reading some 206 files
                               // (and possibly in other situations too)
                               for (Spanner* spanner : n->spannerFor()) {
-                                   if (spanner->endElement() == nullptr) {
-                                         n->removeSpannerFor(spanner);
-                                         delete spanner;
-                                         }
+                                    if (spanner->endElement() == nullptr) {
+                                          n->removeSpannerFor(spanner);
+                                          delete spanner;
+                                          }
                                     }
                               }
                         }

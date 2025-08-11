@@ -5418,6 +5418,16 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
       for (Segment* s = m1->first(); s != m2->last(); s = s->next1()) {
             if (!s->isChordRestType())
                   continue;
+
+            // Make sure annotations are removed once, even if this segment contains linked copies of the same annotation
+            // (the linked copy would be removed by undoRemoveElement)
+            while (!s->annotations().empty()) {
+                  Element* annotation = s->annotations().front();
+                  if (!annotation)
+                        continue;
+                  undoRemoveElement(annotation);
+                  }
+
             for (int track = 0; track < ntracks(); ++track) {
                   Element* e = s->element(track);
                   if (!e || !e->isChord())
