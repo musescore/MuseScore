@@ -1776,3 +1776,104 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
 
     return result;
 }
+
+//---------------------------------------------------------
+//   createLinkedTabs
+//---------------------------------------------------------
+
+void Excerpt::createLinkedTabs(MasterScore* score)
+{
+    // store map of all initial spanners
+    std::unordered_map<staff_idx_t, std::vector<Spanner*> > spanners;
+    // for moving initial spanner to new index
+    std::unordered_map<staff_idx_t, staff_idx_t> indexMapping;
+    std::set<staff_idx_t> staffIndexesToCopy;
+    constexpr size_t stavesInPart = 2;
+
+    for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+        Spanner* s = it->second;
+        spanners[s->staffIdx()].push_back(s);
+    }
+
+    size_t curStaffIdx = 0;
+    size_t stavesOperated = 0;
+
+    // creating linked staves and recalculating spanners indexes
+    for (size_t partNum = 0; partNum < score->parts().size(); partNum++) {
+        Part* part = score->parts()[partNum];
+        Fraction fr = Fraction(0, 1);
+        size_t lines = part->instrument()->stringData()->strings();
+        size_t stavesNum = part->nstaves();
+
+        if (stavesNum != 1) {
+            for (size_t i = 0; i < stavesNum; i++) {
+                indexMapping[curStaffIdx] = stavesOperated + i;
+                curStaffIdx++;
+            }
+
+            stavesOperated += stavesNum;
+            continue;
+        }
+
+        bool needsTabStaff = !part->staff(0)->isDrumStaff(fr);
+
+        if (needsTabStaff) {
+            part->setStaves(static_cast<int>(stavesInPart));
+
+            Staff* srcStaff = part->staff(0);
+            Staff* dstStaff = part->staff(1);
+            cloneStaff(srcStaff, dstStaff, false);
+
+            static const std::vector<StaffTypes> types {
+                StaffTypes::TAB_4SIMPLE,
+                StaffTypes::TAB_5SIMPLE,
+                StaffTypes::TAB_6SIMPLE,
+                StaffTypes::TAB_7SIMPLE,
+                StaffTypes::TAB_8SIMPLE,
+                StaffTypes::TAB_9SIMPLE,
+                StaffTypes::TAB_10SIMPLE,
+            };
+
+            size_t index = (lines >= 4 && lines <= 10) ? lines - 4 : 2;
+
+            dstStaff->setStaffType(fr, *StaffType::preset(types.at(index)));
+            dstStaff->setLines(fr, static_cast<int>(lines));
+
+            staffIndexesToCopy.insert(curStaffIdx);
+        }
+
+        // each spanner moves down to the staff with index,
+        // equal to number of spanners operated before it
+        indexMapping[curStaffIdx] = stavesOperated;
+        curStaffIdx++;
+
+        stavesOperated += needsTabStaff ? stavesInPart : 1;
+    }
+
+    // moving and copying spanner segments
+    for (auto& spannerMapElem : spanners) {
+        auto& spannerList = spannerMapElem.second;
+        staff_idx_t idx = spannerMapElem.first;
+        bool needsCopy = staffIndexesToCopy.find(idx) != staffIndexesToCopy.end();
+        for (Spanner* s : spannerList) {
+            /// moving
+            staff_idx_t newIdx = indexMapping[idx];
+            track_idx_t newTrackIdx = staff2track(newIdx);
+            s->setTrack(newTrackIdx);
+            s->setTrack2(newTrackIdx);
+            for (SpannerSegment* ss : s->spannerSegments()) {
+                ss->setTrack(newTrackIdx);
+            }
+
+            /// copying
+            if (needsCopy) {
+                staff_idx_t dstStaffIdx = newIdx + 1;
+
+                track_idx_t dstTrack = dstStaffIdx * VOICES + s->voice();
+                track_idx_t dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+
+                cloneSpanner(s, score, dstTrack, dstTrack2);
+            }
+        }
+    }
+}
