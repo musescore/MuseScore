@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import Qt.labs.settings 1.0
 
 import MuseScore 3.0
 import Muse.Ui
@@ -8,8 +9,7 @@ import Muse.UiComponents
 // Inspired by roblyric, by Robbie Matthews
 
 MuseScore {
-    version: "1.2" // 21 - June - 2022
-    description: qsTr("Apply lyrics in lilypond format.")
+    version: "1.3" // 11 - August - 2025 // Adds saving lyrics in the plugin's text field
     title: "Lilypond Lyrics"
     categoryCode: "lyrics"
     thumbnailName: "lilyrics.png"
@@ -32,6 +32,12 @@ MuseScore {
     property var onScreenStaves: []
     property var onScreenVoice: null
     property var onScreenVerse: null
+
+    // Added persistent lyrics saving
+    Settings {
+        id: lyricsSettings
+        property string lastLyrics: ""
+    }
 
     onRun: {}
 
@@ -89,7 +95,12 @@ MuseScore {
                     wrapMode: TextEdit.WrapAnywhere
                     textFormat: TextEdit.PlainText
                     selectByMouse: true
-                    text: ""
+                    // Patch : text saved/restored
+                    text: lyricsSettings.lastLyrics
+
+                    onTextChanged: {
+                        lyricsSettings.lastLyrics = text
+                    }
                 }
             }
         }
@@ -246,7 +257,6 @@ MuseScore {
             }
         }
 
-
         // CANCEL
         FlatButton {
             id : buttonCancel
@@ -260,7 +270,6 @@ MuseScore {
                 quit()
             }
         }
-
 
         /******************************************
         *********** Bottom bar controls ***********
@@ -391,6 +400,11 @@ MuseScore {
                 width: 36
             }
         }
+    }
+
+    // Patch : restore text when opening plugin
+    Component.onCompleted: {
+        textLily.text = lyricsSettings.lastLyrics
     }
 
     /*********************************************
