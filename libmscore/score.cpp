@@ -1873,12 +1873,12 @@ void Score::scanElementsInRange(void* data, void (*func)(void*, Element*), bool 
                         mmr->scanElements(data, func, all);
                   }
             }
-      for (Element* e : _selection.elements()) {
-            if (e->isSpanner()) {
-                  Spanner* spanner = toSpanner(e);
-                  for (SpannerSegment* ss : spanner->spannerSegments()) {
-                        ss->scanElements(data, func, all);
-                        }
+      for (const Element* e : _selection.elements()) {
+            if (!e->isSpannerSegment())
+                  continue;
+            Spanner* spanner = toSpannerSegment(e)->spanner();
+            for (SpannerSegment* ss : spanner->spannerSegments()) {
+                  ss->scanElements(data, func, all);
                   }
             }
       }
