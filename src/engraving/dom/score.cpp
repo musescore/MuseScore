@@ -6128,7 +6128,6 @@ void Score::updateCapo()
         return;
     }
 
-    std::map<staff_idx_t, std::vector<int>> map;
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
         Fraction segmentTick = s->tick();
 
@@ -6142,7 +6141,6 @@ void Score::updateCapo()
             }
 
             for (Staff* staff : e->staff()->staffList()) {
-                map[staff->idx()].emplace_back(segmentTick.ticks());
                 staff->insertCapoParams(segmentTick, toCapo(e));
             }
         }
