@@ -377,21 +377,23 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
     createMeasures(score, scoreOptions);
 
     {
-        QString title = score->metaTag(u"workTitle");
-        QString subtitle = score->metaTag(u"subtitle");
-        QString composer = score->metaTag(u"composer");
-        QString lyricist = score->metaTag(u"lyricist");
+        const QString title = score->metaTag(u"workTitle");
+        const QString subtitle = score->metaTag(u"subtitle");
+        const QString composer = score->metaTag(u"composer");
+        const QString lyricist = score->metaTag(u"lyricist");
 
         if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !lyricist.isEmpty()) {
             mu::engraving::MeasureBase* measure = score->measures()->first();
             if (measure->type() != ElementType::VBOX) {
-                mu::engraving::MeasureBase* nm = nvb ? nvb : Factory::createTitleVBox(score->dummy()->system());
-                nm->setTick(mu::engraving::Fraction(0, 1));
-                nm->setExcludeFromOtherParts(false);
-                nm->setNext(measure);
-                score->measures()->add(nm);
+                if (!nvb) {
+                    nvb = Factory::createTitleVBox(score->dummy()->system());
+                }
+                nvb->setTick(mu::engraving::Fraction(0, 1));
+                nvb->setNext(measure);
+                score->measures()->add(nvb);
             } else if (nvb) {
                 delete nvb;
+                nvb = nullptr;
             }
 
             auto setText = [score](mu::engraving::TextStyleType textItemId, const QString& text) {
@@ -420,6 +422,11 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             }
         } else if (nvb) {
             delete nvb;
+            nvb = nullptr;
+        }
+
+        if (nvb) {
+            nvb->manageExclusionFromParts(/*exclude*/ false);
         }
     }
 
