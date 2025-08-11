@@ -91,7 +91,7 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v4
     - name: Download and extract artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         path: build.artifacts
     - name: Collate release binaries
