@@ -31,6 +31,7 @@
 #include "types/string.h"
 
 #include "engraving/dom/measurebase.h"
+#include "engraving/dom/stringdata.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/iengravingconfiguration.h"
 #include "engraving/types/types.h"
@@ -314,6 +315,7 @@ protected:
     bool createTuningString(int strings, int tuning[]); // returns useFlats
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const { return nullptr; }
     void initDynamics(size_t stavesNum);
+    void addTunings();
 
 public:
     std::vector<std::string> tunings;
