@@ -43,7 +43,6 @@ class PropertyItem : public QObject
 public:
     explicit PropertyItem(const mu::engraving::Pid propertyId, QObject* parent = nullptr);
 
-    void fillValues(const QVariant& currentValue);
     void updateCurrentValue(const QVariant& currentValue);
 
     Q_INVOKABLE void resetToDefault();
@@ -72,10 +71,9 @@ signals:
     void isStyledChanged();
     void isVisibleChanged(bool isVisible);
     void isModifiedChanged(bool isModified);
-    void resetToDefaultRequested();
 
     void propertyModified(mu::engraving::Pid propertyId, QVariant newValue);
-    void propertyReset(mu::engraving::Pid propertyId);
+    void resetToDefaultRequested(mu::engraving::Pid propertyId);
     void applyToStyleRequested(mu::engraving::Sid styledId, QVariant newStyleValue);
 
 private:

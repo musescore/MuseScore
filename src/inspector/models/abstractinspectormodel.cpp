@@ -420,7 +420,7 @@ void AbstractInspectorModel::setModelType(InspectorModelType modelType)
 void AbstractInspectorModel::onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue)
 {
     setPropertyValue(m_elementList, pid, newValue);
-    updateProperties();
+    loadProperties();
 }
 
 void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid,
@@ -454,7 +454,7 @@ void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingIt
 void AbstractInspectorModel::onPropertyValueReset(const mu::engraving::Pid pid)
 {
     resetPropertyValue(m_elementList, pid);
-    updateProperties();
+    loadProperties();
 }
 
 void AbstractInspectorModel::resetPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid)
@@ -709,8 +709,8 @@ void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
     }
 
     connect(propertyItem, &PropertyItem::propertyModified, this, propertyCallback);
+    connect(propertyItem, &PropertyItem::resetToDefaultRequested, this, resetCallback);
     connect(propertyItem, &PropertyItem::applyToStyleRequested, this, styleCallback);
-    connect(propertyItem, &PropertyItem::propertyReset, this, resetCallback);
 }
 
 void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, ConvertPropertyValueFunc convertElementPropertyValueFunc)
@@ -787,7 +787,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
         propertyValue = QVariant();
     }
 
-    propertyItem->fillValues(propertyValue);
+    propertyItem->updateCurrentValue(propertyValue);
     propertyItem->setIsModified(isModified);
 }
 

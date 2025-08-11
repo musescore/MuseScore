@@ -32,13 +32,6 @@ PropertyItem::PropertyItem(const mu::engraving::Pid propertyId, QObject* parent)
     m_propertyId = propertyId;
 }
 
-void PropertyItem::fillValues(const QVariant& currentValue)
-{
-    updateCurrentValue(currentValue);
-
-    emit isModifiedChanged(isModified());
-}
-
 void PropertyItem::updateCurrentValue(const QVariant& currentValue)
 {
     if (m_currentValue == currentValue) {
@@ -53,9 +46,7 @@ void PropertyItem::updateCurrentValue(const QVariant& currentValue)
 
 void PropertyItem::resetToDefault()
 {
-    emit propertyReset(m_propertyId);
-    emit isModifiedChanged(isModified());
-    emit resetToDefaultRequested();
+    emit resetToDefaultRequested(m_propertyId);
 }
 
 void PropertyItem::applyToStyle()
