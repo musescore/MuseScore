@@ -84,7 +84,6 @@ ComboBox {
             width: comboDropdown.contentWidth
 
             normalColor: ui.theme.buttonColor
-            radius: 0
 
             isSelected: model.index === comboDropdown.currentIndex
 

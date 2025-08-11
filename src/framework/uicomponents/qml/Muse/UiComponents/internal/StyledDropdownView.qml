@@ -222,7 +222,6 @@ DropdownView {
                 width: root.contentWidth
 
                 normalColor: root.itemColor
-                radius: 0
 
                 isSelected: model.index === root.currentIndex
 
