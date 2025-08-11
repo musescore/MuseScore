@@ -374,6 +374,11 @@ void InspectorListModel::listenScoreChanges()
             return;
         }
 
+        const INotationPtr notation = context()->currentNotation();
+        if (notation && notation->elements()->msScore()->selectionChanged()) {
+            updateElementList();
+        }
+
         onScoreChanged(changes.changedPropertyIdSet, changes.changedStyleIdSet);
     });
 }
