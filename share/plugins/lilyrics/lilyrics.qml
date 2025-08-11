@@ -10,6 +10,7 @@ import Muse.UiComponents
 
 MuseScore {
     version: "1.3" // 11 - August - 2025 // Adds saving lyrics in the plugin's text field
+                                         // Display a hyphen between two syllables of the same word
     title: "Lilypond Lyrics"
     categoryCode: "lyrics"
     thumbnailName: "lilyrics.png"
@@ -616,7 +617,6 @@ MuseScore {
         onScreenVerse=spinVerse.value;
     }
 
-
     function deleteLyrics() {
         var track=(spinStaff.value-1)*4+spinVoice.value-1;
         var verse=spinVerse.value-1;
@@ -656,7 +656,6 @@ MuseScore {
         }
     }
 
-
     function pasteLyrics(s) {
         var skipTies=checkTie.checked;
         var track=(spinStaff.value-1)*4+spinVoice.value-1;
@@ -664,7 +663,10 @@ MuseScore {
         var placement=comboPos.currentIndex;
         var spaceString="--SPACE--";
         var sinalefa=sinalefas[comboElision.currentIndex];
-        //var s = textLily.text;
+
+        // Makes the hyphen between words visible
+        s = s.replace(/([^\s-]+)-([^\s-]+)/g, "$1 - $2");
+
         var spaces=findSpaces(s);
         var linkDictionary = {};
         s=s.trim();
@@ -698,6 +700,14 @@ MuseScore {
                 var syl=Lyrics.SINGLE;
                 if (index<list.length) w=list[index];
                 if (w==spaceString) w=" ";
+
+                // Management of the hyphen for syllabic liaison
+                if (index > 0 && list[index - 1] == "-") {
+                    syl = Lyrics.END;
+                } else if (index + 1 < list.length && list[index + 1] == "-") {
+                    syl = Lyrics.BEGIN;
+                }
+
                 if (index+1<list.length && list[index+1]=="--") {
                     insideMelisma=false;
                     if (insideWord) syl=Lyrics.MIDDLE;
@@ -807,8 +817,6 @@ MuseScore {
         curScore.selection.clear();
     }
 
-
-
     /********** Functions on condensed format **********/
 
     function condenseLyrics(s) {
@@ -881,6 +889,4 @@ MuseScore {
         s=s.trim();
         return s;
     }
-
 }
-
