@@ -23,18 +23,22 @@
 
 #include "io/file.h"
 
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::guitarpro {
 extern mu::engraving::Err importGTP(mu::engraving::MasterScore*, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx,
-                                    bool createLinkedTabForce = false, bool experimental = false);
+                                    bool experimental = false);
 
 muse::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options&)
 {
     muse::io::File file(path);
-    mu::engraving::Err err = importGTP(score, &file, iocContext(), guitarProConfiguration()->linkedTabStaffCreated(),
-                                       guitarProConfiguration()->experimental());
+    mu::engraving::Err err = importGTP(score, &file, iocContext(), guitarProConfiguration()->experimental());
+
+    if (guitarProConfiguration()->linkedTabStaffCreated()) {
+        engraving::Excerpt::createLinkedTabs(score);
+    }
 
     muse::io::File styleFile(":/engraving/styles/gp-style.mss");
     score->loadStyle(styleFile);
