@@ -108,6 +108,8 @@ public:
     //! TODO Change KeyboardModifiers to modes
     virtual bool startDropSingle(const QByteArray& edata) = 0;
     virtual bool startDropRange(const QByteArray& data) = 0;
+    virtual bool startDropRange(const Fraction& sourceTick, const Fraction& tickLength, engraving::staff_idx_t sourceStaffIdx,
+                                size_t numStaves) = 0;
     virtual bool startDropImage(const QUrl& url) = 0;
     virtual bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool updateDropRange(const muse::PointF& pos) = 0;
