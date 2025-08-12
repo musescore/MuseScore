@@ -26,259 +26,363 @@
 #include "global/serialization/msgpack_forward.h"
 #include "../../audiotypes.h"
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::PlaybackStatus& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::PlaybackStatus& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::PlaybackStatus& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioResourceType& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioResourceType& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioFxCategory& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioFxCategory& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioResourceType& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioResourceType& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioFxCategory& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioFxCategory& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioResourceMeta& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioResourceMeta& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioResourceMeta& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioResourceMeta& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioFxParams& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioFxParams& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioFxParams& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioFxParams& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AuxSendParams& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AuxSendParams& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AuxSendParams& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AuxSendParams& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSourceParams& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSourceParams& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioOutputParams& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioOutputParams& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioParams& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioParams& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioSourceParams& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioSourceParams& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioOutputParams& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioOutputParams& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioParams& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioParams& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundPreset& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundPreset& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::SoundPreset& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::SoundPreset& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackType& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackType& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackFormat& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::SoundTrackType& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::SoundTrackType& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::SoundTrackFormat& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::SoundTrackFormat& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSignalVal& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioSignalVal& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioSignalVal& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::ChunkInfo& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::ChunkInfo& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::ProgressInfo& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::ProgressInfo& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::StatusInfo& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::StatusInfo& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::InputProcessingProgress::ChunkInfo& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::InputProcessingProgress::ChunkInfo& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::InputProcessingProgress::ProgressInfo& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::InputProcessingProgress::ProgressInfo& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::InputProcessingProgress::StatusInfo& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::InputProcessingProgress::StatusInfo& value);
 
 // MPE
 // PlaybackEvent
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArrangementContext& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArrangementContext& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PitchContext& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PitchContext& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArrangementPattern& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArrangementPattern& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PitchPattern& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PitchPattern& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ExpressionPattern& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ExpressionPattern& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArticulationPatternSegment& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArticulationPatternSegment& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArticulationType& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArticulationType& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArticulationMeta& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArticulationMeta& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArticulationAppliedData& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArticulationAppliedData& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ExpressionContext& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ExpressionContext& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArrangementContext& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArrangementContext& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PitchContext& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PitchContext& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArrangementPattern& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArrangementPattern& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PitchPattern& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PitchPattern& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ExpressionPattern& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ExpressionPattern& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArticulationPatternSegment& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArticulationPatternSegment& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArticulationType& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArticulationType& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArticulationMeta& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArticulationMeta& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArticulationAppliedData& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArticulationAppliedData& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ExpressionContext& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ExpressionContext& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::NoteEvent& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::NoteEvent& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::RestEvent& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::RestEvent& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::TextArticulationEvent& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::TextArticulationEvent& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SoundPresetChangeEvent& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SoundPresetChangeEvent& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SyllableEvent& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SyllableEvent& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ControllerChangeEvent& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ControllerChangeEvent& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackEvent& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackEvent& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::NoteEvent& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::NoteEvent& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::RestEvent& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::RestEvent& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::TextArticulationEvent& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::TextArticulationEvent& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::SoundPresetChangeEvent& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::SoundPresetChangeEvent& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::SyllableEvent& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::SyllableEvent& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ControllerChangeEvent& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ControllerChangeEvent& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PlaybackEvent& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PlaybackEvent& value);
 
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SoundCategory& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SoundCategory& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackSetupData& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackSetupData& value);
-void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackData& value);
-void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::SoundCategory& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::SoundCategory& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PlaybackSetupData& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PlaybackSetupData& value);
+template<typename Data>
+void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PlaybackData& value);
+template<typename Data>
+void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PlaybackData& value);
 
 #include "global/serialization/msgpack.h"
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::PlaybackStatus& value)
 {
     p.process(static_cast<int8_t>(value));
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::PlaybackStatus& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::PlaybackStatus& value)
 {
     int8_t val = 0;
     p.process(val);
     value = static_cast<muse::audio::PlaybackStatus>(val);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioResourceType& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioResourceType& value)
 {
     p.process(static_cast<int8_t>(value));
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioResourceType& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioResourceType& value)
 {
     int type = 0;
     p.process(type);
     value = static_cast<muse::audio::AudioResourceType>(type);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioFxCategory& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioFxCategory& value)
 {
     p.process(static_cast<int>(value));
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioFxCategory& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioFxCategory& value)
 {
     int cat = 0;
     p.process(cat);
     value = static_cast<muse::audio::AudioFxCategory>(cat);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioResourceMeta& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioResourceMeta& value)
 {
     p.process(value.id, value.type, value.vendor, value.attributes, value.hasNativeEditorSupport);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioResourceMeta& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioResourceMeta& value)
 {
     p.process(value.id, value.type, value.vendor, value.attributes, value.hasNativeEditorSupport);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioFxParams& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioFxParams& value)
 {
     p.process(value.categories, value.chainOrder, value.resourceMeta, value.configuration, value.active);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioFxParams& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioFxParams& value)
 {
     p.process(value.categories, value.chainOrder, value.resourceMeta, value.configuration, value.active);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AuxSendParams& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AuxSendParams& value)
 {
     p.process(value.signalAmount, value.active);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AuxSendParams& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AuxSendParams& value)
 {
     p.process(value.signalAmount, value.active);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioOutputParams& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioOutputParams& value)
 {
     p.process(value.fxChain, value.volume, value.balance,  value.auxSends, value.solo, value.muted, value.forceMute);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioOutputParams& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioOutputParams& value)
 {
     p.process(value.fxChain, value.volume, value.balance, value.auxSends, value.solo, value.muted, value.forceMute);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioParams& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioParams& value)
 {
     p.process(value.in, value.out);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioParams& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioParams& value)
 {
     p.process(value.in, value.out);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundPreset& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::SoundPreset& value)
 {
     p.process(value.code, value.name, value.isDefault, value.attributes);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundPreset& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::SoundPreset& value)
 {
     p.process(value.code, value.name, value.isDefault, value.attributes);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSourceParams& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioSourceParams& value)
 {
     p.process(value.resourceMeta, value.configuration);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSourceParams& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioSourceParams& value)
 {
     p.process(value.resourceMeta, value.configuration);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackType& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::SoundTrackType& value)
 {
     p.process(static_cast<int>(value));
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackType& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::SoundTrackType& value)
 {
     int type = 0;
     p.process(type);
     value = static_cast<muse::audio::SoundTrackType>(type);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackFormat& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::SoundTrackFormat& value)
 {
     p.process(value.type, value.sampleRate, value.samplesPerChannel, value.audioChannelsNumber, value.bitRate);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::SoundTrackFormat& value)
 {
     p.process(value.type, value.sampleRate, value.samplesPerChannel, value.audioChannelsNumber, value.bitRate);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::AudioSignalVal& value)
 {
     p.process(value.amplitude, value.pressure);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::AudioSignalVal& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::AudioSignalVal& value)
 {
     p.process(value.amplitude, value.pressure);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::ChunkInfo& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::InputProcessingProgress::ChunkInfo& value)
 {
     p.process(value.start, value.end);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::ChunkInfo& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::InputProcessingProgress::ChunkInfo& value)
 {
     p.process(value.start, value.end);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::ProgressInfo& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::InputProcessingProgress::ProgressInfo& value)
 {
     p.process(value.current, value.total);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::ProgressInfo& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::InputProcessingProgress::ProgressInfo& value)
 {
     p.process(value.current, value.total);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::StatusInfo& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::audio::InputProcessingProgress::StatusInfo& value)
 {
     p.process(static_cast<uint8_t>(value.status), value.errcode);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::StatusInfo& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::audio::InputProcessingProgress::StatusInfo& value)
 {
     uint8_t status = 0;
     p.process(status, value.errcode);
@@ -286,120 +390,142 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessi
 }
 
 // MPE
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArrangementContext& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArrangementContext& value)
 {
     p.process(value.nominalTimestamp, value.actualTimestamp, value.nominalDuration, value.actualDuration,
               value.voiceLayerIndex, value.staffLayerIndex, value.bps);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArrangementContext& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArrangementContext& value)
 {
     p.process(value.nominalTimestamp, value.actualTimestamp, value.nominalDuration, value.actualDuration,
               value.voiceLayerIndex, value.staffLayerIndex, value.bps);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PitchContext& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PitchContext& value)
 {
     p.process(value.nominalPitchLevel, value.pitchCurve);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PitchContext& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PitchContext& value)
 {
     p.process(value.nominalPitchLevel, value.pitchCurve);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArrangementPattern& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArrangementPattern& value)
 {
     p.process(value.durationFactor, value.timestampOffset);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArrangementPattern& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArrangementPattern& value)
 {
     p.process(value.durationFactor, value.timestampOffset);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PitchPattern& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PitchPattern& value)
 {
     p.process(value.pitchOffsetMap);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PitchPattern& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PitchPattern& value)
 {
     p.process(value.pitchOffsetMap);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ExpressionPattern& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ExpressionPattern& value)
 {
     p.process(value.dynamicOffsetMap);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ExpressionPattern& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ExpressionPattern& value)
 {
     p.process(value.dynamicOffsetMap);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArticulationPatternSegment& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArticulationPatternSegment& value)
 {
     p.process(value.arrangementPattern, value.pitchPattern, value.expressionPattern);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArticulationPatternSegment& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArticulationPatternSegment& value)
 {
     p.process(value.arrangementPattern, value.pitchPattern, value.expressionPattern);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArticulationType& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArticulationType& value)
 {
     p.process(static_cast<int8_t>(value));
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArticulationType& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArticulationType& value)
 {
     int8_t type = 0;
     p.process(type);
     value = static_cast<muse::mpe::ArticulationType>(type);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArticulationMeta& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArticulationMeta& value)
 {
     p.process(value.type, value.pattern, value.timestamp, value.overallDuration,
               value.overallPitchChangesRange, value.overallDynamicChangesRange);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArticulationMeta& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArticulationMeta& value)
 {
     p.process(value.type, value.pattern, value.timestamp, value.overallDuration,
               value.overallPitchChangesRange, value.overallDynamicChangesRange);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArticulationAppliedData& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ArticulationAppliedData& value)
 {
     p.process(value.meta, value.appliedPatternSegment, value.occupiedFrom, value.occupiedTo,
               value.occupiedPitchChangesRange, value.occupiedDynamicChangesRange);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ArticulationAppliedData& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ArticulationAppliedData& value)
 {
     p.process(value.meta, value.appliedPatternSegment, value.occupiedFrom, value.occupiedTo,
               value.occupiedPitchChangesRange, value.occupiedDynamicChangesRange);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ExpressionContext& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ExpressionContext& value)
 {
     p.process(value.articulations, value.nominalDynamicLevel, value.expressionCurve, value.velocityOverride);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ExpressionContext& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ExpressionContext& value)
 {
     p.process(value.articulations, value.nominalDynamicLevel, value.expressionCurve, value.velocityOverride);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::NoteEvent& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::NoteEvent& value)
 {
     p.process(value.arrangementCtx(), value.pitchCtx(), value.expressionCtx());
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::NoteEvent& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::NoteEvent& value)
 {
     muse::mpe::ArrangementContext arrCtx;
     muse::mpe::PitchContext pitchCtx;
@@ -408,61 +534,72 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::NoteEvent& valu
     value = muse::mpe::NoteEvent(std::move(arrCtx), std::move(pitchCtx), std::move(exprCtx));
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::RestEvent& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::RestEvent& value)
 {
     p.process(value.arrangementCtx());
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::RestEvent& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::RestEvent& value)
 {
     muse::mpe::ArrangementContext arrCtx;
     p.process(arrCtx);
     value = muse::mpe::RestEvent(std::move(arrCtx));
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::TextArticulationEvent& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::TextArticulationEvent& value)
 {
     p.process(value.text, value.layerIdx, value.flags);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::TextArticulationEvent& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::TextArticulationEvent& value)
 {
     p.process(value.text, value.layerIdx, value.flags);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SoundPresetChangeEvent& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::SoundPresetChangeEvent& value)
 {
     p.process(value.code, value.layerIdx);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SoundPresetChangeEvent& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::SoundPresetChangeEvent& value)
 {
     p.process(value.code, value.layerIdx);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SyllableEvent& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::SyllableEvent& value)
 {
     p.process(value.text, value.layerIdx, value.flags);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SyllableEvent& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::SyllableEvent& value)
 {
     p.process(value.text, value.layerIdx, value.flags);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ControllerChangeEvent& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::ControllerChangeEvent& value)
 {
     p.process(static_cast<int8_t>(value.type), value.val, value.layerIdx);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::ControllerChangeEvent& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::ControllerChangeEvent& value)
 {
     int8_t type = 0;
     p.process(type, value.val, value.layerIdx);
     value.type = static_cast<muse::mpe::ControllerChangeEvent::Type>(type);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackEvent& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PlaybackEvent& value)
 {
     uint8_t idx = static_cast<uint8_t>(value.index());
     p.process(idx);
@@ -501,7 +638,8 @@ inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackEvent
     }
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackEvent& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PlaybackEvent& value)
 {
     uint8_t idx = 0;
     p.process(idx);
@@ -546,36 +684,42 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackEvent& 
     }
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::SoundCategory& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::SoundCategory& value)
 {
     p.process(static_cast<int8_t>(value));
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::SoundCategory& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::SoundCategory& value)
 {
     int8_t type = 0;
     p.process(type);
     value = static_cast<muse::mpe::SoundCategory>(type);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackSetupData& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PlaybackSetupData& value)
 {
     p.process(value.id, value.category, value.subCategories,
               value.supportsSingleNoteDynamics, value.musicXmlSoundId, value.scoreId);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackSetupData& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PlaybackSetupData& value)
 {
     p.process(value.id, value.category, value.subCategories,
               value.supportsSingleNoteDynamics, value.musicXmlSoundId, value.scoreId);
 }
 
-inline void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackData& value)
+template<typename Data>
+inline void pack_custom(muse::msgpack::DataPacker<Data>& p, const muse::mpe::PlaybackData& value)
 {
     p.process(value.originEvents, value.setupData, value.dynamics);
 }
 
-inline void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& value)
+template<typename Data>
+inline void unpack_custom(muse::msgpack::DataUnPacker<Data>& p, muse::mpe::PlaybackData& value)
 {
     p.process(value.originEvents, value.setupData, value.dynamics);
 }
@@ -630,26 +774,21 @@ public:
     template<class ... Types>
     static ByteArray pack(const Options& opt, const Types&... args)
     {
-        // RpcAllocator<uint8_t> allocator;
-        // // std::vector<uint8_t, RpcAllocator<uint8_t>> data(allocator);
-        // std::vector<uint8_t> data;
-        // data.reserve(opt.rezerveSize);
-        // msgpack::pack_to_data(data, args ...);
+        //RpcAllocator<uint8_t> allocator;
+        //std::vector<uint8_t, RpcAllocator<uint8_t>> data(allocator);
+        std::vector<uint8_t> data;
+        data.reserve(opt.rezerveSize);
+        msgpack::pack_to_data(data, args ...);
         // return ByteArray::fromRawData(&data[0], data.size());
+        return ByteArray(&data[0], data.size());
 
-        return msgpack::pack(opt, args ...);
+        //return msgpack::pack(opt, args ...);
     }
 
     template<class ... Types>
     static ByteArray pack(const Types&... args)
     {
-        // RpcAllocator<uint8_t> allocator;
-        // //std::vector<uint8_t, RpcAllocator<uint8_t>> data(allocator);
-        // std::vector<uint8_t> data;
-        // msgpack::pack_to_data(data, args ...);
-        // return ByteArray::fromRawData(&data[0], data.size());
-
-        return msgpack::pack(args ...);
+        return RpcPacker::pack(Options {}, args ...);
     }
 
     template<class ... Types>

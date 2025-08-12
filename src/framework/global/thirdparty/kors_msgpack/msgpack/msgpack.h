@@ -950,7 +950,7 @@ inline void pack_type(Data& data, const T& value) {
         } else if constexpr (has_func_pack_custom_packer<Data, T>::value) {
             pack_custom_packer(data, value);
         } else {
-            pack_custom(data, value);
+            pack_custom_type<Data>(data, value);
         }
     }
 }
@@ -979,7 +979,7 @@ inline bool unpack_type(Cursor& cursor, T& value) {
         } else if constexpr (has_func_unpack_custom_unpacker<Data, T>::value) {
             return unpack_custom_unpacker<Data>(cursor, value);
         } else {
-            return unpack_custom(cursor, value);
+            return unpack_custom_type<Data>(cursor, value);
         }
     }
 }

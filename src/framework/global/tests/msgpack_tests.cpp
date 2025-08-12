@@ -33,19 +33,23 @@ struct ObjectCustom {
 
 #include "serialization/msgpack_forward.h"
 
-void pack_custom(std::vector<uint8_t>& data, const muse::ObjectCustom& value);
-bool unpack_custom(muse::msgpack::Cursor& cursor, muse::ObjectCustom& value);
+template<typename Data>
+void pack_custom_type(Data& data, const muse::ObjectCustom& value);
+template<typename Data>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::ObjectCustom& value);
 
 #include "serialization/msgpack.h"
 
-void pack_custom(std::vector<uint8_t>& data, const muse::ObjectCustom& value)
+template<typename Data>
+void pack_custom_type(Data& data, const muse::ObjectCustom& value)
 {
     muse::msgpack::pack_to_data(data, value.i32, value.str);
 }
 
-bool unpack_custom(muse::msgpack::Cursor& cursor, muse::ObjectCustom& value)
+template<typename Data>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::ObjectCustom& value)
 {
-    return muse::msgpack::unpack(cursor, value.i32, value.str);
+    return muse::msgpack::DataUnPacker<Data>::unpack(cursor, value.i32, value.str);
 }
 
 using namespace muse;

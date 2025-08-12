@@ -31,74 +31,84 @@
 #include "../types/retval.h"
 #include "../io/path.h"
 
-void pack_custom(std::vector<uint8_t>& data, const size_t& value);
-bool unpack_custom(muse::msgpack::Cursor& cursor, size_t& value);
+template<typename Data>
+void pack_custom_type(Data& data, const size_t& value);
+template<typename Data>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, size_t& value);
 
-template<typename T>
-void pack_custom(std::vector<uint8_t>& data, const std::optional<T>& value);
-template<typename T>
-bool unpack_custom(muse::msgpack::Cursor& cursor, std::optional<T>& value);
+template<typename Data, typename T>
+void pack_custom_type(Data& data, const std::optional<T>& value);
+template<typename Data, typename T>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, std::optional<T>& value);
 
-void pack_custom(std::vector<uint8_t>& data, const muse::String& value);
-bool unpack_custom(muse::msgpack::Cursor& cursor, muse::String& value);
+template<typename Data>
+void pack_custom_type(Data& data, const muse::String& value);
+template<typename Data>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::String& value);
 
-template<typename T>
-void pack_custom(std::vector<uint8_t>& data, const muse::number_t<T>& value);
-template<typename T>
-bool unpack_custom(muse::msgpack::Cursor& cursor, muse::number_t<T>& value);
+template<typename Data, typename T>
+void pack_custom_type(Data& data, const muse::number_t<T>& value);
+template<typename Data, typename T>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::number_t<T>& value);
 
-template<typename T>
-void pack_custom(std::vector<uint8_t>& data, const muse::Flags<T>& value);
-template<typename T>
-bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Flags<T>& value);
+template<typename Data, typename T>
+void pack_custom_type(Data& data, const muse::Flags<T>& value);
+template<typename Data, typename T>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::Flags<T>& value);
 
 // Ret[Val]
-void pack_custom(std::vector<uint8_t>& data, const muse::Ret& value);
-bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Ret& value);
-template<typename T>
-void pack_custom(std::vector<uint8_t>& data, const muse::RetVal<T>& value);
-template<typename T>
-bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal<T>& value);
-template<typename T1, typename T2>
-void pack_custom(std::vector<uint8_t>& data, const muse::RetVal2<T1, T2>& value);
-template<typename T1, typename T2>
-bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal2<T1, T2>& value);
+template<typename Data>
+void pack_custom_type(Data& data, const muse::Ret& value);
+template<typename Data>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::Ret& value);
+template<typename Data, typename T>
+void pack_custom_type(Data& data, const muse::RetVal<T>& value);
+template<typename Data, typename T>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::RetVal<T>& value);
+template<typename Data, typename T1, typename T2>
+void pack_custom_type(Data& data, const muse::RetVal2<T1, T2>& value);
+template<typename Data, typename T1, typename T2>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::RetVal2<T1, T2>& value);
 
 // path_t
-void pack_custom(std::vector<uint8_t>& data, const muse::io::path_t& value);
-bool unpack_custom(muse::msgpack::Cursor& cursor, muse::io::path_t& value);
+template<typename Data>
+void pack_custom_type(Data& data, const muse::io::path_t& value);
+template<typename Data>
+bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::io::path_t& value);
 
 #include "../thirdparty/kors_msgpack/msgpack/msgpack.h"
 
 // std standart
-inline void pack_custom(std::vector<uint8_t>& data, const size_t& value)
+template<typename Data>
+inline void pack_custom_type(Data& data, const size_t& value)
 {
-    muse::msgpack::Packer::pack(data, static_cast<uint64_t>(value));
+    muse::msgpack::DataPacker<Data>::pack(data, static_cast<uint64_t>(value));
 }
 
-inline bool unpack_custom(muse::msgpack::Cursor& cursor, size_t& value)
+template<typename Data>
+inline bool unpack_custom_type(muse::msgpack::Cursor& cursor, size_t& value)
 {
     uint64_t v = 0;
-    bool ok = muse::msgpack::UnPacker::unpack(cursor, v);
+    bool ok = muse::msgpack::DataUnPacker<Data>::unpack(cursor, v);
     value = static_cast<size_t>(v);
     return ok;
 }
 
-template<typename T>
-inline void pack_custom(std::vector<uint8_t>& data, const std::optional<T>& value)
+template<typename Data, typename T>
+inline void pack_custom_type(Data& data, const std::optional<T>& value)
 {
     bool has_value = value.has_value();
-    muse::msgpack::Packer::pack(data, has_value);
+    muse::msgpack::DataPacker<Data>::pack(data, has_value);
     if (has_value) {
-        muse::msgpack::Packer::pack(data, value.value());
+        muse::msgpack::DataPacker<Data>::pack(data, value.value());
     }
 }
 
-template<typename T>
-inline bool unpack_custom(muse::msgpack::Cursor& cursor, std::optional<T>& value)
+template<typename Data, typename T>
+inline bool unpack_custom_type(muse::msgpack::Cursor& cursor, std::optional<T>& value)
 {
     bool has_value = false;
-    bool ok = muse::msgpack::UnPacker::unpack(cursor, has_value);
+    bool ok = muse::msgpack::DataUnPacker<Data>::unpack(cursor, has_value);
     if (!ok) {
         return false;
     }
@@ -109,7 +119,7 @@ inline bool unpack_custom(muse::msgpack::Cursor& cursor, std::optional<T>& value
     }
 
     T val = {};
-    ok = muse::msgpack::UnPacker::unpack(cursor, val);
+    ok = muse::msgpack::DataUnPacker<Data>::unpack(cursor, val);
     if (!ok) {
         return false;
     }
@@ -119,99 +129,105 @@ inline bool unpack_custom(muse::msgpack::Cursor& cursor, std::optional<T>& value
 }
 
 // muse standart types
-inline void pack_custom(std::vector<uint8_t>& data, const muse::String& value)
+template<typename Data>
+inline void pack_custom_type(Data& data, const muse::String& value)
 {
-    muse::msgpack::Packer::pack(data, value.toStdString());
+    muse::msgpack::DataPacker<Data>::pack(data, value.toStdString());
 }
 
-inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::String& value)
+template<typename Data>
+inline bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::String& value)
 {
     std::string str;
-    bool ok = muse::msgpack::UnPacker::unpack(cursor, str);
+    bool ok = muse::msgpack::DataUnPacker<Data>::unpack(cursor, str);
     value = muse::String::fromStdString(str);
     return ok;
 }
 
-template<typename T>
-inline void pack_custom(std::vector<uint8_t>& data, const muse::number_t<T>& value)
+template<typename Data, typename T>
+inline void pack_custom_type(Data& data, const muse::number_t<T>& value)
 {
-    muse::msgpack::Packer::pack(data, value.raw());
+    muse::msgpack::DataPacker<Data>::pack(data, value.raw());
 }
 
-template<typename T>
-inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::number_t<T>& value)
+template<typename Data, typename T>
+inline bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::number_t<T>& value)
 {
     T val = {};
-    bool ok = muse::msgpack::UnPacker::unpack(cursor, val);
+    bool ok = muse::msgpack::DataUnPacker<Data>::unpack(cursor, val);
     value = muse::number_t<T>(val);
     return ok;
 }
 
-template<typename T>
-inline void pack_custom(std::vector<uint8_t>& data, const muse::Flags<T>& value)
+template<typename Data, typename T>
+inline void pack_custom_type(Data& data, const muse::Flags<T>& value)
 {
     typename muse::Flags<T>::Int val = value;
-    muse::msgpack::Packer::pack(data, val);
+    muse::msgpack::DataPacker<Data>::pack(data, val);
 }
 
-template<typename T>
-inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Flags<T>& value)
+template<typename Data, typename T>
+inline bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::Flags<T>& value)
 {
     typename muse::Flags<T>::Int val = 0;
-    bool ok = muse::msgpack::UnPacker::unpack(cursor, val);
+    bool ok = muse::msgpack::DataUnPacker<Data>::unpack(cursor, val);
     value = muse::Flags<T>(val);
     return ok;
 }
 
 // Ret[Val]
-inline void pack_custom(std::vector<uint8_t>& data, const muse::Ret& value)
+template<typename Data>
+inline void pack_custom_type(Data& data, const muse::Ret& value)
 {
-    muse::msgpack::Packer::pack(data, value.code(), value.text());
+    muse::msgpack::DataPacker<Data>::pack(data, value.code(), value.text());
 }
 
-inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::Ret& value)
+template<typename Data>
+inline bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::Ret& value)
 {
     int code = 0;
     std::string text;
-    bool ok = muse::msgpack::UnPacker::unpack(cursor, code, text);
+    bool ok = muse::msgpack::DataUnPacker<Data>::unpack(cursor, code, text);
     value = muse::Ret(code, text);
     return ok;
 }
 
-template<typename T>
-inline void pack_custom(std::vector<uint8_t>& data, const muse::RetVal<T>& value)
+template<typename Data, typename T>
+inline void pack_custom_type(Data& data, const muse::RetVal<T>& value)
 {
-    muse::msgpack::Packer::pack(data, value.ret, value.val);
+    muse::msgpack::DataPacker<Data>::pack(data, value.ret, value.val);
 }
 
-template<typename T>
-inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal<T>& value)
+template<typename Data, typename T>
+inline bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::RetVal<T>& value)
 {
-    return muse::msgpack::UnPacker::unpack(cursor, value.ret, value.val);
+    return muse::msgpack::DataUnPacker<Data>::unpack(cursor, value.ret, value.val);
 }
 
-template<typename T1, typename T2>
-inline void pack_custom(std::vector<uint8_t>& data, const muse::RetVal2<T1, T2>& value)
+template<typename Data, typename T1, typename T2>
+inline void pack_custom_type(Data& data, const muse::RetVal2<T1, T2>& value)
 {
-    muse::msgpack::Packer::pack(data, value.ret, value.val1, value.val2);
+    muse::msgpack::DataPacker<Data>::pack(data, value.ret, value.val1, value.val2);
 }
 
-template<typename T1, typename T2>
-inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::RetVal2<T1, T2>& value)
+template<typename Data, typename T1, typename T2>
+inline bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::RetVal2<T1, T2>& value)
 {
-    return muse::msgpack::UnPacker::unpack(cursor, value.ret, value.val1, value.val2);
+    return muse::msgpack::DataUnPacker<Data>::unpack(cursor, value.ret, value.val1, value.val2);
 }
 
 // path_t
-inline void pack_custom(std::vector<uint8_t>& data, const muse::io::path_t& value)
+template<typename Data>
+inline void pack_custom_type(Data& data, const muse::io::path_t& value)
 {
-    muse::msgpack::Packer::pack(data, value.toStdString());
+    muse::msgpack::DataPacker<Data>::pack(data, value.toStdString());
 }
 
-inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::io::path_t& value)
+template<typename Data>
+inline bool unpack_custom_type(muse::msgpack::Cursor& cursor, muse::io::path_t& value)
 {
     std::string str;
-    bool ok = muse::msgpack::UnPacker::unpack(cursor, str);
+    bool ok = muse::msgpack::DataUnPacker<Data>::unpack(cursor, str);
     value = muse::io::path_t(str);
     return ok;
 }
@@ -222,10 +238,10 @@ struct Options {
     size_t rezerveSize = 100;
 };
 
-template<class ... Types>
-static inline void pack_to_data(std::vector<uint8_t>& data, const Types&... args)
+template<typename Data, typename ... Types>
+static inline void pack_to_data(Data& data, const Types&... args)
 {
-    Packer::pack(data, args ...);
+    DataPacker<Data>::pack(data, args ...);
 }
 
 template<class ... Types>
@@ -235,7 +251,7 @@ static inline ByteArray pack(const Options& opt, const Types&... args)
     std::vector<uint8_t>& vdata = ba.vdata();
     vdata.clear();
     vdata.reserve(opt.rezerveSize);
-    Packer::pack(vdata, args ...);
+    DataPacker<std::vector<uint8_t>>::pack(vdata, args ...);
     vdata.emplace_back(0);
     return ba;
 }
