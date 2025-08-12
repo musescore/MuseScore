@@ -1900,9 +1900,14 @@ static double scaleText(const String& str, const Sid fontFaceSid, const double f
     const double pagePrintableWidth = style.styleV(Sid::pagePrintableWidth).value<double>() * DPI;
     const double pageWidth = style.styleV(Sid::pageWidth).value<double>() * DPI;
     const double pageHeight = style.styleV(Sid::pageHeight).value<double>() * DPI;
-    const double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), TextShowMnemonic, str).width();
 
-    return pagePrintableWidth / textWidth;
+    double longestLine = 0.0;
+    for (const String& line : str.split(u"\n")) {
+        const double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), TextShowMnemonic, line).width();
+        longestLine = std::max(longestLine, textWidth);
+    }
+
+    return pagePrintableWidth / longestLine;
 }
 
 static void scaleCopyrightText(Score* score)
@@ -1912,12 +1917,12 @@ static void scaleCopyrightText(Score* score)
         return;
     }
 
-    const double fontSize = score->style().styleV(Sid::footerFontSize).value<double>();
-    const double sizeRatio = scaleText(copyright, Sid::footerFontFace, fontSize, score);
+    const double fontSize = score->style().styleV(Sid::copyrightFontSize).value<double>();
+    const double sizeRatio = scaleText(copyright, Sid::copyrightFontFace, fontSize, score);
 
     if (sizeRatio < 1) {
         const double newSize = floor(fontSize * sizeRatio * 10) / 10;
-        score->style().set(Sid::footerFontSize, newSize);
+        score->style().set(Sid::copyrightFontSize, newSize);
     }
 }
 
