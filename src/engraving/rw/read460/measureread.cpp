@@ -89,8 +89,8 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         bool ok = true;
         measure->m_len = Fraction::fromString(e.attribute("len"), &ok);
         if (!ok || measure->m_len < Fraction(1, 128)) {
-            e.raiseError(muse::mtrc("engraving", "MSCX error at line %1: invalid measure length: %2")
-                         .arg(e.lineNumber()).arg(e.attribute("len")));
+            e.raiseError(muse::mtrc("engraving", "MSCX error at byte offset %1: invalid measure length: %2")
+                         .arg(e.byteOffset()).arg(e.attribute("len")));
             return;
         }
         irregular = true;

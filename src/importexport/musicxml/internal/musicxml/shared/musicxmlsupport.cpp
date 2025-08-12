@@ -45,9 +45,9 @@ namespace mu::iex::musicxml {
 //   errorStringWithLocation
 //---------------------------------------------------------
 
-String errorStringWithLocation(int line, int col, const String& error)
+String errorStringWithLocation(int64_t byteOffset, const String& error)
 {
-    return muse::mtrc("iex_musicxml", "line %1, column %2:").arg(line).arg(col) + u" " + error;
+    return muse::mtrc("iex_musicxml", "byte offset %1:").arg(byteOffset) + u" " + error;
 }
 
 //---------------------------------------------------------

@@ -150,6 +150,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack_forward.h
+    
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
     ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
@@ -254,6 +257,10 @@ elseif (CC_IS_EMCC)
 else ()
     set(Z_LIB z)
 endif ()
+
+list(APPEND MODULE_INCLUDE_PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml
+)
 
 list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
 list(APPEND MODULE_LINK ${Z_LIB})

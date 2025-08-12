@@ -1395,15 +1395,16 @@ public:
     {
         // Create a new xml document containing only the (text) xml chunk
         String name = String::fromAscii(origReader.name().ascii());
-        int64_t additionalLines = origReader.lineNumber() - 2;     // Subtracting the 2 new lines that will be added
+        String prefix = u"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<" + name + u">";
         xmlTag = origReader.readXml();
-        xmlTag.prepend(u"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<" + name + u">");
+        xmlTag.prepend(prefix);
         xmlTag.append(u"</" + name + u">\n");
         muse::ByteArray data = xmlTag.toUtf8();
         tagReader.setData(data);  // Add the xml data to the XmlReader
         // the additional lines are needed to output the correct line number
         // of the original file in case of error
-        tagReader.setOffsetLines(additionalLines);
+        int64_t additionalOffset = origReader.byteOffset() - prefix.toStdString().size();     // Subtracting the 2 new lines that will be added
+        tagReader.setByteOffsetAdjustment(additionalOffset);
         copyProperties(origReader, tagReader);
         tagReader.readNextStartElement();     // read up to the first "name" tag
     }
@@ -3500,7 +3501,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         }
     }
     if (e.error() != muse::XmlStreamReader::NoError) {
-        LOGE() << muse::String(u"XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber())
+        LOGE() << muse::String(u"XML read error at byte offset %1: %2").arg(e.byteOffset())
             .arg(muse::String::fromAscii(e.name().ascii()));
         return false;
     }
