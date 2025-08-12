@@ -24,31 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <Staff>
-        <eid>D_D</eid>
-        <linkedTo>C_C</linkedTo>
-        <StaffType group="tablature">
-          <name>tab6StrSimple</name>
-          <lines>6</lines>
-          <lineDistance>1.5</lineDistance>
-          <stemless>1</stemless>
-          <timesig>0</timesig>
-          <durations>0</durations>
-          <durationFontName>MuseScore Tab Modern</durationFontName>
-          <durationFontSize>15</durationFontSize>
-          <durationFontY>0</durationFontY>
-          <fretUseTextStyle>1</fretUseTextStyle>
-          <fretTextStyle>tab_fret_number</fretTextStyle>
-          <linesThrough>0</linesThrough>
-          <minimStyle>0</minimStyle>
-          <onLines>1</onLines>
-          <showRests>0</showRests>
-          <stemsDown>1</stemsDown>
-          <stemsThrough>0</stemsThrough>
-          <upsideDown>0</upsideDown>
-          <useNumbers>1</useNumbers>
-          </StaffType>
-        </Staff>
       <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
@@ -75,33 +50,33 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>E_E</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>H_H</eid>
+            <eid>G_G</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <eid>I_I</eid>
+            <eid>H_H</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <eid>J_J</eid>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>J_J</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -111,7 +86,7 @@
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.266667</bendEndTimeFactor>
-                  <eid>L_L</eid>
+                  <eid>K_K</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -128,10 +103,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>M_M</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -141,7 +116,7 @@
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.716667</bendEndTimeFactor>
-                  <eid>O_O</eid>
+                  <eid>N_N</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -158,90 +133,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>P_P</eid>
-            <durationType>half</durationType>
-            </Rest>
-          </voice>
-        </Measure>
-      </Staff>
-    <Staff id="2">
-      <Measure>
-        <voice>
-          <KeySig>
-            <eid>Q_Q</eid>
-            <linkedTo>F_F</linkedTo>
-            <concertKey>0</concertKey>
-            <mode>major</mode>
-            </KeySig>
-          <Chord>
-            <eid>R_R</eid>
-            <linkedTo>J_J</linkedTo>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>S_S</eid>
-              <linkedTo>K_K</linkedTo>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>3</guitarBendType>
-                  <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>T_T</eid>
-                  <linkedTo>L_L</linkedTo>
-                  <anchor>3</anchor>
-                  </GuitarBend>
-                <next>
-                  <location>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    </location>
-                  </prev>
-                </Spanner>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>U_U</eid>
-            <linkedTo>M_M</linkedTo>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>V_V</eid>
-              <linkedTo>N_N</linkedTo>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              <Spanner type="GuitarBend">
-                <GuitarBend>
-                  <guitarBendType>3</guitarBendType>
-                  <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>W_W</eid>
-                  <linkedTo>O_O</linkedTo>
-                  <anchor>3</anchor>
-                  </GuitarBend>
-                <next>
-                  <location>
-                    </location>
-                  </next>
-                </Spanner>
-              <Spanner type="GuitarBend">
-                <prev>
-                  <location>
-                    </location>
-                  </prev>
-                </Spanner>
-              </Note>
-            </Chord>
-          <Rest>
-            <eid>X_X</eid>
-            <linkedTo>P_P</linkedTo>
+            <eid>O_O</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
