@@ -31,28 +31,33 @@
 using namespace muse;
 
 namespace {
-static ByteArray BA(const char* s) {
+static ByteArray BA(const char* s)
+{
     return ByteArray(reinterpret_cast<const uint8_t*>(s), std::strlen(s));
 }
-static String S(const char* s) {
+
+static String S(const char* s)
+{
     return String::fromUtf8(s);
 }
 } // namespace
 
-class Serialization_XmlDomTests : public ::testing::Test {};
+class Serialization_XmlDomTests : public ::testing::Test
+{
+};
 
 // ---------- Parse + root element ----------
 TEST_F(Serialization_XmlDomTests, ParseAndRootElement)
 {
-    const char* xml =
-        "<?xml version=\"1.0\"?>\n"
-        "<score>\n"
-        "  <header key=\"C\" mode=\"maj\">Title</header>\n"
-        "  <!-- comment -->\n"
-        "  <body>\n"
-        "    <part id=\"P1\"/>\n"
-        "  </body>\n"
-        "</score>\n";
+    const char* xml
+        ="<?xml version=\"1.0\"?>\n"
+         "<score>\n"
+         "  <header key=\"C\" mode=\"maj\">Title</header>\n"
+         "  <!-- comment -->\n"
+         "  <body>\n"
+         "    <part id=\"P1\"/>\n"
+         "  </body>\n"
+         "</score>\n";
 
     XmlDomDocument doc;
     doc.setContent(BA(xml));
@@ -67,13 +72,13 @@ TEST_F(Serialization_XmlDomTests, ParseAndRootElement)
 // ---------- Child traversal & filtering ----------
 TEST_F(Serialization_XmlDomTests, ChildTraversalAndFiltering)
 {
-    const char* xml =
-        "<a>"
-        "  text1"
-        "  <b/>"
-        "  <!--c-->"
-        "  <c><d/></c>"
-        "</a>";
+    const char* xml
+        ="<a>"
+         "  text1"
+         "  <b/>"
+         "  <!--c-->"
+         "  <c><d/></c>"
+         "</a>";
 
     XmlDomDocument doc;
     doc.setContent(BA(xml));
@@ -104,10 +109,10 @@ TEST_F(Serialization_XmlDomTests, ChildTraversalAndFiltering)
 // ---------- Sibling traversal (elements vs any) ----------
 TEST_F(Serialization_XmlDomTests, SiblingTraversal)
 {
-    const char* xml =
-        "<root>"
-        "  <x/>text<!--com--><y/>"
-        "</root>";
+    const char* xml
+        ="<root>"
+         "  <x/>text<!--com--><y/>"
+         "</root>";
 
     XmlDomDocument doc;
     doc.setContent(BA(xml));

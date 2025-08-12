@@ -49,8 +49,9 @@ using xml_attr_impl = const tinyxml2::XMLAttribute*;
 // ================================================
 
 namespace {
-template <class T>
-inline xml_handle pack_handle(const T& t) noexcept {
+template<class T>
+inline xml_handle pack_handle(const T& t) noexcept
+{
     static_assert(std::is_trivially_copyable_v<T>,
                   "Backend handle must be trivially copyable");
     static_assert(sizeof(T) <= sizeof(xml_handle),
@@ -60,8 +61,9 @@ inline xml_handle pack_handle(const T& t) noexcept {
     return h;
 }
 
-template <class T>
-inline T unpack_handle(xml_handle h) noexcept {
+template<class T>
+inline T unpack_handle(xml_handle h) noexcept
+{
     static_assert(std::is_trivially_copyable_v<T>,
                   "Backend handle must be trivially copyable");
     static_assert(sizeof(T) <= sizeof(xml_handle),
@@ -75,7 +77,6 @@ inline T unpack_handle(xml_handle h) noexcept {
 // ================================================
 // XmlDomNode
 // ================================================
-
 
 XmlDomNode::XmlDomNode(const std::shared_ptr<XmlDomImplData>& xml, xml_node_handle node)
     : m_xml(xml), m_node(node)
@@ -272,7 +273,8 @@ void XmlDomDocument::setContent(const ByteArray& data)
     struct Accumulator {
         double total_ms = 0.0;
         size_t count = 0;
-        ~Accumulator() {
+        ~Accumulator()
+        {
             LOGD() << "[XmlDom TINYXML2] Parsed " << count << " docs in "
                    << total_ms << " ms (avg "
                    << (count ? total_ms / count : 0.0) << " ms/doc)\n";

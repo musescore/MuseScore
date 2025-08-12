@@ -46,8 +46,9 @@ using xml_attr_impl = pugi::xml_attribute;
 // ================================================
 
 namespace {
-template <class T>
-inline xml_handle pack_handle(const T& t) noexcept {
+template<class T>
+inline xml_handle pack_handle(const T& t) noexcept
+{
     static_assert(std::is_trivially_copyable_v<T>,
                   "Backend handle must be trivially copyable");
     static_assert(sizeof(T) <= sizeof(xml_handle),
@@ -59,8 +60,9 @@ inline xml_handle pack_handle(const T& t) noexcept {
     return h;
 }
 
-template <class T>
-inline T unpack_handle(xml_handle h) noexcept {
+template<class T>
+inline T unpack_handle(xml_handle h) noexcept
+{
     static_assert(std::is_trivially_copyable_v<T>,
                   "Backend handle must be trivially copyable");
     static_assert(sizeof(T) <= sizeof(xml_handle),
@@ -74,7 +76,6 @@ inline T unpack_handle(xml_handle h) noexcept {
 // ================================================
 // XmlDomNode
 // ================================================
-
 
 XmlDomNode::XmlDomNode(const std::shared_ptr<XmlDomImplData>& xml, xml_node_handle node)
     : m_xml(xml), m_node(node)
@@ -130,7 +131,7 @@ XmlDomElement XmlDomNode::firstChildElement(const char* name) const
     if (m_node) {
         xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
         xml_node_impl c = name ? n.child(name)
-                               : n.find_child([](xml_node_impl x){ return x.type() == pugi::node_element; });
+                          : n.find_child([](xml_node_impl x){ return x.type() == pugi::node_element; });
         if (c && c.type() == pugi::node_element) {
             return XmlDomElement(m_xml, pack_handle(c));
         }
@@ -171,7 +172,9 @@ XmlDomElement XmlDomNode::nextSiblingElement(const char* name) const
         xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
         xml_node_impl s = name ? n.next_sibling(name) : n.next_sibling();
         if (!name) {
-            while (s && s.type() != pugi::node_element) s = s.next_sibling();
+            while (s && s.type() != pugi::node_element) {
+                s = s.next_sibling();
+            }
         }
         if (s && s.type() == pugi::node_element) {
             return XmlDomElement(m_xml, pack_handle(s));
@@ -186,7 +189,9 @@ XmlDomElement XmlDomNode::previousSiblingElement(const char* name) const
         xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
         xml_node_impl s = name ? n.previous_sibling(name) : n.previous_sibling();
         if (!name) {
-            while (s && s.type() != pugi::node_element) s = s.previous_sibling();
+            while (s && s.type() != pugi::node_element) {
+                s = s.previous_sibling();
+            }
         }
         if (s && s.type() == pugi::node_element) {
             return XmlDomElement(m_xml, pack_handle(s));
@@ -309,7 +314,8 @@ void XmlDomDocument::setContent(const ByteArray& data)
     struct Accumulator {
         double total_ms = 0.0;
         size_t count = 0;
-        ~Accumulator() {
+        ~Accumulator()
+        {
             LOGD() << "[XmlDom PUGI] Parsed " << count << " docs in "
                    << total_ms << " ms (avg "
                    << (count ? total_ms / count : 0.0) << " ms/doc)\n";

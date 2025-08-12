@@ -82,7 +82,8 @@ void XmlStreamReader::setData(const ByteArray& data_)
 #ifndef NDEBUG
     struct Accumulator {
         double total_ms = 0.0;
-        ~Accumulator() {
+        ~Accumulator()
+        {
             LOGD() << "[XmlStreamReader] Total TINYXML2 parse time: "
                    << total_ms << " ms\n";
         }
@@ -256,9 +257,9 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
 
         // Name token: up to whitespace / quote / '>'
         const char* nameBegin = cur;
-        while (*cur &&
-               *cur != ' ' && *cur != '\t' && *cur != '\r' && *cur != '\n' &&
-               *cur != '"' && *cur != '\'' && *cur != '>') {
+        while (*cur
+               && *cur != ' ' && *cur != '\t' && *cur != '\r' && *cur != '\n'
+               && *cur != '"' && *cur != '\'' && *cur != '>') {
             ++cur;
         }
         const char* nameEnd = cur;
@@ -266,8 +267,8 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
         // Handle a leading '%' glued to the name (parameter entity without a space)
         if (nameBegin < nameEnd && *nameBegin == '%') {
             ++nameBegin;
-            while (nameBegin < nameEnd &&
-                   (*nameBegin == ' ' || *nameBegin == '\t' || *nameBegin == '\r' || *nameBegin == '\n')) {
+            while (nameBegin < nameEnd
+                   && (*nameBegin == ' ' || *nameBegin == '\t' || *nameBegin == '\r' || *nameBegin == '\n')) {
                 ++nameBegin;
             }
         }

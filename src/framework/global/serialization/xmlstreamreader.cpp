@@ -78,7 +78,8 @@ void XmlStreamReader::setData(const ByteArray& data_)
 #ifndef NDEBUG
     struct Accumulator {
         double total_ms = 0.0;
-        ~Accumulator() {
+        ~Accumulator()
+        {
             LOGD() << "[XmlStreamReader] Total PUGI parse time: "
                    << total_ms << " ms\n";
         }
@@ -120,9 +121,9 @@ void XmlStreamReader::setData(const ByteArray& data_)
 
     // pugi needs explicit flags to surface declaration/doctype/comments as nodes
     unsigned flags = pugi::parse_default
-                   | pugi::parse_declaration
-                   | pugi::parse_doctype
-                   | pugi::parse_comments;
+                     | pugi::parse_declaration
+                     | pugi::parse_doctype
+                     | pugi::parse_comments;
     m_xml->result = m_xml->doc.load_buffer(data.constData(), data.size(), flags);
 
     if (m_xml->result.status == pugi::status_ok) {
@@ -189,7 +190,7 @@ resolveNode(pugi::xml_node currentNode, XmlStreamReader::TokenType currentToken)
     if (currentToken == XmlStreamReader::TokenType::StartElement) {
         pugi::xml_node child = currentNode.first_child();
         if (child) {
-            return { child, resolveToken(child, /*isStartElement=*/true) };
+            return { child, resolveToken(child, /*isStartElement=*/ true) };
         }
 
         pugi::xml_node sibling = currentNode.next_sibling();
@@ -206,12 +207,12 @@ resolveNode(pugi::xml_node currentNode, XmlStreamReader::TokenType currentToken)
 
     pugi::xml_node sibling = currentNode.next_sibling();
     if (sibling) {
-        return { sibling, resolveToken(sibling, /*isStartElement=*/true) };
+        return { sibling, resolveToken(sibling, /*isStartElement=*/ true) };
     }
 
     pugi::xml_node parent = currentNode.parent();
     if (parent) {
-        return { parent, resolveToken(parent, /*isStartElement=*/false) };
+        return { parent, resolveToken(parent, /*isStartElement=*/ false) };
     }
 
     return { pugi::xml_node(), XmlStreamReader::TokenType::EndDocument };
@@ -237,8 +238,8 @@ XmlStreamReader::TokenType XmlStreamReader::readNext()
             return m_token;
         }
         m_token = (m_xml->node.type() == pugi::node_declaration)
-                      ? TokenType::StartDocument
-                      : resolveToken(m_xml->node, /*isStartElement=*/true);
+                  ? TokenType::StartDocument
+                  : resolveToken(m_xml->node, /*isStartElement=*/ true);
         return m_token;
     }
 
@@ -286,9 +287,9 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
 
         // Name token: up to whitespace / quote / '>'
         const char* nameBegin = cur;
-        while (*cur &&
-               *cur != ' ' && *cur != '\t' && *cur != '\r' && *cur != '\n' &&
-               *cur != '"' && *cur != '\'' && *cur != '>') {
+        while (*cur
+               && *cur != ' ' && *cur != '\t' && *cur != '\r' && *cur != '\n'
+               && *cur != '"' && *cur != '\'' && *cur != '>') {
             ++cur;
         }
         const char* nameEnd = cur;
@@ -296,8 +297,8 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
         // Handle a leading '%' glued to the name (parameter entity without a space)
         if (nameBegin < nameEnd && *nameBegin == '%') {
             ++nameBegin;
-            while (nameBegin < nameEnd &&
-                   (*nameBegin == ' ' || *nameBegin == '\t' || *nameBegin == '\r' || *nameBegin == '\n')) {
+            while (nameBegin < nameEnd
+                   && (*nameBegin == ' ' || *nameBegin == '\t' || *nameBegin == '\r' || *nameBegin == '\n')) {
                 ++nameBegin;
             }
         }
@@ -530,8 +531,7 @@ String XmlStreamReader::readBody() const
 
     for (pugi::xml_node child = m_xml->node.first_child();
          child;
-         child = child.next_sibling())
-    {
+         child = child.next_sibling()) {
         if (child.type() == pugi::node_element) {
             // Match tinyxml2::XMLPrinter default (no indentation/line breaks)
             child.print(oss, "", pugi::format_raw);

@@ -31,15 +31,19 @@
 using namespace muse;
 
 namespace {
-static ByteArray BA(const char* s) {
+static ByteArray BA(const char* s)
+{
     return ByteArray(reinterpret_cast<const uint8_t*>(s), std::strlen(s));
 }
-static String S(const char* s) {
+
+static String S(const char* s)
+{
     return String::fromUtf8(s);
 }
 
 // Helper: advance until a specific token or EndDocument/Invalid
-static XmlStreamReader::TokenType advanceTo(XmlStreamReader& r, XmlStreamReader::TokenType want) {
+static XmlStreamReader::TokenType advanceTo(XmlStreamReader& r, XmlStreamReader::TokenType want)
+{
     for (;;) {
         XmlStreamReader::TokenType t = r.readNext();
         if (t == want || t == XmlStreamReader::TokenType::EndDocument || t == XmlStreamReader::TokenType::Invalid) {
@@ -49,14 +53,16 @@ static XmlStreamReader::TokenType advanceTo(XmlStreamReader& r, XmlStreamReader:
 }
 } // namespace
 
-class Serialization_XmlStreamReaderTests : public ::testing::Test {};
+class Serialization_XmlStreamReaderTests : public ::testing::Test
+{
+};
 
 // ---------- Happy path: declaration, root, attributes, text, comment, empty child ----------
 TEST_F(Serialization_XmlStreamReaderTests, WalkAndReadBasics)
 {
-    const char* xml =
-        "<?xml version=\"1.0\"?>\n"
-        "<root a=\"1\" b=\"two\">hi<!--c--><child/>there</root>";
+    const char* xml
+        ="<?xml version=\"1.0\"?>\n"
+         "<root a=\"1\" b=\"two\">hi<!--c--><child/>there</root>";
 
     XmlStreamReader xr;
     xr.setData(BA(xml));
@@ -99,10 +105,10 @@ TEST_F(Serialization_XmlStreamReaderTests, WalkAndReadBasics)
 // ---------- Expand more than one ENTITY value in DOCTYPE ----------
 TEST_F(Serialization_XmlStreamReaderTests, EntityExpansion_MultipleEntitiesInDoctype)
 {
-    const char* xml =
-        "<?xml version=\"1.0\"?>\n"
-        "<!DOCTYPE r [ <!ENTITY HELLO \"Hello\"> <!ENTITY WHO \"World\"> ]>\n"
-        "<r>&HELLO;, &WHO;!</r>";
+    const char* xml
+        ="<?xml version=\"1.0\"?>\n"
+         "<!DOCTYPE r [ <!ENTITY HELLO \"Hello\"> <!ENTITY WHO \"World\"> ]>\n"
+         "<r>&HELLO;, &WHO;!</r>";
 
     XmlStreamReader xr;
     xr.setData(BA(xml));
@@ -120,10 +126,10 @@ TEST_F(Serialization_XmlStreamReaderTests, EntityExpansion_MultipleEntitiesInDoc
 // ---------- Single-quoted entity values should be processed ----------
 TEST_F(Serialization_XmlStreamReaderTests, EntityExpansion_SingleQuotedValue)
 {
-    const char* xml =
-        "<?xml version=\"1.0\"?>\n"
-        "<!DOCTYPE r [ <!ENTITY HELLO 'Hello'> ]>\n"
-        "<r>&HELLO; world</r>";
+    const char* xml
+        ="<?xml version=\"1.0\"?>\n"
+         "<!DOCTYPE r [ <!ENTITY HELLO 'Hello'> ]>\n"
+         "<r>&HELLO; world</r>";
 
     XmlStreamReader xr;
     xr.setData(BA(xml));
@@ -141,11 +147,11 @@ TEST_F(Serialization_XmlStreamReaderTests, EntityExpansion_SingleQuotedValue)
 // ---------- Name parsing should handle leading '%' and SYSTEM/PUBLIC noise ----------
 TEST_F(Serialization_XmlStreamReaderTests, EntityExpansion_NameWithPercentAndKeywords)
 {
-    const char* xml =
-        "<?xml version=\"1.0\"?>\n"
-        // Leading spaces, optional '%', keywords, and extra spaces before the quoted value.
-        "<!DOCTYPE r [ <!ENTITY    %   NAME   SYSTEM   \"X\"> <!ENTITY WHO \"World\"> ]>\n"
-        "<r>&NAME;&WHO;</r>";
+    const char* xml
+        ="<?xml version=\"1.0\"?>\n"
+          // Leading spaces, optional '%', keywords, and extra spaces before the quoted value.
+         "<!DOCTYPE r [ <!ENTITY    %   NAME   SYSTEM   \"X\"> <!ENTITY WHO \"World\"> ]>\n"
+         "<r>&NAME;&WHO;</r>";
 
     XmlStreamReader xr;
     xr.setData(BA(xml));
@@ -163,10 +169,10 @@ TEST_F(Serialization_XmlStreamReaderTests, EntityExpansion_NameWithPercentAndKey
 // ---------- Name sanitizer should not strip "PUBLIC"/"SYSTEM" inside real names ----------
 TEST_F(Serialization_XmlStreamReaderTests, EntityExpansion_NameSanitizerOverStrips)
 {
-    const char* xml =
-        "<?xml version=\"1.0\"?>\n"
-        "<!DOCTYPE r [ <!ENTITY PUBLICNAME \"X\"> <!ENTITY WHO \"World\"> ]>\n"
-        "<r>&PUBLICNAME;&WHO;</r>";
+    const char* xml
+        ="<?xml version=\"1.0\"?>\n"
+         "<!DOCTYPE r [ <!ENTITY PUBLICNAME \"X\"> <!ENTITY WHO \"World\"> ]>\n"
+         "<r>&PUBLICNAME;&WHO;</r>";
 
     XmlStreamReader xr;
     xr.setData(BA(xml));
@@ -193,9 +199,9 @@ TEST_F(Serialization_XmlStreamReaderTests, MalformedXmlReportsError)
     // On malformed, readNext should quickly reach Invalid or EndDocument; error() should flag it
     XmlStreamReader::TokenType first = xr.readNext();
     // Depending on backend behavior, allow any of these early terminals
-    bool terminal = (first == XmlStreamReader::TokenType::Invalid) ||
-                    (first == XmlStreamReader::TokenType::EndDocument) ||
-                    (first == XmlStreamReader::TokenType::NoToken);
+    bool terminal = (first == XmlStreamReader::TokenType::Invalid)
+                    || (first == XmlStreamReader::TokenType::EndDocument)
+                    || (first == XmlStreamReader::TokenType::NoToken);
     EXPECT_TRUE(terminal);
 
     EXPECT_NE(xr.error(), XmlStreamReader::Error::NoError);
@@ -222,10 +228,10 @@ TEST_F(Serialization_XmlStreamReaderTests, ProcessingInstructionsIgnored)
 {
     // PI appears inside the root element and should NOT produce any token.
     // We still expect the XML declaration as StartDocument.
-    const char* xml =
-        "<?xml version=\"1.0\"?>\n"
-        "<root>hi<?proc do-this='now'?>"
-        "<child/>there</root>";
+    const char* xml
+        ="<?xml version=\"1.0\"?>\n"
+         "<root>hi<?proc do-this='now'?>"
+         "<child/>there</root>";
 
     XmlStreamReader xr;
     xr.setData(BA(xml));

@@ -36,7 +36,9 @@ using xml_handle_slot = std::uintptr_t;
 struct xml_handle {
     xml_handle_slot slot0 = 0;
     xml_handle_slot slot1 = 0;
-    explicit operator bool() const noexcept { return !(slot0 == 0 && slot1 == 0); }
+    explicit operator bool() const noexcept {
+        return !(slot0 == 0 && slot1 == 0);
+    }
 };
 using xml_node_handle = xml_handle;
 using xml_attr_handle = xml_handle;
