@@ -6145,7 +6145,7 @@ void Score::updateCapo()
             }
         }
     }
-    for (Staff *staff : staves()) {
+    for (Staff* staff : staves()) {
         staff->applyCapoParams();
     }
 }

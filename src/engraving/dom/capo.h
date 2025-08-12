@@ -58,7 +58,8 @@ private:
 class AbstractCapoTransposeState : public std::enable_shared_from_this<AbstractCapoTransposeState>
 {
 public:
-    explicit AbstractCapoTransposeState(int capoFret) : m_capoFret(capoFret) {}
+    explicit AbstractCapoTransposeState(int capoFret)
+        : m_capoFret(capoFret) {}
 
     virtual ~AbstractCapoTransposeState() = default;
     virtual std::shared_ptr<AbstractCapoTransposeState> transitionToPlaybackOnly() = 0;
@@ -82,7 +83,8 @@ protected:
 class CapoTransposeStatePlaybackOnly : public AbstractCapoTransposeState
 {
 public:
-    explicit CapoTransposeStatePlaybackOnly(int capoFret) : AbstractCapoTransposeState(capoFret) {}
+    explicit CapoTransposeStatePlaybackOnly(int capoFret)
+        : AbstractCapoTransposeState(capoFret) {}
     ~CapoTransposeStatePlaybackOnly() override = default;
     void setCapoFret(int fret) override;
     std::shared_ptr<AbstractCapoTransposeState> transitionToPlaybackOnly() override;
@@ -93,7 +95,8 @@ public:
 class CapoTransposeStateStandardOnly : public AbstractCapoTransposeState
 {
 public:
-    explicit CapoTransposeStateStandardOnly(int capoFret) : AbstractCapoTransposeState(capoFret) {}
+    explicit CapoTransposeStateStandardOnly(int capoFret)
+        : AbstractCapoTransposeState(capoFret) {}
     ~CapoTransposeStateStandardOnly() override = default;
     void setCapoFret(int fret) override;
     std::shared_ptr<AbstractCapoTransposeState> transitionToPlaybackOnly() override;
@@ -104,7 +107,8 @@ public:
 class CapoTransposeStateTabOnly : public AbstractCapoTransposeState
 {
 public:
-    explicit CapoTransposeStateTabOnly(int capoFret) : AbstractCapoTransposeState(capoFret) {}
+    explicit CapoTransposeStateTabOnly(int capoFret)
+        : AbstractCapoTransposeState(capoFret) {}
     ~CapoTransposeStateTabOnly() override = default;
     void setCapoFret(int fret) override;
     std::shared_ptr<AbstractCapoTransposeState> transitionToPlaybackOnly() override;

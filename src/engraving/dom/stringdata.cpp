@@ -261,14 +261,14 @@ void StringData::fretChords(Chord* chord) const
             // Revert capo pitch offset for ignored strings
             if (const auto it = capo.ignoredStrings.find(nNewString); it != capo.ignoredStrings.end()) {
                 switch (capo.transposeMode) {
-                    case CapoParams::PLAYBACK_ONLY:
-                        break;
-                    case CapoParams::NOTATION_ONLY:
-                        nNewFret += capo.fretPosition;
-                        break;
-                    case CapoParams::TAB_ONLY:
-                        nNewFret -= capoPitchOffset;
-                        break;
+                case CapoParams::PLAYBACK_ONLY:
+                    break;
+                case CapoParams::NOTATION_ONLY:
+                    nNewFret += capo.fretPosition;
+                    break;
+                case CapoParams::TAB_ONLY:
+                    nNewFret -= capoPitchOffset;
+                    break;
                 }
             }
         }
