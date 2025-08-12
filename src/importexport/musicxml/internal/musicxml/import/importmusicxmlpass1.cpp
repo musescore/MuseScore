@@ -1799,6 +1799,7 @@ static void updateStyles(Score* score,
         // The MusicXML specification does not specify to which kinds of text
         // the word-font setting applies. Setting all sizes to the size specified
         // gives bad results, so a selection is made:
+        // Only apply word-font style when "Apply default typeface" is unchecked
         // exclude lyrics odd and even lines (handled separately),
         // Roman numeral analysis and harp pedal diagrams (special case, leave untouched)
         // and text types used in the title frame
@@ -1810,7 +1811,7 @@ static void updateStyles(Score* score,
             continue;
         }
 
-        bool needUseDefaultSize = tid == TextStyleType::HARMONY_ROMAN
+        bool needUseDefaultSize = configuration()->needUseDefaultFont() || tid == TextStyleType::HARMONY_ROMAN
                                   || tid == TextStyleType::HAMMER_ON_PULL_OFF
                                   || isTitleFrameStyle(tid)
                                   || isHarpPedalStyle(tid);
