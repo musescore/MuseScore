@@ -762,14 +762,13 @@ static void scaleTitle(Score* score, Text* text);
  Also sets Align and Yoff.
  */
 
-static void addText2(VBox* vbx, Score* score, const String& strTxt, const TextStyleType stl, const Align align, const double yoffs)
+static void addText2(VBox* vbx, Score* score, const String& strTxt, const TextStyleType stl, const Align align)
 {
     if (stl != TextStyleType::COMPOSER && overrideTextStyleForComposer(strTxt)) {
         // HACK: in some Dolet 8 files the composer is written as a subtitle, which leads to stupid formatting.
         // This overrides the formatting and introduces proper composer text
         Text* text = Factory::createText(vbx, TextStyleType::COMPOSER);
         text->setXmlText(strTxt.trimmed());
-        text->setOffset(muse::PointF(0.0, yoffs));
         text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         vbx->add(text);
     } else if (!strTxt.isEmpty()) {
@@ -777,7 +776,6 @@ static void addText2(VBox* vbx, Score* score, const String& strTxt, const TextSt
         text->setXmlText(strTxt.trimmed());
         text->setAlign(align);
         text->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
-        text->setOffset(muse::PointF(0.0, yoffs));
         text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         vbx->add(text);
         if (stl == TextStyleType::TITLE) {
@@ -997,7 +995,6 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
 static void resizeTitleBox(VBox* vbox)
 {
     double calculatedVBoxHeight = 0;
-    const int padding = spatium;
     ElementList elist = vbox->el();
     Score* score = vbox->score();
     for (EngravingItem* e : elist) {
@@ -1069,12 +1066,11 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const 
         if (mustAddWordToVbox(w->type)) {
             const TextStyleType tid = top ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
             const Align align = alignForCreditWords(w, pageSize.width(), tid);
-            double yoffs = tid == TextStyleType::COMPOSER ? 0.0 : (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
                 Fraction vBoxTick = top ? Fraction(0, 1) : tick;
                 vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score, vBoxTick);
             }
-            addText2(vbox, score, w->words, tid, align, yoffs);
+            addText2(vbox, score, w->words, tid, align);
         } else if (w->type == u"rights" && score->metaTag(u"copyright").empty()) {
             // Add rights to footer, not a vbox
             static const std::regex tagRe("(<.*?>)");
