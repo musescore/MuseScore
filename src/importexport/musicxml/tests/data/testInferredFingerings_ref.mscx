@@ -124,18 +124,16 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>10</height>
+        <height>11.5334</height>
         <eid>E_E</eid>
         <Text>
           <eid>F_F</eid>
           <style>title</style>
-          <offset x="0" y="-0.07525"/>
           <text><font size="22"/>Test Inferred Fingerings</text>
           </Text>
         <Text>
           <eid>G_G</eid>
           <style>subtitle</style>
-          <offset x="0" y="9.92425"/>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>

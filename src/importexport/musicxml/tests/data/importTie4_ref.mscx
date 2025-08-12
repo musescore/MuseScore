@@ -224,7 +224,7 @@ Arranged by [Arranger]</metaTag>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>10</height>
+        <height>10.7302</height>
         <eid>E_E</eid>
         <Text>
           <eid>F_F</eid>
@@ -234,7 +234,6 @@ Arranged by [Arranger]</metaTag>
         <Text>
           <eid>G_G</eid>
           <style>subtitle</style>
-          <offset x="0" y="9.45"/>
           <text><font size="11.94"/>for Piano</text>
           </Text>
         <Text>
