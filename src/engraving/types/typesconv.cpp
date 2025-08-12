@@ -387,7 +387,7 @@ static const std::array ELEMENT_TYPES {
           TranslatableString("engraving", "Volta(s)", nullptr, 1) },
     Item{ ElementType::HAIRPIN_SEGMENT, "HairpinSegment",
           TranslatableString("engraving", "hairpin segment(s)", nullptr, 1),
-          TranslatableString("engraving", "Hairpin segment", nullptr, 1) },
+          TranslatableString("engraving", "Hairpin segment(s)", nullptr, 1) },
     Item{ ElementType::OTTAVA_SEGMENT, "OttavaSegment",
           TranslatableString("engraving", "ottava segment(s)", nullptr, 1),
           TranslatableString("engraving", "Ottava segment(s)", nullptr, 1) },
