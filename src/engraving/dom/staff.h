@@ -168,6 +168,7 @@ public:
 
     const CapoParams& capo(const Fraction&) const;
     void insertCapoParams(const Fraction& tick, const CapoParams& params);
+    void removeDeletedCaposAndRestoreNotation(const std::vector<int>& currentCapos);
     void applyCapoParams();
     void clearCapoParams();
 
