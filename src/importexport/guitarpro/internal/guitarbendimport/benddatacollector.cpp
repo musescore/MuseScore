@@ -251,7 +251,7 @@ void BendDataCollector::fillBendDataContext(BendDataContext& bendDataCtx)
                 for (size_t i = 0; i < notesVec.size(); ++i) {
                     Note* n = notesVec[i];
                     if (auto it = notesData.find(n); it != notesData.end()) {
-                        fillBendDataForNote(bendDataCtx, it->second, i);
+                        fillBendDataForNote(bendDataCtx, it->second, static_cast<int>(i));
                     }
                 }
             }
