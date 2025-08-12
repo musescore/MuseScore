@@ -1129,8 +1129,11 @@ void Staff::insertCapoParams(const Fraction& tick, const Capo* capo)
 void Staff::applyCapoParams()
 {
     for (auto it = m_capoMap.begin(); it != m_capoMap.end(); ++it) {
+        const Capo* capo = it->second;
+        if (capo->params().ignoreTransposition) {
+            continue;
+        }
         if (!staffType()->isTabStaff()) {
-            const Capo* capo = it->second;
             int startTick = it->first;
             int endTick = -1;
             if (auto n = std::next(it); n != m_capoMap.end()) {

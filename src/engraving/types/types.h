@@ -1292,6 +1292,7 @@ struct CapoParams {
     int fretPosition = 0;
     TransposeMode transposeMode = TransposeMode::PLAYBACK_ONLY;
     bool active = false;
+    bool ignoreTransposition = false;
 };
 
 struct PartAudioSettingsCompat {

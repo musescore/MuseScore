@@ -107,22 +107,26 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
             // Return to the default state
             m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
         }
+        m_params.ignoreTransposition = false;
         m_params.active = active;
     } else if (id == Pid::CAPO_FRET_POSITION) {
         m_params.fretPosition = val.toInt();
         m_params.capoTransposeState->setCapoFret(val.toInt());
+        m_params.ignoreTransposition = false;
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
         m_params.ignoredStrings.clear();
         std::vector<int> ignoredStrings = val.value<std::vector<int> >();
         for (int string : ignoredStrings) {
             m_params.ignoredStrings.insert(static_cast<string_idx_t>(string));
         }
+        m_params.ignoreTransposition = true;
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         m_shouldAutomaticallyGenerateText = val.toBool();
 
         if (!m_shouldAutomaticallyGenerateText) {
             setXmlText(m_customText);
         }
+        m_params.ignoreTransposition = true;
     } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
         m_params.transposeMode = (CapoParams::TransposeMode)val.toInt();
         switch (m_params.transposeMode) {
@@ -138,6 +142,7 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
             default:
                 break;
         }
+        m_params.ignoreTransposition = false;
     } else {
         return StaffTextBase::setProperty(id, val);
     }
