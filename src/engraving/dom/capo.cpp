@@ -91,17 +91,17 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
         bool active = val.toBool();
         if (active) {
             switch (m_params.transposeMode) {
-                case CapoParams::TransposeMode::PLAYBACK_ONLY:
-                    m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
-                    break;
-                case CapoParams::TransposeMode::NOTATION_ONLY:
-                    m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
-                    break;
-                case CapoParams::TransposeMode::TAB_ONLY:
-                    m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
-                    break;
-                default:
-                    break;
+            case CapoParams::TransposeMode::PLAYBACK_ONLY:
+                m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
+                break;
+            case CapoParams::TransposeMode::NOTATION_ONLY:
+                m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
+                break;
+            case CapoParams::TransposeMode::TAB_ONLY:
+                m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+                break;
+            default:
+                break;
             }
         } else {
             // Return to the default state
@@ -130,17 +130,17 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
     } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
         m_params.transposeMode = (CapoParams::TransposeMode)val.toInt();
         switch (m_params.transposeMode) {
-            case CapoParams::TransposeMode::PLAYBACK_ONLY:
-                m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
-                break;
-            case CapoParams::TransposeMode::NOTATION_ONLY:
-                m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
-                break;
-            case CapoParams::TransposeMode::TAB_ONLY:
-                m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
-                break;
-            default:
-                break;
+        case CapoParams::TransposeMode::PLAYBACK_ONLY:
+            m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
+            break;
+        case CapoParams::TransposeMode::NOTATION_ONLY:
+            m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
+            break;
+        case CapoParams::TransposeMode::TAB_ONLY:
+            m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+            break;
+        default:
+            break;
         }
         m_params.ignoreTransposition = false;
     } else {

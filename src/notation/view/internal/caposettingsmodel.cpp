@@ -151,7 +151,8 @@ QVariantList CapoSettingsModel::possibleCapoPlacements() const
     };
 }
 
-void CapoSettingsModel::setTransposeMode(int mode) {
+void CapoSettingsModel::setTransposeMode(int mode)
+{
     if (transposeMode() == mode) {
         return;
     }
