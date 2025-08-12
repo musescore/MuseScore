@@ -5368,6 +5368,17 @@ void MusicXmlParserDirection::wedge(const String& type, const int number,
             const Spatium val(spread.toDouble() / 10.0);
             h->setHairpinHeight(val);
         }
+        AsciiStringView lineType = m_e.asciiAttribute("line-type");
+        if (lineType == "dashed") {
+            h->setLineStyle(LineType::DASHED);
+        } else if (lineType == "dotted") {
+            h->setLineStyle(LineType::DOTTED);
+        }
+        const String spread = m_e.attribute("spread");
+        if (!spread.empty() && configuration()->importLayout()) {
+            const Spatium val(spread.toDouble() / 10.0);
+            h->setHairpinHeight(val);
+        }
         starts.push_back(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
     } else if (type == "stop") {
         Hairpin* h = spdesc.isStarted ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy()->segment());
