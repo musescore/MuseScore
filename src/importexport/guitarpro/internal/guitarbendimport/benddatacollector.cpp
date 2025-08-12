@@ -245,7 +245,7 @@ void BendDataCollector::fillBendDataContext(BendDataContext& bendDataCtx)
                 }
             }
 
-            for (auto& [tick, chordInfo] : chunk) {
+            for (auto& [tack, chordInfo] : chunk) {
                 const auto& notesVec  = chordInfo.chord->notes();
                 const auto& notesData = chordInfo.dataByNote;
                 for (size_t i = 0; i < notesVec.size(); ++i) {
