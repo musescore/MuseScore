@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -69,9 +70,12 @@ Column {
 
             defaultText: qsTrc("project", "Untitled score")
 
-            navigationPanel: root.navigationPanel
-            navigationColumn: 0
+            TextInputField {
+                navigationPanel: root.navigationPanel
+                navigationColumn: 0
+            }
         }
+
         GeneralInfoItem {
             id: composerInfo
 
@@ -83,8 +87,10 @@ Column {
 
             defaultText: qsTrc("project", "Composer / arranger")
 
-            navigationPanel: root.navigationPanel
-            navigationColumn: 1
+            TextInputField {
+                navigationPanel: root.navigationPanel
+                navigationColumn: 2
+            }
         }
     }
 
@@ -109,8 +115,10 @@ Column {
 
             defaultText: qsTrc("project", "Subtitle")
 
-            navigationPanel: root.navigationPanel
-            navigationColumn: 2
+            TextInputField {
+                navigationPanel: root.navigationPanel
+                navigationColumn: 1
+            }
         }
 
         GeneralInfoItem {
@@ -122,6 +130,7 @@ Column {
 
             title: qsTrc("project", "Lyricist")
 
+        TextInputField {
             navigationPanel: root.navigationPanel
             navigationColumn: 3
         }
@@ -138,7 +147,9 @@ Column {
         //: The caption of a field to specify copyright information
         title: qsTrc("project", "Copyright")
 
-        navigationPanel: root.navigationPanel
-        navigationColumn: 4
+        TextInputField {
+            navigationPanel: root.navigationPanel
+            navigationColumn: 4
+        }
     }
 }
