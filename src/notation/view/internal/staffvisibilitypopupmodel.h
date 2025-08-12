@@ -46,7 +46,7 @@ class StaffVisibilityPopupModel : public AbstractElementPopupModel, public QQmlP
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(EmptyStavesVisibilityModel * emptyStavesVisibilityModel READ emptyStavesVisibilityModel CONSTANT)
-    Q_PROPERTY(int systemIndex READ systemIndex NOTIFY systemIndexChanged)
+    Q_PROPERTY(size_t systemIndex READ systemIndex NOTIFY systemIndexChanged)
 
 public:
     explicit StaffVisibilityPopupModel(QObject* parent = nullptr);
@@ -54,7 +54,7 @@ public:
     Q_INVOKABLE void init() override;
 
     EmptyStavesVisibilityModel* emptyStavesVisibilityModel() const { return m_emptyStavesVisibilityModel.get(); }
-    int systemIndex() const { return m_systemIndex; }
+    size_t systemIndex() const { return m_systemIndex; }
 
 signals:
     void systemIndexChanged();
@@ -64,7 +64,7 @@ private:
     void componentComplete() override {}
 
     std::unique_ptr<EmptyStavesVisibilityModel> m_emptyStavesVisibilityModel = nullptr;
-    int m_systemIndex = 0;
+    size_t m_systemIndex = 0;
 };
 
 class EmptyStavesVisibilityModel : public QAbstractItemModel, public muse::Injectable
