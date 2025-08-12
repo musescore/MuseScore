@@ -3521,6 +3521,10 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
         p->setShow(e.readInt());
     } else if (tag == "soloist") {
         p->setSoloist(e.readInt());
+    } else if (tag == "hideWhenEmpty") {
+        p->setHideWhenEmpty(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
+    } else if (tag == "hideStavesWhenIndividuallyEmpty") {
+        p->setHideStavesWhenIndividuallyEmpty(e.readBool());
     } else if (tag == "preferSharpFlat") {
         String val = e.readText();
         if (val == "sharps") {
@@ -3901,11 +3905,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "invisible") {
         s->staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {
-        s->setHideWhenEmpty(Staff::HideMode(e.readInt()));
+        s->setHideWhenEmpty(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
     } else if (tag == "cutaway") {
         s->setCutaway(e.readInt());
     } else if (tag == "showIfSystemEmpty") {
-        s->setShowIfEmpty(e.readInt());
+        s->setShowIfEntireSystemEmpty(e.readInt());
     } else if (tag == "hideSystemBarLine") {
         s->setHideSystemBarLine(e.readInt());
     } else if (tag == "mergeMatchingRests") {

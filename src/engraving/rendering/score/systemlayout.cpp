@@ -514,9 +514,14 @@ System* SystemLayout::getNextSystem(LayoutContext& ctx)
     return system;
 }
 
-// Returns ALWAYS, NEVER, or INSTRUMENT
-static Staff::HideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty,
-                                       bool& hasSystemSpecificOverrides)
+enum class StaffHideMode {
+    HIDE_WHEN_STAFF_EMPTY,
+    HIDE_WHEN_INSTRUMENT_EMPTY,
+    ALWAYS_SHOW
+};
+
+static StaffHideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty,
+                                     bool& hasSystemSpecificOverrides)
 {
     // Check for system-specific overrides
     bool hasSystemSpecificOverrideHide = false;
@@ -536,28 +541,47 @@ static Staff::HideMode computeHideMode(const System* system, const Staff* staff,
 
     if (hasSystemSpecificOverrideDontHide) {
         hasSystemSpecificOverrides = true;
-        return Staff::HideMode::NEVER;
+        return StaffHideMode::ALWAYS_SHOW;
     } else if (hasSystemSpecificOverrideHide) {
         hasSystemSpecificOverrides = true;
-        return Staff::HideMode::ALWAYS;
+        return StaffHideMode::HIDE_WHEN_STAFF_EMPTY;
     }
 
-    // Consider staff hide mode and global hide mode
-    Staff::HideMode hideMode = staff->hideWhenEmpty();
-    if (hideMode == Staff::HideMode::AUTO) {
-        return globalHideIfEmpty ? Staff::HideMode::ALWAYS : Staff::HideMode::NEVER;
-    } else if (hideMode == Staff::HideMode::INSTRUMENT && !globalHideIfEmpty) {
-        return Staff::HideMode::NEVER;
+    // Consider staff setting
+    AutoOnOff staffHideMode = staff->hideWhenEmpty();
+    switch (staffHideMode) {
+    case AutoOnOff::ON:
+        return StaffHideMode::HIDE_WHEN_STAFF_EMPTY;
+    case AutoOnOff::OFF:
+        return StaffHideMode::ALWAYS_SHOW;
+    case AutoOnOff::AUTO:
+        break;
     }
 
-    return hideMode;
+    // Consider part setting
+    AutoOnOff partHideMode = staff->part()->hideWhenEmpty();
+    switch (partHideMode) {
+    case AutoOnOff::ON:
+        break;
+    case AutoOnOff::OFF:
+        return StaffHideMode::ALWAYS_SHOW;
+    case AutoOnOff::AUTO:
+        // Consider global setting
+        if (!globalHideIfEmpty) {
+            return StaffHideMode::ALWAYS_SHOW;
+        }
+    }
+
+    return staff->part()->hideStavesWhenIndividuallyEmpty()
+           ? StaffHideMode::HIDE_WHEN_STAFF_EMPTY
+           : StaffHideMode::HIDE_WHEN_INSTRUMENT_EMPTY;
 }
 
 static bool computeShowSysStaff(const System* system, const Staff* staff, const staff_idx_t staffIdx,
                                 const Fraction& stick, const SpannerMap::IntervalList& spanners,
-                                const Staff::HideMode hideMode)
+                                const StaffHideMode hideMode)
 {
-    if (hideMode == Staff::HideMode::NEVER) {
+    if (hideMode == StaffHideMode::ALWAYS_SHOW) {
         return true;
     }
 
@@ -596,7 +620,7 @@ static bool computeShowSysStaff(const System* system, const Staff* staff, const 
 
                 const Measure* m = toMeasure(mb);
                 bool empty = m->isEmpty(st);
-                if (hideMode == Staff::HideMode::INSTRUMENT && !empty) {
+                if (hideMode == StaffHideMode::HIDE_WHEN_INSTRUMENT_EMPTY && !empty) {
                     return true;
                 } else if (empty) {
                     continue;
@@ -661,7 +685,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
             continue;
         }
 
-        const Staff::HideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty, hasSystemSpecificOverrides);
+        const StaffHideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty, hasSystemSpecificOverrides);
         const bool show = computeShowSysStaff(system, staff, staffIdx, stick, spanners, hideMode);
         ss->setShow(show);
         if (show) {
@@ -673,12 +697,12 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
 
     system->setHasStaffVisibilityIndicator(hasSystemSpecificOverrides || hasHiddenStaves);
 
-    // If the system is empty, unhide the staves with `showIfEmpty` set to true, if any
+    // If the system is empty, unhide the staves with `showIfEntireSystemEmpty` set to true, if any
     const Staff* firstVisible = nullptr;
     if (systemIsEmpty) {
         for (const Staff* staff : ctx.dom().staves()) {
             SysStaff* ss  = system->staff(staff->idx());
-            if (staff->showIfEmpty() && !ss->show()) {
+            if (staff->showIfEntireSystemEmpty() && !ss->show()) {
                 ss->setShow(true);
                 systemIsEmpty = false;
             } else if (!firstVisible && staff->show()) {
@@ -710,7 +734,7 @@ bool SystemLayout::canChangeSysStaffVisibility(const System* system, const staff
         const Fraction etick = system->last()->endTick();
         const auto& spanners = system->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
 
-        return !computeShowSysStaff(system, staff, staffIdx, system->first()->tick(), spanners, Staff::HideMode::ALWAYS);
+        return !computeShowSysStaff(system, staff, staffIdx, system->first()->tick(), spanners, StaffHideMode::HIDE_WHEN_STAFF_EMPTY);
     }
 
     // SysStaff is hidden; check if can show

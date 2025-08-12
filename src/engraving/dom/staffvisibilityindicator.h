@@ -33,6 +33,6 @@ class StaffVisibilityIndicator : public IndicatorIcon
 public:
     StaffVisibilityIndicator(System* parent);
 
-    char16_t iconCode() const override { return 0xEF53; }
+    char16_t iconCode() const override { return 0xF4AE; }
 };
 }

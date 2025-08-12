@@ -50,9 +50,24 @@ RadioDelegate {
 
     ButtonGroup.group: ListView.view && ListView.view instanceof RadioButtonGroup ? ListView.view.radioButtonGroup : null
 
-    implicitHeight: ListView.view ? ListView.view.height : ui.theme.defaultButtonSize
-    implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
-                                 : ui.theme.defaultButtonSize
+    implicitHeight: {
+        if (ListView.view && ListView.view.orientation === ListView.Horizontal) {
+            return ListView.view.height
+        } else {
+            return ui.theme.defaultButtonSize
+        }
+    }
+    implicitWidth: {
+        if (ListView.view) {
+            if (ListView.view.orientation === ListView.Horizontal) {
+                return (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
+            } else {
+                return ListView.view.width
+            }
+        } else {
+            return ui.theme.defaultButtonSize
+        }
+    }
 
     hoverEnabled: root.enabled
 

@@ -30,25 +30,12 @@
 using namespace muse;
 
 namespace Awl {
-//---------------------------------------------------------
-//   ColorLabel
-//---------------------------------------------------------
-
 ColorLabel::ColorLabel(QWidget* parent)
     : QPushButton(parent)
 {
     connect(this, &QPushButton::clicked, this, &ColorLabel::colorButtonClicked);
     setFlat(true);
 }
-
-ColorLabel::~ColorLabel()
-{
-    delete _pixmap;
-}
-
-//---------------------------------------------------------
-//   setColor
-//---------------------------------------------------------
 
 void ColorLabel::setColor(const QColor& c)
 {
@@ -60,51 +47,23 @@ void ColorLabel::setColor(const QColor& c)
     }
 }
 
-//---------------------------------------------------------
-//   setPixmap
-//---------------------------------------------------------
-
-void ColorLabel::setPixmap(QPixmap* pm)
-{
-    delete _pixmap;
-    _pixmap = pm;
-    update();
-}
-
-//---------------------------------------------------------
-//   sizeHint
-//---------------------------------------------------------
-
 QSize ColorLabel::sizeHint() const
 {
-    return QSize(30, 20);
+    return QSize(30, 30);
 }
-
-//---------------------------------------------------------
-//   paintEvent
-//---------------------------------------------------------
 
 void ColorLabel::paintEvent(QPaintEvent* ev)
 {
     QPainter p(this);
-    if (_pixmap) {
-        p.drawTiledPixmap(rect(), *_pixmap);
-    } else {
-        p.fillRect(rect(), _color);
-    }
+    p.setPen(Qt::NoPen);
+    p.setBrush(_color);
+    p.drawRoundedRect(rect(), 3, 3);
 
     QPushButton::paintEvent(ev);
 }
 
-//---------------------------------------------------------
-//   mousePressEvent
-//---------------------------------------------------------
-
 void ColorLabel::colorButtonClicked(bool)
 {
-    if (_pixmap) {
-        return;
-    }
     QColor c = QColorDialog::getColor(_color, this,
                                       muse::qtrc("notation", "Select color"),
                                       QColorDialog::ShowAlphaChannel
@@ -118,4 +77,3 @@ void ColorLabel::colorButtonClicked(bool)
     }
 }
 }
-// namespace Awl

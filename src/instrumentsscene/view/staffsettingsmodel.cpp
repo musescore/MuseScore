@@ -21,8 +21,11 @@
  */
 #include "staffsettingsmodel.h"
 
+#include "engraving/types/types.h"
+
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 StaffSettingsModel::StaffSettingsModel(QObject* parent)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
@@ -50,6 +53,8 @@ void StaffSettingsModel::load(const QString& staffId)
 
     emit cutawayEnabledChanged();
     emit isSmallStaffChanged();
+    emit hideWhenEmptyChanged();
+    emit showIfEntireSystemEmptyChanged();
     emit voicesChanged();
     emit allStaffTypesChanged();
     emit staffTypeChanged();
@@ -205,6 +210,76 @@ void StaffSettingsModel::setCutawayEnabled(bool value)
     notationParts()->setStaffConfig(m_staffId, m_config);
 
     emit cutawayEnabledChanged();
+}
+
+int StaffSettingsModel::hideWhenEmpty() const
+{
+    if (!notationParts()) {
+        return 0; // AutoOnOff::AUTO
+    }
+
+    const Staff* staff = notationParts()->staff(m_staffId);
+    if (!staff) {
+        return 0; // AutoOnOff::AUTO
+    }
+
+    return static_cast<int>(staff->hideWhenEmpty());
+}
+
+void StaffSettingsModel::setHideWhenEmpty(int value)
+{
+    if (!notationParts()) {
+        return;
+    }
+
+    const Staff* staff = notationParts()->staff(m_staffId);
+    if (!staff || static_cast<int>(staff->hideWhenEmpty()) == value) {
+        return;
+    }
+
+    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("instruments", "Change staff settings"));
+
+    Staff* mutableStaff = const_cast<Staff*>(staff);
+    mutableStaff->undoChangeProperty(Pid::HIDE_WHEN_EMPTY, PropertyValue(static_cast<AutoOnOff>(value)));
+
+    currentNotation()->undoStack()->commitChanges();
+
+    emit hideWhenEmptyChanged();
+}
+
+bool StaffSettingsModel::showIfEntireSystemEmpty() const
+{
+    if (!notationParts()) {
+        return false;
+    }
+
+    const Staff* staff = notationParts()->staff(m_staffId);
+    if (!staff) {
+        return false;
+    }
+
+    return staff->showIfEntireSystemEmpty();
+}
+
+void StaffSettingsModel::setShowIfEntireSystemEmpty(bool value)
+{
+    if (!notationParts()) {
+        return;
+    }
+
+    const Staff* staff = notationParts()->staff(m_staffId);
+    if (!staff || staff->showIfEntireSystemEmpty() == value) {
+        return;
+    }
+
+    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("instruments", "Change staff settings"));
+
+    Staff* mutableStaff = const_cast<Staff*>(staff);
+    mutableStaff->undoChangeProperty(Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY, PropertyValue(value));
+
+    currentNotation()->undoStack()->commitChanges();
+
+    emit showIfEntireSystemEmptyChanged();
 }
 
 void StaffSettingsModel::createLinkedStaff()

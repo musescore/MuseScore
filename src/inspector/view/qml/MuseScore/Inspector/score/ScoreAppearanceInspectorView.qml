@@ -65,7 +65,6 @@ InspectorSectionView {
                 Layout.fillWidth: false
                 Layout.minimumWidth: implicitWidth
 
-                enabled: root.model ? root.model.hideEmptyStaves : false
                 icon: IconCode.SETTINGS_COG
                 transparent: !isOpened
 
@@ -79,12 +78,6 @@ InspectorSectionView {
                 popupContent: HideEmptyStavesSettings {
                     model: root.model
                     navigationPanel: hideEmptyStavesSettingsPopupButton.popupNavigationPanel
-                }
-
-                onEnabledChanged: {
-                    if (!enabled) {
-                        closePopup()
-                    }
                 }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
