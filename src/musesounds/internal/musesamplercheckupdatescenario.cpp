@@ -38,11 +38,13 @@ void MuseSamplerCheckUpdateScenario::checkAndShowUpdateIfNeed()
     }
 
     if (service()->incompatibleLocalVersion()) {
+        m_alreadyChecked = true;
         showCriticalUpdateNotification();
         return;
     }
 
     if (configuration()->museSamplerUpdateAvailable()) {
+        m_alreadyChecked = true;
         showNewVersionNotification();
         return;
     }

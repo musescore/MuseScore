@@ -188,6 +188,10 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
         return;
     }
 
+    if (configuration()->checkForUpdateTestMode()) {
+        return;
+    }
+
     QString actionCode = rv.val.toQString();
 
     if (actionCode == "install") {
@@ -240,5 +244,5 @@ void UpdateScenario::closeAppAndStartInstallation(const muse::io::path_t& instal
 
 bool UpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
 {
-    return info.version == configuration()->skippedReleaseVersion();
+    return info.version == configuration()->skippedReleaseVersion() && !configuration()->checkForUpdateTestMode();
 }
