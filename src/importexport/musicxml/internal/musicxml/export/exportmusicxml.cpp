@@ -4696,7 +4696,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
     attr.doAttr(xml, false);
     String tagName = u"direction";
     if (el) {
-        tagname += placement2xml(el);
+        tagName += placement2xml(el);
         if (el->systemFlag() && !ExportMusicXml::configuration()->exportMu3Compat()) {
             tagName += u" system=\"only-top\"";
         }
