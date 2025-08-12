@@ -1977,7 +1977,6 @@ void InsertRemoveMeasures::removeMeasures()
                   if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2))
                         sp->removeUnmanaged();
                   }
-            score->connectTies(true);   // ??
             }
 
       // remove empty systems
