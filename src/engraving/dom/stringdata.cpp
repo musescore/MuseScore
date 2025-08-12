@@ -153,13 +153,14 @@ void StringData::fretChords(Chord* chord) const
     auto capo = chord->staff()->capo(chord->tick());
     int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;
     int pitchOffset = -transp + chord->staff()->pitchOffset(chord->segment()->tick());
+    int capoPitchOffset = 0;
     if (capo.active) {
-        pitchOffset += capo.capoTransposeState->tabPitchOffset();
+        capoPitchOffset = capo.capoTransposeState->tabPitchOffset();
     }
     // if chord parent is not a segment, the chord is special (usually a grace chord):
     // fret it by itself, ignoring the segment
     if (chord->explicitParent()->type() != ElementType::SEGMENT) {
-        sortChordNotes(sortedNotes, chord, pitchOffset, &count);
+        sortChordNotes(sortedNotes, chord, pitchOffset + capoPitchOffset, &count);
     } else {
         // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
         Segment* seg = chord->segment();
@@ -169,7 +170,7 @@ void StringData::fretChords(Chord* chord) const
         for (trk = trkFrom; trk < trkTo; ++trk) {
             EngravingItem* ch = seg->elist().at(trk);
             if (ch && ch->type() == ElementType::CHORD) {
-                sortChordNotes(sortedNotes, toChord(ch), pitchOffset, &count);
+                sortChordNotes(sortedNotes, toChord(ch), pitchOffset + capoPitchOffset, &count);
             }
         }
     }
@@ -217,7 +218,7 @@ void StringData::fretChords(Chord* chord) const
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
         if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
             // get a new fretting
-            if (!convertPitch(note->pitch(), pitchOffset, &nNewString, &nNewFret) && note->displayFret()
+            if (!convertPitch(note->pitch(), pitchOffset + capoPitchOffset, &nNewString, &nNewFret) && note->displayFret()
                 == Note::DisplayFretOption::NoHarmonic && !note->negativeFretUsed()) {
                 // no way to fit this note in this tab:
                 // mark as fretting conflict
@@ -242,7 +243,7 @@ void StringData::fretChords(Chord* chord) const
             // attempt to find a suitable string, from topmost
             for (int nTempString = 0; nTempString < strings; nTempString++) {
                 if (bUsed[nTempString] < 1
-                    && (nTempFret=fret(note->pitch(), nTempString, pitchOffset)) != INVALID_FRET_INDEX) {
+                    && (nTempFret=fret(note->pitch(), nTempString, pitchOffset + capoPitchOffset)) != INVALID_FRET_INDEX) {
                     bUsed[nNewString]--;              // free previous string
                     bUsed[nTempString]++;             // and occupy new string
                     nNewFret   = nTempFret;
@@ -255,6 +256,22 @@ void StringData::fretChords(Chord* chord) const
         // TODO : try to optimize used fret range, avoiding excessively open positions
 
         // if fretting did change, store as a fret change
+        // Check to see if we're dealing with partial capo
+        if (capo.active && !capo.ignoredStrings.empty()) {
+            // Revert capo pitch offset for ignored strings
+            if (const auto it = capo.ignoredStrings.find(nNewString); it != capo.ignoredStrings.end()) {
+                switch (capo.transposeMode) {
+                    case CapoParams::PLAYBACK_ONLY:
+                        break;
+                    case CapoParams::NOTATION_ONLY:
+                        nNewFret += capo.fretPosition;
+                        break;
+                    case CapoParams::TAB_ONLY:
+                        nNewFret -= capoPitchOffset;
+                        break;
+                }
+            }
+        }
         if (nFret != nNewFret) {
             note->undoChangeProperty(Pid::FRET, nNewFret);
         }
