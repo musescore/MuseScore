@@ -80,20 +80,6 @@ fi
 export PATH="$BUILD_TOOLS/linuxdeploy:$PATH"
 linuxdeploy --list-plugins
 
-if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
-  mkdir $BUILD_TOOLS/appimageupdatetool
-  cd $BUILD_TOOLS/appimageupdatetool
-  download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
-  cd $ORIGIN_DIR
-fi
-if [[ "${UPDATE_INFORMATION}" ]]; then
-  export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
-
-  # `appimageupdatetool`'s `AppRun` script gets confused when called via a symlink.
-  # Resolve the symlink here to avoid this issue.
-  $(readlink -f "$(which appimageupdatetool)") --version
-fi
-
 echo "############################## BUNDLE DEPENDENCIES INTO APPDIR ##############################"
 
 cd "$(dirname "${INSTALL_DIR}")"
@@ -175,6 +161,10 @@ unwanted_files=(
   lib/libwayland-client.so.0
 )
 
+for file in "${unwanted_files[@]}"; do
+  rm -rf "${appdir}/${file}"
+done
+
 # ADDITIONAL QT COMPONENTS
 # linuxdeploy-plugin-qt may have missed some Qt files or folders that we need.
 # List them here using paths relative to the Qt root directory. Report new
@@ -200,6 +190,15 @@ else
   )
 fi
 
+for file in "${additional_qt_components[@]}"; do
+  if [ -f "${appdir}/${file}" ]; then
+    echo "Warning: ${file} was already deployed. Skipping."
+    continue
+  fi
+    mkdir -p "${appdir}/$(dirname "${file}")"
+    cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
+done
+
 # ADDITIONAL LIBRARIES
 # linuxdeploy may have missed some libraries that we need
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
@@ -212,6 +211,14 @@ else
   additional_libraries=()
 fi
 
+for lib in "${additional_libraries[@]}"; do
+  if [ -f "${appdir}/lib/${lib}" ]; then
+    echo "Warning: ${file} was already deployed. Skipping."
+    continue
+  fi
+  full_path="$(find_library "${lib}")"
+  cp -L "${full_path}" "${appdir}/lib/${lib}"
+done
 
 # FALLBACK LIBRARIES
 # These get bundled in the AppImage, but are only loaded if the user does not
@@ -232,69 +239,52 @@ else
   )
 fi
 
-# PREVIOUSLY EXTRACTED APPIMAGES
-# These include their own dependencies. We bundle them uncompressed to avoid
-# creating a double layer of compression (AppImage inside AppImage).
-if [[ "${UPDATE_INFORMATION}" ]]; then
-  extracted_appimages=(
-    appimageupdatetool
-  )
-else
-  extracted_appimages=(
-    # none
-  )
-fi
-
-for file in "${unwanted_files[@]}"; do
-  rm -rf "${appdir}/${file}"
-done
-
-for file in "${additional_qt_components[@]}"; do
-  if [ -f "${appdir}/${file}" ]; then
-    echo "Warning: ${file} was already deployed. Skipping."
-    continue
-  fi
-    mkdir -p "${appdir}/$(dirname "${file}")"
-    cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
-done
-
-for lib in "${additional_libraries[@]}"; do
-  if [ -f "${appdir}/lib/${lib}" ]; then
-    echo "Warning: ${file} was already deployed. Skipping."
-    continue
-  fi
-  full_path="$(find_library "${lib}")"
-  cp -L "${full_path}" "${appdir}/lib/${lib}"
-done
-
 for fb_lib in "${fallback_libraries[@]}"; do
   fallback_library "${fb_lib}"
 done
 
-for name in "${extracted_appimages[@]}"; do
-  symlink="$(which "${name}")"
-  apprun="$(dirname "${symlink}")/$(readlink "${symlink}")"
-  if [[ ! -L "${symlink}" || ! -f "${apprun}" ]]; then
-    echo "$0: Warning: Unable to find AppImage for '${name}'. Will not bundle." >&2
-    continue
+# APPIMAGEUPDATETOOL
+# Bundled uncompressed, to avoid creating a double layer of compression
+# (AppImage inside AppImage).
+if [[ "${UPDATE_INFORMATION}" ]]; then
+  if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
+    mkdir $BUILD_TOOLS/appimageupdatetool
+    cd $BUILD_TOOLS/appimageupdatetool
+    download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
+    cd $ORIGIN_DIR
   fi
-  extracted_appdir_path="$(dirname "${apprun}")"
-  extracted_appdir_name="$(basename "${extracted_appdir_path}")"
-  cp -r "${extracted_appdir_path}" "${appdir}/"
-  cat >"${appdir}/bin/${name}" <<EOF
+
+  export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
+  appimageupdatetool --version
+
+  # Extract appimageupdatetool
+  appimageupdatetool --appimage-extract >/dev/null # dest folder "squashfs-root"
+
+  # Move into AppDir
+  mv squashfs-root ${appdir}/appimageupdatetool.AppDir
+
+  # Create alias in `${appdir}/bin`
+  # Use script instead of symlink, because appimageupdatetool.AppDir/AppRun fails
+  # when run from a symlink.
+  cat >"${appdir}/bin/appimageupdatetool" <<EOF
 #!/bin/sh
 unset APPDIR APPIMAGE # clear outer values before running inner AppImage
 HERE="\$(dirname "\$(readlink -f "\$0")")"
-exec "\${HERE}/../${extracted_appdir_name}/AppRun" "\$@"
+exec "\${HERE}/../appimageupdatetool.AppDir/AppRun" "\$@"
 EOF
-  chmod +x "${appdir}/bin/${name}"
-done
+  chmod +x "${appdir}/bin/appimageupdatetool"
+fi
 
 # METHOD OF LAST RESORT
 # Special treatment for some dependencies when all other methods fail
 
 # Bundle libnss3 and friends as fallback libraries. Needed on Chromebook.
 # See discussion at https://github.com/probonopd/linuxdeployqt/issues/35
+libnss3_system_path="$(dirname "$(find_library libnss3.so)")"
+libnss3_appdir_path="${appdir}/fallback/libnss3.so" # directory named like library
+
+mkdir -p "${libnss3_appdir_path}/nss"
+
 libnss3_files=(
   # https://packages.ubuntu.com/xenial/amd64/libnss3/filelist
   libnss3.so
@@ -311,11 +301,6 @@ libnss3_files=(
   nss/libsoftokn3.chk
   nss/libsoftokn3.so
 )
-
-libnss3_system_path="$(dirname "$(find_library libnss3.so)")"
-libnss3_appdir_path="${appdir}/fallback/libnss3.so" # directory named like library
-
-mkdir -p "${libnss3_appdir_path}/nss"
 
 for file in "${libnss3_files[@]}"; do
   cp -L "${libnss3_system_path}/${file}" "${libnss3_appdir_path}/${file}"
