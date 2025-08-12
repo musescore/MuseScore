@@ -249,6 +249,7 @@ for file in "${unwanted_files[@]}"; do
   rm -rf "${appdir}/${file}"
 done
 
+set -x
 for file in "${additional_qt_components[@]}"; do
   if [ -f "${appdir}/${file}" ]; then
     echo "Warning: ${file} was already deployed. Skipping."
@@ -258,6 +259,7 @@ for file in "${additional_qt_components[@]}"; do
     cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
 done
 
+set -x
 for lib in "${additional_libraries[@]}"; do
   if [ -f "${appdir}/lib/${lib}" ]; then
     echo "Warning: ${file} was already deployed. Skipping."
@@ -322,6 +324,7 @@ for file in "${libnss3_files[@]}"; do
   rm -f "${appdir}/lib/$(basename "${file}")" # in case it was already packaged by linuxdeploy
 done
 
+set +x
 
 echo "############################## TURN APPDIR INTO AN APPIMAGE ##############################"
 
