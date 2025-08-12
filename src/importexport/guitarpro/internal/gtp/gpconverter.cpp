@@ -771,6 +771,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
                     String capoText = String(u"Capo fret %1").arg(capo);
                     st->setPlainText(muse::mtrc("iex_guitarpro", capoText));
                     s->add(st);
+                    m_hasCapo[curTrack] = true;
                 }
             }
         }
