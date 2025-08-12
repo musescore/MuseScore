@@ -54,6 +54,9 @@ public:
 
     bool museSamplerCheckForUpdateTestMode() const override;
 
+    bool museSamplerUpdateAvailable() const override;
+    void setMuseSamplerUpdateAvailable(bool value) override;
+
 private:
     bool getSoundsTestMode() const;
 };

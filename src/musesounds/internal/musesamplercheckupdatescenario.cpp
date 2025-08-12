@@ -37,6 +37,16 @@ void MuseSamplerCheckUpdateScenario::checkForUpdate()
         return;
     }
 
+    if (service()->incompatibleLocalVersion()) {
+        showCriticalUpdateNotification();
+        return;
+    }
+
+    if (configuration()->museSamplerUpdateAvailable()) {
+        showNewVersionNotification();
+        return;
+    }
+
     auto promise = service()->checkForUpdate();
     promise.onResolve(this, [this](const muse::RetVal<bool>& res) {
         m_alreadyChecked = true;
@@ -47,12 +57,40 @@ void MuseSamplerCheckUpdateScenario::checkForUpdate()
         }
 
         if (res.val) {
-            showUpdateNotification();
+            showNewVersionNotification();
         }
     });
 }
 
-void MuseSamplerCheckUpdateScenario::showUpdateNotification()
+void MuseSamplerCheckUpdateScenario::showCriticalUpdateNotification()
+{
+    muse::IInteractive::ButtonData notNowBtn(int(muse::IInteractive::Button::CustomButton) + 1,
+                                             muse::trc("musesounds", "Not now"));
+
+#ifdef Q_OS_LINUX
+    muse::IInteractive::ButtonData launchBtn(int(muse::IInteractive::Button::CustomButton) + 2,
+                                             muse::trc("musesounds", "Quit & launch MuseSounds Manager"), true /*accent*/);
+
+    std::string msg = muse::trc("musesounds", "To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. "
+                                              "Your MuseSounds libraries won’t work until the update is complete.");
+#else
+    muse::IInteractive::ButtonData launchBtn(int(muse::IInteractive::Button::CustomButton) + 2,
+                                             muse::trc("musesounds", "Quit & launch MuseHub"), true /*accent*/);
+
+    std::string msg = muse::trc("musesounds", "To apply this update, MuseScore Studio will need to close briefly and MuseHub will open. "
+                                              "Your MuseSounds libraries won’t work until the update is complete.");
+#endif
+
+    interactive()->info(muse::trc("musesounds", "MuseSounds needs an update"), msg,
+                        { notNowBtn, launchBtn }, launchBtn.btn, muse::IInteractive::Option::WithIcon)
+    .onResolve(this, [this, launchBtn](const muse::IInteractive::Result& res) {
+        if (res.isButton(launchBtn.btn)) {
+            openMuseHubAndQuit();
+        }
+    });
+}
+
+void MuseSamplerCheckUpdateScenario::showNewVersionNotification()
 {
     muse::IInteractive::ButtonData notNowBtn(int(muse::IInteractive::Button::CustomButton) + 1,
                                              muse::trc("musesounds", "Not now"));
@@ -76,7 +114,10 @@ void MuseSamplerCheckUpdateScenario::showUpdateNotification()
     interactive()->info(muse::trc("musesounds", "An update for MuseSounds is available"), msg,
                         { notNowBtn, launchBtn }, launchBtn.btn, muse::IInteractive::Option::WithIcon)
     .onResolve(this, [this, launchBtn](const muse::IInteractive::Result& res) {
-        if (res.isButton(launchBtn.btn)) {
+        const bool agreesToUpdate = res.isButton(launchBtn.btn);
+        configuration()->setMuseSamplerUpdateAvailable(!agreesToUpdate);
+
+        if (agreesToUpdate) {
             openMuseHubAndQuit();
         }
     });

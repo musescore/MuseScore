@@ -81,27 +81,37 @@ InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const AudioRe
 
 void MuseSamplerResolver::init()
 {
-    const io::path_t& museSamplerLibraryPath = configuration()->libraryPath();
-    if (io::isAbsolute(museSamplerLibraryPath) && !io::FileInfo::exists(museSamplerLibraryPath)) {
-        LOGI() << "MuseSampler library not found: " << museSamplerLibraryPath;
+    const io::path_t libraryPath = configuration()->libraryPath();
+    if (io::isAbsolute(libraryPath) && !io::FileInfo::exists(libraryPath)) {
+        LOGI() << "MuseSampler library not found: " << libraryPath;
         return;
     }
 
-    m_libHandler = std::make_shared<MuseSamplerLibHandler>(museSamplerLibraryPath, configuration()->useLegacyAudition());
-
-    if (!m_libHandler->isValid()) {
-        LOGE() << "Incompatible MuseSampler library, ignoring: " << museSamplerLibraryPath;
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>();
+    if (!m_libHandler->loadLib(libraryPath)) {
+        LOGE() << "Unable to load MuseSampler library: " << libraryPath;
         m_libHandler.reset();
         return;
     }
+
+    if (!m_libHandler->loadApi(configuration()->minSupportedVersion(), configuration()->useLegacyAudition())) {
+        m_samplerVersion = m_libHandler->version();
+        m_samplerBuildNumber = m_libHandler->buildNumber();
+        m_libHandler.reset();
+        LOGE() << "Incompatible MuseSampler library: " << libraryPath << ", version: " << m_samplerVersion.toString();
+        return;
+    }
+
+    m_samplerVersion = m_libHandler->version();
+    m_samplerBuildNumber = m_libHandler->buildNumber();
 
     if (!m_libHandler->init()) {
-        LOGE() << "Could not init MuseSampler: " << museSamplerLibraryPath;
+        LOGE() << "Could not init MuseSampler: " << libraryPath << ", version: " << m_samplerVersion.toString();
         m_libHandler.reset();
         return;
     }
 
-    LOGI() << "MuseSampler successfully inited: " << museSamplerLibraryPath;
+    LOGI() << "MuseSampler successfully inited: " << libraryPath << ", version: " << m_samplerVersion.toString();
 }
 
 bool MuseSamplerResolver::reloadAllInstruments()
@@ -120,7 +130,7 @@ void MuseSamplerResolver::processOnlineSounds()
 
 int MuseSamplerResolver::buildNumber() const
 {
-    return m_libHandler ? m_libHandler->getBuildNumber() : -1;
+    return m_samplerBuildNumber;
 }
 
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const
@@ -237,17 +247,12 @@ void MuseSamplerResolver::clearSources()
 {
 }
 
-std::string MuseSamplerResolver::version() const
+const Version& MuseSamplerResolver::version() const
 {
-    if (!m_libHandler) {
-        return std::string();
-    }
-
-    String ver = String::fromUtf8(m_libHandler->getVersionString());
-    return ver.toStdString();
+    return m_samplerVersion;
 }
 
-bool MuseSamplerResolver::isInstalled() const
+bool MuseSamplerResolver::isLoaded() const
 {
     if (m_libHandler) {
         return true;
@@ -258,7 +263,7 @@ bool MuseSamplerResolver::isInstalled() const
 
 float MuseSamplerResolver::defaultReverbLevel(const String& instrumentSoundId) const
 {
-    if (!m_libHandler || !m_libHandler->getReverbLevel || instrumentSoundId.empty()) {
+    if (!m_libHandler || instrumentSoundId.empty()) {
         return 0.f;
     }
 

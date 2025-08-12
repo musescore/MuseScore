@@ -40,6 +40,8 @@ public:
 
     io::path_t libraryPath() const override;
 
+    Version minSupportedVersion() const override;
+
     bool shouldShowBuildNumber() const override;
     bool useLegacyAudition() const override;
 };
