@@ -42,6 +42,11 @@ void MuseSamplerCheckUpdateScenario::checkForUpdate()
         return;
     }
 
+    if (configuration()->museSamplerUpdateAvailable()) {
+        showNewVersionNotification();
+        return;
+    }
+
     auto promise = service()->checkForUpdate();
     promise.onResolve(this, [this](const muse::RetVal<bool>& res) {
         m_alreadyChecked = true;
@@ -109,7 +114,10 @@ void MuseSamplerCheckUpdateScenario::showNewVersionNotification()
     interactive()->info(muse::trc("musesounds", "An update for MuseSounds is available"), msg,
                         { notNowBtn, launchBtn }, launchBtn.btn, muse::IInteractive::Option::WithIcon)
     .onResolve(this, [this, launchBtn](const muse::IInteractive::Result& res) {
-        if (res.isButton(launchBtn.btn)) {
+        const bool agreesToUpdate = res.isButton(launchBtn.btn);
+        configuration()->setMuseSamplerUpdateAvailable(!agreesToUpdate);
+
+        if (agreesToUpdate) {
             openMuseHubAndQuit();
         }
     });

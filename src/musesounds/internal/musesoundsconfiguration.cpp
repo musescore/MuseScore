@@ -35,6 +35,7 @@ static const Settings::Key GET_SOUNDS_TEST_MODE_KEY(module_name, "musesounds/get
 static const Settings::Key LAST_MUSESOUNDS_SHOWN_VERSION_KEY(module_name, "application/lastShownMuseSoundsReleaseVersion");
 
 static const Settings::Key MUSESAMPLER_CHECK_FOR_UPDATE_TEST_MODE(module_name, "museSampler/checkForUpdateTestMode");
+static const Settings::Key MUSESAMPLER_UPDATE_AVAILABLE(module_name, "museSampler/updateAvailable");
 
 static const muse::String OPEN_SOUND_URL("https://www.musehub.com/muse-sounds/");
 
@@ -60,6 +61,8 @@ void MuseSoundsConfiguration::init()
 
     settings()->setDefaultValue(GET_SOUNDS_TEST_MODE_KEY, Val(false));
     settings()->setDefaultValue(MUSESAMPLER_CHECK_FOR_UPDATE_TEST_MODE, Val(false));
+
+    settings()->setDefaultValue(MUSESAMPLER_UPDATE_AVAILABLE, Val(false));
 }
 
 bool MuseSoundsConfiguration::needCheckForMuseSoundsUpdate() const
@@ -118,6 +121,16 @@ void MuseSoundsConfiguration::setLastShownMuseSoundsReleaseVersion(const std::st
 bool MuseSoundsConfiguration::museSamplerCheckForUpdateTestMode() const
 {
     return settings()->value(MUSESAMPLER_CHECK_FOR_UPDATE_TEST_MODE).toBool();
+}
+
+bool MuseSoundsConfiguration::museSamplerUpdateAvailable() const
+{
+    return settings()->value(MUSESAMPLER_UPDATE_AVAILABLE).toBool();
+}
+
+void MuseSoundsConfiguration::setMuseSamplerUpdateAvailable(bool value)
+{
+    settings()->setSharedValue(MUSESAMPLER_UPDATE_AVAILABLE, Val(value));
 }
 
 bool MuseSoundsConfiguration::getSoundsTestMode() const
