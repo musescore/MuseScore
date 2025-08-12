@@ -131,7 +131,7 @@ DropdownView {
 
         showArrow: root.showArrow
         arrowX: root.arrowX
-        opensUpward: root.opensUpward
+        popupPosition: root.popupPosition
         isOpened: root.isOpened
 
         onCloseRequested: {

@@ -41,7 +41,10 @@ FocusScope {
 
     property bool showArrow: false
     property int arrowX: 0
-    property bool opensUpward: false
+    property int arrowY: 0
+
+    property int popupPosition: PopupPosition.Bottom
+
     property bool isOpened: false
     property bool useDropShadow: true
 
@@ -132,15 +135,33 @@ FocusScope {
         Canvas {
             id: arrow
 
-            height: root.padding
-            width: root.padding * 2
+            height: root.popupPosition & PopupPosition.Vertical
+                ? root.padding
+                : 2 * root.padding;
+            width: root.popupPosition & PopupPosition.Vertical
+                ? 2 * root.padding
+                : root.padding;
 
             visible: root.showArrow && arrow.height > 0
             enabled: root.showArrow
 
-            x: root.arrowX - arrow.width / 2 - root.padding
-            y: root.opensUpward ? parent.y + parent.height - height - contentBorder.border.width
-                                : -height + contentBorder.border.width
+            x: {
+                if (root.popupPosition & PopupPosition.Vertical) {
+                    return root.arrowX - arrow.width / 2 - root.padding;
+                } else if (root.popupPosition & PopupPosition.Left) {
+                    return parent.x + parent.width - width - contentBackground.border.width
+                } else if (root.popupPosition & PopupPosition.Right)
+                    return -width + contentBackground.border.width
+            }
+
+            y: {
+                if (root.popupPosition & PopupPosition.Top) {
+                    return parent.y + parent.height - height - contentBackground.border.width
+                } else if (root.popupPosition & PopupPosition.Bottom) {
+                    return -height + contentBackground.border.width
+                } else if (root.popupPosition & PopupPosition.Horizontal)
+                    return root.arrowY - arrow.height / 2 - root.padding;
+            }
 
             onPaint: {
                 var ctx = getContext("2d");
@@ -151,13 +172,21 @@ FocusScope {
                 ctx.strokeStyle = contentBorder.border.color
                 ctx.beginPath();
 
-                if (root.opensUpward) {
+                if (root.popupPosition & PopupPosition.Top) {
                     ctx.moveTo(0, 0);
                     ctx.lineTo(width / 2, height - 1);
                     ctx.lineTo(width, 0);
-                } else {
+                } else if (root.popupPosition & PopupPosition.Bottom) {
                     ctx.moveTo(0, height);
                     ctx.lineTo(width / 2, 1);
+                    ctx.lineTo(width, height);
+                } else if (root.popupPosition & PopupPosition.Left) {
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(width, height / 2);
+                    ctx.lineTo(0, height);
+                } else if (root.popupPosition & PopupPosition.Right) {
+                    ctx.moveTo(width, 0);
+                    ctx.lineTo(0, height / 2);
                     ctx.lineTo(width, height);
                 }
 
@@ -167,7 +196,7 @@ FocusScope {
 
             Connections {
                 target: root
-                function onOpensUpwardChanged() { arrow.requestPaint() }
+                function onPopupPositionChanged() { arrow.requestPaint() }
             }
 
             Connections {
