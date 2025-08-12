@@ -69,6 +69,8 @@ public:
     void runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
+    QList<QVariantMap> welcomeDialogData() const override;
+
 private:
     void registerAudioPlugins();
     void checkAndShowMuseSamplerUpdateIfNeed();
@@ -82,6 +84,8 @@ private:
 
     void restoreLastSession();
     void removeProjectsUnsavedChanges(const muse::io::paths_t& projectsPaths);
+
+    void showWelcomeDialog();
 
     std::string m_startupTypeStr;
     project::ProjectFile m_startupScoreFile;

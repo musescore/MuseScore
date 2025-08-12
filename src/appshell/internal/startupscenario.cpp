@@ -33,6 +33,7 @@ using namespace muse;
 using namespace muse::actions;
 
 static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup?floating=true");
+static const muse::UriQuery WELCOME_DIALOG_URI("musescore://welcomedialog");
 static const muse::Uri HOME_URI("musescore://home");
 static const muse::Uri NOTATION_URI("musescore://notation");
 
@@ -226,6 +227,45 @@ bool StartupScenario::startupCompleted() const
     return m_startupCompleted;
 }
 
+QList<QVariantMap> StartupScenario::welcomeDialogData() const
+{
+    QVariantMap item1;
+    item1.insert("title", muse::qtrc("appshell/welcome", "What’s new in MuseScore Studio"));
+    item1.insert("imageUrl", "qrc:/resources/welcomedialog/WhatsNew.png");
+    item1.insert("description", muse::qtrc("appshell/welcome",
+                                           "Includes a new system for hiding empty staves, a new text editing widget, guitar notation improvements, engraving improvements and more."));
+    item1.insert("buttonText", muse::qtrc("appshell/welcome", "Watch video"));
+    item1.insert("destinationUrl", "https://www.youtube.com/watch?v=-I-InDHIzdQ"); // TODO: Placeholder (4.6 video does not exist yet)
+
+    QVariantMap item2;
+    item2.insert("title", muse::qtrc("appshell/welcome", "Install our free MuseSounds libraries"));
+    item2.insert("imageUrl", "qrc:/resources/welcomedialog/MuseSounds.png");
+    item2.insert("description", muse::qtrc("appshell/welcome",
+                                           "Explore our collection of realistic sample libraries, including solo instruments, marching percussion, and full orchestra - available for free on MuseHub."));
+    item2.insert("buttonText", muse::qtrc("appshell/welcome", "Get it on MuseHub"));
+    item2.insert("destinationUrl",
+                 "https://www.musehub.com/free-musesounds?utm_source=mss-app-welcome-free-musesounds&utm_medium=mss-app-welcome-free-musesounds&utm_campaign=mss-app-welcome-free-musesounds&utm_id=mss-app-welcome-free-musesounds");
+
+    QVariantMap item3;
+    item3.insert("title", muse::qtrc("appshell/welcome", "Explore our tutorials"));
+    item3.insert("imageUrl", "qrc:/resources/welcomedialog/ExploreTutorials.png");
+    item3.insert("description", muse::qtrc("appshell/welcome",
+                                           "We’ve put together a playlist of tutorials to help both beginners and experienced users get the most out of MuseScore Studio."));
+    item3.insert("buttonText", muse::qtrc("appshell/welcome", "View tutorials"));
+    item3.insert("destinationUrl",
+                 "https://www.youtube.com/playlist?list=PLTYuWi2LmaPECOZrC6bkPHBkYY9_WEexT&utm_source=mss-app-welcome-tutorials&utm_medium=mss-app-welcome-tutorials&utm_campaign=mss-app-welcome-tutorials&utm_id=mss-app-welcome-tutorials");
+
+    return { item1, item2, item3 };
+}
+
+void StartupScenario::showWelcomeDialog()
+{
+    interactive()->openSync(WELCOME_DIALOG_URI);
+
+    const std::string version = configuration()->museScoreVersion();
+    configuration()->setWelcomeDialogLastShownVersion(version);
+}
+
 StartupModeType StartupScenario::resolveStartupModeType() const
 {
     if (m_startupScoreFile.isValid()) {
@@ -271,9 +311,27 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         appUpdateScenario()->showUpdate();
     }
 
+    //! NOTE: The welcome dialog should not show if the first launch setup has not been completed, or if we're going
+    //! to show a MuseSounds update dialog (see ProjectActionsController::doFinishOpenProject). MuseSampler's update
+    //! dialog should be shown after the welcome dialog.
+
     if (!configuration()->hasCompletedFirstLaunchSetup()) {
         interactive()->open(FIRST_LAUNCH_SETUP_URI);
-    } else if (shouldCheckForMuseSamplerUpdate) {
+        return;
+    }
+
+    const Version welcomeDialogLastShownVersion(configuration()->welcomeDialogLastShownVersion());
+    const Version currentMuseScoreVersion(configuration()->museScoreVersion());
+    if (welcomeDialogLastShownVersion < currentMuseScoreVersion) {
+        configuration()->setWelcomeDialogShowOnStartup(true); // override user preference
+        configuration()->setWelcomeDialogLastShownIndex(-1); // reset
+    }
+
+    if (configuration()->welcomeDialogShowOnStartup() && !museSoundsUpdateScenario()->hasUpdate()) {
+        showWelcomeDialog();
+    }
+
+    if (shouldCheckForMuseSamplerUpdate) {
         checkAndShowMuseSamplerUpdateIfNeed();
     }
 }
