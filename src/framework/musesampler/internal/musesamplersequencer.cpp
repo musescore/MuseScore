@@ -421,7 +421,7 @@ void MuseSamplerSequencer::loadDynamicEvents(const DynamicLevelLayers& changes)
         }
 
         for (const auto& dynamic : layer.second) {
-            m_samplerLib->addDynamicsEvent(m_sampler, track, dynamic.first, dynamicLevelRatio(dynamic.second));
+            m_samplerLib->addDynamicsEvent(m_sampler, track, DynamicEvent { dynamic.first, dynamicLevelRatio(dynamic.second) });
         }
     }
 }
@@ -444,9 +444,9 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     for (const auto& art : noteEvent.expressionCtx().articulations) {
         if (art.first == ArticulationType::Pedal || art.first == ArticulationType::LetRing) {
             // Pedal on:
-            m_samplerLib->addPedalEvent(m_sampler, track, art.second.meta.timestamp, 1.0);
+            m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { art.second.meta.timestamp, 1.0 });
             // Pedal off:
-            m_samplerLib->addPedalEvent(m_sampler, track, art.second.meta.timestamp + art.second.meta.overallDuration, 0.0);
+            m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { art.second.meta.timestamp + art.second.meta.overallDuration, 0.0 });
         }
 
         const ms_NoteArticulation ms_art = muse::value(ARTICULATION_TYPES_PART1, art.first, ms_NoteArticulation_None);
