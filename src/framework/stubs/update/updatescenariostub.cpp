@@ -23,8 +23,16 @@
 
 using namespace muse::update;
 
-void UpdateScenarioStub::checkForUpdate(bool)
+bool UpdateScenarioStub::needCheckForUpdate() const
 {
+    return false;
+}
+
+muse::async::Promise<muse::Ret> UpdateScenarioStub::checkForUpdate(bool)
+{
+    return muse::async::make_promise<Ret>([this](auto, auto) {
+        return muse::async::Promise<muse::Ret>::dummy_result();
+    });
 }
 
 bool UpdateScenarioStub::hasUpdate() const

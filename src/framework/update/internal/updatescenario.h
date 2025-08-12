@@ -48,7 +48,8 @@ public:
     UpdateScenario(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void checkForUpdate(bool manual) override;
+    bool needCheckForUpdate() const override;
+    muse::async::Promise<Ret> checkForUpdate(bool manual) override;
 
     bool hasUpdate() const override;
     muse::Ret showUpdate() override;
@@ -56,7 +57,6 @@ public:
 private:
     bool isCheckInProgress() const;
 
-    void doCheckForUpdate(bool manual);
     void th_checkForUpdate();
 
     void processUpdateResult(int errorCode);

@@ -36,6 +36,8 @@ static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup
 static const muse::Uri HOME_URI("musescore://home");
 static const muse::Uri NOTATION_URI("musescore://notation");
 
+static constexpr int CHECK_FOR_UPDATES_TIMEOUT(60000);
+
 static StartupModeType modeTypeTromString(const std::string& str)
 {
     if ("start-empty" == str) {
@@ -85,32 +87,102 @@ void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFi
     m_startupScoreFile = file ? file.value() : project::ProjectFile();
 }
 
-void StartupScenario::runOnSplashScreen()
+muse::async::Promise<muse::Ret> StartupScenario::runOnSplashScreen()
 {
-    if (registerAudioPluginsScenario()) {
-        //! NOTE Registering plugins shows a window (dialog) before the main window is shown.
-        //! After closing it, the application may in a state where there are no open windows,
-        //! which leads to automatic exit from the application.
-        //! (Thanks to the splashscreen, but this is not an obvious detail)
-        qApp->setQuitLockEnabled(false);
+    return async::make_promise<Ret>([this](auto resolve, auto) {
+        registerAudioPlugins();
 
-        Ret ret = registerAudioPluginsScenario()->registerNewPlugins();
-        if (!ret) {
-            LOGE() << ret.toString();
+        if (multiInstancesProvider()->instances().size() != 1) {
+            const Ret ret = muse::make_ret(Ret::Code::Cancel);
+            return resolve(ret);
         }
 
-        qApp->setQuitLockEnabled(true);
+        // Calculate the total number of expected update checks (TODO: check the
+        // connection before trying any of this)...
+        static size_t totalChecksExpected = 0;
+
+        const bool canCheckAppUpdate = appUpdateScenario() && appUpdateScenario()->needCheckForUpdate();
+        if (canCheckAppUpdate) {
+            ++totalChecksExpected;
+        }
+
+        const bool canCheckMuseSoundsUpdate = museSoundsUpdateScenario() && museSoundsUpdateScenario()->needCheckForUpdate();
+        if (canCheckMuseSoundsUpdate) {
+            ++totalChecksExpected;
+        }
+
+        //! NOTE: A MuseSampler update check also exists but we run it later (see onStartupPageOpened)...
+
+        if (totalChecksExpected == 0) {
+            const Ret ret = muse::make_ret(Ret::Code::Ok);
+            return resolve(ret);
+        }
+
+        // Resolve once all checks are completed...
+        const auto onUpdateCheckCompleted = [this, resolve](){
+            static size_t totalChecksReceived = 0;
+            IF_ASSERT_FAILED(m_updateCheckInProgress && totalChecksReceived < totalChecksExpected) {
+                m_updateCheckInProgress = false;
+                return;
+            }
+
+            ++totalChecksReceived;
+
+            if (totalChecksReceived == totalChecksExpected) {
+                m_updateCheckInProgress = false;
+                const Ret ret = muse::make_ret(Ret::Code::Ok);
+                (void)resolve(ret);
+            }
+        };
+
+        // Asynchronously start the checks once we know the total number of expected checks...
+        m_updateCheckInProgress = true;
+        async::Async::call(this, [this, onUpdateCheckCompleted, canCheckAppUpdate, canCheckMuseSoundsUpdate]() {
+            if (canCheckAppUpdate) {
+                muse::async::Promise<Ret> promise = appUpdateScenario()->checkForUpdate(/*manual*/ false);
+                promise.onResolve(this, [onUpdateCheckCompleted](Ret) {
+                    onUpdateCheckCompleted();
+                });
+            }
+            if (canCheckMuseSoundsUpdate) {
+                muse::async::Promise<Ret> promise = museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false);
+                promise.onResolve(this, [onUpdateCheckCompleted](Ret) {
+                    onUpdateCheckCompleted();
+                });
+            }
+        });
+
+        // Timeout if the checks take too long...
+        QTimer::singleShot(CHECK_FOR_UPDATES_TIMEOUT, [this, resolve]() {
+            if (m_updateCheckInProgress) {
+                LOGE() << "Update checks timed out...";
+                const Ret ret = muse::make_ret(Ret::Code::Cancel);
+                (void)resolve(ret);
+            }
+        });
+
+        return muse::async::Promise<Ret>::dummy_result();
+    });
+}
+
+void StartupScenario::registerAudioPlugins()
+{
+    if (!registerAudioPluginsScenario()) {
+        return;
     }
 
-    if (appUpdateScenario()) {
-        appUpdateScenario()->checkForUpdate(/*manual*/ false);
+    //! NOTE Registering plugins shows a window (dialog) before the main window is shown.
+    //! After closing it, the application may in a state where there are no open windows,
+    //! which leads to automatic exit from the application.
+    //! (Thanks to the splashscreen, but this is not an obvious detail)
+    qApp->setQuitLockEnabled(false);
+
+    Ret ret = registerAudioPluginsScenario()->registerNewPlugins();
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 
-    if (museSoundsUpdateScenario()) {
-        museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false);
-    }
-
-    //! NOTE: A MuseSampler update check also exists but we run it later (see onStartupPageOpened)...
+    qApp->setQuitLockEnabled(true);
 }
 
 void StartupScenario::runAfterSplashScreen()
