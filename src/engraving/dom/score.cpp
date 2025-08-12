@@ -6141,7 +6141,7 @@ void Score::updateCapo()
             }
 
             for (Staff* staff : e->staff()->staffList()) {
-                staff->insertCapoParams(segmentTick, toCapo(e));
+                staff->insertCapoParams(segmentTick, toCapo(e)->params());
             }
         }
     }

@@ -167,7 +167,7 @@ public:
     void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { m_swingList.insert({ tick.ticks(), sp }); }
 
     const CapoParams& capo(const Fraction&) const;
-    void insertCapoParams(const Fraction& tick, const Capo* capo);
+    void insertCapoParams(const Fraction& tick, const CapoParams& params);
     void applyCapoParams();
     void clearCapoParams();
 
@@ -312,7 +312,7 @@ private:
 
     std::map<int, int> m_channelList[VOICES];
     std::map<int, SwingParameters> m_swingList;
-    std::map<int, const Capo*> m_capoMap;
+    std::map<int, CapoParams> m_capoMap;
     bool m_playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> m_visibilityVoices { true, true, true, true };
 

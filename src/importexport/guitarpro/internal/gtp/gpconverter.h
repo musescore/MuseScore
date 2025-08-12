@@ -150,7 +150,6 @@ private:
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
     void setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measure, Fraction tick);
-    void addCapos();
 
     mu::engraving::Score* _score;
     std::unique_ptr<GPDomModel> _gpDom;
@@ -167,7 +166,7 @@ private:
     std::unordered_multimap<int, GPMasterTracks::Automation> _tempoMap;
     std::unordered_map<track_idx_t, GPBar::Clef> _clefs;
     std::unordered_map<track_idx_t, GPBeat::DynamicType> _dynamics;
-//    std::unordered_map<track_idx_t, bool> m_hasCapo;
+    std::unordered_map<track_idx_t, bool> m_hasCapo;
     std::unordered_map<track_idx_t, std::vector<mu::engraving::Tie*> > _ties; // map(track, tie)
     std::unordered_map<track_idx_t, std::vector<mu::engraving::Tie*> > _harmonicTies; // map(track, tie between harmonic note)
     std::unordered_map<Note*, int> m_originalPitches; // info of changed pitches for keeping track of ties
@@ -190,7 +189,6 @@ private:
         int lowestBase = LOWEST_BASE;     // expected denominator
         static constexpr int LOWEST_BASE = 1024;
     } m_nextTupletInfo;
-    std::map</* part id */int, /* capo fret */ int> m_capos;
 
     // Index is the number of sharps. Using flat keysigs for signatures with double sharps
     std::vector<int> m_sharpsToKeyConverter{ 0, 1, 2, 3, 4, 5, 6, 7, -4, -3, -2, -1 };

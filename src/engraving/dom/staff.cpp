@@ -1042,7 +1042,7 @@ const CapoParams& Staff::capo(const Fraction& tick) const
         return dummy;
     }
     --it;
-    return m_capoMap.at(*it)->params();
+    return m_capoMap.at(*it);
 }
 
 void Staff::applyCapoTranspose(int startTick, int endTick, const int pitchOffset)
@@ -1121,16 +1121,16 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const int pitchOffset
     }
 }
 
-void Staff::insertCapoParams(const Fraction& tick, const Capo* capo)
+void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
 {
-    m_capoMap.insert_or_assign(tick.ticks(), capo);
+    m_capoMap.insert_or_assign(tick.ticks(), params);
 }
 
 void Staff::applyCapoParams()
 {
     for (auto it = m_capoMap.begin(); it != m_capoMap.end(); ++it) {
-        const Capo* capo = it->second;
-        if (capo->params().ignoreTransposition) {
+        const CapoParams& param = it->second;
+        if (param.ignoreTransposition) {
             continue;
         }
         if (!staffType()->isTabStaff()) {
@@ -1139,7 +1139,7 @@ void Staff::applyCapoParams()
             if (auto n = std::next(it); n != m_capoMap.end()) {
                 endTick = n->first;
             }
-            applyCapoTranspose(startTick, endTick, capo->params().capoTransposeState->standardPitchOffset());
+            applyCapoTranspose(startTick, endTick, param.capoTransposeState->standardPitchOffset());
         }
     }
 }
