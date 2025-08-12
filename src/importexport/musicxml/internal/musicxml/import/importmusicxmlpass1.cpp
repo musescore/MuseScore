@@ -994,6 +994,38 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
     inferredCredits = creditLines.join(u"\n");
 }
 
+static void resizeTitleBox(VBox* vbox)
+{
+    double calculatedVBoxHeight = 0;
+    const int padding = spatium;
+    ElementList elist = vbox->el();
+    Score* score = vbox->score();
+    for (EngravingItem* e : elist) {
+        score->renderer()->layoutItem(e);
+    }
+
+    double padding = vbox->spatium();
+
+    for (EngravingItem* e : elist) {
+        if (e->isText()) {
+            Text* txt = toText(e);
+            Text::LayoutData* txtLD = txt->mutldata();
+
+            LD_CONDITION(txtLD->isSetBbox());
+
+            RectF bbox = txtLD->bbox();
+            bbox.moveTop(0.0);
+            txtLD->setBbox(bbox);
+            calculatedVBoxHeight += txtLD->bbox().height() + padding;
+        }
+    }
+
+    double heightInSp = calculatedVBoxHeight / vbox->spatium();
+    if (heightInSp > vbox->propertyDefault(Pid::BOX_HEIGHT).toDouble()) {
+        vbox->undoChangeProperty(Pid::BOX_HEIGHT, heightInSp);
+    }
+}
+
 //---------------------------------------------------------
 //   addCreditWords
 //---------------------------------------------------------
@@ -1050,6 +1082,11 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const 
             rights.remove(tagRe);
             score->setMetaTag(u"copyright", rights);
         }
+    }
+
+    if (vbox) {
+        // Correct size
+        resizeTitleBox(vbox);
     }
 
     return vbox;
