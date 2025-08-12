@@ -81,30 +81,37 @@ InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const AudioRe
 
 void MuseSamplerResolver::init()
 {
-    const io::path_t& museSamplerLibraryPath = configuration()->libraryPath();
-    if (io::isAbsolute(museSamplerLibraryPath) && !io::FileInfo::exists(museSamplerLibraryPath)) {
-        LOGI() << "MuseSampler library not found: " << museSamplerLibraryPath;
+    const io::path_t libraryPath = configuration()->libraryPath();
+    if (io::isAbsolute(libraryPath) && !io::FileInfo::exists(libraryPath)) {
+        LOGI() << "MuseSampler library not found: " << libraryPath;
         return;
     }
 
-    m_libHandler = std::make_shared<MuseSamplerLibHandler>(museSamplerLibraryPath,
-                                                           configuration()->minSupportedVersion(),
-                                                           configuration()->useLegacyAudition());
-    m_samplerVersion = m_libHandler->version();
-
-    if (!m_libHandler->isValid()) {
-        LOGE() << "Incompatible MuseSampler library, ignoring: " << museSamplerLibraryPath;
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>();
+    if (!m_libHandler->loadLib(libraryPath)) {
+        LOGE() << "Unable to load MuseSampler library: " << libraryPath;
         m_libHandler.reset();
         return;
     }
+
+    if (!m_libHandler->loadApi(configuration()->minSupportedVersion(), configuration()->useLegacyAudition())) {
+        m_samplerVersion = m_libHandler->version();
+        m_samplerBuildNumber = m_libHandler->buildNumber();
+        m_libHandler.reset();
+        LOGE() << "Incompatible MuseSampler library: " << libraryPath << ", version: " << m_samplerVersion.toString();
+        return;
+    }
+
+    m_samplerVersion = m_libHandler->version();
+    m_samplerBuildNumber = m_libHandler->buildNumber();
 
     if (!m_libHandler->init()) {
-        LOGE() << "Could not init MuseSampler: " << museSamplerLibraryPath;
+        LOGE() << "Could not init MuseSampler: " << libraryPath << ", version: " << m_samplerVersion.toString();
         m_libHandler.reset();
         return;
     }
 
-    LOGI() << "MuseSampler successfully inited: " << museSamplerLibraryPath;
+    LOGI() << "MuseSampler successfully inited: " << libraryPath << ", version: " << m_samplerVersion.toString();
 }
 
 bool MuseSamplerResolver::reloadAllInstruments()
