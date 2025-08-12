@@ -1123,7 +1123,56 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const int pitchOffset
 
 void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
 {
-    m_capoMap.insert_or_assign(tick.ticks(), params);
+    int ticks = tick.ticks();
+    if (auto it = m_capoMap.find(ticks); it == m_capoMap.end()) {
+        if (CapoParams::TransposeMode::PLAYBACK_ONLY != params.transposeMode) {
+            CapoParams updatedParams = params;
+            // Note: This is an undo action. By default, capo always is in the PLAYBACK_ONLY mode. Update transpose values
+            updatedParams.capoTransposeState = params.capoTransposeState->transitionOnRestore();
+            m_capoMap.insert({ ticks, updatedParams });
+        } else {
+            m_capoMap.insert({ ticks, params });
+        }
+    } else {
+        CapoParams& newParams = it->second;
+        newParams.ignoreTransposition = params.ignoreTransposition;
+        newParams.fretPosition = params.fretPosition;
+        newParams.transposeMode = params.transposeMode;
+        newParams.ignoredStrings = params.ignoredStrings;
+        newParams.active = params.active;
+        newParams.capoTransposeState = params.capoTransposeState;
+    }
+}
+
+void Staff::removeDeletedCaposAndRestoreNotation(const std::vector<int>& currentCapos)
+{
+    const std::vector<int> keys = muse::keys(m_capoMap);
+    std::vector<int> diff;
+    std::set_difference(keys.begin(), keys.end(), currentCapos.begin(), currentCapos.end(), std::back_inserter(diff));
+    if (!staffType()->isTabStaff()) {
+        for (int ticks : diff) {
+            const auto it = m_capoMap.find(ticks);
+            IF_ASSERT_FAILED(it != m_capoMap.end()) {
+                LOGE() << "Key must exist in capo map!";
+                return;
+            }
+
+            int startTick = it->first;
+            int endTick = -1;
+            if (auto n = std::next(it); n != m_capoMap.end()) {
+                endTick = n->first;
+            }
+            CapoParams& param = it->second;
+            // Restore initial state
+            param.capoTransposeState = param.capoTransposeState->transitionOnRemove();
+            applyCapoTranspose(startTick, endTick, param.capoTransposeState->standardPitchOffset());
+        }
+    }
+
+    // Clean m_capoMap
+    for (int ticks : diff) {
+        m_capoMap.erase(ticks);
+    }
 }
 
 void Staff::applyCapoParams()

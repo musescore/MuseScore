@@ -62,9 +62,15 @@ public:
         : m_capoFret(capoFret) {}
 
     virtual ~AbstractCapoTransposeState() = default;
+    // Regular transitions
     virtual std::shared_ptr<AbstractCapoTransposeState> transitionToPlaybackOnly() = 0;
     virtual std::shared_ptr<AbstractCapoTransposeState> transitionToStandardOnly() = 0;
     virtual std::shared_ptr<AbstractCapoTransposeState> transitionToTabOnly() = 0;
+
+    // Transitions on removing capo element
+    virtual std::shared_ptr<AbstractCapoTransposeState> transitionOnRemove() = 0;
+    // Transition on undo remove action
+    virtual std::shared_ptr<AbstractCapoTransposeState> transitionOnRestore() = 0;
     virtual void setCapoFret(int fret)  = 0;
 
     void setTabPitchOffset(int v) { m_tabPitchOffset = v; }
@@ -90,6 +96,9 @@ public:
     std::shared_ptr<AbstractCapoTransposeState> transitionToPlaybackOnly() override;
     std::shared_ptr<AbstractCapoTransposeState> transitionToStandardOnly() override;
     std::shared_ptr<AbstractCapoTransposeState> transitionToTabOnly() override;
+
+    std::shared_ptr<AbstractCapoTransposeState> transitionOnRemove() override;
+    std::shared_ptr<AbstractCapoTransposeState> transitionOnRestore() override;
 };
 
 class CapoTransposeStateStandardOnly : public AbstractCapoTransposeState
@@ -102,6 +111,9 @@ public:
     std::shared_ptr<AbstractCapoTransposeState> transitionToPlaybackOnly() override;
     std::shared_ptr<AbstractCapoTransposeState> transitionToStandardOnly() override;
     std::shared_ptr<AbstractCapoTransposeState> transitionToTabOnly() override;
+
+    std::shared_ptr<AbstractCapoTransposeState> transitionOnRemove() override;
+    std::shared_ptr<AbstractCapoTransposeState> transitionOnRestore() override;
 };
 
 class CapoTransposeStateTabOnly : public AbstractCapoTransposeState
@@ -114,6 +126,9 @@ public:
     std::shared_ptr<AbstractCapoTransposeState> transitionToPlaybackOnly() override;
     std::shared_ptr<AbstractCapoTransposeState> transitionToStandardOnly() override;
     std::shared_ptr<AbstractCapoTransposeState> transitionToTabOnly() override;
+
+    std::shared_ptr<AbstractCapoTransposeState> transitionOnRemove() override;
+    std::shared_ptr<AbstractCapoTransposeState> transitionOnRestore() override;
 };
 }
 

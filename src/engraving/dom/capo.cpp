@@ -243,6 +243,23 @@ std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStatePlaybackOnly::tran
     return newMode;
 }
 
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStatePlaybackOnly::transitionOnRemove()
+{
+    setTabPitchOffset(0);
+    setStandardPitchOffset(0);
+    return shared_from_this();
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStatePlaybackOnly::transitionOnRestore()
+{
+    setTabPitchOffset(0);
+    setStandardPitchOffset(0);
+    return shared_from_this();
+}
+
+/****************************
+CapoTransposeStateStandardOnly
+*****************************/
 void CapoTransposeStateStandardOnly::setCapoFret(int fret)
 {
     setStandardPitchOffset(fret - capoFret());
@@ -250,9 +267,6 @@ void CapoTransposeStateStandardOnly::setCapoFret(int fret)
     m_capoFret = fret;
 }
 
-/****************************
-CapoTransposeStateStandardOnly
-*****************************/
 std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateStandardOnly::transitionToPlaybackOnly()
 {
     auto newMode = std::make_shared<CapoTransposeStatePlaybackOnly>(capoFret());
@@ -272,6 +286,20 @@ std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateStandardOnly::tran
     newMode->setStandardPitchOffset(-capoFret());
     newMode->setTabPitchOffset(-capoFret());
     return newMode;
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateStandardOnly::transitionOnRemove()
+{
+    setStandardPitchOffset(-capoFret());
+    setTabPitchOffset(0);
+    return shared_from_this();
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateStandardOnly::transitionOnRestore()
+{
+    setStandardPitchOffset(capoFret());
+    setTabPitchOffset(0);
+    return shared_from_this();
 }
 
 /****************************
@@ -302,5 +330,19 @@ std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateTabOnly::transitio
 
 std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateTabOnly::transitionToTabOnly()
 {
+    return shared_from_this();
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateTabOnly::transitionOnRemove()
+{
+    setTabPitchOffset(capoFret());
+    setStandardPitchOffset(0);
+    return shared_from_this();
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateTabOnly::transitionOnRestore()
+{
+    setTabPitchOffset(-capoFret());
+    setStandardPitchOffset(0);
     return shared_from_this();
 }
