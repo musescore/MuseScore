@@ -50,7 +50,5 @@ void RestBeamSettingsModel::requestElements()
 
 void RestBeamSettingsModel::onCurrentNotationChanged()
 {
-    AbstractInspectorModel::onCurrentNotationChanged();
-
     m_beamModesModel->onCurrentNotationChanged();
 }

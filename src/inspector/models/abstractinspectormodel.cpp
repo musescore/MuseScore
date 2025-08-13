@@ -152,7 +152,7 @@ QString AbstractInspectorModel::shortcutsForActionCode(std::string code) const
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
                                                mu::engraving::ElementType elementType)
-    : QObject(parent), m_elementType(elementType), m_updatePropertiesAllowed(true)
+    : QObject(parent), m_elementType(elementType)
 {
     m_repository = repository;
 
@@ -170,39 +170,14 @@ void AbstractInspectorModel::init()
     onCurrentNotationChanged();
 }
 
-void AbstractInspectorModel::onCurrentNotationChanged()
-{
-    INotationPtr notation = currentNotation();
-    if (!notation) {
-        return;
-    }
-
-    notation->viewModeChanged().onNotify(this, [this]() {
-        onNotationChanged({}, {});
-    });
-
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
-        if (changes.isTextEditing) {
-            return;
-        }
-
-        if (changes.changedPropertyIdSet.empty() && changes.changedStyleIdSet.empty()) {
-            return;
-        }
-
-        if (m_updatePropertiesAllowed && !isEmpty()) {
-            PropertyIdSet expandedPropertyIdSet = propertyIdSetFromStyleIdSet(changes.changedStyleIdSet);
-            expandedPropertyIdSet.insert(changes.changedPropertyIdSet.cbegin(), changes.changedPropertyIdSet.cend());
-            onNotationChanged(expandedPropertyIdSet, changes.changedStyleIdSet);
-        }
-
-        m_updatePropertiesAllowed = true;
-    });
-}
-
 bool AbstractInspectorModel::isSystemObjectBelowBottomStaff() const
 {
     return m_isSystemObjectBelowBottomStaff;
+}
+
+bool AbstractInspectorModel::shouldUpdateOnScoreChange() const
+{
+    return m_shouldUpdateOnScoreChange;
 }
 
 void AbstractInspectorModel::updateIsSystemObjectBelowBottomStaff()
@@ -219,10 +194,6 @@ void AbstractInspectorModel::updateIsSystemObjectBelowBottomStaff()
         m_isSystemObjectBelowBottomStaff = soBelowBottomStaff;
         emit isSystemObjectBelowBottomStaffChanged(m_isSystemObjectBelowBottomStaff);
     }
-}
-
-void AbstractInspectorModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
-{
 }
 
 void AbstractInspectorModel::requestResetToDefaults()
@@ -493,6 +464,14 @@ void AbstractInspectorModel::requestElements()
     if (m_elementType != mu::engraving::ElementType::INVALID) {
         m_elementList = m_repository->findElementsByType(m_elementType);
     }
+}
+
+void AbstractInspectorModel::onCurrentNotationChanged()
+{
+}
+
+void AbstractInspectorModel::onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&)
+{
 }
 
 mu::engraving::Sid AbstractInspectorModel::styleIdByPropertyId(const mu::engraving::Pid pid) const
@@ -814,7 +793,7 @@ void AbstractInspectorModel::beginCommand(const muse::TranslatableString& action
 
     //! NOTE prevents unnecessary updating of properties
     //! after changing their values in the inspector
-    m_updatePropertiesAllowed = false;
+    m_shouldUpdateOnScoreChange = false;
 }
 
 void AbstractInspectorModel::endCommand()
@@ -827,11 +806,6 @@ void AbstractInspectorModel::endCommand()
 INotationPtr AbstractInspectorModel::currentNotation() const
 {
     return context()->currentNotation();
-}
-
-muse::async::Notification AbstractInspectorModel::currentNotationChanged() const
-{
-    return context()->currentNotationChanged();
 }
 
 bool AbstractInspectorModel::isMasterNotation() const

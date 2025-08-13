@@ -557,6 +557,10 @@ void UndoStack::redo(EditData* ed)
 
 bool UndoMacro::canRecordSelectedElement(const EngravingItem* e)
 {
+    if (e->generated()) {
+        return false;
+    }
+
     return e->isNote() || (e->isChordRest() && !e->isChord())
            || (e->isTextBase() && !e->isInstrumentName() && !e->isHammerOnPullOffText())
            || e->isFretDiagram() || e->isSoundFlag();

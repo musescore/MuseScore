@@ -76,8 +76,6 @@ bool ScoreAppearanceSettingsModel::isEmpty() const
 
 void ScoreAppearanceSettingsModel::onCurrentNotationChanged()
 {
-    AbstractInspectorModel::onCurrentNotationChanged();
-
     emit hideEmptyStavesChanged();
     emit dontHideEmptyStavesInFirstSystemChanged();
     emit showBracketsWhenSpanningSingleStaffChanged();
