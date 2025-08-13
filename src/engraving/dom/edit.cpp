@@ -7451,6 +7451,25 @@ void Score::rebuildFretBox()
     }
 }
 
+void Score::relayoutFretBox()
+{
+    FBox* fretBox = findFretBox();
+    if (!fretBox) {
+        return;
+    }
+
+    fretBox->triggerLayout();
+
+    for (EngravingObject* linkedObject : fretBox->linkList()) {
+        if (!linkedObject || !linkedObject->isFBox() || linkedObject == fretBox) {
+            continue;
+        }
+
+        FBox* box = toFBox(linkedObject);
+        box->triggerLayout();
+    }
+}
+
 //---------------------------------------------------------
 //   undoAddCR
 //---------------------------------------------------------

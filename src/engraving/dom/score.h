@@ -701,6 +701,7 @@ public:
 
     void setUpTempoMapLater();
     void setUpTempoMap();
+    void setNeedLayoutFretBox(bool layout);
 
     EngravingItem* nextElement();
     EngravingItem* prevElement();
@@ -1094,6 +1095,7 @@ public:
     void updateSystemLocksOnCreateMMRests(Measure* first, Measure* last);
 
     void rebuildFretBox();
+    void relayoutFretBox();
 
     friend class Chord;
 
@@ -1244,6 +1246,7 @@ private:
 
     bool m_isOpen = false;
     bool m_needSetUpTempoMap = true;
+    bool m_needLayoutFretBox = false;
 
     std::map<String, String> m_metaTags;
 

@@ -748,6 +748,7 @@ void FBox::init()
 
     DEFER {
         triggerLayout();
+        score()->setNeedLayoutFretBox(true);
     };
 
     clearElements();

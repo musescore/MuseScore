@@ -496,6 +496,11 @@ void Score::setUpTempoMap()
     m_needSetUpTempoMap = false;
 }
 
+void Score::setNeedLayoutFretBox(bool layout)
+{
+    m_needLayoutFretBox = layout;
+}
+
 //---------------------------------------------------------
 //    fixTicks
 ///    updates tempomap and time sig map for a measure
