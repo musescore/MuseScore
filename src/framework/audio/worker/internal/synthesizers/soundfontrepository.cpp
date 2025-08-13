@@ -108,14 +108,14 @@ void SoundFontRepository::loadSoundFonts(const SoundFontPaths& paths)
         auto it = oldSoundFonts.find(path);
         if (it != oldSoundFonts.cend()) {
             m_soundFonts.insert(*it);
-            return;
+            continue;
         }
 
         RetVal<SoundFontMeta> meta = FluidSoundFontParser::parseSoundFont(path);
 
         if (!meta.ret) {
             LOGE() << "Failed parse SoundFont presets for " << path << ": " << meta.ret.toString();
-            return;
+            continue;
         }
 
         m_soundFonts.insert_or_assign(path, std::move(meta.val));
