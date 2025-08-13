@@ -40,6 +40,7 @@ StyledPopupView {
     property int navigationOrderEnd: tieMenuList.navigation.order
 
     showArrow: false
+    placementPolicies: partialTiePopupModel.tieDirection ? PopupView.PreferAbove : PopupView.PreferBelow
 
     onClosed: {
         partialTiePopupModel.onClosed()

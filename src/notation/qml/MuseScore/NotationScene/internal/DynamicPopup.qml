@@ -24,12 +24,11 @@ StyledPopupView {
     showArrow: false
 
     focusPolicies: PopupView.DefaultFocus & ~PopupView.ClickFocus
+    placementPolicies: PopupView.PreferBelow
 
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        root.x = root.parent.width / 2 - root.contentWidth / 2
-        root.y = root.parent.height
     }
 
     RowLayout {

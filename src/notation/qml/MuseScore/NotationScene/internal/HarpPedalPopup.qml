@@ -40,6 +40,7 @@ StyledPopupView {
 
     margins: 0
 
+    placementPolicies: PopupView.PreferAbove
     showArrow: false
 
     signal elementRectChanged(var elementRect)
@@ -66,8 +67,6 @@ StyledPopupView {
         if (globPos + contentHeight > ui.rootItem.height) {
             opensUp = true;
         }
-
-        root.setPopupPosition(opensUp ? PopupPosition.Top : PopupPosition.Bottom)
 
         root.y = opensUp ? yUp : yDown
     }
