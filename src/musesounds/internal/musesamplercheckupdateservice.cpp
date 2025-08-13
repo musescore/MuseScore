@@ -64,7 +64,8 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
 #ifdef QT_CONCURRENT_SUPPORTED
         Concurrent::run([this, localVersion, resolve]() {
             if (configuration()->museSamplerCheckForUpdateTestMode()) {
-                (void)resolve(muse::RetVal<bool>::make_ok(true));
+                muse::RetVal<bool> result = muse::RetVal<bool>::make_ok(true);
+                (void)resolve(result);
                 return;
             }
 

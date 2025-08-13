@@ -50,7 +50,7 @@ public:
         : Injectable(iocCtx) {}
 
     bool alreadyChecked() const override;
-    void checkForUpdate() override;
+    void checkAndShowUpdateIfNeed() override;
 
 private:
     void showCriticalUpdateNotification();

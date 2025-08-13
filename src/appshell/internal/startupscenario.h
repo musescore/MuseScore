@@ -34,6 +34,9 @@
 #include "isessionsmanager.h"
 #include "project/iprojectautosaver.h"
 #include "audioplugins/iregisteraudiopluginsscenario.h"
+
+#include "update/iupdatescenario.h"
+#include "musesounds/imusesoundscheckupdatescenario.h"
 #include "musesounds/imusesamplercheckupdatescenario.h"
 
 namespace mu::appshell {
@@ -46,10 +49,12 @@ class StartupScenario : public IStartupScenario, public muse::Injectable, public
     muse::Inject<ISessionsManager> sessionsManager = { this };
     muse::Inject<project::IProjectAutoSaver> projectAutoSaver = { this };
     muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
+
+    muse::Inject<muse::update::IUpdateScenario> appUpdateScenario = { this };
+    muse::Inject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
     muse::Inject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario = { this };
 
 public:
-
     StartupScenario(const muse::modularity::ContextPtr& iocCtx)
         : muse::Injectable(iocCtx) {}
 
@@ -66,6 +71,8 @@ public:
 
 private:
     void onStartupPageOpened(StartupModeType modeType);
+
+    void checkAndShowMuseSamplerUpdateIfNeed();
 
     StartupModeType resolveStartupModeType() const;
     muse::Uri startupPageUri(StartupModeType modeType) const;

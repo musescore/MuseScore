@@ -101,6 +101,16 @@ void StartupScenario::runOnSplashScreen()
 
         qApp->setQuitLockEnabled(true);
     }
+
+    if (appUpdateScenario()) {
+        appUpdateScenario()->checkForUpdate(/*manual*/ false);
+    }
+
+    if (museSoundsUpdateScenario()) {
+        museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false);
+    }
+
+    //! NOTE: A MuseSampler update check also exists but we run it later (see onStartupPageOpened)...
 }
 
 void StartupScenario::runAfterSplashScreen()
@@ -185,11 +195,23 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     } break;
     }
 
+    if (appUpdateScenario() && appUpdateScenario()->hasUpdate()) {
+        appUpdateScenario()->showUpdate();
+    }
+
     if (!configuration()->hasCompletedFirstLaunchSetup()) {
         interactive()->open(FIRST_LAUNCH_SETUP_URI);
     } else if (shouldCheckForMuseSamplerUpdate) {
-        museSamplerCheckForUpdateScenario()->checkForUpdate();
+        checkAndShowMuseSamplerUpdateIfNeed();
     }
+}
+
+void StartupScenario::checkAndShowMuseSamplerUpdateIfNeed()
+{
+    if (!museSamplerCheckForUpdateScenario() || museSamplerCheckForUpdateScenario()->alreadyChecked()) {
+        return;
+    }
+    museSamplerCheckForUpdateScenario()->checkAndShowUpdateIfNeed();
 }
 
 muse::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
@@ -224,7 +246,7 @@ void StartupScenario::restoreLastSession()
         } else {
             removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
             sessionsManager()->reset();
-            museSamplerCheckForUpdateScenario()->checkForUpdate();
+            checkAndShowMuseSamplerUpdateIfNeed();
         }
     });
 }

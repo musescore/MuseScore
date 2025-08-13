@@ -50,6 +50,9 @@ public:
 
     void checkForUpdate(bool manual) override;
 
+    bool hasUpdate() const override;
+    muse::Ret showUpdate() override;
+
 private:
     bool isCheckInProgress() const;
 
@@ -65,6 +68,8 @@ private:
 
     void downloadRelease();
     void closeAppAndStartInstallation(const io::path_t& installerPath);
+
+    bool shouldIgnoreUpdate(const ReleaseInfo& info) const;
 
     bool m_checkInProgress = false;
     ProgressPtr m_checkProgressChannel = nullptr;

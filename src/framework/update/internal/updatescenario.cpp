@@ -56,6 +56,36 @@ void UpdateScenario::checkForUpdate(bool manual)
     }
 }
 
+bool UpdateScenario::hasUpdate() const
+{
+    if (isCheckInProgress()) {
+        return false;
+    }
+
+    const RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
+    if (!lastCheckResult.ret) {
+        return false;
+    }
+
+    bool noUpdate = lastCheckResult.ret.code() == static_cast<int>(Err::NoUpdate);
+    if (noUpdate) {
+        return false;
+    }
+
+    return !shouldIgnoreUpdate(lastCheckResult.val);
+}
+
+muse::Ret UpdateScenario::showUpdate()
+{
+    RetVal<ReleaseInfo> lastCheckResult = service()->lastCheckResult();
+    if (!lastCheckResult.ret) {
+        return lastCheckResult.ret;
+    }
+
+    showReleaseInfo(lastCheckResult.val);
+    return muse::make_ok();
+}
+
 bool UpdateScenario::isCheckInProgress() const
 {
     return m_checkInProgress;
@@ -73,7 +103,7 @@ void UpdateScenario::doCheckForUpdate(bool manual)
             m_checkInProgress = false;
         };
 
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+        const bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
         if (!noUpdate && !res.ret) {
             LOGE() << "Unable to check for update, error: " << res.ret.toString();
 
@@ -84,18 +114,12 @@ void UpdateScenario::doCheckForUpdate(bool manual)
             return;
         }
 
-        ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
         if (!manual) {
-            bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
-            if (noUpdate || shouldIgnoreUpdate) {
-                return;
-            }
-        } else if (noUpdate) {
-            showNoUpdateMsg();
             return;
         }
 
-        showReleaseInfo(info);
+        ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
+        noUpdate ? showNoUpdateMsg() : showReleaseInfo(info);
     });
 
     Concurrent::run(this, &UpdateScenario::th_checkForUpdate);
@@ -208,4 +232,9 @@ void UpdateScenario::closeAppAndStartInstallation(const muse::io::path_t& instal
 
         dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
     });
+}
+
+bool UpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
+{
+    return info.version == configuration()->skippedReleaseVersion();
 }

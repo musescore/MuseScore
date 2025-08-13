@@ -53,6 +53,7 @@ public:
     void init();
 
     RetVal<ReleaseInfo> checkForUpdate() override;
+    RetVal<ReleaseInfo> lastCheckResult() const override;
 
     RetVal<io::path_t> downloadRelease() override;
     void cancelUpdate() override;
@@ -81,7 +82,7 @@ private:
 
     void clear();
 
-    ReleaseInfo m_lastCheckResult;
+    RetVal<ReleaseInfo> m_lastCheckResult;
     io::path_t m_installatorPath;
 
     network::INetworkManagerPtr m_networkManager;

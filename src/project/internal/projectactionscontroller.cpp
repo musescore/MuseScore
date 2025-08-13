@@ -413,7 +413,7 @@ Ret ProjectActionsController::doFinishOpenProject()
             if (museSoundsCheckUpdateScenario()->hasUpdate()) {
                 museSoundsCheckUpdateScenario()->showUpdate();
             } else if (!museSamplerCheckUpdateScenario()->alreadyChecked()) {
-                museSamplerCheckUpdateScenario()->checkForUpdate();
+                museSamplerCheckUpdateScenario()->checkAndShowUpdateIfNeed();
             }
 
             toursService()->onEvent(u"project_opened");

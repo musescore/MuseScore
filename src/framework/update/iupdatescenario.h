@@ -22,6 +22,8 @@
 #ifndef MUSE_UPDATE_IUPDATESCENARIO_H
 #define MUSE_UPDATE_IUPDATESCENARIO_H
 
+#include "types/ret.h"
+
 #include "modularity/imoduleinterface.h"
 
 namespace muse::update {
@@ -33,6 +35,9 @@ public:
     virtual ~IUpdateScenario() = default;
 
     virtual void checkForUpdate(bool manual) = 0;
+
+    virtual bool hasUpdate() const = 0;
+    virtual muse::Ret showUpdate() = 0;
 };
 }
 

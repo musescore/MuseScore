@@ -31,7 +31,7 @@ bool MuseSamplerCheckUpdateScenario::alreadyChecked() const
     return m_alreadyChecked;
 }
 
-void MuseSamplerCheckUpdateScenario::checkForUpdate()
+void MuseSamplerCheckUpdateScenario::checkAndShowUpdateIfNeed()
 {
     if (!service()->canCheckForUpdate() || multiInstancesProvider()->instances().size() != 1) {
         return;

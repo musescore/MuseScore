@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include "types/ret.h"
+
 #include "modularity/imoduleinterface.h"
 
 namespace mu::musesounds {
@@ -32,6 +34,6 @@ public:
     virtual ~IMuseSamplerCheckUpdateScenario() = default;
 
     virtual bool alreadyChecked() const = 0;
-    virtual void checkForUpdate() = 0;
+    virtual void checkAndShowUpdateIfNeed() = 0;
 };
 }

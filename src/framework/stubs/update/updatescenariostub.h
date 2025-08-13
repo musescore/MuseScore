@@ -29,6 +29,10 @@ class UpdateScenarioStub : public IUpdateScenario
 {
 public:
     void checkForUpdate(bool manual) override;
+
+    bool hasUpdate() const override;
+    muse::Ret showUpdate() override;
+
 };
 }
 
