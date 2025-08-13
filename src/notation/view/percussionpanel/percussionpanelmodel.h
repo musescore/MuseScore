@@ -33,6 +33,7 @@
 #include "musesampler/imusesamplerinfo.h"
 #include "iinstrumentsrepository.h"
 #include "inotationconfiguration.h"
+#include "tours/itoursservice.h"
 
 #include "percussionpanelpadlistmodel.h"
 
@@ -58,6 +59,7 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
     muse::Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
     muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
     muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<muse::tours::IToursService> tours = { this };
 
     Q_OBJECT
 

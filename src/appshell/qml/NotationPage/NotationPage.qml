@@ -635,5 +635,19 @@ DockPage {
                 ]
             }
         },
+        {
+            "eventCode": "percussion_panel_opened", // TODO: We need to handle the situation where the panel is already open on startup (otherwise this clashes with project-opened-tour)...
+            "tour": {
+                "id": "percussion-panel-columns",
+                "steps": [
+                    {
+                        "title": qsTrc("notation/percussion", "Make some room"),
+                        "description": qsTrc("notation/percussion", "Set the number of drum pad columns for each instrument in your score."),
+                        //NOTE: Weirdly, unlike the layout panel tour step, this doesn't seem to care where it's docked..
+                        "controlUri": "control://NavigationBottomPanel/PercussionPanelToolBarRightSide/layout-menu",
+                    }
+                ]
+            }
+        },
     ]
 }
