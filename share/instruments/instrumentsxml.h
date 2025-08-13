@@ -3908,7 +3908,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Congas", "congas longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Con.", "congas shortName"),
 
 //: description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "High-pitch, shallow body taiko drum.", "shime-daiko description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "High-pitched, shallow body taiko drum.", "shime-daiko description"),
 //: trackName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Shime-Daiko", "shime-daiko trackName"),
 //: longName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4016,7 +4016,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Frame Drum", "frame-drum longName")
 QT_TRANSLATE_NOOP3("engraving/instruments", "Fr. Dr.", "frame-drum shortName"),
 
 //: description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese high-pitch frame drum.", "bangu description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese high-pitched frame drum.", "bangu description"),
 //: trackName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bangu", "bangu trackName"),
 //: longName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4088,7 +4088,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Tsuri-Daiko", "tsuri-daiko longName
 QT_TRANSLATE_NOOP3("engraving/instruments", "T-Daiko", "tsuri-daiko shortName"),
 
 //: description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Robust, barrel shaped Japanese drum. Also known as nagadou, they are the most common taiko.", "miya-daiko description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Robust, barrel-shaped Japanese drum. Also known as nagadou, they are the most common taiko.", "miya-daiko description"),
 //: trackName for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Miya-Daiko", "miya-daiko trackName"),
 //: longName for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
