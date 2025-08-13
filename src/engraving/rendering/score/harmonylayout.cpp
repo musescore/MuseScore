@@ -202,6 +202,8 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
     const std::vector<HarmonyRenderItem*>& itemList = item->ldata()->renderItemList();
     // Layout parentheses
     std::vector<ChordSymbolParen*> openingParenStack;
+    double lastTsHeight = 0.0;
+    double lastTsTop = 0.0;
     for (HarmonyRenderItem* renderItem : itemList) {
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
             if (paren->paren->direction() == DirectionH::LEFT) {
@@ -220,6 +222,12 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 // Layout parenthesis pair
                 double startY = openingParen->top;
                 double height = openingParen->bottom - openingParen->top;
+                if (std::isinf(height)) {
+                    height = lastTsHeight;
+                }
+                if (muse::RealIsEqual(DBL_MAX, startY)) {
+                    startY = lastTsTop;
+                }
                 double midPointThickness = height / 30 * openingParen->paren->ldata()->mag();
                 double endPointThickness = 0.05;
                 openingParen->paren->mutldata()->startY = startY;
@@ -233,7 +241,11 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 paren->paren->mutldata()->height = height;
                 paren->paren->mutldata()->midPointThickness.set_value(midPointThickness);
                 paren->paren->mutldata()->endPointThickness.set_value(endPointThickness);
-                paren->setx(openingParen->closingParenPos);
+                double closingPos = openingParen->closingParenPos;
+                if (muse::RealIsEqual(-DBL_MAX, closingPos)) {
+                    closingPos = openingParen->x() + openingParen->boundingRect().width();
+                }
+                paren->setx(closingPos);
 
                 ParenthesisLayout::createPathAndShape(openingParen->paren, openingParen->paren->mutldata());
                 ParenthesisLayout::createPathAndShape(paren->paren, paren->paren->mutldata());
@@ -246,10 +258,12 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
             }
         } else if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
             // Set top paren height
+            lastTsHeight = ts->height();
+            lastTsTop = ts->boundingRect().translated(ts->pos()).y();
             if (!openingParenStack.empty()) {
                 ChordSymbolParen* topParen = openingParenStack.back();
                 topParen->top = std::min(topParen->top, ts->boundingRect().translated(ts->pos()).y());
-                topParen->bottom = std::max(topParen->bottom, ts->boundingRect().translated(ts->pos()).y() + ts->boundingRect().height());
+                topParen->bottom = std::max(topParen->bottom, ts->boundingRect().translated(ts->pos()).y() + ts->height());
                 topParen->closingParenPos = std::max(topParen->closingParenPos, ts->x() + ts->width());
                 continue;
             }
