@@ -41,7 +41,6 @@ jobs:
           version: ${{ env.USE_QT69 == 'on' && '6.9.1' || '6.2.4' }}
           host: "linux"
           target: "desktop"
-          archives: "qttools qtbase icu"
           arch: ${{ env.USE_QT69== 'on' && 'linux_gcc_64' || 'gcc_64' }}
 
       - name: Run lupdate
