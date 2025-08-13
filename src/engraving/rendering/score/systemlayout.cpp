@@ -1146,6 +1146,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     if (hasFretDiagram) {
         for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
+            TLayout::layoutFretDiagram(fretDiag, fretDiag->mutldata(), ctx);
             Autoplace::autoplaceSegmentElement(fretDiag, fretDiag->mutldata());
         }
 
