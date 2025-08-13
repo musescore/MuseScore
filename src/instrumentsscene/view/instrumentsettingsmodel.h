@@ -44,6 +44,7 @@ class InstrumentSettingsModel : public QObject, public muse::async::Asyncable
     Q_PROPERTY(
         bool hideStavesWhenIndividuallyEmpty READ hideStavesWhenIndividuallyEmpty WRITE setHideStavesWhenIndividuallyEmpty NOTIFY hideStavesWhenIndividuallyEmptyChanged)
 
+    Q_PROPERTY(bool hasMultipleStaves READ hasMultipleStaves NOTIFY hasMultipleStavesChanged)
     Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
 
 public:
@@ -55,6 +56,7 @@ public:
     QString abbreviature() const;
     int hideWhenEmpty() const;
     bool hideStavesWhenIndividuallyEmpty() const;
+    bool hasMultipleStaves() const;
 
     bool isMainScore() const;
 
@@ -68,6 +70,7 @@ signals:
     void dataChanged();
     void hideWhenEmptyChanged();
     void hideStavesWhenIndividuallyEmptyChanged();
+    void hasMultipleStavesChanged();
     void isMainScoreChanged();
 
 private:
@@ -80,6 +83,7 @@ private:
     QString m_instrumentAbbreviature;
     int m_hideWhenEmpty = 0; // AutoOnOff::AUTO
     bool m_hideStavesWhenIndividuallyEmpty = false;
+    bool m_hasMultipleStaves = false;
 };
 }
 
