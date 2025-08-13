@@ -104,6 +104,10 @@ void PlaybackModel::load(Score* score)
 
 void PlaybackModel::reload()
 {
+    if (!m_score) {
+        return;
+    }
+
     TRACEFUNC;
 
     int trackFrom = 0;

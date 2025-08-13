@@ -494,6 +494,10 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             s->doLayout();
         }
     }
+
+    if (m_notationPlayback) {
+        m_notationPlayback->reload();
+    }
 }
 
 void MasterNotation::unloadExcerpts(ExcerptNotationList& excerpts)
