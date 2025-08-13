@@ -44,6 +44,11 @@ public:
     typedef typename EventSequenceMap::const_iterator SequenceIterator;
     typedef typename EventSequence::const_iterator EventIterator;
 
+    AbstractEventSequencer()
+    {
+        resetAllIterators();
+    }
+
     virtual ~AbstractEventSequencer()
     {
         m_playbackData.mainStream.resetOnReceive(this);
