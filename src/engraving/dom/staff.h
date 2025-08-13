@@ -265,8 +265,8 @@ public:
     bool shouldShowMeasureNumbers() const;
     bool shouldShowPlayCount() const;
 
-    void setSystemObjectsBelowBottomStaff(bool v) { m_systemObjectsBelowBottomStaff = v; }
-    bool systemObjectsBelowBottomStaff() const { return m_systemObjectsBelowBottomStaff; }
+    bool isSystemObjectStaff() const;
+    bool hasSystemObjectsBelowBottomStaff() const;
 
 private:
 
@@ -319,6 +319,5 @@ private:
     bool m_reflectTranspositionInLinkedTab = true;
 
     AutoOnOff m_showMeasureNumbers = AutoOnOff::AUTO;
-    bool m_systemObjectsBelowBottomStaff = false;
 };
 }

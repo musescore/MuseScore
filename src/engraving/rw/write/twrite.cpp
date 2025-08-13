@@ -2809,7 +2809,6 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::PLAYBACK_VOICE3);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE4);
     writeProperty(item, xml, Pid::SHOW_MEASURE_NUMBERS);
-    writeProperty(item, xml, Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF);
 
     xml.endElement();
 }

@@ -776,7 +776,7 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
     startEdit(TranslatableString("undoableAction", "Add system markings"));
 
     for (Staff* staff : staves) {
-        if (score->isSystemObjectStaff(staff)) {
+        if (staff->isSystemObjectStaff()) {
             continue;
         }
 
@@ -816,9 +816,11 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
     startEdit(TranslatableString("undoableAction", "Remove system markings"));
 
     for (Staff* staff : staves) {
-        if (score->isSystemObjectStaff(staff)) {
-            staff->undoResetProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF);
+        if (staff->isSystemObjectStaff()) {
             score->undo(new mu::engraving::RemoveSystemObjectStaff(staff));
+            if (staff->hasSystemObjectsBelowBottomStaff()) {
+                score->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
+            }
         }
     }
 
@@ -837,7 +839,7 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
 void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destinationStaffId)
 {
     Staff* srcStaff = staffModifiable(sourceStaffId);
-    if (!srcStaff || !score()->isSystemObjectStaff(srcStaff)) {
+    if (!srcStaff || !srcStaff->isSystemObjectStaff()) {
         return;
     }
 
@@ -852,10 +854,10 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
     startEdit(TranslatableString("undoableAction", "Move system markings"));
 
     score()->undo(new mu::engraving::RemoveSystemObjectStaff(srcStaff));
-    if (!score()->isSystemObjectStaff(dstStaff) && dstStaffIdx != 0) {
+    if (!dstStaff->isSystemObjectStaff() && dstStaffIdx != 0) {
         score()->undo(new mu::engraving::AddSystemObjectStaff(dstStaff));
     } else {
-        dstStaff->undoResetProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF);
+        score()->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
     }
 
     // Remove items first
@@ -894,7 +896,7 @@ void NotationParts::moveSystemObjectLayerBelowBottomStaff()
 {
     startEdit(TranslatableString("undoableAction", "Add system object layer below the bottom staff"));
 
-    score()->staves().back()->undoChangeProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, true);
+    score()->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, true);
 
     apply();
 }
@@ -903,7 +905,7 @@ void NotationParts::moveSystemObjectLayerAboveBottomStaff()
 {
     startEdit(TranslatableString("undoableAction", "Remove system object layer below the bottom staff"));
 
-    score()->staves().back()->undoChangeProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, false);
+    score()->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
 
     apply();
 }

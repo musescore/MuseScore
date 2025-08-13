@@ -470,7 +470,6 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::EXCLUDE_VERTICAL_ALIGN,  false, "excludeVerticalAlign",  P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "exclude vertical align") },
 
     { Pid::SHOW_MEASURE_NUMBERS,              false, "showMeasureNumbers",            P_TYPE::AUTO_ON_OFF, PropertyGroup::NONE, DUMMY_QT_TR_NOOP("propertyName", "show bar numbers")},
-    { Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, false, "systemObjectsBelowBottomStaff", P_TYPE::BOOL,        PropertyGroup::NONE, DUMMY_QT_TR_NOOP("propertyName", "system objects below bottom staff")},
     { Pid::PLAY_COUNT_TEXT_SETTING, false, "playCountTextSetting",  P_TYPE::AUTO_CUSTOM_HIDE,   PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "play count text setting") },
     { Pid::PLAY_COUNT_TEXT,         false, "playCountText",         P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "play count text") },
 

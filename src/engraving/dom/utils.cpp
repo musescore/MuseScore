@@ -1300,7 +1300,7 @@ bool allowRemoveWhenRemovingStaves(EngravingItem* item, staff_idx_t startStaff, 
     }
 
     Staff* nextRemaining = score->staff(endStaff);
-    bool nextRemainingIsSystemObjectStaff = nextRemaining && score->isSystemObjectStaff(nextRemaining);
+    bool nextRemainingIsSystemObjectStaff = nextRemaining && nextRemaining->isSystemObjectStaff();
     if (item->isTopSystemObject() && !nextRemainingIsSystemObjectStaff) {
         return false;
     }
@@ -1325,7 +1325,7 @@ bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff, staff
 
     Score* score = item->score();
     Staff* nextAfterInserted = score->staff(endStaff);
-    bool nextAfterInsertedIsSystemObjectStaff = nextAfterInserted && score->isSystemObjectStaff(nextAfterInserted);
+    bool nextAfterInsertedIsSystemObjectStaff = nextAfterInserted && nextAfterInserted->isSystemObjectStaff();
     if (item->isTopSystemObject() && !nextAfterInsertedIsSystemObjectStaff) {
         return false;
     }

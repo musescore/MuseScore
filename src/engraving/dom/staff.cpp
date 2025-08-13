@@ -247,6 +247,16 @@ bool Staff::shouldShowPlayCount() const
     return isTopStave || isSystemObjectStaff;
 }
 
+bool Staff::isSystemObjectStaff() const
+{
+    return score() && muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
+}
+
+bool Staff::hasSystemObjectsBelowBottomStaff() const
+{
+    return isSystemObjectStaff() && score()->staves().back() == this && style().styleB(Sid::systemObjectsBelowBottomStaff);
+}
+
 //---------------------------------------------------------
 //   fillBrackets
 //    make sure index idx is valid
@@ -1563,8 +1573,6 @@ PropertyValue Staff::getProperty(Pid id) const
         return m_showMeasureNumbers;
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
         return m_showIfEntireSystemEmpty;
-    case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
-        return m_systemObjectsBelowBottomStaff;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();
@@ -1647,9 +1655,6 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
         m_showIfEntireSystemEmpty = v.toBool();
         break;
-    case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
-        m_systemObjectsBelowBottomStaff = v.toBool();
-        break;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         break;
@@ -1688,8 +1693,6 @@ PropertyValue Staff::propertyDefault(Pid id) const
     case Pid::SHOW_MEASURE_NUMBERS:
         return AutoOnOff::AUTO;
     case Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY:
-        return false;
-    case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
         return false;
     default:
         LOGD("unhandled id <%s>", propertyName(id));

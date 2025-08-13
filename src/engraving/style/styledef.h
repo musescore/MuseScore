@@ -2008,6 +2008,8 @@ enum class Sid {
     repeatPlayCountShow,
     repeatPlayCountShowSingleRepeats,
 
+    systemObjectsBelowBottomStaff,
+
     STYLES
     ///\}
 };
