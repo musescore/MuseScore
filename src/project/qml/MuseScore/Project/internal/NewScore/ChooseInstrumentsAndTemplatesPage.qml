@@ -72,7 +72,9 @@ Item {
     }
 
     function focusOnSelected() {
-        pageLoader.item.navigation.requestActive()
+        if (pageLoader.item) {
+            pageLoader.item.navigation.requestActive()
+        }
     }
 
     Component.onCompleted: {
