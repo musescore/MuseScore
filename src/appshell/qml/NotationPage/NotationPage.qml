@@ -594,6 +594,15 @@ DockPage {
                         "title": qsTrc("playback", "Ready, set, play!"),
                         "description": qsTrc("playback", "Click here to enable a bar of count-in when starting playback."),
                         "controlUri": "control://TopTool/PlaybackToolBar/playback-settings",
+                    },
+                    {
+                        "title": qsTrc("notation", "Do more in the layout panel"),
+                        "description": qsTrc("notation", "Set measure numbers below the bottom stave, control instrument visibility, and more."),
+                        // TODO: This step only appears if the panel is docked to the left (perhaps because DockWindow::doLoadPage hasn't been
+                        //       called by the time we initialise tours?)
+                        "controlUri": "control://NavigationLeftPanel/PanelTabs/Layout",
+                        "videoExplanationUrl": "https://youtu.be/xm1-XkS9VzA", // TODO: Use actual video
+                        "preferredPlacement" : "Right" // TODO: Probably should be dynamic depending on the dock's current position...
                     }
                 ]
             }

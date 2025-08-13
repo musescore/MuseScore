@@ -461,6 +461,7 @@ void DockPageView::setTours(const QVariant& newTours)
             tours::TourStep step;
             step.title = stepMap.value("title").toString();
             step.description = stepMap.value("description").toString();
+            step.preferredPlacement = stepMap.value("preferredPlacement").toString();
             step.previewImageOrGifUrl = stepMap.value("previewImageOrGifUrl").toString();
             step.videoExplanationUrl = stepMap.value("videoExplanationUrl").toString();
             step.controlUri = Uri(stepMap.value("controlUri").toString());
