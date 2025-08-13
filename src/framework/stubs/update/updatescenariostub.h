@@ -28,7 +28,11 @@ namespace muse::update {
 class UpdateScenarioStub : public IUpdateScenario
 {
 public:
-    void checkForUpdate() override;
+    bool needCheckForUpdate() const override;
+    muse::async::Promise<Ret> checkForUpdate(bool manual) override;
+
+    bool hasUpdate() const override;
+    muse::Ret showUpdate() override;
 };
 }
 

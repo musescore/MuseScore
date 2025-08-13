@@ -50,6 +50,7 @@ public:
     virtual std::string lastShownMuseSoundsReleaseVersion() const = 0;
     virtual void setLastShownMuseSoundsReleaseVersion(const std::string& version) = 0;
 
+    virtual bool museSoundsCheckForUpdateTestMode() const = 0;
     virtual bool museSamplerCheckForUpdateTestMode() const = 0;
 
     virtual bool museSamplerUpdateAvailable() const = 0;

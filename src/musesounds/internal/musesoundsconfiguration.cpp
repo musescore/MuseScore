@@ -34,6 +34,7 @@ static const Settings::Key CHECK_FOR_MUSESOUNDS_UPDATE_KEY(module_name, "musesou
 static const Settings::Key GET_SOUNDS_TEST_MODE_KEY(module_name, "musesounds/getSoundsTestMode");
 static const Settings::Key LAST_MUSESOUNDS_SHOWN_VERSION_KEY(module_name, "application/lastShownMuseSoundsReleaseVersion");
 
+static const Settings::Key MUSESOUNDS_CHECK_FOR_UPDATE_TEST_MODE(module_name, "musesounds/checkForUpdateTestMode");
 static const Settings::Key MUSESAMPLER_CHECK_FOR_UPDATE_TEST_MODE(module_name, "museSampler/checkForUpdateTestMode");
 static const Settings::Key MUSESAMPLER_UPDATE_AVAILABLE(module_name, "museSampler/updateAvailable");
 
@@ -63,6 +64,7 @@ void MuseSoundsConfiguration::init()
     settings()->setDefaultValue(MUSESAMPLER_CHECK_FOR_UPDATE_TEST_MODE, Val(false));
 
     settings()->setDefaultValue(MUSESAMPLER_UPDATE_AVAILABLE, Val(false));
+    settings()->setDefaultValue(MUSESOUNDS_CHECK_FOR_UPDATE_TEST_MODE, Val(false));
 }
 
 bool MuseSoundsConfiguration::needCheckForMuseSoundsUpdate() const
@@ -116,6 +118,11 @@ std::string MuseSoundsConfiguration::lastShownMuseSoundsReleaseVersion() const
 void MuseSoundsConfiguration::setLastShownMuseSoundsReleaseVersion(const std::string& version)
 {
     settings()->setSharedValue(LAST_MUSESOUNDS_SHOWN_VERSION_KEY, Val(version));
+}
+
+bool MuseSoundsConfiguration::museSoundsCheckForUpdateTestMode() const
+{
+    return settings()->value(MUSESAMPLER_CHECK_FOR_UPDATE_TEST_MODE).toBool();
 }
 
 bool MuseSoundsConfiguration::museSamplerCheckForUpdateTestMode() const

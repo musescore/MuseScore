@@ -58,6 +58,7 @@
         <file>qml/Preferences/internal/IncrementalPropertyControlWithTitle.qml</file>
         <file>qml/Preferences/internal/KeyboardLayoutsSection.qml</file>
         <file>qml/Preferences/internal/SaveToCloudSection.qml</file>
+        <file>qml/Preferences/internal/WelcomeDialogSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSubSection.qml</file>
@@ -98,6 +99,9 @@
         <file>qml/platform/AppButtonBackground.qml</file>
         <file>resources/LoadingScreen.svg</file>
         <file>resources/OnlineSoundsPreview.gif</file>
+        <file>resources/welcomedialog/MuseSounds.png</file>
+        <file>resources/welcomedialog/WhatsNew.png</file>
+        <file>resources/welcomedialog/ExploreTutorials.png</file>
         <file>qml/Preferences/BraillePreferencesPage.qml</file>
         <file>qml/Preferences/internal/BrailleSection.qml</file>
         <file>qml/Preferences/internal/BrailleAdvancedSection.qml</file>
@@ -108,5 +112,6 @@
         <file>qml/DevTools/Extensions/ExtensionsListView.qml</file>
         <file>qml/platform/PlatformMenuBar.qml</file>
         <file>qml/Preferences/PercussionPreferencesPage.qml</file>
+        <file>qml/WelcomeDialog.qml</file>
     </qresource>
 </RCC>

@@ -29,6 +29,11 @@ RetVal<ReleaseInfo> UpdateServiceStub::checkForUpdate()
     return make_ret(Ret::Code::NotSupported);
 }
 
+RetVal<ReleaseInfo> UpdateServiceStub::lastCheckResult() const
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
 RetVal<io::path_t> UpdateServiceStub::downloadRelease()
 {
     return make_ret(Ret::Code::NotSupported);

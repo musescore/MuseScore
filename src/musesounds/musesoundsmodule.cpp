@@ -96,8 +96,3 @@ void MuseSoundsModule::onInit(const IApplication::RunMode& mode)
     m_configuration->init();
     m_repository->init();
 }
-
-void MuseSoundsModule::onDelayedInit()
-{
-    m_museSoundsCheckUpdateScenario->delayedInit();
-}

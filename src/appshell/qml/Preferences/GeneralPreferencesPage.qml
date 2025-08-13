@@ -51,7 +51,7 @@ PreferencesPage {
 
             languages: preferencesModel.languages
             currentLanguageCode: preferencesModel.currentLanguageCode
-            isNeedRestart: preferencesModel.isNeedRestart
+            restartRequired: preferencesModel.restartRequired
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
@@ -72,6 +72,15 @@ PreferencesPage {
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
+        }
+
+        SeparatorLine { }
+
+        WelcomeDialogSection {
+            model: preferencesModel
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
         }
 
         /*

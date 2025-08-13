@@ -43,16 +43,62 @@ static const char* DEFAULT_IMAGE_URL = "qrc:/qml/MuseScore/MuseSounds/resources/
 static const TranslatableString DEFAULT_ACTION_TITLE("musesounds", "Take me to MuseHub");
 static const TranslatableString DEFAULT_CANCEL_TITLE("musesounds", "No thanks");
 
-void MuseSoundsCheckUpdateScenario::delayedInit()
+bool MuseSoundsCheckUpdateScenario::needCheckForUpdate() const
 {
-    if (service()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
-        doCheckForUpdate(false);
-    }
+    return configuration()->needCheckForMuseSoundsUpdate();
+}
+
+muse::async::Promise<Ret> MuseSoundsCheckUpdateScenario::checkForUpdate(bool manual)
+{
+    return async::make_promise<Ret>([this, manual](auto resolve, auto) {
+        if (isCheckInProgress()) {
+            LOGE() << "Check already in progress";
+            const Ret ret = muse::make_ret(Ret::Code::UnknownError);
+            return resolve(ret);
+        }
+
+        m_checkProgressChannel = std::make_shared<Progress>();
+        m_checkProgressChannel->started().onNotify(this, [this]() {
+            m_checkInProgress = true;
+        });
+
+        m_checkProgressChannel->finished().onReceive(this, [this, manual, resolve](const ProgressResult& res) {
+            Ret ret = muse::make_ok();
+            DEFER {
+                m_checkInProgress = false;
+                (void)resolve(ret);
+            };
+
+            if (!res.ret) {
+                LOGE() << "Unable to check for update, error: " << res.ret.toString();
+                ret = muse::make_ret(Ret::Code::UnknownError);
+                return;
+            }
+            if (!manual) {
+                return;
+            }
+
+            const bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+            if (noUpdate) {
+                return;
+            }
+
+            const ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
+            if (shouldIgnoreUpdate(info)) {
+                return;
+            }
+
+            showReleaseInfo(info);
+        });
+
+        Concurrent::run(this, &MuseSoundsCheckUpdateScenario::th_checkForUpdate);
+        return muse::async::Promise<Ret>::dummy_result();
+    });
 }
 
 bool MuseSoundsCheckUpdateScenario::hasUpdate() const
 {
-    if (isCheckStarted() || !service()->needCheckForUpdate()) {
+    if (isCheckInProgress() || !service()->needCheckForUpdate()) {
         return false;
     }
 
@@ -79,55 +125,19 @@ muse::Ret MuseSoundsCheckUpdateScenario::showUpdate()
     return showReleaseInfo(lastCheckResult.val);
 }
 
-bool MuseSoundsCheckUpdateScenario::isCheckStarted() const
+bool MuseSoundsCheckUpdateScenario::isCheckInProgress() const
 {
-    return m_checkProgress;
+    return m_checkInProgress;
 }
 
 bool MuseSoundsCheckUpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
 {
-    return info.version == configuration()->lastShownMuseSoundsReleaseVersion();
+    return info.version == configuration()->lastShownMuseSoundsReleaseVersion() && !configuration()->museSoundsCheckForUpdateTestMode();
 }
 
 void MuseSoundsCheckUpdateScenario::setIgnoredUpdate(const std::string& version)
 {
     configuration()->setLastShownMuseSoundsReleaseVersion(version);
-}
-
-void MuseSoundsCheckUpdateScenario::doCheckForUpdate(bool manual)
-{
-    m_checkProgressChannel = std::make_shared<Progress>();
-    m_checkProgressChannel->started().onNotify(this, [this]() {
-        m_checkProgress = true;
-    });
-
-    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
-        DEFER {
-            m_checkProgress = false;
-        };
-
-        if (!res.ret) {
-            LOGE() << "Unable to check for update, error: " << res.ret.toString();
-            return;
-        }
-        if (!manual) {
-            return;
-        }
-
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
-        if (noUpdate) {
-            return;
-        }
-
-        ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
-        if (shouldIgnoreUpdate(info)) {
-            return;
-        }
-
-        showReleaseInfo(info);
-    });
-
-    Concurrent::run(this, &MuseSoundsCheckUpdateScenario::th_checkForUpdate);
 }
 
 void MuseSoundsCheckUpdateScenario::th_checkForUpdate()
@@ -154,8 +164,11 @@ muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info
     };
 
     UriQuery query("musescore://musesounds/musesoundsreleaseinfo");
-    query.addParam("notes", Val(info.notes));
-    query.addParam("features", Val(info.additionInfo.at("features")));
+
+    if (!configuration()->museSoundsCheckForUpdateTestMode()) {
+        query.addParam("notes", Val(info.notes));
+        query.addParam("features", Val(info.additionInfo.at("features")));
+    }
 
     if (info.actionTitle.empty()) {
         query.addParam("actionTitle", Val(DEFAULT_ACTION_TITLE.qTranslated()));
