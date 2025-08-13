@@ -692,6 +692,8 @@ void MasterNotation::updateExcerpts()
             excerptNotation->notation()->elements()->msScore()->doLayout();
         }
 
+        initNotationSoloMuteState(excerptNotation->notation());
+
         updatedExcerpts.push_back(excerptNotation);
     }
 
