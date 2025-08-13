@@ -5526,7 +5526,8 @@ void Score::undoResetPlayCountTextSettings(BarLine* bl)
             continue;
         }
 
-        curBl->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::AUTO);
+        curBl->undoResetProperty(Pid::PLAY_COUNT_TEXT_SETTING);
+        curBl->undoResetProperty(Pid::PLAY_COUNT_TEXT);
     }
 }
 
