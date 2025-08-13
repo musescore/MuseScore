@@ -815,6 +815,30 @@ static String slurTieLineStyle(const SlurTie* s)
     return rest;
 }
 
+static String slurTieBezier(const SlurTie* st, const bool start)
+{
+    if (!ExportMusicXml::configuration()->exportLayout()) {
+        return String();
+    }
+
+    String attributeString;
+    const int spatium = st->spatium();
+    if (start) {
+        const SlurTieSegment* front = toSlurTieSegment(st->frontSegment());
+        const PointF startP = front->ups(Grip::START).pos();
+        const PointF bezierP = front->ups(Grip::BEZIER1).pos();
+        attributeString += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - startP.x()) / spatium);
+        attributeString += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - startP.y()) / spatium);
+    } else {
+        const SlurTieSegment* back = toSlurTieSegment(st->backSegment());
+        const PointF endP = back->ups(Grip::END).pos();
+        const PointF bezierP = back->ups(Grip::BEZIER2).pos();
+        attributeString += String(u" bezier-x=\"%1\"").arg(10 * (bezierP.x() - endP.x()) / spatium);
+        attributeString += String(u" bezier-y=\"%1\"").arg(-10 * (bezierP.y() - endP.y()) / spatium);
+    }
+    return attributeString;
+}
+
 //---------------------------------------------------------
 //   findSlur -- get index of slur in slur table
 //   return -1 if not found
@@ -941,7 +965,7 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, String tagNam
     // compose tag
     tagName += u" type=\"start\"";
     tagName += style ? slurTieLineStyle(s) : color2xml(s);
-    tagName += ExportMusicXml::positioningAttributes(s, true);
+    tagName += slurTieBezier(s, true);
 
     if (i >= 0) {
         // remove from list and print start
@@ -987,7 +1011,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, String tagName
             m_started[i] = false;
             notations.tag(xml, s);
             tagName += String(u" type=\"stop\" number=\"%1\"").arg(i + 1);
-            tagName += ExportMusicXml::positioningAttributes(s, false);
+            tagName += slurTieBezier(s, false);
             xml.tagRaw(tagName);
         } else {
             LOGD("no free slur slot");
@@ -998,7 +1022,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, String tagName
         m_started[i] = false;
         notations.tag(xml, s);
         tagName += String(u" type=\"stop\" number=\"%1\"").arg(i + 1);
-        tagName += ExportMusicXml::positioningAttributes(s, false);
+        tagName += slurTieBezier(s, false);
         xml.tagRaw(tagName);
     }
 }
@@ -5552,10 +5576,31 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
             }
             tag += color2xml(hp);
             tag += positioningAttributes(hp, isStart);
+            switch (hp->lineStyle()) {
+            case LineType::DASHED:
+                tag += u" line-type=\"dashed\"";
+                break;
+            case LineType::DOTTED:
+                tag += u" line-type=\"dotted\"";
+                break;
+            case LineType::SOLID:
+            default:
+                break;
+            }
+            if (configuration()->exportLayout() && (hp->lineStyle() == LineType::DASHED)) {
+                tag += String(u" dash-length=\"%1\"").arg(String::number(hp->dashLineLen() * 10, 2));
+                tag += String(u" space-length=\"%1\"").arg(String::number(hp->dashGapLen() * 10, 2));
+            }
+            if (configuration()->exportLayout() && hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
+                tag += String(u" spread=\"%1\"").arg(String::number(hp->hairpinHeight().val() * 10, 2));
+            }
         } else {
             tag += u"\"stop\"";
             if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DIM_HAIRPIN) {
                 tag += u" niente=\"yes\"";
+            }
+            if (configuration()->exportLayout() && hp->hairpinType() == HairpinType::DIM_HAIRPIN) {
+                tag += String(u" spread=\"%1\"").arg(String::number(hp->hairpinHeight().val() * 10, 2));
             }
         }
         tag += String(u" number=\"%1\"").arg(n + 1);

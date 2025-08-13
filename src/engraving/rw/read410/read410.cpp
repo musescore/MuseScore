@@ -168,9 +168,6 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
             score->m_showSoundFlags = e.readInt();
         } else if (tag == "markIrregularMeasures") {
             score->m_markIrregularMeasures = e.readInt();
-        } else if (tag == "Style") {
-            // Since version 400, the style is stored in a separate file
-            e.skipCurrentElement();
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
@@ -225,9 +222,6 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
             Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
             TRead::readItem(s, e, ctx);
             score->addSpanner(s);
-        } else if (tag == "Excerpt") {
-            // Since version 400, the Excerpts are stored in a separate file
-            e.skipCurrentElement();
         } else if (e.name() == "initialPartId") {
             if (score->excerpt()) {
                 score->excerpt()->setInitialPartId(ID(e.readInt()));
@@ -240,9 +234,6 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
             if (strack != -1 && dtrack != -1) {
                 ctx.tracks().insert({ strack, dtrack });
             }
-            e.skipCurrentElement();
-        } else if (tag == "Score") {
-            // Since version 400, the Excerpts is stored in a separate file
             e.skipCurrentElement();
         } else if (tag == "name") {
             String n = e.readText();

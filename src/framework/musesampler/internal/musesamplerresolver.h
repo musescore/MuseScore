@@ -57,8 +57,8 @@ public:
     void refresh() override;
     void clearSources() override;
 
-    std::string version() const override;
-    bool isInstalled() const override;
+    const Version& version() const override;
+    bool isLoaded() const override;
 
     float defaultReverbLevel(const String& instrumentSoundId) const override;
 
@@ -72,6 +72,9 @@ private:
 
     MuseSamplerLibHandlerPtr m_libHandler = nullptr;
     async::Notification m_processOnlineSoundsRequested;
+
+    Version m_samplerVersion;
+    int m_samplerBuildNumber = -1;
 };
 }
 

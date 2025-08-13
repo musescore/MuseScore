@@ -7435,7 +7435,7 @@
                   <trackName>Shime-Daiko</trackName>
                   <longName>Shime-Daiko</longName>
                   <shortName>S-Dko.</shortName>
-                  <description>High-pitch, shallow body taiko drum.</description>
+                  <description>High-pitched, shallow body taiko drum.</description>
                   <musicXMLid>drum.shime-daiko</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -7464,7 +7464,7 @@
                   <trackName>Kakko</trackName>
                   <longName>Kakko</longName>
                   <shortName>Kakko</shortName>
-                  <description>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played infront of a kneeling performer.</description>
+                  <description>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played in front of a kneeling performer.</description>
                   <musicXMLid>drum.kakko</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -8323,7 +8323,7 @@
                   <trackName>Bangu</trackName>
                   <longName>Bangu</longName>
                   <shortName>Bgu.</shortName>
-                  <description>Chinese high-pitch frame drum.</description>
+                  <description>Chinese high-pitched frame drum.</description>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
@@ -8593,7 +8593,7 @@
                   <trackName>Miya-Daiko</trackName>
                   <longName>Miya-Daiko</longName>
                   <shortName>M-Daiko</shortName>
-                  <description>Robust, barrel shaped Japanese drum. Also known as nagadou, they are the most common taiko.</description>
+                  <description>Robust, barrel-shaped Japanese drum. Also known as nagadou, they are the most common taiko.</description>
                   <musicXMLid>drum.nagado-daiko</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -8679,7 +8679,7 @@
                   <trackName>Shōko</trackName>
                   <longName>Shōko</longName>
                   <shortName>Shōko</shortName>
-                  <description>Small Japanese bronz gong.</description>
+                  <description>Small Japanese bronze gong.</description>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
@@ -8707,7 +8707,7 @@
                   <trackName>Kane</trackName>
                   <longName>Kane</longName>
                   <shortName>Kane</shortName>
-                  <description>Small Japanese saucer-shaped bell</description>
+                  <description>Small Japanese saucer-shaped bell.</description>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
@@ -9056,7 +9056,7 @@
                   <trackName>Kkwaenggwari</trackName>
                   <longName>Kkwaenggwari</longName>
                   <shortName>Kgwari.</shortName>
-                  <description>Korean dish-like gong</description>
+                  <description>Korean dish-like gong.</description>
                   <musicXMLid>metal.gong.kkwenggwari</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -9891,7 +9891,7 @@
                         <head>normal</head>
                         <line>6</line>
                         <voice>0</voice>
-                        <name>Low-Mid  Sound</name>
+                        <name>Low-Mid Sound</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
@@ -9901,7 +9901,7 @@
                         <head>normal</head>
                         <line>4</line>
                         <voice>0</voice>
-                        <name>Mid  Sound</name>
+                        <name>Mid Sound</name>
                         <stem>1</stem>
                         <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
@@ -9911,7 +9911,7 @@
                         <head>normal</head>
                         <line>2</line>
                         <voice>0</voice>
-                        <name>High-Mid  Sound</name>
+                        <name>High-Mid Sound</name>
                         <stem>1</stem>
                         <shortcut>D</shortcut>
                         <panelRow>0</panelRow>
@@ -9921,7 +9921,7 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>High  Sound</name>
+                        <name>High Sound</name>
                         <stem>1</stem>
                         <shortcut>E</shortcut>
                         <panelRow>0</panelRow>

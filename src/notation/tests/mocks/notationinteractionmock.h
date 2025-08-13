@@ -74,6 +74,7 @@ public:
 
     MOCK_METHOD(bool, startDropSingle, (const QByteArray&), (override));
     MOCK_METHOD(bool, startDropRange, (const QByteArray&), (override));
+    MOCK_METHOD(bool, startDropRange, (const Fraction&, const Fraction&, engraving::staff_idx_t, size_t), (override));
     MOCK_METHOD(bool, startDropImage, (const QUrl&), (override));
     MOCK_METHOD(bool, updateDropSingle, (const muse::PointF&, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(bool, updateDropRange, (const muse::PointF&), (override));

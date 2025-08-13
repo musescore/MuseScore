@@ -66,8 +66,11 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::VISIBLE,                 false, "visible",               P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "visible") },
     { Pid::Z,                       false, "z",                     P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "z") },
     { Pid::SMALL,                   false, "small",                 P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "small") },
+    { Pid::HIDE_WHEN_EMPTY,         false, "hideWhenEmpty",         P_TYPE::AUTO_ON_OFF,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "hide when empty") },
+    { Pid::HIDE_STAVES_WHEN_INDIVIDUALLY_EMPTY, false, "hideStavesWhenIndividuallyEmpty", P_TYPE::BOOL, PropertyGroup::APPEARANCE, DUMMY_QT_TR_NOOP("propertyName", "hide staves when individually empty") },
+    { Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY, false, "showIfEntireSystemEmpty", P_TYPE::BOOL,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "show if entire system empty") },
     { Pid::SHOW_COURTESY,           false, "showCourtesySig",       P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
-    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEY_MODE,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
+    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEY_MODE,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "key signature mode") },
     { Pid::SLUR_STYLE_TYPE,         false, "lineType",              P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "line type") },
     { Pid::PITCH,                   true,  "pitch",                 P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "pitch") },
 
@@ -127,6 +130,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::RIGHT_MARGIN,            false, "rightMargin",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "right padding") },
     { Pid::TOP_MARGIN,              false, "topMargin",             P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "top padding") },
     { Pid::BOTTOM_MARGIN,           false, "bottomMargin",          P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bottom padding") },
+    { Pid::PADDING_TO_NOTATION_ABOVE, false, "paddingToNotationAbove", P_TYPE::SPATIUM,         PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "padding to notation above") },
+    { Pid::PADDING_TO_NOTATION_BELOW, false, "paddingToNotationBelow", P_TYPE::SPATIUM,         PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "padding to notation below") },
+
     { Pid::LAYOUT_BREAK,            false, "subtype",               P_TYPE::LAYOUTBREAK_TYPE,   PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "subtype") },
     { Pid::AUTOSCALE,               false, "autoScale",             P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "autoscale") },
     { Pid::SIZE,                    false, "size",                  P_TYPE::SIZE,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "size") },

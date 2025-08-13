@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "chordlist.h"
+#include "parenthesis.h"
 #include "draw/types/font.h"
 
 #include "textbase.h"
@@ -38,30 +39,87 @@ class ParsedChord;
 class Score;
 
 enum class HarmonyType : unsigned char {
-    ///.\{
     STANDARD,
     ROMAN,
     NASHVILLE
-    ///\}
+};
+
+enum class HarmonyRenderItemType : unsigned char {
+    TEXT,
+    PAREN
+};
+
+struct HarmonyRenderItem {
+    virtual ~HarmonyRenderItem() = default;
+    HarmonyRenderItem(bool align, double _x, double _y)
+        : m_hAlign(align), m_pos(_x, _y) {}
+
+    PointF pos() const { return m_pos + m_offset; }
+    double x() const { return m_pos.x(); }
+    double y() const { return m_pos.y(); }
+    void movex(double v) { m_pos.rx() += v; }
+    void movey(double v) { m_pos.ry() += v; }
+    void setx(double v) { m_pos.rx() = v; }
+    void sety(double v) { m_pos.ry() = v; }
+    void setOffset(const PointF& p) { m_offset = p; }
+
+    virtual double height() const = 0;
+
+    bool align() const { return m_hAlign; }
+
+    virtual RectF boundingRect() const = 0;
+    virtual RectF tightBoundingRect() const = 0;
+
+    virtual double leftPadding() const = 0;
+    virtual double rightPadding() const = 0;
+    virtual double bboxBaseLine() const = 0;
+
+    virtual HarmonyRenderItemType type() const = 0;
+
+private:
+    bool m_hAlign = true;
+    PointF m_offset;       // Offset for placing within the TextBase.
+    PointF m_pos;          // Position of segments relative to Harmony position
+};
+
+struct ChordSymbolParen : HarmonyRenderItem {
+    ChordSymbolParen(Parenthesis* p, bool hAlign, double _x, double _y)
+        : HarmonyRenderItem(hAlign, _x, _y), paren(p) {}
+    ~ChordSymbolParen() { delete paren; }
+
+    RectF boundingRect() const override { return paren->shape().bbox(); }
+    RectF tightBoundingRect() const override { return paren->shape().bbox(); }
+
+    double top = DBL_MAX;
+    double bottom = -DBL_MAX;
+    double closingParenPos = -DBL_MAX;
+
+    Parenthesis* paren = nullptr;
+
+    double height() const override { return paren->height(); }
+
+    double leftPadding() const override { return paren->direction() == DirectionH::LEFT ? OUTER_PADDING : INNER_PADDING; }
+    double rightPadding() const override { return paren->direction() == DirectionH::LEFT ? INNER_PADDING : OUTER_PADDING; }
+
+    double bboxBaseLine() const override { return bottom; }
+
+    HarmonyRenderItemType type() const override { return HarmonyRenderItemType::PAREN; }
+
+private:
+    static constexpr double INNER_PADDING = 0.05;
+    static constexpr double OUTER_PADDING = 0.1;
 };
 
 //---------------------------------------------------------
 //   TextSegment
 //---------------------------------------------------------
 
-struct TextSegment {
+struct TextSegment : HarmonyRenderItem {
     double width() const;
     double capHeight() const;
-    RectF boundingRect() const;
-    RectF tightBoundingRect() const;
-    double bboxBaseLine() const;
-
-    void setOffset(const PointF& p) { m_offset = p; }
-    PointF pos() const { return m_pos + m_offset; }
-    double x() const { return m_pos.x(); }
-    double y() const { return m_pos.y(); }
-    void movex(double v) { m_pos.rx() += v; }
-    void movey(double v) { m_pos.ry() += v; }
+    double bboxBaseLine() const override;
+    RectF boundingRect() const override;
+    RectF tightBoundingRect() const override;
 
     void setText(const String& t) { m_text = t; }
     String text() const { return m_text; }
@@ -69,18 +127,19 @@ struct TextSegment {
     muse::draw::Font font() const { return m_font; }
     void setFont(const muse::draw::Font& f);
 
-    bool align() const { return m_hAlign; }
+    double leftPadding() const override { return 0.0; }
+    double rightPadding() const override { return 0.0; }
+
+    double height() const override { return boundingRect().height(); }
+
+    HarmonyRenderItemType type() const override { return HarmonyRenderItemType::TEXT; }
 
     TextSegment(const String& s, const muse::draw::Font& f, double _x, double _y, bool align)
-        : m_pos(_x, _y), m_hAlign(align) { setText(s); setFont(f); }
+        : HarmonyRenderItem(align, _x, _y) { setText(s); setFont(f); }
 
 private:
     muse::draw::Font m_font;
     String m_text;
-    PointF m_pos;          // Position of segments relative to Harmony position
-    PointF m_offset;       // Offset for placing within the TextBase.
-
-    bool m_hAlign = true;
 };
 
 class HDegree;
@@ -245,7 +304,7 @@ public:
         ld_field<double> polychordDividerOffset = { "[Harmony] polychordDividerOffset", 0.0 };
         ld_field<double> baseline = { "[Harmony] baseline", 0.0 };
         ld_field<std::vector<muse::draw::Font> > fontList = "[Harmony] fontList";          // temp values used in render()
-        ld_field<std::vector<TextSegment*> > textList = "[Harmony] textList";              // rendered chord
+        ld_field<std::vector<HarmonyRenderItem*> > renderItemList = "[Harmony] renderItemList";              // rendered chord
     };
     DECLARE_LAYOUTDATA_METHODS(Harmony)
 

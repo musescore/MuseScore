@@ -23,11 +23,11 @@
 
 #include <vector>
 
-#include "../layoutoptions.h"
 #include "layoutcontext.h"
 
 #include "../../dom/measure.h"
 #include "../../dom/segment.h"
+#include "../../types/types.h"
 
 namespace mu::engraving {
 class BarLine;
@@ -70,6 +70,7 @@ public:
     static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
 
     static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);
+    static bool canChangeSysStaffVisibility(const System* system, const staff_idx_t staffIdx);
 
     static void layout2(System* system, LayoutContext& ctx);
     static void restoreLayout2(System* system, LayoutContext& ctx);

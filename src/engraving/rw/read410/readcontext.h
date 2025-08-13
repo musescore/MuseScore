@@ -20,12 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_READ410_READCONTEXT_H
-#define MU_ENGRAVING_READ410_READCONTEXT_H
+#pragma once
 
 #include <map>
+#include <vector>
 
-#include "global/modularity/ioc.h"
 #include "iengravingfontsprovider.h"
 
 #include "../types/types.h"
@@ -33,7 +32,6 @@
 #include "dom/connector.h"
 #include "dom/interval.h"
 #include "dom/location.h"
-#include "dom/sig.h"
 
 #include "../linksindexer.h"
 #include "../inoutdata.h"
@@ -57,12 +55,6 @@ class DummyElement;
 }
 
 namespace mu::engraving::read410 {
-struct SpannerValues {
-    int spannerId;
-    Fraction tick2;
-    track_idx_t track2;
-};
-
 struct TextStyleMap {
     String name;
     TextStyleType ss;
@@ -76,13 +68,7 @@ public:
     ReadContext(Score* score);
     ~ReadContext();
 
-    void setScore(Score* score);
     Score* score() const;
-    bool isMasterScore() const;
-
-    void setMasterCtx(ReadContext* ctx);
-    ReadContext* masterCtx();
-    const ReadContext* masterCtx() const;
 
     const MStyle& style() const;
     std::shared_ptr<IEngravingFontsProvider> engravingFonts() const;
@@ -103,16 +89,9 @@ public:
 
     compat::DummyElement* dummy() const;
 
-    Staff* staff(int n);
-
-    void appendStaff(Staff* staff);
-    void addSpanner(Spanner* s);
-
-    bool undoStackActive() const;
+    Staff* staff(staff_idx_t n);
 
     bool isSameScore(const EngravingObject* obj) const;
-
-    bool hasAccidental = false; // used for userAccidental backward compatibility
 
     Fraction tick()  const { return _tick + _tickOffset; }
     Fraction rtick()  const;
@@ -133,39 +112,14 @@ public:
     void setCurrentMeasureIndex(int idx) { _curMeasureIdx = idx; }
     int currentMeasureIndex() const { return _curMeasureIdx; }
 
-    void addBeam(Beam* s);
-    Beam* findBeam(int id) const { return muse::value(_beams, id, nullptr); }
-
-    void addTuplet(Tuplet* s);
-    Tuplet* findTuplet(int id) const { return muse::value(_tuplets, id, nullptr); }
-    std::unordered_map<int, Tuplet*>& tuplets() { return _tuplets; }
-    void checkTuplets();
-
-    void removeSpanner(const Spanner*);
-    void addSpanner(int id, Spanner*);
-    Spanner* findSpanner(int id);
-
-    int spannerId(const Spanner*);        // returns spanner id, allocates new one if none exists
-
-    void addSpannerValues(const SpannerValues& sv) { _spannerValues.push_back(sv); }
-    const SpannerValues* spannerValues(int id) const;
-
     Interval transpose() const { return _transpose; }
     void setTransposeChromatic(int8_t v) { _transpose.chromatic = v; }
     void setTransposeDiatonic(int8_t v) { _transpose.diatonic = v; }
 
     TracksMap& tracks() { return _tracks; }
 
-    TextStyleType addUserTextStyle(const String& name);
-    TextStyleType lookupUserTextStyle(const String& name) const;
-    void clearUserTextStyles() { userTextStyles.clear(); }
-
-    std::list<std::pair<EngravingItem*, PointF> >& fixOffsets() { return _fixOffsets; }
-
     void addPartAudioSettingCompat(PartAudioSettingsCompat partAudioSetting);
     const SettingsCompat& settingCompat() { return _settingsCompat; }
-
-    TimeSigMap* compatTimeSigMap();
 
     Fraction timeSigForNextMeasure() { return m_timeSigForNextMeasure; }
     void setTimeSigForNextMeasure(Fraction timeSig) { m_timeSigForNextMeasure = timeSig; }
@@ -178,8 +132,6 @@ public:
     void initLinks(const rw::ReadLinks& l);
     void addLink(Staff* staff, LinkedObjects* link, const Location& location);
     LinkedObjects* getLink(bool isMasterScore, const Location& location, int localIndexDiff);
-    std::map<int, std::vector<std::pair<LinkedObjects*, Location> > >& staffLinkedElements();
-    std::map<int, LinkedObjects*>& linkIds();
 
     void addConnectorInfoLater(std::shared_ptr<ConnectorInfoReader> c);   // add connector info to be checked after calling checkConnectors()
     void checkConnectors();
@@ -187,31 +139,15 @@ public:
     void clearOrphanedConnectors();
 
 private:
-
-    Location doLocation(bool forceAbsFrac = false) const;
-    void doFillLocation(Location&, bool forceAbsFrac = false) const;
-    void doSetLocation(const Location&);
-
-    rw::ReadLinks doReadLinks() const;
-    void doInitLinks(const rw::ReadLinks& l);
-    void doAddLink(Staff* staff, LinkedObjects* link, const Location& location);
-    LinkedObjects* doGetLink(bool isMasterScore, const Location& location, int localIndexDiff);
-
-    void doCheckConnectors();
-    void doReconnectBrokenConnectors();
-
     void addConnectorInfo(std::shared_ptr<ConnectorInfoReader>);
     void removeConnector(const ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
 
     Score* m_score = nullptr;
-    ReadContext* m_masterCtx = nullptr;
 
     bool _pasteMode = false;  // modifies read behaviour on paste operation
 
     std::map<int /*staffIndex*/, std::vector<std::pair<LinkedObjects*, Location> > > m_staffLinkedElements; // one list per staff
     LinksIndexer m_linksIndexer;
-
-    std::map<int, LinkedObjects*> _elinks;       // for reading old files (< 3.01)
 
     std::vector<std::shared_ptr<ConnectorInfoReader> > _connectors;
     std::vector<std::shared_ptr<ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
@@ -227,26 +163,13 @@ private:
     Measure* _lastMeasure = nullptr;
     int _curMeasureIdx = 0;
 
-    std::unordered_map<int, Beam*> _beams;
-    std::unordered_map<int, Tuplet*> _tuplets;
-
-    std::list<SpannerValues> _spannerValues;
-    std::list<std::pair<int, Spanner*> > _spanner;
-
     Interval _transpose;
     TracksMap _tracks;
 
-    std::list<TextStyleMap> userTextStyles;
-
-    std::list<std::pair<EngravingItem*, PointF> > _fixOffsets;
     SettingsCompat _settingsCompat;
-
-    TimeSigMap m_compatTimeSigMap;
 
     PropertyIdSet m_propertiesToSkip;
 
     Fraction m_timeSigForNextMeasure = Fraction(0, 1);
 };
 }
-
-#endif // MU_ENGRAVING_READ410_READCONTEXT_H

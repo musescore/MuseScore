@@ -42,7 +42,7 @@ import QtQuick 2.5
 BasicTableViewStyle {
     id: root
 
-    readonly property TreeView control: __control
+    readonly property LegacyTreeView control: __control
 
     property int indentation: 16
 

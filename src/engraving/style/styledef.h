@@ -156,6 +156,8 @@ enum class Sid {
     figuredBassStyle,
     systemFrameDistance,
     frameSystemDistance,
+    paddingToNotationAbove,
+    paddingToNotationBelow,
     minMeasureWidth,
 
     barWidth,

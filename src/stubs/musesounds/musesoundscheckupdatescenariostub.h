@@ -27,6 +27,9 @@ namespace mu::musesounds {
 class MuseSoundsCheckUpdateScenarioStub : public IMuseSoundsCheckUpdateScenario
 {
 public:
+    bool needCheckForUpdate() const override;
+    muse::async::Promise<muse::Ret> checkForUpdate(bool manual) override;
+
     bool hasUpdate() const override;
     muse::Ret showUpdate() override;
 };

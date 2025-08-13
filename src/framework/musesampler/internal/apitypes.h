@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,13 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MUSESAMPLER_APITYPES_H
-#define MUSE_MUSESAMPLER_APITYPES_H
+#pragma once
 
 #include <stdint.h>
-#include <memory>
-
-#include "log.h"
 
 typedef void* MuseSamplerLib;
 
@@ -38,7 +34,6 @@ typedef enum ms_Result
 } ms_Result;
 
 // Functions to return the major + minor version of the core code. Note that this is independent of the UI version.
-typedef const char*(* ms_get_version_string)();
 typedef int (* ms_get_version_major)();
 typedef int (* ms_get_version_minor)();
 typedef int (* ms_get_version_revision)();
@@ -203,18 +198,6 @@ typedef struct ms_NoteEvent_5
     ms_NoteHead _notehead;
 } ms_NoteEvent_5;
 
-// Added in v0.6
-typedef struct ms_AuditionStartNoteEvent_3
-{
-    int _pitch; // MIDI pitch
-    int _offset_cents;
-    ms_NoteArticulation _articulation;
-    ms_NoteHead _notehead;
-    double _dynamics;
-    const char* _active_presets; // presets that are selected for this note. list is separated by "|"
-    const char* _active_text_articulation; // text articulation that is active for this note. Can be empty
-} ms_AuditionStartNoteEvent_3;
-
 // Added in v0.100 -> changed from ms_AuditionStartNoteEvent3 by adding "_active_syllable"
 typedef struct ms_AuditionStartNoteEvent_4
 {
@@ -252,19 +235,6 @@ typedef struct ms_AuditionStopNoteEvent
 {
     int _pitch; // MIDI pitch
 } ms_AuditionStopNoteEvent;
-
-// Added in v0.3
-typedef struct ms_LivePlayStartNoteEvent_2
-{
-    int _pitch; // MIDI pitch
-    int _offset_cents;
-    double _dynamics;
-} ms_LivePlayStartNoteEvent_2;
-
-typedef struct ms_LivePlayStopNoteEvent
-{
-    int _pitch; // MIDI pitch
-} ms_LivePlayStopNoteEvent;
 
 // Added in v0.5
 enum ms_PitchBendType
@@ -306,8 +276,7 @@ typedef struct ms_SyllableEvent
 
 typedef ms_Result (* ms_init)();
 typedef ms_Result (* ms_disable_reverb)();
-typedef int (* ms_contains_instrument)(const char* mpe_id, const char* musicxml_id);
-typedef int (* ms_get_matching_instrument_id)(const char* pack, const char* name);
+
 typedef ms_InstrumentList (* ms_get_instrument_list)();
 typedef ms_InstrumentList (* ms_get_matching_instrument_list)(const char* mpe_id, const char* musicxml_id);
 typedef ms_InstrumentInfo (* ms_InstrumentList_get_next)(ms_InstrumentList instrument_list);
@@ -315,7 +284,6 @@ typedef ms_InstrumentInfo (* ms_InstrumentList_get_next)(ms_InstrumentList instr
 typedef int (* ms_Instrument_get_id)(ms_InstrumentInfo instrument);
 typedef const char*(* ms_Instrument_get_name)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_category)(ms_InstrumentInfo);
-typedef const char*(* ms_Instrument_get_package)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_musicxml_sound)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_mpe_sound)(ms_InstrumentInfo);
 typedef float (* ms_Instrument_get_reverb_level)(ms_InstrumentInfo);
@@ -330,8 +298,6 @@ typedef ms_Result (* ms_MuseSampler_init)(ms_MuseSampler ms, double sample_rate,
 // Added in 0.100
 typedef ms_Result (* ms_MuseSampler_init_2)(ms_MuseSampler ms, double sample_rate, int block_size, int channel_count);
 
-typedef ms_Result (* ms_MuseSampler_set_demo_score)(ms_MuseSampler ms);
-typedef ms_Result (* ms_MuseSampler_clear_score)(ms_MuseSampler ms);
 typedef ms_Result (* ms_MuseSampler_finalize_score)(ms_MuseSampler ms);
 typedef ms_Track (* ms_MuseSampler_add_track)(ms_MuseSampler ms, int instrument_id);
 typedef ms_Result (* ms_MuseSampler_finalize_track)(ms_MuseSampler ms, ms_Track track);
@@ -355,16 +321,7 @@ typedef ms_Result (* ms_MuseSampler_add_vibrato)(ms_MuseSampler ms, ms_Track tra
 // Added in 0.3
 typedef ms_Result (* ms_MuseSampler_stop_audition_note)(ms_MuseSampler ms, ms_Track track, ms_AuditionStopNoteEvent evt);
 
-// Added in 0.6
-typedef ms_Result (* ms_MuseSampler_start_audition_note_3)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3 evt);
-
-typedef ms_Result (* ms_MuseSampler_start_liveplay_mode)(ms_MuseSampler ms);
-typedef ms_Result (* ms_MuseSampler_stop_liveplay_mode)(ms_MuseSampler ms);
-
 // Added in 0.3
-typedef ms_Result (* ms_MuseSampler_start_liveplay_note_2)(ms_MuseSampler ms, ms_Track track, ms_LivePlayStartNoteEvent_2 evt);
-typedef ms_Result (* ms_MuseSampler_stop_liveplay_note)(ms_MuseSampler ms, ms_Track track, ms_LivePlayStopNoteEvent evt);
-
 typedef ms_Result (* ms_MuseSampler_start_offline_mode)(ms_MuseSampler ms, double sample_rate);
 typedef ms_Result (* ms_MuseSampler_stop_offline_mode)(ms_MuseSampler ms);
 typedef ms_Result (* ms_MuseSampler_process_offline)(ms_MuseSampler ms, ms_OutputBuffer buffer);
@@ -400,6 +357,17 @@ typedef bool (* ms_MuseSampler_ready_to_play)(ms_MuseSampler ms);
 // ------------------------------------------------------------
 
 // Added in 0.102
+enum ms_ErrorLevel : int16_t
+{
+    ms_ErrorLevel_Debug = 0,
+    ms_ErrorLevel_Info = 1,
+    ms_ErrorLevel_Warning = 2,
+    ms_ErrorLevel_Error = 3,
+};
+
+typedef void (* ms_logging_callback)(ms_ErrorLevel level, const char* msg);
+typedef void (* ms_set_logging_callback)(ms_logging_callback callback);
+
 typedef bool (* ms_Instrument_is_online)(ms_InstrumentInfo);
 
 typedef void (* ms_MuseSampler_set_score_id)(ms_MuseSampler ms, const char* score_id);
@@ -473,8 +441,8 @@ struct AuditionCCEvent {
     ms_Track msTrack = nullptr;
 };
 
+using DynamicEvent = ms_DynamicsEvent_2;
+using PedalEvent = ms_PedalEvent_2;
 using NoteEvent = ms_NoteEvent_5;
 using SyllableEvent = ms_SyllableEvent2;
 }
-
-#endif // MUSE_MUSESAMPLER_APITYPES_H

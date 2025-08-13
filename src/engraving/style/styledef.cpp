@@ -139,6 +139,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(figuredBassStyle,                           0),
     styleDef(systemFrameDistance,                        Spatium(7.0)),
     styleDef(frameSystemDistance,                        Spatium(7.0)),
+    styleDef(paddingToNotationAbove,                     Spatium(2.0)),
+    styleDef(paddingToNotationBelow,                     Spatium(2.0)),
     styleDef(minMeasureWidth,                            Spatium(8.0)),
     styleDef(barWidth,                                   Spatium(0.18)),
     styleDef(doubleBarWidth,                             Spatium(0.18)),

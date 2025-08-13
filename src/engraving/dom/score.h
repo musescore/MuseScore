@@ -444,6 +444,7 @@ public:
     void cmdPadNoteDecreaseTAB();
     void cmdToggleMmrest();
     void cmdToggleHideEmpty();
+    void cmdSetHideStaffIfEmptyOverride(staff_idx_t staffIdx, System* system, engraving::AutoOnOff value);
     void cmdSetVisible();
     void cmdUnsetVisible();
     void cmdMoveRest(Rest*, DirectionV);

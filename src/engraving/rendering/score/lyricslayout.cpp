@@ -461,9 +461,9 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
 
             endSegment = endChordSeg->nextCR(track, false);
 
-            if (!endSegment) {
+            if (!endSegment || endSegment->tick() > endChord->endTick()) {
                 endSegment = endChordSeg;
-                while (endSegment && endSegment->tick() < endChord->tick() + endChord->ticks()) {
+                while (endSegment && endSegment->tick() < endChord->endTick()) {
                     endSegment = endSegment->nextCR(muse::nidx, true);
                 }
             }

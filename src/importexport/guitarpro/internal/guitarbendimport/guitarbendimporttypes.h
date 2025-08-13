@@ -83,8 +83,8 @@ struct ImportedBendInfo {
 
 struct ChordImportedBendData {
     const mu::engraving::Chord* chord = nullptr;
-    std::map<const mu::engraving::Note*, ImportedBendInfo> dataByNote;
+    std::unordered_map<const mu::engraving::Note*, ImportedBendInfo> dataByNote;
 };
 
-using tied_chords_bend_data_chunk_t = std::vector<ChordImportedBendData>;
+using tied_chords_bend_data_chunk_t = std::map<mu::engraving::Fraction, ChordImportedBendData>;
 } // mu::iex::guitarpro

@@ -484,7 +484,7 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     lockIndicator->setParent(system);
     system->addLockIndicator(lockIndicator);
 
-    TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
+    TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
 }
 
 //---------------------------------------------------------
@@ -514,8 +514,14 @@ System* SystemLayout::getNextSystem(LayoutContext& ctx)
     return system;
 }
 
-// Returns ALWAYS, NEVER, or INSTRUMENT
-static Staff::HideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty)
+enum class StaffHideMode {
+    HIDE_WHEN_STAFF_EMPTY,
+    HIDE_WHEN_INSTRUMENT_EMPTY,
+    ALWAYS_SHOW
+};
+
+static StaffHideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty,
+                                     bool& hasSystemSpecificOverrides)
 {
     // Check for system-specific overrides
     bool hasSystemSpecificOverrideHide = false;
@@ -534,27 +540,48 @@ static Staff::HideMode computeHideMode(const System* system, const Staff* staff,
     }
 
     if (hasSystemSpecificOverrideDontHide) {
-        return Staff::HideMode::NEVER;
+        hasSystemSpecificOverrides = true;
+        return StaffHideMode::ALWAYS_SHOW;
     } else if (hasSystemSpecificOverrideHide) {
-        return Staff::HideMode::ALWAYS;
+        hasSystemSpecificOverrides = true;
+        return StaffHideMode::HIDE_WHEN_STAFF_EMPTY;
     }
 
-    // Consider staff hide mode and global hide mode
-    Staff::HideMode hideMode = staff->hideWhenEmpty();
-    if (hideMode == Staff::HideMode::AUTO) {
-        return globalHideIfEmpty ? Staff::HideMode::ALWAYS : Staff::HideMode::NEVER;
-    } else if (hideMode == Staff::HideMode::INSTRUMENT && !globalHideIfEmpty) {
-        return Staff::HideMode::NEVER;
+    // Consider staff setting
+    AutoOnOff staffHideMode = staff->hideWhenEmpty();
+    switch (staffHideMode) {
+    case AutoOnOff::ON:
+        return StaffHideMode::HIDE_WHEN_STAFF_EMPTY;
+    case AutoOnOff::OFF:
+        return StaffHideMode::ALWAYS_SHOW;
+    case AutoOnOff::AUTO:
+        break;
     }
 
-    return hideMode;
+    // Consider part setting
+    AutoOnOff partHideMode = staff->part()->hideWhenEmpty();
+    switch (partHideMode) {
+    case AutoOnOff::ON:
+        break;
+    case AutoOnOff::OFF:
+        return StaffHideMode::ALWAYS_SHOW;
+    case AutoOnOff::AUTO:
+        // Consider global setting
+        if (!globalHideIfEmpty) {
+            return StaffHideMode::ALWAYS_SHOW;
+        }
+    }
+
+    return staff->part()->hideStavesWhenIndividuallyEmpty()
+           ? StaffHideMode::HIDE_WHEN_STAFF_EMPTY
+           : StaffHideMode::HIDE_WHEN_INSTRUMENT_EMPTY;
 }
 
 static bool computeShowSysStaff(const System* system, const Staff* staff, const staff_idx_t staffIdx,
                                 const Fraction& stick, const SpannerMap::IntervalList& spanners,
-                                const Staff::HideMode hideMode)
+                                const StaffHideMode hideMode)
 {
-    if (hideMode == Staff::HideMode::NEVER) {
+    if (hideMode == StaffHideMode::ALWAYS_SHOW) {
         return true;
     }
 
@@ -593,7 +620,7 @@ static bool computeShowSysStaff(const System* system, const Staff* staff, const 
 
                 const Measure* m = toMeasure(mb);
                 bool empty = m->isEmpty(st);
-                if (hideMode == Staff::HideMode::INSTRUMENT && !empty) {
+                if (hideMode == StaffHideMode::HIDE_WHEN_INSTRUMENT_EMPTY && !empty) {
                     return true;
                 } else if (empty) {
                     continue;
@@ -630,6 +657,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
         // One staff, show iff not manually hidden score-wide
         const bool show = ctx.dom().staves().front()->show();
         system->staves().front()->setShow(show);
+        system->setHasStaffVisibilityIndicator(false);
         return;
     }
 
@@ -640,6 +668,8 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     const bool globalHideIfEmpty = ctx.conf().styleB(Sid::hideEmptyStaves)
                                    && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem));
 
+    bool hasSystemSpecificOverrides = false;
+    bool hasHiddenStaves = false;
     bool systemIsEmpty = true;
     staff_idx_t staffIdx = 0;
 
@@ -655,20 +685,24 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
             continue;
         }
 
-        const Staff::HideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty);
+        const StaffHideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty, hasSystemSpecificOverrides);
         const bool show = computeShowSysStaff(system, staff, staffIdx, stick, spanners, hideMode);
         ss->setShow(show);
         if (show) {
             systemIsEmpty = false;
+        } else {
+            hasHiddenStaves = true;
         }
     }
 
-    // If the system is empty, unhide the staves with `showIfEmpty` set to true, if any
+    system->setHasStaffVisibilityIndicator(hasSystemSpecificOverrides || hasHiddenStaves);
+
+    // If the system is empty, unhide the staves with `showIfEntireSystemEmpty` set to true, if any
     const Staff* firstVisible = nullptr;
     if (systemIsEmpty) {
         for (const Staff* staff : ctx.dom().staves()) {
             SysStaff* ss  = system->staff(staff->idx());
-            if (staff->showIfEmpty() && !ss->show()) {
+            if (staff->showIfEntireSystemEmpty() && !ss->show()) {
                 ss->setShow(true);
                 systemIsEmpty = false;
             } else if (!firstVisible && staff->show()) {
@@ -678,11 +712,37 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     }
 
     // If there are no such staves, unhide the first one
-    if (systemIsEmpty && !ctx.dom().staves().empty()) {
+    if (systemIsEmpty) {
         const Staff* staff = firstVisible ? firstVisible : ctx.dom().staves().front();
         SysStaff* ss = system->staff(staff->idx());
         ss->setShow(true);
     }
+}
+
+bool SystemLayout::canChangeSysStaffVisibility(const System* system, const staff_idx_t staffIdx)
+{
+    if (system->staves().size() <= 1) {
+        // Only one staff; always visible
+        return false;
+    }
+
+    const Staff* staff = system->score()->staff(staffIdx);
+
+    if (system->staff(staffIdx)->show()) {
+        // SysStaff is visible; check if can hide
+        const Fraction stick = system->first()->tick();
+        const Fraction etick = system->last()->endTick();
+        const auto& spanners = system->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
+
+        return !computeShowSysStaff(system, staff, staffIdx, system->first()->tick(), spanners, StaffHideMode::HIDE_WHEN_STAFF_EMPTY);
+    }
+
+    // SysStaff is hidden; check if can show
+    if (!staff->show()) {
+        return false;
+    }
+
+    return true;
 }
 
 void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
@@ -2675,13 +2735,15 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     const LayoutConfiguration& conf = ctx.conf();
     const DomAccessor& dom = ctx.dom();
 
-    const Box* topVBox = top->vbox();
-    const Box* bottomVBox = bottom->vbox();
+    const VBox* topVBox = static_cast<VBox*>(top->vbox());
+    const VBox* bottomVBox = static_cast<VBox*>(bottom->vbox());
 
     if (topVBox && !bottomVBox) {
-        return std::max(topVBox->absoluteFromSpatium(topVBox->bottomGap()), bottom->minTop());
+        return std::max(topVBox->absoluteFromSpatium(topVBox->bottomGap()),
+                        bottom->minTop() + topVBox->absoluteFromSpatium(topVBox->paddingToNotationBelow()));
     } else if (!topVBox && bottomVBox) {
-        return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()), top->minBottom());
+        return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()),
+                        top->minBottom() + bottomVBox->absoluteFromSpatium(bottomVBox->paddingToNotationAbove()));
     } else if (topVBox && bottomVBox) {
         double largestGap = std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()),
                                      topVBox->absoluteFromSpatium(topVBox->bottomGap()));

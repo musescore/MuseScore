@@ -26,110 +26,102 @@
 #include "../../infrastructure/rtti.h"
 #include "../../infrastructure/htmlparser.h"
 
-#include "../../dom/score.h"
-#include "../../dom/masterscore.h"
-#include "../../dom/factory.h"
-#include "../../dom/linkedobjects.h"
-#include "../../dom/mscore.h"
-
-#include "../../dom/tempotext.h"
-#include "../../dom/stafftext.h"
-#include "../../dom/stafftextbase.h"
-
-#include "../../dom/drumset.h"
-#include "../../dom/dynamic.h"
-#include "../../dom/expression.h"
-#include "../../dom/harmony.h"
-#include "../../dom/harmonicmark.h"
-#include "../../dom/chordlist.h"
-
-#include "../../dom/excerpt.h"
-
-#include "../../dom/fret.h"
-#include "../../dom/tremolobar.h"
-#include "../../dom/sticking.h"
-#include "../../dom/systemtext.h"
-#include "../../dom/playtechannotation.h"
-#include "../../dom/rehearsalmark.h"
-
-#include "../../dom/instrument.h"
-#include "../../dom/instrchange.h"
-
-#include "../../dom/staffstate.h"
-#include "../../dom/figuredbass.h"
-#include "../../dom/part.h"
-#include "../../dom/fermata.h"
-#include "../../dom/image.h"
-#include "../../dom/tuplet.h"
-#include "../../dom/text.h"
-#include "../../dom/beam.h"
-#include "../../dom/ambitus.h"
 #include "../../dom/accidental.h"
-#include "../../dom/marker.h"
-#include "../../dom/jump.h"
-#include "../../dom/measurenumber.h"
-#include "../../dom/mmrestrange.h"
-#include "../../dom/systemdivider.h"
 #include "../../dom/actionicon.h"
+#include "../../dom/ambitus.h"
 #include "../../dom/arpeggio.h"
 #include "../../dom/articulation.h"
-#include "../../dom/ornament.h"
 #include "../../dom/audio.h"
 #include "../../dom/bagpembell.h"
 #include "../../dom/barline.h"
-#include "../../dom/chord.h"
+#include "../../dom/beam.h"
 #include "../../dom/bend.h"
 #include "../../dom/box.h"
-#include "../../dom/layoutbreak.h"
-#include "../../dom/stafftypechange.h"
 #include "../../dom/bracket.h"
 #include "../../dom/breath.h"
-#include "../../dom/note.h"
-#include "../../dom/noteline.h"
-#include "../../dom/spanner.h"
-#include "../../dom/fingering.h"
-#include "../../dom/notedot.h"
+#include "../../dom/chord.h"
 #include "../../dom/chordline.h"
-#include "../../dom/timesig.h"
-#include "../../dom/lyrics.h"
-#include "../../dom/stem.h"
-#include "../../dom/stemslash.h"
-#include "../../dom/hook.h"
-#include "../../dom/page.h"
-#include "../../dom/tremolotwochord.h"
-#include "../../dom/tremolosinglechord.h"
+#include "../../dom/chordlist.h"
 #include "../../dom/clef.h"
+#include "../../dom/drumset.h"
+#include "../../dom/dynamic.h"
+#include "../../dom/excerpt.h"
+#include "../../dom/expression.h"
+#include "../../dom/factory.h"
+#include "../../dom/fermata.h"
+#include "../../dom/figuredbass.h"
+#include "../../dom/fingering.h"
+#include "../../dom/fret.h"
 #include "../../dom/glissando.h"
 #include "../../dom/gradualtempochange.h"
-#include "../../dom/line.h"
-#include "../../dom/textlinebase.h"
 #include "../../dom/groups.h"
-#include "../../dom/harppedaldiagram.h"
 #include "../../dom/hairpin.h"
+#include "../../dom/harmonicmark.h"
+#include "../../dom/harmony.h"
+#include "../../dom/harppedaldiagram.h"
+#include "../../dom/hook.h"
+#include "../../dom/image.h"
+#include "../../dom/instrchange.h"
+#include "../../dom/instrument.h"
+#include "../../dom/jump.h"
 #include "../../dom/keysig.h"
 #include "../../dom/layoutbreak.h"
 #include "../../dom/ledgerline.h"
 #include "../../dom/letring.h"
+#include "../../dom/line.h"
+#include "../../dom/linkedobjects.h"
+#include "../../dom/lyrics.h"
+#include "../../dom/marker.h"
+#include "../../dom/masterscore.h"
+#include "../../dom/measurenumber.h"
 #include "../../dom/measurerepeat.h"
 #include "../../dom/mmrest.h"
-#include "../../dom/rest.h"
+#include "../../dom/mmrestrange.h"
+#include "../../dom/mscore.h"
+#include "../../dom/note.h"
+#include "../../dom/notedot.h"
+#include "../../dom/noteline.h"
+#include "../../dom/ornament.h"
+#include "../../dom/ottava.h"
+#include "../../dom/page.h"
+#include "../../dom/palmmute.h"
+#include "../../dom/part.h"
+#include "../../dom/pedal.h"
+#include "../../dom/playtechannotation.h"
 #include "../../dom/rasgueado.h"
+#include "../../dom/rehearsalmark.h"
+#include "../../dom/rest.h"
+#include "../../dom/score.h"
+#include "../../dom/segment.h"
 #include "../../dom/slur.h"
 #include "../../dom/slurtie.h"
 #include "../../dom/spacer.h"
+#include "../../dom/spanner.h"
+#include "../../dom/staff.h"
+#include "../../dom/staffstate.h"
+#include "../../dom/stafftext.h"
+#include "../../dom/stafftextbase.h"
 #include "../../dom/stafftype.h"
 #include "../../dom/stafftypechange.h"
+#include "../../dom/stem.h"
+#include "../../dom/stemslash.h"
+#include "../../dom/sticking.h"
 #include "../../dom/system.h"
+#include "../../dom/systemdivider.h"
+#include "../../dom/systemtext.h"
+#include "../../dom/tempotext.h"
+#include "../../dom/text.h"
 #include "../../dom/textline.h"
+#include "../../dom/textlinebase.h"
+#include "../../dom/tie.h"
+#include "../../dom/timesig.h"
+#include "../../dom/tremolobar.h"
+#include "../../dom/tremolosinglechord.h"
+#include "../../dom/tremolotwochord.h"
 #include "../../dom/trill.h"
+#include "../../dom/tuplet.h"
 #include "../../dom/vibrato.h"
 #include "../../dom/volta.h"
-#include "../../dom/tie.h"
-#include "../../dom/ottava.h"
-#include "../../dom/pedal.h"
-#include "../../dom/palmmute.h"
-#include "../../dom/segment.h"
-#include "../../dom/part.h"
 #include "../../dom/whammybar.h"
 
 #include "../xmlreader.h"
@@ -3313,8 +3305,10 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
 {
     p->setId(e.intAttribute("id", 0));
 
+    StaffHideModes staffHideModes;
+
     while (e.readNextStartElement()) {
-        if (!readProperties(p, e, ctx)) {
+        if (!readProperties(p, e, ctx, staffHideModes)) {
             e.unknown();
         }
     }
@@ -3322,9 +3316,85 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
     if (p->partName().isEmpty()) {
         p->setPartName(p->instrument()->trackName());
     }
+
+    read(p, staffHideModes, ctx.style().styleB(Sid::hideEmptyStaves));
 }
 
-bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
+void TRead::read(Part* p, StaffHideModes& staffHideModes, const bool globalHideEmptyStaves)
+{
+    IF_ASSERT_FAILED(p->nstaves() > 0) {
+        return;
+    }
+
+    if (p->nstaves() == 1) {
+        switch (staffHideModes[p->staves().front()]) { // inserts AUTO if not found
+        case StaffHideMode::AUTO:
+            break;
+        case StaffHideMode::ALWAYS:
+            p->setHideWhenEmpty(AutoOnOff::ON);
+            break;
+        case StaffHideMode::NEVER:
+            p->setHideWhenEmpty(AutoOnOff::OFF);
+            break;
+        case StaffHideMode::INSTRUMENT:
+            break;
+        }
+        return;
+    }
+
+    bool hasAuto = false;
+    bool allAlways = true;
+    bool allNever = true;
+    bool hasInstrument = false;
+
+    for (Staff* staff : p->staves()) {
+        StaffHideMode mode = staffHideModes[staff]; // inserts AUTO if not found
+
+        hasAuto |= (mode == StaffHideMode::AUTO);
+        allAlways &= (mode == StaffHideMode::ALWAYS);
+        allNever &= (mode == StaffHideMode::NEVER);
+        hasInstrument |= (mode == StaffHideMode::INSTRUMENT);
+    }
+
+    if (allAlways) {
+        p->setHideWhenEmpty(AutoOnOff::ON);
+        p->setHideStavesWhenIndividuallyEmpty(true);
+        return;
+    } else if (allNever) {
+        p->setHideWhenEmpty(AutoOnOff::OFF);
+        return;
+    }
+
+    if (globalHideEmptyStaves && hasAuto && !hasInstrument) {
+        p->setHideStavesWhenIndividuallyEmpty(true);
+    }
+
+    for (Staff* staff : p->staves()) {
+        switch (staffHideModes[staff]) {
+        case StaffHideMode::AUTO:
+            // If this Part contains a mix of AUTO and INSTRUMENT staves, that
+            // can't really be represented in the new system. The INSTRUMENT
+            // staves force us to leave `hideStavesWhenIndividuallyEmpty` false,
+            // so if we choose `AutoOnOff::AUTO`, that will have the effect of
+            // INSTRUMENT. That means the staff might appear in some systems
+            // where it is empty but one of the other staves is not empty. The
+            // alternative is that we choose `AutoOnOff::ON`, but in that case
+            // the staff will be hidden in the first system if it's empty there,
+            // which is even less likely to match the user's intent.
+            break;
+        case StaffHideMode::ALWAYS:
+            staff->setHideWhenEmpty(AutoOnOff::ON);
+            break;
+        case StaffHideMode::NEVER:
+            staff->setHideWhenEmpty(AutoOnOff::OFF);
+            break;
+        case StaffHideMode::INSTRUMENT:
+            break;
+        }
+    }
+}
+
+bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes)
 {
     const AsciiStringView tag(e.name());
     if (tag == "id") {
@@ -3332,7 +3402,7 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Staff") {
         Staff* staff = Factory::createStaff(p);
         p->score()->appendStaff(staff);
-        TRead::read(staff, e, ctx);
+        TRead::read(staff, e, ctx, staffHideModes);
     } else if (tag == "Instrument") {
         Instrument* instr = new Instrument;
         read(instr, e, ctx, p);
@@ -3718,16 +3788,30 @@ void TRead::read(StaffTypeChange* c, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(Staff* s, XmlReader& e, ReadContext& ctx)
+void TRead::read(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes)
 {
     while (e.readNextStartElement()) {
-        if (!readProperties(s, e, ctx)) {
+        if (!readProperties(s, e, ctx, staffHideModes)) {
             e.unknown();
         }
     }
 }
 
-bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
+AutoOnOff TRead::readStaffHideMode(AsciiStringView asciiText)
+{
+    if (asciiText == "0") { // AUTO
+        // Cannot be represented anymore, so convert to the equivalent of INSTRUMENT
+        return AutoOnOff::AUTO;
+    } else if (asciiText == "1") { // ALWAYS
+        return AutoOnOff::ON;
+    } else if (asciiText == "2") { // NEVER
+        return AutoOnOff::OFF;
+    } else { // INSTRUMENT
+        return AutoOnOff::AUTO;
+    }
+}
+
+bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideModes& staffHideModes)
 {
     const AsciiStringView tag(e.name());
     if (tag == "StaffType") {
@@ -3746,11 +3830,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "invisible") {
         s->staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {
-        s->setHideWhenEmpty(Staff::HideMode(e.readInt()));
+        staffHideModes[s] = static_cast<StaffHideMode>(e.readInt());
     } else if (tag == "cutaway") {
         s->setCutaway(e.readInt());
     } else if (tag == "showIfSystemEmpty") {
-        s->setShowIfEmpty(e.readInt());
+        s->setShowIfEntireSystemEmpty(e.readInt());
     } else if (tag == "hideSystemBarLine") {
         s->setHideSystemBarLine(e.readInt());
     } else if (tag == "mergeMatchingRests") {

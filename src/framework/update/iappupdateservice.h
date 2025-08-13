@@ -39,6 +39,7 @@ public:
     virtual ~IAppUpdateService() = default;
 
     virtual muse::RetVal<ReleaseInfo> checkForUpdate() = 0;
+    virtual muse::RetVal<ReleaseInfo> lastCheckResult() const = 0;
 
     virtual muse::RetVal<muse::io::path_t> downloadRelease() = 0;
     virtual void cancelUpdate() = 0;

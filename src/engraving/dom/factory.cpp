@@ -93,6 +93,7 @@
 #include "staffstate.h"
 #include "stafftext.h"
 #include "stafftypechange.h"
+#include "staffvisibilityindicator.h"
 #include "stem.h"
 #include "stemslash.h"
 #include "sticking.h"
@@ -185,6 +186,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
     case ElementType::SOUND_FLAG:        return new SoundFlag(parent);
     case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
+    case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parent->isSystem()
+                                                                                      ? toSystem(parent) : dummy->system());
     case ElementType::NOTEHEAD:          return new NoteHead(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::NOTEDOT: {
         if (parent->isNote()) {
@@ -782,6 +785,8 @@ PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingT
 CREATE_ITEM_IMPL(Capo, ElementType::CAPO, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TimeTickAnchor, ElementType::TIME_TICK_ANCHOR, Segment, isAccessibleEnabled)
+
+CREATE_ITEM_IMPL(StaffVisibilityIndicator, ElementType::STAFF_VISIBILITY_INDICATOR, System, isAccessibleEnabled)
 
 SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const SystemLock * lock, bool isAccessibleEnabled)
 {

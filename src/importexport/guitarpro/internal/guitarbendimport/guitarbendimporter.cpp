@@ -29,7 +29,7 @@ using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
 GuitarBendImporter::GuitarBendImporter(mu::engraving::Score* score)
-    : m_dataCollector(std::make_unique<BendDataCollector>()),
+    : m_dataCollector(std::make_unique<BendDataCollector>(score)),
     m_dataProcessor(std::make_unique<BendDataProcessor>(score))
 {
 }

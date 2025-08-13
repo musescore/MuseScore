@@ -41,6 +41,7 @@
 #include "view/notationpagemodel.h"
 #include "view/notationstatusbarmodel.h"
 #include "view/aboutmodel.h"
+#include "view/welcomedialogmodel.h"
 #include "view/firstlaunchsetup/firstlaunchsetupmodel.h"
 #include "view/firstlaunchsetup/themespagemodel.h"
 #include "view/firstlaunchsetup/tutorialspagemodel.h"
@@ -126,6 +127,7 @@ void AppShellModule::resolveImports()
         ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
         ir->registerUri(Uri("musescore://about/musescore"), ContainerMeta(ContainerType::QmlDialog, "AboutDialog.qml"));
         ir->registerUri(Uri("musescore://about/musicxml"), ContainerMeta(ContainerType::QmlDialog, "AboutMusicXMLDialog.qml"));
+        ir->registerUri(Uri("musescore://welcomedialog"), ContainerMeta(ContainerType::QmlDialog, "WelcomeDialog.qml"));
         ir->registerUri(Uri("musescore://firstLaunchSetup"),
                         ContainerMeta(ContainerType::QmlDialog, "FirstLaunchSetup/FirstLaunchSetupDialog.qml"));
         ir->registerUri(Uri("muse://preferences"), ContainerMeta(ContainerType::QmlDialog, "Preferences/PreferencesDialog.qml"));
@@ -169,6 +171,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<NotationStatusBarModel>("MuseScore.AppShell", 1, 0, "NotationStatusBarModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");
+    qmlRegisterType<WelcomeDialogModel>("MuseScore.AppShell", 1, 0, "WelcomeDialogModel");
     qmlRegisterType<FirstLaunchSetupModel>("MuseScore.AppShell", 1, 0, "FirstLaunchSetupModel");
     qmlRegisterType<ThemesPageModel>("MuseScore.AppShell", 1, 0, "ThemesPageModel");
     qmlRegisterType<TutorialsPageModel>("MuseScore.AppShell", 1, 0, "TutorialsPageModel");

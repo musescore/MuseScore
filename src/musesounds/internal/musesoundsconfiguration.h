@@ -52,7 +52,11 @@ public:
     std::string lastShownMuseSoundsReleaseVersion() const override;
     void setLastShownMuseSoundsReleaseVersion(const std::string& version) override;
 
+    bool museSoundsCheckForUpdateTestMode() const override;
     bool museSamplerCheckForUpdateTestMode() const override;
+
+    bool museSamplerUpdateAvailable() const override;
+    void setMuseSamplerUpdateAvailable(bool value) override;
 
 private:
     bool getSoundsTestMode() const;

@@ -94,6 +94,11 @@ int main(int argc, char** argv)
     qputenv("QT_STYLE_OVERRIDE", "Fusion");
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
+    // HACK: Workaround for crash #28840. This disables the incremental GC
+    if (!qEnvironmentVariableIsSet("QV4_GC_TIMELIMIT")) {
+        qputenv("QV4_GC_TIMELIMIT", "0");
+    }
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
     if (!qEnvironmentVariableIsSet("QT_QUICK_FLICKABLE_WHEEL_DECELERATION")) {
         qputenv("QT_QUICK_FLICKABLE_WHEEL_DECELERATION", "5000");

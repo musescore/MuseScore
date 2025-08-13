@@ -3532,6 +3532,11 @@ void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fracti
         ElementType::VIBRATO,
     };
 
+    // undoRemoveElement and undoChangeProperty also handle linked elements, so we need
+    // to make sure each linked group is handled only once if multiple elements per linked
+    // group are found in the range, for example in the case of linked staves.
+    std::unordered_set<EngravingObject*> handledMainElements;
+
     auto spanners = m_spanner.findOverlapping(t1.ticks(), t2.ticks() - 1);
     for (auto i : spanners) {
         Spanner* sp = i.value;
@@ -3539,6 +3544,11 @@ void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fracti
         Fraction spEndTick = sp->tick2();
         const bool trackValid = sp->track() >= track1 && sp->track() < track2;
         if (!trackValid || sp->isVolta() || sp->systemFlag()) {
+            continue;
+        }
+
+        if (sp->links() && !handledMainElements.insert(sp->links()->mainElement()).second) {
+            // already handled this linked group
             continue;
         }
 

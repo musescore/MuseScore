@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
 
-import Muse.Ui 1.0
+import Muse.Ui
 
 FocusableControl {
     id: root
@@ -29,7 +29,10 @@ FocusableControl {
     property string hint
 
     property bool isSelected: false
-    property alias radius: root.background.radius
+    // HACK: Workaround debug assert failure "coreIndex >= 0" (https://bugreports.qt.io/browse/QTBUG-124476)
+    //property alias radius: background.radius
+    property double radius: 0
+    background.radius: radius
 
     property color normalColor: "transparent"
     property color hoverHitColor: ui.theme.buttonColor

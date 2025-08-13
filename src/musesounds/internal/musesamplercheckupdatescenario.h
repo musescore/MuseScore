@@ -50,10 +50,12 @@ public:
         : Injectable(iocCtx) {}
 
     bool alreadyChecked() const override;
-    void checkForUpdate() override;
+    void checkAndShowUpdateIfNeed() override;
 
 private:
-    void showUpdateNotification();
+    void showCriticalUpdateNotification();
+    void showNewVersionNotification();
+
     void openMuseHubAndQuit();
     void openMuseHubWebsiteAndQuit();
 

@@ -162,10 +162,8 @@ StaffConfig NotationParts::staffConfig(const ID& staffId) const
     config.visible = staff->visible();
     config.userDistance = staff->userDist();
     config.cutaway = staff->cutaway();
-    config.showIfEmpty = staff->showIfEmpty();
     config.hideSystemBarline = staff->hideSystemBarLine();
     config.mergeMatchingRests = staff->mergeMatchingRests();
-    config.hideMode = staff->hideWhenEmpty();
     config.clefTypeList = staff->defaultClefType();
     config.reflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
 
@@ -629,7 +627,7 @@ bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffI
 
     startEdit(TranslatableString("undoableAction", "Add linked staff"));
 
-    doAppendStaff(staff, destinationPart);
+    doAppendStaff(staff, destinationPart, false);
 
     ///! NOTE: need to unlink before linking
     staff->setLinks(nullptr);
@@ -997,7 +995,7 @@ void NotationParts::onPartsRemoved(const std::vector<Part*>&)
 {
 }
 
-void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
+void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart, bool createRests)
 {
     staff_idx_t staffLocalIndex = destinationPart->nstaves();
     mu::engraving::KeyList keyList = *destinationPart->staff(staffLocalIndex - 1)->keyList();
@@ -1005,7 +1003,7 @@ void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
     staff->setScore(score());
     staff->setPart(destinationPart);
 
-    insertStaff(staff, staffLocalIndex);
+    insertStaff(staff, staffLocalIndex, createRests);
 
     staff_idx_t staffGlobalIndex = staff->idx();
     score()->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
@@ -1023,8 +1021,8 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
         return;
     }
 
-    score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode,
-                                                 config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests,
+    score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.cutaway,
+                                                 config.hideSystemBarline, config.mergeMatchingRests,
                                                  config.reflectTranspositionInLinkedTab));
 
     score()->undo(new mu::engraving::ChangeStaffType(staff, config.staffType));
@@ -1064,7 +1062,7 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         staffCopy->setPart(part);
         staffCopy->init(staff);
 
-        insertStaff(staffCopy, static_cast<int>(staffIndex));
+        insertStaff(staffCopy, static_cast<int>(staffIndex), /* createRests = */ false);
         score()->undo(new mu::engraving::Link(staffCopy, staff));
 
         mu::engraving::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
@@ -1220,11 +1218,11 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
     score()->adjustKeySigs(firstStaffIndex, endStaffIndex, keyList);
 }
 
-void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex)
+void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex, bool createRest)
 {
     TRACEFUNC;
 
-    score()->undoInsertStaff(staff, destinationStaffIndex);
+    score()->undoInsertStaff(staff, destinationStaffIndex, createRest);
 }
 
 void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex)

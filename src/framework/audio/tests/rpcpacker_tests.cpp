@@ -126,9 +126,9 @@ TEST_F(Audio_RpcPackerTests, AudioFxParams)
 
     KNOWN_FIELDS(origin,
                  origin.categories,
-                 origin.chainOrder,
                  origin.resourceMeta,
                  origin.configuration,
+                 origin.chainOrder,
                  origin.active);
 
     ByteArray data = rpc::RpcPacker::pack(origin);
@@ -143,7 +143,7 @@ TEST_F(Audio_RpcPackerTests, AudioFxParams)
 TEST_F(Audio_RpcPackerTests, AuxSendParams)
 {
     AuxSendParams origin;
-    origin.signalAmount = 0.42;
+    origin.signalAmount = 0.42f;
     origin.active = true;
 
     KNOWN_FIELDS(origin,
@@ -163,7 +163,7 @@ TEST_F(Audio_RpcPackerTests, AudioOutputParams)
 {
     AudioOutputParams origin;
     origin.fxChain.insert({ 3, {} });
-    origin.volume = 0.6;
+    origin.volume = 0.6f;
     origin.balance = 0.5;
     origin.auxSends.push_back({});
     origin.forceMute = true;
@@ -276,7 +276,7 @@ TEST_F(Audio_RpcPackerTests, AudioSourceParams)
 TEST_F(Audio_RpcPackerTests, AudioSignalVal)
 {
     AudioSignalVal origin;
-    origin.amplitude = 0.6;
+    origin.amplitude = 0.6f;
     origin.pressure = 0.5;
 
     KNOWN_FIELDS(origin,
@@ -722,7 +722,7 @@ TEST_F(Audio_RpcPackerTests, MPE_PlaybackEvent)
     {
         mpe::ControllerChangeEvent event;
         event.type = mpe::ControllerChangeEvent::Type::Modulation;
-        event.val = 0.4;
+        event.val = 0.4f;
         event.layerIdx = 2;
 
         KNOWN_FIELDS(event,

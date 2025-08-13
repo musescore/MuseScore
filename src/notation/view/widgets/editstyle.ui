@@ -2685,7 +2685,7 @@
                  <item row="0" column="1">
                   <widget class="QDoubleSpinBox" name="spacingDensity">
                    <property name="suffix">
-                    <string>%</string>
+                    <string notr="true">%</string>
                    </property>
                    <property name="decimals">
                     <number>1</number>
@@ -12788,7 +12788,7 @@ followed by dashes</string>
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
          <widget class="QWidget" name="chordSymbolsPage" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout_59"/>
+          <layout class="QVBoxLayout" name="verticalLayout_591"/>
          </widget>
         </item>
        </layout>

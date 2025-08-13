@@ -29,6 +29,7 @@ class UpdateServiceStub : public IAppUpdateService
 {
 public:
     RetVal<ReleaseInfo> checkForUpdate() override;
+    RetVal<ReleaseInfo> lastCheckResult() const override;
 
     RetVal<io::path_t> downloadRelease() override;
     void cancelUpdate() override;

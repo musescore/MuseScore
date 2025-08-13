@@ -693,14 +693,20 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    // Select
-    mousePress_considerSelect(ctx);
-
     // Drag outgoing: range
     consumed = mousePress_considerDragOutgoingRange(ctx);
     if (consumed) {
         return;
     }
+
+    // Alt+click to paste range
+    consumed = mousePress_considerStartPasteRangeOnRelease(ctx);
+    if (consumed) {
+        return;
+    }
+
+    // Select
+    mousePress_considerSelect(ctx);
 
     // Misc
     if (button == Qt::LeftButton) {
@@ -750,6 +756,38 @@ bool NotationViewInputController::mousePress_considerDragOutgoingElement(const C
 
     viewInteraction()->select({ ctx.hitElement }, SelectType::SINGLE, ctx.hitStaff);
     m_mouseDownInfo.dragAction = MouseDownInfo::DragOutgoingElement;
+    return true;
+}
+
+bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(const ClickContext& ctx)
+{
+    // Check if this is a left click with Alt modifier
+    if (ctx.event->button() != Qt::LeftButton || !(ctx.event->modifiers() & Qt::AltModifier)) {
+        return false;
+    }
+
+    // Check if we have a range selection that can be copied
+    const INotationSelectionPtr selection = viewInteraction()->selection();
+    if (!selection->isRange() || !selection->canCopy()) {
+        return false;
+    }
+
+    const INotationSelectionRangePtr range = selection->range();
+    const Fraction sourceTick = range->startTick();
+    const Fraction tickLength = range->endTick() - range->startTick();
+    const engraving::staff_idx_t sourceStaffIdx = range->startStaffIndex();
+    const size_t numStaves = range->endStaffIndex() - range->startStaffIndex();
+
+    const bool started = viewInteraction()->startDropRange(sourceTick, tickLength, sourceStaffIdx, numStaves);
+    if (!started) {
+        return false;
+    }
+
+    m_mouseDownInfo.dragAction = MouseDownInfo::PasteRangeOnRelease;
+
+    const bool canDrop = viewInteraction()->updateDropRange(ctx.logicClickPos);
+    m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : QCursor());
+
     return true;
 }
 
@@ -942,14 +980,14 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     }
 
-    QPointF physicalDragDelta = event->pos() - m_mouseDownInfo.physicalBeginPoint;
+    const QPointF physicalDragDelta = event->pos() - m_mouseDownInfo.physicalBeginPoint;
 
-    bool isDragStarted = m_isCanvasDragged
-                         || viewInteraction()->isDragStarted()
-                         || viewInteraction()->isOutgoingDragStarted();
+    const bool isDragStarted = m_isCanvasDragged
+                               || viewInteraction()->isDragStarted()
+                               || viewInteraction()->isOutgoingDragStarted();
     if (!isDragStarted) {
         // only start drag operations after a minimum of movement:
-        bool canStartDrag = physicalDragDelta.manhattanLength() > 4;
+        const bool canStartDrag = physicalDragDelta.manhattanLength() > 4;
         if (!canStartDrag) {
             return;
         }
@@ -969,24 +1007,30 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         }
         return;
     }
+    case MouseDownInfo::PasteRangeOnRelease: {
+        const PointF logicPos = m_view->toLogical(event->pos());
+        const bool canDrop = viewInteraction()->updateDropRange(logicPos);
+        m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : QCursor());
+        return;
+    }
     case MouseDownInfo::Nothing:
         return;
     case MouseDownInfo::Other:
         break;
     }
 
-    Qt::KeyboardModifiers keyState = event->modifiers();
+    const Qt::KeyboardModifiers keyState = event->modifiers();
 
     m_view->hideContextMenu();
     if (!viewInteraction()->isTextEditingStarted()) {
         m_view->hideElementPopup();
     }
 
-    PointF logicPos = m_view->toLogical(event->pos());
+    const PointF logicPos = m_view->toLogical(event->pos());
 
-    bool isNoteEnterMode = m_view->isNoteEnterMode();
-    bool isMiddleButton  = (event->buttons() & Qt::MiddleButton);
-    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying() || isMiddleButton);
+    const bool isNoteEnterMode = m_view->isNoteEnterMode();
+    const bool isMiddleButton  = (event->buttons() & Qt::MiddleButton);
+    const bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying() || isMiddleButton);
     if (isDragObjectsAllowed) {
         const EngravingItem* hitElement = hitElementContext().element;
 
@@ -1025,7 +1069,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
     // move canvas
     if (!isNoteEnterMode || isMiddleButton) {
-        PointF logicalDragDelta = logicPos - m_mouseDownInfo.logicalBeginPoint;
+        const PointF logicalDragDelta = logicPos - m_mouseDownInfo.logicalBeginPoint;
         m_view->moveCanvas(logicalDragDelta.x(), logicalDragDelta.y());
 
         m_isCanvasDragged = true;
@@ -1053,9 +1097,34 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 {
+    if (m_mouseDownInfo.dragAction == MouseDownInfo::Nothing) {
+        return;
+    }
+
     INotationInteractionPtr interaction = viewInteraction();
     INotationNoteInputPtr noteInput = interaction->noteInput();
     const EngravingItem* hitElement = hitElementContext().element;
+
+    DEFER {
+        m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
+        m_view->asItem()->setCursor(QCursor());
+    };
+
+    if (m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
+        INotationSelectionPtr selection = interaction->selection();
+        if (!selection->isRange() || !selection->canCopy()) {
+            viewInteraction()->endDrop();
+            return;
+        }
+        muse::ByteArray rangeData = selection->mimeData();
+        if (rangeData.empty()) {
+            viewInteraction()->endDrop();
+            return;
+        }
+        PointF logicPos = m_view->toLogical(event->pos());
+        viewInteraction()->dropRange(rangeData.toQByteArrayNoCopy(), logicPos, false);
+        return;
+    }
 
     if (event->modifiers() != Qt::ControlModifier && event->modifiers() != Qt::ShiftModifier) {
         if (!hitElement && !m_isCanvasDragged && !interaction->isGripEditStarted()
@@ -1220,6 +1289,10 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
         return true;
     }
 
+    if (key == Qt::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
+        return true;
+    }
+
     if (viewInteraction()->isElementEditStarted()) {
         return viewInteraction()->isEditAllowed(event);
     }
@@ -1238,14 +1311,20 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
     if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
         dispatcher()->dispatch("edit-text");
         event->accept();
+    } else if (event->key() == Qt::Key_Escape && m_mouseDownInfo.dragAction == MouseDownInfo::PasteRangeOnRelease) {
+        // Cancel "Alt+click to paste range"
+        viewInteraction()->endDrop();
+        m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
+        m_view->asItem()->setCursor({});
+        event->accept();
     } else if (viewInteraction()->isElementEditStarted()) {
         viewInteraction()->editElement(event);
         if (key == Qt::Key_Shift) {
             viewInteraction()->updateTimeTickAnchors(event);
         }
     } else if (key == Qt::Key_Shift) {
-        updateShadowNotePopupVisibility();
         viewInteraction()->updateTimeTickAnchors(event);
+        updateShadowNotePopupVisibility();
     } else if (isAnchorEditingEvent(event)) {
         viewInteraction()->moveElementAnchors(event);
     }
@@ -1420,6 +1499,7 @@ void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
     }
 
     viewInteraction()->endDrop();
+    m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
 }
 
 void NotationViewInputController::dropEvent(QDropEvent* event)

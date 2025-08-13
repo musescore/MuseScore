@@ -101,6 +101,10 @@ void AudioOutputDeviceController::checkConnection()
 
 void AudioOutputDeviceController::onOutputDeviceChanged()
 {
+    if (!audioDriver()->isOpened()) {
+        return;
+    }
+
     IAudioDriver::Spec activeSpec = audioDriver()->activeSpec();
 
     // TODO: audioEngine()->setAudioChannelsCount(activeSpec.channels);

@@ -20,23 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __AWLCOLORLABEL_H__
-#define __AWLCOLORLABEL_H__
+#pragma once
 
 #include <QPushButton>
 
 namespace Awl {
-//---------------------------------------------------------
-//   ColorLabel
-//---------------------------------------------------------
-
 class ColorLabel : public QPushButton
 {
     Q_OBJECT
-    Q_PROPERTY(QColor color READ color WRITE setColor)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
     QColor _color = Qt::blue;
-    QPixmap* _pixmap = nullptr;
 
     virtual void paintEvent(QPaintEvent*);
 
@@ -48,12 +42,8 @@ public slots:
 
 public:
     ColorLabel(QWidget* parent = 0);
-    ~ColorLabel();
     void setColor(const QColor& c);
     virtual QSize sizeHint() const;
-    void setPixmap(QPixmap*);
     QColor color() const { return _color; }
-    QPixmap* pixmap() const { return _pixmap; }
 };
-}  // namespace Awl
-#endif
+}

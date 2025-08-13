@@ -121,6 +121,7 @@
 #include "dom/stafftext.h"
 #include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
+#include "dom/staffvisibilityindicator.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
@@ -348,6 +349,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter);
         break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter);
+        break;
+    case ElementType::STAFF_VISIBILITY_INDICATOR: draw(item_cast<const StaffVisibilityIndicator*>(item), painter);
         break;
     case ElementType::STEM:                 draw(item_cast<const Stem*>(item), painter);
         break;
@@ -1808,7 +1811,7 @@ void TDraw::draw(const Harmony* item, Painter* painter)
 
     const Harmony::LayoutData* ldata = item->ldata();
 
-    if (ldata->textList().empty()) {
+    if (ldata->renderItemList().empty()) {
         drawTextBase(item, painter);
         return;
     }
@@ -1837,15 +1840,22 @@ void TDraw::draw(const Harmony* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     Color color = item->textColor();
     painter->setPen(color);
-    for (const TextSegment* ts : ldata->textList()) {
-        Font f(ts->font());
-        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    for (const HarmonyRenderItem* renderItem : ldata->renderItemList()) {
+        if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
+            Font f(ts->font());
+            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
-        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
+            TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
 #else
-        painter->setFont(f);
-        painter->drawText(ts->pos(), ts->text());
+            painter->setFont(f);
+            painter->drawText(ts->pos(), ts->text());
 #endif
+        } else if (const ChordSymbolParen* parenItem = dynamic_cast<const ChordSymbolParen*>(renderItem)) {
+            Parenthesis* p = parenItem->paren;
+            painter->translate(parenItem->pos());
+            draw(p, painter);
+            painter->translate(-parenItem->pos());
+        }
     }
 
     if (item->isPolychord()) {
@@ -2858,7 +2868,7 @@ void TDraw::draw(const SystemText* item, Painter* painter)
     drawTextBase(item, painter);
 }
 
-void TDraw::draw(const SystemLockIndicator* item, muse::draw::Painter* painter)
+void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -2875,15 +2885,17 @@ void TDraw::draw(const SystemLockIndicator* item, muse::draw::Painter* painter)
 
     painter->drawSymbol(PointF(), item->iconCode());
 
-    if (item->selected()) {
-        Color lockedAreaColor = item->configuration()->selectionColor();
+    if (item->isSystemLockIndicator() && item->selected()) {
+        const SystemLockIndicator* sli = toSystemLockIndicator(item);
+
+        Color lockedAreaColor = sli->configuration()->selectionColor();
         lockedAreaColor.setAlpha(38);
         Brush brush(lockedAreaColor);
         painter->setBrush(brush);
         painter->setNoPen();
-        double radius = 0.5 * item->spatium();
+        double radius = 0.5 * sli->spatium();
 
-        painter->drawRoundedRect(item->ldata()->rangeRect, radius, radius);
+        painter->drawRoundedRect(sli->ldata()->rangeRect, radius, radius);
     }
 }
 

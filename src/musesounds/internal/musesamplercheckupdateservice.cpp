@@ -34,18 +34,27 @@ using namespace muse::network;
 bool MuseSamplerCheckUpdateService::canCheckForUpdate() const
 {
 #ifdef QT_CONCURRENT_SUPPORTED
-    return museSampler() && museSampler()->isInstalled();
+    return museSampler() && !museSampler()->version().isNull();
 #else
     return false;
 #endif
 }
 
+bool MuseSamplerCheckUpdateService::incompatibleLocalVersion() const
+{
+    if (!museSampler()) {
+        return true;
+    }
+
+    return museSampler()->version() < museSamplerConfiguration()->minSupportedVersion();
+}
+
 muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
 {
-    const std::string localVersionStr = museSampler() ? museSampler()->version() : std::string();
+    const muse::Version localVersion = museSampler() ? museSampler()->version() : muse::Version();
 
-    return muse::async::Promise<muse::RetVal<bool> >([this, localVersionStr](auto resolve, auto) {
-        if (localVersionStr.empty()) {
+    return muse::async::Promise<muse::RetVal<bool> >([this, localVersion](auto resolve, auto) {
+        if (localVersion.isNull()) {
             muse::RetVal<bool> result;
             result.ret = muse::Ret(int(muse::Ret::Code::UnknownError), "Unable to obtain the local MuseSampler version");
             result.val = false;
@@ -53,9 +62,10 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
         }
 
 #ifdef QT_CONCURRENT_SUPPORTED
-        Concurrent::run([this, localVersionStr, resolve]() {
+        Concurrent::run([this, localVersion, resolve]() {
             if (configuration()->museSamplerCheckForUpdateTestMode()) {
-                (void)resolve(muse::RetVal<bool>::make_ok(true));
+                muse::RetVal<bool> result = muse::RetVal<bool>::make_ok(true);
+                (void)resolve(result);
                 return;
             }
 
@@ -98,9 +108,7 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
 
             const QJsonObject firstAsset = assetsArray.first().toObject();
             const QString versionStr = firstAsset.value("version").toString();
-
             const muse::Version version(versionStr);
-            const muse::Version localVersion(localVersionStr);
 
             result.val = localVersion < version;
         });

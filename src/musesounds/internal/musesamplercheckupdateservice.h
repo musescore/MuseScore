@@ -25,6 +25,7 @@
 
 #include "modularity/ioc.h"
 #include "musesampler/imusesamplerinfo.h"
+#include "musesampler/imusesamplerconfiguration.h"
 #include "network/inetworkmanagercreator.h"
 #include "imusesoundsconfiguration.h"
 #include "async/asyncable.h"
@@ -35,6 +36,7 @@ namespace mu::musesounds {
 class MuseSamplerCheckUpdateService : public IMuseSamplerCheckUpdateService, public muse::Injectable, public muse::async::Asyncable
 {
     Inject<muse::musesampler::IMuseSamplerInfo> museSampler = { this };
+    Inject<muse::musesampler::IMuseSamplerConfiguration> museSamplerConfiguration = { this };
     Inject<muse::network::INetworkManagerCreator> networkManagerCreator = { this };
     Inject<IMuseSoundsConfiguration> configuration = { this };
 
@@ -43,6 +45,8 @@ public:
         : Injectable(iocCtx) {}
 
     bool canCheckForUpdate() const override;
+    bool incompatibleLocalVersion() const override;
+
     muse::async::Promise<muse::RetVal<bool> > checkForUpdate() override;
 };
 }

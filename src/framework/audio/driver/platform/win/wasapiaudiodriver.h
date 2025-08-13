@@ -71,11 +71,16 @@ private:
 
     AudioDeviceID defaultDeviceId() const;
 
+    void updateAvailableOutputDevices();
+
     unsigned int minSupportedBufferSize() const;
 
     bool m_isOpened = false;
 
     AudioDeviceID m_deviceId;
+
+    mutable std::mutex m_availableOutputDevicesMutex;
+    mutable AudioDeviceList m_availableOutputDevices;
 
     std::unique_ptr<AudioDevicesListener> m_devicesListener;
 

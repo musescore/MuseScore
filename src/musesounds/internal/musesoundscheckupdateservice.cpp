@@ -73,6 +73,14 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
 
     clear();
 
+    if (configuration()->museSoundsCheckForUpdateTestMode()) {
+        // Return dummy info...
+        result.val = ReleaseInfo();
+        result.ret = muse::make_ok();
+        m_lastCheckResult = result;
+        return result;
+    }
+
     QBuffer buff;
     QUrl url = configuration()->checkForMuseSoundsUpdateUrl();
     m_networkManager = networkManagerCreator()->makeNetworkManager();

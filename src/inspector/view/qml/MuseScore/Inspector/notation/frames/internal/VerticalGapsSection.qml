@@ -32,6 +32,8 @@ Item {
 
     property PropertyItem gapAbove: null
     property PropertyItem gapBelow: null
+    property PropertyItem notationGapAbove: null
+    property PropertyItem notationGapBelow: null
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -44,13 +46,22 @@ Item {
         gapAbove.focusOnFirst()
     }
 
+    StyledTextLabel {
+        id: gapToStaff
+        horizontalAlignment: Qt.AlignLeft
+        text: qsTrc("inspector", "Gap to staff/frames")
+        font: ui.theme.bodyBoldFont
+    }
+
     SpinBoxPropertyView {
         id: gapAbove
+        anchors.top: gapToStaff.bottom
+        anchors.topMargin: 4
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        titleText: qsTrc("inspector", "Gap above")
+        titleText: qsTrc("inspector", "Above")
         propertyItem: root.gapAbove
 
         icon: IconCode.GAP_ABOVE
@@ -62,12 +73,57 @@ Item {
 
     SpinBoxPropertyView {
         id: gapBelow
+        anchors.top: gapAbove.top
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        titleText: qsTrc("inspector", "Gap below")
+        titleText: qsTrc("inspector", "Below")
         propertyItem: root.gapBelow
+
+        icon: IconCode.GAP_BELOW
+        measureUnitsSymbol: qsTrc("global", "sp")
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: gapAbove.navigationRowEnd + 1
+    }
+
+    StyledTextLabel {
+        id: notationPadding
+        anchors.top: gapAbove.bottom
+        anchors.topMargin: 12
+        horizontalAlignment: Qt.AlignLeft
+        text: qsTrc("inspector", "Clearance for notation")
+        font: ui.theme.bodyBoldFont
+    }
+
+    SpinBoxPropertyView {
+        id: gapNotationAbove
+        anchors.top: notationPadding.bottom
+        anchors.topMargin: 4
+        anchors.left: parent.left
+        anchors.right: parent.horizontalCenter
+        anchors.rightMargin: 4
+
+        titleText: qsTrc("inspector", "Above")
+        propertyItem: root.notationGapAbove
+
+        icon: IconCode.GAP_ABOVE
+        measureUnitsSymbol: qsTrc("global", "sp")
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
+    }
+
+    SpinBoxPropertyView {
+        id: gapNotationBelow
+        anchors.top: gapNotationAbove.top
+        anchors.left: parent.horizontalCenter
+        anchors.leftMargin: 4
+        anchors.right: parent.right
+
+        titleText: qsTrc("inspector", "Below")
+        propertyItem: root.notationGapBelow
 
         icon: IconCode.GAP_BELOW
         measureUnitsSymbol: qsTrc("global", "sp")

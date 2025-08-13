@@ -81,6 +81,7 @@ class GuitarBendHold;
 
 class Hairpin;
 class HammerOnPullOff;
+class HammerOnPullOffSegment;
 class Harmony;
 class HarmonicMark;
 class HarpPedalDiagram;
@@ -96,6 +97,7 @@ class KeyList;
 class KeySig;
 
 class LayoutBreak;
+class LaissezVib;
 class LedgerLine;
 class LetRing;
 class LineSegment;
@@ -115,12 +117,17 @@ class Note;
 class NoteEvent;
 class NoteDot;
 class NoteHead;
+class NoteLine;
+
 class Ornament;
 class Ottava;
 
 class Page;
 class PalmMute;
+class Parenthesis;
 class Part;
+class PartialLyricsLine;
+class PartialTie;
 class Pedal;
 class PlayCountText;
 class PlayTechAnnotation;
@@ -154,6 +161,7 @@ class BSymbol;
 class FSymbol;
 
 class Tapping;
+class TappingHalfSlur;
 class Text;
 class TextLine;
 class TextLineBase;

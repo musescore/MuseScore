@@ -46,8 +46,12 @@ void FretFrameChordListModel::load()
 
     auto harmonyName = [](const Harmony* harmony) {
         QString name;
-        for (const TextSegment* segment : harmony->ldata()->textList()) {
-            name += segment->text().toQString();
+        for (const HarmonyRenderItem* segment : harmony->ldata()->renderItemList()) {
+            if (const TextSegment* textSeg = dynamic_cast<const TextSegment*>(segment)) {
+                name += textSeg->text().toQString();
+            } else if (const ChordSymbolParen* parenSeg = dynamic_cast<const ChordSymbolParen*>(segment)) {
+                name += parenSeg->paren->direction() == DirectionH::LEFT ? u"(" : u")";
+            }
         }
 
         return name;

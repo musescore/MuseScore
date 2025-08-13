@@ -109,6 +109,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/rw/harmonytodiagramreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/harmonytodiagramreader.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/write/writer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/write/writer.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/write/writecontext.cpp
@@ -156,8 +159,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/tread.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/connectorinforeader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/connectorinforeader.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/harmonytodiagramreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/harmonytodiagramreader.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.h
@@ -171,8 +172,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/read460/tread.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/read460/connectorinforeader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read460/connectorinforeader.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/harmonytodiagramreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/harmonytodiagramreader.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h

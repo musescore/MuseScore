@@ -318,8 +318,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::LAYOUT_BREAK:
         layoutLayoutBreak(item_cast<const LayoutBreak*>(item), static_cast<LayoutBreak::LayoutData*>(ldata));
         break;
+    // TODO: case ElementType::STAFF_VISIBILTY_INDICATOR:
     case ElementType::SYSTEM_LOCK_INDICATOR:
-        layoutSystemLockIndicator(item_cast<const SystemLockIndicator*>(item), static_cast<SystemLockIndicator::LayoutData*>(ldata));
+        layoutIndicatorIcon(item_cast<const IndicatorIcon*>(item), static_cast<IndicatorIcon::LayoutData*>(ldata));
         break;
     case ElementType::LET_RING:         layoutLetRing(item_cast<LetRing*>(item), ctx);
         break;
@@ -1599,8 +1600,8 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
             y += rowHeights[r] + rowGap;
         }
 
-        double baseline = harmony->ldata()->textList.value().empty() ? 0.0 : harmony->ldata()->textList.value().front()->bboxBaseLine()
-                          + harmony->ldata()->textList.value().front()->pos().y();
+        std::vector<HarmonyRenderItem*> renderItemList = harmony->ldata()->renderItemList.value();
+        double baseline = renderItemList.empty() ? 0.0 : renderItemList.front()->bboxBaseLine() + renderItemList.front()->pos().y();
 
         double baseLineAdjust = harmony->ldata()->bbox().bottom() - baseline;
 
@@ -1614,7 +1615,8 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
         bottomY = std::max(bottomY, fretDiagram->mutldata()->bbox().translated(fretDiagram->mutldata()->pos()).bottom());
     }
 
-    ldata->setBbox(0.0, 0.0, width, bottomY + bottomMargin);
+    double height = std::max(bottomY + bottomMargin, item->minHeight());
+    ldata->setBbox(0.0, 0.0, width, height);
 }
 
 void TLayout::layoutTBox(const TBox* item, TBox::LayoutData* ldata, const LayoutContext& ctx)
@@ -3853,7 +3855,7 @@ void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData
     ldata->setShape(Shape(bbox, item));
 }
 
-void TLayout::layoutSystemLockIndicator(const SystemLockIndicator* item, SystemLockIndicator::LayoutData* ldata)
+void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::LayoutData* ldata)
 {
     if (MScore::testMode) {
         // Don't layout in test mode because these are essentially UI elements,
@@ -3861,44 +3863,63 @@ void TLayout::layoutSystemLockIndicator(const SystemLockIndicator* item, SystemL
         return;
     }
 
+    const MeasureBase* endMB = nullptr;
+
     Shape shape;
 
-    FontMetrics metrics(item->font());
-    RectF lockBox = metrics.boundingRect(item->iconCode());
-    shape.add(lockBox, item);
+    const FontMetrics metrics(item->font());
+    const RectF iconBox = metrics.boundingRect(item->iconCode());
+    shape.add(iconBox, item);
 
-    if (item->selected()) {
-        const SystemLock* lock = item->systemLock();
-        double xStart = lock->startMB()->x();
-        double xEnd = lock->endMB()->x() + lock->endMB()->width();
-        double width = xEnd - xStart;
-        double y = lockBox.top() - 0.5 * item->spatium();
-        double height = lockBox.height() + item->spatium();
-        ldata->rangeRect = RectF(xStart, y, width, height).translated(-item->x(), 0.0);
-        shape.add(ldata->rangeRect);
+    if (item->isSystemLockIndicator()) {
+        const SystemLockIndicator* sli = toSystemLockIndicator(item);
+        endMB = sli->systemLock()->endMB();
+        if (item->selected()) {
+            // Draw the range rect...
+            const SystemLock* lock = sli->systemLock();
+
+            double xStart = lock->startMB()->x();
+            double xEnd = lock->endMB()->x() + lock->endMB()->width();
+
+            double width = xEnd - xStart;
+            double height = iconBox.height() + sli->spatium();
+
+            double y = iconBox.top() - 0.5 * sli->spatium();
+
+            ldata->rangeRect = RectF(xStart, y, width, height).translated(-sli->x(), 0.0);
+            shape.add(ldata->rangeRect);
+        }
+    } else {
+        endMB = item->system()->last();
     }
 
     ldata->setShape(shape);
 
-    double spatium = item->spatium();
+    const double spatium = item->spatium();
 
-    const MeasureBase* endMB = item->systemLock()->endMB();
     double x = endMB->x() + endMB->width();
-    x -= lockBox.right() + 0.5 * spatium;
+    x -= iconBox.right() + 0.5 * spatium;
 
-    double xLayoutBreaks = endMB->x() + endMB->width();
+    double xOffset = endMB->x() + endMB->width();
     for (EngravingItem* el : endMB->el()) {
         if (el->isLayoutBreak()) {
-            xLayoutBreaks = std::min(xLayoutBreaks, endMB->x() + el->x() + el->ldata()->bbox().left() - spatium);
+            xOffset = std::min(xOffset, endMB->x() + el->x() + el->ldata()->bbox().left() - spatium);
         }
     }
 
-    x = std::min(x, xLayoutBreaks - lockBox.right());
+    for (const SystemLockIndicator* sli : item->system()->lockIndicators()) {
+        if (sli != item) {
+            // TODO: Rough spacing here
+            xOffset -= (sli->ldata()->bbox().width() * 2) - spatium;
+        }
+    }
+
+    x = std::min(x, xOffset - iconBox.right());
 
     ldata->setPos(PointF(x, -2.5 * spatium));
 
     // Ensure it goes behind notation and LayoutBreak
-    const_cast<SystemLockIndicator*>(item)->setZ(-100);
+    const_cast<IndicatorIcon*>(item)->setZ(-100);
 }
 
 static void _layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, LedgerLine::LayoutData* ldata)

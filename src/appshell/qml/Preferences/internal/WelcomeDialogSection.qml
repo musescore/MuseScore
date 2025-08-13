@@ -19,15 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
 
-#include "../xmlreader.h"
-#include "readcontext.h"
+import QtQuick 2.15
 
-namespace mu::engraving::read410 {
-class HarmonyToDiagramReader
-{
-public:
-    static std::unordered_map<String, String> read(XmlReader& reader);
-};
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0
+import MuseScore.Preferences
+
+BaseSection {
+    id: root
+
+    title: qsTrc("appshell/preferences", "Welcome screen")
+
+    required property GeneralPreferencesModel model
+
+    rowSpacing: 16
+
+    CheckBox {
+        id: checkbox
+
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Show welcome screen when MuseScore Studio launches")
+        checked: root.model.showWelcomeDialog
+
+        navigation.name: checkbox.text
+        navigation.panel: root.navigation
+
+        onClicked: {
+            root.model.showWelcomeDialog = !root.model.showWelcomeDialog
+        }
+    }
 }

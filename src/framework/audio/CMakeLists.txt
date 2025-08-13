@@ -61,6 +61,10 @@ set(MODULE_LINK
     fluidsynth
     )
 
+if (QT_ADD_CONCURRENT)
+    list(APPEND MODULE_LINK Qt::Concurrent)
+endif()
+
 if (MUSE_MODULE_AUDIO_JACK)
     find_package(Jack REQUIRED)
     set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${JACK_INCLUDE_DIRS} )
@@ -81,14 +85,28 @@ else ()
         set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${ALSA_INCLUDE_DIRS} )
         set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
         if (MUSE_PIPEWIRE_AUDIO_DRIVER)
-            pkg_check_modules(PipeWire REQUIRED libpipewire-0.3)
-            set(MODULE_INCLUDE ${MODULE_INCLUDE} ${PipeWire_INCLUDE_DIRS} )
-            set(MODULE_LINK ${MODULE_LINK} ${PipeWire_LIBRARIES})
-            set(MODULE_DEF ${MODULE_DEF} -DMUSE_PIPEWIRE_AUDIO_DRIVER)
-            message(STATUS "Found Pipewire: ${PipeWire_LIBRARIES}")
+            pkg_check_modules(PipeWire libpipewire-0.3)
+            if (PipeWire_FOUND)
+                message(STATUS "Found Pipewire: ${PipeWire_LIBRARIES}")
+                set(MODULE_SRC
+                    ${MODULE_SRC}
+                    ${PW_AUDIO_DRIVER_SRC}
+                )
+                set(MODULE_INCLUDE ${MODULE_INCLUDE} ${PipeWire_INCLUDE_DIRS} )
+                set(MODULE_LINK ${MODULE_LINK} ${PipeWire_LIBRARIES})
+                set(MODULE_DEF ${MODULE_DEF} -DMUSE_PIPEWIRE_AUDIO_DRIVER)
+            else()
+                message(WARNING "Pipewire development files not found.\nPipewire support is disabled from the build.")
+            endif()
         endif()
     endif()
 endif()
+
+# Adding driver source
+set(MODULE_SRC
+    ${MODULE_SRC}
+    ${DRIVER_SRC}
+)
 
 set(MODULE_QRC audio.qrc)
 

@@ -46,6 +46,8 @@ namespace mu::engraving {
 static const ElementStyle boxStyle {
     { Sid::systemFrameDistance,                Pid::TOP_GAP },
     { Sid::frameSystemDistance,                Pid::BOTTOM_GAP },
+    { Sid::paddingToNotationAbove,             Pid::PADDING_TO_NOTATION_ABOVE },
+    { Sid::paddingToNotationBelow,             Pid::PADDING_TO_NOTATION_BELOW },
 };
 
 static const ElementStyle hBoxStyle {
@@ -602,7 +604,9 @@ VBox::VBox(const ElementType& type, System* parent)
     : Box(type, parent)
 {
     initElementStyle(&boxStyle);
+
     resetProperty(Pid::BOX_HEIGHT);
+
     setLineBreak(true);
 }
 
@@ -626,6 +630,10 @@ PropertyValue VBox::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::BOX_AUTOSIZE:
         return isAutoSizeEnabled();
+    case Pid::PADDING_TO_NOTATION_ABOVE:
+        return m_paddingToNotationAbove;
+    case Pid::PADDING_TO_NOTATION_BELOW:
+        return m_paddingToNotationBelow;
     default:
         return Box::getProperty(propertyId);
     }
@@ -643,6 +651,23 @@ PropertyValue VBox::propertyDefault(Pid id) const
     default:
         return Box::propertyDefault(id);
     }
+}
+
+bool VBox::setProperty(Pid propertyId, const PropertyValue& v)
+{
+    switch (propertyId) {
+    case Pid::PADDING_TO_NOTATION_ABOVE:
+        m_paddingToNotationAbove = v.value<Spatium>();
+        break;
+    case Pid::PADDING_TO_NOTATION_BELOW:
+        m_paddingToNotationBelow = v.value<Spatium>();
+        break;
+    default:
+        return Box::setProperty(propertyId, v);
+    }
+
+    triggerLayout();
+    return true;
 }
 
 //---------------------------------------------------------
@@ -839,9 +864,6 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
         return 8;
     case Pid::FRET_FRAME_H_ALIGN:
         return static_cast<int>(AlignH::HCENTER);
-    case Pid::TOP_GAP:
-    case Pid::BOTTOM_GAP:
-        return 4.0;
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
         return PropertyValue();
     default:

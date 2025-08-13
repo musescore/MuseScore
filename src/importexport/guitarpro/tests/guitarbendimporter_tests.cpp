@@ -38,8 +38,7 @@ using namespace mu::engraving;
 static const String GUITARPRO_DIR(u"guitarbendimporter_data/");
 
 namespace mu::iex::guitarpro {
-extern Err importGTP(MasterScore*, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx, bool createLinkedTabForce = false,
-                     bool experimental = false);
+extern Err importGTP(MasterScore*, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx, bool experimental = false);
 class GuitarBendImporter_Tests : public ::testing::Test, public muse::Injectable
 {
 public:
@@ -61,7 +60,7 @@ void GuitarBendImporter_Tests::gpReadTest(const String& fileName, const String& 
 
     auto importFunc = [](MasterScore* score, const muse::io::path_t& path) -> Err {
         muse::io::File file(path);
-        return importGTP(score, &file, muse::modularity::globalCtx(), true, true);
+        return importGTP(score, &file, muse::modularity::globalCtx(), true);
     };
 
     MasterScore* score = ScoreRW::readScore(gpFileName, false, importFunc);
@@ -195,6 +194,12 @@ TEST_F(GuitarBendImporter_Tests, gpBendOnTuplet) {
 }
 TEST_F(GuitarBendImporter_Tests, gpBendOnUnequalChords) {
     gpReadTest(u"bend_on_unequal_chords", u"gp");
+}
+TEST_F(GuitarBendImporter_Tests, gpGraceChordDiffBends) {
+    gpReadTest(u"grace_chord_diff_bends", u"gp");
+}
+TEST_F(GuitarBendImporter_Tests, gpTiedBendsReleaseOrHold) {
+    gpReadTest(u"tied_bends_release_or_hold", u"gp");
 }
 #endif
 }
