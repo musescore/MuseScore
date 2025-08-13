@@ -53,6 +53,7 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
     m_instrumentAbbreviature = part->instrument()->abbreviatureAsPlainText();
     m_hideWhenEmpty = static_cast<int>(part->hideWhenEmpty());
     m_hideStavesWhenIndividuallyEmpty = part->hideStavesWhenIndividuallyEmpty();
+    m_hasMultipleStaves = part->nstaves() > 1;
 
     context()->currentNotationChanged().onNotify(this, [this]() {
         emit isMainScoreChanged();
@@ -61,6 +62,7 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
     emit dataChanged();
     emit hideWhenEmptyChanged();
     emit hideStavesWhenIndividuallyEmptyChanged();
+    emit hasMultipleStavesChanged();
 }
 
 QString InstrumentSettingsModel::instrumentName() const
@@ -81,6 +83,11 @@ int InstrumentSettingsModel::hideWhenEmpty() const
 bool InstrumentSettingsModel::hideStavesWhenIndividuallyEmpty() const
 {
     return m_hideStavesWhenIndividuallyEmpty;
+}
+
+bool InstrumentSettingsModel::hasMultipleStaves() const
+{
+    return m_hasMultipleStaves;
 }
 
 bool InstrumentSettingsModel::isMainScore() const

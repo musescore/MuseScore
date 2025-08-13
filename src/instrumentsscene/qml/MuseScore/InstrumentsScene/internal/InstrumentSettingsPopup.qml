@@ -164,15 +164,17 @@ StyledPopupView {
                 id: hideStavesWhenIndividuallyEmptyCheckBox
 
                 width: parent.width
+                visible: settingsModel.hasMultipleStaves
+                enabled: settingsModel.hideWhenEmpty !== 2 // Not "Never hide"
 
                 navigation.panel: root.navigationPanel
                 navigation.row: 6
 
-                text: qsTrc("instruments", "Only hide staves if all are empty")
+                text: qsTrc("instruments", "Only hide staves on a system if the entire instrument is empty")
 
                 checked: !settingsModel.hideStavesWhenIndividuallyEmpty
                 onClicked: {
-                    settingsModel.hideStavesWhenIndividuallyEmpty = !!checked
+                    settingsModel.hideStavesWhenIndividuallyEmpty = !settingsModel.hideStavesWhenIndividuallyEmpty
                 }
             }
         }
