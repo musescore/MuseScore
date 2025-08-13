@@ -52,7 +52,8 @@ StyledPopupView {
         const popupHeight = content.height + root.margins * 2 + root.padding * 2
         root.x = partialTiePopupModel.dialogPosition.x - root.parent.x
         root.y = partialTiePopupModel.dialogPosition.y - root.parent.y - (opensUp ? popupHeight : 0)
-        root.setOpensUpward(opensUp)
+
+        root.setPopupPosition(opensUp ? PopupPosition.Top : PopupPosition.Bottom)
 
         tieMenuList.calculateWidth()
     }

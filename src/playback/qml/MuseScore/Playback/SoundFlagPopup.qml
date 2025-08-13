@@ -61,7 +61,7 @@ StyledPopupView {
         root.y = yUp
         root.x = (root.parent.width / 2) - (root.width / 2) + root.margins
 
-        root.setOpensUpward(true)
+        root.setPopupPosition(PopupPosition.Top)
     }
 
     Column {

@@ -67,7 +67,8 @@ StyledPopupView {
             opensUp = true;
         }
 
-        setOpensUpward(opensUp)
+        root.setPopupPosition(opensUp ? PopupPosition.Top : PopupPosition.Bottom)
+
         root.y = opensUp ? yUp : yDown
     }
 
