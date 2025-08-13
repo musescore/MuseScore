@@ -103,7 +103,7 @@ cd fonts-main
 
 echo "Installing Google Fonts..."
 mkdir -p "$FONTS_DIR"
-find . -type f \( -iname "*.ttf" -o -iname "*.otf" \) -print0 | xargs -0 -r mv-t "$FONTS_DIR"
+find . -type f \( -iname "*.ttf" -o -iname "*.otf" \) -print0 | xargs -0 -r mv -t "$FONTS_DIR"
 
 echo "Installing Fonts Cache..."
 fc-cache -f -v
