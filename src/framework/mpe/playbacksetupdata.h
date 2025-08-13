@@ -43,7 +43,7 @@ struct PlaybackSetupData
     PlaybackSetupData() = default;
 
     PlaybackSetupData(SoundId id, SoundCategory category, SoundSubCategories&& soundSubCategories = {}, bool supportsSND = false)
-        : id(soundIdToString(id)), supportsSingleNoteDynamics(supportsSND), category(category)
+        : id(soundIdToString(id)), category(category), supportsSingleNoteDynamics(supportsSND)
     {
         for (SoundSubCategory subCategory : soundSubCategories) {
             subCategories.push_back(soundSubCategoryToString(subCategory));
