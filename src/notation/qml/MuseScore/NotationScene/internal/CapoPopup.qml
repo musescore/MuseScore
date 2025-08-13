@@ -33,17 +33,16 @@ StyledPopupView {
     property alias navigationOrderStart: capoSettingsNavPanel.order
     readonly property alias navigationOrderEnd: capoSettingsNavPanel.order
 
-
     contentWidth: content.width
     contentHeight: content.height
 
+    placementPolicies: PopupView.PreferRight
     showArrow: false
 
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
         var h = Math.max(root.contentHeight, capoModel.capoIsOn ? 360 : 160)
-        root.x = root.parent.width + 12
         root.y = (root.parent.y + root.parent.height / 2) - root.parent.y - h / 2
     }
 

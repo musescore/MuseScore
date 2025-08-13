@@ -39,10 +39,11 @@ StyledPopupView {
 
     margins: 0
 
+    placementPolicies: PopupView.PreferBelow
+
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        root.x = root.parent.width / 2 - root.contentWidth / 2;
         root.y = root.parent.height + 4; // 4 for spacing
     }
 
