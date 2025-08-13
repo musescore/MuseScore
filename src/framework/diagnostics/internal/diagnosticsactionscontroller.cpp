@@ -37,7 +37,7 @@ static const muse::UriQuery GRAPHICSINFO_URI("muse://diagnostics/system/graphics
 static const muse::UriQuery PROFILER_URI("muse://diagnostics/system/profiler?sync=false&modal=false&floating=true");
 static const muse::UriQuery NAVIGATION_TREE_URI("muse://diagnostics/navigation/tree?sync=false&modal=false&floating=true");
 static const muse::UriQuery ACCESSIBLE_TREE_URI("muse://diagnostics/accessible/tree?sync=false&modal=false&floating=true");
-static const muse::UriQuery ENGRAVING_ELEMENTS_URI("muse://diagnostics/engraving/elements?sync=false&modal=false&floating=true");
+static const muse::UriQuery ENGRAVING_ELEMENTS_URI("musescore://diagnostics/engraving/elements?sync=false&modal=false&floating=true");
 static const muse::UriQuery ACTIONS_LIST_URI("muse://diagnostics/actions/list?sync=false&modal=false&floating=true");
 
 void DiagnosticsActionsController::init()
