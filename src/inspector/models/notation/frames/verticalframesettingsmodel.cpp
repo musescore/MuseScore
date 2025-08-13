@@ -21,6 +21,8 @@
  */
 #include "verticalframesettingsmodel.h"
 
+#include "engraving/dom/box.h"
+
 #include "dataformatter.h"
 
 #include "translation.h"
@@ -39,7 +41,10 @@ VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElement
 
 void VerticalFrameSettingsModel::createProperties()
 {
-    m_frameHeight = buildPropertyItem(Pid::BOX_HEIGHT);
+    m_frameHeight = buildPropertyItem(Pid::BOX_HEIGHT,
+                                      [this](const Pid pid, const QVariant& newValue) { onFrameHeightSet(pid, newValue); },
+                                      nullptr,
+                                      [this](const Pid pid) { onFrameHeightReset(pid); });
     m_gapAbove = buildPropertyItem(Pid::TOP_GAP);
     m_gapBelow = buildPropertyItem(Pid::BOTTOM_GAP);
     m_frameLeftMargin = buildPropertyItem(Pid::LEFT_MARGIN);
@@ -49,6 +54,62 @@ void VerticalFrameSettingsModel::createProperties()
     m_isSizeSpatiumDependent = buildPropertyItem(Pid::SIZE_SPATIUM_DEPENDENT);
     m_paddingToNotationAbove = buildPropertyItem(Pid::PADDING_TO_NOTATION_ABOVE);
     m_paddingToNotationBelow = buildPropertyItem(Pid::PADDING_TO_NOTATION_BELOW);
+}
+
+void VerticalFrameSettingsModel::onFrameHeightSet(const Pid pid, const QVariant& newValue)
+{
+    if (m_elementList.empty()) {
+        return;
+    }
+
+    beginCommand(TranslatableString("undoableAction", "Edit %1").arg(propertyUserName(pid)));
+
+    for (EngravingItem* element : m_elementList) {
+        VBox* vbox = toVBox(element);
+        IF_ASSERT_FAILED(vbox) {
+            continue;
+        }
+
+        vbox->undoChangeProperty(Pid::BOX_AUTOSIZE, false);
+
+        mu::engraving::PropertyFlags ps = vbox->propertyFlags(pid);
+
+        if (ps == mu::engraving::PropertyFlags::STYLED) {
+            ps = mu::engraving::PropertyFlags::UNSTYLED;
+        }
+
+        PropertyValue propValue = valueToElementUnits(pid, newValue, vbox);
+        vbox->undoChangeProperty(pid, propValue, ps);
+    }
+
+    loadPropertyItem(m_frameHeight);
+
+    updateNotation();
+    endCommand();
+}
+
+void VerticalFrameSettingsModel::onFrameHeightReset(const Pid pid)
+{
+    if (m_elementList.empty()) {
+        return;
+    }
+
+    beginCommand(TranslatableString("undoableAction", "Reset %1").arg(propertyUserName(pid)));
+
+    for (EngravingItem* element : m_elementList) {
+        VBox* vbox = toVBox(element);
+        IF_ASSERT_FAILED(vbox) {
+            continue;
+        }
+
+        vbox->undoResetProperty(pid);
+        vbox->undoChangeProperty(Pid::BOX_AUTOSIZE, true);
+    }
+
+    loadPropertyItem(m_frameHeight);
+
+    updateNotation();
+    endCommand();
 }
 
 void VerticalFrameSettingsModel::requestElements()
