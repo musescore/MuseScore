@@ -588,13 +588,12 @@ DockPage {
         {
             "eventCode": "project_opened",
             "tour": {
-                "id": "input-by-duration",
+                "id": "project-opened-tour",
                 "steps": [
                     {
-                        "title": qsTrc("notation", "Note input modes"),
-                        "description": qsTrc("notation", "Discover different ways to input notes in MuseScore Studio."),
-                        "controlUri": "control://NoteInputSection/NoteInputBar/note-input-by-duration",
-                        "videoExplanationUrl": "https://youtu.be/xm1-XkS9VzA?utm_source=mss-yt&utm_medium=enter-by-duration&utm_campaign=mss-yt-enter-by-duration"
+                        "title": qsTrc("playback", "Ready, set, play!"),
+                        "description": qsTrc("playback", "Click here to enable a bar of count-in when starting playback."),
+                        "controlUri": "control://TopTool/PlaybackToolBar/playback-settings",
                     }
                 ]
             }

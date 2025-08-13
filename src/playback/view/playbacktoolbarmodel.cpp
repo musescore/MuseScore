@@ -127,7 +127,7 @@ void PlaybackToolBarModel::updateActions()
         }
     }
 
-    MenuItem* settingsItem = makeMenu(TranslatableString("action", "Playback settings"), settingsItems);
+    MenuItem* settingsItem = makeMenu(TranslatableString("action", "Playback settings"), settingsItems, "playback-settings");
 
     UiAction action = settingsItem->action();
     action.iconCode = IconCode::Code::SETTINGS_COG;
