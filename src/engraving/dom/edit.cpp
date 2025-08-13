@@ -7440,8 +7440,6 @@ void Score::rebuildFretBox()
     }
 
     fretBox->init();
-    fretBox->triggerLayout();
-    update();
 
     for (EngravingObject* linkedObject : fretBox->linkList()) {
         if (!linkedObject || !linkedObject->isFBox() || linkedObject == fretBox) {
@@ -7449,10 +7447,26 @@ void Score::rebuildFretBox()
         }
 
         FBox* box = toFBox(linkedObject);
-
         box->init();
+    }
+}
+
+void Score::relayoutFretBox()
+{
+    FBox* fretBox = findFretBox();
+    if (!fretBox) {
+        return;
+    }
+
+    fretBox->triggerLayout();
+
+    for (EngravingObject* linkedObject : fretBox->linkList()) {
+        if (!linkedObject || !linkedObject->isFBox() || linkedObject == fretBox) {
+            continue;
+        }
+
+        FBox* box = toFBox(linkedObject);
         box->triggerLayout();
-        box->score()->update();
     }
 }
 

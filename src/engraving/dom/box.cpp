@@ -36,6 +36,7 @@
 #include "text.h"
 #include "undo.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace mu;
@@ -709,9 +710,13 @@ FBox::FBox(System* parent)
 
 void FBox::init()
 {
-    clearElements();
+    std::vector<FretDiagram*> newDiagrams;
+    StringList newDiagramsNames;
 
-    std::set<String> usedDiagrams;
+    StringList oldDiagramsNames;
+    for (EngravingItem* element : el()) {
+        oldDiagramsNames.push_back(toFretDiagram(element)->harmonyText().toLower());
+    }
 
     for (mu::engraving::Segment* segment = masterScore()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
          segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
@@ -725,16 +730,31 @@ void FBox::init()
                 continue;
             }
 
-            String harmonyName = fretDiagram->harmony()->harmonyName().toLower();
-            if (muse::contains(usedDiagrams, harmonyName) || harmonyName.empty()) {
+            String harmonyName = fretDiagram->harmonyText().toLower();
+            if (muse::contains(newDiagramsNames, harmonyName) || harmonyName.empty()) {
                 delete fretDiagram;
                 continue;
             }
 
-            add(fretDiagram);
-
-            usedDiagrams.insert(harmonyName);
+            newDiagrams.emplace_back(fretDiagram);
+            newDiagramsNames.push_back(harmonyName);
         }
+    }
+
+    if (newDiagramsNames == oldDiagramsNames) {
+        muse::DeleteAll(newDiagrams);
+        return;
+    }
+
+    DEFER {
+        triggerLayout();
+        score()->setNeedLayoutFretBox(true);
+    };
+
+    clearElements();
+
+    for (FretDiagram* diagram : newDiagrams) {
+        add(diagram);
     }
 
     if (m_diagramsOrder.empty()) {
