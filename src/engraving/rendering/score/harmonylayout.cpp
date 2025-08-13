@@ -98,12 +98,16 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
         layoutModifierParentheses(item);
         RectF bb;
         RectF hAlignBox;
+        double segBl = 0.0;
         for (HarmonyRenderItem* renderItem : item->ldata()->renderItemList()) {
             RectF tsBbox = renderItem->tightBoundingRect().translated(renderItem->x(), renderItem->y());
             bb.unite(tsBbox);
 
             if (renderItem->align()) {
                 hAlignBox.unite(tsBbox);
+            }
+            if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
+                segBl = ts->bboxBaseLine();
             }
         }
 
@@ -276,10 +280,8 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
     for (size_t i = 0; i < itemList.size(); i++) {
         HarmonyRenderItem* renderItem = itemList.at(i);
         double padding = i != 0 ? computePadding(itemList.at(i - 1), renderItem) : 0.0;
-        LOGI() << "padding: " << padding;
 
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
-            LOGI() << "PAREN";
             if (paren->paren->direction() == DirectionH::LEFT) {
                 additionalSpace += paren->paren->width() + padding;
                 paren->movex(additionalSpace);
@@ -289,7 +291,6 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 additionalSpace += paren->paren->width() + padding;
             }
         } else if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
-            LOGI() << ts->text();
             additionalSpace += padding;
             ts->movex(additionalSpace);
         }

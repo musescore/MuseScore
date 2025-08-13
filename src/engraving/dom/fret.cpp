@@ -814,7 +814,7 @@ void FretDiagram::applyAlignmentToHarmony()
         m_harmony->resetProperty(Pid::OFFSET);
     }
 
-    m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
+    m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
     m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
 }
 
