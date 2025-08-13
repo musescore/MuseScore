@@ -19,11 +19,8 @@
 
 #include "exportmp3.h"
 
-#include "libmscore/score.h"
-#include "libmscore/note.h"
-#include "libmscore/part.h"
+#include "libmscore/mscore.h"
 
-#include "audio/midi/msynthesizer.h"
 #include "mscore/preferences.h"
 
 namespace Ms {
