@@ -10,9 +10,9 @@ on:
 permissions:
   actions: write
 
- env:
-   CURRENT_RELEASE_BRANCH: 4.6.0
-   IS_CURRENT_RELEASE_BRANCH: ${{ github.event.schedule == '0 4 * * *' && 'true' || 'false' }}
+env:
+  CURRENT_RELEASE_BRANCH: 4.6.0
+  IS_CURRENT_RELEASE_BRANCH: ${{ github.event.schedule == '0 4 * * *' && 'true' || 'false' }}
 
 jobs:
   trigger_nightly:
