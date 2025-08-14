@@ -329,7 +329,13 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
 
     ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
-    ChordArticulationsRenderer::render(chord, ArticulationType::Last, ctx, result[ctx.nominalTimestamp]);
+    PlaybackEventList newEvents;
+    ChordArticulationsRenderer::render(chord, ArticulationType::Last, ctx, newEvents);
+
+    if (!newEvents.empty()) {
+        PlaybackEventList& list = result[ctx.nominalTimestamp];
+        list.insert(list.end(), std::make_move_iterator(newEvents.begin()), std::make_move_iterator(newEvents.end()));
+    }
 }
 
 void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::timestamp_t actualTimestamp,
