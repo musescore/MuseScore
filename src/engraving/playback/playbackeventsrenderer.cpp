@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,7 +27,6 @@
 #include "dom/chord.h"
 #include "dom/harmony.h"
 #include "dom/note.h"
-#include "dom/rest.h"
 #include "dom/sig.h"
 #include "dom/tempo.h"
 #include "dom/staff.h"
@@ -92,14 +91,10 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const int tickPos
                                     const ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx,
                                     PlaybackEventsMap& result) const
 {
-    IF_ASSERT_FAILED(item->isChordRest()) {
-        return;
-    }
+    DO_ASSERT(item->isChord());
 
     if (item->type() == ElementType::CHORD) {
         renderNoteEvents(toChord(item), tickPositionOffset, profile, playbackCtx, result);
-    } else if (item->type() == ElementType::REST) {
-        renderRestEvents(toRest(item), tickPositionOffset, result);
     }
 }
 
@@ -108,9 +103,7 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
                                     const ArticulationType persistentArticulationApplied, const ArticulationsProfilePtr profile,
                                     PlaybackEventsMap& result) const
 {
-    IF_ASSERT_FAILED(item->isChordRest() || item->isNote()) {
-        return;
-    }
+    DO_ASSERT(item->isChord() || item->isNote());
 
     ElementType type = item->type();
 
@@ -125,8 +118,6 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
     } else if (type == ElementType::NOTE) {
         renderFixedNoteEvent(toNote(item), actualTimestamp, actualDuration,
                              actualDynamicLevel, persistentArticulationApplied, profile, result[actualTimestamp]);
-    } else if (type == ElementType::REST) {
-        renderRestEvents(toRest(item), 0, result);
     }
 }
 
@@ -357,20 +348,4 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
 
     NominalNoteCtx noteCtx(note, ctx);
     result.emplace_back(buildNoteEvent(std::move(noteCtx)));
-}
-
-void PlaybackEventsRenderer::renderRestEvents(const Rest* rest, const int tickPositionOffset, mpe::PlaybackEventsMap& result) const
-{
-    IF_ASSERT_FAILED(rest) {
-        return;
-    }
-
-    int positionTick = rest->tick().ticks();
-    int durationTicks = rest->ticks().ticks();
-
-    auto nominalTnD
-        = timestampAndDurationFromStartAndDurationTicks(rest->score(), positionTick, durationTicks, tickPositionOffset);
-
-    result[nominalTnD.timestamp].emplace_back(mpe::RestEvent(nominalTnD.timestamp, nominalTnD.duration,
-                                                             static_cast<voice_layer_idx_t>(rest->voice())));
 }
