@@ -74,7 +74,7 @@ static void createSlightBends(const BendDataContext& bendDataCtx, mu::engraving:
                 GuitarBend* bend = chord->score()->addGuitarBend(GuitarBendType::SLIGHT_BEND, note);
                 IF_ASSERT_FAILED(bend) {
                     LOGE() << "bend wasn't created for track " << chord->track() << ", tick " << chord->tick().ticks();
-                    return;
+                    continue;
                 }
 
                 bend->setStartTimeFactor(noteBendData.startFactor);
@@ -98,8 +98,8 @@ static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Sc
                 const auto& noteBendData = tickInfo.at(noteIndex);
                 GuitarBend* bend = chord->score()->addGuitarBend(GuitarBendType::PRE_BEND, note);
                 IF_ASSERT_FAILED(bend) {
-                    LOGE() << "bend wasn't created for track " << chord->track() << ", tick " << chord->tick().ticks();
-                    return;
+                    LOGE() << "prebend wasn't created for track " << chord->track() << ", tick " << chord->tick().ticks();
+                    continue;
                 }
 
                 bend->setStartTimeFactor(noteBendData.startFactor);
@@ -209,6 +209,11 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
                     graceChord->add(graceNote);
 
                     GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, currentNote, graceNote);
+                    IF_ASSERT_FAILED(bend) {
+                        LOGE() << "grace-after bend wasn't created for track " << graceChord->track() << ", tick " <<
+                            graceChord->tick().ticks();
+                        break;
+                    }
 
                     QuarterOffset quarterOff = noteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
                     bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + noteData.quarterTones / 2, quarterOff);
@@ -259,6 +264,11 @@ static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engravi
                 }
 
                 GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, startNote, endNote);
+                IF_ASSERT_FAILED(bend) {
+                    LOGE() << "bend wasn't created for track " << chord->track() << ", tick " << chord->tick().ticks();
+                    continue;
+                }
+
                 QuarterOffset quarterOff = noteInfo.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
                 bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + noteInfo.quarterTones / 2, quarterOff);
                 bend->setStartTimeFactor(noteInfo.startFactor);
