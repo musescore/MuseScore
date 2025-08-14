@@ -270,10 +270,8 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
     for (size_t i = 0; i < itemList.size(); i++) {
         HarmonyRenderItem* renderItem = itemList.at(i);
         double padding = i != 0 ? computePadding(itemList.at(i - 1), renderItem) : 0.0;
-        LOGI() << "padding: " << padding;
 
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
-            LOGI() << "PAREN";
             if (paren->paren->direction() == DirectionH::LEFT) {
                 additionalSpace += paren->paren->width() + padding;
                 paren->movex(additionalSpace);
@@ -283,7 +281,6 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 additionalSpace += paren->paren->width() + padding;
             }
         } else if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
-            LOGI() << ts->text();
             additionalSpace += padding;
             ts->movex(additionalSpace);
         }
@@ -456,13 +453,14 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
 
     NoteSpellingType spelling = style.styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
 
+    const ChordDescription* cd = info->getDescription();
+    const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
+
     if (item->harmonyType() == HarmonyType::STANDARD && tpcIsValid(info->rootTpc())) {
         // render root
         render(item, ldata, chordList->renderListRoot, harmonyCtx, ctx, info->rootTpc(), spelling, rootCase);
         // render extension
-        const ChordDescription* cd = info->getDescription();
         if (cd) {
-            const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
             render(item, ldata, stackModifiers ? cd->renderListStacked : cd->renderList, harmonyCtx, ctx, 0);
         }
     } else if (item->harmonyType() == HarmonyType::NASHVILLE && tpcIsValid(info->rootTpc())) {
@@ -471,9 +469,7 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
         double adjust = chordList->nominalAdjust();
         harmonyCtx.movey(adjust * item->magS() * item->spatium() * .2);
         // render extension
-        const ChordDescription* cd = info->getDescription();
         if (cd) {
-            const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
             render(item, ldata, stackModifiers ? cd->renderListStacked : cd->renderList, harmonyCtx, ctx, 0);
         }
     } else {
@@ -484,6 +480,14 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
     if (tpcIsValid(info->bassTpc())) {
         std::list<RenderActionPtr >& bassNoteChordList
             = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
+
+        static const std::wregex PATTERN_69 = std::wregex(L"6[,/]?9");
+        const bool is69 = info->textName().contains(PATTERN_69);
+        const bool hasModifierStack = stackModifiers && (info->parsedChord() ? info->parsedChord()->modifierList().size() > 1 : false);
+
+        if (hasModifierStack || is69) {
+            bassNoteChordList.emplace_front(new RenderActionMove(0.05, 0.0));
+        }
         render(item, ldata, bassNoteChordList, harmonyCtx, ctx, info->bassTpc(), spelling, bassCase, item->bassScale());
     }
 
