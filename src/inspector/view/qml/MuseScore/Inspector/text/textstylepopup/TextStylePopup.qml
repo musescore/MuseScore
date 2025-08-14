@@ -51,12 +51,12 @@ StyledPopupView {
     showArrow: false
 
     focusPolicies: PopupView.DefaultFocus & ~PopupView.ClickFocus
+    placementPolicies: PopupView.PreferAbove
 
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        root.x = 0;
-        root.y = -height;
+        root.x = 0
     }
 
     TextStylePopupModel {
