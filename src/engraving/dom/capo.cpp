@@ -38,7 +38,7 @@ Capo::Capo(Segment* parent, TextStyleType textStyleType)
 
     m_params.active = true;
     m_params.fretPosition = 1;
-    m_params.capoTransposeState = std::make_shared<CapoTransposeStatePlaybackOnly>(1);
+//    m_params.capoTransposeState = std::make_shared<CapoTransposeStatePlaybackOnly>(1);
 }
 
 Capo* Capo::clone() const
@@ -89,60 +89,122 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
 {
     if (id == Pid::ACTIVE) {
         bool active = val.toBool();
-        if (active) {
-            switch (m_params.transposeMode) {
-            case CapoParams::TransposeMode::PLAYBACK_ONLY:
-                m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
-                break;
+        switch (m_params.transposeMode) {
             case CapoParams::TransposeMode::NOTATION_ONLY:
-                m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
+                m_params.notesInvalid = true;
+                m_params.fretsInvalid = false;
+//            m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
                 break;
             case CapoParams::TransposeMode::TAB_ONLY:
-                m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+//            m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+                m_params.notesInvalid = false;
+                m_params.fretsInvalid = true;
                 break;
+            case CapoParams::TransposeMode::PLAYBACK_ONLY:
             default:
                 break;
-            }
-        } else {
-            // Return to the default state
-            m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
         }
-        m_params.ignoreTransposition = false;
+//        if (active) {
+//            switch (m_params.transposeMode) {
+//            case CapoParams::TransposeMode::PLAYBACK_ONLY:
+////                m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
+//                break;
+//            case CapoParams::TransposeMode::NOTATION_ONLY:
+////                m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
+//                break;
+//            case CapoParams::TransposeMode::TAB_ONLY:
+////                m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+//                break;
+//            default:
+//                break;
+//            }
+//        } else {
+//            // Return to the default state
+////            m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
+//        }
+//        m_params.capoTransposeState->setIgnoreTransposition(false);
         m_params.active = active;
     } else if (id == Pid::CAPO_FRET_POSITION) {
         m_params.fretPosition = val.toInt();
-        m_params.capoTransposeState->setCapoFret(val.toInt());
-        m_params.ignoreTransposition = false;
+        switch (m_params.transposeMode) {
+            case CapoParams::TransposeMode::NOTATION_ONLY:
+                m_params.notesInvalid = true;
+                m_params.fretsInvalid = false;
+//            m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
+                break;
+            case CapoParams::TransposeMode::TAB_ONLY:
+//            m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+                m_params.notesInvalid = false;
+                m_params.fretsInvalid = true;
+                break;
+            case CapoParams::TransposeMode::PLAYBACK_ONLY:
+            default:
+                break;
+        }
+//        m_params.capoTransposeState->setCapoFret(val.toInt());
+//        m_params.capoTransposeState->setIgnoreTransposition(false);
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
         m_params.ignoredStrings.clear();
         std::vector<int> ignoredStrings = val.value<std::vector<int> >();
         for (int string : ignoredStrings) {
             m_params.ignoredStrings.insert(static_cast<string_idx_t>(string));
         }
-        m_params.ignoreTransposition = true;
+//        m_params.capoTransposeState->setIgnoreTransposition(true);
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         m_shouldAutomaticallyGenerateText = val.toBool();
 
         if (!m_shouldAutomaticallyGenerateText) {
             setXmlText(m_customText);
         }
-        m_params.ignoreTransposition = true;
+//        m_params.capoTransposeState->setIgnoreTransposition(true);
     } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
-        m_params.transposeMode = (CapoParams::TransposeMode)val.toInt();
-        switch (m_params.transposeMode) {
+        auto newMode = (CapoParams::TransposeMode)val.toInt();
+        switch (newMode) {
         case CapoParams::TransposeMode::PLAYBACK_ONLY:
-            m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
+//            m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
+            if (CapoParams::TransposeMode::TAB_ONLY == m_params.transposeMode) {
+                m_params.notesInvalid = false;
+                m_params.fretsInvalid = true;
+            } else if (CapoParams::TransposeMode::NOTATION_ONLY == m_params.transposeMode) {
+                m_params.notesInvalid = true;
+                m_params.fretsInvalid = false;
+            } else {
+                m_params.notesInvalid = false;
+                m_params.fretsInvalid = false;
+            }
+
             break;
         case CapoParams::TransposeMode::NOTATION_ONLY:
-            m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
+            if (CapoParams::TransposeMode::PLAYBACK_ONLY == m_params.transposeMode) {
+                m_params.notesInvalid = true;
+                m_params.fretsInvalid = false;
+            } else if (CapoParams::TransposeMode::TAB_ONLY == m_params.transposeMode) {
+                m_params.notesInvalid = true;
+                m_params.fretsInvalid = true;
+            } else {
+                m_params.notesInvalid = false;
+                m_params.fretsInvalid = false;
+            }
+//            m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
             break;
         case CapoParams::TransposeMode::TAB_ONLY:
-            m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+//            m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+            if (CapoParams::TransposeMode::PLAYBACK_ONLY == m_params.transposeMode) {
+                m_params.notesInvalid = false;
+                m_params.fretsInvalid = true;
+            } else if (CapoParams::TransposeMode::NOTATION_ONLY == m_params.transposeMode) {
+                m_params.notesInvalid = true;
+                m_params.fretsInvalid = true;
+            } else {
+                m_params.notesInvalid = false;
+                m_params.fretsInvalid = false;
+            }
             break;
         default:
             break;
         }
-        m_params.ignoreTransposition = false;
+        m_params.transposeMode = newMode;
+//        m_params.capoTransposeState->setIgnoreTransposition(false);
     } else {
         return StaffTextBase::setProperty(id, val);
     }
@@ -173,7 +235,7 @@ const CapoParams& Capo::params() const
 void Capo::setParams(const CapoParams& params)
 {
     m_params = params;
-    m_params.capoTransposeState->setCapoFret(params.fretPosition);
+//    m_params.capoTransposeState->setCapoFret(params.fretPosition);
 }
 
 bool Capo::shouldAutomaticallyGenerateText() const

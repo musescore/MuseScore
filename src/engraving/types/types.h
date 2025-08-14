@@ -1278,7 +1278,7 @@ struct SwingParameters {
     bool isOn() const { return swingUnit != 0; }
 };
 
-class AbstractCapoTransposeState;
+//class AbstractCapoTransposeState;
 
 struct CapoParams {
     enum TransposeMode {
@@ -1288,11 +1288,12 @@ struct CapoParams {
     };
 
     std::unordered_set<string_idx_t> ignoredStrings;
-    std::shared_ptr<AbstractCapoTransposeState> capoTransposeState = nullptr;
+//    std::shared_ptr<AbstractCapoTransposeState> capoTransposeState = nullptr;
     int fretPosition = 0;
     TransposeMode transposeMode = TransposeMode::PLAYBACK_ONLY;
     bool active = false;
-    bool ignoreTransposition = false;
+    bool fretsInvalid = false;
+    bool notesInvalid = false;
 };
 
 struct PartAudioSettingsCompat {
