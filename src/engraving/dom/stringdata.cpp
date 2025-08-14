@@ -166,8 +166,12 @@ int StringData::fret(int pitch, int string, Staff* staff) const
 
 void StringData::fretChords(Chord* chord) const
 {
-    return;
     if (bFretting) {
+        return;
+    }
+    const CapoParams& capo = chord->staff()->capo(chord->tick());
+    if (capo.active) {
+        // Frets and string already handled with capo params
         return;
     }
     bFretting = true;
@@ -183,14 +187,6 @@ void StringData::fretChords(Chord* chord) const
     // store staff pitch offset at this tick, to speed up actual note pitch calculations
     int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;
     int pitchOffset = -transp + chord->staff()->pitchOffset(chord->segment()->tick());
-//    CapoParams capoParams = chord->staff()->capo(chord->tick());
-//    if (capoParams.active) {
-//        if (capoParams.transposeMode == CapoParams::TransposeMode::TAB_ONLY) {
-//            pitchOffset -= capoParams.fretPosition;
-//        } else if (capoParams.transposeMode == CapoParams::TransposeMode::NOTATION_ONLY) {
-//            pitchOffset += capoParams.fretPosition;
-//        }
-//    }
     // if chord parent is not a segment, the chord is special (usually a grace chord):
     // fret it by itself, ignoring the segment
     if (chord->explicitParent()->type() != ElementType::SEGMENT) {
@@ -252,10 +248,6 @@ void StringData::fretChords(Chord* chord) const
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
         if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
             // get a new fretting
-//            int capoOffset = 0;
-//            if (capoParams.active && CapoParams::TransposeMode::NOTATION_ONLY == capoParams.transposeMode) {
-//                capoOffset -= capoParams.fretPosition;
-//            }
             if (!convertPitch(note->pitch(), pitchOffset, &nNewString, &nNewFret) && note->displayFret()
                 == Note::DisplayFretOption::NoHarmonic && !note->negativeFretUsed()) {
                 // no way to fit this note in this tab:

@@ -1113,7 +1113,6 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const CapoParams& par
                     case CapoParams::PB_TO_NOTATION:
                     case CapoParams::UPDATE_NOTES:
                         newPitch = stringData->getPitch(note->string(), note->fret(), this, tick);
-                        //HACK: On capo el delete/undo hack. The note pitch is still incorrect, but we need to adjust it to the prev capo
                         note->setPitch((INVALID_PITCH == newPitch ? note->pitch() : newPitch) - notePitchCorrection);
                         note->setTpcFromPitch();
                         break;
