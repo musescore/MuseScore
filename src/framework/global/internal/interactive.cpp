@@ -425,12 +425,7 @@ bool Interactive::isSelectColorOpened() const
 
 RetVal<Val> Interactive::openSync(const UriQuery& uri)
 {
-    UriQuery newQuery = uri;
-    if (!newQuery.contains("sync")) {
-        newQuery.addParam("sync", Val(true));
-    }
-
-    return provider()->openSync(newQuery);
+    return provider()->openSync(uri);
 }
 
 async::Promise<Val> Interactive::open(const UriQuery& uri)
