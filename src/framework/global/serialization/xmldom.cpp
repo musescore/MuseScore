@@ -131,7 +131,7 @@ XmlDomElement XmlDomNode::firstChildElement(const char* name) const
     }
     xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
     xml_node_impl c = name ? n.child(name)
-                           : n.find_child([](xml_node_impl x){ return x.type() == pugi::node_element; });
+                      : n.find_child([](xml_node_impl x){ return x.type() == pugi::node_element; });
     if (c && c.type() == pugi::node_element) {
         return XmlDomElement(m_xml, pack_handle(c));
     }
@@ -173,7 +173,9 @@ XmlDomElement XmlDomNode::nextSiblingElement(const char* name) const
     xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
     xml_node_impl s = name ? n.next_sibling(name) : n.next_sibling();
     if (!name) {
-        while (s && s.type() != pugi::node_element) s = s.next_sibling();
+        while (s && s.type() != pugi::node_element) {
+            s = s.next_sibling();
+        }
     }
     if (s && s.type() == pugi::node_element) {
         return XmlDomElement(m_xml, pack_handle(s));
@@ -189,7 +191,9 @@ XmlDomElement XmlDomNode::previousSiblingElement(const char* name) const
     xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
     xml_node_impl s = name ? n.previous_sibling(name) : n.previous_sibling();
     if (!name) {
-        while (s && s.type() != pugi::node_element) s = s.previous_sibling();
+        while (s && s.type() != pugi::node_element) {
+            s = s.previous_sibling();
+        }
     }
     if (s && s.type() == pugi::node_element) {
         return XmlDomElement(m_xml, pack_handle(s));
