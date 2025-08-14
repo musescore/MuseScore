@@ -402,7 +402,7 @@ void MusicXmlParserPass1::addError(const String& error)
 {
     if (!error.empty()) {
         m_logger->logError(error, &m_e);
-        m_errors += errorStringWithLocation(m_e.lineNumber(), m_e.columnNumber(), error) + '\n';
+        m_errors += errorStringWithLocation(m_e.byteOffset(), error) + '\n';
     }
 }
 
@@ -1292,7 +1292,7 @@ Err MusicXmlParserPass1::parse()
     if (!found) {
         m_logger->logError(u"this is not a MusicXML score-partwise file, node <score-partwise> not found", &m_e);
         if (!m_e.errorString().isEmpty()) {
-            m_errors += errorStringWithLocation(m_e.lineNumber(), m_e.columnNumber(), m_e.errorString()) + '\n';
+            m_errors += errorStringWithLocation(m_e.byteOffset(), m_e.errorString()) + '\n';
         }
         return Err::FileBadFormat;
     }

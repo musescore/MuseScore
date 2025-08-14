@@ -30,8 +30,20 @@
 namespace muse {
 struct XmlDomImplData;
 // avoid external dependency on a particular xml library
-using xml_node_ptr = uintptr_t;
-using xml_attribute_ptr = uintptr_t;
+// Opaque, backend-agnostic handle storage (two machine words)
+using xml_handle_slot = std::uintptr_t;
+
+struct xml_handle {
+    xml_handle_slot slot0 = 0;
+    xml_handle_slot slot1 = 0;
+    explicit operator bool() const noexcept {
+        return !(slot0 == 0 && slot1 == 0);
+    }
+};
+static_assert(std::is_trivially_copyable_v<xml_handle>,
+              "Xml handle struct must be trivially copyable");
+using xml_node_handle = xml_handle;
+using xml_attr_handle = xml_handle;
 
 class XmlDomElement;
 class XmlDomAttribute;
@@ -59,10 +71,10 @@ protected:
     friend class XmlDomDocument;
     friend class XmlDomElement;
 
-    XmlDomNode(const std::shared_ptr<XmlDomImplData>& xml, xml_node_ptr node);
+    XmlDomNode(const std::shared_ptr<XmlDomImplData>& xml, xml_node_handle node);
 
     std::shared_ptr<XmlDomImplData> m_xml = nullptr;
-    xml_node_ptr m_node = 0;
+    xml_node_handle m_node{};
 };
 
 class XmlDomElement : public XmlDomNode
@@ -79,7 +91,7 @@ private:
     friend class XmlDomDocument;
     friend class XmlDomNode;
 
-    XmlDomElement(const std::shared_ptr<XmlDomImplData>& data, xml_node_ptr node);
+    XmlDomElement(const std::shared_ptr<XmlDomImplData>& data, xml_node_handle node);
 };
 
 class XmlDomAttribute
@@ -96,10 +108,10 @@ public:
 private:
     friend class XmlDomElement;
 
-    explicit XmlDomAttribute(xml_attribute_ptr attribute)
-        : m_attribute(attribute) {}
+    explicit XmlDomAttribute(const std::shared_ptr<XmlDomImplData>& data, xml_attr_handle attribute);
 
-    xml_attribute_ptr m_attribute = 0;
+    std::shared_ptr<XmlDomImplData> m_xml = nullptr;
+    xml_attr_handle m_attribute{};
 };
 
 class XmlDomDocument
