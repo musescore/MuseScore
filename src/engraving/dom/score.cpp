@@ -6118,11 +6118,8 @@ void Score::updateSwing()
 //   updateCapo
 //---------------------------------------------------------
 
-void Score::updateCapo()
+void Score::updateCapo(bool skipNotesUpdate /* = false */)
 {
-//    for (Staff* staff : m_staves) {
-//        staff->clearCapoParams();
-//    }
     Measure* fm = firstMeasure();
     if (!fm) {
         return;
@@ -6143,7 +6140,7 @@ void Score::updateCapo()
 
             for (Staff* staff : e->staff()->staffList()) {
                 currentCapos[staff->idx()].push_back(segmentTick.ticks());
-                staff->insertCapoParams(segmentTick, toCapo(e)->params());
+                staff->insertCapoParams(segmentTick, toCapo(e)->params(), skipNotesUpdate);
             }
         }
     }

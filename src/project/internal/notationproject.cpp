@@ -195,6 +195,8 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
 
     mu::engraving::compat::EngravingCompat::doPreLayoutCompatIfNeeded(m_engravingProject->masterScore());
 
+    masterScore->updateCapo(/* skipNotesUpdate = */ true);
+
     masterScore->lockUpdates(false);
     masterScore->setLayoutAll();
     masterScore->update();
