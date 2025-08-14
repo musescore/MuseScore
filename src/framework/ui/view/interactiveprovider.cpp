@@ -129,7 +129,7 @@ bool InteractiveProvider::isSelectColorOpened() const
     return m_isSelectColorOpened;
 }
 
-RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
+RetVal<Val> InteractiveProvider::openSync(const UriQuery& q)
 {
 #ifndef MUSE_MODULE_UI_SYNCINTERACTIVE_SUPPORTED
     NOT_SUPPORTED;
@@ -140,11 +140,6 @@ RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
         return rv;
     }
 #endif
-
-    UriQuery q = q_;
-
-    //! NOTE Disable Dialog.exec()
-    q.set("sync", false);
 
     RetVal<Val> rv;
     QEventLoop loop;
@@ -375,7 +370,6 @@ void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q, co
     }
 
     data->setValue("uri", QString::fromStdString(VIEWER_URI.toString()));
-    data->setValue("sync", params.value("sync", false));
     data->setValue("params", params);
 }
 
@@ -386,7 +380,6 @@ void InteractiveProvider::fillData(QmlLaunchData* data, const Uri& uri, const QV
     data->setValue("type", meta.type);
     data->setValue("uri", QString::fromStdString(uri.toString()));
     data->setValue("params", params);
-    data->setValue("sync", params.value("sync", false));
     data->setValue("modal", params.value("modal", ""));
 }
 

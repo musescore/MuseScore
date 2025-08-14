@@ -35,7 +35,7 @@ using namespace muse::mi;
 using namespace muse::ipc;
 using namespace muse::actions;
 
-static const muse::UriQuery DEV_SHOW_INFO_URI("muse://devtools/multiinstances/info?sync=false&modal=false");
+static const muse::UriQuery DEV_SHOW_INFO_URI("muse://devtools/multiinstances/info?modal=false");
 static const QString METHOD_PROJECT_IS_OPENED("PROJECT_IS_OPENED");
 static const QString METHOD_ACTIVATE_WINDOW_WITH_PROJECT("ACTIVATE_WINDOW_WITH_PROJECT");
 static const QString METHOD_IS_WITHOUT_PROJECT("IS_WITHOUT_PROJECT");
