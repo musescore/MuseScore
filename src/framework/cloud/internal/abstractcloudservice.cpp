@@ -130,7 +130,7 @@ bool AbstractCloudService::readTokens()
 
     io::path_t tokensPath = tokensFilePath();
     if (!fileSystem()->exists(tokensPath)) {
-        LOGW() << "Could not find the tokens file: " << tokensPath;
+        LOGI() << "Could not find the tokens file: " << tokensPath;
         return false;
     }
 
