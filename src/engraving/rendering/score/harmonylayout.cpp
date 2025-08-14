@@ -270,10 +270,8 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
     for (size_t i = 0; i < itemList.size(); i++) {
         HarmonyRenderItem* renderItem = itemList.at(i);
         double padding = i != 0 ? computePadding(itemList.at(i - 1), renderItem) : 0.0;
-        LOGI() << "padding: " << padding;
 
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
-            LOGI() << "PAREN";
             if (paren->paren->direction() == DirectionH::LEFT) {
                 additionalSpace += paren->paren->width() + padding;
                 paren->movex(additionalSpace);
@@ -283,7 +281,6 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 additionalSpace += paren->paren->width() + padding;
             }
         } else if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
-            LOGI() << ts->text();
             additionalSpace += padding;
             ts->movex(additionalSpace);
         }
