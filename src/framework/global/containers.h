@@ -342,7 +342,7 @@ inline bool remove(Map& c, const T& k)
 }
 
 template<typename Map, typename Predicate>
-inline int remove_if(Map& c, Predicate pred)
+inline size_t remove_if(Map& c, Predicate pred)
 {
     auto old_size = c.size();
     for (auto first = c.begin(), last = c.end(); first != last;) {

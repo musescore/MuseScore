@@ -19,22 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_WININTERACTIVEHELPER_H
-#define MU_FRAMEWORK_WININTERACTIVEHELPER_H
+#pragma once
 
-#include "io/path.h"
 #include "types/ret.h"
-#include "types/uri.h"
 
 #include "async/asyncable.h"
 #include "async/promise.h"
 
 namespace muse {
+class Uri;
+
 class WinInteractiveHelper : public async::Asyncable
 {
 public:
     static async::Promise<Ret> openApp(const Uri& uri);
 };
 }
-
-#endif // MU_FRAMEWORK_WININTERACTIVEHELPER_H

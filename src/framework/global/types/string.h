@@ -228,6 +228,8 @@ public:
     inline bool operator ==(const String& s) const { return constStr() == s.constStr(); }
     inline bool operator !=(const String& s) const { return !operator ==(s); }
 
+    bool isEqualIgnoreCase(const String& s) const;
+
     bool operator ==(const AsciiStringView& s) const;
     inline bool operator !=(const AsciiStringView& s) const { return !operator ==(s); }
     inline bool operator ==(const char16_t* s) const { return constStr() == s; }
@@ -259,6 +261,7 @@ public:
     static String fromUtf16BE(const ByteArray& data);
 
     static String fromUtf8(const char* str);
+    static String fromUtf8(std::string_view);
     static String fromUtf8(const ByteArray& data);
     ByteArray toUtf8() const;
 
@@ -311,6 +314,7 @@ public:
     String& insert(size_t position, const String& str);
     String& remove(const String& str) { return replace(str, String()); }
     String& remove(const std::regex& rx) { return replace(rx, String()); }
+    String& remove(const std::wregex& rx) { return replace(rx, String()); }
     String& remove(const Char& ch);
     String& remove(char16_t ch);
     String& remove(size_t position, size_t n = muse::nidx);
@@ -435,6 +439,9 @@ public:
 #endif
 
     operator std::string_view() const {
+        if (!m_data) {
+            return std::string_view{};
+        }
         return std::string_view(m_data, m_size);
     }
 

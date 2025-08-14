@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_RUNTIME_H
-#define MUSE_GLOBAL_RUNTIME_H
+#pragma once
 
 #include <sstream>
 #include <string>
@@ -52,5 +51,3 @@ inline std::string toString(const std::thread::id& id)
 void setThreadName(const std::string& name);
 const std::string& threadName();
 }
-
-#endif // MUSE_GLOBAL_RUNTIME_H

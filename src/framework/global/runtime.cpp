@@ -22,13 +22,15 @@
 
 #include "runtime.h"
 
-#include "log.h"
-
 #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 #include <pthread.h>
 #endif
 #if defined(Q_OS_FREEBSD)
 #include <pthread_np.h> // Needed for pthread_setname_np on FreeBSD
+#endif
+
+#ifdef Q_OS_LINUX
+#include "log.h"
 #endif
 
 static thread_local std::string s_threadName;

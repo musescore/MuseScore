@@ -92,6 +92,23 @@ std::string ConsoleLogDest::name() const
 
 void ConsoleLogDest::write(const LogMsg& logMsg)
 {
+    std::string log = m_layout.output(logMsg);
+
+#ifdef _WIN32
+    std::wstring str = std::wstring(log.begin(), log.end());
+    size_t preview = 0;
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (str.at(i) == L'\n') {
+            str[i] = L'\0';
+            OutputDebugString(&str[preview]);
+            OutputDebugString(L"\n");
+            preview = i + 1;
+        }
+    }
+
+    OutputDebugString(&str[preview]);
+    OutputDebugString(L"\n");
+#else
     auto colorCode = [](Color c){
         switch (c) {
         case Color::None:    return "\033[0m";
@@ -107,28 +124,6 @@ void ConsoleLogDest::write(const LogMsg& logMsg)
         return "\033[0m";
     };
 
-    std::string msg;
-    msg.reserve(100);
-    msg.append(colorCode(logMsg.color));
-    std::string log = m_layout.output(logMsg);
-    msg.append(log);
-    msg.append("\033[0m");
-#ifdef _WIN32
-    std::wstring str = std::wstring(msg.begin(), msg.end());
-    size_t preview = 0;
-    for (size_t i = 0; i < str.size(); ++i) {
-        if (str.at(i) == L'\n') {
-            str[i] = L'\0';
-            OutputDebugString(&str[preview]);
-            OutputDebugString(L"\n");
-            preview = i + 1;
-        }
-    }
-
-    OutputDebugString(&str[preview]);
-    OutputDebugString(L"\n");
-
-#else
-    std::cout << msg << std::endl;
+    std::cout << colorCode(logMsg.color) << log << "\033[0m" << std::endl;
 #endif
 }

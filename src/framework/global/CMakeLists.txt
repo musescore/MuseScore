@@ -25,6 +25,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_logger/logger.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler/profiler.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_modularity/modularity/modularity.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/utfcpp/utfcpp.cmake)
 
 find_package(TinyXml REQUIRED)
 set(MODULE_SRC
@@ -32,6 +33,7 @@ set(MODULE_SRC
     ${ASYNC_SRC}
     ${KORS_LOGGER_SRC}
     ${KORS_PROFILER_SRC}
+    ${UTFCPP_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/globaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iapplication.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
@@ -105,6 +107,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/config.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ratio.h
     ${CMAKE_CURRENT_LIST_DIR}/types/secs.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/color.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/color.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/rgba.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
@@ -143,6 +148,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/json.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack.h
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack_forward.h
 
     ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
     ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
@@ -227,9 +234,12 @@ else()
         set(MODULE_SRC ${MODULE_SRC}
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wininteractivehelper.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wininteractivehelper.h
+            ${CMAKE_CURRENT_LIST_DIR}/platform/win/async.h
             ${CMAKE_CURRENT_LIST_DIR}/platform/win/waitabletimer.h
         )
-        list(APPEND MODULE_LINK Winmm) # needed for timeBeginPeriod
+        list(APPEND MODULE_LINK
+            WindowsApp # needed for C++/WinRT
+            Winmm) # needed for timeBeginPeriod
     endif()
 endif()
 
@@ -239,21 +249,29 @@ if (CC_IS_MSVC)
     include(FindZlibStatic)
     set(Z_LIB zlibstat)
     set(Z_INCLUDE ${DEPENDENCIES_INC}/zlib)
-elseif (CC_IS_EMSCRIPTEN)
+elseif (CC_IS_EMCC)
     #zlib included in main linker
 else ()
     set(Z_LIB z)
 endif ()
 
-list(APPEND MODULE_INCLUDE_PRIVATE
-    ${Z_INCLUDE}
-    )
+list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
+list(APPEND MODULE_LINK ${Z_LIB})
 
-list(APPEND MODULE_LINK
-    ${Z_LIB}
-)
 list(APPEND MODULE_LINK ${TINYXML_MODULE_LINK})
 set(MODULE_DEF ${TINYXML_MODULE_DEF})
+
+if (QT_SUPPORT)
+    # These are needed by so many modules, that we make them public here,
+    # so that other modules get them transitively.
+    list(APPEND MODULE_LINK_PUBLIC Qt::Core Qt::Gui)
+
+    # These are needed by the PCH; if we don't make them public, modules
+    # that don't use them won't be able to use the PCH with some compilers.
+    list(APPEND MODULE_LINK_PUBLIC Qt::Quick Qt::Widgets)
+endif()
+
+list(APPEND MODULE_LINK_PUBLIC ${CMAKE_DL_LIBS})
 
 if (MUSE_ENABLE_CUSTOM_ALLOCATOR)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_ENABLE_CUSTOM_ALLOCATOR)

@@ -49,8 +49,10 @@ public:
     bool operator!=(const ByteArray& other) const { return !operator==(other); }
 
     uint8_t* data();
+    std::vector<uint8_t>& vdata();
     const uint8_t* constData() const;
     const char* constChar() const; // data as char*
+    const std::vector<uint8_t>& constVData() const;
     size_t size() const;
     bool empty() const;
 

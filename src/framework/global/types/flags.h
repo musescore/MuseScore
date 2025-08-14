@@ -22,7 +22,7 @@
 #ifndef MUSE_GLOBAL_FLAGS_H
 #define MUSE_GLOBAL_FLAGS_H
 
-#include <cstdint>
+#include <type_traits>
 
 namespace muse {
 class Flag

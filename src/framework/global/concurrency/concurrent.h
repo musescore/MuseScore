@@ -23,9 +23,7 @@
 #ifndef MUSE_GLOBAL_CONCURRENT_H
 #define MUSE_GLOBAL_CONCURRENT_H
 
-#ifndef NO_QT_SUPPORT
 #include <QtConcurrent>
-#endif
 
 #include "log.h"
 

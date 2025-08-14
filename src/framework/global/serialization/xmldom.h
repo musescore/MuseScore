@@ -28,9 +28,13 @@
 #include "types/string.h"
 
 namespace muse {
-struct XmlDomData;
+struct XmlDomImplData;
+// avoid external dependency on a particular xml library
+using xml_node_ptr = uintptr_t;
+using xml_attribute_ptr = uintptr_t;
 
 class XmlDomElement;
+class XmlDomAttribute;
 class XmlDomNode
 {
 public:
@@ -44,20 +48,21 @@ public:
     XmlDomNode firstChild() const;
     XmlDomElement firstChildElement(const char* name) const;
     XmlDomNode nextSibling() const;
+    XmlDomNode previousSibling() const;
+    XmlDomNode parent() const;
 
-    bool hasAttribute(const char* name) const;
-    String attribute(const char* name) const;
-
+    XmlDomElement nextSiblingElement(const char* name = nullptr) const;
+    XmlDomElement previousSiblingElement(const char* name = nullptr) const;
     XmlDomElement toElement() const;
 
 protected:
     friend class XmlDomDocument;
     friend class XmlDomElement;
 
-    XmlDomNode(const std::shared_ptr<XmlDomData>& xml, uintptr_t node);
+    XmlDomNode(const std::shared_ptr<XmlDomImplData>& xml, xml_node_ptr node);
 
-    std::shared_ptr<XmlDomData> m_xml = nullptr;
-    uintptr_t m_node = 0;
+    std::shared_ptr<XmlDomImplData> m_xml = nullptr;
+    xml_node_ptr m_node = 0;
 };
 
 class XmlDomElement : public XmlDomNode
@@ -66,12 +71,35 @@ public:
 
     String text() const;
 
+    XmlDomAttribute firstAttribute() const;
+    XmlDomAttribute attribute(const char* name) const;
+
 private:
 
     friend class XmlDomDocument;
     friend class XmlDomNode;
 
-    XmlDomElement(const std::shared_ptr<XmlDomData>& data, uintptr_t node);
+    XmlDomElement(const std::shared_ptr<XmlDomImplData>& data, xml_node_ptr node);
+};
+
+class XmlDomAttribute
+{
+public:
+
+    bool isNull() const;
+    String attributeName() const;
+
+    String value() const;
+
+    XmlDomAttribute nextAttribute() const;
+
+private:
+    friend class XmlDomElement;
+
+    explicit XmlDomAttribute(xml_attribute_ptr attribute)
+        : m_attribute(attribute) {}
+
+    xml_attribute_ptr m_attribute = 0;
 };
 
 class XmlDomDocument
@@ -87,7 +115,7 @@ public:
     String errorString() const;
 
 private:
-    std::shared_ptr<XmlDomData> m_xml = nullptr;
+    std::shared_ptr<XmlDomImplData> m_xml = nullptr;
 };
 }
 

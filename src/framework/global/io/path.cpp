@@ -25,7 +25,7 @@
 #include <QDir>
 #endif
 
-#include "stringutils.h"
+#include "global/stringutils.h"
 #include "fileinfo.h"
 
 using namespace muse;
@@ -90,7 +90,7 @@ String path_t::toString() const
     return String::fromStdString(m_path);
 }
 
-std::string path_t::toStdString() const
+const std::string& path_t::toStdString() const
 {
     return m_path;
 }

@@ -346,6 +346,6 @@ void XmlWriter::comment(const String& text)
 
 String XmlWriter::xmlString(const String& s)
 {
-    return XmlStreamWriter::escapeString(s);
+    return s.toXmlEscaped();
 }
 }

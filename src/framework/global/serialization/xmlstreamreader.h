@@ -105,6 +105,8 @@ public:
     double doubleAttribute(const char* name, double def) const;
     std::vector<Attribute> attributes() const;
 
+    String readBody() const;
+
     String text() const;
     AsciiStringView asciiText() const;
     String readText();

@@ -17,7 +17,7 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
         u"Automations"
     };
 
-    int trackIdx = trackNode->attribute("id").toInt();
+    int trackIdx = trackNode->toElement().attribute("id").value().toInt();
     auto track = std::make_unique<GPTrack>(trackIdx);
     XmlDomNode trackChildNode = trackNode->firstChild();
     String version = versionNode->toElement().text();

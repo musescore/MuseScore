@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_XMLSTREAMWRITER_H
-#define MUSE_GLOBAL_XMLSTREAMWRITER_H
+#pragma once
 
-#include <list>
+#include <string>
+#include <string_view>
 #include <variant>
 
-#include "types/string.h"
-#include "io/iodevice.h"
+#include "global/types/string.h"
+#include "global/io/iodevice.h"
 
 namespace muse {
 class TextStream;
@@ -61,9 +61,8 @@ public:
 
     void comment(const String& text);
 
-    static String escapeSymbol(char16_t c);
-    static String escapeString(const AsciiStringView& s);
-    static String escapeString(const String& s);
+    static std::string escapeCodePoint(char32_t);
+    static std::string escapeString(std::string_view);
 
 protected:
     void startElementRaw(const String& name);
@@ -78,5 +77,3 @@ private:
     Impl* m_impl = nullptr;
 };
 }
-
-#endif // MUSE_GLOBAL_XMLSTREAMWRITER_H
