@@ -115,6 +115,7 @@ bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int
 {
     return convertPitch(pitch, pitchOffsetAt(staff, tick), string, fret);
 }
+
 //---------------------------------------------------------
 //   getPitch
 //    Returns the pitch corresponding to the string / fret combination
@@ -345,12 +346,12 @@ int StringData::pitchOffsetAt(Staff* staff, const Fraction& tick)
     const CapoParams& capo = staff->capo(tick);
     if (capo.active) {
         switch (capo.transposeMode) {
-            case CapoParams::PLAYBACK_ONLY:
-                break;
-            case CapoParams::NOTATION_ONLY:
-            case CapoParams::TAB_ONLY:
-                offset -= capo.fretPosition;
-                break;
+        case CapoParams::PLAYBACK_ONLY:
+            break;
+        case CapoParams::NOTATION_ONLY:
+        case CapoParams::TAB_ONLY:
+            offset -= capo.fretPosition;
+            break;
         }
     }
     return offset;
