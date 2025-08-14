@@ -3598,7 +3598,7 @@ bool MStyle::readProperties440(XmlReader& e, int mscVersion)
             || tag == "headerToLineStartDistance"                   // pre-x.4 typo, Mu4 only, let's skip
             || tag == "ottavaMusicalSymbolsScale")                  // Mu4.4+ only, let's skip
             e.skipCurrentElement();
-      else if (tag == "tremoloStrokeStyle")                         // pre-4.4 typo
+      else if (tag == "tremoloStyle")                               // pre-4.4 typo, "tremoloStrokeStyle"
             set(Sid::tremoloStyle, e.readInt());
       else if (tag == "tupletOutOfStaff")                           // pre-4.4 typo, "tupletOufOfStaff"
             set(Sid::tupletOutOfStaff, e.readBool());
@@ -3648,27 +3648,27 @@ bool MStyle::readProperties440(XmlReader& e, int mscVersion)
             set(Sid::systemTextPlacement, e.readElementText().toInt());
       else if (tag == "systemTextPosAbove")                         // pre-4.4 typo
             set(Sid::systemTextPosAbove, e.readPoint());
-      else if (tag == "systemPosBelow")                             // pre-4.4 typo
+      else if (tag == "systemTextPosBelow")                         // pre-4.4 typo
             set(Sid::systemTextPosBelow, e.readPoint());
-      else if (tag == "systemMinDistance")                          // pre-4.4 typo
+      else if (tag == "systemTextMinDistance")                      // pre-4.4 typo
             set(Sid::systemTextMinDistance, Spatium(e.readDouble()));
-      else if (tag == "systemFrameType")                            // pre-4.4 typo
+      else if (tag == "systemTextFrameType")                        // pre-4.4 typo
             set(Sid::systemTextFrameType, e.readInt());
-      else if (tag == "systemFramePadding")                         // pre-4.4 typo
+      else if (tag == "systemTextFramePadding")                     // pre-4.4 typo
             set(Sid::systemTextFramePadding, e.readDouble());
-      else if (tag == "systemFrameWidth")                           // pre-4.4 typo
+      else if (tag == "systemTextFrameWidth")                       // pre-4.4 typo
             set(Sid::systemTextFrameWidth, e.readDouble());
-      else if (tag == "systemFrameRound")                           // pre-4.4 typo
+      else if (tag == "systemTextFrameRound")                       // pre-4.4 typo
             set(Sid::systemTextFrameRound, e.readInt());
-      else if (tag == "systemFrameFgColor")                         // pre-4.4 typo
+      else if (tag == "systemTextFrameFgColor")                     // pre-4.4 typo
             set(Sid::systemTextFrameFgColor, e.readColor());
-      else if (tag == "systemFrameBgColor")                         // pre-4.4 typo
+      else if (tag == "systemTextFrameBgColor")                     // pre-4.4 typo
             set(Sid::systemTextFrameBgColor, e.readColor());
       else if (tag == "staffTextFontFace")                          // pre-4.4 typo
             set(Sid::staffTextFontFace, e.readElementText());
       else if (tag == "staffTextFontSize")                          // pre-4.4 typo
             set(Sid::staffTextFontSize, e.readDouble());
-      else if (tag == "staffFontSpatiumDependent")                  // pre-4.4 typo
+      else if (tag == "staffTextFontSpatiumDependent")              // pre-4.4 typo
             set(Sid::staffTextFontSpatiumDependent, e.readBool());
       else if (tag == "staffTextFontStyle")                         // pre-4.4 typo
             set(Sid::staffTextFontStyle, e.readInt());
