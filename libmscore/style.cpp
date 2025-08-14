@@ -3780,6 +3780,8 @@ bool  MStyle::readProperties450(XmlReader& e, int mscVersion)
             e.skipCurrentElement();
       else if (tag == "minHangingTieLength")                        // Mu4.5+ only, let's skip
             e.skipCurrentElement();
+      else if (tag == "lineEndToBarlineDistance")                   // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
       else if (tag == "laissezVibMinDistance")                      // Mu4.5+ only, let's skip
             e.skipCurrentElement();
       else if (tag == "tieDotsPlacement")                           // Mu4.5+ only, let's skip
@@ -3794,6 +3796,22 @@ bool  MStyle::readProperties450(XmlReader& e, int mscVersion)
             || tag == "glissandoDashLineLen"                        // Mu4.5+ only, let's skip
             || tag == "glissandoDashGapLen"                         // Mu4.5+ only, let's skip
             || tag == "glissandoShowText")                          // Mu4.5+ only, let's skip
+            e.skipCurrentElement();
+      else if (tag == "defaultsVersion")                            // 4mm -> 4nn, let's skip, i.e. reset to Mu3's 302
+            e.skipCurrentElement();
+      else if (tag == "changesBeforeBarlineRepeats"
+            || tag == "changesBeforeBarlineOtherJumps"
+            || tag == "placeClefsBeforeRepeats"
+            || tag == "changesBetweenEndStartRepeat"
+            || tag == "showCourtesiesRepeats"
+            || tag == "useParensRepeatCourtesies"
+            || tag == "showCourtesiesOtherJumps"
+            || tag == "useParensOtherJumpCourtesies"
+            || tag == "showCourtesiesAfterCancellingRepeats"
+            || tag == "useParensRepeatCourtesiesAfterCancelling"
+            || tag == "showCourtesiesAfterCancellingOtherJumps"
+            || tag == "useParensOtherJumpCourtesiesAfterCancelling"
+            || tag == "smallParens")                // Mu4.5+ only, let's skip
             e.skipCurrentElement();
       else if (tag == "spatium")                                    // pre-4.5(?) typo
             set(Sid::spatium, e.readDouble() * DPMM);

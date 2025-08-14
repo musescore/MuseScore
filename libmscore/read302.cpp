@@ -227,6 +227,8 @@ bool Score::read(XmlReader& e)
                   TextBase* t = new StaffText(score(), Tid::EXPRESSION);
                   t->setXmlText(s);
                   }
+            else if (tag == "SystemLocks") // Mu4.5+ compatibility
+                  e.skipCurrentElement(); // skip, don't log
             else
                   e.unknown();
             }

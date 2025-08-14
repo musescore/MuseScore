@@ -10,21 +10,18 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "part.h"
-#include "staff.h"
-#include "xml.h"
-#include "score.h"
-#include "style.h"
-#include "note.h"
-#include "drumset.h"
-#include "instrtemplate.h"
-#include "text.h"
-#include "measure.h"
-#include "stringdata.h"
-#include "stafftype.h"
-#include "sym.h"
 #include "chordrest.h"
+#include "drumset.h"
 #include "fret.h"
+#include "measure.h"
+#include "note.h"
+#include "part.h"
+#include "score.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "style.h"
+#include "xml.h"
+#include "instrtemplate.h"
 
 namespace Ms {
 
@@ -77,7 +74,7 @@ const Part* Part::masterPart() const
       if (!links)
             return this;
 
-      for (ScoreElement* le : *links) {
+      for (ScoreElement*& le : *links) {
             if (le->isStaff() && toStaff(le)->score()->isMaster()) {
                   if (Part* p = toStaff(le)->part())
                         return p;
