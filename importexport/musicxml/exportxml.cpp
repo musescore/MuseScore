@@ -667,6 +667,14 @@ static QString fontStyleToXML(const FontStyle style, bool allowUnderline = true)
       }
 
 //---------------------------------------------------------
+//   placement2xml
+//---------------------------------------------------------
+
+static QString placement2xml(const Element* el)
+      {
+      return QString(" placement=\"%1\"").arg((el->placement() == Placement::BELOW) ? "below" : "above");
+      }
+//---------------------------------------------------------
 //   slurHandler
 //---------------------------------------------------------
 
@@ -3211,12 +3219,7 @@ static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notation
                   }
             tagName += color2xml(breath);
             tagName += positioningAttributes(breath);
-            if (breath->placement() == Placement::BELOW)
-                  tagName += " placement=\"below\"";
-            else/* if (preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))*/ {
-                  // MuseScore 3.6.2 and earlier as well as all 4.x prior to 4.3 otherwise default to below on import
-                  tagName += " placement=\"above\"";
-                  }
+            tagName += placement2xml(breath);
 
             if (breath->isCaesura() && (type.isEmpty() || preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))) {
                   // for backwards compatibility, as 3.6.2 and earlier can't import those special caesuras,
@@ -3709,8 +3712,8 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                   technical.tag(xml);
                   QString t = MScoreTextToMXML::toPlainText(f->xmlText());
                   QString attr;
-                  if (!f->isStyled(Pid::PLACEMENT) || f->placement() == Placement::BELOW)
-                        attr = QString(" placement=\"%1\"").arg((f->placement() == Placement::BELOW) ? "below" : "above");
+                  if (!f->isStyled(Pid::PLACEMENT))
+                        attr += placement2xml(e);
                   if (!f->isStyled(Pid::FONT_FACE))
                         attr += QString(" font-family=\"%1\"").arg(f->getProperty(Pid::FONT_FACE).toString());
                   if (!f->isStyled(Pid::FONT_SIZE))
@@ -4283,117 +4286,13 @@ void ExportMusicXml::rest(Rest* rest, int staff, const std::vector<Lyrics*>* ll)
 static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const el = 0)
       {
       attr.doAttr(xml, false);
-      QString tagname = QString("direction");
+      QString tagName = QString("direction");
       if (el) {
-            /*
-             qDebug("directionTag() spatium=%g elem=%p tp=%d (%s)\ndirectionTag()  x=%g y=%g xsp,ysp=%g,%g w=%g h=%g userOff.y=%g",
-                    el->spatium(),
-                    el,
-                    el->type(),
-                    el->name(),
-                    el->x(), el->y(),
-                    el->x()/el->spatium(), el->y()/el->spatium(),
-                    el->width(), el->height(),
-                    el->offset().y()
-                   );
-             */
-            const Element* pel = 0;
-            const LineSegment* seg = 0;
-            if (el->type() == ElementType::HAIRPIN || el->type() == ElementType::OTTAVA
-                || el->type() == ElementType::PEDAL || el->type() == ElementType::TEXTLINE
-                || el->type() == ElementType::LET_RING || el->type() == ElementType::PALM_MUTE) {
-                  // handle elements derived from SLine
-                  // find the system containing the first linesegment
-                  const SLine* sl = static_cast<const SLine*>(el);
-                  if (!sl->segmentsEmpty()) {
-                        seg = toLineSegment(sl->frontSegment());
-                        /*
-                         qDebug("directionTag()  seg=%p x=%g y=%g w=%g h=%g cpx=%g cpy=%g userOff.y=%g",
-                                seg, seg->x(), seg->y(),
-                                seg->width(), seg->height(),
-                                seg->pagePos().x(), seg->pagePos().y(),
-                                seg->offset().y());
-                         */
-                        pel = seg->parent();
-                        }
-                  }
-            else if (el->type() == ElementType::DYNAMIC
-                     || el->type() == ElementType::INSTRUMENT_CHANGE
-                     || el->type() == ElementType::REHEARSAL_MARK
-                     || el->type() == ElementType::STAFF_TEXT
-                     || el->type() == ElementType::SYMBOL
-                     || el->type() == ElementType::TEXT
-                     || el->type() == ElementType::SYSTEM_TEXT) {
-                  // handle other elements attached (e.g. via Segment / Measure) to a system
-                  // find the system containing this element
-                  for (const Element* e = el; e; e = e->parent()) {
-                        if (e->type() == ElementType::SYSTEM) pel = e;
-                        }
-                  }
-            else
-                  qDebug("directionTag() element %p tp=%d (%s) not supported",
-                         el, int(el->type()), el->name());
-
-            /*
-             if (pel) {
-             qDebug("directionTag()  prnt tp=%d (%s) x=%g y=%g w=%g h=%g userOff.y=%g",
-                    pel->type(),
-                    pel->name(),
-                    pel->x(), pel->y(),
-                    pel->width(), pel->height(),
-                    pel->offset().y());
-                  }
-             */
-
-            if (pel && pel->type() == ElementType::SYSTEM) {
-                  /*
-                  const System* sys = static_cast<const System*>(pel);
-                  QRectF bb = sys->staff(el->staffIdx())->bbox();
-                  qDebug("directionTag()  syst=%p sys x=%g y=%g cpx=%g cpy=%g",
-                         sys, sys->pos().x(),  sys->pos().y(),
-                         sys->pagePos().x(),
-                         sys->pagePos().y()
-                        );
-                  qDebug("directionTag()  staf x=%g y=%g w=%g h=%g",
-                         bb.x(), bb.y(),
-                         bb.width(), bb.height());
-                  // element is above the staff if center of bbox is above center of staff
-                  qDebug("directionTag()  center diff=%g", el->y() + el->height() / 2 - bb.y() - bb.height() / 2);
-                   */
-
-                  if (el->isHairpin() || el->isOttava() || el->isPedal() || el->isTextLine()) {
-                        // for the line type elements the reference point is vertically centered
-                        // actual position info is in the segments
-                        // compare the segment's canvas ypos with the staff's center height
-                        // if (seg->pagePos().y() < sys->pagePos().y() + bb.y() + bb.height() / 2)
-                        if (el->placement() == Placement::ABOVE)
-                              tagname += " placement=\"above\"";
-                        else
-                              tagname += " placement=\"below\"";
-                        }
-                  else if (el->isDynamic()) {
-                        tagname += " placement=\"";
-                        tagname += el->placement() == Placement::ABOVE ? "above" : "below";
-                        tagname += "\"";
-                        }
-                  else {
-                        /*
-                        qDebug("directionTag()  staf ely=%g elh=%g bby=%g bbh=%g",
-                               el->y(), el->height(),
-                               bb.y(), bb.height());
-                         */
-                        // if (el->y() + el->height() / 2 < /*bb.y() +*/ bb.height() / 2)
-                        if (el->placement() == Placement::ABOVE)
-                              tagname += " placement=\"above\"";
-                        else
-                              tagname += " placement=\"below\"";
-                        }
-                  } // if (pel && ...
-
+            tagName += placement2xml(el);
             if (el->systemFlag() && !preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))
-                  tagname += " system=\"only-top\"";
+                  tagName += " system=\"only-top\"";
             }
-      xml.stag(tagname);
+      xml.stag(tagName);
       }
 
 //---------------------------------------------------------
@@ -4661,7 +4560,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
              qPrintable(text->xmlText()));
       */
       _attr.doAttr(_xml, false);
-      QString tempoAttrs = QString("direction placement=\"%1\"").arg(text->placement() == Placement::BELOW ? "below" : "above");
+      QString tempoAttrs = QString("direction" + placement2xml(text));
       if (text->systemFlag() && !preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))
             tempoAttrs += QString(" system=\"%1\"").arg(text->isLinked() ? "also-top" : "only-top");
       _xml.stag(tempoAttrs);
@@ -5564,7 +5463,7 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
             }
 
       if (!sound.isEmpty()) {
-            xml.stag(QString("direction placement=\"%1\"").arg((jp->placement() == Placement::BELOW ) ? "below" : "above"));
+            xml.stag(QString("direction" + placement2xml(jp)));
             xml.stag("direction-type");
             QString attrs = color2xml(jp);
             attrs += positioningAttributes(jp);
@@ -5682,7 +5581,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
             }
 
       if (!sound.isEmpty()) {
-            xml.stag(QString("direction placement=\"%1\"").arg((m->placement() == Placement::BELOW ) ? "below" : "above"));
+            xml.stag(QString("direction" + placement2xml(m)));
             xml.stag("direction-type");
             QString attrs = color2xml(m);
             attrs += positioningAttributes(m);
@@ -8074,7 +7973,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       int rootTpc = h->rootTpc();
       QString tagName = "harmony";
       if (!h->isStyled(Pid::PLACEMENT))
-            tagName += QString(" placement=\"%1\"").arg(h->placement() == Placement::BELOW ? "below" : "above");
+            tagName += placement2xml(h);
       //if (h->hasFrame())
             //tagName += " print-frame=\"yes\"";
       tagName += QString(" print-frame=\"%1\"").arg(h->hasFrame() ? "yes" : "no"); // .append(relative));
