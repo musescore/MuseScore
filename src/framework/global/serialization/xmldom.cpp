@@ -53,10 +53,8 @@ inline xml_handle pack_handle(const T& t) noexcept
                   "Backend handle must be trivially copyable");
     static_assert(sizeof(T) <= sizeof(xml_handle),
                   "Increase xml_handle slots/size");
-    xml_handle h{};                   // zero both slots
-    if (t) {
-        std::memcpy(&h, &t, sizeof(T));  // copy only the bytes T needs
-    }
+    xml_handle h{};                 // zero both slots
+    std::memcpy(&h, &t, sizeof(T)); // copy only the bytes T needs
     return h;
 }
 
@@ -67,8 +65,8 @@ inline T unpack_handle(xml_handle h) noexcept
                   "Backend handle must be trivially copyable");
     static_assert(sizeof(T) <= sizeof(xml_handle),
                   "Increase xml_handle slots/size");
-    T t{};                            // zero-init destination
-    std::memcpy(&t, &h, sizeof(T));   // copy back only sizeof(T)
+    T t{};                          // zero-init destination
+    std::memcpy(&t, &h, sizeof(T)); // copy back only sizeof(T)
     return t;
 }
 } // anonymous namespace
@@ -128,13 +126,14 @@ XmlDomNode XmlDomNode::firstChild() const
 
 XmlDomElement XmlDomNode::firstChildElement(const char* name) const
 {
-    if (m_node) {
-        xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
-        xml_node_impl c = name ? n.child(name)
-                          : n.find_child([](xml_node_impl x){ return x.type() == pugi::node_element; });
-        if (c && c.type() == pugi::node_element) {
-            return XmlDomElement(m_xml, pack_handle(c));
-        }
+    if (!m_node) {
+        return XmlDomElement(m_xml, xml_node_handle());
+    }
+    xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
+    xml_node_impl c = name ? n.child(name)
+                           : n.find_child([](xml_node_impl x){ return x.type() == pugi::node_element; });
+    if (c && c.type() == pugi::node_element) {
+        return XmlDomElement(m_xml, pack_handle(c));
     }
     return XmlDomElement(m_xml, xml_node_handle());
 }
@@ -168,45 +167,44 @@ XmlDomNode XmlDomNode::parent() const
 
 XmlDomElement XmlDomNode::nextSiblingElement(const char* name) const
 {
-    if (m_node) {
-        xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
-        xml_node_impl s = name ? n.next_sibling(name) : n.next_sibling();
-        if (!name) {
-            while (s && s.type() != pugi::node_element) {
-                s = s.next_sibling();
-            }
-        }
-        if (s && s.type() == pugi::node_element) {
-            return XmlDomElement(m_xml, pack_handle(s));
-        }
+    if (!m_node) {
+        return XmlDomElement(m_xml, xml_node_handle());
+    }
+    xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
+    xml_node_impl s = name ? n.next_sibling(name) : n.next_sibling();
+    if (!name) {
+        while (s && s.type() != pugi::node_element) s = s.next_sibling();
+    }
+    if (s && s.type() == pugi::node_element) {
+        return XmlDomElement(m_xml, pack_handle(s));
     }
     return XmlDomElement(m_xml, xml_node_handle());
 }
 
 XmlDomElement XmlDomNode::previousSiblingElement(const char* name) const
 {
-    if (m_node) {
-        xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
-        xml_node_impl s = name ? n.previous_sibling(name) : n.previous_sibling();
-        if (!name) {
-            while (s && s.type() != pugi::node_element) {
-                s = s.previous_sibling();
-            }
-        }
-        if (s && s.type() == pugi::node_element) {
-            return XmlDomElement(m_xml, pack_handle(s));
-        }
+    if (!m_node) {
+        return XmlDomElement(m_xml, xml_node_handle());
+    }
+    xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
+    xml_node_impl s = name ? n.previous_sibling(name) : n.previous_sibling();
+    if (!name) {
+        while (s && s.type() != pugi::node_element) s = s.previous_sibling();
+    }
+    if (s && s.type() == pugi::node_element) {
+        return XmlDomElement(m_xml, pack_handle(s));
     }
     return XmlDomElement(m_xml, xml_node_handle());
 }
 
 XmlDomElement XmlDomNode::toElement() const
 {
-    if (m_node) {
-        xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
-        if (n.type() == pugi::node_element) {
-            return XmlDomElement(m_xml, pack_handle(n));
-        }
+    if (!m_node) {
+        return XmlDomElement(m_xml, xml_node_handle());
+    }
+    xml_node_impl n = unpack_handle<xml_node_impl>(m_node);
+    if (n.type() == pugi::node_element) {
+        return XmlDomElement(m_xml, pack_handle(n));
     }
     return XmlDomElement(m_xml, xml_node_handle());
 }
@@ -279,22 +277,24 @@ String XmlDomElement::text() const
 
 XmlDomAttribute XmlDomElement::firstAttribute() const
 {
-    if (m_node) {
-        xml_node_impl e = unpack_handle<xml_node_impl>(m_node);
-        if (e && e.type() == pugi::node_element) {
-            return XmlDomAttribute(m_xml, pack_handle(e.first_attribute()));
-        }
+    if (!m_node) {
+        return XmlDomAttribute(m_xml, xml_attr_handle());
+    }
+    xml_node_impl e = unpack_handle<xml_node_impl>(m_node);
+    if (e && e.type() == pugi::node_element) {
+        return XmlDomAttribute(m_xml, pack_handle(e.first_attribute()));
     }
     return XmlDomAttribute(m_xml, xml_attr_handle());
 }
 
 XmlDomAttribute XmlDomElement::attribute(const char* name) const
 {
-    if (m_node) {
-        xml_node_impl e = unpack_handle<pugi::xml_node>(m_node);
-        if (e && e.type() == pugi::node_element) {
-            return XmlDomAttribute(m_xml, pack_handle(e.attribute(name)));
-        }
+    if (!m_node) {
+        return XmlDomAttribute(m_xml, xml_attr_handle());
+    }
+    xml_node_impl e = unpack_handle<pugi::xml_node>(m_node);
+    if (e && e.type() == pugi::node_element) {
+        return XmlDomAttribute(m_xml, pack_handle(e.attribute(name)));
     }
     return XmlDomAttribute(m_xml, xml_attr_handle());
 }

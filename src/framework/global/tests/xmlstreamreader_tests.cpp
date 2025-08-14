@@ -36,11 +36,6 @@ static ByteArray BA(const char* s)
     return ByteArray(reinterpret_cast<const uint8_t*>(s), std::strlen(s));
 }
 
-static String S(const char* s)
-{
-    return String::fromUtf8(s);
-}
-
 // Helper: advance until a specific token or EndDocument/Invalid
 static XmlStreamReader::TokenType advanceTo(XmlStreamReader& r, XmlStreamReader::TokenType want)
 {
@@ -76,7 +71,7 @@ TEST_F(Serialization_XmlStreamReaderTests, WalkAndReadBasics)
     EXPECT_EQ(xr.name(), AsciiStringView("root"));
     EXPECT_TRUE(xr.hasAttribute("a"));
     EXPECT_EQ(xr.asciiAttribute("a"), AsciiStringView("1"));
-    EXPECT_EQ(xr.attribute("b"), S("two"));
+    EXPECT_EQ(xr.attribute("b"), u"two");
 
     // Next Characters: "hi"
     EXPECT_EQ(advanceTo(xr, XmlStreamReader::TokenType::Characters), XmlStreamReader::TokenType::Characters);
@@ -95,7 +90,7 @@ TEST_F(Serialization_XmlStreamReaderTests, WalkAndReadBasics)
 
     // Final Characters: "there"
     EXPECT_EQ(advanceTo(xr, XmlStreamReader::TokenType::Characters), XmlStreamReader::TokenType::Characters);
-    EXPECT_EQ(xr.text(), S("there"));
+    EXPECT_EQ(xr.text(), u"there");
 
     // Close root and then end document
     EXPECT_EQ(advanceTo(xr, XmlStreamReader::TokenType::EndElement), XmlStreamReader::TokenType::EndElement);
@@ -257,7 +252,7 @@ TEST_F(Serialization_XmlStreamReaderTests, ProcessingInstructionsIgnored)
 
     // Then trailing "there"
     EXPECT_EQ(advanceTo(xr, XmlStreamReader::TokenType::Characters), XmlStreamReader::TokenType::Characters);
-    EXPECT_EQ(xr.text(), S("there"));
+    EXPECT_EQ(xr.text(), u"there");
 
     // Close out
     EXPECT_EQ(advanceTo(xr, XmlStreamReader::TokenType::EndElement), XmlStreamReader::TokenType::EndElement);

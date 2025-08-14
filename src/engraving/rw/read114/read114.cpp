@@ -2924,7 +2924,7 @@ muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     }
 
     if (e.error() != muse::XmlStreamReader::NoError) {
-        LOGD() << e.byteOffset() << ": " << e.errorString();
+        LOGD() << "XML read error at byte offset " << e.byteOffset() << ": " << e.errorString();
         return make_ret(Err::FileBadFormat, e.errorString());
     }
 

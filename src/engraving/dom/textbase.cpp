@@ -2709,7 +2709,7 @@ bool TextBase::validateText(String& s)
         s = d;
         return true;
     }
-    LOGD() << "xml error at line " << xml.byteOffset()
+    LOGD() << "xml error at byte offset " << xml.byteOffset()
            << ": " << xml.errorString();
     LOGD() << "text: |" << ss << "|";
     return false;

@@ -253,7 +253,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         if (e.error() == muse::XmlStreamReader::CustomError) {
             LOGE() << e.errorString();
         } else {
-            LOGE() << String(u"XML read error at line %1: %2").arg(e.byteOffset())
+            LOGE() << String(u"XML read error at byte offset %1: %2").arg(e.byteOffset())
                 .arg(String::fromAscii(e.name().ascii()));
         }
         return false;
