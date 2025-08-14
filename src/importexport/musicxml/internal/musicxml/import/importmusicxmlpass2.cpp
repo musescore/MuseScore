@@ -6888,6 +6888,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
     bool graceSlash = false;
     bool printObject = m_e.asciiAttribute("print-object") != "no";
+    bool printLyric = printObject && m_e.asciiAttribute("print-lyric") != "no";
     bool isSingleDrumset = false;
     BeamMode bm;
     std::map<int, String> beamTypes;
@@ -6928,7 +6929,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
         } else if (m_e.name() == "lyric") {
             // lyrics on grace notes not (yet) supported by MuseScore
             // add to main note instead
-            lyric.parse(printObject);
+            lyric.parse(printLyric);
         } else if (m_e.name() == "notations") {
             notations.parse();
             addError(notations.errors());
@@ -8030,12 +8031,12 @@ void MusicXmlParserLyric::readElision(String& formattedText)
 //   parse
 //---------------------------------------------------------
 
-void MusicXmlParserLyric::parse(bool noteVisible)
+void MusicXmlParserLyric::parse(bool visibility)
 {
     bool hasExtend = false;
     const String lyricNumber = m_e.attribute("number");
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
-    const bool printLyric = noteVisible ? m_e.asciiAttribute("print-object") != "no" : m_e.asciiAttribute("print-object") != "yes";
+    const bool printLyric = visibility ? m_e.asciiAttribute("print-object") != "no" : m_e.asciiAttribute("print-object") != "yes";
     m_placement = m_e.attribute("placement");
     double relX = m_e.doubleAttribute("relative-x") * 0.1 * DPMM;
     m_relativeY = m_e.doubleAttribute("relative-y") * -0.1 * DPMM;
