@@ -1,0 +1,1 @@
+set(CTEST_CUSTOM_PRE_TEST "rm -f ${CMAKE_BINARY_DIR}/Testing/Temporary/failed_test_reference_files.txt")
