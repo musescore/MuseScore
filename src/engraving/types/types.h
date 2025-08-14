@@ -1287,21 +1287,26 @@ struct CapoParams {
         TAB_ONLY      = 2,
     };
     enum Transition {
+        NO_TRANSITION = -1,
         PB_TO_NOTATION,
         PB_TO_TAB,
         NOTATION_TO_PB,
         NOTATION_TO_TAB,
         TAB_TO_PB,
         TAB_TO_NOTATION,
+        // On/Off cases
+        UPDATE_FRETS,
+        UPDATE_NOTES
     };
 
     std::unordered_set<string_idx_t> ignoredStrings;
 //    std::shared_ptr<AbstractCapoTransposeState> capoTransposeState = nullptr;
     int fretPosition = 0;
     TransposeMode transposeMode = TransposeMode::PLAYBACK_ONLY;
+    Transition transition = Transition::NO_TRANSITION;
     bool active = false;
-    bool fretsInvalid = false;
-    bool notesInvalid = false;
+//    bool fretsInvalid = false;
+//    bool notesInvalid = false;
 };
 
 struct PartAudioSettingsCompat {
