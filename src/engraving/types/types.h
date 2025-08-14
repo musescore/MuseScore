@@ -1300,13 +1300,10 @@ struct CapoParams {
     };
 
     std::unordered_set<string_idx_t> ignoredStrings;
-//    std::shared_ptr<AbstractCapoTransposeState> capoTransposeState = nullptr;
     int fretPosition = 0;
     TransposeMode transposeMode = TransposeMode::PLAYBACK_ONLY;
     Transition transition = Transition::NO_TRANSITION;
     bool active = false;
-//    bool fretsInvalid = false;
-//    bool notesInvalid = false;
 };
 
 struct PartAudioSettingsCompat {

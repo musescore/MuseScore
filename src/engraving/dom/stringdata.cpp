@@ -481,7 +481,7 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 
 void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset) const
 {
-    int capoFret = chord->staff()->part()->capoFret();
+    int capoFret = chord->staff()->capo(chord->tick()).fretPosition;
     std::unordered_map<size_t, Note*> usedStrings;
     std::unordered_map<int, std::vector<int> > fretTable;
 

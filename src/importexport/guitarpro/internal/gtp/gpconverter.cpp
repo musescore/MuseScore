@@ -1168,7 +1168,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         params.active = true;
         params.fretPosition = capoFret;
 
-        part->staff(0)->insertCapoParams({ 0, 1 }, params);
+        part->staff(0)->insertCapoParams({ 0, 1 }, params, true);
         part->setCapoFret(capoFret);
         auto tunning = staffProperty[0].tunning;
         bool usePresetTable = staffProperty[0].ignoreFlats;

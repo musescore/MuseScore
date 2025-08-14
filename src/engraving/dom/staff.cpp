@@ -1094,9 +1094,20 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const CapoParams& par
 
             if (e->isChord()) {
                 Chord* chord = toChord(e);
+                chord->sortNotes();
                 const std::vector<Note*> nl = chord->notes();
                 const Fraction tick = chord->tick();
                 const StringData* stringData = part()->stringData(tick, idx());
+                // Prefer not change strings for intervals and chords
+                bool possibleFretConflict = false;
+                if (nl.size() > 1) {
+                    for (const Note* n : nl) {
+                        if (n->fret() < params.fretPosition) {
+                            possibleFretConflict = true;
+                            break;
+                        }
+                    }
+                }
                 for (size_t noteIdx = 0; noteIdx < nl.size(); ++noteIdx) {
                     if (!score()->selectionFilter().canSelectNoteIdx(noteIdx, nl.size(),
                                                                      score()->selection().rangeContainsMultiNoteChords())) {
@@ -1126,9 +1137,13 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const CapoParams& par
                     case CapoParams::TAB_TO_NOTATION:
                         // Go through PLAYBACK ONLY mode since TAB and PLAYBACK modes has the same note pitch
                         // re-fret the note first
-                        stringData->convertPitch(note->pitch(), 0, &string, &fret);
-                        note->setString(string);
-                        note->setFret(fret);
+                        if (possibleFretConflict) {
+                            note->setFret(note->fret() + params.fretPosition);
+                        } else {
+                            stringData->convertPitch(note->pitch(), 0, &string, &fret);
+                            note->setString(string);
+                            note->setFret(fret);
+                        }
                         // Now when we've got the correct string and fret, transition to NOTATION ONLY mode
                         newPitch = stringData->getPitch(note->string(), note->fret() - notePitchCorrection, this, tick);
                         note->setPitch(newPitch);
@@ -1162,7 +1177,7 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const CapoParams& par
     }
 }
 
-void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
+void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params, bool skipNotesUpdate)
 {
     auto isNeedUpdate = [](const CapoParams& oldParams, const CapoParams& newParams) -> bool {
         return !(oldParams.transition == newParams.transition
@@ -1174,7 +1189,7 @@ void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
     int ticks = tick.ticks();
     if (auto it = m_capoMap.find(ticks); it == m_capoMap.end()) {
         // If this is not the first capo, we have to check to see if we're showing the correct pitch and fret
-        const bool needUpdate = true;
+        const bool needUpdate = !skipNotesUpdate;
         // Just added new capo. Update range according to the previous one.
         const bool ignorePrevious = false;
         m_capoMap.insert({ ticks, { params, needUpdate, ignorePrevious } });
@@ -1308,11 +1323,6 @@ void Staff::applyCapoParams()
         }
         applyCapoTranspose(startTick, endTick, param, notePitchCorrection);
     }
-}
-
-void Staff::clearCapoParams()
-{
-    m_capoMap.clear();
 }
 
 bool Staff::shouldMergeMatchingRests() const

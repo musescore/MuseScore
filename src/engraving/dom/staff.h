@@ -167,10 +167,9 @@ public:
     void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { m_swingList.insert({ tick.ticks(), sp }); }
 
     const CapoParams& capo(const Fraction&) const;
-    void insertCapoParams(const Fraction& tick, const CapoParams& params);
+    void insertCapoParams(const Fraction& tick, const CapoParams& params, bool skipNotesUpdate);
     void removeDeletedCaposAndRestoreNotation(const std::vector<int>& currentCapos);
     void applyCapoParams();
-    void clearCapoParams();
 
     //==== staff type helper function
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
