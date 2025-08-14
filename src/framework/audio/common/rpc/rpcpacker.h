@@ -750,19 +750,23 @@ public:
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
+        LOGDA() << "m_currentPos: " << m_currentPos;
         if (m_currentPos + n > m_pool.size()) {
-            size_type newSize = std::max(m_pool.size() * 2, n);
+            size_type newSize = std::max(m_pool.size() * 2, m_pool.size() + n);
             m_pool.resize(newSize);
         }
 
         pointer ptr = reinterpret_cast<pointer>(&m_pool[m_currentPos]);
         m_currentPos += n;
+        LOGDA() << "m_currentPos += n: " << m_currentPos;
         return ptr;
     }
 
     void deallocate(pointer, size_type n)
     {
+        LOGDA() << "m_currentPos: " << m_currentPos;
         m_currentPos -= n;
+        LOGDA() << "m_currentPos -= n: " << m_currentPos;
     }
 };
 
@@ -774,10 +778,10 @@ public:
     template<class ... Types>
     static ByteArray pack(const Options& opt, const Types&... args)
     {
-        //RpcAllocator<uint8_t> allocator;
-        //std::vector<uint8_t, RpcAllocator<uint8_t>> data(allocator);
-        std::vector<uint8_t> data;
-        data.reserve(opt.rezerveSize);
+        RpcAllocator<uint8_t> allocator;
+        std::vector<uint8_t, RpcAllocator<uint8_t>> data(allocator);
+        //std::vector<uint8_t> data;
+        //data.reserve(opt.rezerveSize);
         msgpack::pack_to_data(data, args ...);
         // return ByteArray::fromRawData(&data[0], data.size());
         return ByteArray(&data[0], data.size());

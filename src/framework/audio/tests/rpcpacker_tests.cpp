@@ -51,6 +51,22 @@ static constexpr void KNOWN_FIELDS(const T&, const Fields&...)
     static_assert(sizeof(T) == sum_sizeof<Fields...>());
 }
 
+TEST_F(Audio_RpcPackerTests, Alloc)
+{
+    // int val1_1 = 10;
+    std::string val1_2 = "he";
+
+    ByteArray data = rpc::RpcPacker::pack(val1_2);
+
+    //int val2_1 = 0;
+    std::string val2_2;
+    bool ok = rpc::RpcPacker::unpack(data, val2_2);
+
+    EXPECT_TRUE(ok);
+    // EXPECT_TRUE(val1_1 == val2_1);
+    EXPECT_TRUE(val1_2 == val2_2);
+}
+
 TEST_F(Audio_RpcPackerTests, AudioResourceMeta)
 {
     AudioResourceMeta origin;
