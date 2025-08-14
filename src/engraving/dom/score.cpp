@@ -6120,6 +6120,9 @@ void Score::updateSwing()
 
 void Score::updateCapo()
 {
+//    for (Staff* staff : m_staves) {
+//        staff->clearCapoParams();
+//    }
     Measure* fm = firstMeasure();
     if (!fm) {
         return;

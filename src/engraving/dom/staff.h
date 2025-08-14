@@ -284,7 +284,7 @@ private:
     friend class Excerpt;
     void setVoiceVisible(voice_idx_t voice, bool visible);
     void updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks);
-    void applyCapoTranspose(int startTick, int endTick, const int pitchOffset);
+    void applyCapoTranspose(int startTick, int endTick, const CapoParams& params, int notePitchCorrection = 0);
 
     ID m_id = INVALID_ID;
     Part* m_part = nullptr;
@@ -313,7 +313,12 @@ private:
 
     std::map<int, int> m_channelList[VOICES];
     std::map<int, SwingParameters> m_swingList;
-    std::map<int, CapoParams> m_capoMap;
+    struct CapoState {
+        CapoParams params;
+        bool needUpdate = false;
+        bool ignorePrevious = false; // If just added update according to previous capo if exists
+    };
+    std::map<int, CapoState> m_capoMap;
     bool m_playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> m_visibilityVoices { true, true, true, true };
 

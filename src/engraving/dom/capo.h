@@ -79,11 +79,15 @@ public:
     int tabPitchOffset() const { return m_tabPitchOffset; }
     int standardPitchOffset() const { return m_standardPitchOffset; }
     int capoFret() const { return m_capoFret; }
+    bool ignoreTransposition() const { return m_ignoreTransposition; }
+    void setIgnoreTransposition(bool val) { m_ignoreTransposition = val; }
 
 protected:
     int m_tabPitchOffset = 0;
     int m_standardPitchOffset = 0;
     int m_capoFret = 0;
+    // With default mode, we don't need to adjust staves
+    bool m_ignoreTransposition = true;
 };
 
 class CapoTransposeStatePlaybackOnly : public AbstractCapoTransposeState
