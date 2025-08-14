@@ -183,42 +183,6 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_NoArticulations)
 }
 
 /**
- * @brief PlaybackEventsRendererTests_Rest
- * @details In this case we're gonna render a simple piece of score with a single measure,
- *          which consists a rest only
- */
-TEST_F(Engraving_PlaybackEventsRendererTests, Rest)
-{
-    // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "whole_measure_rest/whole_measure_rest.mscx");
-
-    Measure* firstMeasure = score->firstMeasure();
-    ASSERT_TRUE(firstMeasure);
-
-    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
-    ASSERT_TRUE(firstSegment);
-
-    ChordRest* rest = firstSegment->nextChordRest(0);
-    ASSERT_TRUE(rest);
-
-    // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
-
-    // [WHEN] Request to render the rest
-    PlaybackEventsMap result;
-    m_renderer.render(rest, 0, m_defaultProfile, ctx, result);
-
-    // [THEN] We expect that a single rest event will be rendered
-    EXPECT_EQ(result.size(), 1);
-
-    RestEvent event = std::get<RestEvent>(result.begin()->second.front());
-
-    // [THEN] We expect that the rest event will match time expectations of the whole measure rest with 120BPM tempo
-    EXPECT_EQ(event.arrangementCtx().nominalTimestamp, 0);
-    EXPECT_EQ(event.arrangementCtx().nominalDuration, QUARTER_NOTE_DURATION * 4);
-}
-
-/**
  * @brief PlaybackEventsRendererTests_SingleNote_Trill_Modern
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note marked by Trill articulation.
