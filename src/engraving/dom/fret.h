@@ -166,6 +166,7 @@ public:
     Segment* segment() const;
 
     static String patternFromDiagram(const FretDiagram* diagram);
+    static std::vector<String> patternHarmonies(const String& pattern);
 
     void updateDiagram(const String& harmonyName);
 
