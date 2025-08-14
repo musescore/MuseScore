@@ -81,6 +81,7 @@
         <eid>D_D</eid>
         <linkedTo>C_C</linkedTo>
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
