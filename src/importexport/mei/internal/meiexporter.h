@@ -33,7 +33,7 @@
 #include "thirdparty/libmei/element.h"
 #include "thirdparty/libmei/shared.h"
 
-#include "thirdparty/pugixml.hpp"
+#include "pugixml.hpp"
 
 namespace mu::engraving {
 class Articulation;
