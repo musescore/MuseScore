@@ -24,6 +24,7 @@
 #include <chrono>
 #include <type_traits>
 #include <cstring>
+#include <algorithm>
 
 #include "pugixml.hpp"
 
@@ -54,7 +55,9 @@ inline xml_handle pack_handle(const T& t) noexcept
     static_assert(sizeof(T) <= sizeof(xml_handle),
                   "Increase xml_handle slots/size");
     xml_handle h{};                 // zero both slots
-    std::memcpy(&h, &t, sizeof(T)); // copy only the bytes T needs
+    const auto* src = reinterpret_cast<const unsigned char*>(&t);
+    auto* dst = reinterpret_cast<unsigned char*>(&h);
+    std::copy_n(src, sizeof(T), dst);
     return h;
 }
 
@@ -66,7 +69,9 @@ inline T unpack_handle(xml_handle h) noexcept
     static_assert(sizeof(T) <= sizeof(xml_handle),
                   "Increase xml_handle slots/size");
     T t{};                          // zero-init destination
-    std::memcpy(&t, &h, sizeof(T)); // copy back only sizeof(T)
+    const auto* src = reinterpret_cast<const unsigned char*>(&h);
+    auto* dst = reinterpret_cast<unsigned char*>(&t);
+    std::copy_n(src, sizeof(T), dst);
     return t;
 }
 } // anonymous namespace
