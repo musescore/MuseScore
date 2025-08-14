@@ -1966,7 +1966,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 }
                 // update pitch and tpc's and check it matches stringData
                 upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
-                if (newPitch + pitchOffset != stringData->getPitch(string, fret, staff) && !oNote->bendBack()) {
+                if (newPitch + pitchOffset != stringData->getPitch(string, fret, staff, oNote->tick()) && !oNote->bendBack()) {
                     // oh-oh: something went very wrong!
                     LOGD("upDown tab in-string: pitch mismatch");
                     return;
@@ -2049,7 +2049,9 @@ void Score::upDown(bool up, UpDownMode mode)
                     }
                 }
             }
+            part->stringData(tick, staff->idx())->convertPitch(newPitch, staff, tick, &string, &fret);
             undoChangePitch(oNote, newPitch, newTpc1, newTpc2);
+            undoChangeFretting(oNote, newPitch, string, fret, newTpc1, newTpc2);
         }
         // store fret change only if undoChangePitch has not been called,
         // as undoChangePitch() already manages fret changes, if necessary
