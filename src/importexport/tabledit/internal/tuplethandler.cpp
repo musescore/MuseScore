@@ -26,7 +26,6 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/types/fraction.h"
 
-using namespace std;
 using namespace mu::engraving;
 namespace mu::iex::tabledit {
 // start/stop tuplet and calculate timing correction

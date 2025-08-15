@@ -27,7 +27,6 @@
 #include "engraving/engravingerrors.h"
 #include "io/iodevice.h"
 
-using namespace std;
 namespace mu::iex::tabledit {
 // offsets into the file header
 static const uint8_t OFFSET_TBED = 0x38;

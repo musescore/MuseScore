@@ -24,7 +24,6 @@
 #include "voiceallocator.h"
 #include "engraving/dom/mscore.h"
 
-using namespace std;
 namespace mu::iex::tabledit {
 bool VoiceAllocator::canAddTefNoteToVoice(const TefNote* const note, const int voice)
 {
