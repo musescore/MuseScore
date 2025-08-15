@@ -275,6 +275,15 @@ PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrume
                                                                                           SoundSubCategory::Nylon,
                                                                                           SoundSubCategory::Spanish,
                                                                                           SoundSubCategory::Plucked } } },
+        { "cuatro-venezuela", { SoundId::CuatroVenezuela, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                                                    SoundSubCategory::Nylon,
+                                                                                    SoundSubCategory::Venezuelan,
+                                                                                    SoundSubCategory::Plucked } } },
+        { "cuatro-venezuela-tablature", { SoundId::CuatroVenezuela, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                                                              SoundSubCategory::Nylon,
+                                                                                              SoundSubCategory::Venezuelan,
+                                                                                              SoundSubCategory::Plucked } } },
+
     };
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());

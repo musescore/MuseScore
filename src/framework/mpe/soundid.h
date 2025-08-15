@@ -88,6 +88,7 @@ enum class SoundId
     Contrabass,
     Octobass,
     TimpleCanario,
+    CuatroVenezolano,
 
     WindsGroup,
     Piccolo,
@@ -264,6 +265,7 @@ enum class SoundSubCategory
     African,
     Indian,
     Spanish,
+    Venezuelan,
     Swedish,
     Hungarian,
     Romanian,
@@ -473,6 +475,7 @@ inline const std::unordered_map<SoundId, String> ID_STRINGS
     { SoundId::Contrabass, String(u"contrabass") },
     { SoundId::Octobass, String(u"octobass") },
     { SoundId::TimpleCanario, String(u"timple_canario") },
+    { SoundId::CuatroVenezolano, String(u"cuatro_venezuela") },
 
     { SoundId::WindsGroup, String(u"winds_group") },
     { SoundId::Piccolo, String(u"piccolo") },
@@ -696,6 +699,7 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::African, String(u"african") },
     { SoundSubCategory::Indian, String(u"indian") },
     { SoundSubCategory::Spanish, String(u"spanish") },
+    { SoundSubCategory::Venezuelan, String(u"venezuelan") },
     { SoundSubCategory::Swedish, String(u"swedish") },
     { SoundSubCategory::Hungarian, String(u"hungarian") },
     { SoundSubCategory::Romanian, String(u"romanian") },

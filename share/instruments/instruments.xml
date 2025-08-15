@@ -14786,6 +14786,38 @@
                   <stafftype staffTypePreset="tab5StrSimple">tablature</stafftype>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="cuatro-venezuela">
+                  <family>guitars</family>
+                  <trackName>Cuatro</trackName>
+                  <longName>Cuatro Venezolano</longName>
+                  <shortName>Cua.</shortName>
+                  <description>Traditional Venezuelan 4-string guitar-like instrument (staff notation).</description>
+                  <musicXMLid>pluck.guitar</musicXMLid>
+                  <StringData>
+                        <frets>17</frets>
+                        <string>69</string>
+                        <string>62</string>
+                        <string>66</string>
+                        <string>59</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>59-83</aPitchRange>
+                  <pPitchRange>59-86</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="cuatro-venezuela-tablature">
+                  <init>cuatro-venezuela</init>
+                  <family>guitars</family>
+                  <trackName>Cuatro (tablature)</trackName>
+                  <longName>Cuatro Venezolano</longName>
+                  <shortName>Cua.</shortName>
+                  <description>Traditional Venezuelan 4-string guitar-like instrument (tablature).</description>
+                  <musicXMLid>pluck.guitar</musicXMLid>
+                  <stafftype staffTypePreset="tab4StrSimple">tablature</stafftype>
+                  <genre>world</genre>
+            </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings - Bowed</name>

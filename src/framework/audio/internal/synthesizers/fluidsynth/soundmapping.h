@@ -275,6 +275,10 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                             mpe::SoundSubCategory::Nylon,
                                             mpe::SoundSubCategory::Spanish,
                                             mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
+        { { mpe::SoundId::CuatroVenezuela,  { mpe::SoundSubCategory::Acoustic,
+                                              mpe::SoundSubCategory::Nylon,
+                                              mpe::SoundSubCategory::Venezuelan,
+                                              mpe::SoundSubCategory::Plucked } }, { midi::Program(0, 24) } },
 
         { { mpe::SoundId::Erhu,  { mpe::SoundSubCategory::Chinese } }, { midi::Program(0, 110) } },
         { { mpe::SoundId::Nyckelharpa,  { mpe::SoundSubCategory::Swedish } }, { midi::Program(0, 41) } },
