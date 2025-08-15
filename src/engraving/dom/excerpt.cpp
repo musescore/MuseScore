@@ -1024,8 +1024,13 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         }
                     }
 
-                    if (oe && !oe->generated() && !oe->excludeFromOtherParts()) {
+                    bool cloneBarLine = oe && oe->isBarLine() && toBarLine(oe)->barLineType() == BarLineType::END_REPEAT
+                                        && toBarLine(oseg->element(0))->playCountText();
+                    bool clone = oe && (!oe->generated() || cloneBarLine) && !oe->excludeFromOtherParts();
+
+                    if (clone) {
                         EngravingItem* ne;
+                        oe->setGenerated(false);
                         ne = oe->linkedClone();
                         ne->setTrack(track);
 
@@ -1043,6 +1048,15 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                 newText->setTrack(track);
                                 PlayCountText* oldText = toBarLine(oe)->playCountText();
                                 score->undo(new Link(newText, oldText));
+                            } else {
+                                BarLine* topBarLine = toBarLine(oseg->element(0));
+                                PlayCountText* oldText = topBarLine->playCountText();
+                                EngravingItem* npc = oldText->linkedClone();
+                                npc->setTrack(track);
+                                npc->setParent(ne);
+                                npc->setScore(score);
+                                npc->styleChanged();
+                                score->doUndoAddElement(npc);
                             }
                         } else if (oe->isChordRest()) {
                             ChordRest* ocr = toChordRest(oe);
@@ -1660,6 +1674,22 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         }
                         addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                         addTremoloTwoChord(och, nch, prevTremolo);
+                    }
+                }
+
+                if (oe->isBarLine() && toBarLine(oe)->barLineType() == BarLineType::END_REPEAT) {
+                    BarLine* topBarLine = toBarLine(oseg->element(0));
+                    PlayCountText* pc = topBarLine->playCountText();
+
+                    EngravingItem* linkedElement = pc->findLinkedInScore(score);
+
+                    if (!linkedElement) {
+                        EngravingItem* npc = pc->linkedClone();
+                        npc->setTrack(dstTrack);
+                        npc->setParent(ne);
+                        npc->setScore(score);
+                        npc->styleChanged();
+                        addElement(npc);
                     }
                 }
             }

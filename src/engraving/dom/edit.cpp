@@ -5573,7 +5573,7 @@ void Score::undoUpdatePlayCountText(Measure* m)
                 bl->undoChangeProperty(Pid::GENERATED, false, PropertyFlags::NOSTYLE);
             } else {
                 if (playCountText->parent() != bl) {
-                    playCountText->parentItem()->remove(playCountText);
+                    undoRemoveElement(playCountText);
 
                     playCountText->setParent(bl);
                     undoAddElement(playCountText);
