@@ -69,8 +69,8 @@ StyledPopupView {
             StyledTextLabel {
                 id: nameLabel
                 width: parent.width
-                text: settingsModel.isMainScore ? qsTrc("instruments", "Name on main score") :
-                                                  qsTrc("instruments", "Name on part score")
+                text: settingsModel.isMainScore ? qsTrc("layoutpanel/instrumentsettingspopup", "Name on main score") :
+                                                  qsTrc("layoutpanel/instrumentsettingspopup", "Name on part score")
                 horizontalAlignment: Text.AlignLeft
             }
 
@@ -98,7 +98,7 @@ StyledPopupView {
             StyledTextLabel {
                 id: abbreviatureLabel
                 width: parent.width
-                text: qsTrc("instruments", "Abbreviated name")
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Abbreviated name")
                 horizontalAlignment: Text.AlignLeft
             }
 
@@ -126,7 +126,7 @@ StyledPopupView {
             StyledTextLabel {
                 id: hideEmptyStavesLabel
                 width: parent.width
-                text: qsTrc("instruments", "Hide empty staves")
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Hide empty staves")
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
@@ -138,9 +138,9 @@ StyledPopupView {
                 orientation: ListView.Vertical
 
                 model: [
-                    { text: qsTrc("instruments", "Auto"), value: 0 },
-                    { text: qsTrc("instruments", "Always hide"), value: 1 },
-                    { text: qsTrc("instruments", "Never hide"), value: 2 }
+                    { text: qsTrc("layoutpanel/instrumentsettingspopup", "Auto"), value: 0 },
+                    { text: qsTrc("layoutpanel/instrumentsettingspopup", "Always hide"), value: 1 },
+                    { text: qsTrc("layoutpanel/instrumentsettingspopup", "Never hide"), value: 2 }
                 ]
 
                 delegate: FlatRadioButton {
@@ -170,7 +170,7 @@ StyledPopupView {
                 navigation.panel: root.navigationPanel
                 navigation.row: 6
 
-                text: qsTrc("instruments", "Only hide staves on a system if the entire instrument is empty")
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Only hide staves on a system if the entire instrument is empty")
 
                 checked: !settingsModel.hideStavesWhenIndividuallyEmpty
                 onClicked: {
@@ -191,7 +191,7 @@ StyledPopupView {
                 navigation.panel: root.navigationPanel
                 navigation.row: 7
 
-                text: qsTrc("instruments", "Replace instrument")
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Replace instrument")
 
                 visible: settingsModel.isMainScore
 
@@ -207,7 +207,7 @@ StyledPopupView {
                 navigation.panel: root.navigationPanel
                 navigation.row: 8
 
-                text: qsTrc("instruments", "Reset all formatting")
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Reset all formatting")
 
                 visible: !settingsModel.isMainScore
 
