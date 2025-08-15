@@ -459,7 +459,6 @@ void PlaybackController::onAudioResourceChanged(const TrackId trackId, const Ins
 
     if (audio::isOnlineAudioResource(newMeta)) {
         addToOnlineSounds(trackId);
-        tours()->onEvent(u"online_sounds_added");
     } else if (audio::isOnlineAudioResource(oldMeta)) {
         removeFromOnlineSounds(trackId);
     }

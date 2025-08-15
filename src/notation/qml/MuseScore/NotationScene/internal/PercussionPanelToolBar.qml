@@ -232,8 +232,10 @@ Item {
             text: qsTrc("notation/percussion", "Layout")
             orientation: Qt.Horizontal
 
+            navigation.name: "layout-menu"
             navigation.panel: rightSideNavPanel
             navigation.row: 0
+            navigation.accessible.name: text
 
             onClicked: {
                 menuLoader.toggleOpened(root.model.layoutMenuItems)

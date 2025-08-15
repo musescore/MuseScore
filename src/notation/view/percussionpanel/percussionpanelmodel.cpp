@@ -144,6 +144,8 @@ void PercussionPanelModel::init()
     globalContext()->currentNotationChanged().onNotify(this, [this] {
         setUpConnections();
     });
+
+    tours()->onEvent(u"percussion_panel_opened");
 }
 
 QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
