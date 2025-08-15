@@ -346,10 +346,20 @@ int Dynamic::dynamicVelocity(DynamicType t)
 
 void Dynamic::startEdit(EditData& ed)
 {
+    // See also NotationInteraction::startEditGrip
     if (ed.curGrip != Grip::NO_GRIP) {
         EngravingItem::startEdit(ed);
     } else {
         TextBase::startEdit(ed);
+    }
+}
+
+bool Dynamic::edit(EditData& ed)
+{
+    if (cursor() && cursor()->editing()) {
+        return TextBase::edit(ed);
+    } else {
+        return EngravingItem::edit(ed);
     }
 }
 
@@ -597,6 +607,10 @@ String Dynamic::screenReaderInfo() const
 
 bool Dynamic::isEditAllowed(EditData& ed) const
 {
+    if (!cursor() || !cursor()->editing()) {
+        return EngravingItem::isEditAllowed(ed);
+    }
+
     if (ed.key == Key_Tab) {
         return false;
     }
