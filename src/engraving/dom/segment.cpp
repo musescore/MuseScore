@@ -2273,14 +2273,19 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             }
         }
 
-        EngravingItem* prev = nullptr;
+        EngravingItem* prevAnnotation = nullptr;
         if (e->explicitParent() == this) {
-            prev = prevAnnotation(e);
+            prevAnnotation = this->prevAnnotation(e);
+        }
+        if (prevAnnotation) {
+            return prevAnnotation;
+        } else if (const Segment* prevSeg = prev1()) {
+            const Spanner* s = prevSeg->lastSpanner(activeStaff);
+            if (s) {
+                return s->spannerSegments().back();
+            }
         }
 
-        if (prev) {
-            return prev;
-        }
         if (notChordRestType()) {
             EngravingItem* lastEl = lastElementOfSegment(activeStaff);
             if (lastEl) {
