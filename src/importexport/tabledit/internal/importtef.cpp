@@ -194,7 +194,7 @@ void TablEdit::initializeVoiceAllocators(vector<VoiceAllocator>& allocators)
 
 void TablEdit::allocateVoices(vector<VoiceAllocator>& allocators)
 {
-    vector<const TefNote* const> column;
+    vector<const TefNote*> column;
     int currentPosition { -1 };
     engraving::part_idx_t currentPart { 0 };
     for (const TefNote& tefNote : tefContents) {

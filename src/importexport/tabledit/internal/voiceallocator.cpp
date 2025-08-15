@@ -162,7 +162,7 @@ void VoiceAllocator::allocateVoice(const TefNote* const note, int voice)
     }
 }
 
-void VoiceAllocator::addColumn(const vector<const TefNote* const>& column)
+void VoiceAllocator::addColumn(const vector<const TefNote*>& column)
 {
     if (column.empty()) {
         return;
