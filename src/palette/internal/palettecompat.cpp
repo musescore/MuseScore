@@ -33,6 +33,7 @@
 #include "engraving/dom/expression.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
@@ -54,6 +55,36 @@ static const std::unordered_set<ActionIconType> BENDS_ACTION_TYPES = {
     ActionIconType::PRE_BEND,
     ActionIconType::GRACE_NOTE_BEND,
     ActionIconType::SLIGHT_BEND
+};
+
+static const std::unordered_map<String, String> FRET_DIAGRAMS_MIGRATION_MAP = {
+    { u"X[3-O][2-O]O[1-O]O", u"C" },
+    { u"X-[5-O][5-O][4-O]-;B3[1-5]", u"Cm" },
+    { u"X[3-O][2-O][3-O][1-O]O", u"C7" },
+
+    { u"XXO[2-O][3-O][2-O]", u"D" },
+    { u"XXO[2-O][3-O][1-O]", u"Dm" },
+    { u"XXO[2-O][1-O][2-O]", u"D7" },
+
+    { u"O[2-O][2-O][1-O]OO", u"E" },
+    { u"O[2-O][2-O]OOO", u"Em" },
+    { u"O[2-O]O[1-O]OO", u"E7" },
+
+    { u"-[3-O][3-O][2-O]--;B1[0-5]", u"F" },
+    { u"-[3-O][3-O]---;B1[0-5]", u"Fm" },
+    { u"-[3-O]-[2-O]--;B1[0-5]", u"F7" },
+
+    { u"[3-O][2-O]OOO[3-O]", u"G" },
+    { u"-[5-O][5-O]---;B3[0-5]", u"Gm" },
+    { u"[3-O][2-O]OOO[1-O]", u"G7" },
+
+    { u"XO[2-O][2-O][2-O]O", u"A" },
+    { u"XO[2-O][2-O][1-O]O", u"Am" },
+    { u"XO[2-O]O[2-O]O", u"A7" },
+
+    { u"X-[4-O][4-O][4-O]-;B2[1-5]", u"B" },
+    { u"X-[4-O][4-O][3-O]-;B2[1-5]", u"Bm" },
+    { u"X[2-O][1-O][2-O]O[2-O]", u"B7" }
 };
 
 void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* paletteScore)
@@ -105,10 +136,16 @@ void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* pa
     }
 
     if (item->isFretDiagram()) {
-        FretDiagram* newFretDiagram = Factory::createFretDiagram(paletteScore->dummy()->segment());
         FretDiagram* oldFretDiagram = toFretDiagram(item);
+        String oldFretDiagramPattern = FretDiagram::patternFromDiagram(oldFretDiagram);
+        std::vector<String> oldFretDiagramPatternHarmonies = FretDiagram::patternHarmonies(oldFretDiagramPattern);
 
-        String harmonyName = oldFretDiagram->harmonyText();
+        String harmonyName = muse::value(FRET_DIAGRAMS_MIGRATION_MAP, oldFretDiagramPattern);
+        if (harmonyName.empty() || muse::contains(oldFretDiagramPatternHarmonies, harmonyName)) {
+            return;
+        }
+
+        FretDiagram* newFretDiagram = Factory::createFretDiagram(paletteScore->dummy()->segment());
 
         if (harmonyName.empty()) {
             newFretDiagram->clear();
@@ -235,12 +272,14 @@ void PaletteCompat::addNewFretboardDiagramItems(Palette& fretboardDiagramPalette
     bool containsBlankItem = false;
     for (const PaletteCellPtr& cell : fretboardDiagramPalette.cells()) {
         const ElementPtr element = cell->element;
-        if (!element) {
+        if (!element || !element->isFretDiagram()) {
             continue;
         }
 
-        if (element->isFretDiagram() && toFretDiagram(element.get())->harmonyText().empty()) {
+        FretDiagram* fretDiagram = toFretDiagram(element.get());
+        if (!fretDiagram->harmony() || fretDiagram->harmony()->harmonyName().empty()) {
             containsBlankItem = true;
+            break;
         }
     }
 

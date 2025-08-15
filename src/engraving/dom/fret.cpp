@@ -808,6 +808,11 @@ String FretDiagram::patternFromDiagram(const FretDiagram* diagram)
     return pattern;
 }
 
+std::vector<String> FretDiagram::patternHarmonies(const String& pattern)
+{
+    return muse::value(s_diagramPatternToHarmoniesMap, pattern);
+}
+
 void FretDiagram::applyAlignmentToHarmony()
 {
     if (m_harmony->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
