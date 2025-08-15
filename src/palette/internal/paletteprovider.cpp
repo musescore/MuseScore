@@ -531,7 +531,7 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
     properties["showGrid"] = palette->drawGrid();
 
     QJsonDocument document = QJsonDocument::fromVariant(properties);
-    QString uri = QString("musescore://palette/properties?sync=true&properties=%1")
+    QString uri = QString("musescore://palette/properties?properties=%1")
                   .arg(QString(document.toJson()));
 
     interactive()->open(uri.toStdString());
@@ -569,7 +569,7 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
     properties["drawStaff"] = cell->drawStaff;
 
     QJsonDocument document = QJsonDocument::fromVariant(properties);
-    QString uri = QString("musescore://palette/cellproperties?sync=true&properties=%1")
+    QString uri = QString("musescore://palette/cellproperties?properties=%1")
                   .arg(QString(document.toJson()));
 
     interactive()->open(uri.toStdString());

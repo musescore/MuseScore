@@ -132,7 +132,7 @@ bool PercussionUtilities::editPercussionShortcut(Drumset& drumset, int originPit
 
 muse::RetVal<muse::Val> PercussionUtilities::openPercussionShortcutDialog(const Drumset& drumset, int originPitch)
 {
-    muse::UriQuery query("musescore://notation/editpercussionshortcut?sync=true&modal=true");
+    muse::UriQuery query("musescore://notation/editpercussionshortcut?modal=true");
 
     const mu::engraving::DrumInstrument& originDrum = drumset.drum(originPitch);
     query.addParam("originDrum", muse::Val::fromQVariant(drumToQVariantMap(originPitch, originDrum)));

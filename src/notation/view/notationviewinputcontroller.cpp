@@ -128,13 +128,8 @@ void NotationViewInputController::onNotationChanged()
         return;
     }
 
-    currNotation->interaction()->selectionChanged().onNotify(this, [this]() {
-        const INotationPtr notation = currentNotation();
-        if (!notation) {
-            return;
-        }
-
-        const EngravingItem* selectedItem = notation->interaction()->selection()->element();
+    currNotation->interaction()->selectionChanged().onNotify(this, [this, currNotation]() {
+        const EngravingItem* selectedItem = currNotation->interaction()->selection()->element();
         ElementType type = selectedItem ? selectedItem->type() : ElementType::INVALID;
 
         bool noChanges = selectedItem && m_prevSelectedElement == selectedItem;
@@ -152,22 +147,29 @@ void NotationViewInputController::onNotationChanged()
         }
     });
 
-    currNotation->interaction()->textEditingChanged().onNotify(this, [this]() {
-        const INotationPtr notation = currentNotation();
-        if (!notation) {
+    currNotation->interaction()->textEditingStarted().onNotify(this, [this, currNotation] {
+        m_view->hideContextMenu();
+        m_view->hideElementPopup();
+
+        const TextBase* item = currNotation->interaction()->editedText();
+        if (AbstractElementPopupModel::hasTextStylePopup(item)
+            && (!item->isLyrics() || !item->empty())) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        }
+    });
+
+    currNotation->interaction()->textEditingChanged().onNotify(this, [this, currNotation] {
+        if (!currNotation->interaction()->isTextEditingStarted()) {
             return;
         }
 
-        if (notation->interaction()->isTextEditingStarted()) {
-            const TextBase* item = notation->interaction()->editedText();
-            if (AbstractElementPopupModel::hasTextStylePopup(item)
-                && item->cursor()->hasSelection()) {
-                m_view->showElementPopup(item->type(), item->canvasBoundingRect());
-                return;
-            }
+        const TextBase* item = currNotation->interaction()->editedText();
+        if (AbstractElementPopupModel::hasTextStylePopup(item) && item->cursor()->hasSelection()) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
         }
+    });
 
-        m_view->hideContextMenu();
+    currNotation->interaction()->textEditingEnded().onReceive(this, [this](const TextBase*) {
         m_view->hideElementPopup();
     });
 }
@@ -936,6 +938,13 @@ void NotationViewInputController::updateTextCursorPosition()
 {
     if (viewInteraction()->isTextEditingStarted()) {
         viewInteraction()->changeTextCursorPosition(m_mouseDownInfo.logicalBeginPoint);
+
+        // Show text style popup
+        const TextBase* item = viewInteraction()->editedText();
+        if (AbstractElementPopupModel::hasTextStylePopup(item)
+            && (!item->isLyrics() || !item->empty())) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        }
     }
 }
 

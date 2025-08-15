@@ -142,7 +142,7 @@ Rectangle {
             text: "[qml] Sample dialog sync"
             onClicked: {
                 console.log("qml: before open")
-                api.launcher.open("muse://devtools/interactive/sample?sync=true&color=#EF8605")
+                api.launcher.openSync("muse://devtools/interactive/sample?color=#EF8605")
                 console.log("qml: after open")
             }
         }
