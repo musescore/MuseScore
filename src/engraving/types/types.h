@@ -1294,9 +1294,10 @@ struct CapoParams {
         NOTATION_TO_TAB,
         TAB_TO_PB,
         TAB_TO_NOTATION,
-        // On/Off cases
+        // Special cases
         UPDATE_FRETS,
-        UPDATE_NOTES
+        UPDATE_NOTES,
+        UPDATE_IGNORED_STRINGS
     };
 
     std::unordered_set<string_idx_t> ignoredStrings;

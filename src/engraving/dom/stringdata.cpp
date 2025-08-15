@@ -154,6 +154,11 @@ int StringData::fret(int pitch, int string, Staff* staff) const
     return fret(pitch, string, pitchOffsetAt(staff));
 }
 
+int StringData::fret(int pitch, int string, Staff* staff, const Fraction& tick) const
+{
+    return fret(pitch, string, pitchOffsetAt(staff, tick));
+}
+
 //---------------------------------------------------------
 //   fretChords
 //    Assigns fretting to all the notes of each chord in the same segment of chord
