@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_IMPORTTEF_H
-#define MU_IMPORTEXPORT_IMPORTTEF_H
+#pragma once
 
 #include "voiceallocator.h"
 #include "engraving/dom/masterscore.h"
@@ -171,5 +170,3 @@ public:
     mu::engraving::Err import();
 };
 } // namespace mu::iex::tabledit
-
-#endif // MU_IMPORTEXPORT_IMPORTTEF_H
