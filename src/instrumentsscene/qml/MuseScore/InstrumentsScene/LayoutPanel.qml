@@ -130,248 +130,228 @@ Item {
             Layout.leftMargin: 20
             Layout.rightMargin: 20
 
-            text: Boolean(treeModel.addInstrumentsKeyboardShortcut)
-                  //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
-                  ? qsTrc("layoutpanel", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the keyboard shortcut %1.")
+            text: {
+                if (treeModel.addInstrumentsKeyboardShortcut) {
+                    //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
+                    return qsTrc("layoutpanel", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the keyboard shortcut %1.")
                     .arg("<b>" + treeModel.addInstrumentsKeyboardShortcut + "</b>")
-                  //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
-                  : qsTrc("layoutpanel", "There are no instruments in your score. To choose some, press <b>Add</b>.")
+                } else {
+                    //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
+                    return qsTrc("layoutpanel", "There are no instruments in your score. To choose some, press <b>Add</b>.")
+                }
+            }
             visible: treeModel.isEmpty && treeModel.isAddingAvailable
 
             verticalAlignment: Qt.AlignTop
             wrapMode: Text.WordWrap
         }
 
-        StyledFlickable {
-            id: flickable
+        LegacyTreeView {
+            id: layoutPanelTreeView
+
+            readonly property real delegateHeight: 38
 
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            contentWidth: width
-            contentHeight: layoutPanelTreeView.implicitHeight
+            visible: !treeModel.isEmpty
 
-            LegacyTreeView {
-                id: layoutPanelTreeView
+            model: LayoutPanelTreeModel {
+                id: treeModel
+            }
 
-                readonly property real delegateHeight: 38
+            selection: treeModel ? treeModel.selectionModel() : null
 
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
+            alternatingRowColors: false
+            headerVisible: false
 
-                implicitHeight: flickableItem.contentHeight
-                flickableItem.interactive: false
-
-                visible: !treeModel.isEmpty
-
-                model: LayoutPanelTreeModel {
-                    id: treeModel
-                }
-
-                selection: treeModel ? treeModel.selectionModel() : null
-
-                alternatingRowColors: false
-                backgroundVisible: false
-                headerVisible: false
-                frameVisible: false
-
-                function expandCollapseAll(expand) {
-                    for (let row = 0; row < layoutPanelTreeView.model.rowCount(); row++) {
-                        const instrumentIndex = layoutPanelTreeView.model.index(row, 0);
-                        const itemDelegate = layoutPanelTreeView.model.data(instrumentIndex);
-                        if (itemDelegate.isExpandable){
-                            if (expand) {
-                                layoutPanelTreeView.expand(instrumentIndex)
-                            } else {
-                                layoutPanelTreeView.collapse(instrumentIndex)
-                            }
-                        }
-                    }
-                    flickable.returnToBounds();
-                }
-
-                function scrollToFocusedItem(focusedIndex) {
-                    let targetScrollPosition = focusedIndex * layoutPanelTreeView.delegateHeight
-                    let visibleAreaEnd = flickable.contentY + flickable.height
-
-                    if (targetScrollPosition + layoutPanelTreeView.delegateHeight > visibleAreaEnd) {
-                        flickable.contentY = Math.min(targetScrollPosition + layoutPanelTreeView.delegateHeight - flickable.height, flickable.contentHeight - flickable.height)
-                    } else if (targetScrollPosition < flickable.contentY) {
-                        flickable.contentY = Math.max(targetScrollPosition, 0)
-                    }
-                }
-
-                property NavigationPanel navigationTreePanel : NavigationPanel {
-                    name: "LayoutPanelTree"
-                    section: root.navigationSection
-                    direction: NavigationPanel.Both
-                    enabled: layoutPanelTreeView.enabled && layoutPanelTreeView.visible
-                    order: controlPanel.navigation.order + 1
-
-                    onNavigationEvent: function(event) {
-                        if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlName", prv.currentItemNavigationName)
+            function expandCollapseAll(expand) {
+                for (let row = 0; row < layoutPanelTreeView.model.rowCount(); row++) {
+                    const instrumentIndex = layoutPanelTreeView.model.index(row, 0);
+                    const itemDelegate = layoutPanelTreeView.model.data(instrumentIndex);
+                    if (itemDelegate.isExpandable){
+                        if (expand) {
+                            layoutPanelTreeView.expand(instrumentIndex)
+                        } else {
+                            layoutPanelTreeView.collapse(instrumentIndex)
                         }
                     }
                 }
+                flickableItem.returnToBounds();
+            }
 
-                TableViewColumn {
-                    role: "itemRole"
+            function scrollToFocusedItem(focusedIndex) {
+                let targetScrollPosition = focusedIndex * layoutPanelTreeView.delegateHeight
+                let visibleAreaEnd = flickableItem.contentY + flickableItem.height
+
+                if (targetScrollPosition + layoutPanelTreeView.delegateHeight > visibleAreaEnd) {
+                    flickableItem.contentY = Math.min(targetScrollPosition + layoutPanelTreeView.delegateHeight - flickableItem.height, flickableItem.contentHeight - flickableItem.height)
+                } else if (targetScrollPosition < flickableItem.contentY) {
+                    flickableItem.contentY = Math.max(targetScrollPosition, 0)
                 }
+            }
 
-                function isControl(itemType) {
-                    return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF ||
-                           itemType === LayoutPanelItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
-                }
+            property NavigationPanel navigationTreePanel : NavigationPanel {
+                name: "LayoutPanelTree"
+                section: root.navigationSection
+                direction: NavigationPanel.Both
+                enabled: layoutPanelTreeView.enabled && layoutPanelTreeView.visible
+                order: controlPanel.navigation.order + 1
 
-                style: LegacyTreeViewStyle {
-                    indentation: 0
-
-                    frame: Item {}
-                    incrementControl: Item {}
-                    decrementControl: Item {}
-                    handle: Item {}
-                    scrollBarBackground: Item {}
-                    branchDelegate: Item {}
-
-                    backgroundColor: "transparent"
-
-                    rowDelegate: Item {
-                        height: layoutPanelTreeView.delegateHeight
-                        width: parent.width
+                onNavigationEvent: function(event) {
+                    if (event.type === NavigationEvent.AboutActive) {
+                        event.setData("controlName", prv.currentItemNavigationName)
                     }
                 }
+            }
 
-                itemDelegate: DropArea {
-                    id: dropArea
+            TableViewColumn {
+                role: "itemRole"
+            }
 
-                    Loader {
-                        id: treeItemDelegateLoader
+            function isControl(itemType) {
+                return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF ||
+                        itemType === LayoutPanelItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
+            }
 
-                        property int delegateType: model ? model.itemRole.type : LayoutPanelItemType.UNDEFINED
+            style: LegacyTreeViewStyle {
+                indentation: 0
+                branchDelegate: null
+                backgroundColor: "transparent"
 
-                        height: parent.height
-                        width: parent.width
+                rowDelegate: Item {
+                    height: layoutPanelTreeView.delegateHeight
+                    width: parent.width
+                }
+            }
 
-                        sourceComponent: layoutPanelTreeView.isControl(delegateType) ?
-                                             controlItemDelegateComponent : treeItemDelegateComponent
+            itemDelegate: DropArea {
+                id: dropArea
 
-                        Component {
-                            id: treeItemDelegateComponent
+                Loader {
+                    id: treeItemDelegateLoader
 
-                            LayoutPanelItemDelegate {
-                                id: itemDelegate
+                    property int delegateType: model ? model.itemRole.type : LayoutPanelItemType.UNDEFINED
 
-                                treeView: layoutPanelTreeView
-                                item: model ? model.itemRole : null
-                                originalParent: treeItemDelegateLoader
+                    height: parent.height
+                    width: parent.width
 
-                                sideMargin: contentColumn.sideMargin
-                                popupAnchorItem: root
+                    sourceComponent: layoutPanelTreeView.isControl(delegateType) ?
+                                         controlItemDelegateComponent : treeItemDelegateComponent
 
-                                navigation.name: model ? model.itemRole.title : "LayoutPanelItemDelegate"
-                                navigation.panel: layoutPanelTreeView.navigationTreePanel
-                                navigation.row: model ? model.index : 0
-                                navigation.onActiveChanged: {
-                                    if (navigation.active) {
-                                        prv.currentItemNavigationName = navigation.name
-                                        layoutPanelTreeView.scrollToFocusedItem(model.index)
-                                    }
-                                }
+                    Component {
+                        id: treeItemDelegateComponent
 
-                                onClicked: {
-                                    if (itemDelegate.isSelectable) {
-                                        treeModel.selectRow(styleData.index)
-                                    }
-                                }
+                        LayoutPanelItemDelegate {
+                            id: itemDelegate
 
-                                onDoubleClicked: {
-                                    if (!isExpandable) {
-                                        return
-                                    }
+                            treeView: layoutPanelTreeView
+                            item: model ? model.itemRole : null
 
-                                    if (!styleData.isExpanded) {
-                                        layoutPanelTreeView.expand(styleData.index)
-                                    } else {
-                                        layoutPanelTreeView.collapse(styleData.index)
-                                    }
-                                }
+                            sideMargin: contentColumn.sideMargin
+                            popupAnchorItem: root
 
-                                onRemoveSelectionRequested: {
-                                    treeModel.removeSelectedRows()
-                                }
-
-                                property real contentYBackup: 0
-
-                                onPopupOpened: function(popupX, popupY, popupHeight) {
-                                    contentYBackup = flickable.contentY
-                                    var mappedPopupY = mapToItem(flickable, popupX, popupY).y
-
-                                    if (mappedPopupY + popupHeight < flickable.height - contentColumn.sideMargin) {
-                                        return
-                                    }
-
-                                    var hiddenPopupPartHeight = Math.abs(flickable.height - (mappedPopupY + popupHeight))
-                                    flickable.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
-                                }
-
-                                onPopupClosed: {
-                                    flickable.contentY = contentYBackup
-                                }
-
-                                onChangeVisibilityOfSelectedRowsRequested: function(visible) {
-                                    treeModel.changeVisibilityOfSelectedRows(visible);
-                                }
-
-                                onChangeVisibilityRequested: function(index, visible) {
-                                    treeModel.changeVisibility(index, visible)
-                                }
-
-                                onDragStarted: {
-                                    treeModel.startActiveDrag()
-                                }
-
-                                onDropped: {
-                                    treeModel.endActiveDrag()
+                            navigation.name: model ? model.itemRole.title : "LayoutPanelItemDelegate"
+                            navigation.panel: layoutPanelTreeView.navigationTreePanel
+                            navigation.row: model ? model.index : 0
+                            navigation.onActiveChanged: {
+                                if (navigation.active) {
+                                    prv.currentItemNavigationName = navigation.name
+                                    layoutPanelTreeView.scrollToFocusedItem(model.index)
                                 }
                             }
-                        }
 
-                        Component {
-                            id: controlItemDelegateComponent
-
-                            LayoutPanelItemControl {
-                                isSelected: model ? model.itemRole.isSelected : false
-
-                                navigation.panel: layoutPanelTreeView.navigationTreePanel
-                                navigation.row: model ? model.index : 0
-
-                                sideMargin: contentColumn.sideMargin
-
-                                onClicked: {
-                                    styleData.value.appendNewItem()
+                            onClicked: {
+                                if (itemDelegate.isSelectable) {
+                                    treeModel.selectRow(styleData.index)
                                 }
+                            }
+
+                            onDoubleClicked: {
+                                if (!isExpandable) {
+                                    return
+                                }
+
+                                if (!styleData.isExpanded) {
+                                    layoutPanelTreeView.expand(styleData.index)
+                                } else {
+                                    layoutPanelTreeView.collapse(styleData.index)
+                                }
+                            }
+
+                            onRemoveSelectionRequested: {
+                                treeModel.removeSelectedRows()
+                            }
+
+                            property real contentYBackup: 0
+
+                            onPopupOpened: function(popupX, popupY, popupHeight) {
+                                contentYBackup = layoutPanelTreeView.flickableItem.contentY
+                                var mappedPopupY = mapToItem(layoutPanelTreeView.flickableItem, popupX, popupY).y
+
+                                if (mappedPopupY + popupHeight < layoutPanelTreeView.flickableItem.height - contentColumn.sideMargin) {
+                                    return
+                                }
+
+                                var hiddenPopupPartHeight = Math.abs(layoutPanelTreeView.flickableItem.height - (mappedPopupY + popupHeight))
+                                layoutPanelTreeView.flickableItem.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
+                            }
+
+                            onPopupClosed: {
+                                layoutPanelTreeView.flickableItem.contentY = contentYBackup
+                            }
+
+                            onChangeVisibilityOfSelectedRowsRequested: function(visible) {
+                                treeModel.changeVisibilityOfSelectedRows(visible);
+                            }
+
+                            onChangeVisibilityRequested: function(index, visible) {
+                                treeModel.changeVisibility(index, visible)
+                            }
+
+                            onDragStarted: {
+                                treeModel.startActiveDrag()
+                            }
+
+                            onDropped: {
+                                treeModel.endActiveDrag()
                             }
                         }
                     }
 
-                    onEntered: function(drag) {
-                        if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.item)) {
-                            return
-                        }
+                    Component {
+                        id: controlItemDelegateComponent
 
-                        if (drag.source.index.row < 0 || styleData.index.row < 0) {
-                            return;
-                        }
+                        LayoutPanelItemControl {
+                            isSelected: model ? model.itemRole.isSelected : false
 
-                        Qt.callLater(treeModel.moveRows,
-                                     drag.source.index.parent,
-                                     drag.source.index.row,
-                                     1,
-                                     styleData.index.parent,
-                                     styleData.index.row)
+                            navigation.panel: layoutPanelTreeView.navigationTreePanel
+                            navigation.row: model ? model.index : 0
+
+                            sideMargin: contentColumn.sideMargin
+
+                            onClicked: {
+                                styleData.value.appendNewItem()
+                            }
+                        }
                     }
+                }
+
+                onEntered: function(drag) {
+                    if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.item)) {
+                        return
+                    }
+
+                    if (drag.source.index.row < 0 || styleData.index.row < 0) {
+                        return;
+                    }
+
+                    Qt.callLater(treeModel.moveRows,
+                                 drag.source.index.parent,
+                                 drag.source.index.row,
+                                 1,
+                                 styleData.index.parent,
+                                 styleData.index.row)
                 }
             }
         }

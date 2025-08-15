@@ -43,11 +43,11 @@ import QtQuick 2.2
     \qmltype BasicTableViewStyle
     \internal
     \inqmlmodule QtQuick.Controls.Styles
-    \inherits ScrollViewStyle
+    \inherits Style
     \qmlabstract
 */
 
-ScrollViewStyle {
+Style {
     id: root
 
     /*! \qmlproperty BasicTableView BasicTableViewStyle::control
@@ -60,7 +60,7 @@ ScrollViewStyle {
 
     /*! \qmlproperty color BasicTableViewStyle::backgroundColor
         The background color. */
-    property color backgroundColor: control.backgroundVisible ? SystemPaletteSingleton.base(control.enabled) : "transparent"
+    property color backgroundColor: /*control.backgroundVisible ? SystemPaletteSingleton.base(control.enabled) :*/ "transparent"
 
     /*! \qmlproperty color BasicTableViewStyle::alternateBackgroundColor
         The alternate background color. */
