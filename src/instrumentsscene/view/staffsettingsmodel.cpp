@@ -237,7 +237,7 @@ void StaffSettingsModel::setHideWhenEmpty(int value)
         return;
     }
 
-    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("instruments", "Change staff settings"));
+    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Change staff settings"));
 
     Staff* mutableStaff = const_cast<Staff*>(staff);
     mutableStaff->undoChangeProperty(Pid::HIDE_WHEN_EMPTY, PropertyValue(static_cast<AutoOnOff>(value)));
@@ -272,7 +272,7 @@ void StaffSettingsModel::setShowIfEntireSystemEmpty(bool value)
         return;
     }
 
-    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("instruments", "Change staff settings"));
+    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Change staff settings"));
 
     Staff* mutableStaff = const_cast<Staff*>(staff);
     mutableStaff->undoChangeProperty(Pid::SHOW_IF_ENTIRE_SYSTEM_EMPTY, PropertyValue(value));
