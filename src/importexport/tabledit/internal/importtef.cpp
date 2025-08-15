@@ -40,7 +40,6 @@
 using namespace mu::engraving;
 
 namespace mu::iex::tabledit {
-
 // local copy of older version of Score::tick2measure(),
 // as commit f2b2de9 of Apr 7 2025 broke the import
 
@@ -125,7 +124,7 @@ string TablEdit::readUtf8TextIndirect(uint32_t positionOfPosition)
 
 // return the part index for the instrument containing stringIdx
 
-engraving::part_idx_t TablEdit::partIdx(size_t stringIdx, bool &ok) const
+engraving::part_idx_t TablEdit::partIdx(size_t stringIdx, bool& ok) const
 {
     ok = true;
     engraving::part_idx_t result { 0 };
@@ -157,7 +156,6 @@ int TablEdit::stringNumberPreviousParts(part_idx_t partIdx) const
     }
     LOGN("partIdx %zu result %zu", partIdx, result);
     return result;
-
 }
 
 // debug: use color cr to show voice
@@ -174,12 +172,14 @@ static muse::draw::Color toColor(const int voice)
     default: return muse::draw::Color::BLACK;
     }
 }
+
 #else
 static muse::draw::Color toColor(const int)
 {
     // no debug: color notes black
     return muse::draw::Color::BLACK;
 }
+
 #endif
 
 // create a VoiceAllocator for every instrument
@@ -221,9 +221,9 @@ void TablEdit::allocateVoices(vector<VoiceAllocator>& allocators)
 
 static void connectTie(mu::engraving::Chord* chord, Note* note)
 {
-    Segment* segment {chord->segment()};
-    auto startTrack {VOICES * (chord->track() / VOICES)};
-    auto endTrack {startTrack + VOICES - 1};
+    Segment* segment { chord->segment() };
+    auto startTrack { VOICES* (chord->track() / VOICES) };
+    auto endTrack { startTrack + VOICES - 1 };
     LOGD("segment %p tick %d string %d startTrack %zu track %zu endTrack %zu",
          segment, segment->tick().ticks(), note->string(), startTrack, chord->track(), endTrack);
 
@@ -248,7 +248,8 @@ static void connectTie(mu::engraving::Chord* chord, Note* note)
     }
 }
 
-static void addNoteToChord(mu::engraving::Chord* chord, track_idx_t track, int pitch, int fret, int string, bool tie, muse::draw::Color color)
+static void addNoteToChord(mu::engraving::Chord* chord, track_idx_t track, int pitch, int fret, int string, bool tie,
+                           muse::draw::Color color)
 {
     LOGD("pitch %d", pitch);
     mu::engraving::Note* note = Factory::createNote(chord);
@@ -269,7 +270,7 @@ static void addNoteToChord(mu::engraving::Chord* chord, track_idx_t track, int p
 static void addGraceNotesToChord(mu::engraving::Chord* chord, int pitch, int fret, int string, muse::draw::Color color)
 {
     mu::engraving::TDuration durationType(mu::engraving::DurationType::V_INVALID);
-    const int ticks {240};
+    const int ticks { 240 };
     durationType.setVal(ticks);
     mu::engraving::Chord* cr = Factory::createChord(chord->score()->dummy()->segment());
     cr->setTrack(chord->track());
@@ -312,29 +313,25 @@ void TablEdit::createContents()
     allocateVoices(voiceAllocators);
 
     for (size_t part = 0; part < tefInstruments.size(); ++part) {
-
         LOGD("part %zu", part);
         for (size_t voice = 0; voice < mu::engraving::VOICES; ++voice) {
-
             LOGD("- voice %zu", voice);
-            auto& voiceContent {voiceAllocators.at(part).voiceContent(voice)};
+            auto& voiceContent { voiceAllocators.at(part).voiceContent(voice) };
             TupletHandler tupletHandler;
             for (size_t k = 0; k < voiceContent.size(); ++k) {
-
                 LOGD("  - chord %zu", k);
                 // tefNotes is either a rest or a chord of one or more notes
-                const vector<const TefNote*>& tefNotes {voiceContent.at(k)};
+                const vector<const TefNote*>& tefNotes { voiceContent.at(k) };
 
                 if (tefNotes.size() == 0) {
                     continue; // shouldn't happen
                 }
 
-                const TefNote* const firstNote {tefNotes.at(0)};
+                const TefNote* const firstNote { tefNotes.at(0) };
                 Fraction length { firstNote->length, 64 }; // length is in 64th
                 if (firstNote->dots == 1) {
                     length *= Fraction{ 3, 2 };
-                }
-                else if (firstNote->dots == 2) {
+                } else if (firstNote->dots == 2) {
                     length *= Fraction{ 7, 4 };
                 }
 
@@ -356,8 +353,7 @@ void TablEdit::createContents()
                 if (!measure) {
                     LOGD("error: no measure");
                     continue;
-                }
-                else {
+                } else {
                     LOGD("measure %p", measure);
                 }
                 Segment* segment { measure->getSegment(mu::engraving::SegmentType::ChordRest, tick) };
@@ -375,10 +371,9 @@ void TablEdit::createContents()
                 if (firstNote->rest) {
                     LOGD("    - rest position %d string %d fret %d", firstNote->position, firstNote->string, firstNote->fret);
                     addRest(segment, track, tDuration, length, toColor(voice));
-                }
-                else {
+                } else {
                     LOGD("    - note(s) position %d string %d fret %d", firstNote->position, firstNote->string, firstNote->fret);
-                    mu::engraving::Chord* chord {Factory::createChord(segment)};
+                    mu::engraving::Chord* chord { Factory::createChord(segment) };
                     if (chord) {
                         chord->setTrack(track);
                         chord->setDurationType(tDuration);
@@ -394,13 +389,13 @@ void TablEdit::createContents()
                         for (const auto note : tefNotes) {
                             const auto stringOffset = stringNumberPreviousParts(part);
                             // todo fix magical constant 96 and code duplication
-                            int pitch = 96 - instrument.tuning.at(note->string - stringOffset - 1)  + note->fret;
+                            int pitch = 96 - instrument.tuning.at(note->string - stringOffset - 1) + note->fret;
                             LOGD("      -> string %d fret %d pitch %d", note->string, note->fret, pitch);
                             // note TableEdit's strings start at 1, MuseScore's at 0
                             addNoteToChord(chord, track, pitch, note->fret, note->string - 1, note->tie, toColor(voice));
                             if (note->hasGrace) {
                                 // todo fix magical constant 96 and code duplication
-                                int gracePitch = 96 - instrument.tuning.at(/* todo */ note->string - stringOffset - 1)  + note->graceFret;
+                                int gracePitch = 96 - instrument.tuning.at(/* todo */ note->string - stringOffset - 1) + note->graceFret;
                                 addGraceNotesToChord(chord, gracePitch, note->graceFret, /* todo */ note->string - 1, toColor(voice));
                             }
                         }
@@ -476,8 +471,7 @@ void TablEdit::createMeasures()
             }
             lastTimeSig = length;
             createTempo();
-        }
-        else {
+        } else {
             if (tefMeasure.key != lastKey) {
                 auto s1 = measure->getSegment(mu::engraving::SegmentType::KeySig, tick);
                 for (size_t i = 0; i < tefInstruments.size(); ++i) {
@@ -586,8 +580,7 @@ void TablEdit::createRepeats()
         Measure* last { score->lastMeasure() };
         first->setRepeatStart(true);
         last->setRepeatEnd(true);
-    }
-    else {
+    } else {
         LOGD("no score repeat");
     }
 }
@@ -638,8 +631,7 @@ void TablEdit::createTexts()
         if (!measure) {
             LOGD("error: no measure");
             continue;
-        }
-        else {
+        } else {
             LOGD("measure %p", measure);
         }
         Segment* segment { measure->getSegment(mu::engraving::SegmentType::ChordRest, tick) };
@@ -696,35 +688,38 @@ void TablEdit::createTitleFrame()
 // (including triplets rounded down to nearest note length)
 // TODO: remove code duplication with voiceallocator.cpp durationToInt()
 
-static int duration2length(const int duration) {
+static int duration2length(const int duration)
+{
     if (0 <= duration && duration <= 18) {
         // remove dot and triplet
         int noteType { 0 };
         int dotOrTriplet { duration % 3 };
         switch (dotOrTriplet) {
-        case 0: noteType = duration / 3; break;
-        case 1: noteType = (duration + 2) / 3; break;
-        case 2: noteType = (duration - 2) / 3; break;
+        case 0: noteType = duration / 3;
+            break;
+        case 1: noteType = (duration + 2) / 3;
+            break;
+        case 2: noteType = (duration - 2) / 3;
+            break;
         default: LOGD("impossible value %d", dotOrTriplet);
         }
         switch (noteType) {
         case 0: return 64; // 1/1
         case 1: return 32; // 1/2
         case 2: return 16; // 1/4
-        case 3: return  8; // 1/8
-        case 4: return  4; // 1/16
-        case 5: return  2; // 1/32
-        case 6: return  1; // 1/64
+        case 3: return 8;  // 1/8
+        case 4: return 4;  // 1/16
+        case 5: return 2;  // 1/32
+        case 6: return 1;  // 1/64
         // as long as the if statement above is correct, this cannot actually happen
         default: LOGD("impossible value %d", dotOrTriplet);
         }
-    }
-    else {
+    } else {
         switch (duration) {
         case 19: return 32; // 1/2
         case 22: return 16; // 1/4
-        case 25: return  8; // 1/8
-        case 28: return  4; // 1/16
+        case 25: return 8;  // 1/8
+        case 28: return 4;  // 1/16
         default: LOGD("impossible value %d", duration);
         }
     }
@@ -735,14 +730,13 @@ static int duration2length(const int duration) {
 // return the number of dots
 // TODO: remove code duplication with voiceallocator.cpp durationToInt()
 
-static int duration2dots(const int duration) {
+static int duration2dots(const int duration)
+{
     if (0 <= duration && duration <= 18 && (duration % 3) == 0) {
         return 0;
-    }
-    else if (0 <= duration && duration <= 18 && (duration % 3) == 1) {
+    } else if (0 <= duration && duration <= 18 && (duration % 3) == 1) {
         return 1;
-    }
-    else if (duration == 19 || duration == 22 || duration == 25 || duration == 28) {
+    } else if (duration == 19 || duration == 22 || duration == 25 || duration == 28) {
         return 2;
     }
     LOGD("invalid note duration %d", duration);
@@ -751,11 +745,11 @@ static int duration2dots(const int duration) {
 
 // check if 3:2 tuplet
 
-static bool duration2triplet(const int duration) {
+static bool duration2triplet(const int duration)
+{
     if (0 <= duration && duration <= 18) {
         return duration % 3 == 2;
-    }
-    else {
+    } else {
         LOGD("invalid note duration %d", duration);
         return false; // invalid
     }
@@ -767,7 +761,8 @@ Voice extractVoice(const uint8_t byte3)
     case 0: return Voice::DEFAULT;
     case 2: return Voice::UPPER;
     case 3: return Voice::LOWER;
-    default: LOGE("unknown voice"); return Voice::DEFAULT;
+    default: LOGE("unknown voice");
+        return Voice::DEFAULT;
     }
 }
 
@@ -805,12 +800,10 @@ void TablEdit::readTefContents()
         if (noteRestMarker < 0x33) {
             note.string = ((offset >> 3) % totalNumberOfStrings) + 1;
             note.fret = noteRestMarker - 1;
-        }
-        else if (noteRestMarker == 0x33) {
+        } else if (noteRestMarker == 0x33) {
             note.string = ((offset >> 3) % totalNumberOfStrings) + 1;
             note.rest = true;
-        }
-        else {
+        } else {
             // not a note or rest
             //LOGD("marker %d duration %d length %d dots %d", noteRestMarker, note.duration, note.length, note.dots);
         }
@@ -828,8 +821,7 @@ void TablEdit::readTefContents()
                 //LOGD("graceEffect %d graceFret %d", note.graceEffect, note.graceFret);
             }
             tefContents.push_back(note);
-        }
-        else if (noteRestMarker == 0x39) {
+        } else if (noteRestMarker == 0x39) {
             TefTextMarker tefTextMarker;
             tefTextMarker.position = (offset >> 3) / totalNumberOfStrings;
             tefTextMarker.string = ((offset >> 3) % totalNumberOfStrings) + 1;
@@ -1041,5 +1033,4 @@ Err TablEdit::import()
     createScore();
     return Err::NoError;
 }
-
 } // namespace mu::iex::tabledit

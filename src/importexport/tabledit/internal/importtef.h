@@ -29,7 +29,6 @@
 
 using namespace std;
 namespace mu::iex::tabledit {
-
 // offsets into the file header
 static const uint8_t OFFSET_TBED = 0x38;
 static const uint8_t OFFSET_CONTENTS = 0x3C;
@@ -159,7 +158,6 @@ class TablEdit
     void readTefReadingList();
     void readTefTexts();
 
-
     TefHeader tefHeader;
     vector<TefTextMarker> tefTextMarkers;
     vector<TefNote> tefContents; // notes (and rests) only
@@ -173,7 +171,6 @@ public:
         : _file(f), score(s) {}
     mu::engraving::Err import();
 };
-
 } // namespace mu::iex::tabledit
 
 #endif // MU_IMPORTEXPORT_IMPORTTEF_H

@@ -27,7 +27,6 @@
 #include "project/inotationreadersregister.h"
 #include "internal/tableditreader.h"
 
-
 using namespace muse::modularity;
 using namespace mu::iex::tabledit;
 using namespace mu::project;

@@ -40,7 +40,6 @@ muse::Ret TablEditReader::read(MasterScore* score, const muse::io::path_t& path,
     return make_ret(err, path);
 }
 
-
 Err TablEditReader::import(MasterScore* score, const muse::io::path_t& path, const Options&)
 {
     if (!fileSystem()->exists(path)) {
@@ -51,7 +50,7 @@ Err TablEditReader::import(MasterScore* score, const muse::io::path_t& path, con
     if (!file.open(muse::io::IODevice::ReadOnly)) {
         return Err::FileOpenError;
     }
-    TablEdit tablEdit{&file, score};
+    TablEdit tablEdit{ &file, score };
     Err err = tablEdit.import();
 
     return err;
