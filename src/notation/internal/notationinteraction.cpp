@@ -75,6 +75,7 @@
 #include "engraving/dom/navigate.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/shadownote.h"
 #include "engraving/dom/slur.h"
@@ -6251,6 +6252,20 @@ void NotationInteraction::spellPitches()
 {
     startEdit(TranslatableString("undoableAction", "Respell pitches"));
     score()->spell();
+    apply();
+}
+
+void NotationInteraction::spellPitchesWithSharps()
+{
+    startEdit(TranslatableString("undoableAction", "Respell pitches with sharps"));
+    score()->spellWithSharpsOrFlats(Prefer::SHARPS);
+    apply();
+}
+
+void NotationInteraction::spellPitchesWithFlats()
+{
+    startEdit(TranslatableString("undoableAction", "Respell pitches with flats"));
+    score()->spellWithSharpsOrFlats(Prefer::FLATS);
     apply();
 }
 
