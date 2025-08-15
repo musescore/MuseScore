@@ -1050,13 +1050,15 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                 score->undo(new Link(newText, oldText));
                             } else {
                                 BarLine* topBarLine = toBarLine(oseg->element(0));
-                                PlayCountText* oldText = topBarLine->playCountText();
-                                EngravingItem* npc = oldText->linkedClone();
-                                npc->setTrack(track);
-                                npc->setParent(ne);
-                                npc->setScore(score);
-                                npc->styleChanged();
-                                score->doUndoAddElement(npc);
+                                PlayCountText* oldText = topBarLine ? topBarLine->playCountText() : nullptr;
+                                if (oldText) {
+                                    EngravingItem* npc = oldText->linkedClone();
+                                    npc->setTrack(track);
+                                    npc->setParent(ne);
+                                    npc->setScore(score);
+                                    npc->styleChanged();
+                                    score->doUndoAddElement(npc);
+                                }
                             }
                         } else if (oe->isChordRest()) {
                             ChordRest* ocr = toChordRest(oe);
