@@ -4535,7 +4535,12 @@ void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::G
     m_editData.curGrip = grip;
 
     updateGripAnchorLines();
-    m_editData.element->startEdit(m_editData);
+    if (grip == engraving::Grip::NO_GRIP && m_editData.element->isDynamic()) {
+        // Ensure we don't start text edit mode. See also Dynamic::startEdit.
+        m_editData.element->EngravingItem::startEdit(m_editData);
+    } else {
+        m_editData.element->startEdit(m_editData);
+    }
 
     notifyAboutNotationChanged();
 }
