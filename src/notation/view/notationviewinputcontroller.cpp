@@ -797,7 +797,7 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
         return;
     }
 
-    m_hitElementWasAlreadySelected = ctx.hitElement->selected();
+    m_hitElementWasAlreadySingleSelected = ctx.hitElement == viewInteraction()->selection()->element();
 
     if (ctx.event->button() == Qt::LeftButton) {
         if (ctx.event->modifiers() & Qt::ControlModifier) {
@@ -1193,7 +1193,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         }
     }
 
-    if (!m_hitElementWasAlreadySelected) {
+    if (!m_hitElementWasAlreadySingleSelected) {
         return;
     }
 
