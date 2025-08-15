@@ -24,6 +24,8 @@
 
 #include "barline.h"
 #include "dom/score.h"
+#include "dom/textedit.h"
+#include "dom/undo.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -39,19 +41,18 @@ PlayCountText::PlayCountText(BarLine* parent, TextStyleType tid)
     initElementStyle(&playCountStyle);
 }
 
-void PlayCountText::startEdit(EditData& ed)
-{
-    score()->startCmd(TranslatableString("undoableAction", "Set play count text setting to custom"));
-    barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::CUSTOM);
-    score()->endCmd();
-    TextBase::startEdit(ed);
-}
-
 void PlayCountText::endEdit(EditData& ed)
 {
-    score()->startCmd(TranslatableString("undoableAction", "Update play count text"));
-    barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT, xmlText());
-    score()->endCmd();
+    UndoStack* undo = score()->undoStack();
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
+    const bool textWasEdited = undo->currentIndex() > ted->startUndoIdx;
+
+    if (textWasEdited) {
+        score()->startCmd(TranslatableString("undoableAction", "Update play count text"));
+        barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT, xmlText());
+        barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::CUSTOM);
+        score()->endCmd();
+    }
     TextBase::endEdit(ed);
 }
 
