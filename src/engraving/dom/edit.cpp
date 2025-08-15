@@ -5580,7 +5580,7 @@ void Score::undoUpdatePlayCountText(Measure* m)
                 }
             }
         } else if (playCountText) {
-            doUndoRemoveElement(playCountText);
+            undoRemoveElement(playCountText);
         }
     }
 }
@@ -6571,6 +6571,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || (et == ElementType::JUMP)
         || (et == ElementType::MARKER)
         || (et == ElementType::TEMPO_TEXT)
+        || (et == ElementType::PLAY_COUNT_TEXT)
         || isSystemLine
         ) {
         std::list<Staff* > staffList;
@@ -6637,6 +6638,15 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             } else if (et == ElementType::MEASURE_NUMBER) {
                 toMeasure(element->explicitParent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE,
                                                                          static_cast<int>(MeasureNumberMode::SHOW));
+            } else if (et == ElementType::PLAY_COUNT_TEXT) {
+                BarLine* bl = toBarLine(element->explicitParent());
+                Fraction tick = bl->tick();
+                Measure* m = score->tick2measureMM(tick - Fraction::eps());
+                Segment* blSeg = m->last(SegmentType::EndBarLine);
+                BarLine* linkedBl = toBarLine(blSeg->element(ntrack));
+                ne->setTrack(ntrack);
+                ne->setParent(linkedBl);
+                doUndoAddElement(ne);
             } else {
                 Segment* segment  = toSegment(element->explicitParent());
                 Fraction tick     = segment->tick();
@@ -7204,7 +7214,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             nbreath->setTrack(linkedTrack);
             nbreath->setParent(seg);
             doUndoAddElement(nbreath);
-        } else if (element->isPlayCountText()) {
+        } /*else if (element->isPlayCountText() && staff->shouldShowPlayCount()) {
             BarLine* bl = toBarLine(element->explicitParent());
             Fraction tick = bl->tick();
             Measure* m = score->tick2measureMM(tick - Fraction::eps());
@@ -7213,7 +7223,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ne->setTrack(linkedTrack);
             ne->setParent(linkedBl);
             doUndoAddElement(ne);
-        } else {
+        }*/
+        else {
             LOGW("undoAddElement: unhandled: <%s>", element->typeName());
         }
         ne->styleChanged();
