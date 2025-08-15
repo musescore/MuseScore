@@ -69,7 +69,7 @@ StyledPopupView {
             StyledTextLabel {
                 id: typeLabel
                 width: parent.width
-                text: qsTrc("layoutpanel", "Staff type")
+                text: qsTrc("layoutpanel/staffsettingspopup", "Staff type")
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
@@ -103,7 +103,7 @@ StyledPopupView {
 
             StyledTextLabel {
                 visible: !settingsModel.isMainScore
-                text: qsTrc("layoutpanel", "Voices visible in the score")
+                text: qsTrc("layoutpanel/staffsettingspopup", "Voices visible in the score")
             }
 
             Row {
@@ -159,7 +159,7 @@ StyledPopupView {
                 navigation.panel: root.navigationPanel
                 navigation.row: 20 // Should be more than a voices checkbox
 
-                text: qsTrc("layoutpanel", "Small staff")
+                text: qsTrc("layoutpanel/staffsettingspopup", "Small staff")
                 checked: settingsModel.isSmallStaff
 
                 onClicked: {
@@ -173,7 +173,7 @@ StyledPopupView {
                 navigation.panel: root.navigationPanel
                 navigation.row: 21 // after small staff CheckBox
 
-                text: qsTrc("layoutpanel", "Hide all measures that do not contain notation (cutaway)")
+                text: qsTrc("layoutpanel/staffsettingspopup", "Hide all measures that do not contain notation (cutaway)")
 
                 checked: settingsModel.cutawayEnabled
 
@@ -191,7 +191,7 @@ StyledPopupView {
 
             StyledTextLabel {
                 width: parent.width
-                text: qsTrc("layoutpanel", "Hide empty staves")
+                text: qsTrc("layoutpanel/staffsettingspopup", "Hide empty staves")
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
@@ -203,9 +203,9 @@ StyledPopupView {
                 orientation: ListView.Vertical
 
                 model: [
-                    { text: qsTrc("layoutpanel", "Follow instrument"), value: 0 },
-                    { text: qsTrc("layoutpanel", "Always hide"), value: 1 },
-                    { text: qsTrc("layoutpanel", "Never hide"), value: 2 }
+                    { text: qsTrc("layoutpanel/staffsettingspopup", "Follow instrument"), value: 0 },
+                    { text: qsTrc("layoutpanel/staffsettingspopup", "Always hide"), value: 1 },
+                    { text: qsTrc("layoutpanel/staffsettingspopup", "Never hide"), value: 2 }
                 ]
 
                 delegate: FlatRadioButton {
@@ -214,7 +214,7 @@ StyledPopupView {
 
                     navigation.panel: root.navigationPanel
                     navigation.row: 22 + index
-                    navigation.accessible.name: qsTrc("layoutpanel", "Hide empty staves") + " " + text
+                    navigation.accessible.name: qsTrc("layoutpanel/staffsettingspopup", "Hide empty staves") + " " + text
 
                     text: modelData.text
 
@@ -232,7 +232,7 @@ StyledPopupView {
                 navigation.panel: root.navigationPanel
                 navigation.row: 25 // after hideEmptyStavesGroup
 
-                text: qsTrc("layoutpanel", "If the entire system is empty, show this staff")
+                text: qsTrc("layoutpanel/staffsettingspopup", "If the entire system is empty, show this staff")
                 checked: settingsModel.showIfEntireSystemEmpty
 
                 onClicked: {
@@ -253,7 +253,7 @@ StyledPopupView {
                 navigation.panel: root.navigationPanel
                 navigation.row: 26 // after showIfEntireSystemEmptyCheckBox
 
-                text: qsTrc("layoutpanel", "Create a linked staff")
+                text: qsTrc("layoutpanel/staffsettingspopup", "Create a linked staff")
 
                 onClicked: {
                     settingsModel.createLinkedStaff()
@@ -264,7 +264,7 @@ StyledPopupView {
             StyledTextLabel {
                 width: parent.width
 
-                text: qsTrc("layoutpanel", "Linked staves contain identical notation (e.g. for guitar tablature)")
+                text: qsTrc("layoutpanel/staffsettingspopup", "Linked staves contain identical notation (e.g. for guitar tablature)")
                 wrapMode: Text.WordWrap
             }
         }

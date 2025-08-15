@@ -346,14 +346,15 @@ StyledFlickable {
                             StyledTextLabel {
                                 Layout.preferredWidth: styleGroupBox.labelWidth
                                 horizontalAlignment: Text.AlignLeft
-                                text: qsTrc("notation/editstyle/timesignatures", "Gap between numbers\n(scaled):")
+                                text: qsTrc("notation/editstyle/timesignatures", "Gap between numbers (scaled):")
+                                wrapMode: Text.Wrap
                             }
 
                             IncrementalPropertyControl {
                                 Layout.preferredWidth: 100
                                 decimals: 2
                                 step: 0.1
-                                measureUnitsSymbol: 'sp'
+                                measureUnitsSymbol: qsTrc("global", "sp")
 
                                 currentValue: root.numDist.value
                                 onValueEdited: function(newValue) {

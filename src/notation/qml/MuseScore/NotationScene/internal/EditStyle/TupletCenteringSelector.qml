@@ -45,7 +45,7 @@ Rectangle {
         }
 
         RadioButtonGroup {
-            orientation: ListView.horizontal
+            orientation: ListView.Horizontal
             spacing: 8
 
             model: [
