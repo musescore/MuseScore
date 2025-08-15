@@ -776,6 +776,7 @@ void BarLine::add(EngravingItem* e)
         break;
     case ElementType::PLAY_COUNT_TEXT: {
         setPlayCountText(toPlayCountText(e));
+        setGenerated(false);
     }
     break;
     default:
