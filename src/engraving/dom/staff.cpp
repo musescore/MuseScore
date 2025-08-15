@@ -1236,6 +1236,11 @@ void Staff::removeDeletedCaposAndRestoreNotation(const std::vector<int>& current
                 } else if (CapoParams::TransposeMode::TAB_ONLY == prevParams.transposeMode) {
                     param.transition = CapoParams::Transition::NOTATION_TO_TAB;
                     notePitchCorrection = param.fretPosition - prevParams.fretPosition;
+                } else if (CapoParams::TransposeMode::NOTATION_ONLY == prevParams.transposeMode) {
+                    if (!param.active) {
+                        param.transition = CapoParams::Transition::PB_TO_NOTATION;
+                        notePitchCorrection = -prevParams.fretPosition;
+                    }
                 }
                 break;
             case CapoParams::TransposeMode::TAB_ONLY:
