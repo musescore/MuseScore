@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IEX_TABLEDITREADER_H
-#define MU_IEX_TABLEDITREADER_H
+#pragma once
 
 #include "engraving/engravingerrors.h"
 #include "io/ifilesystem.h"
@@ -36,5 +35,3 @@ public:
     mu::engraving::Err import(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options());
 };
 }
-
-#endif // MU_IEX_TABLEDITREADER_H
