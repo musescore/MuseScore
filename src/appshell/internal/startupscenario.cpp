@@ -327,7 +327,8 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         configuration()->setWelcomeDialogLastShownIndex(-1); // reset
     }
 
-    if (configuration()->welcomeDialogShowOnStartup() && !museSoundsUpdateScenario()->hasUpdate()) {
+    const size_t numInstances = multiInstancesProvider()->instances().size();
+    if (numInstances == 1 && configuration()->welcomeDialogShowOnStartup() && !museSoundsUpdateScenario()->hasUpdate()) {
         showWelcomeDialog();
     }
 
