@@ -754,7 +754,6 @@ TEST_F(MusicXml_Tests, incompleteTuplet) {
 TEST_F(MusicXml_Tests, incorrectMidiProgram) {
     musicXmlIoTestRef("testIncorrectMidiProgram");
 }
-
 TEST_F(MusicXml_Tests, incorrectStaffNumber1) {
     musicXmlIoTestRef("testIncorrectStaffNumber1");
 }
@@ -859,6 +858,9 @@ TEST_F(MusicXml_Tests, lyricBracket) {
 }
 TEST_F(MusicXml_Tests, lyricColor) {
     musicXmlIoTest("testLyricColor");
+}
+TEST_F(MusicXml_Tests, lyricVisibility) {
+    musicXmlImportTestRef("testLyricVisibility");
 }
 TEST_F(MusicXml_Tests, lyricPos) {
     musicXmlImportTestRef("testLyricPos");

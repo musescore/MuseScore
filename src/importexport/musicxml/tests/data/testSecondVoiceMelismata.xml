@@ -240,7 +240,7 @@
         <type>eighth</type>
         <dot/>
         </note>
-      <note print-object="no">
+      <note print-object="no" print-lyric="yes">
         <rest/>
         <duration>1</duration>
         <voice>2</voice>
@@ -250,7 +250,7 @@
           <text>ly</text>
           </lyric>
         </note>
-      <note print-object="no">
+      <note print-object="no" print-lyric="yes">
         <rest/>
         <duration>4</duration>
         <voice>2</voice>
