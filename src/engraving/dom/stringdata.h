@@ -66,6 +66,7 @@ public:
     bool        convertPitch(int pitch, Staff* staff, int* string, int* fret) const;
     bool        convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const;
     int         fret(int pitch, int string, Staff* staff) const;
+    int         fret(int pitch, int string, Staff* staff, const Fraction& tick) const;
     void        fretChords(Chord* chord) const;
     int         getPitch(int string, int fret, int pitchOffset) const;
     int         getPitch(int string, int fret, Staff* staff) const;

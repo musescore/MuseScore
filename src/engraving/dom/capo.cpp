@@ -118,6 +118,7 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
         for (int string : ignoredStrings) {
             m_params.ignoredStrings.insert(static_cast<string_idx_t>(string));
         }
+        m_params.transition = CapoParams::Transition::UPDATE_IGNORED_STRINGS;
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         m_shouldAutomaticallyGenerateText = val.toBool();
 
@@ -132,7 +133,6 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
                 m_params.transition = CapoParams::Transition::TAB_TO_PB;
             } else if (CapoParams::TransposeMode::NOTATION_ONLY == m_params.transposeMode) {
                 m_params.transition = CapoParams::Transition::NOTATION_TO_PB;
-            } else {
             }
 
             break;

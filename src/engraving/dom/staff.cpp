@@ -1158,6 +1158,15 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const CapoParams& par
                         note->setString(string);
                         note->setFret(fret);
                         break;
+                    case CapoParams::UPDATE_IGNORED_STRINGS:
+                        if (CapoParams::TransposeMode::PLAYBACK_ONLY != params.transposeMode) {
+                            if (muse::contains(params.ignoredStrings, (string_idx_t)note->string())) {
+                                note->setFret(stringData->fret(note->pitch(), note->string(), this));
+                            } else {
+                                note->setFret(stringData->fret(note->pitch(), note->string(), this, tick));
+                            }
+                        }
+                        break;
                     }
                 }
                 // TODO: Grace notes
