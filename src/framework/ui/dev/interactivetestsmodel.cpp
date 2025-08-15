@@ -108,7 +108,7 @@ void InteractiveTestsModel::openSampleDialogSync()
 void InteractiveTestsModel::openSampleDialogAsync()
 {
     LOGI() << "cpp: before open ";
-    interactive()->open("muse://devtools/interactive/sample?sync=false&color=#D24373");
+    interactive()->open("muse://devtools/interactive/sample?color=#D24373");
     LOGI() << "cpp: after open";
 }
 
@@ -125,7 +125,7 @@ void InteractiveTestsModel::openSampleDialogAsyncWithPromise()
     promise.onResolve(this, [](const Val& val) {
         LOGI() << "success val: " << val.toString();
     }).onReject(this, [](int code, const std::string& err) {
-        LOGE() << "faile or cancel code: " << code << ", err: " << err;
+        LOGE() << "error or cancel code: " << code << ", err: " << err;
     });
 }
 
@@ -139,8 +139,13 @@ void InteractiveTestsModel::openWidgetDialog()
 void InteractiveTestsModel::openWidgetDialogAsync()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = interactive()->openSync("muse://devtools/interactive/testdialog?sync=false&title='And from its properties'");
-    LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
+    auto promise = interactive()->open("muse://devtools/interactive/testdialog?title='And from its properties'");
+    LOGI() << "cpp: after open";
+    promise.onResolve(this, [](const Val& val) {
+        LOGI() << "success val: " << val.toString();
+    }).onReject(this, [](int code, const std::string& err) {
+        LOGE() << "error or cancel code: " << code << ", err: " << err;
+    });
 }
 
 void InteractiveTestsModel::closeWidgetDialog()

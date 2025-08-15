@@ -29,7 +29,7 @@
 
 using namespace muse::extensions;
 
-static const muse::UriQuery SHOW_APIDUMP_URI("muse://extensions/apidump?sync=false&modal=false&floating=true");
+static const muse::UriQuery SHOW_APIDUMP_URI("muse://extensions/apidump?modal=false&floating=true");
 
 void ExtensionsActionController::init()
 {
