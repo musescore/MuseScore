@@ -112,6 +112,31 @@ StyledPopupView {
             }
         }
 
+        StyledDropdown {
+            id: transposeOptions
+
+            Layout.fillWidth: true
+
+            navigation.name: "TransposeOptions"
+            navigation.panel: navPanel
+            navigation.row: 1
+            navigation.accessible.name: titleLabel.text + " " + currentText
+
+            model: [
+                { text: qsTrc("global", "Affects playback only") },
+                { text: qsTrc("global", "Affects stave notation only") },
+                { text: qsTrc("global", "Affects tablature fingering only") },
+            ]
+
+            currentIndex: capoModel.transposeMode
+
+            onActivated: function(index, value) {
+                capoModel.transposeMode = index
+            }
+
+            visible: capoModel.capoIsOn
+        }
+
         StyledTextLabel {
             id: fretLabel
 

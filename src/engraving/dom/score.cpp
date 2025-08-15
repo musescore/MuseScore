@@ -6148,17 +6148,14 @@ void Score::updateSwing()
 //   updateCapo
 //---------------------------------------------------------
 
-void Score::updateCapo()
+void Score::updateCapo(bool skipNotesUpdate /* = false */)
 {
-    for (Staff* s : m_staves) {
-        s->clearCapoParams();
-    }
-
     Measure* fm = firstMeasure();
     if (!fm) {
         return;
     }
 
+    std::map<staff_idx_t, std::vector<int> > currentCapos;
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
         Fraction segmentTick = s->tick();
 
@@ -6172,9 +6169,14 @@ void Score::updateCapo()
             }
 
             for (Staff* staff : e->staff()->staffList()) {
-                staff->insertCapoParams(segmentTick, toCapo(e)->params());
+                currentCapos[staff->idx()].push_back(segmentTick.ticks());
+                staff->insertCapoParams(segmentTick, toCapo(e)->params(), skipNotesUpdate);
             }
         }
+    }
+    for (Staff* staff : staves()) {
+        staff->removeDeletedCaposAndRestoreNotation(currentCapos[staff->idx()]);
+        staff->applyCapoParams();
     }
 }
 
