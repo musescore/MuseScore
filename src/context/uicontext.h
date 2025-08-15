@@ -33,7 +33,9 @@ static constexpr muse::ui::UiContext UiCtxAny = muse::ui::UiCtxAny;
 
 static constexpr muse::ui::UiContext UiCtxHomeOpened = muse::ui::UiCtxHomeOpened;
 static constexpr muse::ui::UiContext UiCtxProjectOpened = muse::ui::UiCtxProjectOpened;
+
 static constexpr muse::ui::UiContext UiCtxProjectFocused = muse::ui::UiCtxProjectFocused;
+static constexpr muse::ui::UiContext UiCtxBrailleFocused = muse::ui::UiCtxBrailleFocused;
 
 static constexpr muse::ui::UiContext UiCtxDialogOpened = muse::ui::UiCtxDialogOpened;
 

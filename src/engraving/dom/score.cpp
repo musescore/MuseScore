@@ -3422,7 +3422,7 @@ static void onFocusedItemChanged(EngravingItem* item)
     AccessibleRoot* accRoot = score->rootItem()->accessible()->accessibleRoot();
     AccessibleRoot* dummyAccRoot = score->dummy()->rootItem()->accessible()->accessibleRoot();
 
-    if (accRoot && currAccRoot == accRoot && accRoot->registered()) {
+    if (accRoot && currAccRoot == accRoot && accRoot->registered() && accRoot->enabled()) {
         accRoot->setFocusedElement(accessible);
 
         if (AccessibleItemPtr focusedElement = dummyAccRoot->focusedElement().lock()) {
@@ -3432,7 +3432,7 @@ static void onFocusedItemChanged(EngravingItem* item)
         dummyAccRoot->setFocusedElement(nullptr);
     }
 
-    if (dummyAccRoot && currAccRoot == dummyAccRoot && dummyAccRoot->registered()) {
+    if (dummyAccRoot && currAccRoot == dummyAccRoot && dummyAccRoot->registered() && dummyAccRoot->enabled()) {
         dummyAccRoot->setFocusedElement(accessible);
 
         if (AccessibleItemPtr focusedElement = accRoot->focusedElement().lock()) {
