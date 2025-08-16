@@ -48,8 +48,8 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       zText->setText(timesig->numeratorString());
       nText->setText(timesig->denominatorString());
       // set validators for numerator and denominator strings
-      // which only accepts '(', ')', '*' (and 'x', 'X', '×'), '+', '-', '/' (and '÷'), digits, '=', and some time symb conventional representations
-      QRegExp rx("[()\\*+\\-/0-9=COXcox\\x00A2\\x00BD\\x00BC\\x00D7\\x00D8\\x00F7\\xE910-\\xE91A]*");
+      // which only accepts '(', ')', '[', ']', '*' (and 'x', 'X', '×'), '+', '-', '/' (and '÷'), digits, '=', and some time symb conventional representations
+      QRegExp rx("[()\\[\\]\\*+\\-/0-9=COXcox\\x00A2\\x00BD\\x00BC\\x00D7\\x00D8\\x00F7\\xE910-\\xE91A]*");
       QValidator *validator = new QRegExpValidator(rx, this);
       zText->setValidator(validator);
       nText->setValidator(validator);
