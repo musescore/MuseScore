@@ -26,6 +26,7 @@
 */
 
 #include <assert.h>
+#include <set>
 
 #include "translation.h"
 
@@ -3332,6 +3333,85 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     }
     m_is.setDuration(d);
     nextInputPos(cr, false);
+}
+
+//---------------------------------------------------------
+//   extendToNextNote
+//---------------------------------------------------------
+
+void Score::cmdExtendToNextNote()
+{
+    Fraction startTick = selection().tickStart();
+    Fraction endTick = selection().tickEnd();
+    staff_idx_t startStaff = selection().staffStart();
+    staff_idx_t endStaff = selection().staffEnd();
+
+    std::vector<ChordRest*> crList;
+    std::string selType = m_selection.isList() ? "list" : "range";
+
+    for (EngravingItem* el : selection().elements()) {
+        if (!el->isNote()) {
+            continue;
+        }
+        Note* n = toNote(el);
+        ChordRest* cr = toChordRest(n->chord());
+        Fraction crts = cr->ticks();
+        crList.push_back(cr);
+
+        while ((nextChordRest(cr) && nextChordRest(cr)->isRest()) || (nextChordRest(cr) && nextChordRest(cr)->tick() > (cr->tick() + cr->ticks()))) {
+            ChordRest* ncr = nextChordRest(cr);
+            Rest* r = toRest(ncr);
+
+            if (cr->tuplet() || r->tuplet()) {
+                m_is.setSegment(ncr->segment());
+                m_is.setLastSegment(m_is.segment());
+                m_is.setDuration(r->durationType());
+
+                Note* nn = nullptr;
+                for (uint i = 0; i < toChord(cr)->notes().size(); i++) {
+                    Note* note = toChord(cr)->notes()[i];
+                    NoteVal nval(note->noteVal());
+                    nn = addPitch(nval, i != 0);
+
+                    Tie* tie =  Factory::createTie(note);
+                    tie->setStartNote(note);
+                    tie->setTrack(note->track());
+                    tie->setTick(note->chord()->segment()->tick());
+                    tie->setEndNote(nn);
+                    tie->setTicks(nn->chord()->segment()->tick() - note->chord()->segment()->tick());
+                    undoAddElement(tie);
+                }
+                cr = toChordRest(nn->chord());
+                crList.push_back(cr);
+            } else {
+                changeCRlen(cr, cr->ticks() + r->ticks());
+                if (cr->ticks() == crts) {
+                    cr = nextChordRest(cr);
+                    crList.push_back(cr);
+                }
+            }
+            crts = cr->ticks();
+            endTick = cr->tick() + cr->ticks() >= endTick ? cr->tick() + cr->ticks() : endTick;
+        }
+        while ((!nextChordRest(cr) && cr->voice() > 0 && cr->measure() != score()->lastMeasure())) {
+            changeCRlen(cr, cr->ticks() + cr->measure()->ticks());
+            cr = nextChordRest(cr);
+            crList.push_back(cr);
+            endTick = score()->endTick();
+        }
+    }
+
+    if (selType == "range") {
+        selection().setRangeTicks(startTick, endTick, startStaff, endStaff);
+        selection().updateSelectedElements();
+    } else {
+        for (ChordRest* cr : crList) {
+            std::vector<Note*> notes = toChord(cr)->notes();
+            for (Note* n : notes) {
+                select(n, SelectType::ADD);
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
