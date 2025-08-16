@@ -2231,6 +2231,7 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
     const int z = ts.numerator();
     const int n = ts.denominator();
     const String ns = tsig->numeratorString();
+    const String ds = tsig->denominatorString();
 
     m_attr.doAttr(m_xml, true);
     XmlWriter::Attributes attrs;
@@ -2238,7 +2239,7 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
         attrs = { { "symbol", "common" } };
     } else if (st == TimeSigType::ALLA_BREVE) {
         attrs = { { "symbol", "cut" } };
-    } else if (!ns.empty() && tsig->denominatorString().empty()) {
+    } else if (!ns.empty() && ds.empty()) {
         attrs = { { "symbol", "single-number" } };
     }
     if (!tsig->visible()) {
@@ -2249,15 +2250,16 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
 
     m_xml.startElement("time", attrs);
 
-    static const std::regex beats_re("^\\d+(\\+\\d+)+$");
-    if (std::regex_match(ns.toStdString(), beats_re)) {
-        // if compound numerator, exported as is
+    if (!ns.empty()) {
         m_xml.tag("beats", ns);
     } else {
-        // else fall back and use the numerator as integer
         m_xml.tag("beats", z);
     }
-    m_xml.tag("beat-type", n);
+    if (!ds.empty()) {
+        m_xml.tag("beat-type", ds);
+    } else {
+        m_xml.tag("beat-type", n);
+    }
     m_xml.endElement();
 }
 
