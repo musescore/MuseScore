@@ -38,6 +38,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/docktabsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/docktabsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/docktabbar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/docktabbar.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowactionscontroller.cpp

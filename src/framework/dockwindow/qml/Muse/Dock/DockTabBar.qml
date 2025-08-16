@@ -23,6 +23,7 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import Muse.Dock 1.0
 
 Rectangle {
     id: root
@@ -41,8 +42,6 @@ Rectangle {
     property NavigationPanel navigationPanel: null
     readonly property string currentItemNavigationName: tabs.currentItem && tabs.currentItem.navigation ? tabs.currentItem.navigation.name : ""
 
-    property alias currentToolbarComponent: toolbarLoader.sourceComponent
-
     signal tabClicked(int index)
     signal handleContextMenuItemRequested(string itemId)
 
@@ -53,17 +52,28 @@ Rectangle {
         }
     }
 
+    function updateToolBarComponent() {
+        const idx = root.tabsModel.index(root.currentIndex, 0);
+        const toolBar = root.tabsModel.data(idx, DockTabsModel.ToolBarComponent)
+        toolbarLoader.sourceComponent = toolBar
+    }
+
     function doubleClicked(pos) {
         if (root.tabBarCpp) {
             root.tabBarCpp.doubleClicked(pos)
         }
     }
 
+    Component.onDestruction: { root.tabsModel.clear() }
+
     onTabBarCppChanged: { updateMouseArea() }
     onDraggingTabsAllowedChanged: { updateMouseArea() }
+    onCurrentIndexChanged: { updateToolBarComponent() }
 
-    Component.onDestruction: {
-        tabs.model = 0
+    Connections {
+        target: root.tabsModel
+        function onDataChanged() { updateToolBarComponent() }
+        function onModelReset() { updateToolBarComponent() }
     }
 
     ListView {
@@ -96,15 +106,21 @@ Rectangle {
         }
 
         delegate: DockPanelTab {
-            text: modelData.title
+            text: model.title
             isCurrent: root.currentIndex === model.index
-            contextMenuModel: modelData.contextMenuModel
+            contextMenuModel: model.contextMenu
 
-            width: isCurrent || (tabs.implicitWidthOfAllTabsTogether <= tabs.availableWidth)
-                   ? implicitWidth
-                   : (tabs.availableWidth - tabs.implicitWidthOfActiveTab)
-                     / (tabs.implicitWidthOfAllTabsTogether - tabs.implicitWidthOfActiveTab)
-                     * implicitWidth
+            width: {
+                var w
+                if (isCurrent || tabs.implicitWidthOfAllTabsTogether <= tabs.availableWidth) {
+                    w = implicitWidth
+                } else {
+                    w = (tabs.availableWidth - tabs.implicitWidthOfActiveTab)
+                    / (tabs.implicitWidthOfAllTabsTogether - tabs.implicitWidthOfActiveTab)
+                    * implicitWidth
+                }
+                return w
+            }
 
             navigation.name: text
             navigation.panel: root.navigationPanel
