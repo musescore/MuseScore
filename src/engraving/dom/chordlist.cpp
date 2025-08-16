@@ -1386,6 +1386,10 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
         m_quality = u"major";
         implied = true;
         extension = 5;
+    } else if (kind == "pedal") {
+        // Ignore, assume major
+        m_quality = u"major";
+        implied = true;
     } else {
         m_quality = kind;
     }

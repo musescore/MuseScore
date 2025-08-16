@@ -124,7 +124,6 @@
         <Text>
           <eid>E_E</eid>
           <style>title</style>
-          <offset x="0" y="-0.0564445"/>
           <text><font size="24"/>Test measure-style/slash</text>
           </Text>
         </VBox>

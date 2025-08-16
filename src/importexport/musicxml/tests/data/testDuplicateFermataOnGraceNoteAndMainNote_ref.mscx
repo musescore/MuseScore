@@ -184,7 +184,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>10</height>
+        <height>14.413</height>
         <eid>E_E</eid>
         <Text>
           <eid>F_F</eid>
@@ -197,14 +197,12 @@
           <eid>G_G</eid>
           <style>title</style>
           <family>Times New Roman</family>
-          <offset x="0" y="-0.172872"/>
           <text><font size="24"/><font face="Times New Roman"/>Mephisto Waltz No. 1</text>
           </Text>
         <Text>
           <eid>H_H</eid>
           <style>subtitle</style>
           <family>Times New Roman</family>
-          <offset x="0" y="9.82548"/>
           <text><font size="14"/><font face="Times New Roman"/>S. 514</text>
           </Text>
         </VBox>
