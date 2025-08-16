@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -45,7 +45,7 @@ bool VoiceAllocator::canAddTefNoteToVoice(const TefNote* const note, const int v
     return false;
 }
 
-int VoiceAllocator::findFirstPossibleVoice(const TefNote* const note, const array<int, 3> voices)
+int VoiceAllocator::findFirstPossibleVoice(const TefNote* const note, const std::array<int, 3> voices)
 {
     for (const auto v : voices) {
         if (canAddTefNoteToVoice(note, v)) {
@@ -111,7 +111,7 @@ void VoiceAllocator::appendNoteToVoice(const TefNote* const note, int voice)
     LOGD("voice %d nChords %zu", voice, nChords);
     if (nChords == 0) {
         LOGD("create first chord");
-        vector<const TefNote*> chord;
+        std::vector<const TefNote*> chord;
         chord.push_back(note);
         voiceContents[voice].push_back(chord);
     } else {
@@ -122,7 +122,7 @@ void VoiceAllocator::appendNoteToVoice(const TefNote* const note, int voice)
             voiceContents[voice].at(nChords - 1).push_back(note);
         } else {
             LOGD("create next chord at position %d", note->position);
-            vector<const TefNote*> chord;
+            std::vector<const TefNote*> chord;
             chord.push_back(note);
             voiceContents[voice].push_back(chord);
         }
@@ -162,7 +162,7 @@ void VoiceAllocator::allocateVoice(const TefNote* const note, int voice)
     }
 }
 
-void VoiceAllocator::addColumn(const vector<const TefNote*>& column)
+void VoiceAllocator::addColumn(const std::vector<const TefNote*>& column)
 {
     if (column.empty()) {
         return;
