@@ -2984,11 +2984,12 @@ void TDraw::draw(const Tapping* item, muse::draw::Painter* painter)
     painter->setPen(item->curColor());
     if (item->ldata()->symId != SymId::noSym) {
         item->drawSymbol(item->ldata()->symId, painter);
-    } else {
-        TappingText* text = item->text();
+    } else if (TappingText* text = item->text()) {
         painter->translate(text->pos());
         drawTextBase(text, painter);
         painter->translate(-text->pos());
+    } else {
+        assert(false && "Drawing Tapping item without text or symbol");
     }
 }
 
