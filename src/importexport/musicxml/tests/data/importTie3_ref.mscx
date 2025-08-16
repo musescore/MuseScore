@@ -119,6 +119,8 @@ Arranged by [Arranger]</metaTag>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

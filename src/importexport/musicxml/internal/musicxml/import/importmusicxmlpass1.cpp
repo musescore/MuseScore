@@ -2386,6 +2386,7 @@ void MusicXmlParserPass1::scorePart(const String& curPartGroupName)
             String name = m_e.readText();
             m_parts[id].setName(name);
         } else if (m_e.name() == "part-name-display") {
+            m_parts[id].setPrintName(m_e.asciiAttribute("print-object") != "no");
             String name;
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "display-text") {
@@ -2408,6 +2409,7 @@ void MusicXmlParserPass1::scorePart(const String& curPartGroupName)
             String name = m_e.readText();
             m_parts[id].setAbbr(name);
         } else if (m_e.name() == "part-abbreviation-display") {
+            m_parts[id].setPrintAbbr(m_e.asciiAttribute("print-object") != "no");
             String name;
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "display-text") {
