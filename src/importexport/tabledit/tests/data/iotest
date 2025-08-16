@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# simple standalone iotest for TEF import
+# run in src/importexport/tabledit/tests/data directory as "./iotest"
+# use "mscore -t file.tef -o file.mscx" to generate reference files
+
+# Linux
+#MSCORE=../../../build.debug/mscore/mscore
+# OS X terminal build
+#MSCORE=../../../applebuild/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build
+MSCORE=../../../../../builds/Mac-Qt6.2.4-macos-Make-RelWithDebInfo/install/mscore.app/Contents/MacOS/mscore
+
+echo "----------------------------------------------"
+echo "Regression Tests for MuseScore TablEdit import"
+echo "----------------------------------------------"
+echo
+$MSCORE -v
+echo
+
+
+tef_files=`ls *.tef | sort`
+testcount=0
+failures=0
+
+cleanup() {
+    rm -rf META-INF Thumbnails
+    rm audiosettings.json score_style.mss viewsettings.json
+    }
+
+rwtestTef() {
+      echo -n "testing load/save $1";
+      $MSCORE $1.tef -t -o aaa.mscx &> /dev/null
+      cat aaa.mscx | grep -v pageWidth | grep -v pageHeight | grep -v pagePrintableWidth | grep -v open >mops.mscx
+      if diff -q $1.mscx mops.mscx &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            echo "+++++++++DIFF++++++++++++++"
+            diff $1.mscx mops.mscx
+            echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.mscx
+      testcount=$(($testcount+1))
+      }
+
+rwtestAllTef() {
+      for f in $tef_files; do
+            rwtestTef `basename $f .tef`
+      done
+      cleanup
+      }
+
+usage() {
+      echo "usage: $0"
+      echo
+      exit 1
+      }
+
+if [ $# -eq 0 ]; then
+      rwtestAllTef
+else
+      usage
+fi
+
+echo
+echo "$testcount test(s), $failures failure(s)"
