@@ -19,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 #include <QIODevice>
 
 using ::testing::_;
+using ::testing::NiceMock;
 using ::testing::Return;
 
 #include "framework/network/networktypes.h"
@@ -53,17 +52,17 @@ public:
     {
         m_service = new AppUpdateService(muse::modularity::globalCtx());
 
-        m_configuration = std::make_shared<UpdateConfigurationMock>();
+        m_configuration = std::make_shared<NiceMock<UpdateConfigurationMock> >();
         m_service->configuration.set(m_configuration);
 
-        m_networkManagerCreator = std::make_shared<muse::network::NetworkManagerCreatorMock>();
+        m_networkManagerCreator = std::make_shared<NiceMock<muse::network::NetworkManagerCreatorMock> >();
         m_service->networkManagerCreator.set(m_networkManagerCreator);
 
         m_networkManager = std::make_shared<muse::network::NetworkManagerMock>();
         ON_CALL(*m_networkManagerCreator, makeNetworkManager())
         .WillByDefault(Return(m_networkManager));
 
-        m_systemInfoMock = std::make_shared<SystemInfoMock>();
+        m_systemInfoMock = std::make_shared<NiceMock<SystemInfoMock> >();
         m_service->systemInfo.set(m_systemInfoMock);
 
         ON_CALL(*m_systemInfoMock, productType())
