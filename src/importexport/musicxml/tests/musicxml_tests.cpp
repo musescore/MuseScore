@@ -676,6 +676,9 @@ TEST_F(MusicXml_Tests, DISABLED_graceAfter4) {
 TEST_F(MusicXml_Tests, graceFermata) {
     musicXmlIoTest("testGraceFermata");
 }
+TEST_F(MusicXml_Tests, groupTime) {
+    musicXmlIoTest("testGroupTime");
+}
 TEST_F(MusicXml_Tests, guitarBends) {
     bool useRead302 = MScore::useRead302InTestMode;
     MScore::useRead302InTestMode = false;
