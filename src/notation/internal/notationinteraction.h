@@ -119,11 +119,11 @@ public:
     // Drop
     bool startDropSingle(const QByteArray& edata) override;
     bool startDropRange(const QByteArray& data) override;
-    bool startDropRange(const Fraction& sourceTick, const Fraction& tickLength, engraving::staff_idx_t sourceStaffIdx,
-                        size_t numStaves) override;
+    bool startDropRange(const Fraction& sourceTick, const Fraction& tickLength, engraving::staff_idx_t sourceStaffIdx, size_t numStaves,
+                        bool preserveMeasureAlignment) override;
     bool startDropImage(const QUrl& url) override;
     bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    bool updateDropRange(const muse::PointF& pos) override;
+    bool updateDropRange(const muse::PointF& pos, std::optional<bool> preserveMeasureAlignment = std::nullopt) override;
     bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
@@ -494,6 +494,8 @@ private:
 
         engraving::Fraction tickLength;
         size_t numStaves = 0;
+
+        bool preserveMeasureAlignment = false;
 
         engraving::Segment* targetSegment = nullptr;
         engraving::staff_idx_t targetStaffIdx = 0;

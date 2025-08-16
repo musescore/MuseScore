@@ -80,7 +80,7 @@ void EditTimeTickAnchors::updateAnchors(const EngravingItem* item)
     item->triggerLayout();
 }
 
-void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
+void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx, const std::set<Fraction>& additionalAnchorRelTicks)
 {
     Fraction startTick = Fraction(0, 1);
     Fraction endTick = measure->ticks();
@@ -88,7 +88,7 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
     Fraction timeSig = measure->timesig();
     Fraction halfDivision = Fraction(1, 2 * timeSig.denominator());
 
-    std::set<Fraction> anchorTicks;
+    std::set<Fraction> anchorTicks { additionalAnchorRelTicks };
     for (Fraction tick = startTick; tick <= endTick; tick += halfDivision) {
         anchorTicks.insert(tick);
     }
