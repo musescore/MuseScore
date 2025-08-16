@@ -117,9 +117,13 @@ std::string TablEdit::readUtf8TextIndirect(uint32_t positionOfPosition)
 {
     _file->seek(positionOfPosition);
     uint32_t position = readUInt32();
-    _file->seek(position);
-    LOGD("position %d", position);
-    return readUtf8Text();
+    if (position) {
+        _file->seek(position);
+        LOGD("position %d", position);
+        return readUtf8Text();
+    } else {
+        return "";
+    }
 }
 
 // return the part index for the instrument containing stringIdx
