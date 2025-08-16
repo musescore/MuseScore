@@ -4026,6 +4026,14 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
             if (!smufl.empty()) {
                 m_wordsText += u"<sym>" + smufl + u"</sym>";
             }
+        } else if (m_e.name() == "string-mute") {
+            const String type = m_e.attribute("type");
+            if (type == u"on") {
+                m_wordsText += u"<sym>stringsMuteOn</sym>";
+            } else if (type == u"off") {
+                m_wordsText += u"<sym>stringsMuteOff</sym>";
+            }
+            m_e.skipCurrentElement();
         } else if (m_e.name() == "other-direction") {
             otherDirection();
         } else {
