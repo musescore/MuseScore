@@ -21,10 +21,15 @@
  */
 #pragma once
 
-#include "voiceallocator.h"
+#include <array>
+#include <string>
+#include <vector>
+
 #include "engraving/dom/masterscore.h"
 #include "engraving/engravingerrors.h"
 #include "io/iodevice.h"
+
+#include "voiceallocator.h"
 
 namespace mu::iex::tabledit {
 // offsets into the file header
@@ -74,8 +79,8 @@ class TablEdit
     uint8_t readUInt8();
     uint16_t readUInt16();
     uint32_t readUInt32();
-    string readUtf8Text();
-    string readUtf8TextIndirect(uint32_t positionOfPosition);
+    std::string readUtf8Text();
+    std::string readUtf8TextIndirect(uint32_t positionOfPosition);
 
     struct TefHeader {
         int version { 0 };
@@ -111,7 +116,7 @@ class TablEdit
         int fClef { 0 };
         int output { 0 };
         int options { 0 };
-        array<int, 12> tuning = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        std::array<int, 12> tuning = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         std::string name;
     };
 
@@ -134,7 +139,7 @@ class TablEdit
         int index { 0 };
     };
 
-    void allocateVoices(vector<VoiceAllocator>& allocator);
+    void allocateVoices(std::vector<VoiceAllocator>& allocator);
     void createContents();
     void createLinkedTabs();
     void createMeasures();
@@ -146,7 +151,7 @@ class TablEdit
     void createTempo();
     void createTexts();
     void createTitleFrame();
-    void initializeVoiceAllocators(vector<VoiceAllocator>& allocators);
+    void initializeVoiceAllocators(std::vector<VoiceAllocator>& allocators);
     engraving::part_idx_t partIdx(size_t stringIdx, bool& ok) const;
     int stringNumberPreviousParts(engraving::part_idx_t partIdx) const;
     void readTefContents();
@@ -157,12 +162,12 @@ class TablEdit
     void readTefTexts();
 
     TefHeader tefHeader;
-    vector<TefTextMarker> tefTextMarkers;
-    vector<TefNote> tefContents; // notes (and rests) only
-    vector<TefInstrument> tefInstruments;
-    vector<TefMeasure> tefMeasures;
-    vector<TefReadingListItem> tefReadingList;
-    vector<string> tefTexts;
+    std::vector<TefTextMarker> tefTextMarkers;
+    std::vector<TefNote> tefContents; // notes (and rests) only
+    std::vector<TefInstrument> tefInstruments;
+    std::vector<TefMeasure> tefMeasures;
+    std::vector<TefReadingListItem> tefReadingList;
+    std::vector<std::string> tefTexts;
 
 public:
     TablEdit(muse::io::IODevice* f, mu::engraving::MasterScore* s)

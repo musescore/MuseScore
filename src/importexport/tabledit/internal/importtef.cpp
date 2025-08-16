@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -98,9 +98,9 @@ uint32_t TablEdit::readUInt32()
 
 // read sized and null-terminated utf8 text from the current position
 
-string TablEdit::readUtf8Text()
+std::string TablEdit::readUtf8Text()
 {
-    string result;
+    std::string result;
     uint16_t size = readUInt16();
     for (uint16_t i = 0; i < size - 1; ++i) {
         result += readUInt8();
@@ -113,7 +113,7 @@ string TablEdit::readUtf8Text()
 // read sized and null-terminated utf8 text
 // input is the position where the text's position in the file is stored
 
-string TablEdit::readUtf8TextIndirect(uint32_t positionOfPosition)
+std::string TablEdit::readUtf8TextIndirect(uint32_t positionOfPosition)
 {
     _file->seek(positionOfPosition);
     uint32_t position = readUInt32();
@@ -184,7 +184,7 @@ static muse::draw::Color toColor(const int)
 
 // create a VoiceAllocator for every instrument
 
-void TablEdit::initializeVoiceAllocators(vector<VoiceAllocator>& allocators)
+void TablEdit::initializeVoiceAllocators(std::vector<VoiceAllocator>& allocators)
 {
     for (size_t i = 0; i < tefInstruments.size(); ++i) {
         VoiceAllocator allocator;
@@ -192,9 +192,9 @@ void TablEdit::initializeVoiceAllocators(vector<VoiceAllocator>& allocators)
     }
 }
 
-void TablEdit::allocateVoices(vector<VoiceAllocator>& allocators)
+void TablEdit::allocateVoices(std::vector<VoiceAllocator>& allocators)
 {
-    vector<const TefNote*> column;
+    std::vector<const TefNote*> column;
     int currentPosition { -1 };
     engraving::part_idx_t currentPart { 0 };
     for (const TefNote& tefNote : tefContents) {
@@ -308,7 +308,7 @@ void TablEdit::createContents()
         return;
     }
 
-    vector<VoiceAllocator> voiceAllocators;
+    std::vector<VoiceAllocator> voiceAllocators;
     initializeVoiceAllocators(voiceAllocators);
     allocateVoices(voiceAllocators);
 
@@ -321,7 +321,7 @@ void TablEdit::createContents()
             for (size_t k = 0; k < voiceContent.size(); ++k) {
                 LOGD("  - chord %zu", k);
                 // tefNotes is either a rest or a chord of one or more notes
-                const vector<const TefNote*>& tefNotes { voiceContent.at(k) };
+                const std::vector<const TefNote*>& tefNotes { voiceContent.at(k) };
 
                 if (tefNotes.size() == 0) {
                     continue; // shouldn't happen
@@ -505,7 +505,7 @@ void TablEdit::createNotesFrame()
         vbox->setTick(mu::engraving::Fraction(0, 1)); // TODO find correct value (0/1 seems to work OK)
         score->measures()->add(vbox);
         Text* s = Factory::createText(vbox, TextStyleType::FRAME);
-        s->setPlainText(String::fromUtf8(tefHeader.notes.c_str()));
+        s->setPlainText(muse::String::fromUtf8(tefHeader.notes.c_str()));
         vbox->add(s);
     }
 }
@@ -515,7 +515,7 @@ void TablEdit::createParts()
     for (const auto& instrument : tefInstruments) {
         Part* part = new Part(score);
         score->appendPart(part);
-        String staffName { String::fromUtf8(instrument.name.c_str()) };
+        muse::String staffName { muse::String::fromUtf8(instrument.name.c_str()) };
         part->setPartName(staffName);
         part->setPlainLongName(staffName);
 
@@ -543,19 +543,19 @@ void TablEdit::createParts()
 void TablEdit::createProperties()
 {
     if (!tefHeader.title.empty()) {
-        score->setMetaTag(u"workTitle", String::fromUtf8(tefHeader.title.c_str()));
+        score->setMetaTag(u"workTitle", muse::String::fromUtf8(tefHeader.title.c_str()));
     }
     if (!tefHeader.subTitle.empty()) {
-        score->setMetaTag(u"subtitle", String::fromUtf8(tefHeader.subTitle.c_str()));
+        score->setMetaTag(u"subtitle", muse::String::fromUtf8(tefHeader.subTitle.c_str()));
     }
     if (!tefHeader.comment.empty()) {
-        score->setMetaTag(u"comment", String::fromUtf8(tefHeader.comment.c_str()));
+        score->setMetaTag(u"comment", muse::String::fromUtf8(tefHeader.comment.c_str()));
     }
     if (!tefHeader.internetLink.empty()) {
-        score->setMetaTag(u"source", String::fromUtf8(tefHeader.internetLink.c_str()));
+        score->setMetaTag(u"source", muse::String::fromUtf8(tefHeader.internetLink.c_str()));
     }
     if (!tefHeader.copyright.empty()) {
-        score->setMetaTag(u"copyright", String::fromUtf8(tefHeader.copyright.c_str()));
+        score->setMetaTag(u"copyright", muse::String::fromUtf8(tefHeader.copyright.c_str()));
     }
 }
 
@@ -655,12 +655,12 @@ void TablEdit::createTitleFrame()
     score->measures()->add(vbox);
     if (!tefHeader.title.empty()) {
         Text* s = Factory::createText(vbox, TextStyleType::TITLE);
-        s->setPlainText(String::fromUtf8(tefHeader.title.c_str()));
+        s->setPlainText(muse::String::fromUtf8(tefHeader.title.c_str()));
         vbox->add(s);
     }
     if (!tefHeader.subTitle.empty()) {
         Text* s = Factory::createText(vbox, TextStyleType::SUBTITLE);
-        s->setPlainText(String::fromUtf8(tefHeader.subTitle.c_str()));
+        s->setPlainText(muse::String::fromUtf8(tefHeader.subTitle.c_str()));
         vbox->add(s);
     }
 }
@@ -936,7 +936,7 @@ void TablEdit::readTefTexts()
     _file->seek(position);
     uint16_t numberOfTexts = readUInt16();
     for (uint16_t i = 0; i < numberOfTexts; ++i) {
-        string text { readUtf8Text() };
+        std::string text { readUtf8Text() };
         LOGD("i %d text '%s'", i, text.c_str());
         tefTexts.push_back(text);
     }
