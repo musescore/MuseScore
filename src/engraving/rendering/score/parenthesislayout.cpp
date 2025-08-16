@@ -225,6 +225,9 @@ double ParenthesisLayout::computeInternalParenthesisPadding(const EngravingItem*
     case ElementType::CLEF:
         padding = (parenFirst ? 0.2 : 0.25) * spatium;
         break;
+    case ElementType::HARMONY:
+        padding = 0.2 * spatium;
+        break;
     default:
         padding = 0.1 * spatium;
         break;
@@ -251,7 +254,7 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
     const double shoulderYOffset = 0.2 * height;
 
     // Control width of parentheses. We don't want tall parens to be too wide, nor do we want parens at a small scale to lose their curve too much
-    double shoulderX = 0.2 * std::pow(height, 0.95) * std::pow(mag, 0.1);
+    double shoulderX = ldata->shoulderWidth.has_value() ? ldata->shoulderWidth() : 0.2 * std::pow(height, 0.95) * std::pow(mag, 0.1);
     const double minShoulderX = 0.25 * spatium;
     shoulderX = std::max(shoulderX, minShoulderX);
 
@@ -403,12 +406,33 @@ void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutD
     Harmony* parent = toHarmony(item->parentItem());
     RectF bbox = parent->ldata()->bbox();
 
-    double bottom = parent->baseLine();
+    double endPointThickness = 0.03;
+    double extension = 0.1 * spatium * (parent->size() / 10.0);
+    double bottom = parent->baseLine() + extension;
+
+    double topCapHeight = DBL_MAX;
+    const TextSegment* rootTextSeg = nullptr;
+    for (const HarmonyRenderItem* renderItem : parent->ldata()->renderItemList.value()) {
+        if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
+            topCapHeight = std::min(topCapHeight, ts->pos().y() - ts->capHeight());
+
+            rootTextSeg = !rootTextSeg ? ts : rootTextSeg;
+        }
+    }
+    double top = topCapHeight - extension;
+    double height = bottom - top;
+    double rootCapHeight = rootTextSeg->capHeight();
+    double scale = (height - 2 * extension) / rootCapHeight;
 
     ldata->setMag(parent->mag());
-    ldata->startY = bbox.top() - 0.25 * spatium;
-    ldata->height = bottom - ldata->startY;
-    ldata->midPointThickness.set_value(ldata->height / 60 * ldata->mag());  // 0.1sp for a height of 6sp
+    ldata->startY = top;
+    ldata->height = height;
+    ldata->midPointThickness.set_value(ldata->height / 20 * ldata->mag() * std::pow(scale, -0.5));
+    ldata->endPointThickness.set_value(endPointThickness);
+
+    double shoulder = 0.2 * std::pow(ldata->height, 0.99) * std::pow(ldata->mag(), 0.1) * std::pow(scale, -0.5);
+    ldata->shoulderWidth = shoulder;
+
     const double PADDING = spatium * 0.2;
     ldata->setPosX(item->direction() == DirectionH::RIGHT ? bbox.right() + PADDING : bbox.left() - PADDING);
 }

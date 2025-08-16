@@ -2682,10 +2682,22 @@ void Segment::createShape(staff_idx_t staffIdx)
         if (e->isHarmony() || e->isFretDiagram()) {
             // TODO: eliminate once and for all this addHorizontalSpace hack [M.S.]
             RectF bbox = e->ldata()->bbox().translated(e->pos());
+            if (Parenthesis* p = e->leftParen()) {
+                bbox.unite(p->ldata()->bbox().translated(p->pos() + e->pos()));
+            }
+            if (Parenthesis* p = e->rightParen()) {
+                bbox.unite(p->ldata()->bbox().translated(p->pos() + e->pos()));
+            }
             s.addHorizontalSpacing(e, bbox.left(), bbox.right());
             if (e->isFretDiagram()) {
                 if (Harmony* harmony = toFretDiagram(e)->harmony()) {
                     RectF harmBbox = harmony->ldata()->bbox().translated(harmony->pos() + e->pos());
+                    if (Parenthesis* p = harmony->leftParen()) {
+                        harmBbox.unite(p->ldata()->bbox().translated(p->pos() + harmony->pos() + e->pos()));
+                    }
+                    if (Parenthesis* p = harmony->rightParen()) {
+                        harmBbox.unite(p->ldata()->bbox().translated(p->pos() + harmony->pos() + e->pos()));
+                    }
                     s.addHorizontalSpacing(harmony, harmBbox.left(), harmBbox.right());
                 }
             }
