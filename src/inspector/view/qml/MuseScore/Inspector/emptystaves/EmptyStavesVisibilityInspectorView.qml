@@ -45,7 +45,10 @@ InspectorSectionView {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
 
+            icon: IconCode.HIDE_EMPTY_STAVES
             text: qsTrc("inspector", "Hide empty staves")
+            orientation: Qt.Horizontal
+            enabled: root.model && root.model.canHideEmptyStavesInSelection
 
             onClicked: {
                 if (root.model) {
@@ -61,7 +64,10 @@ InspectorSectionView {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 2
 
-            text: qsTrc("inspector", "Show all empty staves")
+            icon: IconCode.SHOW_EMPTY_STAVES
+            text: qsTrc("inspector", "Show empty staves")
+            orientation: Qt.Horizontal
+            enabled: root.model && root.model.canShowAllEmptyStaves
 
             onClicked: {
                 if (root.model) {
@@ -77,7 +83,10 @@ InspectorSectionView {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 3
 
+            icon: IconCode.UNDO
             text: qsTrc("inspector", "Reset empty staves visibility")
+            orientation: Qt.Horizontal
+            enabled: root.model && root.model.canResetEmptyStavesVisibility
 
             onClicked: {
                 if (root.model) {
