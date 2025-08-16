@@ -1523,7 +1523,7 @@ bool NotationInteraction::startDropRange(const QByteArray& data)
 }
 
 bool NotationInteraction::startDropRange(const Fraction& sourceTick, const Fraction& tickLength,
-                                         engraving::staff_idx_t sourceStaffIdx, size_t numStaves)
+                                         engraving::staff_idx_t sourceStaffIdx, size_t numStaves, bool preserveMeasureAlignment)
 {
     if (tickLength.isZero() || numStaves == 0) {
         return false;
@@ -1538,6 +1538,7 @@ bool NotationInteraction::startDropRange(const Fraction& sourceTick, const Fract
     rdd.tickLength = tickLength;
     rdd.sourceStaffIdx = sourceStaffIdx;
     rdd.numStaves = numStaves;
+    rdd.preserveMeasureAlignment = preserveMeasureAlignment;
 
     return true;
 }
@@ -1678,6 +1679,22 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     return false;
 }
 
+static Measure* rangeEndMeasure(Score* score, const Fraction& endTick)
+{
+    Measure* endMeasure = score->tick2measure(endTick);
+    if (!endMeasure) {
+        endMeasure = score->lastMeasure();
+        if (!endMeasure) {
+            return nullptr;
+        }
+    }
+    if (endMeasure->tick() == endTick) {
+        // If the end tick is at the start of a measure, return the previous measure
+        return endMeasure->prevMeasure();
+    }
+    return endMeasure;
+}
+
 static Segment* rangeEndSegment(Score* score, const Fraction& endTick)
 {
     Segment* endSegment = score->tick2rightSegment(endTick,
@@ -1691,81 +1708,115 @@ static Segment* rangeEndSegment(Score* score, const Fraction& endTick)
     return endSegment ? endSegment : score->lastSegmentMM();
 }
 
-static bool dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t numStaves, staff_idx_t* staffIdx,
-                              Segment** segment, const Segment** endSegment = nullptr, ShowAnchors* showAnchors = nullptr)
+static bool dropRangePosition(Score* score, const PointF& pos,
+                              Fraction sourceStartTick, Fraction tickLength,
+                              staff_idx_t numStaves, staff_idx_t* targetStartStaffIdx,
+                              Segment** targetStartSegment, const Segment** targetEndSegment = nullptr,
+                              bool preserveMeasureAlignment = false,
+                              ShowAnchors* showAnchors = nullptr)
 {
-    IF_ASSERT_FAILED(score && staffIdx && segment) {
+    IF_ASSERT_FAILED(score && targetStartStaffIdx && targetStartSegment) {
         return false;
     }
 
-    static constexpr double spacingFactor = 0.5;
-    static constexpr bool useTimeAnchors = true;
-
-    // First, get an approximate location
-    score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
-    if (*staffIdx == muse::nidx || !*segment) {
+    Measure* targetStartMeasure = nullptr;
+    if (!dragPositionToMeasure(pos, score, &targetStartMeasure, targetStartStaffIdx)) {
         return false;
     }
 
-    // Determine the measures range
-    Fraction startTick = (*segment)->tick();
-    Fraction endTick = startTick + tickLength;
+    Fraction targetStartTick;
+    Fraction targetEndTick;
 
-    Measure* startMeasure = (*segment)->measure();
-    if (!startMeasure) {
+    if (preserveMeasureAlignment) {
+        Measure* sourceStartMeasure = score->tick2measure(sourceStartTick);
+        IF_ASSERT_FAILED(sourceStartMeasure) {
+            return false;
+        }
+
+        Fraction startTickOffset = sourceStartTick - sourceStartMeasure->tick();
+        targetStartTick = targetStartMeasure->tick() + startTickOffset;
+        targetEndTick = targetStartTick + tickLength;
+
+        if (targetStartTick >= targetStartMeasure->endTick()) {
+            // Target start tick is beyond the end of the measure, so cannot preserve alignment
+            // This can happen when the target measure is shorter than the source measure
+            preserveMeasureAlignment = false;
+        }
+    }
+    if (!preserveMeasureAlignment) {
+        // Assign temporary values until target segment is determined
+        targetStartTick = targetStartMeasure->tick();
+        targetEndTick = targetStartMeasure->endTick() - Fraction::fromTicks(1) + tickLength;
+    }
+
+    Measure* targetEndMeasure = rangeEndMeasure(score, targetEndTick);
+    if (!targetEndMeasure) {
         return false;
     }
 
-    Measure* endMeasure = score->tick2measure(endTick);
-    if (!endMeasure) {
-        endMeasure = score->lastMeasure();
+    IF_ASSERT_FAILED(targetStartMeasure == targetEndMeasure || targetStartMeasure->isBefore(targetEndMeasure)) {
+        return false;
+    }
 
-        if (!endMeasure) {
+    const staff_idx_t targetEndStaffIdx = std::min(*targetStartStaffIdx + numStaves, score->nstaves());
+
+    // Add time tick anchors throughout these measures
+    for (MeasureBase* mb = targetStartMeasure; mb && mb->tick() <= targetEndMeasure->tick(); mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        std::set<Fraction> additionalAnchorRelTicks;
+        if (preserveMeasureAlignment) {
+            if (mb == targetStartMeasure) {
+                additionalAnchorRelTicks.insert(targetStartTick - mb->tick());
+            }
+            if (mb == targetEndMeasure) {
+                additionalAnchorRelTicks.insert(targetEndTick - mb->tick());
+            }
+        }
+        for (staff_idx_t i = *targetStartStaffIdx; i < targetEndStaffIdx; ++i) {
+            EditTimeTickAnchors::updateAnchors(toMeasure(mb), i, additionalAnchorRelTicks);
+        }
+    }
+
+    if (preserveMeasureAlignment) {
+        *targetStartSegment = segmentOrChordRestSegmentAtSameTick(
+            targetStartMeasure->findSegment(Segment::CHORD_REST_OR_TIME_TICK_TYPE, targetStartTick));
+    } else {
+        static constexpr double spacingFactor = 0.5;
+        static constexpr bool useTimeAnchors = true;
+
+        // Depends on time tick anchors that we just created
+        if (!dragPositionToSegment(pos, targetStartMeasure, *targetStartStaffIdx, targetStartSegment, spacingFactor, useTimeAnchors)) {
+            return false;
+        }
+
+        targetStartTick = (*targetStartSegment)->tick();
+        targetEndTick = targetStartTick + tickLength;
+
+        targetEndMeasure = rangeEndMeasure(score, targetEndTick);
+        if (!targetEndMeasure) {
             return false;
         }
     }
 
-    IF_ASSERT_FAILED(startMeasure == endMeasure || startMeasure->isBefore(endMeasure)) {
-        return false;
-    }
-
-    const staff_idx_t endStaffIdx = std::min(*staffIdx + numStaves, score->nstaves());
-
-    // Add time tick anchors throughout these measures
-    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
-        if (!mb->isMeasure()) {
-            continue;
-        }
-        for (staff_idx_t i = 0; i < endStaffIdx; ++i) {
-            EditTimeTickAnchors::updateAnchors(toMeasure(mb), i);
-        }
-    }
-
-    // Get precise location using the newly created time tick anchors
-    score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
-    if (*staffIdx == muse::nidx || !*segment) {
-        return false;
-    }
-
-    startTick = (*segment)->tick();
-    endTick = startTick + tickLength;
-
-    if (endSegment) {
-        *endSegment = rangeEndSegment(score, endTick);
-        if (!*endSegment) {
+    if (targetEndSegment) {
+        *targetEndSegment = rangeEndSegment(score, targetEndTick);
+        if (!*targetEndSegment) {
             return false;
         }
     }
 
     if (showAnchors) {
-        *showAnchors = ShowAnchors(0, *staffIdx, *staffIdx + numStaves, startTick, endTick,
-                                   startMeasure->tick(), endMeasure->endTick());
+        *showAnchors = ShowAnchors(0, *targetStartStaffIdx, *targetStartStaffIdx + numStaves,
+                                   targetStartTick, targetEndTick,
+                                   targetStartMeasure->tick(), targetEndMeasure->endTick());
     }
 
     return true;
 }
 
-bool NotationInteraction::updateDropRange(const PointF& pos)
+bool NotationInteraction::updateDropRange(const PointF& pos, std::optional<bool> preserveMeasureAlignment)
 {
     IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
         return false;
@@ -1773,12 +1824,19 @@ bool NotationInteraction::updateDropRange(const PointF& pos)
 
     RangeDropData& rdd = m_dropData.rangeDropData.value();
 
+    if (preserveMeasureAlignment.has_value()) {
+        rdd.preserveMeasureAlignment = preserveMeasureAlignment.value();
+    }
+
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
     const Segment* endSegment = nullptr;
     ShowAnchors showAnchors;
 
-    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment, &endSegment, &showAnchors);
+    const bool ok = dropRangePosition(score(), pos,
+                                      rdd.sourceTick, rdd.tickLength, rdd.numStaves,
+                                      &staffIdx, &segment, &endSegment,
+                                      rdd.preserveMeasureAlignment, &showAnchors);
 
     if (showAnchors != score()->showAnchors()) {
         score()->setShowAnchors(showAnchors);
@@ -2101,7 +2159,9 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
 
-    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
+    const bool ok = dropRangePosition(score(), pos,
+                                      rdd.sourceTick, rdd.tickLength, rdd.numStaves,
+                                      &staffIdx, &segment, nullptr, rdd.preserveMeasureAlignment);
     if (!ok) {
         return false;
     }
