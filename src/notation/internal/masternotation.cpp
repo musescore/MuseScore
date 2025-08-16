@@ -431,56 +431,60 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
     }
 
     if (scoreOptions.withTempo) {
-        mu::engraving::Fraction ts(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
+        String text { u"<sym>metNoteQuarterUp</sym> = %1" };
+        const double bpm = scoreOptions.tempo.valueBpm;
+        double qpm = bpm; // internal tempo value is always expressed in quarter notes
 
-        QString text("<sym>metNoteQuarterUp</sym> = %1");
-        double bpm = scoreOptions.tempo.valueBpm;
-
-        bool withDot = scoreOptions.tempo.withDot;
+        const bool withDot = scoreOptions.tempo.withDot;
         switch (scoreOptions.tempo.duration) {
         case DurationType::V_WHOLE:
             text = "<sym>metNoteWhole</sym> = %1";
+            qpm *= 4.0;
             break;
         case DurationType::V_HALF:
             if (withDot) {
                 text = "<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                qpm *= 3.0;
             } else {
                 text = "<sym>metNoteHalfUp</sym> = %1";
+                qpm *= 2.0;
             }
             break;
         case DurationType::V_QUARTER:
             if (withDot) {
                 text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                qpm *= 1.5;
             } else {
                 text = "<sym>metNoteQuarterUp</sym> = %1";
+                //qpm *= 1.0;
             }
             break;
         case DurationType::V_EIGHTH:
             if (withDot) {
                 text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                qpm *= 0.75;
             } else {
                 text = "<sym>metNote8thUp</sym> = %1";
+                qpm *= 0.5;
             }
             break;
         case DurationType::V_16TH:
             if (withDot) {
                 text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                qpm *= 0.375;
             } else {
                 text = "<sym>metNote16thUp</sym> = %1";
+                qpm *= 0.25;
             }
             break;
         default:
             break;
         }
 
-        mu::engraving::Segment* seg = score->firstMeasure()->first(mu::engraving::SegmentType::ChordRest);
-        mu::engraving::TempoText* tt = new mu::engraving::TempoText(seg);
+        engraving::Segment* seg = score->firstMeasure()->first(engraving::SegmentType::ChordRest);
+        engraving::TempoText* tt = new engraving::TempoText(seg);
         tt->setXmlText(text.arg(bpm));
-
-        double tempo = scoreOptions.tempo.valueBpm;
-        tempo /= 60; // bpm -> bps
-
-        tt->setTempo(tempo);
+        tt->setTempo(qpm / 60.0); // qpm -> qps
         tt->setFollowText(true);
         tt->setTrack(0);
         seg->add(tt);
