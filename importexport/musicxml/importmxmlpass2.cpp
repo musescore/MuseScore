@@ -3754,6 +3754,14 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                   if (!smufl.isEmpty())
                         _wordsText += "<sym>" + smufl + "</sym>";
                   }
+            else if (_e.name() == "string-mute") {
+                  const QString type = _e.attributes().value("type").toString();
+                  if (type == "on")
+                        _wordsText += "<sym>stringsMuteOn</sym>";
+                  else if (type == "off")
+                        _wordsText += "<sym>stringsMuteOff</sym>";
+                  _e.skipCurrentElement();
+                  }
             else if (_e.name() == "other-direction")
                   otherDirection();
             else
