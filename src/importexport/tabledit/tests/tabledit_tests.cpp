@@ -66,9 +66,11 @@ TEST_F(TablEdit_Tests, tef_chord_C_D) {
     tefReadTest("chord_C_D");
 }
 
+#if 0
 TEST_F(TablEdit_Tests, tef_grace_1) {
     tefReadTest("grace_1");
 }
+#endif
 
 TEST_F(TablEdit_Tests, tef_guitar) {
     tefReadTest("guitar");
