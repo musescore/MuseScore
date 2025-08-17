@@ -554,6 +554,9 @@ EngravingItem* Ambitus::prevSegmentElement()
 
 String Ambitus::accessibleInfo() const
 {
+    if (m_topTpc == Tpc::TPC_INVALID || m_bottomTpc == Tpc::TPC_INVALID) {
+        return EngravingItem::accessibleInfo();
+    }
     return EngravingItem::accessibleInfo() + u"; "
            + muse::mtrc("engraving", "Top pitch: %1; Bottom pitch: %2")
            .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false) + String::number(topOctave()),
