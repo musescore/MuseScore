@@ -211,9 +211,6 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
             Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
             TRead::readItem(s, e, ctx);
             score->addSpanner(s);
-        } else if (tag == "Excerpt") {
-            // Since version 400, the Excerpts are stored in a separate file
-            e.skipCurrentElement();
         } else if (e.name() == "initialPartId") {
             if (score->excerpt()) {
                 score->excerpt()->setInitialPartId(ID(e.readInt()));

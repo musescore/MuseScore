@@ -3446,20 +3446,6 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 readPedal(e, ctx, toPedal(s));
             }
             score->addSpanner(s);
-        } else if (tag == "Excerpt") {
-            if (MScore::noExcerpts) {
-                e.skipCurrentElement();
-            } else {
-                if (score->isMaster()) {
-                    MasterScore* mScore = static_cast<MasterScore*>(score);
-                    Excerpt* ex = new Excerpt(mScore);
-                    read400::TRead::read(ex, e, ctx);
-                    mScore->excerpts().push_back(ex);
-                } else {
-                    LOGD("read206: readScore(): part cannot have parts");
-                    e.skipCurrentElement();
-                }
-            }
         } else if (tag == "Score") {            // recursion
             if (MScore::noExcerpts) {
                 e.skipCurrentElement();

@@ -135,20 +135,6 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
             read400::TRead::readItem(s, e, ctx);
             score->addSpanner(s);
-        } else if (tag == "Excerpt") {
-            if (MScore::noExcerpts) {
-                e.skipCurrentElement();
-            } else {
-                if (score->isMaster()) {
-                    MasterScore* mScore = static_cast<MasterScore*>(score);
-                    Excerpt* ex = new Excerpt(mScore);
-                    read400::TRead::read(ex, e, ctx);
-                    mScore->excerpts().push_back(ex);
-                } else {
-                    LOGD("Score::read(): part cannot have parts");
-                    e.skipCurrentElement();
-                }
-            }
         } else if (e.name() == "Tracklist") {
             int strack = e.intAttribute("sTrack",   -1);
             int dtrack = e.intAttribute("dstTrack", -1);
