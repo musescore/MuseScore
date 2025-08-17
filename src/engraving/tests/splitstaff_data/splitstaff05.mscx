@@ -78,7 +78,6 @@
           <TimeSig>
             <sigN>3</sigN>
             <sigD>4</sigD>
-            <showCourtesy>0</showCourtesy>
             </TimeSig>
           <Rest>
             <durationType>quarter</durationType>
