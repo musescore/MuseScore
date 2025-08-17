@@ -3678,7 +3678,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         }
     }
 
-    // check if all articulations were handled
+    // write all remaining articulations as other-articulation
     for (const Articulation* a : na) {
         if (!ExportMusicXml::canWrite(a)) {
             continue;
@@ -3689,7 +3689,21 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             && symIdToTechn(sid) == ""
             && !a->isOrnament() && !a->isTapping()
             && !isLaissezVibrer(sid)) {
-            LOGD("unknown chord attribute %d %s", static_cast<int>(sid), muPrintable(a->translatedTypeUserName()));
+            String otherArtic = u"other-articulation";
+            otherArtic += color2xml(a);
+            otherArtic += ExportMusicXml::positioningAttributes(a);
+            if (a->anchor() != ArticulationAnchor::AUTO) {
+                if (a->anchor() == ArticulationAnchor::TOP) {
+                    otherArtic += u" placement=\"above\"";
+                } else {
+                    otherArtic += u" placement=\"below\"";
+                }
+            }
+            notations.tag(m_xml, a);
+            articulations.tag(m_xml);
+            AsciiStringView noteheadName = SymNames::nameForSymId(sid);
+            otherArtic += String(u" smufl=\"%1\"").arg(String::fromAscii(noteheadName.ascii()));
+            m_xml.tagRaw(otherArtic);
         }
     }
 }
