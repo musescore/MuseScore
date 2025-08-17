@@ -156,6 +156,7 @@
           <PlayTechAnnotation>
             <playTechType>mute</playTechType>
             <eid>Q_Q</eid>
+            <color r="69" g="0" b="84" a="255"/>
             <text><sym>stringsMuteOn</sym></text>
             </PlayTechAnnotation>
           <Chord>
@@ -206,6 +207,7 @@
           <PlayTechAnnotation>
             <playTechType>open</playTechType>
             <eid>a_a</eid>
+            <color r="253" g="169" b="51" a="255"/>
             <text><sym>stringsMuteOff</sym></text>
             </PlayTechAnnotation>
           <Chord>
