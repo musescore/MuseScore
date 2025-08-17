@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "engraving/dom/mscore.h"
+#include "engraving/types/types.h"
 
 namespace mu::iex::tabledit {
 struct TefNote;
@@ -41,7 +42,10 @@ public:
     int findFirstPossibleVoice(const TefNote* const note, const std::array<int, 3> voices);
     int stopPosition(const size_t voice);
     int voice(const TefNote* const note);
-    const std::vector<std::vector<const TefNote*> >& voiceContent(int voice) const { return voiceContents.at(voice); }
+    const std::vector<std::vector<const TefNote*> >& voiceContent(mu::engraving::voice_idx_t voice) const
+    {
+        return voiceContents.at(voice);
+    }
 
 private:
     void appendNoteToVoice(const TefNote* const note, int voice);

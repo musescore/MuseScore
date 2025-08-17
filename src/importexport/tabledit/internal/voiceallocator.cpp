@@ -29,7 +29,7 @@ bool VoiceAllocator::canAddTefNoteToVoice(const TefNote* const note, const int v
 {
     // is there room after the previous note ?
     if (stopPosition(voice) <= note->position) {
-        LOGD("add string %d fret %d to voice %d", note->string, note->fret, voice);
+        LOGN("add string %d fret %d to voice %d", note->string, note->fret, voice);
         return true;
     }
     // can the note go into a chord ?
@@ -39,7 +39,7 @@ bool VoiceAllocator::canAddTefNoteToVoice(const TefNote* const note, const int v
         && !note->rest
         && notePlaying->position == note->position
         && notePlaying->duration == note->duration) {
-        LOGD("add string %d fret %d to voice %d as chord", note->string, note->fret, voice);
+        LOGN("add string %d fret %d to voice %d as chord", note->string, note->fret, voice);
         return true;
     }
     return false;
@@ -105,28 +105,28 @@ int VoiceAllocator::stopPosition(const size_t voice)
 
 void VoiceAllocator::appendNoteToVoice(const TefNote* const note, int voice)
 {
-    LOGD("position %d string %d fret %d voice %d", note->position, note->string, note->fret, voice);
+    LOGN("position %d string %d fret %d voice %d", note->position, note->string, note->fret, voice);
     const auto nChords { voiceContents[voice].size() };
-    LOGD("voice %d nChords %zu", voice, nChords);
+    LOGN("voice %d nChords %zu", voice, nChords);
     if (nChords == 0) {
-        LOGD("create first chord");
+        LOGN("create first chord");
         std::vector<const TefNote*> chord;
         chord.push_back(note);
         voiceContents[voice].push_back(chord);
     } else {
         const auto position { voiceContents[voice].at(nChords - 1).at(0)->position };
-        LOGD("chord %zu position %d", nChords - 1, position);
+        LOGN("chord %zu position %d", nChords - 1, position);
         if (position == note->position) {
-            LOGD("add to last chord");
+            LOGN("add to last chord");
             voiceContents[voice].at(nChords - 1).push_back(note);
         } else {
-            LOGD("create next chord at position %d", note->position);
+            LOGN("create next chord at position %d", note->position);
             std::vector<const TefNote*> chord;
             chord.push_back(note);
             voiceContents[voice].push_back(chord);
         }
     }
-    LOGD("done");
+    LOGN("done");
 }
 
 // debug: dump voices
@@ -134,11 +134,11 @@ void VoiceAllocator::appendNoteToVoice(const TefNote* const note, int voice)
 void VoiceAllocator::dump()
 {
     for (size_t i = 0; i < mu::engraving::VOICES; ++i) {
-        LOGD("- voice %zu", i);
+        LOGN("- voice %zu", i);
         for (size_t j = 0; j < voiceContents.at(i).size(); ++j) {
-            LOGD("  - chord %zu", j);
+            LOGN("  - chord %zu", j);
             for (const auto note : voiceContents.at(i).at(j)) {
-                LOGD("    - position %d string %d fret %d", note->position, note->string, note->fret);
+                LOGN("    - position %d string %d fret %d", note->position, note->string, note->fret);
             }
         }
     }
@@ -182,7 +182,7 @@ void VoiceAllocator::addColumn(const std::vector<const TefNote*>& column)
 void VoiceAllocator::addNote(const TefNote* const note, const bool preferVoice0)
 {
     int voice { -1 };
-    LOGD("note position %d voice %d", note->position, static_cast<int>(note->voice));
+    LOGN("note position %d voice %d", note->position, static_cast<int>(note->voice));
     if (note->voice == Voice::UPPER) {
         voice = findFirstPossibleVoice(note, { 0, 2, 3 });
     } else if (note->voice == Voice::LOWER) {
@@ -206,7 +206,7 @@ int VoiceAllocator::voice(const TefNote* const note)
         LOGD("no voice allocated for note %p", note);
     }
 
-    LOGD("note %p voice %d res %d", note, static_cast<int>(note->voice), res);
+    LOGN("note %p voice %d res %d", note, static_cast<int>(note->voice), res);
     return res;
 }
 } // namespace mu::iex::tabledit

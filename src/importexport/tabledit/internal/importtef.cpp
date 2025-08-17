@@ -106,7 +106,7 @@ std::string TablEdit::readUtf8Text()
         result += readUInt8();
     }
     readUInt8(); // skip null
-    LOGD("size %d result '%s'", size, result.c_str());
+    LOGN("size %d result '%s'", size, result.c_str());
     return result;
 }
 
@@ -119,7 +119,7 @@ std::string TablEdit::readUtf8TextIndirect(uint32_t positionOfPosition)
     uint32_t position = readUInt32();
     if (position) {
         _file->seek(position);
-        LOGD("position %d", position);
+        LOGN("position %d", position);
         return readUtf8Text();
     } else {
         return "";
@@ -146,7 +146,7 @@ engraving::part_idx_t TablEdit::partIdx(size_t stringIdx, bool& ok) const
     }
     ok = false;
     result = 0;
-    LOGD("string %zu not found result %zu", stringIdx, result);
+    LOGN("string %zu not found result %zu", stringIdx, result);
     return result;
 }
 
@@ -228,7 +228,7 @@ static void connectTie(mu::engraving::Chord* chord, Note* note)
     Segment* segment { chord->segment() };
     auto startTrack { VOICES* (chord->track() / VOICES) };
     auto endTrack { startTrack + VOICES - 1 };
-    LOGD("segment %p tick %d string %d startTrack %zu track %zu endTrack %zu",
+    LOGN("segment %p tick %d string %d startTrack %zu track %zu endTrack %zu",
          segment, segment->tick().ticks(), note->string(), startTrack, chord->track(), endTrack);
 
     for (Segment* seg = segment->prev1(); seg; seg = seg->prev1()) {
@@ -236,14 +236,14 @@ static void connectTie(mu::engraving::Chord* chord, Note* note)
             EngravingItem* el = seg->element(track);
             if (el && el->isChord()) {
                 Chord* firstChord = toChord(el);
-                LOGD("firstChord %p tick %d track %zu", firstChord, firstChord->tick().ticks(), track);
+                LOGN("firstChord %p tick %d track %zu", firstChord, firstChord->tick().ticks(), track);
                 for (Note* firstNote : firstChord->notes()) {
-                    LOGD("- string %d", firstNote->string());
+                    LOGN("- string %d", firstNote->string());
                     if (firstNote->string() == note->string()) {
                         Tie* tie = Factory::createTie(firstNote);
                         tie->setEndNote(note);
                         firstNote->add(tie);
-                        LOGD(" -> tie %p", tie);
+                        LOGN(" -> tie %p", tie);
                         return;
                     }
                 }
@@ -255,7 +255,7 @@ static void connectTie(mu::engraving::Chord* chord, Note* note)
 static void addNoteToChord(mu::engraving::Chord* chord, track_idx_t track, int pitch, int fret, int string, bool tie,
                            muse::draw::Color color)
 {
-    LOGD("pitch %d", pitch);
+    LOGN("pitch %d", pitch);
     mu::engraving::Note* note = Factory::createNote(chord);
     if (note) {
         note->setTrack(track);
@@ -317,13 +317,13 @@ void TablEdit::createContents()
     allocateVoices(voiceAllocators);
 
     for (size_t part = 0; part < tefInstruments.size(); ++part) {
-        LOGD("part %zu", part);
+        LOGN("part %zu", part);
         for (voice_idx_t voice = 0; voice < mu::engraving::VOICES; ++voice) {
-            LOGD("- voice %zu", voice);
+            LOGN("- voice %zu", voice);
             auto& voiceContent { voiceAllocators.at(part).voiceContent(voice) };
             TupletHandler tupletHandler;
             for (size_t k = 0; k < voiceContent.size(); ++k) {
-                LOGD("  - chord %zu", k);
+                LOGN("  - chord %zu", k);
                 // tefNotes is either a rest or a chord of one or more notes
                 const std::vector<const TefNote*>& tefNotes { voiceContent.at(k) };
 
@@ -347,7 +347,7 @@ void TablEdit::createContents()
 
                 Fraction tick { firstNote->position, 64 }; // position is in 64th
                 tick += positionCorrection;
-                LOGD("    positionCorrection %d/%d tick %d/%d length %d/%d",
+                LOGN("    positionCorrection %d/%d tick %d/%d length %d/%d",
                      positionCorrection.numerator(), positionCorrection.denominator(),
                      tick.numerator(), tick.denominator(),
                      length.numerator(), length.denominator()
@@ -358,7 +358,7 @@ void TablEdit::createContents()
                     LOGD("error: no measure");
                     continue;
                 } else {
-                    LOGD("measure %p", measure);
+                    LOGN("measure %p", measure);
                 }
                 Segment* segment { measure->getSegment(mu::engraving::SegmentType::ChordRest, tick) };
                 if (!segment) {
@@ -373,10 +373,10 @@ void TablEdit::createContents()
                 }
 
                 if (firstNote->rest) {
-                    LOGD("    - rest position %d string %d fret %d", firstNote->position, firstNote->string, firstNote->fret);
+                    LOGN("    - rest position %d string %d fret %d", firstNote->position, firstNote->string, firstNote->fret);
                     addRest(segment, track, tDuration, length, toColor(voice));
                 } else {
-                    LOGD("    - note(s) position %d string %d fret %d", firstNote->position, firstNote->string, firstNote->fret);
+                    LOGN("    - note(s) position %d string %d fret %d", firstNote->position, firstNote->string, firstNote->fret);
                     mu::engraving::Chord* chord { Factory::createChord(segment) };
                     if (chord) {
                         chord->setTrack(track);
@@ -394,7 +394,7 @@ void TablEdit::createContents()
                             const auto stringOffset = stringNumberPreviousParts(part);
                             // todo fix magical constant 96 and code duplication
                             int pitch = 96 - instrument.tuning.at(note->string - stringOffset - 1) + note->fret;
-                            LOGD("      -> string %d fret %d pitch %d", note->string, note->fret, pitch);
+                            LOGN("      -> string %d fret %d pitch %d", note->string, note->fret, pitch);
                             // note TableEdit's strings start at 1, MuseScore's at 0
                             addNoteToChord(chord, track, pitch, note->fret, note->string - 1, note->tie, toColor(voice));
                             if (note->hasGrace) {
@@ -527,7 +527,7 @@ void TablEdit::createParts()
         stringData.setFrets(25); // reasonable default (?)
         for (int i = 0; i < instrument.stringNumber; ++i) {
             int pitch = 96 - instrument.tuning.at(instrument.stringNumber - i - 1);
-            LOGD("pitch %d", pitch);
+            LOGN("pitch %d", pitch);
             instrString str { pitch };
             stringData.stringList().push_back(str);
         }
@@ -567,7 +567,7 @@ void TablEdit::createProperties()
 
 void TablEdit::createRepeats()
 {
-    LOGD("reading list size %zu number of measures %zu", tefReadingList.size(), tefMeasures.size());
+    LOGN("reading list size %zu number of measures %zu", tefReadingList.size(), tefMeasures.size());
     // proof of concept: add repeat to whole score if
     // - reading list contains two items
     // - both spanning the entire score
@@ -575,7 +575,7 @@ void TablEdit::createRepeats()
         && tefReadingList.at(0).firstMeasure == 1 && tefReadingList.at(0).lastMeasure == static_cast<int>(tefMeasures.size())
         && tefReadingList.at(1).firstMeasure == 1 && tefReadingList.at(1).lastMeasure == static_cast<int>(tefMeasures.size())
         ) {
-        LOGD("do it");
+        LOGN("do it");
         if (score->measures()->empty()) {
             LOGE("no measures in score");
             return;
@@ -585,7 +585,7 @@ void TablEdit::createRepeats()
         first->setRepeatStart(true);
         last->setRepeatEnd(true);
     } else {
-        LOGD("no score repeat");
+        LOGN("no score repeat");
     }
 }
 
@@ -620,7 +620,7 @@ void TablEdit::createTempo()
 void TablEdit::createTexts()
 {
     for (const auto& textMarker : tefTextMarkers) {
-        LOGD("position %d string %d text marker %d", textMarker.position, textMarker.string, textMarker.index);
+        LOGN("position %d string %d text marker %d", textMarker.position, textMarker.string, textMarker.index);
         bool ok { true };
         const auto part = partIdx(textMarker.string, ok);
         if (!ok) {
@@ -628,7 +628,7 @@ void TablEdit::createTexts()
             continue;
         }
         const auto track = part * VOICES;
-        LOGD("part %zu track %zu", part, track);
+        LOGN("part %zu track %zu", part, track);
 
         Fraction tick { textMarker.position, 64 }; // position is in 64th
         Measure* measure { tick2measure(score, tick) };
@@ -636,7 +636,7 @@ void TablEdit::createTexts()
             LOGD("error: no measure");
             continue;
         } else {
-            LOGD("measure %p", measure);
+            LOGN("measure %p", measure);
         }
         Segment* segment { measure->getSegment(mu::engraving::SegmentType::ChordRest, tick) };
         if (!segment) {
@@ -782,13 +782,13 @@ void TablEdit::readTefContents()
     for (const auto& instrument : tefInstruments) {
         totalNumberOfStrings += instrument.stringNumber;
     }
-    LOGD("totalNumberOfStrings %d", totalNumberOfStrings);
+    LOGN("totalNumberOfStrings %d", totalNumberOfStrings);
 
     _file->seek(OFFSET_CONTENTS);
     uint32_t position = readUInt32();
     _file->seek(position);
     uint32_t offset = readUInt32();
-    LOGD("position %d offset %d", position, offset);
+    LOGN("position %d offset %d", position, offset);
     while (offset != 0xFFFFFFFF) {
         uint8_t byte1 = readUInt8();
         uint8_t byte2 = readUInt8();
@@ -830,7 +830,7 @@ void TablEdit::readTefContents()
             tefTextMarker.position = (offset >> 3) / totalNumberOfStrings;
             tefTextMarker.string = ((offset >> 3) % totalNumberOfStrings) + 1;
             tefTextMarker.index = static_cast<int>((byte3 << 8) + byte2);
-            LOGD("text marker %d", tefTextMarker.index);
+            LOGN("text marker %d", tefTextMarker.index);
             tefTextMarkers.push_back(tefTextMarker);
         }
         offset = readUInt32();
@@ -849,7 +849,7 @@ void TablEdit::readTefInstruments()
     uint16_t structSize = readUInt16();
     uint16_t numberOfInstruments = readUInt16();
     //uint32_t zero = readUInt16();
-    LOGD("structSize %d numberOfInstruments %d", structSize, numberOfInstruments);
+    LOGN("structSize %d numberOfInstruments %d", structSize, numberOfInstruments);
     for (uint16_t i = 0; i < numberOfInstruments; ++i) {
         TefInstrument instrument;
         instrument.stringNumber = readUInt16();
@@ -941,7 +941,7 @@ void TablEdit::readTefTexts()
     uint16_t numberOfTexts = readUInt16();
     for (uint16_t i = 0; i < numberOfTexts; ++i) {
         std::string text { readUtf8Text() };
-        LOGD("i %d text '%s'", i, text.c_str());
+        LOGN("i %d text '%s'", i, text.c_str());
         tefTexts.push_back(text);
     }
 }
@@ -962,7 +962,7 @@ void TablEdit::readTefHeader()
     tefHeader.tbed = readUInt32();
     readUInt32(); // skip contents
     auto titlePtr = readUInt32();
-    LOGD("titlePtr %d", titlePtr);
+    LOGN("titlePtr %d", titlePtr);
     _file->seek(titlePtr);
     tefHeader.title = readUtf8TextIndirect(OFFSET_TITLE);
     tefHeader.subTitle = readUtf8TextIndirect(OFFSET_SUBTITLE);
@@ -985,16 +985,16 @@ void TablEdit::readTefHeader()
 Err TablEdit::import()
 {
     readTefHeader();
-    LOGD("version %d subversion %d", tefHeader.version, tefHeader.subVersion);
-    LOGD("tempo %d chorus %d reverb %d", tefHeader.tempo, tefHeader.chorus, tefHeader.reverb);
-    LOGD("securityCode %d securityFlags %d", tefHeader.securityCode, tefHeader.securityFlags);
-    LOGD("title '%s'", tefHeader.title.c_str());
-    LOGD("subTitle '%s'", tefHeader.subTitle.c_str());
-    LOGD("comment '%s'", tefHeader.comment.c_str());
-    LOGD("notes '%s'", tefHeader.notes.c_str());
-    LOGD("internetLink '%s'", tefHeader.internetLink.c_str());
-    LOGD("copyright '%s'", tefHeader.copyright.c_str());
-    LOGD("tbed %d wOldNum %d wFormat %d", tefHeader.tbed, tefHeader.wOldNum, tefHeader.wFormat);
+    LOGN("version %d subversion %d", tefHeader.version, tefHeader.subVersion);
+    LOGN("tempo %d chorus %d reverb %d", tefHeader.tempo, tefHeader.chorus, tefHeader.reverb);
+    LOGN("securityCode %d securityFlags %d", tefHeader.securityCode, tefHeader.securityFlags);
+    LOGN("title '%s'", tefHeader.title.c_str());
+    LOGN("subTitle '%s'", tefHeader.subTitle.c_str());
+    LOGN("comment '%s'", tefHeader.comment.c_str());
+    LOGN("notes '%s'", tefHeader.notes.c_str());
+    LOGN("internetLink '%s'", tefHeader.internetLink.c_str());
+    LOGN("copyright '%s'", tefHeader.copyright.c_str());
+    LOGN("tbed %d wOldNum %d wFormat %d", tefHeader.tbed, tefHeader.wOldNum, tefHeader.wFormat);
     if ((tefHeader.wFormat >> 8) < 10) {
         return Err::FileBadFormat;
         //return Err::FileTooOld; // TODO: message is too specific for MuseScore format
@@ -1008,31 +1008,31 @@ Err TablEdit::import()
     }
     readTefTexts();
     for (const auto& text : tefTexts) {
-        LOGD("text: '%s'", text.c_str());
+        LOGN("text: '%s'", text.c_str());
     }
     readTefMeasures();
     for (const auto& measure : tefMeasures) {
-        LOGD("flag %d key %d size %d numerator %d denominator %d",
+        LOGN("flag %d key %d size %d numerator %d denominator %d",
              measure.flag, measure.key, measure.size, measure.numerator, measure.denominator);
     }
     readTefInstruments();
     for (const auto& instrument : tefInstruments) {
-        LOGD("stringNumber %d firstString %d midiVoice %d midiBank %d",
+        LOGN("stringNumber %d firstString %d midiVoice %d midiBank %d",
              instrument.stringNumber, instrument.firstString, instrument.midiVoice, instrument.midiBank);
     }
     readTefReadingList();
     for (const auto& item : tefReadingList) {
-        LOGD("firstMeasure %d lastMeasure %d", item.firstMeasure, item.lastMeasure);
+        LOGN("firstMeasure %d lastMeasure %d", item.firstMeasure, item.lastMeasure);
     }
     readTefContents();
     for (const auto& note : tefContents) {
-        LOGD("position %d rest %d string %d fret %d duration %d length %d dots %d tie %d triplet %d voice %d",
+        LOGN("position %d rest %d string %d fret %d duration %d length %d dots %d tie %d triplet %d voice %d",
              note.position, note.rest, note.string, note.fret,
              note.duration, note.length, note.dots,
              note.tie, note.triplet, static_cast<int>(note.voice));
     }
     for (const auto& textMarker : tefTextMarkers) {
-        LOGD("position %d string %d text marker %d", textMarker.position, textMarker.string, textMarker.index);
+        LOGN("position %d string %d text marker %d", textMarker.position, textMarker.string, textMarker.index);
     }
     createScore();
     return Err::NoError;
