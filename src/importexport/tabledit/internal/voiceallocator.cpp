@@ -87,7 +87,6 @@ static int durationToInt(uint8_t duration) // TODO duplicated code ?
     case 28: return 7; //"16th double dotted";
     default: return 0; //"undefined";
     }
-    return 0; //"undefined";
 }
 
 int VoiceAllocator::stopPosition(const size_t voice)

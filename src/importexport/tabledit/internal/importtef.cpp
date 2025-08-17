@@ -154,11 +154,11 @@ engraving::part_idx_t TablEdit::partIdx(size_t stringIdx, bool& ok) const
 
 int TablEdit::stringNumberPreviousParts(part_idx_t partIdx) const
 {
-    part_idx_t result { 0 };
+    int result { 0 };
     for (part_idx_t i = 0; i < partIdx; ++i) {
         result += tefInstruments.at(i).stringNumber;
     }
-    LOGN("partIdx %zu result %zu", partIdx, result);
+    LOGN("partIdx %zu result %d", partIdx, result);
     return result;
 }
 
@@ -318,7 +318,7 @@ void TablEdit::createContents()
 
     for (size_t part = 0; part < tefInstruments.size(); ++part) {
         LOGD("part %zu", part);
-        for (size_t voice = 0; voice < mu::engraving::VOICES; ++voice) {
+        for (voice_idx_t voice = 0; voice < mu::engraving::VOICES; ++voice) {
             LOGD("- voice %zu", voice);
             auto& voiceContent { voiceAllocators.at(part).voiceContent(voice) };
             TupletHandler tupletHandler;
@@ -865,13 +865,13 @@ void TablEdit::readTefInstruments()
         instrument.fClef = readUInt8();
         instrument.output = readUInt16();
         instrument.options = readUInt16();
-        for (uint16_t i = 0; i < 12; ++i) {
+        for (uint16_t j = 0; j < 12; ++j) {
             auto n = readUInt8();
-            instrument.tuning[i] = n;
+            instrument.tuning[j] = n;
         }
         // name is a zero-terminated utf8 string
         bool atEnd = false;
-        for (uint16_t i = 0; i < 36; ++i) {
+        for (uint16_t j = 0; j < 36; ++j) {
             auto c = readUInt8();
             if (c == 0) {
                 // stop appending, but continue reading
