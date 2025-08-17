@@ -165,7 +165,7 @@ int TablEdit::stringNumberPreviousParts(part_idx_t partIdx) const
 // debug: use color cr to show voice
 
 #if 0
-static muse::draw::Color toColor(const int voice)
+static muse::draw::Color toColor(const voice_idx_t voice)
 {
     // debug: color notes based on voice number
     switch (voice) {
@@ -178,7 +178,7 @@ static muse::draw::Color toColor(const int voice)
 }
 
 #else
-static muse::draw::Color toColor(const int)
+static muse::draw::Color toColor(const voice_idx_t)
 {
     // no debug: color notes black
     return muse::draw::Color::BLACK;
