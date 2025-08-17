@@ -1081,7 +1081,7 @@ void Note::updateHeadGroup(const NoteHeadGroup headGroup)
 
     if (links()) {
         for (EngravingObject* scoreElement : *links()) {
-            scoreElement->undoChangeProperty(Pid::HEAD_GROUP, static_cast<int>(group));
+            scoreElement->undoChangeProperty(Pid::HEAD_GROUP, group);
             Note* note = toNote(scoreElement);
 
             if (note->staff() && !note->staff()->isDrumStaff(chord()->tick()) && group == NoteHeadGroup::HEAD_CROSS) {
@@ -1089,7 +1089,7 @@ void Note::updateHeadGroup(const NoteHeadGroup headGroup)
             }
         }
     } else {
-        undoChangeProperty(Pid::HEAD_GROUP, int(group));
+        undoChangeProperty(Pid::HEAD_GROUP, group);
     }
 }
 
@@ -1783,14 +1783,14 @@ EngravingItem* Note::drop(EditData& data)
         if (group != m_headGroup) {
             if (links()) {
                 for (EngravingObject* se : *links()) {
-                    se->undoChangeProperty(Pid::HEAD_GROUP, int(group));
+                    se->undoChangeProperty(Pid::HEAD_GROUP, group);
                     Note* note = toNote(se);
                     if (note->staff() && !note->staff()->isDrumStaff(ch->tick())) {
                         se->undoChangeProperty(Pid::DEAD, group == NoteHeadGroup::HEAD_CROSS);
                     }
                 }
             } else {
-                undoChangeProperty(Pid::HEAD_GROUP, int(group));
+                undoChangeProperty(Pid::HEAD_GROUP, group);
                 if (!staff()->isDrumStaff(ch->tick())) {
                     undoChangeProperty(Pid::DEAD, group == NoteHeadGroup::HEAD_CROSS);
                 }
@@ -2958,7 +2958,7 @@ PropertyValue Note::getProperty(Pid propertyId) const
     case Pid::HEAD_SCHEME:
         return int(headScheme());
     case Pid::HEAD_GROUP:
-        return int(headGroup());
+        return headGroup();
     case Pid::USER_VELOCITY:
         return userVelocity();
     case Pid::TUNING:
