@@ -34,7 +34,7 @@
         <source>Piccolo in E♭, sounding a minor third above the standard piccolo.</source>
         <comment>eb-piccolo description</comment>
         <extracomment>description for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pikkolo E♭, soi pientä terssiä alempaa kuin tavallinen pikkolo.</translation>
+        <translation>Pikkolo E♭, soi pientä terssiä alempaa kuin normaali pikkolo.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="217"/>
@@ -69,7 +69,7 @@
         <source>Piccolo in D♭, sounding a semitone above the standard piccolo.</source>
         <comment>db-piccolo description</comment>
         <extracomment>description for Piccolo; transposition: D♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pikkolo D♭, soi puolisävelaskelta tavallisen piccon yläpuolella.</translation>
+        <translation>Pikkolo D♭, soi puolisävelaskelta normaalin piccon yläpuolella.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="228"/>
@@ -139,7 +139,7 @@
         <source>Flute in G, sounding a fifth higher than the standard flute.</source>
         <comment>treble-flute description</comment>
         <extracomment>description for Treble Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Huilu G, soi kvinttiä korkeammalta kuin tavallinen huilu</translation>
+        <translation>Huilu G, soi kvinttiä korkeammalta kuin normaali huilu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="250"/>
@@ -195,7 +195,7 @@
         <source>Flute in E♭, sounding a minor third above the standard flute.</source>
         <comment>soprano-flute description</comment>
         <extracomment>description for Soprano Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Huilu E♭, soi pientä terssiä korkeammalta, kuin tavallinen huilu.</translation>
+        <translation>Huilu E♭, soi pientä terssiä korkeammalta, kuin normaali huilu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="268"/>
@@ -307,7 +307,7 @@
         <source>Flute in G, sounding a fourth lower than the standard flute.</source>
         <comment>alto-flute description</comment>
         <extracomment>description for Alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Huilu G, soi kvarttia matalammalta, kuin tavallinen huilu.</translation>
+        <translation>Huilu G, soi kvarttia matalammalta, kuin normaali huilu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="304"/>
@@ -335,7 +335,7 @@
         <source>Flute in C, sounding an octave lower than the standard flute.</source>
         <comment>bass-flute description</comment>
         <extracomment>description for Bass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Huilu C, soi oktaavia matalammalta kuin tavallinen huilu.</translation>
+        <translation>Huilu C, soi oktaavia matalammalta kuin normaali huilu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="313"/>
@@ -391,7 +391,7 @@
         <source>Flute in C, sounding two octaves lower than the standard flute.</source>
         <comment>contrabass-flute description</comment>
         <extracomment>description for Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Huilu C, soi kaksi oktaavia matalammalta kuin tavallinen huilu.</translation>
+        <translation>Huilu C, soi kaksi oktaavia matalammalta kuin normaali huilu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="331"/>
@@ -447,7 +447,7 @@
         <source>Flute in C, sounding three octaves below the standard flute.</source>
         <comment>double-contrabass-flute description</comment>
         <extracomment>description for Double Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Huilu C, soi kolme oktaavia matalammalta kuin tavallinen huilu.</translation>
+        <translation>Huilu C, soi kolme oktaavia matalammalta kuin normaali huilu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="349"/>
@@ -475,7 +475,7 @@
         <source>Flute in C, sounding four octaves below the standard flute.</source>
         <comment>hyperbass-flute description</comment>
         <extracomment>description for Hyperbass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Huilu C, soi neljä oktaavia matalammalta kuin tavallinen huilu.</translation>
+        <translation>Huilu C, soi neljä oktaavia matalammalta kuin normaali huilu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="358"/>
@@ -1952,7 +1952,7 @@
         <source>Oboe in E♭, sounding a minor third above the standard oboe. Historically called the oboe musette.</source>
         <comment>piccolo-oboe description</comment>
         <extracomment>description for Piccolo Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oboe E♭, soi pientä terssiä tavallista oboeta korkeammalta. Historiallisesti kutsuttu oboe-musettiksi.</translation>
+        <translation>Oboe E♭, soi pientä terssiä normaalia oboeta korkeammalta. Historiallisesti kutsuttu oboe-musettiksi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="827"/>
@@ -2008,7 +2008,7 @@
         <source>Standard concert oboe.</source>
         <comment>oboe description</comment>
         <extracomment>description for Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tavallinen konserttioboe.</translation>
+        <translation>Normaali konserttioboe.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="845"/>
@@ -2064,7 +2064,7 @@
         <source>Oboe in F, sounding a perfect fifth below the standard oboe.</source>
         <comment>oboe-da-caccia description</comment>
         <extracomment>description for Oboe da caccia; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oboe F, soi puhtaan kvintin tavallisen oboen alapuolella.</translation>
+        <translation>Oboe F, soi puhtaan kvintin normaalin oboen alapuolella.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="863"/>
@@ -2092,7 +2092,7 @@
         <source>Oboe in F, sounding a perfect fifth below the standard oboe.</source>
         <comment>english-horn description</comment>
         <extracomment>description for English Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oboe F, soi puhtaan kvintin tavallisen oboen alapuolella.</translation>
+        <translation>Oboe F, soi puhtaan kvintin normaali oboen alapuolella.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="872"/>
@@ -2120,7 +2120,7 @@
         <source>Oboe in C, sounding an octave lower than the standard oboe. Similar, but not identical to, the heckelphone.</source>
         <comment>bass-oboe description</comment>
         <extracomment>description for Bass Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oboe C, soi oktaavin matalammalta kuin tavallinen oboe. Samanlainen, mutta ei identtinen heckelphonen kanssa.</translation>
+        <translation>Oboe C, soi oktaavin matalammalta kuin normaali oboe. Samanlainen, mutta ei identtinen heckelphonen kanssa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="881"/>
@@ -2148,7 +2148,7 @@
         <source>Oboe in C, sounding an octave lower than the standard oboe. Similar, but not identical to, the bass oboe.</source>
         <comment>heckelphone description</comment>
         <extracomment>description for Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oboe C, soi oktaavin matalammalta kuin tavallinen oboe. Samanlainen, mutta ei identtinen basso-oboen kanssa.</translation>
+        <translation>Oboe C, soi oktaavin matalammalta kuin normaali oboe. Samanlainen, mutta ei identtinen basso-oboen kanssa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="890"/>
@@ -3464,7 +3464,7 @@
         <source>Soprano clarinet in B♭. One of the standard orchestral clarinets.</source>
         <comment>bb-clarinet description</comment>
         <extracomment>description for Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopraanoklarinetti B♭. Yksi tavallisista orkesteriklarineteista.</translation>
+        <translation>Sopraanoklarinetti B♭. Yksi normaaleista orkesteriklarineteista.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1310"/>
@@ -3499,7 +3499,7 @@
         <source>Soprano clarinet in B♭. One of the standard orchestral clarinets.</source>
         <comment>clarinet description</comment>
         <extracomment>description for Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopraanoklarinetti B♭. Yksi tavallisista orkesteriklarineteista.</translation>
+        <translation>Sopraanoklarinetti B♭. Yksi normaaleista orkesteriklarineteista.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1321"/>
@@ -3527,7 +3527,7 @@
         <source>Soprano clarinet in A. One of the standard orchestral clarinets.</source>
         <comment>a-clarinet description</comment>
         <extracomment>description for Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopraanoklarinetti sävelle A. Yksi tavallisista orkesteriklarineteista.</translation>
+        <translation>Sopraanoklarinetti sävelle A. Yksi normaaleista orkesteriklarineteista.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1330"/>
@@ -3597,7 +3597,7 @@
         <source>Similar to the standard soprano clarinet, but with an extension to the lower range.</source>
         <comment>basset-clarinet description</comment>
         <extracomment>description for Basset Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Samanlainen kuin tavallinen sopraanoklarinetti, mutta laajennettuna alemmalle alueelle.</translation>
+        <translation>Samanlainen kuin normaali sopraanoklarinetti, mutta laajennettuna alemmalle alueelle.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1352"/>
@@ -4661,7 +4661,7 @@
         <source>Standard concert bassoon.</source>
         <comment>bassoon description</comment>
         <extracomment>description for Bassoon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tavallinen konserttifagotti.</translation>
+        <translation>Normaali konserttifagotti.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1692"/>
@@ -7692,7 +7692,7 @@
         <source>Trumpet in B♭, with the tubing wound into a smaller coil than the standard trumpet.</source>
         <comment>pocket-trumpet description</comment>
         <extracomment>description for Pocket Trumpet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭-trumpetti, letku kierretty pienempään kelaan kuin tavallinen trumpetti.</translation>
+        <translation>B♭-trumpetti, letku kierretty pienempään kelaan kuin normaali trumpetti.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2644"/>
@@ -11671,13 +11671,6 @@
         <translation>Con.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3911"/>
-        <source>High-pitch, shallow body taiko drum.</source>
-        <comment>shime-daiko description</comment>
-        <extracomment>description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3913"/>
         <source>Shime-Daiko</source>
         <comment>shime-daiko trackName</comment>
@@ -11696,13 +11689,6 @@
         <source>S-Dko.</source>
         <comment>shime-daiko shortName</comment>
         <extracomment>shortName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3920"/>
-        <source>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played infront of a kneeling performer.</source>
-        <comment>kakko description</comment>
-        <extracomment>description for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12007,13 +11993,6 @@
         <translation>Fr. Dr.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4019"/>
-        <source>Chinese high-pitch frame drum.</source>
-        <comment>bangu description</comment>
-        <extracomment>description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4021"/>
         <source>Bangu</source>
         <comment>bangu trackName</comment>
@@ -12179,6 +12158,27 @@
         <source>Generic Japanese drum.</source>
         <comment>taiko description</comment>
         <extracomment>description for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4091"/>
+        <source>Robust, barrel-shaped Japanese drum. Also known as nagadou, they are the most common taiko.</source>
+        <comment>miya-daiko description</comment>
+        <extracomment>description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4118"/>
+        <source>Small Japanese bronze gong.</source>
+        <comment>shoko description</comment>
+        <extracomment>description for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4127"/>
+        <source>Small Japanese saucer-shaped bell.</source>
+        <comment>kane description</comment>
+        <extracomment>description for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12378,13 +12378,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4235"/>
-        <source>Korean dish-like gong</source>
-        <comment>kkwaenggwari description</comment>
-        <extracomment>description for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4237"/>
         <source>Kkwaenggwari</source>
         <comment>kkwaenggwari trackName</comment>
@@ -12418,6 +12411,27 @@
         <comment>taiko trackName</comment>
         <extracomment>trackName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Taiko</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3911"/>
+        <source>High-pitched, shallow body taiko drum.</source>
+        <comment>shime-daiko description</comment>
+        <extracomment>description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3920"/>
+        <source>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played in front of a kneeling performer.</source>
+        <comment>kakko description</comment>
+        <extracomment>description for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4019"/>
+        <source>Chinese high-pitched frame drum.</source>
+        <comment>bangu description</comment>
+        <extracomment>description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4077"/>
@@ -12459,13 +12473,6 @@
         <source>T-Daiko</source>
         <comment>tsuri-daiko shortName</comment>
         <extracomment>shortName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4091"/>
-        <source>Robust, barrel shaped Japanese drum. Also known as nagadou, they are the most common taiko.</source>
-        <comment>miya-daiko description</comment>
-        <extracomment>description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12546,13 +12553,6 @@
         <translation>Anv.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4118"/>
-        <source>Small Japanese bronz gong.</source>
-        <comment>shoko description</comment>
-        <extracomment>description for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4120"/>
         <source>Shōko</source>
         <comment>shoko trackName</comment>
@@ -12571,13 +12571,6 @@
         <source>Shōko</source>
         <comment>shoko shortName</comment>
         <extracomment>shortName for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4127"/>
-        <source>Small Japanese saucer-shaped bell</source>
-        <comment>kane description</comment>
-        <extracomment>description for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12712,6 +12705,13 @@
         <comment>chains shortName</comment>
         <extracomment>shortName for Chains; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Chn.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4235"/>
+        <source>Korean dish-like gong.</source>
+        <comment>kkwaenggwari description</comment>
+        <extracomment>description for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4244"/>
@@ -17527,7 +17527,7 @@
         <source>Standard ukulele (staff notation).</source>
         <comment>ukulele description</comment>
         <extracomment>description for Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Vakioukulele (viivastonotaatio).</translation>
+        <translation>Normaali ukulele (viivastonotaatio).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5797"/>
@@ -17583,7 +17583,7 @@
         <source>Standard ukulele (tablature).</source>
         <comment>ukulele-4-str-tab description</comment>
         <extracomment>description for Ukulele (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tavallinen ukulele (tabulattuuri).</translation>
+        <translation>Normaali ukulele (tabulattuuri).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5815"/>
