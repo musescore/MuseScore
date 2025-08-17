@@ -19,8 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 #include "mocks/controlledviewmock.h"
@@ -35,6 +33,7 @@
 #include "notation/view/notationviewinputcontroller.h"
 
 using ::testing::_;
+using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::ReturnRef;
 
@@ -50,13 +49,13 @@ public:
 
     void SetUp() override
     {
-        m_interaction = std::make_shared<NotationInteractionMock>();
+        m_interaction = std::make_shared<NiceMock<NotationInteractionMock> >();
 
-        m_selection = std::make_shared<NotationSelectionMock>();
+        m_selection = std::make_shared<NiceMock<NotationSelectionMock> >();
         ON_CALL(*m_interaction, selection())
         .WillByDefault(Return(m_selection));
 
-        m_selectionRange = std::make_shared<NotationSelectionRangeMock>();
+        m_selectionRange = std::make_shared<NiceMock<NotationSelectionRangeMock> >();
         ON_CALL(*m_selection, range())
         .WillByDefault(Return(m_selectionRange));
 
@@ -68,10 +67,10 @@ public:
 
         m_controller = new NotationViewInputController(&m_view, muse::modularity::globalCtx());
 
-        m_configuration = std::make_shared<NotationConfigurationMock>();
+        m_configuration = std::make_shared<NiceMock<NotationConfigurationMock> >();
         m_controller->configuration.set(m_configuration);
 
-        m_playbackController = std::make_shared<playback::PlaybackControllerMock>();
+        m_playbackController = std::make_shared<NiceMock<playback::PlaybackControllerMock> >();
         m_controller->playbackController.set(m_playbackController);
 
         setNoWaylandForLinux();
@@ -84,12 +83,12 @@ public:
     }
 
     NotationViewInputController* m_controller = nullptr;
-    ControlledViewMock m_view;
+    NiceMock<ControlledViewMock> m_view;
     std::shared_ptr<NotationConfigurationMock> m_configuration;
     std::shared_ptr<NotationInteractionMock> m_interaction;
     std::shared_ptr<NotationSelectionMock> m_selection;
     std::shared_ptr<NotationSelectionRangeMock> m_selectionRange;
-    std::shared_ptr<playback::PlaybackControllerMock > m_playbackController;
+    std::shared_ptr<playback::PlaybackControllerMock> m_playbackController;
     playback::IPlaybackController::PlayParams m_playParams;
 
     mutable QList<QInputEvent*> m_events;

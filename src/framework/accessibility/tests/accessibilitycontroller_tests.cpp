@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <gmock/gmock.h>
-#include <gtest/gtest.h>
 
 #include <memory>
 
@@ -45,10 +44,11 @@
 
 class QEvent;
 
-using ::testing::Return;
 using ::testing::_;
-using ::testing::SaveArg;
 using ::testing::DoAll;
+using ::testing::NiceMock;
+using ::testing::Return;
+using ::testing::SaveArg;
 
 using namespace muse;
 using namespace muse::accessibility;
@@ -63,13 +63,13 @@ public:
 
         m_controller->setAccesibilityEnabled(true);
 
-        m_mainWindow = std::make_shared<muse::ui::MainWindowMock>();
+        m_mainWindow = std::make_shared<NiceMock<muse::ui::MainWindowMock> >();
         m_controller->mainWindow.set(m_mainWindow);
 
-        m_application = std::make_shared<ApplicationMock>();
+        m_application = std::make_shared<NiceMock<ApplicationMock> >();
         m_controller->application.set(m_application);
 
-        m_configuration = std::make_shared<AccessibilityConfigurationMock>();
+        m_configuration = std::make_shared<NiceMock<AccessibilityConfigurationMock> >();
         m_controller->configuration.set(m_configuration);
     }
 
