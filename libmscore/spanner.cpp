@@ -127,9 +127,17 @@ QByteArray SpannerSegment::mimeData(const QPointF& dragOffset) const
 
 Element* SpannerSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::COLOR || pid == Pid::VISIBLE || pid == Pid::PLACEMENT)
-            return spanner();
-      return 0;
+      switch (pid) {
+            case Pid::COLOR:
+            case Pid::PLACEMENT:
+            case Pid::SPANNER_TICK:
+            case Pid::SPANNER_TICKS:
+            case Pid::SPANNER_TRACK2:
+            case Pid::VISIBLE:
+                  return spanner();
+            default: break;
+            }
+      return nullptr;
       }
 
 //---------------------------------------------------------

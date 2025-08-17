@@ -68,8 +68,12 @@ void OttavaSegment::layout()
 
 Element* OttavaSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::OTTAVA_TYPE || pid == Pid::NUMBERS_ONLY)
-            return spanner();
+      switch (pid) {
+            case Pid::NUMBERS_ONLY:
+            case Pid::OTTAVA_TYPE:
+                  return spanner();
+            default: break;
+            }
       return TextLineBaseSegment::propertyDelegate(pid);
       }
 

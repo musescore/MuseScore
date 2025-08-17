@@ -72,8 +72,13 @@ void VoltaSegment::layout()
 
 Element* VoltaSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::BEGIN_HOOK_TYPE || pid == Pid::END_HOOK_TYPE || pid == Pid::VOLTA_ENDING)
-            return spanner();
+      switch (pid) {
+            case Pid::BEGIN_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
+            case Pid::VOLTA_ENDING:
+                  return spanner();
+             default: break;
+            }
       return TextLineBaseSegment::propertyDelegate(pid);
       }
 

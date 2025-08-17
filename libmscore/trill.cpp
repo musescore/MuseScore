@@ -233,8 +233,14 @@ Element* TrillSegment::drop(EditData& data)
 
 Element* TrillSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::TRILL_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT || pid == Pid::PLAY)
-            return spanner();
+      switch (pid) {
+            case Pid::ORNAMENT_STYLE:
+            case Pid::PLACEMENT:
+            case Pid::PLAY:
+            case Pid::TRILL_TYPE:
+                  return spanner();
+            default: break;
+            }
       return LineSegment::propertyDelegate(pid);
       }
 

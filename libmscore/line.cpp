@@ -706,13 +706,16 @@ void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
 
 Element* LineSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::DIAGONAL
-         || pid == Pid::COLOR
-         || pid ==   Pid::LINE_WIDTH
-         || pid ==   Pid::LINE_STYLE
-         || pid ==   Pid::DASH_LINE_LEN
-         || pid ==   Pid::DASH_GAP_LEN)
-            return spanner();
+      switch (pid) {
+            case Pid::COLOR:
+            case Pid::DASH_GAP_LEN:
+            case Pid::DASH_LINE_LEN:
+            case Pid::DIAGONAL:
+            case Pid::LINE_WIDTH:
+            case Pid::LINE_STYLE:
+                  return spanner();
+            default: break;
+            }
       return SpannerSegment::propertyDelegate(pid);
       }
 

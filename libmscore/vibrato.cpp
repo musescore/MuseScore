@@ -143,8 +143,13 @@ Shape VibratoSegment::shape() const
 
 Element* VibratoSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::VIBRATO_TYPE || pid == Pid::PLACEMENT || pid == Pid::PLAY)
-            return spanner();
+      switch (pid) {
+            case Pid::PLACEMENT:
+            case Pid::PLAY:
+            case Pid::VIBRATO_TYPE:
+                  return spanner();
+            default: break;
+            }
       return LineSegment::propertyDelegate(pid);
       }
 
