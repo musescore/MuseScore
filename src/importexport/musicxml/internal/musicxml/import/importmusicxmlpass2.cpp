@@ -3585,6 +3585,7 @@ void MusicXmlParserDirection::direction(const String& partId,
 
             if (m_color.isValid()) {
                 t->setColor(m_color);
+                t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
             }
 
             if (configuration()->importLayout()) {
