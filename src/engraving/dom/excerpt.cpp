@@ -1024,8 +1024,13 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         }
                     }
 
-                    bool cloneBarLine = oe && oe->isBarLine() && toBarLine(oe)->barLineType() == BarLineType::END_REPEAT
-                                        && toBarLine(oseg->element(0))->playCountText();
+                    bool cloneBarLine = false;
+                    if (oseg->isEndBarLineType()) {
+                        BarLine* topBarLine = toBarLine(oseg->element(0));
+                        PlayCountText* topPlayCount = topBarLine ? topBarLine->playCountText() : nullptr;
+                        cloneBarLine = oe && oe->isBarLine() && toBarLine(oe)->barLineType() == BarLineType::END_REPEAT && topPlayCount;
+                    }
+
                     bool clone = oe && (!oe->generated() || cloneBarLine) && !oe->excludeFromOtherParts();
 
                     if (clone) {

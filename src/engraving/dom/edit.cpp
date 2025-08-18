@@ -7214,17 +7214,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             nbreath->setTrack(linkedTrack);
             nbreath->setParent(seg);
             doUndoAddElement(nbreath);
-        } /*else if (element->isPlayCountText() && staff->shouldShowPlayCount()) {
-            BarLine* bl = toBarLine(element->explicitParent());
-            Fraction tick = bl->tick();
-            Measure* m = score->tick2measureMM(tick - Fraction::eps());
-            Segment* blSeg = m->last(SegmentType::EndBarLine);
-            BarLine* linkedBl = toBarLine(blSeg->element(linkedTrack));
-            ne->setTrack(linkedTrack);
-            ne->setParent(linkedBl);
-            doUndoAddElement(ne);
-        }*/
-        else {
+        } else {
             LOGW("undoAddElement: unhandled: <%s>", element->typeName());
         }
         ne->styleChanged();
