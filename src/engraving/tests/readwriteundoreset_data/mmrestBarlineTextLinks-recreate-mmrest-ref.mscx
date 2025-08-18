@@ -129,33 +129,33 @@
         </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
-        <eid>J_J</eid>
+        <eid>n_n</eid>
         <LayoutBreak>
-          <eid>K_K</eid>
+          <eid>o_o</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <TimeSig>
-            <eid>L_L</eid>
+            <eid>p_p</eid>
             <linkedTo>G_G</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>M_M</eid>
+            <eid>q_q</eid>
             <linkedTo>H_H</linkedTo>
             <offset x="-12.5239" y="-3.69242"/>
             <text>test1</text>
             </StaffText>
           <Rest>
-            <eid>N_N</eid>
+            <eid>r_r</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <eid>O_O</eid>
+            <eid>s_s</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -174,7 +174,7 @@
           <BarLine>
             <subtype>double</subtype>
             <eid>S_S</eid>
-            <linkedTo>O_O</linkedTo>
+            <linkedTo>s_s</linkedTo>
             </BarLine>
           </voice>
         </Measure>
@@ -195,27 +195,27 @@
         </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
-        <eid>W_W</eid>
+        <eid>t_t</eid>
         <LayoutBreak>
-          <eid>X_X</eid>
+          <eid>u_u</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <StaffText>
-            <eid>Y_Y</eid>
+            <eid>v_v</eid>
             <linkedTo>U_U</linkedTo>
             <offset x="28.5455" y="-4.14373"/>
             <text>test2</text>
             </StaffText>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>w_w</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <eid>a_a</eid>
+            <eid>x_x</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -234,7 +234,7 @@
           <BarLine>
             <subtype>double</subtype>
             <eid>e_e</eid>
-            <linkedTo>a_a</linkedTo>
+            <linkedTo>x_x</linkedTo>
             </BarLine>
           </voice>
         </Measure>
@@ -254,15 +254,15 @@
         </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
-        <eid>i_i</eid>
+        <eid>y_y</eid>
         <voice>
           <StaffText>
-            <eid>j_j</eid>
+            <eid>z_z</eid>
             <linkedTo>g_g</linkedTo>
             <text>test3</text>
             </StaffText>
           <Rest>
-            <eid>k_k</eid>
+            <eid>0_0</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
