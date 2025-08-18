@@ -1270,6 +1270,63 @@ Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch)
     return f;
 }
 
+bool dragPositionToMeasure(const PointF& pos, const Score* score,
+                           Measure** measure, staff_idx_t* staffIdx,
+                           const double spacingFactor)
+{
+    const System* preferredSystem = (*measure) ? (*measure)->system() : nullptr;
+
+    Measure* m = score->searchMeasure(pos, preferredSystem, spacingFactor);
+    if (!m) {
+        return false;
+    }
+
+    const System* system = m->system();
+    const double y = pos.y() - system->canvasPos().y();
+    const staff_idx_t i = system->searchStaff(y, *staffIdx, spacingFactor);
+    if (!score->staff(i)) {
+        return false;
+    }
+
+    *measure = m;
+    *staffIdx = i;
+    return true;
+}
+
+bool dragPositionToSegment(const PointF& pos, const Measure* measure, const staff_idx_t staffIdx,
+                           Segment** segment,
+                           const double spacingFactor, const bool allowTimeAnchor)
+{
+    const track_idx_t strack = staffIdx * VOICES;
+    const track_idx_t etrack = strack + VOICES;
+
+    const double x = pos.x() - measure->canvasPos().x();
+    const SegmentType st = allowTimeAnchor ? Segment::CHORD_REST_OR_TIME_TICK_TYPE : SegmentType::ChordRest;
+    Segment* s = measure->searchSegment(x, st, strack, etrack, *segment, spacingFactor);
+    if (!s) {
+        return false;
+    }
+
+    *segment = segmentOrChordRestSegmentAtSameTick(s);
+    return true;
+}
+
+Segment* segmentOrChordRestSegmentAtSameTick(Segment* segment)
+{
+    IF_ASSERT_FAILED(segment) {
+        return nullptr;
+    }
+
+    // If TimeTick and ChordRest segments are at the same tick, prefer ChordRest
+    if (segment->isTimeTickType() && segment->measure()) {
+        if (Segment* crSegAtSameTick = segment->measure()->findSegmentR(SegmentType::ChordRest, segment->rtick())) {
+            return crSegAtSameTick;
+        }
+    }
+
+    return segment;
+}
+
 double yStaffDifference(const System* system1, const System* system2, staff_idx_t staffIdx)
 {
     if (!system1 || !system2) {
