@@ -56,7 +56,6 @@ double MScore::nudgeStep;
 double MScore::nudgeStep10;
 double MScore::nudgeStep50;
 
-bool MScore::noExcerpts = false;
 bool MScore::noImages = false;
 bool MScore::pdfPrinting = false;
 bool MScore::svgPrinting = false;

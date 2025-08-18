@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_READ302_H
-#define MU_ENGRAVING_READ302_H
+#pragma once
 
 #include "../ireader.h"
 
@@ -46,7 +45,7 @@ class Read302 : public rw::IReader
 {
 public:
 
-    muse::Ret readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
+    muse::Ret readScoreFile(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
@@ -55,10 +54,8 @@ public:
 private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;
 
-    static bool readScore302(Score* score, XmlReader& e, read400::ReadContext& ctx);
+    static bool readScoreTag(Score* score, XmlReader& e, read400::ReadContext& ctx);
 
     static void fixInstrumentId(Instrument* instrument);
 };
 }
-
-#endif // MU_ENGRAVING_READ302_H

@@ -65,6 +65,7 @@ public:
     ~ReadContext();
 
     Score* score() const;
+    void setScore(Score* score);
 
     const MStyle& style() const;
     std::shared_ptr<IEngravingFontsProvider> engravingFonts() const;

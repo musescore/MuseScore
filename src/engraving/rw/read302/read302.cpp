@@ -52,7 +52,7 @@ using namespace mu::engraving::read400;
 using namespace mu::engraving::read302;
 using namespace mu::engraving::compat;
 
-bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
+bool Read302::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         ctx.setTrack(muse::nidx);
@@ -143,30 +143,26 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             }
             e.skipCurrentElement();
         } else if (tag == "Score") {            // recursion
-            if (MScore::noExcerpts) {
-                e.skipCurrentElement();
-            } else {
-                ctx.tracks().clear();             // ???
-                MasterScore* m = score->masterScore();
-                Score* s = m->createScore();
+            ctx.tracks().clear();                 // ???
+            MasterScore* m = score->masterScore();
+            Score* s = m->createScore();
 
-                ReadStyleHook::setupDefaultStyle(s);
+            ReadStyleHook::setupDefaultStyle(s);
 
-                Excerpt* ex = new Excerpt(m);
-                ex->setExcerptScore(s);
-                ctx.setLastMeasure(nullptr);
+            Excerpt* ex = new Excerpt(m);
+            ex->setExcerptScore(s);
+            ctx.setLastMeasure(nullptr);
 
-                Score* curScore = ctx.score();
-                ctx.setScore(s);
+            Score* curScore = ctx.score();
+            ctx.setScore(s);
 
-                readScore302(s, e, ctx);
+            readScoreTag(s, e, ctx);
 
-                ctx.setScore(curScore);
+            ctx.setScore(curScore);
 
-                s->linkMeasures(m);
-                ex->setTracksMapping(ctx.tracks());
-                m->addExcerpt(ex);
-            }
+            s->linkMeasures(m);
+            ex->setTracksMapping(ctx.tracks());
+            m->addExcerpt(ex);
         } else if (tag == "name") {
             String n = e.readText();
             if (!score->isMaster()) {     //ignore the name if it's not a child score
@@ -236,7 +232,7 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-muse::Ret Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+muse::Ret Read302::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
     if (out) {
@@ -261,7 +257,7 @@ muse::Ret Read302::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "programRevision") {
             score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
-            if (!readScore302(score, e, ctx)) {
+            if (!readScoreTag(score, e, ctx)) {
                 if (e.error() == muse::XmlStreamReader::CustomError) {
                     return make_ret(Err::FileCriticallyCorrupted, e.errorString());
                 }

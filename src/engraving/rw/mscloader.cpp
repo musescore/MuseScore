@@ -82,51 +82,53 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
 
     ScoreLoad sl;
 
-    // Read style
-    {
-        ByteArray styleData = mscReader.readStyleFile();
-        if (!styleData.empty()) {
-            Buffer buf(&styleData);
-            buf.open(IODevice::ReadOnly);
-            masterScore->style().read(&buf);
-            if (inOut) {
-                inOut->originalSpatium = masterScore->style().spatium();
+    if (mscReader.isContainer()) {
+        // Read style
+        {
+            ByteArray styleData = mscReader.readStyleFile();
+            if (!styleData.empty()) {
+                Buffer buf(&styleData);
+                buf.open(IODevice::ReadOnly);
+                masterScore->style().read(&buf);
+                if (inOut) {
+                    inOut->originalSpatium = masterScore->style().spatium();
+                }
             }
         }
-    }
 
-    // Read ChordList
-    {
-        bool chordListOk = false;
-        ByteArray chordListData = mscReader.readChordListFile();
-        if (!chordListData.empty()) {
-            Buffer buf(&chordListData);
-            buf.open(IODevice::ReadOnly);
+        // Read ChordList
+        {
+            bool chordListOk = false;
+            ByteArray chordListData = mscReader.readChordListFile();
+            if (!chordListData.empty()) {
+                Buffer buf(&chordListData);
+                buf.open(IODevice::ReadOnly);
 
-            chordListOk = masterScore->chordList()->read(&buf);
+                chordListOk = masterScore->chordList()->read(&buf);
+            }
+
+            masterScore->chordList()->setCustomChordList(chordListOk);
+
+            if (!chordListOk) {
+                // See also ReadChordListHook::validate()
+                MStyle& style = masterScore->style();
+                ChordList* chordList = masterScore->chordList();
+
+                bool custom = style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM;
+                chordList->setCustomChordList(custom);
+
+                // Ensure that `checkChordList` loads the default chord list
+                chordList->unload();
+            }
         }
 
-        masterScore->chordList()->setCustomChordList(chordListOk);
-
-        if (!chordListOk) {
-            // See also ReadChordListHook::validate()
-            MStyle& style = masterScore->style();
-            ChordList* chordList = masterScore->chordList();
-
-            bool custom = style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM;
-            chordList->setCustomChordList(custom);
-
-            // Ensure that `checkChordList` loads the default chord list
-            chordList->unload();
-        }
-    }
-
-    // Read images
-    {
-        if (!MScore::noImages) {
-            std::vector<String> images = mscReader.imageFileNames();
-            for (const String& name : images) {
-                imageStore.add(name, mscReader.readImageFile(name));
+        // Read images
+        {
+            if (!MScore::noImages) {
+                std::vector<String> images = mscReader.imageFileNames();
+                for (const String& name : images) {
+                    imageStore.add(name, mscReader.readImageFile(name));
+                }
             }
         }
     }
@@ -152,7 +154,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
     }
 
     // Read excerpts
-    if (ret && masterScore->mscVersion() >= 400) {
+    if (ret && masterScore->mscVersion() >= 400 && mscReader.isContainer()) {
         std::vector<String> excerptFileNames = mscReader.excerptFileNames();
         for (const String& excerptFileName : excerptFileNames) {
             Score* partScore = masterScore->createScore();
@@ -182,7 +184,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
                 break;
             }
 
-            ret = reader.val->readScore(partScore, xml, &partReadInData);
+            ret = reader.val->readScoreFile(partScore, xml, &partReadInData);
             if (!ret) {
                 break;
             }
@@ -255,7 +257,7 @@ Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVers
                 score->checkChordList();
             }
 
-            Ret ret = reader.val->readScore(score, e, out);
+            Ret ret = reader.val->readScoreFile(score, e, out);
 
             score->setExcerptsChanged(false);
 

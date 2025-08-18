@@ -61,6 +61,11 @@ Score* ReadContext::score() const
     return m_score;
 }
 
+void ReadContext::setScore(Score* score)
+{
+    m_score = score;
+}
+
 const MStyle& ReadContext::style() const
 {
     return score()->style();
