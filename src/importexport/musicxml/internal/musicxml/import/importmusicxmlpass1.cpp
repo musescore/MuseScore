@@ -1080,7 +1080,7 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const 
         }
     }
 
-    if (vbox) {
+    if (vbox && !MScore::testMode) {
         // Correct size
         resizeTitleBox(vbox);
     }
