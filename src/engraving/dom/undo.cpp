@@ -662,6 +662,17 @@ const InputState& UndoMacro::redoInputState() const
     return m_redoInputState;
 }
 
+void UndoMacro::excludeElementFromSelectionInfo(EngravingItem* element)
+{
+    if (m_undoSelectionInfo.isValid()) {
+        muse::remove(m_undoSelectionInfo.elements, element);
+    }
+
+    if (m_redoSelectionInfo.isValid()) {
+        muse::remove(m_redoSelectionInfo.elements, element);
+    }
+}
+
 const UndoMacro::SelectionInfo& UndoMacro::undoSelectionInfo() const
 {
     return m_undoSelectionInfo;

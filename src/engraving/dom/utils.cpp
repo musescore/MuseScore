@@ -32,6 +32,8 @@
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
+#include "fret.h"
+#include "harmony.h"
 #include "laissezvib.h"
 #include "lyrics.h"
 #include "marker.h"
@@ -1911,5 +1913,15 @@ MeasureBeat findBeat(const Score* score, int tick)
     measureBeat.maxBeatIndex = timeSig.numerator() - 1;
 
     return measureBeat;
+}
+
+bool isElementInFretBox(const EngravingItem* item)
+{
+    if (item->isHarmony()) {
+        return toHarmony(item)->isInFretBox();
+    } else if (item->isFretDiagram()) {
+        return toFretDiagram(item)->isInFretBox();
+    }
+    return false;
 }
 }
