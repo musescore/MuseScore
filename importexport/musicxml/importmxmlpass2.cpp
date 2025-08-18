@@ -3691,8 +3691,8 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
             // Prevent multi-word directions from overwriting y-values.
             bool hasDefaultYCandidate = false;
             bool hasRelativeYCandidate = false;
-            qreal defaultYCandidate = _e.attributes().value("default-y").toDouble(&hasDefaultYCandidate) * -0.1;
-            qreal relativeYCandidate =_e.attributes().value("relative-y").toDouble(&hasRelativeYCandidate) * -0.1;
+            const qreal defaultYCandidate = _e.attributes().value("default-y").toDouble(&hasDefaultYCandidate) * -0.1;
+            const qreal relativeYCandidate =_e.attributes().value("relative-y").toDouble(&hasRelativeYCandidate) * -0.1;
             if (hasDefaultYCandidate && !_hasDefaultY)
                   _defaultY = defaultYCandidate;
             if (hasRelativeYCandidate && !_hasRelativeY)
@@ -3701,7 +3701,7 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
             _hasRelativeY |= hasRelativeYCandidate;
             _isBold &= _e.attributes().value("font-weight").toString() == "bold";
             _visible = _e.attributes().value("print-object").toString() != "no";
-            QString number = _e.attributes().value("number").toString();
+            const QString number = _e.attributes().value("number").toString();
             int n = 0;
             if (!number.isEmpty()) {
                   n = number.toInt();
@@ -3710,7 +3710,7 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                   else
                         n--;  // make zero-based
                   }
-            QString type = _e.attributes().value("type").toString();
+            const QString type = _e.attributes().value("type").toString();
             _color       = _e.attributes().value("color").toString();
             _justify     = _e.attributes().value("justify").toString();
 
@@ -3755,7 +3755,6 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                         _wordsText += "<sym>" + smufl + "</sym>";
                   }
             else if (_e.name() == "string-mute") {
-                  const QString type = _e.attributes().value("type").toString();
                   if (type == "on")
                         _wordsText += "<sym>stringsMuteOn</sym>";
                   else if (type == "off")
