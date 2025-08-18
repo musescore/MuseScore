@@ -427,10 +427,11 @@ void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutD
     ldata->setMag(parent->mag());
     ldata->startY = top;
     ldata->height = height;
-    ldata->midPointThickness.set_value(ldata->height / 20 * ldata->mag() * std::pow(scale, -0.5));
+    static constexpr double HEIGHT_TO_WIDTH_RATIO = 20;
+    ldata->midPointThickness.set_value(ldata->height / HEIGHT_TO_WIDTH_RATIO * ldata->mag() * 1 / std::sqrt(scale));
     ldata->endPointThickness.set_value(endPointThickness);
 
-    double shoulder = 0.2 * std::pow(ldata->height, 0.99) * std::pow(ldata->mag(), 0.1) * std::pow(scale, -0.5);
+    double shoulder = 0.2 * ldata->height * std::pow(ldata->mag(), 0.1) * 1 / std::sqrt(scale);
     ldata->shoulderWidth = shoulder;
 
     const double PADDING = spatium * 0.2;
