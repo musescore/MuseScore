@@ -156,6 +156,9 @@ private:
 
     static void updateLedgerLines(Chord* item, LayoutContext& ctx);
 
+    static void layoutDurationLines(Chord* item, LayoutContext& ctx);
+    static void layoutOctaveDots(Chord* item, LayoutContext& ctx);
+
     static ChordPosInfo calculateChordPosInfo(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
                                               LayoutContext& ctx);
     static void calculateMaxNoteWidths(ChordPosInfo& posInfo, const Fraction& tick, const Staff* staff, LayoutContext& ctx);

@@ -264,6 +264,9 @@ public:
     bool fretConflict() const { return m_fretConflict; }
     void setFretConflict(bool val) { m_fretConflict = val; }
 
+    String jianpuDigit() const { return m_jianpuDigit; }
+    void setJianpuDigit(const String& s) { m_jianpuDigit = s; }
+
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
 
@@ -555,6 +558,7 @@ private:
     std::vector<Spanner*> m_spannerBack;
 
     String m_fretString;
+    String m_jianpuDigit;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
     TieJumpPointList m_jumpPoints { this };

@@ -99,6 +99,10 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
     m_genTimesig(genTimeSig),
     m_genKeysig(genKeySig)
 {
+    // Jianpu temporarly uses TAB fret font
+    if (xml == u"stdJianpu") {
+        setFretTextStyle(TextStyleType::TAB_FRET_NUMBER);
+    }
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
@@ -232,6 +236,7 @@ StaffTypes StaffType::type() const
 {
     static const std::map<String, StaffTypes> xmlNameToType {
         { u"stdNormal", StaffTypes::STANDARD },
+        { u"stdJianpu", StaffTypes::JIANPU },
 
         { u"perc1Line", StaffTypes::PERC_1LINE },
         { u"perc2Line", StaffTypes::PERC_2LINE },
@@ -1124,6 +1129,7 @@ void StaffType::initStaffTypes(const Color& defaultColor)
     m_presets = {
 //                       group,              xml-name,  human-readable-name,          lin stpOff  dist clef   bars stmless time  key    ledger invis     color
         StaffType(StaffGroup::STANDARD,   u"stdNormal", muse::mtrc("engraving", "Standard"),        5, 0,     1,   true,  true, false, true, true, true, false,  defaultColor),
+        StaffType(StaffGroup::STANDARD,   u"stdJianpu", muse::mtrc("engraving", "Jianpu"),          0, 0,     1,   true,  true, false, true, true, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, u"perc1Line", muse::mtrc("engraving", "Perc. 1 line"),    1, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, u"perc2Line", muse::mtrc("engraving", "Perc. 2 lines"),   2, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, u"perc3Line", muse::mtrc("engraving", "Perc. 3 lines"),   3, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),

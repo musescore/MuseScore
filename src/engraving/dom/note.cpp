@@ -680,7 +680,8 @@ Note::Note(const Note& n, bool link)
     for (NoteDot* dot : n.m_dots) {
         add(Factory::copyNoteDot(*dot));
     }
-    m_mark      = n.m_mark;
+    m_mark = n.m_mark;
+    m_jianpuDigit = n.m_jianpuDigit;
 
     setDropTarget(false);
 }
