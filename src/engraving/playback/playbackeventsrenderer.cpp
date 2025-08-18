@@ -346,18 +346,21 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
 {
     static const ArticulationMap articulations;
 
-    RenderingContext ctx(actualTimestamp,
-                         actualDuration,
-                         actualDynamicLevel,
-                         0,
-                         0,
-                         ticksFromTempoAndDuration(Constants::DEFAULT_TEMPO.val, actualDuration),
-                         Constants::DEFAULT_TEMPO,
-                         TimeSigMap::DEFAULT_TIME_SIGNATURE,
-                         articulations,
-                         note->score(),
-                         profile,
-                         playbackCtx);
+    int durationTicks = ticksFromTempoAndDuration(Constants::DEFAULT_TEMPO.val, actualDuration);
+
+    RenderingContext ctx{ actualTimestamp,
+                          actualDuration,
+                          actualDynamicLevel,
+                          0, /*nominalPositionStartTick*/
+                          durationTicks, /*nominalPositionEndTick*/
+                          durationTicks, /*nominalDurationTicks*/
+                          0, /*positionTickOffset*/
+                          Constants::DEFAULT_TEMPO,
+                          TimeSigMap::DEFAULT_TIME_SIGNATURE,
+                          articulations,
+                          note->score(),
+                          profile,
+                          playbackCtx };
 
     NoteArticulationsParser::parsePlayingTechnique(ctx, ctx.commonArticulations);
     NoteArticulationsParser::parseGhostNote(note, ctx, ctx.commonArticulations);

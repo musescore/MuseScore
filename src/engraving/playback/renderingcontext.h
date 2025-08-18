@@ -33,6 +33,8 @@
 
 namespace mu::engraving {
 struct RenderingContext {
+    RenderingContext() = default;
+
     muse::mpe::timestamp_t nominalTimestamp = 0;
     muse::mpe::duration_t nominalDuration = 0;
     muse::mpe::dynamic_level_t nominalDynamicLevel = 0;
@@ -50,38 +52,10 @@ struct RenderingContext {
     const muse::mpe::ArticulationsProfilePtr profile;
     const PlaybackContextPtr playbackCtx;
 
-    RenderingContext() = default;
-
-    explicit RenderingContext(const muse::mpe::timestamp_t timestamp,
-                              const muse::mpe::duration_t duration,
-                              const muse::mpe::dynamic_level_t dynamicLevel,
-                              const int posTick,
-                              const int posTickOffset,
-                              const int durationTicks,
-                              const BeatsPerSecond& bps,
-                              const TimeSigFrac& timeSig,
-                              const muse::mpe::ArticulationMap& articulations,
-                              const Score* scorePtr,
-                              const muse::mpe::ArticulationsProfilePtr profilePtr,
-                              const PlaybackContextPtr playbackCtxPtr)
-        : nominalTimestamp(timestamp),
-        nominalDuration(duration),
-        nominalDynamicLevel(dynamicLevel),
-        nominalPositionStartTick(posTick),
-        nominalPositionEndTick(posTick + durationTicks),
-        nominalDurationTicks(durationTicks),
-        positionTickOffset(posTickOffset),
-        beatsPerSecond(bps),
-        timeSignatureFraction(timeSig),
-        commonArticulations(articulations),
-        score(scorePtr),
-        profile(profilePtr),
-        playbackCtx(playbackCtxPtr)
-    {}
-
     bool isValid() const
     {
-        return profile
+        return score
+               && profile
                && playbackCtx
                && beatsPerSecond > 0
                && nominalDuration > 0
@@ -104,18 +78,19 @@ inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPosi
     BeatsPerSecond bps = score->tempomap()->multipliedTempo(chordPosTick);
     TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(chordPosTick).timesig();
 
-    RenderingContext ctx(chordTnD.timestamp,
-                         chordTnD.duration,
-                         playbackCtx->appliableDynamicLevel(chord->track(), chordPosTickWithOffset),
-                         chordPosTick,
-                         tickPositionOffset,
-                         chordDurationTicks,
-                         bps,
-                         timeSignatureFraction,
-                         articulations,
-                         score,
-                         profile,
-                         playbackCtx);
+    RenderingContext ctx{ chordTnD.timestamp,
+                          chordTnD.duration,
+                          playbackCtx->appliableDynamicLevel(chord->track(), chordPosTickWithOffset),
+                          chordPosTick,
+                          chordPosTick + chordDurationTicks,
+                          chordDurationTicks,
+                          tickPositionOffset,
+                          bps,
+                          timeSignatureFraction,
+                          articulations,
+                          score,
+                          profile,
+                          playbackCtx };
 
     return ctx;
 }
