@@ -143,7 +143,7 @@ jobs:
       add_tag_to_commit: ${{ steps.gen2.outputs.release_tag }}
     steps:
     - name: Clone repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0 # entire history for all branches and tags
     - id: gen2
@@ -202,7 +202,7 @@ jobs:
       url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.plan2.outputs.release_tag }}
     steps:
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Download and extract artifacts
       uses: actions/download-artifact@v5
       with:

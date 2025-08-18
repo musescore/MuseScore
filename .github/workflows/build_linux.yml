@@ -145,7 +145,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Configure workflow
       env:
         PR_TITLE: ${{ github.event.pull_request.title }} # somehow required for correct filename when PR title contains slash inside doublequotes GH#938
@@ -233,7 +233,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Configure workflow
       env:
         PR_TITLE: ${{ github.event.pull_request.title }} # somehow required for correct filename when PR title contains slash inside doublequotes GH#938
@@ -321,7 +321,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Configure workflow
       env:
         PR_TITLE: ${{ github.event.pull_request.title }} # somehow required for correct filename when PR title contains slash inside doublequotes GH#938
@@ -400,7 +400,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Free disk space
       run: |
         sudo docker system prune -a -f

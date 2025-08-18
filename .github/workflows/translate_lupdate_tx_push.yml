@@ -15,7 +15,7 @@ jobs:
     runs-on: macos-11
     steps:
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: "Configure workflow"
       run: |
         DO_PUBLISH='false'
