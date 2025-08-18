@@ -3163,8 +3163,10 @@ void MusicXmlParserPass2::staffDetails(const String& partId, Measure* measure)
         } else if (m_e.name() == "staff-tuning") {
             staffTuning(&stringData);
         } else if (m_e.name() == "staff-size") {
+            const double scale = m_e.doubleAttribute("scale", 1.0);
             const double val = m_e.readDouble() / 100;
-            m_score->staff(staffIdx)->setProperty(Pid::MAG, val);
+            m_score->staff(staffIdx)->setProperty(Pid::MAG, scale);
+            m_score->staff(staffIdx)->setProperty(Pid::LINE_DISTANCE, val);
         } else {
             skipLogCurrElem();
         }
@@ -4700,7 +4702,9 @@ void MusicXmlParserDirection::handleRepeats(Measure* measure, const Fraction tic
                 measure = measure->nextMeasure();
             }
             // Temporary solution to indent codas - add a horizontal frame at start of system or midway through
-            if (tb->isMarker() && toMarker(tb)->markerType() == MarkerType::CODA) {
+            MeasureBase* prevMeasureBase = measure->prev();
+            bool hbox = prevMeasureBase && prevMeasureBase->isHBox();
+            if (tb->isMarker() && toMarker(tb)->markerType() == MarkerType::CODA && !hbox) {
                 MeasureBase* gap = m_score->insertBox(ElementType::HBOX, measure);
                 toHBox(gap)->setBoxWidth(Spatium(10));
             }

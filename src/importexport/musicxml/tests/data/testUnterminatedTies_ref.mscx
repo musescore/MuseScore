@@ -121,13 +121,11 @@
         <Text>
           <eid>E_E</eid>
           <style>title</style>
-          <offset x="0" y="-0.07525"/>
           <text><font size="22"/>Unterminated Ties</text>
           </Text>
         <Text>
           <eid>F_F</eid>
           <style>subtitle</style>
-          <offset x="0" y="9.92425"/>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
