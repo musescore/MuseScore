@@ -50,6 +50,7 @@ class Clef;
 class Capo;
 
 class DeadSlapped;
+class DurationLine;
 class Dynamic;
 
 class Expression;
@@ -106,8 +107,8 @@ class Note;
 class NoteDot;
 class NoteLineSegment;
 
+class OctaveDot;
 class Ornament;
-
 class Ottava;
 class OttavaSegment;
 
@@ -213,6 +214,7 @@ private:
     static void draw(const Capo* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
     static void draw(const DeadSlapped* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void draw(const DurationLine* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Dynamic* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
     static void draw(const Expression* item, muse::draw::Painter* painter, const PaintOptions& opt);
@@ -263,6 +265,7 @@ private:
     static void draw(const NoteHead* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const NoteLineSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 
+    static void draw(const OctaveDot* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const Ornament* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const OttavaSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
 

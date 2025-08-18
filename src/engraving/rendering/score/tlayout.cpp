@@ -54,6 +54,7 @@
 #include "dom/capo.h"
 
 #include "dom/deadslapped.h"
+#include "dom/durationline.h"
 #include "dom/dynamic.h"
 
 #include "dom/expression.h"
@@ -100,6 +101,7 @@
 #include "dom/notedot.h"
 #include "dom/noteline.h"
 
+#include "dom/octavedot.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -368,6 +370,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::ORNAMENT:
         layoutOrnament(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
+        break;
+    case ElementType::OCTAVE_DOT:       layoutOctaveDot(item_cast<OctaveDot*>(item));
         break;
     case ElementType::OTTAVA:           layoutOttava(item_cast<Ottava*>(item), ctx);
         break;
@@ -1807,6 +1811,21 @@ void TLayout::layoutDeadSlapped(const DeadSlapped* item, DeadSlapped::LayoutData
         ldata->path1 = path1;
         ldata->path2 = path2;
     }
+}
+
+void TLayout::layoutDurationLine(DurationLine* item, LayoutContext& ctx)
+{
+    LAYOUT_CALL_ITEM(item);
+    double chordMag = item->chord()->mag();
+    DurationLine::LayoutData* ldata = item->mutldata();
+    ldata->setMag(chordMag);
+    ldata->lineWidth = ctx.conf().styleMM(Sid::staffLineWidth) * chordMag;
+    if (item->staff()) {
+        const_cast<DurationLine*>(item)->setColor(item->staff()->staffType(item->tick())->color());
+    }
+
+    double w2 = ldata->lineWidth * .5;
+    ldata->setBbox(0, -w2, item->len(), 2 * w2);
 }
 
 void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -4045,6 +4064,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
     }
 
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
+    bool useJianpu = item->staff() && item->staff()->isJianpuStaff(item->chord()->tick());
     ldata->useTablature.set_value(useTablature);
 
     RectF noteBBox;
@@ -4082,6 +4102,23 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         double mags = item->magS();
         double y = item->deadNote() ? tab->deadFretBoxY() : tab->fretBoxY();
         double height = item->deadNote() ? tab->deadFretBoxH() : tab->fretBoxH();
+
+        noteBBox = RectF(0, y * mags, w, height * mags);
+    } else if (useJianpu) {
+        const Staff* st = item->staff();
+        const StaffType* jianpu = st->staffTypeForElement(item);
+
+        KeySigEvent ks = st->keySigEvent(item->chord()->tick());
+        int tpc = pitch2tpc(item->pitch(), ks.key(), Prefer::NEAREST);
+
+        String accName, stepName;
+        tpc2Function(tpc, ks.key(), accName, stepName);
+        const_cast<Note*>(item)->setJianpuDigit(String(u"%1").arg(stepName));
+
+        double w = item->headWidth();
+        double mags = item->magS();
+        double y = jianpu->jianpuBoxY();
+        double height = jianpu->jianpuBoxH();
 
         noteBBox = RectF(0, y * mags, w, height * mags);
     } else {
@@ -4192,6 +4229,17 @@ void TLayout::layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata)
     }
 
     ldata->setBbox(item->symBbox(SymId::augmentationDot));
+}
+
+void TLayout::layoutOctaveDot(OctaveDot* item)
+{
+    LAYOUT_CALL_ITEM(item);
+    OctaveDot::LayoutData* ldata = item->mutldata();
+    ldata->setMag(item->chord()->mag());
+    ldata->radius = item->defaultSpatium() * .1; // TODO: style
+
+    double diameter = ldata->radius * 2;
+    ldata->setBbox(0, -ldata->radius, item->len(), diameter);
 }
 
 void TLayout::layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf)

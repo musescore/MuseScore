@@ -36,6 +36,7 @@
 #include "beam.h"
 #include "chordline.h"
 #include "drumset.h"
+#include "durationline.h"
 #include "factory.h"
 #include "guitarbend.h"
 #include "hook.h"
@@ -48,6 +49,7 @@
 #include "notedot.h"
 #include "noteevent.h"
 #include "noteline.h"
+#include "octavedot.h"
 #include "ornament.h"
 #include "part.h"
 #include "rest.h"
@@ -417,7 +419,9 @@ Chord::~Chord()
     delete m_stemSlash;
     delete m_stem;
     delete m_hook;
+    muse::DeleteAll(m_durationLines);
     muse::DeleteAll(m_ledgerLines);
+    muse::DeleteAll(m_octaveDots);
     muse::DeleteAll(m_graceNotes);
     muse::DeleteAll(m_notes);
 }
@@ -960,21 +964,37 @@ Chord* Chord::next() const
     return nullptr;
 }
 
-void Chord::resizeLedgerLinesTo(size_t newSize)
+template<class T>
+void Chord::resizeTo(std::vector<T*>& vec, size_t newSize)
 {
-    int ledgerLineCountDiff = static_cast<int>(newSize - m_ledgerLines.size());
-    if (ledgerLineCountDiff > 0) {
-        for (int i = 0; i < ledgerLineCountDiff; ++i) {
-            m_ledgerLines.push_back(new LedgerLine(score()->dummy()));
+    int diff = static_cast<int>(newSize - vec.size());
+    if (diff > 0) {
+        for (int i = 0; i < diff; ++i) {
+            vec.push_back(new T(score()->dummy()));
         }
     } else {
-        for (int i = 0; i < std::abs(ledgerLineCountDiff); ++i) {
-            delete m_ledgerLines.back();
-            m_ledgerLines.pop_back();
+        for (int i = 0; i < std::abs(diff); ++i) {
+            delete vec.back();
+            vec.pop_back();
         }
     }
 
-    assert(m_ledgerLines.size() == newSize);
+    assert(vec.size() == newSize);
+}
+
+void Chord::resizeDurationLinesTo(size_t newSize)
+{
+    resizeTo<DurationLine>(m_durationLines, newSize);
+}
+
+void Chord::resizeLedgerLinesTo(size_t newSize)
+{
+    resizeTo<LedgerLine>(m_ledgerLines, newSize);
+}
+
+void Chord::resizeOctaveDotsTo(size_t newSize)
+{
+    resizeTo<OctaveDot>(m_octaveDots, newSize);
 }
 
 void Chord::setBeamExtension(double extension)
@@ -996,7 +1016,8 @@ bool Chord::shouldHaveStem() const
            && !(durationType().type() == DurationType::V_HALF && staffType && staffType->isTabStaff()
                 && staffType->minimStyle() == TablatureMinimStyle::NONE)
            && !(measure() && measure()->stemless(staffIdx()))
-           && !(staffType && staffType->isTabStaff() && staffType->stemless());
+           && !(staffType && staffType->isTabStaff() && staffType->stemless())
+           && !(staff && staff->isJianpuStaff(tick()));
 }
 
 bool Chord::shouldHaveHook() const
@@ -1245,6 +1266,12 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     }
     for (Note* note : m_notes) {
         note->scanElements(func);
+    }
+    for (DurationLine* dl : m_durationLines) {
+        func(dl);
+    }
+    for (OctaveDot* dot : m_octaveDots) {
+        func(dot);
     }
     for (Chord* chord : m_graceNotes) {
         chord->scanElements(func);
