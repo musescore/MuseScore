@@ -113,13 +113,13 @@ public:
     bool hasVoiceAssignmentProperties() const override { return true; }
 
     void startEdit(EditData&) override;
-    bool isEditAllowed(EditData&) const override;
-    bool edit(EditData&) override;
     void endEdit(EditData&) override;
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
     void editDrag(EditData& editData) override;
     void endEditDrag(EditData&) override;
+
+    bool isEditAllowed(EditData&) const override;
 
     Hairpin* leftHairpin() const { return m_leftHairpin; }
     Hairpin* rightHairpin() const { return m_rightHairpin; }
