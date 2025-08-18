@@ -325,19 +325,22 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
     static const ArticulationMap articulations;
     static const PlaybackContextPtr dummyCtx = std::make_shared<PlaybackContext>();
 
-    RenderingContext ctx(actualTimestamp,
-                         actualDuration,
-                         actualDynamicLevel,
-                         0,
-                         0,
-                         ticksFromTempoAndDuration(Constants::DEFAULT_TEMPO.val, actualDuration),
-                         Constants::DEFAULT_TEMPO,
-                         TimeSigMap::DEFAULT_TIME_SIGNATURE,
-                         persistentArticulationApplied,
-                         articulations,
-                         note->score(),
-                         profile,
-                         dummyCtx);
+    int durationTicks = ticksFromTempoAndDuration(Constants::DEFAULT_TEMPO.val, actualDuration);
+
+    RenderingContext ctx{ actualTimestamp,
+                          actualDuration,
+                          actualDynamicLevel,
+                          0, /*nominalPositionStartTick*/
+                          durationTicks, /*nominalPositionEndTick*/
+                          durationTicks, /*nominalDurationTicks*/
+                          0, /*positionTickOffset*/
+                          Constants::DEFAULT_TEMPO,
+                          TimeSigMap::DEFAULT_TIME_SIGNATURE,
+                          persistentArticulationApplied,
+                          articulations,
+                          note->score(),
+                          profile,
+                          dummyCtx };
 
     NoteArticulationsParser::parsePersistentMeta(ctx, ctx.commonArticulations);
     NoteArticulationsParser::parseGhostNote(note, ctx, ctx.commonArticulations);
