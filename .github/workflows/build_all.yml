@@ -137,7 +137,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Prepare dummy artifact
       run: |
         ARTIFACTS_DIR="build.artifacts"

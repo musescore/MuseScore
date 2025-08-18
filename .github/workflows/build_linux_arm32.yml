@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-22.04-arm
     steps:
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Setup QEMU
       run: |
         sudo apt-get update
