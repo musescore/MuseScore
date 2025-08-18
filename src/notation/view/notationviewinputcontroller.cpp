@@ -778,7 +778,8 @@ bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(co
     const engraving::staff_idx_t sourceStaffIdx = range->startStaffIndex();
     const size_t numStaves = range->endStaffIndex() - range->startStaffIndex();
 
-    const bool started = viewInteraction()->startDropRange(sourceTick, tickLength, sourceStaffIdx, numStaves);
+    const bool started = viewInteraction()->startDropRange(sourceTick, tickLength, sourceStaffIdx, numStaves,
+                                                           /*preserveMeasureAlignment=*/ true);
     if (!started) {
         return false;
     }
@@ -1009,7 +1010,13 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
     case MouseDownInfo::PasteRangeOnRelease: {
         const PointF logicPos = m_view->toLogical(event->pos());
-        const bool canDrop = viewInteraction()->updateDropRange(logicPos);
+
+        std::optional<bool> preserveMeasureAlignment;
+        if (physicalDragDelta.manhattanLength() > 4) {
+            preserveMeasureAlignment = false;
+        }
+
+        const bool canDrop = viewInteraction()->updateDropRange(logicPos, preserveMeasureAlignment);
         m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : QCursor());
         return;
     }

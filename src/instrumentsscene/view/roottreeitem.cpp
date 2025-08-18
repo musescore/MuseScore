@@ -22,7 +22,6 @@
 #include "roottreeitem.h"
 
 #include "parttreeitem.h"
-#include "stafftreeitem.h"
 #include "systemobjectslayertreeitem.h"
 
 using namespace mu::instrumentsscene;

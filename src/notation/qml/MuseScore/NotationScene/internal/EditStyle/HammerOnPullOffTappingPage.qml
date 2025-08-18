@@ -57,6 +57,8 @@ StyledFlickable {
                 }
 
                 RowLayout {
+                    spacing: 6
+
                     ToggleButton {
                         checked: hopoPage.showOnStandardStaves.value === true
                         onToggled: {
@@ -67,11 +69,13 @@ StyledFlickable {
                     StyledTextLabel {
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignLeft
-                        text: "Standard staves"
+                        text: qsTrc("notation/editstyle/hammeronpulloff", "Standard staves")
                     }
                 }
 
                 RowLayout {
+                    spacing: 6
+
                     ToggleButton {
                         checked: hopoPage.showOnTabStaves.value === true
                         onToggled: {
@@ -80,10 +84,9 @@ StyledFlickable {
                     }
 
                     StyledTextLabel {
-                        id : toggleText
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignLeft
-                        text: "Tablature staves"
+                        text: qsTrc("notation/editstyle/hammeronpulloff", "Tablature staves")
                     }
                 }
             }
@@ -94,42 +97,36 @@ StyledFlickable {
             Layout.minimumWidth: 500
             title: qsTrc("notation/editstyle/hammeronpulloff", "Case")
 
-            RowLayout {
+            Row {
                 width: parent.width
-                spacing: 10
+                spacing: 8
 
                 RadioButtonGroup {
                     orientation: ListView.Horizontal
-                    spacing: 6
 
                     model: [
-                        {iconCode: IconCode.HP_UPPER_CASE, value: true },
-                        {iconCode: IconCode.HP_LOWER_CASE, value: false },
+                        {iconCode: IconCode.HP_UPPER_CASE, text: qsTrc("notation/editstyle/hammeronpulloff", "Upper case"), value: true },
+                        {iconCode: IconCode.HP_LOWER_CASE, text: qsTrc("notation/editstyle/hammeronpulloff", "Lower case"), value: false },
                     ]
 
                     delegate: FlatRadioButton {
                         width: 40
                         height: 30
                         iconCode: modelData.iconCode
+                        toolTipTitle: modelData.text
                         checked: hopoPage.hopoUpperCase.value === modelData.value
                         onToggled: hopoPage.hopoUpperCase.value = modelData.value
                     }
                 }
 
-                SeparatorLine {
-                    orientation: Qt.Vertical
-                }
+                SeparatorLine {}
 
                 FlatButton {
-                    text: qsTrc("notation", "Edit text style")
+                    text: qsTrc("notation/editstyle/hammeronpulloff", "Edit text style")
 
                     onClicked: {
                         root.goToTextStylePage("hammer-ons-pull-offs-and-tapping")
                     }
-                }
-
-                Item {
-                    Layout.fillWidth: true
                 }
             }
         }
@@ -141,11 +138,11 @@ StyledFlickable {
 
             ColumnLayout {
                 width: parent.width
-                spacing: 10
+                spacing: 8
 
                 RadioButtonGroup {
                     orientation: ListView.Vertical
-                    spacing: 6
+                    spacing: 8
 
                     model: [
                         {text: qsTrc("notation/editstyle/hammeronpulloff", "Show ‘H’ or ‘P’ between each pair of notes"), value: true },
@@ -173,13 +170,12 @@ StyledFlickable {
 
             ColumnLayout {
                 width: parent.width
-                spacing: 10
+                spacing: 8
 
                 RowLayout {
                     spacing: 24
 
                     ColumnLayout {
-                        width: parent.width
                         spacing: 8
 
                         StyledTextLabel {
@@ -188,7 +184,6 @@ StyledFlickable {
 
                         RadioButtonGroup {
                             orientation: ListView.Horizontal
-                            spacing: 6
 
                             model: [
                                 {text: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
@@ -197,7 +192,7 @@ StyledFlickable {
                             ]
 
                             delegate: FlatRadioButton {
-                                width: 90
+                                width: Math.max(90, implicitContentWidth)
                                 height: 30
                                 text: modelData.text
                                 checked: hopoPage.lhTappingShowItemsNormalStave.value === modelData.value
@@ -208,7 +203,6 @@ StyledFlickable {
 
                     ColumnLayout {
                         enabled: hopoPage.lhTappingShowItemsNormalStave.value !== 0
-                        width: parent.width
                         spacing: 8
 
                         StyledTextLabel {
@@ -217,7 +211,6 @@ StyledFlickable {
 
                         RadioButtonGroup {
                             orientation: ListView.Horizontal
-                            spacing: 6
 
                             model: [
                                 {iconCode: IconCode.TAPPING_ENCIRCLED_T, value: 1 },
@@ -239,7 +232,6 @@ StyledFlickable {
                     spacing: 24
 
                     ColumnLayout {
-                        width: parent.width
                         spacing: 8
 
                         StyledTextLabel {
@@ -248,7 +240,6 @@ StyledFlickable {
 
                         RadioButtonGroup {
                             orientation: ListView.Horizontal
-                            spacing: 6
 
                             model: [
                                 {text: qsTrc("notation/editstyle/hammeronpulloff", "Half slur"), value: 0 },
@@ -257,7 +248,7 @@ StyledFlickable {
                             ]
 
                             delegate: FlatRadioButton {
-                                width: 90
+                                width: Math.max(90, implicitContentWidth)
                                 height: 30
                                 text: modelData.text
                                 checked: hopoPage.lhTappingShowItemsTab.value === modelData.value
@@ -268,7 +259,6 @@ StyledFlickable {
 
                     ColumnLayout {
                         enabled: hopoPage.lhTappingShowItemsTab.value !== 0
-                        width: parent.width
                         spacing: 8
 
                         StyledTextLabel {
@@ -277,7 +267,6 @@ StyledFlickable {
 
                         RadioButtonGroup {
                             orientation: ListView.Horizontal
-                            spacing: 6
 
                             model: [
                                 {iconCode: IconCode.TAPPING_ENCIRCLED_T, value: 1 },
@@ -311,10 +300,9 @@ StyledFlickable {
 
             ColumnLayout {
                 width: parent.width
-                spacing: 10
+                spacing: 12
 
                 ColumnLayout {
-                    width: parent.width
                     spacing: 8
 
                     StyledTextLabel {
@@ -323,7 +311,6 @@ StyledFlickable {
 
                     RadioButtonGroup {
                         orientation: ListView.Horizontal
-                        spacing: 6
 
                         model: [
                             {iconCode: IconCode.TAPPING_PLUS, value: 1},
@@ -341,7 +328,6 @@ StyledFlickable {
                 }
 
                 ColumnLayout {
-                    width: parent.width
                     spacing: 8
 
                     StyledTextLabel {
@@ -350,7 +336,6 @@ StyledFlickable {
 
                     RadioButtonGroup {
                         orientation: ListView.Horizontal
-                        spacing: 6
 
                         model: [
                             {iconCode: IconCode.TAPPING_PLUS, value: 1},
