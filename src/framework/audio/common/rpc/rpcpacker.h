@@ -26,6 +26,8 @@
 #include "global/serialization/msgpack_forward.h"
 #include "../../audiotypes.h"
 
+#include "log.h"
+
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::PlaybackStatus& value);
 
@@ -590,13 +592,23 @@ public:
     template<class ... Types>
     static ByteArray pack(const Options& opt, const Types&... args)
     {
-        return msgpack::pack(opt, args ...);
+        // clear but keep capacity
+        buffer.clear();
+        // makes sense if the reserve is greater than the current capacity
+        buffer.reserve(std::max(opt.rezerveSize, DEFAULT_CAPACITY));
+        msgpack::pack(buffer, args ...);
+
+        IF_ASSERT_FAILED(buffer.size() > 0) {
+            return ByteArray();
+        }
+
+        return ByteArray(&buffer[0], buffer.size());
     }
 
     template<class ... Types>
     static ByteArray pack(const Types&... args)
     {
-        return msgpack::pack(args ...);
+        return RpcPacker::pack(Options {}, args ...);
     }
 
     template<class ... Types>
@@ -604,5 +616,8 @@ public:
     {
         return msgpack::unpack(data, args ...);
     }
+
+    static constexpr size_t DEFAULT_CAPACITY = 1024 * 200;
+    static inline std::vector<uint8_t> buffer = {};
 };
 }
