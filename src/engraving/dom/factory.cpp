@@ -41,6 +41,7 @@
 #include "chordline.h"
 #include "capo.h"
 #include "deadslapped.h"
+#include "durationline.h"
 #include "dynamic.h"
 #include "expression.h"
 #include "fermata.h"
@@ -72,6 +73,7 @@
 #include "mmrestrange.h"
 #include "note.h"
 #include "noteline.h"
+#include "octavedot.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
@@ -249,6 +251,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::PARTIAL_TIE:       return new PartialTie(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
     case ElementType::PARENTHESIS:       return new Parenthesis(parent);
+    case ElementType::DURATION_LINE:     return new DurationLine(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::OCTAVE_DOT:        return new OctaveDot(parent->isChord() ? toChord(parent) : dummy->chord());
 
     case ElementType::TEXTLINE_BASE:
     case ElementType::TEXTLINE_SEGMENT:
