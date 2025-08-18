@@ -65,7 +65,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Configure workflow
       shell: bash
       env:
@@ -243,7 +243,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Configure workflow
       shell: bash
       env:
@@ -363,7 +363,7 @@ jobs:
   #   runs-on: windows-2022
   #   steps:
   #   - name: Clone repository
-  #     uses: actions/checkout@v4
+  #     uses: actions/checkout@v5
   #   - name: Sign test
   #     shell: cmd
   #     run: |

@@ -24,7 +24,7 @@ jobs:
     if: github.event_name != 'schedule' || github.repository == 'musescore/MuseScore'
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Configure workflow
         run: |
