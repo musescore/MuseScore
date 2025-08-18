@@ -30,9 +30,11 @@
 #include "global/io/file.h"
 #include "global/io/dir.h"
 
+#include "engraving/infrastructure/mscio.h"
+
 #include "convertercodes.h"
 #include "compat/backendapi.h"
-#include "internal/converterutils.h"
+#include "converterutils.h"
 
 #include "log.h"
 

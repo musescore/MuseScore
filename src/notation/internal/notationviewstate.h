@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONVIEWSTATE_H
-#define MU_NOTATION_NOTATIONVIEWSTATE_H
+#pragma once
 
 #include "../inotationviewstate.h"
 #include "async/asyncable.h"
@@ -71,5 +70,3 @@ private:
     muse::async::Notification m_stateChanged;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONVIEWSTATE_H

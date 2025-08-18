@@ -19,20 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONVIEWSTATE_H
-#define MU_NOTATION_INOTATIONVIEWSTATE_H
+#pragma once
 
 #include <memory>
 
 #include "async/channel.h"
 #include "types/retval.h"
 
-#include "engraving/infrastructure/mscreader.h"
-#include "engraving/infrastructure/mscwriter.h"
-
 #include "draw/types/transform.h"
 
 #include "notationtypes.h"
+
+namespace mu::engraving {
+class MscReader;
+class MscWriter;
+}
 
 namespace mu::notation {
 class NotationPaintView;
@@ -66,5 +67,3 @@ public:
 
 using INotationViewStatePtr = std::shared_ptr<INotationViewState>;
 }
-
-#endif // MU_NOTATION_INOTATIONVIEWSTATE_H
