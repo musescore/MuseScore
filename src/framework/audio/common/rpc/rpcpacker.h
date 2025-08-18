@@ -618,6 +618,6 @@ public:
     }
 
     static constexpr size_t DEFAULT_CAPACITY = 1024 * 200;
-    static inline std::vector<uint8_t> buffer = {};
+    static inline thread_local std::vector<uint8_t> buffer = {};
 };
 }
