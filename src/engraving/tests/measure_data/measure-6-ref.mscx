@@ -7,23 +7,12 @@
       <frameSystemDistance>1</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
-      <maskBarlinesForText>0</maskBarlinesForText>
       <bracketWidth>0.35</bracketWidth>
       <barNoteDistance>0.6</barNoteDistance>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
-      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <keySigNaturals>1</keySigNaturals>
-      <pageNumberFontSize>9</pageNumberFontSize>
-      <pageNumberFontStyle>0</pageNumberFontStyle>
-      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
-      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
-      <showCourtesiesRepeats>0</showCourtesiesRepeats>
-      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
-      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
-      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
-      <repeatPlayCountShow>0</repeatPlayCountShow>
+      <defaultsVersion>301</defaultsVersion>
       <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>

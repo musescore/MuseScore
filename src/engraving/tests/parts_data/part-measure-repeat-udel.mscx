@@ -4,7 +4,214 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <pageWidth>8.26772</pageWidth>
+      <pageHeight>11.6929</pageHeight>
+      <pagePrintableWidth>7.08661</pagePrintableWidth>
+      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageOddTopMargin>0.590551</pageOddTopMargin>
+      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <lyricsMinBottomDistance>1.5</lyricsMinBottomDistance>
+      <lyricsMinDistance>0.25</lyricsMinDistance>
+      <lyricsDashMaxLength>0.6</lyricsDashMaxLength>
+      <lyricsMelismaPad>0.2</lyricsMelismaPad>
+      <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
+      <lyricsDashYposRatio>0.5</lyricsDashYposRatio>
+      <lyricsOddFontFace>Edwin</lyricsOddFontFace>
+      <lyricsOddFontSize>10</lyricsOddFontSize>
+      <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>
+      <lyricsEvenFontSize>10</lyricsEvenFontSize>
+      <minMeasureWidth>8</minMeasureWidth>
+      <barWidth>0.18</barWidth>
+      <doubleBarWidth>0.18</doubleBarWidth>
+      <endBarWidth>0.55</endBarWidth>
+      <doubleBarDistance>0.37</doubleBarDistance>
+      <endBarDistance>0.37</endBarDistance>
+      <repeatBarlineDotSeparation>0.37</repeatBarlineDotSeparation>
+      <maskBarlinesForText>1</maskBarlinesForText>
+      <akkoladeWidth>1.5</akkoladeWidth>
+      <akkoladeBarDistance>0.35</akkoladeBarDistance>
+      <clefLeftMargin>0.75</clefLeftMargin>
+      <timesigLeftMargin>0.63</timesigLeftMargin>
+      <clefKeyDistance>0.75</clefKeyDistance>
+      <stemWidth>0.1</stemWidth>
+      <shortestStem>2.5</shortestStem>
+      <minNoteDistance>0.35</minNoteDistance>
+      <barNoteDistance>1.25</barNoteDistance>
+      <barAccidentalDistance>0.65</barAccidentalDistance>
+      <noteBarDistance>1.5</noteBarDistance>
+      <staffLineWidth>0.11</staffLineWidth>
+      <ledgerLineLength>0.33</ledgerLineLength>
+      <accidentalDistance>0.25</accidentalDistance>
+      <accidentalNoteDistance>0.25</accidentalNoteDistance>
+      <bracketedAccidentalPadding>0.175</bracketedAccidentalPadding>
+      <beamMinLen>1.1</beamMinLen>
+      <dotNoteDistance>0.5</dotNoteDistance>
+      <dotDotDistance>0.65</dotDotDistance>
+      <hairpinPosAbove x="0" y="-1.75"/>
+      <hairpinPosBelow x="0" y="1.75"/>
+      <hairpinLinePosAbove x="0" y="-1"/>
+      <hairpinLinePosBelow x="0" y="2"/>
+      <hairpinHeight>1.15</hairpinHeight>
+      <hairpinLineWidth>0.12</hairpinLineWidth>
+      <hairpinFontFace>Edwin</hairpinFontFace>
+      <hairpinFontSize>10</hairpinFontSize>
+      <pedalPosAbove x="0" y="-1"/>
+      <pedalPosBelow x="0" y="2.5"/>
+      <pedalLineWidth>0.11</pedalLineWidth>
+      <pedalFontFace>Edwin</pedalFontFace>
+      <pedalFontSize>10</pedalFontSize>
+      <trillPosAbove x="0" y="-0.5"/>
+      <trillPosBelow x="0" y="2"/>
+      <chordSymbolAFontFace>Edwin</chordSymbolAFontFace>
+      <chordSymbolAFontSize>10</chordSymbolAFontSize>
+      <chordSymbolBFontFace>Edwin</chordSymbolBFontFace>
+      <chordSymbolBFontSize>10</chordSymbolBFontSize>
+      <nashvilleNumberFontFace>Edwin</nashvilleNumberFontFace>
+      <fretFretSpacing>0.7</fretFretSpacing>
+      <barreLineWidth>0.85</barreLineWidth>
+      <scaleRythmicSpacingForSmallNotes>1</scaleRythmicSpacingForSmallNotes>
+      <chordStyle>std</chordStyle>
+      <chordDescriptionFile>chords_std.xml</chordDescriptionFile>
+      <verticallyAlignChordSymbols>1</verticallyAlignChordSymbols>
+      <chordSymPosition>center</chordSymPosition>
+      <minEmptyMeasures>1</minEmptyMeasures>
+      <minMMRestWidth>6</minMMRestWidth>
+      <multiMeasureRestMargin>1.25</multiMeasureRestMargin>
+      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
+      <arpeggioNoteDistance>0.4</arpeggioNoteDistance>
+      <slurEndWidth>0.05</slurEndWidth>
+      <slurMidWidth>0.21</slurMidWidth>
+      <tieEndWidth>0.05</tieEndWidth>
+      <tieMidWidth>0.21</tieMidWidth>
+      <musicalSymbolFont>Leland</musicalSymbolFont>
+      <musicalTextFont>Leland Text</musicalTextFont>
+      <showHeader>1</showHeader>
+      <evenHeaderL>$p</evenHeaderL>
+      <oddHeaderR>$p</oddHeaderR>
+      <evenFooterL></evenFooterL>
+      <evenFooterC>$C</evenFooterC>
+      <oddFooterC>$C</oddFooterC>
+      <oddFooterR></oddFooterR>
+      <voltaHook>2.2</voltaHook>
+      <voltaLineWidth>0.11</voltaLineWidth>
+      <voltaFontFace>Edwin</voltaFontFace>
+      <voltaOffset x="0.6" y="2.2"/>
+      <ottavaPosAbove x="0" y="-2"/>
+      <ottavaPosBelow x="0" y="2"/>
+      <ottavaHookAbove>1</ottavaHookAbove>
+      <ottavaHookBelow>1</ottavaHookBelow>
+      <ottavaLineWidth>0.11</ottavaLineWidth>
+      <ottavaFontFace>Edwin</ottavaFontFace>
+      <tupletVStemDistance>0.5</tupletVStemDistance>
+      <tupletFontFace>Edwin</tupletFontFace>
+      <tupletFontSize>9</tupletFontSize>
+      <tupletBracketHookHeight>0.75</tupletBracketHookHeight>
+      <scaleBarlines>0</scaleBarlines>
+      <barGraceDistance>1</barGraceDistance>
+      <dynamicsPosAbove x="0" y="-1"/>
+      <dynamicsPosBelow x="0" y="2"/>
+      <defaultFontFace>Edwin</defaultFontFace>
+      <titleFontFace>Edwin</titleFontFace>
+      <titleFontSize>22</titleFontSize>
+      <subTitleFontFace>Edwin</subTitleFontFace>
+      <composerFontFace>Edwin</composerFontFace>
+      <composerFontSize>10</composerFontSize>
+      <lyricistFontFace>Edwin</lyricistFontFace>
+      <lyricistFontSize>10</lyricistFontSize>
+      <fingeringFontFace>Edwin</fingeringFontFace>
+      <lhGuitarFingeringFontFace>Edwin</lhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontFace>Edwin</rhGuitarFingeringFontFace>
+      <rhGuitarFingeringFontStyle>2</rhGuitarFingeringFontStyle>
+      <stringNumberFontFace>Edwin</stringNumberFontFace>
+      <longInstrumentFontFace>Edwin</longInstrumentFontFace>
+      <longInstrumentFontSize>10</longInstrumentFontSize>
+      <shortInstrumentFontFace>Edwin</shortInstrumentFontFace>
+      <shortInstrumentFontSize>10</shortInstrumentFontSize>
+      <partInstrumentFontFace>Edwin</partInstrumentFontFace>
+      <partInstrumentFontSize>14</partInstrumentFontSize>
+      <dynamicsFontFace>Edwin</dynamicsFontFace>
+      <dynamicsFontSize>10</dynamicsFontSize>
+      <expressionFontFace>Edwin</expressionFontFace>
+      <expressionFontSize>10</expressionFontSize>
+      <expressionOffset x="0" y="2.5"/>
+      <tempoFontFace>Edwin</tempoFontFace>
+      <metronomeFontFace>Edwin</metronomeFontFace>
+      <metronomeFontStyle>0</metronomeFontStyle>
+      <measureNumberFontFace>Edwin</measureNumberFontFace>
+      <measureNumberFontSpatiumDependent>0</measureNumberFontSpatiumDependent>
+      <measureNumberFontStyle>2</measureNumberFontStyle>
+      <measureNumberHPlacement>left</measureNumberHPlacement>
+      <measureNumberPosition>left</measureNumberPosition>
+      <translatorFontFace>Edwin</translatorFontFace>
+      <translatorFontSize>10</translatorFontSize>
+      <systemTextFontFace>Edwin</systemTextFontFace>
+      <staffTextFontFace>Edwin</staffTextFontFace>
+      <staffTextPosAbove x="0" y="-1"/>
+      <staffTextPosBelow x="0" y="2.5"/>
+      <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
+      <rehearsalMarkFrameWidth>0.16</rehearsalMarkFrameWidth>
+      <rehearsalMarkFrameRound>0</rehearsalMarkFrameRound>
+      <rehearsalMarkPosAbove x="0" y="-2"/>
+      <repeatLeftFontFace>Edwin</repeatLeftFontFace>
+      <repeatLeftFontSize>10</repeatLeftFontSize>
+      <repeatRightFontFace>Edwin</repeatRightFontFace>
+      <repeatRightFontSize>10</repeatRightFontSize>
+      <frameFontFace>Edwin</frameFontFace>
+      <frameFontSize>10</frameFontSize>
+      <textLineFontFace>Edwin</textLineFontFace>
+      <textLineFontSize>10</textLineFontSize>
+      <glissandoFontFace>Edwin</glissandoFontFace>
+      <bendFontFace>Edwin</bendFontFace>
+      <headerFontFace>Edwin</headerFontFace>
+      <headerFontSize>9</headerFontSize>
+      <footerFontFace>Edwin</footerFontFace>
+      <footerFontSize>9</footerFontSize>
+      <footerOffset x="0" y="0"/>
+      <copyrightFontFace>Edwin</copyrightFontFace>
+      <copyrightFontSize>9</copyrightFontSize>
+      <copyrightOffset x="0" y="0"/>
+      <pageNumberFontFace>Edwin</pageNumberFontFace>
+      <pageNumberFontSize>11</pageNumberFontSize>
+      <pageNumberFontStyle>1</pageNumberFontStyle>
+      <pageNumberOffset x="0" y="0"/>
+      <instrumentChangeFontFace>Edwin</instrumentChangeFontFace>
+      <instrumentChangeFontSize>10</instrumentChangeFontSize>
+      <stickingFontFace>Edwin</stickingFontFace>
+      <stickingFontSize>10</stickingFontSize>
+      <stickingPosAbove x="0" y="-1"/>
+      <user1FontFace>Edwin</user1FontFace>
+      <user2FontFace>Edwin</user2FontFace>
+      <user3FontFace>Edwin</user3FontFace>
+      <user4FontFace>Edwin</user4FontFace>
+      <user5FontFace>Edwin</user5FontFace>
+      <user6FontFace>Edwin</user6FontFace>
+      <user7FontFace>Edwin</user7FontFace>
+      <user8FontFace>Edwin</user8FontFace>
+      <user9FontFace>Edwin</user9FontFace>
+      <user10FontFace>Edwin</user10FontFace>
+      <user11FontFace>Edwin</user11FontFace>
+      <user12FontFace>Edwin</user12FontFace>
+      <letRingFontFace>Edwin</letRingFontFace>
+      <letRingLineWidth>0.11</letRingLineWidth>
+      <palmMuteFontFace>Edwin</palmMuteFontFace>
+      <palmMutePosAbove x="0" y="0"/>
+      <palmMutePosBelow x="0" y="0"/>
+      <palmMuteLineWidth>0.11</palmMuteLineWidth>
+      <fermataPosAbove x="0" y="-0.5"/>
+      <fermataPosBelow x="0" y="0.5"/>
+      <trillMinDistance>0.5</trillMinDistance>
       <defaultsVersion>301</defaultsVersion>
+      <changesBeforeBarlineRepeats>1</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>1</changesBeforeBarlineOtherJumps>
+      <showCourtesiesRepeats>1</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>1</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>1</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>1</showCourtesiesAfterCancellingOtherJumps>
+      <repeatPlayCountShow>1</repeatPlayCountShow>
       <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -853,11 +1060,6 @@
     <Score>
       <eid>+B_+B</eid>
       <name>Alto</name>
-      <Tracklist sTrack="0" dstTrack="0"/>
-      <Tracklist sTrack="1" dstTrack="1"/>
-      <Tracklist sTrack="2" dstTrack="2"/>
-      <Tracklist sTrack="3" dstTrack="3"/>
-      <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
         <defaultsVersion>301</defaultsVersion>
@@ -871,6 +1073,7 @@
       <Part id="1">
         <Staff>
           <eid>/B_/B</eid>
+          <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
             <name>Standard</name>
             </StaffType>
@@ -911,8 +1114,10 @@
           <height>10</height>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>AC_AC</eid>
+          <linkedTo>E_E</linkedTo>
           <Text>
             <eid>BC_BC</eid>
+            <linkedTo>F_F</linkedTo>
             <style>title</style>
             <text>testpart1</text>
             </Text>
@@ -930,46 +1135,56 @@
               <transposingClefType>G</transposingClefType>
               <isHeader>1</isHeader>
               <eid>EC_EC</eid>
+              <linkedTo>H_H</linkedTo>
               </Clef>
             <TimeSig>
               <eid>FC_FC</eid>
+              <linkedTo>I_I</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Tempo>
               <tempo>1.66667</tempo>
               <eid>GC_GC</eid>
+              <linkedTo>J_J</linkedTo>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
             <Chord>
               <eid>HC_HC</eid>
+              <linkedTo>K_K</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>IC_IC</eid>
+                <linkedTo>L_L</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
                 </Note>
               </Chord>
             <Chord>
               <eid>JC_JC</eid>
+              <linkedTo>M_M</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>KC_KC</eid>
+                <linkedTo>N_N</linkedTo>
                 <pitch>74</pitch>
                 <tpc>16</tpc>
                 </Note>
               </Chord>
             <Chord>
               <eid>LC_LC</eid>
+              <linkedTo>O_O</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>MC_MC</eid>
+                <linkedTo>P_P</linkedTo>
                 <pitch>76</pitch>
                 <tpc>18</tpc>
                 </Note>
               </Chord>
             <Rest>
               <eid>NC_NC</eid>
+              <linkedTo>Q_Q</linkedTo>
               <durationType>quarter</durationType>
               </Rest>
             </voice>
@@ -981,6 +1196,7 @@
             <MeasureRepeat>
               <subtype>1</subtype>
               <eid>PC_PC</eid>
+              <linkedTo>S_S</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </MeasureRepeat>
@@ -993,6 +1209,7 @@
             <MeasureRepeat>
               <subtype>2</subtype>
               <eid>RC_RC</eid>
+              <linkedTo>V_V</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </MeasureRepeat>
@@ -1004,6 +1221,7 @@
           <voice>
             <Rest>
               <eid>TC_TC</eid>
+              <linkedTo>Y_Y</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1015,6 +1233,7 @@
           <voice>
             <Rest>
               <eid>VC_VC</eid>
+              <linkedTo>b_b</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1027,6 +1246,7 @@
             <MeasureRepeat>
               <subtype>4</subtype>
               <eid>XC_XC</eid>
+              <linkedTo>e_e</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </MeasureRepeat>
@@ -1038,6 +1258,7 @@
           <voice>
             <Rest>
               <eid>ZC_ZC</eid>
+              <linkedTo>h_h</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1049,6 +1270,7 @@
           <voice>
             <Rest>
               <eid>bC_bC</eid>
+              <linkedTo>k_k</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1059,6 +1281,7 @@
           <voice>
             <Rest>
               <eid>dC_dC</eid>
+              <linkedTo>m_m</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1069,6 +1292,7 @@
           <voice>
             <Rest>
               <eid>fC_fC</eid>
+              <linkedTo>o_o</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1079,6 +1303,7 @@
           <voice>
             <Rest>
               <eid>hC_hC</eid>
+              <linkedTo>q_q</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1089,6 +1314,7 @@
           <voice>
             <Rest>
               <eid>jC_jC</eid>
+              <linkedTo>s_s</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1099,6 +1325,7 @@
           <voice>
             <Rest>
               <eid>lC_lC</eid>
+              <linkedTo>u_u</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1109,6 +1336,7 @@
           <voice>
             <Rest>
               <eid>nC_nC</eid>
+              <linkedTo>w_w</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1119,6 +1347,7 @@
           <voice>
             <Rest>
               <eid>pC_pC</eid>
+              <linkedTo>y_y</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1129,6 +1358,7 @@
           <voice>
             <Rest>
               <eid>rC_rC</eid>
+              <linkedTo>0_0</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1139,6 +1369,7 @@
           <voice>
             <Rest>
               <eid>tC_tC</eid>
+              <linkedTo>2_2</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1149,6 +1380,7 @@
           <voice>
             <Rest>
               <eid>vC_vC</eid>
+              <linkedTo>4_4</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1159,6 +1391,7 @@
           <voice>
             <Rest>
               <eid>xC_xC</eid>
+              <linkedTo>6_6</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1169,6 +1402,7 @@
           <voice>
             <Rest>
               <eid>zC_zC</eid>
+              <linkedTo>8_8</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1179,6 +1413,7 @@
           <voice>
             <Rest>
               <eid>1C_1C</eid>
+              <linkedTo>+_+</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1189,6 +1424,7 @@
           <voice>
             <Rest>
               <eid>3C_3C</eid>
+              <linkedTo>AB_AB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1199,6 +1435,7 @@
           <voice>
             <Rest>
               <eid>5C_5C</eid>
+              <linkedTo>CB_CB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1209,6 +1446,7 @@
           <voice>
             <Rest>
               <eid>7C_7C</eid>
+              <linkedTo>EB_EB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1219,6 +1457,7 @@
           <voice>
             <Rest>
               <eid>9C_9C</eid>
+              <linkedTo>GB_GB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1229,6 +1468,7 @@
           <voice>
             <Rest>
               <eid>/C_/C</eid>
+              <linkedTo>IB_IB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1239,6 +1479,7 @@
           <voice>
             <Rest>
               <eid>BD_BD</eid>
+              <linkedTo>KB_KB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1249,6 +1490,7 @@
           <voice>
             <Rest>
               <eid>DD_DD</eid>
+              <linkedTo>MB_MB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1259,6 +1501,7 @@
           <voice>
             <Rest>
               <eid>FD_FD</eid>
+              <linkedTo>OB_OB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1269,6 +1512,7 @@
           <voice>
             <Rest>
               <eid>HD_HD</eid>
+              <linkedTo>QB_QB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1279,6 +1523,7 @@
           <voice>
             <Rest>
               <eid>JD_JD</eid>
+              <linkedTo>SB_SB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1289,6 +1534,7 @@
           <voice>
             <Rest>
               <eid>LD_LD</eid>
+              <linkedTo>UB_UB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1299,11 +1545,6 @@
     <Score>
       <eid>MD_MD</eid>
       <name>Tenor</name>
-      <Tracklist sTrack="0" dstTrack="0"/>
-      <Tracklist sTrack="1" dstTrack="1"/>
-      <Tracklist sTrack="2" dstTrack="2"/>
-      <Tracklist sTrack="3" dstTrack="3"/>
-      <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
         <defaultsVersion>301</defaultsVersion>
@@ -1317,6 +1558,7 @@
       <Part id="2">
         <Staff>
           <eid>ND_ND</eid>
+          <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
             <name>Standard</name>
             </StaffType>
@@ -1357,8 +1599,10 @@
           <height>10</height>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>OD_OD</eid>
+          <linkedTo>E_E</linkedTo>
           <Text>
             <eid>PD_PD</eid>
+            <linkedTo>F_F</linkedTo>
             <style>title</style>
             <text>testpart1</text>
             </Text>
@@ -1376,49 +1620,60 @@
               <transposingClefType>G8vb</transposingClefType>
               <isHeader>1</isHeader>
               <eid>SD_SD</eid>
+              <linkedTo>VB_VB</linkedTo>
               </Clef>
             <TimeSig>
               <eid>TD_TD</eid>
+              <linkedTo>WB_WB</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Tempo>
               <tempo>1.66667</tempo>
               <eid>UD_UD</eid>
+              <linkedTo>J_J</linkedTo>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
             <Chord>
               <eid>VD_VD</eid>
+              <linkedTo>XB_XB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>WD_WD</eid>
+                <linkedTo>YB_YB</linkedTo>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
                 </Note>
               </Chord>
             <Chord>
               <eid>XD_XD</eid>
+              <linkedTo>ZB_ZB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>YD_YD</eid>
+                <linkedTo>aB_aB</linkedTo>
                 <pitch>57</pitch>
                 <tpc>17</tpc>
                 </Note>
               </Chord>
             <Chord>
               <eid>ZD_ZD</eid>
+              <linkedTo>bB_bB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>aD_aD</eid>
+                <linkedTo>cB_cB</linkedTo>
                 <pitch>59</pitch>
                 <tpc>19</tpc>
                 </Note>
               </Chord>
             <Chord>
               <eid>bD_bD</eid>
+              <linkedTo>dB_dB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>cD_cD</eid>
+                <linkedTo>eB_eB</linkedTo>
                 <pitch>60</pitch>
                 <tpc>14</tpc>
                 </Note>
@@ -1432,6 +1687,7 @@
             <MeasureRepeat>
               <subtype>1</subtype>
               <eid>eD_eD</eid>
+              <linkedTo>fB_fB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </MeasureRepeat>
@@ -1444,6 +1700,7 @@
             <MeasureRepeat>
               <subtype>1</subtype>
               <eid>gD_gD</eid>
+              <linkedTo>gB_gB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </MeasureRepeat>
@@ -1456,6 +1713,7 @@
             <MeasureRepeat>
               <subtype>2</subtype>
               <eid>iD_iD</eid>
+              <linkedTo>hB_hB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </MeasureRepeat>
@@ -1467,6 +1725,7 @@
           <voice>
             <Rest>
               <eid>kD_kD</eid>
+              <linkedTo>iB_iB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1478,6 +1737,7 @@
           <voice>
             <Rest>
               <eid>mD_mD</eid>
+              <linkedTo>jB_jB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1490,6 +1750,7 @@
             <MeasureRepeat>
               <subtype>4</subtype>
               <eid>oD_oD</eid>
+              <linkedTo>kB_kB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </MeasureRepeat>
@@ -1501,6 +1762,7 @@
           <voice>
             <Rest>
               <eid>qD_qD</eid>
+              <linkedTo>lB_lB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1512,6 +1774,7 @@
           <voice>
             <Rest>
               <eid>sD_sD</eid>
+              <linkedTo>mB_mB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1522,6 +1785,7 @@
           <voice>
             <Rest>
               <eid>uD_uD</eid>
+              <linkedTo>nB_nB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1532,6 +1796,7 @@
           <voice>
             <Rest>
               <eid>wD_wD</eid>
+              <linkedTo>oB_oB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1542,6 +1807,7 @@
           <voice>
             <Rest>
               <eid>yD_yD</eid>
+              <linkedTo>pB_pB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1552,6 +1818,7 @@
           <voice>
             <Rest>
               <eid>0D_0D</eid>
+              <linkedTo>qB_qB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1562,6 +1829,7 @@
           <voice>
             <Rest>
               <eid>2D_2D</eid>
+              <linkedTo>rB_rB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1572,6 +1840,7 @@
           <voice>
             <Rest>
               <eid>4D_4D</eid>
+              <linkedTo>sB_sB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1582,6 +1851,7 @@
           <voice>
             <Rest>
               <eid>6D_6D</eid>
+              <linkedTo>tB_tB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1592,6 +1862,7 @@
           <voice>
             <Rest>
               <eid>8D_8D</eid>
+              <linkedTo>uB_uB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1602,6 +1873,7 @@
           <voice>
             <Rest>
               <eid>+D_+D</eid>
+              <linkedTo>vB_vB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1612,6 +1884,7 @@
           <voice>
             <Rest>
               <eid>AE_AE</eid>
+              <linkedTo>wB_wB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1622,6 +1895,7 @@
           <voice>
             <Rest>
               <eid>CE_CE</eid>
+              <linkedTo>xB_xB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1632,6 +1906,7 @@
           <voice>
             <Rest>
               <eid>EE_EE</eid>
+              <linkedTo>yB_yB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1642,6 +1917,7 @@
           <voice>
             <Rest>
               <eid>GE_GE</eid>
+              <linkedTo>zB_zB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1652,6 +1928,7 @@
           <voice>
             <Rest>
               <eid>IE_IE</eid>
+              <linkedTo>0B_0B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1662,6 +1939,7 @@
           <voice>
             <Rest>
               <eid>KE_KE</eid>
+              <linkedTo>1B_1B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1672,6 +1950,7 @@
           <voice>
             <Rest>
               <eid>ME_ME</eid>
+              <linkedTo>2B_2B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1682,6 +1961,7 @@
           <voice>
             <Rest>
               <eid>OE_OE</eid>
+              <linkedTo>3B_3B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1692,6 +1972,7 @@
           <voice>
             <Rest>
               <eid>QE_QE</eid>
+              <linkedTo>4B_4B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1702,6 +1983,7 @@
           <voice>
             <Rest>
               <eid>SE_SE</eid>
+              <linkedTo>5B_5B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1712,6 +1994,7 @@
           <voice>
             <Rest>
               <eid>UE_UE</eid>
+              <linkedTo>6B_6B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1722,6 +2005,7 @@
           <voice>
             <Rest>
               <eid>WE_WE</eid>
+              <linkedTo>7B_7B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1732,6 +2016,7 @@
           <voice>
             <Rest>
               <eid>YE_YE</eid>
+              <linkedTo>8B_8B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1742,6 +2027,7 @@
           <voice>
             <Rest>
               <eid>aE_aE</eid>
+              <linkedTo>9B_9B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
