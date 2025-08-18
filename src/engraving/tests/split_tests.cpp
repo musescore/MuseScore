@@ -101,7 +101,7 @@ TEST_F(Engraving_SplitTests, split08)
     split("split08.mscx", "split08-ref.mscx");
 }
 
-TEST_F(Engraving_SplitTests, DISABLED_split183846) //  determine why pageWidth/pageHeight are missing!
+TEST_F(Engraving_SplitTests, split183846)
 {
     split("split183846-irregular-qn-qn-wn.mscx",          "split183846-irregular-qn-qn-wn-ref.mscx", 1);
     split("split183846-irregular-wn-wn.mscx",             "split183846-irregular-wn-wn-ref.mscx", 1);

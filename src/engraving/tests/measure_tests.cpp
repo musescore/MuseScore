@@ -44,7 +44,7 @@ class Engraving_MeasureTests : public ::testing::Test
 {
 };
 
-TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify program change, 72 is wrong surely?
+TEST_F(Engraving_MeasureTests, insertMeasureMiddle)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-1.mscx");
     EXPECT_TRUE(score);
@@ -58,7 +58,7 @@ TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify prog
     delete score;
 }
 
-TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureBegin) // TODO: verify program change, 72 is wrong surely?
+TEST_F(Engraving_MeasureTests, insertMeasureBegin)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"measure-1.mscx");
     EXPECT_TRUE(score);
@@ -72,7 +72,7 @@ TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureBegin) // TODO: verify prog
     delete score;
 }
 
-TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureEnd) // TODO: verify program change, 72 is wrong surely?
+TEST_F(Engraving_MeasureTests, insertMeasureEnd)
 {
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-1.mscx");
     EXPECT_TRUE(score);

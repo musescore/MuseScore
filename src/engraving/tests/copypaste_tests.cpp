@@ -126,7 +126,7 @@ TEST_F(Engraving_CopyPasteTests, copypaste06)
     copypaste("06");    // tie
 }
 
-TEST_F(Engraving_CopyPasteTests, DISABLED_copypaste07)
+TEST_F(Engraving_CopyPasteTests, copypaste07)
 {
     copypaste("07");    // start ottava
 }
