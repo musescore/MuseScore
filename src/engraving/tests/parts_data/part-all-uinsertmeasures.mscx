@@ -1114,7 +1114,7 @@
           <eid>3C_3C</eid>
           <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
-            <name>stdNormal</name>
+            <name>Standard</name>
             </StaffType>
           </Staff>
         <trackName>Alto</trackName>
@@ -1856,7 +1856,7 @@
           <eid>wE_wE</eid>
           <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
-            <name>stdNormal</name>
+            <name>Standard</name>
             </StaffType>
           </Staff>
         <trackName>Tenor</trackName>
