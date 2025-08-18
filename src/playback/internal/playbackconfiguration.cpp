@@ -355,14 +355,19 @@ void PlaybackConfiguration::setNeedToShowResetSoundFlagsWhenChangePlaybackProfil
     settings()->setSharedValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING, Val(show));
 }
 
-bool PlaybackConfiguration::needToShowOnlineSoundsConnectionWarning() const
+bool PlaybackConfiguration::shouldShowOnlineSoundsProcessingError() const
 {
     return settings()->value(ONLINE_SOUNDS_CONNECTION_WARNING).toBool();
 }
 
-void PlaybackConfiguration::setNeedToShowOnlineSoundsConnectionWarning(bool show)
+void PlaybackConfiguration::setShouldShowOnlineSoundsProcessingError(bool show)
 {
     settings()->setSharedValue(ONLINE_SOUNDS_CONNECTION_WARNING, Val(show));
+}
+
+muse::String PlaybackConfiguration::onlineSoundsHandbookUrl() const
+{
+    return u"https://handbook.musescore.org/sound-and-playback/installing-muse-sounds/online-sounds";
 }
 
 OnlineSoundsShowProgressBarMode PlaybackConfiguration::onlineSoundsShowProgressBarMode() const

@@ -81,8 +81,10 @@ public:
     bool needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const override;
     void setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show) override;
 
-    bool needToShowOnlineSoundsConnectionWarning() const override;
-    void setNeedToShowOnlineSoundsConnectionWarning(bool show) override;
+    bool shouldShowOnlineSoundsProcessingError() const override;
+    void setShouldShowOnlineSoundsProcessingError(bool show) override;
+
+    muse::String onlineSoundsHandbookUrl() const override;
 
     OnlineSoundsShowProgressBarMode onlineSoundsShowProgressBarMode() const override;
     void setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode mode) override;

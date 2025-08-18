@@ -231,8 +231,8 @@ private:
     void removeFromOnlineSounds(const muse::audio::TrackId trackId);
     void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
     void listenAutoProcessOnlineSoundsInBackgroundChanged();
-    bool shouldShowOnlineSoundsConnectionWarning() const;
-    void showOnlineSoundsConnectionWarning();
+    bool shouldShowOnlineSoundsProcessingError() const;
+    void showOnlineSoundsProcessingError();
 
     muse::audio::secs_t playedTickToSecs(int tick) const;
 
@@ -275,7 +275,7 @@ private:
     std::set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
     muse::async::Notification m_onlineSoundsChanged;
     muse::Progress m_onlineSoundsProcessingProgress;
-    int m_onlineSoundsProcessingErrorCode = 0;
+    bool m_onlineSoundsErrorDetected = false;
 };
 }
 
