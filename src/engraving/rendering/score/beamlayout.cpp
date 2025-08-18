@@ -60,6 +60,11 @@ void BeamLayout::layout(Beam* item, const LayoutContext& ctx)
 {
     TRACEFUNC;
 
+    const Staff* staff = item->staff();
+    if (staff->isJianpuStaff(item->tick())) {
+        return;
+    }
+
     Beam::LayoutData* ldata = item->mutldata();
     // all of the beam layout code depends on _elements being in order by tick
     // this may not be the case if two cr's were recently swapped.

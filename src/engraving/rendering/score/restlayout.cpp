@@ -79,6 +79,7 @@ void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Lay
     double spatium = item->spatium();
 
     ldata->setPosX(0.0);
+    const Staff* stf = item->staff();
     const StaffType* stt = item->staffType();
     if (stt && stt->isTabStaff()) {
         // if rests are shown and note values are shown as duration symbols
@@ -112,12 +113,14 @@ void RestLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Lay
             delete item->tabDur();
             const_cast<Rest*>(item)->setTabDur(nullptr);
         }
+    } else if (stf && stf->isJianpuStaff(item->measure()->ticks())) {
+        ldata->setPos(0.0, 0.0);
+        return;
     }
 
     const_cast<Rest*>(item)->setDotLine(Rest::getDotline(item->durationType().type()));
 
     double yOff = item->offset().y();
-    const Staff* stf = item->staff();
     const StaffType* st = stf ? stf->staffTypeForElement(item) : 0;
     double lineDist = st ? st->lineDistance().val() : 1.0;
     int userLine   = RealIsNull(yOff) ? 0 : lrint(yOff / (lineDist * spatium));
