@@ -193,13 +193,11 @@
         <Text>
           <eid>G_G</eid>
           <style>title</style>
-          <offset x="0" y="-0.00874889"/>
           <text><font size="22"/>Volta Hiding</text>
           </Text>
         <Text>
           <eid>H_H</eid>
           <style>subtitle</style>
-          <offset x="0" y="9.99123"/>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
