@@ -463,13 +463,14 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
 
     NoteSpellingType spelling = style.styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
 
+    const ChordDescription* cd = info->getDescription();
+    const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
+
     if (item->harmonyType() == HarmonyType::STANDARD && tpcIsValid(info->rootTpc())) {
         // render root
         render(item, ldata, chordList->renderListRoot, harmonyCtx, ctx, info->rootTpc(), spelling, rootCase);
         // render extension
-        const ChordDescription* cd = info->getDescription();
         if (cd) {
-            const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
             render(item, ldata, stackModifiers ? cd->renderListStacked : cd->renderList, harmonyCtx, ctx, 0);
         }
     } else if (item->harmonyType() == HarmonyType::NASHVILLE && tpcIsValid(info->rootTpc())) {
@@ -478,9 +479,7 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
         double adjust = chordList->nominalAdjust();
         harmonyCtx.movey(adjust * item->magS() * item->spatium() * .2);
         // render extension
-        const ChordDescription* cd = info->getDescription();
         if (cd) {
-            const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
             render(item, ldata, stackModifiers ? cd->renderListStacked : cd->renderList, harmonyCtx, ctx, 0);
         }
     } else {
@@ -491,6 +490,14 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
     if (tpcIsValid(info->bassTpc())) {
         std::list<RenderActionPtr >& bassNoteChordList
             = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
+
+        static const std::wregex PATTERN_69 = std::wregex(L"6[,/]?9");
+        const bool is69 = info->textName().contains(PATTERN_69);
+        const bool hasModifierStack = stackModifiers && (info->parsedChord() ? info->parsedChord()->modifierList().size() > 1 : false);
+
+        if (hasModifierStack || is69) {
+            bassNoteChordList.emplace_front(new RenderActionMove(0.05, 0.0));
+        }
         render(item, ldata, bassNoteChordList, harmonyCtx, ctx, info->bassTpc(), spelling, bassCase, item->bassScale());
     }
 
