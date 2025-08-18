@@ -776,6 +776,7 @@ void BarLine::add(EngravingItem* e)
         break;
     case ElementType::PLAY_COUNT_TEXT: {
         setPlayCountText(toPlayCountText(e));
+        setGenerated(false);
     }
     break;
     default:
@@ -852,7 +853,6 @@ PropertyValue BarLine::getProperty(Pid id) const
 bool BarLine::setProperty(Pid id, const PropertyValue& v)
 {
     if (EngravingItem* e = propertyDelegate(id)) {
-        e->setProperty(id, v);
         return e->setProperty(id, v);
     }
 
@@ -899,6 +899,11 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
 
 void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
+    if (EngravingItem* e = propertyDelegate(id)) {
+        e->undoChangeProperty(id, v, ps);
+        return;
+    }
+
     if (id == Pid::BARLINE_TYPE && segment()) {
         score()->undoChangeBarLineType(this, v.value<BarLineType>(), true, true);
     } else {
