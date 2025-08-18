@@ -2675,13 +2675,23 @@ void Segment::createShape(staff_idx_t staffIdx)
 
         setVisible(true);
 
+        // Still include harmony attached to fret diagram
+        if (e->isFretDiagram() && !e->addToSkyline() && toFretDiagram(e)->harmony()) {
+            e = toHarmony(toFretDiagram(e)->harmony());
+        }
+
         if (!e->addToSkyline()) {
             continue;
         }
 
         if (e->isHarmony() || e->isFretDiagram()) {
             // TODO: eliminate once and for all this addHorizontalSpace hack [M.S.]
-            RectF bbox = e->ldata()->bbox().translated(e->pos());
+            PointF pos = e->pos();
+            // Harmony attached to invisible fret diagram
+            if (e->isHarmony() && e->parent()->isFretDiagram()) {
+                pos += e->parentItem()->pos();
+            }
+            RectF bbox = e->ldata()->bbox().translated(pos);
             s.addHorizontalSpacing(e, bbox.left(), bbox.right());
             if (e->isFretDiagram()) {
                 if (Harmony* harmony = toFretDiagram(e)->harmony()) {
