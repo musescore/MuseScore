@@ -148,9 +148,6 @@ TEST_F(Engraving_JoinTests, join10)
 
 TEST_F(Engraving_JoinTests, joinTieAtStart) {
     // Test splitting a measure when there is a tie ending on the first chord on the split range
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + u"joinTieAtStart.mscx");
     EXPECT_TRUE(score);
 
@@ -193,5 +190,4 @@ TEST_F(Engraving_JoinTests, joinTieAtStart) {
     EXPECT_EQ(tie3, tie1);
 
     delete score;
-    MScore::useRead302InTestMode = use302;
 }

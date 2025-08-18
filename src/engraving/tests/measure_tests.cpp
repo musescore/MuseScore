@@ -599,9 +599,6 @@ TEST_F(Engraving_MeasureTests, measureSplit) {
 }
 
 TEST_F(Engraving_MeasureTests, MMRestEndOfMeasureTS) {
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrEndOfMeasureTimeSig.mscz");
     EXPECT_TRUE(score);
 
@@ -623,14 +620,9 @@ TEST_F(Engraving_MeasureTests, MMRestEndOfMeasureTS) {
     EXPECT_TRUE(tsSegMMR && tsSegMMR->endOfMeasureChange());
     EngravingItem* tsItemMMR = tsSeg->element(0);
     EXPECT_TRUE(tsItemMMR && tsItemMMR->isTimeSig());
-
-    MScore::useRead302InTestMode = use302;
 }
 
 TEST_F(Engraving_MeasureTests, MMRestContinuationCourtesies) {
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrContinuationCourtesies.mscz");
     EXPECT_TRUE(score);
 
@@ -678,6 +670,4 @@ TEST_F(Engraving_MeasureTests, MMRestContinuationCourtesies) {
     Measure* m3MMR = m3->mmRest();
     EXPECT_TRUE(m3MMR && m3MMR->isMMRest());
     checkSegmentsAndItems(m3MMR, true);
-
-    MScore::useRead302InTestMode = use302;
 }

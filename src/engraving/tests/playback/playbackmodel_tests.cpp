@@ -54,10 +54,6 @@ class Engraving_PlaybackModelTests : public ::testing::Test, public muse::async:
 protected:
     void SetUp() override
     {
-        //! NOTE: allows to read test files using their version readers
-        //! instead of using 302 (see mscloader.cpp, makeReader)
-        MScore::useRead302InTestMode = false;
-
         m_dummyPatternSegment.arrangementPattern
             = tests::createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_dummyPatternSegment.pitchPattern = tests::createSimplePitchPattern(0 /*increment_pitch_diff*/);
@@ -67,11 +63,6 @@ protected:
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
 
         m_repositoryMock = std::make_shared<NiceMock<ArticulationProfilesRepositoryMock> >();
-    }
-
-    void TearDown() override
-    {
-        MScore::useRead302InTestMode = true;
     }
 
     ArticulationPattern buildTestArticulationPattern() const

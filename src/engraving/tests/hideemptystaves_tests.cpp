@@ -36,19 +36,6 @@ static const String HIDEEMPTYSTAVES_DATA_DIR("hideemptystaves_data/");
 
 class Engraving_HideEmptyStavesTests : public ::testing::Test
 {
-protected:
-    void SetUp() override
-    {
-        m_useRead302 = std::exchange(MScore::useRead302InTestMode, false);
-    }
-
-    void TearDown() override
-    {
-        MScore::useRead302InTestMode = m_useRead302;
-    }
-
-private:
-    bool m_useRead302 = false;
 };
 
 TEST_F(Engraving_HideEmptyStavesTests, Compat450)

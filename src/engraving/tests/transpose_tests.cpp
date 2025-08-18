@@ -101,18 +101,12 @@ TEST_F(Engraving_TransposeTests, undoTranspose)
 
 TEST_F(Engraving_TransposeTests, undoTransposeChordSymbols)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     undoTransposeTest(u"undoTransposeChordSymbols");
-    MScore::useRead302InTestMode = useRead302;
 }
 
 TEST_F(Engraving_TransposeTests, undoDiatonicTransposeChordSymbols)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     undoDiatonicTransposeTest(u"undoDiatonicTransposeChordSymbols");
-    MScore::useRead302InTestMode = useRead302;
 }
 
 TEST_F(Engraving_TransposeTests, undoDiatonicTranspose)

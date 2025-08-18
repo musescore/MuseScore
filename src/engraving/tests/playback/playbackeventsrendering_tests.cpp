@@ -60,15 +60,6 @@ protected:
         m_dummyPattern.emplace(0, m_dummyPatternSegment);
 
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
-
-        //! NOTE: allows to read test files using their version readers
-        //! instead of using 302 (see mscloader.cpp, makeReader)
-        MScore::useRead302InTestMode = false;
-    }
-
-    void TearDown() override
-    {
-        MScore::useRead302InTestMode = true;
     }
 
     const Chord* findChord(const Score* score, int tick, track_idx_t track = 0) const
