@@ -3972,7 +3972,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         m_defaultY = m_e.asciiAttribute("default-y").toDouble(&m_hasDefaultY) * -0.1;
         m_relativeX = m_e.doubleAttribute("relative-x") / 10 * m_score->style().spatium();
         m_visible = m_e.asciiAttribute("print-object") != "no";
-        String number = m_e.attribute("number");
+        const String number = m_e.attribute("number");
         int n = 0;
         if (!number.empty()) {
             n = number.toInt();
@@ -3982,7 +3982,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
                 n--;          // make zero-based
             }
         }
-        String type = m_e.attribute("type");
+        const String type = m_e.attribute("type");
         m_color = Color::fromString(m_e.asciiAttribute("color").ascii());
         m_justify = m_e.attribute("justify");
         if (m_e.name() == "metronome") {
@@ -4028,7 +4028,6 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
                 m_wordsText += u"<sym>" + smufl + u"</sym>";
             }
         } else if (m_e.name() == "string-mute") {
-            const String type = m_e.attribute("type");
             if (type == u"on") {
                 m_wordsText += u"<sym>stringsMuteOn</sym>";
             } else if (type == u"off") {
