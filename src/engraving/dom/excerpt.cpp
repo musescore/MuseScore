@@ -1688,19 +1688,20 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     if (PlayCountText* invalidPcText = toBarLine(ne)->playCountText()) {
                         ne->remove(invalidPcText);
                     }
+                    if (dstStaff->shouldShowPlayCount()) {
+                        BarLine* topBarLine = toBarLine(oseg->element(0));
+                        PlayCountText* pc = topBarLine->playCountText();
 
-                    BarLine* topBarLine = toBarLine(oseg->element(0));
-                    PlayCountText* pc = topBarLine->playCountText();
+                        EngravingItem* linkedElement = pc->findLinkedInScore(score);
 
-                    EngravingItem* linkedElement = pc->findLinkedInScore(score);
-
-                    if (!linkedElement) {
-                        EngravingItem* npc = pc->linkedClone();
-                        npc->setTrack(dstTrack);
-                        npc->setParent(ne);
-                        npc->setScore(score);
-                        npc->styleChanged();
-                        addElement(npc);
+                        if (!linkedElement) {
+                            EngravingItem* npc = pc->linkedClone();
+                            npc->setTrack(dstTrack);
+                            npc->setParent(ne);
+                            npc->setScore(score);
+                            npc->styleChanged();
+                            addElement(npc);
+                        }
                     }
                 }
             }
