@@ -819,8 +819,17 @@ void FretDiagram::applyAlignmentToHarmony()
         m_harmony->resetProperty(Pid::OFFSET);
     }
 
-    m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
+    m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
     m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+}
+
+void FretDiagram::resetHarmonyAlignment()
+{
+    if (m_harmony->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+        m_harmony->resetProperty(Pid::OFFSET);
+    }
+
+    m_harmony->resetProperty(Pid::ALIGN);
 }
 
 //---------------------------------------------------------
@@ -963,6 +972,8 @@ void FretDiagram::linkHarmony(Harmony* harmony)
 void FretDiagram::unlinkHarmony()
 {
     m_harmony->setTrack(track());
+
+    resetHarmonyAlignment();
 
     segment()->add(m_harmony);
 
