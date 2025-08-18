@@ -161,7 +161,7 @@ public:
         FBox* fretBox = toFBox(score->measure(0));
         ASSERT_TRUE(fretBox);
 
-        const ElementList& elements = fretBox->orderedElements();
+        const ElementList& elements = fretBox->orderedElements(false /*includeInvisible*/);
         EXPECT_EQ(elements.size(), chords.size());
 
         for (size_t i = 0; i < chords.size(); ++i) {
