@@ -30,6 +30,7 @@
 #include "dom/chordbracket.h"
 #include "dom/beam.h"
 #include "dom/chord.h"
+#include "dom/durationline.h"
 #include "dom/factory.h"
 #include "dom/fingering.h"
 #include "dom/glissando.h"
@@ -40,6 +41,7 @@
 #include "dom/measure.h"
 #include "dom/navigate.h"
 #include "dom/note.h"
+#include "dom/octavedot.h"
 #include "dom/ornament.h"
 #include "dom/page.h"
 #include "dom/parenthesis.h"
@@ -129,7 +131,15 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     // https://github.com/musescore/MuseScore/issues/8970
     std::vector<Accidental*> chordAccidentals;
 
+    Note* upNote = item->upNote();
+    const bool isJianpuStaff = item->staff() && item->staff()->isJianpuStaff(item->tick());
+
     for (Note* note : item->notes()) {
+        if (isJianpuStaff && note != upNote) {
+            // Jianpu only shows the up note
+            continue;
+        }
+
         TLayout::layoutNote(note, note->mutldata());
         double x1 = note->pos().x() + chordX;
         double x2 = x1 + note->headWidth();
@@ -1291,6 +1301,7 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     double lineDistance = 1;
     bool staffVisible  = true;
     int stepOffset = 0;                         // for staff type changes with a step offset
+    bool isJianpu = false;
 
     Segment* segment = item->segment();
 
@@ -1303,10 +1314,11 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
         lineDistance  = st->lineDistance(tick);
         staffVisible  = !st->isLinesInvisible(tick);
         stepOffset = st->staffType(tick)->stepOffset();
+        isJianpu = st->isJianpuStaff(tick);
     }
 
     // need ledger lines?
-    if (item->downLine() + stepOffset <= lineBelow + 1 && item->upLine() + stepOffset >= -1) {
+    if (isJianpu || (item->downLine() + stepOffset <= lineBelow + 1 && item->upLine() + stepOffset >= -1)) {
         muse::DeleteAll(item->ledgerLines());
         item->ledgerLines().clear();
         return;
@@ -1638,6 +1650,182 @@ int ChordLayout::computeAutoStemDirection(const std::vector<int>& noteDistances)
         return netDirecting > 0 ? 1 : -1;
     }
     return 0;
+}
+
+void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
+{
+    Segment* segment = item->segment();
+    if (!segment) {
+        return; // no segment, nothing to do
+    }
+    Fraction tick = segment->tick();
+    staff_idx_t idx = item->staffIdx() + item->staffMove();
+    track_idx_t track = staff2track(idx);
+    const Staff* st = ctx.dom().staff(idx);
+    bool staffVisible = !st->isLinesInvisible(tick);
+    bool isJianpu = st->isJianpuStaff(tick);
+
+    int lines = 0;
+    TDuration durationType = item->durationType();
+    if (durationType == DurationType::V_LONG) {
+        lines = -15;
+    } else if (durationType == DurationType::V_BREVE) {
+        lines = -7;
+    } else if (durationType == DurationType::V_WHOLE) {
+        lines = -3;
+    } else if (durationType == DurationType::V_HALF) {
+        lines = -1;
+    } else if (durationType == DurationType::V_QUARTER) {
+        lines = 0;
+    } else if (durationType == DurationType::V_EIGHTH) {
+        lines = 1;
+    } else if (durationType == DurationType::V_16TH) {
+        lines = 2;
+    } else if (durationType == DurationType::V_32ND) {
+        lines = 3;
+    } else if (durationType == DurationType::V_64TH) {
+        lines = 4;
+    } else if (durationType == DurationType::V_128TH) {
+        lines = 5;
+    } else if (durationType == DurationType::V_256TH) {
+        lines = 6;
+    } else if (durationType == DurationType::V_512TH) {
+        lines = 7;
+    } else if (durationType == DurationType::V_1024TH) {
+        lines = 8;
+    }
+
+    // need duration lines?
+    if (!isJianpu || lines == 0) {
+        muse::DeleteAll(item->durationLines());
+        item->durationLines().clear();
+        return;
+    }
+
+    if (const Note* note = item->upNote(); note) {
+        double hw = note->headWidth();
+        double hx = note->pos().x() + note->bboxXShift();
+        double maxX = hx + hw;
+
+        size_t prevLines = 0; // Number of duration lines in the previous chord
+        double prevOffsetX = .0; // Offset of the previous chord
+        bool first = true;
+        if (item->isChordRest()) {
+            Beam* beam = toChordRest(item)->beam();
+            if (beam) {
+                ChordRest* cr = beam->elements().front();
+                first = (cr && cr->isChord() && toChord(cr) == item);
+            }
+        }
+
+        if (Chord* prev = item->prev(); prev&& !first) {
+            if (prev->durationLines().size() > 0 && prev->durationLines().back()->halving()) {
+                prevLines = prev->durationLines().size();
+                prevOffsetX = item->pagePos().x() - prev->pagePos().x() - hw;
+            }
+        }
+
+        double distance = item->spatium() * .3;
+        item->resizeDurationLinesTo(std::abs(lines));
+        for (int i = 0; i < lines; ++i) {
+            DurationLine* dl = item->durationLines()[i];
+            dl->setParent(item);
+            dl->setTrack(track);
+            dl->setVisible(staffVisible);
+            if (i >= static_cast<int>(prevLines)) {
+                prevOffsetX = 0.0; // Do not join to duration line in previous chord
+            }
+            double minX = hx - prevOffsetX; // extend to join to previous duration line
+            dl->setLen(maxX - minX);
+            dl->setPos(minX, (i + 1) * distance);
+            dl->setHalving(true); // Halving duration
+        }
+
+        if (lines < 0) { // If we have negative lines, we need to lengthen the duration lines
+            const StaffType* jianpu = st->staffTypeForElement(item);
+            double height = jianpu->jianpuBoxH() * item->magS();
+
+            for (int i = 0; i < -lines; ++i) {
+                DurationLine* dl = item->durationLines()[i];
+                dl->setParent(item);
+                dl->setTrack(track);
+                dl->setVisible(staffVisible);
+                dl->setLen(hw);
+                dl->setPos(hx + hw * 1.2 * (i + 1), -height * .5);
+                dl->setHalving(false); // Lengthening duration
+            }
+        }
+    }
+
+    for (DurationLine* dl : item->durationLines()) {
+        TLayout::layoutDurationLine(dl, ctx);
+    }
+}
+
+void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
+{
+    Segment* segment = item->segment();
+    if (!segment) {
+        return; // no segment, nothing to do
+    }
+    Fraction tick = segment->tick();
+    staff_idx_t idx = item->staffIdx() + item->staffMove();
+    track_idx_t track = staff2track(idx);
+    const Staff* st = ctx.dom().staff(idx);
+    bool staffVisible = !st->isLinesInvisible(tick);
+    bool isJianpu = st->isJianpuStaff(tick);
+    int baseOctave = 3; // Default base octave for Jianpu
+
+    auto cleanupOctaveDots = [item]() {
+        muse::DeleteAll(item->octaveDots());
+        item->octaveDots().clear();
+    };
+
+    // need octave dots?
+    if (!isJianpu) {
+        cleanupOctaveDots();
+        return;
+    }
+
+    if (const Note* note = item->upNote(); note) {
+        int dots = 0;
+        double offsetY = 0;
+        double distance = item->spatium() * .3;
+        int octave = note->octave();
+        if (octave > baseOctave) {
+            dots = octave - baseOctave;
+            const StaffType* jianpu = st->staffTypeForElement(item);
+            double height = jianpu->jianpuBoxH() * item->magS();
+            offsetY = -(height + dots * distance);
+        } else if (octave < baseOctave) {
+            dots = baseOctave - octave;
+            offsetY = distance;
+            if (item->durationLines().size() > 0) {
+                offsetY += item->durationLines().back()->pos().y() + item->durationLines().back()->height() * .5;
+            }
+        } else {
+            cleanupOctaveDots();
+            return;
+        }
+
+        double hw = note->headWidth();
+        double minX = note->pos().x() + note->bboxXShift();
+        double maxX = minX + hw;
+
+        item->resizeOctaveDotsTo(dots);
+        for (int i = 0; i < dots; ++i) {
+            OctaveDot* dot = item->octaveDots()[i];
+            dot->setParent(item);
+            dot->setTrack(track);
+            dot->setVisible(staffVisible);
+            dot->setLen(maxX - minX);
+            dot->setPos(minX, offsetY + i * distance);
+        }
+    }
+
+    for (OctaveDot* od : item->octaveDots()) {
+        TLayout::layoutOctaveDot(od);
+    }
 }
 
 //---------------------------------------------------------
@@ -2289,6 +2477,8 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             for (Chord* grace : chord->graceNotes()) {
                 AccidentalsLayout::layoutAccidentals({ grace }, ctx);
             }
+            layoutDurationLines(chord, ctx);
+            layoutOctaveDots(chord, ctx);
         }
     }
 
@@ -2643,6 +2833,8 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
     // Track dot position of voices on this stave and possible cross voices from above & below
     std::array<double, 3 * VOICES> dotPos{};
 
+    bool isJianpu = staff->isJianpuStaff(tick);
+
     int nNotes = int(notes.size());
 
     for (int i = nNotes - 1; i >= 0; --i) {
@@ -2652,7 +2844,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
         if (chord->dots()) {
             if (dotPosition == DirectionV::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
                 // resolve dot conflicts
-                int line = note->line();
+                int line = isJianpu ? 0 : note->line();
                 Note* above = (i < nNotes - 1) ? notes[i + 1] : nullptr;
                 if (above
                     && (!above->visible() || above->dotsHidden() || above->chord()->dots() == 0
@@ -2738,7 +2930,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
                 noteX = chord->noteHeadWidth() - note->headBodyWidth();
             }
 
-            double ny = (note->line() + stepOffset) * stepDistance;
+            double ny = (isJianpu ? 0 : note->line() + stepOffset) * stepDistance;
             if (note->ldata()->pos().y() != ny) {
                 note->mutldata()->setPosY(ny);
                 if (stem) {
