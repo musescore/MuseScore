@@ -1856,7 +1856,7 @@ void Excerpt::createLinkedTabs(MasterScore* score)
             continue;
         }
 
-        bool needsTabStaff = !part->staff(0)->isDrumStaff(fr);
+        bool needsTabStaff = !part->staff(0)->isDrumStaff(fr) && (lines > 0);
 
         if (needsTabStaff) {
             part->setStaves(static_cast<int>(stavesInPart));
