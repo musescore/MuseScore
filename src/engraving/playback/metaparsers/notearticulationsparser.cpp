@@ -136,7 +136,7 @@ void NoteArticulationsParser::parsePersistentMeta(const RenderingContext& ctx, m
         return;
     }
 
-    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(ctx.persistentArticulation);
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(ctx.persistentArticulation, ArticulationType::Standard);
     if (pattern.empty()) {
         return;
     }

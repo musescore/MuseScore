@@ -143,8 +143,12 @@ void VstSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::NoteEv
         destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
     }
 
-    for (const auto& articPair : noteEvent.expressionCtx().articulations) {
-        const mpe::ArticulationMeta& meta = articPair.second.meta;
+    for (const auto& artPair : noteEvent.expressionCtx().articulations) {
+        if (artPair.first == mpe::ArticulationType::Standard) {
+            continue;
+        }
+
+        const mpe::ArticulationMeta& meta = artPair.second.meta;
 
         if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
             addPitchCurve(destination, noteEvent, meta);

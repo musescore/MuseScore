@@ -316,6 +316,8 @@ enum class ArticulationType : signed char {
     RingTouch,
     SingingBell,
     SingingVibrate,
+    Swing,
+    Echo,
 
     // multi-note articulations
     Trill,

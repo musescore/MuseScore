@@ -108,6 +108,8 @@ static const std::unordered_map<ArticulationType, ms_NoteArticulation2> ARTICULA
     { ArticulationType::Pluck, ms_NoteArticulation2_Pluck },
     { ArticulationType::SingingBell, ms_NoteArticulation2_SingingBell },
     { ArticulationType::SingingVibrate, ms_NoteArticulation2_SingingVibrate },
+    { ArticulationType::Swing, ms_NoteArticulation2_HandbellSwing },
+    { ArticulationType::Echo, ms_NoteArticulation2_Echo },
 };
 
 static const std::unordered_map<ArticulationType, ms_NoteHead> NOTEHEAD_TYPES {
@@ -476,7 +478,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
     long long noteEventId = 0;
     if (!m_samplerLib->addNoteEvent(m_sampler, track, event, noteEventId)) {
-        LOGE() << "Unable to add event for track";
+        LOGE() << "Unable to add event for track, timestamp: " << event._location_us;
     }
 
     for (auto& art : noteEvent.expressionCtx().articulations) {

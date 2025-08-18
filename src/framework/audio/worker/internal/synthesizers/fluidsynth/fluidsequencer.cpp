@@ -167,6 +167,10 @@ void FluidSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::Note
     }
 
     for (const auto& artPair : noteEvent.expressionCtx().articulations) {
+        if (artPair.first == ArticulationType::Standard) {
+            continue;
+        }
+
         const mpe::ArticulationMeta& meta = artPair.second.meta;
 
         if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {

@@ -25,7 +25,7 @@
 #include <QString>
 #include <unordered_map>
 
-#include "mpetypes.h"
+#include "mpe/mpetypes.h"
 
 namespace muse::mpe {
 static const std::unordered_map<ArticulationFamily, QString> ARTICULATION_FAMILY_NAMES {
@@ -161,6 +161,8 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::RingTouch, "RingTouch" },
     { ArticulationType::SingingBell, "SingingBell" },
     { ArticulationType::SingingVibrate, "SingingVibrate" },
+    { ArticulationType::Swing, "Swing" },
+    { ArticulationType::Echo, "Echo" },
 };
 
 inline ArticulationFamily articulationFamilyFromString(const QString& str)

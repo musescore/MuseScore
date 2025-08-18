@@ -499,22 +499,30 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
     ctx.update(parts.front()->id(), score);
 
     // [THEN] The techniques successfully parsed
-    std::map<int /*tick*/, ArticulationType> expectedArticulationTypes {
+    constexpr int ticksPerMeasure = 1920;
+
+    const std::map<int /*tick*/, ArticulationType> expectedArticulationTypes {
         { 0, ArticulationType::Pizzicato },
         { 1440, ArticulationType::Open },
-        { 1920, ArticulationType::Mute },
-        { 3840, ArticulationType::Tremolo64th },
-        { 5760, ArticulationType::Detache },
-        { 7680, ArticulationType::Martele },
-        { 9600, ArticulationType::ColLegno },
-        { 11520, ArticulationType::SulPont },
-        { 13440, ArticulationType::SulTasto },
-//        { 15360, ArticulationType::Vibrato },
-//        { 17280, ArticulationType::Legato },
-        { 19200, ArticulationType::Distortion },
-        { 21120, ArticulationType::Overdrive },
-        { 23040, ArticulationType::Harmonic },
-        { 24960, ArticulationType::JazzTone },
+        { ticksPerMeasure* 1, ArticulationType::Mute },
+        { ticksPerMeasure* 2, ArticulationType::Tremolo64th },
+        { ticksPerMeasure* 3, ArticulationType::Detache },
+        { ticksPerMeasure* 4, ArticulationType::Martele },
+        { ticksPerMeasure* 5, ArticulationType::ColLegno },
+        { ticksPerMeasure* 6, ArticulationType::SulPont },
+        { ticksPerMeasure* 7, ArticulationType::SulTasto },
+        { ticksPerMeasure* 8, ArticulationType::Vibrato },
+        { ticksPerMeasure* 9, ArticulationType::Legato },
+        { ticksPerMeasure* 10, ArticulationType::Distortion },
+        { ticksPerMeasure* 11, ArticulationType::Overdrive },
+        { ticksPerMeasure* 12, ArticulationType::Harmonic },
+        { ticksPerMeasure* 13, ArticulationType::JazzTone },
+        { ticksPerMeasure* 14, ArticulationType::Swing }, // Swing
+        { ticksPerMeasure* 15, ArticulationType::Swing }, // Swing up
+        { ticksPerMeasure* 16, ArticulationType::Swing }, // Swing down
+        { ticksPerMeasure* 17, ArticulationType::Echo }, // Echo 1
+        { ticksPerMeasure* 18, ArticulationType::Echo }, // Echo 2
+        { ticksPerMeasure* 19, ArticulationType::Ring },
     };
 
     auto findExpectedType = [&expectedArticulationTypes](int tick) {
