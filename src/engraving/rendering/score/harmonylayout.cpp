@@ -530,9 +530,7 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
         render(item, ldata, chordList->renderListRoot, harmonyCtx, ctx, capoRootTpc, spelling, rootCase);
 
         // render extension
-        const ChordDescription* cd = info->getDescription();
         if (cd) {
-            const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
             render(item, ldata, stackModifiers ? cd->renderListStacked : cd->renderList, harmonyCtx, ctx,  0);
         }
 
