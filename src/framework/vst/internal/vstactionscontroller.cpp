@@ -29,7 +29,7 @@
 using namespace muse;
 using namespace muse::vst;
 
-static const char16_t* VST_EDITOR_URI = u"muse://vst/editor?instanceId=%1&sync=false&modal=false&floating=true";
+static const char16_t* VST_EDITOR_URI = u"muse://vst/editor?instanceId=%1&modal=false&floating=true";
 
 void VstActionsController::init()
 {

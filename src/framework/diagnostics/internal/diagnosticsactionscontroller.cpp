@@ -32,13 +32,13 @@ using namespace muse;
 using namespace muse::accessibility;
 using namespace muse::actions;
 
-static const muse::UriQuery SYSTEM_PATHS_URI("muse://diagnostics/system/paths?sync=false&modal=false&floating=true");
-static const muse::UriQuery GRAPHICSINFO_URI("muse://diagnostics/system/graphicsinfo?sync=false&modal=false&floating=true");
-static const muse::UriQuery PROFILER_URI("muse://diagnostics/system/profiler?sync=false&modal=false&floating=true");
-static const muse::UriQuery NAVIGATION_TREE_URI("muse://diagnostics/navigation/tree?sync=false&modal=false&floating=true");
-static const muse::UriQuery ACCESSIBLE_TREE_URI("muse://diagnostics/accessible/tree?sync=false&modal=false&floating=true");
-static const muse::UriQuery ENGRAVING_ELEMENTS_URI("muse://diagnostics/engraving/elements?sync=false&modal=false&floating=true");
-static const muse::UriQuery ACTIONS_LIST_URI("muse://diagnostics/actions/list?sync=false&modal=false&floating=true");
+static const muse::UriQuery SYSTEM_PATHS_URI("muse://diagnostics/system/paths?modal=false&floating=true");
+static const muse::UriQuery GRAPHICSINFO_URI("muse://diagnostics/system/graphicsinfo?modal=false&floating=true");
+static const muse::UriQuery PROFILER_URI("muse://diagnostics/system/profiler?modal=false&floating=true");
+static const muse::UriQuery NAVIGATION_TREE_URI("muse://diagnostics/navigation/tree?modal=false&floating=true");
+static const muse::UriQuery ACCESSIBLE_TREE_URI("muse://diagnostics/accessible/tree?modal=false&floating=true");
+static const muse::UriQuery ENGRAVING_ELEMENTS_URI("muse://diagnostics/engraving/elements?modal=false&floating=true");
+static const muse::UriQuery ACTIONS_LIST_URI("muse://diagnostics/actions/list?modal=false&floating=true");
 
 void DiagnosticsActionsController::init()
 {
