@@ -118,6 +118,11 @@ int RepeatSegment::len() const
     return (m_measureList.empty()) ? 0 : (m_measureList.back()->endTick().ticks() - tick);
 }
 
+int RepeatSegment::endTick() const
+{
+    return tick + len();
+}
+
 void RepeatSegment::popMeasure()
 {
     if (!m_measureList.empty()) {
