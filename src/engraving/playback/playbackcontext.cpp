@@ -154,14 +154,28 @@ dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackId
     return it->second.level;
 }
 
-ArticulationType PlaybackContext::persistentArticulationType(const int nominalPositionTick) const
+std::pair<mpe::timestamp_t, PlayingTechniqueType> PlaybackContext::playingTechnique(const Score* score, const int nominalPositionTick) const
 {
     auto it = findLessOrEqual(m_playTechniquesMap, nominalPositionTick);
     if (it == m_playTechniquesMap.cend()) {
-        return mpe::ArticulationType::Standard;
+        return std::make_pair(0, PlayingTechniqueType::Natural);
     }
 
-    return it->second;
+    return std::make_pair(timestampFromTicks(score, it->first), it->second);
+}
+
+muse::mpe::timestamp_t PlaybackContext::findPlayingTechniqueTimestamp(const Score* score, PlayingTechniqueType type,
+                                                                      const int startFromTick) const
+{
+    auto it = m_playTechniquesMap.upper_bound(startFromTick);
+
+    for (; it != m_playTechniquesMap.end(); ++it) {
+        if (it->second == type) {
+            return timestampFromTicks(score, it->first);
+        }
+    }
+
+    return -1;
 }
 
 std::map<timestamp_t, SoundPresetChangeEventList> PlaybackContext::soundPresets(const Score* score) const
@@ -412,12 +426,11 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
 void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick)
 {
     const PlayingTechniqueType type = annotation->techniqueType();
-
     if (type == PlayingTechniqueType::Undefined) {
         return;
     }
 
-    m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
+    m_playTechniquesMap[segmentPositionTick] = type;
 
     bool cancelPlayTechniques = type == PlayingTechniqueType::Natural || type == PlayingTechniqueType::Open;
 
@@ -476,7 +489,7 @@ void PlaybackContext::updateSoundPresetAndTextArticulationMap(const SoundFlagMap
         }
 
         if (flag->playingTechnique() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
-            m_playTechniquesMap[segmentPositionTick] = mpe::ArticulationType::Standard;
+            m_playTechniquesMap[segmentPositionTick] = PlayingTechniqueType::Natural;
         }
     }
 }

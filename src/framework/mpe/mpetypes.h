@@ -624,6 +624,16 @@ struct ArticulationMeta
                && overallPitchChangesRange == other.overallPitchChangesRange
                && overallDynamicChangesRange == other.overallDynamicChangesRange;
     }
+
+    bool hasStart() const
+    {
+        return overallDuration > 0;
+    }
+
+    bool hasEnd() const
+    {
+        return overallDuration != mpe::INFINITE_DURATION;
+    }
 };
 
 using ArticulationMetaMap = SharedHashMap<ArticulationType, ArticulationMeta>;

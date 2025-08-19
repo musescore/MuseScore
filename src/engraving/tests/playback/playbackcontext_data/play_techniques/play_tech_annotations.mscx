@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
-  <programVersion>4.7.0</programVersion>
+  <programVersion>4.6.0</programVersion>
   <programRevision></programRevision>
   <Score>
     <eid>Egkft6+kOXJ_WzrSIxhYG8C</eid>
@@ -1082,6 +1082,98 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>p6MPRNWDCgL_xNUcHUUK/eN</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>EkIK0zXBI8F_IG8phCnwxg</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_lv</playTechType>
+            <eid>QiW7kh4ZstB_WvE9Cxsjm3F</eid>
+            <text>LV</text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>Md9Oj59I+cD_1Z0H3I44+dB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4a8kE9q9n3K_OPMXJKfzmXD</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>yhHI4pMOO4_g+ZicfN0rgC</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>mQex4ErfNtO_vgQx1mgL62P</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>+nA3IqojewB_Q7rT44HNMeK</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>SACBuBCAAsD_HOtLjb6clmB</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>P2o3VN0BtUN_z4fB+yCIRrO</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>xKkAqydbqgD_EUZ/EhW9FuP</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>dT5fzj7khYJ_sUQ25QKr9W</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_damp</playTechType>
+            <eid>Q4pKp0tXAUB_zTnpQ7MTRnL</eid>
+            <text><sym>handbellsDamp3</sym></text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>Hc/pFGt0NvO_5dt9qkgaEqG</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>I0kZ5iznBfJ_Qew7kr74wmN</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>knH3InjH/MI_2GRIAyu52MJ</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>qNivoXARAkB_d7o+c92G9/</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>u1vMznEKHXI_kS2eLcXTwlN</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>ocgV0ZsNQ6C_Qorc0RjjuoE</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>UbzoVHUEQDG_9/sDb3OlByM</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>qth7NX34I9B_Q3qf+E7kMYH</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>

@@ -451,10 +451,8 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
     for (const auto& art : articulations) {
         if (art.first == ArticulationType::Pedal) {
-            // Pedal on:
-            m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { art.second.meta.timestamp, 1.0 });
-            // Pedal off:
-            m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { art.second.meta.timestamp + art.second.meta.overallDuration, 0.0 });
+            addPedalEvent(art.second.meta, track);
+            continue;
         }
 
         const ms_NoteArticulation ms_art = muse::value(ARTICULATION_TYPES_PART1, art.first, ms_NoteArticulation_None);
@@ -500,6 +498,17 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
     if (articulations.contains(ArticulationType::Vibrato)) {
         addVibrato(noteEvent, noteEventId, track);
+    }
+}
+
+void MuseSamplerSequencer::addPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track)
+{
+    if (meta.hasStart()) {
+        m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { meta.timestamp, 1.0 });
+    }
+
+    if (meta.hasEnd()) {
+        m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { meta.timestamp + meta.overallDuration, 0.0 });
     }
 }
 
@@ -627,6 +636,7 @@ void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long
 void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
 {
     const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    const mpe::ArticulationMap& articulations = noteEvent.expressionCtx().articulations;
 
     layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, arrangementCtx.voiceLayerIndex);
     ms_Track track = findOrCreateTrack(layerIdx);
@@ -645,7 +655,7 @@ void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
         msEvent._pitch = pitch;
         msEvent._offset_cents = offsetCents;
 
-        parseArticulations(noteEvent.expressionCtx().articulations, msEvent._articulation, msEvent._articulation_2, msEvent._notehead);
+        parseArticulations(articulations, msEvent._articulation, msEvent._articulation_2, msEvent._notehead);
 
         if (noteEvent.expressionCtx().velocityOverride.has_value()) {
             msEvent._dynamics = noteEvent.expressionCtx().velocityOverride.value();
@@ -671,11 +681,33 @@ void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
         timestamp_t timestampTo = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration;
         m_offStreamEvents[timestampTo].emplace(std::move(noteOff));
     }
+
+    auto pedalIt = articulations.find(mpe::ArticulationType::Pedal);
+    if (pedalIt != articulations.end()) {
+        addAuditionPedalEvent(pedalIt->second.meta, track);
+    }
+}
+
+void MuseSamplerSequencer::addAuditionPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track)
+{
+    AuditionCCEvent event;
+    event.cc = 64;
+    event.msTrack = track;
+
+    if (meta.hasStart()) {
+        event.value = 1;
+        m_offStreamEvents[meta.timestamp].emplace(event);
+    }
+
+    if (meta.hasEnd()) {
+        event.value = 0;
+        m_offStreamEvents[meta.timestamp + meta.overallDuration].emplace(event);
+    }
 }
 
 void MuseSamplerSequencer::addAuditionCCEvent(const mpe::ControllerChangeEvent& event, long long positionUs)
 {
-    const std::map<mpe::ControllerChangeEvent::Type, int> TYPE_TO_CC {
+    static const std::unordered_map<mpe::ControllerChangeEvent::Type, int> TYPE_TO_CC {
         { mpe::ControllerChangeEvent::Modulation, 1 },
         { mpe::ControllerChangeEvent::SustainPedalOnOff, 64 },
         { mpe::ControllerChangeEvent::PitchBend, 128 },

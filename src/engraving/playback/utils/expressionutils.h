@@ -148,8 +148,8 @@ inline muse::mpe::ArticulationType articulationFromPlayTechType(const PlayingTec
     case PlayingTechniqueType::HandbellsSwingDown: return muse::mpe::ArticulationType::Swing;
     case PlayingTechniqueType::HandbellsEcho1: return muse::mpe::ArticulationType::Echo;
     case PlayingTechniqueType::HandbellsEcho2: return muse::mpe::ArticulationType::Echo;
-    case PlayingTechniqueType::HandbellsLV: return muse::mpe::ArticulationType::Pedal; // TODO
-    case PlayingTechniqueType::HandbellsDamp: return muse::mpe::ArticulationType::Pedal; // TODO
+    case PlayingTechniqueType::HandbellsLV: return muse::mpe::ArticulationType::Pedal;
+    case PlayingTechniqueType::HandbellsDamp: return muse::mpe::ArticulationType::Standard;
     case PlayingTechniqueType::HandbellsR: return muse::mpe::ArticulationType::Ring;
     case PlayingTechniqueType::Undefined: return muse::mpe::ArticulationType::Undefined;
     }

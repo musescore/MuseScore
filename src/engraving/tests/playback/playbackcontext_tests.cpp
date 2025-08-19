@@ -487,12 +487,13 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
     // [GIVEN] Context for parsing techniques
     PlaybackContext ctx;
 
-    // [THEN] No technique parsed, returns the "Standard" acticulation
+    // [THEN] No technique parsed, returns the "Natural" type
     int maxTick = score->endTick().ticks();
 
     for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
-        ArticulationType actualType = ctx.persistentArticulationType(tick);
-        EXPECT_EQ(actualType, ArticulationType::Standard);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        EXPECT_EQ(actualType.first, 0);
+        EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
 
     // [WHEN] Parse techniques
@@ -501,52 +502,62 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques)
     // [THEN] The techniques successfully parsed
     constexpr int ticksPerMeasure = 1920;
 
-    const std::map<int /*tick*/, ArticulationType> expectedArticulationTypes {
-        { 0, ArticulationType::Pizzicato },
-        { 1440, ArticulationType::Open },
-        { ticksPerMeasure* 1, ArticulationType::Mute },
-        { ticksPerMeasure* 2, ArticulationType::Tremolo64th },
-        { ticksPerMeasure* 3, ArticulationType::Detache },
-        { ticksPerMeasure* 4, ArticulationType::Martele },
-        { ticksPerMeasure* 5, ArticulationType::ColLegno },
-        { ticksPerMeasure* 6, ArticulationType::SulPont },
-        { ticksPerMeasure* 7, ArticulationType::SulTasto },
-        { ticksPerMeasure* 8, ArticulationType::Vibrato },
-        { ticksPerMeasure* 9, ArticulationType::Legato },
-        { ticksPerMeasure* 10, ArticulationType::Distortion },
-        { ticksPerMeasure* 11, ArticulationType::Overdrive },
-        { ticksPerMeasure* 12, ArticulationType::Harmonic },
-        { ticksPerMeasure* 13, ArticulationType::JazzTone },
-        { ticksPerMeasure* 14, ArticulationType::Swing }, // Swing
-        { ticksPerMeasure* 15, ArticulationType::Swing }, // Swing up
-        { ticksPerMeasure* 16, ArticulationType::Swing }, // Swing down
-        { ticksPerMeasure* 17, ArticulationType::Echo }, // Echo 1
-        { ticksPerMeasure* 18, ArticulationType::Echo }, // Echo 2
-        { ticksPerMeasure* 19, ArticulationType::Ring },
+    const std::map<int /*tick*/, PlayingTechniqueType> expectedTypes {
+        { 0, PlayingTechniqueType::Pizzicato },
+        { 1440, PlayingTechniqueType::Open },
+        { ticksPerMeasure* 1, PlayingTechniqueType::Mute },
+        { ticksPerMeasure* 2, PlayingTechniqueType::Tremolo },
+        { ticksPerMeasure* 3, PlayingTechniqueType::Detache },
+        { ticksPerMeasure* 4, PlayingTechniqueType::Martele },
+        { ticksPerMeasure* 5, PlayingTechniqueType::ColLegno },
+        { ticksPerMeasure* 6, PlayingTechniqueType::SulPonticello },
+        { ticksPerMeasure* 7, PlayingTechniqueType::SulTasto },
+        { ticksPerMeasure* 8, PlayingTechniqueType::Vibrato },
+        { ticksPerMeasure* 9, PlayingTechniqueType::Legato },
+        { ticksPerMeasure* 10, PlayingTechniqueType::Distortion },
+        { ticksPerMeasure* 11, PlayingTechniqueType::Overdrive },
+        { ticksPerMeasure* 12, PlayingTechniqueType::Harmonics },
+        { ticksPerMeasure* 13, PlayingTechniqueType::JazzTone },
+        { ticksPerMeasure* 14, PlayingTechniqueType::HandbellsSwing },
+        { ticksPerMeasure* 15, PlayingTechniqueType::HandbellsSwingUp },
+        { ticksPerMeasure* 16, PlayingTechniqueType::HandbellsSwingDown },
+        { ticksPerMeasure* 17, PlayingTechniqueType::HandbellsEcho1 },
+        { ticksPerMeasure* 18, PlayingTechniqueType::HandbellsEcho2 },
+        { ticksPerMeasure* 19, PlayingTechniqueType::HandbellsR },
+        { ticksPerMeasure* 20, PlayingTechniqueType::HandbellsLV },
+        { ticksPerMeasure* 21, PlayingTechniqueType::HandbellsDamp },
     };
 
-    auto findExpectedType = [&expectedArticulationTypes](int tick) {
-        auto it = muse::findLessOrEqual(expectedArticulationTypes, tick);
-        if (it == expectedArticulationTypes.end()) {
-            return ArticulationType::Standard;
+    auto findExpectedType = [&expectedTypes, score](int tick) -> std::pair<timestamp_t, PlayingTechniqueType> {
+        auto it = muse::findLessOrEqual(expectedTypes, tick);
+        if (it == expectedTypes.end()) {
+            return std::make_pair(0, PlayingTechniqueType::Natural);
         }
 
-        return it->second;
+        return std::make_pair(timestampFromTicks(score, it->first), it->second);
     };
 
     for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
-        ArticulationType actualType = ctx.persistentArticulationType(tick);
-        ArticulationType expectedType = findExpectedType(tick);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        std::pair<timestamp_t, PlayingTechniqueType> expectedType = findExpectedType(tick);
         EXPECT_EQ(actualType, expectedType);
     }
+
+    // [WHEN] Find position of Damp
+    const timestamp_t actualDampPosition = ctx.findPlayingTechniqueTimestamp(score, PlayingTechniqueType::HandbellsDamp,
+                                                                             ticksPerMeasure * 20);
+
+    // [THEN] Position is correct
+    EXPECT_EQ(actualDampPosition, timestampFromTicks(score, ticksPerMeasure * 21));
 
     // [WHEN] Clear the context
     ctx.clear();
 
-    // [THEN] No technique parsed, returns the "Standard" acticulation
+    // [THEN] No technique parsed, returns the "Natural" type
     for (int tick = 0; tick <= maxTick; tick += TICKS_STEP) {
-        ArticulationType actualType = ctx.persistentArticulationType(tick);
-        EXPECT_EQ(actualType, ArticulationType::Standard);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        EXPECT_EQ(actualType.first, 0);
+        EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
 
     delete score;
@@ -570,27 +581,28 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques_MeasureRepeats)
     // [WHEN] Parse playing techniques
     ctx.update(parts.front()->id(), score);
 
-    // [THEN] The articulation map matches the expectation
-    std::map<int, mpe::ArticulationType> expectedArticulations {
+    // [THEN] The playing technique map matches the expectation
+    std::map<int, PlayingTechniqueType> expectedTypes {
         // 1st measure
-        { 0, mpe::ArticulationType::Standard },
+        { 0, PlayingTechniqueType::Natural },
 
         // 2nd measure
-        { 1920 + repeatOffsetTick, mpe::ArticulationType::Mute }, // 1st quarter note
+        { 1920 + repeatOffsetTick, PlayingTechniqueType::Mute }, // 1st quarter note
 
         // 3rd measure
-        { 4320 + repeatOffsetTick, mpe::ArticulationType::Distortion }, // 2nd quarter note
+        { 4320 + repeatOffsetTick, PlayingTechniqueType::Distortion }, // 2nd quarter note
 
         // copy of 2nd measure
-        { 5760 + repeatOffsetTick, mpe::ArticulationType::Mute },
+        { 5760 + repeatOffsetTick, PlayingTechniqueType::Mute },
 
         // copy of 3rd measure
-        { 8160 + repeatOffsetTick, mpe::ArticulationType::Distortion },
+        { 8160 + repeatOffsetTick, PlayingTechniqueType::Distortion },
     };
 
-    for (const auto& pair : expectedArticulations) {
-        mpe::ArticulationType actualArticulation = ctx.persistentArticulationType(pair.first);
-        EXPECT_EQ(actualArticulation, pair.second);
+    for (const auto& pair : expectedTypes) {
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, pair.first);
+        EXPECT_EQ(actualType.first, timestampFromTicks(score, pair.first));
+        EXPECT_EQ(actualType.second, pair.second);
     }
 }
 
@@ -740,15 +752,18 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
 
     // [THEN] 1st measure: Pizz.
     for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
-        ArticulationType actualType = ctx.persistentArticulationType(tick);
-        EXPECT_EQ(actualType, ArticulationType::Pizzicato);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        EXPECT_EQ(actualType.first, 0);
+        EXPECT_EQ(actualType.second, PlayingTechniqueType::Pizzicato);
     }
 
-    // [THEN] "Standard" for all the other measures, as Pizz. was canceled with "Ord." in the 2nd measure
+    // [THEN] "Natural" for all the other measures, as Pizz. was canceled with "Ord." in the 2nd measure
+    const timestamp_t expectedNaturalTimestamp = timestampFromTicks(score, 1920);
     int lastTick = score->lastMeasure()->tick().ticks();
     for (int tick = 1920; tick < lastTick; tick += TICKS_STEP) {
-        ArticulationType actualType = ctx.persistentArticulationType(tick);
-        EXPECT_EQ(actualType, ArticulationType::Standard);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        EXPECT_EQ(actualType.first, expectedNaturalTimestamp);
+        EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
 
     // [THEN] The actual text articulations match the expectation
@@ -776,14 +791,17 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags_CancelPlayingTechniques)
 
     // [THEN] 1st measure: Standard
     for (int tick = 0; tick < 1920; tick += TICKS_STEP) {
-        ArticulationType actualType = ctx.persistentArticulationType(tick);
-        EXPECT_EQ(actualType, ArticulationType::Standard);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        EXPECT_EQ(actualType.first, 0);
+        EXPECT_EQ(actualType.second, PlayingTechniqueType::Natural);
     }
 
     // [THEN] "Open" starting from the 2nd measure
+    const timestamp_t expectedOpenTimestamp = timestampFromTicks(score, 1920);
     for (int tick = 1920; tick < lastTick; tick += TICKS_STEP) {
-        ArticulationType actualType = ctx.persistentArticulationType(tick);
-        EXPECT_EQ(actualType, ArticulationType::Open);
+        std::pair<timestamp_t, PlayingTechniqueType> actualType = ctx.playingTechnique(score, tick);
+        EXPECT_EQ(actualType.first, expectedOpenTimestamp);
+        EXPECT_EQ(actualType.second, PlayingTechniqueType::Open);
     }
 
     // [THEN] The actual text articulations match the expectation

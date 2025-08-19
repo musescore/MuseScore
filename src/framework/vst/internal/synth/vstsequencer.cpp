@@ -156,8 +156,7 @@ void VstSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::NoteEv
         }
 
         if (muse::contains(SUSTAIN_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
-            addParamChange(destination, meta.timestamp, SUSTAIN_IDX, 1);
-            addParamChange(destination, meta.timestamp + meta.overallDuration, SUSTAIN_IDX, 0);
+            addPedalEvent(destination, meta);
             continue;
         }
 
@@ -166,6 +165,17 @@ void VstSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::NoteEv
             sostenutoTimeAndDurations.push_back(mpe::TimestampAndDuration { timestamp, meta.overallDuration });
             continue;
         }
+    }
+}
+
+void VstSequencer::addPedalEvent(EventSequenceMap& destination, const mpe::ArticulationMeta& meta)
+{
+    if (meta.hasStart()) {
+        addParamChange(destination, meta.timestamp, SUSTAIN_IDX, 1);
+    }
+
+    if (meta.hasEnd()) {
+        addParamChange(destination, meta.timestamp + meta.overallDuration, SUSTAIN_IDX, 0);
     }
 }
 
