@@ -500,6 +500,7 @@ void TablEdit::createMeasures()
 
         tick += length;
     }
+    score->setUpTempoMap();
 }
 
 void TablEdit::createNotesFrame()
