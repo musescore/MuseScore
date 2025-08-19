@@ -44,11 +44,11 @@ public:
     bool isHandbellsSymbol() const;
     bool isEditable() const override { return !isHandbellsSymbol(); }
 
-private:
-
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid id) const override;
+
+private:
 
     PlayingTechniqueType m_techniqueType = PlayingTechniqueType::Undefined;
 };
