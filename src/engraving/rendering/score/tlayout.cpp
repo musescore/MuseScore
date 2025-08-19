@@ -1542,12 +1542,11 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
             RectF fretRect = fretDiagram->ldata()->bbox();
 
             const Harmony::LayoutData* harmonyLdata = fretDiagram->harmony()->ldata();
-            RectF harmonyRect = harmonyLdata->bbox();
-            harmonyRect.moveTo(harmonyLdata->pos());
+            RectF harmonyRect = harmonyLdata->bbox().translated(harmonyLdata->pos());
 
             double height = fretRect.united(harmonyRect).height();
             maxRowHeight = std::max(maxRowHeight, height);
-            maxHarmonyHeight = std::max(maxHarmonyHeight, harmonyRect.height());
+            maxHarmonyHeight = std::max(maxHarmonyHeight, -harmonyRect.top());
             harmonyBaseline = std::max(harmonyBaseline, fretDiagram->harmony()->baseLine());
         }
 
@@ -1573,8 +1572,6 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
                           ? (width - totalTableWidth) / 2
                           : alignH == AlignH::RIGHT ? width - totalTableWidth : 0.0;
     const double startY = topMargin;
-
-    const double shapeMarginAboveDiagram = ctx.conf().styleMM(Sid::harmonyFretDist).val() * 1.5;
 
     double bottomY = 0.0;
 
@@ -1607,7 +1604,7 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
         harmony->mutldata()->moveY(-(harmonyBaselines[row]) + baseLineAdjust);
 
         double fretDiagramX = x;
-        double fretDiagramY = y + harmonyHeights[row] + shapeMarginAboveDiagram;
+        double fretDiagramY = y + harmonyHeights[row];
 
         fretDiagram->mutldata()->setPos(PointF(fretDiagramX, fretDiagramY));
 
