@@ -1159,13 +1159,18 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const CapoParams& par
                         note->setFret(fret);
                         break;
                     case CapoParams::UPDATE_IGNORED_STRINGS:
-                        if (CapoParams::TransposeMode::PLAYBACK_ONLY != params.transposeMode) {
-                            if (muse::contains(params.ignoredStrings, (string_idx_t)note->string())) {
-                                note->setFret(stringData->fret(note->pitch(), note->string(), this));
-                            } else {
-                                note->setFret(stringData->fret(note->pitch(), note->string(), this, tick));
-                            }
+                        bool ignoreString = muse::contains(params.ignoredStrings, (string_idx_t)note->string());
+                        if (CapoParams::TAB_ONLY == params.transposeMode) {
+                            int newFret = ignoreString ? stringData->fret(note->pitch(), note->string(), this) : stringData->fret(
+                                note->pitch(), note->string(), this, tick);
+                            note->setFret(newFret);
+                        } else if (CapoParams::NOTATION_ONLY == params.transposeMode) {
+                            int newPitch = ignoreString ? stringData->getPitch(note->string(), note->fret(), this) : stringData->getPitch(
+                                note->string(), note->fret(), this, tick);
+                            note->setPitch(newPitch);
+                            note->setTpcFromPitch();
                         }
+
                         break;
                     }
                 }
