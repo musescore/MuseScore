@@ -24,7 +24,7 @@
 #define MUSE_VST_IVSTMODULESREPOSITORY_H
 
 #include "modularity/imoduleinterface.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 #include "vsttypes.h"
 

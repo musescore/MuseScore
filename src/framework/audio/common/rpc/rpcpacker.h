@@ -24,7 +24,7 @@
 #include <cassert>
 
 #include "global/serialization/msgpack_forward.h"
-#include "../../audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 #include "log.h"
 

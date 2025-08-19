@@ -25,7 +25,7 @@
 
 #include "async/asyncable.h"
 
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 #include "notation/iinstrumentsrepository.h"
 #include "notation/inotation.h"

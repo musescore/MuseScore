@@ -25,7 +25,7 @@
 #include "apitypes.h"
 
 #include "global/timer.h"
-#include "audio/audioerrors.h"
+#include "audio/common/audioerrors.h"
 
 using namespace muse;
 using namespace muse::musesampler;

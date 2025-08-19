@@ -25,7 +25,7 @@
 
 #include <QTime>
 
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace mu::playback {
 static constexpr muse::audio::aux_channel_idx_t AUX_CHANNEL_NUM = 2;

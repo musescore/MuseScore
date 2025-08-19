@@ -24,7 +24,7 @@
 
 #include "types/retval.h"
 #include "midi/miditypes.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "async/channel.h"
 #include "mpe/events.h"
 #include "engraving/types/types.h"

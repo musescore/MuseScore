@@ -27,7 +27,7 @@
 #include <condition_variable>
 
 #include "async/notification.h"
-#include "audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio {
 class AudioDevicesListener
