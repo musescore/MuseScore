@@ -31,30 +31,6 @@
     </HarmonyToDiagram>
     <HarmonyToDiagram>
         <FretDiagram>
-            <fretOffset>3</fretOffset>
-            <frets>4</frets>
-            <fretDiagram>
-                <string no="1">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="2">
-                    <dot fret="3">normal</dot>
-                </string>
-                <string no="3">
-                    <dot fret="2">normal</dot>
-                </string>
-                <string no="5">
-                </string>
-                <barre start="0" end="5">1</barre>
-            </fretDiagram>
-        </FretDiagram>
-        <pattern>-[6-O][6-O][5-O]--;B4[0-5]</pattern>
-        <Harmony>
-            <name>a</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
             <frets>4</frets>
             <fretDiagram>
                 <string no="0">
