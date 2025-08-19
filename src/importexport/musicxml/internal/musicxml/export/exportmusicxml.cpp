@@ -8840,6 +8840,9 @@ static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
 void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd, const Fraction& offset)
 {
     XmlWriter::Attributes harmonyAttrs;
+    if (h->isPolychord()) {
+        harmonyAttrs.emplace_back(std::make_pair("arrangement", "vertical"));
+    }
     if (!h->isStyled(Pid::PLACEMENT)) {
         harmonyAttrs.emplace_back(std::make_pair("placement", TConv::toXml(h->placement())));
     }
