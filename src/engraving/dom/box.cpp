@@ -713,9 +713,15 @@ void FBox::init()
     std::vector<FretDiagram*> newDiagrams;
     StringList newDiagramsNames;
 
+    bool hasBlankDiagram = false;
+
     StringList oldDiagramsNames;
     for (EngravingItem* element : el()) {
-        oldDiagramsNames.push_back(toFretDiagram(element)->harmonyText().toLower());
+        FretDiagram* diagram = toFretDiagram(element);
+
+        hasBlankDiagram |= diagram->isClear();
+
+        oldDiagramsNames.push_back(diagram->harmonyText().toLower());
     }
 
     for (mu::engraving::Segment* segment = masterScore()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
@@ -745,7 +751,7 @@ void FBox::init()
         }
     }
 
-    if (newDiagramsNames == oldDiagramsNames) {
+    if (!hasBlankDiagram && newDiagramsNames == oldDiagramsNames) {
         muse::DeleteAll(newDiagrams);
         return;
     }
