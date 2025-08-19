@@ -2687,7 +2687,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
 
     double shapeMarginAboveDiagram = ldata->fretDist * 1.5;
     double w = ldata->stringDist * (item->strings() - 1) + ldata->markerSize;
-    double h = item->frets() * ldata->fretDist + ldata->stringExtendBottom + shapeMarginAboveDiagram;
+    double h = item->frets() * ldata->fretDist + ldata->stringExtendBottom + 0.5 * ldata->stringLineWidth + shapeMarginAboveDiagram;
     double y = -shapeMarginAboveDiagram;
     double x = -(ldata->markerSize * .5);
 
