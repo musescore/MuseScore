@@ -837,6 +837,7 @@ void FretDiagram::clear()
     m_barres.clear();
     m_dots.clear();
     m_markers.clear();
+    m_fretOffset = 0;
 }
 
 //---------------------------------------------------------
@@ -1369,19 +1370,16 @@ bool FretDiagram::isCustom(const String& harmonyNameForCompare) const
     static const std::list<Pid> props {
         Pid::FRET_STRINGS,
         Pid::FRET_FRETS,
-        Pid::FRET_OFFSET,
         Pid::FRET_NUT,
         Pid::FRET_FINGERING
     };
 
     for (const Pid& pid : props) {
         if (pid == Pid::FRET_FINGERING) {
-            if (!custom(Pid::FRET_SHOW_FINGERINGS)) {
-                break;
+            if (custom(Pid::FRET_SHOW_FINGERINGS)) {
+                return true;
             }
-        }
-
-        if (custom(pid)) {
+        } else if (custom(pid)) {
             return true;
         }
     }
