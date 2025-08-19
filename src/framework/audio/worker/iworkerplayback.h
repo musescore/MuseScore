@@ -25,7 +25,7 @@
 #include "global/types/retval.h"
 #include "global/io/path.h"
 
-#include "audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio::worker {
 class IWorkerPlayback : MODULE_EXPORT_INTERFACE

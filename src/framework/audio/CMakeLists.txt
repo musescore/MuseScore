@@ -35,15 +35,9 @@ set(MODULE_SRC
     ${AUDIO_WORKER_SRC}
     ${AUDIO_DRIVER_SRC}
 
-    # Temporary
-    ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
-
     # Common public
-
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
-    ${CMAKE_CURRENT_LIST_DIR}/audioutils.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
 
     # Common internal

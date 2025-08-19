@@ -34,7 +34,7 @@
 #include "audio/main/iplayer.h"
 #include "audio/main/iplayback.h"
 #include "audio/iaudioconfiguration.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "iinteractive.h"
 #include "tours/itoursservice.h"
 

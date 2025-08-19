@@ -26,9 +26,8 @@
 #include <QObject>
 
 #include "async/asyncable.h"
-
-#include "audio/audiotypes.h"
 #include "actions/actiontypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace mu::playback {
 class AbstractAudioResourceItem : public QObject, public muse::async::Asyncable

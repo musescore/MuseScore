@@ -26,7 +26,7 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace mu::iex::audioexport {
 class IAudioExportConfiguration : MODULE_EXPORT_INTERFACE
