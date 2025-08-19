@@ -43,15 +43,10 @@ struct PaddingVector : std::array<T, TOT_ELEMENT_TYPES>
 struct PaddingTable : public PaddingVector<PaddingVector<double> >
 {
 public:
-
-    void setMinimumPaddingUnit(double val) { m_minimumPaddingUnit = val; }
-    double minimumPaddingUnit() const { return m_minimumPaddingUnit; }
-
     void createTable(const MStyle& style);
 
 private:
-    void initPaddingTable();
-    double m_minimumPaddingUnit = 0.0;
+    void initPaddingTable(double minPadUnit);
 };
 
 struct ParenPaddingTable
@@ -59,21 +54,15 @@ struct ParenPaddingTable
 public:
     virtual ~ParenPaddingTable() = default;
 
-    void setMinimumPaddingUnit(double val) { m_minimumPaddingUnit = val; }
-    double minimumPaddingUnit() const { return m_minimumPaddingUnit; }
-
     virtual void createTable(const MStyle& style) = 0;
     double padding(ElementType type1, ElementType type2);
 
     static ParenPaddingTablePtr getPaddingTable(const EngravingItem* parent);
 
 protected:
-    void initPaddingTable();
+    void initPaddingTable(double minPadUnit);
     PaddingVector<double> m_parenBefore;
     PaddingVector<double> m_parenAfter;
-
-private:
-    double m_minimumPaddingUnit = 0.0;
 };
 
 struct NoteParenPaddingTable : public ParenPaddingTable {
