@@ -8867,9 +8867,9 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 m_xml.tag("root-alter", alter);
             }
             m_xml.endElement();
-    
+
             const String xmlKind = harmonyXmlKind(info);
-    
+
             if (!xmlKind.isEmpty()) {
                 String s = u"kind";
                 String kindText = harmonyXmlText(info);
@@ -8883,7 +8883,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                     s += u" parentheses-degrees=\"yes\"";
                 }
                 m_xml.tagRaw(s, xmlKind);
-    
+
                 if (tpcIsValid(bassTpc)) {
                     m_xml.startElement("bass");
                     m_xml.tag("bass-step", tpc2stepName(bassTpc));
@@ -8893,7 +8893,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                     }
                     m_xml.endElement();
                 }
-    
+
                 StringList l = harmonyXmlDegrees(info);
                 if (!l.empty()) {
                     for (const String& tag : l) {
@@ -8941,7 +8941,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 } else {
                     m_xml.tag("kind", { { "text", info->textName() } }, "");
                 }
-    
+
                 if (tpcIsValid(bassTpc)) {
                     m_xml.startElement("bass");
                     m_xml.tag("bass-step", tpc2stepName(bassTpc));
