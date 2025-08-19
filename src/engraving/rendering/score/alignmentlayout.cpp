@@ -27,8 +27,10 @@
 #include "dom/expression.h"
 #include "dom/fret.h"
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harmony.h"
 #include "dom/system.h"
+#include "dom/tapping.h"
 #include "dom/text.h"
 
 namespace mu::engraving::rendering::score {
@@ -41,12 +43,52 @@ void AlignmentLayout::alignItemsGroup(const std::vector<EngravingItem*>& element
     double outermostY = yOpticalCenter(elements.front());
     for (const EngravingItem* element : elements) {
         double curY = yOpticalCenter(element);
-        outermostY = element->placeAbove() ? std::min(outermostY, curY) : std::max(outermostY, curY);
+        outermostY = isAbove(element) ? std::min(outermostY, curY) : std::max(outermostY, curY);
     }
 
     for (EngravingItem* element : elements) {
         moveItemToY(element, outermostY, system);
     }
+}
+
+void AlignmentLayout::alignHopoLetters(const HammerOnPullOff* hopo, const System* system)
+{
+    IF_ASSERT_FAILED(!hopo->segmentsEmpty()) {
+        return;
+    }
+
+    std::vector<EngravingItem*> itemsToAlign;
+    for (SpannerSegment* seg : hopo->spannerSegments()) {
+        if (seg->system() == system) {
+            HammerOnPullOffSegment* hopoSegment = toHammerOnPullOffSegment(seg);
+            for (HammerOnPullOffText* hopoText : hopoSegment->hopoText()) {
+                itemsToAlign.push_back(hopoText);
+            }
+            break;
+        }
+    }
+
+    if (itemsToAlign.empty()) {
+        return;
+    }
+
+    bool above = isAbove(itemsToAlign.front());
+    for (EngravingItem* item : itemsToAlign) {
+        if (isAbove(item) != above) {
+            return; // Don't try to align items split above/below
+        }
+    }
+
+    ChordRest* scr = toChordRest(hopo->startElement());
+    if (scr && scr->isChord()) {
+        for (Articulation* art : toChord(scr)->articulations()) {
+            if (art->isTapping() && toTapping(art)->text() && isAbove(art) == above) {
+                itemsToAlign.push_back(art);
+            }
+        }
+    }
+
+    alignItemsGroup(itemsToAlign, system);
 }
 
 void AlignmentLayout::alignItemsWithTheirSnappingChain(const std::vector<EngravingItem*>& elements, const System* system)
@@ -231,5 +273,10 @@ double AlignmentLayout::computeAverageY(const std::vector<double>& vecOfY)
 {
     double sum = std::accumulate(vecOfY.begin(), vecOfY.end(), 0.0);
     return sum / static_cast<double>(vecOfY.size());
+}
+
+bool AlignmentLayout::isAbove(const EngravingItem* item)
+{
+    return item->isArticulationFamily() ? toArticulation(item)->ldata()->up() : item->placeAbove();
 }
 } // namespace mu::engraving::rendering::dev
