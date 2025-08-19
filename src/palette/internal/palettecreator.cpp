@@ -2026,8 +2026,6 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
     };
 
     static const std::vector<ArticulationTextType> handbellsTextTypes {
-        ArticulationTextType::LV,
-        ArticulationTextType::R,
         ArticulationTextType::TD,
         ArticulationTextType::BD,
         ArticulationTextType::RT,
@@ -2042,10 +2040,12 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
     };
 
     static const std::vector<HandbellsPlayTechInfo> standardHandbellsPlayTech {
+        { "R", PlayingTechniqueType::HandbellsR, },
+        { "LV", PlayingTechniqueType::HandbellsLV, },
+        { "<sym>handbellsDamp3</sym>",   PlayingTechniqueType::HandbellsDamp, },
         { "<sym>handbellsSwingUp</sym>",   PlayingTechniqueType::HandbellsSwingUp, },
         { "<sym>handbellsSwingDown</sym>",   PlayingTechniqueType::HandbellsSwingDown, },
         { "<sym>handbellsEcho1</sym>",   PlayingTechniqueType::HandbellsEcho1, },
-        { "<sym>handbellsDamp3</sym>",   PlayingTechniqueType::HandbellsDamp, },
     };
 
     for (SymId symId : standardHandbellsArticSymbols) {
@@ -2063,9 +2063,12 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
 
     for (const HandbellsPlayTechInfo& info : standardHandbellsPlayTech) {
         auto element = makeElement<PlayTechAnnotation>(gpaletteScore);
+        element->setProperty(Pid::TEXT_STYLE, TextStyleType::ARTICULATION);
         element->setXmlText(info.xmlText);
         element->setTechniqueType(info.playTechType);
-        sp->appendElement(element, TConv::userName(info.playTechType));
+        sp->appendElement(element, TConv::userName(info.playTechType),
+                          info.playTechType == PlayingTechniqueType::HandbellsLV
+                          || info.playTechType == PlayingTechniqueType::HandbellsR ? 1.1 : 1.0);
     }
 
     if (!defaultPalette) {
@@ -2087,6 +2090,7 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
 
         for (const HandbellsPlayTechInfo& info : additionalHandbellsPlayTech) {
             auto element = makeElement<PlayTechAnnotation>(gpaletteScore);
+            element->setProperty(Pid::TEXT_STYLE, TextStyleType::ARTICULATION);
             element->setXmlText(info.xmlText);
             element->setTechniqueType(info.playTechType);
             sp->appendElement(element, TConv::userName(info.playTechType));
