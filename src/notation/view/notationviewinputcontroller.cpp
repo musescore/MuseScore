@@ -916,11 +916,7 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     // If it is the only selected element, start editing if needed
     if (ctx.hitElement == viewInteraction()->selection()->element()
         && ctx.hitElement->needStartEditingAfterSelecting()) {
-        if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage()) {
-            viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->defaultGrip());
-        } else {
-            viewInteraction()->startEditElement(ctx.hitElement);
-        }
+        viewInteraction()->startEditElement(ctx.hitElement);
     }
 
     if (ctx.hitElement->isPlayable()) {
