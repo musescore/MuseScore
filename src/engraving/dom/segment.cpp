@@ -2692,10 +2692,22 @@ void Segment::createShape(staff_idx_t staffIdx)
                 pos += e->parentItem()->pos();
             }
             RectF bbox = e->ldata()->bbox().translated(pos);
+            if (Parenthesis* p = e->leftParen()) {
+                bbox.unite(p->ldata()->bbox().translated(p->pos() + pos));
+            }
+            if (Parenthesis* p = e->rightParen()) {
+                bbox.unite(p->ldata()->bbox().translated(p->pos() + pos));
+            }
             s.addHorizontalSpacing(e, bbox.left(), bbox.right());
             if (e->isFretDiagram()) {
                 if (Harmony* harmony = toFretDiagram(e)->harmony()) {
                     RectF harmBbox = harmony->ldata()->bbox().translated(harmony->pos() + e->pos());
+                    if (Parenthesis* p = harmony->leftParen()) {
+                        harmBbox.unite(p->ldata()->bbox().translated(p->pos() + harmony->pos() + e->pos()));
+                    }
+                    if (Parenthesis* p = harmony->rightParen()) {
+                        harmBbox.unite(p->ldata()->bbox().translated(p->pos() + harmony->pos() + e->pos()));
+                    }
                     s.addHorizontalSpacing(harmony, harmBbox.left(), harmBbox.right());
                 }
             }
