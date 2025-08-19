@@ -1079,6 +1079,12 @@ TEST_F(MusicXml_Tests, sound2) {
 TEST_F(MusicXml_Tests, specialCharacters) {
     musicXmlIoTest("testSpecialCharacters");
 }
+TEST_F(MusicXml_Tests, stackedHarm) {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+    musicXmlMscxExportTestRef("testStackedHarm");
+    MScore::useRead302InTestMode = use302;
+}
 TEST_F(MusicXml_Tests, staffEmptiness) {
     musicXmlImportTestRef("testStaffEmptiness");
 }
