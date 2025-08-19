@@ -2013,6 +2013,7 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
     sp->setName(QT_TRANSLATE_NOOP("palette", "Handbells"));
     sp->setGridSize(42, 25);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     static const std::vector<SymId> standardHandbellsArticSymbols {
         SymId::handbellsMartellato,
