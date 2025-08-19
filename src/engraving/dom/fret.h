@@ -186,7 +186,10 @@ public:
     void setBarre(int string, int fret, bool add = false);
     void setMarker(int string, FretMarkerType marker);
     /*void setFingering(int string, int finger);*/
+
     void clear();
+    bool isClear() const;
+
     void undoSetFretDot(int _string, int _fret, bool _add = false, FretDotType _dtype = FretDotType::NORMAL);
     void undoSetFretMarker(int _string, FretMarkerType _mtype);
     void undoSetFretBarre(int _string, int _fret, bool _add = false);

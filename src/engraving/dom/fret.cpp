@@ -831,6 +831,11 @@ void FretDiagram::clear()
     m_fretOffset = 0;
 }
 
+bool FretDiagram::isClear() const
+{
+    return m_barres.empty() && m_dots.empty() && m_markers.empty();
+}
+
 //---------------------------------------------------------
 //   undoFretClear
 //---------------------------------------------------------
