@@ -1685,9 +1685,6 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
 
                 if (oe->isBarLine() && toBarLine(oe)->barLineType() == BarLineType::END_REPEAT) {
-                    if (PlayCountText* invalidPcText = toBarLine(ne)->playCountText()) {
-                        ne->remove(invalidPcText);
-                    }
                     if (dstStaff->shouldShowPlayCount()) {
                         BarLine* topBarLine = toBarLine(oseg->element(0));
                         PlayCountText* pc = topBarLine->playCountText();

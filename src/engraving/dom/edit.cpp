@@ -5581,7 +5581,15 @@ void Score::undoUpdatePlayCountText(Measure* m)
                 }
             }
         } else if (playCountText) {
-            undoRemoveElement(playCountText);
+            Staff* staff = playCountText->staff();
+            // Remove this play count text and MMR links
+            for (EngravingObject* obj : playCountText->linkList()) {
+                EngravingItem* item = toEngravingItem(obj);
+                if (staff != item->staff()) {
+                    continue;
+                }
+                undoRemoveElement(item, false);
+            }
         }
     }
 }
