@@ -950,6 +950,7 @@ void TLayout::layoutArticulation(Articulation* item, Articulation::LayoutData* l
         text->setXmlText(TConv::text(item->textType()));
         text->setTrack(item->track());
         text->setParent(item);
+        text->setSelected(item->selected());
 
         layoutBaseTextBase(item->text(), item->text()->mutldata());
     }
