@@ -440,6 +440,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     }
 
     const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    const mpe::ArticulationMap& articulations = noteEvent.expressionCtx().articulations;
     const voice_layer_idx_t voiceIdx = arrangementCtx.voiceLayerIndex;
     const layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, voiceIdx);
 
@@ -448,8 +449,8 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         return;
     }
 
-    for (const auto& art : noteEvent.expressionCtx().articulations) {
-        if (art.first == ArticulationType::Pedal || art.first == ArticulationType::LetRing) {
+    for (const auto& art : articulations) {
+        if (art.first == ArticulationType::Pedal) {
             // Pedal on:
             m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { art.second.meta.timestamp, 1.0 });
             // Pedal off:
@@ -474,14 +475,14 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     event._tempo = arrangementCtx.bps * 60.0; // API expects BPM
 
     pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, event._pitch, event._offset_cents);
-    parseArticulations(noteEvent.expressionCtx().articulations, event._articulation, event._articulation_2, event._notehead);
+    parseArticulations(articulations, event._articulation, event._articulation_2, event._notehead);
 
     long long noteEventId = 0;
     if (!m_samplerLib->addNoteEvent(m_sampler, track, event, noteEventId)) {
         LOGE() << "Unable to add event for track, timestamp: " << event._location_us;
     }
 
-    for (auto& art : noteEvent.expressionCtx().articulations) {
+    for (auto& art : articulations) {
         const ms_NoteArticulation ms_art = muse::value(ARTICULATION_TYPES_PART1, art.first, ms_NoteArticulation_None);
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this ends an articulation range, indicate the end
@@ -493,11 +494,11 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         }
     }
 
-    if (noteEvent.expressionCtx().articulations.contains(ArticulationType::Multibend)) {
+    if (articulations.contains(ArticulationType::Multibend)) {
         addPitchBends(noteEvent, noteEventId, track);
     }
 
-    if (noteEvent.expressionCtx().articulations.contains(ArticulationType::Vibrato)) {
+    if (articulations.contains(ArticulationType::Vibrato)) {
         addVibrato(noteEvent, noteEventId, track);
     }
 }

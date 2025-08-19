@@ -47,7 +47,6 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::Accent, "Accent" },
     { ArticulationType::SoftAccent, "SoftAccent" },
     { ArticulationType::LaissezVibrer, "LaissezVibrer" },
-    { ArticulationType::LetRing, "LetRing" },
     { ArticulationType::Subito, "Subito" },
     { ArticulationType::FadeIn, "FadeIn" },
     { ArticulationType::FadeOut, "FadeOut" },

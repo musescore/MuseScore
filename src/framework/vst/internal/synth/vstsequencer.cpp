@@ -33,7 +33,7 @@ static constexpr ControlIdx SOSTENUTO_IDX = static_cast<ControlIdx>(Steinberg::V
 static constexpr ControlIdx PITCH_BEND_IDX = static_cast<ControlIdx>(Steinberg::Vst::kPitchBend);
 
 static const mpe::ArticulationTypeSet SUSTAIN_PEDAL_CC_SUPPORTED_TYPES {
-    mpe::ArticulationType::Pedal, mpe::ArticulationType::LetRing,
+    mpe::ArticulationType::Pedal,
 };
 
 static const mpe::ArticulationTypeSet SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES = {

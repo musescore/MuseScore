@@ -199,7 +199,6 @@ enum class ArticulationType : signed char {
     SoftAccent,
 
     LaissezVibrer,
-    LetRing,
 
     Subito,
 
