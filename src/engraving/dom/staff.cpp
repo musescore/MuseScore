@@ -1222,6 +1222,11 @@ void Staff::removeDeletedCaposAndRestoreNotation(const std::vector<int>& current
             return;
         }
 
+        if (it != m_capoMap.begin()) {
+            const auto prevCapoIt = std::prev(it);
+            prevCapoIt->second.needUpdate = true;
+        }
+
         int startTick = it->first;
         int endTick = -1;
         if (auto n = std::next(it); n != m_capoMap.end()) {
