@@ -235,7 +235,7 @@ private:
 
     const mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
 
-    bool m_hitElementWasAlreadySelected = false;
+    bool m_hitElementWasAlreadySingleSelected = false;
     bool m_shouldSelectOnLeftClickRelease = false;
     bool m_shouldStartEditOnLeftClickRelease = false;
 };
