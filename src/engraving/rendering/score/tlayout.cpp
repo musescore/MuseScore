@@ -1547,7 +1547,7 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
             double height = fretRect.united(harmonyRect).height();
             maxRowHeight = std::max(maxRowHeight, height);
             maxHarmonyHeight = std::max(maxHarmonyHeight, -harmonyRect.top());
-            harmonyBaseline = std::max(harmonyBaseline, fretDiagram->harmony()->baseLine());
+            harmonyBaseline = std::min(harmonyBaseline, harmonyLdata->pos().y());
         }
 
         rowHeights.push_back(maxRowHeight);
@@ -1596,12 +1596,10 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
             y += rowHeights[r] + rowGap;
         }
 
-        std::vector<HarmonyRenderItem*> renderItemList = harmony->ldata()->renderItemList.value();
-        double baseline = renderItemList.empty() ? 0.0 : renderItemList.front()->bboxBaseLine() + renderItemList.front()->pos().y();
-
-        double baseLineAdjust = harmony->ldata()->bbox().bottom() - baseline;
-
-        harmony->mutldata()->moveY(-(harmonyBaselines[row]) + baseLineAdjust);
+        double commonBaseline = harmonyBaselines[row];
+        double thisBaseline = harmony->ldata()->pos().y();
+        double baselineOff = commonBaseline - thisBaseline;
+        harmony->mutldata()->moveY(baselineOff);
 
         double fretDiagramX = x;
         double fretDiagramY = y + harmonyHeights[row];
