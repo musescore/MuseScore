@@ -37,6 +37,8 @@ using namespace muse::actions;
 
 void NotationContextMenuModel::loadItems(int elementType)
 {
+    AbstractMenuModel::load();
+
     MenuItemList items = makeItemsByElementType(static_cast<ElementType>(elementType));
     setItems(items);
 }
