@@ -118,7 +118,7 @@ StyledPopupView {
             Layout.fillWidth: true
 
             navigation.name: "TransposeOptions"
-            navigation.panel: navPanel
+            navigation.panel: capoSettingsNavPanel
             navigation.row: 1
             navigation.accessible.name: titleLabel.text + " " + currentText
 

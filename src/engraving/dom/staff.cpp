@@ -1049,32 +1049,71 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const CapoParams& par
 {
     auto caposSelected = score()->selection().elements(ElementType::CAPO);
     score()->deselectAll();
-    auto m = score()->firstMeasure();
-    while (m->tick().ticks() < startTick) {
-        m = m->nextMeasure();
-    }
-    if (-1 == endTick) {
-        while (m) {
-            score()->select(m, SelectType::RANGE, idx());
-            m = m->nextMeasure();
+
+    auto advanceSegToTickInMeasure = [](Measure* m, int tick) -> Segment* {
+        if (!m) {
+            return nullptr;
         }
-    } else {
-        while (m && m->tick().ticks() < endTick) {
-            score()->select(m, SelectType::RANGE, idx());
-            m = m->nextMeasure();
+
+        Segment* s = m->first(SegmentType::ChordRest);
+        while (s && s->tick().ticks() < tick && s->measure() == m) {
+            s = s->next1();
         }
+
+        return s;
+    };
+
+    Measure* measureStart = score()->firstMeasure();
+    while (measureStart && measureStart->endTick().ticks() <= startTick) {
+        measureStart = measureStart->nextMeasure();
     }
-    Segment* s1 = score()->selection().startSegment();
-    if (!s1) {
+
+    IF_ASSERT_FAILED(measureStart) {
+        LOGE() << "cannot find measure for applying capo logic";
         return;
     }
-    if (s1->measure()->isMMRest()) {
-        s1 = score()->tick2segment(s1->tick(), true, s1->segmentType(), false);
+
+    Segment* startSeg = advanceSegToTickInMeasure(measureStart, startTick);
+    if (!startSeg) {
+        Measure* m = measureStart->nextMeasure();
+        startSeg = m ? m->first(SegmentType::ChordRest) : score()->lastSegment();
     }
-    if (s1->rtick().isZero()) {
-        s1 = s1->measure()->first();
+
+    IF_ASSERT_FAILED(startSeg) {
+        LOGE() << "cannot find start segment for applying capo logic";
+        return;
     }
-    Segment* s2 = score()->selection().endSegment();
+
+    Segment* endSeg = nullptr;
+    if (endTick < 0) {
+        endSeg = score()->lastSegment();
+    } else {
+        Measure* measureEnd = measureStart;
+        while (measureEnd && measureEnd->endTick().ticks() <= endTick) {
+            measureEnd = measureEnd->nextMeasure();
+        }
+
+        if (!measureEnd) {
+            endSeg = score()->lastSegment();
+        } else {
+            endSeg = advanceSegToTickInMeasure(measureEnd, endTick);
+            if (!endSeg) {
+                Measure* m = measureEnd->nextMeasure();
+                endSeg = m ? m->first(SegmentType::ChordRest) : score()->lastSegment();
+            }
+        }
+    }
+
+    score()->selection().setRange(startSeg, endSeg, idx(), idx() + 1);
+
+    if (startSeg->measure()->isMMRest()) {
+        startSeg = score()->tick2segment(startSeg->tick(), true, startSeg->segmentType(), false);
+    }
+
+    if (startSeg->rtick().isZero()) {
+        startSeg = startSeg->measure()->first();
+    }
+
     std::list<track_idx_t> tracks;
     track_idx_t sidx = idx() * VOICES;
     for (voice_idx_t i = 0; i < VOICES; ++i) {
@@ -1082,10 +1121,11 @@ void Staff::applyCapoTranspose(int startTick, int endTick, const CapoParams& par
             tracks.push_back(sidx + i);
         }
     }
-    for (Segment* segment = s1; segment && segment != s2; segment = segment->next1()) {
+    for (Segment* segment = startSeg; segment && segment != endSeg; segment = segment->next1()) {
         if (!segment->enabled()) {
             continue;
         }
+
         for (track_idx_t track : tracks) {
             EngravingItem* e = segment->element(track);
             if (!e) {
