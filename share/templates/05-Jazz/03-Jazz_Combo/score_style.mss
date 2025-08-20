@@ -301,7 +301,7 @@
     <fretNut>1</fretNut>
     <fretDotSize>1</fretDotSize>
     <fretStringSpacing>0.7</fretStringSpacing>
-    <fretFretSpacing>0.8</fretFretSpacing>
+    <fretFretSpacing>0.7</fretFretSpacing>
     <fretOrientation>0</fretOrientation>
     <maxFretShiftAbove>3</maxFretShiftAbove>
     <maxFretShiftBelow>3</maxFretShiftBelow>
@@ -500,7 +500,7 @@
     <tupletFrameRound>0</tupletFrameRound>
     <tupletFrameFgColor r="0" g="0" b="0" a="255"/>
     <tupletFrameBgColor r="255" g="255" b="255" a="0"/>
-    <barreLineWidth>1</barreLineWidth>
+    <barreLineWidth>0.85</barreLineWidth>
     <scaleBarlines>0</scaleBarlines>
     <barGraceDistance>1</barGraceDistance>
     <minVerticalDistance>0.5</minVerticalDistance>
