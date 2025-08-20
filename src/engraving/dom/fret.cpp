@@ -1377,21 +1377,15 @@ bool FretDiagram::isCustom(const String& harmonyNameForCompare) const
         }
     }
 
-    String pattern = patternFromDiagram(this);
-    if (pattern == blankPattern(strings())) {
-        return false;
-    }
-
-    if (s_diagramPatternToHarmoniesMap.empty()) {
+    if (s_harmonyToDiagramMap.empty()) {
         readHarmonyToDiagramFile(HARMONY_TO_DIAGRAM_FILE_PATH);
     }
 
-    std::vector<String> patternHarmonies = muse::value(s_diagramPatternToHarmoniesMap, pattern);
-    if (patternHarmonies.empty()) {
-        return true;
-    }
+    NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+    HarmonyMapKey key = createHarmonyMapKey(harmonyNameForCompare, spellingType, score()->chordList());
 
-    return !muse::contains(patternHarmonies, harmonyNameForCompare.toLower());
+    String diagramXml = muse::value(s_harmonyToDiagramMap, key);
+    return diagramXml.empty();
 }
 
 void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) const
