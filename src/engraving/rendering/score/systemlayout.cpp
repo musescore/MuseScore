@@ -1155,6 +1155,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
 
         for (Harmony* harmony : elementsToLayout.harmonies) {
+            FretDiagram* fdParent = harmony->parent()->isFretDiagram() ? toFretDiagram(harmony->parent()) : nullptr;
+            if (fdParent && !fdParent->visible()) {
+                harmony->mutldata()->moveY(-fdParent->pos().y());
+            }
             Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
         }
 

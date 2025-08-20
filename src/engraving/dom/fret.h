@@ -234,6 +234,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    virtual void setVisible(bool f);
+
     void setTrack(track_idx_t val) override;
 
     String accessibleInfo() const override;

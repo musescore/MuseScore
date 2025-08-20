@@ -2783,10 +2783,12 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     Harmony* harmony = item->harmony();
     if (harmony) {
         TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
-        double vertDist = ldata->bbox().top() - harmony->ldata()->bbox().translated(harmony->pos()).bottom();
-        double diff = vertDist - harmony->minDistance().val() * item->spatium();
-        if (diff < 0) {
-            harmony->mutldata()->moveY(diff);
+        if (item->visible()) {
+            double vertDist = ldata->bbox().top() - harmony->ldata()->bbox().translated(harmony->pos()).bottom();
+            double diff = vertDist - harmony->minDistance().val() * item->spatium();
+            if (diff < 0) {
+                harmony->mutldata()->moveY(diff);
+            }
         }
     }
 
