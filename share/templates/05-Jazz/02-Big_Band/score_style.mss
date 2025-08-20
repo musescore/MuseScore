@@ -200,7 +200,7 @@
     <pedalBeginTextOffset x="0" y="0.15"/>
     <pedalHookHeight>-1.2</pedalHookHeight>
     <pedalFontFace>MuseJazz Text</pedalFontFace>
-    <pedalFontSize>12</pedalFontSize>
+    <pedalFontSize>10</pedalFontSize>
     <pedalLineSpacing>1</pedalLineSpacing>
     <pedalFontSpatiumDependent>1</pedalFontSpatiumDependent>
     <pedalFontStyle>0</pedalFontStyle>
