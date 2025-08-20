@@ -128,7 +128,8 @@ void MuseSamplerCheckUpdateScenario::showNewVersionNotification()
 void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
 {
 #ifdef Q_OS_LINUX
-    if (process()->startDetached("muse-sounds-manager")) {
+    if (process()->startDetached("muse-sounds-manager",
+                                 { "--show-sampler-update", "--show-hidden-statuses" })) {
         dispatcher()->dispatch("quit");
     } else {
         openMuseHubWebsiteAndQuit();
