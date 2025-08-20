@@ -93,6 +93,7 @@ public:
 
     bool shouldShowOnlineSoundsProcessingError() const override;
     void setShouldShowOnlineSoundsProcessingError(bool show) override;
+    muse::async::Notification shouldShowOnlineSoundsProcessingErrorChanged() const override;
 
     OnlineSoundsShowProgressBarMode onlineSoundsShowProgressBarMode() const override;
     void setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode mode) override;
@@ -106,6 +107,7 @@ private:
     const SoundProfileName& fallbackSoundProfileStr() const;
 
     muse::async::Notification m_playNotesWhenEditingChanged;
+    muse::async::Notification m_shouldShowOnlineSoundsProcessingErrorChanged;
     muse::async::Notification m_onlineSoundsShowProgressBarModeChanged;
     muse::async::Channel<bool> m_playChordWhenEditingChanged;
     muse::async::Channel<bool> m_playHarmonyWhenEditingChanged;

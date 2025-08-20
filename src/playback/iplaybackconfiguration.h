@@ -90,6 +90,7 @@ public:
 
     virtual bool shouldShowOnlineSoundsProcessingError() const = 0;
     virtual void setShouldShowOnlineSoundsProcessingError(bool show) = 0;
+    virtual muse::async::Notification shouldShowOnlineSoundsProcessingErrorChanged() const = 0;
 
     virtual muse::String onlineSoundsHandbookUrl() const = 0;
 

@@ -213,6 +213,11 @@ void PlaybackConfigurationStub::setShouldShowOnlineSoundsProcessingError(bool)
 {
 }
 
+muse::async::Notification PlaybackConfigurationStub::shouldShowOnlineSoundsProcessingErrorChanged() const
+{
+    return {};
+}
+
 muse::String PlaybackConfigurationStub::onlineSoundsHandbookUrl() const
 {
     return muse::String();

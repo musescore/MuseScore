@@ -83,6 +83,7 @@ public:
 
     bool shouldShowOnlineSoundsProcessingError() const override;
     void setShouldShowOnlineSoundsProcessingError(bool show) override;
+    muse::async::Notification shouldShowOnlineSoundsProcessingErrorChanged() const override;
 
     muse::String onlineSoundsHandbookUrl() const override;
 

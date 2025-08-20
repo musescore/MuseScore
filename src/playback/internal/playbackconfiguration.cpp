@@ -57,7 +57,7 @@ static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING(mod
 static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING(moduleName,
                                                                                         "playback/mixer/needToShowAboutResetSoundFlagsWhwnChangePlaybackProfileWarning");
 
-static const Settings::Key ONLINE_SOUNDS_CONNECTION_WARNING(moduleName, "playback/onlineSounds/showConnectionWarning");
+static const Settings::Key ONLINE_SOUNDS_SHOW_ERROR(moduleName, "playback/onlineSounds/showError");
 static const Settings::Key ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE(moduleName, "playback/onlineSounds/showProgressBarMode");
 
 static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/muteHiddenInstruments");
@@ -148,7 +148,10 @@ void PlaybackConfiguration::init()
         });
     }
 
-    settings()->setDefaultValue(ONLINE_SOUNDS_CONNECTION_WARNING, Val(true));
+    settings()->setDefaultValue(ONLINE_SOUNDS_SHOW_ERROR, Val(true));
+    settings()->valueChanged(ONLINE_SOUNDS_SHOW_ERROR).onReceive(nullptr, [this](const Val&) {
+        m_shouldShowOnlineSoundsProcessingErrorChanged.notify();
+    });
 
     settings()->setDefaultValue(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE, Val(static_cast<int>(OnlineSoundsShowProgressBarMode::Always)));
     settings()->valueChanged(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE).onReceive(nullptr, [this](const Val&) {
@@ -357,12 +360,17 @@ void PlaybackConfiguration::setNeedToShowResetSoundFlagsWhenChangePlaybackProfil
 
 bool PlaybackConfiguration::shouldShowOnlineSoundsProcessingError() const
 {
-    return settings()->value(ONLINE_SOUNDS_CONNECTION_WARNING).toBool();
+    return settings()->value(ONLINE_SOUNDS_SHOW_ERROR).toBool();
 }
 
 void PlaybackConfiguration::setShouldShowOnlineSoundsProcessingError(bool show)
 {
-    settings()->setSharedValue(ONLINE_SOUNDS_CONNECTION_WARNING, Val(show));
+    settings()->setSharedValue(ONLINE_SOUNDS_SHOW_ERROR, Val(show));
+}
+
+muse::async::Notification PlaybackConfiguration::shouldShowOnlineSoundsProcessingErrorChanged() const
+{
+    return m_shouldShowOnlineSoundsProcessingErrorChanged;
 }
 
 muse::String PlaybackConfiguration::onlineSoundsHandbookUrl() const
