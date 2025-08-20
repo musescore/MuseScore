@@ -8885,7 +8885,9 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 m_xml.tagRaw(s, xmlKind);
 
                 if (tpcIsValid(bassTpc)) {
-                    m_xml.startElement("bass");
+                    XmlWriter::Attributes bassAttrs
+                        = { { "arrangement", m_score->style().styleB(Sid::chordBassNoteStagger) ? "diagonal" : "horizontal" } };
+                    m_xml.startElement("bass", bassAttrs);
                     m_xml.tag("bass-step", tpc2stepName(bassTpc));
                     alter = int(tpc2alter(bassTpc));
                     if (alter) {
