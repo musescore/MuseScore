@@ -59,6 +59,7 @@ struct PropertyMetaData {
 #define DUMMY_QT_TR_NOOP(x, y) y
 /* *INDENT-OFF* */
 static constexpr PropertyMetaData propertyList[] = {
+    { Pid::SUBTYPE,                 false, "++unused++",            P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") },
     { Pid::SELECTED,                false, "selected",              P_TYPE::BOOL,               PropertyGroup::NONE,      DUMMY_QT_TR_NOOP("propertyName", "selected") },
     { Pid::GENERATED,               false, "generated",             P_TYPE::BOOL,               PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "generated") },
     { Pid::COLOR,                   false, "color",                 P_TYPE::COLOR,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "color") },

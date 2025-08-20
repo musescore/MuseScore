@@ -69,6 +69,7 @@ enum class PropertyFlags : char {
 //------------------------------------------------------------------------
 
 enum class Pid {
+    SUBTYPE, // FIXME: Unused
     SELECTED,
     GENERATED,
     COLOR,
