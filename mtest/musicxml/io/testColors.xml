@@ -48,6 +48,11 @@
           <line>2</line>
           </clef>
         </attributes>
+      <direction placement="below">
+        <direction-type>
+          <words color="#BB00AA" font-style="italic">colourful</words>
+          </direction-type>
+        </direction>
       <note>
         <pitch>
           <step>D</step>
@@ -226,6 +231,15 @@
         <notehead color="#9437FF">normal</notehead>
         <beam number="1">end</beam>
         <beam number="2">end</beam>
+        </note>
+      <note color="#F0A007">
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <fermata type="upright" color="#039E0F"/>
+          </notations>
         </note>
       </measure>
     </part>
