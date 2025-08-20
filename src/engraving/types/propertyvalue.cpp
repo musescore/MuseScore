@@ -179,6 +179,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::RH_TAPPING_SYMBOL: return static_cast<int>(value<RHTappingSymbol>());
     case P_TYPE::PARENTHESES_MODE: return static_cast<int>(value<ParenthesesMode>());
     case P_TYPE::PLAY_COUNT_PRESET: return static_cast<int>(value<RepeatPlayCountPreset>());
+    case P_TYPE::MARKER_TYPE: return static_cast<int>(value<MarkerType>());
 
     case P_TYPE::VOICE_ASSIGNMENT: return static_cast<int>(value<VoiceAssignment>());
     case P_TYPE::AUTO_ON_OFF:       return static_cast<int>(value<AutoOnOff>());
@@ -301,6 +302,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::RH_TAPPING_SYMBOL: return PropertyValue(RHTappingSymbol(v.toInt()));
     case P_TYPE::PARENTHESES_MODE:   return PropertyValue(ParenthesesMode(v.toInt()));
     case P_TYPE::PLAY_COUNT_PRESET:   return PropertyValue(RepeatPlayCountPreset(v.toInt()));
+    case P_TYPE::MARKER_TYPE:         return PropertyValue(MarkerType(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {

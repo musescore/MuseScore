@@ -102,6 +102,7 @@
           <style>repeat_right</style>
           <text>To Coda</text>
           <label>coda</label>
+          <markerType>coda</markerType>
           </Marker>
         <LayoutBreak>
           <eid>F_F</eid>
@@ -304,6 +305,7 @@
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Spanner type="Volta">
