@@ -66,12 +66,16 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
     ClefType clef   = st->clef(tick);
     const Instrument* instr = st->part()->instrument(s->tick());
     NoteVal nval;
-    const StringData* stringData = st->part()->stringData(s->tick(), st->idx());
+    const StringData* stringData = nullptr;
 
     // pitched/unpitched note entry depends on instrument (override StaffGroup)
     StaffGroup staffGroup = st->staffType(tick)->group();
     if (staffGroup != StaffGroup::TAB) {
         staffGroup = instr->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+    }
+
+    if (staffGroup != StaffGroup::PERCUSSION) {
+        stringData = st->part()->stringData(s->tick(), st->idx());
     }
 
     switch (staffGroup) {

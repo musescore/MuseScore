@@ -37,7 +37,7 @@ class CapoSettingsModel : public AbstractElementPopupModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(uint8_t transposeMode READ transposeMode WRITE setTransposeMode NOTIFY transposeModeChanged) // CapoParams::TransposeMode
+    Q_PROPERTY(int transposeMode READ transposeMode WRITE setTransposeMode NOTIFY transposeModeChanged) // CapoParams::TransposeMode
     Q_PROPERTY(bool capoIsOn READ capoIsOn WRITE setCapoIsOn NOTIFY capoIsOnChanged)
     Q_PROPERTY(int fretPosition READ fretPosition WRITE setFretPosition NOTIFY fretPositionChanged)
     Q_PROPERTY(QList<StringItem*> strings READ strings NOTIFY stringsChanged)
@@ -81,7 +81,7 @@ signals:
 
 private:
     const mu::engraving::CapoParams& params() const;
-    int m_transposeMode;
+    int m_transposeMode = 0;
     QList<StringItem*> m_strings;
 };
 

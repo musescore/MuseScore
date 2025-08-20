@@ -102,9 +102,9 @@ StyledPopupView {
 
             model: [
                 //: as opposed to Off
-                { text: qsTrc("global", "On"), value: true },
+                { text: qsTrc("notation", "On"), value: true },
                 //: as opposed to On
-                { text: qsTrc("global", "Off"), value: false }
+                { text: qsTrc("notation", "Off"), value: false }
             ]
 
             onToggled: function(newValue) {
@@ -123,9 +123,9 @@ StyledPopupView {
             navigation.accessible.name: titleLabel.text + " " + currentText
 
             model: [
-                { text: qsTrc("global", "Affects playback only") },
-                { text: qsTrc("global", "Affects stave notation only") },
-                { text: qsTrc("global", "Affects tablature fingering only") },
+                { text: qsTrc("notation", "Affects playback only") },
+                { text: qsTrc("notation", "Affects stave notation only") },
+                { text: qsTrc("notation", "Affects tablature fingering only") },
             ]
 
             currentIndex: capoModel.transposeMode
