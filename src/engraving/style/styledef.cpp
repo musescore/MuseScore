@@ -965,7 +965,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(hopoShowOnTabStaves,                                     true),
     styleDef(hopoUpperCase,                                           true),
     styleDef(hopoShowAll,                                             true),
-    styleDef(hopoAlignLettersStandardStaves,                          false),
+    styleDef(hopoAlignLettersStandardStaves,                          true),
     styleDef(hopoAlignLettersTabStaves,                               true),
 
     styleDef(lhTappingSymbolNormalStave,                 LHTappingSymbol::DOT),
