@@ -2789,6 +2789,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         }
     }
 
+    ldata->slurPaths.clear();
     for (auto i : item->barres()) {
         FretItem::Barre barre = i.second;
         if (!barre.exists()) {
@@ -2824,8 +2825,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         slurPath.moveTo(startX, startEndY);
         slurPath.cubicTo(bezier1for, bezier2for, PointF(endX, startEndY));
         slurPath.cubicTo(bezier2back, bezier1back, PointF(startX, startEndY));
-        ldata->slurPath = slurPath;
-        break;
+        ldata->slurPaths.push_back(slurPath);
     }
 }
 
