@@ -157,11 +157,11 @@ void NotationPlayback::triggerMetronome(muse::midi::tick_t tick)
     m_playbackModel.triggerMetronome(tick);
 }
 
-void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& totalCountInDuration)
+void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& countInDuration)
 {
     muse::mpe::duration_t durationInMicrosecs = 0;
     m_playbackModel.triggerCountIn(tick, durationInMicrosecs);
-    totalCountInDuration = audio::microsecsToSecs(durationInMicrosecs);
+    countInDuration = audio::microsecsToSecs(durationInMicrosecs);
 }
 
 void NotationPlayback::triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick)
@@ -383,22 +383,7 @@ const Tempo& NotationPlayback::multipliedTempo(tick_t tick) const
 
 MeasureBeat NotationPlayback::beat(tick_t tick) const
 {
-    MeasureBeat measureBeat;
-
-    if (score() && score()->checkHasMeasures()) {
-        int ticks = 0;
-        int beatIndex = 0;
-        score()->sigmap()->tickValues(tick, &measureBeat.measureIndex, &beatIndex, &ticks);
-
-        const TimeSigFrac timeSig = score()->sigmap()->timesig(Fraction::fromTicks(tick)).timesig();
-        const int ticksB = ticks_beat(timeSig.denominator());
-
-        measureBeat.beat = beatIndex + ticks / static_cast<float>(ticksB);
-        measureBeat.maxMeasureIndex = score()->measures()->size() - 1;
-        measureBeat.maxBeatIndex = timeSig.numerator() - 1;
-    }
-
-    return measureBeat;
+    return mu::engraving::findBeat(m_getScore->score(), tick);
 }
 
 tick_t NotationPlayback::beatToRawTick(int measureIndex, int beatIndex) const
