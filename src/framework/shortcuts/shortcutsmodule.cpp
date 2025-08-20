@@ -140,3 +140,8 @@ void ShortcutsModule::onAllInited(const IApplication::RunMode& mode)
 
     m_shortcutsRegister->init();
 }
+
+void ShortcutsModule::onDelayedInit()
+{
+    m_shortcutsRegister->init();
+}
