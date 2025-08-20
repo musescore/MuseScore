@@ -2711,13 +2711,18 @@ void Score::cmdResetBeamMode()
         return;
     }
 
-    const staff_idx_t staffStart = selection().staffStart();
-    const staff_idx_t staffEnd = selection().staffEnd();
+    ChordRest* firstCr = selection().firstChordRest();
+    if (!firstCr) {
+        LOGD("no chord/rest in selection");
+        return;
+    }
+
+    const track_idx_t trackStart = staff2track(selection().staffStart());
+    const track_idx_t trackEnd = staff2track(selection().staffEnd());
     const Fraction endTick = selection().tickEnd();
 
-    for (track_idx_t track = staff2track(staffStart); track < staff2track(staffEnd); ++track) {
-        ChordRest* firstCR = selection().firstChordRest(track);
-        for (Segment* seg = firstCR->segment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
+    for (Segment* seg = firstCr->segment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
+        for (track_idx_t track = trackStart; track < trackEnd; ++track) {
             ChordRest* cr = toChordRest(seg->element(track));
             if (!cr) {
                 continue;
