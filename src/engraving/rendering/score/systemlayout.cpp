@@ -1154,7 +1154,14 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             AlignmentLayout::alignItemsForSystem(fretItems, system);
         }
 
-        layoutHarmonies(elementsToLayout.harmonies, system, true, ctx);
+        for (Harmony* harmony : elementsToLayout.harmonies) {
+            Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
+        }
+
+        if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+            std::vector<EngravingItem*> harmonyItems(elementsToLayout.harmonies.begin(), elementsToLayout.harmonies.end());
+            AlignmentLayout::alignItemsForSystem(harmonyItems, system);
+        }
 
         for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
             if (Harmony* harmony = fretDiag->harmony()) {
