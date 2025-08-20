@@ -122,7 +122,7 @@ void MuseSoundsConfiguration::setLastShownMuseSoundsReleaseVersion(const std::st
 
 bool MuseSoundsConfiguration::museSoundsCheckForUpdateTestMode() const
 {
-    return settings()->value(MUSESAMPLER_CHECK_FOR_UPDATE_TEST_MODE).toBool();
+    return settings()->value(MUSESOUNDS_CHECK_FOR_UPDATE_TEST_MODE).toBool();
 }
 
 bool MuseSoundsConfiguration::museSamplerCheckForUpdateTestMode() const
