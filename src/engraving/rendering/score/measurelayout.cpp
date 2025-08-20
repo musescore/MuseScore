@@ -602,6 +602,8 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
                 if (s->element(track)) {
                     if (!s->element(track)->isRest()) {
                         return false;
+                    } else if (m->isIrregular() && !toRest(s->element(track))->isFullMeasureRest()) {
+                        return false;
                     }
                     restFound = true;
                 }
