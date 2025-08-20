@@ -710,17 +710,14 @@ FBox::FBox(System* parent)
 
 void FBox::init()
 {
+    LOGDA() << "============= init";
+
     std::vector<FretDiagram*> newDiagrams;
     StringList newDiagramsNames;
-
-    bool hasBlankDiagram = false;
 
     StringList oldDiagramsNames;
     for (EngravingItem* element : el()) {
         FretDiagram* diagram = toFretDiagram(element);
-
-        hasBlankDiagram |= diagram->isClear();
-
         oldDiagramsNames.push_back(diagram->harmonyText().toLower());
     }
 
@@ -749,11 +746,6 @@ void FBox::init()
             newDiagrams.emplace_back(fretDiagram);
             newDiagramsNames.push_back(harmonyName);
         }
-    }
-
-    if (!hasBlankDiagram && newDiagramsNames == oldDiagramsNames) {
-        muse::DeleteAll(newDiagrams);
-        return;
     }
 
     DEFER {
