@@ -52,7 +52,7 @@
           <root-step>A</root-step>
           </root>
         <kind text="m7">minor-seventh</kind>
-        <bass>
+        <bass arrangement="horizontal">
           <bass-step>G</bass-step>
           </bass>
         </harmony>
@@ -112,7 +112,7 @@
           <root-step>A</root-step>
           </root>
         <kind text="m">minor</kind>
-        <bass>
+        <bass arrangement="horizontal">
           <bass-step>F</bass-step>
           </bass>
         </harmony>
@@ -139,7 +139,7 @@
           <root-step>F</root-step>
           </root>
         <kind>major</kind>
-        <bass>
+        <bass arrangement="horizontal">
           <bass-step>A</bass-step>
           </bass>
         <root>
