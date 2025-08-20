@@ -86,6 +86,8 @@ FocusableItem {
                 propertyItem: root.model ? root.model.chordsPerRow : null
                 step: 1
                 decimals: 0
+                minValue: 1
+                maxValue: 100
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: gapsSection.navigationRowEnd + 1
