@@ -186,6 +186,20 @@ const CapoParams& Capo::params() const
 void Capo::setParams(const CapoParams& params)
 {
     m_params = params;
+    if (m_params.transition == CapoParams::Transition::NO_TRANSITION) {
+        switch (m_params.transposeMode) {
+        case CapoParams::NOTATION_ONLY:
+            m_params.transition = CapoParams::Transition::UPDATE_NOTES;
+            break;
+
+        case CapoParams::TAB_ONLY:
+            m_params.transition = CapoParams::Transition::UPDATE_FRETS;
+            break;
+
+        default:
+            break;
+        }
+    }
 }
 
 bool Capo::shouldAutomaticallyGenerateText() const
