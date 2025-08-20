@@ -37,22 +37,20 @@ void MuseSamplerCheckUpdateScenario::checkAndShowUpdateIfNeed()
         return;
     }
 
+    m_alreadyChecked = true;
+
     if (service()->incompatibleLocalVersion()) {
-        m_alreadyChecked = true;
         showCriticalUpdateNotification();
         return;
     }
 
     if (configuration()->museSamplerUpdateAvailable()) {
-        m_alreadyChecked = true;
         showNewVersionNotification();
         return;
     }
 
     auto promise = service()->checkForUpdate();
     promise.onResolve(this, [this](const muse::RetVal<bool>& res) {
-        m_alreadyChecked = true;
-
         if (!res.ret) {
             LOGE() << res.ret.toString();
             return;
