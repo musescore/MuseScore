@@ -51,6 +51,7 @@ public:
         ld_field<double> height = { "[Parenthesis] height", 0.0 };
         ld_field<double> midPointThickness = { "[Parenthesis] midPointThickness", 0.0 };
         ld_field<double> endPointThickness = { "[Parenthesis] endPointThickness", PARENTHESIS_END_WIDTH };
+        ld_field<double> shoulderWidth = "[Parenthesis] endPointThickness";
         ld_field<SymId> symId = { "[Parenthesis] symId", SymId::noSym };
     };
     DECLARE_LAYOUTDATA_METHODS(Parenthesis);

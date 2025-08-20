@@ -79,6 +79,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
     const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
                             ? toFretDiagram(item->explicitParent())
                             : nullptr;
+    const bool alignToFretDiagram = fd && fd->visible();
 
     const double cw = item->symWidth(SymId::noteheadBlack);
 
@@ -88,7 +89,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
     if (item->ldata()->renderItemList().empty()) {
         TLayout::layoutBaseTextBase1(item, ldata);
 
-        if (fd) {
+        if (alignToFretDiagram) {
             newPosY = ldata->pos().y();
         } else {
             newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? -ldata->bbox().height() : 0.0);
@@ -97,6 +98,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
         layoutModifierParentheses(item);
         RectF bb;
         RectF hAlignBox;
+        double segBl = 0.0;
         for (HarmonyRenderItem* renderItem : item->ldata()->renderItemList()) {
             RectF tsBbox = renderItem->tightBoundingRect().translated(renderItem->x(), renderItem->y());
             bb.unite(tsBbox);
@@ -104,10 +106,13 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
             if (renderItem->align()) {
                 hAlignBox.unite(tsBbox);
             }
+            if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
+                segBl = ts->bboxBaseLine();
+            }
         }
 
         double xx = 0.0;
-        if (fd) {
+        if (alignToFretDiagram) {
             switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
             case AlignH::LEFT:
                 xx = -hAlignBox.left();
@@ -142,7 +147,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
             yy = -bb.height() - bb.y();
         }
 
-        if (fd) {
+        if (alignToFretDiagram) {
             newPosY = ypos - yy - ctx.conf().styleMM(Sid::harmonyFretDist);
         } else {
             newPosY = ypos;
@@ -158,7 +163,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
         ldata->harmonyHeight = ldata->bbox().height();
     }
 
-    if (fd) {
+    if (alignToFretDiagram) {
         switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
         case AlignH::LEFT:
             newPosX = 0.0;
@@ -182,6 +187,11 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
             newPosX = cw;
             break;
         }
+    }
+
+    if (fd && !fd->visible()) {
+        // Translate to base position around note
+        newPosX -= fd->pos().x();
     }
 
     return PointF(newPosX, newPosY);
@@ -270,10 +280,8 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
     for (size_t i = 0; i < itemList.size(); i++) {
         HarmonyRenderItem* renderItem = itemList.at(i);
         double padding = i != 0 ? computePadding(itemList.at(i - 1), renderItem) : 0.0;
-        LOGI() << "padding: " << padding;
 
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
-            LOGI() << "PAREN";
             if (paren->paren->direction() == DirectionH::LEFT) {
                 additionalSpace += paren->paren->width() + padding;
                 paren->movex(additionalSpace);
@@ -283,7 +291,6 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 additionalSpace += paren->paren->width() + padding;
             }
         } else if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
-            LOGI() << ts->text();
             additionalSpace += padding;
             ts->movex(additionalSpace);
         }
@@ -456,13 +463,14 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
 
     NoteSpellingType spelling = style.styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
 
+    const ChordDescription* cd = info->getDescription();
+    const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
+
     if (item->harmonyType() == HarmonyType::STANDARD && tpcIsValid(info->rootTpc())) {
         // render root
         render(item, ldata, chordList->renderListRoot, harmonyCtx, ctx, info->rootTpc(), spelling, rootCase);
         // render extension
-        const ChordDescription* cd = info->getDescription();
         if (cd) {
-            const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
             render(item, ldata, stackModifiers ? cd->renderListStacked : cd->renderList, harmonyCtx, ctx, 0);
         }
     } else if (item->harmonyType() == HarmonyType::NASHVILLE && tpcIsValid(info->rootTpc())) {
@@ -471,9 +479,7 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
         double adjust = chordList->nominalAdjust();
         harmonyCtx.movey(adjust * item->magS() * item->spatium() * .2);
         // render extension
-        const ChordDescription* cd = info->getDescription();
         if (cd) {
-            const bool stackModifiers = style.styleB(Sid::verticallyStackModifiers) && !item->doNotStackModifiers();
             render(item, ldata, stackModifiers ? cd->renderListStacked : cd->renderList, harmonyCtx, ctx, 0);
         }
     } else {
@@ -484,6 +490,14 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
     if (tpcIsValid(info->bassTpc())) {
         std::list<RenderActionPtr >& bassNoteChordList
             = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
+
+        static const std::wregex PATTERN_69 = std::wregex(L"6[,/]?9");
+        const bool is69 = info->textName().contains(PATTERN_69);
+        const bool hasModifierStack = stackModifiers && (info->parsedChord() ? info->parsedChord()->modifierList().size() > 1 : false);
+
+        if (hasModifierStack || is69) {
+            bassNoteChordList.emplace_front(new RenderActionMove(0.05, 0.0));
+        }
         render(item, ldata, bassNoteChordList, harmonyCtx, ctx, info->bassTpc(), spelling, bassCase, item->bassScale());
     }
 

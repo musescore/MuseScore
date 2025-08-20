@@ -2675,17 +2675,39 @@ void Segment::createShape(staff_idx_t staffIdx)
 
         setVisible(true);
 
+        // Still include harmony attached to fret diagram
+        if (e->isFretDiagram() && !e->addToSkyline() && toFretDiagram(e)->harmony()) {
+            e = toHarmony(toFretDiagram(e)->harmony());
+        }
+
         if (!e->addToSkyline()) {
             continue;
         }
 
         if (e->isHarmony() || e->isFretDiagram()) {
             // TODO: eliminate once and for all this addHorizontalSpace hack [M.S.]
-            RectF bbox = e->ldata()->bbox().translated(e->pos());
+            PointF pos = e->pos();
+            // Harmony attached to invisible fret diagram
+            if (e->isHarmony() && e->parent()->isFretDiagram()) {
+                pos += e->parentItem()->pos();
+            }
+            RectF bbox = e->ldata()->bbox().translated(pos);
+            if (Parenthesis* p = e->leftParen()) {
+                bbox.unite(p->ldata()->bbox().translated(p->pos() + pos));
+            }
+            if (Parenthesis* p = e->rightParen()) {
+                bbox.unite(p->ldata()->bbox().translated(p->pos() + pos));
+            }
             s.addHorizontalSpacing(e, bbox.left(), bbox.right());
             if (e->isFretDiagram()) {
                 if (Harmony* harmony = toFretDiagram(e)->harmony()) {
                     RectF harmBbox = harmony->ldata()->bbox().translated(harmony->pos() + e->pos());
+                    if (Parenthesis* p = harmony->leftParen()) {
+                        harmBbox.unite(p->ldata()->bbox().translated(p->pos() + harmony->pos() + e->pos()));
+                    }
+                    if (Parenthesis* p = harmony->rightParen()) {
+                        harmBbox.unite(p->ldata()->bbox().translated(p->pos() + harmony->pos() + e->pos()));
+                    }
                     s.addHorizontalSpacing(harmony, harmBbox.left(), harmBbox.right());
                 }
             }
