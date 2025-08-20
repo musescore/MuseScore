@@ -141,7 +141,7 @@ StyledFlickable {
                 spacing: 10
 
                 StyledTextLabel {
-                    text: qsTrc("notation/editstyle/hammeronpulloff", "Align 'H', 'P' and 'T' symbols in the same slur on")
+                    text: qsTrc("notation/editstyle/hammeronpulloff", "Align ‘H’, ‘P’ and ‘T’ symbols in the same slur on")
                 }
 
                 CheckBox {
