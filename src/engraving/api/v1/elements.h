@@ -192,9 +192,6 @@ class EngravingItem : public apiv1::ScoreElement
     /// \since MuseScore 4.6
     Q_PROPERTY(bool addToSkyline READ addToSkyline)
 
-    /// Unlike the name might suggest, this property no longer returns the subtype and is scarcely used.
-    /// Named 'subtype' prior to MuseScore 4.6
-    API_PROPERTY(subType,                 SUBTYPE)
     API_PROPERTY_READ_ONLY_T(bool, selected, SELECTED)
     API_PROPERTY_READ_ONLY_T(bool, generated, GENERATED)
     /// EngravingItem color. See https://doc.qt.io/qt-5/qml-color.html
@@ -527,6 +524,9 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, mmRestNumberVisible, MMREST_NUMBER_VISIBLE)
 
+    /// For measure repeats: The number of measures to repeat.
+    ///\since MuseScore 4.6
+    API_PROPERTY(measureRepeatNumber,  MEASURE_REPEAT_NUMBER)
     /// For measure repeats: The position of the number.
     ///\since MuseScore 4.6
     API_PROPERTY(measureRepeatNumberPos,  MEASURE_REPEAT_NUMBER_POS)

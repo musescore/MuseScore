@@ -59,7 +59,6 @@ struct PropertyMetaData {
 #define DUMMY_QT_TR_NOOP(x, y) y
 /* *INDENT-OFF* */
 static constexpr PropertyMetaData propertyList[] = {
-    { Pid::SUBTYPE,                 false, "subtype",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "subtype") },
     { Pid::SELECTED,                false, "selected",              P_TYPE::BOOL,               PropertyGroup::NONE,      DUMMY_QT_TR_NOOP("propertyName", "selected") },
     { Pid::GENERATED,               false, "generated",             P_TYPE::BOOL,               PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "generated") },
     { Pid::COLOR,                   false, "color",                 P_TYPE::COLOR,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "color") },
@@ -247,8 +246,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::MMREST_NUMBER_OFFSET,    false, "mmRestNumberOffset",    P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "vertical offset of multimeasure rest number") },
     { Pid::MMREST_NUMBER_VISIBLE,   false, "mmRestNumberVisible",   P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "visibility of multimeasure rest number") },
 
+    { Pid::MEASURE_REPEAT_NUMBER,     false, "subtype",                P_TYPE::INT,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "subtype") },
     { Pid::MEASURE_REPEAT_NUMBER_POS, false, "measureRepeatNumberPos", P_TYPE::SPATIUM,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "vertical position of measure repeat number") },
-    { Pid::REPEAT_COUNT,            true,  "repeatCount",             P_TYPE::INT,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "repeat count") },
+    { Pid::REPEAT_COUNT,              true,  "repeatCount",            P_TYPE::INT,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "repeat count") },
 
     { Pid::USER_STRETCH,            false, "stretch",               P_TYPE::REAL,               PropertyGroup::NONE      ,      DUMMY_QT_TR_NOOP("propertyName", "stretch") },
     { Pid::NO_OFFSET,               true,  "noOffset",              P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "numbering offset") },

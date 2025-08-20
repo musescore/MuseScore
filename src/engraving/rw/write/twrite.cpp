@@ -2310,7 +2310,7 @@ void TWrite::write(const MeasureNumber* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const MeasureRepeat* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
-    writeProperty(item, xml, Pid::SUBTYPE);
+    writeProperty(item, xml, Pid::MEASURE_REPEAT_NUMBER);
     writeProperties(static_cast<const Rest*>(item), xml, ctx);
     writeItems(item->el(), xml, ctx);
     xml.endElement();
