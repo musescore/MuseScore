@@ -665,11 +665,7 @@ void PlaybackController::play()
 
     secs_t delay = 0.;
     if (notationConfiguration()->isCountInEnabled()) {
-        if (INotationPlaybackPtr notationPlay = notationPlayback()) {
-            secs_t countInDuration = 0.;
-            notationPlay->triggerCountIn(m_currentTick, countInDuration);
-            delay = playbackDelay(countInDuration);
-        }
+        notationPlayback()->triggerCountIn(m_currentTick, delay);
     }
 
     currentPlayer()->play(delay);
@@ -720,11 +716,7 @@ void PlaybackController::resume()
 
     secs_t delay = 0.;
     if (notationConfiguration()->isCountInEnabled()) {
-        if (INotationPlaybackPtr notationPlay = notationPlayback()) {
-            secs_t countInDuration = 0.;
-            notationPlay->triggerCountIn(m_currentTick, countInDuration);
-            delay = playbackDelay(countInDuration);
-        }
+        notationPlayback()->triggerCountIn(m_currentTick, delay);
     }
 
     currentPlayer()->resume(delay);
@@ -752,23 +744,6 @@ secs_t PlaybackController::playbackStartSecs() const
 secs_t PlaybackController::playbackEndSecs() const
 {
     return notationPlayback() ? notationPlayback()->totalPlayTime() : secs_t { 0 };
-}
-
-secs_t PlaybackController::playbackDelay(const secs_t countInDuration) const
-{
-    if (!notationConfiguration()->isMetronomeEnabled()) {
-        return countInDuration;
-    }
-
-    const MeasureBeat beat = currentBeat();
-    const secs_t closestMainBeatPosition = beatToSecs(beat.measureIndex, std::ceil(beat.beat));
-    const secs_t playbackPosition = currentPlayer()->playbackPosition();
-    const secs_t delay = countInDuration - (closestMainBeatPosition - playbackPosition);
-    IF_ASSERT_FAILED(!delay.is_negative()) {
-        return 0.;
-    }
-
-    return delay;
 }
 
 InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() const
