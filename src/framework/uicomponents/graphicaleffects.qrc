@@ -6,5 +6,6 @@
         <file>qml/Muse/GraphicalEffects/EffectRectangularGlow.qml</file>
         <file>qml/Muse/GraphicalEffects/EffectFastBlur.qml</file>
         <file>qml/Muse/GraphicalEffects/EffectColorOverlay.qml</file>
+        <file>qml/Muse/GraphicalEffects/RoundedCornersEffect.qml</file>
     </qresource>
 </RCC>

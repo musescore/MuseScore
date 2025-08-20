@@ -24,6 +24,7 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import Muse.GraphicalEffects 1.0
 
 FocusScope {
     id: root
@@ -120,6 +121,11 @@ FocusScope {
 
             implicitWidth: root.contentWidth
             implicitHeight: root.contentHeight
+            
+            layer.enabled: ui.isEffectsAllowed
+            layer.effect: RoundedCornersEffect {
+                radius: contentBackground.radius
+            }
         }
 
         Rectangle {
