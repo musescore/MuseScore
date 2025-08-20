@@ -27,11 +27,13 @@
 #include "global/settings.h"
 
 #include "audio/common/soundfonttypes.h"
+#include "audio/common/rpc/rpcpacker.h"
 
 #include "log.h"
 
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::audio::rpc;
 using namespace muse::audio::synth;
 
 static const audioch_t AUDIO_CHANNELS = 2;
@@ -102,6 +104,14 @@ void AudioConfiguration::init()
     });
 
     updateSamplesToPreallocate();
+}
+
+void AudioConfiguration::sendConfigToWorker()
+{
+    WorkerConf conf;
+    conf.sampleRate = sampleRate();
+
+    rpcChannel()->send(rpc::make_request(Method::WorkerConfigChanged, RpcPacker::pack(conf)));
 }
 
 std::vector<std::string> AudioConfiguration::availableAudioApiList() const

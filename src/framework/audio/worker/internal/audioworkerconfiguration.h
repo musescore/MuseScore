@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,34 +21,29 @@
  */
 #pragma once
 
-#include "modularity/imoduleinterface.h"
+#include "../iaudioworkerconfiguration.h"
 
-#include "global/async/notification.h"
+#include "global/modularity/ioc.h"
+#include "audio/common/rpc/irpcchannel.h"
 
 #include "audio/common/audiotypes.h"
 
-#include "internal/mixer.h"
-
 namespace muse::audio::worker {
-class IAudioEngine : MODULE_EXPORT_INTERFACE
+class AudioWorkerConfiguration : public IAudioWorkerConfiguration
 {
-    INTERFACE_ID(IAudioEngine)
+    Inject<rpc::IRpcChannel> channel;
 
 public:
-    virtual ~IAudioEngine() = default;
+    AudioWorkerConfiguration() = default;
 
-    virtual sample_rate_t sampleRate() const = 0;
+    void init();
 
-    virtual void setSampleRate(const sample_rate_t sampleRate) = 0;
-    virtual void setReadBufferSize(const uint16_t readBufferSize) = 0;
-    virtual void setAudioChannelsCount(const audioch_t count) = 0;
+    audioch_t audioChannelsCount() const override;
+    sample_rate_t sampleRate() const override;
 
-    virtual RenderMode mode() const = 0;
-    virtual void setMode(const RenderMode newMode) = 0;
-    virtual async::Notification modeChanged() const = 0;
+private:
 
-    virtual MixerPtr mixer() const = 0;
-
-    virtual void procces() = 0;
+    bool m_inited = false;
+    WorkerConf m_conf;
 };
 }

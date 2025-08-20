@@ -132,7 +132,7 @@ void AudioModule::registerExports()
 
     //! NOTE Temporarily for compatibility
     m_workerModule = std::make_shared<worker::AudioWorkerModule>();
-    m_audioThread = std::make_shared<worker::AudioThread>();
+    m_audioThread = std::make_shared<worker::AudioThread>(m_rpcChannel);
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
@@ -207,7 +207,7 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
         in order to avoid problems associated with access data thread safety.
 
         Objects from different layers (threads) must interact only through:
-            * Asynchronous API (@see thirdparty/deto) - controls and pass midi data
+            * Asynchronous API - controls and pass midi data
             * AudioBuffer - pass audio data from worker to driver for play
 
         AudioEngine is in the worker and operates only with the buffer,
@@ -222,23 +222,29 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
-    m_workerModule->audioBuffer()->init(m_configuration->audioChannelsCount());
-
-    m_audioOutputController->init();
-
-    m_soundFontController->init();
-
-    // rpc
+    // Init RPC
     m_rpcTimer.setInterval(16); // corresponding to 60 fps
     QObject::connect(&m_rpcTimer, &QTimer::timeout, [this]() {
         m_rpcChannel->process();
     });
     m_rpcTimer.start();
 
-    m_mainPlayback->init();
+    // Init Worker
 
-    // Setup audio driver
-    setupAudioDriver(mode);
+    m_rpcChannel->onMethod(rpc::Method::WorkerStarted, [this](const rpc::Msg&) {
+        LOGI() << "Worker started";
+        m_configuration->sendConfigToWorker();
+    });
+
+    m_rpcChannel->onMethod(rpc::Method::WorkerConfigInited, [this](const rpc::Msg&) {
+        LOGI() << "WorkerConfigInited";
+
+        m_audioOutputController->init();
+        m_soundFontController->init();
+        m_mainPlayback->init();
+    });
+
+    m_audioThread->run();
 
     //! --- Diagnostics ---
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
@@ -248,6 +254,18 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
             pr->reg("soundfonts", p);
         }
     }
+
+    return;
+
+    // m_workerModule->audioBuffer()->init(m_configuration->audioChannelsCount());
+
+    // m_audioOutputController->init();
+
+    // m_soundFontController->init();
+    // m_mainPlayback->init();
+
+    // Setup audio driver
+    setupAudioDriver(mode);
 }
 
 void AudioModule::onDeinit()
@@ -301,14 +319,17 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
         IAudioDriver::Spec activeSpec;
         if (m_audioDriver->open(requiredSpec, &activeSpec)) {
-            setupAudioWorker(activeSpec);
+            // setupAudioWorker(activeSpec);
+            m_rpcChannel->send(rpc::make_notification(rpc::Method::DriverOpened, rpc::RpcPacker::pack(activeSpec)));
             return;
         }
 
         LOGE() << "audio output open failed";
     }
 
-    setupAudioWorker(requiredSpec);
+    //setupAudioWorker(requiredSpec);
+    //! NOTE In this case the driver does not open, but for simplicity we simulate it as if it were open
+    m_rpcChannel->send(rpc::make_notification(rpc::Method::DriverOpened, rpc::RpcPacker::pack(requiredSpec)));
 }
 
 void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
@@ -324,7 +345,7 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         ONLY_AUDIO_WORKER_THREAD;
 
         //! NOTE It should be as early as possible
-        m_rpcChannel->initOnWorker();
+        // m_rpcChannel->initOnWorker();
 
         m_workerModule->onPreInit(IApplication::RunMode::GuiApp);
 
@@ -354,5 +375,5 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
     };
 
     msecs_t interval = m_configuration->audioWorkerInterval(activeSpec.samples, activeSpec.sampleRate);
-    m_audioThread->run(workerSetup, workerLoopBody, interval);
+    // m_audioThread->run(workerSetup, workerLoopBody, interval);
 }

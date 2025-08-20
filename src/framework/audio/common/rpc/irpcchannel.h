@@ -37,6 +37,13 @@ using CallId = uint64_t;
 enum class Method {
     Undefined = 0,
 
+    // --- Inin ---
+    WorkerStarted,
+    WorkerConfigChanged,
+    WorkerConfigInited,
+    DriverOpened,
+
+    // --- Playback ---
     // Sequences
     AddSequence,
     RemoveSequence,
@@ -306,6 +313,8 @@ class IRpcChannel : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IRpcChannel)
 public:
     virtual ~IRpcChannel() = default;
+
+    virtual void initOnWorker() = 0;
 
     virtual void process() = 0;
 

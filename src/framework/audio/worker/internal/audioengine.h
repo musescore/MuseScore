@@ -69,6 +69,8 @@ public:
 
     MixerPtr mixer() const override;
 
+    void procces() override;
+
 private:
 
     void updateBufferConstraints();

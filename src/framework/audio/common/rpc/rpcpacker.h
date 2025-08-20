@@ -25,8 +25,12 @@
 
 #include "global/serialization/msgpack_forward.h"
 #include "audio/common/audiotypes.h"
+#include "audio/iaudiodriver.h"
 
 #include "log.h"
+
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::WorkerConf& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::WorkerConf& value);
 
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::PlaybackStatus& value);
@@ -116,6 +120,16 @@ void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackData& value)
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& value);
 
 #include "global/serialization/msgpack.h"
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::WorkerConf& value)
+{
+    p.process(value.sampleRate);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::WorkerConf& value)
+{
+    p.process(value.sampleRate);
+}
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value)
 {

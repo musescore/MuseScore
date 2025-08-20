@@ -79,6 +79,10 @@ static constexpr size_t MINIMUM_BUFFER_SIZE = 128;
 
 static constexpr size_t MAXIMUM_BUFFER_SIZE = 4096;
 
+struct WorkerConf {
+    sample_rate_t sampleRate = 0;
+};
+
 enum class SoundTrackType {
     Undefined = -1,
     MP3,

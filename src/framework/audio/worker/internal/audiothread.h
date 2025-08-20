@@ -30,31 +30,43 @@
 
 #include "audio/common/audiotypes.h"
 
+namespace muse::audio::rpc {
+class IRpcChannel;
+}
+
 namespace muse::audio::worker {
+class AudioWorkerConfiguration;
+class AudioEngine;
+class AudioBuffer;
+
 class AudioThread
 {
 public:
-    AudioThread() = default;
+    AudioThread(std::shared_ptr<rpc::IRpcChannel> channel);
     ~AudioThread();
 
     static std::thread::id ID;
 
     using Runnable = std::function<void ()>;
 
-    void run(const Runnable& onStart, const Runnable& loopBody, const msecs_t interval = 1);
+    void run();
     void setInterval(const msecs_t interval);
     void stop(const Runnable& onFinished = nullptr);
     bool isRunning() const;
 
 private:
-    void main();
+    void th_main();
 
-    Runnable m_onStart = nullptr;
-    Runnable m_mainLoopBody = nullptr;
+    // services
+    std::shared_ptr<AudioWorkerConfiguration> m_configuration;
+    std::shared_ptr<AudioEngine> m_audioEngine;
+    std::shared_ptr<AudioBuffer> m_audioBuffer;
+
     Runnable m_onFinished = nullptr;
-    msecs_t m_intervalMsecs = 0;
+    msecs_t m_intervalMsecs = 1;
     uint64_t m_intervalInWinTime = 0;
 
+    std::shared_ptr<rpc::IRpcChannel> m_channel = nullptr;
     std::unique_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;
 };

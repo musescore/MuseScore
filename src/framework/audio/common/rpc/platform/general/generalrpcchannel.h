@@ -33,10 +33,10 @@ class GeneralRpcChannel : public IRpcChannel
 public:
     GeneralRpcChannel() = default;
 
-    void initOnWorker();
+    void initOnWorker() override;
+
     void process() override;
 
-    // IRpcChannel
     // msgs
     void send(const Msg& msg, const Handler& onResponse = nullptr) override;
     void onMethod(Method method, Handler h) override;

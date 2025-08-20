@@ -23,17 +23,25 @@
 
 #include "global/runtime.h"
 #include "global/threadutils.h"
-
-#include "audio/common/audiosanitizer.h"
+#include "global/async/processevents.h"
+#include "global/modularity/ioc.h"
 
 #ifdef Q_OS_WIN
 #include "global/platform/win/waitabletimer.h"
 #endif
 
+#include "audio/common/audiosanitizer.h"
+#include "audio/common/rpc/irpcchannel.h"
+
+#include "audioworkerconfiguration.h"
+#include "audioengine.h"
+#include "audiobuffer.h"
+
 #include "log.h"
 
 using namespace muse::audio;
 using namespace muse::audio::worker;
+using namespace muse::audio::rpc;
 
 static uint64_t toWinTime(const msecs_t msecs)
 {
@@ -42,6 +50,12 @@ static uint64_t toWinTime(const msecs_t msecs)
 
 std::thread::id AudioThread::ID;
 
+AudioThread::AudioThread(std::shared_ptr<rpc::IRpcChannel> channel)
+    : m_channel(channel)
+{
+    m_intervalInWinTime = toWinTime(m_intervalMsecs);
+}
+
 AudioThread::~AudioThread()
 {
     if (m_running) {
@@ -49,16 +63,35 @@ AudioThread::~AudioThread()
     }
 }
 
-void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const msecs_t interval)
+static std::string moduleName()
 {
-    m_onStart = onStart;
-    m_mainLoopBody = loopBody;
-    m_intervalMsecs = interval;
-    m_intervalInWinTime = toWinTime(interval);
+    return "audio_worker";
+}
 
+static muse::modularity::ModulesIoC* ioc()
+{
+    return muse::modularity::globalIoc();
+}
+
+void AudioThread::run()
+{
+    // Services registration
+    //! NOTE At the moment, it is better to create services
+    //! and register them in the IOC in the main thread,
+    //! because the IOC thread is not safe.
+    //! Therefore, we will need to make own IOC instance for the worker.
+
+    m_configuration = std::make_shared<AudioWorkerConfiguration>();
+    m_audioEngine = std::make_shared<AudioEngine>();
+    m_audioBuffer = std::make_shared<AudioBuffer>();
+
+    ioc()->registerExport<IAudioWorkerConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
+
+    // Run thread
     m_running = true;
     m_thread = std::make_unique<std::thread>([this]() {
-        main();
+        th_main();
     });
 
     if (!muse::setThreadPriority(*m_thread, ThreadPriority::High)) {
@@ -88,15 +121,23 @@ bool AudioThread::isRunning() const
     return m_running;
 }
 
-void AudioThread::main()
+void AudioThread::th_main()
 {
     runtime::setThreadName("audio_worker");
 
     AudioThread::ID = std::this_thread::get_id();
 
-    if (m_onStart) {
-        m_onStart();
-    }
+    m_channel->initOnWorker();
+
+    m_configuration->init();
+
+    m_channel->onMethod(Method::WorkerConfigInited, [this](const Msg&) {
+        LOGI() << "WorkerConfigInited";
+
+        m_audioBuffer->init(m_configuration->audioChannelsCount());
+    });
+
+    m_channel->send(rpc::make_notification(Method::WorkerStarted));
 
 #ifdef Q_OS_WIN
     WaitableTimer timer;
@@ -107,9 +148,10 @@ void AudioThread::main()
 #endif
 
     while (m_running) {
-        if (m_mainLoopBody) {
-            m_mainLoopBody();
-        }
+        ONLY_AUDIO_WORKER_THREAD;
+        async::processEvents();
+        m_channel->process();
+        m_audioEngine->procces();
 
 #ifdef Q_OS_WIN
         if (!timerValid || !timer.setAndWait(m_intervalInWinTime)) {

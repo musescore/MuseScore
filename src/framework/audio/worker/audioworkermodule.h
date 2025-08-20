@@ -57,8 +57,7 @@ public:
     const std::shared_ptr<synth::SynthResolver>& synthResolver() const { return m_synthResolver; }
 
 private:
-    std::shared_ptr<AudioEngine> m_audioEngine;
-    std::shared_ptr<AudioBuffer> m_audioBuffer;
+
     std::shared_ptr<WorkerPlayback> m_workerPlayback;
     std::shared_ptr<WorkerChannelController> m_workerChannelController;
     std::shared_ptr<fx::FxResolver> m_fxResolver;

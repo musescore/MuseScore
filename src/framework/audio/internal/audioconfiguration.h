@@ -27,18 +27,21 @@
 #include "global/iglobalconfiguration.h"
 
 #include "../iaudioconfiguration.h"
+#include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
 class AudioConfiguration : public IAudioConfiguration, public Injectable
 {
     Inject<IGlobalConfiguration> globalConfiguration = { this };
     Inject<io::IFileSystem> fileSystem = { this };
+    Inject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
     AudioConfiguration(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
     void init();
+    void sendConfigToWorker();
 
     std::vector<std::string> availableAudioApiList() const override;
 

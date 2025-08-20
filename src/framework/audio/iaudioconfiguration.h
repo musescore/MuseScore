@@ -37,6 +37,12 @@ class IAudioConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioConfiguration() = default;
 
+    // sync with worker
+    virtual sample_rate_t sampleRate() const = 0;
+    virtual void setSampleRate(sample_rate_t sampleRate) = 0;
+    virtual async::Notification sampleRateChanged() const = 0;
+    // ---
+
     virtual std::vector<std::string> availableAudioApiList() const = 0;
 
     virtual std::string currentAudioApi() const = 0;
@@ -57,10 +63,6 @@ public:
 
     virtual samples_t samplesToPreallocate() const = 0;
     virtual async::Channel<samples_t> samplesToPreallocateChanged() const = 0;
-
-    virtual unsigned int sampleRate() const = 0;
-    virtual void setSampleRate(unsigned int sampleRate) = 0;
-    virtual async::Notification sampleRateChanged() const = 0;
 
     virtual size_t desiredAudioThreadNumber() const = 0;
     virtual size_t minTrackCountForMultithreading() const = 0;

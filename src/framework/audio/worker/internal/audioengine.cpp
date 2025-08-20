@@ -217,6 +217,12 @@ MixerPtr AudioEngine::mixer() const
     return m_mixer;
 }
 
+void AudioEngine::procces()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    m_buffer->forward();
+}
+
 void AudioEngine::updateBufferConstraints()
 {
     IF_ASSERT_FAILED(m_buffer) {
