@@ -1411,7 +1411,9 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             pen.setJoinStyle(PenJoinStyle::RoundJoin);
             painter->setPen(pen);
             painter->setBrush(Brush(pen.color()));
-            painter->drawPath(ldata->slurPath);
+            for (const PainterPath& path : ldata->slurPaths) {
+                painter->drawPath(path);
+            }
         } else {
             pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
             pen.setCapStyle(PenCapStyle::RoundCap);

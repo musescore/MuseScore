@@ -274,7 +274,7 @@ public:
         double fretNumPadding = 0.0;
         double gridHeight = 0.0;
         std::vector<FingeringItem> fingeringItems;
-        PainterPath slurPath = PainterPath();
+        std::vector<PainterPath> slurPaths;
         String fretText = String();
     };
     DECLARE_LAYOUTDATA_METHODS(FretDiagram)
