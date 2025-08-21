@@ -698,7 +698,15 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
         writeItem(e, xml, ctx);
     }
     writeProperty(item, xml, Pid::PLAY_COUNT_TEXT_SETTING);
-    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
+
+    const bool showText = item->style().styleB(Sid::repeatPlayCountShow);
+    const bool singleRepeats = item->style().styleB(Sid::repeatPlayCountShowSingleRepeats);
+    const int playCount = item->measure() ? item->measure()->repeatCount() : 2;
+    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true);
+    if (showPlayCount) {
+        writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
+    }
+
     if (item->playCountText()) {
         writeItem(item->playCountText(), xml, ctx);
     }

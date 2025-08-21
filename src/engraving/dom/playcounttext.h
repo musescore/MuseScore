@@ -36,7 +36,6 @@ public:
     BarLine* barline() const { return toBarLine(parent()); }
 
     bool isEditable() const override { return true; }
-    void startEdit(EditData&) override;
     void endEdit(EditData&) override;
 
     EngravingItem* propertyDelegate(Pid) override;
