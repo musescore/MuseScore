@@ -72,6 +72,7 @@
 #include "rendering/score/parenthesislayout.h"
 #include "tlayout.h"
 #include "slurtielayout.h"
+#include "systemlayout.h"
 #include "beamlayout.h"
 #include "tremololayout.h"
 #include "autoplace.h"
@@ -1200,7 +1201,7 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
                 Articulation* aa = *iter2;
                 aa->mutldata()->moveY(minDist);
                 if (sstaff && aa->addToSkyline()) {
-                    sstaff->skyline().add(aa->shape().translate(aa->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset()));
+                    SystemLayout::updateSkylineForElement(aa, m->system(), minDist);
                     for (ShapeElement& sh : s->staffShape(item->staffIdx()).elements()) {
                         if (sh.item() == aa) {
                             sh.translate(0.0, minDist);
