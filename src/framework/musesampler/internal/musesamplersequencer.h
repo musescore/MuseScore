@@ -137,16 +137,13 @@ private:
 
     struct RenderingInfo {
         long long initialChunksDurationUs = 0;
-        int errorCode = 0;
+        std::string error;
         int64_t percentage = 0;
         audio::InputProcessingProgress::ChunkInfoList lastReceivedChunks;
 
         void clear()
         {
-            initialChunksDurationUs = 0;
-            errorCode = 0;
-            percentage = 0;
-            lastReceivedChunks.clear();
+            *this = RenderingInfo();
         }
     };
 

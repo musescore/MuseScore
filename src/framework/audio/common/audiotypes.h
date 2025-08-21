@@ -475,24 +475,25 @@ struct InputProcessingProgress {
 
     struct StatusInfo {
         Status status = Status::Undefined;
-        int errcode = 0;
+        int errorCode = 0;
+        std::string errorText;
     };
 
     void start()
     {
         isStarted = true;
-        processedChannel.send({ Status::Started, 0 }, {}, {});
+        processedChannel.send({ Status::Started, 0, {} }, {}, {});
     }
 
     void process(const ChunkInfoList& chuncs, int64_t current, int64_t total)
     {
-        processedChannel.send({ Status::Processing, 0 }, chuncs, { current, total });
+        processedChannel.send({ Status::Processing, 0, {} }, chuncs, { current, total });
     }
 
-    void finish(int errcode)
+    void finish(int errcode, const std::string& err = {})
     {
         isStarted = false;
-        processedChannel.send({ Status::Finished, errcode }, {}, {});
+        processedChannel.send({ Status::Finished, errcode, err }, {}, {});
     }
 
     bool isStarted = false;

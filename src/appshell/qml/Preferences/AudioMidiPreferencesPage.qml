@@ -100,11 +100,16 @@ PreferencesPage {
 
             visible: audioMidiModel.onlineSoundsSectionVisible()
 
+            showErrorDialog: audioMidiModel.shouldShowOnlineSoundsProcessingError
             autoProcessOnlineSoundsInBackground: audioMidiModel.autoProcessOnlineSoundsInBackground
             progressBarMode: audioMidiModel.onlineSoundsShowProgressBarMode
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 4
+
+            onShowErrorDialogChangeRequested: function(value) {
+                audioMidiModel.shouldShowOnlineSoundsProcessingError = value
+            }
 
             onAutoProcessOnlineSoundsInBackgroundChangeRequested: function(value) {
                 audioMidiModel.autoProcessOnlineSoundsInBackground = value

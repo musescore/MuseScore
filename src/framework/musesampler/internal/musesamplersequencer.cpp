@@ -245,18 +245,22 @@ void MuseSamplerSequencer::doPollProgress()
 
         switch (info._state) {
         case ms_RenderingState_ErrorNetwork:
-            m_renderingInfo.errorCode = static_cast<int>(muse::audio::Err::OnlineSoundsNetworkError);
+            m_renderingInfo.error = "Network error";
             break;
         case ms_RenderingState_ErrorRendering:
+            m_renderingInfo.error = "Rendering error";
+            break;
         case ms_RenderingState_ErrorFileIO:
+            m_renderingInfo.error = "File IO error";
+            break;
         case ms_RenderingState_ErrorTimeOut:
-            m_renderingInfo.errorCode = static_cast<int>(muse::audio::Err::UnknownError);
+            m_renderingInfo.error = "Timeout";
             break;
         case ms_RenderingState_Rendering:
             break;
         }
 
-        if (progressStarted && m_renderingInfo.errorCode != 0) {
+        if (progressStarted && !m_renderingInfo.error.empty()) {
             continue;
         }
 
@@ -302,8 +306,9 @@ void MuseSamplerSequencer::doPollProgress()
 
     // Finish progress
     if (chunksDurationUs <= 0) {
+        const int errcode = !m_renderingInfo.error.empty() ? (int)muse::audio::Err::OnlineSoundsProcessingError : 0;
         m_pollRenderingProgressTimer->stop();
-        m_renderingProgress->finish(m_renderingInfo.errorCode);
+        m_renderingProgress->finish(errcode, m_renderingInfo.error);
         m_renderingInfo.clear();
     }
 }
