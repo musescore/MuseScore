@@ -99,13 +99,6 @@ static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/
 
 static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
 
-static const String blankPattern(int strings)
-{
-    std::vector<Char> blank(strings, Char('-'));
-    String pattern(blank.data(), blank.size());
-    return pattern;
-}
-
 static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType, const ChordList* cl)
 {
     String s = harmony;
@@ -837,6 +830,7 @@ void FretDiagram::clear()
     m_barres.clear();
     m_dots.clear();
     m_markers.clear();
+    m_fretOffset = 0;
 }
 
 //---------------------------------------------------------
@@ -1367,38 +1361,29 @@ bool FretDiagram::isCustom(const String& harmonyNameForCompare) const
     static const std::list<Pid> props {
         Pid::FRET_STRINGS,
         Pid::FRET_FRETS,
-        Pid::FRET_OFFSET,
         Pid::FRET_NUT,
         Pid::FRET_FINGERING
     };
 
     for (const Pid& pid : props) {
         if (pid == Pid::FRET_FINGERING) {
-            if (!custom(Pid::FRET_SHOW_FINGERINGS)) {
-                break;
+            if (custom(Pid::FRET_SHOW_FINGERINGS)) {
+                return true;
             }
-        }
-
-        if (custom(pid)) {
+        } else if (custom(pid)) {
             return true;
         }
     }
 
-    String pattern = patternFromDiagram(this);
-    if (pattern == blankPattern(strings())) {
-        return false;
-    }
-
-    if (s_diagramPatternToHarmoniesMap.empty()) {
+    if (s_harmonyToDiagramMap.empty()) {
         readHarmonyToDiagramFile(HARMONY_TO_DIAGRAM_FILE_PATH);
     }
 
-    std::vector<String> patternHarmonies = muse::value(s_diagramPatternToHarmoniesMap, pattern);
-    if (patternHarmonies.empty()) {
-        return true;
-    }
+    NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+    HarmonyMapKey key = createHarmonyMapKey(harmonyNameForCompare, spellingType, score()->chordList());
 
-    return !muse::contains(patternHarmonies, harmonyNameForCompare.toLower());
+    String diagramXml = muse::value(s_harmonyToDiagramMap, key);
+    return diagramXml.empty();
 }
 
 void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) const
