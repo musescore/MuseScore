@@ -696,8 +696,9 @@ void PlaybackController::pause(bool select)
 
     currentPlayer()->pause();
 
-    if (select) {
-        selectAtRawTick(m_currentTick);
+    if (select && m_notation) {
+        const Fraction playPositionFrac = Fraction::fromTicks(m_currentTick);
+        interaction()->findAndSelectChordRest(playPositionFrac);
     }
 }
 
@@ -722,21 +723,6 @@ void PlaybackController::resume()
     }
 
     currentPlayer()->resume(delay);
-}
-
-void PlaybackController::selectAtRawTick(const tick_t& rawTick)
-{
-    if (!m_notation) {
-        return;
-    }
-
-    const RetVal<tick_t> playPositionTick = notationPlayback()->playPositionTickByRawTick(rawTick);
-    if (!playPositionTick.ret) {
-        return;
-    }
-
-    const Fraction playPositionFrac = Fraction::fromTicks(playPositionTick.val);
-    interaction()->findAndSelectChordRest(playPositionFrac);
 }
 
 secs_t PlaybackController::playbackStartSecs() const
