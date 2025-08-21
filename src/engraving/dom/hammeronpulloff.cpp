@@ -85,6 +85,15 @@ void HammerOnPullOffSegment::setTrack(track_idx_t idx)
     }
 }
 
+void HammerOnPullOffSegment::setSelected(bool f)
+{
+    for (HammerOnPullOffText* text : m_hopoText) {
+        text->setSelected(f);
+    }
+
+    SlurTieSegment::setSelected(f);
+}
+
 void HammerOnPullOffSegment::updateHopoText()
 {
     Chord* startChord = nullptr;
@@ -311,16 +320,11 @@ bool HammerOnPullOffText::isUserModified() const
 
 Color HammerOnPullOffText::curColor() const
 {
-    if (score()->printing()) {
-        return TextBase::curColor();
+    if (!isValid() && MScore::warnGuitarBends && !score()->printing()) {
+        return selected() ? configuration()->criticalSelectedColor() : configuration()->criticalColor();
     }
 
-    auto engravingConf = configuration();
-    if (isValid() || !MScore::warnGuitarBends) {
-        return selected() || (parentItem() && parentItem()->selected()) ? engravingConf->selectionColor() : TextBase::curColor();
-    }
-
-    return selected() || parentItem()->selected() ? engravingConf->criticalSelectedColor() : engravingConf->criticalColor();
+    return TextBase::curColor();
 }
 
 PropertyValue HammerOnPullOffText::propertyDefault(Pid id) const

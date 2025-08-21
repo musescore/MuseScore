@@ -1190,6 +1190,7 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
         }
         Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset());
         Shape sShape = ss->shape().translate(ss->pos());
+        sShape.removeTypes({ ElementType::HAMMER_ON_PULL_OFF_TEXT });
         double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
         double vertClearance = a->up() ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
         if (vertClearance < minDist) {

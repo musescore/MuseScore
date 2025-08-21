@@ -2431,7 +2431,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, bool
         return;
     }
 
-    if (element->isSlur() && addSingle) {
+    if (element->isSlur()) {
         doAddSlur(toSlur(element));
         return;
     }
