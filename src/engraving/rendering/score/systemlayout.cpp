@@ -2850,7 +2850,8 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
 void SystemLayout::updateSkylineForElement(EngravingItem* element, const System* system, double yMove)
 {
     Skyline& skyline = system->staff(element->staffIdx())->skyline();
-    SkylineLine& skylineLine = element->placeAbove() ? skyline.north() : skyline.south();
+    bool isAbove = element->isArticulationFamily() ? toArticulation(element)->up() : element->placeAbove();
+    SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
     for (ShapeElement& shapeEl : skylineLine.elements()) {
         const EngravingItem* itemInSkyline = shapeEl.item();
         if (itemInSkyline && itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {
