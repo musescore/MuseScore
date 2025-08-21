@@ -118,6 +118,11 @@ int RepeatSegment::len() const
     return (m_measureList.empty()) ? 0 : (m_measureList.back()->endTick().ticks() - tick);
 }
 
+int RepeatSegment::endTick() const
+{
+    return tick + len();
+}
+
 void RepeatSegment::popMeasure()
 {
     if (!m_measureList.empty()) {
@@ -205,8 +210,9 @@ void RepeatList::updateTempo()
         s->utime      = t;
         double ct      = tl->tick2time(s->tick);
         s->timeOffset = t - ct;
-        utick        += s->len();
-        t            += tl->tick2time(s->tick + s->len()) - ct;
+        int len       = s->len();
+        utick        += len;
+        t            += tl->tick2time(s->tick + len) - ct;
     }
 }
 
@@ -245,7 +251,7 @@ int RepeatList::tick2utick(int tick) const
         return 0;
     }
     for (const RepeatSegment* s : *this) {
-        if (tick >= s->tick && tick < (s->tick + s->len())) {
+        if (tick >= s->tick && tick < s->endTick()) {
             return s->utick + (tick - s->tick);
         }
     }

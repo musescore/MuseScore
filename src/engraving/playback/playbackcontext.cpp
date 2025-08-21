@@ -317,9 +317,7 @@ void PlaybackContext::update(const ID partId, const Score* score, bool expandRep
             }
         }
 
-        handleSpanners(partId, score, repeatSegment->tick,
-                       repeatSegment->tick + repeatSegment->len(), tickPositionOffset);
-
+        handleSpanners(partId, score, repeatSegment->tick, repeatSegment->endTick(), tickPositionOffset);
         handleMeasureRepeats(measureRepeats, tickPositionOffset);
     }
 
