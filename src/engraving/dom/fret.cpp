@@ -99,13 +99,6 @@ static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/
 
 static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
 
-static const String blankPattern(int strings)
-{
-    std::vector<Char> blank(strings, Char('-'));
-    String pattern(blank.data(), blank.size());
-    return pattern;
-}
-
 static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType, const ChordList* cl)
 {
     String s = harmony;
