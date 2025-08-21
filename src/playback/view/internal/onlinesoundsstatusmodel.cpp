@@ -22,9 +22,12 @@
 
 #include "onlinesoundsstatusmodel.h"
 
+#include "async/async.h"
 #include "translation.h"
 
+using namespace mu::notation;
 using namespace mu::playback;
+using namespace muse::audio;
 
 OnlineSoundsStatusModel::OnlineSoundsStatusModel(QObject* parent)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
@@ -33,9 +36,19 @@ OnlineSoundsStatusModel::OnlineSoundsStatusModel(QObject* parent)
 
 void OnlineSoundsStatusModel::load()
 {
-    setHasOnlineSounds(!playbackController()->onlineSounds().empty());
+    updateHasOnlineSounds();
     playbackController()->onlineSoundsChanged().onNotify(this, [this]() {
-        setHasOnlineSounds(!playbackController()->onlineSounds().empty());
+        updateHasOnlineSounds();
+    });
+
+    updateManualProcessingAllowed();
+
+    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+        updateManualProcessingAllowed();
+    });
+
+    audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool) {
+        updateManualProcessingAllowed();
     });
 
     muse::Progress progress = playbackController()->onlineSoundsProcessingProgress();
@@ -47,29 +60,28 @@ void OnlineSoundsStatusModel::load()
 
     progress.finished().onReceive(this, [this](const muse::ProgressResult& result) {
         setStatus(result.ret.success() ? Status::Success : Status::Error);
-    });
 
-    setCanProcessOnlineSounds(!audioConfiguration()->autoProcessOnlineSoundsInBackground());
-    audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool value) {
-        setCanProcessOnlineSounds(!value);
+        if (result.ret.success() && m_manualProcessingAllowed) {
+            setManualProcessingAllowed(false);
+        }
     });
 }
 
 void OnlineSoundsStatusModel::processOnlineSounds()
 {
-    if (m_canProcessOnlineSounds) {
+    if (m_manualProcessingAllowed) {
         dispatcher()->dispatch("process-online-sounds");
     }
 }
 
 bool OnlineSoundsStatusModel::hasOnlineSounds() const
 {
-    return m_hasOnlineSounds;
+    return !m_onlineTrackIdSet.empty();
 }
 
-bool OnlineSoundsStatusModel::canProcessOnlineSounds() const
+bool OnlineSoundsStatusModel::manualProcessingAllowed() const
 {
-    return m_canProcessOnlineSounds;
+    return m_manualProcessingAllowed;
 }
 
 int OnlineSoundsStatusModel::status() const
@@ -95,28 +107,68 @@ QString OnlineSoundsStatusModel::errorDescription() const
     return muse::qtrc("global", "Please check your internet connection or try again later.");
 }
 
-void OnlineSoundsStatusModel::setHasOnlineSounds(bool value)
+void OnlineSoundsStatusModel::updateHasOnlineSounds()
 {
-    if (m_hasOnlineSounds == value) {
-        return;
+    const std::map<TrackId, AudioResourceMeta>& onlineSounds = playbackController()->onlineSounds();
+    const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap = playbackController()->instrumentTrackIdMap();
+
+    const bool wasEmpty = m_onlineTrackIdSet.empty();
+    m_onlineTrackIdSet.clear();
+    m_onlineTrackIdSet.reserve(onlineSounds.size());
+
+    for (const auto& pair : instrumentTrackIdMap) {
+        if (muse::contains(onlineSounds, pair.second)) {
+            m_onlineTrackIdSet.insert(pair.first);
+        }
     }
 
-    m_hasOnlineSounds = value;
-    emit hasOnlineSoundsChanged();
-
-    if (!m_hasOnlineSounds) {
-        setStatus(Status::Success);
+    if (m_onlineTrackIdSet.empty() != wasEmpty) {
+        emit hasOnlineSoundsChanged();
     }
 }
 
-void OnlineSoundsStatusModel::setCanProcessOnlineSounds(bool canRun)
+void OnlineSoundsStatusModel::updateManualProcessingAllowed()
 {
-    if (m_canProcessOnlineSounds == canRun) {
+    if (audioConfiguration()->autoProcessOnlineSoundsInBackground()) {
+        m_tracksDataChanged.resetOnReceive(this);
+        setManualProcessingAllowed(false);
         return;
     }
 
-    m_canProcessOnlineSounds = canRun;
-    emit canProcessOnlineSoundsChanged();
+    IMasterNotationPtr master = globalContext()->currentMasterNotation();
+    if (!master) {
+        m_tracksDataChanged.resetOnReceive(this);
+        setManualProcessingAllowed(false);
+        return;
+    }
+
+    m_tracksDataChanged = master->playback()->tracksDataChanged();
+    m_tracksDataChanged.onReceive(this, [this](const InstrumentTrackIdSet& changedTrackIdSet) {
+        for (const InstrumentTrackId& trackId : changedTrackIdSet) {
+            if (muse::contains(m_onlineTrackIdSet, trackId)) {
+                setManualProcessingAllowed(true);
+                return;
+            }
+        }
+    });
+}
+
+void OnlineSoundsStatusModel::setManualProcessingAllowed(bool allowed)
+{
+    if (m_manualProcessingAllowed == allowed) {
+        return;
+    }
+
+    m_manualProcessingAllowed = allowed;
+    emit manualProcessingAllowedChanged();
+
+    if (allowed && m_shouldNotifyToursThatManualProcessingAllowed) {
+        muse::async::Async::call(this, [=]() {
+            tours()->onEvent(u"online_sounds_manual_processing_allowed");
+        });
+
+        m_shouldNotifyToursThatManualProcessingAllowed = false;
+    }
 }
 
 void OnlineSoundsStatusModel::setStatus(Status status)
