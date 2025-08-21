@@ -49,6 +49,8 @@ public:
     PropertyItem* position() const;
     PropertyItem* centerOnSymbol() const;
 
+    Q_INVOKABLE QString markerTypeName() const;
+
 private:
     PropertyItem* m_type = nullptr;
     PropertyItem* m_label = nullptr;
