@@ -588,6 +588,7 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const std:
     harmonyCtx.scale = noteMag;
 
     for (const RenderActionPtr& a : renderList) {
+        a->print();
         renderAction(item, ldata, a, harmonyCtx, ctx);
     }
 }
