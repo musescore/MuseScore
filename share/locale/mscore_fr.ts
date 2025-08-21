@@ -27863,12 +27863,12 @@ a échoué</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="346"/>
         <source>&amp;Optimize Enharmonic Spellings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Optimiser l&apos;écriture des notes enharmoniques</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="347"/>
         <source>Optimize enharmonic spellings</source>
-        <translation type="unfinished"></translation>
+        <translation>Optimiser l&apos;écriture des notes enharmoniques</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1951"/>
@@ -28397,12 +28397,12 @@ a échoué</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2967"/>
         <source>Change Enharmonic Spelling (&amp;Both Modes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Échanger les notes enharmoniques (&amp;Tonalité réelle et transposée)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2975"/>
         <source>Change Enharmonic Spelling (&amp;Current Mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Échanger les notes enharmoniques (Tonalité &amp;active)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2983"/>

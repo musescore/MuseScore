@@ -4605,25 +4605,25 @@
         <location filename="../instruments/instrumentsxml.h" line="958"/>
         <location filename="../instruments/instrumentsxml.h" line="960"/>
         <source>Doumbek</source>
-        <translation type="unfinished"></translation>
+        <translation>Doumbek</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="959"/>
         <source>Dbk.</source>
         <comment>Doumbek</comment>
-        <translation type="unfinished"></translation>
+        <translation>Dbk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="961"/>
         <location filename="../instruments/instrumentsxml.h" line="963"/>
         <source>Djembe</source>
-        <translation type="unfinished"></translation>
+        <translation>Djembe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="962"/>
         <source>Djbe.</source>
         <comment>Djembe</comment>
-        <translation type="unfinished"></translation>
+        <translation>Djbe.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="964"/>
@@ -4652,53 +4652,53 @@
         <location filename="../instruments/instrumentsxml.h" line="995"/>
         <location filename="../instruments/instrumentsxml.h" line="997"/>
         <source>Log Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Log Drum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="996"/>
         <source>Log D.</source>
         <comment>Log Drum</comment>
-        <translation type="unfinished"></translation>
+        <translation>Log D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1010"/>
         <location filename="../instruments/instrumentsxml.h" line="1012"/>
         <source>Agogô Bells</source>
-        <translation type="unfinished"></translation>
+        <translation>Cloches Agogô</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1011"/>
         <source>Agogô</source>
         <comment>Agogô Bells</comment>
-        <translation type="unfinished"></translation>
+        <translation>Agogô</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1051"/>
         <location filename="../instruments/instrumentsxml.h" line="1053"/>
         <source>Shekere</source>
-        <translation type="unfinished"></translation>
+        <translation>Shekere</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1052"/>
         <source>Shkre.</source>
         <comment>Shekere</comment>
-        <translation type="unfinished"></translation>
+        <translation>Shkre.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1067"/>
         <source>Show Tenors</source>
-        <translation type="unfinished"></translation>
+        <translation>Ténors de défilé</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1068"/>
         <source>T.</source>
         <comment>Show Tenors</comment>
-        <translation type="unfinished">T.</translation>
+        <translation>T.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1069"/>
         <source>Show-Style Tenors</source>
-        <translation type="unfinished"></translation>
+        <translation>Ténors de défilé</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1244"/>
@@ -4716,25 +4716,25 @@
         <location filename="../instruments/instrumentsxml.h" line="1247"/>
         <location filename="../instruments/instrumentsxml.h" line="1249"/>
         <source>Bird Call</source>
-        <translation type="unfinished"></translation>
+        <translation>Appel d&apos;oiseau</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1248"/>
         <source>Bird</source>
         <comment>Bird Call</comment>
-        <translation type="unfinished"></translation>
+        <translation>Oiseau</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1250"/>
         <location filename="../instruments/instrumentsxml.h" line="1252"/>
         <source>Ocean Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocean Drum</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1251"/>
         <source>O.Drm.</source>
         <comment>Ocean Drum</comment>
-        <translation type="unfinished"></translation>
+        <translation>O.Drm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1497"/>
@@ -7053,7 +7053,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1601"/>
         <source>Orchestra</source>
-        <translation type="unfinished">Orchestre</translation>
+        <translation>Orchestre</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1602"/>
