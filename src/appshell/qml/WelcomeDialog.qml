@@ -137,12 +137,8 @@ StyledDialogView {
                 source: model.currentItem ? model.currentItem.imageUrl : ""
 
                 layer.enabled: ui.isEffectsAllowed
-                layer.effect: EffectOpacityMask {
-                    maskSource: Rectangle {
-                        width: image.width
-                        height: image.height
-                        radius: 8
-                    }
+                layer.effect: RoundedCornersEffect {
+                    radius: 8
                 }
 
                 MouseArea {
