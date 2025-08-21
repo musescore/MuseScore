@@ -584,7 +584,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
-        int repeatEndTick = repeatStartTick + repeatSegment->len();
+        int repeatEndTick = repeatSegment->endTick();
 
         if (repeatStartTick > tickTo || repeatEndTick <= tickFrom) {
             continue;
@@ -839,7 +839,7 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
-        int repeatEndTick = repeatStartTick + repeatSegment->len();
+        int repeatEndTick = repeatSegment->endTick();
 
         if (repeatStartTick > tickTo || repeatEndTick <= tickFrom) {
             continue;

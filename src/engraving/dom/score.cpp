@@ -5103,7 +5103,7 @@ String Score::extractLyrics()
         const RepeatList& rlist = repeatList();
         for (const RepeatSegment* rs : rlist) {
             Fraction startTick  = Fraction::fromTicks(rs->tick);
-            Fraction endTick    = startTick + Fraction::fromTicks(rs->len());
+            Fraction endTick    = Fraction::fromTicks(rs->endTick());
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                 size_t playCount = m->playbackCount();
                 for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
