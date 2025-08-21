@@ -457,6 +457,7 @@ void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifie
     }
 
     notation->interaction()->applyPaletteElement(cell->element.get(), modifiers);
+    mainWindow()->qWindow()->requestActivate();
 }
 
 // ====================================================
