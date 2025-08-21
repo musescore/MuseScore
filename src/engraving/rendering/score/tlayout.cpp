@@ -3357,7 +3357,7 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         hopoText->mutldata()->setPos(centerX, y);
 
         hopoTextShape.translateY(y);
-        skyline.add(hopoTextShape);
+        skl.add(hopoTextShape);
     }
 
     Shape hopoSegmentShape = item->mutldata()->shape();
