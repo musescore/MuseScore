@@ -167,9 +167,6 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     m_rootItem = new RootItem(this);
     m_rootItem->init();
 
-    //! NOTE Looks like a bug, `minimumPaddingUnit` is set using the default style's spatium value
-    //! and does not change if the style or the spatium of this score is changed
-    m_paddingTable.setMinimumPaddingUnit(0.1 * style().spatium());
     createPaddingTable();
 
     m_shadowNote = new ShadowNote(this);

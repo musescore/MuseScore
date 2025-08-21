@@ -253,13 +253,11 @@
         <Text>
           <eid>H_H</eid>
           <style>title</style>
-          <offset x="0" y="-0.0174978"/>
           <text><font size="22"/>Test Part Names</text>
           </Text>
         <Text>
           <eid>I_I</eid>
           <style>subtitle</style>
-          <offset x="0" y="9.98249"/>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
