@@ -180,7 +180,7 @@ private:
     static void layoutGuitarBends(Chord* chord, LayoutContext& ctx);
     static void updateCrossBeams(System* system, LayoutContext& ctx);
     static bool measureHasCrossStuffOrModifiedBeams(const Measure* measure);
-    static void restoreTiesAndBends(System* system, LayoutContext& ctx);
+    static void restoreOldSystemLayout(System* system, LayoutContext& ctx);
     static void layoutTuplets(const std::vector<ChordRest*>& chordRests, LayoutContext& ctx);
 
     static void layoutTiesAndBends(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
@@ -213,7 +213,8 @@ private:
 
     static void layoutParenthesisAndBigTimeSigs(const ElementsToLayout& elementsToLayout);
 
-    static void layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, bool verticalAlign, LayoutContext& ctx);
+    static void layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx);
+    static void layoutFretDiagrams(const ElementsToLayout& elements, System* system, LayoutContext& ctx);
 
     static void alignRests(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
     static void checkFullMeasureRestCollisions(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);

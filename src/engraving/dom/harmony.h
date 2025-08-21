@@ -84,22 +84,22 @@ private:
 
 struct ChordSymbolParen : HarmonyRenderItem {
     ChordSymbolParen(Parenthesis* p, bool hAlign, double _x, double _y)
-        : HarmonyRenderItem(hAlign, _x, _y), paren(p) {}
-    ~ChordSymbolParen() { delete paren; }
+        : HarmonyRenderItem(hAlign, _x, _y), parenItem(p) {}
+    ~ChordSymbolParen() { delete parenItem; }
 
-    RectF boundingRect() const override { return paren->shape().bbox(); }
-    RectF tightBoundingRect() const override { return paren->shape().bbox(); }
+    RectF boundingRect() const override { return parenItem->shape().bbox(); }
+    RectF tightBoundingRect() const override { return parenItem->shape().bbox(); }
 
     double top = DBL_MAX;
     double bottom = -DBL_MAX;
     double closingParenPos = -DBL_MAX;
 
-    Parenthesis* paren = nullptr;
+    Parenthesis* parenItem = nullptr;
 
-    double height() const override { return paren->height(); }
+    double height() const override { return parenItem->height(); }
 
-    double leftPadding() const override { return paren->direction() == DirectionH::LEFT ? OUTER_PADDING : INNER_PADDING; }
-    double rightPadding() const override { return paren->direction() == DirectionH::LEFT ? INNER_PADDING : OUTER_PADDING; }
+    double leftPadding() const override { return parenItem->direction() == DirectionH::LEFT ? OUTER_PADDING : INNER_PADDING; }
+    double rightPadding() const override { return parenItem->direction() == DirectionH::LEFT ? INNER_PADDING : OUTER_PADDING; }
 
     double bboxBaseLine() const override { return bottom; }
 

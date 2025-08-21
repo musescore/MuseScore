@@ -54,6 +54,7 @@
 #include "dom/utils.h"
 #include "types/typesconv.h"
 
+#include "autoplace.h"
 #include "tlayout.h"
 #include "layoutcontext.h"
 #include "arpeggiolayout.h"
