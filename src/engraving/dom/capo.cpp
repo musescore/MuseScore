@@ -61,7 +61,7 @@ PropertyValue Capo::getProperty(Pid id) const
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return m_shouldAutomaticallyGenerateText;
     } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
-        return m_params.transposeMode;
+        return static_cast<int>(m_params.transposeMode);
     }
 
     return StaffTextBase::getProperty(id);
@@ -188,11 +188,11 @@ void Capo::setParams(const CapoParams& params)
     m_params = params;
     if (m_params.transition == CapoParams::Transition::NO_TRANSITION) {
         switch (m_params.transposeMode) {
-        case CapoParams::NOTATION_ONLY:
+        case CapoParams::TransposeMode::NOTATION_ONLY:
             m_params.transition = CapoParams::Transition::UPDATE_NOTES;
             break;
 
-        case CapoParams::TAB_ONLY:
+        case CapoParams::TransposeMode::TAB_ONLY:
             m_params.transition = CapoParams::Transition::UPDATE_FRETS;
             break;
 

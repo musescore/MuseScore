@@ -1281,12 +1281,12 @@ struct SwingParameters {
 //class AbstractCapoTransposeState;
 
 struct CapoParams {
-    enum TransposeMode {
+    enum class TransposeMode {
         PLAYBACK_ONLY = 0,
         NOTATION_ONLY = 1,
         TAB_ONLY      = 2,
     };
-    enum Transition {
+    enum class Transition {
         NO_TRANSITION = -1,
         PB_TO_NOTATION,
         PB_TO_TAB,

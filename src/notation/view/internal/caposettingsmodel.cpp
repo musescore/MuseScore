@@ -101,7 +101,7 @@ void CapoSettingsModel::init()
         m_strings.push_back(item);
     }
 
-    m_transposeMode = params().transposeMode;
+    m_transposeMode = static_cast<int>(params().transposeMode);
 
     emit capoIsOnChanged(capoIsOn());
     emit fretPositionChanged(fretPosition());
