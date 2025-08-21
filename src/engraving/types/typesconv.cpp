@@ -3025,21 +3025,21 @@ GlissandoType TConv::fromXml(const AsciiStringView& tag, GlissandoType def)
 }
 
 static const std::vector<Item<JumpType> > JUMP_TYPES = {
-    { JumpType::DC,             "", muse::TranslatableString("engraving", "Da Capo") },
-    { JumpType::DC_AL_FINE,     "", muse::TranslatableString("engraving", "Da Capo al Fine") },
-    { JumpType::DC_AL_CODA,     "", muse::TranslatableString("engraving", "Da Capo al Coda") },
-    { JumpType::DS_AL_CODA,     "", muse::TranslatableString("engraving", "D.S. al Coda") },
-    { JumpType::DS_AL_FINE,     "", muse::TranslatableString("engraving", "D.S. al Fine") },
-    { JumpType::DS,             "", muse::TranslatableString("engraving", "D.S.") },
+    { JumpType::DC,             "dc",       muse::TranslatableString("engraving", "Da Capo") },
+    { JumpType::DC_AL_FINE,     "dcalfine", muse::TranslatableString("engraving", "Da Capo al Fine") },
+    { JumpType::DC_AL_CODA,     "dcalcoda", muse::TranslatableString("engraving", "Da Capo al Coda") },
+    { JumpType::DS_AL_CODA,     "dsalcoda", muse::TranslatableString("engraving", "D.S. al Coda") },
+    { JumpType::DS_AL_FINE,     "dsalfine", muse::TranslatableString("engraving", "D.S. al Fine") },
+    { JumpType::DS,             "ds",       muse::TranslatableString("engraving", "D.S.") },
 
-    { JumpType::DC_AL_DBLCODA,  "", muse::TranslatableString("engraving", "Da Capo al Doppia Coda") },
-    { JumpType::DS_AL_DBLCODA,  "", muse::TranslatableString("engraving", "Dal Segno al Doppia Coda") },
-    { JumpType::DSS,            "", muse::TranslatableString("engraving", "Dal Doppio Segno") },
-    { JumpType::DSS_AL_CODA,    "", muse::TranslatableString("engraving", "Dal Doppio Segno al Coda") },
-    { JumpType::DSS_AL_DBLCODA, "", muse::TranslatableString("engraving", "Dal Doppio Segno al Doppia Coda") },
-    { JumpType::DSS_AL_FINE,    "", muse::TranslatableString("engraving", "Dal Doppio Segno al Fine") },
+    { JumpType::DC_AL_DBLCODA,  "dcaldblcoda",  muse::TranslatableString("engraving", "Da Capo al Doppia Coda") },
+    { JumpType::DS_AL_DBLCODA,  "dsaldblcoda",  muse::TranslatableString("engraving", "Dal Segno al Doppia Coda") },
+    { JumpType::DSS,            "dss",          muse::TranslatableString("engraving", "Dal Doppio Segno") },
+    { JumpType::DSS_AL_CODA,    "dssalcoda",    muse::TranslatableString("engraving", "Dal Doppio Segno al Coda") },
+    { JumpType::DSS_AL_DBLCODA, "dssaldblcoda", muse::TranslatableString("engraving", "Dal Doppio Segno al Doppia Coda") },
+    { JumpType::DSS_AL_FINE,    "dssalfine",    muse::TranslatableString("engraving", "Dal Doppio Segno al Fine") },
 
-    { JumpType::USER,           "", muse::TranslatableString("engraving", "Custom") }
+    { JumpType::USER,           "user", muse::TranslatableString("engraving", "Custom") }
 };
 
 const muse::TranslatableString& TConv::userName(JumpType v)
@@ -3060,10 +3060,10 @@ static const std::array<Item<MarkerType>, 11> MARKER_TYPES = { {
     { MarkerType::CODETTA,      "codetta",  muse::TranslatableString("engraving", "Doppia Coda") },
     { MarkerType::FINE,         "fine",     muse::TranslatableString("engraving", "Fine") },
     { MarkerType::TOCODA,       "coda",     muse::TranslatableString("engraving", "To coda") },
-    { MarkerType::TOCODASYM,    "",         muse::TranslatableString("engraving", "To coda (symbol)") },
-    { MarkerType::DA_CODA,      "",         muse::TranslatableString("engraving", "Da Coda") },
-    { MarkerType::DA_DBLCODA,   "",         muse::TranslatableString("engraving", "Da Doppia Coda") },
-    { MarkerType::USER,         "",         muse::TranslatableString("engraving", "Custom") }
+    { MarkerType::TOCODASYM,    "codasym",  muse::TranslatableString("engraving", "To coda (symbol)") },
+    { MarkerType::DA_CODA,      "dacoda",   muse::TranslatableString("engraving", "Da Coda") },
+    { MarkerType::DA_DBLCODA,   "dadblcoda", muse::TranslatableString("engraving", "Da Doppia Coda") },
+    { MarkerType::USER,         "user",     muse::TranslatableString("engraving", "Custom") }
 } };
 
 const muse::TranslatableString& TConv::userName(MarkerType v)
