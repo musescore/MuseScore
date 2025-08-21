@@ -204,13 +204,23 @@ void PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangePlaybackPr
 {
 }
 
-bool PlaybackConfigurationStub::needToShowOnlineSoundsConnectionWarning() const
+bool PlaybackConfigurationStub::shouldShowOnlineSoundsProcessingError() const
 {
     return false;
 }
 
-void PlaybackConfigurationStub::setNeedToShowOnlineSoundsConnectionWarning(bool)
+void PlaybackConfigurationStub::setShouldShowOnlineSoundsProcessingError(bool)
 {
+}
+
+muse::async::Notification PlaybackConfigurationStub::shouldShowOnlineSoundsProcessingErrorChanged() const
+{
+    return {};
+}
+
+muse::String PlaybackConfigurationStub::onlineSoundsHandbookUrl() const
+{
+    return muse::String();
 }
 
 OnlineSoundsShowProgressBarMode PlaybackConfigurationStub::onlineSoundsShowProgressBarMode() const

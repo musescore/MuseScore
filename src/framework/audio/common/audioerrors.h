@@ -64,7 +64,7 @@ enum class Err {
     InvalidTimeLoop = 360,
 
     // online sounds
-    OnlineSoundsNetworkError = 361,
+    OnlineSoundsProcessingError = 361,
 };
 
 inline Ret make_ret(Err e)

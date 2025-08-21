@@ -28,7 +28,6 @@
 #include "engraving/dom/factory.h"
 
 #include "audio/common/audioutils.h"
-#include "audio/common/audioerrors.h"
 #include "audio/devtools/inputlag.h"
 
 #include "containers.h"
@@ -630,8 +629,8 @@ void PlaybackController::togglePlay()
         return;
     }
 
-    if (shouldShowOnlineSoundsConnectionWarning()) {
-        showOnlineSoundsConnectionWarning();
+    if (shouldShowOnlineSoundsProcessingError()) {
+        showOnlineSoundsProcessingError();
         return;
     }
 
@@ -1001,7 +1000,7 @@ void PlaybackController::resetCurrentSequence()
     const bool hadOnlineSounds = !m_onlineSounds.empty();
     m_onlineSounds.clear();
     m_onlineSoundsBeingProcessed.clear();
-    m_onlineSoundsProcessingErrorCode = 0;
+    m_onlineSoundsErrorDetected = false;
 
     if (hadOnlineSounds) {
         m_onlineSoundsChanged.notify();
@@ -1303,7 +1302,7 @@ void PlaybackController::removeFromOnlineSounds(const TrackId trackId)
     muse::remove(m_onlineSoundsBeingProcessed, trackId);
 
     if (m_onlineSoundsProcessingProgress.isStarted() && m_onlineSoundsBeingProcessed.empty()) {
-        m_onlineSoundsProcessingProgress.finish(Ret(m_onlineSoundsProcessingErrorCode));
+        m_onlineSoundsProcessingProgress.finish(make_ret(Ret::Code::Cancel));
     }
 
     m_onlineSoundsChanged.notify();
@@ -1325,7 +1324,7 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
                     m_onlineSoundsBeingProcessed.insert(trackId);
 
                     if (!m_onlineSoundsProcessingProgress.isStarted()) {
-                        m_onlineSoundsProcessingErrorCode = 0;
+                        m_onlineSoundsErrorDetected = false;
                         m_onlineSoundsProcessingProgress.start();
                     }
                 } break;
@@ -1337,12 +1336,13 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
                 case InputProcessingProgress::Finished: {
                     muse::remove(m_onlineSoundsBeingProcessed, trackId);
 
-                    if (m_onlineSoundsProcessingErrorCode == 0 && status.errcode != static_cast<int>(Ret::Code::Cancel)) {
-                        m_onlineSoundsProcessingErrorCode = status.errcode;
+                    if (!m_onlineSoundsErrorDetected && status.errorCode != static_cast<int>(Ret::Code::Cancel)) {
+                        m_onlineSoundsErrorDetected = true;
+                        LOGE() << "Error during online sounds processing: " << status.errorText << ", track: " << trackId;
                     }
 
                     if (m_onlineSoundsBeingProcessed.empty()) {
-                        m_onlineSoundsProcessingProgress.finish(Ret(m_onlineSoundsProcessingErrorCode));
+                        m_onlineSoundsProcessingProgress.finish(Ret(!m_onlineSoundsErrorDetected));
                     }
                 } break;
             }
@@ -1380,29 +1380,31 @@ void PlaybackController::listenAutoProcessOnlineSoundsInBackgroundChanged()
     });
 }
 
-bool PlaybackController::shouldShowOnlineSoundsConnectionWarning() const
+bool PlaybackController::shouldShowOnlineSoundsProcessingError() const
 {
-    if (m_onlineSoundsProcessingErrorCode == static_cast<int>(muse::audio::Err::OnlineSoundsNetworkError)) {
-        return configuration()->needToShowOnlineSoundsConnectionWarning() && !isPlaying();
+    if (m_onlineSoundsErrorDetected) {
+        return configuration()->shouldShowOnlineSoundsProcessingError() && !isPlaying();
     }
 
     return false;
 }
 
-void PlaybackController::showOnlineSoundsConnectionWarning()
+void PlaybackController::showOnlineSoundsProcessingError()
 {
-    const std::string text = muse::trc("playback", "This may be due to a poor internet connection or server issue. Your score will still play, "
-                                                   "but some sounds may be missing. Please check your internet connection or try again later.");
+    const std::string text = muse::mtrc("playback", "This may be due to a poor internet connection or server issue. "
+                                                    "Your score will still play, but some sounds may be missing. "
+                                                    "Please check your connection or <a href=\"%1\">learn more here</a>.")
+                             .arg(configuration()->onlineSoundsHandbookUrl()).toStdString();
 
     auto promise = interactive()->warning(muse::trc("playback", "Some online sounds aren’t ready yet"), text,
                                           { IInteractive::Button::Ok }, IInteractive::Button::Ok,
                                           IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
-    m_onlineSoundsProcessingErrorCode = 0;
+    m_onlineSoundsErrorDetected = false;
 
     promise.onResolve(this, [this](const IInteractive::Result& res) {
         if (!res.showAgain()) {
-            configuration()->setNeedToShowOnlineSoundsConnectionWarning(false);
+            configuration()->setShouldShowOnlineSoundsProcessingError(false);
         }
 
         togglePlay();
