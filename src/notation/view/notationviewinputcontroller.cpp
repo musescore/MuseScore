@@ -152,22 +152,39 @@ void NotationViewInputController::onNotationChanged()
         }
     });
 
-    currNotation->interaction()->textEditingChanged().onNotify(this, [this]() {
+    currNotation->interaction()->textEditingStarted().onNotify(this, [this] {
         const INotationPtr notation = currentNotation();
         if (!notation) {
             return;
         }
 
-        if (notation->interaction()->isTextEditingStarted()) {
-            const TextBase* item = notation->interaction()->editedText();
-            if (AbstractElementPopupModel::hasTextStylePopup(item)
-                && item->cursor()->hasSelection()) {
-                m_view->showElementPopup(item->type(), item->canvasBoundingRect());
-                return;
-            }
+        m_view->hideContextMenu();
+        m_view->hideElementPopup();
+
+        const TextBase* item = notation->interaction()->editedText();
+        if (AbstractElementPopupModel::hasTextStylePopup(item)
+            && (!item->isLyrics() || !item->empty())) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        }
+    });
+
+    currNotation->interaction()->textEditingChanged().onNotify(this, [this] {
+        const INotationPtr notation = currentNotation();
+        if (!notation) {
+            return;
         }
 
-        m_view->hideContextMenu();
+        if (!notation->interaction()->isTextEditingStarted()) {
+            return;
+        }
+
+        const TextBase* item = notation->interaction()->editedText();
+        if (AbstractElementPopupModel::hasTextStylePopup(item) && item->cursor()->hasSelection()) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        }
+    });
+
+    currNotation->interaction()->textEditingEnded().onReceive(this, [this](const TextBase*) {
         m_view->hideElementPopup();
     });
 }
@@ -937,6 +954,13 @@ void NotationViewInputController::updateTextCursorPosition()
 {
     if (viewInteraction()->isTextEditingStarted()) {
         viewInteraction()->changeTextCursorPosition(m_mouseDownInfo.logicalBeginPoint);
+
+        // Show text style popup
+        const TextBase* item = viewInteraction()->editedText();
+        if (AbstractElementPopupModel::hasTextStylePopup(item)
+            && (!item->isLyrics() || !item->empty())) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        }
     }
 }
 
