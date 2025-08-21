@@ -426,9 +426,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     if (oldSystem && !oldSystem->measures().empty() && oldSystem->measures().front()->tick() >= system->endTick()
         && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
-        // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
-        // We need to restore them to the correct state.
-        SystemLayout::restoreTiesAndBends(oldSystem, ctx);
+        // We may have unfinished layouts of certain elements in the next system
+        // - ties & bends (in LayoutChords::updateLineAttachPoints())
+        // - fret diagrams & harmony (in layoutMeasure)
+        // Restore them to the correct state.
+        SystemLayout::restoreOldSystemLayout(oldSystem, ctx);
     }
 
     return system;
@@ -990,16 +992,50 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
     }
 }
 
-void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, bool verticalAlign, LayoutContext& ctx)
+void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx)
 {
     for (Harmony* harmony : harmonies) {
         TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
         Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
     }
 
-    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols) && verticalAlign) {
+    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
         std::vector<EngravingItem*> harmonyItems(harmonies.begin(), harmonies.end());
         AlignmentLayout::alignItemsForSystem(harmonyItems, system);
+    }
+}
+
+void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* system, LayoutContext& ctx)
+{
+    for (FretDiagram* fretDiag : elements.fretDiagrams) {
+        Autoplace::autoplaceSegmentElement(fretDiag, fretDiag->mutldata());
+    }
+
+    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+        std::vector<EngravingItem*> fretItems(elements.fretDiagrams.begin(), elements.fretDiagrams.end());
+        AlignmentLayout::alignItemsForSystem(fretItems, system);
+    }
+
+    for (Harmony* harmony : elements.harmonies) {
+        FretDiagram* fdParent = harmony->parent()->isFretDiagram() ? toFretDiagram(harmony->parent()) : nullptr;
+        if (fdParent && !fdParent->visible()) {
+            harmony->mutldata()->moveY(-fdParent->pos().y());
+        }
+        Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
+    }
+
+    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+        std::vector<EngravingItem*> harmonyItems(elements.harmonies.begin(), elements.harmonies.end());
+        AlignmentLayout::alignItemsForSystem(harmonyItems, system);
+    }
+
+    for (FretDiagram* fretDiag : elements.fretDiagrams) {
+        if (Harmony* harmony = fretDiag->harmony()) {
+            SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
+            Segment* s = fretDiag->segment();
+            Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
+            skl.add(harmShape);
+        }
     }
 }
 
@@ -1136,7 +1172,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     bool hasFretDiagram = elementsToLayout.fretDiagrams.size() > 0;
     if (!hasFretDiagram) {
-        layoutHarmonies(elementsToLayout.harmonies, system, true, ctx);
+        layoutHarmonies(elementsToLayout.harmonies, system, ctx);
     }
 
     for (StaffText* st : elementsToLayout.staffText) {
@@ -1152,36 +1188,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     if (hasFretDiagram) {
-        for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
-            Autoplace::autoplaceSegmentElement(fretDiag, fretDiag->mutldata());
-        }
-
-        if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
-            std::vector<EngravingItem*> fretItems(elementsToLayout.fretDiagrams.begin(), elementsToLayout.fretDiagrams.end());
-            AlignmentLayout::alignItemsForSystem(fretItems, system);
-        }
-
-        for (Harmony* harmony : elementsToLayout.harmonies) {
-            FretDiagram* fdParent = harmony->parent()->isFretDiagram() ? toFretDiagram(harmony->parent()) : nullptr;
-            if (fdParent && !fdParent->visible()) {
-                harmony->mutldata()->moveY(-fdParent->pos().y());
-            }
-            Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
-        }
-
-        if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
-            std::vector<EngravingItem*> harmonyItems(elementsToLayout.harmonies.begin(), elementsToLayout.harmonies.end());
-            AlignmentLayout::alignItemsForSystem(harmonyItems, system);
-        }
-
-        for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
-            if (Harmony* harmony = fretDiag->harmony()) {
-                SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
-                Segment* s = fretDiag->segment();
-                Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
-                skl.add(harmShape);
-            }
-        }
+        layoutFretDiagrams(elementsToLayout, system, ctx);
     }
 
     layoutVoltas(elementsToLayout, ctx);
@@ -1910,7 +1917,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
     }
 }
 
-void SystemLayout::restoreTiesAndBends(System* system, LayoutContext& ctx)
+void SystemLayout::restoreOldSystemLayout(System* system, LayoutContext& ctx)
 {
     ElementsToLayout elements(system);
     for (MeasureBase* mb : system->measures()) {
@@ -1920,6 +1927,13 @@ void SystemLayout::restoreTiesAndBends(System* system, LayoutContext& ctx)
     }
 
     layoutTiesAndBends(elements, ctx);
+
+    bool hasFretDiagram = elements.fretDiagrams.size() > 0;
+    if (hasFretDiagram) {
+        layoutFretDiagrams(elements, system, ctx);
+    } else {
+        layoutHarmonies(elements.harmonies, system, ctx);
+    }
 }
 
 void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)

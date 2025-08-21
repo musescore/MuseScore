@@ -50,7 +50,7 @@ void FretFrameChordListModel::load()
             if (const TextSegment* textSeg = dynamic_cast<const TextSegment*>(segment)) {
                 name += textSeg->text().toQString();
             } else if (const ChordSymbolParen* parenSeg = dynamic_cast<const ChordSymbolParen*>(segment)) {
-                name += parenSeg->paren->direction() == DirectionH::LEFT ? u"(" : u")";
+                name += parenSeg->parenItem->direction() == DirectionH::LEFT ? u"(" : u")";
             }
         }
 
