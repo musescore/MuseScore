@@ -825,10 +825,6 @@ void FretDiagram::applyAlignmentToHarmony()
 
 void FretDiagram::resetHarmonyAlignment()
 {
-    if (m_harmony->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
-        m_harmony->resetProperty(Pid::OFFSET);
-    }
-
     m_harmony->resetProperty(Pid::ALIGN);
 }
 
@@ -1180,6 +1176,15 @@ PropertyValue FretDiagram::propertyDefault(Pid pid) const
         }
     }
     return EngravingItem::propertyDefault(pid);
+}
+
+void FretDiagram::setVisible(bool f)
+{
+    EngravingItem::setVisible(f);
+
+    if (m_harmony && m_harmony->isStyled(Pid::OFFSET)) {
+        m_harmony->resetProperty(Pid::OFFSET);
+    }
 }
 
 void FretDiagram::setTrack(track_idx_t val)
