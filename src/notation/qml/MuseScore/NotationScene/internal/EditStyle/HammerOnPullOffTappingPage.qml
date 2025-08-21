@@ -134,6 +134,33 @@ StyledFlickable {
         StyledGroupBox {
             Layout.fillWidth: true
             Layout.minimumWidth: 500
+            title: qsTrc("notation/editstyle/hammeronpulloff", "Alignment")
+
+            ColumnLayout {
+                width: parent.width
+                spacing: 10
+
+                StyledTextLabel {
+                    text: qsTrc("notation/editstyle/hammeronpulloff", "Align ‘H’, ‘P’ and ‘T’ symbols in the same slur on")
+                }
+
+                CheckBox {
+                    text: qsTrc("notation/editstyle/hammeronpulloff", "Standard staves")
+                    checked: hopoPage.hopoAlignLettersStandardStaves.value === true
+                    onClicked: hopoPage.hopoAlignLettersStandardStaves.value = !hopoPage.hopoAlignLettersStandardStaves.value
+                }
+
+                CheckBox {
+                    text: qsTrc("notation/editstyle/hammeronpulloff", "Tablature staves")
+                    checked: hopoPage.hopoAlignLettersTabStaves.value === true
+                    onClicked: hopoPage.hopoAlignLettersTabStaves.value = !hopoPage.hopoAlignLettersTabStaves.value
+                }
+            }
+        }
+
+        StyledGroupBox {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 500
             title: qsTrc("notation/editstyle/hammeronpulloff", "Consecutive hammer-ons/pull-offs")
 
             ColumnLayout {

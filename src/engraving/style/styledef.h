@@ -982,6 +982,8 @@ enum class Sid {
     hopoShowOnTabStaves,
     hopoUpperCase,
     hopoShowAll,
+    hopoAlignLettersStandardStaves,
+    hopoAlignLettersTabStaves,
 
     lhTappingSymbolNormalStave,
     lhTappingSymbolTab,

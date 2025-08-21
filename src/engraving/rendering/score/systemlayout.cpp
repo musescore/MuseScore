@@ -1086,6 +1086,13 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         if (ecr && ecr->isChord()) {
             ChordLayout::layoutArticulations3(toChord(ecr), slur, ctx);
         }
+        if (slur->isHammerOnPullOff()) {
+            StaffType* staffType = slur->staff()->staffType(slur->tick());
+            if ((staffType->isTabStaff() && ctx.conf().styleB(Sid::hopoAlignLettersTabStaves))
+                || (!staffType->isTabStaff() && ctx.conf().styleB(Sid::hopoAlignLettersStandardStaves))) {
+                AlignmentLayout::alignHopoLetters(toHammerOnPullOff(slur), system);
+            }
+        }
     }
 
     processLines(system, ctx, elementsToLayout.trills);
