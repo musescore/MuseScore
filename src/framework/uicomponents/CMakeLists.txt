@@ -127,6 +127,11 @@ set(MODULE_USE_UNITY OFF)
 
 setup_module()
 
+qt_add_shaders(${MODULE} "${MODULE}_shaders"
+    FILES
+        "qml/Muse/GraphicalEffects/shaders/roundcorners.frag"
+)
+
 if (MUSE_MODULE_UI_TESTS)
     add_subdirectory(tests)
 endif()

@@ -62,12 +62,8 @@ Item {
 
         // Clip content to our beautiful rounded rect
         layer.enabled: ui.isEffectsAllowed
-        layer.effect: EffectOpacityMask {
-            maskSource: Rectangle {
-                width: dropArea.width
-                height: dropArea.height
-                radius: background.radius - background.border.width
-            }
+        layer.effect: RoundedCornersEffect {
+            radius: background.radius - background.border.width
         }
     }
 
