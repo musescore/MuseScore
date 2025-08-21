@@ -3392,13 +3392,13 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 
 void Score::cmdExtendToNextNote()
 {
-    Fraction startTick = selection().tickStart();
+    const Fraction startTick = selection().tickStart();
     Fraction endTick = selection().tickEnd();
-    staff_idx_t startStaff = selection().staffStart();
-    staff_idx_t endStaff = selection().staffEnd();
+    const staff_idx_t startStaff = selection().staffStart();
+    const staff_idx_t endStaff = selection().staffEnd();
 
     std::vector<ChordRest*> crList;
-    std::string selType = m_selection.isList() ? "list" : "range";
+    const bool wasRangeSelection = selection().isRange();
 
     for (EngravingItem* el : selection().elements()) {
         if (!el->isNote()) {
@@ -3409,17 +3409,19 @@ void Score::cmdExtendToNextNote()
         Fraction crts = cr->ticks();
         crList.push_back(cr);
 
-        while ((nextChordRest(cr) && nextChordRest(cr)->isRest()) || (nextChordRest(cr) && nextChordRest(cr)->tick() > (cr->tick() + cr->ticks()))) {
-            ChordRest* ncr = nextChordRest(cr);
-            Rest* r = toRest(ncr);
+        if (!nextChordRest(cr)) {
+            continue;
+        }
+        ChordRest* ncr = nextChordRest(cr);
 
-            if (cr->tuplet() || r->tuplet()) {
+        while (ncr->isRest() || (ncr->tick() > cr->endTick())) { //second condition checks for empty measure between cr and ncr for voices 2,3,4.
+            if (cr->tuplet() || ncr->tuplet()) {
                 m_is.setSegment(ncr->segment());
                 m_is.setLastSegment(m_is.segment());
-                m_is.setDuration(r->durationType());
+                m_is.setDuration(ncr->durationType());
 
                 Note* nn = nullptr;
-                for (uint i = 0; i < toChord(cr)->notes().size(); i++) {
+                for (size_t i = 0; i < toChord(cr)->notes().size(); i++) {
                     Note* note = toChord(cr)->notes()[i];
                     NoteVal nval(note->noteVal());
                     nn = addPitch(nval, i != 0);
@@ -3435,14 +3437,19 @@ void Score::cmdExtendToNextNote()
                 cr = toChordRest(nn->chord());
                 crList.push_back(cr);
             } else {
-                changeCRlen(cr, cr->ticks() + r->ticks());
+                changeCRlen(cr, cr->ticks() + ncr->ticks());
                 if (cr->ticks() == crts) {
                     cr = nextChordRest(cr);
                     crList.push_back(cr);
                 }
             }
             crts = cr->ticks();
-            endTick = cr->tick() + cr->ticks() >= endTick ? cr->tick() + cr->ticks() : endTick;
+            endTick = cr->endTick() >= endTick ? cr->endTick() : endTick;
+
+            if (!nextChordRest(cr)) { //endMeasure
+                break;
+            }
+            ncr = nextChordRest(cr);
         }
         while ((!nextChordRest(cr) && cr->voice() > 0 && cr->measure() != score()->lastMeasure())) {
             changeCRlen(cr, cr->ticks() + cr->measure()->ticks());
@@ -3452,7 +3459,7 @@ void Score::cmdExtendToNextNote()
         }
     }
 
-    if (selType == "range") {
+    if (wasRangeSelection) {
         selection().setRangeTicks(startTick, endTick, startStaff, endStaff);
         selection().updateSelectedElements();
     } else {
