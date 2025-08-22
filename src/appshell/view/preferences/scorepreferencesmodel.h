@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "notation/inotationconfiguration.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
 
 namespace mu::appshell {
 class ScorePreferencesModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
