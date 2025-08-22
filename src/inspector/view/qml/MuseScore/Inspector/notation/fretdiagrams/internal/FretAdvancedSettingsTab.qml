@@ -58,6 +58,7 @@ FocusableItem {
 
                 titleText: qsTrc("inspector", "Scale")
                 propertyItem: root.model ? root.model.scale : null
+                enabled: root.model ? !root.model.isInFretBox : false
 
                 measureUnitsSymbol: "%"
                 step: 1

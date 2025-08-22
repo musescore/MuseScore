@@ -100,6 +100,8 @@ void FretDiagramSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::FRET_DIAGRAM);
 
+    updateIsInFretBox();
+
     emit fretDiagramChanged(fretDiagram());
     emit areSettingsAvailableChanged(areSettingsAvailable());
 }
@@ -266,4 +268,33 @@ void FretDiagramSettingsModel::setCurrentFretDotType(int currentFretDotType)
 
     m_currentFretDotType = newFretDotType;
     emit currentFretDotTypeChanged(currentFretDotType);
+}
+
+void FretDiagramSettingsModel::updateIsInFretBox()
+{
+    bool isInFretBox = false;
+
+    for (mu::engraving::EngravingItem* item : std::as_const(m_elementList)) {
+        if (engraving::toFretDiagram(item)->isInFretBox()) {
+            isInFretBox = true;
+            break;
+        }
+    }
+
+    setIsInFretBox(isInFretBox);
+}
+
+bool FretDiagramSettingsModel::isInFretBox() const
+{
+    return m_isInFretBox;
+}
+
+void FretDiagramSettingsModel::setIsInFretBox(bool isInFretBox)
+{
+    if (m_isInFretBox == isInFretBox) {
+        return;
+    }
+
+    m_isInFretBox = isInFretBox;
+    emit isInFretBoxChanged(isInFretBox);
 }
