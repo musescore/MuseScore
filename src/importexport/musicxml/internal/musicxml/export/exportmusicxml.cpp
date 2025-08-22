@@ -3356,6 +3356,8 @@ static String symIdToTechn(const SymId sid)
         return u"hand martellato";
     case SymId::handbellsMalletLft:
         return u"mallet lift";
+    case SymId::handbellsMalletBellSuspended:
+        return String(u"stopped smufl=\"%1\"").arg(String::fromAscii(SymNames::nameForSymId(sid).ascii()));
     case SymId::handbellsMalletBellOnTable:
         return u"mallet table";
     case SymId::handbellsMartellato:
@@ -3614,6 +3616,9 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 m_xml.startElementRaw(mxmlTechn);
                 m_xml.tag("natural");
                 m_xml.endElement();
+            } else if (sid == SymId::handbellsMalletBellSuspended) {
+                // special case for mallet bell suspended
+                m_xml.tagRaw(mxmlTechn);
             } else if (String::fromAscii(SymNames::nameForSymId(sid).ascii()).startsWith(u"handbells")) {
                 String handbell = u"handbell";
                 handbell += color2xml(a);
