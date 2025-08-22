@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
 #include "audio/iaudiodriver.h"
 
 namespace mu::appshell {

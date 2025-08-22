@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "playback/iplaybackcontroller.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::playback {
