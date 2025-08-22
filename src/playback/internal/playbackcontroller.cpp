@@ -457,7 +457,7 @@ void PlaybackController::onAudioResourceChanged(const TrackId trackId, const Ins
     notationPlayback->removeSoundFlags({ instrumentTrackId });
 
     if (audio::isOnlineAudioResource(newMeta)) {
-        addToOnlineSounds(trackId);
+        addToOnlineSounds(trackId, newMeta);
         tours()->onEvent(u"online_sounds_added");
     } else if (audio::isOnlineAudioResource(oldMeta)) {
         removeFromOnlineSounds(trackId);
@@ -1113,7 +1113,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
         }
 
         if (muse::audio::isOnlineAudioResource(appliedParams.in.resourceMeta)) {
-            addToOnlineSounds(trackId);
+            addToOnlineSounds(trackId, appliedParams.in.resourceMeta);
         }
     })
     .onReject(this, [instrumentTrackId, onFinished](int code, const std::string& msg) {
@@ -1281,13 +1281,14 @@ void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTr
     }
 }
 
-void PlaybackController::addToOnlineSounds(const TrackId trackId)
+void PlaybackController::addToOnlineSounds(const TrackId trackId, const AudioResourceMeta& meta)
 {
-    if (muse::contains(m_onlineSounds, trackId)) {
+    auto it = m_onlineSounds.find(trackId);
+    if (it != m_onlineSounds.end() && it->second == meta) {
         return;
     }
 
-    m_onlineSounds.insert(trackId);
+    m_onlineSounds.insert_or_assign(trackId, meta);
     listenOnlineSoundsProcessingProgress(trackId);
     m_onlineSoundsChanged.notify();
 }
@@ -1870,7 +1871,7 @@ bool PlaybackController::canReceiveAction(const ActionCode&) const
     return m_masterNotation != nullptr && m_masterNotation->hasParts();
 }
 
-const std::set<TrackId>& PlaybackController::onlineSounds() const
+const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& PlaybackController::onlineSounds() const
 {
     return m_onlineSounds;
 }

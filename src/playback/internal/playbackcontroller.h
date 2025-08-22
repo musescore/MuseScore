@@ -124,7 +124,7 @@ public:
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
-    const std::set<muse::audio::TrackId>& onlineSounds() const override;
+    const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;
     muse::Progress onlineSoundsProcessingProgress() const override;
 
@@ -225,7 +225,7 @@ private:
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
-    void addToOnlineSounds(const muse::audio::TrackId trackId);
+    void addToOnlineSounds(const muse::audio::TrackId trackId, const muse::audio::AudioResourceMeta& meta);
     void removeFromOnlineSounds(const muse::audio::TrackId trackId);
     void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
     void listenAutoProcessOnlineSoundsInBackgroundChanged();
@@ -269,7 +269,7 @@ private:
 
     bool m_measureInputLag = false;
 
-    std::set<muse::audio::TrackId> m_onlineSounds;
+    std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> m_onlineSounds;
     std::set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
     muse::async::Notification m_onlineSoundsChanged;
     muse::Progress m_onlineSoundsProcessingProgress;
