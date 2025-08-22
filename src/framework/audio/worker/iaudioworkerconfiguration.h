@@ -40,5 +40,10 @@ public:
 
     virtual bool autoProcessOnlineSoundsInBackground() const = 0;
     virtual async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const = 0;
+
+    virtual AudioInputParams defaultAudioInputParams() const = 0;
+
+    virtual size_t desiredAudioThreadNumber() const = 0;
+    virtual size_t minTrackCountForMultithreading() const = 0;
 };
 }
