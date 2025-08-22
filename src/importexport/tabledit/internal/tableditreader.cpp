@@ -30,10 +30,6 @@
 using namespace mu::iex::tabledit;
 using namespace mu::engraving;
 
-namespace mu::iex::tabledit {
-extern Err importTablEdit(MasterScore* score, const QString& name);
-}
-
 muse::Ret TablEditReader::read(MasterScore* score, const muse::io::path_t& path, const Options&)
 {
     Err err = import(score, path);

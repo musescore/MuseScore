@@ -478,12 +478,10 @@ void TablEdit::createMeasures()
 void TablEdit::createNotesFrame()
 {
     if (!tefHeader.notes.empty()) {
-        VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
-        vbox->setTick(score->endTick());
-        score->measures()->add(vbox);
-        Text* s = Factory::createText(vbox, TextStyleType::FRAME);
-        s->setPlainText(muse::String::fromUtf8(tefHeader.notes.c_str()));
-        vbox->add(s);
+        TBox* tbox = Factory::createTBox(score->dummy()->system());
+        tbox->setTick(score->endTick());
+        score->measures()->add(tbox);
+        tbox->text()->setPlainText(muse::String::fromStdString(tefHeader.notes));
     }
 }
 
@@ -492,7 +490,7 @@ void TablEdit::createParts()
     for (const auto& instrument : tefInstruments) {
         Part* part = new Part(score);
         score->appendPart(part);
-        muse::String staffName { muse::String::fromUtf8(instrument.name.c_str()) };
+        muse::String staffName { muse::String::fromStdString(instrument.name) };
         part->setPartName(staffName);
         part->setPlainLongName(staffName);
 
@@ -520,19 +518,19 @@ void TablEdit::createParts()
 void TablEdit::createProperties()
 {
     if (!tefHeader.title.empty()) {
-        score->setMetaTag(u"workTitle", muse::String::fromUtf8(tefHeader.title.c_str()));
+        score->setMetaTag(u"workTitle", muse::String::fromStdString(tefHeader.title));
     }
     if (!tefHeader.subTitle.empty()) {
-        score->setMetaTag(u"subtitle", muse::String::fromUtf8(tefHeader.subTitle.c_str()));
+        score->setMetaTag(u"subtitle", muse::String::fromStdString(tefHeader.subTitle));
     }
     if (!tefHeader.comment.empty()) {
-        score->setMetaTag(u"comment", muse::String::fromUtf8(tefHeader.comment.c_str()));
+        score->setMetaTag(u"comment", muse::String::fromStdString(tefHeader.comment));
     }
     if (!tefHeader.internetLink.empty()) {
-        score->setMetaTag(u"source", muse::String::fromUtf8(tefHeader.internetLink.c_str()));
+        score->setMetaTag(u"source", muse::String::fromStdString(tefHeader.internetLink));
     }
     if (!tefHeader.copyright.empty()) {
-        score->setMetaTag(u"copyright", muse::String::fromUtf8(tefHeader.copyright.c_str()));
+        score->setMetaTag(u"copyright", muse::String::fromStdString(tefHeader.copyright));
     }
 }
 
@@ -632,12 +630,12 @@ void TablEdit::createTitleFrame()
     score->measures()->add(vbox);
     if (!tefHeader.title.empty()) {
         Text* s = Factory::createText(vbox, TextStyleType::TITLE);
-        s->setPlainText(muse::String::fromUtf8(tefHeader.title.c_str()));
+        s->setPlainText(muse::String::fromStdString(tefHeader.title));
         vbox->add(s);
     }
     if (!tefHeader.subTitle.empty()) {
         Text* s = Factory::createText(vbox, TextStyleType::SUBTITLE);
-        s->setPlainText(muse::String::fromUtf8(tefHeader.subTitle.c_str()));
+        s->setPlainText(muse::String::fromStdString(tefHeader.subTitle));
         vbox->add(s);
     }
 }

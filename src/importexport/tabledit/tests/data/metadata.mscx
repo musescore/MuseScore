@@ -123,16 +123,14 @@
             </BarLine>
           </voice>
         </Measure>
-      <VBox>
-        <height>10</height>
-        <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
+      <TBox>
         <eid>O_O</eid>
         <Text>
           <eid>P_P</eid>
           <style>frame</style>
           <text>These are notes</text>
           </Text>
-        </VBox>
+        </TBox>
       </Staff>
     <Staff id="2">
       <Measure>
