@@ -601,6 +601,11 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
                 if (s->element(track)) {
                     if (!s->element(track)->isRest()) {
                         return false;
+                    } else {
+                        bool isNonEmptyIrregular = m->isIrregular() && !toRest(s->element(track))->isFullMeasureRest();
+                        if (isNonEmptyIrregular) {
+                            return false;
+                        }
                     }
                     restFound = true;
                 }
