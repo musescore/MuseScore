@@ -777,22 +777,6 @@ void Harmony::endEdit(EditData& ed)
 
     TextBase::endEdit(ed);
 
-    TextEditData* ted = dynamic_cast<TextEditData*>(ed.getData(this).get());
-    bool textChanged = ted != nullptr && ted->oldXmlText != harmonyName();
-
-    if (textChanged) {
-        FretDiagram* fretDiagram = explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
-        bool isFretDiagramCustom = fretDiagram ? fretDiagram->isCustom(ted->oldXmlText) : false;
-        if (fretDiagram && configuration()->autoUpdateFretboardDiagrams()) {
-            if (!isFretDiagramCustom) {
-                UndoStack* undo = score()->undoStack();
-                undo->reopen();
-                score()->undo(new FretDataChange(fretDiagram, s));
-                score()->endCmd();
-            }
-        }
-    }
-
     if (links()) {
         for (EngravingObject* e : *links()) {
             if (e == this) {
@@ -1490,17 +1474,22 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
     case Pid::HARMONY_DO_NOT_STACK_MODIFIERS:
         m_doNotStackModifiers = v.toBool();
         break;
-    default:
-        if (TextBase::setProperty(pid, v)) {
-            if (pid == Pid::TEXT) {
-                setHarmony(v.value<String>());
-
-                //! After each changes we rebuild the fret box
-                score()->rebuildFretBox();
+    case Pid::TEXT:
+    {
+        String curText = xmlText();
+        TextBase::setProperty(pid, v);
+        setHarmony(v.value<String>());
+        String newText = xmlText();
+        if (newText != curText) {
+            FretDiagram* fretDiagram = explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
+            if (fretDiagram && !fretDiagram->isCustom(curText) && configuration()->autoUpdateFretboardDiagrams()) {
+                fretDiagram->updateDiagram(plainText());
             }
-            break;
+            score()->rebuildFretBox();
         }
-        return false;
+    }
+    default:
+        return TextBase::setProperty(pid, v);
     }
     triggerLayout();
     return true;
