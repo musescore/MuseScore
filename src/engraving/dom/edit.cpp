@@ -5584,8 +5584,8 @@ void Score::undoUpdatePlayCountText(Measure* m)
             Staff* staff = playCountText->staff();
             // Remove this play count text and MMR links
             for (EngravingObject* obj : playCountText->linkList()) {
-                EngravingItem* item = toEngravingItem(obj);
-                if (staff != item->staff()) {
+                PlayCountText* item = toPlayCountText(obj);
+                if (staff != item->staff() || item->barline()->playCountText() != item) {
                     continue;
                 }
                 undoRemoveElement(item, false);
