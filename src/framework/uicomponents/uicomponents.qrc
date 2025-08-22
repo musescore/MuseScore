@@ -37,7 +37,6 @@
         <file>qml/Muse/UiComponents/SeparatorLine.qml</file>
         <file>qml/Muse/UiComponents/StyledBusyIndicator.qml</file>
         <file>qml/Muse/UiComponents/StyledDialogView.qml</file>
-        <file>qml/Muse/UiComponents/StyledRectangularShadow.qml</file>
         <file>qml/Muse/UiComponents/StyledDropdown.qml</file>
         <file>qml/Muse/UiComponents/StyledFlickable.qml</file>
         <file>qml/Muse/UiComponents/StyledGridView.qml</file>
