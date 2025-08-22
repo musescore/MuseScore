@@ -52,13 +52,15 @@ import QtQml 2.14 as Qml
 import QtQuick 2.6
 import QtQuick.Window 2.2
 
+import Muse.UiComponents as Muse
+
 /*!
     \qmltype BasicTableView
     \qmlabstract
     \inqmlmodule QtQuick.Controls.Private
 */
 
-ScrollView {
+FocusScope {
     id: root
 
     /*! \qmlproperty bool BasicTableView::alternatingRowColors
@@ -219,6 +221,26 @@ ScrollView {
     property int selectionMode: 1 //SelectionMode.SingleSelection
 
     /*!
+        \qmlproperty Item ScrollView::flickableItem
+
+        The flickableItem of the ScrollView. If the contentItem provided
+        to the ScrollView is a Flickable, it will be the \l contentItem.
+    */
+    readonly property alias flickableItem: listView
+    readonly property alias contentItem: listView.contentItem
+
+    /*! \qmlproperty Component ScrollView::style
+
+        The style Component for this control.
+        \sa {Qt Quick Controls 1 Styles QML Types}
+
+    */
+    property Component style: Qt.createComponent("TableViewStyle.qml", root)
+
+    /*! \internal */
+    property Style __style: styleLoader.item
+
+    /*!
         \qmlmethod TableViewColumn BasicTableView::addColumn(object column)
 
         Adds a \a column and returns the added column.
@@ -358,9 +380,9 @@ ScrollView {
     implicitWidth: 200
     implicitHeight: 150
 
-    frameVisible: true
-    __scrollBarTopMargin: headerVisible && (listView.transientScrollBars || Qt.platform.os === "osx")
-                          ? listView.headerItem.height : 0
+    // frameVisible: true
+    // __scrollBarTopMargin: headerVisible && (listView.transientScrollBars || Qt.platform.os === "osx")
+    //                       ? listView.headerItem.height : 0
 
     /*! \internal
         Use this to display user-friendly messages in TableView and TreeView common functions.
@@ -400,60 +422,70 @@ ScrollView {
     /*! \internal */
     property Item __mouseArea
 
-    ListView {
+    Loader {
+        id: styleLoader
+        sourceComponent: style
+        onStatusChanged: {
+            if (status === Loader.Error)
+                console.error("Failed to load Style for", root)
+        }
+        property alias __control: root
+    }
+
+    Muse.StyledListView {
         id: listView
         focus: true
         activeFocusOnTab: false
         Keys.forwardTo: [__mouseArea]
         anchors.fill: parent
-        contentWidth: headerItem.headerRow.width + listView.vScrollbarPadding
+        contentWidth: headerItem.headerRow.width //+ listView.vScrollbarPadding
         // ### FIXME Late configuration of the header item requires
         // this binding to get the header visible after creation
         contentY: -headerItem.height
 
         currentIndex: -1
         visible: columnCount > 0
-        interactive: Settings.hasTouchScreen
+        // interactive: Settings.hasTouchScreen
         property var rowItemStack: [] // Used as a cache for rowDelegates
 
-        readonly property bool transientScrollBars: __style && !!__style.transientScrollBars
-        readonly property real vScrollbarPadding: __scroller.verticalScrollBar.visible
-                                                  && !transientScrollBars && Qt.platform.os === "osx" ?
-                                                  __verticalScrollBar.width + __scroller.scrollBarSpacing + root.__style.padding.right : 0
+        // readonly property bool transientScrollBars: __style && !!__style.transientScrollBars
+        // readonly property real vScrollbarPadding: __scroller.verticalScrollBar.visible
+        //                                           && !transientScrollBars && Qt.platform.os === "osx" ?
+        //                                           __verticalScrollBar.width + __scroller.scrollBarSpacing + root.__style.padding.right : 0
 
-        Qml.Binding {
-            // On Mac, we reserve the vSB space in the contentItem because the vSB should
-            // appear under the header. Unfortunately, the ListView header won't expand
-            // beyond the ListView's boundaries, that's why we need to ressort to this.
-            target: root.__scroller
-            when: Qt.platform.os === "osx"
-            property: "verticalScrollbarOffset"
-            value: 0
-            restoreMode: Binding.RestoreBinding
-        }
+        // Qml.Binding {
+        //     // On Mac, we reserve the vSB space in the contentItem because the vSB should
+        //     // appear under the header. Unfortunately, the ListView header won't expand
+        //     // beyond the ListView's boundaries, that's why we need to ressort to this.
+        //     target: root.__scroller
+        //     when: Qt.platform.os === "osx"
+        //     property: "verticalScrollbarOffset"
+        //     value: 0
+        //     restoreMode: Binding.RestoreBinding
+        // }
 
-        function incrementCurrentIndexBlocking() {
-            var oldIndex = __listView.currentIndex
-            __scroller.blockUpdates = true;
-            incrementCurrentIndex();
-            __scroller.blockUpdates = false;
-            return oldIndex !== __listView.currentIndex
-        }
+        // function incrementCurrentIndexBlocking() {
+        //     var oldIndex = __listView.currentIndex
+        //     __scroller.blockUpdates = true;
+        //     incrementCurrentIndex();
+        //     __scroller.blockUpdates = false;
+        //     return oldIndex !== __listView.currentIndex
+        // }
 
-        function decrementCurrentIndexBlocking() {
-            var oldIndex = __listView.currentIndex
-            __scroller.blockUpdates = true;
-            decrementCurrentIndex();
-            __scroller.blockUpdates = false;
-            return oldIndex !== __listView.currentIndex
-        }
+        // function decrementCurrentIndexBlocking() {
+        //     var oldIndex = __listView.currentIndex
+        //     __scroller.blockUpdates = true;
+        //     decrementCurrentIndex();
+        //     __scroller.blockUpdates = false;
+        //     return oldIndex !== __listView.currentIndex
+        // }
 
-        function scrollIfNeeded(key) {
-            var diff = key === Qt.Key_PageDown ? height :
-                       key === Qt.Key_PageUp ? -height : 0
-            if (diff !== 0)
-                __verticalScrollBar.value += diff
-        }
+        // function scrollIfNeeded(key) {
+        //     var diff = key === Qt.Key_PageDown ? height :
+        //                key === Qt.Key_PageUp ? -height : 0
+        //     if (diff !== 0)
+        //         __verticalScrollBar.value += diff
+        // }
 
         SystemPalette {
             id: palette
@@ -462,7 +494,7 @@ ScrollView {
 
         Rectangle {
             id: colorRect
-            parent: viewport
+            parent: root
             anchors.fill: parent
             color: __style ? __style.backgroundColor : palette.base
             z: -2
@@ -488,7 +520,7 @@ ScrollView {
             y: listView.contentHeight - listView.contentY + listView.originY
             width: parent.width
             visible: alternatingRowColors
-            height: listView.model && listView.model.count ? (viewport.height - listView.contentHeight) : 0
+            height: listView.model && listView.model.count ? (root.height - listView.contentHeight) : 0
             Repeater {
                 model: visible ? parent.paddedRowCount : 0
                 Loader {
@@ -583,7 +615,7 @@ ScrollView {
                     // Row fills the view width regardless of item size
                     // But scrollbar should not adjust to it
                     height: item ? item.height : 16
-                    width: parent.width + __horizontalScrollBar.width
+                    width: parent.width
                     x: listView.contentX
 
                     // these properties are exposed to the row delegate
@@ -620,7 +652,7 @@ ScrollView {
         header: Item {
             id: tableHeader
             visible: headerVisible
-            width: Math.max(headerRow.width + listView.vScrollbarPadding, root.viewport.width)
+            width: Math.max(headerRow.width /*+ listView.vScrollbarPadding*/, root.width)
             height: visible ? headerRow.height : 0
 
             property alias headerRow: row
@@ -641,7 +673,7 @@ ScrollView {
                         readonly property int column: index
                         z:-index
                         width: modelData.width
-                        implicitWidth: columnCount === 1 ? viewport.width + __verticalScrollBar.width : headerStyle.implicitWidth
+                        implicitWidth: columnCount === 1 ? root.width : headerStyle.implicitWidth
                         visible: modelData.visible
                         height: headerStyle.height
 

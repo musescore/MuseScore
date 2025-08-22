@@ -146,12 +146,12 @@ BasicTableView {
                 var oldPressedIndex = mouseArea.pressedIndex
                 var row
                 if (mouseArea.autoScroll === 1) {
-                    __listView.incrementCurrentIndexBlocking();
+                    __listView.incrementCurrentIndex();
                     row = __listView.indexAt(0, __listView.height + __listView.contentY)
                     if (row === -1)
                         row = __listView.count - 1
                 } else {
-                    __listView.decrementCurrentIndexBlocking();
+                    __listView.decrementCurrentIndex();
                     row = __listView.indexAt(0, __listView.contentY)
                 }
 
@@ -401,7 +401,7 @@ BasicTableView {
         }
 
         Keys.onPressed: function(event) {
-            __listView.scrollIfNeeded(event.key)
+            // __listView.scrollIfNeeded(event.key)
 
             if (event.key === Qt.Key_A && event.modifiers & Qt.ControlModifier
                 && !!selection && selectionMode > P.SelectionMode.SingleSelection) {
