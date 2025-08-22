@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "audio/worker/internal/synthesizers/abstractsynthesizer.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/worker/iaudioworkerconfiguration.h"
 #include "audio/common/audiotypes.h"
 #include "modularity/ioc.h"
 #include "mpe/events.h"
@@ -38,7 +38,7 @@ namespace muse::vst {
 class VstSynthesiser : public muse::audio::synth::AbstractSynthesizer
 {
     Inject<IVstInstancesRegister> instancesRegister = { this };
-    Inject<muse::audio::IAudioConfiguration> config = { this };
+    Inject<audio::worker::IAudioWorkerConfiguration> config = { this };
 
 public:
     explicit VstSynthesiser(const muse::audio::TrackId trackId, const muse::audio::AudioInputParams& params,

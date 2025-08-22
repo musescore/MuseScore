@@ -29,7 +29,7 @@
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
 #include "global/io/ifilesystem.h"
-#include "iaudioconfiguration.h"
+#include "../iaudioconfiguration.h"
 #include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
