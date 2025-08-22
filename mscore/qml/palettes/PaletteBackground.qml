@@ -80,8 +80,8 @@ Canvas {
         }
         const offY = offsetY % cellHeight;
         const nrows = Math.ceil((height - offY) / cellHeight) + (offY ? 1 : 0);
-        for (var i = 1; i < nrows; ++i) {
-            const y = i * cellHeight - offY;
+        for (var j = 1; j < nrows; ++j) {
+            const y = j * cellHeight - offY;
             ctx.moveTo(0, y);
             ctx.lineTo(width, y);
         }

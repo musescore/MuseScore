@@ -138,7 +138,7 @@ StyledPopup {
                                 if (hovered) {
                                     mscore.tooltip.item = addButton;
                                     mscore.tooltip.text = addButton.ToolTip.text;
-                                } else if (mscore.tooltip.item == addButton)
+                                } else if (mscore.tooltip.item === addButton)
                                     mscore.tooltip.item = null;
                             }
 

@@ -221,7 +221,7 @@ StyledPopup {
                             if (hovered) {
                                 mscore.tooltip.item = deleteButton;
                                 mscore.tooltip.text = deleteButton.text;
-                            } else if (mscore.tooltip.item == deleteButton)
+                            } else if (mscore.tooltip.item === deleteButton)
                                 mscore.tooltip.item = null;
                         }
 

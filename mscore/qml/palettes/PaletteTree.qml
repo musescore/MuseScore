@@ -96,7 +96,7 @@ ListView {
     }
 
     onCurrentIndexChanged: {
-        if (paletteSelectionModel.hasSelection && paletteSelectionModel.currentIndex.row != currentIndex)
+        if (paletteSelectionModel.hasSelection && paletteSelectionModel.currentIndex.row !== currentIndex)
             paletteSelectionModel.clearSelection();
     }
 
@@ -418,7 +418,7 @@ ListView {
 
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
 
-            property bool popupExpanded: paletteTree.expandedPopupIndex == modelIndex
+            property bool popupExpanded: paletteTree.expandedPopupIndex === modelIndex
             function togglePopup() {
                 const expand = !popupExpanded;
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
@@ -612,7 +612,7 @@ ListView {
                     hidePaletteElementVisible: {
                         return !control.selected && control.expanded
                             && paletteSelectionModel.hasSelection && paletteSelectionModel.columnIntersectsSelection(0, control.modelIndex)
-                            && paletteTree.paletteModel.parent(paletteSelectionModel.currentIndex) == control.modelIndex; // HACK to work around a (possible?) bug in columnIntersectsSelection
+                            && paletteTree.paletteModel.parent(paletteSelectionModel.currentIndex) === control.modelIndex; // HACK to work around a (possible?) bug in columnIntersectsSelection
                     }
                     custom: model.custom
 
