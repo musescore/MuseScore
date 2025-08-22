@@ -1329,7 +1329,6 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
 
         fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy()->segment());
 
-        fretDiagram->setTrack(harmony->track());
         fretDiagram->updateDiagram(harmony->plainText());
 
         fretDiagram->linkHarmony(harmony);
@@ -1341,6 +1340,10 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
             //! generate from diagram and add harmony
             fretDiagram->add(Factory::createHarmony(harmonyOrFretDiagram->score()->dummy()->segment()));
         }
+    }
+
+    if (fretDiagram) {
+        fretDiagram->setTrack(muse::nidx);
     }
 
     return fretDiagram;
