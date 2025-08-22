@@ -507,7 +507,7 @@ void TablEdit::createNotesFrame()
 {
     if (!tefHeader.notes.empty()) {
         VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
-        vbox->setTick(mu::engraving::Fraction(0, 1)); // TODO find correct value (0/1 seems to work OK)
+        vbox->setTick(score->endTick());
         score->measures()->add(vbox);
         Text* s = Factory::createText(vbox, TextStyleType::FRAME);
         s->setPlainText(muse::String::fromUtf8(tefHeader.notes.c_str()));
