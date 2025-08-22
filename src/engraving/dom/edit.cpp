@@ -6650,7 +6650,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             } else if (et == ElementType::PLAY_COUNT_TEXT) {
                 BarLine* bl = toBarLine(element->explicitParent());
                 Fraction tick = bl->tick();
-                Measure* m = score->tick2measureMM(tick - Fraction::eps());
+                Measure* m = score->tick2measure(tick - Fraction::eps());
                 Segment* blSeg = m->last(SegmentType::EndBarLine);
                 BarLine* linkedBl = toBarLine(blSeg->element(ntrack));
                 ne->setTrack(ntrack);
