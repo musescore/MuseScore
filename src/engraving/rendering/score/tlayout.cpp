@@ -4399,7 +4399,7 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
 
     // This method is also called from SingleLayout, where `part` may be nullptr
     Part* part = item->part();
-    if (part && part->instrument()->hasStrings() && !item->staffType()->isTabStaff()) {
+    if (part && part->instrument()->hasStrings()) {
         GuitarBend* bend = item->bendFor();
         if (bend && bend->addToSkyline() && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
             GuitarBendSegment* bendSeg = toGuitarBendSegment(bend->frontSegment());
