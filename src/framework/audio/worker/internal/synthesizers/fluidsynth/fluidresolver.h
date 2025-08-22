@@ -40,7 +40,7 @@ class FluidResolver : public ISynthResolver::IResolver, public muse::Injectable,
     muse::Inject<ISoundFontRepository> soundFontRepository = { this };
 
 public:
-    explicit FluidResolver(const muse::modularity::ContextPtr& iocCtx);
+    explicit FluidResolver(const muse::modularity::ContextPtr& iocCtx = nullptr);
 
     ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const override;
     bool hasCompatibleResources(const audio::PlaybackSetupData& setup) const override;
