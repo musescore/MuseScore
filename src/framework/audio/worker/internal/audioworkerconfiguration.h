@@ -41,5 +41,10 @@ public:
 
     bool autoProcessOnlineSoundsInBackground() const override;
     async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const override;
+
+    AudioInputParams defaultAudioInputParams() const override;
+
+    size_t desiredAudioThreadNumber() const override;
+    size_t minTrackCountForMultithreading() const override;
 };
 }

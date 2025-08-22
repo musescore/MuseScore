@@ -21,9 +21,23 @@
  */
 #include "audioworkerconfiguration.h"
 
+#include "audio/common/soundfonttypes.h"
+
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::worker;
+
+static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";
+static const AudioResourceAttributes DEFAULT_AUDIO_RESOURCE_ATTRIBUTES = {
+    { PLAYBACK_SETUP_DATA_ATTRIBUTE, muse::mpe::GENERIC_SETUP_DATA_STRING },
+    { synth::SOUNDFONT_NAME_ATTRIBUTE, String::fromStdString(DEFAULT_SOUND_FONT_NAME) } };
+
+static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META = {
+    DEFAULT_SOUND_FONT_NAME,
+    "Fluid",
+    DEFAULT_AUDIO_RESOURCE_ATTRIBUTES,
+    AudioResourceType::FluidSoundfont,
+    false /*hasNativeEditor*/ };
 
 audioch_t AudioWorkerConfiguration::audioChannelsCount() const
 {
@@ -48,4 +62,23 @@ bool AudioWorkerConfiguration::autoProcessOnlineSoundsInBackground() const
 async::Channel<bool> AudioWorkerConfiguration::autoProcessOnlineSoundsInBackgroundChanged() const
 {
     return configuration()->autoProcessOnlineSoundsInBackgroundChanged();
+}
+
+AudioInputParams AudioWorkerConfiguration::defaultAudioInputParams() const
+{
+    AudioInputParams result;
+    result.resourceMeta = DEFAULT_AUDIO_RESOURCE_META;
+
+    return result;
+}
+
+size_t AudioWorkerConfiguration::desiredAudioThreadNumber() const
+{
+    return 0;
+}
+
+size_t AudioWorkerConfiguration::minTrackCountForMultithreading() const
+{
+    // Start mutlithreading-processing only when there are more or equal number of tracks
+    return 2;
 }
