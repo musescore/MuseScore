@@ -1335,7 +1335,7 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
                 case InputProcessingProgress::Finished: {
                     muse::remove(m_onlineSoundsBeingProcessed, trackId);
 
-                    if (!m_onlineSoundsErrorDetected && status.errorCode != static_cast<int>(Ret::Code::Cancel)) {
+                    if (status.errorCode != 0 && status.errorCode != (int)Ret::Code::Cancel) {
                         m_onlineSoundsErrorDetected = true;
                         LOGE() << "Error during online sounds processing: " << status.errorText << ", track: " << trackId;
                     }
