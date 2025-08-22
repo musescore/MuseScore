@@ -3689,7 +3689,8 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             continue;
         }
 
-        SymId sid = a->symId();
+        const SymId sid = a->symId();
+        const String articText = a->text();
         if (symIdToArtic(sid).empty()
             && symIdToTechn(sid) == ""
             && !a->isOrnament() && !a->isTapping()
@@ -3706,9 +3707,11 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             }
             notations.tag(m_xml, a);
             articulations.tag(m_xml);
-            AsciiStringView noteheadName = SymNames::nameForSymId(sid);
-            otherArtic += String(u" smufl=\"%1\"").arg(String::fromAscii(noteheadName.ascii()));
-            m_xml.tagRaw(otherArtic);
+            if (sid != SymId::noSym) {
+                AsciiStringView articGlyph = SymNames::nameForSymId(sid);
+                otherArtic += String(u" smufl=\"%1\"").arg(String::fromAscii(articGlyph.ascii()));
+            }
+            m_xml.tagRaw(otherArtic, articText);
         }
     }
 }
