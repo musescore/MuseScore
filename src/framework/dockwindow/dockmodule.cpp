@@ -143,6 +143,7 @@ void DockModule::registerUiTypes()
     qmlRegisterType<DockPageView>("Muse.Dock", 1, 0, "DockPageView");
     qmlRegisterType<DockFrameModel>("Muse.Dock", 1, 0, "DockFrameModel");
 
+    qmlRegisterUncreatableType<DockTabsModel>("Muse.Dock", 1, 0, "DockTabsModel", "Not creatable from QML");
     qmlRegisterUncreatableType<DockToolBarAlignment>("Muse.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
     qmlRegisterUncreatableType<DockLocation>("Muse.Dock", 1, 0, "Location", "Not creatable from QML");
 }
