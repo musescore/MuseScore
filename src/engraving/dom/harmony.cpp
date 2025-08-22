@@ -1539,11 +1539,13 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::PLAY:
         v = true;
         break;
-    case Pid::OFFSET:
-        if (explicitParent() && explicitParent()->isFretDiagram()) {
+    case Pid::OFFSET: {
+        const FretDiagram* fd = explicitParent() && explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
+        if (fd && fd->visible()) {
             v = PropertyValue::fromValue(PointF(0.0, 0.0));
             break;
         }
+    }
     // fall-through
     default:
         v = TextBase::propertyDefault(id);
@@ -1559,7 +1561,9 @@ PropertyValue Harmony::propertyDefault(Pid id) const
 Sid Harmony::getPropertyStyle(Pid pid) const
 {
     if (pid == Pid::OFFSET) {
-        if (explicitParent() && explicitParent()->isFretDiagram()) {
+        const FretDiagram* fd = explicitParent() && explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
+
+        if (fd && fd->visible()) {
             return Sid::NOSTYLE;
         } else if (textStyleType() == TextStyleType::HARMONY_A) {
             return placeAbove() ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;

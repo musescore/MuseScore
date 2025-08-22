@@ -927,6 +927,9 @@ Font TextFragment::font(const TextBase* t) const
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
             m = t->getProperty(Pid::MARKER_SYMBOL_SIZE).toDouble();
+            if (t->sizeIsSpatiumDependent()) {
+                m *= spatiumScaling;
+            }
         } else {
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;

@@ -214,6 +214,7 @@
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Rest>
@@ -258,6 +259,7 @@
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Rest>

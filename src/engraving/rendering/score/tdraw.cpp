@@ -1853,7 +1853,7 @@ void TDraw::draw(const Harmony* item, Painter* painter)
             painter->drawText(ts->pos(), ts->text());
 #endif
         } else if (const ChordSymbolParen* parenItem = dynamic_cast<const ChordSymbolParen*>(renderItem)) {
-            Parenthesis* p = parenItem->paren;
+            Parenthesis* p = parenItem->parenItem;
             painter->translate(parenItem->pos());
             draw(p, painter);
             painter->translate(-parenItem->pos());

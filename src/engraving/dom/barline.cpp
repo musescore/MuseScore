@@ -961,8 +961,13 @@ PropertyValue BarLine::propertyDefault(Pid propertyId) const
     case Pid::PLAY_COUNT_TEXT_SETTING:
         return AutoCustomHide::AUTO;
 
-    case Pid::PLAY_COUNT_TEXT:
+    case Pid::PLAY_COUNT_TEXT: {
+        if (m_barLineType == BarLineType::END_REPEAT) {
+            int repeatCount = measure() ? measure()->repeatCount() : 2;
+            return TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(repeatCount);
+        }
         return String();
+    }
 
     default:
         break;

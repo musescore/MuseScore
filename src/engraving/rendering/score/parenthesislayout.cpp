@@ -253,6 +253,11 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
     const double heightInSpatium = height / spatium;
     const double shoulderYOffset = 0.2 * height;
 
+    if (std::isinf(height)) {
+        LOGE() << "Error: parenthesis height is infinite";
+        return;
+    }
+
     // Control width of parentheses. We don't want tall parens to be too wide, nor do we want parens at a small scale to lose their curve too much
     double shoulderX = ldata->shoulderWidth.has_value() ? ldata->shoulderWidth() : 0.2 * std::pow(height, 0.95) * std::pow(mag, 0.1);
     const double minShoulderX = 0.25 * spatium;

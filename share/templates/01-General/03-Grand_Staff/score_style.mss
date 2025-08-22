@@ -200,7 +200,7 @@
     <pedalBeginTextOffset x="0" y="0.15"/>
     <pedalHookHeight>-1.2</pedalHookHeight>
     <pedalFontFace>Edwin</pedalFontFace>
-    <pedalFontSize>12</pedalFontSize>
+    <pedalFontSize>10</pedalFontSize>
     <pedalLineSpacing>1</pedalLineSpacing>
     <pedalFontSpatiumDependent>1</pedalFontSpatiumDependent>
     <pedalFontStyle>0</pedalFontStyle>
@@ -301,7 +301,7 @@
     <fretNut>1</fretNut>
     <fretDotSize>1</fretDotSize>
     <fretStringSpacing>0.7</fretStringSpacing>
-    <fretFretSpacing>0.8</fretFretSpacing>
+    <fretFretSpacing>0.7</fretFretSpacing>
     <fretOrientation>0</fretOrientation>
     <maxFretShiftAbove>0</maxFretShiftAbove>
     <maxFretShiftBelow>0</maxFretShiftBelow>
@@ -446,7 +446,7 @@
     <ottavaPosAbove x="0" y="-2"/>
     <ottavaPosBelow x="0" y="2"/>
     <ottavaHookAbove>1</ottavaHookAbove>
-    <ottavaHookBelow>-1</ottavaHookBelow>
+    <ottavaHookBelow>1</ottavaHookBelow>
     <ottavaLineWidth>0.11</ottavaLineWidth>
     <ottavaLineStyle>2</ottavaLineStyle>
     <ottavaNumbersOnly>1</ottavaNumbersOnly>
@@ -500,7 +500,7 @@
     <tupletFrameRound>0</tupletFrameRound>
     <tupletFrameFgColor r="0" g="0" b="0" a="255"/>
     <tupletFrameBgColor r="255" g="255" b="255" a="0"/>
-    <barreLineWidth>1</barreLineWidth>
+    <barreLineWidth>0.85</barreLineWidth>
     <scaleBarlines>0</scaleBarlines>
     <barGraceDistance>1</barGraceDistance>
     <minVerticalDistance>0.5</minVerticalDistance>
@@ -980,7 +980,7 @@
     <footerFontSpatiumDependent>0</footerFontSpatiumDependent>
     <footerFontStyle>0</footerFontStyle>
     <footerColor r="0" g="0" b="0" a="255"/>
-    <footerAlign>center,center</footerAlign>
+    <footerAlign>center,bottom</footerAlign>
     <footerOffset x="0" y="0"/>
     <footerFrameType>0</footerFrameType>
     <footerFramePadding>0.2</footerFramePadding>

@@ -116,6 +116,7 @@ enum class P_TYPE : unsigned char {
     NOTELINE_PLACEMENT_TYPE,
     LYRICS_DASH_SYSTEM_START_TYPE,
     PARTIAL_SPANNER_DIRECTION,
+    MARKER_TYPE,
 
     LH_TAPPING_SYMBOL,
     RH_TAPPING_SYMBOL,
@@ -347,6 +348,9 @@ public:
 
     PropertyValue(const AutoCustomHide& v)
         : m_type(P_TYPE::AUTO_CUSTOM_HIDE), m_data(make_data<AutoCustomHide>(v)) {}
+
+    PropertyValue(const MarkerType& v)
+        : m_type(P_TYPE::MARKER_TYPE), m_data(make_data<MarkerType>(v)) {}
 
     bool isValid() const;
 
