@@ -513,7 +513,7 @@ ListView {
                                                  : model.accessibleText
             Accessible.role: Accessible.TreeItem
 
-            width: parent.width
+            width: ListView.view.width
 
             Drag.active: paletteHeaderDragArea.drag.active
             Drag.dragType: Drag.Automatic
