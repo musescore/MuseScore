@@ -49,10 +49,12 @@ ScrollBar {
         opacity: 0.0
         visible: false
 
+        property bool forcedActive: false
+
         states: [
             State {
                 name: "active"
-                when: root.policy === ScrollBar.AlwaysOn || (root.active && root.isScrollbarNeeded)
+                when: root.policy === ScrollBar.AlwaysOn || (root.active && root.isScrollbarNeeded) || handle.forcedActive
 
                 PropertyChanges {
                     target: handle
@@ -84,9 +86,9 @@ ScrollBar {
     }
 
     function activate() {
-        root.active = true
+        handle.forcedActive = true
         Qt.callLater(function() {
-            root.active = Qt.binding( function() { return root.hovered || root.pressed } )
+            handle.forcedActive = false
         })
     }
 }

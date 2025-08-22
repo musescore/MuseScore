@@ -147,7 +147,6 @@ Rectangle {
         }
 
         style: LegacyTreeViewStyle {
-            indentation: styleData.depth
             rowDelegate: Rectangle {
                 height: 48
                 width: parent.width
