@@ -466,7 +466,7 @@ struct InputProcessingProgress {
         int64_t total = 0;
     };
 
-    enum Status : uint8_t {
+    enum Status : unsigned int {
         Undefined = 0,
         Started,
         Processing,
