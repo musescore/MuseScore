@@ -259,12 +259,6 @@ void GuiApp::perform()
         });
     }, Qt::QueuedConnection);
 
-    QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
-        for (const QQmlError& e : warnings) {
-            LOGE() << "error: " << e.toString().toStdString() << "\n";
-        }
-    });
-
     // ====================================================
     // Load Main qml
     // ====================================================
