@@ -52,9 +52,6 @@ public:
     virtual void setDriverBufferSize(unsigned int size) = 0;
     virtual async::Notification driverBufferSizeChanged() const = 0;
 
-    virtual msecs_t audioWorkerInterval(const samples_t bufferSize, const samples_t sampleRate) const = 0;
-    virtual samples_t minSamplesToReserve(RenderMode mode) const = 0;
-
     virtual samples_t samplesToPreallocate() const = 0;
     virtual async::Channel<samples_t> samplesToPreallocateChanged() const = 0;
 
@@ -62,12 +59,7 @@ public:
     virtual void setSampleRate(unsigned int sampleRate) = 0;
     virtual async::Notification sampleRateChanged() const = 0;
 
-    virtual size_t desiredAudioThreadNumber() const = 0;
-    virtual size_t minTrackCountForMultithreading() const = 0;
-
     // synthesizers
-    virtual AudioInputParams defaultAudioInputParams() const = 0;
-
     virtual io::paths_t soundFontDirectories() const = 0;
     virtual io::paths_t userSoundFontDirectories() const = 0;
     virtual void setUserSoundFontDirectories(const io::paths_t& paths) = 0;

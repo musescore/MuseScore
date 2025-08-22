@@ -27,6 +27,7 @@
 #include "global/settings.h"
 
 #include "audio/common/soundfonttypes.h"
+#include "audio/common/audioutils.h"
 
 #include "log.h"
 
@@ -42,19 +43,10 @@ static const Settings::Key AUDIO_OUTPUT_DEVICE_ID_KEY("audio", "io/outputDevice"
 static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "io/bufferSize");
 static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
 static const Settings::Key AUDIO_MEASURE_INPUT_LAG("audio", "io/measureInputLag");
-static const Settings::Key AUDIO_DESIRED_THREAD_NUMBER_KEY("audio", "io/audioThreads");
 
 static const Settings::Key ONLINE_SOUNDS_PROCESS_IN_BACKGROUND("audio", "io/onlineSounds/processInBackground");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
-
-static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";
-static const AudioResourceAttributes DEFAULT_AUDIO_RESOURCE_ATTRIBUTES = {
-    { PLAYBACK_SETUP_DATA_ATTRIBUTE, muse::mpe::GENERIC_SETUP_DATA_STRING },
-    { SOUNDFONT_NAME_ATTRIBUTE, String::fromStdString(DEFAULT_SOUND_FONT_NAME) } };
-
-static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
-    = { DEFAULT_SOUND_FONT_NAME, "Fluid", DEFAULT_AUDIO_RESOURCE_ATTRIBUTES, AudioResourceType::FluidSoundfont, false /*hasNativeEditor*/ };
 
 void AudioConfiguration::init()
 {
@@ -93,8 +85,6 @@ void AudioConfiguration::init()
     }
 
     settings()->setDefaultValue(AUDIO_MEASURE_INPUT_LAG, Val(false));
-
-    settings()->setDefaultValue(AUDIO_DESIRED_THREAD_NUMBER_KEY, Val(0));
 
     settings()->setDefaultValue(ONLINE_SOUNDS_PROCESS_IN_BACKGROUND, Val(true));
     settings()->valueChanged(ONLINE_SOUNDS_PROCESS_IN_BACKGROUND).onReceive(nullptr, [this](const Val& val) {
@@ -161,28 +151,6 @@ async::Notification AudioConfiguration::driverBufferSizeChanged() const
     return m_driverBufferSizeChanged;
 }
 
-msecs_t AudioConfiguration::audioWorkerInterval(const samples_t samples, const sample_rate_t sampleRate) const
-{
-    msecs_t interval = float(samples) / 4.f / float(sampleRate) * 1000.f;
-    interval = std::max(interval, msecs_t(1));
-
-    // Found experementaly on a slow laptop (2 core) running on battery power
-    interval = std::min(interval, msecs_t(10));
-
-    return interval;
-}
-
-samples_t AudioConfiguration::minSamplesToReserve(RenderMode mode) const
-{
-    // Idle: render as little as possible for lower latency
-    if (mode == RenderMode::IdleMode) {
-        return 128;
-    }
-
-    // Active: render more for better quality (rendering is usually much heavier in this scenario)
-    return 1024;
-}
-
 samples_t AudioConfiguration::samplesToPreallocate() const
 {
     return m_samplesToPreallocate;
@@ -206,25 +174,6 @@ void AudioConfiguration::setSampleRate(unsigned int sampleRate)
 async::Notification AudioConfiguration::sampleRateChanged() const
 {
     return m_driverSampleRateChanged;
-}
-
-size_t AudioConfiguration::desiredAudioThreadNumber() const
-{
-    return settings()->value(AUDIO_DESIRED_THREAD_NUMBER_KEY).toInt();
-}
-
-size_t AudioConfiguration::minTrackCountForMultithreading() const
-{
-    // Start mutlithreading-processing only when there are more or equal number of tracks
-    return 2;
-}
-
-AudioInputParams AudioConfiguration::defaultAudioInputParams() const
-{
-    AudioInputParams result;
-    result.resourceMeta = DEFAULT_AUDIO_RESOURCE_META;
-
-    return result;
 }
 
 SoundFontPaths AudioConfiguration::soundFontDirectories() const
