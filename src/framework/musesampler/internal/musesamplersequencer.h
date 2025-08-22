@@ -157,6 +157,7 @@ private:
     std::string m_defaultPresetCode;
     AuditionParams m_auditionParamsCache;
 
+    double m_autoRenderInterval = 0.0;
     std::unique_ptr<Timer> m_pollRenderingProgressTimer;
     audio::InputProcessingProgress* m_renderingProgress = nullptr;
     RenderingInfo m_renderingInfo;
