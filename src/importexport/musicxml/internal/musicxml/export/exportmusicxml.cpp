@@ -3690,7 +3690,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         }
 
         const SymId sid = a->symId();
-        const String articText = a->text();
+        const AsciiStringView articText = TConv::toXml(a->textType());
         if (symIdToArtic(sid).empty()
             && symIdToTechn(sid) == ""
             && !a->isOrnament() && !a->isTapping()

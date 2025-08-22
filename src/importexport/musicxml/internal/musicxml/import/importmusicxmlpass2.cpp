@@ -8360,11 +8360,13 @@ void MusicXmlParserNotations::articulations()
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "other-articulation") {
             const String smufl = m_e.attribute("smufl");
+            const String articText = m_e.readText();
+            SymId sid = SymNames::symIdByName(smufl, SymId::noSym);
+            Notation artic = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                              m_e.attributes(), u"articulations", sid);
+            artic.setText(articText);
 
-            if (!smufl.empty()) {
-                SymId sid = SymNames::symIdByName(smufl, SymId::noSym);
-                Notation artic = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
-                                                                  m_e.attributes(), u"articulations", sid);
+            if (!smufl.empty() || !articText.empty()) {
                 m_notations.push_back(artic);
             }
             m_e.skipCurrentElement();  // skip but don't log
