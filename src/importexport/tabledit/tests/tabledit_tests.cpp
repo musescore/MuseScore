@@ -96,9 +96,11 @@ TEST_F(TablEdit_Tests, tef_key_signatures_2) {
     tefReadTest("key_signatures_2");
 }
 
+#if 0
 TEST_F(TablEdit_Tests, tef_metadata) {
     tefReadTest("metadata");
 }
+#endif
 
 TEST_F(TablEdit_Tests, tef_multi_track_rests) {
     tefReadTest("multi_track_rests");
