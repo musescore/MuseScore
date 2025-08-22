@@ -258,8 +258,10 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     BarLine* lastMeasureEndBarline = toBarLine(e);
                     if (!generated && !mmrEndBarline->links()) {
                         ctx.mutDom().undo(new Link(mmrEndBarline, lastMeasureEndBarline));
-                        if (PlayCountText* playCount = mmrEndBarline->playCountText()) {
-                            ctx.mutDom().undo(new Link(playCount, lastMeasureEndBarline->playCountText()));
+                        PlayCountText* playCount = mmrEndBarline->playCountText();
+                        PlayCountText* lastMeasurePlayCount = lastMeasureEndBarline->playCountText();
+                        if (playCount && !playCount->isLinked(lastMeasurePlayCount)) {
+                            ctx.mutDom().undo(new Link(playCount, lastMeasurePlayCount));
                         }
                     }
                     if (mmrEndBarline->barLineType() != lastMeasureEndBarline->barLineType()) {
