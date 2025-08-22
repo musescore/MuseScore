@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "audio/worker/ifxprocessor.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/worker/iaudioworkerconfiguration.h"
 
 #include "../vstaudioclient.h"
 #include "../../ivstplugininstance.h"
@@ -37,7 +37,7 @@
 namespace muse::vst {
 class VstFxProcessor : public muse::audio::IFxProcessor, public async::Asyncable
 {
-    muse::Inject<muse::audio::IAudioConfiguration> config;
+    muse::Inject<audio::worker::IAudioWorkerConfiguration> config;
 public:
     explicit VstFxProcessor(IVstPluginInstancePtr&& instance, const muse::audio::AudioFxParams& params);
 

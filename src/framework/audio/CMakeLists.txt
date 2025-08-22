@@ -36,13 +36,8 @@ set(MODULE_SRC
     ${AUDIO_DRIVER_SRC}
 
     # Common public
-    ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
-
-    # Common internal
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
     )
 
 # fluidsynth dependency

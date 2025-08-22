@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
 #include "midi/imidiconfiguration.h"
 #include "midi/imidioutport.h"
 #include "midi/imidiinport.h"
