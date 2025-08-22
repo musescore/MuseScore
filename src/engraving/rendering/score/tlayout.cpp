@@ -3315,7 +3315,7 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         bool above = hopoText->placeAbove();
 
         Align align;
-        align.vertical = above ? AlignV::BASELINE : AlignV::TOP;
+        align.vertical = AlignV::BASELINE;
         align.horizontal = AlignH::HCENTER;
         hopoText->setAlign(align);
         layoutItem(hopoText, ctx);
@@ -3357,7 +3357,7 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         hopoText->mutldata()->setPos(centerX, y);
 
         hopoTextShape.translateY(y);
-        skyline.add(hopoTextShape);
+        skl.add(hopoTextShape);
     }
 
     Shape hopoSegmentShape = item->mutldata()->shape();

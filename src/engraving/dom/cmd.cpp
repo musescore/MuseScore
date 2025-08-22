@@ -458,11 +458,6 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
 
     TRACEFUNC;
 
-    if (m_needLayoutFretBox) {
-        relayoutFretBox();
-        m_needLayoutFretBox = false;
-    }
-
     bool updateAll = false;
     {
         MasterScore* ms = masterScore();

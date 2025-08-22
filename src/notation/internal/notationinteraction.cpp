@@ -2202,16 +2202,6 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     XmlReader e(data);
     score()->pasteStaff(e, segment, staffIdx);
 
-    if (deleteSourceMaterial) {
-        // pasteStaff limits the layout range to just the destination region,
-        // but if the source material was deleted we must also layout the source region.
-        CmdState& cmdState = score()->cmdState();
-        cmdState.setTick(rdd.sourceTick);
-        cmdState.setTick(rdd.sourceTick + rdd.tickLength);
-        cmdState.setStaff(rdd.sourceStaffIdx);
-        cmdState.setStaff(rdd.sourceStaffIdx + rdd.numStaves);
-    }
-
     endDrop();
     apply();
 
@@ -2441,7 +2431,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, bool
         return;
     }
 
-    if (element->isSlur() && addSingle) {
+    if (element->isSlur()) {
         doAddSlur(toSlur(element));
         return;
     }

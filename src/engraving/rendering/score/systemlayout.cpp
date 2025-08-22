@@ -1122,6 +1122,13 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         if (ecr && ecr->isChord()) {
             ChordLayout::layoutArticulations3(toChord(ecr), slur, ctx);
         }
+        if (slur->isHammerOnPullOff()) {
+            StaffType* staffType = slur->staff()->staffType(slur->tick());
+            if ((staffType->isTabStaff() && ctx.conf().styleB(Sid::hopoAlignLettersTabStaves))
+                || (!staffType->isTabStaff() && ctx.conf().styleB(Sid::hopoAlignLettersStandardStaves))) {
+                AlignmentLayout::alignHopoLetters(toHammerOnPullOff(slur), system);
+            }
+        }
     }
 
     processLines(system, ctx, elementsToLayout.trills);
@@ -2843,7 +2850,8 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
 void SystemLayout::updateSkylineForElement(EngravingItem* element, const System* system, double yMove)
 {
     Skyline& skyline = system->staff(element->staffIdx())->skyline();
-    SkylineLine& skylineLine = element->placeAbove() ? skyline.north() : skyline.south();
+    bool isAbove = element->isArticulationFamily() ? toArticulation(element)->up() : element->placeAbove();
+    SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
     for (ShapeElement& shapeEl : skylineLine.elements()) {
         const EngravingItem* itemInSkyline = shapeEl.item();
         if (itemInSkyline && itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {

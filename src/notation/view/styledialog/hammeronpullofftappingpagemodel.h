@@ -43,6 +43,9 @@ class HammerOnPullOffTappingPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * rhTappingSymbolNormalStave READ rhTappingSymbolNormalStave CONSTANT)
     Q_PROPERTY(StyleItem * rhTappingSymbolTab READ rhTappingSymbolTab CONSTANT)
 
+    Q_PROPERTY(StyleItem * hopoAlignLettersStandardStaves READ hopoAlignLettersStandardStaves CONSTANT)
+    Q_PROPERTY(StyleItem * hopoAlignLettersTabStaves READ hopoAlignLettersTabStaves CONSTANT)
+
 public:
     explicit HammerOnPullOffTappingPageModel(QObject* parent = nullptr);
 
@@ -59,5 +62,8 @@ public:
 
     StyleItem* rhTappingSymbolNormalStave() const;
     StyleItem* rhTappingSymbolTab() const;
+
+    StyleItem* hopoAlignLettersStandardStaves() const;
+    StyleItem* hopoAlignLettersTabStaves() const;
 };
 }
