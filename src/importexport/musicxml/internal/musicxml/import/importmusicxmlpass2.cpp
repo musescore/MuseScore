@@ -1263,7 +1263,6 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
 
 static void addTapToChord(const Notation& notation, ChordRest* cr)
 {
-    const Color color = Color::fromString(notation.attribute(u"color"));
     const String place = notation.attribute(u"placement");
     const TappingHand hand = notation.attribute(u"hand") == u"right" ? TappingHand::RIGHT : TappingHand::LEFT;
 
@@ -1279,7 +1278,7 @@ static void addTapToChord(const Notation& notation, ChordRest* cr)
     } else {
         tap->setAnchor(ArticulationAnchor::AUTO);
     }
-    colorItem(tap, color);
+    colorItem(tap, Color::fromString(notation.attribute(u"color")));
     cr->add(tap);
 }
 
@@ -1324,7 +1323,6 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
         }
     }
     if (articSym != SymId::noSym) {
-        const Color color = Color::fromString(notation.attribute(u"color"));
         const String place = notation.attribute(u"placement");
         Ornament* mordent = Factory::createOrnament(cr);
         mordent->setSymId(articSym);
@@ -1335,7 +1333,7 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
         } else {
             mordent->setAnchor(ArticulationAnchor::AUTO);
         }
-        colorItem(mordent, color);
+        colorItem(mordent, Color::fromString(notation.attribute(u"color")));
         cr->add(mordent);
     } else {
         LOGD("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
@@ -1354,7 +1352,6 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
 static void addTurnToChord(const Notation& notation, ChordRest* cr)
 {
     SymId turnSym = notation.symId();
-    const Color color = Color::fromString(notation.attribute(u"color"));
     const String place = notation.attribute(u"placement");
     if (notation.attribute(u"slash") == "yes") {
         // TODO: currently this is the only available SMuFL turn with a slash
@@ -1369,7 +1366,7 @@ static void addTurnToChord(const Notation& notation, ChordRest* cr)
     } else {
         turn->setAnchor(ArticulationAnchor::AUTO);
     }
-    colorItem(turn, color);
+    colorItem(turn, Color::fromString(notation.attribute(u"color")));
     cr->add(turn);
 }
 
@@ -4196,9 +4193,7 @@ void MusicXmlParserDirection::otherDirection()
         if (id != SymId::noSym) {
             Symbol* smuflSym = Factory::createSymbol(m_score->dummy());
             smuflSym->setSym(id);
-            if (color.isValid()) {
-                smuflSym->setColor(color);
-            }
+            colorItem(smuflSym, color);
             m_elems.push_back(smuflSym);
         }
         m_e.skipCurrentElement();
@@ -5286,7 +5281,7 @@ void MusicXmlParserDirection::pedal(const String& type, const int /* number */,
             p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
         }
         p->setEndHookType(HookType::NONE);
-        colorItem(p, Color::fromString(m_e.asciiAttribute("color").ascii()));
+        colorItem(p, color);
         starts.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
     } else if (type == u"stop" || type == u"discontinue") {
         Pedal* p = spdesc.isStarted ? toPedal(spdesc.sp) : Factory::createPedal(m_score->dummy());
@@ -5712,9 +5707,7 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
                     bool spanStaff = nstaves > 1 ? i < nstaves - 1 : staff->barLineSpan();
                     track_idx_t currentTrack = track + (i * VOICES);
                     auto b = createBarline(measure->score(), currentTrack, type, visible, barStyle, spanStaff);
-                    if (barlineColor.isValid()) {
-                        b->setColor(barlineColor);
-                    }
+                    colorItem(b.get(), barlineColor);
                     addBarlineToMeasure(measure, locTick, std::move(b));
                 }
             }
@@ -7133,10 +7126,9 @@ Note* MusicXmlParserPass2::note(const String& partId,
         Stem* stem = c->stem();
         if (!stem) {
             stem = Factory::createStem(c);
-            if (stemColor.isValid()) {
-                stem->setColor(stemColor);
-            } else if (noteColor.isValid()) {
-                stem->setColor(noteColor);
+            colorItem(stem, stemColor);
+            if (!stemColor.isValid()) {
+                colorItem(stem, noteColor);
             }
             c->add(stem);
         }
@@ -7447,7 +7439,7 @@ FiguredBassItem* MusicXmlParserPass2::figure(const int idx, const bool paren, Fi
             // MuseScore can only handle single digit
             if (1 <= iVal && iVal <= 9) {
                 fgi->setDigit(iVal);
-                fgi->setColor(color);
+                colorItem(fgi, color);
             } else {
                 m_logger->logError(String(u"incorrect figure-number '%1'").arg(val), &m_e);
             }
@@ -8200,8 +8192,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             } else if (lineType == u"solid" || lineType.empty()) {
                 newSlur->setStyleType(SlurStyleType::Solid);
             }
-            const Color color = Color::fromString(notation.attribute(u"color"));
-            colorItem(newSlur, color);
+            colorItem(newSlur, Color::fromString(notation.attribute(u"color")));
             newSlur->setTick(Fraction::fromTicks(tick));
             newSlur->setStartElement(cr);
             if (configuration()->importLayout()) {
@@ -8892,8 +8883,7 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
         currTie->setStartNote(note);
         currTie->setTrack(track);
 
-        const Color color = Color::fromString(notation.attribute(u"color"));
-        colorItem(currTie, color);
+        colorItem(currTie, Color::fromString(notation.attribute(u"color")));
 
         if (configuration()->importLayout()) {
             if (orientation == u"over" || placement == u"above") {
@@ -9000,7 +8990,6 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
 static void addBreath(const Notation& notation, ChordRest* cr)
 {
     const SymId breath = notation.symId();
-    const Color color = Color::fromString(notation.attribute(u"color"));
     const String placement = notation.attribute(u"placement");
 
     Segment* const seg = cr->measure()->getSegment(SegmentType::Breath, cr->tick() + cr->ticks());
@@ -9010,7 +8999,7 @@ static void addBreath(const Notation& notation, ChordRest* cr)
     b->setSymId(breath);
     b->setPlacement(placement == u"below" ? PlacementV::BELOW : PlacementV::ABOVE);
     b->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
-    colorItem(b, color);
+    colorItem(b, Color::fromString(notation.attribute(u"color")));
     seg->add(b);
 }
 
@@ -9022,7 +9011,6 @@ static void addChordLine(const Notation& notation, Note* note,
                          MusicXmlLogger* logger, const XmlStreamReader* const xmlreader)
 {
     const String chordLineType = notation.subType();
-    const Color color = Color::fromString(notation.attribute(u"color"));
     if (!chordLineType.empty()) {
         if (note) {
             ChordLine* const chordline = Factory::createChordLine(note->chord());
@@ -9035,9 +9023,7 @@ static void addChordLine(const Notation& notation, Note* note,
             } else if (chordLineType == u"scoop") {
                 chordline->setChordLineType(ChordLineType::SCOOP);
             }
-            if (color.isValid()) {
-                chordline->setColor(color);
-            }
+            colorItem(chordline, Color::fromString(notation.attribute(u"color")));
             note->chord()->add(chordline);
         } else {
             logger->logError(String(u"no note for %1").arg(chordLineType), xmlreader);
