@@ -37,15 +37,8 @@ static const String PARTIALTIE_DATA_DIR(u"partialtie_data/");
 class Engraving_PartialTieTests : public ::testing::Test
 {
 protected:
-    void SetUp() override
-    {
-        m_useRead302 = MScore::useRead302InTestMode;
-        MScore::useRead302InTestMode = false;
-    }
-
     void TearDown() override
     {
-        MScore::useRead302InTestMode = m_useRead302;
         delete m_masterScore;
     }
 
@@ -390,8 +383,6 @@ protected:
     }
 
 private:
-    bool m_useRead302 = false;
-
     MasterScore* m_masterScore = nullptr;
     Note* m_startNote = nullptr;
     std::vector<Note*> m_jumpPoints;

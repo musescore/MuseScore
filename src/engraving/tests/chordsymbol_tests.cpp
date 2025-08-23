@@ -371,8 +371,6 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeJazz)
 }
 
 TEST_F(Engraving_ChordSymbolTests, testNashvilleNumbers) {
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     MasterScore* score = test_pre(u"nashville-numbers");
     selectAllChordSymbols(score);
 
@@ -421,8 +419,6 @@ TEST_F(Engraving_ChordSymbolTests, testNashvilleNumbers) {
 
         idx++;
     }
-
-    MScore::useRead302InTestMode = use302;
 }
 
 TEST_F(Engraving_ChordSymbolTests, testParserSuffix)

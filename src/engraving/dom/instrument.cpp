@@ -283,22 +283,10 @@ String Instrument::recognizeId() const
 
 int Instrument::recognizeMidiProgram() const
 {
-    const InstrumentTemplate* tmplInstrumentId = mu::engraving::searchTemplateForMusicXmlId(m_musicXmlId);
+    const InstrumentTemplate* tp = searchTemplate(m_id);
 
-    if (tmplInstrumentId && !tmplInstrumentId->channel.empty() && tmplInstrumentId->channel[0].program() >= 0) {
-        return tmplInstrumentId->channel[0].program();
-    }
-
-    std::list<String> nameList;
-
-    nameList.push_back(m_trackName);
-    muse::join(nameList, m_longNames.toStringList());
-    muse::join(nameList, m_shortNames.toStringList());
-
-    const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList);
-
-    if (tmplByName && !tmplByName->channel.empty() && tmplByName->channel[0].program() >= 0) {
-        return tmplByName->channel[0].program();
+    if (tp && !tp->channel.empty() && tp->channel[0].program() >= 0) {
+        return tp->channel[0].program();
     }
 
     return 0;

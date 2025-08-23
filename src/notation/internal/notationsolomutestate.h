@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONSOLOMUTESTATE_H
-#define MU_NOTATION_NOTATIONSOLOMUTESTATE_H
+#pragma once
+
+#include <unordered_map>
 
 #include "../inotationsolomutestate.h"
 #include "async/asyncable.h"
@@ -43,5 +44,3 @@ private:
     muse::async::Channel<engraving::InstrumentTrackId, SoloMuteState> m_trackSoloMuteStateChanged;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONSOLOMUTESTATE_H

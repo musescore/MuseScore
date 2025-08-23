@@ -46,18 +46,6 @@ static constexpr int TICKS_STEP = 480;
 
 class Engraving_PlaybackContextTests : public ::testing::Test
 {
-protected:
-    void SetUp() override
-    {
-        //! NOTE: allows to read test files using their version readers
-        //! instead of using 302 (see mscloader.cpp, makeReader)
-        MScore::useRead302InTestMode = false;
-    }
-
-    void TearDown() override
-    {
-        MScore::useRead302InTestMode = true;
-    }
 };
 
 //! Checks that hairpins outside/inside repeats don't overlap. See:

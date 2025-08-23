@@ -828,23 +828,8 @@
     <Score>
       <eid>6B_6B</eid>
       <name>Alto</name>
-      <Tracklist sTrack="0" dstTrack="0"/>
-      <Tracklist sTrack="1" dstTrack="1"/>
-      <Tracklist sTrack="2" dstTrack="2"/>
-      <Tracklist sTrack="3" dstTrack="3"/>
-      <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
-        <maskBarlinesForText>0</maskBarlinesForText>
-        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-        <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
-        <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
-        <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
-        <showCourtesiesRepeats>0</showCourtesiesRepeats>
-        <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
-        <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
-        <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
-        <repeatPlayCountShow>0</repeatPlayCountShow>
         <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -855,6 +840,7 @@
       <Part id="1">
         <Staff>
           <eid>7B_7B</eid>
+          <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
             <name>Standard</name>
             </StaffType>
@@ -895,8 +881,10 @@
           <height>10</height>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>8B_8B</eid>
+          <linkedTo>E_E</linkedTo>
           <Text>
             <eid>9B_9B</eid>
+            <linkedTo>F_F</linkedTo>
             <style>title</style>
             <text>testpart1</text>
             </Text>
@@ -920,17 +908,21 @@
               <transposingClefType>G</transposingClefType>
               <isHeader>1</isHeader>
               <eid>BC_BC</eid>
+              <linkedTo>I_I</linkedTo>
               </Clef>
             <TimeSig>
               <eid>CC_CC</eid>
+              <linkedTo>J_J</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Chord>
               <eid>DC_DC</eid>
+              <linkedTo>K_K</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>EC_EC</eid>
+                <linkedTo>L_L</linkedTo>
                 <Image>
                   <Image>
                     <eid>FC_FC</eid>
@@ -939,6 +931,7 @@
                     <linkPath>schnee.png</linkPath>
                     </Image>
                   <eid>GC_GC</eid>
+                  <linkedTo>N_N</linkedTo>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                   <linkPath>schnee.png</linkPath>
                   <size w="38.52" h="38.64"/>
@@ -949,24 +942,29 @@
               </Chord>
             <Chord>
               <eid>HC_HC</eid>
+              <linkedTo>O_O</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>IC_IC</eid>
+                <linkedTo>P_P</linkedTo>
                 <pitch>74</pitch>
                 <tpc>16</tpc>
                 </Note>
               </Chord>
             <Chord>
               <eid>JC_JC</eid>
+              <linkedTo>Q_Q</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>KC_KC</eid>
+                <linkedTo>R_R</linkedTo>
                 <pitch>76</pitch>
                 <tpc>18</tpc>
                 </Note>
               </Chord>
             <Rest>
               <eid>LC_LC</eid>
+              <linkedTo>S_S</linkedTo>
               <durationType>quarter</durationType>
               </Rest>
             </voice>
@@ -976,6 +974,7 @@
           <voice>
             <Rest>
               <eid>NC_NC</eid>
+              <linkedTo>U_U</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -986,6 +985,7 @@
           <voice>
             <Rest>
               <eid>PC_PC</eid>
+              <linkedTo>W_W</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -996,6 +996,7 @@
           <voice>
             <Rest>
               <eid>RC_RC</eid>
+              <linkedTo>Y_Y</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1006,6 +1007,7 @@
           <voice>
             <Rest>
               <eid>TC_TC</eid>
+              <linkedTo>a_a</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1016,6 +1018,7 @@
           <voice>
             <Rest>
               <eid>VC_VC</eid>
+              <linkedTo>c_c</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1026,6 +1029,7 @@
           <voice>
             <Rest>
               <eid>XC_XC</eid>
+              <linkedTo>e_e</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1036,6 +1040,7 @@
           <voice>
             <Rest>
               <eid>ZC_ZC</eid>
+              <linkedTo>g_g</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1046,6 +1051,7 @@
           <voice>
             <Rest>
               <eid>bC_bC</eid>
+              <linkedTo>i_i</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1056,6 +1062,7 @@
           <voice>
             <Rest>
               <eid>dC_dC</eid>
+              <linkedTo>k_k</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1066,6 +1073,7 @@
           <voice>
             <Rest>
               <eid>fC_fC</eid>
+              <linkedTo>m_m</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1076,6 +1084,7 @@
           <voice>
             <Rest>
               <eid>hC_hC</eid>
+              <linkedTo>o_o</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1086,6 +1095,7 @@
           <voice>
             <Rest>
               <eid>jC_jC</eid>
+              <linkedTo>q_q</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1096,6 +1106,7 @@
           <voice>
             <Rest>
               <eid>lC_lC</eid>
+              <linkedTo>s_s</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1106,6 +1117,7 @@
           <voice>
             <Rest>
               <eid>nC_nC</eid>
+              <linkedTo>u_u</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1116,6 +1128,7 @@
           <voice>
             <Rest>
               <eid>pC_pC</eid>
+              <linkedTo>w_w</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1126,6 +1139,7 @@
           <voice>
             <Rest>
               <eid>rC_rC</eid>
+              <linkedTo>y_y</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1136,6 +1150,7 @@
           <voice>
             <Rest>
               <eid>tC_tC</eid>
+              <linkedTo>0_0</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1146,6 +1161,7 @@
           <voice>
             <Rest>
               <eid>vC_vC</eid>
+              <linkedTo>2_2</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1156,6 +1172,7 @@
           <voice>
             <Rest>
               <eid>xC_xC</eid>
+              <linkedTo>4_4</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1166,6 +1183,7 @@
           <voice>
             <Rest>
               <eid>zC_zC</eid>
+              <linkedTo>6_6</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1176,6 +1194,7 @@
           <voice>
             <Rest>
               <eid>1C_1C</eid>
+              <linkedTo>8_8</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1186,6 +1205,7 @@
           <voice>
             <Rest>
               <eid>3C_3C</eid>
+              <linkedTo>+_+</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1196,6 +1216,7 @@
           <voice>
             <Rest>
               <eid>5C_5C</eid>
+              <linkedTo>AB_AB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1206,6 +1227,7 @@
           <voice>
             <Rest>
               <eid>7C_7C</eid>
+              <linkedTo>CB_CB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1216,6 +1238,7 @@
           <voice>
             <Rest>
               <eid>9C_9C</eid>
+              <linkedTo>EB_EB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1226,6 +1249,7 @@
           <voice>
             <Rest>
               <eid>/C_/C</eid>
+              <linkedTo>GB_GB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1236,6 +1260,7 @@
           <voice>
             <Rest>
               <eid>BD_BD</eid>
+              <linkedTo>IB_IB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1246,6 +1271,7 @@
           <voice>
             <Rest>
               <eid>DD_DD</eid>
+              <linkedTo>KB_KB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1256,6 +1282,7 @@
           <voice>
             <Rest>
               <eid>FD_FD</eid>
+              <linkedTo>MB_MB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1266,6 +1293,7 @@
           <voice>
             <Rest>
               <eid>HD_HD</eid>
+              <linkedTo>OB_OB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1276,6 +1304,7 @@
           <voice>
             <Rest>
               <eid>JD_JD</eid>
+              <linkedTo>QB_QB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1286,23 +1315,8 @@
     <Score>
       <eid>KD_KD</eid>
       <name>Tenor</name>
-      <Tracklist sTrack="0" dstTrack="0"/>
-      <Tracklist sTrack="1" dstTrack="1"/>
-      <Tracklist sTrack="2" dstTrack="2"/>
-      <Tracklist sTrack="3" dstTrack="3"/>
-      <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
-        <maskBarlinesForText>0</maskBarlinesForText>
-        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-        <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
-        <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
-        <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
-        <showCourtesiesRepeats>0</showCourtesiesRepeats>
-        <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
-        <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
-        <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
-        <repeatPlayCountShow>0</repeatPlayCountShow>
         <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1313,6 +1327,7 @@
       <Part id="2">
         <Staff>
           <eid>LD_LD</eid>
+          <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
             <name>Standard</name>
             </StaffType>
@@ -1353,8 +1368,10 @@
           <height>10</height>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>MD_MD</eid>
+          <linkedTo>E_E</linkedTo>
           <Text>
             <eid>ND_ND</eid>
+            <linkedTo>F_F</linkedTo>
             <style>title</style>
             <text>testpart1</text>
             </Text>
@@ -1372,44 +1389,54 @@
               <transposingClefType>G8vb</transposingClefType>
               <isHeader>1</isHeader>
               <eid>QD_QD</eid>
+              <linkedTo>RB_RB</linkedTo>
               </Clef>
             <TimeSig>
               <eid>RD_RD</eid>
+              <linkedTo>SB_SB</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Chord>
               <eid>SD_SD</eid>
+              <linkedTo>TB_TB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>TD_TD</eid>
+                <linkedTo>UB_UB</linkedTo>
                 <pitch>55</pitch>
                 <tpc>15</tpc>
                 </Note>
               </Chord>
             <Chord>
               <eid>UD_UD</eid>
+              <linkedTo>VB_VB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>VD_VD</eid>
+                <linkedTo>WB_WB</linkedTo>
                 <pitch>57</pitch>
                 <tpc>17</tpc>
                 </Note>
               </Chord>
             <Chord>
               <eid>WD_WD</eid>
+              <linkedTo>XB_XB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>XD_XD</eid>
+                <linkedTo>YB_YB</linkedTo>
                 <pitch>59</pitch>
                 <tpc>19</tpc>
                 </Note>
               </Chord>
             <Chord>
               <eid>YD_YD</eid>
+              <linkedTo>ZB_ZB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
                 <eid>ZD_ZD</eid>
+                <linkedTo>aB_aB</linkedTo>
                 <pitch>60</pitch>
                 <tpc>14</tpc>
                 </Note>
@@ -1421,6 +1448,7 @@
           <voice>
             <Rest>
               <eid>bD_bD</eid>
+              <linkedTo>bB_bB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1431,6 +1459,7 @@
           <voice>
             <Rest>
               <eid>dD_dD</eid>
+              <linkedTo>cB_cB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1441,6 +1470,7 @@
           <voice>
             <Rest>
               <eid>fD_fD</eid>
+              <linkedTo>dB_dB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1451,6 +1481,7 @@
           <voice>
             <Rest>
               <eid>hD_hD</eid>
+              <linkedTo>eB_eB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1461,6 +1492,7 @@
           <voice>
             <Rest>
               <eid>jD_jD</eid>
+              <linkedTo>fB_fB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1471,6 +1503,7 @@
           <voice>
             <Rest>
               <eid>lD_lD</eid>
+              <linkedTo>gB_gB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1481,6 +1514,7 @@
           <voice>
             <Rest>
               <eid>nD_nD</eid>
+              <linkedTo>hB_hB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1491,6 +1525,7 @@
           <voice>
             <Rest>
               <eid>pD_pD</eid>
+              <linkedTo>iB_iB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1501,6 +1536,7 @@
           <voice>
             <Rest>
               <eid>rD_rD</eid>
+              <linkedTo>jB_jB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1511,6 +1547,7 @@
           <voice>
             <Rest>
               <eid>tD_tD</eid>
+              <linkedTo>kB_kB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1521,6 +1558,7 @@
           <voice>
             <Rest>
               <eid>vD_vD</eid>
+              <linkedTo>lB_lB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1531,6 +1569,7 @@
           <voice>
             <Rest>
               <eid>xD_xD</eid>
+              <linkedTo>mB_mB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1541,6 +1580,7 @@
           <voice>
             <Rest>
               <eid>zD_zD</eid>
+              <linkedTo>nB_nB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1551,6 +1591,7 @@
           <voice>
             <Rest>
               <eid>1D_1D</eid>
+              <linkedTo>oB_oB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1561,6 +1602,7 @@
           <voice>
             <Rest>
               <eid>3D_3D</eid>
+              <linkedTo>pB_pB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1571,6 +1613,7 @@
           <voice>
             <Rest>
               <eid>5D_5D</eid>
+              <linkedTo>qB_qB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1581,6 +1624,7 @@
           <voice>
             <Rest>
               <eid>7D_7D</eid>
+              <linkedTo>rB_rB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1591,6 +1635,7 @@
           <voice>
             <Rest>
               <eid>9D_9D</eid>
+              <linkedTo>sB_sB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1601,6 +1646,7 @@
           <voice>
             <Rest>
               <eid>/D_/D</eid>
+              <linkedTo>tB_tB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1611,6 +1657,7 @@
           <voice>
             <Rest>
               <eid>BE_BE</eid>
+              <linkedTo>uB_uB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1621,6 +1668,7 @@
           <voice>
             <Rest>
               <eid>DE_DE</eid>
+              <linkedTo>vB_vB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1631,6 +1679,7 @@
           <voice>
             <Rest>
               <eid>FE_FE</eid>
+              <linkedTo>wB_wB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1641,6 +1690,7 @@
           <voice>
             <Rest>
               <eid>HE_HE</eid>
+              <linkedTo>xB_xB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1651,6 +1701,7 @@
           <voice>
             <Rest>
               <eid>JE_JE</eid>
+              <linkedTo>yB_yB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1661,6 +1712,7 @@
           <voice>
             <Rest>
               <eid>LE_LE</eid>
+              <linkedTo>zB_zB</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1671,6 +1723,7 @@
           <voice>
             <Rest>
               <eid>NE_NE</eid>
+              <linkedTo>0B_0B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1681,6 +1734,7 @@
           <voice>
             <Rest>
               <eid>PE_PE</eid>
+              <linkedTo>1B_1B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1691,6 +1745,7 @@
           <voice>
             <Rest>
               <eid>RE_RE</eid>
+              <linkedTo>2B_2B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1701,6 +1756,7 @@
           <voice>
             <Rest>
               <eid>TE_TE</eid>
+              <linkedTo>3B_3B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1711,6 +1767,7 @@
           <voice>
             <Rest>
               <eid>VE_VE</eid>
+              <linkedTo>4B_4B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1721,6 +1778,7 @@
           <voice>
             <Rest>
               <eid>XE_XE</eid>
+              <linkedTo>5B_5B</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>

@@ -34,22 +34,7 @@ static const String FRETDIAGRAM_DATA_DIR(u"fretdiagrams_data/");
 class Engraving_FretDiagramTests : public ::testing::Test
 {
 protected:
-    void SetUp() override
-    {
-        m_use302 = MScore::useRead302InTestMode;
-        MScore::useRead302InTestMode = false;
-    }
-
-    void TearDown() override
-    {
-        MScore::useRead302InTestMode = m_use302;
-    }
-
     void testChordSymToFretDiagram(MasterScore* score);
-
-private:
-
-    bool m_use302 = false;
 };
 
 void Engraving_FretDiagramTests::testChordSymToFretDiagram(MasterScore* score)

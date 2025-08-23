@@ -59,7 +59,7 @@ class IReader
 public:
     virtual ~IReader() = default;
 
-    virtual muse::Ret readScore(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
+    virtual muse::Ret readScoreFile(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
 
     using Supported = std::variant<std::monostate,
                                    Accidental*,

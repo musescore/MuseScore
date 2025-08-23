@@ -44,11 +44,6 @@ class Engraving_BendsRendererTests : public ::testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        //! NOTE: allows to read test files using their version readers
-        //! instead of using 302 (see mscloader.cpp, makeReader)
-        bool useRead302 = MScore::useRead302InTestMode;
-        MScore::useRead302InTestMode = false;
-
         s_score = ScoreRW::readScore(u"playback/playbackeventsrenderer_data/guitar_bends/guitar_bends.mscx");
 
         ASSERT_TRUE(s_score);
@@ -57,8 +52,6 @@ protected:
 
         s_playbackCtx = std::make_shared<PlaybackContext>();
         s_playbackCtx->update(s_score->parts().front()->id(), s_score);
-
-        MScore::useRead302InTestMode = useRead302;
     }
 
     static void TearDownTestSuite()

@@ -417,8 +417,6 @@ TEST_F(Engraving_TimesigTests, timesig_11)
 
 TEST_F(Engraving_TimesigTests, endOfMeasureTimeSigChange)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"endOfMeasureChange.mscz");
     EXPECT_TRUE(score);
 
@@ -448,13 +446,9 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTimeSigChange)
         EXPECT_TRUE(m->timesig() == expectedTimeSigsMM.at(measureCount));
         measureCount++;
     }
-
-    MScore::useRead302InTestMode = useRead302;
 }
 
 TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"endOfMeasureTie.mscx");
     EXPECT_TRUE(score);
 
@@ -507,6 +501,4 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
     Tie* undoTie = undoTieNote->tieFor();
     EXPECT_TRUE(undoTie);
     EXPECT_TRUE(undoTie->endNote());
-
-    MScore::useRead302InTestMode = useRead302;
 }

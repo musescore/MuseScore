@@ -54,6 +54,7 @@ public:
     muse::Ret open();
     void close();
     bool isOpened() const;
+    bool isContainer() const;
 
     muse::ByteArray readStyleFile() const;
     muse::ByteArray readScoreFile() const;
