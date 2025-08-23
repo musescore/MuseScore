@@ -41,7 +41,7 @@ InfoPanel {
     buttonsPanel: RowLayout {
         id: buttons
 
-        spacing: 19
+        spacing: 12
 
         // StyledDropdown {
         //     id: execPoints
@@ -70,8 +70,6 @@ InfoPanel {
         // }
 
         FlatButton {
-            id: neutralButton
-
             Layout.alignment: Qt.AlignLeft
 
             navigation.name: "EditShortcutButton"
@@ -88,13 +86,13 @@ InfoPanel {
 
         RowLayout {
             Layout.alignment: Qt.AlignRight
-            spacing: 22
+            spacing: 12
 
             FlatButton {
                 id: removeButton
-                
+
                 visible: root.isRemovable
-                navigation.name: text + "Button"
+                navigation.name: "RemoveButton"
                 navigation.panel: root.contentNavigation
                 navigation.column: 2
                 accessible.ignored: true
@@ -111,12 +109,10 @@ InfoPanel {
                 }
             }
 
-
-
             FlatButton {
                 id: mainButton
 
-                navigation.name: text + "Button"
+                navigation.name: "EnableDisableButton"
                 navigation.panel: root.contentNavigation
                 navigation.column: 3
                 accessible.ignored: true

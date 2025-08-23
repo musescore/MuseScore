@@ -31,6 +31,7 @@ FocusScope {
     property int icon: IconCode.NONE
     property string text: ""
     property int textFormat: Text.AutoText
+    property int maximumLineCount: 1
 
     //!NOTE: used to sort buttons inside a button box
     property int buttonId: 0
@@ -221,7 +222,8 @@ FocusScope {
                 text: root.text
                 font: root.textFont
                 textFormat: root.textFormat
-                maximumLineCount: 1
+                wrapMode: Text.Wrap
+                maximumLineCount: root.maximumLineCount
                 visible: !isEmpty
             }
         }
@@ -248,7 +250,8 @@ FocusScope {
                 text: root.text
                 font: root.textFont
                 textFormat: root.textFormat
-                maximumLineCount: 1
+                wrapMode: Text.Wrap
+                maximumLineCount: root.maximumLineCount
                 visible: !isEmpty
             }
         }
