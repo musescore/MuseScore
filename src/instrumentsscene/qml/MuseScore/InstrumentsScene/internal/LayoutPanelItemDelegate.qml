@@ -19,27 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
-import MuseScore.InstrumentsScene 1.0
+import Muse.Ui
+import Muse.UiComponents
+import MuseScore.InstrumentsScene
 
 FocusableControl {
     id: root
 
-    property var item: null
-    property LegacyTreeView treeView: undefined
-    property var index: styleData.index
+    required property TreeView treeView
+    required property bool isTreeNode
+    required property bool expanded
+    required property bool hasChildren
+    required property int depth
+    required property int row
+    required property int column
+    required property bool current
+
+    required property var modelIndex
+
+    required property var item
+
     property string filterKey
 
-    readonly property int type: item ? item.type : LayoutPanelItemType.UNDEFINED
-    readonly property bool isSelected: item && item.isSelected
-    readonly property bool isSelectable: item && item.isSelectable
-    readonly property bool isExpandable: item && item.isExpandable
-    readonly property bool settingsAvailable: item && item.settingsAvailable
-    readonly property bool settingsEnabled: item && item.settingsEnabled
+    readonly property int type: item.type
+    readonly property bool isSelected: item.isSelected
+    readonly property bool isSelectable: item.isSelectable
+    readonly property bool isExpandable: item.isExpandable
 
     property int sideMargin: 0
 
@@ -53,7 +61,7 @@ FocusableControl {
     signal popupClosed()
 
     signal changeVisibilityOfSelectedRowsRequested(bool visible)
-    signal changeVisibilityRequested(var index, bool visible)
+    signal changeVisibilityRequested(bool visible)
 
     signal dragStarted()
     signal dropped()
@@ -66,20 +74,14 @@ FocusableControl {
         onDraggedChanged: {
             if (dragged) {
                 root.dragStarted()
-                if (styleData.isExpanded) {
-                    root.treeView.collapse(styleData.index)
+                if (root.expanded) {
+                    root.treeView.collapse(root.row)
                 }
             } else {
                 root.dropped()
             }
         }
     }
-
-    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-    anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
-
-    height: parent ? parent.height : implicitHeight
-    width: parent ? parent.width : implicitWidth
 
     implicitHeight: 38
     implicitWidth: 248
@@ -180,12 +182,12 @@ FocusableControl {
                 // To prevent that, let the popup close itself, and perform the
                 // actual operation "later", i.e. not (directly or indirectly)
                 // inside the signal handler in the popup.
-                Qt.callLater(model.itemRole.replaceInstrument)
+                Qt.callLater(root.item.replaceInstrument)
             }
 
             onResetAllFormattingRequested: {
                 // Same as above
-                Qt.callLater(model.itemRole.resetAllFormatting)
+                Qt.callLater(root.item.resetAllFormatting)
             }
         }
     }
@@ -194,7 +196,7 @@ FocusableControl {
         id: staffSettingsComp
 
         StaffSettingsPopup {
-            anchorItem: popupAnchorItem
+            anchorItem: root.popupAnchorItem
         }
     }
 
@@ -202,7 +204,7 @@ FocusableControl {
         id: systemObjectsLayerSettingsComp
 
         SystemObjectsLayerSettingsPopup {
-            anchorItem: popupAnchorItem
+            anchorItem: root.popupAnchorItem
         }
     }
 
@@ -216,40 +218,37 @@ FocusableControl {
         navigationPanel: root.navigation.panel
         navigationRow: root.navigation.row
 
-        title: Boolean(model) ? model.itemRole.title : ""
-        isRootControl: Boolean(model) && root.type === LayoutPanelItemType.PART
+        title: root.item.title
+        isRootControl: root.type === LayoutPanelItemType.PART
 
         useVisibilityButton: root.type !== LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
-        isVisible: Boolean(model) && model.itemRole.isVisible
+        isVisible: root.item.isVisible
         onVisibilityButtonClicked: function(isVisible) {
-            if (!model) {
-                return
-            }
             if (root.isSelected) {
                 root.changeVisibilityOfSelectedRowsRequested(!isVisible)
             } else {
-                root.changeVisibilityRequested(styleData.index, !isVisible)
+                root.changeVisibilityRequested(!isVisible)
             }
         }
 
         showDashIcon: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
         isExpandable: root.isExpandable
-        isExpanded: styleData.isExpanded
-        expandableDepth: styleData.depth
+        isExpanded: root.expanded
+        expandableDepth: root.depth
         onExpandButtonClicked: function(expand) {
             if (expand) {
-                root.treeView.expand(styleData.index)
+                root.treeView.expand(root.row)
             } else {
-                root.treeView.collapse(styleData.index)
+                root.treeView.collapse(root.row)
             }
         }
 
         FlatButton {
             id: settingsButton
 
-            visible: root.settingsAvailable
-            enabled: root.visible && root.settingsEnabled
+            visible: root.item.settingsAvailable
+            enabled: root.visible && root.item.settingsEnabled
 
             objectName: "SettingsBtn"
             navigation.panel: visibilityControls.navigationPanel
@@ -271,16 +270,16 @@ FocusableControl {
                 if (root.type === LayoutPanelItemType.PART) {
                     comp = instrumentSettingsComp
 
-                    item["partId"] = model.itemRole.id
-                    item["instrumentId"] = model.itemRole.instrumentId()
+                    item["partId"] = root.item.id
+                    item["instrumentId"] = root.item.instrumentId()
                 } else if (root.type === LayoutPanelItemType.STAFF) {
                     comp = staffSettingsComp
 
-                    item["id"] = model.itemRole.id
+                    item["id"] = root.item.id
                 } else if (root.type == LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
                     comp = systemObjectsLayerSettingsComp
 
-                    item["staffId"] = model.itemRole.staffId()
+                    item["staffId"] = root.item.staffId()
                 }
 
                 popupLoader.openPopup(comp, this, item)
@@ -301,7 +300,7 @@ FocusableControl {
     }
 
     Behavior on opacity {
-        enabled: styleData.depth !== 0
+        enabled: root.depth !== 0
         NumberAnimation { duration: 150 }
     }
 
@@ -365,7 +364,7 @@ FocusableControl {
 
         State {
             name: "PART_EXPANDED"
-            when: styleData.isExpanded && !root.isSelected &&
+            when: root.expanded && !root.isSelected &&
                   root.type === LayoutPanelItemType.PART
 
             PropertyChanges {
@@ -394,6 +393,11 @@ FocusableControl {
             when: prv.dragged
             name: "DRAGGED"
 
+            PropertyChanges {
+                target: root
+                z: 1000
+            }
+
             ParentChange {
                 target: root
                 parent: root.treeView.contentItem
@@ -402,14 +406,6 @@ FocusableControl {
             PropertyChanges {
                 target: shadow
                 visible: true
-            }
-
-            AnchorChanges {
-                target: root
-                anchors {
-                    verticalCenter: undefined
-                    horizontalCenter: undefined
-                }
             }
         }
     ]
