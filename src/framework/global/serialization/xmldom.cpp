@@ -21,10 +21,9 @@
  */
 #include "xmldom.h"
 
-#include <chrono>
-#include <type_traits>
-#include <cstring>
 #include <algorithm>
+#include <cstring>
+#include <type_traits>
 
 #include "pugixml.hpp"
 
@@ -319,21 +318,7 @@ XmlDomDocument::XmlDomDocument()
 
 void XmlDomDocument::setContent(const ByteArray& data)
 {
-#ifndef NDEBUG
-    struct Accumulator {
-        double total_ms = 0.0;
-        size_t count = 0;
-        ~Accumulator()
-        {
-            LOGD() << "[XmlDom PUGI] Parsed " << count << " docs in "
-                   << total_ms << " ms (avg "
-                   << (count ? total_ms / count : 0.0) << " ms/doc)\n";
-        }
-    };
-    static Accumulator acc;
-
-    auto start = std::chrono::steady_clock::now();
-#endif //NDEBUG
+    TRACEFUNC;
 
     m_xml->doc.reset();
     m_xml->result = m_xml->doc.load_buffer(data.constData(), data.size());
@@ -342,12 +327,6 @@ void XmlDomDocument::setContent(const ByteArray& data)
     if (m_xml->result.status != pugi::status_ok) {
         LOGE() << errorString();
     }
-
-#ifndef NDEBUG
-    auto end = std::chrono::steady_clock::now();
-    acc.total_ms += std::chrono::duration<double, std::milli>(end - start).count();
-    acc.count++;
-#endif //NDEBUG
 }
 
 XmlDomElement XmlDomDocument::rootElement() const
