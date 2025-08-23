@@ -3711,7 +3711,9 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 AsciiStringView articGlyph = SymNames::nameForSymId(sid);
                 otherArtic += String(u" smufl=\"%1\"").arg(String::fromAscii(articGlyph.ascii()));
             }
-            m_xml.tagRaw(otherArtic, articText);
+            if (sid != SymId::noSym || !articText.empty()) {
+                m_xml.tagRaw(otherArtic, articText);
+            }
         }
     }
 }
