@@ -33,6 +33,22 @@ https://musescore.com/contact
 Change log
 ----------
 
+23 August 2025 (Martin Keary & Simon Smith) Leland Version 0.79
+- Metadata
+  - Upward stem attachment point corrected for Whole (semibreve) notehead (E0A2)
+  - Cutouts corrected for Reversed flat (quarter-tone flat) (Stein) (E280)
+- Leland
+  - Added:
+    - Filled whole (semibreve) and half (minim) noteheads (E0FA, E0FB)
+    - Ligature for 'sff' dynamic
+  - Modified:
+    - Slight right sidebearing removed from dynamics (E520-E53D)
+    - Arpeggiato arrowhead down (EAAE) has been flipped vertically
+  - Kerning added for composite letters of 'Ped.' symbol (E651-E654); kerning tweaked for dynamics
+- Leland Text
+  - Kerning added for metronome mark noteheads (ECA0-ECB6) followed by augmentation dot (ECB7)
+
+
 8 May 2025 (Martin Keary & Simon Smith) Leland Version 0.78
 - Metadata
   - Updated engravingDefaults (new values for slurEndpointThickness, tieEndpointThickness, legerLineExtension, thinThickBarlineSeparation, bracketThickness, hBarThickness)
