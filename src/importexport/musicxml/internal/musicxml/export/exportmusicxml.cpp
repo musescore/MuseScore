@@ -3706,13 +3706,14 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 }
             }
             notations.tag(m_xml, a);
-            articulations.tag(m_xml);
             if (sid != SymId::noSym) {
                 AsciiStringView articGlyph = SymNames::nameForSymId(sid);
                 otherArtic += String(u" smufl=\"%1\"").arg(String::fromAscii(articGlyph.ascii()));
             }
             if (sid != SymId::noSym || !articText.empty()) {
+                articulations.tag(m_xml);
                 m_xml.tagRaw(otherArtic, articText);
+                articulations.etag(m_xml);
             }
         }
     }
