@@ -1196,6 +1196,9 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
     const String place = notation.attribute(u"placement");
     Articulation* na = Factory::createArticulation(cr);
     na->setSymId(articSym);
+    if (!notation.text().empty()) {
+        na->setTextType(TConv::fromXml(notation.text().toAscii().constChar(), ArticulationTextType::NO_TEXT));
+    }
     colorItem(na, Color::fromString(notation.attribute(u"color")));
 
     if (dir == "up" || dir == "down") {
@@ -8360,16 +8363,15 @@ void MusicXmlParserNotations::articulations()
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "other-articulation") {
             const String smufl = m_e.attribute("smufl");
-            const String articText = m_e.readText();
             SymId sid = SymNames::symIdByName(smufl, SymId::noSym);
             Notation artic = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
                                                               m_e.attributes(), u"articulations", sid);
+            const String articText = m_e.readText();
             artic.setText(articText);
 
             if (!smufl.empty() || !articText.empty()) {
                 m_notations.push_back(artic);
             }
-            m_e.skipCurrentElement();  // skip but don't log
         } else {
             skipLogCurrElem();
         }
