@@ -126,9 +126,13 @@ void EngravingFont::ensureLoad()
     }
 
     std::string error;
-    JsonObject metadataJson = JsonDocument::fromJson(metadataFile.readAll(), &error).rootObject();
+    const JsonObject metadataJson = JsonDocument::fromJson(metadataFile.readAll(), &error).rootObject();
     if (!error.empty()) {
         LOGE() << "Json parse error in " << metadataFile.filePath() << ", error: " << error;
+        return;
+    }
+    if (!metadataJson.isValid()) {
+        LOGE() << "No valid JSON object in " << metadataFile.filePath();
         return;
     }
 
@@ -142,8 +146,12 @@ void EngravingFont::ensureLoad()
 
 void EngravingFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
 {
+    if (!glyphsWithAnchors.isValid()) {
+        return;
+    }
+
     for (const std::string& symName : glyphsWithAnchors.keys()) {
-        SymId symId = SymNames::symIdByName(symName);
+        const SymId symId = SymNames::symIdByName(symName);
         if (symId == SymId::noSym) {
             //! NOTE currently, Bravura contains a bunch of entries in glyphsWithAnchors
             //! for glyph names that will not be found - flag32ndUpStraight, etc.
@@ -151,7 +159,10 @@ void EngravingFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
         }
 
         Sym& sym = this->sym(symId);
-        JsonObject anchors = glyphsWithAnchors.value(symName).toObject();
+        const JsonObject anchors = glyphsWithAnchors.value(symName).toObject();
+        if (!anchors.isValid()) {
+            continue;
+        }
 
         static const std::unordered_map<std::string, SmuflAnchorId> smuflAnchorIdNames {
             { "stemDownNW", SmuflAnchorId::stemDownNW },
@@ -166,15 +177,15 @@ void EngravingFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
         };
 
         for (const std::string& anchorId : anchors.keys()) {
-            auto search = smuflAnchorIdNames.find(anchorId);
+            const auto search = smuflAnchorIdNames.find(anchorId);
             if (search == smuflAnchorIdNames.cend()) {
                 //LOGD() << "Unhandled SMuFL anchorId: " << anchorId;
                 continue;
             }
 
-            JsonArray arr = anchors.value(anchorId).toArray();
-            double x = arr.at(0).toDouble();
-            double y = arr.at(1).toDouble();
+            const JsonArray arr = anchors.value(anchorId).toArray();
+            const double x = arr.at(0).toDouble();
+            const double y = arr.at(1).toDouble();
 
             sym.smuflAnchors[search->second] = PointF(x, -y) * SPATIUM20;
         }
@@ -498,6 +509,22 @@ void EngravingFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternat
           std::string("timeSig9Narrow"),
           SymId::timeSig9Narrow
         },
+        { std::string("timeSigBracketLeftSmall"),
+          std::string("timeSigBracketLeftSmallLarge"),
+          SymId::timeSigBracketLeftSmallLarge
+        },
+        { std::string("timeSigBracketLeftSmall"),
+          std::string("timeSigBracketLeftSmallNarrow"),
+          SymId::timeSigBracketLeftSmallNarrow
+        },
+        { std::string("timeSigBracketRightSmall"),
+          std::string("timeSigBracketRightSmallLarge"),
+          SymId::timeSigBracketRightSmallLarge
+        },
+        { std::string("timeSigBracketRightSmall"),
+          std::string("timeSigBracketRightSmallNarrow"),
+          SymId::timeSigBracketRightSmallNarrow
+        },
         { std::string("timeSigCommon"),
           std::string("timeSigCommonLarge"),
           SymId::timeSigCommonLarge
@@ -715,6 +742,10 @@ void EngravingFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternat
 
 void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObject)
 {
+    if (!engravingDefaultsObject.isValid()) {
+        return;
+    }
+
     struct EngravingDefault {
         std::vector<Sid> sids;
 

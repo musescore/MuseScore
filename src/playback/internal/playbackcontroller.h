@@ -31,10 +31,10 @@
 #include "engraving/types/types.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationplayback.h"
-#include "audio/iplayer.h"
-#include "audio/iplayback.h"
+#include "audio/main/iplayer.h"
+#include "audio/main/iplayback.h"
 #include "audio/iaudioconfiguration.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "iinteractive.h"
 #include "tours/itoursservice.h"
 
@@ -89,9 +89,13 @@ public:
     void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
                                const notation::INotationSoloMuteState::SoloMuteState& state) override;
 
-    void playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi = false) override;
-    void playNotes(const notation::NoteValList& notes, const notation::staff_idx_t staffIdx, const notation::Segment* segment) override;
+    void playElements(const std::vector<const notation::EngravingItem*>& elements,
+                      const PlayParams& params = PlayParams(), bool isMidi = false) override;
+    void playNotes(const notation::NoteValList& notes, notation::staff_idx_t staffIdx, const notation::Segment* segment,
+                   const PlayParams& params = PlayParams()) override;
     void playMetronome(int tick) override;
+
+    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
 
     void seekElement(const notation::EngravingItem* element) override;
     void seekBeat(int measureIndex, int beatIndex) override;
@@ -168,12 +172,8 @@ private:
     void stop();
     void resume();
 
-    void selectAtRawTick(const muse::midi::tick_t& rawTick);
-
     muse::audio::secs_t playbackStartSecs() const;
     muse::audio::secs_t playbackEndSecs() const;
-
-    muse::audio::secs_t playbackDelay(const muse::secs_t countInDuration) const;
 
     notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 
@@ -229,8 +229,8 @@ private:
     void removeFromOnlineSounds(const muse::audio::TrackId trackId);
     void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
     void listenAutoProcessOnlineSoundsInBackgroundChanged();
-    bool shouldShowOnlineSoundsConnectionWarning() const;
-    void showOnlineSoundsConnectionWarning();
+    bool shouldShowOnlineSoundsProcessingError() const;
+    void showOnlineSoundsProcessingError();
 
     muse::audio::secs_t playedTickToSecs(int tick) const;
 
@@ -273,7 +273,7 @@ private:
     std::set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
     muse::async::Notification m_onlineSoundsChanged;
     muse::Progress m_onlineSoundsProcessingProgress;
-    int m_onlineSoundsProcessingErrorCode = 0;
+    bool m_onlineSoundsErrorDetected = false;
 };
 }
 

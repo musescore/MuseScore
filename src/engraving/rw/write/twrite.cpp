@@ -114,6 +114,7 @@
 #include "dom/partialtie.h"
 #include "dom/pedal.h"
 #include "dom/pickscrape.h"
+#include "dom/playcounttext.h"
 #include "dom/playtechannotation.h"
 
 #include "dom/rasgueado.h"
@@ -294,6 +295,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
         break;
     case ElementType::PICK_SCRAPE:  write(item_cast<const PickScrape*>(item), xml, ctx);
         break;
+    case ElementType::PLAY_COUNT_TEXT: write(item_cast<const PlayCountText*>(item), xml, ctx);
+        break;
     case ElementType::PLAYTECH_ANNOTATION: write(item_cast<const PlayTechAnnotation*>(item), xml, ctx);
         break;
     case ElementType::RASGUEADO:    write(item_cast<const Rasgueado*>(item), xml, ctx);
@@ -454,7 +457,12 @@ void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteCont
     if (!eid.isValid()) {
         eid = item->assignNewEID();
     }
-    xml.tag("eid", eid.toStdString());
+
+    std::array<char, EID::MAX_STR_SIZE> buf{};
+    const char* last = eid.toChars(buf.data(), buf.data() + buf.size());
+    const auto size = static_cast<size_t>(last - buf.data());
+
+    xml.tag("eid", AsciiStringView { buf.data(), size });
 }
 
 void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
@@ -467,7 +475,7 @@ void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteCon
     if (mainElement != item) {
         EID eidOfMainElement = mainElement->eid();
         DO_ASSERT(eidOfMainElement.isValid());
-        xml.tag("linkedTo", mainElement->eid().toStdString());
+        xml.tag("linkedTo", eidOfMainElement.toStdString());
     }
 }
 
@@ -503,8 +511,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
 
     writeItemLink(item, xml, ctx);
 
-    if ((ctx.writeTrack() || item->track() != ctx.curTrack())
-        && (item->track() != muse::nidx) && !item->isBeam() && !item->isTuplet()) {
+    if (item->track() != ctx.curTrack() && item->track() != muse::nidx && !item->isBeam() && !item->isTuplet()) {
         // Writing track number for beams and tuplets is redundant as it is calculated
         // during layout.
         int t = static_cast<int>(item->track()) + ctx.trackDiff();
@@ -557,7 +564,7 @@ void TWrite::write(const ActionIcon* item, XmlWriter& xml, WriteContext&)
 void TWrite::write(const Ambitus* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
-    xml.tagProperty(Pid::HEAD_GROUP, int(item->noteHeadGroup()), int(Ambitus::NOTEHEADGROUP_DEFAULT));
+    xml.tagProperty(Pid::HEAD_GROUP, item->noteHeadGroup(), Ambitus::NOTEHEADGROUP_DEFAULT);
     xml.tagProperty(Pid::HEAD_TYPE,  int(item->noteHeadType()),  int(Ambitus::NOTEHEADTYPE_DEFAULT));
     xml.tagProperty(Pid::MIRROR_HEAD, int(item->direction()),    int(Ambitus::DIRECTION_DEFAULT));
     xml.tag("hasLine",    item->hasLine(), true);
@@ -690,6 +697,24 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     for (const EngravingItem* e : *item->el()) {
         writeItem(e, xml, ctx);
     }
+    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT_SETTING);
+
+    const bool showText = item->style().styleB(Sid::repeatPlayCountShow);
+    const bool singleRepeats = item->style().styleB(Sid::repeatPlayCountShowSingleRepeats);
+    const int playCount = item->measure() ? item->measure()->repeatCount() : 2;
+    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true);
+    if (showPlayCount) {
+        writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
+    }
+
+    if (item->playCountText()) {
+        writeItem(item->playCountText(), xml, ctx);
+    }
+
+    if (ctx.clipboardmode() && item->measure()) {
+        xml.tag("playCount", item->measure()->repeatCount());
+    }
+
     writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
@@ -768,6 +793,10 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
         bool force = ((item->isVBox() || item->isFBox()) && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
         writeProperty(item, xml, id, force);
     }
+    if (item->isVBoxBase()) {
+        writeProperty(item, xml, Pid::PADDING_TO_NOTATION_ABOVE);
+        writeProperty(item, xml, Pid::PADDING_TO_NOTATION_BELOW);
+    }
     writeItemProperties(item, xml, ctx);
     for (const EngravingItem* e : item->el()) {
         writeItem(e, xml, ctx);
@@ -802,6 +831,7 @@ void TWrite::write(const FBox* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::FRET_FRAME_ROW_GAP);
     writeProperty(item, xml, Pid::FRET_FRAME_CHORDS_PER_ROW);
     writeProperty(item, xml, Pid::FRET_FRAME_H_ALIGN);
+    writeProperty(item, xml, Pid::FRET_FRAME_DIAGRAMS_ORDER);
 
     writeProperties(static_cast<const Box*>(item), xml, ctx);
 
@@ -2270,6 +2300,7 @@ void TWrite::write(const Marker* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.tag("label", item->label());
+    writeProperty(item, xml, Pid::MARKER_TYPE);
     writeProperty(item, xml, Pid::MARKER_CENTER_ON_SYMBOL);
     writeProperty(item, xml, Pid::MARKER_SYMBOL_SIZE);
     xml.endElement();
@@ -2490,6 +2521,14 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("color", item->color());
     }
 
+    if (item->hideWhenEmpty() != AutoOnOff::AUTO) {
+        xml.tag("hideWhenEmpty", TConv::toXml(item->hideWhenEmpty()));
+    }
+
+    if (item->hideStavesWhenIndividuallyEmpty()) {
+        xml.tag("hideStavesWhenIndividuallyEmpty", item->hideStavesWhenIndividuallyEmpty());
+    }
+
     if (item->preferSharpFlat() != PreferSharpFlat::AUTO) {
         switch (item->preferSharpFlat()) {
         case PreferSharpFlat::AUTO:
@@ -2569,6 +2608,13 @@ void TWrite::write(const PickScrape* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const PlayCountText* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
+    xml.endElement();
+}
+
 void TWrite::write(const PlayTechAnnotation* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
@@ -2605,6 +2651,7 @@ void TWrite::write(const Rest* item, XmlWriter& xml, WriteContext& ctx)
     writeChordRestBeam(item, xml, ctx);
     xml.startElement(item);
     writeStyledProperties(item, xml);
+    writeProperty(item, xml, Pid::ALIGN_WITH_OTHER_RESTS);
     writeProperties(static_cast<const ChordRest*>(item), xml, ctx);
     writeItems(item->el(), xml, ctx);
     bool write_dots = false;
@@ -2733,17 +2780,14 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("defaultTransposingClef", TConv::toXml(ct.transposingClef));
     }
 
-    if (item->isLinesInvisible(Fraction(0, 1))) {
-        xml.tag("invisible", item->isLinesInvisible(Fraction(0, 1)));
-    }
-    if (item->hideWhenEmpty() != Staff::HideMode::AUTO) {
-        xml.tag("hideWhenEmpty", int(item->hideWhenEmpty()));
+    if (item->hideWhenEmpty() != AutoOnOff::AUTO) {
+        xml.tag("hideWhenEmpty", TConv::toXml(item->hideWhenEmpty()));
     }
     if (item->cutaway()) {
         xml.tag("cutaway", item->cutaway());
     }
-    if (item->showIfEmpty()) {
-        xml.tag("showIfSystemEmpty", item->showIfEmpty());
+    if (item->showIfEntireSystemEmpty()) {
+        xml.tag("showIfSystemEmpty", item->showIfEntireSystemEmpty());
     }
     if (item->hideSystemBarLine()) {
         xml.tag("hideSystemBarLine", item->hideSystemBarLine());
@@ -2769,7 +2813,6 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_FROM);
     writeProperty(item, xml, Pid::STAFF_BARLINE_SPAN_TO);
     writeProperty(item, xml, Pid::STAFF_USERDIST);
-    writeProperty(item, xml, Pid::STAFF_COLOR);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE1);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE2);
     writeProperty(item, xml, Pid::PLAYBACK_VOICE3);

@@ -26,117 +26,112 @@
 #include "../../infrastructure/rtti.h"
 #include "../../infrastructure/htmlparser.h"
 
-#include "../../dom/score.h"
-#include "../../dom/masterscore.h"
-#include "../../dom/factory.h"
-#include "../../dom/mscore.h"
-
-#include "../../dom/tempotext.h"
-#include "../../dom/stafftext.h"
-#include "../../dom/stafftextbase.h"
-#include "../../dom/soundflag.h"
-#include "../../dom/capo.h"
-
-#include "../../dom/drumset.h"
-#include "../../dom/dynamic.h"
-#include "../../dom/expression.h"
-#include "../../dom/harmony.h"
-#include "../../dom/harmonicmark.h"
-#include "../../dom/chordlist.h"
-
-#include "../../dom/excerpt.h"
-
-#include "../../dom/fret.h"
-#include "../../dom/tremolosinglechord.h"
-#include "../../dom/tremolotwochord.h"
-#include "../../dom/tremolobar.h"
-#include "../../dom/sticking.h"
-#include "../../dom/systemtext.h"
-#include "../../dom/playtechannotation.h"
-#include "../../dom/rehearsalmark.h"
-
-#include "../../dom/instrument.h"
-#include "../../dom/instrchange.h"
-
-#include "../../dom/staffstate.h"
-#include "../../dom/figuredbass.h"
-#include "../../dom/part.h"
-#include "../../dom/fermata.h"
-#include "../../dom/image.h"
-#include "../../dom/tuplet.h"
-#include "../../dom/text.h"
-#include "../../dom/beam.h"
-#include "../../dom/ambitus.h"
 #include "../../dom/accidental.h"
-#include "../../dom/marker.h"
-#include "../../dom/jump.h"
-#include "../../dom/measurenumber.h"
-#include "../../dom/mmrestrange.h"
-#include "../../dom/systemdivider.h"
 #include "../../dom/actionicon.h"
+#include "../../dom/ambitus.h"
 #include "../../dom/arpeggio.h"
 #include "../../dom/articulation.h"
-#include "../../dom/ornament.h"
 #include "../../dom/audio.h"
 #include "../../dom/bagpembell.h"
 #include "../../dom/barline.h"
-#include "../../dom/chord.h"
+#include "../../dom/beam.h"
 #include "../../dom/bend.h"
 #include "../../dom/box.h"
-#include "../../dom/laissezvib.h"
-#include "../../dom/layoutbreak.h"
-#include "../../dom/stafftypechange.h"
 #include "../../dom/bracket.h"
 #include "../../dom/breath.h"
-#include "../../dom/note.h"
-#include "../../dom/noteline.h"
-#include "../../dom/spanner.h"
-#include "../../dom/fingering.h"
-#include "../../dom/notedot.h"
+#include "../../dom/capo.h"
+#include "../../dom/chord.h"
 #include "../../dom/chordline.h"
-#include "../../dom/timesig.h"
-#include "../../dom/lyrics.h"
-#include "../../dom/stem.h"
-#include "../../dom/stemslash.h"
-#include "../../dom/hook.h"
-#include "../../dom/page.h"
+#include "../../dom/chordlist.h"
 #include "../../dom/clef.h"
+#include "../../dom/drumset.h"
+#include "../../dom/dynamic.h"
+#include "../../dom/excerpt.h"
+#include "../../dom/expression.h"
+#include "../../dom/factory.h"
+#include "../../dom/fermata.h"
+#include "../../dom/figuredbass.h"
+#include "../../dom/fingering.h"
+#include "../../dom/fret.h"
 #include "../../dom/glissando.h"
 #include "../../dom/gradualtempochange.h"
-#include "../../dom/guitarbend.h"
-#include "../../dom/line.h"
-#include "../../dom/textlinebase.h"
 #include "../../dom/groups.h"
-#include "../../dom/harppedaldiagram.h"
+#include "../../dom/guitarbend.h"
 #include "../../dom/hairpin.h"
 #include "../../dom/hammeronpulloff.h"
+#include "../../dom/harmonicmark.h"
+#include "../../dom/harmony.h"
+#include "../../dom/harppedaldiagram.h"
+#include "../../dom/hook.h"
+#include "../../dom/image.h"
+#include "../../dom/instrchange.h"
+#include "../../dom/instrument.h"
+#include "../../dom/jump.h"
 #include "../../dom/keysig.h"
+#include "../../dom/laissezvib.h"
+#include "../../dom/layoutbreak.h"
 #include "../../dom/layoutbreak.h"
 #include "../../dom/ledgerline.h"
 #include "../../dom/letring.h"
+#include "../../dom/line.h"
+#include "../../dom/lyrics.h"
+#include "../../dom/marker.h"
+#include "../../dom/masterscore.h"
+#include "../../dom/measurenumber.h"
 #include "../../dom/measurerepeat.h"
 #include "../../dom/mmrest.h"
-#include "../../dom/rest.h"
-#include "../../dom/rasgueado.h"
-#include "../../dom/slur.h"
-#include "../../dom/slurtie.h"
-#include "../../dom/spacer.h"
-#include "../../dom/stafftype.h"
-#include "../../dom/stafftypechange.h"
-#include "../../dom/stringtunings.h"
-#include "../../dom/system.h"
-#include "../../dom/textline.h"
-#include "../../dom/trill.h"
-#include "../../dom/vibrato.h"
-#include "../../dom/volta.h"
-#include "../../dom/tie.h"
+#include "../../dom/mmrestrange.h"
+#include "../../dom/mscore.h"
+#include "../../dom/note.h"
+#include "../../dom/notedot.h"
+#include "../../dom/noteline.h"
+#include "../../dom/ornament.h"
 #include "../../dom/ottava.h"
-#include "../../dom/pedal.h"
+#include "../../dom/page.h"
 #include "../../dom/palmmute.h"
-#include "../../dom/segment.h"
 #include "../../dom/parenthesis.h"
 #include "../../dom/part.h"
+#include "../../dom/part.h"
 #include "../../dom/partialtie.h"
+#include "../../dom/pedal.h"
+#include "../../dom/playcounttext.h"
+#include "../../dom/playtechannotation.h"
+#include "../../dom/rasgueado.h"
+#include "../../dom/rehearsalmark.h"
+#include "../../dom/rest.h"
+#include "../../dom/score.h"
+#include "../../dom/segment.h"
+#include "../../dom/sig.h"
+#include "../../dom/slur.h"
+#include "../../dom/slurtie.h"
+#include "../../dom/soundflag.h"
+#include "../../dom/spacer.h"
+#include "../../dom/spanner.h"
+#include "../../dom/staffstate.h"
+#include "../../dom/stafftext.h"
+#include "../../dom/stafftextbase.h"
+#include "../../dom/stafftype.h"
+#include "../../dom/stafftypechange.h"
+#include "../../dom/stem.h"
+#include "../../dom/stemslash.h"
+#include "../../dom/sticking.h"
+#include "../../dom/stringtunings.h"
+#include "../../dom/system.h"
+#include "../../dom/systemdivider.h"
+#include "../../dom/systemtext.h"
+#include "../../dom/tempotext.h"
+#include "../../dom/text.h"
+#include "../../dom/textline.h"
+#include "../../dom/textlinebase.h"
+#include "../../dom/tie.h"
+#include "../../dom/timesig.h"
+#include "../../dom/tremolobar.h"
+#include "../../dom/tremolosinglechord.h"
+#include "../../dom/tremolotwochord.h"
+#include "../../dom/trill.h"
+#include "../../dom/tuplet.h"
+#include "../../dom/vibrato.h"
+#include "../../dom/volta.h"
 #include "../../dom/whammybar.h"
 
 #include "../xmlreader.h"
@@ -270,6 +265,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::PARTIAL_TIE: read(item_cast<PartialTie*>(item), xml, ctx);
         break;
     case ElementType::PEDAL: read(item_cast<Pedal*>(item), xml, ctx);
+        break;
+    case ElementType::PLAY_COUNT_TEXT: read(item_cast<PlayCountText*>(item), xml, ctx);
         break;
     case ElementType::PLAYTECH_ANNOTATION: read(item_cast<PlayTechAnnotation*>(item), xml, ctx);
         break;
@@ -461,6 +458,10 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PartialSpannerDirection::OUTGOING));
     case P_TYPE::PARENTHESES_MODE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), ParenthesesMode::NONE));
+    case P_TYPE::AUTO_CUSTOM_HIDE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoCustomHide::AUTO));
+    case P_TYPE::MARKER_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), MarkerType::USER));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -552,6 +553,8 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     } else if (tag == "Parenthesis") {
         Parenthesis* p = Factory::createParenthesis(item);
         TRead::read(p, e, ctx);
+        p->setParent(item);
+        p->setTrack(ctx.track());
         item->add(p);
     } else {
         return false;
@@ -887,6 +890,11 @@ void TRead::read(Sticking* s, XmlReader& xml, ReadContext& ctx)
 void TRead::read(SystemText* t, XmlReader& xml, ReadContext& ctx)
 {
     read(static_cast<StaffTextBase*>(t), xml, ctx);
+}
+
+void TRead::read(PlayCountText* t, XmlReader& xml, ReadContext& ctx)
+{
+    read(static_cast<TextBase*>(t), xml, ctx);
 }
 
 void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)
@@ -1691,21 +1699,18 @@ void TRead::read(Accidental* a, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Marker* m, XmlReader& e, ReadContext& ctx)
 {
-    MarkerType mt = MarkerType::SEGNO;
-
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "label") {
             AsciiStringView s(e.readAsciiText());
             m->setLabel(String::fromAscii(s.ascii()));
-            mt = TConv::fromXml(s, MarkerType::USER);
+        } else if (readProperty(m, tag, e, ctx, Pid::MARKER_TYPE)) {
         } else if (readProperty(m, tag, e, ctx, Pid::MARKER_CENTER_ON_SYMBOL)) {
         } else if (readProperty(m, tag, e, ctx, Pid::MARKER_SYMBOL_SIZE)) {
         } else if (!readProperties(static_cast<TextBase*>(m), e, ctx)) {
             e.unknown();
         }
     }
-    m->setMarkerType(mt);
 }
 
 void TRead::read(Jump* j, XmlReader& e, ReadContext& ctx)
@@ -2020,6 +2025,16 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
                 TRead::read(image, e, ctx);
                 b->add(image);
             }
+        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT_SETTING)) {
+        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT)) {
+        } else if (tag == "PlayCountText") {
+            PlayCountText* p = Factory::createPlayCountText(b);
+            TRead::read(p, e, ctx);
+            p->setParent(b);
+            p->setTrack(ctx.track());
+            b->add(p);
+        } else if (tag == "playCount") {
+            b->setPlayCount(e.readInt());
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
@@ -2091,6 +2106,7 @@ void TRead::read(FBox* b, XmlReader& xml, ReadContext& ctx)
         } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_ROW_GAP)) {
         } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_CHORDS_PER_ROW)) {
         } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_H_ALIGN)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_DIAGRAMS_ORDER)) {
         } else if (TRead::readProperties(static_cast<Box*>(b), xml, ctx)) {
         } else {
             xml.unknown();
@@ -2201,6 +2217,8 @@ bool TRead::readProperties(Box* b, XmlReader& e, ReadContext& ctx)
             //! but when we add it to Box, the parent will be rewritten.
             b->add(vb);
         }
+    } else if (TRead::readProperty(b, tag, e, ctx, Pid::PADDING_TO_NOTATION_ABOVE)) {
+    } else if (TRead::readProperty(b, tag, e, ctx, Pid::PADDING_TO_NOTATION_BELOW)) {
     } else if (TRead::readProperties(static_cast<MeasureBase*>(b), e, ctx)) {
     } else {
         return false;
@@ -3502,6 +3520,10 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
         p->setShow(e.readInt());
     } else if (tag == "soloist") {
         p->setSoloist(e.readInt());
+    } else if (tag == "hideWhenEmpty") {
+        p->setHideWhenEmpty(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
+    } else if (tag == "hideStavesWhenIndividuallyEmpty") {
+        p->setHideStavesWhenIndividuallyEmpty(e.readBool());
     } else if (tag == "preferSharpFlat") {
         String val = e.readText();
         if (val == "sharps") {
@@ -3559,6 +3581,7 @@ void TRead::read(Rest* r, XmlReader& e, ReadContext& ctx)
             TRead::read(dot, e, ctx);
             r->add(dot);
         } else if (TRead::readStyledProperty(r, tag, e, ctx)) {
+        } else if (TRead::readProperty(r, tag, e, ctx, Pid::ALIGN_WITH_OTHER_RESTS)) {
         } else if (TRead::readProperties(r, e, ctx)) {
         } else {
             e.unknown();
@@ -3777,7 +3800,7 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
             t->setGenClef(e.readInt());
         } else if (tag == "stemless") {
             bool val = e.readInt() != 0;
-            t->setStemless(e.readBool());
+            t->setStemless(val);
             t->setShowBackTied(!val);        // for compatibility with 2.0.2 scores where this prop
         }                                 // was lacking and controlled by "slashStyle" instead
         else if (tag == "barlines") {
@@ -3881,11 +3904,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "invisible") {
         s->staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {
-        s->setHideWhenEmpty(Staff::HideMode(e.readInt()));
+        s->setHideWhenEmpty(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
     } else if (tag == "cutaway") {
         s->setCutaway(e.readInt());
     } else if (tag == "showIfSystemEmpty") {
-        s->setShowIfEmpty(e.readInt());
+        s->setShowIfEntireSystemEmpty(e.readInt());
     } else if (tag == "hideSystemBarLine") {
         s->setHideSystemBarLine(e.readInt());
     } else if (tag == "mergeMatchingRests") {

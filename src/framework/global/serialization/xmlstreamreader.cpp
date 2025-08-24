@@ -22,13 +22,11 @@
 #include "xmlstreamreader.h"
 
 #include <cstring>
+#include <sstream>
+#include <chrono>
+#include <iostream>
 
-#include "global/types/string.h"
-#ifdef SYSTEM_TINYXML
-#include <tinyxml2.h>
-#else
-#include "thirdparty/tinyxml/tinyxml2.h"
-#endif
+#include "pugixml.hpp"
 
 #include "log.h"
 
@@ -36,9 +34,9 @@ using namespace muse;
 using namespace muse::io;
 
 struct XmlStreamReader::Xml {
-    tinyxml2::XMLDocument doc;
-    tinyxml2::XMLNode* node = nullptr;
-    tinyxml2::XMLError err;
+    pugi::xml_document doc;
+    pugi::xml_node node{};
+    pugi::xml_parse_result result{};
     String customErr;
 };
 
@@ -77,20 +75,38 @@ XmlStreamReader::~XmlStreamReader()
 
 void XmlStreamReader::setData(const ByteArray& data_)
 {
-    m_xml->doc.Clear();
+#ifndef NDEBUG
+    struct Accumulator {
+        double total_ms = 0.0;
+        ~Accumulator()
+        {
+            LOGD() << "[XmlStreamReader] Total PUGI parse time: "
+                   << total_ms << " ms\n";
+        }
+    };
+    static Accumulator acc;
+
+    auto start = std::chrono::steady_clock::now();
+#endif //NDEBUG
+
+    m_xml->doc.reset();
     m_xml->customErr.clear();
     m_token = TokenType::Invalid;
 
     if (data_.size() < 4) {
-        m_xml->err = tinyxml2::XML_ERROR_EMPTY_DOCUMENT;
-        LOGE() << m_xml->doc.ErrorIDToName(m_xml->err);
+        m_xml->result = pugi::xml_parse_result{}; // zero it
+        m_xml->result.status = pugi::status_no_document_element;
+        m_xml->customErr = String(u"empty document");
+        LOGE() << m_xml->customErr;
         return;
     }
 
     UtfCodec::Encoding enc = UtfCodec::xmlEncoding(data_);
     if (enc == UtfCodec::Encoding::Unknown) {
-        m_xml->err = tinyxml2::XML_CAN_NOT_CONVERT_TEXT;
-        LOGE() << "unknown encoding";
+        m_xml->result = pugi::xml_parse_result{};
+        m_xml->result.status = pugi::status_internal_error;
+        m_xml->customErr = String(u"unknown encoding");
+        LOGE() << m_xml->customErr;
         return;
     }
 
@@ -103,13 +119,23 @@ void XmlStreamReader::setData(const ByteArray& data_)
         data = u16.toUtf8();
     }
 
-    m_xml->err = m_xml->doc.Parse(reinterpret_cast<const char*>(data.constData()), data.size());
+    // pugi needs explicit flags to surface declaration/doctype/comments as nodes
+    unsigned flags = pugi::parse_default
+                     | pugi::parse_declaration
+                     | pugi::parse_doctype
+                     | pugi::parse_comments;
+    m_xml->result = m_xml->doc.load_buffer(data.constData(), data.size(), flags);
 
-    if (m_xml->err == tinyxml2::XML_SUCCESS) {
+    if (m_xml->result.status == pugi::status_ok) {
         m_token = TokenType::NoToken;
     } else {
-        LOGE() << m_xml->doc.ErrorIDToName(m_xml->err);
+        LOGE() << String::fromUtf8(m_xml->result.description());
     }
+
+#ifndef NDEBUG
+    auto end = std::chrono::steady_clock::now();
+    acc.total_ms += std::chrono::duration<double, std::milli>(end - start).count();
+#endif //NDEBUG
 }
 
 bool XmlStreamReader::readNextStartElement()
@@ -129,50 +155,67 @@ bool XmlStreamReader::atEnd() const
     return m_token == TokenType::EndDocument || m_token == TokenType::Invalid;
 }
 
-static XmlStreamReader::TokenType resolveToken(tinyxml2::XMLNode* n, bool isStartElement)
+static XmlStreamReader::TokenType resolveToken(pugi::xml_node n, bool isStartElement)
 {
-    if (n->ToElement()) {
-        return isStartElement ? XmlStreamReader::TokenType::StartElement : XmlStreamReader::TokenType::EndElement;
-    } else if (n->ToText()) {
+    switch (n.type()) {
+    case pugi::node_element:
+        return isStartElement
+               ? XmlStreamReader::TokenType::StartElement
+               : XmlStreamReader::TokenType::EndElement;
+
+    case pugi::node_pcdata:
+    case pugi::node_cdata:
         return XmlStreamReader::TokenType::Characters;
-    } else if (n->ToComment()) {
+
+    case pugi::node_comment:
         return XmlStreamReader::TokenType::Comment;
-    } else if (n->ToDeclaration()) {
+
+    case pugi::node_declaration:   // <?xml ... ?>
         return XmlStreamReader::TokenType::StartDocument;
-    } else if (n->ToDocument()) {
+
+    case pugi::node_document:      // the document node
         return XmlStreamReader::TokenType::EndDocument;
-    } else if (n->ToUnknown()) {
+
+    case pugi::node_doctype:       // <!DOCTYPE ...>
         return XmlStreamReader::TokenType::DTD;
+
+    default:                       // includes node_pi, node_null, etc.
+        return XmlStreamReader::TokenType::Unknown;
     }
-    return XmlStreamReader::TokenType::Unknown;
 }
 
-static std::pair<tinyxml2::XMLNode*, XmlStreamReader::TokenType>
-resolveNode(tinyxml2::XMLNode* currentNode, XmlStreamReader::TokenType currentToken)
+static std::pair<pugi::xml_node, XmlStreamReader::TokenType>
+resolveNode(pugi::xml_node currentNode, XmlStreamReader::TokenType currentToken)
 {
     if (currentToken == XmlStreamReader::TokenType::StartElement) {
-        tinyxml2::XMLNode* child = currentNode->FirstChild();
+        pugi::xml_node child = currentNode.first_child();
         if (child) {
-            return { child, resolveToken(child, true) };
+            return { child, resolveToken(child, /*isStartElement=*/ true) };
         }
 
-        tinyxml2::XMLNode* sibling = currentNode->NextSibling();
-        if (!sibling || sibling->ToElement() || sibling->ToText() || sibling->ToComment()) {
+        pugi::xml_node sibling = currentNode.next_sibling();
+        if (!sibling
+            || sibling.type() == pugi::node_element
+            || sibling.type() == pugi::node_pcdata
+            || sibling.type() == pugi::node_cdata
+            || sibling.type() == pugi::node_comment) {
+            // Mirror tiny: close the element before stepping to "content" siblings
             return { currentNode, XmlStreamReader::TokenType::EndElement };
         }
+        // else: fall through to handle non-content siblings (doctype, declaration, etc.)
     }
 
-    tinyxml2::XMLNode* sibling = currentNode->NextSibling();
+    pugi::xml_node sibling = currentNode.next_sibling();
     if (sibling) {
-        return { sibling, resolveToken(sibling, true) };
+        return { sibling, resolveToken(sibling, /*isStartElement=*/ true) };
     }
 
-    tinyxml2::XMLNode* parent = currentNode->Parent();
+    pugi::xml_node parent = currentNode.parent();
     if (parent) {
-        return { parent, resolveToken(parent, false) };
+        return { parent, resolveToken(parent, /*isStartElement=*/ false) };
     }
 
-    return { nullptr, XmlStreamReader::TokenType::EndDocument };
+    return { pugi::xml_node(), XmlStreamReader::TokenType::EndDocument };
 }
 
 XmlStreamReader::TokenType XmlStreamReader::readNext()
@@ -181,65 +224,153 @@ XmlStreamReader::TokenType XmlStreamReader::readNext()
         return m_token;
     }
 
-    if (m_xml->err != tinyxml2::XML_SUCCESS || m_token == EndDocument) {
-        m_xml->node = nullptr;
+    if (m_xml->result.status != pugi::status_ok || m_token == TokenType::EndDocument) {
+        m_xml->node = pugi::xml_node();
         m_token = TokenType::Invalid;
         return m_token;
     }
 
     if (!m_xml->node) {
-        m_xml->node = m_xml->doc.FirstChild();
-        m_token = m_xml->node->ToDeclaration() ? TokenType::StartDocument : resolveToken(m_xml->node, true);
+        m_xml->node = m_xml->doc.first_child();
+        if (!m_xml->node) {
+            // Empty doc — treat as end
+            m_token = TokenType::EndDocument;
+            return m_token;
+        }
+        m_token = (m_xml->node.type() == pugi::node_declaration)
+                  ? TokenType::StartDocument
+                  : resolveToken(m_xml->node, /*isStartElement=*/ true);
         return m_token;
     }
 
-    std::pair<tinyxml2::XMLNode*, XmlStreamReader::TokenType> p = resolveNode(m_xml->node, m_token);
+    std::pair<pugi::xml_node, XmlStreamReader::TokenType> p = resolveNode(m_xml->node, m_token);
 
     m_xml->node = p.first;
     m_token = p.second;
 
-    if (m_token == XmlStreamReader::TokenType::DTD) {
+    if (m_token == TokenType::DTD) {
         tryParseEntity(m_xml);
     }
 
     return m_token;
 }
 
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#define strdup _strdup // avoid a warning from MSVC on a perfectly valid POSIX function
-#endif
 void XmlStreamReader::tryParseEntity(Xml* xml)
 {
-    static const char* ENTITY = { "ENTITY" };
+    const char* nodeValue = xml->node.value();
 
-    const char* str = xml->node->Value();
-    if (std::strncmp(str, ENTITY, 6) == 0) {
-        // Syntax: '<!ENTITY [%] Name [SYSTEM|PUBLIC] "Value" [additional info] >'
-        // the '<!' and '>' stripped away already from str
-        // let's ignore %, SYSTEM, PUBLIC and any spaces in the 1st token
-        // and not read the (optional) 3rd token at all
-        char* string = strdup(str); // create local copy
-        const char sep[] = "\"";
-        char* token = std::strtok(string + 6, sep); // start at the space after "ENTITY"
-        String name = String::fromUtf8(token).remove(u"%").remove(u"SYSTEM").remove(u"PUBLIC").remove(u" ");
-        token = std::strtok(NULL, sep); // read 2nd token
-        String value = String::fromUtf8(token);
-        free(string); // not needed anymore
+    if (!nodeValue || *nodeValue == '\0') {
+        return;
+    }
+
+    const char* scanPos = nodeValue;
+    while (true) {
+        const char* entityPos = std::strstr(scanPos, "ENTITY");
+        if (!entityPos) {
+            break;
+        }
+
+        const char* cur = entityPos + 6; // after "ENTITY"
+
+        // Skip whitespace
+        while (*cur == ' ' || *cur == '\t' || *cur == '\r' || *cur == '\n') {
+            ++cur;
+        }
+
+        // Optional leading '%' (parameter entity)
+        if (*cur == '%') {
+            ++cur;
+            while (*cur == ' ' || *cur == '\t' || *cur == '\r' || *cur == '\n') {
+                ++cur;
+            }
+        }
+
+        // Name token: up to whitespace / quote / '>'
+        const char* nameBegin = cur;
+        while (*cur
+               && *cur != ' ' && *cur != '\t' && *cur != '\r' && *cur != '\n'
+               && *cur != '"' && *cur != '\'' && *cur != '>') {
+            ++cur;
+        }
+        const char* nameEnd = cur;
+
+        // Handle a leading '%' glued to the name (parameter entity without a space)
+        if (nameBegin < nameEnd && *nameBegin == '%') {
+            ++nameBegin;
+            while (nameBegin < nameEnd
+                   && (*nameBegin == ' ' || *nameBegin == '\t' || *nameBegin == '\r' || *nameBegin == '\n')) {
+                ++nameBegin;
+            }
+        }
+
+        // Find first quote (either ' or ")
+        while (*cur && *cur != '"' && *cur != '\'') {
+            ++cur;
+        }
+        if (*cur != '"' && *cur != '\'') {
+            scanPos = entityPos + 6;
+            continue;
+        }
+
+        // Capture quoted value
+        const char quoteChar = *cur++;
+        const char* valueBegin = cur;
+        while (*cur && *cur != quoteChar) {
+            ++cur;
+        }
+        if (*cur != quoteChar) {
+            scanPos = entityPos + 6;
+            continue;
+        }
+        const char* valueEnd = cur;
+        ++cur; // past closing quote
+
+        // Build name/value:
+        // - DO NOT remove "SYSTEM"/"PUBLIC" from the name
+        // - Trim whitespace
+        std::string nameToken(nameBegin, static_cast<size_t>(nameEnd - nameBegin));
+        String name = String::fromUtf8(nameToken.c_str()).trimmed();
+
+        std::string valueToken(valueBegin, static_cast<size_t>(valueEnd - valueBegin));
+        String value = String::fromUtf8(valueToken.c_str());
+
         if (!name.empty()) {
             m_entities[u'&' + name + u';'] = value;
-            return;
+        } else {
+            LOGW() << "Ignoring malformed ENTITY: " << nodeValue;
         }
-        LOGW() << "Ignoring malformed ENTITY: " << str;
+
+        scanPos = cur; // continue scanning for more ENTITY decls
     }
 }
 
-#if (defined(_MSCVER) || defined(_MSC_VER))
-#undef strdup
-#endif
-
+// emulate tinyxml2::XMLNode::Value
 String XmlStreamReader::nodeValue(Xml* xml) const
 {
-    String str = String::fromUtf8(xml->node->Value());
+    const pugi::xml_node n = xml->node;
+
+    const char* raw = "";
+    switch (n.type()) {
+    case pugi::node_element:
+    case pugi::node_pi:
+    case pugi::node_declaration:
+    case pugi::node_doctype:
+    case pugi::node_document: // usually empty
+        raw = n.name();
+        break;
+
+    case pugi::node_pcdata:
+    case pugi::node_cdata:
+    case pugi::node_comment:
+        raw = n.value();
+        break;
+
+    default:
+        raw = "";
+        break;
+    }
+
+    String str = String::fromUtf8(raw);
     if (!m_entities.empty()) {
         for (const auto& p : m_entities) {
             str.replace(p.first, p.second);
@@ -289,7 +420,9 @@ void XmlStreamReader::skipCurrentElement()
 
 AsciiStringView XmlStreamReader::name() const
 {
-    return (m_xml->node && m_xml->node->ToElement()) ? m_xml->node->Value() : AsciiStringView();
+    return (m_xml->node && m_xml->node.type() == pugi::node_element)
+           ? AsciiStringView(m_xml->node.name())
+           : AsciiStringView();
 }
 
 bool XmlStreamReader::hasAttribute(const char* name) const
@@ -298,11 +431,11 @@ bool XmlStreamReader::hasAttribute(const char* name) const
         return false;
     }
 
-    tinyxml2::XMLElement* e = m_xml->node->ToElement();
-    if (!e) {
+    if (!m_xml->node || m_xml->node.type() != pugi::node_element) {
         return false;
     }
-    return e->FindAttribute(name) != nullptr;
+
+    return m_xml->node.attribute(name);
 }
 
 String XmlStreamReader::attribute(const char* name) const
@@ -311,11 +444,16 @@ String XmlStreamReader::attribute(const char* name) const
         return String();
     }
 
-    tinyxml2::XMLElement* e = m_xml->node->ToElement();
-    if (!e) {
+    if (!m_xml->node || m_xml->node.type() != pugi::node_element) {
         return String();
     }
-    return String::fromUtf8(e->Attribute(name));
+
+    pugi::xml_attribute attr = m_xml->node.attribute(name);
+    if (!attr) {
+        return String();
+    }
+
+    return String::fromUtf8(attr.value());
 }
 
 String XmlStreamReader::attribute(const char* name, const String& def) const
@@ -329,11 +467,12 @@ AsciiStringView XmlStreamReader::asciiAttribute(const char* name) const
         return AsciiStringView();
     }
 
-    tinyxml2::XMLElement* e = m_xml->node->ToElement();
-    if (!e) {
+    if (!m_xml->node || m_xml->node.type() != pugi::node_element) {
         return AsciiStringView();
     }
-    return e->Attribute(name);
+
+    pugi::xml_attribute attr = m_xml->node.attribute(name);
+    return attr ? AsciiStringView(attr.value()) : AsciiStringView();
 }
 
 AsciiStringView XmlStreamReader::asciiAttribute(const char* name, const AsciiStringView& def) const
@@ -368,48 +507,58 @@ std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
         return attrs;
     }
 
-    tinyxml2::XMLElement* e = m_xml->node->ToElement();
-    if (!e) {
+    if (!m_xml->node || m_xml->node.type() != pugi::node_element) {
         return attrs;
     }
 
-    for (const tinyxml2::XMLAttribute* xa = e->FirstAttribute(); xa; xa = xa->Next()) {
+    for (pugi::xml_attribute xa = m_xml->node.first_attribute(); xa; xa = xa.next_attribute()) {
         Attribute a;
-        a.name = xa->Name();
-        a.value = String::fromUtf8(xa->Value());
+        a.name = xa.name();
+        a.value = String::fromUtf8(xa.value());
         attrs.push_back(std::move(a));
     }
+
     return attrs;
 }
 
 String XmlStreamReader::readBody() const
 {
-    if (m_xml->node) {
-        tinyxml2::XMLPrinter printer;
-
-        const tinyxml2::XMLElement* child = m_xml->node->FirstChildElement();
-        while (child) {
-            child->Accept(&printer);
-            child = child->NextSiblingElement();
-        }
-
-        return String::fromStdString(printer.CStr());
+    if (!m_xml->node) {
+        return String();
     }
-    return String();
+
+    std::ostringstream oss;
+
+    for (pugi::xml_node child = m_xml->node.first_child();
+         child;
+         child = child.next_sibling()) {
+        if (child.type() == pugi::node_element) {
+            // Match tinyxml2::XMLPrinter default (no indentation/line breaks)
+            child.print(oss, "", pugi::format_raw);
+        }
+    }
+
+    return String::fromStdString(oss.str());
 }
 
 String XmlStreamReader::text() const
 {
-    if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
-        return nodeValue(m_xml);
+    if (m_xml->node) {
+        pugi::xml_node_type t = m_xml->node.type();
+        if (t == pugi::node_pcdata || t == pugi::node_cdata || t == pugi::node_comment) {
+            return nodeValue(m_xml);
+        }
     }
     return String();
 }
 
 AsciiStringView XmlStreamReader::asciiText() const
 {
-    if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
-        return m_xml->node->Value();
+    if (m_xml->node) {
+        pugi::xml_node_type t = m_xml->node.type();
+        if (t == pugi::node_pcdata || t == pugi::node_cdata || t == pugi::node_comment) {
+            return m_xml->node.value();
+        }
     }
     return AsciiStringView();
 }
@@ -444,7 +593,7 @@ AsciiStringView XmlStreamReader::readAsciiText()
         while (1) {
             switch (readNext()) {
             case Characters:
-                result = AsciiStringView(m_xml->node->Value());
+                result = AsciiStringView(m_xml->node.value());
                 break;
             case EndElement:
                 return result;
@@ -472,18 +621,14 @@ double XmlStreamReader::readDouble(bool* ok)
     return s.toDouble(ok);
 }
 
-int64_t XmlStreamReader::lineNumber() const
+int64_t XmlStreamReader::byteOffset() const
 {
-    int64_t lineNum = m_xml->doc.ErrorLineNum();
-    if (lineNum == 0 && m_xml->node) {
-        lineNum = m_xml->node->GetLineNum();
+    if (!m_xml->node) {
+        return 0;
     }
-    return lineNum;
-}
 
-int64_t XmlStreamReader::columnNumber() const
-{
-    return 0;
+    // Use byte offset from start of document as a temporary proxy for line number
+    return static_cast<int64_t>(m_xml->node.offset_debug());
 }
 
 XmlStreamReader::Error XmlStreamReader::error() const
@@ -492,8 +637,7 @@ XmlStreamReader::Error XmlStreamReader::error() const
         return CustomError;
     }
 
-    tinyxml2::XMLError err = m_xml->doc.ErrorID();
-    if (err == tinyxml2::XML_SUCCESS) {
+    if (m_xml->result.status == pugi::status_ok) {
         return NoError;
     }
 
@@ -510,7 +654,7 @@ String XmlStreamReader::errorString() const
     if (!m_xml->customErr.empty()) {
         return m_xml->customErr;
     }
-    return String::fromUtf8(m_xml->doc.ErrorStr());
+    return String::fromUtf8(m_xml->result.description());
 }
 
 void XmlStreamReader::raiseError(const String& message)

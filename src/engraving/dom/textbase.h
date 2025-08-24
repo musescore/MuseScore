@@ -81,6 +81,7 @@ public:
     CharFormat() {}
     CharFormat(const CharFormat& cf) { *this = cf; }
     bool operator==(const CharFormat& cf) const;
+    bool operator!=(const CharFormat& cf) const { return !(*this == cf); }
     CharFormat& operator=(const CharFormat& cf);
 
     FontStyle style() const { return m_style; }
@@ -98,7 +99,7 @@ public:
     double fontSize() const { return m_fontSize; }
     String fontFamily() const { return m_fontFamily; }
     void setValign(VerticalAlignment val) { m_valign = val; }
-    void setFontSize(double val) { m_fontSize = val; }
+    void setFontSize(double val) { m_fontSize = muse::RealIsEqualOrLess(val, 0.0) ? 1.0 : val; } // Font Size 0 will cause a crash
     void setFontFamily(const String& val) { m_fontFamily = val; }
 
     FormatValue formatValue(FormatId) const;

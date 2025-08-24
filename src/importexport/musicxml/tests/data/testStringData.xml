@@ -45,7 +45,6 @@
           </time>
         <clef>
           <sign>TAB</sign>
-          <line>5</line>
           </clef>
         <staff-details>
           <staff-lines>6</staff-lines>
@@ -75,6 +74,7 @@
             <tuning-alter>1</tuning-alter>
             <tuning-octave>9</tuning-octave>
             </staff-tuning>
+          <staff-size>150</staff-size>
           </staff-details>
         </attributes>
       <note>

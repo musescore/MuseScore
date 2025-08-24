@@ -202,6 +202,10 @@ public:
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) override;
     muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const override;
 
+    bool useMidiVelocityAndDurationDuringNoteInput() const override;
+    void setUseMidiVelocityAndDurationDuringNoteInput(bool use) override;
+    muse::async::Channel<bool> useMidiVelocityAndDurationDuringNoteInputChanged() const override;
+
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs) override;
     muse::async::Channel<int> notePlayDurationMillisecondsChanged() const override;
@@ -307,6 +311,7 @@ private:
     muse::async::Channel<bool> m_warnGuitarBendsChanged;
     muse::async::Channel<int> m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
     muse::async::Channel<int> m_notePlayDurationMillisecondsChanged;
+    muse::async::Channel<bool> m_useMidiVelocityAndDurationDuringNoteInputChanged;
     muse::async::Channel<std::string> m_styleFileImportPathChanged;
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;

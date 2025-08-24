@@ -46,7 +46,7 @@ public:
     Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
 
 private:
-    void onScoreChanged(const mu::engraving::ScoreChangesRange& changes) override;
+    void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
     bool addSystemObject(mu::engraving::EngravingItem* obj);
     bool removeSystemObject(mu::engraving::EngravingItem* obj);

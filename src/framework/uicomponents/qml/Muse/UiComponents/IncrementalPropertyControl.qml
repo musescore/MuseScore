@@ -57,6 +57,8 @@ Item {
 
     signal valueEdited(var newValue)
     signal valueEditingFinished(var newValue)
+    signal accepted()
+    signal escaped()
 
     implicitHeight: 30
     implicitWidth: parent.width
@@ -148,14 +150,22 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
+        navigation.accessible.role: MUAccessible.SpinBox
+        navigation.accessible.value: currentValue + (measureUnitsSymbol !== "" ? " " + measureUnitsSymbol : "")
         navigation.onNavigationEvent: function(event) {
+            if (!textInputField.activeFocus) {
+                return
+            }
+
             switch (event.type) {
             case NavigationEvent.Up:
                 root.increment()
+                selectAll()
                 event.accepted = true
                 break
             case NavigationEvent.Down:
                 root.decrement()
+                selectAll()
                 event.accepted = true
                 break
             }
@@ -191,8 +201,18 @@ Item {
             canIncrease: root.canIncrease
             canDecrease: root.canDecrease
 
-            onIncreaseButtonClicked: { root.increment() }
-            onDecreaseButtonClicked: { root.decrement() }
+            onIncreaseButtonClicked: {
+                root.increment()
+                if (textInputField.activeFocus) {
+                    textInputField.selectAll()
+                }
+            }
+            onDecreaseButtonClicked: {
+                root.decrement()
+                if (textInputField.activeFocus) {
+                    textInputField.selectAll()
+                }
+            }
         }
 
         mouseArea.onWheel: function(wheel) {
@@ -258,6 +278,14 @@ Item {
             }
 
             root.valueEditingFinished(+newVal.toFixed(root.decimals))
+        }
+
+        onAccepted: {
+            root.accepted()
+        }
+
+        onEscaped: {
+            root.escaped()
         }
     }
 

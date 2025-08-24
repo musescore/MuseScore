@@ -151,8 +151,6 @@ void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
 
 void GeneralSettingsModel::onCurrentNotationChanged()
 {
-    AbstractInspectorModel::onCurrentNotationChanged();
-
     m_appearanceSettingsModel->onCurrentNotationChanged();
     m_playbackProxyModel->onCurrentNotationChanged();
 }

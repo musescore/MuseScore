@@ -31,8 +31,3 @@ muse::String ToursConfigurationStub::lastShownTourIdForEvent(const String&) cons
 void ToursConfigurationStub::setLastShownTourIdForEvent(const String&, const String&)
 {
 }
-
-muse::io::path_t ToursConfigurationStub::toursFilePath() const
-{
-    return "";
-}

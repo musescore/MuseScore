@@ -47,6 +47,9 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/number_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ziprw_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/msgpack_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/ret_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/xmldom_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/xmlstreamreader_tests.cpp
 )
 
 include(SetupGTest)

@@ -17,7 +17,7 @@
 #include "framework/actions/actionsmodule.h"
 
 #ifdef MUSE_MODULE_AUDIO
-#include "framework/audio/audiomodule.h"
+#include "framework/audio/main/audiomodule.h"
 #else
 #include "framework/stubs/audio/audiostubmodule.h"
 #endif
@@ -178,6 +178,9 @@
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
 #include "importexport/videoexport/videoexportmodule.h"
 #endif
+#ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
+#include "importexport/tabledit/tableditmodule.h"
+#endif
 
 #include "inspector/inspectormodule.h"
 
@@ -247,7 +250,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>(options, ctx);
 
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
-    //! For other modules, the order is (an should be) unimportant.
+    //! For other modules, the order is (and should be) unimportant.
     app->addModule(new muse::diagnostics::DiagnosticsModule());
 
     // framework
@@ -344,6 +347,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #endif
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
+    app->addModule(new mu::iex::tabledit::TablEditModule());
 #endif
 
     app->addModule(new mu::inspector::InspectorModule());
@@ -483,6 +489,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
 #endif
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
+    app->addModule(new mu::iex::tabledit::TablEditModule());
 #endif
 
     app->addModule(new mu::inspector::InspectorModule());

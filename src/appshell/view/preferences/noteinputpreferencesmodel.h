@@ -68,6 +68,8 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
     Q_PROPERTY(
         bool playPreviewNotesWithScoreDynamics READ playPreviewNotesWithScoreDynamics WRITE setPlayPreviewNotesWithScoreDynamics NOTIFY playPreviewNotesWithScoreDynamicsChanged)
     Q_PROPERTY(bool playNotesOnMidiInput READ playNotesOnMidiInput WRITE setPlayNotesOnMidiInput NOTIFY playNotesOnMidiInputChanged)
+    Q_PROPERTY(
+        bool useMidiVelocityAndDurationDuringNoteInput READ useMidiVelocityAndDurationDuringNoteInput WRITE setUseMidiVelocityAndDurationDuringNoteInput NOTIFY useMidiVelocityAndDurationDuringNoteInputChanged)
 
     Q_PROPERTY(
         bool dynamicsApplyToAllVoices READ dynamicsApplyToAllVoices WRITE setDynamicsApplyToAllVoices NOTIFY dynamicsApplyToAllVoicesChanged FINAL)
@@ -104,6 +106,7 @@ public:
     bool playChordSymbolWhenEditing() const;
     bool playPreviewNotesWithScoreDynamics() const;
     bool playNotesOnMidiInput() const;
+    bool useMidiVelocityAndDurationDuringNoteInput() const;
 
     bool dynamicsApplyToAllVoices() const;
 
@@ -129,6 +132,7 @@ public slots:
     void setPlayChordSymbolWhenEditing(bool value);
     void setPlayPreviewNotesWithScoreDynamics(bool value);
     void setPlayNotesOnMidiInput(bool value);
+    void setUseMidiVelocityAndDurationDuringNoteInput(bool value);
 
     void setDynamicsApplyToAllVoices(bool value);
 
@@ -154,6 +158,7 @@ signals:
     void playChordSymbolWhenEditingChanged(bool value);
     void playPreviewNotesWithScoreDynamicsChanged(bool value);
     void playNotesOnMidiInputChanged(bool value);
+    void useMidiVelocityAndDurationDuringNoteInputChanged(bool value);
 
     void dynamicsApplyToAllVoicesChanged(bool value);
 

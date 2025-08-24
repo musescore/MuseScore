@@ -277,7 +277,7 @@
             </Rest>
           <Beam>
             <eid>w_w</eid>
-            <l1>-28</l1>
+            <l1>-26</l1>
             <l2>-28</l2>
             </Beam>
           <Chord>
@@ -419,122 +419,127 @@
               <tpc2>16</tpc2>
               </Note>
             </Chord>
-          <Chord>
+          <Beam>
             <eid>KB_KB</eid>
+            <l1>-28</l1>
+            <l2>-28</l2>
+            </Beam>
+          <Chord>
+            <eid>LB_LB</eid>
             <durationType>64th</durationType>
             <Note>
-              <eid>LB_LB</eid>
+              <eid>MB_MB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
             <Note>
-              <eid>MB_MB</eid>
+              <eid>NB_NB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>NB_NB</eid>
+            <eid>OB_OB</eid>
             <durationType>64th</durationType>
             <Note>
-              <eid>OB_OB</eid>
+              <eid>PB_PB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>15</tpc2>
               </Note>
             <Note>
-              <eid>PB_PB</eid>
+              <eid>QB_QB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>QB_QB</eid>
+            <eid>RB_RB</eid>
             <durationType>64th</durationType>
             <Note>
-              <eid>RB_RB</eid>
+              <eid>SB_SB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>17</tpc2>
               </Note>
             <Note>
-              <eid>SB_SB</eid>
+              <eid>TB_TB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>TB_TB</eid>
+            <eid>UB_UB</eid>
             <BeamMode>begin32</BeamMode>
             <durationType>64th</durationType>
             <Note>
-              <eid>UB_UB</eid>
+              <eid>VB_VB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
             <Note>
-              <eid>VB_VB</eid>
+              <eid>WB_WB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
             </Chord>
           <Chord>
-            <eid>WB_WB</eid>
+            <eid>XB_XB</eid>
             <durationType>64th</durationType>
             <Note>
-              <eid>XB_XB</eid>
+              <eid>YB_YB</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>15</tpc2>
               </Note>
             <Note>
-              <eid>YB_YB</eid>
+              <eid>ZB_ZB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <tpc2>19</tpc2>
               </Note>
             </Chord>
           <Rest>
-            <eid>ZB_ZB</eid>
+            <eid>aB_aB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>64th</durationType>
             </Rest>
           <Chord>
-            <eid>aB_aB</eid>
+            <eid>bB_bB</eid>
             <BeamMode>begin32</BeamMode>
             <durationType>64th</durationType>
             <Note>
-              <eid>bB_bB</eid>
+              <eid>cB_cB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>16</tpc2>
               </Note>
             <Note>
-              <eid>cB_cB</eid>
+              <eid>dB_dB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <tpc2>20</tpc2>
               </Note>
             </Chord>
           <Rest>
-            <eid>dB_dB</eid>
+            <eid>eB_eB</eid>
             <BeamMode>auto</BeamMode>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>eB_eB</eid>
+            <eid>fB_fB</eid>
             <BeamMode>auto</BeamMode>
             <durationType>64th</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>fB_fB</eid>
+            <eid>gB_gB</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -333,8 +333,8 @@ Harmony::Harmony(const Harmony& h)
 
 Harmony::~Harmony()
 {
-    for (const TextSegment* ts : mutldata()->textList()) {
-        delete ts;
+    for (const HarmonyRenderItem* renderItem : mutldata()->renderItemList()) {
+        delete renderItem;
     }
     for (const HarmonyInfo* info : m_chords) {
         delete info;
@@ -428,13 +428,19 @@ const std::vector<const ChordDescription*> Harmony::parseHarmony(const String& s
     // pre-process for parentheses
     String s = ss.simplified();
     if (s.startsWith('(')) {
-        setParenthesesMode(rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT, true, true);
+        setParenthesesMode(rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT, true, false);
         s.remove(0, 1);
+    } else {
+        setParenthesesMode(rightParen() ? ParenthesesMode::RIGHT : ParenthesesMode::NONE, true, false);
     }
+
     if (s.endsWith(')') && s.count('(') < s.count(')')) {
-        setParenthesesMode(leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT, true, true);
+        setParenthesesMode(leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT, true, false);
         s.remove(s.size() - 1, 1);
+    } else {
+        setParenthesesMode(leftParen() ? ParenthesesMode::LEFT : ParenthesesMode::NONE, true, false);
     }
+
     if (parenthesesMode() == ParenthesesMode::BOTH) {
         s = s.simplified();         // in case of spaces inside parentheses
     }
@@ -638,14 +644,14 @@ NoteCaseType Harmony::bassRenderCase() const
 
 void Harmony::startEdit(EditData& ed)
 {
-    if (!ldata()->textList().empty()) {
+    if (!ldata()->renderItemList().empty()) {
         // convert chord symbol to plain text
         setPlainText(harmonyName());
         // clear rendering
-        for (const TextSegment* t : mutldata()->textList()) {
-            delete t;
+        for (const HarmonyRenderItem* renderItem : mutldata()->renderItemList()) {
+            delete renderItem;
         }
-        mutldata()->textList.mut_value().clear();
+        mutldata()->renderItemList.mut_value().clear();
     }
 
     if (leftParen()) {
@@ -785,15 +791,6 @@ void Harmony::endEdit(EditData& ed)
                 score()->endCmd();
             }
         }
-
-        UndoStack* undo = score()->undoStack();
-        undo->reopen();
-        if (ted->oldXmlText.empty()) {
-            score()->undoAddChordToFretBox(this);
-        } else {
-            score()->undoRenameChordInFretBox(this, ted->oldXmlText);
-        }
-        score()->endCmd();
     }
 
     if (links()) {
@@ -870,7 +867,7 @@ void Harmony::setHarmony(const String& s)
 
 double Harmony::baseLine() const
 {
-    if (ldata()->textList().empty() || !ldata()->baseline.has_value()) {
+    if (ldata()->renderItemList().empty() || !ldata()->baseline.has_value()) {
         return TextBase::baseLine();
     }
 
@@ -1142,22 +1139,20 @@ double TextSegment::capHeight() const
     return FontMetrics::capHeight(m_font);
 }
 
-//---------------------------------------------------------
-//   boundingRect
-//---------------------------------------------------------
+RectF TextSegment::tightBoundingRect() const
+{
+    return FontMetrics::tightBoundingRect(m_font, m_text);
+}
 
 RectF TextSegment::boundingRect() const
 {
     return FontMetrics::boundingRect(m_font, m_text);
 }
 
-//---------------------------------------------------------
-//   tightBoundingRect
-//---------------------------------------------------------
-
-RectF TextSegment::tightBoundingRect() const
+double TextSegment::bboxBaseLine() const
 {
-    return FontMetrics::tightBoundingRect(m_font, m_text);
+    FontMetrics fm(m_font);
+    return boundingRect().bottom() - fm.descent();
 }
 
 void TextSegment::setFont(const muse::draw::Font& f)
@@ -1499,6 +1494,9 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         if (TextBase::setProperty(pid, v)) {
             if (pid == Pid::TEXT) {
                 setHarmony(v.value<String>());
+
+                //! After each changes we rebuild the fret box
+                score()->rebuildFretBox();
             }
             break;
         }
@@ -1541,11 +1539,13 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::PLAY:
         v = true;
         break;
-    case Pid::OFFSET:
-        if (explicitParent() && explicitParent()->isFretDiagram()) {
+    case Pid::OFFSET: {
+        const FretDiagram* fd = explicitParent() && explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
+        if (fd && fd->visible()) {
             v = PropertyValue::fromValue(PointF(0.0, 0.0));
             break;
         }
+    }
     // fall-through
     default:
         v = TextBase::propertyDefault(id);
@@ -1561,7 +1561,9 @@ PropertyValue Harmony::propertyDefault(Pid id) const
 Sid Harmony::getPropertyStyle(Pid pid) const
 {
     if (pid == Pid::OFFSET) {
-        if (explicitParent() && explicitParent()->isFretDiagram()) {
+        const FretDiagram* fd = explicitParent() && explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
+
+        if (fd && fd->visible()) {
             return Sid::NOSTYLE;
         } else if (textStyleType() == TextStyleType::HARMONY_A) {
             return placeAbove() ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;

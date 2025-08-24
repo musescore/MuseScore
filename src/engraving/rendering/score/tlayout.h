@@ -81,6 +81,7 @@
 #include "../../dom/notedot.h"
 
 #include "../../dom/parenthesis.h"
+#include "../../dom/playcounttext.h"
 #include "../../dom/playtechannotation.h"
 
 #include "../../dom/rehearsalmark.h"
@@ -205,7 +206,7 @@ public:
     static void layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf,
                                bool includeCrossStaffHeight = false);
-    static void layoutArticulation(const Articulation* item, Articulation::LayoutData* ldata);
+    static void layoutArticulation(Articulation* item, Articulation::LayoutData* ldata);
     static void fillArticulationShape(const Articulation* item, Articulation::LayoutData* ldata);
 
     static void layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx);
@@ -261,6 +262,8 @@ public:
     static void layoutHarmony(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutHook(const Hook* item, Hook::LayoutData* ldata);
 
+    static void layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::LayoutData* ldata);
+
     static void layoutImage(const Image* item, Image::LayoutData* ldata);
     static void layoutInstrumentChange(const InstrumentChange* item, InstrumentChange::LayoutData* ldata);
     static void layoutInstrumentName(const InstrumentName* item, InstrumentName::LayoutData* ldata);
@@ -271,7 +274,6 @@ public:
 
     static void layoutLaissezVib(LaissezVib* item);
     static void layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData* ldata);
-    static void layoutSystemLockIndicator(const SystemLockIndicator* item, SystemLockIndicator::LayoutData* ldata);
     static void layoutLedgerLine(LedgerLine* item, LayoutContext& ctx);
     static void layoutLetRing(LetRing* item, LayoutContext& ctx);
     static void layoutLetRingSegment(LetRingSegment* item, LayoutContext& ctx);
@@ -308,6 +310,7 @@ public:
     static void layoutPedal(Pedal* item, LayoutContext& ctx);
     static void layoutPedalSegment(PedalSegment* item, LayoutContext& ctx);
     static void layoutPickScrapeSegment(PickScrapeSegment* item, LayoutContext& ctx);
+    static void layoutPlayCountText(PlayCountText* item, PlayCountText::LayoutData* ldata);
     static void layoutPlayTechAnnotation(const PlayTechAnnotation* item, PlayTechAnnotation::LayoutData* ldata);
 
     static void layoutRasgueadoSegment(RasgueadoSegment* item, LayoutContext& ctx);

@@ -87,6 +87,10 @@ public:
     int musicalFontSize() const override;
     async::Notification musicalFontChanged() const override;
 
+    std::string musicalTextFontFamily() const override;
+    int musicalTextFontSize() const override;
+    async::Notification musicalTextFontChanged() const override;
+
     std::string defaultFontFamily() const override;
     int defaultFontSize() const override;
 
@@ -154,6 +158,7 @@ private:
     async::Notification m_currentThemeChanged;
     async::Notification m_fontChanged;
     async::Notification m_musicalFontChanged;
+    async::Notification m_musicalTextFontChanged;
     async::Notification m_iconsFontChanged;
     async::Notification m_windowGeometryChanged;
 

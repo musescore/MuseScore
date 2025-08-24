@@ -308,36 +308,73 @@ void Convert::articFromMEI(engraving::Articulation* articulation, const libmei::
     // @artic
     if (meiArtic.HasArtic() && (meiArtic.GetArtic().size() == 1)) {
         switch (meiArtic.GetArtic().at(0)) {
-        // ordered by SymId
         case (libmei::ARTICULATION_acc): symId = engraving::SymId::articAccentAbove;
             break;
-        case (libmei::ARTICULATION_marc): symId = engraving::SymId::articMarcatoAbove;
-            break;
+        case (libmei::ARTICULATION_acc_inv): break;
+        case (libmei::ARTICULATION_acc_long): break;
         case (libmei::ARTICULATION_acc_soft): symId = engraving::SymId::articSoftAccentAbove;
-            break;
-        case (libmei::ARTICULATION_stacciss): symId = engraving::SymId::articStaccatissimoAbove;
-            break;
-        case (libmei::ARTICULATION_stroke): symId = engraving::SymId::articStaccatissimoStrokeAbove;
-            break;
-        case (libmei::ARTICULATION_spicc): symId = engraving::SymId::articStaccatissimoWedgeAbove;
             break;
         case (libmei::ARTICULATION_stacc): symId = engraving::SymId::articStaccatoAbove;
             break;
         case (libmei::ARTICULATION_ten): symId = engraving::SymId::articTenutoAbove;
             break;
-        case (libmei::ARTICULATION_stop): symId = engraving::SymId::brassMuteClosed;
+        case (libmei::ARTICULATION_stacciss): symId = engraving::SymId::articStaccatissimoAbove;
             break;
-        case (libmei::ARTICULATION_open): symId = engraving::SymId::brassMuteOpen;
+        case (libmei::ARTICULATION_marc): symId = engraving::SymId::articMarcatoAbove;
             break;
-        case (libmei::ARTICULATION_snap): symId = engraving::SymId::pluckedSnapPizzicatoAbove;
+        case (libmei::ARTICULATION_spicc): symId = engraving::SymId::articStaccatissimoWedgeAbove;
             break;
+        case (libmei::ARTICULATION_stress): symId = engraving::SymId::articStressAbove;
+            break;
+        case (libmei::ARTICULATION_unstress): symId = engraving::SymId::articUnstressAbove;
+            break;
+        case (libmei::ARTICULATION_shake): break;
         case (libmei::ARTICULATION_dnbow): symId = engraving::SymId::stringsDownBow;
-            break;
-        case (libmei::ARTICULATION_harm): symId = engraving::SymId::stringsHarmonic;
             break;
         case (libmei::ARTICULATION_upbow): symId = engraving::SymId::stringsUpBow;
             break;
+        case (libmei::ARTICULATION_harm): symId = engraving::SymId::stringsHarmonic;
+            break;
+        case (libmei::ARTICULATION_snap): symId = engraving::SymId::pluckedSnapPizzicatoAbove;
+            break;
+        case (libmei::ARTICULATION_fingernail): symId = engraving::SymId::pluckedWithFingernails;
+            break;
+        case (libmei::ARTICULATION_damp): symId = engraving::SymId::pluckedDamp;
+            break;
+        case (libmei::ARTICULATION_dampall): symId = engraving::SymId::pluckedDampAll;
+            break;
+        case (libmei::ARTICULATION_open): symId = engraving::SymId::brassMuteOpen;
+            break;
+        case (libmei::ARTICULATION_stop): symId = engraving::SymId::brassMuteClosed;
+            break;
+        case (libmei::ARTICULATION_dbltongue): symId = engraving::SymId::doubleTongueAbove;
+            break;
+        case (libmei::ARTICULATION_trpltongue): symId = engraving::SymId::tripleTongueAbove;
+            break;
+        case (libmei::ARTICULATION_heel): symId = engraving::SymId::keyboardPedalHeel1;
+            break;
+        case (libmei::ARTICULATION_toe): symId = engraving::SymId::keyboardPedalToe1;
+            break;
+        case (libmei::ARTICULATION_tap): symId = engraving::SymId::guitarRightHandTapping;
+            break;
+        case (libmei::ARTICULATION_lhpizz): symId = engraving::SymId::pluckedLeftHandPizzicato;
+            break;
+        case (libmei::ARTICULATION_dot): symId = engraving::SymId::articStaccatoAbove;
+            break;
+        case (libmei::ARTICULATION_stroke): symId = engraving::SymId::articStaccatissimoStrokeAbove;
+            break;
         default: break;
+
+            // the following cases would be chordLines:
+            // case (libmei::ARTICULATION_doit): break;
+            // case (libmei::ARTICULATION_scoop): break;
+            // case (libmei::ARTICULATION_rip): break;
+            // case (libmei::ARTICULATION_plop): break;
+            // case (libmei::ARTICULATION_fall): break;
+            // case (libmei::ARTICULATION_longfall): break;
+            // case (libmei::ARTICULATION_bend): break;
+            // case (libmei::ARTICULATION_flip): break;
+            // case (libmei::ARTICULATION_smear): break;
         }
     }
     if (meiArtic.HasArtic() && (meiArtic.GetArtic().size() == 2)) {
@@ -431,12 +468,31 @@ libmei::Artic Convert::articToMEI(const engraving::Articulation* articulation)
     case (engraving::SymId::stringsUpBow):
     case (engraving::SymId::stringsUpBowTurned): meiArtic.SetArtic({ libmei::ARTICULATION_upbow });
         break;
+    case (engraving::SymId::articStressAbove):
+    case (engraving::SymId::articStressBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stress });
+        break;
+    case (engraving::SymId::articUnstressAbove):
+    case (engraving::SymId::articUnstressBelow): meiArtic.SetArtic({ libmei::ARTICULATION_unstress });
+        break;
     // Values without down or invert
     case (engraving::SymId::brassMuteClosed): meiArtic.SetArtic({ libmei::ARTICULATION_stop });
         break;
     case (engraving::SymId::brassMuteOpen): meiArtic.SetArtic({ libmei::ARTICULATION_open });
         break;
     case (engraving::SymId::stringsHarmonic): meiArtic.SetArtic({ libmei::ARTICULATION_harm });
+        break;
+    case (engraving::SymId::keyboardPedalHeel1):
+    case (engraving::SymId::keyboardPedalHeel2):
+    case (engraving::SymId::keyboardPedalHeel3): meiArtic.SetArtic({ libmei::ARTICULATION_heel });
+        break;
+    case (engraving::SymId::keyboardPedalToe1):
+    case (engraving::SymId::keyboardPedalToe2): meiArtic.SetArtic({ libmei::ARTICULATION_toe });
+        break;
+    case (engraving::SymId::pluckedWithFingernails): meiArtic.SetArtic({ libmei::ARTICULATION_fingernail });
+        break;
+    case (engraving::SymId::pluckedDamp): meiArtic.SetArtic({ libmei::ARTICULATION_damp });
+        break;
+    case (engraving::SymId::pluckedDampAll): meiArtic.SetArtic({ libmei::ARTICULATION_dampall });
         break;
 
     default:
@@ -1050,7 +1106,7 @@ void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList
     // @type
     if (textLineBase->isHairpin()) {
         engraving::Hairpin* hairpin = engraving::toHairpin(textLineBase);
-        engraving::HairpinType hairpinType = engraving::HairpinType::DECRESC_LINE;
+        engraving::HairpinType hairpinType = engraving::HairpinType::DIM_LINE;
         if (Convert::hasTypeValue(meiDir.GetType(), std::string(DIR_TYPE) + "cresc")) {
             hairpinType = engraving::HairpinType::CRESC_LINE;
         }
@@ -1121,7 +1177,7 @@ libmei::Dir Convert::dirToMEI(const engraving::TextLineBase* textLineBase, Strin
         if (hairpin->hairpinType() == engraving::HairpinType::CRESC_LINE) {
             dirType += "cresc";
         } else {
-            dirType += "decresc";
+            dirType += "dim";
         }
     }
     meiDir.SetType(dirType);
@@ -1650,7 +1706,7 @@ void Convert::hairpinFromMEI(engraving::Hairpin* hairpin, const libmei::Hairpin&
     if (meiHairpin.GetForm() == libmei::hairpinLog_FORM_cres) {
         hairpin->setHairpinType(engraving::HairpinType::CRESC_HAIRPIN);
     } else {
-        hairpin->setHairpinType(engraving::HairpinType::DECRESC_HAIRPIN);
+        hairpin->setHairpinType(engraving::HairpinType::DIM_HAIRPIN);
     }
 
     // @lform

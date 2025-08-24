@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "audio/ifxprocessor.h"
+#include "audio/worker/ifxprocessor.h"
 #include "audio/iaudioconfiguration.h"
 
 #include "../vstaudioclient.h"

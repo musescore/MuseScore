@@ -65,7 +65,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Configure workflow
       shell: bash
       env:
@@ -197,10 +197,6 @@ jobs:
         buildscripts\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL%
         echo "============== ccache ==============="
         ccache -sv
-    - name: Deploy
-      shell: cmd
-      run: |
-        buildscripts\ci\windows\deploy.bat
     - name: Package
       shell: cmd
       run: |
@@ -247,7 +243,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Configure workflow
       shell: bash
       env:
@@ -342,10 +338,6 @@ jobs:
         buildscripts\ci\windows\build.bat --portable ON -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL%
         echo "============== ccache ==============="
         ccache -sv
-    - name: Deploy
-      shell: cmd
-      run: |
-        buildscripts\ci\windows\deploy.bat --portable ON
     - name: Package
       shell: cmd
       run: |
@@ -371,7 +363,7 @@ jobs:
   #   runs-on: windows-2022
   #   steps:
   #   - name: Clone repository
-  #     uses: actions/checkout@v4
+  #     uses: actions/checkout@v5
   #   - name: Sign test
   #     shell: cmd
   #     run: |

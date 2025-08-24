@@ -165,7 +165,16 @@ bool MuseSamplerWrapper::isValid() const
 
 void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
 {
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
     m_tracks.clear();
+
+    std::string scoreId = setupData.scoreId.value_or(std::string());
+    if (!scoreId.empty()) {
+        m_samplerLib->setScoreId(m_sampler, scoreId.c_str());
+    }
 
     ms_Track track = addTrack();
     if (!track) {
@@ -280,22 +289,18 @@ bool MuseSamplerWrapper::initSampler(const sample_rate_t sampleRate, const sampl
         return false;
     }
 
-    const bool isFirstInit = m_sampler == nullptr;
-
-    if (isFirstInit) {
+    if (!m_sampler) {
         m_sampler = m_samplerLib->create();
         IF_ASSERT_FAILED(m_sampler) {
             return false;
         }
     }
 
-    if (isFirstInit || m_samplerLib->supportsReinit()) {
-        if (!m_samplerLib->initSampler(m_sampler, sampleRate, blockSize, AUDIO_CHANNELS_COUNT)) {
-            LOGE() << "Unable to init MuseSampler, sampleRate: " << sampleRate << ", blockSize: " << blockSize;
-            return false;
-        } else {
-            LOGI() << "Successfully initialized sampler, sampleRate: " << sampleRate << ", blockSize: " << blockSize;
-        }
+    if (!m_samplerLib->initSampler(m_sampler, sampleRate, blockSize, AUDIO_CHANNELS_COUNT)) {
+        LOGE() << "Unable to init MuseSampler, sampleRate: " << sampleRate << ", blockSize: " << blockSize;
+        return false;
+    } else {
+        LOGI() << "Successfully initialized sampler, sampleRate: " << sampleRate << ", blockSize: " << blockSize;
     }
 
     prepareOutputBuffer(blockSize);
@@ -413,6 +418,16 @@ void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventT
         }
 
         m_samplerLib->stopAuditionNote(m_sampler, noteOff.msTrack, noteOff.msEvent);
+        return;
+    }
+
+    if (std::holds_alternative<AuditionCCEvent>(event)) {
+        const AuditionCCEvent& ccEvent = std::get<AuditionCCEvent>(event);
+        IF_ASSERT_FAILED(ccEvent.msTrack) {
+            return;
+        }
+
+        m_samplerLib->addAuditionCCEvent(m_sampler, ccEvent.msTrack, ccEvent.cc, ccEvent.value);
         return;
     }
 }

@@ -22,7 +22,6 @@
 
 #include <cmath>
 
-#include "io/buffer.h"
 #include "io/file.h"
 #include "io/fileinfo.h"
 
@@ -40,7 +39,6 @@ using namespace mu;
 using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::read400;
 
 namespace mu::engraving {
 //---------------------------------------------------------

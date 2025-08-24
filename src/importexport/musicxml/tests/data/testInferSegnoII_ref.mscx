@@ -44,6 +44,7 @@
       <stringNumberFontFace>Times New Roman</stringNumberFontFace>
       <harpPedalDiagramFontFace>Times New Roman</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Times New Roman</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Times New Roman</articulationFontFace>
       <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
       <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
       <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
@@ -58,6 +59,7 @@
       <systemTextFontFace>Times New Roman</systemTextFontFace>
       <staffTextFontFace>Times New Roman</staffTextFontFace>
       <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
+      <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>
       <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
       <repeatRightFontFace>Times New Roman</repeatRightFontFace>
       <frameFontFace>Times New Roman</frameFontFace>
@@ -104,7 +106,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>[Unnamed (treble staff)]</trackName>
       <Instrument id="grand-piano">
@@ -298,6 +299,7 @@
           <style>repeat_left</style>
           <text>segno I</text>
           <label>segno</label>
+          <markerType>segno</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -408,6 +410,7 @@
           <text>To coda I
 <sym>coda</sym></text>
           <label>coda</label>
+          <markerType>coda</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -743,6 +746,7 @@
           <style>repeat_left</style>
           <text><sym>segno</sym> <sym>segno</sym></text>
           <label>segnoii</label>
+          <markerType>segno</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -861,6 +865,7 @@
           <text>To coda II
 <sym>coda</sym><sym>coda</sym></text>
           <label>codaii</label>
+          <markerType>coda</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -1441,6 +1446,7 @@
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -1707,6 +1713,7 @@
           <text>Coda II
 <sym>coda</sym><sym>coda</sym></text>
           <label>codabii</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Beam>

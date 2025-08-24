@@ -42,7 +42,7 @@ class System;
 //    gives infos about note attributes
 //---------------------------------------------------------
 
-enum class ArticulationCategory : char {
+enum class ArticulationCategory : unsigned char {
     NONE = 0x0,
     DOUBLE = 0x1,
     TENUTO = 0x2,
@@ -51,6 +51,7 @@ enum class ArticulationCategory : char {
     MARCATO = 0x10,
     LUTE_FINGERING = 0x20,
     LAISSEZ_VIB = 0x40,
+    HANDBELLS = 0x80,
 };
 DECLARE_FLAGS(ArticulationCategories, ArticulationCategory)
 DECLARE_OPERATORS_FOR_FLAGS(ArticulationCategories)
@@ -117,8 +118,15 @@ public:
     SymId symId() const { return m_symId; }
     void setSymId(SymId id);
     virtual int subtype() const override;
+
     void setTextType(ArticulationTextType textType);
     ArticulationTextType textType() const { return m_textType; }
+    Text* text() const { return m_text; }
+    void setText(Text* t) { m_text = t; }
+
+    void setSelected(bool f) override;
+    void setVisible(bool f) override;
+
     TranslatableString typeUserName() const override;
     TranslatableString subtypeUserName() const override;
     String articulationName() const;    // type-name of articulation; used for midi rendering
@@ -126,7 +134,6 @@ public:
 
     bool layoutCloseToNote() const;
 
-    const muse::draw::Font& font() const { return m_font; }
     bool isHiddenOnTabStaff() const;
 
     std::vector<LineF> dragAnchorLines() const override;
@@ -167,6 +174,7 @@ public:
     bool isMarcato() const { return m_categories & ArticulationCategory::MARCATO; }
     bool isLuteFingering() const { return m_categories & ArticulationCategory::LUTE_FINGERING; }
     bool isLaissezVib() const { return m_categories & ArticulationCategory::LAISSEZ_VIB; }
+    bool isHandbellsArticulation() const { return m_categories & ArticulationCategory::HANDBELLS; }
 
     bool isBasicArticulation() const;
 
@@ -187,6 +195,8 @@ public:
             up.reset();
             symId.reset();
         }
+
+        double opticalCenter() const;
     };
     DECLARE_LAYOUTDATA_METHODS(Articulation)
 
@@ -220,7 +230,7 @@ private:
     String m_channelName;
 
     ArticulationTextType m_textType = ArticulationTextType::NO_TEXT;
-    muse::draw::Font m_font; // used for drawing text type articulations
+    Text* m_text = nullptr;
 
     ArticulationAnchor m_anchor = ArticulationAnchor::AUTO;
 

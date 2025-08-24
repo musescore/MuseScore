@@ -45,7 +45,7 @@ HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepo
         setIcon(muse::ui::IconCode::Code::CRESCENDO);
     }
 
-    m_hairpinType = lineType == Crescendo ? engraving::HairpinType::CRESC_LINE : engraving::HairpinType::DECRESC_LINE;
+    m_hairpinType = lineType == Crescendo ? engraving::HairpinType::CRESC_LINE : engraving::HairpinType::DIM_LINE;
 
     createProperties();
 }

@@ -20,15 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_READ206_H
-#define MU_ENGRAVING_READ206_H
+#pragma once
 
 #include "../ireader.h"
 
-#include "modularity/ioc.h"
-#include "iengravingfontsprovider.h"
-
-#include "engravingerrors.h"
 #include "style/styledef.h"
 #include "dom/score.h"
 
@@ -65,7 +60,7 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    muse::Ret readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
+    muse::Ret readScoreFile(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
@@ -95,9 +90,7 @@ public:
 private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;
 
-    static bool readScore206(Score* score, XmlReader& e, read400::ReadContext& ctx);
+    static bool readScoreTag(Score* score, XmlReader& e, read400::ReadContext& ctx);
     static void readPart206(Part* part, XmlReader& e, read400::ReadContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_READ206_H

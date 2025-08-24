@@ -404,6 +404,7 @@ public:
         SPECTROGRAM = 0xF442,
         SPECTROGRAM_BOX_SELECTION = 0xF443,
         BRUSH = 0xF444,
+        SPLIT_TOOL = 0xF494,
 
         PLAY_FILL = 0xF446,
         STOP_FILL = 0xF447,
@@ -506,6 +507,14 @@ public:
         TAPPING_T = 0xF49D,
         HP_LOWER_CASE = 0xF49E,
         HP_UPPER_CASE = 0xF49F,
+
+        MUSESCORE_COM_LOGO = 0xF4A0,
+        AUDIO_COM_LOGO = 0xF4A2,
+
+        TUPLET_GRAPHICAL_CENTER = 0xF4AC,
+        TUPLET_RYTHMIC_CENTER = 0xF4AD,
+
+        EYE_OPEN_THICK = 0xF4AE,
 
         NONE = 0xFFFF
     };

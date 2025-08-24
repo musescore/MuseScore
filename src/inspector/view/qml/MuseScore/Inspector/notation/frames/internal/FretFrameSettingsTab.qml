@@ -43,6 +43,17 @@ FocusableItem {
         width: parent.width
         spacing: 12
 
+        PropertyCheckBox {
+            id: matchStaffSize
+
+            text: qsTrc("inspector", "Scale with staff size")
+            propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
+
+            navigation.name: "Scale with staff size"
+            navigation.panel: root.navigationPanel
+            navigation.row: alignmentSection.navigationRowEnd + 1
+        }
+
         FretFrameScalesSection {
             id: scalesSection
             textScale: root.model ? root.model.textScale : null
@@ -75,6 +86,8 @@ FocusableItem {
                 propertyItem: root.model ? root.model.chordsPerRow : null
                 step: 1
                 decimals: 0
+                minValue: 1
+                maxValue: 100
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: gapsSection.navigationRowEnd + 1
@@ -95,21 +108,12 @@ FocusableItem {
 
         SeparatorLine { anchors.margins: -12 }
 
-        PropertyCheckBox {
-            id: matchStaffSize
-
-            text: qsTrc("inspector", "Scale with staff size")
-            propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
-
-            navigation.name: "Scale with staff size"
-            navigation.panel: root.navigationPanel
-            navigation.row: alignmentSection.navigationRowEnd + 1
-        }
-
         VerticalGapsSection {
             id: verticalGapsSection
             gapAbove: root.model ? root.model.gapAbove : null
             gapBelow: root.model ? root.model.gapBelow : null
+            notationGapAbove: root.model ? root.model.paddingToNotationAbove : null
+            notationGapBelow: root.model ? root.model.paddingToNotationBelow : null
 
             navigationPanel: root.navigationPanel
             navigationRowStart: matchStaffSize.navigationRowEnd + 1

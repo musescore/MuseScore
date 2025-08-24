@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 
 #include "context/iglobalcontext.h"
-#include "audio/iplayback.h"
+#include "audio/main/iplayback.h"
 #include "iplaybackcontroller.h"
 #include "iplaybackconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -83,11 +83,12 @@ private:
 
     struct RegionInfo {
         mu::engraving::InstrumentTrackId trackId;
-        QRectF rect;
+        QRectF logicRect;
+        QRectF viewRect;
 
         bool operator==(const RegionInfo& r) const
         {
-            return trackId == r.trackId && rect == r.rect;
+            return trackId == r.trackId && logicRect == r.logicRect && viewRect == r.viewRect;
         }
     };
 
@@ -128,6 +129,7 @@ private:
     void onChunksReceived(const mu::engraving::InstrumentTrackId& instrumentTrackId, const ChunkInfoList& chunks);
     void onProgressChanged(const mu::engraving::InstrumentTrackId& instrumentTrackId, int progress);
     void onProgressFinished(const mu::engraving::InstrumentTrackId& instrumentTrackId);
+    void onViewMatrixChanged();
 
     void initShouldShowRegions();
     void updateRegionsBeingProcessed(const TracksBeingProcessed& tracks);

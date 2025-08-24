@@ -47,7 +47,7 @@ public:
     bool classesEnabled() const override;
 
 private:
-    bool isTestingMode() const;
+    bool isTestMode() const;
 
     Config m_config;
 };

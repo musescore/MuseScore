@@ -19,26 +19,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SYSTEMLAYOUT_DEV_H
-#define MU_ENGRAVING_SYSTEMLAYOUT_DEV_H
+#pragma once
 
 #include <vector>
 
-#include "../dom/measure.h"
-
-#include "../layoutoptions.h"
 #include "layoutcontext.h"
 
+#include "../../dom/measure.h"
+#include "../../dom/segment.h"
+#include "../../types/types.h"
+
 namespace mu::engraving {
-class Chord;
-class Score;
-class Segment;
-class Spanner;
-class System;
-class Measure;
+class BarLine;
 class Bracket;
 class BracketItem;
+class Chord;
+class Dynamic;
+class Expression;
+class FiguredBass;
+class FretDiagram;
+class Harmony;
+class HarpPedalDiagram;
+class Image;
+class InstrumentChange;
+class Measure;
+class MeasureNumber;
+class MMRest;
+class MMRestRange;
+class Parenthesis;
+class RehearsalMark;
+class Score;
+class Segment;
 class SkylineLine;
+class Spanner;
+class StaffText;
+class Sticking;
+class System;
+class SystemText;
+class TempoText;
+class TimeSig;
 }
 
 namespace mu::engraving::rendering::score {
@@ -51,6 +70,7 @@ public:
     static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
 
     static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);
+    static bool canChangeSysStaffVisibility(const System* system, const staff_idx_t staffIdx);
 
     static void layout2(System* system, LayoutContext& ctx);
     static void restoreLayout2(System* system, LayoutContext& ctx);
@@ -130,6 +150,7 @@ private:
         std::vector<Image*> images;
         std::vector<Parenthesis*> parenthesis;
         std::vector<Harmony*> harmonies;
+        std::vector<PlayCountText*> playCountText;
 
         std::vector<Spanner*> slurs;
         std::vector<Spanner*> trills;
@@ -159,7 +180,7 @@ private:
     static void layoutGuitarBends(Chord* chord, LayoutContext& ctx);
     static void updateCrossBeams(System* system, LayoutContext& ctx);
     static bool measureHasCrossStuffOrModifiedBeams(const Measure* measure);
-    static void restoreTiesAndBends(System* system, LayoutContext& ctx);
+    static void restoreOldSystemLayout(System* system, LayoutContext& ctx);
     static void layoutTuplets(const std::vector<ChordRest*>& chordRests, LayoutContext& ctx);
 
     static void layoutTiesAndBends(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
@@ -192,8 +213,10 @@ private:
 
     static void layoutParenthesisAndBigTimeSigs(const ElementsToLayout& elementsToLayout);
 
-    static void layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, bool verticalAlign, LayoutContext& ctx);
+    static void layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx);
+    static void layoutFretDiagrams(const ElementsToLayout& elements, System* system, LayoutContext& ctx);
+
+    static void alignRests(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
+    static void checkFullMeasureRestCollisions(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_SYSTEMLAYOUT_DEV_H

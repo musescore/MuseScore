@@ -51,12 +51,12 @@ StyledPopupView {
     showArrow: false
 
     focusPolicies: PopupView.DefaultFocus & ~PopupView.ClickFocus
+    placementPolicies: PopupView.PreferAbove
 
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
-        root.x = 0;
-        root.y = -height;
+        root.x = 0
     }
 
     TextStylePopupModel {
@@ -304,7 +304,7 @@ StyledPopupView {
                         navigation.name: "horizonalAlignmentButtonList"
                         navigation.panel: textStyleSettingsNavPanel
                         navigation.row: horizontalAlignmentButtonList.navigationRowStart + model.index
-                        navigation.accessible.name: qsTrc("inspector", "Horizontal alignent buttons")
+                        navigation.accessible.name: qsTrc("inspector", "Horizontal alignment buttons")
 
                         width: root.elementSize
 

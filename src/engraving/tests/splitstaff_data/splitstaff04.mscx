@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="3.01">
   <Score>
     <Division>480</Division>
     <Style>
@@ -78,7 +78,6 @@
           <TimeSig>
             <sigN>3</sigN>
             <sigD>4</sigD>
-            <showCourtesy>0</showCourtesy>
             </TimeSig>
           <Rest>
             <durationType>quarter</durationType>

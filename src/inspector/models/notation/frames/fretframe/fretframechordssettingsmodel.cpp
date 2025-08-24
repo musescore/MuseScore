@@ -42,21 +42,29 @@ FretFrameChordsSettingsModel::FretFrameChordsSettingsModel(QObject* parent, IEle
 
 void FretFrameChordsSettingsModel::createProperties()
 {
+    m_listOrder = buildPropertyItem(Pid::FRET_FRAME_DIAGRAMS_ORDER,
+                                    [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
+        m_chordListModel->load();
+    });
 }
 
 void FretFrameChordsSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(ElementType::FBOX);
 
-    m_chordListModel->load(fretBox());
+    m_chordListModel->setFBox(fretBox());
+    m_chordListModel->load();
 }
 
 void FretFrameChordsSettingsModel::loadProperties()
 {
+    loadProperties({ Pid::FRET_FRAME_DIAGRAMS_ORDER });
 }
 
 void FretFrameChordsSettingsModel::resetProperties()
 {
+    m_listOrder->resetToDefault();
 }
 
 mu::engraving::FBox* FretFrameChordsSettingsModel::fretBox() const
@@ -74,11 +82,19 @@ void FretFrameChordsSettingsModel::onNotationChanged(const engraving::PropertyId
     loadProperties(changedPropertyIdSet);
 }
 
-void FretFrameChordsSettingsModel::loadProperties(const engraving::PropertyIdSet&)
+void FretFrameChordsSettingsModel::loadProperties(const engraving::PropertyIdSet& propertyIdSet)
 {
+    if (muse::contains(propertyIdSet, Pid::FRET_FRAME_DIAGRAMS_ORDER)) {
+        loadPropertyItem(m_listOrder);
+    }
 }
 
 FretFrameChordListModel* FretFrameChordsSettingsModel::chordListModel() const
 {
     return m_chordListModel.get();
+}
+
+PropertyItem* FretFrameChordsSettingsModel::listOrder() const
+{
+    return m_listOrder;
 }

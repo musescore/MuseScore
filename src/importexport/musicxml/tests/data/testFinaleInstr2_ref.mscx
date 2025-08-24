@@ -54,6 +54,8 @@
       <stringTuningsFontSize>8.8</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Times</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Times</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Times</articulationFontFace>
+      <articulationFontSize>8.8</articulationFontSize>
       <longInstrumentFontFace>Times</longInstrumentFontFace>
       <longInstrumentFontSize>8.8</longInstrumentFontSize>
       <shortInstrumentFontFace>Times</shortInstrumentFontFace>
@@ -83,6 +85,8 @@
       <staffTextFrameWidth>0.07227</staffTextFrameWidth>
       <rehearsalMarkFontFace>Times</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>8.8</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Times</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>8.8</repeatPlayCountFontSize>
       <repeatLeftFontFace>Times</repeatLeftFontFace>
       <repeatLeftFontSize>8.8</repeatLeftFontSize>
       <repeatRightFontFace>Times</repeatRightFontFace>
@@ -159,7 +163,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -238,7 +241,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>B</trackName>
       <Instrument id="violin">
@@ -315,7 +317,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -395,7 +396,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>B</trackName>
       <Instrument id="viola">
@@ -473,7 +473,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="3" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -553,7 +552,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Cello  B</trackName>
@@ -632,7 +630,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>C</trackName>
       <Instrument id="viola">
@@ -710,7 +707,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -780,7 +776,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>C</trackName>
       <Instrument id="bass">
@@ -848,7 +843,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">

@@ -15,7 +15,6 @@
 #include "WidgetResizeHandler_p.h"
 #include "Utils_p.h"
 
-
 using namespace KDDockWidgets;
 
 class Draggable::Private
@@ -54,7 +53,14 @@ QWidgetOrQuick *Draggable::asWidget() const
 
 bool Draggable::dragCanStart(QPoint pressPos, QPoint globalPos) const
 {
-    return (globalPos - pressPos).manhattanLength() > KDDockWidgets::startDragDistance();
+    // Start dragging single-dock floating windows almost immediately for best user experience,
+    // but require some "force" for docked/tabbed widgets in order to prevent accidental undocking.
+    KDDockWidgets::DockWidgetBase* dw = singleDockWidget();
+    int startDragDistance = (isWindow() || (dw && dw->isFloating()))
+                            ? KDDockWidgets::startDragDistance()
+                            : KDDockWidgets::undockDistance();
+
+    return (globalPos - pressPos).manhattanLength() > startDragDistance;
 }
 
 void Draggable::setWidgetResizeHandler(WidgetResizeHandler *w)

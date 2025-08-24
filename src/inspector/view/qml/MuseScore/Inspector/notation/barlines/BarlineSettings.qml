@@ -27,6 +27,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.Inspector 1.0
 import "../../common"
+import "../playcounttext"
 
 Column {
     id: root
@@ -34,9 +35,6 @@ Column {
     property QtObject model: null
 
     objectName: "BarlineSettings"
-
-    property QtObject barlineSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_BARLINE) : null
-    property QtObject staffSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_STAFF) : null
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
@@ -49,10 +47,10 @@ Column {
 
     DropdownPropertyView {
         id: styleSection
-        titleText: qsTrc("inspector", "Style")
-        propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.type : null
+        titleText: qsTrc("inspector", "Type")
+        propertyItem: root.model ? root.model.type : null
 
-        navigationName: "Style"
+        navigationName: "Type"
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
 
@@ -65,15 +63,18 @@ Column {
             { text: qsTrc("inspector", "Reverse final barline"), value: BarlineTypes.TYPE_REVERSE_END },
             { text: qsTrc("inspector", "Heavy barline"), value: BarlineTypes.TYPE_HEAVY },
             { text: qsTrc("inspector", "Heavy double barline"), value: BarlineTypes.TYPE_DOUBLE_HEAVY },
+            { text: qsTrc("inspector", "Left (start) barline"), value: BarlineTypes.TYPE_START_REPEAT },
+            { text: qsTrc("inspector", "Right (end) repeat barline"), value: BarlineTypes.TYPE_END_REPEAT },
+            { text: qsTrc("inspector", "Right and left repeat barline"), value: BarlineTypes.TYPE_END_START_REPEAT },
         ]
     }
 
     FlatRadioButtonGroupPropertyView {
         id: repeatStyleSection
         titleText: qsTrc("inspector", "Repeat style")
-        propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.hasToShowTips : null
+        propertyItem: root.model ? root.model.hasToShowTips : null
 
-        visible: root.barlineSettingsModel && root.barlineSettingsModel.isRepeatStyleChangingAllowed
+        visible: root.model && root.model.isRepeatStyleChangingAllowed
 
         navigationName: "RepeatStyle"
         navigationPanel: root.navigationPanel
@@ -85,160 +86,206 @@ Column {
         ]
     }
 
-    PropertyCheckBox {
-        id: spanToNextStaffCheckBox
+    SpinBoxPropertyView {
+        id: playCount
+        visible: root.model.showPlayCount
 
-        navigation.name: "SpanToStaffCheckBox"
+        anchors.left: parent.left
+        anchors.right: parent.horizontalCenter
+
+        navigationName: "Play count"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: repeatStyleSection.navigationRowEnd + 1
+
+        step: 1
+        minValue: 2
+        maxValue: 999
+
+        titleText: qsTrc("inspector", "Play count")
+        propertyItem: root.model ? root.model.playCount : null
+    }
+
+    PlayCountSettings {
+        id: playCountSection
+
+        visible: root.model.showPlayCount && root.model.showPlayCountSettings
+
+        model: root.model
+        navigationPanel: root.navigationPanel
+        navigationRowStart: playCount.navigationRowEnd + 1
+    }
+
+    ExpandableBlank {
+        id: showItem
+        isExpanded: false
+
+        title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
+
+        width: parent.width
+
         navigation.panel: root.navigationPanel
-        navigation.row: repeatStyleSection.navigationRowEnd + 1
+        navigation.row: playCountSection.navigationRowEnd + 1
 
-        text: qsTrc("inspector", "Span to next staff")
-        propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.isSpanToNextStaff : null
-    }
+        contentItemComponent: Column {
+            height: implicitHeight
+            width: root.width
 
-    SeparatorLine { anchors.margins: -12 }
+            spacing: 12
 
-    Item {
-        height: childrenRect.height
-        width: parent.width
+            PropertyCheckBox {
+                id: spanToNextStaffCheckBox
 
-        SpinBoxPropertyView {
-            id: spanFrom
-            anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
-
-            titleText: qsTrc("inspector", "Span from")
-            propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom : null
-
-            decimals: 0
-            step: 1
-            minValue: -4
-            maxValue: 99
-
-            navigationName: "SpanFrom"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: spanToNextStaffCheckBox.navigation.row + 1
-        }
-
-        SpinBoxPropertyView {
-            id: spanTo
-            anchors.left: parent.horizontalCenter
-            anchors.leftMargin: 2
-            anchors.right: parent.right
-
-            titleText: qsTrc("inspector", "Span to")
-            propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanTo : null
-
-            decimals: 0
-            step: 1
-            minValue: -99
-            maxValue: 99
-
-            navigationName: "SpanTo"
-            navigationPanel: root.navigationPanel
-            navigationRowStart: spanFrom.navigationRowEnd + 1
-        }
-    }
-
-    FlatButton {
-        id: setAsStaffDefaultButton
-        width: parent.width
-
-        text: qsTrc("inspector", "Set as staff default")
-
-        enabled: root.barlineSettingsModel
-
-        navigation.name: "SetAsStaffDefault"
-        navigation.panel: root.navigationPanel
-        navigation.row: spanTo.navigationRowEnd + 1
-
-        onClicked: {
-            root.barlineSettingsModel.setSpanIntervalAsStaffDefault()
-        }
-    }
-
-    Column {
-        id: presetButtons
-
-        spacing: 8
-
-        width: parent.width
-
-        StyledTextLabel {
-            id: spanPresetsLabel
-            width: parent.width
-            text: qsTrc("inspector", "Span presets")
-            horizontalAlignment: Text.AlignLeft
-        }
-
-        RowLayout {
-            width: parent.width
-            spacing: 4
-
-            FlatButton {
-                text: qsTrc("inspector", "Default")
-                Layout.fillWidth: true
-
-                navigation.name: "Default"
+                navigation.name: "SpanToStaffCheckBox"
                 navigation.panel: root.navigationPanel
-                navigation.row: setAsStaffDefaultButton.navigation.row + 1
-                navigation.accessible.name: spanPresetsLabel.text + " " + text
+                navigation.row: showItem.navigationRowEnd + 1
 
-                onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_DEFAULT) }
+                text: qsTrc("inspector", "Span to next staff")
+                propertyItem: root.model ? root.model.isSpanToNextStaff : null
+            }
+
+            Item {
+                height: childrenRect.height
+                width: parent.width
+
+                SpinBoxPropertyView {
+                    id: spanFrom
+                    anchors.left: parent.left
+                    anchors.right: parent.horizontalCenter
+                    anchors.rightMargin: 2
+
+                    titleText: qsTrc("inspector", "Span from")
+                    propertyItem: root.model ? root.model.spanFrom : null
+
+                    decimals: 0
+                    step: 1
+                    minValue: -4
+                    maxValue: 99
+
+                    navigationName: "SpanFrom"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: spanToNextStaffCheckBox.navigation.row + 1
+                }
+
+                SpinBoxPropertyView {
+                    id: spanTo
+                    anchors.left: parent.horizontalCenter
+                    anchors.leftMargin: 2
+                    anchors.right: parent.right
+
+                    titleText: qsTrc("inspector", "Span to")
+                    propertyItem: root.model ? root.model.spanTo : null
+
+                    decimals: 0
+                    step: 1
+                    minValue: -99
+                    maxValue: 99
+
+                    navigationName: "SpanTo"
+                    navigationPanel: root.navigationPanel
+                    navigationRowStart: spanFrom.navigationRowEnd + 1
+                }
             }
 
             FlatButton {
-                text: qsTrc("inspector", "Tick 1")
-                Layout.fillWidth: true
+                id: setAsStaffDefaultButton
+                width: parent.width
 
-                navigation.name: "Tick1"
+                text: qsTrc("inspector", "Set as staff default")
+
+                enabled: root.model
+
+                navigation.name: "SetAsStaffDefault"
                 navigation.panel: root.navigationPanel
-                navigation.row: setAsStaffDefaultButton.navigation.row + 2
-                navigation.accessible.name: spanPresetsLabel.text + " " + text
+                navigation.row: spanTo.navigationRowEnd + 1
 
-                onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_TICK_1) }
+                onClicked: {
+                    root.model.setSpanIntervalAsStaffDefault()
+                }
             }
 
-            FlatButton {
-                text: qsTrc("inspector", "Tick 2")
-                Layout.fillWidth: true
+            Column {
+                id: presetButtons
 
-                navigation.name: "Tick2"
-                navigation.panel: root.navigationPanel
-                navigation.row: setAsStaffDefaultButton.navigation.row + 3
-                navigation.accessible.name: spanPresetsLabel.text + " " + text
+                spacing: 8
 
-                onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_TICK_2) }
-            }
-        }
+                width: parent.width
 
-        RowLayout {
-            width: parent.width
-            spacing: 4
+                StyledTextLabel {
+                    id: spanPresetsLabel
+                    width: parent.width
+                    text: qsTrc("inspector", "Span presets")
+                    horizontalAlignment: Text.AlignLeft
+                }
 
-            FlatButton {
-                text: qsTrc("inspector", "Short 1")
-                Layout.fillWidth: true
+                RowLayout {
+                    width: parent.width
+                    spacing: 4
 
-                navigation.name: "Short1"
-                navigation.panel: root.navigationPanel
-                navigation.row: setAsStaffDefaultButton.navigation.row + 4
-                navigation.accessible.name: spanPresetsLabel.text + " " + text
+                    FlatButton {
+                        text: qsTrc("inspector", "Default")
+                        Layout.fillWidth: true
 
-                onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_SHORT_1) }
-            }
+                        navigation.name: "Default"
+                        navigation.panel: root.navigationPanel
+                        navigation.row: setAsStaffDefaultButton.navigation.row + 1
+                        navigation.accessible.name: spanPresetsLabel.text + " " + text
 
-            FlatButton {
-                text: qsTrc("inspector", "Short 2")
-                Layout.fillWidth: true
+                        onClicked: { root.model.applySpanPreset(BarlineTypes.PRESET_DEFAULT) }
+                    }
 
-                navigation.name: "Short2"
-                navigation.panel: root.navigationPanel
-                navigation.row: setAsStaffDefaultButton.navigation.row + 5
-                navigation.accessible.name: spanPresetsLabel.text + " " + text
+                    FlatButton {
+                        text: qsTrc("inspector", "Tick 1")
+                        Layout.fillWidth: true
 
-                onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_SHORT_2) }
+                        navigation.name: "Tick1"
+                        navigation.panel: root.navigationPanel
+                        navigation.row: setAsStaffDefaultButton.navigation.row + 2
+                        navigation.accessible.name: spanPresetsLabel.text + " " + text
+
+                        onClicked: { root.model.applySpanPreset(BarlineTypes.PRESET_TICK_1) }
+                    }
+
+                    FlatButton {
+                        text: qsTrc("inspector", "Tick 2")
+                        Layout.fillWidth: true
+
+                        navigation.name: "Tick2"
+                        navigation.panel: root.navigationPanel
+                        navigation.row: setAsStaffDefaultButton.navigation.row + 3
+                        navigation.accessible.name: spanPresetsLabel.text + " " + text
+
+                        onClicked: { root.model.applySpanPreset(BarlineTypes.PRESET_TICK_2) }
+                    }
+                }
+
+                RowLayout {
+                    width: parent.width
+                    spacing: 4
+
+                    FlatButton {
+                        text: qsTrc("inspector", "Short 1")
+                        Layout.fillWidth: true
+
+                        navigation.name: "Short1"
+                        navigation.panel: root.navigationPanel
+                        navigation.row: setAsStaffDefaultButton.navigation.row + 4
+                        navigation.accessible.name: spanPresetsLabel.text + " " + text
+
+                        onClicked: { root.model.applySpanPreset(BarlineTypes.PRESET_SHORT_1) }
+                    }
+
+                    FlatButton {
+                        text: qsTrc("inspector", "Short 2")
+                        Layout.fillWidth: true
+
+                        navigation.name: "Short2"
+                        navigation.panel: root.navigationPanel
+                        navigation.row: setAsStaffDefaultButton.navigation.row + 5
+                        navigation.accessible.name: spanPresetsLabel.text + " " + text
+
+                        onClicked: { root.model.applySpanPreset(BarlineTypes.PRESET_SHORT_2) }
+                    }
+                }
             }
         }
     }

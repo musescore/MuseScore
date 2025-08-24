@@ -55,8 +55,13 @@ private:
     };
 
     void listenSelectionChanged();
+    void listenScoreChanges();
+
+    void onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet, const mu::engraving::StyleIdSet& changedStyleIdSet);
+
     void updateElementList();
 
+    bool alwaysUpdateModelList(const QList<mu::engraving::EngravingItem*>& selectedElementList);
     void setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
                         notation::SelectionState selectionState = notation::SelectionState::NONE);
 
@@ -83,6 +88,8 @@ private:
     IElementRepositoryService* m_repository = nullptr;
 
     bool m_inspectorVisible = true;
+    mu::engraving::PropertyIdSet m_changedPropertyIdSet;
+    mu::engraving::StyleIdSet m_changedStyleIdSet;
 };
 }
 

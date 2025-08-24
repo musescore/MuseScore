@@ -472,8 +472,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("pitch-spell",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Respell &pitches"),
-             TranslatableString("action", "Respell pitches")
+             TranslatableString("action", "&Optimize enharmonic spelling"),
+             TranslatableString("action", "Optimize enharmonic spelling")
              ),
     UiAction("reset-groupings",
              mu::context::UiCtxProjectOpened,
@@ -1259,8 +1259,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("add-hairpin-reverse",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "&Decrescendo"),
-             TranslatableString("action", "Add hairpin: decrescendo")
+             TranslatableString("action", "&Diminuendo"),
+             TranslatableString("action", "Add hairpin: diminuendo")
              ),
     UiAction("add-noteline",
              mu::context::UiCtxProjectOpened,
@@ -1650,15 +1650,15 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("enh-both",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Change enharmonic spelling (both modes)"),
-             TranslatableString("action", "Change enharmonic spelling (concert and written pitch)"),
+             TranslatableString("action", "Change enharmonic spelling (concert and transposed &pitch)"),
+             TranslatableString("action", "Change enharmonic spelling (concert and transposed pitch)"),
              IconCode::Code::NONE
              ),
     UiAction("enh-current",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Change enharmonic spelling (current mode)"),
-             TranslatableString("action", "Change enharmonic spelling (current mode only)"),
+             TranslatableString("action", "Change enharmonic spelling (&current pitch mode only)"),
+             TranslatableString("action", "Change enharmonic spelling (current pitch mode only)"),
              IconCode::Code::NONE
              ),
     UiAction("flip",
@@ -2659,6 +2659,13 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Show line-attach points"),
              TranslatableString("action", "Show/hide line-attach points"),
+             Checkable::Yes
+             ),
+    UiAction("mark-empty-staff-visibility-overrides",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Mark empty staff visibility overrides"),
+             TranslatableString("action", "Mark empty staff visibility overrides"),
              Checkable::Yes
              ),
     UiAction("mark-corrupted-measures",

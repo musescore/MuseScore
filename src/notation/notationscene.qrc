@@ -41,6 +41,7 @@
         <file>qml/MuseScore/NotationScene/internal/CapoPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/DynamicPopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/StaffVisibilityPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleToggleWithImage.qml</file>
@@ -114,5 +115,7 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyledXYControllerWithReset.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleResetButton.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleToggle.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/TupletCenteringSelector.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/RepeatPage.qml</file>
     </qresource>
 </RCC>

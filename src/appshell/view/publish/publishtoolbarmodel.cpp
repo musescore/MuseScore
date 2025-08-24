@@ -32,20 +32,18 @@ void PublishToolBarModel::load()
 {
     AbstractToolBarModel::load();
 
-    muse::actions::ActionCodeList itemsCodes = {
-        "print",
-        "file-publish",
-        "file-share-audio",
-        "file-export"
+    ToolBarItemList items;
+    const auto addItems = [this, &items](const muse::actions::ActionCodeList& codes) {
+        for (const ActionCode& code : codes) {
+            auto* item = makeItem(code);
+            item->setShowTitle(true);
+            items << item;
+        }
     };
 
-    ToolBarItemList items;
-    for (const ActionCode& code : itemsCodes) {
-        ToolBarItem* item = makeItem(code);
-        item->setShowTitle(true);
-
-        items << item;
-    }
+    addItems({ "file-save-to-cloud", "print", "file-export" });
+    items << makeSeparator();
+    addItems({ "file-publish", "file-share-audio" });
 
     setItems(items);
 }

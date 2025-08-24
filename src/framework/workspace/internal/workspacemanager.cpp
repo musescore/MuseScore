@@ -168,7 +168,7 @@ void WorkspaceManager::openConfigureWorkspacesDialog()
 {
     prepareCurrentWorkspaceForChange();
 
-    RetVal<Val> result = interactive()->openSync("muse://workspace/select?sync=true");
+    RetVal<Val> result = interactive()->openSync("muse://workspace/select");
     if (!result.ret) {
         return;
     }

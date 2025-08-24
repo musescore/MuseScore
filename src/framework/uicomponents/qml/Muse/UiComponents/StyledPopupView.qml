@@ -46,13 +46,17 @@ PopupView {
 
     property alias useDropShadow: content.useDropShadow
 
+    property bool isPlacementVertical:  (root.placementPolicies === PopupView.Default)
+                                        || (root.placementPolicies & PopupView.PreferAbove)
+                                        || (root.placementPolicies & PopupView.PreferBelow)
+
     contentWidth: 240
     contentHeight: content.contentBodyHeight
 
     closePolicies: PopupView.CloseOnPressOutsideParent
 
-    x: (root.parent.width / 2) - (root.width / 2)
-    y: root.parent.height
+    x: root.isPlacementVertical ? (root.parent.width / 2) - (root.width / 2) : root.parent.width
+    y: root.isPlacementVertical ? root.parent.height : (root.parent.height / 2) - (root.height / 2)
 
     onOpened: {
         if (!(openPolicies & PopupView.NoActivateFocus) && content.navigationSection) {
@@ -76,7 +80,8 @@ PopupView {
 
         showArrow: root.showArrow
         arrowX: root.arrowX
-        opensUpward: root.opensUpward
+        arrowY: root.arrowY
+        popupPosition: root.popupPosition
         isOpened: root.isOpened
 
         enabled: root.isOpened

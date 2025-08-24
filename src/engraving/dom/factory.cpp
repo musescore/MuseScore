@@ -79,6 +79,7 @@
 #include "partialtie.h"
 #include "pedal.h"
 #include "pickscrape.h"
+#include "playcounttext.h"
 #include "playtechannotation.h"
 #include "rasgueado.h"
 #include "rehearsalmark.h"
@@ -92,6 +93,7 @@
 #include "staffstate.h"
 #include "stafftext.h"
 #include "stafftypechange.h"
+#include "staffvisibilityindicator.h"
 #include "stem.h"
 #include "stemslash.h"
 #include "sticking.h"
@@ -176,6 +178,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::MMREST_RANGE:      return new MMRestRange(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::STAFF_TEXT:        return new StaffText(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::PLAY_COUNT_TEXT:   return new PlayCountText(parent->isBarLine() ? toBarLine(parent) : dummy->barline());
     case ElementType::PLAYTECH_ANNOTATION: return new PlayTechAnnotation(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::CAPO:              return new Capo(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::SYSTEM_TEXT:       return new SystemText(parent->isSegment() ? toSegment(parent) : dummy->segment());
@@ -183,6 +186,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
     case ElementType::SOUND_FLAG:        return new SoundFlag(parent);
     case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
+    case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parent->isSystem()
+                                                                                      ? toSystem(parent) : dummy->system());
     case ElementType::NOTEHEAD:          return new NoteHead(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::NOTEDOT: {
         if (parent->isNote()) {
@@ -766,6 +771,8 @@ Image* Factory::createImage(EngravingItem * parent)
 CREATE_ITEM_IMPL(Symbol, ElementType::SYMBOL, EngravingItem, isAccessibleEnabled)
 CREATE_ITEM_IMPL(FSymbol, ElementType::FSYMBOL, EngravingItem, isAccessibleEnabled)
 
+CREATE_ITEM_IMPL(PlayCountText, ElementType::PLAY_COUNT_TEXT, BarLine, isAccessibleEnabled)
+
 PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingTechniqueType techniqueType, TextStyleType styleType,
                                                       bool isAccessibleEnabled)
 {
@@ -778,6 +785,8 @@ PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingT
 CREATE_ITEM_IMPL(Capo, ElementType::CAPO, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TimeTickAnchor, ElementType::TIME_TICK_ANCHOR, Segment, isAccessibleEnabled)
+
+CREATE_ITEM_IMPL(StaffVisibilityIndicator, ElementType::STAFF_VISIBILITY_INDICATOR, System, isAccessibleEnabled)
 
 SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const SystemLock * lock, bool isAccessibleEnabled)
 {

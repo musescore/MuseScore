@@ -19,8 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 #include "mocks/controlledviewmock.h"
@@ -35,6 +33,7 @@
 #include "notation/view/notationviewinputcontroller.h"
 
 using ::testing::_;
+using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::ReturnRef;
 
@@ -50,13 +49,13 @@ public:
 
     void SetUp() override
     {
-        m_interaction = std::make_shared<NotationInteractionMock>();
+        m_interaction = std::make_shared<NiceMock<NotationInteractionMock> >();
 
-        m_selection = std::make_shared<NotationSelectionMock>();
+        m_selection = std::make_shared<NiceMock<NotationSelectionMock> >();
         ON_CALL(*m_interaction, selection())
         .WillByDefault(Return(m_selection));
 
-        m_selectionRange = std::make_shared<NotationSelectionRangeMock>();
+        m_selectionRange = std::make_shared<NiceMock<NotationSelectionRangeMock> >();
         ON_CALL(*m_selection, range())
         .WillByDefault(Return(m_selectionRange));
 
@@ -68,10 +67,10 @@ public:
 
         m_controller = new NotationViewInputController(&m_view, muse::modularity::globalCtx());
 
-        m_configuration = std::make_shared<NotationConfigurationMock>();
+        m_configuration = std::make_shared<NiceMock<NotationConfigurationMock> >();
         m_controller->configuration.set(m_configuration);
 
-        m_playbackController = std::make_shared<playback::PlaybackControllerMock>();
+        m_playbackController = std::make_shared<NiceMock<playback::PlaybackControllerMock> >();
         m_controller->playbackController.set(m_playbackController);
 
         setNoWaylandForLinux();
@@ -84,12 +83,13 @@ public:
     }
 
     NotationViewInputController* m_controller = nullptr;
-    ControlledViewMock m_view;
+    NiceMock<ControlledViewMock> m_view;
     std::shared_ptr<NotationConfigurationMock> m_configuration;
     std::shared_ptr<NotationInteractionMock> m_interaction;
     std::shared_ptr<NotationSelectionMock> m_selection;
     std::shared_ptr<NotationSelectionRangeMock> m_selectionRange;
-    std::shared_ptr<playback::PlaybackControllerMock > m_playbackController;
+    std::shared_ptr<playback::PlaybackControllerMock> m_playbackController;
+    playback::IPlaybackController::PlayParams m_playParams;
 
     mutable QList<QInputEvent*> m_events;
 
@@ -194,6 +194,13 @@ public:
     }
 };
 
+namespace mu::playback {
+inline bool operator==(const IPlaybackController::PlayParams& p1, const IPlaybackController::PlayParams& p2)
+{
+    return p1.duration == p2.duration && p1.flushSound == p2.flushSound;
+}
+}
+
 /**
  * @brief WheelEvent_ScrollVertical
  * @details Received wheel event, without modifiers
@@ -278,9 +285,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     //! [GIVEN] There is a test score
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
 
-    //! [GIVEN] Previous selected note
-    INotationInteraction::HitElementContext oldContext = hitContext(score, { ElementType::NOTE, true /*first note*/ });
-
     //! [GIVEN] User selected new note that was already selected
     INotationInteraction::HitElementContext newContext = hitContext(score, { ElementType::NOTE, false /*last note*/ });
     newContext.element->setSelected(true);
@@ -300,8 +304,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
+    .Times(1)
     .WillOnce(ReturnRef(newContext));
 
     //! [GIVEN] There is a range selection
@@ -323,7 +326,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     .Times(1);
 
     std::vector<const EngravingItem*> elements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(elements, false))
+    EXPECT_CALL(*m_playbackController, playElements(elements, m_playParams, false))
     .Times(1);
 
     std::vector<EngravingItem*> selectElements = { newContext.element };
@@ -331,7 +334,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     .Times(0);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -389,7 +392,7 @@ TEST_F(NotationViewInputControllerTests, DISABLED_Mouse_Press_On_Selected_Text_E
     .Times(1);
 
     std::vector<const EngravingItem*> elements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(elements, false))
+    EXPECT_CALL(*m_playbackController, playElements(elements, m_playParams, false))
     .Times(0);
 
     std::vector<EngravingItem*> selectElements = { newContext.element };
@@ -407,7 +410,7 @@ TEST_F(NotationViewInputControllerTests, DISABLED_Mouse_Press_On_Selected_Text_E
     .Times(1);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -441,17 +444,15 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
     .Times(1);
 
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
-    .WillOnce(ReturnRef(newContext));
-
     //! [GIVEN] There isn't a range selection
     ON_CALL(*m_selection, isRange())
     .WillByDefault(Return(false));
 
     ON_CALL(*m_selection, elements())
     .WillByDefault(ReturnRef(selectedElements));
+
+    ON_CALL(*m_selection, element())
+    .WillByDefault(Return(selectedElements.front()));
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -465,7 +466,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     .Times(1);
 
     std::vector<const EngravingItem*> elements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(elements, false))
+    EXPECT_CALL(*m_playbackController, playElements(elements, m_playParams, false))
     .Times(0);
 
     std::vector<EngravingItem*> selectElements = { newContext.element };
@@ -481,11 +482,11 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     .Times(0);
     EXPECT_CALL(*m_interaction, startEditGrip(newContext.element, _))
     .Times(0);
-    EXPECT_CALL(*m_interaction, startEditElement(newContext.element, _))
+    EXPECT_CALL(*m_interaction, startEditElement(newContext.element))
     .Times(0);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -516,8 +517,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
+    .Times(1)
     .WillOnce(ReturnRef(newContext));
 
     //! [GIVEN] No note enter mode, no playing
@@ -530,10 +530,11 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     //! [THEN] We will select and play selected note, but no seek
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
-    .Times(1);
+    .Times(1)
+    .WillOnce([newContext] { newContext.element->setSelected(true); });
 
     std::vector<const EngravingItem*> playElements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(playElements, false))
+    EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
     .Times(1);
 
     EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
@@ -552,7 +553,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     .Times(1);
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 }
 
 /**
@@ -579,8 +580,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Range)
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(context))
+    .Times(1)
     .WillOnce(ReturnRef(context));
 
     //! [GIVEN] There is a range selection
@@ -602,7 +602,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Range)
     .Times(0);
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -629,8 +629,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Shift_On_Already_Selected_R
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(context))
+    .Times(1)
     .WillOnce(ReturnRef(context));
 
     //! [GIVEN] There is a range selection
@@ -652,7 +651,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Shift_On_Already_Selected_R
     .WillOnce(ReturnRef(selectElements));
 
     //! [WHEN] User pressed left mouse button
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 }
 
 /**
@@ -681,10 +680,12 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
     .Times(1);
 
-    EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
-    .WillOnce(ReturnRef(newContext));
+    ON_CALL(*m_selection, element())
+    .WillByDefault(Return(oldContext.element));
+
+    std::vector<EngravingItem*> selectedElements = { oldContext.element };
+    ON_CALL(*m_selection, elements())
+    .WillByDefault(ReturnRef(selectedElements));
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -694,12 +695,11 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     .WillByDefault(Return(false));
 
     //! [THEN] We will no select already selected note, but play and seek
-    std::vector<EngravingItem*> selectElements = { newContext.element };
-    EXPECT_CALL(*m_interaction, select(selectElements, _, _))
+    EXPECT_CALL(*m_interaction, select(_, _, _))
     .Times(0);
 
     std::vector<const EngravingItem*> playElements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(playElements, false))
+    EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
     .Times(1);
 
     EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
@@ -710,7 +710,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     .WillByDefault(Return(false));
 
     //! [WHEN] User pressed left mouse button with NoModifier on the new note
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -739,8 +739,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     .Times(1);
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .Times(2)
-    .WillOnce(ReturnRef(oldContext))
+    .Times(1)
     .WillOnce(ReturnRef(newContext));
 
     //! [GIVEN] No note enter mode, no playing
@@ -753,7 +752,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     //! [THEN] We will select new measure
     std::vector<EngravingItem*> selectElements = { newContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
-    .Times(1);
+    .Times(1)
+    .WillOnce([newContext] { newContext.element->setSelected(true); });
 
     //! [GIVEN] There is a range selection with two measures
     ON_CALL(*m_selection, isRange())
@@ -761,7 +761,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
 
     //! [THEN] No play measure
     std::vector<const EngravingItem*> playElements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(playElements, false))
+    EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
     .Times(0);
 
     //! [THEN] Because it's a range selection, we should start playing from first measure in the range
@@ -773,7 +773,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range)
     .WillOnce(ReturnRef(selectElements));
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 }
 
 /**
@@ -785,8 +785,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
 {
     //! [GIVEN] There is a test score
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
-
-    INotationInteraction::HitElementContext oldContext;
 
     //! [GIVEN] User selected a measure
     INotationInteraction::HitElementContext selectMeasureContext = hitMeasureContext(score, 0 /*first measure*/);
@@ -811,10 +809,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     .WillOnce(Return());
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .WillOnce(ReturnRef(oldContext))
     .WillOnce(ReturnRef(selectMeasureContext))
     //! right button click
-    .WillOnce(ReturnRef(selectMeasureContext))
     .WillOnce(ReturnRef(contextMenuOnMeasureContext))
 #if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
     .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
@@ -831,8 +827,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     //! [THEN] We will select new measure only one time
     std::vector<EngravingItem*> selectElements = { selectMeasureContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
-    .Times(1)
-    .WillOnce(Return());
+    .Times(1);
 
     EXPECT_CALL(*m_selection, isRange())
     .WillRepeatedly(Return(true));
@@ -842,7 +837,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     .WillOnce(Return(true));
 
     std::vector<const EngravingItem*> playElements = { selectMeasureContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(playElements, false))
+    EXPECT_CALL(*m_playbackController, playElements(playElements, m_playParams, false))
     .Times(0);
 
     EXPECT_CALL(*m_playbackController, seekElement(selectMeasureContext.element))
@@ -863,10 +858,10 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
 #endif
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
@@ -878,8 +873,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
 {
     //! [GIVEN] There is a test score
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
-
-    INotationInteraction::HitElementContext oldContext;
 
     //! [GIVEN] User selected a measure
     INotationInteraction::HitElementContext selectMeasureContext = hitMeasureContext(score, 0 /*first measure*/);
@@ -903,10 +896,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     .WillOnce(Return());
 
     EXPECT_CALL(*m_interaction, hitElementContext())
-    .WillOnce(ReturnRef(oldContext))
     .WillOnce(ReturnRef(selectMeasureContext))
     //! right button click
-    .WillOnce(ReturnRef(selectMeasureContext))
     .WillOnce(ReturnRef(contextMenuOnMeasureContext))
 #if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
     .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
@@ -926,7 +917,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     //! [THEN] The selection should be changed
     std::vector<EngravingItem*> selectElements = { selectMeasureContext.element };
     EXPECT_CALL(*m_interaction, select(selectElements, _, _))
-    .WillOnce(Return());
+    .Times(1);
 
     std::vector<EngravingItem*> contextMenuSelectElements = { contextMenuOnMeasureContext.element };
     EXPECT_CALL(*m_interaction, select(contextMenuSelectElements, _, _))
@@ -940,7 +931,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     EXPECT_CALL(*m_selectionRange, containsItem(contextMenuOnMeasureContext.element, _))
     .WillOnce(Return(false));
 
-    EXPECT_CALL(*m_playbackController, playElements(_, false))
+    EXPECT_CALL(*m_playbackController, playElements(_, m_playParams, false))
     .Times(0);
 
     //! [THEN] We will seek each measures
@@ -959,8 +950,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
 #endif
 
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
-    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPoint(100, 100)));
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
 }

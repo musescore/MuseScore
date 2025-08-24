@@ -343,6 +343,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::SOUND_FLAG, "SoundFlag",
           TranslatableString("engraving", "sound flag(s)", nullptr, 1),
           TranslatableString("engraving", "Sound flag(s)", nullptr, 1) },
+    Item{ ElementType::PLAY_COUNT_TEXT, "PlayCountText",
+          TranslatableString("engraving", "play count text(s)", nullptr, 1),
+          TranslatableString("engraving", "Play count text(s)", nullptr, 1) },
     Item{ ElementType::PLAYTECH_ANNOTATION, "PlayTechAnnotation",
           TranslatableString("engraving", "playing technique annotation(s)", nullptr, 1),
           TranslatableString("engraving", "Playing technique annotation(s)", nullptr, 1) },
@@ -384,7 +387,7 @@ static const std::array ELEMENT_TYPES {
           TranslatableString("engraving", "Volta(s)", nullptr, 1) },
     Item{ ElementType::HAIRPIN_SEGMENT, "HairpinSegment",
           TranslatableString("engraving", "hairpin segment(s)", nullptr, 1),
-          TranslatableString("engraving", "Hairpin segment", nullptr, 1) },
+          TranslatableString("engraving", "Hairpin segment(s)", nullptr, 1) },
     Item{ ElementType::OTTAVA_SEGMENT, "OttavaSegment",
           TranslatableString("engraving", "ottava segment(s)", nullptr, 1),
           TranslatableString("engraving", "Ottava segment(s)", nullptr, 1) },
@@ -439,6 +442,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::LAYOUT_BREAK, "LayoutBreak",
           TranslatableString("engraving", "layout break(s)", nullptr, 1),
           TranslatableString("engraving", "Layout break(s)", nullptr, 1) },
+    Item{ ElementType::STAFF_VISIBILITY_INDICATOR, "staffVisibilityIndicator",
+          TranslatableString("engraving", "staff visibility icon(s)", nullptr, 1),
+          TranslatableString("engraving", "Staff visibility icon(s)", nullptr, 1) },
     Item{ ElementType::SYSTEM_LOCK_INDICATOR, "systemLockIndicator",
           TranslatableString("engraving", "system lock(s)", nullptr, 1),
           TranslatableString("engraving", "System lock(s)", nullptr, 1) },
@@ -611,16 +617,14 @@ static const std::array ELEMENT_TYPES {
           TranslatableString("engraving", "tapping", nullptr, 1),
           TranslatableString("engraving", "Tapping", nullptr, 1) },
     Item{ ElementType::TAPPING_HALF_SLUR, "TappingHalfSlur",
-          TranslatableString("engraving", "tapping half slur", nullptr, 1),
-          TranslatableString("engraving", "Tapping half slur", nullptr, 1),
-    },
+          TranslatableString("engraving", "tapping half slur(s)", nullptr, 1),
+          TranslatableString("engraving", "Tapping half slur(s)", nullptr, 1) },
     Item{ ElementType::TAPPING_HALF_SLUR_SEGMENT, "TappingHalfSlurSegment",
-          TranslatableString("engraving", "tapping half slur segment"),
-          TranslatableString("engraving", "Tapping half slur segment") },
+          TranslatableString("engraving", "tapping half slur segment(s)", nullptr, 1),
+          TranslatableString("engraving", "Tapping half slur segment(s)", nullptr, 1) },
     Item{ ElementType::TAPPING_TEXT, "TappingText",
-          TranslatableString("engraving", "tapping text"),
-          TranslatableString("engraving", "Tapping text"),
-    },
+          TranslatableString("engraving", "tapping text(s)", nullptr, 1),
+          TranslatableString("engraving", "Tapping text(s)", nullptr, 1) },
     Item{ ElementType::ROOT_ITEM, "RootItem",
           TranslatableString::untranslatable("root item"),
           TranslatableString::untranslatable("Root item") },
@@ -936,6 +940,49 @@ AsciiStringView TConv::toXml(ParenthesesMode pm)
 ParenthesesMode TConv::fromXml(const AsciiStringView& str, ParenthesesMode def)
 {
     return findTypeByXmlTag<ParenthesesMode>(PARENTHESES_MODE, str, def);
+}
+
+static const std::vector<Item<RepeatPlayCountPreset> > REPEAT_COUNT_PRESET = {
+    { RepeatPlayCountPreset::X_N, "xn",                         muse::TranslatableString("engraving", "x%1") },
+    { RepeatPlayCountPreset::N_X, "nx",                         muse::TranslatableString("engraving", "%1x") },
+    { RepeatPlayCountPreset::PLAY_N_TIMES, "playntimes",        muse::TranslatableString("engraving", "Play %1 times") },
+    { RepeatPlayCountPreset::N_REPEATS, "nrepeats",             muse::TranslatableString("engraving", "%1 repeats") },
+};
+
+const muse::TranslatableString& TConv::userName(RepeatPlayCountPreset v)
+{
+    return findCapitalizedUserNameByType(REPEAT_COUNT_PRESET, v);
+}
+
+String TConv::translatedUserName(RepeatPlayCountPreset v)
+{
+    return findCapitalizedUserNameByType(REPEAT_COUNT_PRESET, v).translated();
+}
+
+AsciiStringView TConv::toXml(RepeatPlayCountPreset repeatPreset)
+{
+    return findXmlTagByType<RepeatPlayCountPreset>(REPEAT_COUNT_PRESET, repeatPreset);
+}
+
+RepeatPlayCountPreset TConv::fromXml(const AsciiStringView& str, RepeatPlayCountPreset def)
+{
+    return findTypeByXmlTag<RepeatPlayCountPreset>(REPEAT_COUNT_PRESET, str, def);
+}
+
+static const std::vector<Item<AutoCustomHide> > AUTO_CUSTOM_HIDE = {
+    { AutoCustomHide::AUTO, "auto" },
+    { AutoCustomHide::CUSTOM, "custom" },
+    { AutoCustomHide::HIDE, "hide" },
+};
+
+AsciiStringView TConv::toXml(AutoCustomHide autoCustomHide)
+{
+    return findXmlTagByType<AutoCustomHide>(AUTO_CUSTOM_HIDE, autoCustomHide);
+}
+
+AutoCustomHide TConv::fromXml(const AsciiStringView& str, AutoCustomHide def)
+{
+    return findTypeByXmlTag<AutoCustomHide>(AUTO_CUSTOM_HIDE, str, def);
 }
 
 static const std::vector<Item<VoiceAssignment> > VOICE_ASSIGNMENT = {
@@ -1652,6 +1699,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::TEMPO,             "tempo",                muse::TranslatableString("engraving", "Tempo") },
     { TextStyleType::TEMPO_CHANGE,      "tempo change",         muse::TranslatableString("engraving", "Gradual tempo change") },
     { TextStyleType::METRONOME,         "metronome",            muse::TranslatableString("engraving", "Metronome") },
+    { TextStyleType::REPEAT_PLAY_COUNT, "repeat_play_count",    muse::TranslatableString("engraving", "Repeat play count") },
     { TextStyleType::REPEAT_LEFT,       "repeat_left",          muse::TranslatableString("engraving", "Repeat text left") },
     { TextStyleType::REPEAT_RIGHT,      "repeat_right",         muse::TranslatableString("engraving", "Repeat text right") },
     { TextStyleType::REHEARSAL_MARK,    "rehearsal_mark",       muse::TranslatableString("engraving", "Rehearsal mark") },
@@ -1684,6 +1732,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
       muse::TranslatableString("engraving", "Fretboard diagram fret number") },
     { TextStyleType::HARP_PEDAL_DIAGRAM, "harp_pedal_diagram",  muse::TranslatableString("engraving", "Harp pedal diagram") },
     { TextStyleType::HARP_PEDAL_TEXT_DIAGRAM, "harp_pedal_text_diagram", muse::TranslatableString("engraving", "Harp pedal text diagram") },
+    { TextStyleType::ARTICULATION, "articulation", muse::TranslatableString("engraving", "Articulation") },
 
     { TextStyleType::TEXTLINE,          "textline",             muse::TranslatableString("engraving", "Text line") },
     { TextStyleType::NOTELINE,          "noteline",             muse::TranslatableString("engraving", "Note-anchored line") },
@@ -2035,6 +2084,17 @@ static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
     { PlayingTechniqueType::Overdrive,     "overdrive",      muse::TranslatableString("engraving/playtechtype", "Overdrive") },
     { PlayingTechniqueType::Harmonics,     "harmonics",      muse::TranslatableString("engraving/playtechtype", "Harmonics") },
     { PlayingTechniqueType::JazzTone,      "jazz_tone",      muse::TranslatableString("engraving/playtechtype", "Jazz tone") },
+    // Handbells
+    { PlayingTechniqueType::HandbellsSwing, "handbells_swing", muse::TranslatableString("engraving/playtechtype", "Swing") },
+    { PlayingTechniqueType::HandbellsSwingUp, "handbells_swing_up",
+      muse::TranslatableString("engraving/playtechtype", "Swing up") },
+    { PlayingTechniqueType::HandbellsSwingDown, "handbells_swing_down",
+      muse::TranslatableString("engraving/playtechtype", "Swing down") },
+    { PlayingTechniqueType::HandbellsEcho1, "handbells_echo_1", muse::TranslatableString("engraving/playtechtype", "Echo") },
+    { PlayingTechniqueType::HandbellsEcho2, "handbells_echo_2", muse::TranslatableString("engraving/playtechtype", "Echo") },
+    { PlayingTechniqueType::HandbellsDamp, "handbells_damp", muse::TranslatableString("engraving/playtechtype", "Damp") },
+    { PlayingTechniqueType::HandbellsLV, "handbells_lv", muse::TranslatableString("engraving/playtechtype", "Let vibrate") },
+    { PlayingTechniqueType::HandbellsR, "handbells_r", muse::TranslatableString("engraving/playtechtype", "Ring") },
 };
 
 const muse::TranslatableString& TConv::userName(PlayingTechniqueType v)
@@ -2965,21 +3025,21 @@ GlissandoType TConv::fromXml(const AsciiStringView& tag, GlissandoType def)
 }
 
 static const std::vector<Item<JumpType> > JUMP_TYPES = {
-    { JumpType::DC,             "", muse::TranslatableString("engraving", "Da Capo") },
-    { JumpType::DC_AL_FINE,     "", muse::TranslatableString("engraving", "Da Capo al Fine") },
-    { JumpType::DC_AL_CODA,     "", muse::TranslatableString("engraving", "Da Capo al Coda") },
-    { JumpType::DS_AL_CODA,     "", muse::TranslatableString("engraving", "D.S. al Coda") },
-    { JumpType::DS_AL_FINE,     "", muse::TranslatableString("engraving", "D.S. al Fine") },
-    { JumpType::DS,             "", muse::TranslatableString("engraving", "D.S.") },
+    { JumpType::DC,             "dc",       muse::TranslatableString("engraving", "Da Capo") },
+    { JumpType::DC_AL_FINE,     "dcalfine", muse::TranslatableString("engraving", "Da Capo al Fine") },
+    { JumpType::DC_AL_CODA,     "dcalcoda", muse::TranslatableString("engraving", "Da Capo al Coda") },
+    { JumpType::DS_AL_CODA,     "dsalcoda", muse::TranslatableString("engraving", "D.S. al Coda") },
+    { JumpType::DS_AL_FINE,     "dsalfine", muse::TranslatableString("engraving", "D.S. al Fine") },
+    { JumpType::DS,             "ds",       muse::TranslatableString("engraving", "D.S.") },
 
-    { JumpType::DC_AL_DBLCODA,  "", muse::TranslatableString("engraving", "Da Capo al Doppia Coda") },
-    { JumpType::DS_AL_DBLCODA,  "", muse::TranslatableString("engraving", "Dal Segno al Doppia Coda") },
-    { JumpType::DSS,            "", muse::TranslatableString("engraving", "Dal Doppio Segno") },
-    { JumpType::DSS_AL_CODA,    "", muse::TranslatableString("engraving", "Dal Doppio Segno al Coda") },
-    { JumpType::DSS_AL_DBLCODA, "", muse::TranslatableString("engraving", "Dal Doppio Segno al Doppia Coda") },
-    { JumpType::DSS_AL_FINE,    "", muse::TranslatableString("engraving", "Dal Doppio Segno al Fine") },
+    { JumpType::DC_AL_DBLCODA,  "dcaldblcoda",  muse::TranslatableString("engraving", "Da Capo al Doppia Coda") },
+    { JumpType::DS_AL_DBLCODA,  "dsaldblcoda",  muse::TranslatableString("engraving", "Dal Segno al Doppia Coda") },
+    { JumpType::DSS,            "dss",          muse::TranslatableString("engraving", "Dal Doppio Segno") },
+    { JumpType::DSS_AL_CODA,    "dssalcoda",    muse::TranslatableString("engraving", "Dal Doppio Segno al Coda") },
+    { JumpType::DSS_AL_DBLCODA, "dssaldblcoda", muse::TranslatableString("engraving", "Dal Doppio Segno al Doppia Coda") },
+    { JumpType::DSS_AL_FINE,    "dssalfine",    muse::TranslatableString("engraving", "Dal Doppio Segno al Fine") },
 
-    { JumpType::USER,           "", muse::TranslatableString("engraving", "Custom") }
+    { JumpType::USER,           "user", muse::TranslatableString("engraving", "Custom") }
 };
 
 const muse::TranslatableString& TConv::userName(JumpType v)
@@ -3000,10 +3060,10 @@ static const std::array<Item<MarkerType>, 11> MARKER_TYPES = { {
     { MarkerType::CODETTA,      "codetta",  muse::TranslatableString("engraving", "Doppia Coda") },
     { MarkerType::FINE,         "fine",     muse::TranslatableString("engraving", "Fine") },
     { MarkerType::TOCODA,       "coda",     muse::TranslatableString("engraving", "To coda") },
-    { MarkerType::TOCODASYM,    "",         muse::TranslatableString("engraving", "To coda (symbol)") },
-    { MarkerType::DA_CODA,      "",         muse::TranslatableString("engraving", "Da Coda") },
-    { MarkerType::DA_DBLCODA,   "",         muse::TranslatableString("engraving", "Da Doppia Coda") },
-    { MarkerType::USER,         "",         muse::TranslatableString("engraving", "Custom") }
+    { MarkerType::TOCODASYM,    "codasym",  muse::TranslatableString("engraving", "To coda (symbol)") },
+    { MarkerType::DA_CODA,      "dacoda",   muse::TranslatableString("engraving", "Da Coda") },
+    { MarkerType::DA_DBLCODA,   "dadblcoda", muse::TranslatableString("engraving", "Da Doppia Coda") },
+    { MarkerType::USER,         "user",     muse::TranslatableString("engraving", "Custom") }
 } };
 
 const muse::TranslatableString& TConv::userName(MarkerType v)
@@ -3140,9 +3200,17 @@ struct ArticulationTextTypeItem {
     muse::TranslatableString name;
 };
 
-const std::array<ArticulationTextTypeItem, 2> ARTICULATIONTEXT_TYPES = { {
-    { ArticulationTextType::SLAP,   "Slap", String(u"S"),  muse::TranslatableString("engraving/sym", "Slap") },
-    { ArticulationTextType::POP,    "Pop",  String(u"P"),  muse::TranslatableString("engraving/sym", "Pop") }
+const std::array<ArticulationTextTypeItem, 9> ARTICULATIONTEXT_TYPES = { {
+    // Guitar
+    { ArticulationTextType::SLAP,   "Slap", String(u"S"),    muse::TranslatableString("engraving/sym", "Slap") },
+    { ArticulationTextType::POP,    "Pop",  String(u"P"),    muse::TranslatableString("engraving/sym", "Pop") },
+    // Handbells
+    { ArticulationTextType::TD,     "TD",   String(u"TD"),   muse::TranslatableString("engraving/sym", "Thumb damp") },
+    { ArticulationTextType::BD,     "BD",   String(u"BD"),   muse::TranslatableString("engraving/sym", "Brush damp") },
+    { ArticulationTextType::RT,     "RT",   String(u"RT"),   muse::TranslatableString("engraving/sym", "Ring touch") },
+    { ArticulationTextType::PL,     "PL",   String(u"Pl"),   muse::TranslatableString("engraving/sym", "Pluck") },
+    { ArticulationTextType::SB,     "SB",   String(u"SB"),   muse::TranslatableString("engraving/sym", "Singing bell") },
+    { ArticulationTextType::VIB,    "VIB",  String(u"vib."), muse::TranslatableString("engraving/sym", "Vibrate") },
 } };
 
 const muse::TranslatableString& TConv::userName(ArticulationTextType v)
@@ -3232,22 +3300,22 @@ LyricsDashSystemStart TConv::fromXml(const AsciiStringView& tag, LyricsDashSyste
 }
 
 const std::array<const muse::TranslatableString, 17 > KEY_NAMES = { {
-    muse::TranslatableString("engraving", "C♭ major, A♭ minor"),
-    muse::TranslatableString("engraving", "G♭ major, E♭ minor"),
-    muse::TranslatableString("engraving", "D♭ major, B♭ minor"),
-    muse::TranslatableString("engraving", "A♭ major, F minor"),
-    muse::TranslatableString("engraving", "E♭ major, C minor"),
-    muse::TranslatableString("engraving", "B♭ major, G minor"),
-    muse::TranslatableString("engraving", "F major, D minor"),
-    muse::TranslatableString("engraving", "C major, A minor"),
-    muse::TranslatableString("engraving", "G major, E minor"),
-    muse::TranslatableString("engraving", "D major, B minor"),
-    muse::TranslatableString("engraving", "A major, F♯ minor"),
-    muse::TranslatableString("engraving", "E major, C♯ minor"),
-    muse::TranslatableString("engraving", "B major, G♯ minor"),
-    muse::TranslatableString("engraving", "F♯ major, D♯ minor"),
-    muse::TranslatableString("engraving", "C♯ major, A♯ minor"),
-    muse::TranslatableString("engraving", "Open/Atonal"),
+    muse::TranslatableString("engraving", "C♭ major / A♭ minor"),
+    muse::TranslatableString("engraving", "G♭ major / E♭ minor"),
+    muse::TranslatableString("engraving", "D♭ major / B♭ minor"),
+    muse::TranslatableString("engraving", "A♭ major / F minor"),
+    muse::TranslatableString("engraving", "E♭ major / C minor"),
+    muse::TranslatableString("engraving", "B♭ major / G minor"),
+    muse::TranslatableString("engraving", "F major / D minor"),
+    muse::TranslatableString("engraving", "C major / A minor"),
+    muse::TranslatableString("engraving", "G major / E minor"),
+    muse::TranslatableString("engraving", "D major / B minor"),
+    muse::TranslatableString("engraving", "A major / F♯ minor"),
+    muse::TranslatableString("engraving", "E major / C♯ minor"),
+    muse::TranslatableString("engraving", "B major / G♯ minor"),
+    muse::TranslatableString("engraving", "F♯ major / D♯ minor"),
+    muse::TranslatableString("engraving", "C♯ major / A♯ minor"),
+    muse::TranslatableString("engraving", "Open / Atonal"),
     muse::TranslatableString("engraving", "Custom")
 } };
 

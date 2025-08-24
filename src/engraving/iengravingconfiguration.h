@@ -105,6 +105,7 @@ public:
         bool showSystemBoundingRects = false;
         bool showElementMasks = false;
         bool showLineAttachPoints = false;
+        bool markEmptyStaffVisibilityOverrides = false;
         bool markCorruptedMeasures = true;
 
         bool anyEnabled() const
@@ -117,6 +118,7 @@ public:
                    || showSystemBoundingRects
                    || showElementMasks
                    || showLineAttachPoints
+                   || markEmptyStaffVisibilityOverrides
                    || markCorruptedMeasures
             ;
         }

@@ -247,10 +247,10 @@ muse::async::Notification NotationUndoStack::stackChanged() const
     return m_stackStateChanged;
 }
 
-muse::async::Channel<ChangesRange> NotationUndoStack::changesChannel() const
+muse::async::Channel<ScoreChanges> NotationUndoStack::changesChannel() const
 {
     IF_ASSERT_FAILED(score()) {
-        return muse::async::Channel<ChangesRange>();
+        return muse::async::Channel<ScoreChanges>();
     }
 
     return score()->changesChannel();

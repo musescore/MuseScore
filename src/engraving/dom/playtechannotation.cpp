@@ -49,11 +49,18 @@ PlayingTechniqueType PlayTechAnnotation::techniqueType() const
 void PlayTechAnnotation::setTechniqueType(const PlayingTechniqueType techniqueType)
 {
     m_techniqueType = techniqueType;
+    resetProperty(Pid::TEXT_STYLE);
 }
 
 PlayTechAnnotation* PlayTechAnnotation::clone() const
 {
     return new PlayTechAnnotation(*this);
+}
+
+bool PlayTechAnnotation::isHandbellsSymbol() const
+{
+    return static_cast<int>(m_techniqueType) >= static_cast<int>(PlayingTechniqueType::HandbellsSwing)
+           && static_cast<int>(m_techniqueType) <= static_cast<int>(PlayingTechniqueType::HandbellsR);
 }
 
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const
@@ -70,7 +77,7 @@ bool PlayTechAnnotation::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::PLAY_TECH_TYPE:
-        m_techniqueType = PlayingTechniqueType(val.toInt());
+        setTechniqueType(PlayingTechniqueType(val.toInt()));
         break;
     default:
         if (!StaffTextBase::setProperty(propertyId, val)) {
@@ -87,7 +94,7 @@ PropertyValue PlayTechAnnotation::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return TextStyleType::STAFF;
+        return isHandbellsSymbol() ? TextStyleType::ARTICULATION : TextStyleType::STAFF;
     case Pid::PLAY_TECH_TYPE:
         return PlayingTechniqueType::Natural;
     default:

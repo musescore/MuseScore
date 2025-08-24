@@ -39,6 +39,10 @@ static const std::string module_name("appshell");
 
 static const Settings::Key HAS_COMPLETED_FIRST_LAUNCH_SETUP(module_name, "application/hasCompletedFirstLaunchSetup");
 
+static const Settings::Key WELCOME_DIALOG_SHOW_ON_STARTUP_KEY(module_name, "application/welcomeDialogShowOnStartup");
+static const Settings::Key WELCOME_DIALOG_LAST_SHOWN_VERSION_KEY(module_name, "application/welcomeDialogLastShownVersion");
+static const Settings::Key WELCOME_DIALOG_LAST_SHOWN_INDEX(module_name, "application/welcomeDialogLastShownIndex");
+
 static const Settings::Key STARTUP_MODE_TYPE(module_name, "application/startup/modeStart");
 static const Settings::Key STARTUP_SCORE_PATH(module_name, "application/startup/startScore");
 
@@ -47,6 +51,11 @@ static const std::string MUSESCORE_ONLINE_HANDBOOK_URL("https://handbook.musesco
 static const std::string MUSESCORE_ASK_FOR_HELP_URL_PATH("/redirect/post/question");
 static const std::string MUSESCORE_FORUM_URL_PATH("/forum");
 static const std::string MUSESCORE_CONTRIBUTE_URL_PATH("/contribute");
+static const std::string MUSEHUB_FREE_MUSE_SOUNDS_URL("https://www.musehub.com/free-musesounds"
+                                                      "?utm_source=mss-app-dialog-ms-free"
+                                                      "&utm_medium=mss-app-dialog-ms-free"
+                                                      "&utm_campaign=mss-app-dialog-ms-free"
+                                                      "&utm_id=mss-app-dialog");
 static const std::string MUSICXML_URL("https://w3.org");
 static const std::string MUSICXML_LICENSE_URL(MUSICXML_URL + "/community/about/process/final/");
 static const std::string MUSICXML_LICENSE_DEED_URL(MUSICXML_URL + "/community/about/process/fsa-deed/");
@@ -62,6 +71,14 @@ static const std::string SESSION_RESOURCE_NAME("SESSION");
 void AppShellConfiguration::init()
 {
     settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
+
+    settings()->setDefaultValue(WELCOME_DIALOG_SHOW_ON_STARTUP_KEY, Val(true));
+    settings()->valueChanged(WELCOME_DIALOG_SHOW_ON_STARTUP_KEY).onReceive(this, [this](const Val&) {
+        m_welcomeDialogShowOnStartupChanged.notify();
+    });
+
+    settings()->setDefaultValue(WELCOME_DIALOG_LAST_SHOWN_VERSION_KEY, Val("0.0.0"));
+    settings()->setDefaultValue(WELCOME_DIALOG_LAST_SHOWN_INDEX, Val(-1));
 
     settings()->setDefaultValue(STARTUP_MODE_TYPE, Val(StartupModeType::StartEmpty));
     settings()->valueChanged(STARTUP_MODE_TYPE).onReceive(this, [this](const Val&) {
@@ -88,6 +105,41 @@ bool AppShellConfiguration::hasCompletedFirstLaunchSetup() const
 void AppShellConfiguration::setHasCompletedFirstLaunchSetup(bool has)
 {
     settings()->setSharedValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(has));
+}
+
+bool AppShellConfiguration::welcomeDialogShowOnStartup() const
+{
+    return settings()->value(WELCOME_DIALOG_SHOW_ON_STARTUP_KEY).toBool();
+}
+
+void AppShellConfiguration::setWelcomeDialogShowOnStartup(bool show)
+{
+    settings()->setSharedValue(WELCOME_DIALOG_SHOW_ON_STARTUP_KEY, Val(show));
+}
+
+async::Notification AppShellConfiguration::welcomeDialogShowOnStartupChanged() const
+{
+    return m_welcomeDialogShowOnStartupChanged;
+}
+
+std::string AppShellConfiguration::welcomeDialogLastShownVersion() const
+{
+    return settings()->value(WELCOME_DIALOG_LAST_SHOWN_VERSION_KEY).toString();
+}
+
+void AppShellConfiguration::setWelcomeDialogLastShownVersion(const std::string& version)
+{
+    settings()->setSharedValue(WELCOME_DIALOG_LAST_SHOWN_VERSION_KEY, Val(version));
+}
+
+int AppShellConfiguration::welcomeDialogLastShownIndex() const
+{
+    return settings()->value(WELCOME_DIALOG_LAST_SHOWN_INDEX).toInt();
+}
+
+void AppShellConfiguration::setWelcomeDialogLastShownIndex(int index)
+{
+    settings()->setSharedValue(WELCOME_DIALOG_LAST_SHOWN_INDEX, Val(index));
 }
 
 StartupModeType AppShellConfiguration::startupModeType() const
@@ -163,6 +215,11 @@ std::string AppShellConfiguration::museScoreForumUrl() const
 std::string AppShellConfiguration::museScoreContributionUrl() const
 {
     return museScoreUrl() + MUSESCORE_CONTRIBUTE_URL_PATH;
+}
+
+std::string AppShellConfiguration::museHubFreeMuseSoundsUrl() const
+{
+    return MUSEHUB_FREE_MUSE_SOUNDS_URL;
 }
 
 std::string AppShellConfiguration::musicXMLLicenseUrl() const

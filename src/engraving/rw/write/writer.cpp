@@ -139,7 +139,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
         xml.tag("layoutMode", "system");
     }
 
-    if (score->m_audio && ctx.isMsczMode()) {
+    if (score->m_audio) {
         xml.tag("playMode", int(score->m_playMode));
         TWrite::write(score->m_audio, xml, ctx);
     }

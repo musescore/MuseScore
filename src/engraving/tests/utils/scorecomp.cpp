@@ -35,8 +35,9 @@ bool ScoreComp::saveCompareScore(Score* score, const String& saveName, const Str
     if (!ScoreRW::saveScore(score, saveName)) {
         return false;
     }
+    bool val = compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
 
-    return compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
+    return val;
 }
 
 bool ScoreComp::saveCompareMimeData(muse::ByteArray mimeData, const muse::String& saveName, const muse::String& compareWithLocalPath)

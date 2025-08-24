@@ -61,6 +61,7 @@ private:
     QList<mu::engraving::EngravingItem*> findStaffs() const;
     QList<mu::engraving::EngravingItem*> findSectionBreaks() const;
     QList<mu::engraving::EngravingItem*> findTexts() const;
+    mu::engraving::EngravingItem* findTextDelegate(mu::engraving::EngravingItem* element) const;
     QList<mu::engraving::EngravingItem*> findBrackets() const;
     QList<mu::engraving::EngravingItem*> findLines(mu::engraving::ElementType lineType) const;
     QList<mu::engraving::EngravingItem*> findRests() const;

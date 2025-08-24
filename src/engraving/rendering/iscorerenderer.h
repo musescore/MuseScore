@@ -60,6 +60,8 @@ class Harmony;
 
 class Image;
 
+class IndicatorIcon;
+
 enum class KerningType : unsigned char;
 class KeySig;
 
@@ -82,7 +84,6 @@ class SlurTie;
 class Spacer;
 class StaffText;
 class Stem;
-class SystemLockIndicator;
 
 class TextBase;
 class Text;
@@ -139,6 +140,7 @@ public:
                                    FretDiagram*,
                                    Harmony*,
                                    Image*,
+                                   IndicatorIcon*,
                                    KeySig*,
                                    LedgerLine*,
                                    SLine*,
@@ -154,7 +156,6 @@ public:
                                    Spacer*,
                                    StaffText*,
                                    Stem*,
-                                   SystemLockIndicator*,
                                    TextBase*,
                                    Text*,
                                    TimeSig*

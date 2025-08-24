@@ -104,6 +104,7 @@
 #include "dom/part.h"
 #include "dom/pedal.h"
 #include "dom/pickscrape.h"
+#include "dom/playcounttext.h"
 #include "dom/playtechannotation.h"
 
 #include "dom/rasgueado.h"
@@ -120,6 +121,7 @@
 #include "dom/stafftext.h"
 #include "dom/stafftype.h"
 #include "dom/stafftypechange.h"
+#include "dom/staffvisibilityindicator.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
@@ -322,6 +324,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
     case ElementType::PICK_SCRAPE_SEGMENT:  draw(item_cast<const PickScrapeSegment*>(item), painter);
         break;
+    case ElementType::PLAY_COUNT_TEXT:      draw(item_cast<const PlayCountText*>(item), painter);
+        break;
     case ElementType::PLAYTECH_ANNOTATION:  draw(item_cast<const PlayTechAnnotation*>(item), painter);
         break;
 
@@ -345,6 +349,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter);
         break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter);
+        break;
+    case ElementType::STAFF_VISIBILITY_INDICATOR: draw(item_cast<const StaffVisibilityIndicator*>(item), painter);
         break;
     case ElementType::STEM:                 draw(item_cast<const Stem*>(item), painter);
         break;
@@ -556,17 +562,12 @@ void TDraw::draw(const Articulation* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Articulation::LayoutData* ldata = item->ldata();
-
     painter->setPen(item->curColor());
 
     if (item->textType() == ArticulationTextType::NO_TEXT) {
         item->drawSymbol(item->symId(), painter);
     } else {
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->magS() * MScore::pixelRatio);
-        painter->setFont(scaledFont);
-        painter->drawText(ldata->bbox(), TextDontClip | AlignLeft | AlignTop, TConv::text(item->textType()));
+        drawTextBase(item->text(), painter);
     }
 }
 
@@ -646,13 +647,6 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
 
         y1l = st->doty1() * spatium;
         y2l = st->doty2() * spatium;
-
-        // workaround to make external fonts work correctly with repeatDots
-        if (item->score()->engravingFont()->name() == "Ekmelos") { // not the other ones from the Ekmelos family though (EkmelosXXedo)
-            double offset = 0.5 * item->style().spatium() * item->mag();
-            y1l += offset;
-            y2l += offset;
-        }
 
         //adjust for staffType offset
         double stYOffset = item->staffOffsetY();
@@ -1417,7 +1411,9 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             pen.setJoinStyle(PenJoinStyle::RoundJoin);
             painter->setPen(pen);
             painter->setBrush(Brush(pen.color()));
-            painter->drawPath(ldata->slurPath);
+            for (const PainterPath& path : ldata->slurPaths) {
+                painter->drawPath(path);
+            }
         } else {
             pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
             pen.setCapStyle(PenCapStyle::RoundCap);
@@ -1817,7 +1813,7 @@ void TDraw::draw(const Harmony* item, Painter* painter)
 
     const Harmony::LayoutData* ldata = item->ldata();
 
-    if (ldata->textList().empty()) {
+    if (ldata->renderItemList().empty()) {
         drawTextBase(item, painter);
         return;
     }
@@ -1846,15 +1842,22 @@ void TDraw::draw(const Harmony* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     Color color = item->textColor();
     painter->setPen(color);
-    for (const TextSegment* ts : ldata->textList()) {
-        Font f(ts->font());
-        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    for (const HarmonyRenderItem* renderItem : ldata->renderItemList()) {
+        if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
+            Font f(ts->font());
+            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
-        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
+            TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
 #else
-        painter->setFont(f);
-        painter->drawText(ts->pos(), ts->text());
+            painter->setFont(f);
+            painter->drawText(ts->pos(), ts->text());
 #endif
+        } else if (const ChordSymbolParen* parenItem = dynamic_cast<const ChordSymbolParen*>(renderItem)) {
+            Parenthesis* p = parenItem->parenItem;
+            painter->translate(parenItem->pos());
+            draw(p, painter);
+            painter->translate(-parenItem->pos());
+        }
     }
 
     if (item->isPolychord()) {
@@ -2414,6 +2417,12 @@ void TDraw::draw(const PickScrapeSegment* item, Painter* painter)
     drawTextLineBaseSegment(item, painter);
 }
 
+void TDraw::draw(const PlayCountText* item, muse::draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
 void TDraw::draw(const PlayTechAnnotation* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -2861,7 +2870,7 @@ void TDraw::draw(const SystemText* item, Painter* painter)
     drawTextBase(item, painter);
 }
 
-void TDraw::draw(const SystemLockIndicator* item, muse::draw::Painter* painter)
+void TDraw::draw(const IndicatorIcon* item, muse::draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -2878,15 +2887,17 @@ void TDraw::draw(const SystemLockIndicator* item, muse::draw::Painter* painter)
 
     painter->drawSymbol(PointF(), item->iconCode());
 
-    if (item->selected()) {
-        Color lockedAreaColor = item->configuration()->selectionColor();
+    if (item->isSystemLockIndicator() && item->selected()) {
+        const SystemLockIndicator* sli = toSystemLockIndicator(item);
+
+        Color lockedAreaColor = sli->configuration()->selectionColor();
         lockedAreaColor.setAlpha(38);
         Brush brush(lockedAreaColor);
         painter->setBrush(brush);
         painter->setNoPen();
-        double radius = 0.5 * item->spatium();
+        double radius = 0.5 * sli->spatium();
 
-        painter->drawRoundedRect(item->ldata()->rangeRect, radius, radius);
+        painter->drawRoundedRect(sli->ldata()->rangeRect, radius, radius);
     }
 }
 
@@ -2975,11 +2986,12 @@ void TDraw::draw(const Tapping* item, muse::draw::Painter* painter)
     painter->setPen(item->curColor());
     if (item->ldata()->symId != SymId::noSym) {
         item->drawSymbol(item->ldata()->symId, painter);
-    } else {
-        TappingText* text = item->text();
+    } else if (TappingText* text = item->text()) {
         painter->translate(text->pos());
         drawTextBase(text, painter);
         painter->translate(-text->pos());
+    } else {
+        assert(false && "Drawing Tapping item without text or symbol");
     }
 }
 

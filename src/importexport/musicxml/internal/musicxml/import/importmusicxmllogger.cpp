@@ -37,9 +37,8 @@ static String xmlLocation(const muse::XmlStreamReader* xmlreader)
 {
     String loc;
     if (xmlreader) {
-        loc = String(u" at line %1 col %2")
-              .arg(size_t(xmlreader->lineNumber()))
-              .arg(size_t(xmlreader->columnNumber()));
+        loc = String(u" at byte offset %1")
+              .arg(size_t(xmlreader->byteOffset()));
     }
     return loc;
 }

@@ -33,6 +33,7 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::CAPO, PopupModelType::TYPE_CAPO },
     { mu::engraving::ElementType::STRING_TUNINGS, PopupModelType::TYPE_STRING_TUNINGS },
     { mu::engraving::ElementType::SOUND_FLAG, PopupModelType::TYPE_SOUND_FLAG },
+    { mu::engraving::ElementType::STAFF_VISIBILITY_INDICATOR, PopupModelType::TYPE_STAFF_VISIBILITY },
     { mu::engraving::ElementType::DYNAMIC, PopupModelType::TYPE_DYNAMIC },
     { mu::engraving::ElementType::TEXT, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::STAFF_TEXT, PopupModelType::TYPE_TEXT },
@@ -48,7 +49,8 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::TEMPO_TEXT, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
     { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
-    { mu::engraving::ElementType::SHADOW_NOTE, PopupModelType::TYPE_SHADOW_NOTE }
+    { mu::engraving::ElementType::SHADOW_NOTE, PopupModelType::TYPE_SHADOW_NOTE },
+    { mu::engraving::ElementType::PLAY_COUNT_TEXT, PopupModelType::TYPE_TEXT }
 };
 
 static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDENT_ELEMENT_TYPES = {
@@ -56,6 +58,7 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
     { PopupModelType::TYPE_CAPO, { mu::engraving::ElementType::CAPO } },
     { PopupModelType::TYPE_STRING_TUNINGS, { mu::engraving::ElementType::STRING_TUNINGS } },
     { PopupModelType::TYPE_SOUND_FLAG, { mu::engraving::ElementType::SOUND_FLAG, mu::engraving::ElementType::STAFF_TEXT } },
+    { PopupModelType::TYPE_STAFF_VISIBILITY, { mu::engraving::ElementType::STAFF_VISIBILITY_INDICATOR } },
     { PopupModelType::TYPE_DYNAMIC, { mu::engraving::ElementType::DYNAMIC } },
     { PopupModelType::TYPE_TEXT,
       { mu::engraving::ElementType::TEXT,
@@ -68,7 +71,8 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
         mu::engraving::ElementType::HARMONY,
         mu::engraving::ElementType::LYRICS,
         mu::engraving::ElementType::FIGURED_BASS,
-        mu::engraving::ElementType::TEMPO_TEXT } },
+        mu::engraving::ElementType::TEMPO_TEXT,
+        mu::engraving::ElementType::PLAY_COUNT_TEXT } },
     { PopupModelType::TYPE_PARTIAL_TIE, { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
 };
 
@@ -246,11 +250,16 @@ void AbstractElementPopupModel::init()
 
     m_item = selection->element();
 
-    undoStack->changesChannel().onReceive(this, [this] (const ChangesRange& range) {
+    undoStack->changesChannel().onReceive(this, [this] (const ScoreChanges& changes) {
+        if (changes.isTextEditing) {
+            return;
+        }
+
         for (ElementType type : dependentElementTypes()) {
-            if (muse::contains(range.changedTypes, type)) {
+            if (muse::contains(changes.changedTypes, type)) {
                 emit dataChanged();
                 updateItemRect();
+                return;
             }
         }
     });

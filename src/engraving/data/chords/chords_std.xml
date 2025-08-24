@@ -400,12 +400,12 @@
 
   <token class="modifier">
     <name>(</name>
-    <render>s(</render>
+    <render>:pl</render>
     </token>
 
   <token class="modifier">
     <name>)</name>
-    <render>s)</render>
+    <render>:pr</render>
     </token>
 
   <token class="modifier">

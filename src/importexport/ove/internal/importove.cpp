@@ -1548,8 +1548,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (!isRestDefaultLine(notePtr, container->getNoteType()) && notePtr->getLine() != 0) {
                     double yOffset = -(double)(notePtr->getLine());
                     int stepOffset = cr->staff()->staffType(cr->tick())->stepOffset();
-                    int lineOffset = toRest(cr)->computeVoiceOffset(5, toRest(cr)->mutldata());
-                    yOffset -= qreal(lineOffset + stepOffset);
+                    yOffset -= qreal(stepOffset);
                     yOffset *= m_score->style().spatium() / 2.0;
                     cr->ryoffset() = yOffset;
                     cr->setAutoplace(false);
@@ -2465,7 +2464,7 @@ static HairpinType OveWedgeType_To_Type(ovebase::WedgeType type)
 {
     HairpinType subtype = HairpinType::CRESC_HAIRPIN;
     switch (type) {
-    case ovebase::WedgeType::Cres_Line: {
+    case ovebase::WedgeType::Cresc_Line: {
         subtype = HairpinType::CRESC_HAIRPIN;
         break;
     }
@@ -2473,16 +2472,16 @@ static HairpinType OveWedgeType_To_Type(ovebase::WedgeType type)
         subtype = HairpinType::CRESC_HAIRPIN;
         break;
     }
-    case ovebase::WedgeType::Decresc_Line: {
-        subtype = HairpinType::DECRESC_HAIRPIN;
+    case ovebase::WedgeType::Dim_Line: {
+        subtype = HairpinType::DIM_HAIRPIN;
         break;
     }
-    case ovebase::WedgeType::Cres: {
+    case ovebase::WedgeType::Cresc: {
         subtype = HairpinType::CRESC_HAIRPIN;
         break;
     }
-    case ovebase::WedgeType::Decresc: {
-        subtype = HairpinType::DECRESC_HAIRPIN;
+    case ovebase::WedgeType::Dim: {
+        subtype = HairpinType::DIM_HAIRPIN;
         break;
     }
     default:

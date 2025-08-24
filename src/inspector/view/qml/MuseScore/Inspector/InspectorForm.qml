@@ -87,8 +87,6 @@ Rectangle {
 
         spacing: 12
 
-        cacheBuffer: Math.max(0, contentHeight)
-
         function ensureContentVisible(invisibleContentHeight) {
             if (sectionList.contentY + invisibleContentHeight > 0) {
                 sectionList.contentY += invisibleContentHeight
@@ -107,6 +105,10 @@ Rectangle {
 
         onContentHeightChanged: {
             returnToBounds()
+
+            if (contentHeight > cacheBuffer) {
+                cacheBuffer = contentHeight
+            }
         }
 
         delegate: Column {

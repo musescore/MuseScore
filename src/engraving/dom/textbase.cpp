@@ -886,6 +886,7 @@ Font TextFragment::font(const TextBase* t) const
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic()
             || t->isStringTunings()
+            || t->isPlayTechAnnotation()
             || t->textStyleType() == TextStyleType::OTTAVA
             || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM
             || t->textStyleType() == TextStyleType::TUPLET
@@ -926,6 +927,9 @@ Font TextFragment::font(const TextBase* t) const
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
             m = t->getProperty(Pid::MARKER_SYMBOL_SIZE).toDouble();
+            if (t->sizeIsSpatiumDependent()) {
+                m *= spatiumScaling;
+            }
         } else {
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
@@ -1518,6 +1522,11 @@ void TextBlock::changeFormat(FormatId id, const FormatValue& data, int start, in
     for (auto i = m_fragments.begin(); i != m_fragments.end(); ++i) {
         int columns = i->columns();
         if (start + n <= col) {
+            if (columns == 0) {
+                // still apply the format change. Otherwise we have deviating formats for e. g. empty lines
+                // otherwise we have Issue #19571
+                i->changeFormat(id, data);
+            }
             break;
         }
         if (start >= col + columns) {
@@ -1696,7 +1705,7 @@ String TextBlock::text(int col1, int len, bool withFormat) const
                 if (f.format.fontFamily() == "ScoreText" && withFormat) {
                     s += toSymbolXml(c);
                 } else {
-                    s += XmlWriter::escapeSymbol(c.unicode());
+                    s += String::toXmlEscaped(c.unicode());
                 }
             }
             if (!c.isHighSurrogate()) {
@@ -2180,16 +2189,19 @@ String TextBase::genText(const LayoutData* ldata) const
     }
 
     String text;
-    bool bold_      = false;
-    bool italic_    = false;
-    bool underline_ = false;
-    bool strike_    = false;
+    XmlNesting xmlNesting(&text);
 
     CharFormat fmt;
     fmt.setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
     fmt.setFontSize(propertyDefault(Pid::FONT_SIZE).toReal());
     fmt.setStyle(static_cast<FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
 
+    // Prepare the initial style tags (if any).
+    // We only need those if there is any fragment in the blocks with a different style than the default one.
+    bool bold_      = false;
+    bool italic_    = false;
+    bool underline_ = false;
+    bool strike_    = false;
     for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             if (!f.format.bold() && fmt.bold()) {
@@ -2206,8 +2218,6 @@ String TextBase::genText(const LayoutData* ldata) const
             }
         }
     }
-
-    XmlNesting xmlNesting(&text);
     if (bold_) {
         xmlNesting.pushB();
     }
@@ -2221,11 +2231,14 @@ String TextBase::genText(const LayoutData* ldata) const
         xmlNesting.pushS();
     }
 
+    // And here for the actual formatting of the text.
     for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             // don't skip, empty text fragments hold information for empty lines
-//                  if (f.text.isEmpty())                     // skip empty fragments, not to
-//                        continue;                           // insert extra HTML formatting
+            //    if (f.text.isEmpty())                   // skip empty fragments, not to
+            //        continue;                           // insert extra HTML formatting
+
+            // Push or Pop XML tags according to the current format changes
             const CharFormat& format = f.format;
             if (fmt.bold() != format.bold()) {
                 if (format.bold()) {
@@ -2704,7 +2717,7 @@ bool TextBase::validateText(String& s)
         s = d;
         return true;
     }
-    LOGD() << "xml error at line " << xml.lineNumber() << " column " << xml.columnNumber()
+    LOGD() << "xml error at byte offset " << xml.byteOffset()
            << ": " << xml.errorString();
     LOGD() << "text: |" << ss << "|";
     return false;

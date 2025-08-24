@@ -1043,7 +1043,7 @@ void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
     select({ element }, SelectType::SINGLE);
 
     if (element->needStartEditingAfterSelecting()) {
-        startEditElement(element, false);
+        startEditElement(element);
     }
 }
 
@@ -1432,7 +1432,7 @@ void NotationInteraction::startOutgoingDragRange(QObject* dragSource)
         return;
     }
 
-    QMimeData* mimeData = selection()->mimeData();
+    QMimeData* mimeData = selection()->qMimeData();
     if (!mimeData) {
         return;
     }
@@ -1518,6 +1518,27 @@ bool NotationInteraction::startDropRange(const QByteArray& data)
         resetDropData();
         return false;
     }
+
+    return true;
+}
+
+bool NotationInteraction::startDropRange(const Fraction& sourceTick, const Fraction& tickLength,
+                                         engraving::staff_idx_t sourceStaffIdx, size_t numStaves, bool preserveMeasureAlignment)
+{
+    if (tickLength.isZero() || numStaves == 0) {
+        return false;
+    }
+
+    resetDropData();
+
+    m_dropData.rangeDropData = RangeDropData();
+    RangeDropData& rdd = m_dropData.rangeDropData.value();
+
+    rdd.sourceTick = sourceTick;
+    rdd.tickLength = tickLength;
+    rdd.sourceStaffIdx = sourceStaffIdx;
+    rdd.numStaves = numStaves;
+    rdd.preserveMeasureAlignment = preserveMeasureAlignment;
 
     return true;
 }
@@ -1658,6 +1679,22 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     return false;
 }
 
+static Measure* rangeEndMeasure(Score* score, const Fraction& endTick)
+{
+    Measure* endMeasure = score->tick2measure(endTick);
+    if (!endMeasure) {
+        endMeasure = score->lastMeasure();
+        if (!endMeasure) {
+            return nullptr;
+        }
+    }
+    if (endMeasure->tick() == endTick) {
+        // If the end tick is at the start of a measure, return the previous measure
+        return endMeasure->prevMeasure();
+    }
+    return endMeasure;
+}
+
 static Segment* rangeEndSegment(Score* score, const Fraction& endTick)
 {
     Segment* endSegment = score->tick2rightSegment(endTick,
@@ -1671,81 +1708,115 @@ static Segment* rangeEndSegment(Score* score, const Fraction& endTick)
     return endSegment ? endSegment : score->lastSegmentMM();
 }
 
-static bool dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t numStaves, staff_idx_t* staffIdx,
-                              Segment** segment, const Segment** endSegment = nullptr, ShowAnchors* showAnchors = nullptr)
+static bool dropRangePosition(Score* score, const PointF& pos,
+                              Fraction sourceStartTick, Fraction tickLength,
+                              staff_idx_t numStaves, staff_idx_t* targetStartStaffIdx,
+                              Segment** targetStartSegment, const Segment** targetEndSegment = nullptr,
+                              bool preserveMeasureAlignment = false,
+                              ShowAnchors* showAnchors = nullptr)
 {
-    IF_ASSERT_FAILED(score && staffIdx && segment) {
+    IF_ASSERT_FAILED(score && targetStartStaffIdx && targetStartSegment) {
         return false;
     }
 
-    static constexpr double spacingFactor = 0.5;
-    static constexpr bool useTimeAnchors = true;
-
-    // First, get an approximate location
-    score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
-    if (*staffIdx == muse::nidx || !*segment) {
+    Measure* targetStartMeasure = nullptr;
+    if (!dragPositionToMeasure(pos, score, &targetStartMeasure, targetStartStaffIdx)) {
         return false;
     }
 
-    // Determine the measures range
-    Fraction startTick = (*segment)->tick();
-    Fraction endTick = startTick + tickLength;
+    Fraction targetStartTick;
+    Fraction targetEndTick;
 
-    Measure* startMeasure = (*segment)->measure();
-    if (!startMeasure) {
+    if (preserveMeasureAlignment) {
+        Measure* sourceStartMeasure = score->tick2measure(sourceStartTick);
+        IF_ASSERT_FAILED(sourceStartMeasure) {
+            return false;
+        }
+
+        Fraction startTickOffset = sourceStartTick - sourceStartMeasure->tick();
+        targetStartTick = targetStartMeasure->tick() + startTickOffset;
+        targetEndTick = targetStartTick + tickLength;
+
+        if (targetStartTick >= targetStartMeasure->endTick()) {
+            // Target start tick is beyond the end of the measure, so cannot preserve alignment
+            // This can happen when the target measure is shorter than the source measure
+            preserveMeasureAlignment = false;
+        }
+    }
+    if (!preserveMeasureAlignment) {
+        // Assign temporary values until target segment is determined
+        targetStartTick = targetStartMeasure->tick();
+        targetEndTick = targetStartMeasure->endTick() - Fraction::fromTicks(1) + tickLength;
+    }
+
+    Measure* targetEndMeasure = rangeEndMeasure(score, targetEndTick);
+    if (!targetEndMeasure) {
         return false;
     }
 
-    Measure* endMeasure = score->tick2measure(endTick);
-    if (!endMeasure) {
-        endMeasure = score->lastMeasure();
+    IF_ASSERT_FAILED(targetStartMeasure == targetEndMeasure || targetStartMeasure->isBefore(targetEndMeasure)) {
+        return false;
+    }
 
-        if (!endMeasure) {
+    const staff_idx_t targetEndStaffIdx = std::min(*targetStartStaffIdx + numStaves, score->nstaves());
+
+    // Add time tick anchors throughout these measures
+    for (MeasureBase* mb = targetStartMeasure; mb && mb->tick() <= targetEndMeasure->tick(); mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        std::set<Fraction> additionalAnchorRelTicks;
+        if (preserveMeasureAlignment) {
+            if (mb == targetStartMeasure) {
+                additionalAnchorRelTicks.insert(targetStartTick - mb->tick());
+            }
+            if (mb == targetEndMeasure) {
+                additionalAnchorRelTicks.insert(targetEndTick - mb->tick());
+            }
+        }
+        for (staff_idx_t i = *targetStartStaffIdx; i < targetEndStaffIdx; ++i) {
+            EditTimeTickAnchors::updateAnchors(toMeasure(mb), i, additionalAnchorRelTicks);
+        }
+    }
+
+    if (preserveMeasureAlignment) {
+        *targetStartSegment = segmentOrChordRestSegmentAtSameTick(
+            targetStartMeasure->findSegment(Segment::CHORD_REST_OR_TIME_TICK_TYPE, targetStartTick));
+    } else {
+        static constexpr double spacingFactor = 0.5;
+        static constexpr bool useTimeAnchors = true;
+
+        // Depends on time tick anchors that we just created
+        if (!dragPositionToSegment(pos, targetStartMeasure, *targetStartStaffIdx, targetStartSegment, spacingFactor, useTimeAnchors)) {
+            return false;
+        }
+
+        targetStartTick = (*targetStartSegment)->tick();
+        targetEndTick = targetStartTick + tickLength;
+
+        targetEndMeasure = rangeEndMeasure(score, targetEndTick);
+        if (!targetEndMeasure) {
             return false;
         }
     }
 
-    IF_ASSERT_FAILED(startMeasure == endMeasure || startMeasure->isBefore(endMeasure)) {
-        return false;
-    }
-
-    const staff_idx_t endStaffIdx = std::min(*staffIdx + numStaves, score->nstaves());
-
-    // Add time tick anchors throughout these measures
-    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
-        if (!mb->isMeasure()) {
-            continue;
-        }
-        for (staff_idx_t i = 0; i < endStaffIdx; ++i) {
-            EditTimeTickAnchors::updateAnchors(toMeasure(mb), i);
-        }
-    }
-
-    // Get precise location using the newly created time tick anchors
-    score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
-    if (*staffIdx == muse::nidx || !*segment) {
-        return false;
-    }
-
-    startTick = (*segment)->tick();
-    endTick = startTick + tickLength;
-
-    if (endSegment) {
-        *endSegment = rangeEndSegment(score, endTick);
-        if (!*endSegment) {
+    if (targetEndSegment) {
+        *targetEndSegment = rangeEndSegment(score, targetEndTick);
+        if (!*targetEndSegment) {
             return false;
         }
     }
 
     if (showAnchors) {
-        *showAnchors = ShowAnchors(0, *staffIdx, *staffIdx + numStaves, startTick, endTick,
-                                   startMeasure->tick(), endMeasure->endTick());
+        *showAnchors = ShowAnchors(0, *targetStartStaffIdx, *targetStartStaffIdx + numStaves,
+                                   targetStartTick, targetEndTick,
+                                   targetStartMeasure->tick(), targetEndMeasure->endTick());
     }
 
     return true;
 }
 
-bool NotationInteraction::updateDropRange(const PointF& pos)
+bool NotationInteraction::updateDropRange(const PointF& pos, std::optional<bool> preserveMeasureAlignment)
 {
     IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
         return false;
@@ -1753,12 +1824,19 @@ bool NotationInteraction::updateDropRange(const PointF& pos)
 
     RangeDropData& rdd = m_dropData.rangeDropData.value();
 
+    if (preserveMeasureAlignment.has_value()) {
+        rdd.preserveMeasureAlignment = preserveMeasureAlignment.value();
+    }
+
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
     const Segment* endSegment = nullptr;
     ShowAnchors showAnchors;
 
-    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment, &endSegment, &showAnchors);
+    const bool ok = dropRangePosition(score(), pos,
+                                      rdd.sourceTick, rdd.tickLength, rdd.numStaves,
+                                      &staffIdx, &segment, &endSegment,
+                                      rdd.preserveMeasureAlignment, &showAnchors);
 
     if (showAnchors != score()->showAnchors()) {
         score()->setShowAnchors(showAnchors);
@@ -2081,7 +2159,9 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
 
-    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
+    const bool ok = dropRangePosition(score(), pos,
+                                      rdd.sourceTick, rdd.tickLength, rdd.numStaves,
+                                      &staffIdx, &segment, nullptr, rdd.preserveMeasureAlignment);
     if (!ok) {
         return false;
     }
@@ -2121,16 +2201,6 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
 
     XmlReader e(data);
     score()->pasteStaff(e, segment, staffIdx);
-
-    if (deleteSourceMaterial) {
-        // pasteStaff limits the layout range to just the destination region,
-        // but if the source material was deleted we must also layout the source region.
-        CmdState& cmdState = score()->cmdState();
-        cmdState.setTick(rdd.sourceTick);
-        cmdState.setTick(rdd.sourceTick + rdd.tickLength);
-        cmdState.setStaff(rdd.sourceStaffIdx);
-        cmdState.setStaff(rdd.sourceStaffIdx + rdd.numStaves);
-    }
 
     endDrop();
     apply();
@@ -2361,7 +2431,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, bool
         return;
     }
 
-    if (element->isSlur() && addSingle) {
+    if (element->isSlur()) {
         doAddSlur(toSlur(element));
         return;
     }
@@ -3328,7 +3398,7 @@ void NotationInteraction::doFinishAddFretboardDiagram()
     //! then add harmony
     mu::engraving::TextBase* text = score()->addText(TextStyleType::HARMONY_A, fretDiagram);
     doSelect({ text }, SelectType::SINGLE);
-    startEditElement(text, true);
+    startEditElement(text);
 }
 
 void NotationInteraction::setAnchorLines(const std::vector<LineF>& anchorList)
@@ -4064,8 +4134,8 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
         score()->setPlayNote(true);
     }
 
-    if (toEl->hasGrips()) {
-        startEditGrip(toEl, toEl->defaultGrip());
+    if (toEl->needStartEditingAfterSelecting()) {
+        startEditElement(toEl);
     }
 }
 
@@ -4145,11 +4215,11 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly)
     step = step * el->spatium();
 
     switch (d) {
-    case MoveDirection::Undefined:
+    case MoveDirection::Undefined: {
         IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
             return;
         }
-        break;
+    } break;
     case MoveDirection::Left:
         el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(step, 0.0), mu::engraving::PropertyFlags::UNSTYLED);
         break;
@@ -4243,15 +4313,18 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
         return;
     }
 
-    m_editData.clear();
-
     if (element->isTBox()) {
-        m_editData.element = toTBox(element)->text();
-    } else {
-        m_editData.element = element;
+        element = toTBox(element)->text();
     }
 
+    if (element != m_selection->element()) {
+        select({ element }, SelectType::SINGLE);
+    }
+
+    m_editData.clear();
+    m_editData.element = element;
     m_editData.startMove = bindCursorPosToText(cursorPos, m_editData.element);
+
     m_editData.element->startEdit(m_editData);
 
     notifyAboutTextEditingStarted();
@@ -4529,9 +4602,13 @@ void NotationInteraction::endEditGrip()
 
 void NotationInteraction::updateGripAnchorLines()
 {
+    if (!m_editData.element) {
+        return;
+    }
+
     std::vector<LineF> lines;
-    mu::engraving::Grip anchorLinesGrip = m_editData.curGrip
-                                          == mu::engraving::Grip::NO_GRIP ? m_editData.element->defaultGrip() : m_editData.curGrip;
+    mu::engraving::Grip anchorLinesGrip = m_editData.curGrip == mu::engraving::Grip::NO_GRIP
+                                          ? m_editData.element->defaultGrip() : m_editData.curGrip;
     std::vector<LineF> anchorLines = m_editData.element->gripAnchorLines(anchorLinesGrip);
 
     if (!anchorLines.empty()) {
@@ -4565,9 +4642,9 @@ bool NotationInteraction::isElementEditStarted() const
     return m_editData.element != nullptr;
 }
 
-void NotationInteraction::startEditElement(EngravingItem* element, bool editTextualProperties)
+void NotationInteraction::startEditElement(EngravingItem* element)
 {
-    if (!element) {
+    if (!element || !element->isEditable()) {
         return;
     }
 
@@ -4575,9 +4652,11 @@ void NotationInteraction::startEditElement(EngravingItem* element, bool editText
         return;
     }
 
-    if (element->isTextBase() && editTextualProperties) {
+    if (element->isTextBase()) {
         startEditText(element);
-    } else if (element->isEditable()) {
+    } else if (element->hasGrips() && !element->isImage()) {
+        startEditGrip(element, element->defaultGrip());
+    } else {
         element->startEdit(m_editData);
         m_editData.element = element;
     }
@@ -5030,7 +5109,7 @@ void NotationInteraction::copySelection()
             QGuiApplication::clipboard()->setMimeData(mimeData);
         }
     } else {
-        QMimeData* mimeData = selection()->mimeData();
+        QMimeData* mimeData = selection()->qMimeData();
         if (!mimeData) {
             return;
         }
@@ -5165,7 +5244,7 @@ void NotationInteraction::swapSelection()
     QString mimeType = selection.mimeType();
 
     if (mimeType == mu::engraving::mimeStaffListFormat) { // determine size of clipboard selection
-        const QMimeData* mimeData = this->selection()->mimeData();
+        const QMimeData* mimeData = this->selection()->qMimeData();
         QByteArray data = mimeData ? mimeData->data(mu::engraving::mimeStaffListFormat) : QByteArray();
         mu::engraving::XmlReader reader(data);
         reader.readNextStartElement();
@@ -5208,6 +5287,10 @@ void NotationInteraction::deleteSelection()
         return;
     }
 
+    //! NOTE: should be before start edit
+    //! In start edit we save the selection state
+    excludeElementsFromSelectionBeforeDelete();
+
     startEdit(TranslatableString("undoableAction", "Delete"));
 
     if (isTextEditingStarted()) {
@@ -5237,6 +5320,8 @@ void NotationInteraction::flipSelection()
     startEdit(TranslatableString("undoableAction", "Flip direction"));
     score()->cmdFlip();
     apply();
+
+    updateGripAnchorLines();
 }
 
 void NotationInteraction::flipSelectionHorizontally()
@@ -5603,9 +5688,9 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
         return;
     }
 
-    startEdit(steps >= 0
-              ? TranslatableString("undoableAction", "Increase duration")
-              : TranslatableString("undoableAction", "Decrease duration"));
+    startEdit(steps > 0 // negative: increase, positive: decrease
+              ? TranslatableString("undoableAction", "Decrease duration")
+              : TranslatableString("undoableAction", "Increase duration"));
     score()->cmdIncDecDuration(steps, stepByDots);
     apply();
 }
@@ -5630,7 +5715,7 @@ void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
             && !(startDyn->dynamicType() == DynamicType::OTHER || startDyn->dynamicType() >= DynamicType::FP)
             && !leftHp->isLineType()) {
             if (int(startDyn->dynamicType()) > int(selDyn->dynamicType())) {
-                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
+                leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
             } else {
                 leftHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
             }
@@ -5645,7 +5730,7 @@ void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
             if (int(endDyn->dynamicType()) > int(selDyn->dynamicType())) {
                 rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::CRESC_HAIRPIN));
             } else {
-                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DECRESC_HAIRPIN));
+                rightHp->undoChangeProperty(Pid::HAIRPIN_TYPE, int(HairpinType::DIM_HAIRPIN));
             }
         }
     }
@@ -5683,7 +5768,6 @@ void NotationInteraction::toggleDynamicPopup()
                 // If there is already a dynamic, select it instead of opening an empty popup
                 select({ startDynOrExp });
                 if (startDynOrExp->isDynamic()) {
-                    startEditElement(startDynOrExp, false);
                     autoFlipHairpinsType(toDynamic(startDynOrExp));
                 }
             } else {
@@ -5695,7 +5779,6 @@ void NotationInteraction::toggleDynamicPopup()
                 // If there is already a dynamic, select it instead of opening an empty popup
                 select({ endDynOrExp });
                 if (endDynOrExp->isDynamic()) {
-                    startEditElement(endDynOrExp, false);
                     autoFlipHairpinsType(toDynamic(endDynOrExp));
                 }
             } else {
@@ -6218,7 +6301,7 @@ void NotationInteraction::changeEnharmonicSpelling(bool both)
 
 void NotationInteraction::spellPitches()
 {
-    startEdit(TranslatableString("undoableAction", "Respell pitches"));
+    startEdit(TranslatableString("undoableAction", "Optimize enharmonic spelling"));
     score()->spell();
     apply();
 }
@@ -6374,6 +6457,43 @@ bool NotationInteraction::needEndElementEditing(const std::vector<EngravingItem*
     }
 
     return newSelectedElements.front() != score()->selection().element();
+}
+
+void NotationInteraction::excludeElementsFromSelectionBeforeDelete()
+{
+    const std::vector<EngravingItem*> selectedElements = score()->selection().elements();
+    if (selectedElements.empty()) {
+        return;
+    }
+
+    // If there is Harmony or FretDiagram outside the fret box
+    // then the fret box will be rebuilt and we should exclude fret box's elements
+    bool hasHarmonyOrFretDiagramOutsideOfBox = false;
+
+    auto isInFretBox = [](const EngravingItem* item) {
+        if (item->isHarmony()) {
+            return static_cast<const Harmony*>(item)->isInFretBox();
+        } else if (item->isFretDiagram()) {
+            return static_cast<const FretDiagram*>(item)->isInFretBox();
+        }
+        return false;
+    };
+
+    for (const EngravingItem* element : selectedElements) {
+        if (!element->isHarmony() && !element->isFretDiagram()) {
+            continue;
+        }
+
+        hasHarmonyOrFretDiagramOutsideOfBox |= !isInFretBox(element);
+    }
+
+    for (EngravingItem* element : selectedElements) {
+        if (hasHarmonyOrFretDiagramOutsideOfBox
+            && (element->isHarmony() || element->isFretDiagram())
+            && isInFretBox(element)) {
+            score()->deselect(element);
+        }
+    }
 }
 
 void NotationInteraction::resetGripEdit()
@@ -7721,7 +7841,7 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
 
 muse::Ret NotationInteraction::canAddFretboardDiagram() const
 {
-    bool canAdd = m_selection->elementsSelected({ ElementType::HARMONY, ElementType::NOTE, ElementType::REST });
+    bool canAdd = m_selection->elementsSelected({ ElementType::HARMONY });
     return canAdd ? muse::make_ok() : make_ret(Err::NoteOrRestOrHarmonyIsNotSelected);
 }
 
@@ -7748,15 +7868,11 @@ void NotationInteraction::addFretboardDiagram()
     std::vector<EngravingItem*> filteredElements;
 
     for (EngravingItem* element : selectedElements) {
-        if (!element || (!element->isHarmony() && !element->isRest() && !element->isNote())) {
+        if (!element || !element->isHarmony()) {
             continue;
         }
 
-        if (element->isHarmony()) {
-            if (!element->explicitParent()->isFretDiagram()) {
-                filteredElements.emplace_back(element);
-            }
-        } else {
+        if (!element->explicitParent()->isFretDiagram()) {
             filteredElements.emplace_back(element);
         }
     }
@@ -7773,16 +7889,10 @@ void NotationInteraction::addFretboardDiagram()
         engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy()->segment());
         diagram->setTrack(element->track());
 
-        if (element->isHarmony()) {
-            Harmony* harmony = toHarmony(element);
+        Harmony* harmony = toHarmony(element);
 
-            diagram->updateDiagram(harmony->plainText());
-            score->undo(new FretLinkHarmony(diagram, harmony));
-        } else {
-            // add blank diagram
-            diagram->setParent(element->isNote() ? toNote(element)->chord()->segment() : toRest(element)->segment());
-            diagram->clear();
-        }
+        diagram->updateDiagram(harmony->harmonyName());
+        score->undo(new FretLinkHarmony(diagram, harmony));
 
         score->undoAddElement(diagram);
 

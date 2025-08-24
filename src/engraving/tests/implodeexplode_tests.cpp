@@ -124,20 +124,10 @@ TEST_F(Engraving_ImplodeExplodeTests, implodeScore)
 
 TEST_F(Engraving_ImplodeExplodeTests, explodeDynamics)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     testUndoExplode(u"explodeDynamics");
-
-    MScore::useRead302InTestMode = useRead302;
 }
 
 TEST_F(Engraving_ImplodeExplodeTests, implodeDynamics)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     testUndoImplode(u"implodeDynamics");
-
-    MScore::useRead302InTestMode = useRead302;
 }

@@ -156,6 +156,7 @@
             </Chord>
           <Chord>
             <eid>T_T</eid>
+            <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
@@ -215,6 +216,7 @@
         <voice>
           <Chord>
             <eid>a_a</eid>
+            <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
@@ -294,6 +296,7 @@
             </Chord>
           <Chord>
             <eid>i_i</eid>
+            <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
@@ -399,6 +402,7 @@
             </Chord>
           <Chord>
             <eid>w_w</eid>
+            <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>

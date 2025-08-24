@@ -21,6 +21,7 @@
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
+      <articulationFontSize>10</articulationFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <tempoFontSize>10</tempoFontSize>
       <tempoChangeFontSize>10</tempoChangeFontSize>
@@ -56,7 +57,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Violin</trackName>
       <Instrument id="violin">
@@ -127,7 +127,6 @@
         <Text>
           <eid>E_E</eid>
           <style>title</style>
-          <offset x="0" y="-0.0367999"/>
           <text><font size="22"/>Untitled score</text>
           </Text>
         <Text>

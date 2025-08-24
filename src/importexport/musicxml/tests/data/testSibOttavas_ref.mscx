@@ -63,6 +63,8 @@
       <stringTuningsFontSize>11.9365</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Quicksand</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Quicksand</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Quicksand</articulationFontFace>
+      <articulationFontSize>11.9365</articulationFontSize>
       <longInstrumentFontFace>Quicksand</longInstrumentFontFace>
       <longInstrumentFontSize>11.9365</longInstrumentFontSize>
       <shortInstrumentFontFace>Quicksand</shortInstrumentFontFace>
@@ -92,6 +94,8 @@
       <staffTextFrameWidth>0.15625</staffTextFrameWidth>
       <rehearsalMarkFontFace>Quicksand</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>11.9365</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Quicksand</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>11.9365</repeatPlayCountFontSize>
       <repeatLeftFontFace>Quicksand</repeatLeftFontFace>
       <repeatLeftFontSize>11.9365</repeatLeftFontSize>
       <repeatRightFontFace>Quicksand</repeatRightFontFace>
@@ -163,7 +167,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName></trackName>
       <Instrument id="grand-piano">

@@ -30,11 +30,16 @@ class BarlineSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * type READ type CONSTANT)
+    Q_PROPERTY(PropertyItem * playCount READ playCount CONSTANT)
+    Q_PROPERTY(PropertyItem * playCountText READ playCountText CONSTANT)
+    Q_PROPERTY(PropertyItem * playCountTextSetting READ playCountTextSetting CONSTANT)
     Q_PROPERTY(PropertyItem * isSpanToNextStaff READ isSpanToNextStaff CONSTANT)
     Q_PROPERTY(PropertyItem * spanFrom READ spanFrom CONSTANT)
     Q_PROPERTY(PropertyItem * spanTo READ spanTo CONSTANT)
     Q_PROPERTY(PropertyItem * hasToShowTips READ hasToShowTips CONSTANT)
     Q_PROPERTY(bool isRepeatStyleChangingAllowed READ isRepeatStyleChangingAllowed NOTIFY isRepeatStyleChangingAllowedChanged)
+    Q_PROPERTY(bool showPlayCountSettings READ showPlayCountSettings NOTIFY showPlayCountSettingsChanged FINAL)
+    Q_PROPERTY(bool showPlayCount READ showPlayCount NOTIFY showPlayCountChanged FINAL)
 
 public:
     explicit BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -43,15 +48,22 @@ public:
     Q_INVOKABLE void setSpanIntervalAsStaffDefault();
 
     PropertyItem* type() const;
+    PropertyItem* playCount() const;
+    PropertyItem* playCountText() const;
+    PropertyItem* playCountTextSetting() const;
     PropertyItem* isSpanToNextStaff() const;
     PropertyItem* spanFrom() const;
     PropertyItem* spanTo() const;
     PropertyItem* hasToShowTips() const;
 
     bool isRepeatStyleChangingAllowed() const;
+    bool showPlayCountSettings() const;
+    bool showPlayCount() const;
 
 signals:
     void isRepeatStyleChangingAllowedChanged();
+    void showPlayCountSettingsChanged(bool show);
+    void showPlayCountChanged(bool show);
 
 private:
     void createProperties() override;
@@ -63,11 +75,20 @@ private:
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
+    void updateShowPlayCount();
+    void updateShowPlayCountSettings();
+
     PropertyItem* m_type = nullptr;
+    PropertyItem* m_playCount = nullptr;
+    PropertyItem* m_playCountText = nullptr;
+    PropertyItem* m_playCountTextSetting = nullptr;
     PropertyItem* m_isSpanToNextStaff = nullptr;
     PropertyItem* m_spanFrom = nullptr;
     PropertyItem* m_spanTo = nullptr;
     PropertyItem* m_hasToShowTips = nullptr;
+
+    bool m_showPlayCount = false;
+    bool m_showPlayCountSettings = false;
 };
 }
 

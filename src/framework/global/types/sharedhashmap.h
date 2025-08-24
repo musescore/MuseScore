@@ -31,7 +31,12 @@ template<typename KeyType, typename ValType>
 class SharedHashMap
 {
 public:
-    using PairType = std::pair<KeyType, ValType>;
+    // like std
+    using key_type = KeyType;
+    using mapped_type = ValType;
+    using value_type = std::pair<KeyType, ValType>;
+
+    using PairType = value_type;
     using Data = std::unordered_map<KeyType, ValType>;
     using DataPtr = std::shared_ptr<Data>;
     typedef typename Data::iterator iterator;

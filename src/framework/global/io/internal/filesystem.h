@@ -60,8 +60,8 @@ public:
     Ret isWritable(const path_t& filePath) const override;
 
 private:
-    Ret removeFile(const io::path_t& path) const;
-    Ret removeDir(const io::path_t& path, bool onlyIfEmpty = false) const;
+    Ret removeFile(const io::path_t& path);
+    Ret removeDir(const io::path_t& path, bool onlyIfEmpty = false);
     Ret copyRecursively(const io::path_t& src, const io::path_t& dst) const;
 };
 }

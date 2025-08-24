@@ -23,7 +23,6 @@
 #ifndef MUSE_MPE_PLAYBACKSETUPDATA_H
 #define MUSE_MPE_PLAYBACKSETUPDATA_H
 
-#include <variant>
 #include <optional>
 
 #include "soundid.h"
@@ -32,11 +31,14 @@ namespace muse::mpe {
 struct PlaybackSetupData
 {
     String id;
-    SoundCategory category = SoundCategory::Undefined;
     StringList subCategories;
 
-    bool supportsSingleNoteDynamics = false;
+    std::optional<std::string> scoreId;
     std::optional<std::string> musicXmlSoundId;
+
+    SoundCategory category = SoundCategory::Undefined;
+
+    bool supportsSingleNoteDynamics = false;
 
     PlaybackSetupData() = default;
 
@@ -49,7 +51,7 @@ struct PlaybackSetupData
     }
 
     PlaybackSetupData(String id, SoundCategory category, StringList&& subCategories = {})
-        : id(std::move(id)), category(category), subCategories(std::move(subCategories))
+        : id(std::move(id)), subCategories(std::move(subCategories)), category(category)
     {}
 
     SoundId soundId() const

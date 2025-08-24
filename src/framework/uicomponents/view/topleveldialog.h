@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UICOMPONENTS_TOPLEVELDIALOG_H
-#define MUSE_UICOMPONENTS_TOPLEVELDIALOG_H
+#pragma once
 
 #include <QDialog>
 
@@ -41,5 +40,3 @@ protected:
     bool event(QEvent* e) override;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_TOPLEVELDIALOG_H

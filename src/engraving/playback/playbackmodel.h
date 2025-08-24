@@ -80,12 +80,12 @@ public:
 
     bool hasSoundFlags(const InstrumentTrackId& trackId) const;
 
-    const muse::mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
-    const muse::mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const String& instrumentId);
-    void triggerEventsForItems(const std::vector<const EngravingItem*>& items);
+    muse::mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
+    muse::mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const String& instrumentId);
 
+    void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound);
     void triggerMetronome(int tick);
-    void triggerCountIn(int tick, muse::mpe::duration_t& totalCountInDuration);
+    void triggerCountIn(int tick, muse::mpe::duration_t& countInDuration);
 
     InstrumentTrackIdSet existingTrackIdSet() const;
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
@@ -128,10 +128,9 @@ private:
     void processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat, const Measure* currentMeasure,
                               const staff_idx_t staffIdx, ChangedTrackIdSet* trackChanges);
 
-    bool hasToReloadTracks(const ScoreChangesRange& changesRange) const;
-    bool hasToReloadScore(const ScoreChangesRange& changesRange) const;
+    bool hasToReloadTracks(const ScoreChanges& changes) const;
+    bool hasToReloadScore(const ScoreChanges& changes) const;
 
-    bool containsTrack(const InstrumentTrackId& trackId) const;
     void clearExpiredTracks();
     void clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo);
     void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo);
@@ -143,8 +142,10 @@ private:
     void removeTrackEvents(const InstrumentTrackId& trackId, const muse::mpe::timestamp_t timestampFrom = -1,
                            const muse::mpe::timestamp_t timestampTo = -1);
 
-    TrackBoundaries trackBoundaries(const ScoreChangesRange& changesRange) const;
-    TickBoundaries tickBoundaries(const ScoreChangesRange& changesRange) const;
+    bool shouldSkipChanges(const ScoreChanges& changes) const;
+
+    TrackBoundaries trackBoundaries(const ScoreChanges& changes) const;
+    TickBoundaries tickBoundaries(const ScoreChanges& changes) const;
 
     const RepeatList& repeatList() const;
 

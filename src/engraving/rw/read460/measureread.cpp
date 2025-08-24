@@ -56,6 +56,7 @@
 #include "../dom/tempotext.h"
 #include "../dom/image.h"
 
+#include "../types/typesconv.h"
 #include "tread.h"
 
 #include "log.h"
@@ -88,13 +89,11 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         bool ok = true;
         measure->m_len = Fraction::fromString(e.attribute("len"), &ok);
         if (!ok || measure->m_len < Fraction(1, 128)) {
-            e.raiseError(muse::mtrc("engraving", "MSCX error at line %1: invalid measure length: %2")
-                         .arg(e.lineNumber()).arg(e.attribute("len")));
+            e.raiseError(muse::mtrc("engraving", "MSCX error at byte offset %1: invalid measure length: %2")
+                         .arg(e.byteOffset()).arg(e.attribute("len")));
             return;
         }
         irregular = true;
-        ctx.compatTimeSigMap()->add(measure->tick().ticks(), SigEvent(measure->m_len, measure->m_timesig));
-        ctx.compatTimeSigMap()->add((measure->tick() + measure->ticks()).ticks(), SigEvent(measure->m_timesig));
     }
 
     while (e.readNextStartElement()) {
@@ -160,6 +159,8 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
             measure->m_mstaves[staffIdx]->setVisible(e.readInt());
         } else if (tag == "stemless") {
             measure->m_mstaves[staffIdx]->setStemless(e.readInt());
+        } else if (tag == "hideIfEmpty") {
+            measure->m_mstaves[staffIdx]->setHideIfEmpty(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
         } else if (tag == "measureRepeatCount") {
             measure->setMeasureRepeatCount(e.readInt(), staffIdx);
         } else if (tag == "SystemDivider") {

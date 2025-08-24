@@ -39,9 +39,6 @@ class Engraving_SystemLocksTests : public ::testing::Test
 
 TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
     EXPECT_TRUE(score);
 
@@ -65,14 +62,10 @@ TEST_F(Engraving_SystemLocksTests, readLocksFromFile)
     }
 
     delete score;
-    MScore::useRead302InTestMode = useRead302;
 }
 
 TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
     EXPECT_TRUE(score);
 
@@ -123,14 +116,10 @@ TEST_F(Engraving_SystemLocksTests, lockMeasuresPerSystem)
     }
 
     delete score;
-    MScore::useRead302InTestMode = useRead302;
 }
 
 TEST_F(Engraving_SystemLocksTests, makeIntoSystem)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
     EXPECT_TRUE(score);
 
@@ -156,14 +145,10 @@ TEST_F(Engraving_SystemLocksTests, makeIntoSystem)
     EXPECT_TRUE(sixthMeasure->next()->isStartOfSystemLock());
 
     delete score;
-    MScore::useRead302InTestMode = useRead302;
 }
 
 TEST_F(Engraving_SystemLocksTests, moveToPreviousNext)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
     EXPECT_TRUE(score);
 
@@ -192,14 +177,10 @@ TEST_F(Engraving_SystemLocksTests, moveToPreviousNext)
     EXPECT_TRUE(thirdMeasure->isStartOfSystemLock());
 
     delete score;
-    MScore::useRead302InTestMode = useRead302;
 }
 
 TEST_F(Engraving_SystemLocksTests, toggleSystemLock)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(SYSTEM_LOCKS_DATA_DIR + u"system_locks-1.mscx");
     EXPECT_TRUE(score);
 
@@ -236,5 +217,4 @@ TEST_F(Engraving_SystemLocksTests, toggleSystemLock)
     }
 
     delete score;
-    MScore::useRead302InTestMode = useRead302;
 }

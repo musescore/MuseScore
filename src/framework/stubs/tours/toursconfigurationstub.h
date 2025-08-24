@@ -30,7 +30,5 @@ class ToursConfigurationStub : public IToursConfiguration
 public:
     String lastShownTourIdForEvent(const String& eventCode) const override;
     void setLastShownTourIdForEvent(const String& eventCode, const String& tourId) override;
-
-    io::path_t toursFilePath() const override;
 };
 }

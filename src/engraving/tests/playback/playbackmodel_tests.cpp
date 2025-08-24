@@ -46,16 +46,14 @@ using namespace muse;
 
 static const String PLAYBACK_MODEL_TEST_FILES_DIR("playback/playbackmodel_data/");
 static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
+static constexpr duration_t HALF_NOTE_DURATION = QUARTER_NOTE_DURATION * 2; // duration in microseconds for 1/2 120BPM
+static constexpr duration_t WHOLE_NOTE_DURATION = QUARTER_NOTE_DURATION * 4; // duration in microseconds for 4/4 120BPM
 
 class Engraving_PlaybackModelTests : public ::testing::Test, public muse::async::Asyncable
 {
 protected:
     void SetUp() override
     {
-        //! NOTE: allows to read test files using their version readers
-        //! instead of using 302 (see mscloader.cpp, makeReader)
-        MScore::useRead302InTestMode = false;
-
         m_dummyPatternSegment.arrangementPattern
             = tests::createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_dummyPatternSegment.pitchPattern = tests::createSimplePitchPattern(0 /*increment_pitch_diff*/);
@@ -65,11 +63,6 @@ protected:
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
 
         m_repositoryMock = std::make_shared<NiceMock<ArticulationProfilesRepositoryMock> >();
-    }
-
-    void TearDown() override
-    {
-        MScore::useRead302InTestMode = true;
     }
 
     ArticulationPattern buildTestArticulationPattern() const
@@ -813,6 +806,70 @@ TEST_F(Engraving_PlaybackModelTests, Multi_Measure_Repeat)
     EXPECT_EQ(result.size(), expectedSize);
 }
 
+//! See: https://github.com/musescore/MuseScore/issues/29051
+TEST_F(Engraving_PlaybackModelTests, MeasureRepeat_TiedNotes)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "measure_repeat_tied_notes.mscx");
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const Part* part = score->parts().at(0);
+    ASSERT_TRUE(part);
+    ASSERT_EQ(part->instruments().size(), 1);
+
+    // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model(modularity::globalCtx());
+    model.profilesRepository.set(m_repositoryMock);
+    model.setPlayRepeats(true);
+    model.load(score);
+
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
+
+    // [THEN] Expected timestamps & durations
+    constexpr duration_t expectedDuration = HALF_NOTE_DURATION + HALF_NOTE_DURATION; // 2 tied half notes
+
+    const std::vector<TimestampAndDuration> expectedTnDList {
+        // 2nd measure
+        { WHOLE_NOTE_DURATION, expectedDuration },
+
+        // 3nd measure: measure repeat
+        { WHOLE_NOTE_DURATION* 2, expectedDuration },
+
+        // 2nd measure (repeated)
+        { WHOLE_NOTE_DURATION* 4, expectedDuration },
+
+        // 3nd measure (repeated): measure repeat
+        { WHOLE_NOTE_DURATION* 5, expectedDuration },
+    };
+
+    size_t noteEventNum = 0;
+
+    for (const auto& pair : result) {
+        for (const PlaybackEvent& event : pair.second) {
+            if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+                continue;
+            }
+
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+            const TimestampAndDuration& expectedTnD = expectedTnDList.at(noteEventNum);
+
+            EXPECT_EQ(arrangementCtx.actualTimestamp, expectedTnD.timestamp);
+            EXPECT_EQ(arrangementCtx.actualDuration, expectedTnD.duration);
+
+            ++noteEventNum;
+        }
+    }
+
+    EXPECT_EQ(expectedTnDList.size(), noteEventNum);
+
+    delete score;
+}
+
 /**
  * @brief PlaybackModelTests_SimpleRepeat_Changes_Notification
  * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
@@ -848,37 +905,37 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     EXPECT_EQ(result.originEvents.size(), expectedChangedEventsCount);
 
     // [THEN] Updated events map will match our expectations
-    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&,
-                                                                   const PlaybackParamLayers&) {
+    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&) {
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 
     // [WHEN] Score has been changed: the range starts ouside the repeat and ends inside it
-    ScoreChangesRange range;
-    range.tickFrom = 480; // 2nd note of the 1st measure (outside the repeat)
-    range.tickTo = 3840; // 1st note of the 3rd measure (inside the repeat)
-    range.staffIdxFrom = 0;
-    range.staffIdxTo = 0;
-    range.changedTypes = { ElementType::NOTE };
+    ScoreChanges changes;
+    changes.tickFrom = 480; // 2nd note of the 1st measure (outside the repeat)
+    changes.tickTo = 3840; // 1st note of the 3rd measure (inside the repeat)
+    changes.staffIdxFrom = 0;
+    changes.staffIdxTo = 0;
+    changes.changedTypes = { ElementType::NOTE };
 
-    score->changesChannel().send(range);
+    score->changesChannel().send(changes);
 
     // [WHEN] Score has been changed: the range is inside the repeat and tickTo == the end tick of the repeat
     // See: https://github.com/musescore/MuseScore/issues/25899
-    range.tickFrom = 4800; // 3rd note of the 3rd measure (inside the repeat)
-    range.tickTo = 5760; // end tick of the repeat
-    range.staffIdxFrom = 0;
-    range.staffIdxTo = 0;
-    range.changedTypes = { ElementType::PEDAL };
+    changes.tickFrom = 4800; // 3rd note of the 3rd measure (inside the repeat)
+    changes.tickTo = 5760; // end tick of the repeat
+    changes.staffIdxFrom = 0;
+    changes.staffIdxTo = 0;
+    changes.changedTypes = { ElementType::PEDAL };
 
-    score->changesChannel().send(range);
+    score->changesChannel().send(changes);
 }
 
 /**
  * @brief PlaybackModelTests_TempoChangesDuringNotes
  * @details Test that notes and other elements have the correct length when tempo changes occur during them
  */
-TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes) {
+TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes)
+{
     Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "tempo_changes_during_notes/tempo_changes_during_notes.mscx");
 
     ASSERT_TRUE(score);
@@ -1131,26 +1188,28 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
                                                                          const DynamicLevelLayers& triggeredDynamics,
-                                                                         const PlaybackParamList&) {
+                                                                         bool flushOffstream) {
         ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
 
         ASSERT_EQ(eventList.size(), 1);
         const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(eventList.front());
 
-        EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
-        EXPECT_FALSE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
-        EXPECT_TRUE(noteEvent.pitchCtx() == expectedEvent.pitchCtx());
+        EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedEvent.arrangementCtx().actualTimestamp);
+        EXPECT_EQ(noteEvent.expressionCtx(), expectedEvent.expressionCtx());
+        EXPECT_EQ(noteEvent.pitchCtx(), expectedEvent.pitchCtx());
 
         // Use the score dynamics for offstream playback by default
         ASSERT_EQ(triggeredDynamics.size(), 1);
         const mpe::DynamicLevelMap& dynamicsMap = triggeredDynamics.at(0);
         ASSERT_EQ(dynamicsMap.size(), 1);
         EXPECT_EQ(dynamicsMap.begin()->second, dynamicLevelFromType(mpe::DynamicType::ppp));
+
+        EXPECT_TRUE(flushOffstream);
     });
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItems({ firstNote });
+    model.triggerEventsForItems({ firstNote }, QUARTER_NOTE_DURATION, true /*flushSounds*/);
 }
 
 /**
@@ -1201,7 +1260,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents,
                                                       const DynamicLevelLayers& triggeredDynamics,
-                                                      const PlaybackParamList&) {
+                                                      bool flushOffstream) {
         ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& actualEvents = triggeredEvents.at(0);
         ASSERT_EQ(actualEvents.size(), expectedEvents.size());
@@ -1213,7 +1272,9 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
             EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == 0);
             EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
             EXPECT_TRUE(actualNoteEvent.pitchCtx() == expectedNoteEvent.pitchCtx());
+
             EXPECT_TRUE(triggeredDynamics.empty());
+            EXPECT_TRUE(flushOffstream);
         }
     });
 
@@ -1221,7 +1282,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     model.setUseScoreDynamicsForOffstreamPlayback(false);
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItems({ thirdChord });
+    model.triggerEventsForItems({ thirdChord }, QUARTER_NOTE_DURATION, true /*flushSounds*/);
 }
 
 /**

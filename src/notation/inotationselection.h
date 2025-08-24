@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONSELECTION_H
-#define MU_NOTATION_INOTATIONSELECTION_H
+#pragma once
 
 #include <vector>
 
 #include "notationtypes.h"
 #include "internal/inotationselectionrange.h"
+#include "types/bytearray.h"
 #include "types/ret.h"
 
 class QMimeData;
@@ -41,7 +41,8 @@ public:
     virtual SelectionState state() const = 0;
 
     virtual muse::Ret canCopy() const = 0;
-    virtual QMimeData* mimeData() const = 0;
+    virtual muse::ByteArray mimeData() const = 0;
+    virtual QMimeData* qMimeData() const = 0;
 
     virtual EngravingItem* element() const = 0;
     virtual const std::vector<EngravingItem*>& elements() const = 0;
@@ -63,5 +64,3 @@ public:
 
 using INotationSelectionPtr = std::shared_ptr<INotationSelection>;
 }
-
-#endif // MU_NOTATION_INOTATIONSELECTION_H

@@ -57,7 +57,11 @@ static std::array<int, 3> parseVersion(const muse::String& versionString, bool& 
         }
     }
 
-    result.at(componentIdx) = curNum;
+    if (componentIdx < result.size()) {
+        result.at(componentIdx) = curNum;
+    } else {
+        LOGW() << "Ignoring everything after third point";
+    }
 
     ok = true;
     return result;
@@ -142,6 +146,11 @@ void Version::setSuffix(const String& suffix)
 
     m_suffix = versionSuffix.first;
     m_suffixVersion = versionSuffix.second;
+}
+
+bool Version::isNull() const
+{
+    return m_major == 0 && m_minor == 0 && m_patch == 0;
 }
 
 bool Version::preRelease() const

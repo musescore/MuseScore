@@ -17,7 +17,7 @@
          <mdiv>
             <score>
                <scoreDef>
-                  <pgHead>
+                  <pgHead func="first">
                      <rend halign="center" valign="top">
                         <rend type="title" fontsize="x-large">Very long instrument names</rend>
                      </rend>

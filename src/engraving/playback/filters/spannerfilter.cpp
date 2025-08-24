@@ -54,7 +54,7 @@ int SpannerFilter::spannerActualDurationTicks(const Spanner* spanner, const int 
 {
     const ElementType type = spanner->type();
 
-    if (type == ElementType::SLUR || type == ElementType::TRILL) {
+    if (type == ElementType::SLUR || type == ElementType::HAMMER_ON_PULL_OFF || type == ElementType::TRILL) {
         const EngravingItem* startItem = spanner->startElement();
         const EngravingItem* endItem = spanner->endElement();
 

@@ -23,6 +23,8 @@
 
 #include "realfn.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/measure.h"
 
 using namespace mu::engraving;
 
@@ -62,5 +64,22 @@ int harmonicOvertone(Note* note, float harmonicValue, int harmonicType)
     }
 
     return harmonicType == 1 ? result : (result + note->fret());
+}
+
+Chord* getLocatedChord(mu::engraving::Score* score, Fraction tickFr, track_idx_t track)
+{
+    const Measure* measure = score->tick2measure(tickFr);
+    if (!measure) {
+        LOGE() << "bend import error: no valid measure for track " << track << ", tick " << tickFr.ticks();
+        return nullptr;
+    }
+
+    Chord* chord = measure->findChord(tickFr, track);
+    if (!chord) {
+        LOGE() << "bend import error: no valid chord for track " << track << ", tick " << tickFr.ticks();
+        return nullptr;
+    }
+
+    return chord;
 }
 } // namespace mu::iex::guitarpro

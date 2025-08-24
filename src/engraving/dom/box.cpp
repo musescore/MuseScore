@@ -36,6 +36,7 @@
 #include "text.h"
 #include "undo.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace mu;
@@ -46,10 +47,14 @@ namespace mu::engraving {
 static const ElementStyle boxStyle {
     { Sid::systemFrameDistance,                Pid::TOP_GAP },
     { Sid::frameSystemDistance,                Pid::BOTTOM_GAP },
+    { Sid::paddingToNotationAbove,             Pid::PADDING_TO_NOTATION_ABOVE },
+    { Sid::paddingToNotationBelow,             Pid::PADDING_TO_NOTATION_BELOW },
 };
 
 static const ElementStyle hBoxStyle {
 };
+
+static const String FRET_BOX_DIAGRAMS_ORDER_SEPARATOR = u",";
 
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
@@ -479,18 +484,15 @@ void Box::manageExclusionFromParts(bool exclude)
             newFrame->setExcludeFromOtherParts(false);
             // newFrame->setSizeIsSpatiumDependent(!titleFrame);
 
-            // Clear auto generated diagrams inside fret box
-            if (newFrame->isFBox()) {
-                toFBox(newFrame)->clearElements();
-            }
-
-            for (EngravingItem* item : el()) {
-                // Don't add instrument name from current part
-                if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
-                    continue;
+            if (!isFBox()) {
+                for (EngravingItem* item : el()) {
+                    // Don't add instrument name from current part
+                    if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
+                        continue;
+                    }
+                    // add frame items (Layout Break, Title, ...)
+                    newFrame->add(item->linkedClone());
                 }
-                // add frame items (Layout Break, Title, ...)
-                newFrame->add(item->linkedClone());
             }
 
             if (isTBox()) {
@@ -603,7 +605,9 @@ VBox::VBox(const ElementType& type, System* parent)
     : Box(type, parent)
 {
     initElementStyle(&boxStyle);
+
     resetProperty(Pid::BOX_HEIGHT);
+
     setLineBreak(true);
 }
 
@@ -627,6 +631,10 @@ PropertyValue VBox::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::BOX_AUTOSIZE:
         return isAutoSizeEnabled();
+    case Pid::PADDING_TO_NOTATION_ABOVE:
+        return m_paddingToNotationAbove;
+    case Pid::PADDING_TO_NOTATION_BELOW:
+        return m_paddingToNotationBelow;
     default:
         return Box::getProperty(propertyId);
     }
@@ -644,6 +652,23 @@ PropertyValue VBox::propertyDefault(Pid id) const
     default:
         return Box::propertyDefault(id);
     }
+}
+
+bool VBox::setProperty(Pid propertyId, const PropertyValue& v)
+{
+    switch (propertyId) {
+    case Pid::PADDING_TO_NOTATION_ABOVE:
+        m_paddingToNotationAbove = v.value<Spatium>();
+        break;
+    case Pid::PADDING_TO_NOTATION_BELOW:
+        m_paddingToNotationBelow = v.value<Spatium>();
+        break;
+    default:
+        return Box::setProperty(propertyId, v);
+    }
+
+    triggerLayout();
+    return true;
 }
 
 //---------------------------------------------------------
@@ -668,8 +693,6 @@ void VBox::startEditDrag(EditData& ed)
 FBox::FBox(System* parent)
     : VBox(ElementType::FBOX, parent)
 {
-    init();
-
     resetProperty(Pid::FRET_FRAME_TEXT_SCALE);
     resetProperty(Pid::FRET_FRAME_DIAGRAM_SCALE);
     resetProperty(Pid::FRET_FRAME_COLUMN_GAP);
@@ -687,14 +710,22 @@ FBox::FBox(System* parent)
 
 void FBox::init()
 {
-    clearElements();
+    std::vector<FretDiagram*> newDiagrams;
+    StringList newDiagramsNames;
 
-    std::set<String> usedDiagrams;
+    StringList oldDiagramsNames;
+    for (EngravingItem* element : el()) {
+        oldDiagramsNames.push_back(toFretDiagram(element)->harmonyText().toLower());
+    }
 
-    for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
+    for (mu::engraving::Segment* segment = masterScore()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
          segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
         for (EngravingItem* item : segment->annotations()) {
             if (!item || !item->part()) {
+                continue;
+            }
+
+            if (item->isHarmony() && toHarmony(item)->harmonyType() != HarmonyType::STANDARD) {
                 continue;
             }
 
@@ -703,17 +734,58 @@ void FBox::init()
                 continue;
             }
 
-            String harmonyName = fretDiagram->harmony()->harmonyName().toLower();
-            if (muse::contains(usedDiagrams, harmonyName)) {
+            String harmonyName = fretDiagram->harmonyText().toLower();
+            if (muse::contains(newDiagramsNames, harmonyName) || harmonyName.empty()) {
                 delete fretDiagram;
-                fretDiagram = nullptr;
-
                 continue;
             }
 
-            add(fretDiagram);
+            newDiagrams.emplace_back(fretDiagram);
+            newDiagramsNames.push_back(harmonyName);
+        }
+    }
 
-            usedDiagrams.insert(harmonyName);
+    if (newDiagramsNames == oldDiagramsNames) {
+        muse::DeleteAll(newDiagrams);
+        return;
+    }
+
+    DEFER {
+        triggerLayout();
+    };
+
+    clearElements();
+
+    for (FretDiagram* diagram : newDiagrams) {
+        add(diagram);
+    }
+
+    if (m_diagramsOrder.empty()) {
+        return;
+    }
+
+    std::vector<String /*harmonyName*/> currentDiagramsOrder;
+    for (EngravingItem* item : el()) {
+        currentDiagramsOrder.push_back(toFretDiagram(item)->harmony()->harmonyName().toLower());
+    }
+
+    if (currentDiagramsOrder != m_diagramsOrder) {
+        m_diagramsOrder.erase(std::remove_if(m_diagramsOrder.begin(), m_diagramsOrder.end(),
+                                             [&](const String& harmonyName) { return !muse::contains(currentDiagramsOrder, harmonyName); }),
+                              m_diagramsOrder.end());
+
+        String previousHarmonyName;
+        for (const String& harmonyName : currentDiagramsOrder) {
+            if (!muse::contains(m_diagramsOrder, harmonyName)) {
+                size_t index = 0;
+                if (!previousHarmonyName.empty()) {
+                    index = std::find(m_diagramsOrder.begin(), m_diagramsOrder.end(), previousHarmonyName) - m_diagramsOrder.begin() + 1;
+                }
+
+                m_diagramsOrder.insert(m_diagramsOrder.begin() + index, harmonyName);
+            }
+
+            previousHarmonyName = harmonyName;
         }
     }
 }
@@ -761,6 +833,8 @@ PropertyValue FBox::getProperty(Pid propertyId) const
         return m_contentAlignmentH == AlignH::LEFT ? VBox::getProperty(propertyId) : PropertyValue();
     case Pid::RIGHT_MARGIN:
         return m_contentAlignmentH == AlignH::RIGHT ? VBox::getProperty(propertyId) : PropertyValue();
+    case Pid::FRET_FRAME_DIAGRAMS_ORDER:
+        return !m_diagramsOrder.empty() ? m_diagramsOrder.join(FRET_BOX_DIAGRAMS_ORDER_SEPARATOR) : PropertyValue();
     default:
         return VBox::getProperty(propertyId);
     }
@@ -789,6 +863,9 @@ bool FBox::setProperty(Pid propertyId, const PropertyValue& val)
         resetProperty(Pid::LEFT_MARGIN);
         resetProperty(Pid::RIGHT_MARGIN);
         break;
+    case Pid::FRET_FRAME_DIAGRAMS_ORDER:
+        m_diagramsOrder = val.value<String>().split(FRET_BOX_DIAGRAMS_ORDER_SEPARATOR); // todo
+        break;
     default:
         return VBox::setProperty(propertyId, val);
     }
@@ -810,9 +887,8 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
         return 8;
     case Pid::FRET_FRAME_H_ALIGN:
         return static_cast<int>(AlignH::HCENTER);
-    case Pid::TOP_GAP:
-    case Pid::BOTTOM_GAP:
-        return 4.0;
+    case Pid::FRET_FRAME_DIAGRAMS_ORDER:
+        return PropertyValue();
     default:
         return VBox::propertyDefault(propertyId);
     }
@@ -838,10 +914,36 @@ std::vector<PointF> FBox::gripsPositions(const EditData&) const
     return {};
 }
 
-void FBox::undoReorderElements(const std::vector<EID>& newOrderElementsIds)
+void FBox::undoReorderElements(const StringList& newOrder)
 {
-    score()->undo(new ReorderFBox(this, newOrderElementsIds));
+    StringList order;
+    for (const String& harmonyName : newOrder) {
+        order.push_back(harmonyName.toLower());
+    }
+
+    undoChangeProperty(Pid::FRET_FRAME_DIAGRAMS_ORDER, order.join(FRET_BOX_DIAGRAMS_ORDER_SEPARATOR));
     triggerLayout();
+}
+
+ElementList FBox::orderedElements() const
+{
+    ElementList elements = el();
+    std::vector<String> diagramsOrder = this->diagramsOrder();
+
+    std::sort(elements.begin(), elements.end(), [&diagramsOrder](const EngravingItem* a, const EngravingItem* b) {
+        const FretDiagram* diagramA = toFretDiagram(a);
+        const String diagramAHarmonyName = diagramA->harmony()->harmonyName().toLower();
+
+        const FretDiagram* diagramB = toFretDiagram(b);
+        const String diagramBHarmonyName = diagramB->harmony()->harmonyName().toLower();
+
+        auto itA = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramAHarmonyName);
+        auto itB = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramBHarmonyName);
+
+        return itA < itB;
+    });
+
+    return elements;
 }
 
 //---------------------------------------------------------

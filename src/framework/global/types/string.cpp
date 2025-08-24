@@ -32,7 +32,7 @@
 #include <sstream>
 #include <utility>
 
-#include "../thirdparty/utfcpp-3.2.1/utf8.h"
+#include "global/thirdparty/utfcpp/utf8.h"
 
 #include "bytearray.h"
 
@@ -385,6 +385,20 @@ String::Mutator String::mutStr(bool do_detach)
 void String::reserve(size_t i)
 {
     mutStr().reserve(i);
+}
+
+bool String::isEqualIgnoreCase(const String& s) const
+{
+    const std::u16string_view a { constStr() };
+    const std::u16string_view b { s.constStr() };
+
+    if (a.size() != b.size()) {
+        return false;
+    }
+
+    return std::equal(a.begin(), a.end(), b.begin(), [](const char16_t c1, const char16_t c2) {
+        return Char::toLower(c1) == Char::toLower(c2);
+    });
 }
 
 bool String::operator ==(const AsciiStringView& s) const

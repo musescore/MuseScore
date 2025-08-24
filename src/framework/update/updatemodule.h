@@ -40,7 +40,6 @@ public:
     void registerUiTypes() override;
     void registerResources() override;
     void onInit(const IApplication::RunMode& mode) override;
-    void onDelayedInit() override;
 
 private:
     std::shared_ptr<UpdateScenario> m_scenario;

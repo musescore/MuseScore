@@ -46,6 +46,7 @@ private:
     static void parseArpeggio(const Chord* chord, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseGraceNotes(const Chord* chord, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseChordLine(const Chord* chord, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
+    static void parseTapping(const Chord* chord, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
 };
 }
 

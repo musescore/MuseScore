@@ -62,78 +62,159 @@ StyledPopupView {
         anchors.fill: parent
         spacing: 12
 
-        StyledTextLabel {
-            id: nameLabel
-            text: settingsModel.isMainScore ? qsTrc("instruments", "Name on main score") :
-                                              qsTrc("instruments", "Name on part score")
-        }
+        Column {
+            width: parent.width
+            spacing: 8
 
-        TextInputField {
-            id: instrNameField
+            StyledTextLabel {
+                id: nameLabel
+                width: parent.width
+                text: settingsModel.isMainScore ? qsTrc("layoutpanel/instrumentsettingspopup", "Name on main score") :
+                                                  qsTrc("layoutpanel/instrumentsettingspopup", "Name on part score")
+                horizontalAlignment: Text.AlignLeft
+            }
 
-            objectName: "InstrNameField"
+            TextInputField {
+                id: instrNameField
 
-            navigation.panel: root.navigationPanel
-            navigation.row: 1
-            navigation.accessible.name: nameLabel.text + " " + currentText
+                objectName: "InstrNameField"
 
-            currentText: settingsModel.instrumentName
+                navigation.panel: root.navigationPanel
+                navigation.row: 1
+                navigation.accessible.name: nameLabel.text + " " + currentText
 
-            onTextEditingFinished: function(newTextValue) {
-                settingsModel.instrumentName = newTextValue
+                currentText: settingsModel.instrumentName
+
+                onTextEditingFinished: function(newTextValue) {
+                    settingsModel.instrumentName = newTextValue
+                }
             }
         }
 
-        StyledTextLabel {
-            id: abbreviatureLabel
-            text: qsTrc("instruments", "Abbreviated name")
-        }
+        Column {
+            width: parent.width
+            spacing: 8
 
-        TextInputField {
-            objectName: "AbbreviatureField"
+            StyledTextLabel {
+                id: abbreviatureLabel
+                width: parent.width
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Abbreviated name")
+                horizontalAlignment: Text.AlignLeft
+            }
 
-            navigation.panel: root.navigationPanel
-            navigation.row: 2
-            navigation.accessible.name: abbreviatureLabel.text + " " + currentText
+            TextInputField {
+                objectName: "AbbreviatureField"
 
-            currentText: settingsModel.abbreviature
+                navigation.panel: root.navigationPanel
+                navigation.row: 2
+                navigation.accessible.name: abbreviatureLabel.text + " " + currentText
 
-            onTextEditingFinished: function(newTextValue) {
-                settingsModel.abbreviature = newTextValue
+                currentText: settingsModel.abbreviature
+
+                onTextEditingFinished: function(newTextValue) {
+                    settingsModel.abbreviature = newTextValue
+                }
             }
         }
 
         SeparatorLine {}
 
-        FlatButton {
+        Column {
             width: parent.width
+            spacing: 8
 
-            navigation.panel: root.navigationPanel
-            navigation.row: 3
+            StyledTextLabel {
+                id: hideEmptyStavesLabel
+                width: parent.width
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Hide empty staves")
+                font: ui.theme.bodyBoldFont
+                horizontalAlignment: Text.AlignLeft
+            }
 
-            text: qsTrc("instruments", "Replace instrument")
+            RadioButtonGroup {
+                id: hideEmptyStavesGroup
 
-            visible: settingsModel.isMainScore
+                width: parent.width
+                orientation: ListView.Vertical
 
-            onClicked: {
-                root.replaceInstrumentRequested()
-                root.close()
+                model: [
+                    { text: qsTrc("layoutpanel/instrumentsettingspopup", "Auto"), value: 0 },
+                    { text: qsTrc("layoutpanel/instrumentsettingspopup", "Always hide"), value: 1 },
+                    { text: qsTrc("layoutpanel/instrumentsettingspopup", "Never hide"), value: 2 }
+                ]
+
+                delegate: FlatRadioButton {
+                    required property var modelData
+                    required property int index
+
+                    navigation.panel: root.navigationPanel
+                    navigation.row: 3 + index
+                    navigation.accessible.name: hideEmptyStavesLabel.text + " " + text
+
+                    text: modelData.text
+
+                    checked: settingsModel.hideWhenEmpty === modelData.value
+                    onToggled: {
+                        settingsModel.hideWhenEmpty = modelData.value
+                    }
+                }
+            }
+
+            CheckBox {
+                id: hideStavesWhenIndividuallyEmptyCheckBox
+
+                width: parent.width
+                visible: settingsModel.hasMultipleStaves
+                enabled: settingsModel.hideWhenEmpty !== 2 // Not "Never hide"
+
+                navigation.panel: root.navigationPanel
+                navigation.row: 6
+
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Only hide staves on a system if the entire instrument is empty")
+
+                checked: !settingsModel.hideStavesWhenIndividuallyEmpty
+                onClicked: {
+                    settingsModel.hideStavesWhenIndividuallyEmpty = !settingsModel.hideStavesWhenIndividuallyEmpty
+                }
             }
         }
 
-        FlatButton {
+        SeparatorLine {}
+
+        Column {
             width: parent.width
+            spacing: 8
 
-            navigation.panel: root.navigationPanel
-            navigation.row: 4
+            FlatButton {
+                width: parent.width
 
-            text: qsTrc("instruments", "Reset all formatting")
+                navigation.panel: root.navigationPanel
+                navigation.row: 7
 
-            visible: !settingsModel.isMainScore
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Replace instrument")
 
-            onClicked: {
-                root.resetAllFormattingRequested()
-                root.close()
+                visible: settingsModel.isMainScore
+
+                onClicked: {
+                    root.replaceInstrumentRequested()
+                    root.close()
+                }
+            }
+
+            FlatButton {
+                width: parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.row: 8
+
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Reset all formatting")
+
+                visible: !settingsModel.isMainScore
+
+                onClicked: {
+                    root.resetAllFormattingRequested()
+                    root.close()
+                }
             }
         }
     }

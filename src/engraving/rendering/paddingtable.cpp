@@ -27,11 +27,9 @@
 
 using namespace mu::engraving;
 
-void PaddingTable::initPaddingTable()
+void PaddingTable::initPaddingTable(double minPadUnit)
 {
     PaddingTable& table = *this;
-
-    double minPadUnit = minimumPaddingUnit();
 
     for (size_t i=0; i < TOT_ELEMENT_TYPES; ++i) {
         for (size_t j=0; j < TOT_ELEMENT_TYPES; ++j) {
@@ -42,14 +40,14 @@ void PaddingTable::initPaddingTable()
 
 void PaddingTable::createTable(const MStyle& style)
 {
-    initPaddingTable();
-
-    PaddingTable& table = *this;
-
-    const double minPadUnit = minimumPaddingUnit();
     const double spatium = style.spatium();
+    const double minPadUnit = 0.1 * spatium;
+    initPaddingTable(minPadUnit);
+
     const double ledgerPad = 0.25 * spatium;
     const double ledgerLength = style.styleMM(Sid::ledgerLineLength);
+
+    PaddingTable& table = *this;
 
     // NOTE: we don't set note-note padding to minNoteDistance
     // because there are cases when they should be allowed to get closer.
@@ -292,16 +290,17 @@ ParenPaddingTablePtr ParenPaddingTable::getPaddingTable(const EngravingItem* par
         ASSERT_X("Not a valid parenthesised type")
     }
 
-    table->setMinimumPaddingUnit(0.1 * parent->style().spatium());
+    const double spatium = parent->style().spatium();
+    const double minPadUnit = 0.1 * spatium;
+    table->initPaddingTable(minPadUnit);
+
     table->createTable(parent->style());
 
     return table;
 }
 
-void ParenPaddingTable::initPaddingTable()
+void ParenPaddingTable::initPaddingTable(double minPadUnit)
 {
-    const double minPadUnit = minimumPaddingUnit();
-
     for (size_t i = 0; i < TOT_ELEMENT_TYPES; ++i) {
         m_parenBefore[i] = minPadUnit;
         m_parenAfter[i]  = minPadUnit;

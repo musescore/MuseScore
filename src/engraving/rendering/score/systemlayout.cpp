@@ -41,12 +41,14 @@
 #include "dom/lyrics.h"
 #include "dom/measure.h"
 #include "dom/measurenumber.h"
+#include "dom/mmrest.h"
 #include "dom/mmrestrange.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
 #include "dom/part.h"
 #include "dom/parenthesis.h"
 #include "dom/pedal.h"
+#include "dom/playcounttext.h"
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/slur.h"
@@ -71,10 +73,12 @@
 #include "lyricslayout.h"
 #include "measurelayout.h"
 #include "tupletlayout.h"
+#include "restlayout.h"
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
 #include "dynamicslayout.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace mu::engraving;
@@ -353,19 +357,27 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
      * Now perform all operation to finalize system.
      * **********************************************************/
 
-    // Brake cross-measure beams
+    // Break cross-measure beams
     if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure()) {
         Measure* pm = toMeasure(ctx.mutState().prevMeasure());
         BeamLayout::breakCrossMeasureBeams(pm, ctx);
     }
 
-    // hide empty staves
+    // Hide empty staves
     hideEmptyStaves(system, ctx, ctx.state().firstSystem());
 
+    // Re-create shapes to account for newly hidden/unhidden staves
+    // (and for potential forgotten shape updates, for example in MeasureLayout::setRepeatCourtesiesAndParens)
+    for (MeasureBase* mb : system->measures()) {
+        if (mb->isMeasure()) {
+            for (Segment& seg : toMeasure(mb)->segments()) {
+                seg.createShapes();
+            }
+        }
+    }
+
     // Relayout system to account for newly hidden/unhidden staves
-    curSysWidth -= system->leftMargin();
     SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
-    curSysWidth += system->leftMargin();
 
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
@@ -414,9 +426,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     if (oldSystem && !oldSystem->measures().empty() && oldSystem->measures().front()->tick() >= system->endTick()
         && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
-        // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
-        // We need to restore them to the correct state.
-        SystemLayout::restoreTiesAndBends(oldSystem, ctx);
+        // We may have unfinished layouts of certain elements in the next system
+        // - ties & bends (in LayoutChords::updateLineAttachPoints())
+        // - fret diagrams & harmony (in layoutMeasure)
+        // Restore them to the correct state.
+        SystemLayout::restoreOldSystemLayout(oldSystem, ctx);
     }
 
     return system;
@@ -472,7 +486,7 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     lockIndicator->setParent(system);
     system->addLockIndicator(lockIndicator);
 
-    TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
+    TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
 }
 
 //---------------------------------------------------------
@@ -502,104 +516,195 @@ System* SystemLayout::getNextSystem(LayoutContext& ctx)
     return system;
 }
 
-void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem)
+enum class StaffHideMode {
+    HIDE_WHEN_STAFF_EMPTY,
+    HIDE_WHEN_INSTRUMENT_EMPTY,
+    ALWAYS_SHOW
+};
+
+static StaffHideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty,
+                                     bool& hasSystemSpecificOverrides)
 {
-    size_t staves = ctx.dom().nstaves();
-    staff_idx_t staffIdx = 0;
-    bool systemIsEmpty = true;
+    // Check for system-specific overrides
+    bool hasSystemSpecificOverrideHide = false;
+    bool hasSystemSpecificOverrideDontHide = false;
 
-    Fraction stick = system->measures().front()->tick();
-    Fraction etick = system->measures().back()->endTick();
-    auto& spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
-
-    for (const Staff* staff : ctx.dom().staves()) {
-        SysStaff* ss  = system->staff(staffIdx);
-
-        Staff::HideMode hideMode = staff->hideWhenEmpty();
-
-        if (hideMode == Staff::HideMode::ALWAYS
-            || (ctx.conf().styleB(Sid::hideEmptyStaves)
-                && (staves > 1)
-                && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem))
-                && hideMode != Staff::HideMode::NEVER)) {
-            bool hideStaff = true;
-            for (auto& spanner : spanners) {
-                if (spanner.value->staff() == staff
-                    && !spanner.value->systemFlag()
-                    && !(spanner.stop == stick.ticks() && !spanner.value->isSlur())) {
-                    hideStaff = false;
-                    break;
-                }
-            }
-            for (MeasureBase* m : system->measures()) {
-                if (!m->isMeasure()) {
-                    continue;
-                }
-                Measure* measure = toMeasure(m);
-                if (!measure->isEmpty(staffIdx)) {
-                    hideStaff = false;
-                    break;
-                }
-            }
-            // check if notes moved into this staff
-            Part* part = staff->part();
-            const size_t n = part->nstaves();
-            if (hideStaff && (n > 1)) {
-                staff_idx_t idx = part->staves().front()->idx();
-                for (staff_idx_t i = 0; i < n; ++i) {
-                    staff_idx_t st = idx + i;
-
-                    for (MeasureBase* mb : system->measures()) {
-                        if (!mb->isMeasure()) {
-                            continue;
-                        }
-                        Measure* m = toMeasure(mb);
-                        if (staff->hideWhenEmpty() == Staff::HideMode::INSTRUMENT && !m->isEmpty(st)) {
-                            hideStaff = false;
-                            break;
-                        }
-                        for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-                                ChordRest* cr = s->cr(st * VOICES + voice);
-                                int staffMove = cr ? cr->staffMove() : 0;
-                                if (!cr || cr->isRest() || cr->staffMove() == 0) {
-                                    // The case staffMove == 0 has already been checked by measure->isEmpty()
-                                    continue;
-                                }
-                                if (staffIdx == st + staffMove) {
-                                    hideStaff = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!hideStaff) {
-                            break;
-                        }
-                    }
-                    if (!hideStaff) {
-                        break;
-                    }
-                }
-            }
-            ss->setShow(hideStaff ? false : staff->show());
-            if (ss->show()) {
-                systemIsEmpty = false;
-            }
-        } else if (!staff->show()) {
-            // TODO: OK to check this first and not bother with checking if empty?
-            ss->setShow(false);
-        } else {
-            systemIsEmpty = false;
-            ss->setShow(true);
+    for (const MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
         }
 
-        ++staffIdx;
+        const Measure* measure = toMeasure(mb);
+        const AutoOnOff hideIfEmpty = measure->hideStaffIfEmpty(staffIdx);
+
+        hasSystemSpecificOverrideHide |= (hideIfEmpty == AutoOnOff::ON);
+        hasSystemSpecificOverrideDontHide |= (hideIfEmpty == AutoOnOff::OFF);
     }
+
+    if (hasSystemSpecificOverrideDontHide) {
+        hasSystemSpecificOverrides = true;
+        return StaffHideMode::ALWAYS_SHOW;
+    } else if (hasSystemSpecificOverrideHide) {
+        hasSystemSpecificOverrides = true;
+        return StaffHideMode::HIDE_WHEN_STAFF_EMPTY;
+    }
+
+    // Consider staff setting
+    AutoOnOff staffHideMode = staff->hideWhenEmpty();
+    switch (staffHideMode) {
+    case AutoOnOff::ON:
+        return StaffHideMode::HIDE_WHEN_STAFF_EMPTY;
+    case AutoOnOff::OFF:
+        return StaffHideMode::ALWAYS_SHOW;
+    case AutoOnOff::AUTO:
+        break;
+    }
+
+    // Consider part setting
+    AutoOnOff partHideMode = staff->part()->hideWhenEmpty();
+    switch (partHideMode) {
+    case AutoOnOff::ON:
+        break;
+    case AutoOnOff::OFF:
+        return StaffHideMode::ALWAYS_SHOW;
+    case AutoOnOff::AUTO:
+        // Consider global setting
+        if (!globalHideIfEmpty) {
+            return StaffHideMode::ALWAYS_SHOW;
+        }
+    }
+
+    return staff->part()->hideStavesWhenIndividuallyEmpty()
+           ? StaffHideMode::HIDE_WHEN_STAFF_EMPTY
+           : StaffHideMode::HIDE_WHEN_INSTRUMENT_EMPTY;
+}
+
+static bool computeShowSysStaff(const System* system, const Staff* staff, const staff_idx_t staffIdx,
+                                const Fraction& stick, const SpannerMap::IntervalList& spanners,
+                                const StaffHideMode hideMode)
+{
+    if (hideMode == StaffHideMode::ALWAYS_SHOW) {
+        return true;
+    }
+
+    // Check if there are spanners
+    for (const auto& spanner : spanners) {
+        if (spanner.value->staff() == staff
+            && !spanner.value->systemFlag()
+            && !(spanner.stop == stick.ticks() && !spanner.value->isSlur())) {
+            return true;
+        }
+    }
+
+    // Check if the staff is empty in the system
+    for (const MeasureBase* m : system->measures()) {
+        if (!m->isMeasure()) {
+            continue;
+        }
+        const Measure* measure = toMeasure(m);
+        if (!measure->isEmpty(staffIdx)) {
+            return true;
+        }
+    }
+
+    // check if notes moved into this staff
+    Part* part = staff->part();
+    const size_t n = part->nstaves();
+    if (n > 1) {
+        staff_idx_t idx = part->staves().front()->idx();
+        for (staff_idx_t i = 0; i < n; ++i) {
+            staff_idx_t st = idx + i;
+
+            for (MeasureBase* mb : system->measures()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+
+                const Measure* m = toMeasure(mb);
+                bool empty = m->isEmpty(st);
+                if (hideMode == StaffHideMode::HIDE_WHEN_INSTRUMENT_EMPTY && !empty) {
+                    return true;
+                } else if (empty) {
+                    continue;
+                }
+
+                for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                        ChordRest* cr = s->cr(st * VOICES + voice);
+                        int staffMove = cr ? cr->staffMove() : 0;
+                        if (!cr || cr->isRest() || cr->staffMove() == 0) {
+                            // The case staffMove == 0 has already been checked by measure->isEmpty()
+                            continue;
+                        }
+                        if (staffIdx == st + staffMove) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem)
+{
+    if (ctx.dom().nstaves() == 0) {
+        // No staves, nothing to hide
+        return;
+    }
+
+    if (ctx.dom().nstaves() == 1) {
+        // One staff, show iff not manually hidden score-wide
+        const bool show = ctx.dom().staves().front()->show();
+        system->staves().front()->setShow(show);
+        system->setHasStaffVisibilityIndicator(false);
+        return;
+    }
+
+    const Fraction stick = system->first()->tick();
+    const Fraction etick = system->last()->endTick();
+    const auto& spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
+
+    const bool globalHideIfEmpty = ctx.conf().styleB(Sid::hideEmptyStaves)
+                                   && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem));
+
+    bool hasSystemSpecificOverrides = false;
+    bool hasHiddenStaves = false;
+    bool systemIsEmpty = true;
+    staff_idx_t staffIdx = 0;
+
+    for (const Staff* staff : ctx.dom().staves()) {
+        SysStaff* ss = system->staff(staffIdx);
+
+        DEFER {
+            ++staffIdx;
+        };
+
+        if (!staff->show()) {
+            ss->setShow(false);
+            continue;
+        }
+
+        const StaffHideMode hideMode = computeHideMode(system, staff, staffIdx, globalHideIfEmpty, hasSystemSpecificOverrides);
+        const bool show = computeShowSysStaff(system, staff, staffIdx, stick, spanners, hideMode);
+        ss->setShow(show);
+        if (show) {
+            systemIsEmpty = false;
+        } else {
+            hasHiddenStaves = true;
+        }
+    }
+
+    system->setHasStaffVisibilityIndicator(hasSystemSpecificOverrides || hasHiddenStaves);
+
+    // If the system is empty, unhide the staves with `showIfEntireSystemEmpty` set to true, if any
     const Staff* firstVisible = nullptr;
     if (systemIsEmpty) {
         for (const Staff* staff : ctx.dom().staves()) {
             SysStaff* ss  = system->staff(staff->idx());
-            if (staff->showIfEmpty() && !ss->show()) {
+            if (staff->showIfEntireSystemEmpty() && !ss->show()) {
                 ss->setShow(true);
                 systemIsEmpty = false;
             } else if (!firstVisible && staff->show()) {
@@ -607,20 +712,39 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
             }
         }
     }
-    // don't allow a complete empty system
-    if (systemIsEmpty && !ctx.dom().staves().empty()) {
+
+    // If there are no such staves, unhide the first one
+    if (systemIsEmpty) {
         const Staff* staff = firstVisible ? firstVisible : ctx.dom().staves().front();
         SysStaff* ss = system->staff(staff->idx());
         ss->setShow(true);
     }
-    // Re-create the shapes to account for newly hidden or un-hidden staves
-    for (auto mb : system->measures()) {
-        if (mb->isMeasure()) {
-            for (auto& seg : toMeasure(mb)->segments()) {
-                seg.createShapes();
-            }
-        }
+}
+
+bool SystemLayout::canChangeSysStaffVisibility(const System* system, const staff_idx_t staffIdx)
+{
+    if (system->staves().size() <= 1) {
+        // Only one staff; always visible
+        return false;
     }
+
+    const Staff* staff = system->score()->staff(staffIdx);
+
+    if (system->staff(staffIdx)->show()) {
+        // SysStaff is visible; check if can hide
+        const Fraction stick = system->first()->tick();
+        const Fraction etick = system->last()->endTick();
+        const auto& spanners = system->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
+
+        return !computeShowSysStaff(system, staff, staffIdx, system->first()->tick(), spanners, StaffHideMode::HIDE_WHEN_STAFF_EMPTY);
+    }
+
+    // SysStaff is hidden; check if can show
+    if (!staff->show()) {
+        return false;
+    }
+
+    return true;
 }
 
 void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
@@ -868,16 +992,50 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
     }
 }
 
-void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, bool verticalAlign, LayoutContext& ctx)
+void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx)
 {
     for (Harmony* harmony : harmonies) {
         TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
         Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
     }
 
-    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols) && verticalAlign) {
+    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
         std::vector<EngravingItem*> harmonyItems(harmonies.begin(), harmonies.end());
         AlignmentLayout::alignItemsForSystem(harmonyItems, system);
+    }
+}
+
+void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* system, LayoutContext& ctx)
+{
+    for (FretDiagram* fretDiag : elements.fretDiagrams) {
+        Autoplace::autoplaceSegmentElement(fretDiag, fretDiag->mutldata());
+    }
+
+    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+        std::vector<EngravingItem*> fretItems(elements.fretDiagrams.begin(), elements.fretDiagrams.end());
+        AlignmentLayout::alignItemsForSystem(fretItems, system);
+    }
+
+    for (Harmony* harmony : elements.harmonies) {
+        FretDiagram* fdParent = harmony->parent()->isFretDiagram() ? toFretDiagram(harmony->parent()) : nullptr;
+        if (fdParent && !fdParent->visible()) {
+            harmony->mutldata()->moveY(-fdParent->pos().y());
+        }
+        Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
+    }
+
+    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+        std::vector<EngravingItem*> harmonyItems(elements.harmonies.begin(), elements.harmonies.end());
+        AlignmentLayout::alignItemsForSystem(harmonyItems, system);
+    }
+
+    for (FretDiagram* fretDiag : elements.fretDiagrams) {
+        if (Harmony* harmony = fretDiag->harmony()) {
+            SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
+            Segment* s = fretDiag->segment();
+            Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
+            skl.add(harmShape);
+        }
     }
 }
 
@@ -904,6 +1062,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
         MeasureLayout::layoutMeasureNumber(measure, ctx);
         MeasureLayout::layoutMMRestRange(measure, ctx);
+        MeasureLayout::layoutPlayCountText(measure, ctx);
         MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 
         collectElementsToLayout(measure, elementsToLayout, ctx);
@@ -924,6 +1083,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     for (ChordRest* cr : elementsToLayout.chordRests) {
         BeamLayout::layoutNonCrossBeams(cr, ctx);
     }
+
+    RestLayout::alignRests(elementsToLayout.system, ctx);
+    RestLayout::checkFullMeasureRestCollisions(elementsToLayout.system, ctx);
 
     for (BarLine* bl : elementsToLayout.barlines) {
         TLayout::updateBarlineShape(bl, bl->mutldata(), ctx);
@@ -959,6 +1121,13 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
         if (ecr && ecr->isChord()) {
             ChordLayout::layoutArticulations3(toChord(ecr), slur, ctx);
+        }
+        if (slur->isHammerOnPullOff()) {
+            StaffType* staffType = slur->staff()->staffType(slur->tick());
+            if ((staffType->isTabStaff() && ctx.conf().styleB(Sid::hopoAlignLettersTabStaves))
+                || (!staffType->isTabStaff() && ctx.conf().styleB(Sid::hopoAlignLettersStandardStaves))) {
+                AlignmentLayout::alignHopoLetters(toHammerOnPullOff(slur), system);
+            }
         }
     }
 
@@ -1003,7 +1172,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     bool hasFretDiagram = elementsToLayout.fretDiagrams.size() > 0;
     if (!hasFretDiagram) {
-        layoutHarmonies(elementsToLayout.harmonies, system, true, ctx);
+        layoutHarmonies(elementsToLayout.harmonies, system, ctx);
     }
 
     for (StaffText* st : elementsToLayout.staffText) {
@@ -1019,25 +1188,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     if (hasFretDiagram) {
-        for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
-            Autoplace::autoplaceSegmentElement(fretDiag, fretDiag->mutldata());
-        }
-
-        if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
-            std::vector<EngravingItem*> fretItems(elementsToLayout.fretDiagrams.begin(), elementsToLayout.fretDiagrams.end());
-            AlignmentLayout::alignItemsForSystem(fretItems, system);
-        }
-
-        layoutHarmonies(elementsToLayout.harmonies, system, false, ctx);
-
-        for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
-            if (Harmony* harmony = fretDiag->harmony()) {
-                SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
-                Segment* s = fretDiag->segment();
-                Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
-                skl.add(harmShape);
-            }
-        }
+        layoutFretDiagrams(elementsToLayout, system, ctx);
     }
 
     layoutVoltas(elementsToLayout, ctx);
@@ -1056,6 +1207,13 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     for (SpannerSegment* spannerSeg : system->spannerSegments()) {
         if (spannerSeg->isGradualTempoChangeSegment()) {
             tempoElementsToAlign.push_back(spannerSeg);
+        }
+    }
+
+    for (PlayCountText* pt : elementsToLayout.playCountText) {
+        TLayout::layoutPlayCountText(pt, pt->mutldata());
+        if (pt->autoplace()) {
+            Autoplace::autoplaceSegmentElement(pt, pt->mutldata());
         }
     }
 
@@ -1127,6 +1285,9 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
             if (s->isType(SegmentType::BarLineType)) {
                 if (BarLine* bl = toBarLine(s->element(track))) {
                     elements.barlines.push_back(bl);
+                    if (PlayCountText* pt = bl->playCountText()) {
+                        elements.playCountText.push_back(pt);
+                    }
                 }
                 track += VOICES;
                 continue;
@@ -1424,7 +1585,8 @@ void SystemLayout::doLayoutTies(System* system, const std::vector<Segment*>& sl,
 void SystemLayout::layoutTuplets(const std::vector<ChordRest*>& chordRests, LayoutContext& ctx)
 {
     std::set<Tuplet*> laidoutTuplets;
-    for (ChordRest* cr : chordRests) {
+    for (auto revIter = chordRests.rbegin(); revIter != chordRests.rend(); ++revIter) {
+        ChordRest* cr = *revIter;
         Tuplet* tuplet = cr->topTuplet();
 
         if (!tuplet || muse::contains(laidoutTuplets, tuplet)) {
@@ -1755,7 +1917,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
     }
 }
 
-void SystemLayout::restoreTiesAndBends(System* system, LayoutContext& ctx)
+void SystemLayout::restoreOldSystemLayout(System* system, LayoutContext& ctx)
 {
     ElementsToLayout elements(system);
     for (MeasureBase* mb : system->measures()) {
@@ -1765,6 +1927,13 @@ void SystemLayout::restoreTiesAndBends(System* system, LayoutContext& ctx)
     }
 
     layoutTiesAndBends(elements, ctx);
+
+    bool hasFretDiagram = elements.fretDiagrams.size() > 0;
+    if (hasFretDiagram) {
+        layoutFretDiagrams(elements, system, ctx);
+    } else {
+        layoutHarmonies(elements.harmonies, system, ctx);
+    }
 }
 
 void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
@@ -2598,15 +2767,19 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     const LayoutConfiguration& conf = ctx.conf();
     const DomAccessor& dom = ctx.dom();
 
-    const Box* topVBox = top->vbox();
-    const Box* bottomVBox = bottom->vbox();
+    const VBox* topVBox = static_cast<VBox*>(top->vbox());
+    const VBox* bottomVBox = static_cast<VBox*>(bottom->vbox());
 
     if (topVBox && !bottomVBox) {
-        return std::max(topVBox->absoluteFromSpatium(topVBox->bottomGap()), bottom->minTop());
+        return std::max(topVBox->absoluteFromSpatium(topVBox->bottomGap()),
+                        bottom->minTop() + topVBox->absoluteFromSpatium(topVBox->paddingToNotationBelow()));
     } else if (!topVBox && bottomVBox) {
-        return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()), top->minBottom());
+        return std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()),
+                        top->minBottom() + bottomVBox->absoluteFromSpatium(bottomVBox->paddingToNotationAbove()));
     } else if (topVBox && bottomVBox) {
-        return bottomVBox->absoluteFromSpatium(bottomVBox->topGap()) + topVBox->absoluteFromSpatium(topVBox->bottomGap());
+        double largestGap = std::max(bottomVBox->absoluteFromSpatium(bottomVBox->topGap()),
+                                     topVBox->absoluteFromSpatium(topVBox->bottomGap()));
+        return largestGap;
     }
 
     if (top->staves().empty() || bottom->staves().empty()) {
@@ -2677,7 +2850,8 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
 void SystemLayout::updateSkylineForElement(EngravingItem* element, const System* system, double yMove)
 {
     Skyline& skyline = system->staff(element->staffIdx())->skyline();
-    SkylineLine& skylineLine = element->placeAbove() ? skyline.north() : skyline.south();
+    bool isAbove = element->isArticulationFamily() ? toArticulation(element)->up() : element->placeAbove();
+    SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
     for (ShapeElement& shapeEl : skylineLine.elements()) {
         const EngravingItem* itemInSkyline = shapeEl.item();
         if (itemInSkyline && itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {

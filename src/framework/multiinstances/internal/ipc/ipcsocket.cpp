@@ -65,7 +65,6 @@ bool IpcSocket::connect(const QString& serverName)
     m_socket->connectToServer(serverName);
     bool ok = m_socket->waitForConnected(TIMEOUT_MSEC);
     if (!ok) {
-        LOGW() << "failed connect to server";
         return false;
     }
 

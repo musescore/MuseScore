@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "global/async/channel.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace mu::context {
 //! NOTE The current player is in the global context.

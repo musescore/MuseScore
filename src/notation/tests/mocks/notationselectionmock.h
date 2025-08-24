@@ -35,7 +35,8 @@ public:
     MOCK_METHOD(SelectionState, state, (), (const, override));
 
     MOCK_METHOD(muse::Ret, canCopy, (), (const, override));
-    MOCK_METHOD(QMimeData*, mimeData, (), (const, override));
+    MOCK_METHOD(muse::ByteArray, mimeData, (), (const, override));
+    MOCK_METHOD(QMimeData*, qMimeData, (), (const, override));
 
     MOCK_METHOD(EngravingItem*, element, (), (const, override));
     MOCK_METHOD(const std::vector<EngravingItem*>&, elements, (), (const, override));

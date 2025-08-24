@@ -27,7 +27,9 @@ StyledListView {
 
     property alias radioButtonGroup: buttonGroup
 
-    implicitHeight: Math.max(1, contentItem.childrenRect.height)
+    implicitHeight: orientation === ListView.Vertical
+                    ? contentHeight
+                    : Math.max(1, contentItem.childrenRect.height)
     implicitWidth: contentWidth
 
     spacing: 4

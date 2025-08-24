@@ -83,6 +83,7 @@ ImportedBendInfo BendInfoConverter::fillBendInfo(const Note* note, const PitchVa
             break;
 
         case pvd::SAME_PITCH_DIFF_TIME:
+        case pvd::INCREASED_PITCH_SAME_TIME:
         {
             if (importedInfo.segments.empty()) {
                 addPrebendOrHold(pitchValues[i]);
@@ -90,15 +91,7 @@ ImportedBendInfo BendInfoConverter::fillBendInfo(const Note* note, const PitchVa
                 BendSegment& lastSegment = importedInfo.segments.back();
                 lastSegment.middleTime = lastSegment.endTime;
                 lastSegment.endTime = pitchValues[i + 1].time;
-            }
-
-            break;
-        }
-
-        case pvd::INCREASED_PITCH_SAME_TIME:
-        {
-            if (importedInfo.segments.empty()) {
-                addPrebendOrHold(pitchValues[i]);
+                lastSegment.endPitch = pitchValues[i + 1].pitch;
             }
 
             break;

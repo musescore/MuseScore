@@ -53,6 +53,8 @@
       <stringTuningsFontSize>10.25</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Times New Roman</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Times New Roman</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Times New Roman</articulationFontFace>
+      <articulationFontSize>10.25</articulationFontSize>
       <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
       <longInstrumentFontSize>10.25</longInstrumentFontSize>
       <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
@@ -82,6 +84,8 @@
       <staffTextFrameWidth>0.13021</staffTextFrameWidth>
       <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10.25</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>10.25</repeatPlayCountFontSize>
       <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
       <repeatLeftFontSize>10.25</repeatLeftFontSize>
       <repeatRightFontFace>Times New Roman</repeatRightFontFace>
@@ -152,7 +156,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -161,7 +164,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>MusicXML Part</trackName>
       <Instrument id="grand-piano">

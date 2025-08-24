@@ -346,6 +346,24 @@ const TextStyle harpPedalDiagramTextStyle { {
     { TextStylePropertyType::Position,             Sid::harpPedalDiagramPosition,               Pid::POSITION },
 } };
 
+const TextStyle articulationTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::articulationFontFace,                      Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::articulationFontSize,                      Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::articulationLineSpacing,                   Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::articulationFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::articulationFontStyle,                     Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::articulationColor,                         Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::articulationAlign,                         Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::articulationOffset,                        Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::articulationFrameType,                     Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::articulationFramePadding,                  Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::articulationFrameWidth,                    Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::articulationFrameRound,                    Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::articulationFrameFgColor,                  Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::articulationFrameBgColor,                  Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
 const TextStyle harpPedalTextDiagramTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::harpPedalTextDiagramFontFace,               Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::harpPedalTextDiagramFontSize,               Pid::FONT_SIZE },
@@ -740,6 +758,25 @@ const TextStyle rehearsalMarkTextStyle { {
     { TextStylePropertyType::FrameFillColor,       Sid::rehearsalMarkFrameBgColor,              Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
     { TextStylePropertyType::Position,             Sid::rehearsalMarkPosition,                  Pid::POSITION },
+} };
+
+const TextStyle repeatPlayCountTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::repeatPlayCountFontFace,                Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::repeatPlayCountFontSize,                Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::repeatPlayCountLineSpacing,             Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::repeatPlayCountFontSpatiumDependent,    Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::repeatPlayCountFontStyle,               Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::repeatPlayCountColor,                   Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::repeatPlayCountAlign,                   Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::repeatPlayCountPosAbove,                Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::repeatPlayCountFrameType,               Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::repeatPlayCountFramePadding,            Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::repeatPlayCountFrameWidth,              Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::repeatPlayCountFrameRound,              Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::repeatPlayCountFrameFgColor,            Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::repeatPlayCountFrameBgColor,            Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::Position,             Sid::repeatPlayCountPosition,                Pid::POSITION },
 } };
 
 const TextStyle repeatLeftTextStyle { {
@@ -1357,6 +1394,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::TEMPO: return &tempoTextStyle;
     case TextStyleType::TEMPO_CHANGE: return &tempoChangeTextStyle;
     case TextStyleType::METRONOME: return &metronomeTextStyle;
+    case TextStyleType::REPEAT_PLAY_COUNT: return &repeatPlayCountTextStyle;
     case TextStyleType::REPEAT_LEFT: return &repeatLeftTextStyle;
     case TextStyleType::REPEAT_RIGHT: return &repeatRightTextStyle;
     case TextStyleType::REHEARSAL_MARK: return &rehearsalMarkTextStyle;
@@ -1374,6 +1412,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::HARMONY_NASHVILLE: return &nashvilleNumberTextStyle;
 
     case TextStyleType::TUPLET: return &tupletTextStyle;
+    case TextStyleType::ARTICULATION: return &articulationTextStyle;
     case TextStyleType::STICKING: return &stickingTextStyle;
     case TextStyleType::FINGERING: return &fingeringTextStyle;
     case TextStyleType::TAB_FRET_NUMBER: return &tabFretNumberTextStyle;
@@ -1437,6 +1476,7 @@ static const std::vector<TextStyleType> _primaryTextStyles = {
     TextStyleType::MEASURE_NUMBER_ALTERNATE,
     TextStyleType::MMREST_RANGE,
     TextStyleType::TEMPO,
+    TextStyleType::REPEAT_PLAY_COUNT,
     TextStyleType::REPEAT_LEFT,
     TextStyleType::REPEAT_RIGHT,
     TextStyleType::REHEARSAL_MARK,

@@ -218,6 +218,9 @@ void NotesInChordSelectionFilterModel::updateTopNoteIdx()
 
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
         for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
+            IF_ASSERT_FAILED(seg && seg->tick() < endSeg->tick()) {
+                break;
+            }
             const EngravingItem* e = seg->element(track);
             if (!seg->enabled() || !e || !e->isChord()) {
                 continue;

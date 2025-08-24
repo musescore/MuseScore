@@ -92,27 +92,6 @@ Column {
         ]
     }
 
-    FlatButton {
-        id: addFretBoardDiagramButton
-        width: parent.width
-
-        navigation.name: "AddFretboardDiagram"
-        navigation.panel: root.navigationPanel
-        navigation.row: durationSection.navigationRowEnd + 1
-
-        text: qsTrc("inspector", "Add fretboard diagram")
-        icon: IconCode.FRETBOARD_DIAGRAM
-        orientation: Qt.Horizontal
-
-        visible: root.model ? !root.model.hasLinkedFretboardDiagram : false
-
-        onClicked: {
-            if (root.model) {
-                root.model.addFretboardDiagram()
-            }
-        }
-    }
-
     PropertyCheckBox {
         id: verticalAlignCheckBox
 
@@ -121,7 +100,7 @@ Column {
 
         navigation.name: "Exclude from vertical alignment"
         navigation.panel: root.navigationPanel
-        navigation.row: addFretBoardDiagramButton.navigationRowEnd + 1
+        navigation.row: durationSection.navigationRowEnd + 1
     }
 
     PropertyCheckBox {
@@ -183,6 +162,27 @@ Column {
                 { iconCode: IconCode.NOTE_ALIGN_CENTER, value: 2},
                 { iconCode: IconCode.NOTE_ALIGN_RIGHT, value: 1 }
             ]
+        }
+    }
+
+    FlatButton {
+        id: addFretBoardDiagramButton
+        width: parent.width
+
+        navigation.name: "AddFretboardDiagram"
+        navigation.panel: root.navigationPanel
+        navigation.row: alignmentButtonList.navigationRowEnd + 1
+
+        text: qsTrc("inspector", "Add fretboard diagram")
+        icon: IconCode.FRETBOARD_DIAGRAM
+        orientation: Qt.Horizontal
+
+        visible: root.model ? !root.model.hasLinkedFretboardDiagram : false
+
+        onClicked: {
+            if (root.model) {
+                root.model.addFretboardDiagram()
+            }
         }
     }
 }

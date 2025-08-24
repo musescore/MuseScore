@@ -43,7 +43,7 @@ using namespace muse::network;
 
 muse::Ret MuseSoundsCheckUpdateService::needCheckForUpdate() const
 {
-    if (!configuration()->needCheckForUpdate()) {
+    if (!configuration()->needCheckForMuseSoundsUpdate()) {
         return false;
     }
 
@@ -73,11 +73,19 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
 
     clear();
 
+    if (configuration()->museSoundsCheckForUpdateTestMode()) {
+        // Return dummy info...
+        result.val = ReleaseInfo();
+        result.ret = muse::make_ok();
+        m_lastCheckResult = result;
+        return result;
+    }
+
     QBuffer buff;
-    std::string url = configuration()->checkForMuseSoundsUpdateUrl().toString();
+    QUrl url = configuration()->checkForMuseSoundsUpdateUrl();
     m_networkManager = networkManagerCreator()->makeNetworkManager();
 
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(url), &buff);
+    Ret getUpdateInfo = m_networkManager->get(url, &buff);
 
     if (!getUpdateInfo) {
         LOGE() << getUpdateInfo.toString();

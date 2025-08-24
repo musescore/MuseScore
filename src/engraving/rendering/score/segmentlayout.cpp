@@ -159,7 +159,7 @@ void SegmentLayout::layoutChordDrumset(const Staff* staff, const Segment& segmen
             if (!drumset->isValid(pitch)) {
                 // LOGD("unmapped drum note %d", pitch);
             } else if (!note->fixed()) {
-                note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                note->undoChangeProperty(Pid::HEAD_GROUP, drumset->noteHead(pitch));
                 int line = drumset->line(pitch);
                 note->setLine(line);
 

@@ -222,6 +222,11 @@ void TextBase::endEdit(EditData& ed)
                 renderer()->layoutItem(prev);
             }
         }
+
+        if (isHarmony() && explicitParent()->isFretDiagram()) {
+            score()->select(toFretDiagram(explicitParent()), SelectType::SINGLE);
+        }
+
         return;
     }
 

@@ -1469,6 +1469,11 @@ track_idx_t Spanner::effectiveTrack2() const
 
 void Spanner::triggerLayout() const
 {
+    // Don't trigger layout until the tick is correctly set, otherwise is triggers layout of the entire score
+    if (m_tick.numerator() < 0) {
+        return;
+    }
+
     // Spanners do not have parent even when added to a score, so can't check parent here
     const track_idx_t tr2 = effectiveTrack2();
     score()->setLayout(m_tick, m_tick + m_ticks, staffIdx(), track2staff(tr2), this);

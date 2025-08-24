@@ -20,7 +20,7 @@
          <mdiv>
             <score>
                <scoreDef>
-                  <pgHead>
+                  <pgHead func="first">
                      <rend halign="left" valign="top">
                         <rend type="instrument_excerpt">Flute part</rend>
                      </rend>

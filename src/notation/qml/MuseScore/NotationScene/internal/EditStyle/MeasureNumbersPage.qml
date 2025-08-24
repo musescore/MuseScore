@@ -261,15 +261,28 @@ StyledFlickable {
                     width: parent.width
                     spacing: 8
 
-                    StyledTextLabel {
-                        text: qsTrc("notation/editstyle/voltas", "Offset")
-                        horizontalAlignment: Text.AlignLeft
+                    RowLayout {
+                        StyledTextLabel {
+                            Layout.preferredWidth: 145
+                            text: qsTrc("notation/editstyle/voltas", "Offset when above staff:")
+                            horizontalAlignment: Text.AlignLeft
+                        }
+
+                        StyledXYControllerWithReset {
+                            styleItem: barNumbersModel.measureNumberPosAbove
+                        }
                     }
 
-                    StyledXYControllerWithReset {
-                        styleItem: barNumbersModel.measureNumberVPlacement.value === 0
-                                   ? barNumbersModel.measureNumberPosAbove
-                                   : barNumbersModel.measureNumberPosBelow
+                    RowLayout {
+                        StyledTextLabel {
+                            Layout.preferredWidth: 145
+                            text: qsTrc("notation/editstyle/voltas", "Offset when below staff:")
+                            horizontalAlignment: Text.AlignLeft
+                        }
+
+                        StyledXYControllerWithReset {
+                            styleItem: barNumbersModel.measureNumberPosBelow
+                        }
                     }
                 }
             }

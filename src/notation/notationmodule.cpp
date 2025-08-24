@@ -82,6 +82,7 @@
 #include "view/internal/stringtuningssettingsmodel.h"
 #include "view/internal/dynamicpopupmodel.h"
 #include "view/internal/partialtiepopupmodel.h"
+#include "view/internal/staffvisibilitypopupmodel.h"
 
 #include "view/internal/shadownotepopupmodel.h"
 #include "view/internal/percussionnotepopupcontentmodel.h"
@@ -104,6 +105,9 @@
 #include "view/styledialog/chordsymbolspagemodel.h"
 #include "view/styledialog/voltaspagemodel.h"
 #include "view/styledialog/measurenumberspagemodel.h"
+#include "view/styledialog/tupletcenteringselectormodel.h"
+#include "view/styledialog/repeatplaycounttextmodel.h"
+#include "view/styledialog/measurerepeatmodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -216,6 +220,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<StringTuningsSettingsModel>("MuseScore.NotationScene", 1, 0, "StringTuningsSettingsModel");
     qmlRegisterType<DynamicPopupModel>("MuseScore.NotationScene", 1, 0, "DynamicPopupModel");
     qmlRegisterType<PartialTiePopupModel>("MuseScore.NotationScene", 1, 0, "PartialTiePopupModel");
+    qmlRegisterType<StaffVisibilityPopupModel>("MuseScore.NotationScene", 1, 0, "StaffVisibilityPopupModel");
+    qmlRegisterType<EmptyStavesVisibilityModel>("MuseScore.NotationScene", 1, 0, "EmptyStavesVisibilityModel");
 
     qmlRegisterUncreatableType<ShadowNotePopupContent>("MuseScore.NotationScene", 1, 0, "ShadowNotePopupContent", "Cannot create");
     qmlRegisterType<ShadowNotePopupModel>("MuseScore.NotationScene", 1, 0, "ShadowNotePopupModel");
@@ -242,6 +248,9 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<ChordSymbolsPageModel>("MuseScore.NotationScene", 1, 0, "ChordSymbolsPageModel");
     qmlRegisterType<VoltasPageModel>("MuseScore.NotationScene", 1, 0, "VoltasPageModel");
     qmlRegisterType<MeasureNumbersPageModel>("MuseScore.NotationScene", 1, 0, "MeasureNumbersPageModel");
+    qmlRegisterType<TupletCenteringSelectorModel>("MuseScore.NotationScene", 1, 0, "TupletCenteringSelectorModel");
+    qmlRegisterType<RepeatPlayCountTextModel>("MuseScore.NotationScene", 1, 0, "RepeatPlayCountTextModel");
+    qmlRegisterType<MeasureRepeatModel>("MuseScore.NotationScene", 1, 0, "MeasureRepeatModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 

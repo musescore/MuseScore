@@ -21,6 +21,7 @@
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
+      <articulationFontSize>10</articulationFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <tempoFontSize>10</tempoFontSize>
       <tempoChangeFontSize>10</tempoChangeFontSize>
@@ -56,7 +57,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -65,7 +65,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
@@ -129,7 +128,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument id="voice">
@@ -192,7 +190,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>P3</trackName>
       <Instrument id="bass">
@@ -256,13 +253,11 @@
         <Text>
           <eid>H_H</eid>
           <style>title</style>
-          <offset x="0" y="-0.0174978"/>
           <text><font size="22"/>Test Part Names</text>
           </Text>
         <Text>
           <eid>I_I</eid>
           <style>subtitle</style>
-          <offset x="0" y="9.98249"/>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>

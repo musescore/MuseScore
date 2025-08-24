@@ -51,7 +51,6 @@
           </clef>
         <clef number="2">
           <sign>TAB</sign>
-          <line>5</line>
           </clef>
         <staff-details number="2">
           <staff-type>alternate</staff-type>
@@ -80,6 +79,7 @@
             <tuning-step>E</tuning-step>
             <tuning-octave>4</tuning-octave>
             </staff-tuning>
+          <staff-size>150</staff-size>
           </staff-details>
         </attributes>
       <harmony print-frame="no">

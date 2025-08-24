@@ -93,6 +93,7 @@
 #include "dom/part.h"
 #include "dom/pedal.h"
 #include "dom/pickscrape.h"
+#include "dom/playcounttext.h"
 #include "dom/playtechannotation.h"
 
 #include "dom/rasgueado.h"
@@ -271,6 +272,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::PEDAL_SEGMENT:        draw(item_cast<const PedalSegment*>(item), painter);
         break;
     case ElementType::PICK_SCRAPE_SEGMENT:  draw(item_cast<const PickScrapeSegment*>(item), painter);
+        break;
+    case ElementType::PLAY_COUNT_TEXT:      draw(item_cast<const PlayCountText*>(item), painter);
         break;
     case ElementType::PLAYTECH_ANNOTATION:  draw(item_cast<const PlayTechAnnotation*>(item), painter);
         break;
@@ -456,16 +459,13 @@ void SingleDraw::draw(const Articulation* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Articulation::LayoutData* ldata = item->ldata();
     painter->setPen(item->curColor());
 
     if (item->textType() == ArticulationTextType::NO_TEXT) {
         item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
     } else {
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->magS() * MScore::pixelRatio);
-        painter->setFont(scaledFont);
-        painter->drawText(ldata->bbox(), TextDontClip | AlignLeft | AlignTop, TConv::text(item->textType()));
+        item->text()->setColor(item->curColor());
+        drawTextBase(item->text(), painter);
     }
 }
 
@@ -1720,7 +1720,7 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
     TRACE_DRAW_ITEM;
 
     const Harmony::LayoutData* ldata = item->ldata();
-    if (ldata->textList().empty()) {
+    if (ldata->renderItemList().empty()) {
         drawTextBase(item, painter);
         return;
     }
@@ -1749,15 +1749,17 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     Color color = item->textColor();
     painter->setPen(color);
-    for (const TextSegment* ts : ldata->textList()) {
-        Font f(ts->font());
-        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    for (const HarmonyRenderItem* renderItem : ldata->renderItemList()) {
+        if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
+            Font f(ts->font());
+            f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
-        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
+            TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
 #else
-        painter->setFont(f);
-        painter->drawText(ts->pos(), ts->text());
+            painter->setFont(f);
+            painter->drawText(ts->pos(), ts->text());
 #endif
+        }
     }
 }
 
@@ -1956,6 +1958,12 @@ void SingleDraw::draw(const PickScrapeSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const PlayCountText* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
 
 void SingleDraw::draw(const PlayTechAnnotation* item, Painter* painter)

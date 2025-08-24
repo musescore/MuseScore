@@ -682,7 +682,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     setTpc(note, gpnote->accidental());
 
     Note* harmonicNote = addHarmonic(gpnote, note);
-    harmonicNote ? addBend(gpnote, harmonicNote) : addBend(gpnote, note);
+    addBend(gpnote, note);
 
     addLetRing(gpnote, note);
     addPalmMute(gpnote, note);
@@ -1074,7 +1074,10 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
 
     if (!gpscore->poet().isEmpty() || engravingConfiguration()->guitarProImportExperimental()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::LYRICIST);
-        s->setPlainText(muse::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
+        if (!gpscore->poet().isEmpty()) {
+            s->setPlainText(muse::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
+        }
+
         m->add(s);
     }
 }
@@ -1856,8 +1859,8 @@ Note* GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
 
         hnote->setTpcFromPitch();
         note->chord()->add(hnote);
-        hnote->setPlay(true);
-        note->setPlay(false);
+        hnote->setPlay(false);
+        note->setPlay(true);
 
         note->setHarmonicFret(note->fret() + gpnote->harmonic().fret);
     } else {
@@ -1877,6 +1880,7 @@ Note* GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     harmonicNote->setPitch(harmonicPitch);
     harmonicNote->setTpcFromPitch();
     harmonicNote->setHarmonic(true);
+    note->setHarmonicPitchOffset(harmonicNote->pitch() - note->pitch());
 
     if (GPNote::Harmonic::isArtificial(gpnote->harmonic().type) && m_currentGPBeat) {
         m_currentGPBeat->addHarmonicMarkType(harmonicTypeNoteToBeat(gpnote->harmonic().type));

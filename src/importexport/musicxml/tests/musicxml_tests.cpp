@@ -677,10 +677,10 @@ TEST_F(MusicXml_Tests, graceFermata) {
     musicXmlIoTest("testGraceFermata");
 }
 TEST_F(MusicXml_Tests, guitarBends) {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     musicXmlMscxExportTestRef("testGuitarBends");
-    MScore::useRead302InTestMode = useRead302;
+}
+TEST_F(MusicXml_Tests, hammerPull) {
+    musicXmlIoTest("testHammerPull");
 }
 TEST_F(MusicXml_Tests, harpPedals) {
     musicXmlMscxExportTestRef("testHarpPedals");
@@ -755,10 +755,10 @@ TEST_F(MusicXml_Tests, incorrectStaffNumber1) {
 TEST_F(MusicXml_Tests, incorrectStaffNumber2) {
     musicXmlIoTestRef("testIncorrectStaffNumber2");
 }
-TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(inferredCredits1)) {
+TEST_F(MusicXml_Tests, inferredCredits1) {
     musicXmlImportTestRef("testInferredCredits1");
 }
-TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(inferredCredits2)) {
+TEST_F(MusicXml_Tests, inferredCredits2) {
     musicXmlImportTestRef("testInferredCredits2");
 }
 TEST_F(MusicXml_Tests, inferCodaII) {
@@ -1094,6 +1094,9 @@ TEST_F(MusicXml_Tests, stickingLyrics) {
 TEST_F(MusicXml_Tests, stringData) {
     musicXmlIoTest("testStringData");
 }
+TEST_F(MusicXml_Tests, stringMute) {
+    musicXmlImportTestRef("testStringmute");
+}
 TEST_F(MusicXml_Tests, stringVoiceName) {
     musicXmlIoTestRef("testStringVoiceName");
 }
@@ -1145,6 +1148,9 @@ TEST_F(MusicXml_Tests, tablature4) {
 }
 TEST_F(MusicXml_Tests, tablature5) {
     musicXmlIoTestRef("testTablature5");
+}
+TEST_F(MusicXml_Tests, tapping) {
+    musicXmlIoTest("testTapping");
 }
 TEST_F(MusicXml_Tests, tboxAboveBelow1) {
     musicXmlMscxExportTestRef("testTboxAboveBelow1");
@@ -1236,14 +1242,14 @@ TEST_F(MusicXml_Tests, timesig3) {
 TEST_F(MusicXml_Tests, timesig4) {
     musicXmlIoTest("testTimesig4");
 }
+TEST_F(MusicXml_Tests, timesig5) {
+    musicXmlMscxExportTestRef("testTimesig5");
+}
 TEST_F(MusicXml_Tests, timeTick) {
     musicXmlImportTestRef("testTimeTick");
 }
 TEST_F(MusicXml_Tests, timeTickExport) {
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     musicXmlMscxExportTestRef("testTimeTickExport");
-    MScore::useRead302InTestMode = use302;
 }
 TEST_F(MusicXml_Tests, titleSwapMu) {
     musicXmlImportTestRef("testTitleSwapMu");

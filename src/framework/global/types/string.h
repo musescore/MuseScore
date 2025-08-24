@@ -228,6 +228,8 @@ public:
     inline bool operator ==(const String& s) const { return constStr() == s.constStr(); }
     inline bool operator !=(const String& s) const { return !operator ==(s); }
 
+    bool isEqualIgnoreCase(const String& s) const;
+
     bool operator ==(const AsciiStringView& s) const;
     inline bool operator !=(const AsciiStringView& s) const { return !operator ==(s); }
     inline bool operator ==(const char16_t* s) const { return constStr() == s; }
@@ -437,6 +439,9 @@ public:
 #endif
 
     operator std::string_view() const {
+        if (!m_data) {
+            return std::string_view{};
+        }
         return std::string_view(m_data, m_size);
     }
 

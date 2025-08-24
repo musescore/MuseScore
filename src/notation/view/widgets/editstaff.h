@@ -79,7 +79,6 @@ private slots:
     void invisibleChanged();
     void colorChanged();
     void magChanged(double newValue);
-    void isSmallChanged();
     void transpositionChanged();
 
 signals:

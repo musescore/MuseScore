@@ -30,8 +30,8 @@ class Process : public IProcess
 public:
     Process() = default;
 
-    int execute(const std::string& program, const std::vector<std::string>& arguments) override;
-    bool startDetached(const std::string& program, const std::vector<std::string>& arguments) override;
+    int execute(const std::string& program, const std::vector<std::string>& arguments = {}) override;
+    bool startDetached(const std::string& program, const std::vector<std::string>& arguments = {}) override;
 };
 }
 

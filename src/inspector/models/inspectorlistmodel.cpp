@@ -23,6 +23,7 @@
 
 #include "general/generalsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"
+#include "emptystaves/emptystavesvisiblitysettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
 #include "parts/partssettingsmodel.h"
 #include "text/textsettingsmodel.h"
@@ -43,8 +44,11 @@ InspectorListModel::InspectorListModel(QObject* parent)
     m_repository = new ElementRepositoryService(this);
 
     listenSelectionChanged();
+    listenScoreChanges();
+
     context()->currentNotationChanged().onNotify(this, [this]() {
         listenSelectionChanged();
+        listenScoreChanges();
 
         notifyModelsAboutNotationChanged();
     });
@@ -81,16 +85,32 @@ void InspectorListModel::buildModelsForEmptySelection()
     createModelsBySectionType(persistentSections);
 }
 
+bool InspectorListModel::alwaysUpdateModelList(const QList<engraving::EngravingItem*>& selectedElementList)
+{
+    // Force update of the list model where sections are only relevant to the child of the selected element
+    // eg. We need to update the text section of PlayCountText when a BarLine is selected
+    for (EngravingItem* el : selectedElementList) {
+        if (el->isBarLine()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList, SelectionState selectionState)
 {
     TRACEFUNC;
+
+    bool forceUpdate = false;
 
     if (!m_modelList.isEmpty()) {
         if (context()->currentNotation() == nullptr) {
             buildModelsForEmptySelection();
         }
 
-        if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
+        forceUpdate = alwaysUpdateModelList(selectedElementList);
+        if (!m_repository->needUpdateElementList(selectedElementList, selectionState) && !forceUpdate) {
             return;
         }
     }
@@ -108,6 +128,10 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
     }
 
     m_repository->updateElementList(selectedElementList, selectionState);
+
+    if (forceUpdate) {
+        m_repository->elementsUpdated(selectedElementList);
+    }
 }
 
 int InspectorListModel::rowCount(const QModelIndex&) const
@@ -150,6 +174,13 @@ void InspectorListModel::setInspectorVisible(bool visible)
 
     if (visible) {
         updateElementList();
+
+        if (!m_changedPropertyIdSet.empty() || !m_changedStyleIdSet.empty()) {
+            onScoreChanged(m_changedPropertyIdSet, m_changedStyleIdSet);
+
+            m_changedPropertyIdSet.clear();
+            m_changedStyleIdSet.clear();
+        }
     }
 }
 
@@ -183,6 +214,9 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
         case InspectorSectionType::SECTION_MEASURES:
             newModel = new MeasuresSettingsModel(this, m_repository);
             break;
+        case InspectorSectionType::SECTION_EMPTY_STAVES:
+            newModel = new EmptyStavesVisibilitySettingsModel(this, m_repository);
+            break;
         case InspectorSectionType::SECTION_NOTATION:
             newModel = new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
             break;
@@ -203,6 +237,8 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
         }
 
         if (newModel) {
+            connect(newModel, &AbstractInspectorModel::requestReloadInspectorListModel, this,
+                    &InspectorListModel::updateElementList);
             newModel->init();
             m_modelList << newModel;
         }
@@ -321,6 +357,57 @@ void InspectorListModel::listenSelectionChanged()
     notation->interaction()->selectionChanged().onNotify(this, [this]() {
         updateElementList();
     });
+}
+
+void InspectorListModel::listenScoreChanges()
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->viewModeChanged().onNotify(this, [this]() {
+        for (AbstractInspectorModel* model : m_modelList) {
+            model->onNotationChanged({}, {});
+        }
+    });
+
+    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+        if (changes.isTextEditing) {
+            return;
+        }
+
+        if (changes.changedPropertyIdSet.empty() && changes.changedStyleIdSet.empty()) {
+            return;
+        }
+
+        if (!m_inspectorVisible) {
+            m_changedPropertyIdSet.insert(changes.changedPropertyIdSet.cbegin(), changes.changedPropertyIdSet.cend());
+            m_changedStyleIdSet.insert(changes.changedStyleIdSet.cbegin(), changes.changedStyleIdSet.cend());
+            return;
+        }
+
+        const INotationPtr notation = context()->currentNotation();
+        if (notation && notation->elements()->msScore()->selectionChanged()) {
+            updateElementList();
+        }
+
+        onScoreChanged(changes.changedPropertyIdSet, changes.changedStyleIdSet);
+    });
+}
+
+void InspectorListModel::onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                                        const mu::engraving::StyleIdSet& changedStyleIdSet)
+{
+    for (AbstractInspectorModel* model : m_modelList) {
+        if (!model->shouldUpdateOnScoreChange() || model->isEmpty()) {
+            continue;
+        }
+
+        mu::engraving::PropertyIdSet expandedPropertyIdSet = model->propertyIdSetFromStyleIdSet(changedStyleIdSet);
+        expandedPropertyIdSet.insert(changedPropertyIdSet.cbegin(), changedPropertyIdSet.cend());
+        model->onNotationChanged(expandedPropertyIdSet, changedStyleIdSet);
+    }
 }
 
 void InspectorListModel::updateElementList()

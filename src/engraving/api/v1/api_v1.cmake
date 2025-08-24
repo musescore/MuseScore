@@ -7,6 +7,7 @@ set(API_V1_SRC
     ${CMAKE_CURRENT_LIST_DIR}/enums.cpp
     ${CMAKE_CURRENT_LIST_DIR}/enums.h
     ${CMAKE_CURRENT_LIST_DIR}/apitypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/apistructs.cpp
     ${CMAKE_CURRENT_LIST_DIR}/apistructs.h
     ${CMAKE_CURRENT_LIST_DIR}/scoreelement.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreelement.h

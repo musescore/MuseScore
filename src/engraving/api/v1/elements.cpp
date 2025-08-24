@@ -110,6 +110,11 @@ FractionWrapper* EngravingItem::tick() const
     return wrap(element()->tick());
 }
 
+FractionWrapper* EngravingItem::beat() const
+{
+    return wrap(element()->beat());
+}
+
 //---------------------------------------------------------
 //   ChordRest::actualBeamMode
 //---------------------------------------------------------
@@ -510,6 +515,11 @@ int Page::pagenumber() const
 Part* Staff::part()
 {
     return wrap<Part>(staff()->part());
+}
+
+int Staff::clefType(FractionWrapper* tick)
+{
+    return int(staff()->clef(tick->fraction()));
 }
 
 FractionWrapper* Staff::timeStretch(FractionWrapper* tick)

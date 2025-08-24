@@ -3,3 +3,4 @@ PlaybackToolBar 1.0 PlaybackToolBar.qml
 PlaybackLoadingInfo 1.0 PlaybackLoadingInfo.qml
 MixerPanel 1.0 MixerPanel.qml
 SoundFlagPopup 1.0 SoundFlagPopup.qml
+NotationRegionsBeingProcessedView 1.0 NotationRegionsBeingProcessedView.qml

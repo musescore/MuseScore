@@ -304,6 +304,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::AUTO_ON_OFF: {
         element(name, TConv::toXml(data.value<AutoOnOff>()));
     } break;
+    case P_TYPE::AUTO_CUSTOM_HIDE: {
+        element(name, TConv::toXml(data.value<AutoCustomHide>()));
+    } break;
     case P_TYPE::INT_VEC: {
         element(name, TConv::toXml(data.value<std::vector<int> >()));
     } break;
@@ -312,6 +315,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     } break;
     case P_TYPE::PARENTHESES_MODE: {
         element(name, TConv::toXml(data.value<ParenthesesMode>()));
+    } break;
+    case P_TYPE::MARKER_TYPE: {
+        element(name, TConv::toXml(data.value<MarkerType>()));
     } break;
     default: {
         UNREACHABLE; //! TODO
@@ -353,6 +359,6 @@ void XmlWriter::comment(const String& text)
 
 String XmlWriter::xmlString(const String& s)
 {
-    return XmlStreamWriter::escapeString(s);
+    return s.toXmlEscaped();
 }
 }

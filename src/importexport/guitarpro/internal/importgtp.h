@@ -319,7 +319,7 @@ public:
     std::vector<std::string> tunings;
 
     void setTempo(int n, Measure* measure);
-    muse::String title, subtitle, artist, album, composer;
+    muse::String title, subtitle, artist, album, composer, poet;
     muse::StringList comments;
     GpTrack channelDefaults[GP_MAX_TRACK_NUMBER * 2];
     size_t staves = 0;

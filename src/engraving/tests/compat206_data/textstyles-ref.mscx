@@ -576,6 +576,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
+              <beginHookHeight>-1.2</beginHookHeight>
+              <endHookHeight>-1.2</endHookHeight>
               <eid>AB_AB</eid>
               </Pedal>
             <next>

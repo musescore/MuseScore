@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <programVersion>4.6.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>HZRZgCLxI8G_FRqwzgswJTB</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-07-14</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <Staff>
+        <eid>OXiovgL17NB_dPscgKm8StL</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>i87k3weg9VM_OPDh8gKZD/</eid>
+        <voice>
+          <KeySig>
+            <eid>4XyiIUULYUI_P0YVM8kPL8O</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>58facTeHO1D_P/YYQ/6Ds9H</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Harmony>
+            <harmonyInfo>
+              <name>5(69)</name>
+              <root>17</root>
+              </harmonyInfo>
+            <eid>oaZsMxqTmjG_ULgylvrvlJC</eid>
+            </Harmony>
+          <Rest>
+            <eid>XskIg0r8fnK_eFq5/2ryIID</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>JrYlZyliU7E_A7sp3sTEP1</eid>
+        <voice>
+          <Harmony>
+            <bassCase>1</bassCase>
+            <harmonyInfo>
+              <name>5(6/9)</name>
+              <root>17</root>
+              </harmonyInfo>
+            <eid>AXQeYBbXSCD_kotJq87a5UC</eid>
+            </Harmony>
+          <Rest>
+            <eid>HMa/1OCCy5O_WnS4vtCDLV</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>vcP/vIy4apJ_yabtQGz2XSL</eid>
+        <voice>
+          <Harmony>
+            <harmonyInfo>
+              <name>5add69</name>
+              <root>17</root>
+              </harmonyInfo>
+            <eid>D1/lwm9/CGI_0XXBxSMIhxF</eid>
+            </Harmony>
+          <Rest>
+            <eid>GnaeVx6UpvH_gh42tDdXg4E</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>VCIVWXXVGIJ_BtPFuqaRysG</eid>
+        <voice>
+          <Harmony>
+            <harmonyInfo>
+              <name>5(add69)</name>
+              <root>17</root>
+              </harmonyInfo>
+            <eid>0FFa619RQLH_XPgWONPiuMF</eid>
+            </Harmony>
+          <Rest>
+            <eid>1FI/s6O0ezK_A4qXNetrYVM</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>RED1uNYSAiC_NeBu1Cfh9lN</eid>
+        <voice>
+          <Harmony>
+            <harmonyInfo>
+              <name>5add6add9</name>
+              <root>17</root>
+              </harmonyInfo>
+            <eid>R/cw3l/lT7I_p0NqdSLat/F</eid>
+            </Harmony>
+          <Rest>
+            <eid>tiKeTPQ/DXB_qp5UPzDfYjF</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>aOLx15Lec4I_pUTDsExUF2N</eid>
+        <voice>
+          <Harmony>
+            <harmonyInfo>
+              <name>5(add6add9)</name>
+              <root>17</root>
+              </harmonyInfo>
+            <eid>i14nwur1f+J_9Bk8sZ5UaCB</eid>
+            </Harmony>
+          <Rest>
+            <eid>QN16+o3RuFO_7gwEvUzH4lI</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

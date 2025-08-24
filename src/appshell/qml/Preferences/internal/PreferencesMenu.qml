@@ -58,7 +58,7 @@ Item {
         color: ui.theme.backgroundPrimaryColor
     }
 
-    TreeView {
+    LegacyTreeView {
         id: treeView
 
         anchors.fill: parent
@@ -66,30 +66,21 @@ Item {
 
         alternatingRowColors: false
         headerVisible: false
-        frameVisible: false
 
         TableViewColumn {
             role: "itemRole"
         }
 
-        style: TreeViewStyle {
+        style: LegacyTreeViewStyle {
             indentation: 0
-
-            frame: Item {}
-            incrementControl: Item {}
-            decrementControl: Item {}
-            handle: Item {}
-            scrollBarBackground: Item {}
-            branchDelegate: Item {}
-
+            branchDelegate: null
             backgroundColor: background.color
 
-            rowDelegate: Rectangle {
+            rowDelegate: Item {
                 id: rowTreeDelegate
 
                 height: 36
                 width: parent.width
-                color: background.color
             }
         }
 

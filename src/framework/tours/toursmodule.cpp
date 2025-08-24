@@ -64,12 +64,3 @@ void ToursModule::registerUiTypes()
 {
     qmlRegisterType<ToursProviderModel>("Muse.Tours", 1, 0, "ToursProviderModel");
 }
-
-void ToursModule::onInit(const IApplication::RunMode& mode)
-{
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
-    m_service->init();
-}

@@ -23,7 +23,6 @@
 #pragma once
 
 #include "types/string.h"
-#include "io/path.h"
 
 #include "modularity/imoduleinterface.h"
 
@@ -39,7 +38,5 @@ public:
 
     virtual String lastShownTourIdForEvent(const String& eventCode) const = 0;
     virtual void setLastShownTourIdForEvent(const String& eventCode, const String& tourId) = 0;
-
-    virtual io::path_t toursFilePath() const = 0;
 };
 }

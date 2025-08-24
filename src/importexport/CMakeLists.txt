@@ -54,7 +54,6 @@ endif()
 if (MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE)
     add_subdirectory(videoexport)
 endif()
-
-
-
-
+if (MUE_BUILD_IMPEXP_TABLEDIT_MODULE)
+    add_subdirectory(tabledit)
+endif()

@@ -81,6 +81,8 @@ public:
         return m_ptr && ptr()->isConnected();
     }
 
+    uint64_t key() const { return reinterpret_cast<uint64_t>(ptr().get()); }
+
 private:
 
     enum CallType {

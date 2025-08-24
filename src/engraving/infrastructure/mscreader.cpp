@@ -87,6 +87,11 @@ bool MscReader::isOpened() const
     return m_reader ? m_reader->isOpened() : false;
 }
 
+bool MscReader::isContainer() const
+{
+    return m_reader ? m_reader->isContainer() : false;
+}
+
 MscReader::IReader* MscReader::reader() const
 {
     if (!m_reader) {

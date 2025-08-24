@@ -298,8 +298,12 @@ void HChord::add(const std::vector<HDegree>& degreeList)
     };
     // factor in the degrees
     for (const HDegree& d : degreeList) {
-        int dv  = degreeTable[(d.value() - 1) % 7] + d.alter();
-        int dv1 = degreeTable[(d.value() - 1) % 7];
+        int i = (d.value() - 1) % 7;
+        if (i < 0) {
+            continue; // ?
+        }
+        int dv  = degreeTable[i] + d.alter();
+        int dv1 = degreeTable[i];
 
         if (d.value() == 7 && d.alter() == 0) {
             dv -= 1;
@@ -386,6 +390,10 @@ static void readRenderList(String val, std::list<RenderActionPtr>& renderList, i
             renderList.emplace_back(new RenderActionNote());
         } else if (s == u":a") {
             renderList.emplace_back(new RenderActionAccidental());
+        } else if (s == u":pl") {
+            renderList.emplace_back(new RenderActionParenLeft());
+        } else if (s == u":pr") {
+            renderList.emplace_back(new RenderActionParenRight());
         } else {
             renderList.emplace_back(new RenderActionSet(s));
         }
@@ -445,6 +453,11 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderActionPtr>& al
         case RenderAction::RenderActionType::ACCIDENTAL:
             s += u":a";
             break;
+        case RenderAction::RenderActionType::PAREN: {
+            const RenderActionParenPtr paren = std::static_pointer_cast<RenderActionParen>(a);
+            s += paren->direction() == DirectionH::LEFT ? u":pl" : u":pr";
+            break;
+        }
         case RenderAction::RenderActionType::STOPHALIGN:
             // Internal, skip
             break;
@@ -919,7 +932,8 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             addPending = true;
             continue;
         }
-        if (tok1L == "sus") {
+        // When there are no numbers after, default to sus4 further down
+        if (tok1L == "sus" && i != len) {
             addToken(tok1, ChordTokenClass::MODIFIER);
             susPending = true;
             continue;
@@ -1243,9 +1257,17 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                     hdl.push_back(HDegree(d, 0, HDegreeType::SUBTRACT));
                 }
                 if (tok1L == "#") {
-                    hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
+                    if (d == 7) {
+                        m_chord += 11;
+                    } else {
+                        hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
+                    }
                 } else if (tok1L == "b") {
-                    hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
+                    if (d == 7) {
+                        m_chord += 10;
+                    } else {
+                        hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
+                    }
                 }
             }
             if (!degree.empty()) {
@@ -1364,6 +1386,10 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
         m_quality = u"major";
         implied = true;
         extension = 5;
+    } else if (kind == "pedal") {
+        // Ignore, assume major
+        m_quality = u"major";
+        implied = true;
     } else {
         m_quality = kind;
     }
@@ -1600,7 +1626,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
     static const std::wregex SUS_ADD_REGEX = std::wregex(L"sus|add");
     bool stackSusOrAdd = false;
     for (const String& mod : m_modifierList) {
-        if (!mod.contains(SUS_ADD_REGEX)) {
+        if (!stackModifiersEnabled || !mod.contains(SUS_ADD_REGEX)) {
             continue;
         }
         if (!stackSusOrAdd) {
@@ -1612,7 +1638,10 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
     }
 
     bool adjust = cl ? cl->autoAdjust() : false;
-    for (const ChordToken& tok : m_tokenList) {
+    bool firstModifierToken = true;
+    bool closingParenPending = false;
+    for (auto tokIt = m_tokenList.begin(); tokIt != m_tokenList.end(); tokIt++) {
+        const ChordToken& tok = *tokIt;
         const String n = tok.names.front();
         if ((n == u"/" || n == u"," || n == u"\\") && stackSusOrAdd) {
             continue;
@@ -1624,6 +1653,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
         if (stackSusOrAdd && stackModifier && modIdx == 0) {
             curMod.remove(SUS_ADD_REGEX);
         }
+        const bool modifierEnd = curMod.endsWith(n) && modIdx != finalModIdx;
 
         std::list<RenderActionPtr > rl;
         std::list<ChordToken> definedTokens;
@@ -1670,6 +1700,23 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
 
             // Stacked modifiers
             if (stackModifier) {
+                // Pad modifier stack before
+                if (firstModifierToken) {
+                    m_renderList.emplace_back(new RenderActionMove(0.15, 0));
+                    firstModifierToken = false;
+                }
+
+                // Check if the next token is a closing paren
+                // Delay starting a new line until after the paren
+                // (parens are excluded from the modifier string)
+                const auto& nextTokIt = std::next(tokIt);
+                if (nextTokIt != m_tokenList.end() && modifierEnd) {
+                    const ChordToken& nextTok = *nextTokIt;
+                    if (nextTok.names.front() == ")") {
+                        closingParenPending = true;
+                    }
+                }
+
                 auto startsWithAcc = [](const String& s) -> bool {
                     return s.startsWith(u"b") || s.startsWith(u"#");
                 };
@@ -1731,8 +1778,9 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
             m_renderList.emplace_back(new RenderActionPopY());
             // Reset scale
             m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
-            if (curMod.endsWith(n) && modIdx != finalModIdx) {
+            if (modifierEnd != closingParenPending) {
                 modIdx++;
+                closingParenPending = false;
 
                 // Restore x position
                 m_renderList.emplace_back(new RenderActionPopX());
@@ -2280,6 +2328,12 @@ void RenderActionMoveScaled::print() const
 void RenderActionMoveXHeight::print() const
 {
     String info = String(u"up: %1").arg(m_up);
+    RenderAction::print(actionType(), info);
+}
+
+void RenderActionParen::print() const
+{
+    String info = String(u"direction: %1").arg(direction() == DirectionH::LEFT ? u"left" : u"right");
     RenderAction::print(actionType(), info);
 }
 }

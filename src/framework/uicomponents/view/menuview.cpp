@@ -81,7 +81,7 @@ void MenuView::updateGeometry()
     QRectF anchorRect = anchorGeometry();
     QRectF viewRect = viewGeometry();
 
-    setOpensUpward(false);
+    setPopupPosition(PopupPosition::Bottom);
     setCascadeAlign(Qt::AlignmentFlag::AlignRight);
 
     auto movePos = [this, &viewRect](qreal x, qreal y) {
@@ -112,7 +112,7 @@ void MenuView::updateGeometry()
             if (anchorRect.top() < newY) {
                 // move to the top of the parent
                 movePos(m_globalPos.x(), newY);
-                setOpensUpward(true);
+                setPopupPosition(PopupPosition::Top);
             } else {
                 // move to the right of the parent and move to top to an area that doesn't fit
                 movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()));
@@ -138,7 +138,7 @@ void MenuView::updateGeometry()
 
 void MenuView::updateContentPosition()
 {
-    if (opensUpward()) {
+    if (popupPosition() == PopupPosition::Top) {
         contentItem()->setY(padding());
     } else {
         contentItem()->setY(-padding());

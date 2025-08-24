@@ -329,7 +329,11 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
                 if (c) {
                     if (s.at(c - 1) == u'#') {
                         cutoff -= 1;
-                        alter = +1;
+                        if (deg == 7) {
+                            alter = 0;
+                        } else {
+                            alter = +1;
+                        }
                     } else if (s.at(c - 1) == u'b') {
                         cutoff -= 1;
                         alter = -1;

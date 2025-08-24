@@ -139,6 +139,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/image.h
     ${CMAKE_CURRENT_LIST_DIR}/imageStore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/imageStore.h
+    ${CMAKE_CURRENT_LIST_DIR}/indicatoricon.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/indicatoricon.h
     ${CMAKE_CURRENT_LIST_DIR}/input.cpp
     ${CMAKE_CURRENT_LIST_DIR}/input.h
     ${CMAKE_CURRENT_LIST_DIR}/instrchange.cpp
@@ -241,6 +243,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pitch.h
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.h
+    ${CMAKE_CURRENT_LIST_DIR}/playcounttext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playcounttext.h
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.h
     ${CMAKE_CURRENT_LIST_DIR}/property.cpp
@@ -306,6 +310,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stafftypechange.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftypelist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftypelist.h
+    ${CMAKE_CURRENT_LIST_DIR}/staffvisibilityindicator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/staffvisibilityindicator.h
     ${CMAKE_CURRENT_LIST_DIR}/stem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stem.h
     ${CMAKE_CURRENT_LIST_DIR}/stemslash.cpp

@@ -28,11 +28,17 @@ using namespace muse::dock;
 DockTitleBar::DockTitleBar(KDDockWidgets::Frame* parent)
     : KDDockWidgets::TitleBarQuick(parent)
 {
+    // Suppress the default title bar because we add our own. Otherwise
+    // the default title bar steals the mouse events from our title bar.
+    setFixedHeight(0);
 }
 
 DockTitleBar::DockTitleBar(KDDockWidgets::FloatingWindow* parent)
     : KDDockWidgets::TitleBarQuick(parent)
 {
+    // Suppress the default title bar because we add our own. Otherwise
+    // the default title bar steals the mouse events from our title bar.
+    setFixedHeight(0);
 }
 
 QPoint DockTitleBar::mapToWindow(QPoint pos) const

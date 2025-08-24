@@ -290,6 +290,7 @@ enum class ElementType {
     STAFF_TEXT            = int(mu::engraving::ElementType::STAFF_TEXT),
     SYSTEM_TEXT           = int(mu::engraving::ElementType::SYSTEM_TEXT),
     SOUND_FLAG            = int(mu::engraving::ElementType::SOUND_FLAG),
+    PLAY_COUNT_TEXT       = int(mu::engraving::ElementType::PLAY_COUNT_TEXT),
     PLAYTECH_ANNOTATION   = int(mu::engraving::ElementType::PLAYTECH_ANNOTATION),
     CAPO                  = int(mu::engraving::ElementType::CAPO),
     STRING_TUNINGS        = int(mu::engraving::ElementType::STRING_TUNINGS),
@@ -1293,10 +1294,10 @@ enum class StaffGroup {
 Q_ENUM_NS(StaffGroup);
 
 enum class HideMode {
-    AUTO       = int(mu::engraving::Staff::HideMode::AUTO),
-    ALWAYS     = int(mu::engraving::Staff::HideMode::ALWAYS),
-    NEVER      = int(mu::engraving::Staff::HideMode::NEVER),
-    INSTRUMENT = int(mu::engraving::Staff::HideMode::INSTRUMENT),
+    AUTO       = int(mu::engraving::AutoOnOff::AUTO),
+    ALWAYS     = int(mu::engraving::AutoOnOff::ON),
+    NEVER      = int(mu::engraving::AutoOnOff::OFF),
+    INSTRUMENT = int(mu::engraving::AutoOnOff::AUTO),
 };
 Q_ENUM_NS(HideMode);
 
@@ -1313,9 +1314,13 @@ Q_ENUM_NS(OttavaType);
 enum class HairpinType {
     INVALID         = int(mu::engraving::HairpinType::INVALID),
     CRESC_HAIRPIN   = int(mu::engraving::HairpinType::CRESC_HAIRPIN),
-    DECRESC_HAIRPIN = int(mu::engraving::HairpinType::DECRESC_HAIRPIN),
+    DIM_HAIRPIN     = int(mu::engraving::HairpinType::DIM_HAIRPIN),
     CRESC_LINE      = int(mu::engraving::HairpinType::CRESC_LINE),
-    DECRESC_LINE    = int(mu::engraving::HairpinType::DECRESC_LINE),
+    DIM_LINE        = int(mu::engraving::HairpinType::DIM_LINE),
+
+    // obsolete
+    DECRESC_HAIRPIN = int(mu::engraving::HairpinType::DIM_HAIRPIN),
+    DECRESC_LINE    = int(mu::engraving::HairpinType::DIM_LINE)
 };
 Q_ENUM_NS(HairpinType);
 

@@ -94,7 +94,7 @@ bool IpcServer::listen(const QString& serverName)
         inc.id = QString::fromUtf8(id);
         m_incomingSockets.append(inc);
 
-        LOGI() << "id: " << id;
+        LOGI() << "ipc server: client with id " << id << " has connected";
 
         QObject::connect(socket, &QLocalSocket::readyRead, [socket, this]() {
             onIncomingReadyRead(socket);

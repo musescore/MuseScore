@@ -34,4 +34,10 @@ set(STYLEDIALOG_SRC
     ${CMAKE_CURRENT_LIST_DIR}/voltaspagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/measurenumberspagemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/measurenumberspagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/tupletcenteringselectormodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tupletcenteringselectormodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/repeatplaycounttextmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/repeatplaycounttextmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/measurerepeatmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/measurerepeatmodel.h
     )

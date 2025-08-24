@@ -28,7 +28,7 @@
 #include "global/async/notification.h"
 #include "global/io/path.h"
 
-#include "audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio {
 class IAudioConfiguration : MODULE_EXPORT_INTERFACE

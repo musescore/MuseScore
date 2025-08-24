@@ -87,6 +87,11 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
 
+constexpr SegmentType operator ~(const SegmentType& t)
+{
+    return static_cast<SegmentType>(~static_cast<int>(t));
+}
+
 //------------------------------------------------------------------------
 //   @@ Segment
 //    A segment holds all vertical aligned staff elements.
@@ -142,6 +147,7 @@ public:
 
     Segment* prev() const { return m_prev; }
     Segment* prev(SegmentType) const;
+    Segment* prevWithElementsOnTrack(track_idx_t trackIdx, SegmentType segType = SegmentType::ChordRest) const;
     Segment* prevActive() const;
     Segment* prevEnabled() const;
     void setPrev(Segment* e) { m_prev = e; }

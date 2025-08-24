@@ -37,10 +37,13 @@ struct MoveParams {
     muse::ID destinationObjectId;
     LayoutPanelItemType::ItemType objectsType = LayoutPanelItemType::UNDEFINED;
     notation::INotationParts::InsertMode insertMode = notation::INotationParts::InsertMode::Before;
+    bool moveSysObjBelowBottomStaff = false;
+    bool moveSysObjAboveBottomStaff = false;
 
     bool isValid() const
     {
-        return !objectIdListToMove.empty() && destinationObjectId.isValid() && objectsType != LayoutPanelItemType::UNDEFINED;
+        return !objectIdListToMove.empty() && (destinationObjectId.isValid() || moveSysObjBelowBottomStaff)
+               && objectsType != LayoutPanelItemType::UNDEFINED;
     }
 };
 
@@ -91,7 +94,7 @@ public:
 
     virtual void removeChildren(int row, int count = 1, bool deleteChild = false);
 
-    virtual void onScoreChanged(const mu::engraving::ScoreChangesRange& changes);
+    virtual void onScoreChanged(const mu::engraving::ScoreChanges& changes);
 
     AbstractLayoutPanelTreeItem* parentItem() const;
     void setParentItem(AbstractLayoutPanelTreeItem* parent);

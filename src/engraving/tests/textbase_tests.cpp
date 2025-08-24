@@ -178,6 +178,35 @@ TEST_F(Engraving_TextBaseTests, undoChangeFontStyleProperty)
     EXPECT_EQ(staffText->xmlText(), u"normal bold underline italic");
 }
 
+TEST_F(Engraving_TextBaseTests, undoChangeFontSizeEmptyLines)   // Testcase for Issue #19571
+{
+    MasterScore* score = ScoreRW::readScore(u"test.mscx");
+    StaffText* staffText = addStaffText(score);
+
+    String originalText = u"<font size=\"25\"/>Line 1\nLine 2\n\n\nLine 5"; // Two lines of text, two empty lines, one line of text.
+    String expectedText = u"<font size=\"30\"/>Line 1\nLine 2\n\n\nLine 5"; // The font size should change for all lines, including the empty ones.
+
+    staffText->setXmlText(originalText);
+    LOGD("Text is initially: %s", muPrintable(staffText->xmlText().replace(u"\n", u"\\n")));
+    score->renderer()->layoutItem(staffText);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving text base tests"));
+    staffText->undoChangeProperty(Pid::FONT_SIZE, PropertyValue::fromValue(30.0), PropertyFlags::UNSTYLED); // Change font size from 25 to 30
+    score->endCmd();
+
+    LOGD(" 1.: Text is now : %s", muPrintable(staffText->xmlText().replace(u"\n", u"\\n")));
+    EXPECT_EQ(staffText->xmlText(), expectedText); // The font size should change for all lines, including the empty ones.
+
+    EditData ed;
+    score->undoStack()->undo(&ed);
+    LOGD(" 2.: Text is now : %s", muPrintable(staffText->xmlText().replace(u"\n", u"\\n")));
+    EXPECT_EQ(staffText->xmlText(), originalText);
+
+    score->undoStack()->redo(&ed);
+    LOGD(" 3.: Text is now : %s", muPrintable(staffText->xmlText().replace(u"\n", u"\\n")));
+    EXPECT_EQ(staffText->xmlText(), expectedText);
+}
+
 TEST_F(Engraving_TextBaseTests, musicalSymbolsNotBold)
 {
     MasterScore* score = ScoreRW::readScore(u"test.mscx");

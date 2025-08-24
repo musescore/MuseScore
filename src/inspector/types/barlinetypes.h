@@ -59,8 +59,15 @@ public:
         PRESET_SHORT_2,
     };
 
+    enum class AutoCustomHide {
+        COUNT_AUTO,
+        COUNT_CUSTOM,
+        COUNT_HIDE
+    };
+
     Q_ENUM(LineType)
     Q_ENUM(SpanPreset)
+    Q_ENUM(AutoCustomHide)
 };
 }
 

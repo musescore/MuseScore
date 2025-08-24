@@ -24,7 +24,7 @@
 #include "global/async/asyncable.h"
 
 #include "../iplaybackstate.h"
-#include "audio/iplayer.h"
+#include "audio/main/iplayer.h"
 
 namespace mu::context {
 class PlaybackState : public IPlaybackState, public muse::async::Asyncable

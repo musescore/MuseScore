@@ -93,6 +93,8 @@ static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canv
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
 static const Settings::Key WARN_GUITAR_BENDS(module_name, "score/note/warnGuitarBends");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
+static const Settings::Key USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT(module_name,
+                                                                            "io/midi/useMidiVelocityAndDurationDuringNoteInput");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
 
 static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
@@ -309,6 +311,12 @@ void NotationConfiguration::init()
     settings()->valueChanged(REALTIME_DELAY).onReceive(this, [this](const Val& val) {
         m_delayBetweenNotesInRealTimeModeMillisecondsChanged.send(val.toInt());
     });
+
+    settings()->setDefaultValue(USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT, Val(true));
+    settings()->valueChanged(USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT).onReceive(this, [this](const Val& val) {
+        m_useMidiVelocityAndDurationDuringNoteInputChanged.send(val.toBool());
+    });
+
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
     settings()->valueChanged(NOTE_DEFAULT_PLAY_DURATION).onReceive(this, [this](const Val& val) {
         m_notePlayDurationMillisecondsChanged.send(val.toInt());
@@ -396,7 +404,6 @@ void NotationConfiguration::init()
 
     mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
     mu::engraving::MScore::warnGuitarBends = warnGuitarBends();
-    mu::engraving::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 
     mu::engraving::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
     mu::engraving::MScore::setVRaster(DEFAULT_GRID_SIZE_SPATIUM);
@@ -1044,6 +1051,21 @@ async::Channel<int> NotationConfiguration::delayBetweenNotesInRealTimeModeMillis
     return m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
 }
 
+bool NotationConfiguration::useMidiVelocityAndDurationDuringNoteInput() const
+{
+    return settings()->value(USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT).toBool();
+}
+
+void NotationConfiguration::setUseMidiVelocityAndDurationDuringNoteInput(bool use)
+{
+    settings()->setSharedValue(USE_MIDI_VELOCITY_AND_DURATION_DURING_NOTE_INPUT, Val(use));
+}
+
+muse::async::Channel<bool> NotationConfiguration::useMidiVelocityAndDurationDuringNoteInputChanged() const
+{
+    return m_useMidiVelocityAndDurationDuringNoteInputChanged;
+}
+
 int NotationConfiguration::notePlayDurationMilliseconds() const
 {
     return settings()->value(NOTE_DEFAULT_PLAY_DURATION).toInt();
@@ -1051,7 +1073,6 @@ int NotationConfiguration::notePlayDurationMilliseconds() const
 
 void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
 {
-    mu::engraving::MScore::defaultPlayDuration = durationMs;
     settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
 }
 

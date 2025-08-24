@@ -75,6 +75,8 @@ class HarmonicMarkSegment;
 class Harmony;
 class Hook;
 
+class IndicatorIcon;
+
 class Image;
 class InstrumentChange;
 class InstrumentName;
@@ -115,6 +117,7 @@ class Parenthesis;
 class Pedal;
 class PedalSegment;
 class PickScrapeSegment;
+class PlayCountText;
 class PlayTechAnnotation;
 
 class RasgueadoSegment;
@@ -141,7 +144,6 @@ class FSymbol;
 
 class SystemDivider;
 class SystemText;
-class SystemLockIndicator;
 class SoundFlag;
 
 class TabDurationSymbol;
@@ -268,6 +270,7 @@ private:
     static void draw(const PalmMuteSegment* item, muse::draw::Painter* painter);
     static void draw(const PedalSegment* item, muse::draw::Painter* painter);
     static void draw(const PickScrapeSegment* item, muse::draw::Painter* painter);
+    static void draw(const PlayCountText* item, muse::draw::Painter* painter);
     static void draw(const PlayTechAnnotation* item, muse::draw::Painter* painter);
 
     static void draw(const RasgueadoSegment* item, muse::draw::Painter* painter);
@@ -289,7 +292,7 @@ private:
     static void draw(const FSymbol* item, muse::draw::Painter* painter);
     static void draw(const SystemDivider* item, muse::draw::Painter* painter);
     static void draw(const SystemText* item, muse::draw::Painter* painter);
-    static void draw(const SystemLockIndicator* item, muse::draw::Painter* painter);
+    static void draw(const IndicatorIcon* item, muse::draw::Painter* painter);
     static void draw(const SoundFlag* item, muse::draw::Painter* painter);
 
     static void draw(const TabDurationSymbol* item, muse::draw::Painter* painter);

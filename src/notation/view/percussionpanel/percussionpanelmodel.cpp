@@ -25,6 +25,8 @@
 #include <QCoreApplication>
 #include <QKeyEvent>
 
+#include "audio/common/audioutils.h"
+
 #include "notation/utilities/percussionutilities.h"
 
 #include "ui/view/iconcodes.h"
@@ -32,8 +34,6 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/undo.h"
 #include "engraving/dom/utils.h"
-
-#include "audio/audioutils.h"
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
@@ -161,6 +161,8 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
         createColumnSubItem(8),
         createColumnSubItem(12),
         createColumnSubItem(16),
+        createColumnSubItem(20),
+        createColumnSubItem(24),
     };
 
     QList<QVariantMap> menuItems = {

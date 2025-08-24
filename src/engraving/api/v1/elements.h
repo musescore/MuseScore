@@ -1046,6 +1046,10 @@ class EngravingItem : public apiv1::ScoreElement
     /// \see \ref ticklength
     /// \since MuseScore 4.6
     Q_PROPERTY(apiv1::FractionWrapper * fraction READ tick)
+    /// \brief Current beat of this element
+    /// \returns The beat this element starts on, as a fraction.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::FractionWrapper * beat READ beat)
 
 public:
     /// \cond MS_INTERNAL
@@ -1074,6 +1078,7 @@ public:
     Q_INVOKABLE QString _name() const { return name(); }
 
     FractionWrapper* tick() const;
+    FractionWrapper* beat() const;
 };
 
 //---------------------------------------------------------
@@ -1976,9 +1981,9 @@ class Staff : public ScoreElement
     /// mid-system when measures are empty.
     /// \since MuseScore 4.6
     Q_PROPERTY(bool cutaway READ cutaway)
-    /// Whether to not hide if the system is empty.
+    /// Whether to not hide this staff if an entire system is empty.
     /// \since MuseScore 4.6
-    Q_PROPERTY(bool showIfEmpty READ showIfEmpty)
+    Q_PROPERTY(bool showIfEntireSystemEmpty READ showIfEntireSystemEmpty)
     /// Whether to display the system barline (leftmost barline).
     /// \since MuseScore 4.6
     Q_PROPERTY(bool hideSystemBarLine READ hideSystemBarLine)
@@ -2014,7 +2019,7 @@ public:
     int idx() { return int(staff()->idx()); }
     bool show() { return staff()->show(); }
     bool cutaway() { return staff()->cutaway(); }
-    bool showIfEmpty() { return staff()->showIfEmpty(); }
+    bool showIfEntireSystemEmpty() { return staff()->showIfEntireSystemEmpty(); }
     bool hideSystemBarLine() { return staff()->hideSystemBarLine(); }
     int hideWhenEmpty() { return int(staff()->hideWhenEmpty()); }
     int mergeMatchingRests() { return int(staff()->mergeMatchingRests()); }
@@ -2023,6 +2028,12 @@ public:
     QQmlListProperty<EngravingItem> brackets() { return wrapContainerProperty<EngravingItem>(this, staff()->brackets()); }
     /// \endcond
 
+    /// The current clef type at a given tick in the score, one of
+    /// PluginAPI::PluginAPI::ClefType values.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \see PluginAPI::PluginAPI::ClefType
+    /// \since MuseScore 4.6
+    Q_INVOKABLE int clefType(apiv1::FractionWrapper* tick);
     /// The current timestretch factor at a given tick in the score, i.e. the
     /// ratio of the local time signature over the global time signature.
     /// \param tick Tick location in the score, as a fraction.
@@ -2033,9 +2044,9 @@ public:
     /// \since MuseScore 4.6
     Q_INVOKABLE EngravingItem* timeSig(apiv1::FractionWrapper* tick);
     /// The current written key at a given tick in the score, one of
-    /// PluginAPI::PLuginAPI::Key values.
+    /// PluginAPI::PluginAPI::Key values.
     /// \param tick Tick location in the score, as a fraction.
-    /// \see PluginAPI::PLuginAPI::Key
+    /// \see PluginAPI::PluginAPI::Key
     /// \since MuseScore 4.6
     Q_INVOKABLE int key(apiv1::FractionWrapper* tick);
     /// The transposition at a given tick in the score, active if the

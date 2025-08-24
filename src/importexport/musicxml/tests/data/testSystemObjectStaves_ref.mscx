@@ -21,6 +21,7 @@
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
+      <articulationFontSize>10</articulationFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <tempoFontSize>10</tempoFontSize>
       <tempoChangeFontSize>10</tempoChangeFontSize>
@@ -59,7 +60,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="3" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -125,7 +125,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Oboe</trackName>
@@ -190,7 +189,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Clarinet in B♭</trackName>
       <Instrument id="bb-clarinet">
@@ -256,7 +254,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -265,7 +262,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
@@ -331,13 +327,11 @@
         <Text>
           <eid>I_I</eid>
           <style>title</style>
-          <offset x="0" y="-0.0367999"/>
           <text><font size="22"/>Untitled score</text>
           </Text>
         <Text>
           <eid>J_J</eid>
           <style>subtitle</style>
-          <offset x="0" y="9.9632"/>
           <text><font size="14"/>Subtitle</text>
           </Text>
         <Text>

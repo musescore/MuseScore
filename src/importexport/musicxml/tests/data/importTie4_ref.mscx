@@ -55,6 +55,8 @@
       <stringTuningsFontSize>22</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Palatino,serif</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Palatino,serif</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Palatino,serif</articulationFontFace>
+      <articulationFontSize>22</articulationFontSize>
       <longInstrumentFontFace>Palatino,serif</longInstrumentFontFace>
       <longInstrumentFontSize>22</longInstrumentFontSize>
       <shortInstrumentFontFace>Palatino,serif</shortInstrumentFontFace>
@@ -83,6 +85,8 @@
       <staffTextFontSize>22</staffTextFontSize>
       <rehearsalMarkFontFace>Palatino,serif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>22</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Palatino,serif</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>22</repeatPlayCountFontSize>
       <repeatLeftFontFace>Palatino,serif</repeatLeftFontFace>
       <repeatLeftFontSize>22</repeatLeftFontSize>
       <repeatRightFontFace>Palatino,serif</repeatRightFontFace>
@@ -154,7 +158,6 @@ Arranged by [Arranger]</metaTag>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
@@ -163,7 +166,6 @@ Arranged by [Arranger]</metaTag>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
@@ -232,7 +234,6 @@ Arranged by [Arranger]</metaTag>
         <Text>
           <eid>G_G</eid>
           <style>subtitle</style>
-          <offset x="0" y="9.45"/>
           <text><font size="11.94"/>for Piano</text>
           </Text>
         <Text>

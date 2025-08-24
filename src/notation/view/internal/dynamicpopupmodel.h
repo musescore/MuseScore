@@ -42,7 +42,7 @@ public:
     enum ItemType {
         Dynamic,
         Crescendo,
-        Decrescendo
+        Diminuendo
     };
     Q_ENUM(ItemType)
 

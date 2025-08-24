@@ -20,15 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IMPORTEXPORT_UTILS_H
-#define MU_IMPORTEXPORT_UTILS_H
+#pragma once
 
+#include <engraving/types/types.h>
 namespace mu::engraving {
 class Note;
+class Chord;
+class Score;
 }
 
 namespace mu::iex::guitarpro::utils {
 int harmonicOvertone(mu::engraving::Note* note, float harmonicValue, int harmonicType);
+mu::engraving::Chord* getLocatedChord(mu::engraving::Score* score, mu::engraving::Fraction tickFr, mu::engraving::track_idx_t track);
 } // mu::iex::guitarpro
-
-#endif // MU_IMPORTEXPORT_UTILS_H

@@ -21,10 +21,7 @@
  */
 #include "staffread.h"
 
-#include "rw/write/twrite.h"
-
 #include "dom/factory.h"
-#include "dom/box.h"
 #include "dom/measure.h"
 #include "dom/score.h"
 

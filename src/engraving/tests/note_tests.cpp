@@ -230,7 +230,7 @@ TEST_F(Engraving_NoteTests, note)
 
     // headGroup
     for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
-        note->setProperty(Pid::HEAD_GROUP, i);
+        note->setProperty(Pid::HEAD_GROUP, static_cast<NoteHeadGroup>(i));
         n = toNote(ScoreRW::writeReadElement(note));
         EXPECT_EQ(int(n->headGroup()), i);
         delete n;

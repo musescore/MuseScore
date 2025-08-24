@@ -40,6 +40,8 @@
       <stringTuningsFontSize>10</stringTuningsFontSize>
       <harpPedalDiagramFontFace>FreeSerif</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>FreeSerif</harpPedalTextDiagramFontFace>
+      <articulationFontFace>FreeSerif</articulationFontFace>
+      <articulationFontSize>10</articulationFontSize>
       <longInstrumentFontFace>FreeSerif</longInstrumentFontFace>
       <shortInstrumentFontFace>FreeSerif</shortInstrumentFontFace>
       <partInstrumentFontFace>FreeSerif</partInstrumentFontFace>
@@ -61,6 +63,7 @@
       <staffTextFontFace>FreeSerif</staffTextFontFace>
       <rehearsalMarkFontFace>FreeSerif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>FreeSerif</repeatPlayCountFontFace>
       <repeatLeftFontFace>FreeSerif</repeatLeftFontFace>
       <repeatRightFontFace>FreeSerif</repeatRightFontFace>
       <frameFontFace>FreeSerif</frameFontFace>
@@ -123,6 +126,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
+      <hideStavesWhenIndividuallyEmpty>1</hideStavesWhenIndividuallyEmpty>
       <Instrument id="piano">
         <longName>Piano</longName>
         <trackName>Piano</trackName>
@@ -193,14 +197,12 @@
           <eid>G_G</eid>
           <style>title</style>
           <family>Times New Roman</family>
-          <offset x="0" y="-0.172872"/>
           <text><font size="24"/><font face="Times New Roman"/>Mephisto Waltz No. 1</text>
           </Text>
         <Text>
           <eid>H_H</eid>
           <style>subtitle</style>
           <family>Times New Roman</family>
-          <offset x="0" y="9.82548"/>
           <text><font size="14"/><font face="Times New Roman"/>S. 514</text>
           </Text>
         </VBox>

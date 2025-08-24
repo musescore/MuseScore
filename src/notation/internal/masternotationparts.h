@@ -49,6 +49,8 @@ public:
     void addSystemObjects(const muse::IDList& stavesIds) override;
     void removeSystemObjects(const muse::IDList& stavesIds) override;
     void moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId) override;
+    void moveSystemObjectLayerBelowBottomStaff() override;
+    void moveSystemObjectLayerAboveBottomStaff() override;
 
 private:
     void startGlobalEdit(const muse::TranslatableString& actionName);

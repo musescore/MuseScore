@@ -20,6 +20,7 @@
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
+      <articulationFontSize>10</articulationFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <tempoFontSize>10</tempoFontSize>
       <tempoChangeFontSize>10</tempoChangeFontSize>
@@ -56,7 +57,6 @@ the video game: a tone poem</metaTag>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
@@ -122,7 +122,6 @@ the video game: a tone poem</metaTag>
         <Text>
           <eid>E_E</eid>
           <style>title</style>
-          <offset x="0" y="-0.1505"/>
           <text><font size="22"/>Inferred Credits 1</text>
           </Text>
         <Text>

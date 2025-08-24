@@ -78,7 +78,7 @@
 #include "thirdparty/libmei/shared.h"
 #include "thirdparty/libmei/midi.h"
 
-#include "thirdparty/pugixml.hpp"
+#include "pugixml.hpp"
 
 using namespace muse;
 using namespace mu;
@@ -443,7 +443,7 @@ bool MeiImporter::addGraceNotesToChord(ChordRest* chordRest, bool isAfter)
 EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Measure* measure)
 {
     const ChordRest* chordRest = this->findStart(meiElement, measure);
-    if (!chordRest) {
+    if (!chordRest || chordRest->isGrace()) {
         return nullptr;
     }
 

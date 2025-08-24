@@ -180,6 +180,10 @@ public:
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs)  override;
     muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const override;
 
+    bool useMidiVelocityAndDurationDuringNoteInput() const override;
+    void setUseMidiVelocityAndDurationDuringNoteInput(bool use) override;
+    muse::async::Channel<bool> useMidiVelocityAndDurationDuringNoteInputChanged() const override;
+
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs)  override;
     muse::async::Channel<int> notePlayDurationMillisecondsChanged() const override;

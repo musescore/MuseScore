@@ -37,12 +37,15 @@
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
+#include "internal/windowscontroller.h"
 #include "view/platform/macos/macosmainwindowbridge.h"
 #elif defined(Q_OS_WIN)
 #include "internal/platform/windows/windowsplatformtheme.h"
+#include "internal/platform/windows/winwindowscontroller.h"
 #include "view/mainwindowbridge.h"
 #elif defined(Q_OS_LINUX)
 #include "internal/platform/linux/linuxplatformtheme.h"
+#include "internal/windowscontroller.h"
 #include "view/mainwindowbridge.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
@@ -60,6 +63,7 @@
 #include "view/qmlaccessible.h"
 #include "view/focuslistener.h"
 #include "view/qmldrag.h"
+#include "view/windowsmodel.h"
 
 #include "view/internal/errordetailsmodel.h"
 #include "view/internal/progressdialogmodel.h"
@@ -96,10 +100,13 @@ void UiModule::registerExports()
 
     #ifdef Q_OS_MAC
     m_platformTheme = std::make_shared<MacOSPlatformTheme>();
+    m_windowsController = std::make_shared<WindowsController>();
     #elif defined(Q_OS_WIN)
     m_platformTheme = std::make_shared<WindowsPlatformTheme>();
+    m_windowsController = std::make_shared<WinWindowsController>();
     #elif defined(Q_OS_LINUX)
     m_platformTheme = std::make_shared<LinuxPlatformTheme>();
+    m_windowsController = std::make_shared<WindowsController>();
     #else
     m_platformTheme = std::make_shared<StubPlatformTheme>();
     #endif
@@ -113,6 +120,7 @@ void UiModule::registerExports()
     ioc()->registerExport<IUiActionsRegister>(moduleName(), m_uiactionsRegister);
     ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
     ioc()->registerExport<IDragController>(moduleName(), new DragController());
+    ioc()->registerExport<IWindowsController>(moduleName(), m_windowsController);
 }
 
 void UiModule::resolveImports()
@@ -173,6 +181,8 @@ void UiModule::registerUiTypes()
     qmlRegisterType<QmlDrag>("Muse.Ui", 1, 0, "CppDrag");
 
     qmlRegisterType<FocusListener>("Muse.Ui", 1, 0, "FocusListener");
+
+    qmlRegisterType<WindowsModel>("Muse.Ui", 1, 0, "WindowsModel");
 
 #ifdef Q_OS_MAC
     qmlRegisterType<MacOSMainWindowBridge>("Muse.Ui", 1, 0, "MainWindowBridge");

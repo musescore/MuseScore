@@ -62,6 +62,7 @@ import "dynamics"
 import "expressions"
 import "stringtunings"
 import "symbols"
+import "playcounttext"
 
 Loader {
     id: root
@@ -145,6 +146,7 @@ Loader {
             case Inspector.TYPE_EXPRESSION: return expressionComp
             case Inspector.TYPE_STRING_TUNINGS: return stringTuningsComp
             case Inspector.TYPE_SYMBOL: return symbolComp
+            case Inspector.TYPE_PLAY_COUNT_TEXT: return playCountTextComp
             }
 
             return null
@@ -382,5 +384,10 @@ Loader {
     Component {
         id: symbolComp
         SymbolSettings {}
+    }
+
+    Component {
+        id: playCountTextComp
+        PlayCountSettings {}
     }
 }

@@ -76,15 +76,6 @@ void Ret::setData(const std::string& key, const std::any& val)
     m_data[key] = val;
 }
 
-std::any Ret::data(const std::string& key) const
-{
-    auto it = m_data.find(key);
-    if (it != m_data.end()) {
-        return it->second;
-    }
-    return std::any();
-}
-
 std::string Ret::toString() const
 {
     return "[" + std::to_string(m_code) + "] " + m_text;

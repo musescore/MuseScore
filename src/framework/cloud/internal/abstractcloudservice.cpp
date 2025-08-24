@@ -130,7 +130,7 @@ bool AbstractCloudService::readTokens()
 
     io::path_t tokensPath = tokensFilePath();
     if (!fileSystem()->exists(tokensPath)) {
-        LOGW() << "Could not find the tokens file: " << tokensPath;
+        LOGI() << "Could not find the tokens file: " << tokensPath;
         return false;
     }
 
@@ -409,8 +409,7 @@ Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, b
 
 int AbstractCloudService::statusCode(const Ret& ret) const
 {
-    std::any status = ret.data(STATUS_KEY);
-    return status.has_value() ? std::any_cast<int>(status) : 0;
+    return ret.data<int>(STATUS_KEY, 0);
 }
 
 void AbstractCloudService::printServerReply(const QBuffer& reply) const

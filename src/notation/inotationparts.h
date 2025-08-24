@@ -87,6 +87,8 @@ public:
     virtual void addSystemObjects(const muse::IDList& stavesIds) = 0;
     virtual void removeSystemObjects(const muse::IDList& stavesIds) = 0;
     virtual void moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId) = 0;
+    virtual void moveSystemObjectLayerBelowBottomStaff() = 0;
+    virtual void moveSystemObjectLayerAboveBottomStaff() = 0;
 
     virtual muse::async::Notification partsChanged() const = 0;
     virtual muse::async::Notification scoreOrderChanged() const = 0;

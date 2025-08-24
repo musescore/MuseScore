@@ -26,6 +26,7 @@
 #include "modularity/imoduleinterface.h"
 
 #include "musesamplertypes.h"
+#include "global/types/version.h"
 
 namespace muse::musesampler {
 class IMuseSamplerInfo : MODULE_EXPORT_INTERFACE
@@ -35,8 +36,8 @@ class IMuseSamplerInfo : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMuseSamplerInfo() = default;
 
-    virtual std::string version() const = 0;
-    virtual bool isInstalled() const = 0;
+    virtual const Version& version() const = 0;
+    virtual bool isLoaded() const = 0;
 
     virtual float defaultReverbLevel(const String& instrumentSoundId) const = 0;
 

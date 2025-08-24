@@ -50,7 +50,7 @@ public:
         //! NOTE: Case insensitive comparison
         inline bool operator==(const FontFamily& o) const
         {
-            return m_id.toLower() == o.id().toLower();
+            return m_id.isEqualIgnoreCase(o.m_id);
         }
 
     private:

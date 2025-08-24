@@ -259,7 +259,7 @@ struct ShowAnchors {
     Fraction endTickExtendedRegion = Fraction(-1, 1);
 };
 
-struct ScoreChangesRange {
+struct ScoreChanges {
     int tickFrom = -1;
     int tickTo = -1;
     staff_idx_t staffIdxFrom = muse::nidx;
@@ -287,7 +287,7 @@ struct ScoreChangesRange {
 
     void clear()
     {
-        *this = ScoreChangesRange();
+        *this = ScoreChanges();
     }
 };
 
@@ -444,6 +444,7 @@ public:
     void cmdPadNoteDecreaseTAB();
     void cmdToggleMmrest();
     void cmdToggleHideEmpty();
+    void cmdSetHideStaffIfEmptyOverride(staff_idx_t staffIdx, System* system, engraving::AutoOnOff value);
     void cmdSetVisible();
     void cmdUnsetVisible();
     void cmdMoveRest(Rest*, DirectionV);
@@ -476,7 +477,6 @@ public:
     void addSystemObjectStaff(Staff* staff);
     void removeSystemObjectStaff(Staff* staff);
     const std::vector<Staff*>& systemObjectStaves() const { return m_systemObjectStaves; }
-    bool isSystemObjectStaff(Staff* staff) const;
 
     Measure* pos2measure(const PointF&, staff_idx_t* staffIdx, int* pitch, Segment**, PointF* offset) const;
     void dragPosition(const PointF&, staff_idx_t* staffIdx, Segment**, double spacingFactor = 0.5, bool allowTimeAnchor = false) const;
@@ -519,6 +519,9 @@ public:
     void undoChangeStyleValues(std::unordered_map<Sid, PropertyValue> values);
     void undoChangePageNumberOffset(int po);
     void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t _staff);
+    void undoResetPlayCountTextSettings(BarLine* bl);
+    void undoUpdatePlayCountText(Measure* m);
+    void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves, bool replace = false);
 
     void updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff, const Fraction& tick);
 
@@ -600,7 +603,7 @@ public:
     void lockUpdates(bool locked);
     void undoRedo(bool undo, EditData*);
 
-    virtual muse::async::Channel<ScoreChangesRange> changesChannel() const;
+    virtual muse::async::Channel<ScoreChanges> changesChannel() const;
 
     void cmdRemoveTimeSig(TimeSig*);
     void cmdAddTimeSig(Measure*, staff_idx_t staffIdx, TimeSig*, bool local);
@@ -1089,9 +1092,7 @@ public:
     void removeSystemLocksContainingMMRests();
     void updateSystemLocksOnCreateMMRests(Measure* first, Measure* last);
 
-    void undoRenameChordInFretBox(const Harmony* harmony, const String& oldName);
-    void undoAddChordToFretBox(const EngravingItem* harmonyOrFretDiagram);
-    void undoRemoveChordFromFretBox(const EngravingItem* harmonyOrFretDiagram);
+    void rebuildFretBox();
 
     friend class Chord;
 

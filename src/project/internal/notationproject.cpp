@@ -918,7 +918,7 @@ void NotationProject::markAsUnsaved()
 
 void NotationProject::listenIfNeedSaveChanges()
 {
-    m_masterNotation->notation()->undoStack()->changesChannel().onReceive(this, [this](const ScoreChangesRange&) {
+    m_masterNotation->notation()->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges&) {
         bool isStackClean = m_masterNotation && m_masterNotation->notation()->undoStack()->isStackClean();
 
         if (isStackClean && !m_hasNonUndoStackChanges) {

@@ -66,7 +66,7 @@ const Part* PartTreeItem::part() const
     return m_part;
 }
 
-void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChangesRange&)
+void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
 {
     if (!m_part) {
         return;

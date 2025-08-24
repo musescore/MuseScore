@@ -36,6 +36,7 @@ StyledPopupView {
     contentWidth: content.width
     contentHeight: content.height
 
+    placementPolicies: PopupView.PreferRight
     showArrow: false
 
     signal elementRectChanged(var elementRect)

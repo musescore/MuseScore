@@ -55,14 +55,20 @@ Column {
         propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
     }
 
+    SeparatorLine { anchors.margins: -12 }
+
     VerticalGapsSection {
         id: verticalGapsSection
         gapAbove: root.model ? root.model.gapAbove : null
         gapBelow: root.model ? root.model.gapBelow : null
+        notationGapAbove: root.model ? root.model.paddingToNotationAbove : null
+        notationGapBelow: root.model ? root.model.paddingToNotationBelow : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
     }
+
+    SeparatorLine { anchors.margins: -12 }
 
     HorizontalMarginsSection {
         id: horizontalMarginsSection

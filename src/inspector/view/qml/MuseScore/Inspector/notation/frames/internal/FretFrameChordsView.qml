@@ -112,6 +112,7 @@ StyledListView {
 
                 horizontalAlignment: Qt.AlignLeft
                 text: Boolean(itemDelegate.item) ? itemDelegate.item.title : ""
+                font.family: ui.theme.musicalTextFont.family
             }
         }
     }

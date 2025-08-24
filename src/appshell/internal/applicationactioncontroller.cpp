@@ -31,7 +31,7 @@
 #include <QMimeData>
 
 #include "async/async.h"
-#include "audio/soundfonttypes.h"
+#include "audio/common/soundfonttypes.h"
 
 #include "defer.h"
 #include "translation.h"
@@ -178,7 +178,7 @@ bool ApplicationActionController::onDropEvent(QDropEvent* event)
         case DragTarget::SoundFont: {
             muse::io::path_t filePath = url.toLocalFile();
             async::Async::call(this, [this, filePath]() {
-                    soundFontRepository()->addSoundFont(filePath);
+                    soundFontController()->addSoundFont(filePath);
                 });
         } break;
         case DragTarget::Extension: {

@@ -389,6 +389,7 @@ bool MeiExporter::writePgHead(const VBox* vBox)
     m_currentNode = m_currentNode.append_child();
 
     libmei::PgHead pgHead;
+    pgHead.SetFunc(libmei::PGFUNC_first);
     pgHead.Write(m_currentNode);
 
     std::list<std::pair<libmei::Rend, String> > cells[CellCount];
@@ -2286,9 +2287,11 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
 
     track_idx_t trackIdx = chordRest->track();
 
-    for (const EngravingItem* element : chordRest->segment()->annotations()) {
-        if (element->track() == trackIdx) {
-            m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
+    if (!chordRest->isGrace()) {
+        for (const EngravingItem* element : chordRest->segment()->annotations()) {
+            if (element->track() == trackIdx) {
+                m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
+            }
         }
     }
     // Breath is handled differently

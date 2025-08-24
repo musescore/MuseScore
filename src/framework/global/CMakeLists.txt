@@ -25,6 +25,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_logger/logger.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler/profiler.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_modularity/modularity/modularity.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/utfcpp/utfcpp.cmake)
 
 find_package(TinyXml REQUIRED)
 set(MODULE_SRC
@@ -32,6 +33,7 @@ set(MODULE_SRC
     ${ASYNC_SRC}
     ${KORS_LOGGER_SRC}
     ${KORS_PROFILER_SRC}
+    ${UTFCPP_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/globaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iapplication.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
@@ -148,6 +150,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack_forward.h
+    
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
     ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
@@ -252,6 +257,10 @@ elseif (CC_IS_EMCC)
 else ()
     set(Z_LIB z)
 endif ()
+
+list(APPEND MODULE_INCLUDE_PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml
+)
 
 list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
 list(APPEND MODULE_LINK ${Z_LIB})

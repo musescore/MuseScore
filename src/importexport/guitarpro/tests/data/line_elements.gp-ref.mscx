@@ -1002,7 +1002,6 @@
               <eid>wB_wB</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <play>0</play>
               <fret>5</fret>
               <string>1</string>
               </Note>
@@ -1011,6 +1010,7 @@
               <pitch>76</pitch>
               <tpc>18</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>5</fret>
               <string>1</string>
               </Note>
@@ -1056,7 +1056,6 @@
               <eid>0B_0B</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <play>0</play>
               <fret>5</fret>
               <string>1</string>
               </Note>
@@ -1065,6 +1064,7 @@
               <pitch>76</pitch>
               <tpc>18</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>5</fret>
               <string>1</string>
               </Note>
@@ -1152,7 +1152,6 @@
                 </Accidental>
               <pitch>58</pitch>
               <tpc>24</tpc>
-              <play>0</play>
               <fret>3</fret>
               <string>2</string>
               </Note>
@@ -1160,7 +1159,6 @@
               <eid>BC_BC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -1173,6 +1171,7 @@
               <pitch>70</pitch>
               <tpc>12</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>3</fret>
               <string>2</string>
               </Note>
@@ -1181,6 +1180,7 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -1223,7 +1223,6 @@
                 </Accidental>
               <pitch>49</pitch>
               <tpc>21</tpc>
-              <play>0</play>
               <fret>4</fret>
               <string>4</string>
               </Note>
@@ -1235,7 +1234,6 @@
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -1248,6 +1246,7 @@
               <pitch>61</pitch>
               <tpc>21</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>4</fret>
               <string>4</string>
               </Note>
@@ -1256,6 +1255,7 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -1304,7 +1304,6 @@
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -1313,6 +1312,7 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -1324,7 +1324,6 @@
               <eid>WC_WC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -1333,6 +1332,7 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -1351,7 +1351,6 @@
               <eid>aC_aC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>
@@ -1360,6 +1359,7 @@
               <pitch>72</pitch>
               <tpc>14</tpc>
               <head>diamond</head>
+              <play>0</play>
               <fret>1</fret>
               <string>1</string>
               </Note>

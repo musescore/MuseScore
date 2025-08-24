@@ -120,6 +120,7 @@ enum class ElementType : unsigned char {
     STAFF_TEXT,
     SYSTEM_TEXT,
     SOUND_FLAG,
+    PLAY_COUNT_TEXT,
     PLAYTECH_ANNOTATION,
     CAPO,
     STRING_TUNINGS,
@@ -151,6 +152,7 @@ enum class ElementType : unsigned char {
     PARTIAL_LYRICSLINE_SEGMENT,
     GLISSANDO_SEGMENT,
     NOTELINE_SEGMENT,
+    STAFF_VISIBILITY_INDICATOR,
     SYSTEM_LOCK_INDICATOR,
     SPACER,
     STAFF_STATE,
@@ -334,6 +336,12 @@ enum class AutoOnOff : unsigned char {
     AUTO,
     ON,
     OFF
+};
+
+enum class AutoCustomHide : unsigned char {
+    AUTO,
+    CUSTOM,
+    HIDE
 };
 
 //! Note: from lowest to highest priority
@@ -771,6 +779,13 @@ constexpr void operator&=(ParenthesesMode& t1, const ParenthesesMode& t2)
     t1 = ParenthesesMode(t1i);
 }
 
+enum RepeatPlayCountPreset : unsigned char {
+    X_N,
+    N_X,
+    PLAY_N_TIMES,
+    N_REPEATS
+};
+
 //-------------------------------------------------------------------
 //   Tid
 ///   Enumerates the list of built-in text substyles
@@ -806,6 +821,7 @@ enum class TextStyleType : unsigned char {
     TEMPO,
     TEMPO_CHANGE,
     METRONOME,
+    REPEAT_PLAY_COUNT,
     REPEAT_LEFT,       // align to start of measure
     REPEAT_RIGHT,      // align to end of measure
     REHEARSAL_MARK,
@@ -825,6 +841,7 @@ enum class TextStyleType : unsigned char {
 
     // Note oriented styles
     TUPLET,
+    ARTICULATION,
     STICKING,
     FINGERING,
     TAB_FRET_NUMBER,
@@ -925,6 +942,15 @@ enum class PlayingTechniqueType : signed char {
     Overdrive,
     Harmonics,
     JazzTone,
+    // Handbells
+    HandbellsSwing,
+    HandbellsSwingUp,
+    HandbellsSwingDown,
+    HandbellsEcho1,
+    HandbellsEcho2,
+    HandbellsDamp,
+    HandbellsLV,
+    HandbellsR,
 };
 
 enum class GradualTempoChangeType : signed char {
@@ -1144,8 +1170,16 @@ enum class VibratoType : unsigned char {
 
 enum class ArticulationTextType : unsigned char {
     NO_TEXT,
+    // Guitar
     SLAP,
-    POP
+    POP,
+    // Handbells
+    TD,
+    BD,
+    RT,
+    PL,
+    SB,
+    VIB,
 };
 
 enum class LyricsSyllabic : unsigned char {
@@ -1259,6 +1293,13 @@ struct PartAudioSettingsCompat {
 
 struct SettingsCompat {
     std::map<muse::ID /*partid*/, PartAudioSettingsCompat> audioSettings;
+};
+
+struct MeasureBeat {
+    int measureIndex = 0;
+    int maxMeasureIndex = 0;
+    float beat = 0.f;
+    int maxBeatIndex = 0;
 };
 
 //---------------------------------------------------------

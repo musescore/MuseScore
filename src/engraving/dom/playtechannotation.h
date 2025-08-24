@@ -41,11 +41,14 @@ public:
 
     PlayTechAnnotation* clone() const override;
 
-private:
+    bool isHandbellsSymbol() const;
+    bool isEditable() const override { return !isHandbellsSymbol(); }
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid id) const override;
+
+private:
 
     PlayingTechniqueType m_techniqueType = PlayingTechniqueType::Undefined;
 };

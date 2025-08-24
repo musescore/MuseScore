@@ -49,9 +49,25 @@ class FractionWrapper : public QObject
     Q_PROPERTY(int denominator READ denominator)
     /// MIDI ticks number equal to the number of the whole
     /// notes represented by this fraction.
-    Q_PROPERTY(int ticks READ ticks)   // FIXME: fraction transition
+    Q_PROPERTY(int ticks READ ticks)
     /// String representation of this fraction
     Q_PROPERTY(QString str READ toString)
+    /// Real computed value of this fraction,
+    /// e.g. 0.25 for a fraction of 1/4.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(qreal real READ toDouble)
+    /// Returns a reduced (simplified) fraction equal in value to this fraction.
+    /// E.g. a fraction of 6/8 returns a fraction of 3/4.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::FractionWrapper * reduced READ reduced)
+    /// Returns the inverse (reciprocal) fraction of this fraction.
+    /// E.g. a fraction of 2/16 returns a fraction of 16/2.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::FractionWrapper * inverse READ inverse)
+    /// Returns the absolute value of this fraction.
+    /// E.g. a fraction of -3/2 returns a fraction of 3/2.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::FractionWrapper * absValue READ absValue)
 
     mu::engraving::Fraction f;
 
@@ -69,7 +85,47 @@ public:
     int denominator() const { return f.denominator(); }
     int ticks() const { return f.ticks(); }
     QString toString() const { return f.toString(); }
+    qreal toDouble() const { return f.toDouble(); }
+    FractionWrapper* reduced() const;
+    FractionWrapper* inverse() const;
+    FractionWrapper* absValue() const;
     /// \endcond
+
+    // Arithmetic
+    /// Returns the sum of two fractions.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE FractionWrapper* plus(FractionWrapper* other);
+    /// Returns the difference between two fractions.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE FractionWrapper* minus(FractionWrapper* other);
+    /// Returns the product of two fractions.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE FractionWrapper* times(FractionWrapper* other);
+    /// Returns the product of a fraction with an integer.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE FractionWrapper* times(int v);
+    /// Returns the quotient of two fractions.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE FractionWrapper* dividedBy(FractionWrapper* other);
+    /// Returns the quotient of a fraction and an integer.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE FractionWrapper* dividedBy(int v);
+
+    // Comparators
+    /// Returns whether the first fraction is larger than the second.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool greaterThan(FractionWrapper* other);
+    /// Returns whether the first fraction is smaller than the second.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool lessThan(FractionWrapper* other);
+    /// Returns whether the first fraction is equivalent in value second.
+    /// Comparing e.g. 2/4 to 1/2 returns true.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool equals(FractionWrapper* other);
+    /// Returns whether the numerators and denominators of two fractions match.
+    /// Comparing e.g. 2/4 to 1/2 returns false.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool identical(FractionWrapper* other);
 };
 
 //---------------------------------------------------------

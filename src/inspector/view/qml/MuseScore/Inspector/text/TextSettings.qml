@@ -163,6 +163,7 @@ Column {
         propertyItem: root.model ? root.model.textPlacement : null
 
         visible: root.model ? !root.model.isDynamicSpecificSettings : false
+        enabled: root.model ? !root.model.isSystemObjectBelowBottomStaff : false
         height: visible ? implicitHeight : 0
 
         navigationPanel: root.navigationPanel

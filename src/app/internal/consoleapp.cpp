@@ -353,12 +353,12 @@ int ConsoleApp::processDiagnostic(const CmdOptions::Diagnostic& task)
     case DiagnosticType::GenDrawData:
         ret = diagnosticDrawProvider()->generateDrawData(input.front(), output);
         break;
-    case DiagnosticType::ComDrawData:
+    case DiagnosticType::ComDrawData: {
         IF_ASSERT_FAILED(input.size() == 2) {
             return make_ret(Ret::Code::UnknownError);
         }
         ret = diagnosticDrawProvider()->compareDrawData(input.at(0), input.at(1), output);
-        break;
+    } break;
     case DiagnosticType::DrawDataToPng:
         ret = diagnosticDrawProvider()->drawDataToPng(input.front(), output);
         break;

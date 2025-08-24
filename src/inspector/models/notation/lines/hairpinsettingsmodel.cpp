@@ -118,7 +118,7 @@ void HairpinSettingsModel::requestElements()
             return false;
         }
 
-        return hairpin->hairpinType() == mu::engraving::HairpinType::CRESC_HAIRPIN || hairpin->hairpinType() == mu::engraving::HairpinType::DECRESC_HAIRPIN;
+        return hairpin->hairpinType() == mu::engraving::HairpinType::CRESC_HAIRPIN || hairpin->hairpinType() == mu::engraving::HairpinType::DIM_HAIRPIN;
     });
 }
 

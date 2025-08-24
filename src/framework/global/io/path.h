@@ -68,7 +68,7 @@ struct path_t {
     inline bool operator<(const path_t& other) const { return m_path < other.m_path; }
 
     String toString() const;
-    std::string toStdString() const;
+    const std::string& toStdString() const;
     const char* c_str() const;
 
 #ifndef NO_QT_SUPPORT

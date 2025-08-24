@@ -52,11 +52,13 @@ void MeasuresSettingsModel::onCurrentNotationChanged()
         return;
     }
 
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange&) {
+    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
+        if (changes.isTextEditing) {
+            return;
+        }
+
         onNotationChanged({}, {});
     });
-
-    AbstractInspectorModel::onCurrentNotationChanged();
 }
 
 void MeasuresSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet&)
@@ -134,7 +136,6 @@ void MeasuresSettingsModel::toggleSystemLock()
     }
 
     currentNotation()->interaction()->toggleSystemLock();
-    updateAllSystemsAreLocked();
 }
 
 QString MeasuresSettingsModel::shortcutToggleSystemLock() const

@@ -29,13 +29,13 @@ using namespace muse::learn;
 using namespace muse::network;
 
 static const std::string module_name("learn");
-static const Settings::Key GET_PLAYLISTS_TESTING_MODE_KEY(module_name, "learn/getPlaylistsTestingMode");
+static const Settings::Key GET_PLAYLISTS_TEST_MODE_KEY(module_name, "learn/getPlaylistsTestMode");
 
 void LearnConfiguration::init()
 {
     m_config = ConfigReader::read(":/configs/learn.cfg");
 
-    settings()->setDefaultValue(GET_PLAYLISTS_TESTING_MODE_KEY, Val(false));
+    settings()->setDefaultValue(GET_PLAYLISTS_TEST_MODE_KEY, Val(false));
 }
 
 RequestHeaders LearnConfiguration::headers() const
@@ -47,13 +47,13 @@ RequestHeaders LearnConfiguration::headers() const
 
 QUrl LearnConfiguration::startedPlaylistUrl() const
 {
-    return !isTestingMode() ? QUrl(m_config.value("started_playlist_url").toQString())
+    return !isTestMode() ? QUrl(m_config.value("started_playlist_url").toQString())
            : QUrl(m_config.value("started_playlist_url.test").toQString());
 }
 
 QUrl LearnConfiguration::advancedPlaylistUrl() const
 {
-    return !isTestingMode() ? QUrl(m_config.value("advanced_playlist_url").toQString())
+    return !isTestMode() ? QUrl(m_config.value("advanced_playlist_url").toQString())
            : QUrl(m_config.value("advanced_playlist_url.test").toQString());
 }
 
@@ -62,7 +62,7 @@ bool LearnConfiguration::classesEnabled() const
     return m_config.value("classes_enabled", Val(true)).toBool();
 }
 
-bool LearnConfiguration::isTestingMode() const
+bool LearnConfiguration::isTestMode() const
 {
-    return settings()->value(GET_PLAYLISTS_TESTING_MODE_KEY).toBool();
+    return settings()->value(GET_PLAYLISTS_TEST_MODE_KEY).toBool();
 }

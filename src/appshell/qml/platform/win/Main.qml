@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 
+import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.AppShell 1.0
 
@@ -38,14 +39,13 @@ AppWindow {
         }
     }
 
-    FramelessWindowModel {
-        id: framelessWindowModel
+    WindowsModel {
+        id: windowsModel
 
-        titleBarMoveArea: appTitleBar.titleMoveAreaRect
+        mainWindowTitleBarMoveArea: appTitleBar.titleMoveAreaRect
     }
 
     Component.onCompleted: {
-        framelessWindowModel.init()
         window.init()
     }
 

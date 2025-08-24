@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PART_H
-#define MU_ENGRAVING_PART_H
+#pragma once
 
 #include <vector>
 
@@ -190,6 +189,12 @@ public:
     const Part* masterPart() const;
     Part* masterPart();
 
+    AutoOnOff hideWhenEmpty() const { return m_hideWhenEmpty; }
+    void setHideWhenEmpty(AutoOnOff v) { m_hideWhenEmpty = v; }
+
+    bool hideStavesWhenIndividuallyEmpty() const { return m_hideStavesWhenIndividuallyEmpty; }
+    void setHideStavesWhenIndividuallyEmpty(bool v) { m_hideStavesWhenIndividuallyEmpty = v; }
+
     PreferSharpFlat preferSharpFlat() const { return m_preferSharpFlat; }
     void setPreferSharpFlat(PreferSharpFlat v) { m_preferSharpFlat = v; }
 
@@ -213,9 +218,14 @@ private:
     int m_capoFret = 0;
     int m_color = 0;                  ///User specified color for helping to label parts
 
+    /// Hide staves in this part when empty
+    AutoOnOff m_hideWhenEmpty = AutoOnOff::AUTO;
+
+    /// Hide staves when they are individually empty, rather than only if all this part's staves are empty
+    bool m_hideStavesWhenIndividuallyEmpty = false;
+
     PreferSharpFlat m_preferSharpFlat = PreferSharpFlat::AUTO;
 
     std::map<int, StringTunings*> m_stringTunings;
 };
-} // namespace mu::engraving
-#endif
+}

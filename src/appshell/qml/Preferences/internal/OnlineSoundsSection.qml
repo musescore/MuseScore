@@ -31,9 +31,11 @@ BaseSection {
 
     rowSpacing: 16
 
-    property alias autoProcessOnlineSoundsInBackground: autoProcessOnlineSoundsInBackground.checked
+    property alias showErrorDialog: showErrorDialogBox.checked
+    property alias autoProcessOnlineSoundsInBackground: autoProcessOnlineSoundsInBackgroundBox.checked
     property int progressBarMode: 0
 
+    signal showErrorDialogChangeRequested(bool value)
     signal autoProcessOnlineSoundsInBackgroundChangeRequested(bool value)
     signal progressBarModeChangeRequired(int mode)
 
@@ -44,15 +46,31 @@ BaseSection {
         spacing: 12
 
         CheckBox {
-            id: autoProcessOnlineSoundsInBackground
+            id: showErrorDialogBox
+
+            width: parent.width
+
+            text: qsTrc("appshell/preferences", "Show error dialog when online sounds cannot be processed")
+
+            navigation.name: "ShowErrorDialogBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
+
+            onClicked: {
+                root.showErrorDialogChangeRequested(!checked)
+            }
+        }
+
+        CheckBox {
+            id: autoProcessOnlineSoundsInBackgroundBox
 
             width: parent.width
 
             text: qsTrc("appshell/preferences", "Automatically process online sounds in the background")
 
-            navigation.name: "AutoProcessOnlineSoundsInBackgroundCheckbox"
+            navigation.name: "AutoProcessOnlineSoundsInBackgroundBox"
             navigation.panel: root.navigation
-            navigation.row: 1
+            navigation.row: 2
 
             onClicked: {
                 root.autoProcessOnlineSoundsInBackgroundChangeRequested(!checked)
@@ -62,7 +80,7 @@ BaseSection {
         Row {
             spacing: 6
 
-            visible: !autoProcessOnlineSoundsInBackground.checked
+            visible: !autoProcessOnlineSoundsInBackgroundBox.checked
 
             Item {
                 width: 20
@@ -101,7 +119,7 @@ BaseSection {
 
         navigation.name: "ShowProcessingVisualization"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 3
 
         model: {
             var options = [{ text: qsTrc("appshell/preferences", "Always"), value: 0 }]

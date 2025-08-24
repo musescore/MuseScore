@@ -22,7 +22,8 @@
 
 #include "commonaudioapiconfigurationmodel.h"
 
-#include "audio/audiotypes.h"
+#include "global/translation.h"
+#include "audio/common/audiotypes.h"
 
 #include "log.h"
 
@@ -95,8 +96,6 @@ QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
     for (unsigned int bufferSize : bufferSizes) {
         result << bufferSize;
     }
-
-    std::sort(result.begin(), result.end());
 
     return result;
 }

@@ -22,6 +22,9 @@
 #ifndef MUSE_UPDATE_IUPDATESCENARIO_H
 #define MUSE_UPDATE_IUPDATESCENARIO_H
 
+#include "types/ret.h"
+#include "async/promise.h"
+
 #include "modularity/imoduleinterface.h"
 
 namespace muse::update {
@@ -30,9 +33,14 @@ class IUpdateScenario : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IUpdateScenario)
 
 public:
-    virtual ~IUpdateScenario() = default;
+    using CheckForUpdateCompleteCallback = std::function<void ()>;
 
-    virtual void checkForUpdate() = 0;
+    virtual ~IUpdateScenario() = default;
+    virtual bool needCheckForUpdate() const = 0;
+    virtual muse::async::Promise<Ret> checkForUpdate(bool manual) = 0;
+
+    virtual bool hasUpdate() const = 0;
+    virtual muse::Ret showUpdate() = 0;
 };
 }
 

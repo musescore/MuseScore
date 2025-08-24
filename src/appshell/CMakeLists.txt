@@ -34,8 +34,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/istartupscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.h
@@ -54,6 +52,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationstatusbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/welcomedialogmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/welcomedialogmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/firstlaunchsetupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/firstlaunchsetupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/firstlaunchsetup/themespagemodel.cpp
@@ -92,8 +92,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/framelesswindow/framelesswindowmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/framelesswindow/framelesswindowmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/iappmenumodelhook.h
@@ -133,15 +131,6 @@ if (OS_IS_MAC)
         SKIP_PRECOMPILE_HEADERS ON
         )
 endif(OS_IS_MAC)
-
-if (OS_IS_WIN)
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winframelesswindowcontroller.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winframelesswindowcontroller.h
-    )
-
-    set(MODULE_LINK ${MODULE_LINK} dwmapi)
-endif(OS_IS_WIN)
 
 if (NOT OS_IS_MAC)
     set(MODULE_SRC ${MODULE_SRC}

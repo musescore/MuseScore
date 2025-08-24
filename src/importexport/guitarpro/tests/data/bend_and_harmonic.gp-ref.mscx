@@ -127,9 +127,10 @@ Cowboys From Hell</text>
                 <horizontalDirection>right</horizontalDirection>
                 <eid>R_R</eid>
                 </Parenthesis>
-              <pitch>83</pitch>
+              <pitch>59</pitch>
               <tpc>19</tpc>
-              <string>3</string>
+              <fret>2</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -140,7 +141,6 @@ Cowboys From Hell</text>
                   </GuitarBend>
                 <next>
                   <location>
-                    <notes>1</notes>
                     </location>
                   </next>
                 </Spanner>
@@ -151,26 +151,26 @@ Cowboys From Hell</text>
             <durationType>half</durationType>
             <Note>
               <eid>U_U</eid>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <play>0</play>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
               <fret>4</fret>
               <string>2</string>
-              </Note>
-            <Note>
-              <eid>V_V</eid>
-              <pitch>84</pitch>
-              <tpc>14</tpc>
-              <head>diamond</head>
-              <string>3</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
                     <grace>0</grace>
-                    <notes>-1</notes>
                     </location>
                   </prev>
                 </Spanner>
+              </Note>
+            <Note>
+              <eid>V_V</eid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              <head>diamond</head>
+              <play>0</play>
+              <fret>4</fret>
+              <string>2</string>
               </Note>
             </Chord>
           <Spanner type="HarmonicMark">

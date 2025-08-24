@@ -41,9 +41,9 @@ TEST_F(Engraving_HairpinTests, hairpin)
     Hairpin* hp = new Hairpin(score->dummy()->segment());
 
     // subtype
-    hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);
+    hp->setHairpinType(HairpinType::DIM_HAIRPIN);
     Hairpin* hp2 = static_cast<Hairpin*>(ScoreRW::writeReadElement(hp));
-    EXPECT_EQ(hp2->hairpinType(), HairpinType::DECRESC_HAIRPIN);
+    EXPECT_EQ(hp2->hairpinType(), HairpinType::DIM_HAIRPIN);
     delete hp2;
 
     hp->setHairpinType(HairpinType::CRESC_HAIRPIN);

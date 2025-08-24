@@ -31,6 +31,7 @@
 #include "dom/sig.h"
 #include "dom/tempo.h"
 #include "dom/staff.h"
+#include "dom/utils.h"
 
 #include "utils/arrangementutils.h"
 
@@ -133,6 +134,7 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
                                                const int ticksPositionOffset,
                                                const mpe::ArticulationsProfilePtr profile,
+                                               const PlaybackContextPtr playbackCtx,
                                                mpe::PlaybackEventsMap& result) const
 {
     if (!chordSymbol->isRealizable()) {
@@ -149,12 +151,13 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 
     const Score* score = chordSymbol->score();
     int positionTick = chordSymbol->tick().ticks();
+    int positionTickWithOffset = positionTick + ticksPositionOffset;
 
-    timestamp_t eventTimestamp = timestampFromTicks(score, positionTick + ticksPositionOffset);
+    timestamp_t eventTimestamp = timestampFromTicks(score, positionTickWithOffset);
     PlaybackEventList& events = result[eventTimestamp];
 
-    int durationTicks = realized.getActualDuration(positionTick + ticksPositionOffset).ticks();
-    duration_t duration = timestampFromTicks(score, positionTick + ticksPositionOffset + durationTicks) - eventTimestamp;
+    int durationTicks = realized.getActualDuration(positionTickWithOffset).ticks();
+    duration_t duration = timestampFromTicks(score, positionTickWithOffset + durationTicks) - eventTimestamp;
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
     staff_layer_idx_t staffIdx = static_cast<staff_layer_idx_t>(chordSymbol->staffIdx());
@@ -175,15 +178,15 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
                                            voiceIdx,
                                            staffIdx,
                                            pitchLevel,
-                                           dynamicLevelFromType(mpe::DynamicType::Natural),
+                                           playbackCtx->appliableDynamicLevel(chordSymbol->track(), positionTickWithOffset),
                                            articulations,
                                            bps));
     }
 }
 
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp,
-                                               const mpe::duration_t actualDuration, const ArticulationsProfilePtr profile,
-                                               mpe::PlaybackEventsMap& result) const
+                                               const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
+                                               const ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const
 {
     if (!chordSymbol->isRealizable()) {
         return;
@@ -216,29 +219,40 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
                                            voiceIdx,
                                            staffIdx,
                                            pitchLevel,
-                                           dynamicLevelFromType(mpe::DynamicType::Natural),
+                                           actualDynamicLevel,
                                            articulations,
                                            Constants::DEFAULT_TEMPO.val));
     }
 }
 
-void PlaybackEventsRenderer::renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick,
-                                             const int ticksPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,
-                                             mpe::PlaybackEventsMap& result) const
+void PlaybackEventsRenderer::renderMetronome(const Score* score, const Measure* measure, const int ticksPositionOffset,
+                                             const muse::mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(score) {
         return;
     }
 
-    TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(measureStartTick).timesig();
+    int measureStartTick = measure->tick().ticks();
+    int measureEndTick = measure->endTick().ticks();
+
+    TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(measureStartTick).nominal();
     BeatsPerSecond bps = score->tempomap()->multipliedTempo(measureStartTick);
 
     int step = timeSignatureFraction.isBeatedCompound(bps.val)
                ? timeSignatureFraction.beatTicks() : timeSignatureFraction.dUnitTicks();
 
-    for (int tick = measureStartTick; tick < measureEndTick; tick += step) {
+    int startTick = measureStartTick;
+    int rtick = 0;
+
+    if (measure->isAnacrusis()) {
+        int remainingTicks = measure->ticks().ticks() % step;
+        startTick += remainingTicks;
+        rtick = remainingTicks + timeSignatureFraction.ticksPerMeasure() - measure->ticks().ticks();
+    }
+
+    for (int tick = startTick; tick < measureEndTick; tick += step, rtick += step) {
         timestamp_t eventTimestamp = timestampFromTicks(score, tick + ticksPositionOffset);
-        BeatType beatType = score->tick2beatType(Fraction::fromTicks(tick));
+        BeatType beatType = timeSignatureFraction.rtick2beatType(rtick);
         mpe::NoteEvent event = buildMetronomeEvent(timeSignatureFraction, bps.val, beatType, eventTimestamp, profile);
 
         result[eventTimestamp].emplace_back(std::move(event));
@@ -262,7 +276,7 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
 
 void PlaybackEventsRenderer::renderCountIn(const Score* score, const int startTick, const muse::mpe::timestamp_t actualTimestamp,
                                            const muse::mpe::ArticulationsProfilePtr profile,
-                                           muse::mpe::PlaybackEventsMap& result, muse::mpe::duration_t& totalCountInDuration) const
+                                           muse::mpe::PlaybackEventsMap& result, muse::mpe::duration_t& countInDuration) const
 {
     const Measure* measure = score->tick2measure(Fraction::fromTicks(startTick));
     if (!measure) {
@@ -281,10 +295,17 @@ void PlaybackEventsRenderer::renderCountIn(const Score* score, const int startTi
 
     // Add extra clicks if...
     int endTick = ticksPerMeasure + (startTick - measureStartTick); // ... not starting playback at beginning of measure
-    if (measure->isAnacrusis()) {  // ... measure is incomplete (anacrusis)
+    int remainingTicks = 0;
+
+    if (measure->isAnacrusis()) { // ... measure is incomplete (anacrusis)
         int measureTicks = measure->ticks().ticks();
-        endTick += (ticksPerMeasure - measureTicks) - (measureTicks % step);
+        endTick += ticksPerMeasure - measureTicks;
+        remainingTicks = measureTicks % step;
     }
+
+    MeasureBeat measureBeat = findBeat(score, startTick);
+    int closestMainBeatTick = score->sigmap()->bar2tick(measureBeat.measureIndex, std::ceil(measureBeat.beat));
+    remainingTicks += closestMainBeatTick - startTick;
 
     timestamp_t eventTimestamp = actualTimestamp;
 
@@ -297,7 +318,10 @@ void PlaybackEventsRenderer::renderCountIn(const Score* score, const int startTi
         eventTimestamp += stepDuration;
     }
 
-    totalCountInDuration = eventTimestamp - actualTimestamp;
+    countInDuration = eventTimestamp - actualTimestamp;
+    if (remainingTicks > 0) {
+        countInDuration -= durationFromTempoAndTicks(bps.val, remainingTicks);
+    }
 }
 
 void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tickPositionOffset,

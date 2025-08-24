@@ -57,8 +57,8 @@ public:
 
     Progress update(const QString& languageCode) override;
 
-    bool needRestartToApplyLanguageChange() const override;
-    async::Channel<bool> needRestartToApplyLanguageChangeChanged() const override;
+    bool restartRequiredToApplyLanguage() const override;
+    async::Channel<bool> restartRequiredToApplyLanguageChanged() const override;
 
 private:
     void loadLanguages();
@@ -82,8 +82,8 @@ private:
     mutable QHash<QString, Progress> m_updateOperationsHash;
 
     bool m_inited = false;
-    bool m_needRestartToApplyLanguageChange = false;
-    async::Channel<bool> m_needRestartToApplyLanguageChangeChanged;
+    bool m_restartRequiredToApplyLanguage = false;
+    async::Channel<bool> m_restartRequiredToApplyLanguageChanged;
 };
 }
 

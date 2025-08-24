@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_VERTICALFRAMESETTINGSMODEL_H
-#define MU_INSPECTOR_VERTICALFRAMESETTINGSMODEL_H
+#pragma once
 
 #include "models/abstractinspectormodel.h"
+
+#include "engraving/dom/property.h"
 
 namespace mu::inspector {
 class VerticalFrameSettingsModel : public AbstractInspectorModel
@@ -37,6 +38,8 @@ class VerticalFrameSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * frameTopMargin READ frameTopMargin CONSTANT)
     Q_PROPERTY(PropertyItem * frameBottomMargin READ frameBottomMargin CONSTANT)
     Q_PROPERTY(PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
+    Q_PROPERTY(PropertyItem * paddingToNotationAbove READ paddingToNotationAbove CONSTANT)
+    Q_PROPERTY(PropertyItem * paddingToNotationBelow READ paddingToNotationBelow CONSTANT)
 
 public:
     explicit VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -49,9 +52,13 @@ public:
     PropertyItem* frameTopMargin() const;
     PropertyItem* frameBottomMargin() const;
     PropertyItem* isSizeSpatiumDependent() const;
+    PropertyItem* paddingToNotationAbove() const;
+    PropertyItem* paddingToNotationBelow() const;
 
 private:
     void createProperties() override;
+    void onFrameHeightSet(const mu::engraving::Pid pid, const QVariant& newValue);
+    void onFrameHeightReset(const mu::engraving::Pid pid);
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
@@ -68,7 +75,7 @@ private:
     PropertyItem* m_frameTopMargin = nullptr;
     PropertyItem* m_frameBottomMargin = nullptr;
     PropertyItem* m_isSizeSpatiumDependent = nullptr;
+    PropertyItem* m_paddingToNotationAbove = nullptr;
+    PropertyItem* m_paddingToNotationBelow = nullptr;
 };
 }
-
-#endif // MU_INSPECTOR_VERTICALFRAMESETTINGSMODEL_H

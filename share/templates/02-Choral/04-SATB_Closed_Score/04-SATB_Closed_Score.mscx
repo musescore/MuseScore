@@ -40,7 +40,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <mergeMatchingRests>1</mergeMatchingRests>
+        <mergeMatchingRests>on</mergeMatchingRests>
         <bracket type="0" span="2" col="0"/>
         </Staff>
       <trackName>Women</trackName>
@@ -114,7 +114,7 @@ A</shortName>
           </StaffType>
         <defaultConcertClef>G8vb</defaultConcertClef>
         <defaultTransposingClef>F</defaultTransposingClef>
-        <mergeMatchingRests>1</mergeMatchingRests>
+        <mergeMatchingRests>on</mergeMatchingRests>
         </Staff>
       <trackName>Men</trackName>
       <Instrument id="men">

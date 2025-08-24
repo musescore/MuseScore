@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "abstractinspectormodel.h"
+#include "dom/barline.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/property.h"
 
@@ -62,6 +63,7 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
     { mu::engraving::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
     { mu::engraving::ElementType::BAR_LINE, InspectorModelType::TYPE_BARLINE },
+    { mu::engraving::ElementType::PLAY_COUNT_TEXT, InspectorModelType::TYPE_PLAY_COUNT_TEXT },
     { mu::engraving::ElementType::MARKER, InspectorModelType::TYPE_MARKER },
     { mu::engraving::ElementType::JUMP, InspectorModelType::TYPE_JUMP },
     { mu::engraving::ElementType::KEYSIG, InspectorModelType::TYPE_KEYSIGNATURE },
@@ -127,9 +129,9 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
 
 static const QMap<mu::engraving::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
     { mu::engraving::HairpinType::CRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
-    { mu::engraving::HairpinType::DECRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { mu::engraving::HairpinType::DIM_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
     { mu::engraving::HairpinType::CRESC_LINE, InspectorModelType::TYPE_CRESCENDO },
-    { mu::engraving::HairpinType::DECRESC_LINE, InspectorModelType::TYPE_DIMINUENDO },
+    { mu::engraving::HairpinType::DIM_LINE, InspectorModelType::TYPE_DIMINUENDO },
 };
 
 static const QMap<mu::engraving::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
@@ -150,7 +152,7 @@ QString AbstractInspectorModel::shortcutsForActionCode(std::string code) const
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
                                                mu::engraving::ElementType elementType)
-    : QObject(parent), m_elementType(elementType), m_updatePropertiesAllowed(true)
+    : QObject(parent), m_elementType(elementType)
 {
     m_repository = repository;
 
@@ -168,34 +170,30 @@ void AbstractInspectorModel::init()
     onCurrentNotationChanged();
 }
 
-void AbstractInspectorModel::onCurrentNotationChanged()
+bool AbstractInspectorModel::isSystemObjectBelowBottomStaff() const
 {
-    INotationPtr notation = currentNotation();
-    if (!notation) {
-        return;
-    }
-
-    notation->viewModeChanged().onNotify(this, [this]() {
-        onNotationChanged({}, {});
-    });
-
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& range) {
-        if (range.changedPropertyIdSet.empty() && range.changedStyleIdSet.empty()) {
-            return;
-        }
-
-        if (m_updatePropertiesAllowed && !isEmpty()) {
-            PropertyIdSet expandedPropertyIdSet = propertyIdSetFromStyleIdSet(range.changedStyleIdSet);
-            expandedPropertyIdSet.insert(range.changedPropertyIdSet.cbegin(), range.changedPropertyIdSet.cend());
-            onNotationChanged(expandedPropertyIdSet, range.changedStyleIdSet);
-        }
-
-        m_updatePropertiesAllowed = true;
-    });
+    return m_isSystemObjectBelowBottomStaff;
 }
 
-void AbstractInspectorModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
+bool AbstractInspectorModel::shouldUpdateOnScoreChange() const
 {
+    return m_shouldUpdateOnScoreChange;
+}
+
+void AbstractInspectorModel::updateIsSystemObjectBelowBottomStaff()
+{
+    bool soBelowBottomStaff = false;
+    for (EngravingItem* item : m_elementList) {
+        if (item->isSystemObjectBelowBottomStaff()) {
+            soBelowBottomStaff = true;
+            break;
+        }
+    }
+
+    if (m_isSystemObjectBelowBottomStaff != soBelowBottomStaff) {
+        m_isSystemObjectBelowBottomStaff = soBelowBottomStaff;
+        emit isSystemObjectBelowBottomStaffChanged(m_isSystemObjectBelowBottomStaff);
+    }
 }
 
 void AbstractInspectorModel::requestResetToDefaults()
@@ -290,6 +288,25 @@ static bool isPureDynamics(const QList<mu::engraving::EngravingItem*>& selectedE
     return true;
 }
 
+static bool barlineWithPlayText(const QList<mu::engraving::EngravingItem*>& selectedElementList)
+{
+    if (selectedElementList.empty()) {
+        return false;
+    }
+
+    for (const EngravingItem* item : selectedElementList) {
+        if (!item->isBarLine()) {
+            continue;
+        }
+
+        if (toBarLine(item)->playCountText()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
                                                                           const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
@@ -302,7 +319,7 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         }
 
         // Don't show the "Text" inspector panel for "pure" dynamics (i.e. without custom text)
-        if (TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) {
+        if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) || barlineWithPlayText(selectedElementList)) {
             types << InspectorSectionType::SECTION_TEXT;
         }
 
@@ -313,6 +330,7 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
 
     if (isRange) {
         types << InspectorSectionType::SECTION_MEASURES;
+        types << InspectorSectionType::SECTION_EMPTY_STAVES;
     }
 
     if (showPartsSection(selectedElementList)) {
@@ -373,6 +391,7 @@ void AbstractInspectorModel::setModelType(InspectorModelType modelType)
 void AbstractInspectorModel::onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue)
 {
     setPropertyValue(m_elementList, pid, newValue);
+    loadProperties();
 }
 
 void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid,
@@ -403,6 +422,32 @@ void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingIt
     endCommand();
 }
 
+void AbstractInspectorModel::onPropertyValueReset(const mu::engraving::Pid pid)
+{
+    resetPropertyValue(m_elementList, pid);
+    loadProperties();
+}
+
+void AbstractInspectorModel::resetPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid)
+{
+    if (items.empty()) {
+        return;
+    }
+
+    beginCommand(TranslatableString("undoableAction", "Reset %1").arg(propertyUserName(pid)));
+
+    for (mu::engraving::EngravingItem* item : items) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        item->undoResetProperty(pid);
+    }
+
+    updateNotation();
+    endCommand();
+}
+
 void AbstractInspectorModel::updateProperties()
 {
     requestElements();
@@ -419,6 +464,14 @@ void AbstractInspectorModel::requestElements()
     if (m_elementType != mu::engraving::ElementType::INVALID) {
         m_elementList = m_repository->findElementsByType(m_elementType);
     }
+}
+
+void AbstractInspectorModel::onCurrentNotationChanged()
+{
+}
+
+void AbstractInspectorModel::onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&)
+{
 }
 
 mu::engraving::Sid AbstractInspectorModel::styleIdByPropertyId(const mu::engraving::Pid pid) const
@@ -582,22 +635,24 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid
                                                         std::function<void(const mu::engraving::Pid propertyId,
                                                                            const QVariant& newValue)> onPropertyChangedCallBack,
                                                         std::function<void(const mu::engraving::Sid styleId,
-                                                                           const QVariant& newValue)> onStyleChangedCallBack)
+                                                                           const QVariant& newValue)> onStyleChangedCallBack,
+                                                        std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack)
 {
     PropertyItem* newPropertyItem = new PropertyItem(propertyId, this);
 
-    initPropertyItem(newPropertyItem, onPropertyChangedCallBack, onStyleChangedCallBack);
+    initPropertyItem(newPropertyItem, onPropertyChangedCallBack, onStyleChangedCallBack, onPropertyResetCallBack);
 
     return newPropertyItem;
 }
 
 PointFPropertyItem* AbstractInspectorModel::buildPointFPropertyItem(const mu::engraving::Pid& propertyId,
                                                                     std::function<void(const mu::engraving::Pid propertyId,
-                                                                                       const QVariant& newValue)> onPropertyChangedCallBack)
+                                                                                       const QVariant& newValue)> onPropertyChangedCallBack,
+                                                                    std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack)
 {
     PointFPropertyItem* newPropertyItem = new PointFPropertyItem(propertyId, this);
 
-    initPropertyItem(newPropertyItem, onPropertyChangedCallBack);
+    initPropertyItem(newPropertyItem, onPropertyChangedCallBack, nullptr, onPropertyResetCallBack);
 
     return newPropertyItem;
 }
@@ -606,7 +661,8 @@ void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
                                               std::function<void(const mu::engraving::Pid propertyId,
                                                                  const QVariant& newValue)> onPropertyChangedCallBack,
                                               std::function<void(const mu::engraving::Sid styleId,
-                                                                 const QVariant& newValue)> onStyleChangedCallBack)
+                                                                 const QVariant& newValue)> onStyleChangedCallBack,
+                                              std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack)
 {
     auto propertyCallback = onPropertyChangedCallBack;
     if (!propertyCallback) {
@@ -624,7 +680,15 @@ void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
         };
     }
 
+    auto resetCallback = onPropertyResetCallBack;
+    if (!resetCallback) {
+        resetCallback = [this](const mu::engraving::Pid propertyId) {
+            onPropertyValueReset(propertyId);
+        };
+    }
+
     connect(propertyItem, &PropertyItem::propertyModified, this, propertyCallback);
+    connect(propertyItem, &PropertyItem::resetToDefaultRequested, this, resetCallback);
     connect(propertyItem, &PropertyItem::applyToStyleRequested, this, styleCallback);
 }
 
@@ -651,9 +715,9 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
     propertyItem->setStyleId(styleId);
 
     QVariant propertyValue;
-    QVariant defaultPropertyValue;
 
     bool isUndefined = false;
+    bool isModified = false;
 
     for (const mu::engraving::EngravingItem* element : elements) {
         IF_ASSERT_FAILED(element) {
@@ -674,14 +738,22 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
             elementDefaultValue = convertElementPropertyValueFunc(elementDefaultValue);
         }
 
-        if (!(propertyValue.isValid() && defaultPropertyValue.isValid())) {
+        if (!propertyValue.isValid()) {
             propertyValue = elementCurrentValue;
-            defaultPropertyValue = elementDefaultValue;
         }
 
-        isUndefined = propertyValue != elementCurrentValue;
+        if (!isUndefined && propertyValue != elementCurrentValue) {
+            isUndefined = true;
+        }
 
-        if (isUndefined) {
+        if (!isModified) {
+            PropertyFlags f = element->propertyFlags(pid);
+            if (f == PropertyFlags::UNSTYLED || elementCurrentValue != elementDefaultValue) {
+                isModified = true;
+            }
+        }
+
+        if (isUndefined && isModified) {
             break;
         }
     }
@@ -694,7 +766,8 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
         propertyValue = QVariant();
     }
 
-    propertyItem->fillValues(propertyValue, defaultPropertyValue);
+    propertyItem->updateCurrentValue(propertyValue);
+    propertyItem->setIsModified(isModified);
 }
 
 bool AbstractInspectorModel::isNotationExisting() const
@@ -720,7 +793,7 @@ void AbstractInspectorModel::beginCommand(const muse::TranslatableString& action
 
     //! NOTE prevents unnecessary updating of properties
     //! after changing their values in the inspector
-    m_updatePropertiesAllowed = false;
+    m_shouldUpdateOnScoreChange = false;
 }
 
 void AbstractInspectorModel::endCommand()
@@ -733,11 +806,6 @@ void AbstractInspectorModel::endCommand()
 INotationPtr AbstractInspectorModel::currentNotation() const
 {
     return context()->currentNotation();
-}
-
-muse::async::Notification AbstractInspectorModel::currentNotationChanged() const
-{
-    return context()->currentNotationChanged();
 }
 
 bool AbstractInspectorModel::isMasterNotation() const

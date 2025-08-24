@@ -82,6 +82,7 @@ option(MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE "Build importexport imagesexport mod
 option(MUE_BUILD_IMPEXP_GUITARPRO_MODULE "Build importexport guitarpro module" ON)
 option(MUE_BUILD_IMPEXP_MEI_MODULE "Build importexport mei module" ON)
 option(MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE "Build importexport videoexport module" OFF)
+option(MUE_BUILD_IMPEXP_TABLEDIT_MODULE "Build importexport tabledit module" ON)
 
 option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
 option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
@@ -129,6 +130,11 @@ option(MUE_ENABLE_ENGRAVING_RENDER_DEBUG "Enable rendering debug" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_ACCESS "Enable diagnostic engraving check layout data access" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
 
+if (OS_IS_LIN)
+    option(MUSE_PIPEWIRE_AUDIO_DRIVER "Use PipeWire audio driver" OFF) # Turns ON on CI
+elseif (OS_IS_FBSD)
+    option(MUSE_PIPEWIRE_AUDIO_DRIVER "Use PipeWire audio driver" OFF)
+endif()
 
 ###########################################
 # Setup Configure

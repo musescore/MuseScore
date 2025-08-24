@@ -60,6 +60,7 @@ private:
     muse::uicomponents::MenuItemList makeHorizontalBoxItems();
     muse::uicomponents::MenuItemList makeHairpinItems();
     muse::uicomponents::MenuItemList makeGradualTempoChangeItems();
+    muse::uicomponents::MenuItemList makeTextItems();
 
     muse::uicomponents::MenuItem* makeEditStyle(const EngravingItem* element);
 

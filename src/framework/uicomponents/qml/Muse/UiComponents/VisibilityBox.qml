@@ -39,8 +39,6 @@ FocusScope {
     implicitHeight: contentRow.implicitHeight
     implicitWidth: contentRow.implicitWidth
 
-    opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
-
     RowLayout {
         id: contentRow
         spacing: 2
@@ -74,6 +72,7 @@ FocusScope {
         StyledTextLabel {
             id: label
             visible: !isEmpty
+            opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
             readonly property real availableWidth: root.width - contentRow.spacing - eyeButton.width
 

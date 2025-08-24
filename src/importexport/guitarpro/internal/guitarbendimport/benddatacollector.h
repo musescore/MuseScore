@@ -26,12 +26,12 @@
 #include <engraving/types/types.h>
 
 #include "benddatacontext.h"
-#include "guitarbendimporttypes.h"
 #include "splitchord/benddatacollectorsplitchord.h"
 
 namespace mu::engraving {
 class Note;
 class Chord;
+class Score;
 }
 
 namespace mu::iex::guitarpro {
@@ -39,10 +39,12 @@ class BendDataCollector
 {
 public:
 
+    BendDataCollector(mu::engraving::Score* score);
     void storeBendData(const mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues);
     BendDataContext collectBendDataContext();
 
 private:
+    mu::engraving::Score* m_score = nullptr;
     std::unordered_map<mu::engraving::track_idx_t,
                        std::map<mu::engraving::Fraction,
                                 std::unordered_map<const mu::engraving::Note*, ImportedBendInfo> > > m_bendInfoForNote;

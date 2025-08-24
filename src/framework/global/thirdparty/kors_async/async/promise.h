@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <memory>
 #include <string>
+#include <cassert>
 
 #include "internal/abstractinvoker.h"
 #include "async.h"
@@ -95,16 +96,18 @@ public:
 
     static Result dummy_result() { return Result::unchecked(); }
 
-    using Body = std::function<Result (Resolve, Reject)>;
+    using BodyResolveReject = std::function<Result (Resolve, Reject)>;
+    using BodyResolve = std::function<Result (Resolve)>;
 
-    Promise(Body body, PromiseType type)
+    Promise(BodyResolveReject body, PromiseType type)
+        : m_has_reject(true)
     {
         Resolve res(*this);
         Reject rej(*this);
 
         switch (type) {
         case PromiseType::AsyncByPromise:
-            Async::call(nullptr, [res, rej](Body body) mutable {
+            Async::call(nullptr, [res, rej](BodyResolveReject body) mutable {
                 body(res, rej);
             }, body);
             break;
@@ -115,18 +118,47 @@ public:
         }
     }
 
-    Promise(Body body, const std::thread::id& th = std::this_thread::get_id())
+    Promise(BodyResolveReject body, const std::thread::id& th = std::this_thread::get_id())
+        : m_has_reject(true)
     {
         Resolve res(*this);
         Reject rej(*this);
 
-        Async::call(nullptr, [res, rej](Body body) mutable {
+        Async::call(nullptr, [res, rej](BodyResolveReject body) mutable {
             body(res, rej);
         }, body, th);
     }
 
+    Promise(BodyResolve body, PromiseType type)
+        : m_has_reject(false)
+    {
+        Resolve res(*this);
+
+        switch (type) {
+        case PromiseType::AsyncByPromise:
+            Async::call(nullptr, [res](BodyResolveReject body) mutable {
+                body(res);
+            }, body);
+            break;
+
+        case PromiseType::AsyncByBody:
+            body(res);
+            break;
+        }
+    }
+
+    Promise(BodyResolve body, const std::thread::id& th = std::this_thread::get_id())
+        : m_has_reject(false)
+    {
+        Resolve res(*this);
+
+        Async::call(nullptr, [res](BodyResolve body) mutable {
+            body(res);
+        }, body, th);
+    }
+
     Promise(const Promise& p)
-        : m_ptr(p.ptr()) {}
+        : m_ptr(p.ptr()), m_has_reject(p.m_has_reject) {}
 
     ~Promise() {}
 
@@ -137,6 +169,7 @@ public:
         }
 
         m_ptr = p.ptr();
+        m_has_reject = p.m_has_reject;
         return *this;
     }
 
@@ -150,6 +183,8 @@ public:
     template<typename Call>
     Promise<T...>& onReject(const Asyncable* caller, Call f)
     {
+        assert(m_has_reject && "This promise has no rejection");
+
         ptr()->addCallBack(OnReject, const_cast<Asyncable*>(caller), new RejectCall<Call>(f));
         return *this;
     }
@@ -254,10 +289,17 @@ private:
     }
 
     mutable std::shared_ptr<PromiseInvoker> m_ptr = nullptr;
+    bool m_has_reject = false;
 };
 
 template<typename ... T>
-inline Promise<T...> make_promise(typename Promise<T...>::Body f, PromiseType type = PromiseType::AsyncByPromise)
+inline Promise<T...> make_promise(typename Promise<T...>::BodyResolveReject f, PromiseType type = PromiseType::AsyncByPromise)
+{
+    return Promise<T...>(f, type);
+}
+
+template<typename ... T>
+inline Promise<T...> make_promise(typename Promise<T...>::BodyResolve f, PromiseType type = PromiseType::AsyncByPromise)
 {
     return Promise<T...>(f, type);
 }

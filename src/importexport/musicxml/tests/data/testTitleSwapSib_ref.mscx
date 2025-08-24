@@ -48,6 +48,8 @@
       <stringTuningsFontSize>11.9365</stringTuningsFontSize>
       <harpPedalDiagramFontFace>Plantin MT Std</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Plantin MT Std</harpPedalTextDiagramFontFace>
+      <articulationFontFace>Plantin MT Std</articulationFontFace>
+      <articulationFontSize>11.9365</articulationFontSize>
       <longInstrumentFontFace>Plantin MT Std</longInstrumentFontFace>
       <longInstrumentFontSize>11.9365</longInstrumentFontSize>
       <shortInstrumentFontFace>Plantin MT Std</shortInstrumentFontFace>
@@ -76,6 +78,8 @@
       <staffTextFontSize>11.9365</staffTextFontSize>
       <rehearsalMarkFontFace>Plantin MT Std</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>11.9365</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Plantin MT Std</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>11.9365</repeatPlayCountFontSize>
       <repeatLeftFontFace>Plantin MT Std</repeatLeftFontFace>
       <repeatLeftFontSize>11.9365</repeatLeftFontSize>
       <repeatRightFontFace>Plantin MT Std</repeatRightFontFace>
@@ -146,7 +150,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Soprano/Tenor</trackName>
       <Instrument id="piano">
@@ -213,7 +216,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Alto</trackName>
       <Instrument id="piano">
@@ -280,7 +282,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Bass</trackName>
       <Instrument id="piano">
@@ -347,7 +348,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
@@ -418,7 +418,6 @@
           <style>poet</style>
           <family>Edwin</family>
           <align>left,top</align>
-          <offset x="0" y="-0.114849"/>
           <text><font size="10"/><font face="Edwin"/>2</text>
           </Text>
         </VBox>
@@ -454,7 +453,6 @@
         <Text>
           <eid>O_O</eid>
           <align>center,top</align>
-          <offset x="0" y="-0.083"/>
           <text><font size="22.0128"/>Title</text>
           </Text>
         </VBox>

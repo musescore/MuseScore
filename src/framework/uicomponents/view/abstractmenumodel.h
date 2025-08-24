@@ -70,6 +70,7 @@ protected:
         UserRole
     };
 
+    virtual void subscribeOnChanges();
     virtual void onActionsStateChanges(const muse::actions::ActionCodeList& codes);
 
     void setItem(int index, MenuItem* item);
@@ -99,6 +100,9 @@ private:
     MenuItem& item(MenuItemList& items, const QString& itemId);
     MenuItemList items(MenuItemList& items, const muse::actions::ActionCode& actionCode);
     MenuItem& menu(MenuItemList& items, const QString& menuId);
+
+    void updateState(MenuItemList& items, const muse::actions::ActionCodeList& codes, std::map<muse::actions::ActionCode,
+                                                                                               muse::ui::UiActionState>& states);
 
     void updateShortcutsAll();
     void updateShortcuts(MenuItem* item);

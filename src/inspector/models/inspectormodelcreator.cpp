@@ -30,8 +30,7 @@
 #include "notation/fermatas/fermatasettingsmodel.h"
 #include "notation/tempos/temposettingsmodel.h"
 #include "notation/lines/glissandosettingsmodel.h"
-#include "notation/barlines/barlinesettingsproxymodel.h"
-#include "notation/staffs/staffsettingsmodel.h"
+#include "notation/barlines/barlinesettingsmodel.h"
 #include "notation/sectionbreaks/sectionbreaksettingsmodel.h"
 #include "notation/markers/markersettingsmodel.h"
 #include "notation/jumps/jumpsettingsmodel.h"
@@ -74,11 +73,13 @@
 #include "notation/instrumentname/instrumentnamesettingsmodel.h"
 #include "notation/lyrics/lyricssettingsmodel.h"
 #include "notation/rests/beams/restbeamsettingsmodel.h"
+#include "notation/rests/restsettingsmodel.h"
 #include "notation/rests/restsettingsproxymodel.h"
 #include "notation/dynamics/dynamicsettingsmodel.h"
 #include "notation/expressions/expressionsettingsmodel.h"
 #include "notation/stringtunings/stringtuningssettingsmodel.h"
 #include "notation/symbols/symbolsettingsmodel.h"
+#include "notation/playcounttext/playcounttextsettingsmodel.h"
 
 using namespace mu::inspector;
 
@@ -107,9 +108,9 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
     case InspectorModelType::TYPE_GLISSANDO:
         return new GlissandoSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BARLINE:
-        return new BarlineSettingsProxyModel(parent, repository);
-    case InspectorModelType::TYPE_STAFF:
-        return new StaffSettingsModel(parent, repository);
+        return new BarlineSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_PLAY_COUNT_TEXT:
+        return new PlayCountTextSettingsModel(parent, repository);
     case InspectorModelType::TYPE_MARKER:
         return new MarkerSettingsModel(parent, repository);
     case InspectorModelType::TYPE_SECTIONBREAK:
@@ -210,6 +211,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new RestSettingsProxyModel(parent, repository);
     case InspectorModelType::TYPE_REST_BEAM:
         return new RestBeamSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_REST_REST:
+        return new RestSettingsModel(parent, repository);
     case InspectorModelType::TYPE_DYNAMIC:
         return new DynamicsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_EXPRESSION:

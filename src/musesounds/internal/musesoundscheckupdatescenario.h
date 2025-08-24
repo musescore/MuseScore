@@ -47,24 +47,24 @@ public:
     MuseSoundsCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void delayedInit();
+    bool needCheckForUpdate() const override;
+    muse::async::Promise<muse::Ret> checkForUpdate(bool manual) override;
 
     bool hasUpdate() const override;
     muse::Ret showUpdate() override;
 
 private:
-    bool isCheckStarted() const;
+    bool isCheckInProgress() const;
 
     bool shouldIgnoreUpdate(const muse::update::ReleaseInfo& info) const;
     void setIgnoredUpdate(const std::string& version);
 
-    void doCheckForUpdate(bool manual);
     void th_checkForUpdate();
 
     muse::Ret showReleaseInfo(const muse::update::ReleaseInfo& info);
     void tryOpenMuseHub(muse::ValList actions) const;
 
-    bool m_checkProgress = false;
+    bool m_checkInProgress = false;
     muse::ProgressPtr m_checkProgressChannel = nullptr;
 };
 }

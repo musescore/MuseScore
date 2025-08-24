@@ -166,6 +166,7 @@ public:
     Segment* segment() const;
 
     static String patternFromDiagram(const FretDiagram* diagram);
+    static std::vector<String> patternHarmonies(const String& pattern);
 
     void updateDiagram(const String& harmonyName);
 
@@ -233,6 +234,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    void setVisible(bool f) override;
+
     void setTrack(track_idx_t val) override;
 
     String accessibleInfo() const override;
@@ -273,7 +276,7 @@ public:
         double fretNumPadding = 0.0;
         double gridHeight = 0.0;
         std::vector<FingeringItem> fingeringItems;
-        PainterPath slurPath = PainterPath();
+        std::vector<PainterPath> slurPaths;
         String fretText = String();
     };
     DECLARE_LAYOUTDATA_METHODS(FretDiagram)
@@ -297,6 +300,7 @@ private:
     static void applyDiagramPattern(FretDiagram* diagram, const String& pattern);
 
     void applyAlignmentToHarmony();
+    void resetHarmonyAlignment();
 
     int m_strings = 0;
     int m_frets = 0;

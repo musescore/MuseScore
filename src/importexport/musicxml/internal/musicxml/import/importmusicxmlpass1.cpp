@@ -402,7 +402,7 @@ void MusicXmlParserPass1::addError(const String& error)
 {
     if (!error.empty()) {
         m_logger->logError(error, &m_e);
-        m_errors += errorStringWithLocation(m_e.lineNumber(), m_e.columnNumber(), error) + '\n';
+        m_errors += errorStringWithLocation(m_e.byteOffset(), error) + '\n';
     }
 }
 
@@ -762,14 +762,13 @@ static void scaleTitle(Score* score, Text* text);
  Also sets Align and Yoff.
  */
 
-static void addText2(VBox* vbx, Score* score, const String& strTxt, const TextStyleType stl, const Align align, const double yoffs)
+static void addText2(VBox* vbx, Score* score, const String& strTxt, const TextStyleType stl, const Align align)
 {
     if (stl != TextStyleType::COMPOSER && overrideTextStyleForComposer(strTxt)) {
         // HACK: in some Dolet 8 files the composer is written as a subtitle, which leads to stupid formatting.
         // This overrides the formatting and introduces proper composer text
         Text* text = Factory::createText(vbx, TextStyleType::COMPOSER);
         text->setXmlText(strTxt.trimmed());
-        text->setOffset(muse::PointF(0.0, yoffs));
         text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         vbx->add(text);
     } else if (!strTxt.isEmpty()) {
@@ -777,7 +776,6 @@ static void addText2(VBox* vbx, Score* score, const String& strTxt, const TextSt
         text->setXmlText(strTxt.trimmed());
         text->setAlign(align);
         text->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
-        text->setOffset(muse::PointF(0.0, yoffs));
         text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         vbx->add(text);
         if (stl == TextStyleType::TITLE) {
@@ -994,6 +992,37 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
     inferredCredits = creditLines.join(u"\n");
 }
 
+static void resizeTitleBox(VBox* vbox)
+{
+    double calculatedVBoxHeight = 0;
+    ElementList elist = vbox->el();
+    Score* score = vbox->score();
+    for (EngravingItem* e : elist) {
+        score->renderer()->layoutItem(e);
+    }
+
+    double padding = vbox->spatium();
+
+    for (EngravingItem* e : elist) {
+        if (e->isText()) {
+            Text* txt = toText(e);
+            Text::LayoutData* txtLD = txt->mutldata();
+
+            LD_CONDITION(txtLD->isSetBbox());
+
+            RectF bbox = txtLD->bbox();
+            bbox.moveTop(0.0);
+            txtLD->setBbox(bbox);
+            calculatedVBoxHeight += txtLD->bbox().height() + padding;
+        }
+    }
+
+    double heightInSp = calculatedVBoxHeight / vbox->spatium();
+    if (heightInSp > vbox->propertyDefault(Pid::BOX_HEIGHT).toDouble()) {
+        vbox->undoChangeProperty(Pid::BOX_HEIGHT, heightInSp);
+    }
+}
+
 //---------------------------------------------------------
 //   addCreditWords
 //---------------------------------------------------------
@@ -1037,12 +1066,11 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const 
         if (mustAddWordToVbox(w->type)) {
             const TextStyleType tid = top ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
             const Align align = alignForCreditWords(w, pageSize.width(), tid);
-            double yoffs = tid == TextStyleType::COMPOSER ? 0.0 : (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
                 Fraction vBoxTick = top ? Fraction(0, 1) : tick;
                 vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score, vBoxTick);
             }
-            addText2(vbox, score, w->words, tid, align, yoffs);
+            addText2(vbox, score, w->words, tid, align);
         } else if (w->type == u"rights" && score->metaTag(u"copyright").empty()) {
             // Add rights to footer, not a vbox
             static const std::regex tagRe("(<.*?>)");
@@ -1050,6 +1078,11 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const 
             rights.remove(tagRe);
             score->setMetaTag(u"copyright", rights);
         }
+    }
+
+    if (vbox && !MScore::testMode) {
+        // Correct size
+        resizeTitleBox(vbox);
     }
 
     return vbox;
@@ -1292,7 +1325,7 @@ Err MusicXmlParserPass1::parse()
     if (!found) {
         m_logger->logError(u"this is not a MusicXML score-partwise file, node <score-partwise> not found", &m_e);
         if (!m_e.errorString().isEmpty()) {
-            m_errors += errorStringWithLocation(m_e.lineNumber(), m_e.columnNumber(), m_e.errorString()) + '\n';
+            m_errors += errorStringWithLocation(m_e.byteOffset(), m_e.errorString()) + '\n';
         }
         return Err::FileBadFormat;
     }
@@ -1440,7 +1473,7 @@ void MusicXmlParserPass1::scorePartwise()
         }
 
         Score* score = staff->score();
-        if (!score->isSystemObjectStaff(staff) && exporterSoftware() == MusicXmlExporterSoftware::FINALE
+        if (!staff->isSystemObjectStaff() && exporterSoftware() == MusicXmlExporterSoftware::FINALE
             && configuration()->inferTextType()) {
             score->addSystemObjectStaff(staff);
         }
@@ -1799,6 +1832,7 @@ static void updateStyles(Score* score,
         // The MusicXML specification does not specify to which kinds of text
         // the word-font setting applies. Setting all sizes to the size specified
         // gives bad results, so a selection is made:
+        // Only apply word-font style when "Apply default typeface" is unchecked
         // exclude lyrics odd and even lines (handled separately),
         // Roman numeral analysis and harp pedal diagrams (special case, leave untouched)
         // and text types used in the title frame
@@ -1810,7 +1844,7 @@ static void updateStyles(Score* score,
             continue;
         }
 
-        bool needUseDefaultSize = tid == TextStyleType::HARMONY_ROMAN
+        bool needUseDefaultSize = configuration()->needUseDefaultFont() || tid == TextStyleType::HARMONY_ROMAN
                                   || tid == TextStyleType::HAMMER_ON_PULL_OFF
                                   || isTitleFrameStyle(tid)
                                   || isHarpPedalStyle(tid);
@@ -1866,9 +1900,14 @@ static double scaleText(const String& str, const Sid fontFaceSid, const double f
     const double pagePrintableWidth = style.styleV(Sid::pagePrintableWidth).value<double>() * DPI;
     const double pageWidth = style.styleV(Sid::pageWidth).value<double>() * DPI;
     const double pageHeight = style.styleV(Sid::pageHeight).value<double>() * DPI;
-    const double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), TextShowMnemonic, str).width();
 
-    return pagePrintableWidth / textWidth;
+    double longestLine = 0.0;
+    for (const String& line : str.split(u"\n")) {
+        const double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), TextShowMnemonic, line).width();
+        longestLine = std::max(longestLine, textWidth);
+    }
+
+    return pagePrintableWidth / longestLine;
 }
 
 static void scaleCopyrightText(Score* score)
@@ -1878,12 +1917,12 @@ static void scaleCopyrightText(Score* score)
         return;
     }
 
-    const double fontSize = score->style().styleV(Sid::footerFontSize).value<double>();
-    const double sizeRatio = scaleText(copyright, Sid::footerFontFace, fontSize, score);
+    const double fontSize = score->style().styleV(Sid::copyrightFontSize).value<double>();
+    const double sizeRatio = scaleText(copyright, Sid::copyrightFontFace, fontSize, score);
 
     if (sizeRatio < 1) {
         const double newSize = floor(fontSize * sizeRatio * 10) / 10;
-        score->style().set(Sid::footerFontSize, newSize);
+        score->style().set(Sid::copyrightFontSize, newSize);
     }
 }
 
@@ -2222,7 +2261,6 @@ static void createPart(Score* score, const String& id, PartMap& pm)
     pm.insert({ id, part });
     score->appendPart(part);
     Staff* staff = Factory::createStaff(part);
-    staff->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
     score->appendStaff(staff);
 }
 
@@ -2611,18 +2649,12 @@ static void setNumberOfStavesForPart(Part* const part, const size_t staves)
     size_t prevnstaves = part->nstaves();
     if (staves > part->nstaves()) {
         part->setStaves(static_cast<int>(staves));
-        // New staves default to INSTRUMENT hide mode
-        for (size_t i = prevnstaves; i < staves; ++i) {
-            part->staff(i)->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
-        }
     }
     if (staves != 0 && prevnstaves != 1 && prevnstaves != staves) {
-        for (size_t i = 0; i < part->nstaves(); ++i) {
-            // A "staves" value different from the existing nstaves means
-            // staves in a part will sometimes be hidden.
-            // We can approximate this with the AUTO hide mode.
-            part->staff(i)->setHideWhenEmpty(Staff::HideMode::AUTO);
-        }
+        // A "staves" value different from the existing nstaves means
+        // staves in a part will sometimes be hidden.
+        // We can approximate this in the following way:
+        part->setHideStavesWhenIndividuallyEmpty(true);
     }
 }
 
@@ -2942,7 +2974,7 @@ void MusicXmlParserPass1::attributes(const String& partId, const Fraction cTime)
         setNumberOfStavesForPart(muse::value(m_partMap, partId), staves - static_cast<int>(hiddenStaves.size()));
     } else {
         // Otherwise, don't discard any staves
-        // And set hidden staves to HideMode::AUTO
+        // And set hidden staves to hide when empty
         // (MuseScore doesn't currently have a mechanism
         // for hiding non-empty staves, so this is an approximation
         // of the correct implementation)
@@ -2950,7 +2982,7 @@ void MusicXmlParserPass1::attributes(const String& partId, const Fraction cTime)
         for (int hiddenStaff : hiddenStaves) {
             int hiddenStaffIndex = muse::value(m_parts, partId).staffNumberToIndex(hiddenStaff);
             if (hiddenStaffIndex >= 0) {
-                muse::value(m_partMap, partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO);
+                muse::value(m_partMap, partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(engraving::AutoOnOff::ON);
             }
         }
     }

@@ -632,7 +632,7 @@ StyledFlickable {
 
                 IconAndTextButtonSelector {
                     styleItem: chordSymbolsModel.chordAlignmentToFretboard
-                    label: qsTrc("notation", "Alignment to fretboard diagrams:")
+                    label: qsTrc("notation", "Alignment to fretboard diagram:")
                     controlAreaWidth: 98
                     buttonHeight: 30
                     hasReset: false

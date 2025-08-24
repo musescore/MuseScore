@@ -308,9 +308,6 @@ TEST_F(Engraving_BeamTests, deleteBeamStemDirection)
 
 TEST_F(Engraving_BeamTests, drumKitBeam)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "drumKitBeam.mscx");
     EXPECT_TRUE(score);
     score->setLayoutAll();
@@ -343,6 +340,4 @@ TEST_F(Engraving_BeamTests, drumKitBeam)
     // These chords inherit their direction from the beam
     EXPECT_TRUE(cr2->up() && cr2->stemDirection() == DirectionV::AUTO);
     EXPECT_TRUE(cr3->up() && cr3->stemDirection() == DirectionV::AUTO);
-
-    MScore::useRead302InTestMode = useRead302;
 }

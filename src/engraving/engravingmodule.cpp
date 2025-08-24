@@ -259,7 +259,6 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
     // initialize dom
 
-    MScore::defaultPlayDuration = 300;            // ms
     MScore::warnPitchRange      = true;
     MScore::warnGuitarBends     = true;
     MScore::pedalEventsMinTicks = 1;

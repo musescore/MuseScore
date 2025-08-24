@@ -44,6 +44,7 @@
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
 #include "musesounds/imusesoundscheckupdatescenario.h"
+#include "musesounds/imusesamplercheckupdatescenario.h"
 #include "extensions/iextensionsprovider.h"
 #include "tours/itoursservice.h"
 
@@ -77,6 +78,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::Inject<print::IPrintProvider> printProvider = { this };
     muse::Inject<muse::io::IFileSystem> fileSystem = { this };
     muse::Inject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
+    muse::Inject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario = { this };
     muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     muse::Inject<muse::tours::IToursService> toursService = { this };
 

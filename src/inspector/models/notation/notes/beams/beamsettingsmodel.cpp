@@ -358,7 +358,5 @@ void BeamSettingsModel::setIsCrossStaffMoveAvailable(bool isCrossStaffMoveAvaila
 
 void BeamSettingsModel::onCurrentNotationChanged()
 {
-    AbstractInspectorModel::onCurrentNotationChanged();
-
     m_beamModesModel->onCurrentNotationChanged();
 }

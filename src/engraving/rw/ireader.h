@@ -59,7 +59,7 @@ class IReader
 public:
     virtual ~IReader() = default;
 
-    virtual muse::Ret readScore(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
+    virtual muse::Ret readScoreFile(Score* score, XmlReader& xml, rw::ReadInOutData* out) = 0;
 
     using Supported = std::variant<std::monostate,
                                    Accidental*,
@@ -98,7 +98,7 @@ public:
     virtual void pasteSymbols(XmlReader& e, ChordRest* dst) = 0;
 
     // compat
-    virtual void readTremoloCompat(compat::TremoloCompat* item, XmlReader& xml) = 0;
+    virtual void readTremoloCompat(engraving::compat::TremoloCompat* item, XmlReader& xml) = 0;
 
 private:
     virtual void doReadItem(EngravingItem* item, XmlReader& xml) = 0;

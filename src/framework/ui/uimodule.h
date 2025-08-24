@@ -32,6 +32,7 @@ class UiConfiguration;
 class UiActionsRegister;
 class NavigationController;
 class NavigationUiActions;
+class WindowsController;
 
 #ifdef Q_OS_MAC
 class MacOSPlatformTheme;
@@ -64,6 +65,7 @@ private:
     std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
     std::shared_ptr<NavigationController> m_keyNavigationController;
     std::shared_ptr<NavigationUiActions> m_keyNavigationUiActions;
+    std::shared_ptr<WindowsController> m_windowsController;
 
     #ifdef Q_OS_MAC
     std::shared_ptr<MacOSPlatformTheme> m_platformTheme;
