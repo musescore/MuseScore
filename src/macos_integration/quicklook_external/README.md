@@ -9,5 +9,5 @@ pluginkit -m -v | grep muse
 To view the logs for the plugin, run
 
 ```bash
-log stream --level info --predicate 'process == "MuseScoreQLPreviewProvider" OR process == "MuseScoreThumbnailProvider"'
+log stream --level info --predicate 'process == "MuseScoreQuickLookPreviewExtension"'
 ```

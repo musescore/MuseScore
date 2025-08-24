@@ -268,8 +268,8 @@ void NotationModule::onInit(const IApplication::RunMode& mode)
 
     m_configuration->init();
     m_instrumentsRepository->init();
-    m_actionController->init();
-    m_notationUiActions->init();
+//    m_actionController->init();
+//    m_notationUiActions->init();
 
 #ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
     m_engravingFontsController->init();

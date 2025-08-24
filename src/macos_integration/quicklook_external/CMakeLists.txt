@@ -18,10 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if(NOT OS_IS_MAC)
-    return()
-endif()
-
 set(SWIFT_BUILD_DIR "${CMAKE_BINARY_DIR}/swift_build")
 file(MAKE_DIRECTORY ${SWIFT_BUILD_DIR})
 
