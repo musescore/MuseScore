@@ -1077,6 +1077,10 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
       const QString dir = notation.attribute("type");
       const QString place = notation.attribute("placement");
       Articulation* na = new Articulation(articSym, cr->score());
+      if (articSym != SymId::noSym)
+            na->setSymId(articSym);
+      //if (!notation.text().isEmpty())
+      //      na->setTextType(fromXml(notation.text(), ArticulationTextType::NO_TEXT)); // TODO
       colorItem(na, notation.attribute("color"));
 
       if (dir == "up" || dir == "down") {
@@ -7796,13 +7800,14 @@ void MusicXMLParserNotations::articulations()
                   }
             else if (_e.name() == "other-articulation") {
                   const QString smufl = _e.attributes().value("smufl").toString();
+                  SymId sid = Sym::name2id(smufl);
+                  Notation artic = Notation::notationWithAttributes(_e.name().toString(),
+                                                                    _e.attributes(), "articulations", sid);
+                  const QString articText = _e.readElementText();
+                  artic.setText(articText);
 
-                  if (!smufl.isEmpty()) {
-                        Notation artic = Notation::notationWithAttributes(_e.name().toString(),
-                                                                               _e.attributes(), "articulations", id);
+                  if (!smufl.isEmpty() || !articText.isEmpty())
                         _notations.push_back(artic);
-                        }
-                  _e.skipCurrentElement();  // skip but don't log
                   }
             else {
                   skipLogCurrElem();

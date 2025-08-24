@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="4.0">
+  <work>
+    <work-title>Handy tune</work-title>
+    </work>
+  <identification>
+    <creator type="composer">Klaus Rettinghaus</creator>
+    <encoding>
+      <software>MuseScore 0.7.0</software>
+      <encoding-date>2007-09-10</encoding-date>
+      <supports element="accidental" type="yes"/>
+      <supports element="beam" type="yes"/>
+      <supports element="print" attribute="new-page" type="no"/>
+      <supports element="print" attribute="new-system" type="no"/>
+      <supports element="stem" type="yes"/>
+      </encoding>
+    </identification>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Hand Bells</part-name>
+      <part-abbreviation>Ha. Be.</part-abbreviation>
+      <score-instrument id="P1-I1">
+        <instrument-name>Hand Bells</instrument-name>
+        </score-instrument>
+      <midi-device id="P1-I1" port="1"></midi-device>
+      <midi-instrument id="P1-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>113</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      </score-part>
+    </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+          </time>
+        <staves>2</staves>
+        <clef number="1">
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        <clef number="2">
+          <sign>F</sign>
+          <line>4</line>
+          </clef>
+        <transpose>
+          <diatonic>0</diatonic>
+          <chromatic>0</chromatic>
+          <octave-change>1</octave-change>
+          </transpose>
+        </attributes>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <staff>1</staff>
+        </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <staff>1</staff>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <handbell>martellato</handbell>
+            </technical>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <technical>
+            <handbell>martellato lift</handbell>
+            </technical>
+          </notations>
+        </note>
+      </measure>
+    <measure number="2">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <technical>
+            <stopped smufl="handbellsMalletBellSuspended"/>
+            </technical>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>1</staff>
+        <notations>
+          <technical>
+            <handbell>mallet table</handbell>
+            </technical>
+          </notations>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>5</voice>
+        <staff>2</staff>
+        </note>
+      </measure>
+    <measure number="3">
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>1</staff>
+        <notations>
+          <technical>
+            <handbell>mallet lift</handbell>
+            </technical>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <technical>
+            <handbell>pluck lift</handbell>
+            </technical>
+          </notations>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>5</voice>
+        <staff>2</staff>
+        </note>
+      </measure>
+    <measure number="4">
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <technical>
+            <handbell>gyro</handbell>
+            </technical>
+          </notations>
+        </note>
+      <direction placement="above">
+        <direction-type>
+          <words font-family="Leland Text" font-size="8"></words>
+          </direction-type>
+        <sound>
+          <play>
+            <other-play type="handbells_damp">Damp</other-play>
+            </play>
+          </sound>
+        <staff>1</staff>
+        </direction>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>1</staff>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>5</voice>
+        <staff>2</staff>
+        </note>
+      </measure>
+    <measure number="5">
+      <direction placement="above">
+        <direction-type>
+          <words font-family="Leland Text" font-size="8"></words>
+          </direction-type>
+        <sound>
+          <play>
+            <other-play type="handbells_swing_up">Swing up</other-play>
+            </play>
+          </sound>
+        <staff>1</staff>
+        </direction>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>1</staff>
+        </note>
+      <direction placement="above">
+        <direction-type>
+          <words font-family="Leland Text" font-size="8"></words>
+          </direction-type>
+        <sound>
+          <play>
+            <other-play type="handbells_swing_down">Swing down</other-play>
+            </play>
+          </sound>
+        <staff>1</staff>
+        </direction>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>5</voice>
+        <staff>2</staff>
+        </note>
+      </measure>
+    <measure number="6">
+      <direction placement="above">
+        <direction-type>
+          <words font-family="Leland Text" font-size="8"></words>
+          </direction-type>
+        <sound>
+          <play>
+            <other-play type="handbells_echo_1">Echo</other-play>
+            </play>
+          </sound>
+        <staff>1</staff>
+        </direction>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <technical>
+            <handbell>hand martellato</handbell>
+            </technical>
+          </notations>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <staff>2</staff>
+        </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <staff>2</staff>
+        </note>
+      </measure>
+    <measure number="7">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <technical>
+            <handbell>muted martellato</handbell>
+            </technical>
+          </notations>
+        </note>
+      <direction placement="above">
+        <direction-type>
+          <words font-family="Leland Text" font-size="8"></words>
+          </direction-type>
+        <sound>
+          <play>
+            <other-play type="handbells_swing">Swing</other-play>
+            </play>
+          </sound>
+        <staff>1</staff>
+        </direction>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>1</staff>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <staff>2</staff>
+        </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <staff>2</staff>
+        </note>
+      </measure>
+    <measure number="8">
+      <direction placement="above">
+        <direction-type>
+          <words font-family="Leland Text" font-size="8"></words>
+          </direction-type>
+        <sound>
+          <play>
+            <other-play type="handbells_echo_2">Echo</other-play>
+            </play>
+          </sound>
+        <staff>1</staff>
+        </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>1</staff>
+        </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <staff>1</staff>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <staff>2</staff>
+        </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>2</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>2</staff>
+        <notations>
+          <articulations>
+            <other-articulation placement="above">VIB</other-articulation>
+            </articulations>
+          </notations>
+        </note>
+      </measure>
+    <measure number="9">
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <articulations>
+            <other-articulation placement="above">TD</other-articulation>
+            </articulations>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>5</voice>
+        <type>half</type>
+        <stem>down</stem>
+        <staff>2</staff>
+        <notations>
+          <articulations>
+            <other-articulation placement="above">BD</other-articulation>
+            </articulations>
+          </notations>
+        </note>
+      </measure>
+    <measure number="10">
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <articulations>
+            <other-articulation placement="above">RT</other-articulation>
+            </articulations>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <articulations>
+            <other-articulation placement="above">PL</other-articulation>
+            </articulations>
+          </notations>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>5</voice>
+        <staff>2</staff>
+        </note>
+      </measure>
+    <measure number="11">
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        <notations>
+          <articulations>
+            <other-articulation placement="above">SB</other-articulation>
+            </articulations>
+          </notations>
+        </note>
+      <direction placement="above">
+        <direction-type>
+          <words font-size="8">LV</words>
+          </direction-type>
+        <sound>
+          <play>
+            <other-play type="handbells_lv">Let vibrate</other-play>
+            </play>
+          </sound>
+        <staff>1</staff>
+        </direction>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <staff>1</staff>
+        </note>
+      <backup>
+        <duration>4</duration>
+        </backup>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>5</voice>
+        <staff>2</staff>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+    </part>
+  </score-partwise>

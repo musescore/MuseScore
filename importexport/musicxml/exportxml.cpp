@@ -3092,16 +3092,6 @@ static QString symIdToTechn(const SymId sid)
                   return "hole";
             case SymId::guitarGolpe:
                   return "golpe";
-            case SymId::guitarClosePedal:
-            case SymId::pictOpenRimShot:
-                  return QString("stopped smufl=\"%1\"").arg(Sym::id2name(sid));
-            case SymId::guitarHalfOpenPedal:
-            case SymId::pictHalfOpen1:
-            case SymId::pictHalfOpen2:
-                  return QString("half-muted smufl=\"%1\"").arg(Sym::id2name(sid));
-            case SymId::guitarOpenPedal:
-            case SymId::pictOpen:
-                  return QString("open smufl=\"%1\"").arg(Sym::id2name(sid));
             case SymId::handbellsBelltree:
                   return "belltree";
             case SymId::handbellsDamp3:
@@ -3114,6 +3104,8 @@ static QString symIdToTechn(const SymId sid)
                   return "hand martellato";
             case SymId::handbellsMalletLft:
                   return "mallet lift";
+            case SymId::handbellsMalletBellSuspended:
+                 return QString("stopped smufl=\"%1\"").arg(Sym::id2name(sid));
             case SymId::handbellsMalletBellOnTable:
                   return "mallet table";
             case SymId::handbellsMartellato:
@@ -3126,6 +3118,16 @@ static QString symIdToTechn(const SymId sid)
                   return "pluck lift";
             case SymId::handbellsSwing:
                   return "swing";
+            case SymId::guitarClosePedal:
+            case SymId::pictOpenRimShot:
+                  return QString("stopped smufl=\"%1\"").arg(Sym::id2name(sid));
+            case SymId::guitarHalfOpenPedal:
+            case SymId::pictHalfOpen1:
+            case SymId::pictHalfOpen2:
+                  return QString("half-muted smufl=\"%1\"").arg(Sym::id2name(sid));
+            case SymId::guitarOpenPedal:
+            case SymId::pictOpen:
+                  return QString("open smufl=\"%1\"").arg(Sym::id2name(sid));
             default:
                   return QString(); // nothing
             }
@@ -3352,6 +3354,10 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         _xml.tagE("natural");
                         _xml.etag();
                         }
+                  else if (sid == SymId::handbellsMalletBellSuspended) {
+                        // special case for mallet bell suspended
+                        _xml.tagE(mxmlTechn);
+                        }
                   else if (QString(Sym::id2name(sid)).startsWith("handbells")) {
                         QString handbell = "handbell";
                         handbell += color2xml(a);
@@ -3410,7 +3416,8 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             if (a->isOrnament())
                   continue;
 
-            SymId sid = a->symId();
+            const SymId sid = a->symId();
+            const QString articText;// = toXml(a->textType()); // TODO
             if (symIdToArtics(sid).empty()
                 && symIdToTechn(sid).isEmpty()
                 && !isLaissezVibrer(sid)) {
@@ -3424,11 +3431,15 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         else
                               otherArtic += " placement=\"below\"";
                         }
-                  notations.tag(_xml);
-                  articulations.tag(_xml);
-                  const char* noteheadName = Sym::id2name(sid);
-                  otherArtic += QString(" smufl=\"%1\"").arg(noteheadName);
-                  _xml.tagE(otherArtic);
+                  QString articGlyph = Sym::id2name(sid);
+                  if (!articGlyph.isEmpty())
+                        otherArtic += QString(" smufl=\"%1\"").arg(articGlyph);
+                  if (!articGlyph.isEmpty() || !articText.isEmpty()) {
+                        notations.tag(_xml);
+                        articulations.tag(_xml);
+                        _xml.tag(otherArtic, articText);
+                        articulations.etag(_xml);
+                        }
                   }
             }
       }
