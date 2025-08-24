@@ -40,7 +40,17 @@ ToursProvider::ToursProvider(const modularity::ContextPtr& iocCtx)
 
 void ToursProvider::showTour(const Tour& tour)
 {
-    m_tour = tour;
+    for (const TourStep& step : tour.steps) {
+        const ui::INavigationControl* parentControl = findControl(step.controlUri);
+        if (!parentControl) {
+            //! NOTE: It's okay that the control is not found,
+            //! for example, the user has hidden the control.
+            LOGD() << "Control not found: " << step.controlUri << ", skipping step";
+            continue;
+        }
+        m_tour.steps.emplace_back(step);
+    }
+
     m_currentStep = 0;
     m_totalSteps = m_tour.steps.size();
 
@@ -78,15 +88,7 @@ void ToursProvider::doShow()
     m_currentStep++;
 
     const ui::INavigationControl* parentControl = findControl(step.controlUri);
-    if (!parentControl) {
-        //! NOTE: It's okay that the control is not found,
-        //! for example, the user has hidded the control.
-        LOGD() << "Control not found: " << step.controlUri << ", skipping step";
-        showNext();
-        return;
-    }
-
-    QQuickItem* parentControlItem = parentControl->visualItem();
+    QQuickItem* parentControlItem = parentControl ? parentControl->visualItem() : nullptr;
     IF_ASSERT_FAILED(parentControlItem) {
         return;
     }
@@ -104,8 +106,8 @@ void ToursProvider::doShow()
     //! NOTE: Avoid showing tooltip for control when tour for that control is shown
     setBlockShowingTooltipForItem(parentControlItem, true);
 
-    emit openTourStep(parentControlItem, step.title, step.description, step.previewImageOrGifUrl, step.videoExplanationUrl, index,
-                      m_totalSteps);
+    emit openTourStep(parentControlItem, step.title, step.description, step.preferredPlacement, step.previewImageOrGifUrl,
+                      step.videoExplanationUrl, index, m_totalSteps);
 }
 
 const ui::INavigationControl* ToursProvider::findControl(const Uri& controlUri)

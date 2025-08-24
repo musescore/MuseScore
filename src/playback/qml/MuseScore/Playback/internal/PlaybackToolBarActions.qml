@@ -83,7 +83,7 @@ Item {
             transparent: !accentButton
 
             navigation.panel: root.navPanel
-            navigation.name: toolTipTitle
+            navigation.name: Boolean(item) ? item.id : ""
             navigation.order: model.index
             accessible.name: (item.checkable ? (item.checked ? item.title + "  " + qsTrc("global", "On") :
                                                                item.title + "  " + qsTrc("global", "Off")) : item.title)

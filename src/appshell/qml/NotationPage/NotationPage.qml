@@ -588,13 +588,21 @@ DockPage {
         {
             "eventCode": "project_opened",
             "tour": {
-                "id": "input-by-duration",
+                "id": "project-opened-tour",
                 "steps": [
                     {
-                        "title": qsTrc("notation", "Note input modes"),
-                        "description": qsTrc("notation", "Discover different ways to input notes in MuseScore Studio."),
-                        "controlUri": "control://NoteInputSection/NoteInputBar/note-input-by-duration",
-                        "videoExplanationUrl": "https://youtu.be/xm1-XkS9VzA?utm_source=mss-yt&utm_medium=enter-by-duration&utm_campaign=mss-yt-enter-by-duration"
+                        "title": qsTrc("playback", "Ready, set, play!"),
+                        "description": qsTrc("playback", "Click here to enable a bar of count-in when starting playback."),
+                        "controlUri": "control://TopTool/PlaybackToolBar/playback-settings",
+                    },
+                    {
+                        "title": qsTrc("notation", "Do more in the layout panel"),
+                        "description": qsTrc("notation", "Set measure numbers below the bottom stave, control instrument visibility, and more."),
+                        // TODO: This step only appears if the panel is docked to the left (perhaps because DockWindow::doLoadPage hasn't been
+                        //       called by the time we initialise tours?)
+                        "controlUri": "control://NavigationLeftPanel/PanelTabs/Layout",
+                        "videoExplanationUrl": "https://youtu.be/xm1-XkS9VzA", // TODO: Use actual video
+                        "preferredPlacement" : "Right" // TODO: Probably should be dynamic depending on the dock's current position...
                     }
                 ]
             }
@@ -623,6 +631,20 @@ DockPage {
                         "title": qsTrc("playback", "Online sounds"),
                         "description": qsTrc("playback", "Click to manually process online sounds."),
                         "controlUri": "control://NotationStatusBar/NotationStatusBar/OnlineSoundsStatusView",
+                    }
+                ]
+            }
+        },
+        {
+            "eventCode": "percussion_panel_opened", // TODO: We need to handle the situation where the panel is already open on startup (otherwise this clashes with project-opened-tour)...
+            "tour": {
+                "id": "percussion-panel-columns",
+                "steps": [
+                    {
+                        "title": qsTrc("notation/percussion", "Make some room"),
+                        "description": qsTrc("notation/percussion", "Set the number of drum pad columns for each instrument in your score."),
+                        //NOTE: Weirdly, unlike the layout panel tour step, this doesn't seem to care where it's docked..
+                        "controlUri": "control://NavigationBottomPanel/PercussionPanelToolBarRightSide/layout-menu",
                     }
                 ]
             }

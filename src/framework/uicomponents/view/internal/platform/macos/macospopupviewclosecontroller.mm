@@ -68,7 +68,13 @@ bool MacOSPopupViewCloseController::nativeEventFilter(const QByteArray& eventTyp
 
 void MacOSPopupViewCloseController::initWindowMinimizedObserver()
 {
-    WId wid = parentItem()->window()->winId();
+    // HACK TO PREVENT CRASH - DON'T MERGE WITH THIS:
+    const QQuickWindow* window = parentItem() ? parentItem()->window() : nullptr;
+    if (!window) {
+        return;
+    }
+
+    WId wid = window->winId();
     NSView* nsView = (__bridge NSView*)reinterpret_cast<void*>(wid);
     NSWindow* nsWindow = [nsView window];
 

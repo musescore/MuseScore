@@ -30,6 +30,7 @@ struct TourStep
 {
     String title;
     String description;
+    String preferredPlacement;
     String previewImageOrGifUrl;
     String videoExplanationUrl;
 

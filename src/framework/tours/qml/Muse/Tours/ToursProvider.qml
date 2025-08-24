@@ -72,10 +72,10 @@ Item {
             tourStepLoader.active = false
         }
 
-        function open(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total) {
+        function open(parent, title, description, preferredPlacement, previewImageOrGifUrl, videoExplanationUrl, index, total) {
             loadTourStepPopup()
 
-            update(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total)
+            update(parent, title, description, preferredPlacement, previewImageOrGifUrl, videoExplanationUrl, index, total)
 
             var tourStepPopup = tourStepLoader.item
             tourStepPopup.open()
@@ -90,7 +90,20 @@ Item {
             tourStepPopup.close()
         }
 
-        function update(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total) {
+        function resolvePlacementPolicies(preferredPlacement) {
+            if (preferredPlacement === "Below") {
+                return PopupView.PreferBelow
+            } else if (preferredPlacement === "Above") {
+                return PopupView.PreferAbove
+            } else if (preferredPlacement === "Left") {
+                return PopupView.PreferLeft
+            } else if (preferredPlacement === "Right") {
+                return PopupView.PreferRight
+            }
+            return PopupView.Default
+        }
+
+        function update(parent, title, description, preferredPlacement, previewImageOrGifUrl, videoExplanationUrl, index, total) {
             var tourStepPopup = tourStepLoader.item
             if (!Boolean(tourStepPopup)) {
                 return
@@ -99,6 +112,7 @@ Item {
             root.parent = parent
             tourStepPopup.title = title
             tourStepPopup.description = description
+            tourStepPopup.placementPolicies = resolvePlacementPolicies(preferredPlacement)
             tourStepPopup.previewImageOrGifUrl = previewImageOrGifUrl
             tourStepPopup.videoExplanationUrl = videoExplanationUrl
             tourStepPopup.index = index
@@ -109,8 +123,8 @@ Item {
     Connections {
         target: root.provider
 
-        function onOpenTourStep(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total) {
-            tourStepLoader.open(parent, title, description, previewImageOrGifUrl, videoExplanationUrl, index, total)
+        function onOpenTourStep(parent, title, description, preferredPlacement, previewImageOrGifUrl, videoExplanationUrl, index, total) {
+            tourStepLoader.open(parent, title, description, preferredPlacement, previewImageOrGifUrl, videoExplanationUrl, index, total)
         }
 
         function onCloseCurrentTourStep() {
