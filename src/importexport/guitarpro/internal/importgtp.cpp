@@ -707,6 +707,7 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* note)
                 s->setText(u"");
                 s->setGlissandoType(GlissandoType::STRAIGHT);
                 s->setGlissandoShift(sl == SHIFT_SLIDE);
+                s->setGlissandoStyle(s->part()->instrument(s->tick())->glissandoStyle());
 
                 if (sl == LEGATO_SLIDE) {
                     createSlur(true, staffIdx, prevChord);

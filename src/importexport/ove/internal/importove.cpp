@@ -2454,6 +2454,7 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
             if (cr != 0) {
                 Glissando* g = Factory::createGlissando(cr);
                 g->setGlissandoType(GlissandoType::WAVY);
+                g->setGlissandoStyle(cr->part()->instrument(cr->tick())->glissandoStyle());
                 cr->add(g);
             }
         }
