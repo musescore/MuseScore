@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
@@ -30,6 +31,21 @@ Item {
     id: root
 
     property int sideMargin: 0
+
+    property var model
+
+    // Added search filter
+    property string filterText: ""
+
+    // Timer to limit the time between each term written by the user
+    Timer {
+        id: debounceTimer
+        interval: 300
+        repeat: false
+        onTriggered: {
+            root.filterText = searchField.text
+        }
+    }
 
     signal createNewPartRequested()
 
@@ -48,26 +64,74 @@ Item {
         }
     }
 
-    StyledTextLabel {
-        anchors.left: parent.left
-        anchors.leftMargin: root.sideMargin
+    RowLayout {
+        anchors.fill: parent
+        anchors.margins: root.sideMargin
+        spacing: 8
 
-        text: qsTrc("notation", "Parts")
-        font: ui.theme.headerBoldFont
+        StyledTextLabel {
+            text: qsTrc("notation", "Parts")
+            font: ui.theme.headerBoldFont
+            Layout.alignment: Qt.AlignVCenter
+        }
+
+        // Search bar for filtering parts
+        TextInputField {
+            id: searchField
+            placeholderText: qsTr("Search part...")
+            text: root.filterText
+            onTextChanged: debounceTimer.restart()
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+        }
+
+        FlatButton {
+            text: qsTrc("notation", "Create new part")
+            Layout.alignment: Qt.AlignVCenter
+
+            navigation.name: "CreateNewPartButton"
+            navigation.panel: root.navigationPanel
+            navigation.column: 0
+
+            onClicked: {
+                root.createNewPartRequested()
+            }
+        }
     }
 
-    FlatButton {
-        text: qsTrc("notation", "Create new part")
+    // Search filter
+    function filteredModel() {
+        if (root.model && root.filterText.length > 0) {
+            return root.model.filter(function(part) {
+                if (!part.title)
+                    return false;
 
-        anchors.right: parent.right
-        anchors.rightMargin: root.sideMargin
+                // Remove accents from the title for comparison
+                function removeAccents(str) {
+                    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                }
 
-        navigation.name: "CreateNewPartButton"
-        navigation.panel: root.navigationPanel
-        navigation.column: 0
+                // Detect if a term has accents
+                function hasAccent(str) {
+                    return /[àâäéèêëîïôöùûüç]/i.test(str);
+                }
 
-        onClicked: {
-            root.createNewPartRequested()
+                let title = part.title.toLowerCase();
+                let titleNoAccents = removeAccents(title);
+                let terms = root.filterText.toLowerCase().trim().split(/\s+/);
+
+                return terms.every(function(term) {
+                    if (hasAccent(term)) {
+                        // If the term has accents, search in the title with accents
+                        return title.indexOf(term) !== -1;
+                    } else {
+                        // If the term has no accents, search in the title terms with and without accents
+                        return titleNoAccents.indexOf(term) !== -1;
+                    }
+                });
+            });
+        } else {
+            return root.model;
         }
     }
 }
