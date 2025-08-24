@@ -1195,7 +1195,9 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
     const String dir = notation.attribute(u"type");
     const String place = notation.attribute(u"placement");
     Articulation* na = Factory::createArticulation(cr);
-    na->setSymId(articSym);
+    if (articSym != SymId::noSym) {
+        na->setSymId(articSym);
+    }
     if (!notation.text().empty()) {
         na->setTextType(TConv::fromXml(notation.text().toAscii().constChar(), ArticulationTextType::NO_TEXT));
     }

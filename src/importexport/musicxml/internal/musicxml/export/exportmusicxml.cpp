@@ -3692,7 +3692,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         const SymId sid = a->symId();
         const AsciiStringView articText = TConv::toXml(a->textType());
         if (symIdToArtic(sid).empty()
-            && symIdToTechn(sid) == ""
+            && symIdToTechn(sid).empty()
             && !a->isOrnament() && !a->isTapping()
             && !isLaissezVibrer(sid)) {
             String otherArtic = u"other-articulation";
@@ -3705,12 +3705,12 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                     otherArtic += u" placement=\"below\"";
                 }
             }
-            notations.tag(m_xml, a);
-            if (sid != SymId::noSym) {
-                AsciiStringView articGlyph = SymNames::nameForSymId(sid);
+            AsciiStringView articGlyph = SymNames::nameForSymId(sid);
+            if (!articGlyph.empty()) {
                 otherArtic += String(u" smufl=\"%1\"").arg(String::fromAscii(articGlyph.ascii()));
             }
-            if (sid != SymId::noSym || !articText.empty()) {
+            if (!articGlyph.empty() || !articText.empty()) {
+                notations.tag(m_xml, a);
                 articulations.tag(m_xml);
                 m_xml.tagRaw(otherArtic, articText);
                 articulations.etag(m_xml);
