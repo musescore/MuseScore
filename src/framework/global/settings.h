@@ -112,6 +112,9 @@ public:
 
     io::path_t filePath() const;
 
+    void remove(const Key& key);
+    bool contains(const Key& key) const;
+
 private:
     Settings();
     ~Settings();
