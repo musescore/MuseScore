@@ -86,7 +86,9 @@ if (MUE_CONFIGURATION_IS_APPWEB)
     add_subdirectory(webbridge)
 endif()
 
-add_subdirectory(macos-integration)
+if (OS_IS_MAC)
+    add_subdirectory(macos_integration)
+endif()
 
 # Stubs
 add_subdirectory(stubs)

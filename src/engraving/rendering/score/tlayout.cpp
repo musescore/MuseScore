@@ -3845,9 +3845,7 @@ void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
-    if (ldata->isValid() || MScore::testMode) {
-        // Don't layout in test mode because these are essentially UI elements,
-        // and they need to know about the Icon font, which isn't available in test mode.
+    if (ldata->isValid() || !item->configuration()->canLayoutIcons()) {
         return;
     }
 
@@ -3858,9 +3856,7 @@ void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData
 
 void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::LayoutData* ldata)
 {
-    if (MScore::testMode) {
-        // Don't layout in test mode because these are essentially UI elements,
-        // and they need to know about the Icon font, which isn't available in test mode.
+    if (!item->configuration()->canLayoutIcons()) {
         return;
     }
 
