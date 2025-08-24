@@ -202,51 +202,51 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
     mu::engraving::compat::EngravingCompat::doPostLayoutCompatIfNeeded(m_engravingProject->masterScore());
 
     // Load audio settings
-    bool tryCompatAudio = false;
-    ret = m_projectAudioSettings->read(reader);
-    if (!ret) {
-        m_projectAudioSettings->makeDefault();
-        tryCompatAudio = true;
-    }
+//    bool tryCompatAudio = false;
+//    ret = m_projectAudioSettings->read(reader);
+//    if (!ret) {
+//        m_projectAudioSettings->makeDefault();
+//        tryCompatAudio = true;
+//    }
 
     // Load cloud info
-    {
-        m_cloudInfo.sourceUrl = masterScore->metaTags()[SOURCE_TAG].toQString();
-        m_cloudInfo.revisionId = masterScore->metaTags()[SOURCE_REVISION_ID_TAG].toInt();
-
-        m_cloudAudioInfo.url = masterScore->metaTags()[AUDIO_COM_URL_TAG].toQString();
-
-        if (configuration()->isLegacyCloudProject(path)) {
-            m_cloudInfo.name = io::filename(path, false).toQString();
-        }
-    }
+//    {
+//        m_cloudInfo.sourceUrl = masterScore->metaTags()[SOURCE_TAG].toQString();
+//        m_cloudInfo.revisionId = masterScore->metaTags()[SOURCE_REVISION_ID_TAG].toInt();
+//
+//        m_cloudAudioInfo.url = masterScore->metaTags()[AUDIO_COM_URL_TAG].toQString();
+//
+//        if (configuration()->isLegacyCloudProject(path)) {
+//            m_cloudInfo.name = io::filename(path, false).toQString();
+//        }
+//    }
 
     // Set current if all success
     m_masterNotation->setMasterScore(masterScore);
 
     // Load view settings & solo-mute states (needs to be done after notations are created)
-    m_masterNotation->notation()->viewState()->read(reader);
-    m_masterNotation->notation()->soloMuteState()->read(reader);
+//    m_masterNotation->notation()->viewState()->read(reader);
+//    m_masterNotation->notation()->soloMuteState()->read(reader);
     const int mscVersion = m_masterNotation->mscVersion();
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         const INotationPtr excerptNotation = excerpt->notation();
-        if (!excerpt->hasFileName() || mscVersion < 440) {
-            m_masterNotation->initNotationSoloMuteState(excerptNotation);
-            continue;
-        }
-        muse::io::path_t ePath = u"Excerpts/" + excerpt->fileName() + u"/";
-        excerptNotation->viewState()->read(reader, ePath);
-        excerptNotation->soloMuteState()->read(reader, ePath);
+//        if (!excerpt->hasFileName() || mscVersion < 440) {
+//            m_masterNotation->initNotationSoloMuteState(excerptNotation);
+//            continue;
+//        }
+//        muse::io::path_t ePath = u"Excerpts/" + excerpt->fileName() + u"/";
+//        excerptNotation->viewState()->read(reader, ePath);
+//        excerptNotation->soloMuteState()->read(reader, ePath);
     }
 
     // Apply compat audio settings (needs to be done after notations are created)
-    if (tryCompatAudio && !settingsCompat.audioSettings.empty()) {
-        for (const auto& audioCompat : settingsCompat.audioSettings) {
-            notation::INotationSoloMuteState::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
-            INotationSoloMuteStatePtr soloMuteStatePtr = m_masterNotation->notation()->soloMuteState();
-            soloMuteStatePtr->setTrackSoloMuteState(audioCompat.second.instrumentId, state);
-        }
-    }
+//    if (tryCompatAudio && !settingsCompat.audioSettings.empty()) {
+//        for (const auto& audioCompat : settingsCompat.audioSettings) {
+//            notation::INotationSoloMuteState::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
+//            INotationSoloMuteStatePtr soloMuteStatePtr = m_masterNotation->notation()->soloMuteState();
+//            soloMuteStatePtr->setTrackSoloMuteState(audioCompat.second.instrumentId, state);
+//        }
+//    }
 
     return make_ret(Ret::Code::Ok);
 }

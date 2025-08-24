@@ -77,12 +77,12 @@ void EngravingFontsController::scanAllDirectories() const
 
     engravingFonts()->loadAllFonts();
 
-    QStringList musicFonts;
-    for (const engraving::IEngravingFontPtr& font : engravingFonts()->fonts()) {
-        musicFonts << QString::fromStdString(font->name());
-        musicFonts << QString::fromStdString(font->name() + " Text");
-    }
-    uiConfiguration()->setNonTextFonts(musicFonts);
+//    QStringList musicFonts;
+//    for (const engraving::IEngravingFontPtr& font : engravingFonts()->fonts()) {
+//        musicFonts << QString::fromStdString(font->name());
+//        musicFonts << QString::fromStdString(font->name() + " Text");
+//    }
+//    uiConfiguration()->setNonTextFonts(musicFonts);
 }
 
 void EngravingFontsController::scanDirectory(const muse::io::path_t& path, bool isPrivate) const
