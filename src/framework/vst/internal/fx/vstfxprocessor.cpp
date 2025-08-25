@@ -34,15 +34,20 @@ VstFxProcessor::VstFxProcessor(IVstPluginInstancePtr&& instance, const AudioFxPa
 {
 }
 
-void VstFxProcessor::init()
+void VstFxProcessor::init(const audio::OutputSpec& spec)
 {
+    IF_ASSERT_FAILED(spec.isValid()) {
+        return;
+    }
+
+    m_outputSpec = spec;
+
     m_vstAudioClient->init(AudioPluginType::Fx, m_pluginPtr);
 
-    const samples_t blockSize = config()->samplesToPreallocate();
-
-    auto onPluginLoaded = [this, blockSize]() {
+    auto onPluginLoaded = [this]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
-        m_vstAudioClient->setMaxSamplesPerBlock(blockSize);
+        m_vstAudioClient->setSampleRate(m_outputSpec.sampleRate);
+        m_vstAudioClient->setMaxSamplesPerBlock(m_outputSpec.samplesPerChannel);
         m_inited = true;
     };
 
@@ -77,9 +82,10 @@ async::Channel<AudioFxParams> VstFxProcessor::paramsChanged() const
     return m_paramsChanges;
 }
 
-void VstFxProcessor::setSampleRate(unsigned int sampleRate)
+void VstFxProcessor::setOutputSpec(const audio::OutputSpec& spec)
 {
-    m_vstAudioClient->setSampleRate(sampleRate);
+    m_outputSpec = spec;
+    m_vstAudioClient->setSampleRate(spec.sampleRate);
 }
 
 bool VstFxProcessor::active() const

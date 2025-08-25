@@ -93,21 +93,24 @@ std::string WasapiAudioDriver::name() const
 bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
     if (!s_data.wasapiClient.get()) {
-        s_data.wasapiClient
-            = make_self<WasapiAudioClient>(s_data.clientStartedEvent, s_data.clientFailedToStartEvent, s_data.clientStoppedEvent);
+        s_data.wasapiClient = make_self<WasapiAudioClient>(s_data.clientStartedEvent,
+                                                           s_data.clientFailedToStartEvent,
+                                                           s_data.clientStoppedEvent);
     }
 
     m_desiredSpec = spec;
 
-    s_data.wasapiClient->setBufferDuration(samplesToRefTime(spec.samples, spec.sampleRate));
+    s_data.wasapiClient->setBufferDuration(samplesToRefTime(spec.output.samplesPerChannel, spec.output.sampleRate));
 
-    bool lowLatencyModeRequired = spec.samples <= s_data.wasapiClient->lowLatencyUpperBound();
+    bool lowLatencyModeRequired = spec.output.samplesPerChannel <= s_data.wasapiClient->lowLatencyUpperBound();
 
     s_data.wasapiClient->setLowLatency(lowLatencyModeRequired);
     s_data.wasapiClient->setSampleRequestCallback(spec.callback);
 
-    LOGI() << "WASAPI: trying to open the audio end-point with the following sample rate - " << spec.sampleRate;
-    LOGI() << "WASAPI: trying to open the audio end-point with the following samples per channel number - " << spec.samples;
+    LOGI() << "WASAPI: trying to open the audio end-point with"
+           << " the following sample rate - " << spec.output.sampleRate;
+    LOGI() << "WASAPI: trying to open the audio end-point with"
+           << " the following samples per channel number - " << spec.output.samplesPerChannel;
 
     hstring deviceId;
     hstring defaultDeviceId = to_hstring<std::string>(this->defaultDeviceId());
@@ -141,8 +144,9 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
     }
 
     m_activeSpec = m_desiredSpec;
-    m_activeSpec.sampleRate = s_data.wasapiClient->sampleRate();
-    m_activeSpec.samples = std::max(m_activeSpec.samples, static_cast<uint16_t>(minSupportedBufferSize()));
+    m_activeSpec.output.sampleRate = s_data.wasapiClient->sampleRate();
+    m_activeSpec.output.samplesPerChannel = std::max(m_activeSpec.output.samplesPerChannel,
+                                                     static_cast<samples_t>(minSupportedBufferSize()));
     *activeSpec = m_activeSpec;
 
     m_isOpened = true;
@@ -222,11 +226,6 @@ async::Notification WasapiAudioDriver::availableOutputDevicesChanged() const
     return m_availableOutputDevicesChanged;
 }
 
-unsigned int WasapiAudioDriver::outputDeviceBufferSize() const
-{
-    return m_activeSpec.samples;
-}
-
 bool WasapiAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
     bool result = true;
@@ -234,10 +233,10 @@ bool WasapiAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
     if (isOpened()) {
         close();
 
-        m_activeSpec.samples = bufferSize;
+        m_activeSpec.output.samplesPerChannel = bufferSize;
         result = open(m_activeSpec, &m_activeSpec);
     } else {
-        m_desiredSpec.samples = bufferSize;
+        m_desiredSpec.output.samplesPerChannel = bufferSize;
     }
 
     m_outputDeviceBufferSizeChanged.notify();
@@ -265,11 +264,6 @@ std::vector<unsigned int> WasapiAudioDriver::availableOutputDeviceBufferSizes() 
     return result;
 }
 
-unsigned int WasapiAudioDriver::outputDeviceSampleRate() const
-{
-    return m_activeSpec.sampleRate;
-}
-
 bool WasapiAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
 {
     bool result = true;
@@ -277,10 +271,10 @@ bool WasapiAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
     if (isOpened()) {
         close();
 
-        m_activeSpec.sampleRate = sampleRate;
+        m_activeSpec.output.sampleRate = sampleRate;
         result = open(m_activeSpec, &m_activeSpec);
     } else {
-        m_desiredSpec.sampleRate = sampleRate;
+        m_desiredSpec.output.sampleRate = sampleRate;
     }
 
     m_outputDeviceSampleRateChanged.notify();

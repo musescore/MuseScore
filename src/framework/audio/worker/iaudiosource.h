@@ -37,8 +37,8 @@ public:
     virtual bool isActive() const = 0;
     virtual void setIsActive(bool arg) = 0;
 
-    //! set current sample rate. Called by destination.
-    virtual void setSampleRate(unsigned int sampleRate) = 0;
+    //! set current output spec. Called by destination.
+    virtual void setOutputSpec(const OutputSpec& spec) = 0;
 
     //! return substream count for this source: 1 for mono, 2 for stereo, 6 for surround
     virtual unsigned int audioChannelsCount() const = 0;

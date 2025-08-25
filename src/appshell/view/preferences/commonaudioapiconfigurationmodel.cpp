@@ -85,7 +85,7 @@ void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)
 
 unsigned int CommonAudioApiConfigurationModel::bufferSize() const
 {
-    return audioDriver()->outputDeviceBufferSize();
+    return audioDriver()->activeSpec().output.samplesPerChannel;
 }
 
 QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
@@ -107,7 +107,7 @@ void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferS
 
 unsigned int CommonAudioApiConfigurationModel::sampleRate() const
 {
-    return audioDriver()->outputDeviceSampleRate();
+    return audioDriver()->activeSpec().output.sampleRate;
 }
 
 QList<unsigned int> CommonAudioApiConfigurationModel::sampleRateList() const

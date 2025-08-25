@@ -32,8 +32,8 @@ namespace muse::audio::fx {
 class FxResolver : public IFxResolver
 {
 public:
-    std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain) override;
-    std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxChain& fxChain) override;
+    std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain, const OutputSpec& outputSpec) override;
+    std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxChain& fxChain, const OutputSpec& outputSpec) override;
     AudioResourceMetaList resolveAvailableResources() const override;
     void registerResolver(const AudioFxType type, IResolverPtr resolver) override;
     void clearAllFx() override;

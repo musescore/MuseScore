@@ -39,21 +39,6 @@ static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META = {
     AudioResourceType::FluidSoundfont,
     false /*hasNativeEditor*/ };
 
-audioch_t AudioWorkerConfiguration::audioChannelsCount() const
-{
-    return configuration()->audioChannelsCount();
-}
-
-samples_t AudioWorkerConfiguration::samplesToPreallocate() const
-{
-    return configuration()->samplesToPreallocate();
-}
-
-async::Channel<samples_t> AudioWorkerConfiguration::samplesToPreallocateChanged() const
-{
-    return configuration()->samplesToPreallocateChanged();
-}
-
 bool AudioWorkerConfiguration::autoProcessOnlineSoundsInBackground() const
 {
     return configuration()->autoProcessOnlineSoundsInBackground();

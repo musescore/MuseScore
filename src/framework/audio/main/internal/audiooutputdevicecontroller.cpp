@@ -53,7 +53,7 @@ void AudioOutputDeviceController::init()
 
         bool ok = audioDriver()->setOutputDeviceBufferSize(bufferSize);
         if (ok) {
-            rpcChannel()->send(rpc::make_request(Method::SetReadBufferSize, RpcPacker::pack(bufferSize)));
+            rpcChannel()->send(rpc::make_request(Method::SetOutputSpec, RpcPacker::pack(audioDriver()->activeSpec().output)));
         }
     });
 
@@ -63,7 +63,7 @@ void AudioOutputDeviceController::init()
 
         bool ok = audioDriver()->setOutputDeviceSampleRate(sampleRate);
         if (ok) {
-            rpcChannel()->send(rpc::make_request(Method::SetSampleRate, RpcPacker::pack(sampleRate)));
+            rpcChannel()->send(rpc::make_request(Method::SetOutputSpec, RpcPacker::pack(audioDriver()->activeSpec().output)));
         }
     });
 }
@@ -106,8 +106,5 @@ void AudioOutputDeviceController::onOutputDeviceChanged()
     }
 
     IAudioDriver::Spec activeSpec = audioDriver()->activeSpec();
-
-    // TODO: audioEngine()->setAudioChannelsCount(activeSpec.channels);
-    rpcChannel()->send(rpc::make_request(Method::SetSampleRate, RpcPacker::pack(activeSpec.sampleRate)));
-    rpcChannel()->send(rpc::make_request(Method::SetReadBufferSize, RpcPacker::pack(activeSpec.samples)));
+    rpcChannel()->send(rpc::make_request(Method::SetOutputSpec, RpcPacker::pack(activeSpec.output)));
 }

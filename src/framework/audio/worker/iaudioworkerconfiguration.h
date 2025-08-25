@@ -33,11 +33,6 @@ class IAudioWorkerConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioWorkerConfiguration() = default;
 
-    virtual audioch_t audioChannelsCount() const = 0;
-
-    virtual samples_t samplesToPreallocate() const = 0;
-    virtual async::Channel<samples_t> samplesToPreallocateChanged() const = 0;
-
     virtual bool autoProcessOnlineSoundsInBackground() const = 0;
     virtual async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const = 0;
 

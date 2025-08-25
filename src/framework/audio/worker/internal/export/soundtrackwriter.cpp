@@ -65,10 +65,11 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
         return;
     }
 
-    samples_t totalSamplesNumber = (totalDuration / 1000000.f) * sizeof(float) * format.sampleRate;
+    const OutputSpec& outputSpec = format.outputSpec;
+    samples_t totalSamplesNumber = (totalDuration / 1000000.f) * sizeof(float) * outputSpec.sampleRate;
     m_inputBuffer.resize(totalSamplesNumber);
-    m_intermBuffer.resize(format.samplesPerChannel * format.audioChannelsNumber);
-    m_renderStep = format.samplesPerChannel;
+    m_intermBuffer.resize(outputSpec.samplesPerChannel * outputSpec.audioChannelCount);
+    m_renderStep = outputSpec.samplesPerChannel;
 
     m_encoderPtr = createEncoder(format.type);
 
@@ -99,7 +100,7 @@ Ret SoundTrackWriter::write()
 
     audioEngine()->setMode(RenderMode::OfflineMode);
 
-    m_source->setSampleRate(m_encoderPtr->format().sampleRate);
+    m_source->setOutputSpec(m_encoderPtr->format().outputSpec);
     m_source->setIsActive(true);
 
     DEFER {
@@ -107,7 +108,7 @@ Ret SoundTrackWriter::write()
 
         audioEngine()->setMode(RenderMode::IdleMode);
 
-        m_source->setSampleRate(audioEngine()->sampleRate());
+        m_source->setOutputSpec(audioEngine()->outputSpec());
         m_source->setIsActive(false);
 
         m_isAborted = false;

@@ -27,6 +27,8 @@
 #include <optional>
 #include <vector>
 
+#include "global/io/path.h"
+
 #include "global/modularity/ioc.h"
 #include "midi/imidioutport.h"
 
@@ -42,6 +44,7 @@ class FluidSynth : public AbstractSynthesizer
 public:
     FluidSynth(const audio::AudioSourceParams& params, const modularity::ContextPtr& iocCtx);
 
+    Ret init(const OutputSpec& spec);
     Ret addSoundFonts(const std::vector<io::path_t>& sfonts);
     void setPreset(const std::optional<midi::Program>& preset);
 
@@ -65,7 +68,7 @@ public:
     unsigned int audioChannelsCount() const override;
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    void setSampleRate(unsigned int sampleRate) override;
+    void setOutputSpec(const OutputSpec& spec) override;
 
     bool isValid() const override;
 
@@ -97,7 +100,6 @@ private:
         }
     };
 
-    Ret init();
     void createFluidInstance();
 
     void allNotesOff();
@@ -110,6 +112,8 @@ private:
     int setExpressionLevel(int level);
     int setControllerValue(int channel, int ctrl, int value);
     int setPitchBend(int channel, int pitchBend);
+
+    OutputSpec m_outputSpec;
 
     std::shared_ptr<Fluid> m_fluid = nullptr;
 

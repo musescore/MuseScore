@@ -263,10 +263,10 @@ void AudioModule::onDestroy()
 void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 {
     IAudioDriver::Spec requiredSpec;
-    requiredSpec.sampleRate = m_configuration->sampleRate();
     requiredSpec.format = IAudioDriver::Format::AudioF32;
-    requiredSpec.channels = m_configuration->audioChannelsCount();
-    requiredSpec.samples = m_configuration->driverBufferSize();
+    requiredSpec.output.sampleRate = m_configuration->sampleRate();
+    requiredSpec.output.audioChannelCount = m_configuration->audioChannelsCount();
+    requiredSpec.output.samplesPerChannel = m_configuration->driverBufferSize();
 
     if (m_configuration->shouldMeasureInputLag()) {
         requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
@@ -301,9 +301,5 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
 void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 {
-    worker::AudioWorker::ActiveSpec spec;
-    spec.bufferSize = activeSpec.samples;
-    spec.sampleRate = activeSpec.sampleRate;
-
-    m_audioWorker->run(spec);
+    m_audioWorker->run(activeSpec.output);
 }

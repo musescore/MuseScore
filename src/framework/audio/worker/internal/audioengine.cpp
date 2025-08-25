@@ -34,6 +34,8 @@ using namespace muse::audio;
 using namespace muse::audio::worker;
 using namespace muse::audio::rpc;
 
+static constexpr int MAX_SUPPORTED_AUDIO_CHANNELS = 2;
+
 AudioEngine::~AudioEngine()
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
@@ -63,20 +65,12 @@ Ret AudioEngine::init(AudioBufferPtr bufferPtr, const RenderConstraints& consts)
     m_buffer = std::move(bufferPtr);
     m_renderConsts = consts;
 
-    rpcChannel()->onMethod(Method::SetReadBufferSize, [this](const Msg& msg) {
-        uint16_t bufferSize = 0;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, bufferSize)) {
+    rpcChannel()->onMethod(Method::SetOutputSpec, [this](const Msg& msg) {
+        OutputSpec spec;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, spec)) {
             return;
         }
-        this->setReadBufferSize(bufferSize);
-    });
-
-    rpcChannel()->onMethod(Method::SetSampleRate, [this](const Msg& msg) {
-        sample_rate_t sampleRate = 0;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, sampleRate)) {
-            return;
-        }
-        this->setSampleRate(sampleRate);
+        this->setOutputSpec(spec);
     });
 
     setMode(RenderMode::IdleMode);
@@ -104,14 +98,7 @@ void AudioEngine::setOnReadBufferChanged(const OnReadBufferChanged func)
     m_onReadBufferChanged = func;
 }
 
-sample_rate_t AudioEngine::sampleRate() const
-{
-    ONLY_AUDIO_WORKER_THREAD;
-
-    return m_sampleRate;
-}
-
-void AudioEngine::setSampleRate(const sample_rate_t sampleRate)
+void AudioEngine::setOutputSpec(const OutputSpec& outputSpec)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -119,49 +106,36 @@ void AudioEngine::setSampleRate(const sample_rate_t sampleRate)
         return;
     }
 
-    if (m_sampleRate == sampleRate) {
+    if (m_outputSpec == outputSpec) {
         return;
     }
 
-    LOGI() << "Sample rate: " << sampleRate;
+    IF_ASSERT_FAILED(outputSpec.audioChannelCount <= MAX_SUPPORTED_AUDIO_CHANNELS) {
+        return;
+    }
 
-    m_sampleRate = sampleRate;
-    m_mixer->mixedSource()->setSampleRate(sampleRate);
+    LOGI() << "[OutputSpec] sampleRate: " << outputSpec.sampleRate
+           << ", samplesPerChannel: " << outputSpec.samplesPerChannel
+           << ", audioChannelCount: " << outputSpec.audioChannelCount;
+
+    bool isBufferChanged = m_outputSpec.samplesPerChannel != outputSpec.samplesPerChannel;
+
+    m_outputSpec = outputSpec;
+
+    m_mixer->setOutputSpec(outputSpec);
+
+    if (isBufferChanged) {
+        updateBufferConstraints();
+    }
 
     if (m_onReadBufferChanged) {
-        m_onReadBufferChanged(m_readBufferSize, m_sampleRate);
+        m_onReadBufferChanged(outputSpec.samplesPerChannel, outputSpec.sampleRate);
     }
 }
 
-void AudioEngine::setReadBufferSize(const uint16_t readBufferSize)
+OutputSpec AudioEngine::outputSpec() const
 {
-    ONLY_AUDIO_WORKER_THREAD;
-
-    if (m_readBufferSize == readBufferSize) {
-        return;
-    }
-
-    LOGI() << "Read buffer size: " << readBufferSize;
-
-    m_readBufferSize = readBufferSize;
-    updateBufferConstraints();
-
-    if (m_onReadBufferChanged) {
-        m_onReadBufferChanged(m_readBufferSize, m_sampleRate);
-    }
-}
-
-void AudioEngine::setAudioChannelsCount(const audioch_t count)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-
-    IF_ASSERT_FAILED(m_mixer) {
-        return;
-    }
-
-    LOGI() << "Audio channels: " << count;
-
-    m_mixer->setAudioChannelsCount(count);
+    return m_outputSpec;
 }
 
 RenderMode AudioEngine::mode() const
@@ -223,16 +197,16 @@ void AudioEngine::updateBufferConstraints()
         return;
     }
 
-    if (m_readBufferSize == 0) {
+    if (m_outputSpec.samplesPerChannel == 0) {
         return;
     }
 
     samples_t minSamplesToReserve = 0;
 
     if (m_currentMode == RenderMode::IdleMode) {
-        minSamplesToReserve = std::max(m_readBufferSize, m_renderConsts.minSamplesToReserveWhenIdle);
+        minSamplesToReserve = std::max(m_outputSpec.samplesPerChannel, m_renderConsts.minSamplesToReserveWhenIdle);
     } else {
-        minSamplesToReserve = std::max(m_readBufferSize, m_renderConsts.minSamplesToReserveInRealtime);
+        minSamplesToReserve = std::max(m_outputSpec.samplesPerChannel, m_renderConsts.minSamplesToReserveInRealtime);
     }
 
     m_buffer->setMinSamplesPerChannelToReserve(minSamplesToReserve);

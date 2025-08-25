@@ -139,8 +139,8 @@ bool WinmmDriver::open(const Spec& spec, Spec* activeSpec)
     s_winMMData = new WinMMData;
     ZeroMemory(s_winMMData, sizeof(WinMMData));
 
-    s_winMMData->samples = spec.samples;
-    s_winMMData->channels = spec.channels;
+    s_winMMData->samples = spec.output.samplesPerChannel;
+    s_winMMData->channels = spec.output.audioChannelCount;
     s_winMMData->callback = spec.callback;
     s_winMMData->userdata = spec.userdata;
 
@@ -161,8 +161,8 @@ bool WinmmDriver::open(const Spec& spec, Spec* activeSpec)
     WAVEFORMATEX format;
     ZeroMemory(&format, sizeof(WAVEFORMATEX));
 
-    format.nChannels = static_cast<WORD>(spec.channels);
-    format.nSamplesPerSec = static_cast<DWORD>(spec.sampleRate);
+    format.nChannels = static_cast<WORD>(spec.output.audioChannelCount);
+    format.nSamplesPerSec = static_cast<DWORD>(spec.output.sampleRate);
     format.wFormatTag = WAVE_FORMAT_PCM;
     format.wBitsPerSample = sizeof(short) * 8;
     format.nBlockAlign = (format.nChannels * format.wBitsPerSample) / 8;

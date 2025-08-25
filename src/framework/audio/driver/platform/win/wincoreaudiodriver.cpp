@@ -155,12 +155,12 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     hr = s_data->audioClient->GetDevicePeriod(&defaultTime, &minimumTime);
     CHECK_HRESULT(hr, false);
 
-    unsigned int minBufferSize = refTimeToSamples(minimumTime, spec.sampleRate);
+    unsigned int minBufferSize = refTimeToSamples(minimumTime, spec.output.sampleRate);
     m_bufferSizes = resolveBufferSizes(minBufferSize);
 
     s_data->pFormat = *deviceFormat;
     s_data->pFormat.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
-    s_data->pFormat.nChannels = spec.channels;
+    s_data->pFormat.nChannels = spec.output.audioChannelCount;
     s_data->pFormat.wBitsPerSample = 32;
     s_data->pFormat.nAvgBytesPerSec = s_data->pFormat.nSamplesPerSec * s_data->pFormat.nChannels * sizeof(float);
     s_data->pFormat.nBlockAlign = (s_data->pFormat.nChannels * s_data->pFormat.wBitsPerSample) / 8;
@@ -169,11 +169,11 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
-        activeSpec->sampleRate = s_data->pFormat.nSamplesPerSec;
+        activeSpec->output.sampleRate = s_data->pFormat.nSamplesPerSec;
         s_activeSpec = *activeSpec;
     }
 
-    defaultTime = std::max(minimumTime, samplesToRefTime(spec.samples, s_data->pFormat.nSamplesPerSec));
+    defaultTime = std::max(minimumTime, samplesToRefTime(spec.output.samplesPerChannel, s_data->pFormat.nSamplesPerSec));
 
     hr = s_data->audioClient->Initialize(AUDCLNT_SHAREMODE_SHARED,
                                          AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST,
@@ -427,7 +427,7 @@ std::vector<unsigned int> CoreAudioDriver::resolveBufferSizes(unsigned int minBu
 {
     std::vector<unsigned int> result;
 
-    unsigned int minimum = std::max(static_cast<int>(minBufferSize), MINIMUM_BUFFER_SIZE);
+    unsigned int minimum = std::max(static_cast<samples_t>(minBufferSize), MINIMUM_BUFFER_SIZE);
 
     unsigned int n = MAXIMUM_BUFFER_SIZE;
     while (n >= minimum) {
@@ -510,24 +510,15 @@ async::Notification CoreAudioDriver::availableOutputDevicesChanged() const
     return m_availableOutputDevicesChanged;
 }
 
-unsigned int CoreAudioDriver::outputDeviceBufferSize() const
-{
-    if (!s_data) {
-        return 0;
-    }
-
-    return s_activeSpec.samples;
-}
-
 bool CoreAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
-    if (s_activeSpec.samples == bufferSize) {
+    if (s_activeSpec.output.samplesPerChannel == bufferSize) {
         return true;
     }
 
     bool reopen = isOpened();
     close();
-    s_activeSpec.samples = bufferSize;
+    s_activeSpec.output.samplesPerChannel = bufferSize;
 
     bool ok = true;
     if (reopen) {

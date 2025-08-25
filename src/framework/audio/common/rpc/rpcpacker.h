@@ -28,6 +28,9 @@
 
 #include "log.h"
 
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::OutputSpec& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::OutputSpec& value);
+
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::PlaybackStatus& value);
 
@@ -116,6 +119,16 @@ void pack_custom(muse::msgpack::Packer& p, const muse::mpe::PlaybackData& value)
 void unpack_custom(muse::msgpack::UnPacker& p, muse::mpe::PlaybackData& value);
 
 #include "global/serialization/msgpack.h"
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::OutputSpec& value)
+{
+    p.process(value.sampleRate, value.samplesPerChannel, value.audioChannelCount);
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::OutputSpec& value)
+{
+    p.process(value.sampleRate, value.samplesPerChannel, value.audioChannelCount);
+}
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::PlaybackStatus& value)
 {
@@ -237,12 +250,12 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackTyp
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::SoundTrackFormat& value)
 {
-    p.process(value.type, value.sampleRate, value.samplesPerChannel, value.audioChannelsNumber, value.bitRate);
+    p.process(value.type, value.outputSpec, value.bitRate);
 }
 
 inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::SoundTrackFormat& value)
 {
-    p.process(value.type, value.sampleRate, value.samplesPerChannel, value.audioChannelsNumber, value.bitRate);
+    p.process(value.type, value.outputSpec, value.bitRate);
 }
 
 inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::AudioSignalVal& value)

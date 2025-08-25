@@ -43,7 +43,7 @@ FluidResolver::FluidResolver(const modularity::ContextPtr& iocCtx)
     refresh();
 }
 
-ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const
+ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params, const OutputSpec& spec) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -54,6 +54,7 @@ ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const Aud
     }
 
     FluidSynthPtr synth = std::make_shared<FluidSynth>(params, iocContext());
+    synth->init(spec);
     synth->addSoundFonts({ search->second.path });
     synth->setPreset(search->second.preset);
 

@@ -24,8 +24,6 @@
 
 #include <cstring>
 
-#include "realfn.h"
-
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::musesampler;
@@ -49,10 +47,6 @@ MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib,
     m_sequencer.setOnOffStreamFlushed([this]() {
         m_allNotesOffRequested = true;
     });
-
-    config()->samplesToPreallocateChanged().onReceive(this, [this](const samples_t samples) {
-        initSampler(m_samplerSampleRate, samples);
-    });
 }
 
 MuseSamplerWrapper::~MuseSamplerWrapper()
@@ -65,24 +59,26 @@ MuseSamplerWrapper::~MuseSamplerWrapper()
     m_samplerLib->destroy(m_sampler);
 }
 
-void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
+void MuseSamplerWrapper::setOutputSpec(const audio::OutputSpec& spec)
 {
     const bool isOffline = currentRenderMode() == RenderMode::OfflineMode;
-    const bool shouldUpdateSampleRate = m_samplerSampleRate != sampleRate && !isOffline;
+    const bool shouldReinitSampler = !m_sampler
+                                     || (m_outputSpec.sampleRate != spec.sampleRate && !isOffline)
+                                     || (m_outputSpec.samplesPerChannel != spec.samplesPerChannel && !isOffline);
 
-    if (!m_sampler || shouldUpdateSampleRate) {
-        if (!initSampler(sampleRate, config()->samplesToPreallocate())) {
+    if (shouldReinitSampler) {
+        if (!initSampler(spec.sampleRate, spec.samplesPerChannel)) {
             return;
         }
 
-        m_samplerSampleRate = sampleRate;
+        m_samplerSampleRate = spec.sampleRate;
     }
 
-    m_sampleRate = sampleRate;
+    m_outputSpec = spec;
 
     if (isOffline) {
-        LOGD() << "Start offline mode, sampleRate: " << m_sampleRate;
-        m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
+        LOGD() << "Start offline mode, sampleRate: " << spec.sampleRate;
+        m_samplerLib->startOfflineMode(m_sampler, spec.sampleRate);
         m_offlineModeStarted = true;
     }
 }
@@ -113,7 +109,7 @@ samples_t MuseSamplerWrapper::process(float* buffer, samples_t samplesPerChannel
     bool active = isActive();
 
     if (!active) {
-        msecs_t nextMicros = samplesToMsecs(samplesPerChannel, m_sampleRate);
+        msecs_t nextMicros = samplesToMsecs(samplesPerChannel, m_outputSpec.sampleRate);
         MuseSamplerSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMicros);
 
         for (const auto& pair : sequences) {
@@ -248,14 +244,14 @@ ms_Track MuseSamplerWrapper::addTrack()
 
 msecs_t MuseSamplerWrapper::playbackPosition() const
 {
-    return samplesToMsecs(m_currentPosition, m_sampleRate);
+    return samplesToMsecs(m_currentPosition, m_outputSpec.sampleRate);
 }
 
 void MuseSamplerWrapper::setPlaybackPosition(const msecs_t newPosition)
 {
     m_sequencer.setPlaybackPosition(newPosition);
 
-    setCurrentPosition(microSecsToSamples(newPosition, m_sampleRate));
+    setCurrentPosition(microSecsToSamples(newPosition, m_outputSpec.sampleRate));
 }
 
 bool MuseSamplerWrapper::isActive() const
