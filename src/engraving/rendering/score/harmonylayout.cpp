@@ -98,16 +98,12 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
         layoutModifierParentheses(item);
         RectF bb;
         RectF hAlignBox;
-        double segBl = 0.0;
         for (HarmonyRenderItem* renderItem : item->ldata()->renderItemList()) {
             RectF tsBbox = renderItem->tightBoundingRect().translated(renderItem->x(), renderItem->y());
             bb.unite(tsBbox);
 
             if (renderItem->align()) {
                 hAlignBox.unite(tsBbox);
-            }
-            if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
-                segBl = ts->bboxBaseLine();
             }
         }
 
