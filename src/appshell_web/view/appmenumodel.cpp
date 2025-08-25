@@ -328,6 +328,7 @@ MenuItemList AppMenuModel::makeIntervalsItems()
         makeMenuItem("interval7"),
         makeMenuItem("interval8"),
         makeMenuItem("interval9"),
+        makeMenuItem("interval10"),
         makeSeparator(),
         makeMenuItem("interval-2"),
         makeMenuItem("interval-3"),
@@ -336,7 +337,8 @@ MenuItemList AppMenuModel::makeIntervalsItems()
         makeMenuItem("interval-6"),
         makeMenuItem("interval-7"),
         makeMenuItem("interval-8"),
-        makeMenuItem("interval-9")
+        makeMenuItem("interval-9"),
+        makeMenuItem("interval-10")
     };
 
     return items;

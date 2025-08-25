@@ -221,6 +221,10 @@
     <seq>Alt+9</seq>
     </SC>
   <SC>
+    <key>interval10</key>
+    <seq>Alt+0</seq>
+    </SC>
+  <SC>
     <key>note-a</key>
     <seq>A</seq>
     </SC>

@@ -962,6 +962,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Ninth abov&e"),
              TranslatableString("action", "Enter interval: ninth above")
              ),
+    UiAction("interval10",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Tenth above"),
+             TranslatableString("action", "Enter interval: tenth above")
+             ),
     UiAction("interval-2",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -1009,6 +1015,12 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Ninth belo&w"),
              TranslatableString("action", "Enter interval: ninth below")
+             ),
+    UiAction("interval-10",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Tenth below"),
+             TranslatableString("action", "Enter interval: tenth below")
              ),
     UiAction("note-c",
              mu::context::UiCtxProjectOpened,

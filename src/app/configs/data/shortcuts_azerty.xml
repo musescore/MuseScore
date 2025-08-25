@@ -229,6 +229,11 @@
     <seq>Alt+Ç</seq> <!-- AZERTY for 9 -->
     </SC>
   <SC>
+    <key>interval10</key>
+    <seq>Alt+0</seq>
+    <seq>Alt+À</seq> <!-- AZERTY for 0 -->
+    </SC>
+  <SC>
     <key>note-a</key>
     <seq>A</seq>
     </SC>
