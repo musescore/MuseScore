@@ -55,8 +55,8 @@ struct LameHandler
             LOGI() << msg;
         });
 
-        lame_set_num_channels(flags, format.audioChannelsNumber);
-        lame_set_in_samplerate(flags, format.sampleRate);
+        lame_set_num_channels(flags, format.outputSpec.audioChannelCount);
+        lame_set_in_samplerate(flags, format.outputSpec.sampleRate);
         lame_set_brate(flags, format.bitRate);
 
         return lame_init_params(flags) >= 0;

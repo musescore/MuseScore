@@ -428,20 +428,20 @@ PwStream::PwStream(pw_core* core, const IAudioDriver::Spec& spec, const std::str
         PW_KEY_MEDIA_ROLE, "Production",
         nullptr);
 
-    if (!m_spec.samples) {
+    if (m_spec.output.samplesPerChannel == 0) {
         // could be null if upgrading from a previous version
-        m_spec.samples = MINIMUM_BUFFER_SIZE * 4;
+        m_spec.output.samplesPerChannel = MINIMUM_BUFFER_SIZE * 4;
     }
 
-    m_spec.samples = std::max(static_cast<uint16_t>(MINIMUM_BUFFER_SIZE), m_spec.samples);
-    m_spec.samples = std::min(static_cast<uint16_t>(MAXIMUM_BUFFER_SIZE), m_spec.samples);
+    m_spec.output.samplesPerChannel = std::max(MINIMUM_BUFFER_SIZE, m_spec.output.samplesPerChannel);
+    m_spec.output.samplesPerChannel = std::min(MAXIMUM_BUFFER_SIZE, m_spec.output.samplesPerChannel);
     // Request for a specific number of samples.
     // This is done through the "node.latency" property.
     // Note: user system configuration can override this. e.g.:
     //  - PIPEWIRE_QUANTUM or PIPEWIRE_LATENCY environment variable.
     //  - "clock.force-quantum" setting
     std::ostringstream lat;
-    lat << m_spec.samples << "/" << m_spec.sampleRate;
+    lat << m_spec.output.samplesPerChannel << "/" << m_spec.output.sampleRate;
     pw_properties_set(props, PW_KEY_NODE_LATENCY, lat.str().c_str());
 
     if (deviceId != PW_DEFAULT_DEVICE) {
@@ -451,22 +451,22 @@ PwStream::PwStream(pw_core* core, const IAudioDriver::Spec& spec, const std::str
     }
 
     spa_audio_info_raw formatInfo {};
-    formatInfo.rate = m_spec.sampleRate;
-    formatInfo.channels = m_spec.channels;
+    formatInfo.rate = m_spec.output.sampleRate;
+    formatInfo.channels = m_spec.output.audioChannelCount;
     switch (m_spec.format) {
     case IAudioDriver::Format::AudioF32:
         formatInfo.format = SPA_AUDIO_FORMAT_F32;
-        m_stride = m_spec.channels * 4;
+        m_stride = m_spec.output.audioChannelCount * 4;
         break;
     case IAudioDriver::Format::AudioS16:
         formatInfo.format = SPA_AUDIO_FORMAT_S16;
-        m_stride = m_spec.channels * 2;
+        m_stride = m_spec.output.audioChannelCount * 2;
         break;
     default:
         LOGW() << "Unknow format, falling back to F32";
         formatInfo.format = SPA_AUDIO_FORMAT_F32;
         m_spec.format = IAudioDriver::Format::AudioF32;
-        m_stride = m_spec.channels * 4;
+        m_stride = m_spec.output.audioChannelCount * 4;
         break;
     }
 
@@ -624,7 +624,8 @@ bool PwAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
     PwLoopLock lk { m_loop };
 
-    LOGI() << "Connecting to " << m_deviceId << " / " << spec.sampleRate << "Hz / " << spec.samples << " samples";
+    LOGI() << "Connecting to " << m_deviceId << " / " << spec.output.sampleRate << "Hz / "
+           << spec.output.samplesPerChannel << " samples";
 
     m_stream = std::make_unique<PwStream>(m_core, spec, m_deviceId);
 
@@ -717,23 +718,16 @@ async::Notification PwAudioDriver::availableOutputDevicesChanged() const
     return m_registry->availableOutputDevicesChanged();
 }
 
-unsigned int PwAudioDriver::outputDeviceBufferSize() const
-{
-    PwLoopLock lk { m_loop };
-
-    return m_stream ? m_stream->spec().samples : 0;
-}
-
 bool PwAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
-    if (m_formatSpec.samples == bufferSize) {
+    if (m_formatSpec.output.samplesPerChannel == bufferSize) {
         return true;
     }
 
     bool reopen = isOpened();
 
     close();
-    m_formatSpec.samples = bufferSize;
+    m_formatSpec.output.samplesPerChannel = bufferSize;
 
     bool ok = true;
     if (reopen) {
@@ -768,23 +762,16 @@ PwAudioDriver::availableOutputDeviceBufferSizes() const
     return result;
 }
 
-unsigned int PwAudioDriver::outputDeviceSampleRate() const
-{
-    PwLoopLock lk { m_loop };
-
-    return m_stream ? m_stream->spec().sampleRate : 0;
-}
-
 bool PwAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
 {
-    if (m_formatSpec.sampleRate == sampleRate) {
+    if (m_formatSpec.output.sampleRate == sampleRate) {
         return true;
     }
 
     bool reopen = isOpened();
 
     close();
-    m_formatSpec.sampleRate = sampleRate;
+    m_formatSpec.output.sampleRate = sampleRate;
 
     bool ok = true;
     if (reopen) {

@@ -37,10 +37,9 @@ class MixerChannel : public ITrackAudioOutput, public Injectable, public async::
     Inject<fx::IFxResolver> fxResolver = { this };
 
 public:
-    explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate,
+    explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const OutputSpec& outputSpec,
                           const modularity::ContextPtr& iocCtx);
-    explicit MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount,
-                          const modularity::ContextPtr& iocCtx);
+    explicit MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, const modularity::ContextPtr& iocCtx);
 
     TrackId trackId() const;
     IAudioSourcePtr source() const;
@@ -61,7 +60,7 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    void setSampleRate(unsigned int sampleRate) override;
+    void setOutputSpec(const OutputSpec& spec) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
@@ -71,8 +70,7 @@ private:
 
     TrackId m_trackId = -1;
 
-    unsigned int m_sampleRate = 0;
-    unsigned int m_audioChannelsCount = 0;
+    OutputSpec m_outputSpec;
     AudioOutputParams m_params;
 
     IAudioSourcePtr m_audioSource = nullptr;

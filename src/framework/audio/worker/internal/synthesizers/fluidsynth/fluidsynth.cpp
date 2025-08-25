@@ -64,8 +64,6 @@ FluidSynth::FluidSynth(const AudioSourceParams& params, const modularity::Contex
     : AbstractSynthesizer(params, iocCtx)
 {
     m_fluid = std::make_shared<Fluid>();
-
-    init();
 }
 
 bool FluidSynth::isValid() const
@@ -73,7 +71,7 @@ bool FluidSynth::isValid() const
     return m_fluid->synth != nullptr;
 }
 
-Ret FluidSynth::init()
+Ret FluidSynth::init(const OutputSpec& spec)
 {
     auto fluid_log_out = [](int level, const char* message, void*) {
 #undef LOG_TAG
@@ -110,6 +108,8 @@ Ret FluidSynth::init()
     fluid_set_log_function(FLUID_INFO, fluid_log_out, nullptr);
     fluid_set_log_function(FLUID_DBG, fluid_log_out, nullptr);
 
+    m_outputSpec = spec;
+
     m_fluid->settings = new_fluid_settings();
     fluid_settings_setnum(m_fluid->settings, "synth.gain", FLUID_GLOBAL_VOLUME_GAIN);
     fluid_settings_setint(m_fluid->settings, "synth.audio-channels", FLUID_AUDIO_CHANNELS_PAIR); // 1 pair of audio channels
@@ -119,8 +119,8 @@ Ret FluidSynth::init()
     fluid_settings_setint(m_fluid->settings, "synth.dynamic-sample-loading", 1);
     fluid_settings_setint(m_fluid->settings, "synth.polyphony", 512);
 
-    if (m_sampleRate > 0) {
-        fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
+    if (spec.sampleRate > 0) {
+        fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(spec.sampleRate));
     }
 
     fluid_settings_setint(m_fluid->settings, "synth.min-note-length", MIN_NOTE_LENGTH);
@@ -255,15 +255,16 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     return ret == FLUID_OK;
 }
 
-void FluidSynth::setSampleRate(unsigned int sampleRate)
+void FluidSynth::setOutputSpec(const OutputSpec& spec)
 {
-    if (m_sampleRate == sampleRate) {
+    if (m_outputSpec == spec) {
         return;
     }
 
-    m_sampleRate = sampleRate;
+    m_outputSpec = spec;
+
     if (m_fluid->settings) {
-        fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
+        fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(spec.sampleRate));
     }
 
     if (m_fluid->synth) {
@@ -415,7 +416,7 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
         allNotesOff();
     }
 
-    const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
+    const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_outputSpec.sampleRate);
     const FluidSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
     samples_t sampleOffset = 0;
 
@@ -425,7 +426,7 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
         auto nextIt = std::next(it);
         if (nextIt != sequences.cend()) {
             msecs_t duration = nextIt->first - it->first;
-            durationInSamples = microSecsToSamples(duration, m_sampleRate);
+            durationInSamples = microSecsToSamples(duration, m_outputSpec.sampleRate);
         }
 
         IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {

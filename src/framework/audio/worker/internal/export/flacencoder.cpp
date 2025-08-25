@@ -68,8 +68,8 @@ bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, c
 
     if (!m_flac->set_verify(true)
         || !m_flac->set_compression_level(0)
-        || !m_flac->set_channels(m_format.audioChannelsNumber)
-        || !m_flac->set_sample_rate(m_format.sampleRate)
+        || !m_flac->set_channels(m_format.outputSpec.audioChannelCount)
+        || !m_flac->set_sample_rate(m_format.outputSpec.sampleRate)
         || !m_flac->set_bits_per_sample(16)
         || !m_flac->set_total_samples_estimate(totalSamplesNumber)) {
         return false;
@@ -103,9 +103,9 @@ size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
     }
 
     size_t result = 0;
-    size_t totalSamplesNumber = samplesPerChannel * m_format.audioChannelsNumber;
+    size_t totalSamplesNumber = samplesPerChannel * m_format.outputSpec.audioChannelCount;
     uint32_t frameSize = 1024;
-    size_t stepSize = frameSize * m_format.audioChannelsNumber;
+    size_t stepSize = frameSize * m_format.outputSpec.audioChannelCount;
 
     std::vector<FLAC__int32> buff(samplesPerChannel * sizeof(float));
 

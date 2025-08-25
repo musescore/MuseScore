@@ -34,13 +34,15 @@ namespace muse::audio::fx {
 class ReverbProcessor : public IFxProcessor
 {
 public:
-    ReverbProcessor(const audio::AudioFxParams& params, audioch_t audioChannelsCount = 2);
+    ReverbProcessor(const audio::AudioFxParams& params);
     ~ReverbProcessor() override;
+
+    void init(const OutputSpec& spec);
 
     AudioFxType type() const override;
     const AudioFxParams& params() const override;
     async::Channel<audio::AudioFxParams> paramsChanged() const override;
-    void setSampleRate(unsigned int sampleRate) override;
+    void setOutputSpec(const OutputSpec& spec) override;
 
     bool active() const override;
     void setActive(bool active) override;

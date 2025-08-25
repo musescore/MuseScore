@@ -34,11 +34,6 @@ class AudioWorkerConfiguration : public IAudioWorkerConfiguration
 public:
     AudioWorkerConfiguration() = default;
 
-    audioch_t audioChannelsCount() const override;
-
-    samples_t samplesToPreallocate() const override;
-    async::Channel<samples_t> samplesToPreallocateChanged() const override;
-
     bool autoProcessOnlineSoundsInBackground() const override;
     async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const override;
 

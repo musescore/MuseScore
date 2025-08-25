@@ -82,10 +82,10 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
     m_data->format = *activeSpec;
 
     AudioStreamBasicDescription audioFormat;
-    audioFormat.mSampleRate = spec.sampleRate;
+    audioFormat.mSampleRate = spec.output.sampleRate;
     audioFormat.mFormatID = kAudioFormatLinearPCM;
     audioFormat.mFramesPerPacket = 1;
-    audioFormat.mChannelsPerFrame = spec.channels;
+    audioFormat.mChannelsPerFrame = spec.output.audioChannelCount;
     audioFormat.mReserved = 0;
     switch (activeSpec->format) {
     case Format::AudioF32:
@@ -97,7 +97,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         audioFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
         break;
     }
-    audioFormat.mBytesPerPacket = audioFormat.mBitsPerChannel * spec.channels / 8;
+    audioFormat.mBytesPerPacket = audioFormat.mBitsPerChannel * spec.output.audioChannelCount / 8;
     audioFormat.mBytesPerFrame = audioFormat.mBytesPerPacket * audioFormat.mFramesPerPacket;
 
     m_data->callback = spec.callback;
@@ -124,9 +124,9 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    uint16_t minBufferSize = static_cast<uint16_t>(bufferSizeRange.mMinimum);
-    uint16_t maxBufferSize = static_cast<uint16_t>(bufferSizeRange.mMaximum);
-    UInt32 bufferSizeOut = std::min(maxBufferSize, std::max(minBufferSize, spec.samples));
+    samples_t minBufferSize = static_cast<samples_t>(bufferSizeRange.mMinimum);
+    samples_t maxBufferSize = static_cast<samples_t>(bufferSizeRange.mMaximum);
+    UInt32 bufferSizeOut = std::min(maxBufferSize, std::max(minBufferSize, spec.output.samplesPerChannel));
 
     AudioObjectPropertyAddress preferredBufferSizeAddress = {
         .mSelector = kAudioDevicePropertyBufferFrameSize,
@@ -143,13 +143,13 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
     // Allocate 2 audio buffers. At the same time one used for writing, one for reading
     for (unsigned int i = 0; i < 2; ++i) {
         AudioQueueBufferRef buffer;
-        result = AudioQueueAllocateBuffer(m_data->audioQueue, spec.samples * audioFormat.mBytesPerFrame, &buffer);
+        result = AudioQueueAllocateBuffer(m_data->audioQueue, spec.output.samplesPerChannel * audioFormat.mBytesPerFrame, &buffer);
         if (result != noErr) {
             logError("Failed to allocate Audio Buffer, err: ", result);
             return false;
         }
 
-        buffer->mAudioDataByteSize = spec.samples * audioFormat.mBytesPerFrame;
+        buffer->mAudioDataByteSize = spec.output.samplesPerChannel * audioFormat.mBytesPerFrame;
 
         memset(buffer->mAudioData, 0, buffer->mAudioDataByteSize);
 
@@ -163,7 +163,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    LOGI() << "Connected to " << outputDevice() << " with bufferSize " << bufferSizeOut << ", sampleRate " << spec.sampleRate;
+    LOGI() << "Connected to " << outputDevice() << " with bufferSize " << bufferSizeOut << ", sampleRate " << spec.output.sampleRate;
 
     return true;
 }
@@ -300,24 +300,15 @@ void OSXAudioDriver::updateDeviceMap()
     m_availableOutputDevicesChanged.notify();
 }
 
-unsigned int OSXAudioDriver::outputDeviceBufferSize() const
-{
-    if (!isOpened()) {
-        return 0;
-    }
-
-    return m_data->format.samples;
-}
-
 bool OSXAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
-    if (m_data->format.samples == bufferSize) {
+    if (m_data->format.output.samplesPerChannel == bufferSize) {
         return true;
     }
 
     bool reopen = isOpened();
     close();
-    m_data->format.samples = bufferSize;
+    m_data->format.output.samplesPerChannel = bufferSize;
 
     bool ok = true;
     if (reopen) {
@@ -353,8 +344,8 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
         return {};
     }
 
-    unsigned int minimum = std::max(static_cast<size_t>(range.mMinimum), MINIMUM_BUFFER_SIZE);
-    unsigned int maximum = std::min(static_cast<size_t>(range.mMaximum), MAXIMUM_BUFFER_SIZE);
+    unsigned int minimum = std::max(static_cast<samples_t>(range.mMinimum), MINIMUM_BUFFER_SIZE);
+    unsigned int maximum = std::min(static_cast<samples_t>(range.mMaximum), MAXIMUM_BUFFER_SIZE);
 
     std::vector<unsigned int> result;
     for (unsigned int bufferSize = maximum; bufferSize >= minimum;) {
@@ -367,24 +358,15 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() con
     return result;
 }
 
-unsigned int OSXAudioDriver::outputDeviceSampleRate() const
-{
-    if (!isOpened()) {
-        return 0;
-    }
-
-    return m_data->format.sampleRate;
-}
-
 bool OSXAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
 {
-    if (m_data->format.sampleRate == sampleRate) {
+    if (m_data->format.output.sampleRate == sampleRate) {
         return true;
     }
 
     bool reopen = isOpened();
     close();
-    m_data->format.sampleRate = sampleRate;
+    m_data->format.output.sampleRate = sampleRate;
 
     bool ok = true;
     if (reopen) {

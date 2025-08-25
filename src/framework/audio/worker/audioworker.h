@@ -57,13 +57,8 @@ public:
 
     static std::thread::id ID;
 
-    struct ActiveSpec {
-        sample_rate_t sampleRate = 0;
-        uint16_t bufferSize = 0;
-    };
-
     void registerExports();
-    void run(const ActiveSpec& spec);
+    void run(const OutputSpec& outputSpec);
     void setInterval(const msecs_t interval);
     void stop();
     bool isRunning() const;
@@ -71,7 +66,7 @@ public:
     const std::shared_ptr<AudioBuffer>& audioBuffer() const { return m_audioBuffer; }
 
 private:
-    void th_main(const ActiveSpec& spec);
+    void th_main(const OutputSpec& outputSpec);
 
     // services
     std::shared_ptr<rpc::GeneralRpcChannel> m_rpcChannel;

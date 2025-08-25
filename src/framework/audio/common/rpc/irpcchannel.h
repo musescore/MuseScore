@@ -103,8 +103,7 @@ enum class Method {
     AddSoundFont,
 
     // AudioEngine
-    SetReadBufferSize,
-    SetSampleRate,
+    SetOutputSpec,
 };
 
 inline std::string to_string(Method m)
@@ -175,8 +174,7 @@ inline std::string to_string(Method m)
     case Method::AddSoundFont: return "AddSoundFont";
 
     // AudioEngine
-    case Method::SetReadBufferSize: return "SetReadBufferSize";
-    case Method::SetSampleRate: return "SetSampleRate";
+    case Method::SetOutputSpec: return "SetOutputSpec";
     }
 
     assert(false && "unknown enum value");

@@ -110,11 +110,11 @@ void AudioWorker::registerExports()
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 }
 
-void AudioWorker::run(const ActiveSpec& spec)
+void AudioWorker::run(const OutputSpec& outputSpec)
 {
     m_running = true;
-    m_thread = std::make_unique<std::thread>([this, spec]() {
-        th_main(spec);
+    m_thread = std::make_unique<std::thread>([this, outputSpec]() {
+        th_main(outputSpec);
     });
 
     if (!muse::setThreadPriority(*m_thread, ThreadPriority::High)) {
@@ -154,7 +154,7 @@ static msecs_t audioWorkerInterval(const samples_t samples, const sample_rate_t 
     return interval;
 }
 
-void AudioWorker::th_main(const ActiveSpec& spec)
+void AudioWorker::th_main(const OutputSpec& outputSpec)
 {
     runtime::setThreadName("audio_worker");
     AudioSanitizer::setupWorkerThread();
@@ -168,7 +168,7 @@ void AudioWorker::th_main(const ActiveSpec& spec)
     m_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
     m_synthResolver->registerResolver(AudioSourceType::Fluid, std::make_shared<FluidResolver>());
 
-    m_audioBuffer->init(m_configuration->audioChannelsCount());
+    m_audioBuffer->init(outputSpec.audioChannelCount);
 
     worker::AudioEngine::RenderConstraints consts;
     consts.minSamplesToReserveWhenIdle = minSamplesToReserve(RenderMode::IdleMode);
@@ -178,22 +178,20 @@ void AudioWorker::th_main(const ActiveSpec& spec)
 
     // Setup audio engine
     m_audioEngine->init(m_audioBuffer, consts);
-    m_audioEngine->setAudioChannelsCount(m_configuration->audioChannelsCount());
-    m_audioEngine->setSampleRate(spec.sampleRate);
-    m_audioEngine->setReadBufferSize(spec.bufferSize);
+    m_audioEngine->setOutputSpec(outputSpec);
 
     m_audioEngine->setOnReadBufferChanged([this](const samples_t samples, const sample_rate_t rate) {
         msecs_t interval = audioWorkerInterval(samples, rate);
         setInterval(interval);
     });
 
-    m_synthResolver->init(m_configuration->defaultAudioInputParams());
+    m_synthResolver->init(m_configuration->defaultAudioInputParams(), outputSpec);
 
     m_soundFontRepository->init();
     m_workerPlayback->init();
     m_workerChannelController->init(m_workerPlayback);
 
-    m_intervalMsecs = audioWorkerInterval(spec.bufferSize, spec.sampleRate);
+    m_intervalMsecs = audioWorkerInterval(outputSpec.samplesPerChannel, outputSpec.sampleRate);
     m_intervalInWinTime = toWinTime(m_intervalMsecs);
 
 #ifdef Q_OS_WIN

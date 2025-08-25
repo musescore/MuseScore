@@ -26,27 +26,23 @@
 
 #include "async/asyncable.h"
 
-#include "modularity/ioc.h"
 #include "audio/worker/ifxprocessor.h"
-#include "audio/worker/iaudioworkerconfiguration.h"
 
 #include "../vstaudioclient.h"
-#include "../../ivstplugininstance.h"
 #include "vsttypes.h"
 
 namespace muse::vst {
 class VstFxProcessor : public muse::audio::IFxProcessor, public async::Asyncable
 {
-    muse::Inject<audio::worker::IAudioWorkerConfiguration> config;
 public:
     explicit VstFxProcessor(IVstPluginInstancePtr&& instance, const muse::audio::AudioFxParams& params);
 
-    void init();
+    void init(const audio::OutputSpec& spec);
 
     muse::audio::AudioFxType type() const override;
     const muse::audio::AudioFxParams& params() const override;
     async::Channel<muse::audio::AudioFxParams> paramsChanged() const override;
-    void setSampleRate(unsigned int sampleRate) override;
+    void setOutputSpec(const audio::OutputSpec& spec) override;
     bool active() const override;
     void setActive(bool active) override;
     void process(float* buffer, unsigned int sampleCount) override;
@@ -59,6 +55,8 @@ private:
 
     muse::audio::AudioFxParams m_params;
     async::Channel<muse::audio::AudioFxParams> m_paramsChanges;
+
+    audio::OutputSpec m_outputSpec;
 };
 
 using VstFxPtr = std::shared_ptr<VstFxProcessor>;

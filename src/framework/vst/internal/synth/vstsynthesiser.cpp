@@ -50,18 +50,22 @@ VstSynthesiser::~VstSynthesiser()
     instancesRegister()->unregisterInstrPlugin(m_params.resourceMeta.id, m_trackId);
 }
 
-void VstSynthesiser::init()
+void VstSynthesiser::init(const OutputSpec& spec)
 {
+    IF_ASSERT_FAILED(spec.isValid()) {
+        return;
+    }
+
+    m_outputSpec = spec;
+
     m_pluginPtr = instancesRegister()->makeAndRegisterInstrPlugin(m_params.resourceMeta.id, m_trackId);
 
-    m_audioChannelsCount = config()->audioChannelsCount();
-    m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr, m_audioChannelsCount);
+    m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr, m_outputSpec.audioChannelCount);
 
-    const samples_t blockSize = config()->samplesToPreallocate();
-
-    auto onPluginLoaded = [this, blockSize]() {
+    auto onPluginLoaded = [this]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
-        m_vstAudioClient->setMaxSamplesPerBlock(blockSize);
+        m_vstAudioClient->setSampleRate(m_outputSpec.sampleRate);
+        m_vstAudioClient->setMaxSamplesPerBlock(m_outputSpec.samplesPerChannel);
         m_vstAudioClient->loadSupportedParams();
         m_sequencer.init(m_vstAudioClient->paramsMapping(SUPPORTED_CONTROLLERS), m_useDynamicEvents);
     };
@@ -171,15 +175,15 @@ void VstSynthesiser::setPlaybackPosition(const muse::audio::msecs_t newPosition)
     }
 }
 
-void VstSynthesiser::setSampleRate(unsigned int sampleRate)
+void VstSynthesiser::setOutputSpec(const audio::OutputSpec& spec)
 {
-    m_sampleRate = sampleRate;
-    m_vstAudioClient->setSampleRate(sampleRate);
+    m_outputSpec = spec;
+    m_vstAudioClient->setSampleRate(spec.sampleRate);
 }
 
 unsigned int VstSynthesiser::audioChannelsCount() const
 {
-    return m_audioChannelsCount;
+    return m_outputSpec.audioChannelCount;
 }
 
 async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
@@ -197,7 +201,7 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
         m_vstAudioClient->setMaxSamplesPerBlock(samplesPerChannel);
     }
 
-    const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
+    const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_outputSpec.sampleRate);
     const VstSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
 
     samples_t sampleOffset = 0;
@@ -209,14 +213,14 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
         auto nextIt = std::next(it);
         if (nextIt != sequences.cend()) {
             msecs_t duration = nextIt->first - it->first;
-            durationInSamples = microSecsToSamples(duration, m_sampleRate);
+            durationInSamples = microSecsToSamples(duration, m_outputSpec.sampleRate);
         }
 
         IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {
             break;
         }
 
-        processedSamples += processSequence(it->second, durationInSamples, buffer + sampleOffset * m_audioChannelsCount);
+        processedSamples += processSequence(it->second, durationInSamples, buffer + sampleOffset * m_outputSpec.audioChannelCount);
         sampleOffset += durationInSamples;
     }
 

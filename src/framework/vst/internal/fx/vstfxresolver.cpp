@@ -47,7 +47,7 @@ void VstFxResolver::clearAllFx()
     AbstractFxResolver::clearAllFx();
 }
 
-IFxProcessorPtr VstFxResolver::createMasterFx(const AudioFxParams& fxParams) const
+IFxProcessorPtr VstFxResolver::createMasterFx(const AudioFxParams& fxParams, const audio::OutputSpec& outputSpec) const
 {
     if (!pluginModulesRepo()->exists(fxParams.resourceMeta.id)) {
         return nullptr;
@@ -56,12 +56,13 @@ IFxProcessorPtr VstFxResolver::createMasterFx(const AudioFxParams& fxParams) con
     IVstPluginInstancePtr pluginPtr = instancesRegister()->makeAndRegisterMasterFxPlugin(fxParams.resourceMeta.id, fxParams.chainOrder);
 
     std::shared_ptr<VstFxProcessor> fx = std::make_shared<VstFxProcessor>(std::move(pluginPtr), fxParams);
-    fx->init();
+    fx->init(outputSpec);
 
     return fx;
 }
 
-IFxProcessorPtr VstFxResolver::createTrackFx(const TrackId trackId, const AudioFxParams& fxParams) const
+IFxProcessorPtr VstFxResolver::createTrackFx(const TrackId trackId, const AudioFxParams& fxParams,
+                                             const audio::OutputSpec& outputSpec) const
 {
     if (!pluginModulesRepo()->exists(fxParams.resourceMeta.id)) {
         LOGE() << "Unable to create VST plugin"
@@ -73,7 +74,7 @@ IFxProcessorPtr VstFxResolver::createTrackFx(const TrackId trackId, const AudioF
     IVstPluginInstancePtr pluginPtr = instancesRegister()->makeAndRegisterFxPlugin(fxParams.resourceMeta.id, trackId, fxParams.chainOrder);
 
     std::shared_ptr<VstFxProcessor> fx = std::make_shared<VstFxProcessor>(std::move(pluginPtr), fxParams);
-    fx->init();
+    fx->init(outputSpec);
 
     return fx;
 }

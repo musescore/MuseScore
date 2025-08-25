@@ -53,7 +53,6 @@ public:
     AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
 
-    unsigned int outputDeviceBufferSize() const override;
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
 

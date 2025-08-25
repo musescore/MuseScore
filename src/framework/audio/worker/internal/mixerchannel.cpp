@@ -34,25 +34,21 @@ using namespace muse::async;
 using namespace muse::audio;
 using namespace muse::audio::worker;
 
-MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate,
+MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const OutputSpec& outputSpec,
                            const modularity::ContextPtr& iocCtx)
     : Injectable(iocCtx), m_trackId(trackId),
-    m_sampleRate(sampleRate),
+    m_outputSpec(outputSpec),
     m_audioSource(std::move(source)),
-    m_compressor(std::make_unique<dsp::Compressor>(sampleRate))
+    m_compressor(std::make_unique<dsp::Compressor>(outputSpec.sampleRate))
 {
     ONLY_AUDIO_WORKER_THREAD;
-
-    setSampleRate(sampleRate);
 }
 
-MixerChannel::MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount,
+MixerChannel::MixerChannel(const TrackId trackId, const OutputSpec& outputSpec,
                            const modularity::ContextPtr& iocCtx)
-    : MixerChannel(trackId, nullptr, sampleRate, iocCtx)
+    : MixerChannel(trackId, nullptr, outputSpec, iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
-
-    m_audioChannelsCount = audioChannelsCount;
 }
 
 TrackId MixerChannel::trackId() const
@@ -89,10 +85,10 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
     }
 
     m_fxProcessors.clear();
-    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, requiredParams.fxChain);
+    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, requiredParams.fxChain, m_outputSpec);
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
-        fx->setSampleRate(m_sampleRate);
+        fx->setOutputSpec(m_outputSpec);
 
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_params.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
@@ -161,16 +157,18 @@ void MixerChannel::setIsActive(bool arg)
     }
 }
 
-void MixerChannel::setSampleRate(unsigned int sampleRate)
+void MixerChannel::setOutputSpec(const OutputSpec& spec)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    m_outputSpec = spec;
+
     if (m_audioSource) {
-        m_audioSource->setSampleRate(sampleRate);
+        m_audioSource->setOutputSpec(spec);
     }
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
-        fx->setSampleRate(sampleRate);
+        fx->setOutputSpec(spec);
     }
 }
 
@@ -178,7 +176,7 @@ unsigned int MixerChannel::audioChannelsCount() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return m_audioSource ? m_audioSource->audioChannelsCount() : m_audioChannelsCount;
+    return m_audioSource ? m_audioSource->audioChannelsCount() : m_outputSpec.audioChannelCount;
 }
 
 async::Channel<unsigned int> MixerChannel::audioChannelsCountChanged() const

@@ -74,8 +74,6 @@ protected:
 
     async::Notification m_readyToPlayChanged;
 
-    samples_t m_sampleRate = 0;
-
     InputProcessingProgress m_inputProcessingProgress;
 };
 }
