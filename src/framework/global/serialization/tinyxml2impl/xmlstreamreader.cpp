@@ -22,8 +22,6 @@
 #include "xmlstreamreader.h"
 
 #include <cstring>
-#include <chrono>
-#include <iostream>
 
 #include "global/types/string.h"
 #ifdef SYSTEM_TINYXML
@@ -79,17 +77,7 @@ XmlStreamReader::~XmlStreamReader()
 
 void XmlStreamReader::setData(const ByteArray& data_)
 {
-#ifndef NDEBUG
-    struct Accumulator {
-        double total_ms = 0.0;
-        ~Accumulator()
-        {
-            LOGD() << "[XmlStreamReader] Total TINYXML2 parse time: "
-                   << total_ms << " ms\n";
-        }
-    };
-    static Accumulator acc;
-#endif //NDEBUG
+    TRACEFUNC;
 
     auto start = std::chrono::steady_clock::now();
     m_xml->doc.Clear();
@@ -125,11 +113,6 @@ void XmlStreamReader::setData(const ByteArray& data_)
     } else {
         LOGE() << m_xml->doc.ErrorIDToName(m_xml->err);
     }
-
-#ifndef NDEBUG
-    auto end = std::chrono::steady_clock::now();
-    acc.total_ms += std::chrono::duration<double, std::milli>(end - start).count();
-#endif //NDEBUG
 }
 
 bool XmlStreamReader::readNextStartElement()

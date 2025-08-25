@@ -25,7 +25,7 @@ import QtQuick.Layouts 1.15
 import MuseScore.Playback 1.0
 import Muse.UiComponents 1.0
 
-Item {
+RowLayout {
     id: root
 
     signal started()
@@ -47,27 +47,24 @@ Item {
         model.load()
     }
 
-    RowLayout {
-        anchors.fill: parent
-        spacing: 12
+    spacing: 12
 
-        ProgressBar {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 160
-            Layout.preferredHeight: 14
+    ProgressBar {
+        Layout.alignment: Qt.AlignVCenter
+        Layout.preferredWidth: 160
+        Layout.preferredHeight: 14
 
-            from: 0
-            to: model.totalProgress
-            value: model.currentProgress
-        }
+        from: 0
+        to: model.totalProgress
+        value: model.currentProgress
+    }
 
-        StyledTextLabel {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.fillWidth: true
+    StyledTextLabel {
+        Layout.alignment: Qt.AlignVCenter
+        Layout.fillWidth: true
 
-            text: model.progressTitle
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignLeft
-        }
+        text: model.progressTitle
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignLeft
     }
 }
