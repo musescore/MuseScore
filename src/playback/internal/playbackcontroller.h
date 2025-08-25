@@ -34,7 +34,7 @@
 #include "audio/main/iplayer.h"
 #include "audio/main/iplayback.h"
 #include "audio/iaudioconfiguration.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "iinteractive.h"
 #include "tours/itoursservice.h"
 
@@ -176,8 +176,6 @@ private:
 
     muse::audio::secs_t playbackStartSecs() const;
     muse::audio::secs_t playbackEndSecs() const;
-
-    muse::audio::secs_t playbackDelay(const muse::secs_t countInDuration) const;
 
     notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 

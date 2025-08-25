@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_ANCHORS_H
-#define MU_ENGRAVING_ANCHORS_H
+#pragma once
 
 #include "engravingitem.h"
 #include "score.h"
@@ -33,7 +32,7 @@ class EditTimeTickAnchors
 {
 public:
     static void updateAnchors(const EngravingItem* item);
-    static void updateAnchors(Measure* measure, staff_idx_t staffIdx);
+    static void updateAnchors(Measure* measure, staff_idx_t staffIdx, const std::set<Fraction>& additionalAnchorRelTicks = {});
     static TimeTickAnchor* createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx);
     static void updateLayout(Measure* measure);
 };
@@ -90,5 +89,4 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(TimeTickAnchor)
 };
-} // namespace mu::engraving
-#endif // MU_ENGRAVING_ANCHORS_H
+}

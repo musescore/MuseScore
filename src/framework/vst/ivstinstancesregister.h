@@ -22,7 +22,7 @@
 #pragma once
 
 #include "modularity/imoduleinterface.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 #include "vsttypes.h"
 #include "ivstplugininstance.h"

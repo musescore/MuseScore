@@ -1245,7 +1245,7 @@
         <source>Soprano ocarina in C.</source>
         <comment>c-soprano-ocarina description</comment>
         <extracomment>description for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina stämd i C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="603"/>
@@ -1280,7 +1280,7 @@
         <source>Soprano ocarina in C.</source>
         <comment>ocarina description</comment>
         <extracomment>description for Ocarina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina stämd i C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="614"/>
@@ -1308,7 +1308,7 @@
         <source>Soprano ocarina in B♭.</source>
         <comment>bb-soprano-ocarina description</comment>
         <extracomment>description for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina stämd i B♭.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="623"/>
@@ -1343,7 +1343,7 @@
         <source>Soprano ocarina in G.</source>
         <comment>g-soprano-ocarina description</comment>
         <extracomment>description for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina stämd i G.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="634"/>
@@ -1378,7 +1378,7 @@
         <source>Soprano ocarina in F.</source>
         <comment>f-soprano-ocarina description</comment>
         <extracomment>description for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina stämd i F.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="645"/>
@@ -1413,7 +1413,7 @@
         <source>Alto (sometimes called tenor) ocarina in C.</source>
         <comment>c-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Altokarina (även kallad tenorokarina) stämd i C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="656"/>
@@ -11671,13 +11671,6 @@
         <translation>Con.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3911"/>
-        <source>High-pitch, shallow body taiko drum.</source>
-        <comment>shime-daiko description</comment>
-        <extracomment>description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3913"/>
         <source>Shime-Daiko</source>
         <comment>shime-daiko trackName</comment>
@@ -11696,13 +11689,6 @@
         <source>S-Dko.</source>
         <comment>shime-daiko shortName</comment>
         <extracomment>shortName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3920"/>
-        <source>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played infront of a kneeling performer.</source>
-        <comment>kakko description</comment>
-        <extracomment>description for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12007,13 +11993,6 @@
         <translation>Rm-tr.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4019"/>
-        <source>Chinese high-pitch frame drum.</source>
-        <comment>bangu description</comment>
-        <extracomment>description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4021"/>
         <source>Bangu</source>
         <comment>bangu trackName</comment>
@@ -12179,6 +12158,27 @@
         <source>Generic Japanese drum.</source>
         <comment>taiko description</comment>
         <extracomment>description for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4091"/>
+        <source>Robust, barrel-shaped Japanese drum. Also known as nagadou, they are the most common taiko.</source>
+        <comment>miya-daiko description</comment>
+        <extracomment>description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4118"/>
+        <source>Small Japanese bronze gong.</source>
+        <comment>shoko description</comment>
+        <extracomment>description for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4127"/>
+        <source>Small Japanese saucer-shaped bell.</source>
+        <comment>kane description</comment>
+        <extracomment>description for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12378,13 +12378,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4235"/>
-        <source>Korean dish-like gong</source>
-        <comment>kkwaenggwari description</comment>
-        <extracomment>description for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4237"/>
         <source>Kkwaenggwari</source>
         <comment>kkwaenggwari trackName</comment>
@@ -12418,6 +12411,27 @@
         <comment>taiko trackName</comment>
         <extracomment>trackName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Taiko</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3911"/>
+        <source>High-pitched, shallow body taiko drum.</source>
+        <comment>shime-daiko description</comment>
+        <extracomment>description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3920"/>
+        <source>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played in front of a kneeling performer.</source>
+        <comment>kakko description</comment>
+        <extracomment>description for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4019"/>
+        <source>Chinese high-pitched frame drum.</source>
+        <comment>bangu description</comment>
+        <extracomment>description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4077"/>
@@ -12459,13 +12473,6 @@
         <source>T-Daiko</source>
         <comment>tsuri-daiko shortName</comment>
         <extracomment>shortName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4091"/>
-        <source>Robust, barrel shaped Japanese drum. Also known as nagadou, they are the most common taiko.</source>
-        <comment>miya-daiko description</comment>
-        <extracomment>description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12546,13 +12553,6 @@
         <translation>Städ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4118"/>
-        <source>Small Japanese bronz gong.</source>
-        <comment>shoko description</comment>
-        <extracomment>description for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4120"/>
         <source>Shōko</source>
         <comment>shoko trackName</comment>
@@ -12571,13 +12571,6 @@
         <source>Shōko</source>
         <comment>shoko shortName</comment>
         <extracomment>shortName for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4127"/>
-        <source>Small Japanese saucer-shaped bell</source>
-        <comment>kane description</comment>
-        <extracomment>description for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12712,6 +12705,13 @@
         <comment>chains shortName</comment>
         <extracomment>shortName for Chains; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Kdj.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4235"/>
+        <source>Korean dish-like gong.</source>
+        <comment>kkwaenggwari description</comment>
+        <extracomment>description for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4244"/>

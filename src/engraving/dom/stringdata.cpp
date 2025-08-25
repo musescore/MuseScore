@@ -351,10 +351,10 @@ int StringData::pitchOffsetAt(Staff* staff, const Fraction& tick)
     const CapoParams& capo = staff->capo(tick);
     if (capo.active) {
         switch (capo.transposeMode) {
-        case CapoParams::PLAYBACK_ONLY:
+        case CapoParams::TransposeMode::PLAYBACK_ONLY:
             break;
-        case CapoParams::NOTATION_ONLY:
-        case CapoParams::TAB_ONLY:
+        case CapoParams::TransposeMode::NOTATION_ONLY:
+        case CapoParams::TransposeMode::TAB_ONLY:
             offset -= capo.fretPosition;
             break;
         }

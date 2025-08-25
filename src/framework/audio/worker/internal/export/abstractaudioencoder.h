@@ -30,7 +30,7 @@
 #include "global/progress.h"
 #include "global/io/path.h"
 
-#include "audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio::encode {
 class AbstractAudioEncoder

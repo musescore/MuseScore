@@ -2013,6 +2013,7 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
     sp->setName(QT_TRANSLATE_NOOP("palette", "Handbells"));
     sp->setGridSize(42, 25);
     sp->setDrawGrid(true);
+    sp->setVisible(false);
 
     static const std::vector<SymId> standardHandbellsArticSymbols {
         SymId::handbellsMartellato,
@@ -2030,8 +2031,6 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
     };
 
     static const std::vector<ArticulationTextType> handbellsTextTypes {
-        ArticulationTextType::LV,
-        ArticulationTextType::R,
         ArticulationTextType::TD,
         ArticulationTextType::BD,
         ArticulationTextType::RT,
@@ -2046,10 +2045,12 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
     };
 
     static const std::vector<HandbellsPlayTechInfo> standardHandbellsPlayTech {
+        { "R", PlayingTechniqueType::HandbellsR, },
+        { "LV", PlayingTechniqueType::HandbellsLV, },
+        { "<sym>handbellsDamp3</sym>",   PlayingTechniqueType::HandbellsDamp, },
         { "<sym>handbellsSwingUp</sym>",   PlayingTechniqueType::HandbellsSwingUp, },
         { "<sym>handbellsSwingDown</sym>",   PlayingTechniqueType::HandbellsSwingDown, },
         { "<sym>handbellsEcho1</sym>",   PlayingTechniqueType::HandbellsEcho1, },
-        { "<sym>handbellsDamp3</sym>",   PlayingTechniqueType::HandbellsDamp, },
     };
 
     static const std::vector<HandbellsPlayTechInfo> additionalHandbellsPlayTech {
@@ -2073,9 +2074,12 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
 
         for (const HandbellsPlayTechInfo& info : standardHandbellsPlayTech) {
             auto element = makeElement<PlayTechAnnotation>(gpaletteScore);
+            element->setProperty(Pid::TEXT_STYLE, TextStyleType::ARTICULATION);
             element->setXmlText(info.xmlText);
             element->setTechniqueType(info.playTechType);
-            sp->appendElement(element, TConv::userName(info.playTechType));
+            sp->appendElement(element, TConv::userName(info.playTechType),
+                              info.playTechType == PlayingTechniqueType::HandbellsLV
+                              || info.playTechType == PlayingTechniqueType::HandbellsR ? 1.1 : 1.0);
         }
     } else {
         for (SymId symId : additionalHandbellsArticSymbols) {
@@ -2086,6 +2090,7 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
 
         for (const HandbellsPlayTechInfo& info : additionalHandbellsPlayTech) {
             auto element = makeElement<PlayTechAnnotation>(gpaletteScore);
+            element->setProperty(Pid::TEXT_STYLE, TextStyleType::ARTICULATION);
             element->setXmlText(info.xmlText);
             element->setTechniqueType(info.playTechType);
             sp->appendElement(element, TConv::userName(info.playTechType));

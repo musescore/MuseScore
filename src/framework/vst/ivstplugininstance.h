@@ -24,7 +24,7 @@
 #include "global/async/notification.h"
 
 #include "vsttypes.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::vst {
 class IVstPluginInstance

@@ -21,8 +21,8 @@
  */
 #pragma once
 
-#include "audio/audiotypes.h"
 #include "global/io/path.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audioplugins {
 enum class AudioPluginType {

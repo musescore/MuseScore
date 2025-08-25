@@ -856,7 +856,7 @@
         <Staff>
           <eid>7B_7B</eid>
           <StaffType group="pitched">
-            <name>stdNormal</name>
+            <name>Standard</name>
             </StaffType>
           </Staff>
         <trackName>Alto</trackName>
@@ -1314,7 +1314,7 @@
         <Staff>
           <eid>LD_LD</eid>
           <StaffType group="pitched">
-            <name>stdNormal</name>
+            <name>Standard</name>
             </StaffType>
           </Staff>
         <trackName>Tenor</trackName>

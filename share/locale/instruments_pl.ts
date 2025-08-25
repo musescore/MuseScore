@@ -1259,14 +1259,14 @@
         <source>Soprano Ocarina</source>
         <comment>c-soprano-ocarina longName</comment>
         <extracomment>longName for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarina soprano</translation>
+        <translation>Ocarina soprano in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="607"/>
         <source>S. Oc.</source>
         <comment>c-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oc. s. in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="609"/>
@@ -1322,14 +1322,14 @@
         <source>Soprano Ocarina</source>
         <comment>bb-soprano-ocarina longName</comment>
         <extracomment>longName for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarina soprano</translation>
+        <translation>Ocarina soprano in B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="627"/>
         <source>S. Oc.</source>
         <comment>bb-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oc. s. in B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="629"/>
@@ -1357,14 +1357,14 @@
         <source>Soprano Ocarina</source>
         <comment>g-soprano-ocarina longName</comment>
         <extracomment>longName for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarina soprano</translation>
+        <translation>Ocarina soprano in G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="638"/>
         <source>S. Oc.</source>
         <comment>g-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oc. s. in G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="640"/>
@@ -1392,14 +1392,14 @@
         <source>Soprano Ocarina</source>
         <comment>f-soprano-ocarina longName</comment>
         <extracomment>longName for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarina soprano</translation>
+        <translation>Ocarina soprano in F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="649"/>
         <source>S. Oc.</source>
         <comment>f-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oc. s. in F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="651"/>
@@ -1413,7 +1413,7 @@
         <source>Alto (sometimes called tenor) ocarina in C.</source>
         <comment>c-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Okaryna altowa (czasami nazywana tenorową) w stroju C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="656"/>
@@ -1427,14 +1427,14 @@
         <source>Alto Ocarina</source>
         <comment>c-alto-ocarina longName</comment>
         <extracomment>longName for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarina contralto</translation>
+        <translation>Ocarina contralto in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="660"/>
         <source>A. Oc.</source>
         <comment>c-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oc. c-a. in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="662"/>
@@ -1448,7 +1448,7 @@
         <source>Alto (sometimes called tenor) ocarina in B♭.</source>
         <comment>bb-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Okaryna altowa (czasami nazywana tenorową) w stroju B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="667"/>
@@ -1462,14 +1462,14 @@
         <source>Alto Ocarina</source>
         <comment>bb-alto-ocarina longName</comment>
         <extracomment>longName for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarina contralto</translation>
+        <translation>Ocarina contralto in B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="671"/>
         <source>A. Oc.</source>
         <comment>bb-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oc. c-a. in B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="673"/>
@@ -1483,7 +1483,7 @@
         <source>Alto (sometimes called tenor) ocarina in G.</source>
         <comment>g-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Okaryna altowa (czasami nazywana tenorową) w stroju G.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="678"/>
@@ -1497,14 +1497,14 @@
         <source>Alto Ocarina</source>
         <comment>g-alto-ocarina longName</comment>
         <extracomment>longName for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarina contralto</translation>
+        <translation>Ocarina contralto in G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="682"/>
         <source>A. Oc.</source>
         <comment>g-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oc. c-a. in G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="684"/>
@@ -1518,7 +1518,7 @@
         <source>Alto (sometimes called tenor) ocarina in F.</source>
         <comment>f-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Okaryna altowa (czasami nazywana tenorową) w stroju F.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="689"/>
@@ -1532,14 +1532,14 @@
         <source>Alto Ocarina</source>
         <comment>f-alto-ocarina longName</comment>
         <extracomment>longName for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarina contralto</translation>
+        <translation>Ocarina contralto in F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="693"/>
         <source>A. Oc.</source>
         <comment>f-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oc. c-a. in F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="695"/>
@@ -1567,14 +1567,14 @@
         <source>Bass Ocarina</source>
         <comment>c-bass-ocarina longName</comment>
         <extracomment>longName for Bass Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocarina basso</translation>
+        <translation>Ocarina basso in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="704"/>
         <source>B. Oc.</source>
         <comment>c-bass-ocarina shortName</comment>
         <extracomment>shortName for Bass Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oc. b. in C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="706"/>
@@ -11171,7 +11171,7 @@
         <source>Wine glasses played by running moistened fingers around the rim. Sometimes called a glass harp.</source>
         <comment>musical-glasses description</comment>
         <extracomment>description for Musical Glasses; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kieliszki do wina, na których gra się, pocierając zwilżonymi opuszkami palców po ich krawędzi. Czasami nazywane harfą szklaną.</translation>
+        <translation>Kieliszki do wina, na których gra się, pocierając zwilżonymi opuszkami palców po ich krawędziach. Czasami nazywane harfą szklaną.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3748"/>
@@ -11395,84 +11395,84 @@
         <source>Korean hourglass-shaped drum.</source>
         <comment>janggu description</comment>
         <extracomment>description for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Koreański bęben klepsydrowaty.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3823"/>
         <source>Janggu</source>
         <comment>janggu trackName</comment>
         <extracomment>trackName for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3825"/>
         <source>Janggu</source>
         <comment>janggu longName</comment>
         <extracomment>longName for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3827"/>
         <source>Jngu.</source>
         <comment>janggu shortName</comment>
         <extracomment>shortName for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>J.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3830"/>
         <source>Japanese hourglass-shaped drum. Smaller and lower-pitched than the o-tsuzumi. One head is struck while the other is squeezed/released to change pitch.</source>
         <comment>ko-tsuzumi description</comment>
         <extracomment>description for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Japoński bęben klepsydrowaty. Mniejszy i strojony niżej niż o-tsuzumi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
         <source>Ko-Tsuzumi</source>
         <comment>ko-tsuzumi trackName</comment>
         <extracomment>trackName for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ko-Tsuzumi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3834"/>
         <source>Ko-Tsuzumi</source>
         <comment>ko-tsuzumi longName</comment>
         <extracomment>longName for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ko-Tsuzumi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3836"/>
         <source>K-Tszmi.</source>
         <comment>ko-tsuzumi shortName</comment>
         <extracomment>shortName for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ko-Ts.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3839"/>
         <source>Japanese hourglass-shaped drum. Larger and higher-pitched than the ko-tsuzumi. One head is struck while the other is squeezed/released to change pitch.</source>
         <comment>o-tsuzumi description</comment>
         <extracomment>description for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Japoński bęben klepsydrowaty. Większy i strojony wyżej niż ko-tsuzumi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3841"/>
         <source>O-Tsuzumi</source>
         <comment>o-tsuzumi trackName</comment>
         <extracomment>trackName for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>O-Tsuzumi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3843"/>
         <source>O-Tsuzumi</source>
         <comment>o-tsuzumi longName</comment>
         <extracomment>longName for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>O-Tsuzumi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3845"/>
         <source>O-Tszmi.</source>
         <comment>o-tsuzumi shortName</comment>
         <extracomment>shortName for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>O-Ts.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3848"/>
@@ -11507,28 +11507,28 @@
         <source>Small Korean drum held by an attached stick.</source>
         <comment>sogo description</comment>
         <extracomment>description for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mały koreański bęben trzymany za pomocą przymocowanego kija.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3859"/>
         <source>Sogo</source>
         <comment>sogo trackName</comment>
         <extracomment>trackName for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sogo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3861"/>
         <source>Sogo</source>
         <comment>sogo longName</comment>
         <extracomment>longName for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sogo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3863"/>
         <source>Sogo</source>
         <comment>sogo shortName</comment>
         <extracomment>shortName for Sogo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>S.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3866"/>
@@ -11563,28 +11563,28 @@
         <source>Japanese bucket-shaped, lace-headed drum.</source>
         <comment>okedo-daiko description</comment>
         <extracomment>description for Okedo-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Japoński bęben w kształcie kubełka.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3877"/>
         <source>Okedo-Daiko</source>
         <comment>okedo-daiko trackName</comment>
         <extracomment>trackName for Okedo-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Okedo-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3879"/>
         <source>Okedo-Daiko</source>
         <comment>okedo-daiko longName</comment>
         <extracomment>longName for Okedo-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Okedo-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3881"/>
         <source>O-Dko.</source>
         <comment>okedo-daiko shortName</comment>
         <extracomment>shortName for Okedo-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ok.-D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3884"/>
@@ -11671,193 +11671,179 @@
         <translation>C.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3911"/>
-        <source>High-pitch, shallow body taiko drum.</source>
-        <comment>shime-daiko description</comment>
-        <extracomment>description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3913"/>
         <source>Shime-Daiko</source>
         <comment>shime-daiko trackName</comment>
         <extracomment>trackName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shime-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3915"/>
         <source>Shime-Daiko</source>
         <comment>shime-daiko longName</comment>
         <extracomment>longName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shime-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3917"/>
         <source>S-Dko.</source>
         <comment>shime-daiko shortName</comment>
         <extracomment>shortName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3920"/>
-        <source>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played infront of a kneeling performer.</source>
-        <comment>kakko description</comment>
-        <extracomment>description for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sh.-D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3922"/>
         <source>Kakko</source>
         <comment>kakko trackName</comment>
         <extracomment>trackName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kakko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3924"/>
         <source>Kakko</source>
         <comment>kakko longName</comment>
         <extracomment>longName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kakko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3926"/>
         <source>Kakko</source>
         <comment>kakko shortName</comment>
         <extracomment>shortName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>K.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3929"/>
         <source>Medium Chinese drum.</source>
         <comment>xiaogu description</comment>
         <extracomment>description for Xiaogu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Średni chiński bęben.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3931"/>
         <source>Xiaogu</source>
         <comment>xiaogu trackName</comment>
         <extracomment>trackName for Xiaogu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xiaogu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3933"/>
         <source>Xiaogu</source>
         <comment>xiaogu longName</comment>
         <extracomment>longName for Xiaogu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xiaogu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3935"/>
         <source>Xiaogu</source>
         <comment>xiaogu shortName</comment>
         <extracomment>shortName for Xiaogu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>X-gu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3938"/>
         <source>A Middle-Eastern goblet drum, also known as chalice drum, tarabuka, tarabaki, darbuka, darabuka, derbake, debuka, dumbec, dumbeg, dumbelek, toumperleki, tumbak, or zerbaghali.</source>
         <comment>doumbek description</comment>
         <extracomment>description for Doumbek; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bliskowschodni bęben kielichowy, znany również jako tarabuka, tarabaki, darbuka, darabuka, derbake, debuka, dumbec, dumbek, dumbeg, dumbelek, toumperleki, tumbak lub zerbaghali.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3940"/>
         <source>Doumbek</source>
         <comment>doumbek trackName</comment>
         <extracomment>trackName for Doumbek; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Darabouka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3942"/>
         <source>Doumbek</source>
         <comment>doumbek longName</comment>
         <extracomment>longName for Doumbek; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Darabouka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3944"/>
         <source>Dbk.</source>
         <comment>doumbek shortName</comment>
         <extracomment>shortName for Doumbek; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3947"/>
         <source>An African, rope-tension goblet drum.</source>
         <comment>djembe description</comment>
         <extracomment>description for Djembe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Afrykański bęben kielichowy.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3949"/>
         <source>Djembe</source>
         <comment>djembe trackName</comment>
         <extracomment>trackName for Djembe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Djembe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3951"/>
         <source>Djembe</source>
         <comment>djembe longName</comment>
         <extracomment>longName for Djembe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Djembe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3953"/>
         <source>Djbe.</source>
         <comment>djembe shortName</comment>
         <extracomment>shortName for Djembe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dj.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3956"/>
         <source>Peruvian wooden box drum.</source>
         <comment>cajon description</comment>
         <extracomment>description for Cajón; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Peruwiański bęben drewniany.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3958"/>
         <source>Cajón</source>
         <comment>cajon trackName</comment>
         <extracomment>trackName for Cajón; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cajón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3960"/>
         <source>Cajón</source>
         <comment>cajon longName</comment>
         <extracomment>longName for Cajón; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cajón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3962"/>
         <source>Cjn.</source>
         <comment>cajon shortName</comment>
         <extracomment>shortName for Cajón; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Caj.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3965"/>
         <source>Brazilian friction drum played by rubbing a stick permanently fastened to the drum membrane on the inside. Applying pressure to the outside increases the pitch.</source>
         <comment>cuica description</comment>
         <extracomment>description for Cuíca; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Brazylijski bęben pocierany, na którym gra się, pocierając po patyku na stałe przymocowanym do membrany wewnątrz bębna. Stosowanie zewnętrznego nacisku zwiększa wysokość.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3967"/>
         <source>Cuíca</source>
         <comment>cuica trackName</comment>
         <extracomment>trackName for Cuíca; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cuíca</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3969"/>
         <source>Cuíca</source>
         <comment>cuica longName</comment>
         <extracomment>longName for Cuíca; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cuíca</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3971"/>
@@ -12007,32 +11993,25 @@
         <translation>Tamb. a c.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4019"/>
-        <source>Chinese high-pitch frame drum.</source>
-        <comment>bangu description</comment>
-        <extracomment>description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4021"/>
         <source>Bangu</source>
         <comment>bangu trackName</comment>
         <extracomment>trackName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bangu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4023"/>
         <source>Bangu</source>
         <comment>bangu longName</comment>
         <extracomment>longName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bangu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4025"/>
         <source>Bgu.</source>
         <comment>bangu shortName</comment>
         <extracomment>shortName for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4028"/>
@@ -12151,35 +12130,56 @@
         <source>Korean low-pitched double-headed barrel drum.</source>
         <comment>buk description</comment>
         <extracomment>description for Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Koreański bęben o niskim stroju.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4066"/>
         <source>Buk</source>
         <comment>buk trackName</comment>
         <extracomment>trackName for Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4068"/>
         <source>Buk</source>
         <comment>buk longName</comment>
         <extracomment>longName for Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Buk</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4070"/>
         <source>Buk</source>
         <comment>buk shortName</comment>
         <extracomment>shortName for Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4073"/>
         <source>Generic Japanese drum.</source>
         <comment>taiko description</comment>
         <extracomment>description for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Typowy japoński bęben.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4091"/>
+        <source>Robust, barrel-shaped Japanese drum. Also known as nagadou, they are the most common taiko.</source>
+        <comment>miya-daiko description</comment>
+        <extracomment>description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Japoński bęben beczułkowaty. Znany również jako nagadou, jest najpopularniejszym taiko.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4118"/>
+        <source>Small Japanese bronze gong.</source>
+        <comment>shoko description</comment>
+        <extracomment>description for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Mały japoński gong z brązu.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4127"/>
+        <source>Small Japanese saucer-shaped bell.</source>
+        <comment>kane description</comment>
+        <extracomment>description for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Mały japoński dzwonek w kształcie spodka.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4172"/>
@@ -12214,203 +12214,196 @@
         <source>Opera gong.</source>
         <comment>opera-gong description</comment>
         <extracomment>description for Opera Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gong operowy.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4183"/>
         <source>Opera Gong</source>
         <comment>opera-gong trackName</comment>
         <extracomment>trackName for Opera Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Opera gong</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4185"/>
         <source>Opera Gong</source>
         <comment>opera-gong longName</comment>
         <extracomment>longName for Opera Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Opera gong</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4187"/>
         <source>O. Gng.</source>
         <comment>opera-gong shortName</comment>
         <extracomment>shortName for Opera Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>O. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4190"/>
         <source>Wind gong.</source>
         <comment>wind-gong description</comment>
         <extracomment>description for Wind Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gong wietrzny.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4192"/>
         <source>Wind Gong</source>
         <comment>wind-gong trackName</comment>
         <extracomment>trackName for Wind Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Wind gong</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4194"/>
         <source>Wind Gong</source>
         <comment>wind-gong longName</comment>
         <extracomment>longName for Wind Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Wind gong</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4196"/>
         <source>W. Gong</source>
         <comment>wind-gong shortName</comment>
         <extracomment>shortName for Wind Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>W. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4199"/>
         <source>Large Chinese gong with falling pitch.</source>
         <comment>daluo description</comment>
         <extracomment>description for Daluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Duży chiński gong z malejącą wysokością.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4201"/>
         <source>Daluo</source>
         <comment>daluo trackName</comment>
         <extracomment>trackName for Daluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Daluo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4203"/>
         <source>Daluo</source>
         <comment>daluo longName</comment>
         <extracomment>longName for Daluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Daluo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4205"/>
         <source>Daluo</source>
         <comment>daluo shortName</comment>
         <extracomment>shortName for Daluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4208"/>
         <source>Small Chinese gong with rising pitch.</source>
         <comment>xiaoluo description</comment>
         <extracomment>description for Xiaoluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mały chiński gong z rosnącą wysokością.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4210"/>
         <source>Xiaoluo</source>
         <comment>xiaoluo trackName</comment>
         <extracomment>trackName for Xiaoluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xiaoluo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4212"/>
         <source>Xiaoluo</source>
         <comment>xiaoluo longName</comment>
         <extracomment>longName for Xiaoluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xiaoluo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4214"/>
         <source>Xluo.</source>
         <comment>xiaoluo shortName</comment>
         <extracomment>shortName for Xiaoluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>X.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4217"/>
         <source>Large Chinese cymbal.</source>
         <comment>dabo description</comment>
         <extracomment>description for Dabo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Duży chiński talerz.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4219"/>
         <source>Dabo</source>
         <comment>dabo trackName</comment>
         <extracomment>trackName for Dabo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dabo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4221"/>
         <source>Dabo</source>
         <comment>dabo longName</comment>
         <extracomment>longName for Dabo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dabo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4223"/>
         <source>Dabo</source>
         <comment>dabo shortName</comment>
         <extracomment>shortName for Dabo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4226"/>
         <source>Medium Chinese cymbals.</source>
         <comment>naobo description</comment>
         <extracomment>description for Naobo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Średnie chińskie talerze.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4228"/>
         <source>Naobo</source>
         <comment>naobo trackName</comment>
         <extracomment>trackName for Naobo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Naobo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4230"/>
         <source>Naobo</source>
         <comment>naobo longName</comment>
         <extracomment>longName for Naobo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Naobo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4232"/>
         <source>Naobo</source>
         <comment>naobo shortName</comment>
         <extracomment>shortName for Naobo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4235"/>
-        <source>Korean dish-like gong</source>
-        <comment>kkwaenggwari description</comment>
-        <extracomment>description for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>N-bo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4237"/>
         <source>Kkwaenggwari</source>
         <comment>kkwaenggwari trackName</comment>
         <extracomment>trackName for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kkwaenggwari</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4239"/>
         <source>Kkwaenggwari</source>
         <comment>kkwaenggwari longName</comment>
         <extracomment>longName for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kkwaenggwari</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4241"/>
         <source>Kgwari.</source>
         <comment>kkwaenggwari shortName</comment>
         <extracomment>shortName for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kkw.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4451"/>
         <source>Log drum or slit drum.</source>
         <comment>log-drum description</comment>
         <extracomment>description for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bęben szczelinowy.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4075"/>
@@ -12418,6 +12411,27 @@
         <comment>taiko trackName</comment>
         <extracomment>trackName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Taiko</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3911"/>
+        <source>High-pitched, shallow body taiko drum.</source>
+        <comment>shime-daiko description</comment>
+        <extracomment>description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Płytki bęben taiko o wysokim stroju.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3920"/>
+        <source>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played in front of a kneeling performer.</source>
+        <comment>kakko description</comment>
+        <extracomment>description for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Mały japoński bęben cylindryczny.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4019"/>
+        <source>Chinese high-pitched frame drum.</source>
+        <comment>bangu description</comment>
+        <extracomment>description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Chiński bęben obręczowy o wysokim stroju.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4077"/>
@@ -12438,84 +12452,77 @@
         <source>Traditionally ornate Japanese drum hung on circular frame.</source>
         <comment>tsuri-daiko description</comment>
         <extracomment>description for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tradycyjny ozdobny japoński bęben wiszący na okrągłej obręczy.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4084"/>
         <source>Tsuri-Daiko</source>
         <comment>tsuri-daiko trackName</comment>
         <extracomment>trackName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tsuri-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4086"/>
         <source>Tsuri-Daiko</source>
         <comment>tsuri-daiko longName</comment>
         <extracomment>longName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tsuri-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4088"/>
         <source>T-Daiko</source>
         <comment>tsuri-daiko shortName</comment>
         <extracomment>shortName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4091"/>
-        <source>Robust, barrel shaped Japanese drum. Also known as nagadou, they are the most common taiko.</source>
-        <comment>miya-daiko description</comment>
-        <extracomment>description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ts.-D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4093"/>
         <source>Miya-Daiko</source>
         <comment>miya-daiko trackName</comment>
         <extracomment>trackName for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Miya-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4095"/>
         <source>Miya-Daiko</source>
         <comment>miya-daiko longName</comment>
         <extracomment>longName for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Miya-Daiko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4097"/>
         <source>M-Daiko</source>
         <comment>miya-daiko shortName</comment>
         <extracomment>shortName for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>M.-D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4100"/>
         <source>Large Chinese drum.</source>
         <comment>dagu description</comment>
         <extracomment>description for Dagu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Duży chiński bęben.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4102"/>
         <source>Dagu</source>
         <comment>dagu trackName</comment>
         <extracomment>trackName for Dagu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dagu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4104"/>
         <source>Dagu</source>
         <comment>dagu longName</comment>
         <extracomment>longName for Dagu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dagu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4106"/>
         <source>Dagu</source>
         <comment>dagu shortName</comment>
         <extracomment>shortName for Dagu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4109"/>
@@ -12546,60 +12553,46 @@
         <translation>Inc.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4118"/>
-        <source>Small Japanese bronz gong.</source>
-        <comment>shoko description</comment>
-        <extracomment>description for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4120"/>
         <source>Shōko</source>
         <comment>shoko trackName</comment>
         <extracomment>trackName for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shōko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4122"/>
         <source>Shōko</source>
         <comment>shoko longName</comment>
         <extracomment>longName for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shōko</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4124"/>
         <source>Shōko</source>
         <comment>shoko shortName</comment>
         <extracomment>shortName for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4127"/>
-        <source>Small Japanese saucer-shaped bell</source>
-        <comment>kane description</comment>
-        <extracomment>description for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4129"/>
         <source>Kane</source>
         <comment>kane trackName</comment>
         <extracomment>trackName for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kane</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4131"/>
         <source>Kane</source>
         <comment>kane longName</comment>
         <extracomment>longName for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kane</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4133"/>
         <source>Kane</source>
         <comment>kane shortName</comment>
         <extracomment>shortName for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>K.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4136"/>
@@ -12714,6 +12707,13 @@
         <translation>Cat.</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="4235"/>
+        <source>Korean dish-like gong.</source>
+        <comment>kkwaenggwari description</comment>
+        <extracomment>description for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Koreański gong przypominający naczynie.</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="4244"/>
         <source>Cowbell.</source>
         <comment>cowbell description</comment>
@@ -12746,28 +12746,28 @@
         <source>Agogô bells.</source>
         <comment>agogo-bells description</comment>
         <extracomment>description for Agogô Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Agogo.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4255"/>
         <source>Agogô Bells</source>
         <comment>agogo-bells trackName</comment>
         <extracomment>trackName for Agogô Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Agogô</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4257"/>
         <source>Agogô Bells</source>
         <comment>agogo-bells longName</comment>
         <extracomment>longName for Agogô Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Agogô</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4259"/>
         <source>Agogô</source>
         <comment>agogo-bells shortName</comment>
         <extracomment>shortName for Agogô Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ag.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4262"/>
@@ -13110,28 +13110,28 @@
         <source>Large Korean gong.</source>
         <comment>jing description</comment>
         <extracomment>description for Jing; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Duży koreański gong.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4372"/>
         <source>Jing</source>
         <comment>jing trackName</comment>
         <extracomment>trackName for Jing; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jing</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4374"/>
         <source>Jing</source>
         <comment>jing longName</comment>
         <extracomment>longName for Jing; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jing</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4376"/>
         <source>Jing</source>
         <comment>jing shortName</comment>
         <extracomment>shortName for Jing; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>J.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4379"/>
@@ -13278,28 +13278,28 @@
         <source>Chinese clappers.</source>
         <comment>ban description</comment>
         <extracomment>description for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Chińskie kołatki.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4426"/>
         <source>Ban</source>
         <comment>ban trackName</comment>
         <extracomment>trackName for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ban</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4428"/>
         <source>Ban</source>
         <comment>ban longName</comment>
         <extracomment>longName for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ban</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4430"/>
         <source>Ban</source>
         <comment>ban shortName</comment>
         <extracomment>shortName for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4433"/>
@@ -13362,21 +13362,21 @@
         <source>Log Drum</source>
         <comment>log-drum trackName</comment>
         <extracomment>trackName for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamburo a fessura</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4455"/>
         <source>Log Drum</source>
         <comment>log-drum longName</comment>
         <extracomment>longName for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamburo a fessura</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4457"/>
         <source>Log D.</source>
         <comment>log-drum shortName</comment>
         <extracomment>shortName for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamb. a f.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4460"/>
@@ -13411,28 +13411,28 @@
         <source>Chinese wood block.</source>
         <comment>bangzi description</comment>
         <extracomment>description for Bangzi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Chińskie bloki drewniane.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4471"/>
         <source>Bangzi</source>
         <comment>bangzi trackName</comment>
         <extracomment>trackName for Bangzi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bangzi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4473"/>
         <source>Bangzi</source>
         <comment>bangzi longName</comment>
         <extracomment>longName for Bangzi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bangzi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4475"/>
         <source>Bgzi.</source>
         <comment>bangzi shortName</comment>
         <extracomment>shortName for Bangzi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4478"/>
@@ -13663,28 +13663,28 @@
         <source>West African gourd instrument covered with beads woven in a net.</source>
         <comment>shekere description</comment>
         <extracomment>description for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Zachodnioafrykański instrument zrobiony z tykwy pokrytej siatką z koralikami.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4552"/>
         <source>Shekere</source>
         <comment>shekere trackName</comment>
         <extracomment>trackName for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shekere</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4554"/>
         <source>Shekere</source>
         <comment>shekere longName</comment>
         <extracomment>longName for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Shekere</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4556"/>
         <source>Shkre.</source>
         <comment>shekere shortName</comment>
         <extracomment>shortName for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4559"/>
@@ -13859,84 +13859,84 @@
         <source>Military cannon or gunshot sound.</source>
         <comment>cannon description</comment>
         <extracomment>description for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Działo lub dźwięk wystrzału.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4615"/>
         <source>Cannon</source>
         <comment>cannon trackName</comment>
         <extracomment>trackName for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cannon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4617"/>
         <source>Cannon</source>
         <comment>cannon longName</comment>
         <extracomment>longName for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cannon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4619"/>
         <source>Cn.</source>
         <comment>cannon shortName</comment>
         <extracomment>shortName for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4622"/>
         <source>Bird call.</source>
         <comment>bird-call description</comment>
         <extracomment>description for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ptasi śpiew.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4624"/>
         <source>Bird Call</source>
         <comment>bird-call trackName</comment>
         <extracomment>trackName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Canto di uccelli</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4626"/>
         <source>Bird Call</source>
         <comment>bird-call longName</comment>
         <extracomment>longName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Canto di uccelli</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4628"/>
         <source>Bird</source>
         <comment>bird-call shortName</comment>
         <extracomment>shortName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>C. di ucc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4631"/>
         <source>Ocean drum.</source>
         <comment>ocean-drum description</comment>
         <extracomment>description for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bęben oceaniczny.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4633"/>
         <source>Ocean Drum</source>
         <comment>ocean-drum trackName</comment>
         <extracomment>trackName for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamburo oceanico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4635"/>
         <source>Ocean Drum</source>
         <comment>ocean-drum longName</comment>
         <extracomment>longName for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamburo oceanico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4637"/>
         <source>O.Drm.</source>
         <comment>ocean-drum shortName</comment>
         <extracomment>shortName for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tamb. oc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4640"/>
@@ -14055,21 +14055,21 @@
         <source>Marching show-style tenor drum.</source>
         <comment>marching-show-tenors description</comment>
         <extracomment>description for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bęben tenorowy show-style w orkiestrze marszowej.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4681"/>
         <source>Show-Style Tenors</source>
         <comment>marching-show-tenors trackName</comment>
         <extracomment>trackName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Show-Style Tenors</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4683"/>
         <source>Show Tenors</source>
         <comment>marching-show-tenors longName</comment>
         <extracomment>longName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Show Tenors</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4685"/>

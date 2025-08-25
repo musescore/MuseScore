@@ -312,6 +312,19 @@ private:
 
     std::map<int, int> m_channelList[VOICES];
     std::map<int, SwingParameters> m_swingList;
+
+    class SelectionKeeper
+    {
+    public:
+        SelectionKeeper(Staff* s, ElementType type);
+        ~SelectionKeeper();
+
+    private:
+        Staff* m_staff = nullptr;
+        Score* m_score = nullptr;
+        std::vector<EngravingItem*> m_selectedElements;
+    };
+
     struct CapoState {
         CapoParams params;
         bool needUpdate = false;

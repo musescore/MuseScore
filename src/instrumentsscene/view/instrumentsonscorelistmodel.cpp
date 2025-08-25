@@ -22,8 +22,6 @@
 
 #include "instrumentsonscorelistmodel.h"
 
-#include "types/translatablestring.h"
-
 #include "log.h"
 
 using namespace muse;

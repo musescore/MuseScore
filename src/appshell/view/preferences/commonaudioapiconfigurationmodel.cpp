@@ -22,8 +22,8 @@
 
 #include "commonaudioapiconfigurationmodel.h"
 
-#include "audio/audiotypes.h"
 #include "global/translation.h"
+#include "audio/common/audiotypes.h"
 
 #include "log.h"
 

@@ -1061,7 +1061,7 @@ static void updatePercussionNotes(Chord* c, const Drumset* drumset)
                 //! NOTE May be called too often
                 //LOGW("unmapped drum note %d", pitch);
             } else if (!note->fixed()) {
-                note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                note->undoChangeProperty(Pid::HEAD_GROUP, drumset->noteHead(pitch));
                 note->setLine(drumset->line(pitch));
             }
         }
@@ -1835,7 +1835,7 @@ void Chord::setSlash(bool flag, bool stemless)
     size_t ns = m_notes.size();
     for (size_t i = 0; i < ns; ++i) {
         Note* n = m_notes[i];
-        n->undoChangeProperty(Pid::HEAD_GROUP, static_cast<int>(head));
+        n->undoChangeProperty(Pid::HEAD_GROUP, head);
         n->undoChangeProperty(Pid::FIXED, true);
         n->undoChangeProperty(Pid::FIXED_LINE, line);
         n->undoChangeProperty(Pid::PLAY, false);

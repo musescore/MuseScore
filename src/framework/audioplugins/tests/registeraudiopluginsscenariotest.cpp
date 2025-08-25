@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "audioplugins/internal/registeraudiopluginsscenario.h"
 
@@ -36,6 +35,7 @@
 #include "translation.h"
 
 using ::testing::_;
+using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::ReturnRef;
 
@@ -51,15 +51,15 @@ protected:
     void SetUp() override
     {
         m_scenario = std::make_shared<RegisterAudioPluginsScenario>(modularity::globalCtx());
-        m_globalConfiguration = std::make_shared<GlobalConfigurationMock>();
+        m_globalConfiguration = std::make_shared<NiceMock<GlobalConfigurationMock> >();
         m_interactive = std::make_shared<InteractiveMock>();
         m_process = std::make_shared<ProcessMock>();
-        m_scannerRegister = std::make_shared<AudioPluginsScannerRegisterMock>();
-        m_knownPlugins = std::make_shared<KnownAudioPluginsRegisterMock>();
-        m_scanners = { std::make_shared<AudioPluginsScannerMock>() };
-        m_metaReaderRegister = std::make_shared<AudioPluginMetaReaderRegisterMock>();
+        m_scannerRegister = std::make_shared<NiceMock<AudioPluginsScannerRegisterMock> >();
+        m_knownPlugins = std::make_shared<NiceMock<KnownAudioPluginsRegisterMock> >();
+        m_scanners = { std::make_shared<NiceMock<AudioPluginsScannerMock> >() };
+        m_metaReaderRegister = std::make_shared<NiceMock<AudioPluginMetaReaderRegisterMock> >();
 
-        const auto metaReaderMock = std::make_shared<AudioPluginMetaReaderMock>();
+        const auto metaReaderMock = std::make_shared<NiceMock<AudioPluginMetaReaderMock> >();
         m_metaReaders = { metaReaderMock };
 
         m_scenario->globalConfiguration.set(m_globalConfiguration);

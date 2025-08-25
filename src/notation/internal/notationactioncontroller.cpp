@@ -1712,8 +1712,6 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
     if (interaction->textEditingAllowed(element)) {
         PointF cursorPos = !args.empty() ? args.arg<PointF>(0) : PointF();
         interaction->startEditText(element, cursorPos);
-    } else if (element->hasGrips()) {
-        interaction->startEditGrip(element, element->defaultGrip());
     } else {
         interaction->startEditElement(element);
     }
@@ -2131,29 +2129,29 @@ bool NotationActionController::isNotNoteInputMode() const
 
 void NotationActionController::openTupletOtherDialog()
 {
-    interactive()->open("musescore://notation/othertupletdialog?sync=false");
+    interactive()->open("musescore://notation/othertupletdialog");
 }
 
 void NotationActionController::openStaffTextPropertiesDialog()
 {
-    interactive()->open("musescore://notation/stafftextproperties?sync=false");
+    interactive()->open("musescore://notation/stafftextproperties");
 }
 
 void NotationActionController::openMeasurePropertiesDialog()
 {
     if (currentNotationInteraction()->selectedMeasure() != nullptr) {
-        interactive()->open("musescore://notation/measureproperties?sync=false");
+        interactive()->open("musescore://notation/measureproperties");
     }
 }
 
 void NotationActionController::openEditGridSizeDialog()
 {
-    interactive()->open("musescore://notation/editgridsize?sync=false");
+    interactive()->open("musescore://notation/editgridsize");
 }
 
 void NotationActionController::openRealizeChordSymbolsDialog()
 {
-    interactive()->open("musescore://notation/realizechordsymbols?sync=false");
+    interactive()->open("musescore://notation/realizechordsymbols");
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)

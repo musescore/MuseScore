@@ -3709,7 +3709,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the treble clef (‘French notation’).</source>
         <comment>bb-bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭调低音单簧管。较B♭调高音单簧管低八度。在高音谱号中记谱（“法式记谱”）。</translation>
+        <translation>B♭ 调低音单簧管。比 B♭ 调高音单簧管低八度。在高音谱号中记谱（‘法式记谱’）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1388"/>
@@ -3744,7 +3744,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the bass clef (‘German notation’).</source>
         <comment>bb-bass-clarinet-bass-clef description</comment>
         <extracomment>description for Bass Clarinet (bass clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭调低音单簧管。较B♭调高音单簧管低八度。在低音谱号中记谱（“德式记谱”）。</translation>
+        <translation>B♭ 调低音单簧管。比 B♭ 调高音单簧管低八度。在低音谱号中记谱（‘德式记谱’）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1399"/>
@@ -3779,7 +3779,7 @@
         <source>Bass clarinet in A. Extremely rare and almost never used today. Notated in the treble clef (‘French notation’).</source>
         <comment>a-bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A调低音单簧管。极罕见，现时几乎从未使用过。在高音谱号中记谱（“法式记谱”）。</translation>
+        <translation>A 调低音单簧管。极罕见而现时几乎从不使用。在高音谱号中记谱（‘法式记谱’）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1410"/>
@@ -3814,7 +3814,7 @@
         <source>Bass clarinet in A. Extremely rare and almost never used today. Notated in the bass clef (‘German notation’).</source>
         <comment>a-bass-clarinet-bass-clef) description</comment>
         <extracomment>description for Bass Clarinet (bass clef); transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A调低音单簧管。极罕见，现时几乎从未使用过。在低音谱号中记谱（“德式记谱”）。</translation>
+        <translation>A 调低音单簧管。极罕见而现时几乎从不使用。在低音谱号中记谱（‘德式记谱’）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1421"/>
@@ -11671,13 +11671,6 @@
         <translation>Con.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3911"/>
-        <source>High-pitch, shallow body taiko drum.</source>
-        <comment>shime-daiko description</comment>
-        <extracomment>description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3913"/>
         <source>Shime-Daiko</source>
         <comment>shime-daiko trackName</comment>
@@ -11696,13 +11689,6 @@
         <source>S-Dko.</source>
         <comment>shime-daiko shortName</comment>
         <extracomment>shortName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3920"/>
-        <source>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played infront of a kneeling performer.</source>
-        <comment>kakko description</comment>
-        <extracomment>description for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12007,13 +11993,6 @@
         <translation>Fr. Dr.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4019"/>
-        <source>Chinese high-pitch frame drum.</source>
-        <comment>bangu description</comment>
-        <extracomment>description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4021"/>
         <source>Bangu</source>
         <comment>bangu trackName</comment>
@@ -12179,6 +12158,27 @@
         <source>Generic Japanese drum.</source>
         <comment>taiko description</comment>
         <extracomment>description for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4091"/>
+        <source>Robust, barrel-shaped Japanese drum. Also known as nagadou, they are the most common taiko.</source>
+        <comment>miya-daiko description</comment>
+        <extracomment>description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4118"/>
+        <source>Small Japanese bronze gong.</source>
+        <comment>shoko description</comment>
+        <extracomment>description for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4127"/>
+        <source>Small Japanese saucer-shaped bell.</source>
+        <comment>kane description</comment>
+        <extracomment>description for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12378,13 +12378,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4235"/>
-        <source>Korean dish-like gong</source>
-        <comment>kkwaenggwari description</comment>
-        <extracomment>description for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4237"/>
         <source>Kkwaenggwari</source>
         <comment>kkwaenggwari trackName</comment>
@@ -12418,6 +12411,27 @@
         <comment>taiko trackName</comment>
         <extracomment>trackName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>太鼓</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3911"/>
+        <source>High-pitched, shallow body taiko drum.</source>
+        <comment>shime-daiko description</comment>
+        <extracomment>description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3920"/>
+        <source>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played in front of a kneeling performer.</source>
+        <comment>kakko description</comment>
+        <extracomment>description for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4019"/>
+        <source>Chinese high-pitched frame drum.</source>
+        <comment>bangu description</comment>
+        <extracomment>description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4077"/>
@@ -12459,13 +12473,6 @@
         <source>T-Daiko</source>
         <comment>tsuri-daiko shortName</comment>
         <extracomment>shortName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4091"/>
-        <source>Robust, barrel shaped Japanese drum. Also known as nagadou, they are the most common taiko.</source>
-        <comment>miya-daiko description</comment>
-        <extracomment>description for Miya-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12546,13 +12553,6 @@
         <translation>Anv.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4118"/>
-        <source>Small Japanese bronz gong.</source>
-        <comment>shoko description</comment>
-        <extracomment>description for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="4120"/>
         <source>Shōko</source>
         <comment>shoko trackName</comment>
@@ -12571,13 +12571,6 @@
         <source>Shōko</source>
         <comment>shoko shortName</comment>
         <extracomment>shortName for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4127"/>
-        <source>Small Japanese saucer-shaped bell</source>
-        <comment>kane description</comment>
-        <extracomment>description for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12712,6 +12705,13 @@
         <comment>chains shortName</comment>
         <extracomment>shortName for Chains; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Chn.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4235"/>
+        <source>Korean dish-like gong.</source>
+        <comment>kkwaenggwari description</comment>
+        <extracomment>description for Kkwaenggwari; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4244"/>
@@ -16239,7 +16239,7 @@
         <source>Small Portuguese 4-string guitar (staff notation).</source>
         <comment>cavaquinho description</comment>
         <extracomment>description for Cavaquinho; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>葡萄牙小型4弦吉他（五线谱）。</translation>
+        <translation>葡萄牙小型 4 弦吉他（五线谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5391"/>
@@ -17632,7 +17632,7 @@
         <source>Mandolin (staff notation).</source>
         <comment>mandolin description</comment>
         <extracomment>description for Mandolin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>曼陀林（谱表记谱）</translation>
+        <translation>曼陀林（五线谱）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5831"/>
@@ -17821,7 +17821,7 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Staff notation).</source>
         <comment>mtn-dulcimer-std description</comment>
         <extracomment>description for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>在其他名字中也被称为阿巴拉契亚扬琴。筝琴家族的有品弦乐器。（谱表记号集合）。</translation>
+        <translation>在其他名字中还作为阿巴拉契亚扬琴而为人知晓。筝琴家族的有品弦乐器。（五线谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5892"/>
@@ -17968,7 +17968,7 @@
         <source>6-course lute (staff notation).</source>
         <comment>lute description</comment>
         <extracomment>description for Lute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>6复弦鲁特琴（五线谱）。</translation>
+        <translation>6 复弦鲁特琴（五线谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5940"/>
@@ -18836,7 +18836,7 @@
         <source>Spanish folk instrument similar to the mandolin. (Staff notation).</source>
         <comment>bandurria description</comment>
         <extracomment>description for Bandurria; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>西班牙民间乐器，类似于曼陀林（谱表记谱）。</translation>
+        <translation>西班牙民间乐器，类似于曼陀林（五线谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6217"/>

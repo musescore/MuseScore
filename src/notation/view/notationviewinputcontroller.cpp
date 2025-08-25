@@ -778,7 +778,8 @@ bool NotationViewInputController::mousePress_considerStartPasteRangeOnRelease(co
     const engraving::staff_idx_t sourceStaffIdx = range->startStaffIndex();
     const size_t numStaves = range->endStaffIndex() - range->startStaffIndex();
 
-    const bool started = viewInteraction()->startDropRange(sourceTick, tickLength, sourceStaffIdx, numStaves);
+    const bool started = viewInteraction()->startDropRange(sourceTick, tickLength, sourceStaffIdx, numStaves,
+                                                           /*preserveMeasureAlignment=*/ true);
     if (!started) {
         return false;
     }
@@ -797,7 +798,7 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
         return;
     }
 
-    m_hitElementWasAlreadySelected = ctx.hitElement->selected();
+    m_hitElementWasAlreadySingleSelected = ctx.hitElement == viewInteraction()->selection()->element();
 
     if (ctx.event->button() == Qt::LeftButton) {
         if (ctx.event->modifiers() & Qt::ControlModifier) {
@@ -898,11 +899,7 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     // If it is the only selected element, start editing if needed
     if (ctx.hitElement == viewInteraction()->selection()->element()
         && ctx.hitElement->needStartEditingAfterSelecting()) {
-        if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage()) {
-            viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->defaultGrip());
-        } else {
-            viewInteraction()->startEditElement(ctx.hitElement);
-        }
+        viewInteraction()->startEditElement(ctx.hitElement);
     }
 
     if (ctx.hitElement->isPlayable()) {
@@ -1009,7 +1006,13 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
     case MouseDownInfo::PasteRangeOnRelease: {
         const PointF logicPos = m_view->toLogical(event->pos());
-        const bool canDrop = viewInteraction()->updateDropRange(logicPos);
+
+        std::optional<bool> preserveMeasureAlignment;
+        if (physicalDragDelta.manhattanLength() > 4) {
+            preserveMeasureAlignment = false;
+        }
+
+        const bool canDrop = viewInteraction()->updateDropRange(logicPos, preserveMeasureAlignment);
         m_view->asItem()->setCursor(canDrop ? Qt::DragCopyCursor : QCursor());
         return;
     }
@@ -1193,7 +1196,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         }
     }
 
-    if (!m_hitElementWasAlreadySelected) {
+    if (!m_hitElementWasAlreadySingleSelected) {
         return;
     }
 

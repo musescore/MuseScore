@@ -24,9 +24,10 @@
 
 #include <fluidsynth.h>
 
+#include "audio/common/audioerrors.h"
+#include "audio/common/audiotypes.h"
+
 #include "sfcachedloader.h"
-#include "audioerrors.h"
-#include "audiotypes.h"
 
 #include "log.h"
 

@@ -1169,6 +1169,8 @@ SymIdList timeSigSymIdsFromString(const String& string, TimeSigStyle timeSigStyl
         { 'C',    SymId::timeSigCommon },
         { '(',    SymId::timeSigParensLeftSmall },
         { ')',    SymId::timeSigParensRightSmall },
+        { '[',    SymId::timeSigBracketLeftSmall },
+        { ']',    SymId::timeSigBracketRightSmall },
         { u'¢',   SymId::timeSigCutCommon },
         { u'½',   SymId::timeSigFractionHalf },
         { u'¼',   SymId::timeSigFractionQuarter },
@@ -1190,51 +1192,55 @@ SymIdList timeSigSymIdsFromString(const String& string, TimeSigStyle timeSigStyl
     };
 
     static const std::map<Char, SymId> dictLarge = {
-        { 43,    SymId::timeSigPlusSmallLarge },             // '+'
-        { 48,    SymId::timeSig0Large },                     // '0'
-        { 49,    SymId::timeSig1Large },                     // '1'
-        { 50,    SymId::timeSig2Large },                     // '2'
-        { 51,    SymId::timeSig3Large },                     // '3'
-        { 52,    SymId::timeSig4Large },                     // '4'
-        { 53,    SymId::timeSig5Large },                     // '5'
-        { 54,    SymId::timeSig6Large },                     // '6'
-        { 55,    SymId::timeSig7Large },                     // '7'
-        { 56,    SymId::timeSig8Large },                     // '8'
-        { 57,    SymId::timeSig9Large },                     // '9'
-        { 67,    SymId::timeSigCommonLarge },                // 'C'
-        { 40,    SymId::timeSigParensLeftSmallLarge },       // '('
-        { 41,    SymId::timeSigParensRightSmallLarge },      // ')'
-        { 162,   SymId::timeSigCutCommonLarge },             // '¢'
-        { 189,   SymId::timeSigFractionHalfLarge },          // '½'
-        { 188,   SymId::timeSigFractionQuarterLarge },       // '¼'
-        { 42,    SymId::timeSigMultiplyLarge },              // '*'
-        { 88,    SymId::timeSigMultiplyLarge },              // 'X'
-        { 120,   SymId::timeSigMultiplyLarge },              // 'x'
-        { 215,   SymId::timeSigMultiplyLarge },              // '×'
+        { '+',    SymId::timeSigPlusSmallLarge },
+        { '0',    SymId::timeSig0Large },
+        { '1',    SymId::timeSig1Large },
+        { '2',    SymId::timeSig2Large },
+        { '3',    SymId::timeSig3Large },
+        { '4',    SymId::timeSig4Large },
+        { '5',    SymId::timeSig5Large },
+        { '6',    SymId::timeSig6Large },
+        { '7',    SymId::timeSig7Large },
+        { '8',    SymId::timeSig8Large },
+        { '9',    SymId::timeSig9Large },
+        { 'C',    SymId::timeSigCommonLarge },
+        { '(',    SymId::timeSigParensLeftSmallLarge },
+        { ')',    SymId::timeSigParensRightSmallLarge },
+        { '[',    SymId::timeSigBracketLeftSmallLarge },
+        { ']',    SymId::timeSigBracketRightSmallLarge },
+        { u'¢',   SymId::timeSigCutCommonLarge },
+        { u'½',   SymId::timeSigFractionHalfLarge },
+        { u'¼',   SymId::timeSigFractionQuarterLarge },
+        { '*',    SymId::timeSigMultiplyLarge },
+        { 'X',    SymId::timeSigMultiplyLarge },
+        { 'x',    SymId::timeSigMultiplyLarge },
+        { u'×',   SymId::timeSigMultiplyLarge },
     };
 
     static const std::map<Char, SymId> dictNarrow = {
-        { 43,    SymId::timeSigPlusSmallNarrow },             // '+'
-        { 48,    SymId::timeSig0Narrow },                     // '0'
-        { 49,    SymId::timeSig1Narrow },                     // '1'
-        { 50,    SymId::timeSig2Narrow },                     // '2'
-        { 51,    SymId::timeSig3Narrow },                     // '3'
-        { 52,    SymId::timeSig4Narrow },                     // '4'
-        { 53,    SymId::timeSig5Narrow },                     // '5'
-        { 54,    SymId::timeSig6Narrow },                     // '6'
-        { 55,    SymId::timeSig7Narrow },                     // '7'
-        { 56,    SymId::timeSig8Narrow },                     // '8'
-        { 57,    SymId::timeSig9Narrow },                     // '9'
-        { 67,    SymId::timeSigCommonNarrow },                // 'C'
-        { 40,    SymId::timeSigParensLeftSmallNarrow },       // '('
-        { 41,    SymId::timeSigParensRightSmallNarrow },      // ')'
-        { 162,   SymId::timeSigCutCommonNarrow },             // '¢'
-        { 189,   SymId::timeSigFractionHalfNarrow },          // '½'
-        { 188,   SymId::timeSigFractionQuarterNarrow },       // '¼'
-        { 42,    SymId::timeSigMultiplyNarrow },              // '*'
-        { 88,    SymId::timeSigMultiplyNarrow },              // 'X'
-        { 120,   SymId::timeSigMultiplyNarrow },              // 'x'
-        { 215,   SymId::timeSigMultiplyNarrow },              // '×'
+        { '+',    SymId::timeSigPlusSmallNarrow },
+        { '0',    SymId::timeSig0Narrow },
+        { '1',    SymId::timeSig1Narrow },
+        { '2',    SymId::timeSig2Narrow },
+        { '3',    SymId::timeSig3Narrow },
+        { '4',    SymId::timeSig4Narrow },
+        { '5',    SymId::timeSig5Narrow },
+        { '6',    SymId::timeSig6Narrow },
+        { '7',    SymId::timeSig7Narrow },
+        { '8',    SymId::timeSig8Narrow },
+        { '9',    SymId::timeSig9Narrow },
+        { 'C',    SymId::timeSigCommonNarrow },
+        { '(',    SymId::timeSigParensLeftSmallNarrow },
+        { ')',    SymId::timeSigParensRightSmallNarrow },
+        { '[',    SymId::timeSigBracketLeftSmallNarrow },
+        { ']',    SymId::timeSigBracketRightSmallNarrow },
+        { u'¢',   SymId::timeSigCutCommonNarrow },
+        { u'½',   SymId::timeSigFractionHalfNarrow },
+        { u'¼',   SymId::timeSigFractionQuarterNarrow },
+        { '*',    SymId::timeSigMultiplyNarrow },
+        { 'X',    SymId::timeSigMultiplyNarrow },
+        { 'X',    SymId::timeSigMultiplyNarrow },
+        { u'×',   SymId::timeSigMultiplyNarrow },
     };
 
     SymIdList list;
@@ -1262,6 +1268,63 @@ Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch)
         f /= t->ratio();
     }
     return f;
+}
+
+bool dragPositionToMeasure(const PointF& pos, const Score* score,
+                           Measure** measure, staff_idx_t* staffIdx,
+                           const double spacingFactor)
+{
+    const System* preferredSystem = (*measure) ? (*measure)->system() : nullptr;
+
+    Measure* m = score->searchMeasure(pos, preferredSystem, spacingFactor);
+    if (!m) {
+        return false;
+    }
+
+    const System* system = m->system();
+    const double y = pos.y() - system->canvasPos().y();
+    const staff_idx_t i = system->searchStaff(y, *staffIdx, spacingFactor);
+    if (!score->staff(i)) {
+        return false;
+    }
+
+    *measure = m;
+    *staffIdx = i;
+    return true;
+}
+
+bool dragPositionToSegment(const PointF& pos, const Measure* measure, const staff_idx_t staffIdx,
+                           Segment** segment,
+                           const double spacingFactor, const bool allowTimeAnchor)
+{
+    const track_idx_t strack = staffIdx * VOICES;
+    const track_idx_t etrack = strack + VOICES;
+
+    const double x = pos.x() - measure->canvasPos().x();
+    const SegmentType st = allowTimeAnchor ? Segment::CHORD_REST_OR_TIME_TICK_TYPE : SegmentType::ChordRest;
+    Segment* s = measure->searchSegment(x, st, strack, etrack, *segment, spacingFactor);
+    if (!s) {
+        return false;
+    }
+
+    *segment = segmentOrChordRestSegmentAtSameTick(s);
+    return true;
+}
+
+Segment* segmentOrChordRestSegmentAtSameTick(Segment* segment)
+{
+    IF_ASSERT_FAILED(segment) {
+        return nullptr;
+    }
+
+    // If TimeTick and ChordRest segments are at the same tick, prefer ChordRest
+    if (segment->isTimeTickType() && segment->measure()) {
+        if (Segment* crSegAtSameTick = segment->measure()->findSegmentR(SegmentType::ChordRest, segment->rtick())) {
+            return crSegAtSameTick;
+        }
+    }
+
+    return segment;
 }
 
 double yStaffDifference(const System* system1, const System* system2, staff_idx_t staffIdx)
@@ -1827,5 +1890,26 @@ EngravingItem* findNewSystemMarkingParent(const EngravingItem* item, const Staff
     }
 
     return newParent;
+}
+
+MeasureBeat findBeat(const Score* score, int tick)
+{
+    MeasureBeat measureBeat;
+    if (!score || !score->checkHasMeasures()) {
+        return measureBeat;
+    }
+
+    int ticks = 0;
+    int beatIndex = 0;
+    score->sigmap()->tickValues(tick, &measureBeat.measureIndex, &beatIndex, &ticks);
+
+    const TimeSigFrac timeSig = score->sigmap()->timesig(Fraction::fromTicks(tick)).timesig();
+    const int ticksB = ticks_beat(timeSig.denominator());
+
+    measureBeat.beat = beatIndex + ticks / static_cast<float>(ticksB);
+    measureBeat.maxMeasureIndex = const_cast<Score*>(score)->measures()->size() - 1;
+    measureBeat.maxBeatIndex = timeSig.numerator() - 1;
+
+    return measureBeat;
 }
 }

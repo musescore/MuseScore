@@ -173,7 +173,8 @@ RadioButtonGroup {
 
                 navigation.name: "ResetButton"
                 navigation.panel: root.navigationPanel
-                navigation.column: 2 // todo
+                navigation.row: listItem.navigation.row
+                navigation.column: 1
 
                 enabled: model.isEdited
                 visible: model.isBuiltin

@@ -617,16 +617,14 @@ static const std::array ELEMENT_TYPES {
           TranslatableString("engraving", "tapping", nullptr, 1),
           TranslatableString("engraving", "Tapping", nullptr, 1) },
     Item{ ElementType::TAPPING_HALF_SLUR, "TappingHalfSlur",
-          TranslatableString("engraving", "tapping half slur", nullptr, 1),
-          TranslatableString("engraving", "Tapping half slur", nullptr, 1),
-    },
+          TranslatableString("engraving", "tapping half slur(s)", nullptr, 1),
+          TranslatableString("engraving", "Tapping half slur(s)", nullptr, 1) },
     Item{ ElementType::TAPPING_HALF_SLUR_SEGMENT, "TappingHalfSlurSegment",
-          TranslatableString("engraving", "tapping half slur segment"),
-          TranslatableString("engraving", "Tapping half slur segment") },
+          TranslatableString("engraving", "tapping half slur segment(s)", nullptr, 1),
+          TranslatableString("engraving", "Tapping half slur segment(s)", nullptr, 1) },
     Item{ ElementType::TAPPING_TEXT, "TappingText",
-          TranslatableString("engraving", "tapping text"),
-          TranslatableString("engraving", "Tapping text"),
-    },
+          TranslatableString("engraving", "tapping text(s)", nullptr, 1),
+          TranslatableString("engraving", "Tapping text(s)", nullptr, 1) },
     Item{ ElementType::ROOT_ITEM, "RootItem",
           TranslatableString::untranslatable("root item"),
           TranslatableString::untranslatable("Root item") },
@@ -2095,6 +2093,8 @@ static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
     { PlayingTechniqueType::HandbellsEcho1, "handbells_echo_1", muse::TranslatableString("engraving/playtechtype", "Echo") },
     { PlayingTechniqueType::HandbellsEcho2, "handbells_echo_2", muse::TranslatableString("engraving/playtechtype", "Echo") },
     { PlayingTechniqueType::HandbellsDamp, "handbells_damp", muse::TranslatableString("engraving/playtechtype", "Damp") },
+    { PlayingTechniqueType::HandbellsLV, "handbells_lv", muse::TranslatableString("engraving/playtechtype", "Let vibrate") },
+    { PlayingTechniqueType::HandbellsR, "handbells_r", muse::TranslatableString("engraving/playtechtype", "Ring") },
 };
 
 const muse::TranslatableString& TConv::userName(PlayingTechniqueType v)
@@ -3200,17 +3200,15 @@ struct ArticulationTextTypeItem {
     muse::TranslatableString name;
 };
 
-const std::array<ArticulationTextTypeItem, 10> ARTICULATIONTEXT_TYPES = { {
+const std::array<ArticulationTextTypeItem, 9> ARTICULATIONTEXT_TYPES = { {
     // Guitar
     { ArticulationTextType::SLAP,   "Slap", String(u"S"),    muse::TranslatableString("engraving/sym", "Slap") },
     { ArticulationTextType::POP,    "Pop",  String(u"P"),    muse::TranslatableString("engraving/sym", "Pop") },
     // Handbells
-    { ArticulationTextType::LV,     "LV",   String(u"LV"),   muse::TranslatableString("engraving/sym", "Let vibrate") },
-    { ArticulationTextType::R,      "R",    String(u"R"),    muse::TranslatableString("engraving/sym", "Ring") },
     { ArticulationTextType::TD,     "TD",   String(u"TD"),   muse::TranslatableString("engraving/sym", "Thumb damp") },
     { ArticulationTextType::BD,     "BD",   String(u"BD"),   muse::TranslatableString("engraving/sym", "Brush damp") },
     { ArticulationTextType::RT,     "RT",   String(u"RT"),   muse::TranslatableString("engraving/sym", "Ring touch") },
-    { ArticulationTextType::PL,     "PL",   String(u"PL"),   muse::TranslatableString("engraving/sym", "Pluck") },
+    { ArticulationTextType::PL,     "PL",   String(u"Pl"),   muse::TranslatableString("engraving/sym", "Pluck") },
     { ArticulationTextType::SB,     "SB",   String(u"SB"),   muse::TranslatableString("engraving/sym", "Singing bell") },
     { ArticulationTextType::VIB,    "VIB",  String(u"vib."), muse::TranslatableString("engraving/sym", "Vibrate") },
 } };
@@ -3302,22 +3300,22 @@ LyricsDashSystemStart TConv::fromXml(const AsciiStringView& tag, LyricsDashSyste
 }
 
 const std::array<const muse::TranslatableString, 17 > KEY_NAMES = { {
-    muse::TranslatableString("engraving", "C♭ major, A♭ minor"),
-    muse::TranslatableString("engraving", "G♭ major, E♭ minor"),
-    muse::TranslatableString("engraving", "D♭ major, B♭ minor"),
-    muse::TranslatableString("engraving", "A♭ major, F minor"),
-    muse::TranslatableString("engraving", "E♭ major, C minor"),
-    muse::TranslatableString("engraving", "B♭ major, G minor"),
-    muse::TranslatableString("engraving", "F major, D minor"),
-    muse::TranslatableString("engraving", "C major, A minor"),
-    muse::TranslatableString("engraving", "G major, E minor"),
-    muse::TranslatableString("engraving", "D major, B minor"),
-    muse::TranslatableString("engraving", "A major, F♯ minor"),
-    muse::TranslatableString("engraving", "E major, C♯ minor"),
-    muse::TranslatableString("engraving", "B major, G♯ minor"),
-    muse::TranslatableString("engraving", "F♯ major, D♯ minor"),
-    muse::TranslatableString("engraving", "C♯ major, A♯ minor"),
-    muse::TranslatableString("engraving", "Open/Atonal"),
+    muse::TranslatableString("engraving", "C♭ major / A♭ minor"),
+    muse::TranslatableString("engraving", "G♭ major / E♭ minor"),
+    muse::TranslatableString("engraving", "D♭ major / B♭ minor"),
+    muse::TranslatableString("engraving", "A♭ major / F minor"),
+    muse::TranslatableString("engraving", "E♭ major / C minor"),
+    muse::TranslatableString("engraving", "B♭ major / G minor"),
+    muse::TranslatableString("engraving", "F major / D minor"),
+    muse::TranslatableString("engraving", "C major / A minor"),
+    muse::TranslatableString("engraving", "G major / E minor"),
+    muse::TranslatableString("engraving", "D major / B minor"),
+    muse::TranslatableString("engraving", "A major / F♯ minor"),
+    muse::TranslatableString("engraving", "E major / C♯ minor"),
+    muse::TranslatableString("engraving", "B major / G♯ minor"),
+    muse::TranslatableString("engraving", "F♯ major / D♯ minor"),
+    muse::TranslatableString("engraving", "C♯ major / A♯ minor"),
+    muse::TranslatableString("engraving", "Open / Atonal"),
     muse::TranslatableString("engraving", "Custom")
 } };
 

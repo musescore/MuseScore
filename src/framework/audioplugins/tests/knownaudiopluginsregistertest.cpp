@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "global/serialization/json.h"
 
@@ -30,6 +29,7 @@
 #include "mocks/audiopluginsconfigurationmock.h"
 
 using ::testing::_;
+using ::testing::NiceMock;
 using ::testing::Return;
 
 using namespace muse;
@@ -44,8 +44,8 @@ protected:
     void SetUp() override
     {
         m_knownPlugins = std::make_shared<KnownAudioPluginsRegister>(modularity::globalCtx());
-        m_fileSystem = std::make_shared<FileSystemMock>();
-        m_configuration = std::make_shared<AudioPluginsConfigurationMock>();
+        m_fileSystem = std::make_shared<NiceMock<FileSystemMock> >();
+        m_configuration = std::make_shared<NiceMock<AudioPluginsConfigurationMock> >();
 
         m_knownPlugins->fileSystem.set(m_fileSystem);
         m_knownPlugins->configuration.set(m_configuration);

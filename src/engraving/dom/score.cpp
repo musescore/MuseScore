@@ -167,9 +167,6 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     m_rootItem = new RootItem(this);
     m_rootItem->init();
 
-    //! NOTE Looks like a bug, `minimumPaddingUnit` is set using the default style's spatium value
-    //! and does not change if the style or the spatium of this score is changed
-    m_paddingTable.setMinimumPaddingUnit(0.1 * style().spatium());
     createPaddingTable();
 
     m_shadowNote = new ShadowNote(this);
@@ -727,42 +724,15 @@ Measure* Score::pos2measure(const PointF& p, staff_idx_t* rst, int* pitch, Segme
 ///              \b output: new segment for drag position
 //---------------------------------------------------------
 
-void Score::dragPosition(const PointF& p, staff_idx_t* rst, Segment** seg, double spacingFactor, bool allowTimeAnchor) const
+void Score::dragPosition(const PointF& pos, staff_idx_t* rst, Segment** seg, double spacingFactor, bool allowTimeAnchor) const
 {
-    const System* preferredSystem = (*seg) ? (*seg)->system() : nullptr;
-    Measure* m = searchMeasure(p, preferredSystem, spacingFactor);
-    if (m == 0 || m->isMMRest()) {
+    Measure* m = nullptr;
+
+    if (!dragPositionToMeasure(pos, this, &m, rst, spacingFactor)) {
         return;
     }
 
-    System* s = m->system();
-    double y   = p.y() - s->canvasPos().y();
-
-    const staff_idx_t i = s->searchStaff(y, *rst, spacingFactor);
-
-    // search for segment + offset
-    PointF pppp = p - m->canvasPos();
-    track_idx_t strack = staff2track(i);
-    if (!staff(i)) {
-        return;
-    }
-    track_idx_t etrack = staff2track(i + 1);
-
-    SegmentType st = allowTimeAnchor ? Segment::CHORD_REST_OR_TIME_TICK_TYPE : SegmentType::ChordRest;
-    Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg, spacingFactor);
-    if (segment) {
-        if (segment->isTimeTickType()) {
-            if (Segment* crAtSamePos = m->findSegmentR(SegmentType::ChordRest, segment->rtick())) {
-                // If TimeTick and ChordRest at same position, prefer ChordRest
-                segment = crAtSamePos;
-            }
-        }
-        *rst = i;
-        *seg = segment;
-        return;
-    }
-
-    return;
+    dragPositionToSegment(pos, m, *rst, seg, spacingFactor, allowTimeAnchor);
 }
 
 //---------------------------------------------------------

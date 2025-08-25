@@ -240,6 +240,12 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
             continue;
         }
 
+        // Match BspTree::items, which checks for bbox intersection
+        // and empty RectF intersects with nothing
+        if (element->ldata()->bbox().isEmpty()) {
+            continue;
+        }
+
         mu::engraving::ElementType type = element->type();
         switch (type) { // In future sub-type code, this switch() grows, and eType gets used
         case mu::engraving::ElementType::STAFF_LINES: // Handled in the 1st pass above

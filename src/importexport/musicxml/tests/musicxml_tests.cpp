@@ -1100,6 +1100,9 @@ TEST_F(MusicXml_Tests, stickingLyrics) {
 TEST_F(MusicXml_Tests, stringData) {
     musicXmlIoTest("testStringData");
 }
+TEST_F(MusicXml_Tests, stringMute) {
+    musicXmlImportTestRef("testStringmute");
+}
 TEST_F(MusicXml_Tests, stringVoiceName) {
     musicXmlIoTestRef("testStringVoiceName");
 }
@@ -1244,6 +1247,9 @@ TEST_F(MusicXml_Tests, timesig3) {
 }
 TEST_F(MusicXml_Tests, timesig4) {
     musicXmlIoTest("testTimesig4");
+}
+TEST_F(MusicXml_Tests, timesig5) {
+    musicXmlMscxExportTestRef("testTimesig5");
 }
 TEST_F(MusicXml_Tests, timeTick) {
     musicXmlImportTestRef("testTimeTick");

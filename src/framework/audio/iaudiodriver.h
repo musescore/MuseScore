@@ -31,7 +31,7 @@
 #include "global/async/notification.h"
 #include "modularity/imoduleinterface.h"
 
-#include "audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audio {
 class IAudioDriver : MODULE_EXPORT_INTERFACE

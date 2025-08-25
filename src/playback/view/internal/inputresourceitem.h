@@ -35,7 +35,7 @@
 #include "iinteractive.h"
 
 #include "audio/main/iplayback.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "midi/miditypes.h"
 
 #include "abstractaudioresourceitem.h"

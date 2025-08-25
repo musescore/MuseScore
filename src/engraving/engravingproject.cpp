@@ -124,6 +124,7 @@ Ret EngravingProject::doSetupMasterScore(bool forceMode)
     for (Score* s : m_masterScore->scoreList()) {
         s->setPlaylistDirty();
         s->setLayoutAll();
+        s->createPaddingTable();
     }
 
     m_masterScore->updateChannel();

@@ -418,7 +418,6 @@
           <style>poet</style>
           <family>Edwin</family>
           <align>left,top</align>
-          <offset x="0" y="-0.114849"/>
           <text><font size="10"/><font face="Edwin"/>2</text>
           </Text>
         </VBox>
@@ -454,7 +453,6 @@
         <Text>
           <eid>O_O</eid>
           <align>center,top</align>
-          <offset x="0" y="-0.083"/>
           <text><font size="22.0128"/>Title</text>
           </Text>
         </VBox>

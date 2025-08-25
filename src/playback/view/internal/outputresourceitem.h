@@ -33,7 +33,7 @@
 #include "iinteractive.h"
 
 #include "audio/main/iplayback.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 #include "abstractaudioresourceitem.h"
 

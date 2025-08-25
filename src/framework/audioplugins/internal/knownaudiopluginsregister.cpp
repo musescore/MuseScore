@@ -24,7 +24,7 @@
 
 #include "global/serialization/json.h"
 
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "audiopluginsutils.h"
 
 #include "log.h"

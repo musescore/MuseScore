@@ -2231,6 +2231,7 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
     const int z = ts.numerator();
     const int n = ts.denominator();
     const String ns = tsig->numeratorString();
+    const String ds = tsig->denominatorString();
 
     m_attr.doAttr(m_xml, true);
     XmlWriter::Attributes attrs;
@@ -2238,7 +2239,7 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
         attrs = { { "symbol", "common" } };
     } else if (st == TimeSigType::ALLA_BREVE) {
         attrs = { { "symbol", "cut" } };
-    } else if (!ns.empty() && tsig->denominatorString().empty()) {
+    } else if (!ns.empty() && ds.empty()) {
         attrs = { { "symbol", "single-number" } };
     }
     if (!tsig->visible()) {
@@ -2249,15 +2250,16 @@ void ExportMusicXml::timesig(const TimeSig* tsig)
 
     m_xml.startElement("time", attrs);
 
-    static const std::regex beats_re("^\\d+(\\+\\d+)+$");
-    if (std::regex_match(ns.toStdString(), beats_re)) {
-        // if compound numerator, exported as is
+    if (!ns.empty()) {
         m_xml.tag("beats", ns);
     } else {
-        // else fall back and use the numerator as integer
         m_xml.tag("beats", z);
     }
-    m_xml.tag("beat-type", n);
+    if (!ds.empty()) {
+        m_xml.tag("beat-type", ds);
+    } else {
+        m_xml.tag("beat-type", n);
+    }
     m_xml.endElement();
 }
 
@@ -3676,7 +3678,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         }
     }
 
-    // check if all articulations were handled
+    // write all remaining articulations as other-articulation
     for (const Articulation* a : na) {
         if (!ExportMusicXml::canWrite(a)) {
             continue;
@@ -3687,7 +3689,21 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             && symIdToTechn(sid) == ""
             && !a->isOrnament() && !a->isTapping()
             && !isLaissezVibrer(sid)) {
-            LOGD("unknown chord attribute %d %s", static_cast<int>(sid), muPrintable(a->translatedTypeUserName()));
+            String otherArtic = u"other-articulation";
+            otherArtic += color2xml(a);
+            otherArtic += ExportMusicXml::positioningAttributes(a);
+            if (a->anchor() != ArticulationAnchor::AUTO) {
+                if (a->anchor() == ArticulationAnchor::TOP) {
+                    otherArtic += u" placement=\"above\"";
+                } else {
+                    otherArtic += u" placement=\"below\"";
+                }
+            }
+            notations.tag(m_xml, a);
+            articulations.tag(m_xml);
+            AsciiStringView noteheadName = SymNames::nameForSymId(sid);
+            otherArtic += String(u" smufl=\"%1\"").arg(String::fromAscii(noteheadName.ascii()));
+            m_xml.tagRaw(otherArtic);
         }
     }
 }
@@ -7878,8 +7894,15 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part, const std::vecto
                 }
             }
 
-            if (!muse::RealIsEqual(mag, 1.0)) {
-                xml.tag("staff-size", mag * 100);
+            double lineDistance = st->lineDistance(Fraction(0, 1));
+            bool needWriteLineDistance = !muse::RealIsEqual(lineDistance, 1.0);
+            bool needWriteMag = !muse::RealIsEqual(mag, 1.0);
+            if (needWriteLineDistance || needWriteMag) {
+                XmlWriter::Attributes scaleAttributes;
+                if (needWriteMag) {
+                    attributes.emplace_back(std::make_pair("scale", mag));
+                }
+                xml.element("staff-size", scaleAttributes, lineDistance * 100);
             }
 
             xml.endElement();

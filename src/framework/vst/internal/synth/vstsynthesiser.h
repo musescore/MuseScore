@@ -25,7 +25,7 @@
 
 #include "audio/worker/internal/synthesizers/abstractsynthesizer.h"
 #include "audio/iaudioconfiguration.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "modularity/ioc.h"
 #include "mpe/events.h"
 

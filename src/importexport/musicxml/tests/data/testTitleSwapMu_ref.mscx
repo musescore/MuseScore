@@ -416,7 +416,6 @@
         <Text>
           <eid>H_H</eid>
           <style>title</style>
-          <offset x="0" y="-0.101194"/>
           <text><font size="22.0128"/>Title</text>
           </Text>
         </VBox>
@@ -451,7 +450,6 @@
         <eid>N_N</eid>
         <Text>
           <eid>O_O</eid>
-          <offset x="0" y="-0.0942"/>
           <text><font size="10"/><font face="Edwin"/>2</text>
           </Text>
         </VBox>

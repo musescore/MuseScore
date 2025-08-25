@@ -24,7 +24,7 @@
 
 #include "global/types/retval.h"
 #include "global/io/path.h"
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 
 namespace muse::audioplugins {
 class IAudioPluginMetaReader

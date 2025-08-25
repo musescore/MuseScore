@@ -948,7 +948,9 @@ enum class PlayingTechniqueType : signed char {
     HandbellsSwingDown,
     HandbellsEcho1,
     HandbellsEcho2,
-    HandbellsDamp
+    HandbellsDamp,
+    HandbellsLV,
+    HandbellsR,
 };
 
 enum class GradualTempoChangeType : signed char {
@@ -1172,8 +1174,6 @@ enum class ArticulationTextType : unsigned char {
     SLAP,
     POP,
     // Handbells
-    LV,
-    R,
     TD,
     BD,
     RT,
@@ -1281,12 +1281,12 @@ struct SwingParameters {
 //class AbstractCapoTransposeState;
 
 struct CapoParams {
-    enum TransposeMode {
+    enum class TransposeMode {
         PLAYBACK_ONLY = 0,
         NOTATION_ONLY = 1,
         TAB_ONLY      = 2,
     };
-    enum Transition {
+    enum class Transition {
         NO_TRANSITION = -1,
         PB_TO_NOTATION,
         PB_TO_TAB,
@@ -1316,6 +1316,13 @@ struct PartAudioSettingsCompat {
 
 struct SettingsCompat {
     std::map<muse::ID /*partid*/, PartAudioSettingsCompat> audioSettings;
+};
+
+struct MeasureBeat {
+    int measureIndex = 0;
+    int maxMeasureIndex = 0;
+    float beat = 0.f;
+    int maxBeatIndex = 0;
 };
 
 //---------------------------------------------------------

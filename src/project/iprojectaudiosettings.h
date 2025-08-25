@@ -25,11 +25,10 @@
 
 #include <memory>
 
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "engraving/types/types.h"
 #include "playback/playbacktypes.h"
 #include "notation/inotationsolomutestate.h"
-#include "types/retval.h"
 
 namespace mu::project {
 class IProjectAudioSettings

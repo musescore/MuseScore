@@ -27,7 +27,7 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/soundflag.h"
 
-#include "audio/audioutils.h"
+#include "audio/common/audioutils.h"
 #include "actions/actiontypes.h"
 
 #include "translation.h"

@@ -927,6 +927,9 @@ Font TextFragment::font(const TextBase* t) const
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
             m = t->getProperty(Pid::MARKER_SYMBOL_SIZE).toDouble();
+            if (t->sizeIsSpatiumDependent()) {
+                m *= spatiumScaling;
+            }
         } else {
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
@@ -1519,6 +1522,11 @@ void TextBlock::changeFormat(FormatId id, const FormatValue& data, int start, in
     for (auto i = m_fragments.begin(); i != m_fragments.end(); ++i) {
         int columns = i->columns();
         if (start + n <= col) {
+            if (columns == 0) {
+                // still apply the format change. Otherwise we have deviating formats for e. g. empty lines
+                // otherwise we have Issue #19571
+                i->changeFormat(id, data);
+            }
             break;
         }
         if (start >= col + columns) {

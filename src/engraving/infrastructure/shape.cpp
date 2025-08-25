@@ -333,11 +333,6 @@ double Shape::right() const
     return dist;
 }
 
-/* NOTE: these top() and bottom() methods look very weird to me, as they
- * seem to return the opposite of what they say. Or it seems like the
- * rectangles are defined upside down, for some reason. Needs some
- * more understanding. [M.S.] */
-
 //---------------------------------------------------------
 //   top
 //---------------------------------------------------------

@@ -35,7 +35,7 @@
 
 #include "ui/view/navigationpanel.h"
 
-#include "audio/audiotypes.h"
+#include "audio/common/audiotypes.h"
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
 #include "auxsenditem.h"
