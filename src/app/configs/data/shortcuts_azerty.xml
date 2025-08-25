@@ -234,6 +234,51 @@
     <seq>Alt+À</seq> <!-- AZERTY for 0 -->
     </SC>
   <SC>
+    <key>interval-2</key>
+    <seq>Alt+Shift+2</seq>
+    <seq>Alt+Shift+É</seq> <!-- AZERTY for 2 -->
+    </SC>
+  <SC>
+    <key>interval-3</key>
+    <seq>Alt+Shift+3</seq>
+    <seq>Alt+Shift+&quot;</seq> <!-- AZERTY for 3 -->
+    </SC>
+  <SC>
+    <key>interval-4</key>
+    <seq>Alt+Shift+4</seq>
+    <seq>Alt+Shift+'</seq> <!-- AZERTY for 4 -->
+    </SC>
+  <SC>
+    <key>interval-5</key>
+    <seq>Alt+Shift+5</seq>
+    <seq>Alt+Shift+(</seq> <!-- AZERTY for 5 -->
+    </SC>
+  <SC>
+    <key>interval-6</key>
+    <seq>Alt+Shift+6</seq>
+    <seq>Alt+Shift+-</seq> <!-- AZERTY for 6 -->
+    </SC>
+  <SC>
+    <key>interval-7</key>
+    <seq>Alt+Shift+7</seq>
+    <seq>Alt+Shift+È</seq> <!-- AZERTY for 7 -->
+    </SC>
+  <SC>
+    <key>interval-8</key>
+    <seq>Alt+Shift+8</seq>
+    <seq>Alt+Shift+_</seq> <!-- AZERTY for 8 -->
+    </SC>
+  <SC>
+    <key>interval-9</key>
+    <seq>Alt+Shift+9</seq>
+    <seq>Alt+Shift+Ç</seq> <!-- AZERTY for 9 -->
+    </SC>
+  <SC>
+     <key>interval-10</key>
+     <seq>Alt+Shift+0</seq>
+     <seq>Alt+Shift+À</seq> <!-- AZERTY for 0 -->
+     </SC>
+  <SC>
     <key>note-a</key>
     <seq>A</seq>
     </SC>
