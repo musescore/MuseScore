@@ -139,7 +139,7 @@ void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx,
         return;
     }
 
-    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(articulationType, ArticulationType::Standard);
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(articulationType);
     if (pattern.empty()) {
         return;
     }
