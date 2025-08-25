@@ -436,7 +436,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             }
             m_entryNoteNumber2Note.emplace(std::make_pair(currentEntryNumber, noteInfoPtr->getNoteId()), note);
         }
-        if (currentEntry->freezeStem || currentEntry->voice2 || entryInfo->v2Launch
+        if (currentEntry->freezeStem || currentEntry->voice2 || currentEntry->v2Launch
             || muse::contains(m_layerForceStems, entryInfo.getLayerIndex())) {
             // Additionally, beams have their own vertical direction, which is set in processBeams.
             DirectionV dir = currentEntry->upStem ? DirectionV::UP : DirectionV::DOWN;
