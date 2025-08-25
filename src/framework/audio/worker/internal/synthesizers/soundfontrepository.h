@@ -35,7 +35,7 @@ class SoundFontRepository : public ISoundFontRepository, public Injectable, publ
     Inject<rpc::IRpcChannel> channel;
 
 public:
-    SoundFontRepository(const modularity::ContextPtr& iocCtx = nullptr)
+    SoundFontRepository(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
     void init();
