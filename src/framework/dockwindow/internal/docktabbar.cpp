@@ -37,28 +37,48 @@ bool DockTabBar::event(QEvent* event)
         doubleClicked(mouseEvent->pos());
         return true;
     }
-    case QEvent::MouseButtonPress: {
-        QQuickItem* tabBar = tabBarQmlItem();
-        if (tabBar) {
-            QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-            QPoint localPos = mouseEvent->pos();
-
-            int tabIndex = tabAt(localPos);
-            if (tabIndex < 0) {
-                return true;
-            }
-
-            tabBar->setProperty("currentIndex", tabIndex);
-            TabBar::onMousePress(localPos);
-        }
-
-        break;
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease: {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        onMousePressRelease(mouseEvent);
+        return true;
     }
     default:
         break;
     }
 
     return KDDockWidgets::TabBarQuick::event(event);
+}
+
+void DockTabBar::onMousePressRelease(const QMouseEvent* mouseEvent)
+{
+    QQuickItem* tabBar = tabBarQmlItem();
+    if (!mouseEvent || !tabBar) {
+        return;
+    }
+
+    const QPoint localPos = mouseEvent->pos();
+
+    int tabIndex = tabAt(localPos);
+    if (tabIndex < 0) {
+        return;
+    }
+
+    switch (mouseEvent->type()) {
+    case QEvent::MouseButtonPress: {
+        m_indexOfPressedTab = tabIndex;
+        TabBar::onMousePress(localPos);
+        break;
+    }
+    case QEvent::MouseButtonRelease: {
+        if (tabIndex == m_indexOfPressedTab) {
+            tabBar->setProperty("currentIndex", tabIndex);
+        }
+        m_indexOfPressedTab = -1;
+        break;
+    }
+    default: UNREACHABLE;
+    }
 }
 
 void DockTabBar::doubleClicked(const QPoint& pos) const
