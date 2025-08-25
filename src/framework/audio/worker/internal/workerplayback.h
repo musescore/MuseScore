@@ -45,7 +45,7 @@ class WorkerPlayback : public IWorkerPlayback, public Injectable, public async::
     Inject<IAudioEngine> audioEngine = { this };
 
 public:
-    WorkerPlayback(const muse::modularity::ContextPtr& iocCtx = nullptr)
+    WorkerPlayback(const muse::modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
     void init();

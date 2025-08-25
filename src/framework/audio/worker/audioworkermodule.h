@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,19 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_AUDIOTHREAD_H
-#define MUSE_AUDIO_AUDIOTHREAD_H
+#pragma once
 
-#include <memory>
-#include <thread>
-#include <atomic>
-#include <functional>
-
-#include "audio/common/audiotypes.h"
-
-namespace muse::audio::rpc {
-class GeneralRpcChannel;
-}
+#include "modularity/imodulesetup.h"
 
 namespace muse::audio::fx {
 class FxResolver;
@@ -44,38 +34,29 @@ class SoundFontRepository;
 }
 
 namespace muse::audio::worker {
-class AudioWorkerConfiguration;
 class AudioEngine;
 class AudioBuffer;
 class WorkerPlayback;
 class WorkerChannelController;
-class AudioWorker
+
+class AudioWorkerModule : public modularity::IModuleSetup
 {
 public:
-    AudioWorker(std::shared_ptr<rpc::GeneralRpcChannel> rpcChannel);
-    ~AudioWorker();
 
-    static std::thread::id ID;
+    std::string moduleName() const override;
 
-    struct ActiveSpec {
-        sample_rate_t sampleRate = 0;
-        uint16_t bufferSize = 0;
-    };
+    void registerExports() override;
+    void resolveImports() override;
+    void onPreInit(const IApplication::RunMode& mode) override;
+    void onInit(const IApplication::RunMode& mode) override;
+    void onDestroy() override;
 
-    void init();
-    void run(const ActiveSpec& spec);
-    void setInterval(const msecs_t interval);
-    void stop();
-    bool isRunning() const;
-
+    // Temporarily for compatibility
+    const std::shared_ptr<AudioEngine>& audioEngine() const { return m_audioEngine; }
     const std::shared_ptr<AudioBuffer>& audioBuffer() const { return m_audioBuffer; }
+    const std::shared_ptr<synth::SynthResolver>& synthResolver() const { return m_synthResolver; }
 
 private:
-    void th_main(const ActiveSpec& spec);
-
-    // services
-    std::shared_ptr<rpc::GeneralRpcChannel> m_rpcChannel;
-    std::shared_ptr<AudioWorkerConfiguration> m_configuration;
     std::shared_ptr<AudioEngine> m_audioEngine;
     std::shared_ptr<AudioBuffer> m_audioBuffer;
     std::shared_ptr<WorkerPlayback> m_workerPlayback;
@@ -83,15 +64,5 @@ private:
     std::shared_ptr<fx::FxResolver> m_fxResolver;
     std::shared_ptr<synth::SynthResolver> m_synthResolver;
     std::shared_ptr<synth::SoundFontRepository> m_soundFontRepository;
-
-    // thread
-    msecs_t m_intervalMsecs = 0;
-    uint64_t m_intervalInWinTime = 0;
-
-    std::unique_ptr<std::thread> m_thread = nullptr;
-    std::atomic<bool> m_running = false;
 };
-using AudioThreadPtr = std::shared_ptr<AudioWorker>;
 }
-
-#endif // MUSE_AUDIO_AUDIOTHREAD_H
