@@ -25,6 +25,9 @@
 #include "engraving/dom/actionicon.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/spanner.h"
+#include "engraving/dom/textlinebase.h"
+#include "engraving/dom/text.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -75,7 +78,18 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
         const Color frameColorBackup = item->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
         const bool colorsInversionEnabledBackup = item->colorsInversionEnabled();
 
-        item->setColorsInverionEnabled(ctx->colorsInversionEnabled);
+        item->setColorsInversionEnabled(ctx->colorsInversionEnabled);
+
+        if (item->isTextLineBaseSegment()) {
+            TextLineBaseSegment* tls = item_cast<TextLineBaseSegment*>(item);
+            tls->text()->setColorsInversionEnabled(ctx->colorsInversionEnabled);
+            tls->endText()->setColorsInversionEnabled(ctx->colorsInversionEnabled);
+        }
+
+        if (item->isSpannerSegment()) {
+            SpannerSegment* ss = item_cast<SpannerSegment*>(item);
+            ss->spanner()->setColorsInversionEnabled(ctx->colorsInversionEnabled);
+        }
 
         if (!ctx->useElementColors) {
             const Color color = ctx->color;
@@ -85,9 +99,20 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
 
         engravingRender()->drawItem(item, painter);
 
-        item->setColorsInverionEnabled(colorsInversionEnabledBackup);
+        item->setColorsInversionEnabled(colorsInversionEnabledBackup);
         item->setProperty(Pid::COLOR, colorBackup);
         item->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+
+        if (item->isTextLineBaseSegment()) {
+            TextLineBaseSegment* tls = item_cast<TextLineBaseSegment*>(item);
+            tls->text()->setColorsInversionEnabled(colorsInversionEnabledBackup);
+            tls->endText()->setColorsInversionEnabled(colorsInversionEnabledBackup);
+        }
+
+        if (item->isSpannerSegment()) {
+            SpannerSegment* ss = item_cast<SpannerSegment*>(item);
+            ss->spanner()->setColorsInversionEnabled(colorsInversionEnabledBackup);
+        }
 
         painter->restore();
     };

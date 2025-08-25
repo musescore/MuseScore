@@ -494,7 +494,7 @@ public:
     double styleP(Sid idx) const;
 
     bool colorsInversionEnabled() const;
-    void setColorsInverionEnabled(bool enabled);
+    void setColorsInversionEnabled(bool enabled);
 
     virtual void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false);
     ParenthesesMode parenthesesMode() const;

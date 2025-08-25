@@ -169,7 +169,7 @@ public:
         muse::draw::Color selectionColor;
         muse::draw::Color linesColor;
         bool useElementColors = false;
-        bool colorsInverionsEnabled = false;
+        bool colorsInversionEnabled = false;
     };
 
     const PaintOptions& paintOptions() const;
