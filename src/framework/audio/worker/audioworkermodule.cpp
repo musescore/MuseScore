@@ -22,7 +22,6 @@
 
 #include "audioworkermodule.h"
 
-#include "internal/audioworkerconfiguration.h"
 #include "internal/audiobuffer.h"
 #include "internal/audioengine.h"
 #include "internal/workerplayback.h"
@@ -58,7 +57,6 @@ void AudioWorkerModule::registerExports()
     m_synthResolver = std::make_shared<SynthResolver>();
     m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
-    ioc()->registerExport<IAudioWorkerConfiguration>(moduleName(), new AudioWorkerConfiguration());
     ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
     ioc()->registerExport<IWorkerPlayback>(moduleName(), m_workerPlayback);
     ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);

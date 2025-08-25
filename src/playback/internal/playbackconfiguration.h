@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "musesampler/imusesamplerinfo.h"
-#include "audio/main/iaudioconfiguration.h"
+#include "audio/iaudioconfiguration.h"
 
 namespace mu::playback {
 class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async::Asyncable
