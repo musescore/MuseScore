@@ -2108,7 +2108,9 @@ static void changeChordStyle(Score* score)
     bool mstackModifiers = style.styleB(Sid::verticallyStackModifiers);
     bool mexcludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
     String msymbolFont = style.styleSt(Sid::musicalTextFont);
-    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, mstackModifiers, mexcludeModsHAlign, msymbolFont);
+    ChordStylePreset preset = style.styleV(Sid::chordStyle).value<ChordStylePreset>();
+    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, mstackModifiers, mexcludeModsHAlign, msymbolFont,
+                                            preset);
     if (score->style().styleB(Sid::chordsXmlFile)) {
         score->chordList()->read(u"chords.xml");
     }
