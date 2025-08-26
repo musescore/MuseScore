@@ -532,11 +532,15 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
     writeProperty(item, xml, Pid::APPEARANCE_LINKED_TO_MASTER);
     writeProperty(item, xml, Pid::EXCLUDE_FROM_OTHER_PARTS);
 
-    writeProperty(item, xml, Pid::HAS_PARENTHESES);
-    if (item->leftParen()) {
+    bool leftGenerated = item->leftParen() && item->leftParen()->generated();
+    bool rightGenerated = item->rightParen() && item->rightParen()->generated();
+    if (!leftGenerated || !rightGenerated) {
+        writeProperty(item, xml, Pid::HAS_PARENTHESES);
+    }
+    if (item->leftParen() && !item->leftParen()->generated()) {
         writeItem(item->leftParen(), xml, ctx);
     }
-    if (item->rightParen()) {
+    if (item->rightParen() && !item->rightParen()->generated()) {
         writeItem(item->rightParen(), xml, ctx);
     }
 }

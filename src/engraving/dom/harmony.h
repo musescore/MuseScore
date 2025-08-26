@@ -130,7 +130,7 @@ struct TextSegment : HarmonyRenderItem {
     double leftPadding() const override { return 0.0; }
     double rightPadding() const override { return 0.0; }
 
-    double height() const override { return boundingRect().height(); }
+    double height() const override { return tightBoundingRect().height(); }
 
     HarmonyRenderItemType type() const override { return HarmonyRenderItemType::TEXT; }
 

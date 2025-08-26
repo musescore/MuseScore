@@ -121,6 +121,8 @@ public:
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
 
+    void undoUnlink() override;
+
     const ElementList* el() const { return &m_el; }
 
     static String translatedUserTypeName(BarLineType);
