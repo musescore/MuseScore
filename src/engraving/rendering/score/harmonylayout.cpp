@@ -199,6 +199,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
 
 void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
 {
+    const double spatium = item->spatium();
     const std::vector<HarmonyRenderItem*>& itemList = item->ldata()->renderItemList();
     // Layout parentheses
     std::vector<ChordSymbolParen*> openingParenStack;
@@ -220,8 +221,9 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                 curParen->bottom = openingParen->bottom;
 
                 // Layout parenthesis pair
-                double startY = openingParen->top;
-                double height = openingParen->bottom - openingParen->top;
+                double extension = 0.1 * spatium * (item->size() / 10.0);
+                double startY = openingParen->top - extension;
+                double height = (openingParen->bottom - openingParen->top) + 2 * extension;
                 if (std::isinf(height)) {
                     height = lastTextSegHeight;
                 }
@@ -259,11 +261,11 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
         } else if (TextSegment* textSeg = dynamic_cast<TextSegment*>(renderItem)) {
             // Set top paren height
             lastTextSegHeight = textSeg->height();
-            lastTextSegTop = textSeg->boundingRect().translated(textSeg->pos()).y();
+            lastTextSegTop = textSeg->tightBoundingRect().translated(textSeg->pos()).y();
             if (!openingParenStack.empty()) {
                 ChordSymbolParen* topParen = openingParenStack.back();
-                topParen->top = std::min(topParen->top, textSeg->boundingRect().translated(textSeg->pos()).y());
-                topParen->bottom = std::max(topParen->bottom, textSeg->boundingRect().translated(textSeg->pos()).y() + textSeg->height());
+                topParen->top = std::min(topParen->top, textSeg->tightBoundingRect().translated(textSeg->pos()).y());
+                topParen->bottom = std::max(topParen->bottom, textSeg->bboxBaseLine() + textSeg->pos().y());
                 topParen->closingParenPos = std::max(topParen->closingParenPos, textSeg->x() + textSeg->width());
                 continue;
             }
