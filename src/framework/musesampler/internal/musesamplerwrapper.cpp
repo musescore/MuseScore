@@ -35,12 +35,10 @@ static constexpr int AUDIO_CHANNELS_COUNT = 2;
 MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib,
                                        const InstrumentInfo& instrument,
                                        const AudioSourceParams& params,
-                                       async::Notification processOnlineSoundsRequested,
                                        const modularity::ContextPtr& iocCtx)
     : AbstractSynthesizer(params, iocCtx),
     m_samplerLib(samplerLib),
-    m_instrument(instrument),
-    m_processOnlineSoundsRequested(processOnlineSoundsRequested)
+    m_instrument(instrument)
 {
     if (!m_samplerLib || !m_samplerLib->isValid()) {
         return;
@@ -190,7 +188,7 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
 
     m_sequencer.init(m_samplerLib, m_sampler, this, resolveDefaultPresetCode(m_instrument));
 
-    if (m_instrument.isValid() && m_samplerLib->isOnlineInstrument(m_instrument.msInstrument)) {
+    if (m_instrument.isValid() && m_instrument.isOnline) {
         setupOnlineSound();
     }
 }
@@ -321,10 +319,21 @@ void MuseSamplerWrapper::setupOnlineSound()
         m_sequencer.updateMainStream();
         m_sequencer.setAutoRenderInterval(on ? 1.0 : -1.0);
     });
+}
 
-    m_processOnlineSoundsRequested.onNotify(this, [this]() {
-        m_sequencer.triggerRender();
-    });
+void MuseSamplerWrapper::triggerRender()
+{
+    m_sequencer.triggerRender();
+}
+
+void MuseSamplerWrapper::clearOnlineCache()
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    m_samplerLib->clearOnlineCache(m_sampler);
+    m_sequencer.triggerRender();
 }
 
 InstrumentInfo MuseSamplerWrapper::resolveInstrument(const mpe::PlaybackSetupData& setupData) const

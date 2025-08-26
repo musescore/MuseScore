@@ -47,7 +47,6 @@ public:
 private:
     void checkLibraryIsDetected();
     void reloadMuseSampler();
-    void processOnlineSounds();
 
     std::weak_ptr<MuseSamplerResolver> m_museSamplerResolver;
 };

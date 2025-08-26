@@ -222,6 +222,7 @@ public:
             setAutoRenderInterval = (ms_MuseSampler_set_auto_render_interval)muse::getLibFunc(m_lib,
                                                                                               "ms_MuseSampler_set_auto_render_interval");
             triggerRender = (ms_MuseSampler_trigger_render)muse::getLibFunc(m_lib, "ms_MuseSampler_trigger_render");
+            clearOnlineCache = (ms_MuseSampler_clear_online_cache)muse::getLibFunc(m_lib, "ms_MuseSampler_clear_online_cache");
             addAuditionCCEvent = (ms_MuseSampler_add_audition_cc_event)muse::getLibFunc(m_lib, "ms_MuseSampler_add_audition_cc_event");
         } else {
             setLoggingCallback = [](ms_logging_callback) {};
@@ -231,6 +232,7 @@ public:
             getNextRenderProgressInfo = [](ms_RenderingRangeList) { return ms_RenderRangeInfo { 0, 0, ms_RenderingState_ErrorRendering }; };
             setAutoRenderInterval = [](ms_MuseSampler, double) {};
             triggerRender = [](ms_MuseSampler) {};
+            clearOnlineCache = [](ms_MuseSampler) {};
             addAuditionCCEvent = [](ms_MuseSampler, ms_Track, int, float) { return ms_Result_Error; };
         }
 
@@ -306,7 +308,16 @@ public:
                && processOffline
                && process
                && allNotesOff
-               && readyToPlay;
+               && readyToPlay
+               && setLoggingCallback
+               && isOnlineInstrument
+               && setScoreId
+               && getRenderInfo
+               && getNextRenderProgressInfo
+               && setAutoRenderInterval
+               && triggerRender
+               && clearOnlineCache
+               && addAuditionCCEvent;
     }
 
     const Version& version() const
@@ -363,6 +374,7 @@ public:
                << "\n ms_MuseSampler_is_ranged_articulation - " << reinterpret_cast<uint64_t>(isRangedArticulation)
                << "\n ms_MuseSampler_add_track_event_range_start - " << reinterpret_cast<uint64_t>(addTrackEventRangeStart)
                << "\n ms_MuseSampler_add_track_event_range_end - " << reinterpret_cast<uint64_t>(addTrackEventRangeEnd)
+               << "\n ms_MuseSampler_add_audition_cc_event - " << reinterpret_cast<uint64_t>(addAuditionCCEvent)
                << "\n ms_MuseSampler_start_offline_mode - " << reinterpret_cast<uint64_t>(startOfflineMode)
                << "\n ms_MuseSampler_stop_offline_mode - " << reinterpret_cast<uint64_t>(stopOfflineMode)
                << "\n ms_MuseSampler_process_offline - " << reinterpret_cast<uint64_t>(processOffline)
@@ -374,10 +386,14 @@ public:
                << "\n ms_Instrument_is_online - " << reinterpret_cast<uint64_t>(isOnlineInstrument)
                << "\n ms_MuseSampler_get_render_info - " << reinterpret_cast<uint64_t>(getRenderInfo)
                << "\n ms_RenderProgressInfo_get_next - " << reinterpret_cast<uint64_t>(getNextRenderProgressInfo)
+               << "\n ms_MuseSampler_trigger_render - " << reinterpret_cast<uint64_t>(triggerRender)
+               << "\n ms_MuseSampler_set_auto_render_interval - " << reinterpret_cast<uint64_t>(setAutoRenderInterval)
                << "\n ms_MuseSampler_add_track_syllable_event - " << reinterpret_cast<uint64_t>(addSyllableEventInternal)
                << "\n ms_MuseSampler_add_track_syllable_event_2 - " << reinterpret_cast<uint64_t>(addSyllableEventInternal2)
                << "\n ms_reload_all_instruments - " << reinterpret_cast<uint64_t>(reloadAllInstruments)
-               << "\n ms_set_logging_callback - " << reinterpret_cast<uint64_t>(setLoggingCallback);
+               << "\n ms_set_logging_callback - " << reinterpret_cast<uint64_t>(setLoggingCallback)
+               << "\n ms_MuseSampler_set_score_id - " << reinterpret_cast<uint64_t>(setScoreId)
+               << "\n ms_MuseSampler_clear_online_cache - " << reinterpret_cast<uint64_t>(clearOnlineCache);
     }
 
     ms_get_instrument_list getInstrumentList = nullptr;
@@ -447,6 +463,7 @@ public:
     ms_RenderProgressInfo_get_next getNextRenderProgressInfo = nullptr;
     ms_MuseSampler_set_auto_render_interval setAutoRenderInterval = nullptr;
     ms_MuseSampler_trigger_render triggerRender = nullptr;
+    ms_MuseSampler_clear_online_cache clearOnlineCache = nullptr;
 
 private:
     ms_init initLib = nullptr;

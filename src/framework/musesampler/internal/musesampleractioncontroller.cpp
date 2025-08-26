@@ -32,7 +32,6 @@ void MuseSamplerActionController::init(std::weak_ptr<MuseSamplerResolver> resolv
 
     dispatcher()->reg(this, "musesampler-check", this, &MuseSamplerActionController::checkLibraryIsDetected);
     dispatcher()->reg(this, "musesampler-reload", this, &MuseSamplerActionController::reloadMuseSampler);
-    dispatcher()->reg(this, "process-online-sounds", this, &MuseSamplerActionController::processOnlineSounds);
 }
 
 void MuseSamplerActionController::checkLibraryIsDetected()
@@ -67,21 +66,7 @@ void MuseSamplerActionController::checkLibraryIsDetected()
 void MuseSamplerActionController::reloadMuseSampler()
 {
     std::shared_ptr<MuseSamplerResolver> resolver = m_museSamplerResolver.lock();
-    if (!resolver) {
-        return;
-    }
-
-    if (resolver->reloadAllInstruments()) {
+    if (resolver && resolver->reloadAllInstruments()) {
         interactive()->error("", std::string("Could not reload MuseSampler library"));
     }
-}
-
-void MuseSamplerActionController::processOnlineSounds()
-{
-    std::shared_ptr<MuseSamplerResolver> resolver = m_museSamplerResolver.lock();
-    if (!resolver) {
-        return;
-    }
-
-    resolver->processOnlineSounds();
 }
