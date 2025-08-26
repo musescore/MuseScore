@@ -26,6 +26,7 @@
 
 #include "modularity/imoduleinterface.h"
 #include "actiontypes.h"
+#include "global/async/channel.h"
 
 namespace muse::actions {
 class Actionable;
@@ -44,6 +45,9 @@ public:
     virtual void dispatch(const ActionCode& actionCode) = 0;
     virtual void dispatch(const ActionCode& actionCode, const ActionData& data) = 0;
     virtual void dispatch(const ActionQuery& actionQuery) = 0;
+
+    virtual async::Channel<ActionCode> preDispatch() const = 0;
+    virtual async::Channel<ActionCode> postDispatch() const = 0;
 
     virtual void unReg(Actionable* client) = 0;
     virtual void reg(Actionable* client, const ActionCode& actionCode, const ActionCallBackWithNameAndData& call) = 0;

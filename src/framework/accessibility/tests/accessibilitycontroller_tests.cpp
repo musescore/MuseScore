@@ -86,7 +86,7 @@ public:
         IAccessible::Role accessibleRole() const override { return IAccessible::NoRole; }
         QString accessibleName() const override { return QString(); }
         QString accessibleDescription() const override { return QString(); }
-        bool accessibleState(State) const override { return false; }
+        bool accessibleState(State) const override { return true; }
         QRect accessibleRect() const override { return QRect(); }
         bool accessibleIgnored() const override { return false; }
 

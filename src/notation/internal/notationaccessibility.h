@@ -43,8 +43,6 @@ public:
 
     void setEnabled(bool enabled) override;
 
-    void setTriggeredCommand(const std::string& command) override;
-
 private:
     const engraving::Score* score() const;
     const engraving::Selection* selection() const;

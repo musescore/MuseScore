@@ -54,9 +54,6 @@ public:
     void updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem,
                          bool voiceStaffInfoChange = true);
 
-    QString commandInfo() const;
-    void setCommandInfo(const QString& command);
-
     bool isRangeSelection() const;
     QString rangeSelectionInfo();
 
@@ -69,7 +66,6 @@ private:
     AccessibleMapToScreenFunc m_accessibleMapToScreenFunc;
 
     QString m_staffInfo;
-    QString m_commandInfo;
 };
 }
 
