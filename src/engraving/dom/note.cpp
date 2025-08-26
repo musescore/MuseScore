@@ -3086,6 +3086,18 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FIXED_LINE:
         setFixedLine(v.toInt());
         break;
+    case Pid::HAS_PARENTHESES:
+        setParenthesesMode(v.value<ParenthesesMode>());
+        if (links()) {
+            for (EngravingObject* scoreElement : *links()) {
+                Note* note = toNote(scoreElement);
+                Staff* linkedStaff = note ? note->staff() : nullptr;
+                if (linkedStaff && linkedStaff->isTabStaff(tick())) {
+                    note->setGhost(v.toBool());
+                }
+            }
+        }
+        break;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         if (v.toBool() == true && chord()) {
