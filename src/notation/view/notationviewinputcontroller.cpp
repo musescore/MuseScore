@@ -159,12 +159,15 @@ void NotationViewInputController::onNotationChanged()
         }
 
         m_view->hideContextMenu();
-        m_view->hideElementPopup();
 
         const TextBase* item = notation->interaction()->editedText();
         if (AbstractElementPopupModel::hasTextStylePopup(item)
             && (!item->isLyrics() || !item->empty())) {
             m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        } else if (item->isDynamic()) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        } else {
+            m_view->hideElementPopup();
         }
     });
 
