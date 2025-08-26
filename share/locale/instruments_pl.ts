@@ -4687,7 +4687,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1067"/>
         <source>Show Tenors</source>
-        <translation type="unfinished"></translation>
+        <translation>Show Tenors</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1068"/>
@@ -4698,7 +4698,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1069"/>
         <source>Show-Style Tenors</source>
-        <translation type="unfinished"></translation>
+        <translation>Show-Style Tenors</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1244"/>
