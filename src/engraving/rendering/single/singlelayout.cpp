@@ -2078,8 +2078,11 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         x2 = std::max(x2, item->text()->width());
     }
 
+    double beginHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->beginHookHeight().val() * spatium;
+    double endHookHeight = (tl->placeBelow() ? -1.0 : 1.0) * tl->endHookHeight().val() * spatium;
+
     if (tl->endHookType() != HookType::NONE) {
-        double h = pp2.y() + tl->endHookHeight().val() * spatium;
+        double h = pp2.y() + endHookHeight;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -2088,7 +2091,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
     }
 
     if (tl->beginHookType() != HookType::NONE) {
-        double h = tl->beginHookHeight().val() * spatium;
+        double h = beginHookHeight;
         if (h > y2) {
             y2 = h;
         } else if (h < y1) {
@@ -2145,8 +2148,6 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
             alignBaseLine(item->endText(), pp1, pp2);
         }
 
-        double beginHookHeight = tl->beginHookHeight().val() * spatium;
-        double endHookHeight = tl->endHookHeight().val() * spatium;
         double beginHookWidth = 0.0;
         double endHookWidth = 0.0;
 
