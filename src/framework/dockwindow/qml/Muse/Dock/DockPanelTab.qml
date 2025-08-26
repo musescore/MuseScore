@@ -68,25 +68,6 @@ StyledTabButton {
             anchors.verticalCenter: parent.verticalCenter
             visible: root.isCurrent
 
-            Connections {
-                target: root
-
-                function onIsCurrentChanged() {
-                    timer.running = true
-                }
-            }
-
-            Timer {
-                id: timer
-
-                interval: 150
-                repeat: false
-
-                onTriggered: {
-                    contextMenuButton.enabled = root.isCurrent
-                }
-            }
-
             navigation.panel: root.navigation.panel
             navigation.order: root.navigation.order + 1
 
