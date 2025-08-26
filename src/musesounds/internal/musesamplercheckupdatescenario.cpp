@@ -133,7 +133,7 @@ void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
         openMuseHubWebsiteAndQuit();
     }
 #else
-    static const muse::Uri MUSEHUB_URI("musehub://requestUpdateCheck?from=musescore-studio");
+    const muse::UriQuery MUSEHUB_URI("musehub://requestUpdateCheck?from=musescore-studio");
 
 #ifdef Q_OS_MACOS
     if (!interactive()->canOpenApp(MUSEHUB_URI)) {
