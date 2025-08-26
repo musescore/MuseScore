@@ -4466,15 +4466,9 @@ void Score::appendPart(const InstrumentTemplate* t)
     for (staff_idx_t i = 0; i < t->staffCount; ++i) {
         Staff* staff = Factory::createStaff(part);
         StaffType* stt = staff->staffType(Fraction(0, 1));
-        stt->setLines(t->staffLines[i]);
-        stt->setSmall(t->smallStaff[i]);
-        if (i == 0) {
-            staff->setBracketType(0, t->bracket[0]);
-            staff->setBracketSpan(0, t->staffCount);
-        }
+        staff->init(t, stt, int(i));
         undoInsertStaff(staff, i);
     }
-    part->staves().front()->setBarLineSpan(static_cast<int>(part->nstaves()));
     undoInsertPart(part, m_parts.size());
     setUpTempoMapLater();
     masterScore()->rebuildMidiMapping();
