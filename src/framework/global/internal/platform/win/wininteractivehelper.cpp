@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -33,7 +33,7 @@ using namespace muse::async;
 using namespace winrt;
 using namespace Windows::System;
 
-async::Promise<Ret> WinInteractiveHelper::openApp(const Uri& uri)
+async::Promise<Ret> WinInteractiveHelper::openApp(const UriQuery& uri)
 {
     const Windows::Foundation::Uri wUri(winrt::to_hstring(uri.toString()));
 

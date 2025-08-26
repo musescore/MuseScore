@@ -63,12 +63,6 @@ muse::async::Promise<muse::RetVal<bool> > MuseSamplerCheckUpdateService::checkFo
 
 #ifdef QT_CONCURRENT_SUPPORTED
         Concurrent::run([this, localVersion, resolve]() {
-            if (configuration()->museSamplerCheckForUpdateTestMode()) {
-                muse::RetVal<bool> result = muse::RetVal<bool>::make_ok(true);
-                (void)resolve(result);
-                return;
-            }
-
             QByteArray query = configuration()->getMuseSamplerVersionQuery().toUtf8();
             QBuffer queryBuffer(&query);
 
