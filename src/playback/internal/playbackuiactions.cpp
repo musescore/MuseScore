@@ -31,7 +31,7 @@ using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 
-const UiActionList PlaybackUiActions::m_mainActions = {
+const UiActionList PlaybackUiActions::s_mainActions = {
     UiAction("play",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
@@ -85,7 +85,7 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              )
 };
 
-const UiActionList PlaybackUiActions::m_midiInputActions = {
+const UiActionList PlaybackUiActions::s_midiInputActions = {
     UiAction("midi-on",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
@@ -96,7 +96,7 @@ const UiActionList PlaybackUiActions::m_midiInputActions = {
              ),
 };
 
-const UiActionList PlaybackUiActions::m_midiInputPitchActions = {
+const UiActionList PlaybackUiActions::s_midiInputPitchActions = {
     UiAction("midi-input-written-pitch",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
@@ -115,7 +115,7 @@ const UiActionList PlaybackUiActions::m_midiInputPitchActions = {
              ),
 };
 
-const UiActionList PlaybackUiActions::m_settingsActions = {
+const UiActionList PlaybackUiActions::s_settingsActions = {
     UiAction("repeat",
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
@@ -158,7 +158,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              ),
 };
 
-const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
+const UiActionList PlaybackUiActions::s_loopBoundaryActions = {
     UiAction("loop-in",
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
@@ -175,12 +175,22 @@ const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
              ),
 };
 
-const UiActionList PlaybackUiActions::m_diagnosticActions = {
+const UiActionList PlaybackUiActions::s_diagnosticActions = {
     UiAction("playback-reload-cache",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Reload playback cache")
              )
+};
+
+static const ActionCode CLEAR_ONLINE_SOUNDS_CACHE_CODE("clear-online-sounds-cache");
+
+const UiActionList PlaybackUiActions::s_onlineSoundsActions = {
+    UiAction(CLEAR_ONLINE_SOUNDS_CACHE_CODE,
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Clear online sounds cache for this score")
+             ),
 };
 
 PlaybackUiActions::PlaybackUiActions(std::shared_ptr<PlaybackController> controller)
@@ -195,13 +205,20 @@ void PlaybackUiActions::init()
     });
 
     m_controller->isPlayAllowedChanged().onNotify(this, [this]() {
-        ActionCodeList codes;
+        const UiActionList& actions = actionsList();
 
-        for (const UiAction& action : actionsList()) {
+        ActionCodeList codes;
+        codes.reserve(actions.size());
+
+        for (const UiAction& action : actions) {
             codes.push_back(action.code);
         }
 
         m_actionEnabledChanged.send(codes);
+    });
+
+    m_controller->onlineSoundsChanged().onNotify(this, [this]() {
+        m_actionEnabledChanged.send({ CLEAR_ONLINE_SOUNDS_CACHE_CODE });
     });
 }
 
@@ -209,12 +226,13 @@ const UiActionList& PlaybackUiActions::actionsList() const
 {
     static UiActionList alist;
     if (alist.empty()) {
-        alist.insert(alist.end(), m_mainActions.cbegin(), m_mainActions.cend());
-        alist.insert(alist.end(), m_midiInputActions.cbegin(), m_midiInputActions.cend());
-        alist.insert(alist.end(), m_midiInputPitchActions.cbegin(), m_midiInputPitchActions.cend());
-        alist.insert(alist.end(), m_settingsActions.cbegin(), m_settingsActions.cend());
-        alist.insert(alist.end(), m_loopBoundaryActions.cbegin(), m_loopBoundaryActions.cend());
-        alist.insert(alist.end(), m_diagnosticActions.cbegin(), m_diagnosticActions.cend());
+        alist.insert(alist.end(), s_mainActions.cbegin(), s_mainActions.cend());
+        alist.insert(alist.end(), s_midiInputActions.cbegin(), s_midiInputActions.cend());
+        alist.insert(alist.end(), s_midiInputPitchActions.cbegin(), s_midiInputPitchActions.cend());
+        alist.insert(alist.end(), s_settingsActions.cbegin(), s_settingsActions.cend());
+        alist.insert(alist.end(), s_loopBoundaryActions.cbegin(), s_loopBoundaryActions.cend());
+        alist.insert(alist.end(), s_diagnosticActions.cbegin(), s_diagnosticActions.cend());
+        alist.insert(alist.end(), s_onlineSoundsActions.cbegin(), s_onlineSoundsActions.cend());
     }
     return alist;
 }
@@ -227,6 +245,10 @@ bool PlaybackUiActions::actionEnabled(const UiAction& act) const
 
     if (!m_controller->canReceiveAction(act.code)) {
         return false;
+    }
+
+    if (act.code == CLEAR_ONLINE_SOUNDS_CACHE_CODE) {
+        return !m_controller->onlineSounds().empty();
     }
 
     return true;
@@ -249,22 +271,22 @@ muse::async::Channel<ActionCodeList> PlaybackUiActions::actionCheckedChanged() c
 
 const UiActionList& PlaybackUiActions::midiInputActions()
 {
-    return m_midiInputActions;
+    return s_midiInputActions;
 }
 
 const UiActionList& PlaybackUiActions::midiInputPitchActions()
 {
-    return m_midiInputPitchActions;
+    return s_midiInputPitchActions;
 }
 
 const UiActionList& PlaybackUiActions::settingsActions()
 {
-    return m_settingsActions;
+    return s_settingsActions;
 }
 
 const UiActionList& PlaybackUiActions::loopBoundaryActions()
 {
-    return m_loopBoundaryActions;
+    return s_loopBoundaryActions;
 }
 
 const muse::ui::ToolConfig& PlaybackUiActions::defaultPlaybackToolConfig()

@@ -230,6 +230,8 @@ private:
     void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
     bool shouldShowOnlineSoundsProcessingError() const;
     void showOnlineSoundsProcessingError();
+    void processOnlineSounds();
+    void clearOnlineSoundsCache();
 
     muse::audio::secs_t playedTickToSecs(int tick) const;
 

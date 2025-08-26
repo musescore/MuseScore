@@ -110,6 +110,9 @@ void PlaybackController::init()
     dispatcher()->reg(this, TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE, this, &PlaybackController::toggleHearPlaybackWhenEditing);
     dispatcher()->reg(this, "playback-reload-cache", this, &PlaybackController::reloadPlaybackCache);
 
+    dispatcher()->reg(this, "process-online-sounds", this, &PlaybackController::processOnlineSounds);
+    dispatcher()->reg(this, "clear-online-sounds-cache", this, &PlaybackController::clearOnlineSoundsCache);
+
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
@@ -1378,6 +1381,16 @@ void PlaybackController::showOnlineSoundsProcessingError()
 
         togglePlay();
     });
+}
+
+void PlaybackController::processOnlineSounds()
+{
+
+}
+
+void PlaybackController::clearOnlineSoundsCache()
+{
+
 }
 
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)
