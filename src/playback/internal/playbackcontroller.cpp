@@ -1385,12 +1385,24 @@ void PlaybackController::showOnlineSoundsProcessingError()
 
 void PlaybackController::processOnlineSounds()
 {
+    IF_ASSERT_FAILED(playback()) {
+        return;
+    }
 
+    for (const auto& pair : m_onlineSounds) {
+        playback()->processInput(m_currentSequenceId, pair.first);
+    }
 }
 
 void PlaybackController::clearOnlineSoundsCache()
 {
+    IF_ASSERT_FAILED(playback()) {
+        return;
+    }
 
+    for (const auto& pair : m_onlineSounds) {
+        playback()->clearCache(m_currentSequenceId, pair.first);
+    }
 }
 
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)

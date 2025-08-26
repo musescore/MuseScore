@@ -58,8 +58,8 @@ public:
 
     void revokePlayingNotes() override;
 
-    void triggerRender();
-    void clearOnlineCache();
+    void processInput() override;
+    void clearCache() override;
 
 private:
     void setupSound(const mpe::PlaybackSetupData& setupData) override;

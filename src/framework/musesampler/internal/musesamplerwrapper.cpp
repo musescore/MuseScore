@@ -321,21 +321,6 @@ void MuseSamplerWrapper::setupOnlineSound()
     });
 }
 
-void MuseSamplerWrapper::triggerRender()
-{
-    m_sequencer.triggerRender();
-}
-
-void MuseSamplerWrapper::clearOnlineCache()
-{
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
-        return;
-    }
-
-    m_samplerLib->clearOnlineCache(m_sampler);
-    m_sequencer.triggerRender();
-}
-
 InstrumentInfo MuseSamplerWrapper::resolveInstrument(const mpe::PlaybackSetupData& setupData) const
 {
     IF_ASSERT_FAILED(m_samplerLib) {
@@ -515,4 +500,19 @@ bool MuseSamplerWrapper::readyToPlay() const
 void MuseSamplerWrapper::revokePlayingNotes()
 {
     m_allNotesOffRequested = true;
+}
+
+void MuseSamplerWrapper::processInput()
+{
+    m_sequencer.triggerRender();
+}
+
+void MuseSamplerWrapper::clearCache()
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    m_samplerLib->clearOnlineCache(m_sampler);
+    m_sequencer.triggerRender();
 }
