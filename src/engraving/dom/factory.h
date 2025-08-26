@@ -313,6 +313,7 @@ public:
                                                         bool isAccessibleEnabled = true);
 
     static Capo* createCapo(Segment* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Capo> makeCapo(Segment* parent);
 
     static TimeTickAnchor* createTimeTickAnchor(Segment* parent, bool isAccessibleEnabled = true);
 
