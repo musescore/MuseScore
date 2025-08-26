@@ -49,6 +49,10 @@ AccessibleRoot::~AccessibleRoot()
 
 void AccessibleRoot::setFocusedElement(AccessibleItemPtr e, bool voiceStaffInfoChange)
 {
+    if (!m_enabled) {
+        return; // User is outside the score panel (e.g. in the Braille panel).
+    }
+
     AccessibleItemWeakPtr old = m_focusedElement;
     updateStaffInfo(e, old, voiceStaffInfoChange);
 
@@ -151,20 +155,6 @@ void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleIt
                 m_staffInfo = QString("%2 (%3)").arg(staff, staffName);
             }
         }
-    }
-}
-
-QString AccessibleRoot::commandInfo() const
-{
-    return m_commandInfo;
-}
-
-void AccessibleRoot::setCommandInfo(const QString& command)
-{
-    m_commandInfo = command;
-
-    if (!m_commandInfo.isEmpty()) {
-        notifyAboutFocusedElementNameChanged();
     }
 }
 

@@ -31,6 +31,9 @@ public:
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;
 
+    void announce(const QString& announcement) override;
+    QString announcement() const override;
+
     const IAccessible* accessibleRoot() const override;
 
     const IAccessible* lastFocused() const override;
