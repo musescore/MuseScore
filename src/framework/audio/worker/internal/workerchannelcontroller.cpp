@@ -209,6 +209,17 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
         m_playback->setInputParams(seqId, trackId, params);
     });
 
+    channel()->onMethod(Method::ProcessInput, [this](const Msg& msg) {
+        ONLY_AUDIO_WORKER_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackId trackId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackId)) {
+            return;
+        }
+
+        m_playback->processInput(seqId, trackId);
+    });
+
     channel()->onMethod(Method::GetInputProcessingProgress, [this](const Msg& msg) {
         ONLY_AUDIO_WORKER_THREAD;
         TrackSequenceId seqId = 0;
@@ -224,6 +235,17 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
         }
 
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret.ret, ret.val.isStarted, streamId)));
+    });
+
+    channel()->onMethod(Method::ClearCache, [this](const Msg& msg) {
+        ONLY_AUDIO_WORKER_THREAD;
+        TrackSequenceId seqId = 0;
+        TrackId trackId = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, trackId)) {
+            return;
+        }
+
+        m_playback->clearCache(seqId, trackId);
     });
 
     channel()->onMethod(Method::ClearSources, [this](const Msg&) {

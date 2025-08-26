@@ -52,7 +52,10 @@ public:
     virtual void revokePlayingNotes() = 0;
     virtual void flushSound() = 0;
 
+    virtual void processInput() = 0;
     virtual InputProcessingProgress inputProcessingProgress() const = 0;
+
+    virtual void clearCache() = 0;
 };
 
 using ISynthesizerPtr = std::shared_ptr<ISynthesizer>;

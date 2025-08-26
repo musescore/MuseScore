@@ -46,7 +46,10 @@ public:
 
     AudioSignalChanges audioSignalChanges(const TrackId id) const override;
 
+    void processInput(const TrackId id) const override;
     InputProcessingProgress inputProcessingProgress(const TrackId id) const override;
+
+    void clearCache(const TrackId id) const override;
 
 private:
     worker::IGetTracks* m_getTracks = nullptr;

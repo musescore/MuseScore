@@ -236,6 +236,17 @@ async::Notification EventAudioSource::readyToPlayChanged() const
     return m_synth->readyToPlayChanged();
 }
 
+void EventAudioSource::processInput()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    m_synth->processInput();
+}
+
 InputProcessingProgress EventAudioSource::inputProcessingProgress() const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -245,6 +256,17 @@ InputProcessingProgress EventAudioSource::inputProcessingProgress() const
     }
 
     return m_synth->inputProcessingProgress();
+}
+
+void EventAudioSource::clearCache()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    m_synth->clearCache();
 }
 
 EventAudioSource::SynthCtx EventAudioSource::currentSynthCtx() const
