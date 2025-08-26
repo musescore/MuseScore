@@ -1059,11 +1059,11 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     return empty;
 }
 
-static const mpe::ArticulationTypeSet SUSTAIN_PEDAL_CC_SUPPORTED_TYPES = {
-    mpe::ArticulationType::Pedal, mpe::ArticulationType::LetRing,
+static const mpe::ArticulationTypeSet SUSTAIN_PEDAL_CC_SUPPORTED_TYPES {
+    mpe::ArticulationType::Pedal
 };
 
-static const mpe::ArticulationTypeSet SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES = {
+static const mpe::ArticulationTypeSet SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES {
     mpe::ArticulationType::LaissezVibrer,
 };
 

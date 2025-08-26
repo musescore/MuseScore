@@ -71,29 +71,22 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
 
     switch (spanner->type()) {
     case ElementType::SLUR:
-    case ElementType::HAMMER_ON_PULL_OFF: {
+    case ElementType::HAMMER_ON_PULL_OFF:
         type = mpe::ArticulationType::Legato;
         break;
-    }
-    case ElementType::PEDAL: {
+    case ElementType::PEDAL:
+    case ElementType::LET_RING:
         type = mpe::ArticulationType::Pedal;
         break;
-    }
-    case ElementType::LET_RING:
-        type = mpe::ArticulationType::LetRing;
-        break;
-    case ElementType::PALM_MUTE: {
+    case ElementType::PALM_MUTE:
         type = mpe::ArticulationType::PalmMute;
         break;
-    }
-    case ElementType::GUITAR_BEND: {
+    case ElementType::GUITAR_BEND:
         type = mpe::ArticulationType::Multibend;
         break;
-    }
-    case ElementType::VIBRATO: {
+    case ElementType::VIBRATO:
         type = mpe::ArticulationType::Vibrato;
         break;
-    }
     case ElementType::TRILL: {
         const Trill* trill = toTrill(spanner);
 

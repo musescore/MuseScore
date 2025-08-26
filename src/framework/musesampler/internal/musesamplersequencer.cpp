@@ -108,6 +108,8 @@ static const std::unordered_map<ArticulationType, ms_NoteArticulation2> ARTICULA
     { ArticulationType::Pluck, ms_NoteArticulation2_Pluck },
     { ArticulationType::SingingBell, ms_NoteArticulation2_SingingBell },
     { ArticulationType::SingingVibrate, ms_NoteArticulation2_SingingVibrate },
+    { ArticulationType::Swing, ms_NoteArticulation2_HandbellSwing },
+    { ArticulationType::Echo, ms_NoteArticulation2_Echo },
 };
 
 static const std::unordered_map<ArticulationType, ms_NoteHead> NOTEHEAD_TYPES {
@@ -438,6 +440,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     }
 
     const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    const mpe::ArticulationMap& articulations = noteEvent.expressionCtx().articulations;
     const voice_layer_idx_t voiceIdx = arrangementCtx.voiceLayerIndex;
     const layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, voiceIdx);
 
@@ -446,12 +449,10 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         return;
     }
 
-    for (const auto& art : noteEvent.expressionCtx().articulations) {
-        if (art.first == ArticulationType::Pedal || art.first == ArticulationType::LetRing) {
-            // Pedal on:
-            m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { art.second.meta.timestamp, 1.0 });
-            // Pedal off:
-            m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { art.second.meta.timestamp + art.second.meta.overallDuration, 0.0 });
+    for (const auto& art : articulations) {
+        if (art.first == ArticulationType::Pedal) {
+            addPedalEvent(art.second.meta, track);
+            continue;
         }
 
         const ms_NoteArticulation ms_art = muse::value(ARTICULATION_TYPES_PART1, art.first, ms_NoteArticulation_None);
@@ -472,14 +473,14 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     event._tempo = arrangementCtx.bps * 60.0; // API expects BPM
 
     pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, event._pitch, event._offset_cents);
-    parseArticulations(noteEvent.expressionCtx().articulations, event._articulation, event._articulation_2, event._notehead);
+    parseArticulations(articulations, event._articulation, event._articulation_2, event._notehead);
 
     long long noteEventId = 0;
     if (!m_samplerLib->addNoteEvent(m_sampler, track, event, noteEventId)) {
-        LOGE() << "Unable to add event for track";
+        LOGE() << "Unable to add event for track, timestamp: " << event._location_us;
     }
 
-    for (auto& art : noteEvent.expressionCtx().articulations) {
+    for (auto& art : articulations) {
         const ms_NoteArticulation ms_art = muse::value(ARTICULATION_TYPES_PART1, art.first, ms_NoteArticulation_None);
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this ends an articulation range, indicate the end
@@ -491,12 +492,23 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         }
     }
 
-    if (noteEvent.expressionCtx().articulations.contains(ArticulationType::Multibend)) {
+    if (articulations.contains(ArticulationType::Multibend)) {
         addPitchBends(noteEvent, noteEventId, track);
     }
 
-    if (noteEvent.expressionCtx().articulations.contains(ArticulationType::Vibrato)) {
+    if (articulations.contains(ArticulationType::Vibrato)) {
         addVibrato(noteEvent, noteEventId, track);
+    }
+}
+
+void MuseSamplerSequencer::addPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track)
+{
+    if (meta.hasStart()) {
+        m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { meta.timestamp, 1.0 });
+    }
+
+    if (meta.hasEnd()) {
+        m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { meta.timestamp + meta.overallDuration, 0.0 });
     }
 }
 
@@ -624,6 +636,7 @@ void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long
 void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
 {
     const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    const mpe::ArticulationMap& articulations = noteEvent.expressionCtx().articulations;
 
     layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, arrangementCtx.voiceLayerIndex);
     ms_Track track = findOrCreateTrack(layerIdx);
@@ -642,7 +655,7 @@ void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
         msEvent._pitch = pitch;
         msEvent._offset_cents = offsetCents;
 
-        parseArticulations(noteEvent.expressionCtx().articulations, msEvent._articulation, msEvent._articulation_2, msEvent._notehead);
+        parseArticulations(articulations, msEvent._articulation, msEvent._articulation_2, msEvent._notehead);
 
         if (noteEvent.expressionCtx().velocityOverride.has_value()) {
             msEvent._dynamics = noteEvent.expressionCtx().velocityOverride.value();
@@ -668,11 +681,33 @@ void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
         timestamp_t timestampTo = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration;
         m_offStreamEvents[timestampTo].emplace(std::move(noteOff));
     }
+
+    auto pedalIt = articulations.find(mpe::ArticulationType::Pedal);
+    if (pedalIt != articulations.end()) {
+        addAuditionPedalEvent(pedalIt->second.meta, track);
+    }
+}
+
+void MuseSamplerSequencer::addAuditionPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track)
+{
+    AuditionCCEvent event;
+    event.cc = 64;
+    event.msTrack = track;
+
+    if (meta.hasStart()) {
+        event.value = 1;
+        m_offStreamEvents[meta.timestamp].emplace(event);
+    }
+
+    if (meta.hasEnd()) {
+        event.value = 0;
+        m_offStreamEvents[meta.timestamp + meta.overallDuration].emplace(event);
+    }
 }
 
 void MuseSamplerSequencer::addAuditionCCEvent(const mpe::ControllerChangeEvent& event, long long positionUs)
 {
-    const std::map<mpe::ControllerChangeEvent::Type, int> TYPE_TO_CC {
+    static const std::unordered_map<mpe::ControllerChangeEvent::Type, int> TYPE_TO_CC {
         { mpe::ControllerChangeEvent::Modulation, 1 },
         { mpe::ControllerChangeEvent::SustainPedalOnOff, 64 },
         { mpe::ControllerChangeEvent::PitchBend, 128 },

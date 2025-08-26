@@ -199,7 +199,6 @@ enum class ArticulationType : signed char {
     SoftAccent,
 
     LaissezVibrer,
-    LetRing,
 
     Subito,
 
@@ -316,6 +315,8 @@ enum class ArticulationType : signed char {
     RingTouch,
     SingingBell,
     SingingVibrate,
+    Swing,
+    Echo,
 
     // multi-note articulations
     Trill,
@@ -622,6 +623,16 @@ struct ArticulationMeta
                && overallDuration == other.overallDuration
                && overallPitchChangesRange == other.overallPitchChangesRange
                && overallDynamicChangesRange == other.overallDynamicChangesRange;
+    }
+
+    bool hasStart() const
+    {
+        return overallDuration > 0;
+    }
+
+    bool hasEnd() const
+    {
+        return overallDuration != mpe::INFINITE_DURATION;
     }
 };
 

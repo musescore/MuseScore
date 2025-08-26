@@ -126,28 +126,32 @@ inline const CompoundDynamic& compoundDynamicFromType(const DynamicType type)
 
 inline muse::mpe::ArticulationType articulationFromPlayTechType(const PlayingTechniqueType technique)
 {
-    static const std::unordered_map<PlayingTechniqueType, muse::mpe::ArticulationType> PLAYING_TECH_TYPES = {
-        { PlayingTechniqueType::Undefined, muse::mpe::ArticulationType::Undefined },
-        { PlayingTechniqueType::Natural, muse::mpe::ArticulationType::Standard },
-        { PlayingTechniqueType::Pizzicato, muse::mpe::ArticulationType::Pizzicato },
-        { PlayingTechniqueType::Open, muse::mpe::ArticulationType::Open },
-        { PlayingTechniqueType::Mute, muse::mpe::ArticulationType::Mute },
-        { PlayingTechniqueType::Tremolo, muse::mpe::ArticulationType::Tremolo64th },
-        { PlayingTechniqueType::Detache, muse::mpe::ArticulationType::Detache },
-        { PlayingTechniqueType::Martele, muse::mpe::ArticulationType::Martele },
-        { PlayingTechniqueType::ColLegno, muse::mpe::ArticulationType::ColLegno },
-        { PlayingTechniqueType::SulPonticello, muse::mpe::ArticulationType::SulPont },
-        { PlayingTechniqueType::SulTasto, muse::mpe::ArticulationType::SulTasto },
-        { PlayingTechniqueType::Distortion, muse::mpe::ArticulationType::Distortion },
-        { PlayingTechniqueType::Overdrive, muse::mpe::ArticulationType::Overdrive },
-        { PlayingTechniqueType::Harmonics, muse::mpe::ArticulationType::Harmonic },
-        { PlayingTechniqueType::JazzTone, muse::mpe::ArticulationType::JazzTone },
-    };
-
-    auto search = PLAYING_TECH_TYPES.find(technique);
-
-    if (search != PLAYING_TECH_TYPES.cend()) {
-        return search->second;
+    switch (technique) {
+    case PlayingTechniqueType::Natural: return muse::mpe::ArticulationType::Standard;
+    case PlayingTechniqueType::Pizzicato: return muse::mpe::ArticulationType::Pizzicato;
+    case PlayingTechniqueType::Open: return muse::mpe::ArticulationType::Open;
+    case PlayingTechniqueType::Mute: return muse::mpe::ArticulationType::Mute;
+    case PlayingTechniqueType::Tremolo: return muse::mpe::ArticulationType::Tremolo64th;
+    case PlayingTechniqueType::Detache: return muse::mpe::ArticulationType::Detache;
+    case PlayingTechniqueType::Martele: return muse::mpe::ArticulationType::Martele;
+    case PlayingTechniqueType::ColLegno: return muse::mpe::ArticulationType::ColLegno;
+    case PlayingTechniqueType::SulPonticello: return muse::mpe::ArticulationType::SulPont;
+    case PlayingTechniqueType::SulTasto: return muse::mpe::ArticulationType::SulTasto;
+    case PlayingTechniqueType::Distortion: return muse::mpe::ArticulationType::Distortion;
+    case PlayingTechniqueType::Overdrive: return muse::mpe::ArticulationType::Overdrive;
+    case PlayingTechniqueType::Harmonics: return muse::mpe::ArticulationType::Harmonic;
+    case PlayingTechniqueType::JazzTone: return muse::mpe::ArticulationType::JazzTone;
+    case PlayingTechniqueType::Vibrato: return muse::mpe::ArticulationType::Vibrato;
+    case PlayingTechniqueType::Legato: return muse::mpe::ArticulationType::Legato;
+    case PlayingTechniqueType::HandbellsSwing: return muse::mpe::ArticulationType::Swing;
+    case PlayingTechniqueType::HandbellsSwingUp: return muse::mpe::ArticulationType::Swing;
+    case PlayingTechniqueType::HandbellsSwingDown: return muse::mpe::ArticulationType::Swing;
+    case PlayingTechniqueType::HandbellsEcho1: return muse::mpe::ArticulationType::Echo;
+    case PlayingTechniqueType::HandbellsEcho2: return muse::mpe::ArticulationType::Echo;
+    case PlayingTechniqueType::HandbellsLV: return muse::mpe::ArticulationType::Pedal;
+    case PlayingTechniqueType::HandbellsDamp: return muse::mpe::ArticulationType::Standard;
+    case PlayingTechniqueType::HandbellsR: return muse::mpe::ArticulationType::Ring;
+    case PlayingTechniqueType::Undefined: return muse::mpe::ArticulationType::Undefined;
     }
 
     return muse::mpe::ArticulationType::Undefined;

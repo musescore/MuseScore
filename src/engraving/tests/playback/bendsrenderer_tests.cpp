@@ -52,6 +52,13 @@ protected:
 
         s_playbackCtx = std::make_shared<PlaybackContext>();
         s_playbackCtx->update(s_score->parts().front()->id(), s_score);
+
+        s_profile = std::make_shared<ArticulationsProfile>();
+        s_profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+        s_profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
+        s_profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
+        s_profile->setPattern(ArticulationType::PostAppoggiatura, buildTestArticulationPattern());
+        s_profile->setPattern(ArticulationType::Distortion, buildTestArticulationPattern());
     }
 
     static void TearDownTestSuite()
@@ -59,11 +66,24 @@ protected:
         delete s_score;
         s_score = nullptr;
         s_playbackCtx.reset();
+        s_profile.reset();
     }
 
-    const Chord* findChord(int tick, track_idx_t track = 0) const
+    static ArticulationPattern buildTestArticulationPattern()
     {
-        for (MeasureBase* mb = s_score->first(); mb; mb = mb->next()) {
+        ArticulationPatternSegment blankSegment(ArrangementPattern(HUNDRED_PERCENT /*durationFactor*/, 0 /*timestampOffset*/),
+                                                PitchPattern(EXPECTED_SIZE, TEN_PERCENT, 0),
+                                                ExpressionPattern(EXPECTED_SIZE, TEN_PERCENT, 0));
+
+        ArticulationPattern pattern;
+        pattern.emplace(0, std::move(blankSegment));
+
+        return pattern;
+    }
+
+    static const Chord* findChord(int tick, track_idx_t track = 0)
+    {
+        for (const MeasureBase* mb = s_score->first(); mb; mb = mb->next()) {
             if (!mb->isMeasure()) {
                 continue;
             }
@@ -77,24 +97,14 @@ protected:
         return nullptr;
     }
 
-    ArticulationPattern buildTestArticulationPattern() const
-    {
-        ArticulationPatternSegment blankSegment(ArrangementPattern(HUNDRED_PERCENT /*durationFactor*/, 0 /*timestampOffset*/),
-                                                PitchPattern(EXPECTED_SIZE, TEN_PERCENT, 0),
-                                                ExpressionPattern(EXPECTED_SIZE, TEN_PERCENT, 0));
-
-        ArticulationPattern pattern;
-        pattern.emplace(0, std::move(blankSegment));
-
-        return pattern;
-    }
-
     static Score* s_score;
     static PlaybackContextPtr s_playbackCtx;
+    static ArticulationsProfilePtr s_profile;
 };
 
 Score* Engraving_BendsRendererTests::s_score = nullptr;
 PlaybackContextPtr Engraving_BendsRendererTests::s_playbackCtx = nullptr;
+ArticulationsProfilePtr Engraving_BendsRendererTests::s_profile = nullptr;
 
 /*!
  * @details Render a multibend with the following structure:
@@ -114,13 +124,7 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
     EXPECT_TRUE(BendsRenderer::isMultibendPart(startNote));
 
     // [GIVEN] Context of the chord
-    ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
-    profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::PostAppoggiatura, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::Distortion, buildTestArticulationPattern());
-    RenderingContext startChordCtx = buildRenderingCtx(startChord, 0, profile, s_playbackCtx);
+    RenderingContext startChordCtx = buildRenderingCtx(startChord, 0, s_profile, s_playbackCtx);
 
     // [WHEN] Render the note
     PlaybackEventList events;
@@ -169,7 +173,7 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
         ASSERT_TRUE(note);
         EXPECT_TRUE(BendsRenderer::isMultibendPart(note));
 
-        RenderingContext ctx = buildRenderingCtx(note->chord(), 0, profile, s_playbackCtx);
+        RenderingContext ctx = buildRenderingCtx(note->chord(), 0, s_profile, s_playbackCtx);
 
         events.clear();
         BendsRenderer::render(note, ctx, events);
@@ -193,10 +197,7 @@ TEST_F(Engraving_BendsRendererTests, MultipleBendsOnOneChord)
     ASSERT_EQ(chord->notes().size(), 3);
 
     // [GIVEN] Context of the chord
-    ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
-    profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, s_playbackCtx);
+    RenderingContext ctx = buildRenderingCtx(chord, 0, s_profile, s_playbackCtx);
 
     // [WHEN] Render the chord
     PlaybackEventList events;
@@ -252,10 +253,7 @@ TEST_F(Engraving_BendsRendererTests, PreBend)
     ASSERT_EQ(playblePrincipalNote->bendBack()->startNote(), unplayableGracePreBendNote);
 
     // [GIVEN] Context of the chord
-    ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
-    profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, s_playbackCtx);
+    RenderingContext ctx = buildRenderingCtx(chord, 0, s_profile, s_playbackCtx);
 
     // [WHEN] Render the unplayable pre-bend grace note
     PlaybackEventList events;
@@ -294,10 +292,7 @@ TEST_F(Engraving_BendsRendererTests, SlightBend)
     const Note* note = chord->notes().front();
 
     // [GIVEN] Context of the chord
-    ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
-    profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, s_playbackCtx);
+    RenderingContext ctx = buildRenderingCtx(chord, 0, s_profile, s_playbackCtx);
 
     // [WHEN] Render the note
     PlaybackEventList events;
@@ -315,7 +310,6 @@ TEST_F(Engraving_BendsRendererTests, SlightBend)
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 3));
     EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
 
-    EXPECT_EQ(event.expressionCtx().articulations.size(), 1);
     auto artIt = event.expressionCtx().articulations.find(mpe::ArticulationType::Multibend);
     EXPECT_TRUE(artIt != event.expressionCtx().articulations.end());
 
@@ -343,11 +337,7 @@ TEST_F(Engraving_BendsRendererTests, Multibend_CustomTimeOffsets)
     const Note* startGraceNote = graceChord->notes().front();
 
     // [GIVEN] Context of the chord
-    ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
-    profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
-    RenderingContext ctx = buildRenderingCtx(startChord, 0, profile, s_playbackCtx);
+    RenderingContext ctx = buildRenderingCtx(startChord, 0, s_profile, s_playbackCtx);
 
     // [WHEN] Render the note
     PlaybackEventList events;
@@ -383,11 +373,7 @@ TEST_F(Engraving_BendsRendererTests, BendOnTiedNotes)
     ASSERT_EQ(chord->notes().size(), 1);
 
     // [GIVEN] Context of the chord
-    ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
-    profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
-    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, s_playbackCtx);
+    RenderingContext ctx = buildRenderingCtx(chord, 0, s_profile, s_playbackCtx);
 
     // [GIVEN] Quarter A3 tied to another quarter A3
     const Note* note = chord->notes().front();

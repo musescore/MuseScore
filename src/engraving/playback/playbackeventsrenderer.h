@@ -42,7 +42,7 @@ public:
                 const PlaybackContextPtr playbackCtx, muse::mpe::PlaybackEventsMap& result) const;
 
     void render(const EngravingItem* item, const muse::mpe::timestamp_t actualTimestamp, const muse::mpe::duration_t actualDuration,
-                const muse::mpe::dynamic_level_t actualDynamicLevel, const muse::mpe::ArticulationType persistentArticulationApplied,
+                const muse::mpe::dynamic_level_t actualDynamicLevel, const PlaybackContextPtr playbackCtx,
                 const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result) const;
 
     void renderChordSymbol(const Harmony* chordSymbol, const int ticksPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,
@@ -66,8 +66,7 @@ private:
                           const PlaybackContextPtr playbackCtx, muse::mpe::PlaybackEventsMap& result) const;
 
     void renderFixedNoteEvent(const Note* note, const muse::mpe::timestamp_t actualTimestamp, const muse::mpe::duration_t actualDuration,
-                              const muse::mpe::dynamic_level_t actualDynamicLevel,
-                              const muse::mpe::ArticulationType persistentArticulationApplied,
+                              const muse::mpe::dynamic_level_t actualDynamicLevel, const PlaybackContextPtr playbackCtx,
                               const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventList& result) const;
 
     void renderRestEvents(const Rest* rest, const int tickPositionOffset, muse::mpe::PlaybackEventsMap& result) const;
