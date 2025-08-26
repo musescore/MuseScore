@@ -144,8 +144,6 @@ void PlaybackController::init()
         notifyActionCheckedChanged(TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE);
     });
 
-    listenAutoProcessOnlineSoundsInBackgroundChanged();
-
     m_measureInputLag = configuration()->shouldMeasureInputLag();
 }
 
@@ -1337,7 +1335,7 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
                 case InputProcessingProgress::Finished: {
                     muse::remove(m_onlineSoundsBeingProcessed, trackId);
 
-                    if (!m_onlineSoundsErrorDetected && status.errorCode != static_cast<int>(Ret::Code::Cancel)) {
+                    if (status.errorCode != 0 && status.errorCode != (int)Ret::Code::Cancel) {
                         m_onlineSoundsErrorDetected = true;
                         LOGE() << "Error during online sounds processing: " << status.errorText << ", track: " << trackId;
                     }
@@ -1346,36 +1344,6 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
                         m_onlineSoundsProcessingProgress.finish(Ret(!m_onlineSoundsErrorDetected));
                     }
                 } break;
-            }
-        });
-    });
-}
-
-void PlaybackController::listenAutoProcessOnlineSoundsInBackgroundChanged()
-{
-    audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool value) {
-        if (value) {
-            return;
-        }
-
-        const Uri preferencesUri("muse://preferences");
-        const String toursEventCode(u"online_sounds_auto_process_disabled");
-
-        if (!interactive()->isOpened(preferencesUri).val) {
-            tours()->onEvent(toursEventCode);
-            return;
-        }
-
-        async::Channel<Uri> currentUriChanged = interactive()->currentUri().ch;
-        currentUriChanged.onReceive(this, [=](const Uri&) {
-            if (!audioConfiguration()->autoProcessOnlineSoundsInBackground()
-                && !interactive()->isOpened(preferencesUri).val) {
-                async::Async::call(this, [=]() {
-                    tours()->onEvent(toursEventCode);
-                });
-
-                async::Channel<Uri> mut = currentUriChanged;
-                mut.resetOnReceive(this);
             }
         });
     });
