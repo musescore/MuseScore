@@ -27867,12 +27867,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="346"/>
         <source>&amp;Optimize Enharmonic Spellings</source>
-        <translation type="unfinished"></translation>
+        <translation>Z&amp;optymalizuj pisownię enharmoniczną</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="347"/>
         <source>Optimize enharmonic spellings</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoptymalizuj pisownię enharmoniczną</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1951"/>
@@ -28401,12 +28401,12 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2967"/>
         <source>Change Enharmonic Spelling (&amp;Both Modes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień pisownię enharmoniczną (o&amp;ba tryby)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2975"/>
         <source>Change Enharmonic Spelling (&amp;Current Mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień pisownię enharmoni&amp;czną (bieżący tryb)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2983"/>
