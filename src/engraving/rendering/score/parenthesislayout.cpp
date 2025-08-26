@@ -54,7 +54,7 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
         layoutParenthesis(parent->rightParen(), parent->rightParen()->mutldata(), ctx);
     }
 
-    bool itemAddToSkyline = parent->addToSkyline();
+    bool itemAddToSkyline = parent->autoplace() && !parent->ldata()->isSkipDraw();
     Shape dummyItemShape = parent->shape();
     dummyItemShape.remove_if([](ShapeElement& shapeEl) {
         return shapeEl.item() && shapeEl.item()->isParenthesis();
