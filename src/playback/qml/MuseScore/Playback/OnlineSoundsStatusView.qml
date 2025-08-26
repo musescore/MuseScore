@@ -57,15 +57,15 @@ Loader {
 
         navigation.name: "OnlineSoundsStatusView"
 
-        readonly property bool mouseAreaEnabled: view.model.canProcessOnlineSounds
+        readonly property bool mouseAreaEnabled: view.model.manualProcessingAllowed
                                                  || view.model.status === OnlineSoundsStatusModel.Error
 
         mouseArea.enabled: view.mouseAreaEnabled
         mouseArea.hoverEnabled: view.mouseAreaEnabled
 
         // Enable tooltips but disable clicks
-        mouseArea.acceptedButtons: view.model.canProcessOnlineSounds ? Qt.LeftButton : Qt.NoButton
-        hoverHitColor: view.model.canProcessOnlineSounds ? ui.theme.buttonColor : "transparent"
+        mouseArea.acceptedButtons: view.model.manualProcessingAllowed ? Qt.LeftButton : Qt.NoButton
+        hoverHitColor: view.model.manualProcessingAllowed ? ui.theme.buttonColor : "transparent"
 
         transparent: true
         margins: 8
@@ -85,11 +85,13 @@ Loader {
                 height: 16
 
                 sourceComponent: {
-                    switch(view.model.status) {
-                    case OnlineSoundsStatusModel.Processing: return busyIndicator
-                    case OnlineSoundsStatusModel.Error: return errorIndicator
+                    switch (view.model.status) {
+                    case OnlineSoundsStatusModel.Processing:
+                        return busyIndicator
+                    case OnlineSoundsStatusModel.Error:
+                        return errorIndicator
                     case OnlineSoundsStatusModel.Success: {
-                        if (view.model.canProcessOnlineSounds) {
+                        if (view.model.manualProcessingAllowed) {
                             return processOnlineSoundsIndicator
                         }
 
@@ -107,8 +109,18 @@ Loader {
                 horizontalAlignment: Text.AlignLeft
 
                 text: {
-                    if (view.model.canProcessOnlineSounds) {
-                        return qsTrc("playback", "Process online sounds")
+                    switch (view.model.status) {
+                    case OnlineSoundsStatusModel.Processing:
+                        return qsTrc("playback", "Processing online sounds")
+                    case OnlineSoundsStatusModel.Error:
+                        return qsTrc("playback", "Online sounds")
+                    case OnlineSoundsStatusModel.Success: {
+                        if (view.model.manualProcessingAllowed) {
+                            return qsTrc("playback", "Process online sounds")
+                        }
+
+                        return qsTrc("playback", "Online sounds processed")
+                    }
                     }
 
                     return qsTrc("playback", "Online sounds")

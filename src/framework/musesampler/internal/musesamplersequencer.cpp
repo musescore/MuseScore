@@ -165,6 +165,7 @@ void MuseSamplerSequencer::setAutoRenderInterval(double secs)
         return;
     }
 
+    m_autoRenderInterval = secs;
     m_samplerLib->setAutoRenderInterval(m_sampler, secs);
 }
 
@@ -174,6 +175,7 @@ void MuseSamplerSequencer::triggerRender()
         return;
     }
 
+    updateMainStream();
     m_samplerLib->triggerRender(m_sampler);
     pollRenderingProgress();
 }
@@ -209,7 +211,11 @@ void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& event
     loadDynamicEvents(dynamics);
 
     finalizeAllTracks();
-    pollRenderingProgress();
+
+    // Poll only if background rendering is enabled
+    if (m_autoRenderInterval >= 0.0) {
+        pollRenderingProgress();
+    }
 }
 
 void MuseSamplerSequencer::pollRenderingProgress()
@@ -238,6 +244,7 @@ void MuseSamplerSequencer::doPollProgress()
     ms_RenderingRangeList ranges = m_samplerLib->getRenderInfo(m_sampler, &rangeCount);
 
     audio::InputProcessingProgress::ChunkInfoList chunks;
+    chunks.reserve(rangeCount);
     long long chunksDurationUs = 0;
 
     for (int i = 0; i < rangeCount; ++i) {
@@ -270,12 +277,7 @@ void MuseSamplerSequencer::doPollProgress()
 
     // Start progress
     if (!progressStarted) {
-        if (chunksDurationUs <= 0) {
-            if (m_pollRenderingProgressTimer->secondsSinceStart() >= 10.f) { // timeout
-                m_pollRenderingProgressTimer->stop();
-                m_renderingInfo.clear();
-            }
-
+        if (chunksDurationUs <= 0 && m_pollRenderingProgressTimer->secondsSinceStart() < m_autoRenderInterval * 2) {
             return;
         }
 
@@ -294,7 +296,11 @@ void MuseSamplerSequencer::doPollProgress()
     }
 
     // Update percentage
-    const int64_t percentage = std::lround(100.f - (float)chunksDurationUs / (float)m_renderingInfo.initialChunksDurationUs * 100.f);
+    int64_t percentage = 0;
+    if (m_renderingInfo.initialChunksDurationUs != 0) {
+        percentage = std::lround(100.f - (float)chunksDurationUs / (float)m_renderingInfo.initialChunksDurationUs * 100.f);
+    }
+
     if (percentage != m_renderingInfo.percentage) {
         m_renderingInfo.percentage = percentage;
         isChanged = true;

@@ -615,7 +615,7 @@ DockPage {
             }
         },
         {
-            "eventCode": "online_sounds_auto_process_disabled",
+            "eventCode": "online_sounds_manual_processing_allowed",
             "tour": {
                 "id": "online-sounds-manual-process",
                 "steps": [
