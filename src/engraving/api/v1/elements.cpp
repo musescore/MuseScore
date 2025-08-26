@@ -289,7 +289,11 @@ void DurationElement::changeCRlen(FractionWrapper* len)
         LOGW("DurationElement::changeCRlen: invalid parameter values: %s", qPrintable(f.toString()));
         return;
     }
-    durationElement()->score()->changeCRlen(toChordRest(durationElement()), f);
+    if (durationElement()->isChord() && toChord(durationElement())->isGrace()) {
+        durationElement()->score()->undoChangeChordRestLen(toChord(durationElement()), f);
+    } else {
+        durationElement()->score()->changeCRlen(toChordRest(durationElement()), f);
+    }
 }
 
 //---------------------------------------------------------
