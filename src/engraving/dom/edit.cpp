@@ -7057,10 +7057,6 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     }
                 }
             }
-
-            if (element->isHarmony() || element->isFretDiagram()) {
-                element->score()->rebuildFretBox();
-            }
         } else if (element->isSlur()
                    || element->isHairpin()
                    || element->isOttava()
@@ -7565,10 +7561,6 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
             }
             if (e->explicitParent() && e->explicitParent()->isSystem()) {
                 e->setParent(0);   // systems will be regenerated upon redo, so detach
-            }
-
-            if (e->isHarmony() || e->isFretDiagram()) {
-                e->score()->rebuildFretBox();
             }
         }
     }
