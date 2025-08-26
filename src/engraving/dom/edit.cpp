@@ -7449,16 +7449,9 @@ void Score::rebuildFretBox()
         return;
     }
 
-    fretBox->init();
-
-    for (EngravingObject* linkedObject : fretBox->linkList()) {
-        if (!linkedObject || !linkedObject->isFBox() || linkedObject == fretBox) {
-            continue;
-        }
-
-        FBox* box = toFBox(linkedObject);
-        box->init();
-    }
+    // The actual rebuild will be done during the next layout. This just
+    // makes sure that the FBox is included in the layout range.
+    fretBox->triggerLayout();
 }
 
 //---------------------------------------------------------
