@@ -177,26 +177,24 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [GIVEN] Expected amount of events per timestamp
-    const std::map<timestamp_t, std::pair<size_t /*notes*/, size_t /*rests*/> > expectedSizePerTimestamp {
+    const std::map<timestamp_t, size_t> expectedSizePerTimestamp {
         // The first four half notes; repeated
-        { 0 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 1 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 2 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 3 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 4 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 5 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 6 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 7 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 0 * 2 * QUARTER_NOTE_DURATION, 16 },
+        { 1 * 2 * QUARTER_NOTE_DURATION, 16 },
+        { 2 * 2 * QUARTER_NOTE_DURATION, 16 },
+        { 3 * 2 * QUARTER_NOTE_DURATION, 16 },
+        { 4 * 2 * QUARTER_NOTE_DURATION, 16 },
+        { 5 * 2 * QUARTER_NOTE_DURATION, 16 },
+        { 6 * 2 * QUARTER_NOTE_DURATION, 16 },
+        { 7 * 2 * QUARTER_NOTE_DURATION, 16 },
 
         // After the repeat
-        { 8 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 9 * 2 * QUARTER_NOTE_DURATION, { 0, 1 } },
+        { 8 * 2 * QUARTER_NOTE_DURATION, 16 },
 
         // Final three half notes
-        { 10 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 11 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 12 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
-        { 13 * 2 * QUARTER_NOTE_DURATION, { 0, 1 } }
+        { 10 * 2 * QUARTER_NOTE_DURATION, 16 },
+        { 11 * 2 * QUARTER_NOTE_DURATION, 16 },
+        { 12 * 2 * QUARTER_NOTE_DURATION, 16 },
     };
 
     // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
@@ -224,7 +222,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
 
         ASSERT_TRUE(isExpectedTimestamp(pair.first));
 
-        size_t notes = 0, rests = 0;
+        size_t notes = 0;
         for (const PlaybackEvent& event : pair.second) {
             if (std::holds_alternative<mpe::NoteEvent>(event)) {
                 // Check actual timestamp
@@ -232,12 +230,10 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
                 EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, pair.first + notes * (2 * QUARTER_NOTE_DURATION / 16));
 
                 ++notes;
-            } else {
-                ++rests;
             }
         }
 
-        EXPECT_EQ(std::make_pair(notes, rests), expectedSizePerTimestamp.at(pair.first));
+        EXPECT_EQ(expectedSizePerTimestamp.at(pair.first), notes);
     }
 
     EXPECT_EQ(timestampCount, expectedSizePerTimestamp.size());

@@ -515,6 +515,10 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             }
         }
 
+        if (item->isRest()) {
+            continue;
+        }
+
         ArticulationsProfilePtr profile = defaultActiculationProfile(trackId);
         if (!profile) {
             LOGE() << "unsupported instrument family: " << item->part()->id();
