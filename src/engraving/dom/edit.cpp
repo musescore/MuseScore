@@ -5581,7 +5581,15 @@ void Score::undoUpdatePlayCountText(Measure* m)
                 }
             }
         } else if (playCountText) {
-            undoRemoveElement(playCountText);
+            Staff* staff = playCountText->staff();
+            // Remove this play count text and MMR links
+            for (EngravingObject* obj : playCountText->linkList()) {
+                PlayCountText* item = toPlayCountText(obj);
+                if (staff != item->staff() || item->barline()->playCountText() != item) {
+                    continue;
+                }
+                undoRemoveElement(item, false);
+            }
         }
     }
 }
@@ -6642,7 +6650,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             } else if (et == ElementType::PLAY_COUNT_TEXT) {
                 BarLine* bl = toBarLine(element->explicitParent());
                 Fraction tick = bl->tick();
-                Measure* m = score->tick2measureMM(tick - Fraction::eps());
+                Measure* m = score->tick2measure(tick - Fraction::eps());
                 Segment* blSeg = m->last(SegmentType::EndBarLine);
                 BarLine* linkedBl = toBarLine(blSeg->element(ntrack));
                 ne->setTrack(ntrack);
