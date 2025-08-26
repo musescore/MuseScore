@@ -94,7 +94,7 @@ struct HarmonyMapKey
     }
 };
 
-static std::map<HarmonyMapKey /*key*/, String /*harmonyXml*/> s_harmonyToDiagramMap;
+static std::map<HarmonyMapKey /*key*/, std::pair<String /*harmonyXml*/, String /*pattern*/> > s_harmonyToDiagramMap;
 static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/> > s_diagramPatternToHarmoniesMap;
 
 static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
@@ -221,11 +221,9 @@ void FretDiagram::updateDiagram(const String& harmonyName)
     String _harmonyName = harmonyName;
 
     NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
-
-    ParsedChord chord;
     HarmonyMapKey key = createHarmonyMapKey(_harmonyName, spellingType, score()->chordList());
 
-    String diagramXml = muse::value(s_harmonyToDiagramMap, key);
+    String diagramXml = muse::value(s_harmonyToDiagramMap, key).first;
 
     if (diagramXml.empty()) {
         return;
@@ -1385,8 +1383,10 @@ bool FretDiagram::isCustom(const String& harmonyNameForCompare) const
     NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
     HarmonyMapKey key = createHarmonyMapKey(harmonyNameForCompare, spellingType, score()->chordList());
 
-    String diagramXml = muse::value(s_harmonyToDiagramMap, key);
-    return diagramXml.empty();
+    String originalPattern = muse::value(s_harmonyToDiagramMap, key).second;
+    String currentPattern = patternFromDiagram(this);
+
+    return originalPattern != currentPattern;
 }
 
 void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) const
@@ -1408,10 +1408,9 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) con
     const NoteSpellingType spellingType = NoteSpellingType::STANDARD;
 
     for (auto& [key, value] : harmonyToDiagramMap) {
-        ParsedChord chord;
         HarmonyMapKey mapKey = createHarmonyMapKey(key, spellingType, chordList);
 
-        s_harmonyToDiagramMap.insert({ mapKey, value.xml });
+        s_harmonyToDiagramMap.insert({ mapKey, { value.xml, value.pattern } });
         s_diagramPatternToHarmoniesMap[value.pattern].push_back(key);
     }
 }
