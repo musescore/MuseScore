@@ -131,7 +131,7 @@ GOTO END_SUCCESS
 ECHO "Start msi packing..."
 
 :: generate unique GUID
-SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\uuidgen.exe"
+SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\uuidgen.exe"
 %UUIDGEN% > uuid.txt
 SET /p PACKAGE_UUID=<uuid.txt
 ECHO on
