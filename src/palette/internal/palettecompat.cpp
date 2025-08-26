@@ -89,8 +89,6 @@ static const std::unordered_map<String, String> FRET_DIAGRAMS_MIGRATION_MAP = {
     { u"X[2-O][1-O][2-O]O[2-O]", u"B7" }
 };
 
-static const qreal FRAME_MAG = 1.25;
-
 void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* paletteScore)
 {
     EngravingItem* item = element.get();
@@ -270,6 +268,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     }
 
     if (!containsFFrame) {
+        static const qreal FRAME_MAG = 1.25;
         guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
     }
 }
