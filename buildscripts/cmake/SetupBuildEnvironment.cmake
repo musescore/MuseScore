@@ -28,6 +28,11 @@ endif()
 
 # Debug/no-debug options
 add_compile_definitions($<$<CONFIG:Debug>:QT_QML_DEBUG>)
+if (NOT CC_IS_MSVC)
+    add_compile_definitions(
+        "$<$<CONFIG:Debug>:_GLIBCXX_DEBUG=1>"
+        "$<$<CONFIG:Debug>:_LIBCPP_DEBUG=1>")
+endif()
 
 add_compile_definitions($<$<NOT:$<CONFIG:Debug>>:NDEBUG>)
 add_compile_definitions($<$<NOT:$<CONFIG:Debug>>:QT_NO_DEBUG>)
