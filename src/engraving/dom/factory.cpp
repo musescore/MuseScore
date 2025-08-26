@@ -783,6 +783,7 @@ PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingT
 }
 
 CREATE_ITEM_IMPL(Capo, ElementType::CAPO, Segment, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Capo, Segment);
 
 CREATE_ITEM_IMPL(TimeTickAnchor, ElementType::TIME_TICK_ANCHOR, Segment, isAccessibleEnabled)
 
