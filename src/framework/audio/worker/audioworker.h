@@ -62,7 +62,7 @@ public:
         uint16_t bufferSize = 0;
     };
 
-    void init();
+    void registerExports();
     void run(const ActiveSpec& spec);
     void setInterval(const msecs_t interval);
     void stop();
