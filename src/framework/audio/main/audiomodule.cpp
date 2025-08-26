@@ -128,6 +128,7 @@ void AudioModule::registerExports()
     m_soundFontController = std::make_shared<SoundFontController>();
 
     m_audioWorker = std::make_shared<worker::AudioWorker>(m_rpcChannel);
+    m_audioWorker->registerExports();
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
@@ -213,8 +214,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
     if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
-
-    m_audioWorker->init();
 
     m_audioOutputController->init();
 

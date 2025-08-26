@@ -85,7 +85,7 @@ static muse::modularity::ModulesIoC* ioc()
     return muse::modularity::globalIoc();
 }
 
-void AudioWorker::init()
+void AudioWorker::registerExports()
 {
     //! NOTE Services registration
     //! At the moment, it is better to create services
