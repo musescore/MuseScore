@@ -104,6 +104,7 @@ private:
     void loadDynamicEvents(const mpe::DynamicLevelLayers& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
+    void addPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track);
     void addTextArticulationEvent(const mpe::TextArticulationEvent& event, long long startUs);
     void addSoundPresetEvent(const mpe::SoundPresetChangeEvent& event, long long positionUs);
     void addSyllableEvent(const mpe::SyllableEvent& event, long long positionUs);
@@ -111,6 +112,7 @@ private:
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 
     void addAuditionNoteEvent(const mpe::NoteEvent& noteEvent);
+    void addAuditionPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track);
     void addAuditionCCEvent(const mpe::ControllerChangeEvent& event, long long positionUs);
 
     void pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const;

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
-  <programVersion>4.2.0</programVersion>
-  <programRevision>7c017f0</programRevision>
+<museScore version="4.60">
+  <programVersion>4.6.0</programVersion>
+  <programRevision></programRevision>
   <Score>
+    <eid>Egkft6+kOXJ_WzrSIxhYG8C</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -10,6 +11,7 @@
     <showMargins>0</showMargins>
     <open>1</open>
     <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="creationDate">2023-08-18</metaTag>
@@ -70,7 +72,8 @@
       <unsorted/>
       </Order>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>dttJsc8cdq_isRb1OTSUXD</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -137,53 +140,69 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>cvBj1L6S3rH_L1V/Q4VQXmL</eid>
         <Text>
+          <eid>SZj+mLGuf4P_N68gGpsmyYK</eid>
           <style>title</style>
           <text>Playing technique annotations</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>Qv4jlMQKJAI_qbDXhUVFAhP</eid>
         <voice>
           <KeySig>
+            <eid>qKt1MfuLx5O_KgYH3nNHTlC</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>cJ7WJX1kR0P_kTy41O3sAFI</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <PlayTechAnnotation>
             <playTechType>pizzicato</playTechType>
+            <eid>grzlHmlDDEP_/aEHNPxQO3N</eid>
             <text>pizz.</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>ggVId2nru/G_C9hkwOnidsI</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>otcRjh3Na2J_yb/NeZ5q/3G</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>u05l9Wy+HVE_ZsvVrqMSsPL</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>Etr4rRYdIOF_i9VG75foCKM</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>6msDy9iDm5L_Kfv8z02+RjG</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>i6uFKKjHWeG_U/smNffih6P</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <PlayTechAnnotation>
             <playTechType>open</playTechType>
+            <eid>ARTmPHfv36B_VteqZUDeDhC</eid>
             <offset x="-1.6129" y="-1.73314"/>
             <text>open</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>kQ8SJrqbGBI_WCGimNcPY3K</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>KmDb2tFSmtM_nMQ4M2PARoG</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -191,36 +210,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>ElRbot/L0t_7T/GAZJNvwI</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>mute</playTechType>
+            <eid>V5bsgrqhfJN_IO7+myPCeyH</eid>
             <offset x="0" y="-1.86675"/>
             <text>mute</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>axBTL6uaC+J_UM3nz3FQiwK</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>t+KjmHgW3jF_vmlKRoZLxhH</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>dbMJBww4ccD_PyM2UbKt4N</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>PEjuiIUEFhP_XLhkFRVqJLO</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>xDqypv5uquL_n1mwoBxAm3O</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>6ebsHpuEP4I_KbbUovOG0IJ</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>oeiISTjdRzO_lVA5CrsUCwM</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>WtXvpemB1aE_5Da1/RoVW1N</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -228,37 +257,47 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>hQPJ66SunBH_JWd9KBpVPfC</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>tremolo</playTechType>
+            <eid>L2N3UvYLUMN_zN7CXAfmLuP</eid>
             <style>expression</style>
             <offset x="0.293255" y="-1.72012"/>
             <text>tremolo</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>AGHl1r6q9oL_LIbnBjVvQkO</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>1r9XB4hu8kN_yg+dBtHbgQC</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>iWCBdug+qoN_agpGNWw5kxP</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>fnPs4L1YFYC_ITjPv9O0/VL</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>91bYQ5qh0HH_XNArr7rzZZE</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>sXNLq1HFikH_PG6KA+I5a+O</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>Esg9zdAxvcN_LwhHOIgXg2G</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>OGjV1T5kRyG_IEs5qLvbsDH</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -266,36 +305,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>Uc6ZbBpij3O_Y1QSYAHieDD</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>detache</playTechType>
+            <eid>GdacEeI46DG_VwZScAmsbRE</eid>
             <offset x="0" y="-1.86675"/>
             <text>détaché</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>XyRDaA9suWN_GUgZfgf0TGL</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>9jWO4kayY4M_qua77C+7T8I</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>iRZ4jfucAnD_skiAl12dxhJ</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>6S302pIlH3I_0x4O0IOQ73J</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>6Jebt3EnlnP_ZS/Zgw9bnRE</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>/bouSRpZQTJ_OpaUIiEpkMF</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>br779akvy5M_kfKF59aO5WN</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>n6UXbvXcUL_BCJc1mrAkyO</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -303,36 +352,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>ORIECTB2jf_s/RAWw5tWbB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>martele</playTechType>
+            <eid>v3Zuhv9sWQD_NaUOFzVUJpJ</eid>
             <offset x="-0.146628" y="-2.01338"/>
             <text>martelé</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>fBYNrtmYlQM_K/8VyG2bWOJ</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>fQIuXx4ZP/B_tvCTHjFXerM</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>+01NagktdFE_jYGB/5y9ItM</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>jOycW6j9HgM_kBnl5ZIZEQJ</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>WX3HmlFFaDB_ubn9LNSk6+G</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>KlrHwtJYkLM_r+QPQiSK3ZD</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>loebMje7xcB_uy59VbD/+I</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>xxAd1ED33iP_61T4LEKrY4J</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -340,35 +399,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>b9mC0slkGNN_WCKTWp/EmZK</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>col_legno</playTechType>
+            <eid>2FvTl+Ondv_iQE3J4WPIWD</eid>
             <text>col legno</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>4wFvCK16XuH_9tc8v5rvPrE</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>pg2iplE2BcE_DYoM5faKdeJ</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>L9ySn6/MHaB_ygFxPao7aMH</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>O2z1ltlsctB_DODsIvd4nLI</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>r+znvoVqZjI_2kHNa4qRpSC</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>GQgu+9PectB_KxWdSCAJBOD</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>UYtbJp1QSFI_kN+yXz7iRkF</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>1Ot7NEimQ4_csnBTK3jPMN</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -376,35 +445,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>rLhxgO7gSWG_edhJ3cCtNsC</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>sul_ponticello</playTechType>
+            <eid>DIE9VcsjwSB_za39VsWWYiC</eid>
             <text>sul pont.</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>F9MVmTozNkO_H9BaMR7NakI</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>f0xrPqAYkqJ_gzztCg9hhoB</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>msVi0EkeVpB_FV1JUJrU/7P</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>pO5QfHUv2tG_1oMLL7I8p2P</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>ii41Lc/feJK_XmeT8nMqYhD</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>Ha6+bTEOkNK_NO7jz+S4VaD</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>RvP+DHcTp6H_ketpLEZdomI</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>JQWGUeiGuEJ_u4lnWHBJMgO</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -412,35 +491,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>vFyC4LoN2LJ_ntaK8++GTlG</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>sul_tasto</playTechType>
+            <eid>P4PmY00RviN_CO5+21CEDIC</eid>
             <text>sul tasto</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>jbQ2htA+QTH_Nri394u7GhH</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>YLoqyXiAXME_ljT3BlfL8vO</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>kA8DzDoC8NJ_cbW6uY/yuTN</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>rcl7fMZpp3B_OInRaqN2JhG</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>U2G6MtpG/7D_Inu452/RT8N</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>ZkGPKiVn+bM_Lv4h0+X73B</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>0fDEtKbZOmL_NehxmCMoPVB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>tXUV8sAr5YC_SC6fp0i03AC</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -448,31 +537,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>FJM1hSXzTDD_WFZzYx47HvE</eid>
         <voice>
+          <PlayTechAnnotation>
+            <playTechType>vibrato</playTechType>
+            <eid>YkeKYDX7JjK_9nsOv7WLe+I</eid>
+            <text>vibrato</text>
+            </PlayTechAnnotation>
           <Chord>
+            <eid>wFltvdyp6W_eP2Zz1zwp2E</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>P/6o4rHUhpF_AIkSWLPfF/N</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>BYmLqUCE2wD_+7DZM26TpSB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>Mgk35HZzdOC_Z5YcPOQAAUE</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>5C9keeJDTo_lqBJr7TD6eP</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>G6Fcfsl1jAF_693dr56rXtF</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>6nt9j41wmME_MwEPuWN8FVI</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>5MRtNDN0fjJ_gIOyti3Zj0H</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -480,31 +583,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>7lXqXO3ttFL_xS2paR9rlvH</eid>
         <voice>
+          <PlayTechAnnotation>
+            <playTechType>legato</playTechType>
+            <eid>JnEH6d1gNIF_qQuHp+OyG6K</eid>
+            <text>legato</text>
+            </PlayTechAnnotation>
           <Chord>
+            <eid>as8Wqz9OsaJ_VVW5XtlcPUC</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>WbZQVVjR8y_to7/19UkmcL</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>7IdH3J7CTzG_6L39NBROCAO</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>fZeoE9hh3zC_tW2Li7xZ6ND</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>OpXV7r5ShDF_rV3HrwWO+2F</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>W1ckcZUGUVF_QlLZJecXZKH</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>FDq0piMyi5O_imenBknJmVK</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>Y4pg/C23U7G_bmk9IyFOWtE</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -512,35 +629,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>RSAUXMbetVJ_RMougFMb3MF</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>distortion</playTechType>
+            <eid>iXXnhb24BOL_q9g6shDomB</eid>
             <text>distort</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>SKzk2KSI4GN_iLl3IYIBvHE</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>NgBJ49phKx_dyrknyF64cO</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>sHPwxQ9XPFF_StJipr8UpoB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>6RQuBOmu6PJ_AZNpIfqhwdH</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>iEm82oIVXuK_zkPEtSje98B</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>U0+sdgptFVE_RotvnPeCaHF</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>6YECRboP9VD_B7s7QbW1H3E</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>J6NTjvMBbqN_eSWUiMSDePJ</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -548,35 +675,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>ksBqv2h81oP_Rr++QCxydcE</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>overdrive</playTechType>
+            <eid>c3B6C9lp5mF_vWE4T49slhC</eid>
             <text>overdrive</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>V8KLtr09Q2F_Cku+QMW8hM</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>IwTVts+obIB_UxnZOlldK1I</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>B2qWOMkoksL_2k/bA9QILNF</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>AgXqW66W9ZF_mmuDKgRqA/G</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>9+GhgUL5zFL_HmtAvEwTfpF</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>4URBvi4xTbM_AZzltc5n51M</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>HRp6l0aN3EF_g1SitUqMi3I</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>uc9khOWjD5B_4c7naEMpn/</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -584,35 +721,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>mVPu+R+khYI_5UwJJnO1CEN</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>harmonics</playTechType>
+            <eid>ymFZX4EbTB_90gjHkiLRnN</eid>
             <text>harmonics</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>g9+9OMFu+3I_KkiyBFQ3oZC</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>9qPsbAz9BAC_8R5pbs9vziO</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>XThjH3P5QsK_LMdHgEjf6hH</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>iDswwyiilsL_s1i0tk12dHC</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>A+/Cgt9DJ4P_fH+3c8boKBP</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>YjZENNC/5BL_hYVS9rMWwoE</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>OpHX0o6tKIN_QX5W6faxc+C</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>N6xlO2uAZ1O_l1dg4K7lTkC</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -620,35 +767,413 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>9XHP/tL7mpD_7LaAju9JSVK</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>jazz_tone</playTechType>
+            <eid>rxPWYrJfT4G_hWClBS2kktD</eid>
             <text>jazz tone</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>/s58KF7MZoG_SJtghprW6PK</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>i6pPvwFriON_G68TvROqSLF</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>hn3NxLWQiOI_ZyUUYNNH+L</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>qneE1FEL6r_fc76FQNhsXH</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>hG5rMXTTQIF_nn70PWC2oyK</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>tYnYZpgncqK_Amwn22PK4iM</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>QX1E2ZVZu0H_N6jO9ebTr6C</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>wkFk2nMw0k_GATtZCDIWWN</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>nV95tkHrW3E_9HBY9dMCn0P</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_swing</playTechType>
+            <eid>INV8aaAt0aC_x804pFaI9WI</eid>
+            <text><sym>handbellsSwing</sym></text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>JPGhIZdX9UB_4JNRaRD0W/E</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>nysPweaHzNC_mV24REIbL9P</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>xpwUvFCLCVD_dDkgCukCcmP</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>1a129wGhWqE_plrmnsu6EPL</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>JfeFRUI0PPG_WqJPb8hr/IJ</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>TGHXxBpnXiP_TxlIMnF+85N</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>T5zQQIFKH6_NIQet7bRg1</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>DWa5clo+RQO_WNnlLZ3KIpN</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>yuvyGw6/suO_XJ6ZQEKW6HO</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_swing_up</playTechType>
+            <eid>tX5S2DmRIPM_Cq/MN5gSwbF</eid>
+            <text><sym>handbellsSwingUp</sym></text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>cSS1ofPvUPB_7U0VC1VCNbM</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>KAH28f6Buy_qucI14eJ0sM</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>j16dRmmxQ1M_UgcwKUf3qFG</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>5X8O6n5++0L_ZuXmsJ34shJ</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>opPujzzx6wK_s5OPKSkBKaC</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>cswuo12pDMF_BklKWDubst</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>2g9M8GoBxRJ_08qCezXaC3J</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>UZZ/zxRzztF_CcdbtGLfgzO</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>FG0t4haYHFI_QIZheXnIiLD</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_swing_down</playTechType>
+            <eid>pC/6Upu9B5G_P8XdQ6Q/8tE</eid>
+            <text><sym>handbellsSwingDown</sym></text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>lkyvUI430zO_vssz3agxtoF</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>WP3cgd+I4/E_PbAljeRg6q</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>nv4Bf9TORJJ_k1jjVTJDhwK</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>qb83FzTz/PJ_tRBiYn14VvE</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>/0EXjT9D0yE_aPEBeVX2/LI</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>tKDm/wLmTkN_yoN/40Gx12B</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>dv3sF27c7XK_XpY82tl1ExH</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>vr4NAfL4+CH_bbCpZcsGBUJ</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>jM/ULADuwRC_cLUVu2GkOAP</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_echo_1</playTechType>
+            <eid>fuo8EoJKzXP_iGrLI8Vbhw</eid>
+            <text><sym>handbellsEcho1</sym></text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>FFUIttuPqPN_AQ1jvHzw1NL</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>Mqj2Lg1WdAI_cPhO2rltGBI</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>Z4g8MZhWLZO_PlV74Tac7yC</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>dTzng6eiDKO_LjNA7XRMSK</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>Gg9MV3LYBcI_eSebLZaZ4zK</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>3c/3HNAL5FJ_iKOhfcjPB/C</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>Utd+/c5XhXH_OdxeSZSFv9J</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>uZbau+nuhrH_3zkXyzK1hZE</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Qte65OYUXiP_xhW6c3P4yNN</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_echo_2</playTechType>
+            <eid>qIWZWP3B+oJ_gvqzQhB1HMI</eid>
+            <text><sym>handbellsEcho2</sym></text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>eL4t7QEyiMP_dITnaF3lAnJ</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>ntuLscv+EQC_i87tocYcYoO</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>TCygiZcbriF_HkuTLLodJAB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>8d65drW2bkD_lSFCysY34WF</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>mPCGdYPjJYL_NHPOXtTCwfI</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>poYdRpKHWIE_U2V8VovkjzM</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>fopCy1IIPkN_D0aA+LXptFG</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>rsap4vewQlD_oXRt2iOpN6E</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>7ROC4kP35dO_nAvfFaOBwmH</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_r</playTechType>
+            <eid>HLuOQVQRLDP_WiJLe+XAR8D</eid>
+            <text>R</text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>YcAaN6HYz5B_Eq/wAml0M4D</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>GZibA0pnrk_W792w+czfeO</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>mdCLvkAm+qM_M+wUAtDfR2D</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>G0OLBSCxs0F_Y1uyMQAvWjF</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>Tj+Hz67aoX_zSk7tbSa6UN</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>eXLpQ1muekG_CUJ34BZXC0G</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>pB8RaHqqQWB_rvCKEPYYwRB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>p6MPRNWDCgL_xNUcHUUK/eN</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>EkIK0zXBI8F_IG8phCnwxg</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_lv</playTechType>
+            <eid>QiW7kh4ZstB_WvE9Cxsjm3F</eid>
+            <text>LV</text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>Md9Oj59I+cD_1Z0H3I44+dB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4a8kE9q9n3K_OPMXJKfzmXD</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>yhHI4pMOO4_g+ZicfN0rgC</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>mQex4ErfNtO_vgQx1mgL62P</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>+nA3IqojewB_Q7rT44HNMeK</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>SACBuBCAAsD_HOtLjb6clmB</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>P2o3VN0BtUN_z4fB+yCIRrO</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>xKkAqydbqgD_EUZ/EhW9FuP</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>dT5fzj7khYJ_sUQ25QKr9W</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_damp</playTechType>
+            <eid>Q4pKp0tXAUB_zTnpQ7MTRnL</eid>
+            <text><sym>handbellsDamp3</sym></text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>Hc/pFGt0NvO_5dt9qkgaEqG</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>I0kZ5iznBfJ_Qew7kr74wmN</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>knH3InjH/MI_2GRIAyu52MJ</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>qNivoXARAkB_d7o+c92G9/</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>u1vMznEKHXI_kS2eLcXTwlN</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>ocgV0ZsNQ6C_Qorc0RjjuoE</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>UbzoVHUEQDG_9/sDb3OlByM</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>qth7NX34I9B_Q3qf+E7kMYH</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>

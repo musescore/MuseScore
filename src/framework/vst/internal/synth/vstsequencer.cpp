@@ -33,7 +33,7 @@ static constexpr ControlIdx SOSTENUTO_IDX = static_cast<ControlIdx>(Steinberg::V
 static constexpr ControlIdx PITCH_BEND_IDX = static_cast<ControlIdx>(Steinberg::Vst::kPitchBend);
 
 static const mpe::ArticulationTypeSet SUSTAIN_PEDAL_CC_SUPPORTED_TYPES {
-    mpe::ArticulationType::Pedal, mpe::ArticulationType::LetRing,
+    mpe::ArticulationType::Pedal,
 };
 
 static const mpe::ArticulationTypeSet SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES = {
@@ -143,8 +143,12 @@ void VstSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::NoteEv
         destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
     }
 
-    for (const auto& articPair : noteEvent.expressionCtx().articulations) {
-        const mpe::ArticulationMeta& meta = articPair.second.meta;
+    for (const auto& artPair : noteEvent.expressionCtx().articulations) {
+        if (artPair.first == mpe::ArticulationType::Standard) {
+            continue;
+        }
+
+        const mpe::ArticulationMeta& meta = artPair.second.meta;
 
         if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
             addPitchCurve(destination, noteEvent, meta);
@@ -152,8 +156,7 @@ void VstSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::NoteEv
         }
 
         if (muse::contains(SUSTAIN_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
-            addParamChange(destination, meta.timestamp, SUSTAIN_IDX, 1);
-            addParamChange(destination, meta.timestamp + meta.overallDuration, SUSTAIN_IDX, 0);
+            addPedalEvent(destination, meta);
             continue;
         }
 
@@ -162,6 +165,17 @@ void VstSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::NoteEv
             sostenutoTimeAndDurations.push_back(mpe::TimestampAndDuration { timestamp, meta.overallDuration });
             continue;
         }
+    }
+}
+
+void VstSequencer::addPedalEvent(EventSequenceMap& destination, const mpe::ArticulationMeta& meta)
+{
+    if (meta.hasStart()) {
+        addParamChange(destination, meta.timestamp, SUSTAIN_IDX, 1);
+    }
+
+    if (meta.hasEnd()) {
+        addParamChange(destination, meta.timestamp + meta.overallDuration, SUSTAIN_IDX, 0);
     }
 }
 

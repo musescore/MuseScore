@@ -144,6 +144,13 @@ enum ms_NoteArticulation2 : uint64_t
     ms_NoteArticulation2_Pluck = 1LL << 4,
     ms_NoteArticulation2_SingingBell = 1LL << 5,
     ms_NoteArticulation2_SingingVibrate = 1LL << 6,
+    ms_NoteArticulation2_HandbellSwing = 1LL << 7,
+    ms_NoteArticulation2_Echo = 1LL << 8,
+
+    ms_NoteArticulation2_FallRough = 1LL << 9,
+    ms_NoteArticulation2_PlopRough = 1LL << 10,
+    ms_NoteArticulation2_DoitRough = 1LL << 11,
+    ms_NoteArticulation2_ScoopRough = 1LL << 12,
 };
 
 // added in v0.6

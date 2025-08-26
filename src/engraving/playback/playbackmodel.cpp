@@ -310,8 +310,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
             continue;
         }
 
-        m_renderer.render(item, timestamp, duration, dynamicLevel, ctx->persistentArticulationType(utick), profile,
-                          result);
+        m_renderer.render(item, timestamp, duration, dynamicLevel, ctx, profile, result);
     }
 
     trackPlaybackData.offStream.send(std::move(result), std::move(dynamics), flushSound);
