@@ -103,6 +103,7 @@ UiContext UiContextResolver::currentUiContext() const
 {
     TRACEFUNC;
     Uri currentUri = interactive()->currentUri().val;
+    LOGD() << "currentUri: " << currentUri.toString();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
     currentUri = diagnostics::diagnosticCurrentUri(interactive()->stack());
@@ -196,6 +197,8 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     //! allow/disallow shortcuts based on any property of the currentNotation. [M.S.]
 
     if (CTX_NOTATION_OPENED == scContext) {
+        return matchWithCurrent(context::UiCtxProjectOpened);
+    } else if (CTX_NOTATION_OPENED_PRIORITY == scContext) {
         return matchWithCurrent(context::UiCtxProjectOpened);
     } else if (CTX_NOTATION_FOCUSED == scContext) {
         return matchWithCurrent(context::UiCtxProjectFocused);
