@@ -726,6 +726,15 @@ void BarLine::endEditDrag(EditData& ed)
     bed->yoff2 = 0.0;
 }
 
+void BarLine::undoUnlink()
+{
+    EngravingItem::undoUnlink();
+
+    if (m_playCountText) {
+        m_playCountText->undoUnlink();
+    }
+}
+
 //---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
