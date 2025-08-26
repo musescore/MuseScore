@@ -49,6 +49,7 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(int currentFretDotType READ currentFretDotType WRITE setCurrentFretDotType NOTIFY currentFretDotTypeChanged)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
+    Q_PROPERTY(bool isInFretBox READ isInFretBox NOTIFY isInFretBoxChanged)
 
     Q_PROPERTY(QVariant fretDiagram READ fretDiagram NOTIFY fretDiagramChanged)
     Q_PROPERTY(PropertyItem * showFingerings READ showFingerings CONSTANT)
@@ -84,6 +85,9 @@ public:
 
     bool areSettingsAvailable() const;
 
+    bool isInFretBox() const;
+    void setIsInFretBox(bool isInFretBox);
+
 public slots:
     void setIsBarreModeOn(bool isBarreModeOn);
     void setIsMultipleDotsModeOn(bool isMultipleDotsModeOn);
@@ -99,7 +103,11 @@ signals:
     void areSettingsAvailableChanged(bool areSettingsAvailable);
     void fingeringsChanged(QStringList fingerings);
 
+    void isInFretBoxChanged(bool isInFretBox);
+
 private:
+    void updateIsInFretBox();
+
     PropertyItem* m_scale = nullptr;
     PropertyItem* m_stringsCount = nullptr;
     PropertyItem* m_fretsCount = nullptr;
@@ -115,6 +123,7 @@ private:
 
     bool m_isBarreModeOn = false;
     bool m_isMultipleDotsModeOn = false;
+    bool m_isInFretBox = false;
     FretDiagramTypes::FretDot m_currentFretDotType = FretDiagramTypes::FretDot::DOT_NORMAL;
 };
 }
