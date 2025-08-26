@@ -2025,11 +2025,6 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
         SymId::handbellsGyro,
     };
 
-    static const std::vector<SymId> additionalHandbellsArticSymbols {
-        SymId::handbellsHandMartellato,
-        SymId::handbellsMutedMartellato,
-    };
-
     static const std::vector<ArticulationTextType> handbellsTextTypes {
         ArticulationTextType::LV,
         ArticulationTextType::R,
@@ -2053,37 +2048,42 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
         { "<sym>handbellsDamp3</sym>",   PlayingTechniqueType::HandbellsDamp, },
     };
 
-    static const std::vector<HandbellsPlayTechInfo> additionalHandbellsPlayTech {
-        { "<sym>handbellsSwing</sym>",   PlayingTechniqueType::HandbellsSwing, },
-        { "<sym>handbellsEcho2</sym>",   PlayingTechniqueType::HandbellsEcho2, },
-    };
+    for (SymId symId : standardHandbellsArticSymbols) {
+        auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+        artic->setSymId(symId);
+        sp->appendElement(artic, artic->subtypeUserName(),
+                          symId == SymId::handbellsGyro ? 0.7 : symId == SymId::handbellsMalletBellSuspended ? 1.4 : 1.0);
+    }
 
-    if (defaultPalette) {
-        for (SymId symId : standardHandbellsArticSymbols) {
-            auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
-            artic->setSymId(symId);
-            sp->appendElement(artic, artic->subtypeUserName(),
-                              symId == SymId::handbellsGyro ? 0.7 : symId == SymId::handbellsMalletBellSuspended ? 1.4 : 1.0);
-        }
+    for (ArticulationTextType textType : handbellsTextTypes) {
+        auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+        artic->setTextType(textType);
+        sp->appendElement(artic, artic->subtypeUserName(), 1.1);
+    }
 
-        for (ArticulationTextType textType : handbellsTextTypes) {
-            auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
-            artic->setTextType(textType);
-            sp->appendElement(artic, artic->subtypeUserName(), 1.1);
-        }
+    for (const HandbellsPlayTechInfo& info : standardHandbellsPlayTech) {
+        auto element = makeElement<PlayTechAnnotation>(gpaletteScore);
+        element->setXmlText(info.xmlText);
+        element->setTechniqueType(info.playTechType);
+        sp->appendElement(element, TConv::userName(info.playTechType));
+    }
 
-        for (const HandbellsPlayTechInfo& info : standardHandbellsPlayTech) {
-            auto element = makeElement<PlayTechAnnotation>(gpaletteScore);
-            element->setXmlText(info.xmlText);
-            element->setTechniqueType(info.playTechType);
-            sp->appendElement(element, TConv::userName(info.playTechType));
-        }
-    } else {
+    if (!defaultPalette) {
+        static const std::vector<SymId> additionalHandbellsArticSymbols {
+            SymId::handbellsHandMartellato,
+            SymId::handbellsMutedMartellato,
+        };
+
         for (SymId symId : additionalHandbellsArticSymbols) {
             auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
             artic->setSymId(symId);
             sp->appendElement(artic, artic->subtypeUserName());
         }
+
+        static const std::vector<HandbellsPlayTechInfo> additionalHandbellsPlayTech {
+            { "<sym>handbellsSwing</sym>",   PlayingTechniqueType::HandbellsSwing, },
+            { "<sym>handbellsEcho2</sym>",   PlayingTechniqueType::HandbellsEcho2, },
+        };
 
         for (const HandbellsPlayTechInfo& info : additionalHandbellsPlayTech) {
             auto element = makeElement<PlayTechAnnotation>(gpaletteScore);
