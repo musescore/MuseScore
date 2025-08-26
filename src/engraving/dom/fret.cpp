@@ -972,8 +972,6 @@ void FretDiagram::unlinkHarmony()
 
     segment()->add(m_harmony);
 
-    score()->rebuildFretBox();
-
     m_harmony = nullptr;
 }
 
