@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Window
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
@@ -57,6 +58,12 @@ FocusScope {
     }
 
     function ensureActiveFocus() {
+        if (Window.window && Window.window.objectName.includes("PopupWindow_QQuickView")) {
+            // See also PopupWindow_QQuickView::eventFilter
+            Window.window.flags &= ~Qt.WindowDoesNotAcceptFocus
+            Window.window.requestActivate()
+        }
+
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
