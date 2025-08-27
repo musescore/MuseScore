@@ -46,8 +46,8 @@ DurationElement::DurationElement(const ElementType& type, EngravingItem* parent,
 //   DurationElement
 //---------------------------------------------------------
 
-DurationElement::DurationElement(const DurationElement& e)
-    : EngravingItem(e)
+DurationElement::DurationElement(const DurationElement& e, bool link)
+    : EngravingItem(e, link)
 {
     m_tuplet   = 0;      // e._tuplet;
     m_duration = e.m_duration;
