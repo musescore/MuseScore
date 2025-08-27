@@ -106,7 +106,7 @@ staff_idx_t Staff::idx() const
 
 void Staff::triggerLayout() const
 {
-    score()->setLayoutAll(idx());
+    score()->setLayoutAll(idx(), this);
 }
 
 void Staff::triggerLayout(const Fraction& tick)
@@ -231,7 +231,7 @@ void Staff::undoSetShowMeasureNumbers(bool show)
 bool Staff::shouldShowMeasureNumbers() const
 {
     if (style().styleB(Sid::measureNumberAllStaves)) {
-        return true;
+        return show();
     }
 
     bool isTopStave = score()->staves().front() == this;
