@@ -6475,8 +6475,6 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         return false;
     }
 
-    bool instrChangeHandled = false;
-
     // note: the instrument change details are handled in ExportMusicXml::writeMeasureTracks,
     // optionally writing the associated staff text is done below
     if (e->isTempoText()) {
@@ -6494,8 +6492,6 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         exp->rehearsal(toRehearsalMark(e), sstaff);
     } else if (e->isSystemText()) {
         exp->systemText(toStaffTextBase(e), sstaff);
-    } else {
-        return instrChangeHandled;
     }
 
     return true;
