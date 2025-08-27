@@ -92,7 +92,7 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* parent, E
     m_minDistance   = Spatium(0.0);
 }
 
-EngravingItem::EngravingItem(const EngravingItem& e)
+EngravingItem::EngravingItem(const EngravingItem& e, bool link)
     : EngravingObject(e)
 {
     m_offset     = e.m_offset;
@@ -106,6 +106,23 @@ EngravingItem::EngravingItem(const EngravingItem& e)
     itemDiscovered = false;
 
     m_accessibleEnabled = e.m_accessibleEnabled;
+
+    if (e.m_leftParenthesis) {
+        m_leftParenthesis = e.m_leftParenthesis->clone();
+        m_leftParenthesis->setParent(this);
+        m_leftParenthesis->setTrack(track());
+        if (link) {
+            score()->undo(new Link(m_leftParenthesis, e.m_leftParenthesis));
+        }
+    }
+    if (e.m_rightParenthesis) {
+        m_rightParenthesis = e.m_rightParenthesis->clone();
+        m_rightParenthesis->setParent(this);
+        m_rightParenthesis->setTrack(track());
+        if (link) {
+            score()->undo(new Link(m_rightParenthesis, e.m_rightParenthesis));
+        }
+    }
 }
 
 EngravingItem::~EngravingItem()

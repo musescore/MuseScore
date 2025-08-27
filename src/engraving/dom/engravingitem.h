@@ -715,7 +715,7 @@ public:
 
 protected:
     EngravingItem(const ElementType& type, EngravingObject* parent = nullptr, ElementFlags = ElementFlag::NOTHING);
-    EngravingItem(const EngravingItem&);
+    EngravingItem(const EngravingItem&, bool link = false);
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     virtual AccessibleItemPtr createAccessible();

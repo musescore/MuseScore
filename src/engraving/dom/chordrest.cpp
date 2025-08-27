@@ -80,7 +80,7 @@ ChordRest::ChordRest(const ElementType& type, Segment* parent)
 }
 
 ChordRest::ChordRest(const ChordRest& cr, bool link)
-    : DurationElement(cr)
+    : DurationElement(cr, link)
 {
     m_durationType = cr.m_durationType;
     m_staffMove    = cr.m_staffMove;
