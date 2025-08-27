@@ -44,7 +44,7 @@ BaseSection {
     ComboBoxWithTitle {
         id: inputDevicesBox
 
-        title: qsTrc("appshell/preferences", "MIDI input:")
+        title: qsTrc("appshell/preferences", "MIDI input")
         currentIndex: indexOfValue(root.inputDeviceId)
         columnWidth: root.columnWidth
 
@@ -60,7 +60,7 @@ BaseSection {
     ComboBoxWithTitle {
         id: outputDevicesBox
 
-        title: qsTrc("appshell/preferences", "MIDI output:")
+        title: qsTrc("appshell/preferences", "MIDI output")
         currentIndex: indexOfValue(root.outputDeviceId)
         columnWidth: root.columnWidth
 

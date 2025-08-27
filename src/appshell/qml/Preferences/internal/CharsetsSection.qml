@@ -34,7 +34,7 @@ BaseSection {
     signal overtureCharsetChangeRequested(string charset)
 
     ComboBoxWithTitle {
-        title: qsTrc("appshell/preferences", "Overture import character set:")
+        title: qsTrc("appshell/preferences", "Overture import character set")
         columnWidth: root.columnWidth
 
         currentIndex: control.indexOfValue(root.currentOvertureCharset)

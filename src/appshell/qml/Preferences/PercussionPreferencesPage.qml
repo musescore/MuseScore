@@ -65,7 +65,7 @@ PreferencesPage {
 
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: Text.Wrap
-                text: qsTrc("notation/percussion", "Open the panel automatically:")
+                text: qsTrc("notation/percussion", "Open the panel automatically")
             }
 
             RadioButtonGroup {

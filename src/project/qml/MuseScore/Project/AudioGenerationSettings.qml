@@ -136,7 +136,7 @@ RadioButtonGroup {
 
             //: `%1` will be replaced with a number input field.
             //: Text before it will appear before that number field, text after will appear after the field.
-            readonly property string text: qsTrc("project/save", "Every: %1 saves")
+            readonly property string text: qsTrc("project/save", "Every %1 saves")
 
             readonly property var textSplit: text.split("%1")
 
@@ -158,7 +158,9 @@ RadioButtonGroup {
                 id: button
 
                 anchors.verticalCenter: parent.verticalCenter
-                width: Math.max(implicitWidth, 80)
+
+                // align spinbox with Autosave spinbox
+                width: 214
 
                 text: numberOfSavesItem.textPart1.trim()
                 checked: settingsModel.timePeriodType === numberOfSavesItem.type

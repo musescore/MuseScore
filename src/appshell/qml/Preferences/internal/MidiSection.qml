@@ -36,7 +36,7 @@ BaseSection {
     ComboBoxWithTitle {
         id: shortestNotesBox
 
-        title: qsTrc("appshell/preferences", "Shortest note:")
+        title: qsTrc("appshell/preferences", "Shortest note")
         columnWidth: root.columnWidth
 
         currentIndex: control.indexOfValue(root.currentShortestNote)

@@ -45,7 +45,7 @@ BaseSection {
         ComboBoxWithTitle {
             id: defaultZoomTypesBox
 
-            title: qsTrc("appshell/preferences", "Default zoom:")
+            title: qsTrc("appshell/preferences", "Default zoom")
             columnWidth: root.columnWidth
 
             control.textRole: "title"
@@ -91,7 +91,7 @@ BaseSection {
     IncrementalPropertyControlWithTitle {
         id: mouseZoomPrecisionControl
 
-        title: qsTrc("appshell/preferences", "Mouse zoom precision:")
+        title: qsTrc("appshell/preferences", "Mouse zoom precision")
 
         columnWidth: root.columnWidth
         control.width: 60
