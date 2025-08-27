@@ -7953,11 +7953,11 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
 
     m_xml.startElement("sound");
     if (!instr->musicXmlId().empty()) {
-        m_xml.startElementRaw(String("instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));
+        m_xml.startElementRaw(String(u"instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));
         m_xml.tag("instrument-sound", instr->musicXmlId());
         m_xml.endElement();
     } else {
-        m_xml.tagRaw(String("instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));
+        m_xml.tagRaw(String(u"instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));
     }
     m_xml.endElement();
 }
