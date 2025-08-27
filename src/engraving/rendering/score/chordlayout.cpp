@@ -1203,7 +1203,7 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
                 aa->mutldata()->moveY(minDist);
                 if (sstaff && aa->addToSkyline()) {
                     SystemLayout::updateSkylineForElement(aa, m->system(), minDist);
-                    for (ShapeElement& sh : s->staffShape(item->staffIdx()).elements()) {
+                    for (ShapeElement& sh : s->staffShape(item->vStaffIdx()).elements()) {
                         if (sh.item() == aa) {
                             sh.translate(0.0, minDist);
                         }
