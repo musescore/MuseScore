@@ -7952,9 +7952,13 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
     writeInstrumentDetails(instr, m_score->style().styleB(Sid::concertPitch));
 
     m_xml.startElement("sound");
-    m_xml.startElement("instrument-change");
-    scoreInstrument(m_xml, static_cast<int>(partNr) + 1, instNr + 1, instr->trackName(), instr);
-    m_xml.endElement();
+    if (!instr->musicXmlId().empty()) {
+        m_xml.startElementRaw(String("instrument-change %1").arg(instrId(partNr, instNr)));
+        m_xml.tag("instrument-sound", instr->musicXmlId());
+        m_xml.endElement();
+    } else {
+        m_xml.tagRaw(String("instrument-change %1").arg(instrId(partNr, instNr)));        
+    }
     m_xml.endElement();
 }
 
