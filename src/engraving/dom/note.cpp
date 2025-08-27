@@ -587,7 +587,7 @@ std::vector<Note*> Note::compoundNotes() const
 }
 
 Note::Note(const Note& n, bool link)
-    : EngravingItem(n)
+    : EngravingItem(n, link)
 {
     if (link) {
         score()->undo(new Link(this, const_cast<Note*>(&n)));
