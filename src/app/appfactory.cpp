@@ -178,6 +178,9 @@
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
 #include "importexport/videoexport/videoexportmodule.h"
 #endif
+#ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
+#include "importexport/tabledit/tableditmodule.h"
+#endif
 
 #include "inspector/inspectormodule.h"
 
@@ -345,6 +348,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
 #endif
+#ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
+    app->addModule(new mu::iex::tabledit::TablEditModule());
+#endif
 
     app->addModule(new mu::inspector::InspectorModule());
     app->addModule(new mu::instrumentsscene::InstrumentsSceneModule());
@@ -483,6 +489,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
 #endif
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_TABLEDIT_MODULE
+    app->addModule(new mu::iex::tabledit::TablEditModule());
 #endif
 
     app->addModule(new mu::inspector::InspectorModule());

@@ -75,8 +75,8 @@ void MeasureBase::clearElements()
 
 ElementList MeasureBase::takeElements()
 {
-    ElementList l = m_el;
-    m_el.clear();
+    ElementList l;
+    l.swap(m_el);
     return l;
 }
 
@@ -821,7 +821,7 @@ void MeasureBaseList::add(MeasureBase* m)
 {
     MeasureBase* el = m->next();
     if (el == 0) {
-        push_back(m);
+        append(m);
         return;
     }
     if (el == m_first) {
@@ -941,17 +941,7 @@ void MeasureBaseList::append(MeasureBase* m)
     assert(!m->next());
     assert(!m->prev() || m->prev() == m_last);
 
-    ++m_size;
-    if (m_last) {
-        m_last->setNext(m);
-        m->setPrev(m_last);
-        m->setNext(0);
-    } else {
-        m_first = m;
-        m->setPrev(0);
-        m->setNext(0);
-    }
-    m_last = m;
+    push_back(m);
     m_tickIndex.emplace(std::make_pair(m->tick().ticks(), m));
 }
 

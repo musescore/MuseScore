@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Linux
+#MSCORE=../../../build.debug/mscore/mscore
+# OS X terminal build
+#MSCORE=../../../applebuild/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build
+MSCORE=../../../../../builds/Mac-Qt6.2.4-macos-Make-RelWithDebInfo/install/mscore.app/Contents/MacOS/mscore
+
+echo "------------------------------------------------------"
+echo "Generate reference files for MuseScore TablEdit iotest"
+echo "------------------------------------------------------"
+echo
+
+cleanup() {
+    rm -rf META-INF Thumbnails
+    rm audiosettings.json score_style.mss viewsettings.json
+    }
+
+generateMscx() {
+      echo "generating reference for $1";
+      $MSCORE $1.tef -t -o aaa.mscx &>/dev/null
+      cat aaa.mscx | grep -v pageWidth | grep -v pageHeight | grep -v pagePrintableWidth | grep -v open >$1.mscx
+      }
+
+generateAllMscx() {
+      for f in `ls *.tef | sort`; do
+            generateMscx `basename $f .tef`
+      done
+      }
+
+usage() {
+      echo "usage: $0"
+      echo
+      exit 1
+      }
+
+if [ $# -eq 0 ]; then
+      generateAllMscx
+      cleanup
+else
+      usage
+fi
