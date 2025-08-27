@@ -860,9 +860,9 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
         score()->undoChangeStyleVal(Sid::systemObjectsBelowBottomStaff, false);
     }
 
-    AutoOnOff showMeasNumOnScrStaff = srcStaff->getProperty(Pid::SHOW_MEASURE_NUMBERS).value<AutoOnOff>();
-    if (showMeasNumOnScrStaff != AutoOnOff::AUTO) {
-        dstStaff->undoChangeProperty(Pid::SHOW_MEASURE_NUMBERS, showMeasNumOnScrStaff);
+    AutoOnOff showMeasNumOnSrcStaff = srcStaff->getProperty(Pid::SHOW_MEASURE_NUMBERS).value<AutoOnOff>();
+    if (showMeasNumOnSrcStaff != AutoOnOff::AUTO) {
+        dstStaff->undoChangeProperty(Pid::SHOW_MEASURE_NUMBERS, showMeasNumOnSrcStaff);
         srcStaff->undoResetProperty(Pid::SHOW_MEASURE_NUMBERS);
     }
 
