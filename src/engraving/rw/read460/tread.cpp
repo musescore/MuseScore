@@ -580,7 +580,16 @@ void TRead::readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     DO_ASSERT(eid.isValid());
     EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
     EngravingObject* mainElement = eidRegister->itemFromEID(eid);
-    DO_ASSERT(mainElement && mainElement->type() == item->type());
+    IF_ASSERT_FAILED(mainElement) {
+        LOGE() << "Link failed: Main linked element not found for " << item->typeName() << " at " << ctx.tick().toString();
+        return;
+    }
+    IF_ASSERT_FAILED(mainElement->type() == item->type()) {
+        LOGE() << "Link failed: Main element type (" << mainElement->typeName() << ") does not match linked item type (" <<
+            item->typeName() << ") at " << ctx.tick().toString();
+        return;
+    }
+
     item->linkTo(mainElement);
 }
 
