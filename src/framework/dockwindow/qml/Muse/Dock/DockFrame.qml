@@ -95,8 +95,6 @@ Rectangle {
 
         titleBarCpp: root.titleBarCpp
 
-        contextMenuModel: prv.tabsModel.data(prv.tabsModel.index(prv.currentIndex, 0), DockTabsModel.ContextMenu)
-
         navigationPanel: navPanel
         navigationOrder: 1
 
@@ -105,6 +103,18 @@ Rectangle {
         }
 
         titleBarItem: frameModel.titleBar
+
+        function updateContextMenu() {
+            const idx = prv.tabsModel.index(prv.currentIndex, 0);
+            const menuModel = prv.tabsModel.data(idx, DockTabsModel.ContextMenu)
+            titleBar.contextMenuModel = menuModel
+        }
+
+        Connections {
+            target: prv.tabsModel
+            function onDataChanged() { titleBar.updateContextMenu() }
+            function onModelReset() { titleBar.updateContextMenu() }
+        }
     }
 
     DockTabBar {
