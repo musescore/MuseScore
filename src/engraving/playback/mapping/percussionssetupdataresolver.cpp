@@ -70,8 +70,8 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
                                                                        SoundSubCategory::Opera } } },
         { "wind-gong", { SoundId::Gong, SoundCategory::Percussions, { SoundSubCategory::Metal,
                                                                       SoundSubCategory::Wind } } },
-        { "hand-bells", { SoundId::Bell, SoundCategory::Percussions, { SoundSubCategory::Metal,
-                                                                       SoundSubCategory::Hand } } },
+        { "hand-bells", { SoundId::Bell, SoundCategory::Percussions, { SoundSubCategory::Hand } } },
+        { "hand-chimes", { SoundId::Chimes, SoundCategory::Percussions, { SoundSubCategory::Hand } } },
 
         { "orff-soprano-glockenspiel", { SoundId::Glockenspiel, SoundCategory::Percussions, { SoundSubCategory::Soprano,
                                                                                               SoundSubCategory::Orff } } },

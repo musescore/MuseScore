@@ -702,8 +702,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                    mpe::SoundSubCategory::Bowl } }, { midi::Program(0, 11) } },
         { { mpe::SoundId::Chain,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
 
-        { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Metal,
-                                   mpe::SoundSubCategory::Hand } }, { midi::Program(0, 112) } },
+        { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Hand } }, { midi::Program(0, 112) } },
+        { { mpe::SoundId::Chimes, { mpe::SoundSubCategory::Hand } }, { midi::Program(0, 112) } },
         { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Plate,
                                    mpe::SoundSubCategory::Metal } }, { midi::Program(0, 11) } },
         { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
