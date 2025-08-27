@@ -87,7 +87,7 @@
     </part-list>
   <part id="P1">
     <measure number="1" width="203.1">
-      <print>
+      <print page-number="1">
         <system-layout>
           <system-margins>
             <left-margin>50</left-margin>
@@ -1321,7 +1321,7 @@
         </note>
       </measure>
     <measure number="67" width="173.13">
-      <print new-system="yes">
+      <print new-system="yes" page-number="2">
         <system-layout>
           <system-margins>
             <left-margin>0</left-margin>
