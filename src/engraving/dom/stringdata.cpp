@@ -519,6 +519,10 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
             continue;
         }
 
+        if (note->bendFor() || note->bendBack()) {
+            continue;
+        }
+
         int string = note->string();
         int noteFret = note->fret();
 
