@@ -7598,8 +7598,8 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
     size_t staffCount = 0;                               // count sum of # staves in parts
     const auto& parts = score->parts();
     int partGroupEnd[MAX_PART_GROUPS];                // staff where part group ends (bracketSpan is in staves, not parts)
-    for (int i = 0; i < MAX_PART_GROUPS; i++) {
-        partGroupEnd[i] = -1;
+    for (int &i : partGroupEnd) {
+        i = -1;
     }
     for (size_t idx = 0; idx < parts.size(); ++idx) {
         const Part* part = parts.at(idx);
