@@ -92,10 +92,8 @@
           </part-abbreviation-display>
         </print>
       <sound>
-        <instrument-change>
-          <score-instrument id="P1-I2">
-            <instrument-name>Flute</instrument-name>
-            </score-instrument>
+        <instrument-change id="P1-I2">
+          <instrument-sound>wind.flutes.flute</instrument-sound>
           </instrument-change>
         </sound>
       <direction placement="above">
