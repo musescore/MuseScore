@@ -6989,23 +6989,20 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                 }
             }
         }
-        for (staff_idx_t i = 1; i < nstaves; i++) {
-            // return here if it's a key change because of an instrument change
-            if (keysigs.at(i)->forInstrumentChange()) {
-                LOGD("keysigs for instrument change");
-                return;
-            }
-        }
 
         // write the keysigs
         //LOGD(" singleKey %d", singleKey);
         if (singleKey) {
             // keysig applies to all staves
-            keysig(keysigs.at(0), p->staff(0)->clef(m->tick()), 0, keysigs.at(0)->visible());
+            if (!keysigs.at(0)->forInstrumentChange()) {
+                keysig(keysigs.at(0), p->staff(0)->clef(m->tick()), 0, keysigs.at(0)->visible());
+            }
         } else {
             // staff-specific keysigs
             for (staff_idx_t st : muse::keys(keysigs)) {
-                keysig(keysigs.at(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.at(st)->visible());
+                if (!keysigs.at(st)->forInstrumentChange()) {
+                    keysig(keysigs.at(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.at(st)->visible());
+                }
             }
         }
     } else {
