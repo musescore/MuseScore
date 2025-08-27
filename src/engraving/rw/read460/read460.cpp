@@ -522,15 +522,15 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 prevTremolo = nullptr;
                             }
 
-                            if (TremoloTwoChord* tremolo = chord->tremoloTwoChord()) {
+                            TremoloTwoChord* tremolo = chord->tremoloTwoChord();
+                            if (tremolo && chord == tremolo->chord2()) {
                                 if (doScale) {
                                     Fraction d = tremolo->durationType().ticks();
                                     tremolo->setDurationType(d * scale);
                                 }
-                                Measure* m = score->tick2measure(tick);
-                                Fraction ticks = cr->actualTicks();
-                                Fraction rticks = m->endTick() - tick;
-                                if (rticks < ticks || (rticks != ticks && rticks < ticks * 2)) {
+                                Fraction tremoloEndTick = tick + chord->actualTicks();
+                                Fraction measureEndTick = score->tick2measure(tick)->endTick();
+                                if (tremoloEndTick > measureEndTick) {
                                     MScore::setError(MsError::DEST_TREMOLO);
                                     return false;
                                 }
