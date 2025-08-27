@@ -1069,10 +1069,8 @@
           </part-abbreviation-display>
         </print>
       <sound>
-        <instrument-change>
-          <score-instrument id="P15-I2">
-            <instrument-name>Voice</instrument-name>
-            </score-instrument>
+        <instrument-change id="P15-I2">
+          <instrument-sound>voice.vocals</instrument-sound>
           </instrument-change>
         </sound>
       <direction placement="above">
