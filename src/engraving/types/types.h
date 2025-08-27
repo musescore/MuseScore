@@ -948,7 +948,9 @@ enum class PlayingTechniqueType : signed char {
     HandbellsSwingDown,
     HandbellsEcho1,
     HandbellsEcho2,
-    HandbellsDamp
+    HandbellsDamp,
+    HandbellsLV,
+    HandbellsR,
 };
 
 enum class GradualTempoChangeType : signed char {
@@ -1172,8 +1174,6 @@ enum class ArticulationTextType : unsigned char {
     SLAP,
     POP,
     // Handbells
-    LV,
-    R,
     TD,
     BD,
     RT,
@@ -1293,6 +1293,13 @@ struct PartAudioSettingsCompat {
 
 struct SettingsCompat {
     std::map<muse::ID /*partid*/, PartAudioSettingsCompat> audioSettings;
+};
+
+struct MeasureBeat {
+    int measureIndex = 0;
+    int maxMeasureIndex = 0;
+    float beat = 0.f;
+    int maxBeatIndex = 0;
 };
 
 //---------------------------------------------------------

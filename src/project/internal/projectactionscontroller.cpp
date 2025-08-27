@@ -407,21 +407,19 @@ Ret ProjectActionsController::doFinishOpenProject()
 {
     extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_OPENED);
 
-    //! Show Tours & MuseSounds update if need
-    auto showToursAndMuseSoundsUpdate = [=](){
+    //! Show MuseSounds / MuseSampler update if need
+    auto showUpdateNotification = [=](){
         QTimer::singleShot(1000, [this]() {
             if (museSoundsCheckUpdateScenario()->hasUpdate()) {
                 museSoundsCheckUpdateScenario()->showUpdate();
             } else if (!museSamplerCheckUpdateScenario()->alreadyChecked()) {
                 museSamplerCheckUpdateScenario()->checkAndShowUpdateIfNeed();
             }
-
-            toursService()->onEvent(u"project_opened");
         });
     };
 
     if (interactive()->isOpened(NOTATION_PAGE_URI).val) {
-        showToursAndMuseSoundsUpdate();
+        showUpdateNotification();
     } else {
         async::Channel<Uri> opened = interactive()->opened();
         opened.onReceive(this, [=](const Uri&) {
@@ -429,7 +427,7 @@ Ret ProjectActionsController::doFinishOpenProject()
                 async::Channel<Uri> mut = opened;
                 mut.resetOnReceive(this);
 
-                showToursAndMuseSoundsUpdate();
+                showUpdateNotification();
             });
         });
     }

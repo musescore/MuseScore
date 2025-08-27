@@ -203,9 +203,9 @@ void PlaybackControllerStub::setIsExportingAudio(bool)
 {
 }
 
-const std::set<muse::audio::TrackId>& PlaybackControllerStub::onlineSounds() const
+const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& PlaybackControllerStub::onlineSounds() const
 {
-    static const std::set<muse::audio::TrackId> dummy;
+    static const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> dummy;
     return dummy;
 }
 

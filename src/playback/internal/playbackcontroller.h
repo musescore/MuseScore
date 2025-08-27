@@ -124,7 +124,7 @@ public:
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
-    const std::set<muse::audio::TrackId>& onlineSounds() const override;
+    const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>& onlineSounds() const override;
     muse::async::Notification onlineSoundsChanged() const override;
     muse::Progress onlineSoundsProcessingProgress() const override;
 
@@ -174,8 +174,6 @@ private:
 
     muse::audio::secs_t playbackStartSecs() const;
     muse::audio::secs_t playbackEndSecs() const;
-
-    muse::audio::secs_t playbackDelay(const muse::secs_t countInDuration) const;
 
     notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 
@@ -227,12 +225,11 @@ private:
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
-    void addToOnlineSounds(const muse::audio::TrackId trackId);
+    void addToOnlineSounds(const muse::audio::TrackId trackId, const muse::audio::AudioResourceMeta& meta);
     void removeFromOnlineSounds(const muse::audio::TrackId trackId);
     void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
-    void listenAutoProcessOnlineSoundsInBackgroundChanged();
-    bool shouldShowOnlineSoundsConnectionWarning() const;
-    void showOnlineSoundsConnectionWarning();
+    bool shouldShowOnlineSoundsProcessingError() const;
+    void showOnlineSoundsProcessingError();
 
     muse::audio::secs_t playedTickToSecs(int tick) const;
 
@@ -271,11 +268,11 @@ private:
 
     bool m_measureInputLag = false;
 
-    std::set<muse::audio::TrackId> m_onlineSounds;
+    std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> m_onlineSounds;
     std::set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
     muse::async::Notification m_onlineSoundsChanged;
     muse::Progress m_onlineSoundsProcessingProgress;
-    int m_onlineSoundsProcessingErrorCode = 0;
+    bool m_onlineSoundsErrorDetected = false;
 };
 }
 

@@ -505,6 +505,10 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             s->doLayout();
         }
     }
+
+    if (m_notationPlayback) {
+        m_notationPlayback->reload();
+    }
 }
 
 void MasterNotation::unloadExcerpts(ExcerptNotationList& excerpts)
@@ -695,6 +699,8 @@ void MasterNotation::updateExcerpts()
         if (open) {
             excerptNotation->notation()->elements()->msScore()->doLayout();
         }
+
+        initNotationSoloMuteState(excerptNotation->notation());
 
         updatedExcerpts.push_back(excerptNotation);
     }

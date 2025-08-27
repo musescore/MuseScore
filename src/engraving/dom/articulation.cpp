@@ -609,7 +609,7 @@ void Articulation::computeCategories()
     m_categories.setFlag(ArticulationCategory::HANDBELLS,
                          (static_cast<int>(m_symId) >= static_cast<int>(SymId::handbellsBelltree)
                           && static_cast<int>(m_symId) <= static_cast<int>(SymId::handbellsTableSingleBell))
-                         || (static_cast<int>(m_textType) >= static_cast<int>(ArticulationTextType::LV)
+                         || (static_cast<int>(m_textType) >= static_cast<int>(ArticulationTextType::TD)
                              && static_cast<int>(m_textType) <= static_cast<int>(ArticulationTextType::VIB))
                          );
 }

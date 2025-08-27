@@ -310,11 +310,15 @@ bool MuseSamplerWrapper::initSampler(const sample_rate_t sampleRate, const sampl
 
 void MuseSamplerWrapper::setupOnlineSound()
 {
-    m_sequencer.setUpdateMainStreamWhenInactive(true);
+    const bool autoProcess = config()->autoProcessOnlineSoundsInBackground();
+
+    m_sequencer.setUpdateMainStreamWhenInactive(autoProcess);
     m_sequencer.setRenderingProgress(&m_inputProcessingProgress);
-    m_sequencer.setAutoRenderInterval(config()->autoProcessOnlineSoundsInBackground() ? 1.0 : -1.0); // interval < 0 -> no auto process
+    m_sequencer.setAutoRenderInterval(autoProcess ? 1.0 : -1.0); // interval < 0 -> no auto process
 
     config()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool on) {
+        m_sequencer.setUpdateMainStreamWhenInactive(on);
+        m_sequencer.updateMainStream();
         m_sequencer.setAutoRenderInterval(on ? 1.0 : -1.0);
     });
 

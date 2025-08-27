@@ -509,7 +509,7 @@ Ret Interactive::isAppExists(const std::string& appIdentifier) const
 #endif
 }
 
-Ret Interactive::canOpenApp(const Uri& uri) const
+Ret Interactive::canOpenApp(const UriQuery& uri) const
 {
 #ifdef Q_OS_MACOS
     return MacOSInteractiveHelper::canOpenApp(uri);
@@ -520,7 +520,7 @@ Ret Interactive::canOpenApp(const Uri& uri) const
 #endif
 }
 
-async::Promise<Ret> Interactive::openApp(const Uri& uri) const
+async::Promise<Ret> Interactive::openApp(const UriQuery& uri) const
 {
 #ifdef Q_OS_MACOS
     return MacOSInteractiveHelper::openApp(uri);

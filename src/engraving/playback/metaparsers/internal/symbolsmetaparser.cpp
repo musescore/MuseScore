@@ -33,8 +33,6 @@ static mpe::ArticulationType textTypeToArticulationType(ArticulationTextType tex
     case ArticulationTextType::NO_TEXT: return mpe::ArticulationType::Standard;
     case ArticulationTextType::SLAP: return mpe::ArticulationType::Slap;
     case ArticulationTextType::POP: return mpe::ArticulationType::Pop;
-    case ArticulationTextType::LV: return mpe::ArticulationType::LaissezVibrer;
-    case ArticulationTextType::R: return mpe::ArticulationType::Ring;
     case ArticulationTextType::TD: return mpe::ArticulationType::ThumbDamp;
     case ArticulationTextType::BD: return mpe::ArticulationType::BrushDamp;
     case ArticulationTextType::RT: return mpe::ArticulationType::RingTouch;

@@ -36,7 +36,7 @@ bool QmlLauncher::open(const QString& uri)
 
 bool QmlLauncher::openApp(const QString& uri)
 {
-    interactive()->openApp(Uri(uri));
+    interactive()->openApp(UriQuery(uri.toStdString()));
     return true;
 }
 
