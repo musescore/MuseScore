@@ -47,6 +47,7 @@
 #include "timesig.h"
 #include "utils.h"
 #include "capo.h"
+#include "editcapo.h"
 
 // #define DEBUG_CLEFS
 
@@ -1042,356 +1043,80 @@ const CapoParams& Staff::capo(const Fraction& tick) const
         return dummy;
     }
     --it;
-    return m_capoMap.at(*it).params;
+    return m_capoMap.at(*it);
 }
 
-static Segment* firstChordSegOfNextMeasure(Measure* m, const Score* s)
-{
-    if (Measure* n = m ? m->nextMeasure() : nullptr) {
-        if (Segment* fs = n->first(SegmentType::ChordRest)) {
-            return fs;
-        }
-    }
-    return s->lastSegment();
-}
-
-static Segment* firstChordSegAtOrAfter(Score* s, int absTick)
-{
-    Measure* m = s->tick2measure(Fraction::fromTicks(absTick));
-    if (!m) {
-        return s->lastSegment();
-    }
-
-    if (Segment* exact = m->findSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick))) {
-        return exact;
-    }
-
-    Segment* seg = m->first(SegmentType::ChordRest);
-    while (seg && seg->tick().ticks() < absTick && seg->measure() == m) {
-        seg = seg->next1();
-    }
-    if (seg && seg->measure() == m) {
-        return seg;
-    }
-
-    return firstChordSegOfNextMeasure(m, s);
-}
-
-void Staff::applyCapoTranspose(int startTick, int endTick, const CapoParams& params, int notePitchCorrection /* = 0 */)
-{
-    auto setPitch = [](Note* note, int pitch) {
-        note->setPitch(pitch);
-        note->setTpcFromPitch();
-    };
-
-    auto setStringFret = [](Note* note, int string, int fret) {
-        note->setString(string);
-        note->setFret(fret);
-    };
-
-    auto convertPitch = [this, setStringFret](const StringData* stringData,
-                                              Note* n,
-                                              int pitchDelta = 0,
-                                              std::optional<int> pitchOffset = std::nullopt,
-                                              std::optional<Fraction> tick = std::nullopt)
-    {
-        int string = 0;
-        int fret = 0;
-        const int offset = pitchOffset ? *pitchOffset
-                           : (tick ? stringData->pitchOffsetAt(this, *tick)
-                              : stringData->pitchOffsetAt(this));
-        stringData->convertPitch(n->pitch() + pitchDelta, offset, &string, &fret);
-        setStringFret(n, string, fret);
-    };
-
-    auto pitchFor = [this](const StringData* stringData, Note* n, bool withTick){
-        return withTick
-               ? stringData->getPitch(n->string(), n->fret(), this, n->tick())
-               : stringData->getPitch(n->string(), n->fret(), this);
-    };
-
-    auto fretFor  = [this](const StringData* stringData, Note* n, bool withTick){
-        return withTick
-               ? stringData->fret(n->pitch(), n->string(), this, n->tick())
-               : stringData->fret(n->pitch(), n->string(), this);
-    };
-
-    staff_idx_t staffIdx = idx();
-    track_idx_t startTrack = staffIdx * VOICES;
-    track_idx_t endTrack = startTrack + VOICES;
-
-    for (MeasureBase* mb = score()->measures()->first(); mb; mb = mb->next()) {
-        if (!mb->isMeasure()) {
-            continue;
-        }
-        for (Segment& seg : toMeasure(mb)->segments()) {
-            if (!seg.isChordRestType()) {
-                continue;
-            }
-            for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                EngravingItem* e = seg.element(track);
-                if (!e || !e->isChord()) {
-                    continue;
-                }
-                if (e->tick().ticks() < startTick || (-1 != endTick && e->tick().ticks() > endTick)) {
-                    continue;
-                }
-
-                Chord* chord = toChord(e);
-                chord->sortNotes();
-                const Fraction tick = chord->tick();
-                const StringData* stringData = part()->stringData(tick, idx());
-
-                const std::vector<Note*>& nl = chord->notes();
-
-                // Prefer not change strings for intervals and chords
-                bool possibleFretConflict = nl.size() > 1 && std::any_of(nl.begin(), nl.end(),
-                                                                         [&](const Note* n){ return n->fret() < params.fretPosition; });
-
-                for (auto note : nl) {
-                    switch (params.transition) {
-                        case CapoParams::Transition::NO_TRANSITION:
-                            break;
-
-                        case CapoParams::Transition::NOTATION_TO_PB:
-                        case CapoParams::Transition::PB_TO_NOTATION:
-                        case CapoParams::Transition::UPDATE_NOTES: {
-                            if (muse::contains(params.ignoredStrings, (string_idx_t)note->string())) {
-                                setPitch(note, pitchFor(stringData, note, false));
-                            } else {
-                                int newPitch = stringData->getPitch(note->string(), note->fret(), this, tick);
-                                setPitch(note, (newPitch == INVALID_PITCH ? note->pitch() : newPitch) - notePitchCorrection);
-                            }
-
-                            break;
-                        }
-
-                        case CapoParams::Transition::PB_TO_TAB:
-                        case CapoParams::Transition::TAB_TO_PB:
-                        case CapoParams::Transition::UPDATE_FRETS:
-                        {
-                            if (muse::contains(params.ignoredStrings, (string_idx_t)note->string())) {
-                                note->setFret(fretFor(stringData, note, false));
-                            } else {
-                                convertPitch(stringData, note, notePitchCorrection, std::nullopt, tick);
-                            }
-
-                            break;
-                        }
-
-                        case CapoParams::Transition::TAB_TO_NOTATION:
-                            if (muse::contains(params.ignoredStrings, (string_idx_t)note->string())) {
-                                setPitch(note, pitchFor(stringData, note, false));
-                            } else {
-                                // Go through PLAYBACK ONLY mode since TAB and PLAYBACK modes has the same note pitch
-                                // re-fret the note first
-                                if (possibleFretConflict) {
-                                    note->setFret(note->fret() + params.fretPosition);
-                                } else {
-                                    convertPitch(stringData, note, 0, 0);
-                                }
-
-                                // Now when we've got the correct string and fret, transition to NOTATION ONLY mode
-                                setPitch(note, stringData->getPitch(note->string(), note->fret() - notePitchCorrection, this, tick));
-                            }
-
-                            break;
-
-                        case CapoParams::Transition::NOTATION_TO_TAB: {
-                            if (muse::contains(params.ignoredStrings, (string_idx_t)note->string())) {
-                                note->setFret(fretFor(stringData, note, false));
-                            } else {
-                                // Reverse order of TAB_TO_NOTATION
-                                setPitch(note, stringData->getPitch(note->string(), note->fret(), this));
-                                convertPitch(stringData, note, notePitchCorrection - params.fretPosition, 0);
-                            }
-
-                            break;
-                        }
-
-                        case CapoParams::Transition::UPDATE_IGNORED_STRINGS: {
-                            const bool ignore = muse::contains(params.ignoredStrings, (string_idx_t)note->string());
-
-                            if (params.transposeMode == CapoParams::TransposeMode::TAB_ONLY) {
-                                note->setFret(fretFor(stringData, note, !ignore));
-                            } else if (params.transposeMode == CapoParams::TransposeMode::NOTATION_ONLY) {
-                                setPitch(note, pitchFor(stringData, note, !ignore));
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                // TODO: Grace notes
-                for (Chord* g : chord->graceNotes()) {
-                    for (Note* n: g->notes()) {
-                        Fraction tick = n->tick();
-                        int newPitch = part()->stringData(tick, idx())->getPitch(n->string(), n->fret(), this, tick);
-                        n->setPitch(newPitch, n->tpc1default(newPitch), n->tpc2default(newPitch));
-                    }
-                }
-            }
-        }
-    }
-}
-
-void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params, bool skipNotesUpdate)
+void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
 {
     auto isNeedUpdate = [](const CapoParams& oldParams, const CapoParams& newParams) -> bool {
-        return !(oldParams.transition == newParams.transition
-                 && oldParams.active == newParams.active
+        return !(oldParams.active == newParams.active
                  && oldParams.transposeMode == newParams.transposeMode
                  && oldParams.fretPosition == newParams.fretPosition
                  && oldParams.ignoredStrings == newParams.ignoredStrings);
     };
-    int ticks = tick.ticks();
-    if (auto it = m_capoMap.find(ticks); it == m_capoMap.end()) {
-        // If this is not the first capo, we have to check to see if we're showing the correct pitch and fret
-        const bool needUpdate = !skipNotesUpdate;
-        // Just added new capo. Update range according to the previous one.
-        const bool ignorePrevious = false;
-        m_capoMap.insert({ ticks, { params, needUpdate, ignorePrevious } });
-    } else {
-        const CapoParams& oldParams = it->second.params;
-        const bool ignorePrevious = true; // Just updating. No need to consider previous capo if it exists
-        m_capoMap.insert_or_assign(ticks, CapoState { params, isNeedUpdate(oldParams, params), ignorePrevious });
-    }
-}
 
-void Staff::removeDeletedCaposAndRestoreNotation(const std::vector<int>& currentCapos)
-{
-    const std::vector<int> keys = muse::keys(m_capoMap);
-    std::vector<int> diff;
-    std::set_difference(keys.begin(), keys.end(), currentCapos.begin(), currentCapos.end(), std::back_inserter(diff));
-    for (int ticks : diff) {
-        int notePitchCorrection = 0;
-        const auto it = m_capoMap.find(ticks);
-        IF_ASSERT_FAILED(it != m_capoMap.end()) {
-            LOGE() << "Key must exist in capo map!";
+    const static CapoParams initialParams{
+        .ignoredStrings = {},
+        .fretPosition = 1,
+        .transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY,
+        .active = true,
+    };
+    int startTick = tick.ticks();
+    int endTick = -1;
+
+    if (auto it = m_capoMap.find(startTick); it == m_capoMap.end()) {
+        auto result = m_capoMap.insert({ startTick, params });
+        if (const auto nextIt = std::next(result.first); nextIt != m_capoMap.end()) {
+            endTick = nextIt->first;
+        }
+        if (result.first != m_capoMap.begin()) {
+            const auto prevIt = std::prev(result.first);
+            const CapoParams oldParams = prevIt->second;
+            EditCapo::updateNotationForCapoChange(oldParams, params, this, startTick, endTick);
+        } else {
+            EditCapo::updateNotationForCapoChange(initialParams, params, this, startTick, endTick);
+        }
+    } else {
+        CapoParams oldParams = it->second;
+        if (!isNeedUpdate(oldParams, params)) {
             return;
         }
-
-        if (it != m_capoMap.begin()) {
-            const auto prevCapoIt = std::prev(it);
-            prevCapoIt->second.needUpdate = true;
+        auto result = m_capoMap.insert_or_assign(startTick, params);
+        if (const auto nextIt = std::next(result.first); nextIt != m_capoMap.end()) {
+            endTick = nextIt->first;
         }
-
-        int startTick = it->first;
-        int endTick = -1;
-        if (auto n = std::next(it); n != m_capoMap.end()) {
-            endTick = n->first;
-        }
-        CapoParams param = it->second.params;
-        if (it != m_capoMap.begin()) {
-            auto prevIt = std::prev(it);
-            const CapoParams& prevParams = prevIt->second.params;
-            switch (param.transposeMode) {
-            case CapoParams::TransposeMode::PLAYBACK_ONLY:
-                if (CapoParams::TransposeMode::TAB_ONLY == prevParams.transposeMode) {
-                    param.transition = CapoParams::Transition::UPDATE_FRETS;
-                } else if (CapoParams::TransposeMode::NOTATION_ONLY == prevParams.transposeMode) {
-                    param.transition = CapoParams::Transition::UPDATE_NOTES;
-                }
-                break;
-            case CapoParams::TransposeMode::NOTATION_ONLY:
-                if (CapoParams::TransposeMode::PLAYBACK_ONLY == prevParams.transposeMode) {
-                    param.transition = CapoParams::Transition::UPDATE_NOTES;
-                } else if (CapoParams::TransposeMode::TAB_ONLY == prevParams.transposeMode) {
-                    param.transition = CapoParams::Transition::NOTATION_TO_TAB;
-                    notePitchCorrection = param.fretPosition - prevParams.fretPosition;
-                } else if (CapoParams::TransposeMode::NOTATION_ONLY == prevParams.transposeMode) {
-                    if (!param.active) {
-                        param.transition = CapoParams::Transition::PB_TO_NOTATION;
-                        notePitchCorrection = -prevParams.fretPosition;
-                    }
-                }
-                break;
-            case CapoParams::TransposeMode::TAB_ONLY:
-                if (CapoParams::TransposeMode::PLAYBACK_ONLY == prevParams.transposeMode) {
-                    param.transition = CapoParams::Transition::UPDATE_FRETS;
-                } else if (CapoParams::TransposeMode::NOTATION_ONLY == prevParams.transposeMode) {
-                    param.transition = CapoParams::Transition::TAB_TO_NOTATION;
-                    notePitchCorrection = param.fretPosition - prevParams.fretPosition;
-                }
-                break;
-            }
-        } else {
-            // Restore initial state
-            switch (param.transposeMode) {
-            case CapoParams::TransposeMode::NOTATION_ONLY:
-                param.transition = CapoParams::Transition::UPDATE_NOTES;
-                notePitchCorrection = param.fretPosition;
-                break;
-            case CapoParams::TransposeMode::TAB_ONLY:
-                param.transition = CapoParams::Transition::UPDATE_FRETS;
-                notePitchCorrection = param.fretPosition;
-                break;
-            case CapoParams::TransposeMode::PLAYBACK_ONLY:
-                param.transition = CapoParams::Transition::NO_TRANSITION;
-                break;
-            }
-
-            param.transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY;
-        }
-        applyCapoTranspose(startTick, endTick, param, notePitchCorrection);
-    }
-
-    // Clean m_capoMap
-    for (int ticks : diff) {
-        m_capoMap.erase(ticks);
+        EditCapo::updateNotationForCapoChange(oldParams, params, this, startTick, endTick);
     }
 }
 
-void Staff::applyCapoParams()
+void Staff::removeCapoParams(const mu::engraving::Fraction& tick)
 {
-    for (auto it = m_capoMap.begin(); it != m_capoMap.end(); ++it) {
-        bool needUpdate = it->second.needUpdate;
-        if (!needUpdate) {
-            continue;
-        }
-        // Use copy instead of reference to keep the state received from Capo*
-        CapoParams param = it->second.params;
-        int startTick = it->first;
-        int endTick = -1;
-        if (auto n = std::next(it); n != m_capoMap.end()) {
-            endTick = n->first;
-        }
-        const bool ignorePrevious = it->second.ignorePrevious;
-        int notePitchCorrection = 0;
-        if (!ignorePrevious && it != m_capoMap.begin()) {
-            auto prevIt = std::prev(it);
-            const CapoParams& prevParams = prevIt->second.params;
-            if (param.transposeMode == CapoParams::TransposeMode::PLAYBACK_ONLY) {
-                switch (prevParams.transposeMode) {
-                case CapoParams::TransposeMode::NOTATION_ONLY:
-                    param.transition = CapoParams::Transition::UPDATE_NOTES;
-                    break;
-                case CapoParams::TransposeMode::TAB_ONLY:
-                    param.transition = CapoParams::Transition::UPDATE_FRETS;
-                    break;
-                case CapoParams::TransposeMode::PLAYBACK_ONLY:
-                    break;
-                }
-            } else {
-                // This is an undo action after capo delete.
-                switch (prevParams.transposeMode) {
-                case CapoParams::TransposeMode::NOTATION_ONLY:
-                    if (param.transposeMode == CapoParams::TransposeMode::TAB_ONLY) {
-                        param.transition = CapoParams::Transition::NOTATION_TO_TAB;
-                    }
-                    break;
-                case CapoParams::TransposeMode::TAB_ONLY:
-                    if (param.transposeMode == CapoParams::TransposeMode::NOTATION_ONLY) {
-                        param.transition = CapoParams::Transition::TAB_TO_NOTATION;
-                    }
-                    break;
-                case CapoParams::TransposeMode::PLAYBACK_ONLY:
-                    break;
-                }
-            }
-        }
-        applyCapoTranspose(startTick, endTick, param, notePitchCorrection);
+    const int startTick = tick.ticks();
+
+    const auto it = m_capoMap.find(startTick);
+    IF_ASSERT_FAILED(it != m_capoMap.end()) {
+        LOGE() << "Key must exist in capo map!";
+        return;
     }
+
+    const auto nextCapoIt = std::next(it);
+    const int endTick = nextCapoIt == m_capoMap.end() ? -1 : nextCapoIt->first;
+
+    CapoParams revertParams{
+        .ignoredStrings = {},
+        .fretPosition = it->second.fretPosition,
+        .transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY,
+        .active = false,
+    };
+
+    CapoParams oldParams = it->second;
+
+    if (it != m_capoMap.begin()) {
+        revertParams = std::prev(it)->second;
+    }
+    EditCapo::updateNotationForCapoChange(oldParams, revertParams, this, startTick, endTick);
+
+    m_capoMap.erase(startTick);
 }
 
 bool Staff::shouldMergeMatchingRests() const

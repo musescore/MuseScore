@@ -937,7 +937,6 @@ void Segment::remove(EngravingItem* el)
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
-    case ElementType::CAPO:
     case ElementType::SYMBOL:
     case ElementType::TAB_DURATION_SYMBOL:
     case ElementType::TEMPO_TEXT:
@@ -945,6 +944,12 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TREMOLOBAR:
     case ElementType::FERMATA:
     case ElementType::STICKING:
+        removeAnnotation(el);
+        break;
+    case ElementType::CAPO:
+        for (Staff* staff : el->part()->staves()) {
+            staff->removeCapoParams(el->tick());
+        }
         removeAnnotation(el);
         break;
 

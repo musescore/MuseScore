@@ -53,10 +53,10 @@ PropertyValue Capo::getProperty(Pid id) const
         return m_params.fretPosition;
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
         std::vector<int> ignoredStrings;
+        ignoredStrings.reserve(m_params.ignoredStrings.size());
         for (string_idx_t string : m_params.ignoredStrings) {
             ignoredStrings.push_back(static_cast<int>(string));
         }
-
         return ignoredStrings;
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return m_shouldAutomaticallyGenerateText;
@@ -88,37 +88,15 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
 {
     if (id == Pid::ACTIVE) {
         bool active = val.toBool();
-        switch (m_params.transposeMode) {
-        case CapoParams::TransposeMode::NOTATION_ONLY:
-            m_params.transition = CapoParams::Transition::PB_TO_NOTATION;
-            break;
-        case CapoParams::TransposeMode::TAB_ONLY:
-            m_params.transition = CapoParams::Transition::PB_TO_TAB;
-            break;
-        case CapoParams::TransposeMode::PLAYBACK_ONLY:
-        default:
-            break;
-        }
         m_params.active = active;
     } else if (id == Pid::CAPO_FRET_POSITION) {
         m_params.fretPosition = val.toInt();
-        switch (m_params.transposeMode) {
-        case CapoParams::TransposeMode::NOTATION_ONLY:
-            m_params.transition = CapoParams::Transition::UPDATE_NOTES;
-            break;
-        case CapoParams::TransposeMode::TAB_ONLY:
-            m_params.transition = CapoParams::Transition::UPDATE_FRETS;
-            break;
-        case CapoParams::TransposeMode::PLAYBACK_ONLY:
-            break;
-        }
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
         m_params.ignoredStrings.clear();
-        std::vector<int> ignoredStrings = val.value<std::vector<int> >();
+        auto ignoredStrings = val.value<std::vector<int> >();
         for (int string : ignoredStrings) {
             m_params.ignoredStrings.insert(static_cast<string_idx_t>(string));
         }
-        m_params.transition = CapoParams::Transition::UPDATE_IGNORED_STRINGS;
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         m_shouldAutomaticallyGenerateText = val.toBool();
 
@@ -126,36 +104,7 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
             setXmlText(m_customText);
         }
     } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
-        auto newMode = (CapoParams::TransposeMode)val.toInt();
-        switch (newMode) {
-        case CapoParams::TransposeMode::PLAYBACK_ONLY:
-            if (CapoParams::TransposeMode::TAB_ONLY == m_params.transposeMode) {
-                m_params.transition = CapoParams::Transition::TAB_TO_PB;
-            } else if (CapoParams::TransposeMode::NOTATION_ONLY == m_params.transposeMode) {
-                m_params.transition = CapoParams::Transition::NOTATION_TO_PB;
-            }
-
-            break;
-        case CapoParams::TransposeMode::NOTATION_ONLY:
-            if (CapoParams::TransposeMode::PLAYBACK_ONLY == m_params.transposeMode) {
-                m_params.transition = CapoParams::Transition::PB_TO_NOTATION;
-            } else if (CapoParams::TransposeMode::TAB_ONLY == m_params.transposeMode) {
-                m_params.transition = CapoParams::Transition::TAB_TO_NOTATION;
-            } else {
-            }
-            break;
-        case CapoParams::TransposeMode::TAB_ONLY:
-            if (CapoParams::TransposeMode::PLAYBACK_ONLY == m_params.transposeMode) {
-                m_params.transition = CapoParams::Transition::PB_TO_TAB;
-            } else if (CapoParams::TransposeMode::NOTATION_ONLY == m_params.transposeMode) {
-                m_params.transition = CapoParams::Transition::NOTATION_TO_TAB;
-            } else {
-            }
-            break;
-        default:
-            break;
-        }
-        m_params.transposeMode = newMode;
+        m_params.transposeMode = (CapoParams::TransposeMode)val.toInt();
     } else {
         return StaffTextBase::setProperty(id, val);
     }
@@ -186,20 +135,6 @@ const CapoParams& Capo::params() const
 void Capo::setParams(const CapoParams& params)
 {
     m_params = params;
-    if (m_params.transition == CapoParams::Transition::NO_TRANSITION) {
-        switch (m_params.transposeMode) {
-        case CapoParams::TransposeMode::NOTATION_ONLY:
-            m_params.transition = CapoParams::Transition::UPDATE_NOTES;
-            break;
-
-        case CapoParams::TransposeMode::TAB_ONLY:
-            m_params.transition = CapoParams::Transition::UPDATE_FRETS;
-            break;
-
-        default:
-            break;
-        }
-    }
 }
 
 bool Capo::shouldAutomaticallyGenerateText() const

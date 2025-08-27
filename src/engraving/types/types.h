@@ -1278,32 +1278,15 @@ struct SwingParameters {
     bool isOn() const { return swingUnit != 0; }
 };
 
-//class AbstractCapoTransposeState;
-
 struct CapoParams {
     enum class TransposeMode {
         PLAYBACK_ONLY = 0,
-        NOTATION_ONLY = 1,
+        STANDARD_ONLY = 1,
         TAB_ONLY      = 2,
     };
-    enum class Transition {
-        NO_TRANSITION = -1,
-        PB_TO_NOTATION,
-        PB_TO_TAB,
-        NOTATION_TO_PB,
-        NOTATION_TO_TAB,
-        TAB_TO_PB,
-        TAB_TO_NOTATION,
-        // Special cases
-        UPDATE_FRETS,
-        UPDATE_NOTES,
-        UPDATE_IGNORED_STRINGS
-    };
-
     std::unordered_set<string_idx_t> ignoredStrings;
     int fretPosition = 0;
     TransposeMode transposeMode = TransposeMode::PLAYBACK_ONLY;
-    Transition transition = Transition::NO_TRANSITION;
     bool active = false;
 };
 

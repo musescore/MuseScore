@@ -124,7 +124,7 @@ bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int
 //    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
-int StringData::getPitch(int string, int fret, Staff* staff) const
+int StringData::getPitch(int string, int fret, const Staff* staff) const
 {
     return getPitch(string, fret, pitchOffsetAt(staff));
 }
@@ -137,7 +137,7 @@ int StringData::getPitch(int string, int fret, Staff* staff) const
 //    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
-int StringData::getPitch(int string, int fret, Staff* staff, const Fraction& tick) const
+int StringData::getPitch(int string, int fret, const Staff* staff, const Fraction& tick) const
 {
     return getPitch(string, fret, pitchOffsetAt(staff, tick));
 }
@@ -149,12 +149,12 @@ int StringData::getPitch(int string, int fret, Staff* staff, const Fraction& tic
 //    Returns INVALID_FRET_INDEX if not possible
 //---------------------------------------------------------
 
-int StringData::fret(int pitch, int string, Staff* staff) const
+int StringData::fret(int pitch, int string, const Staff* staff) const
 {
     return fret(pitch, string, pitchOffsetAt(staff));
 }
 
-int StringData::fret(int pitch, int string, Staff* staff, const Fraction& tick) const
+int StringData::fret(int pitch, int string, const Staff* staff, const Fraction& tick) const
 {
     return fret(pitch, string, pitchOffsetAt(staff, tick));
 }
@@ -175,7 +175,7 @@ void StringData::fretChords(Chord* chord) const
     if (bFretting) {
         return;
     }
-    const CapoParams& capo = chord->staff()->capo(chord->tick());
+    const CapoParams& capo = chord->notes()[0]->staff()->capo(chord->tick());
     if (capo.active) {
         // Frets and string already handled with capo params
         return;
@@ -337,12 +337,12 @@ int StringData::frettedStrings() const
 //   For string data calculations, pitch offset may depend on transposition, capos and, possibly, ottavas.
 //---------------------------------------------------------
 
-int StringData::pitchOffsetAt(Staff* staff)
+int StringData::pitchOffsetAt(const Staff* staff)
 {
     return -(staff ? staff->part()->instrument()->transpose().chromatic : 0);
 }
 
-int StringData::pitchOffsetAt(Staff* staff, const Fraction& tick)
+int StringData::pitchOffsetAt(const Staff* staff, const Fraction& tick)
 {
     if (!staff) {
         return 0;
@@ -353,7 +353,7 @@ int StringData::pitchOffsetAt(Staff* staff, const Fraction& tick)
         switch (capo.transposeMode) {
         case CapoParams::TransposeMode::PLAYBACK_ONLY:
             break;
-        case CapoParams::TransposeMode::NOTATION_ONLY:
+        case CapoParams::TransposeMode::STANDARD_ONLY:
         case CapoParams::TransposeMode::TAB_ONLY:
             offset -= capo.fretPosition;
             break;

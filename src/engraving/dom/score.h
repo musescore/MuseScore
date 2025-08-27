@@ -791,7 +791,7 @@ public:
 
     void updateSwing();
 
-    void updateCapo(bool skipNotesUpdate = false);
+    void updateCapo();
     void updateChannel();
 
     void cmdConcertPitchChanged(bool);

@@ -167,9 +167,8 @@ public:
     void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { m_swingList.insert({ tick.ticks(), sp }); }
 
     const CapoParams& capo(const Fraction&) const;
-    void insertCapoParams(const Fraction& tick, const CapoParams& params, bool skipNotesUpdate);
-    void removeDeletedCaposAndRestoreNotation(const std::vector<int>& currentCapos);
-    void applyCapoParams();
+    void insertCapoParams(const Fraction& tick, const CapoParams& params);
+    void removeCapoParams(const Fraction& tick);
 
     //==== staff type helper function
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
@@ -283,7 +282,6 @@ private:
     friend class Excerpt;
     void setVoiceVisible(voice_idx_t voice, bool visible);
     void updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks);
-    void applyCapoTranspose(int startTick, int endTick, const CapoParams& params, int notePitchCorrection = 0);
 
     ID m_id = INVALID_ID;
     Part* m_part = nullptr;
@@ -313,12 +311,7 @@ private:
     std::map<int, int> m_channelList[VOICES];
     std::map<int, SwingParameters> m_swingList;
 
-    struct CapoState {
-        CapoParams params;
-        bool needUpdate = false;
-        bool ignorePrevious = false; // If just added update according to previous capo if exists
-    };
-    std::map<int, CapoState> m_capoMap;
+    std::map<int, CapoParams> m_capoMap;
     bool m_playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> m_visibilityVoices { true, true, true, true };
 
