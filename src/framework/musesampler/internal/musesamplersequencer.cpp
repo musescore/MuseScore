@@ -215,7 +215,7 @@ void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& event
     finalizeAllTracks();
 
     // Poll only if background rendering is enabled
-    if (m_autoRenderInterval >= 0.0) {
+    if (RealIsEqualOrMore(m_autoRenderInterval, 0.0)) {
         pollRenderingProgress();
     }
 }
@@ -247,12 +247,17 @@ void MuseSamplerSequencer::doPollProgress()
 
     audio::InputProcessingProgress::ChunkInfoList chunks;
     chunks.reserve(rangeCount);
+
     long long chunksDurationUs = 0;
+    bool isRendering = false;
 
     for (int i = 0; i < rangeCount; ++i) {
         const ms_RenderRangeInfo info = m_samplerLib->getNextRenderProgressInfo(ranges);
 
         switch (info._state) {
+        case ms_RenderingState_Rendering:
+            isRendering = true;
+            break;
         case ms_RenderingState_ErrorNetwork:
             m_renderingInfo.error = "Network error";
             break;
@@ -265,10 +270,10 @@ void MuseSamplerSequencer::doPollProgress()
         case ms_RenderingState_ErrorTimeOut:
             m_renderingInfo.error = "Timeout";
             break;
-        case ms_RenderingState_Rendering:
-            break;
         }
 
+        // Failed regions remain in the list, but should be excluded when
+        // calculating the total remaining rendering duration
         if (progressStarted && !m_renderingInfo.error.empty()) {
             continue;
         }
@@ -279,7 +284,8 @@ void MuseSamplerSequencer::doPollProgress()
 
     // Start progress
     if (!progressStarted) {
-        if (chunksDurationUs <= 0 && m_pollRenderingProgressTimer->secondsSinceStart() < m_autoRenderInterval * 2) {
+        // Rendering has started on the sampler side, but it is not yet ready to report progress
+        if (chunksDurationUs <= 0 && isRendering) {
             return;
         }
 
@@ -291,7 +297,6 @@ void MuseSamplerSequencer::doPollProgress()
     }
 
     bool isChanged = false;
-    // chunks
     if (m_renderingInfo.lastReceivedChunks != chunks) {
         m_renderingInfo.lastReceivedChunks = chunks;
         isChanged = true;
