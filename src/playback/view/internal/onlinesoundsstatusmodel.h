@@ -76,8 +76,8 @@ signals:
     void statusChanged();
 
 private:
-    void updateHasOnlineSounds();
-    void updateManualProcessingAllowed();
+    void onOnlineSoundsChanged();
+    void updateManualProcessingAllowed(bool enableByDefault = true);
 
     void setManualProcessingAllowed(bool allowed);
     void setStatus(Status status);

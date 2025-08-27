@@ -36,19 +36,17 @@ OnlineSoundsStatusModel::OnlineSoundsStatusModel(QObject* parent)
 
 void OnlineSoundsStatusModel::load()
 {
-    updateHasOnlineSounds();
+    onOnlineSoundsChanged();
     playbackController()->onlineSoundsChanged().onNotify(this, [this]() {
-        updateHasOnlineSounds();
+        onOnlineSoundsChanged();
     });
-
-    updateManualProcessingAllowed();
 
     globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
         updateManualProcessingAllowed();
     });
 
     audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool) {
-        updateManualProcessingAllowed();
+        updateManualProcessingAllowed(false /*enableByDefault*/);
     });
 
     muse::Progress progress = playbackController()->onlineSoundsProcessingProgress();
@@ -107,7 +105,7 @@ QString OnlineSoundsStatusModel::errorDescription() const
     return muse::qtrc("global", "Please check your internet connection or try again later.");
 }
 
-void OnlineSoundsStatusModel::updateHasOnlineSounds()
+void OnlineSoundsStatusModel::onOnlineSoundsChanged()
 {
     const std::map<TrackId, AudioResourceMeta>& onlineSounds = playbackController()->onlineSounds();
     const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap = playbackController()->instrumentTrackIdMap();
@@ -125,11 +123,13 @@ void OnlineSoundsStatusModel::updateHasOnlineSounds()
     if (m_onlineTrackIdSet.empty() != wasEmpty) {
         emit hasOnlineSoundsChanged();
     }
+
+    updateManualProcessingAllowed();
 }
 
-void OnlineSoundsStatusModel::updateManualProcessingAllowed()
+void OnlineSoundsStatusModel::updateManualProcessingAllowed(bool enableByDefault)
 {
-    if (audioConfiguration()->autoProcessOnlineSoundsInBackground()) {
+    if (m_onlineTrackIdSet.empty() || audioConfiguration()->autoProcessOnlineSoundsInBackground()) {
         m_tracksDataChanged.resetOnReceive(this);
         setManualProcessingAllowed(false);
         return;
@@ -141,6 +141,8 @@ void OnlineSoundsStatusModel::updateManualProcessingAllowed()
         setManualProcessingAllowed(false);
         return;
     }
+
+    setManualProcessingAllowed(enableByDefault);
 
     m_tracksDataChanged = master->playback()->tracksDataChanged();
     m_tracksDataChanged.onReceive(this, [this](const InstrumentTrackIdSet& changedTrackIdSet) {
