@@ -7113,7 +7113,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
 //  findPartGroupNumber
 //---------------------------------------------------------
 
-static int findPartGroupNumber(int* partGroupEnd)
+static int findPartGroupNumber(std::array<int, MAX_PART_GROUPS> partGroupEnd)
 {
     // find part group number
     for (int number = 0; number < MAX_PART_GROUPS; ++number) {
