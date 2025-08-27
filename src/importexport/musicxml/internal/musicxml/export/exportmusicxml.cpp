@@ -7594,7 +7594,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
     size_t staffCount = 0;                               // count sum of # staves in parts
     const auto& parts = score->parts();
     int partGroupEnd[MAX_PART_GROUPS];                // staff where part group ends (bracketSpan is in staves, not parts)
-    for (int &i : partGroupEnd) {
+    for (int& i : partGroupEnd) {
         i = -1;
     }
     for (size_t idx = 0; idx < parts.size(); ++idx) {
@@ -7957,7 +7957,7 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
         m_xml.tag("instrument-sound", instr->musicXmlId());
         m_xml.endElement();
     } else {
-        m_xml.tagRaw(String("instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));        
+        m_xml.tagRaw(String("instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));
     }
     m_xml.endElement();
 }
