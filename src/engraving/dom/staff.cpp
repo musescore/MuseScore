@@ -106,7 +106,7 @@ staff_idx_t Staff::idx() const
 
 void Staff::triggerLayout() const
 {
-    score()->setLayoutAll(idx());
+    score()->setLayoutAll(idx(), this);
 }
 
 void Staff::triggerLayout(const Fraction& tick)
