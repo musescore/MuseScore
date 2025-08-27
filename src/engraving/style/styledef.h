@@ -1245,6 +1245,7 @@ enum class Sid {
     measureNumberAlternateColor,
     measureNumberAlternateAlign,
     measureNumberAlternatePosAbove,
+    measureNumberAlternatePosBelow,
     measureNumberAlternateFrameType,
     measureNumberAlternateFramePadding,
     measureNumberAlternateFrameWidth,

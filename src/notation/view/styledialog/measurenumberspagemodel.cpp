@@ -38,6 +38,7 @@ MeasureNumbersPageModel::MeasureNumbersPageModel(QObject* parent)
                                          StyleId::measureNumberAllStaves,
                                          StyleId::measureNumberPosAbove,
                                          StyleId::measureNumberPosBelow,
+                                         StyleId::measureNumberAlternatePosBelow,
                                          StyleId::measureNumberAlignToBarline,
 
                                          StyleId::mmRestShowMeasureNumberRange,
@@ -74,7 +75,14 @@ StyleItem* MeasureNumbersPageModel::measureNumberPosAbove() const
     return styleItem(ts->at(offsetPropertyIdx).sid);
 }
 
-StyleItem* MeasureNumbersPageModel::measureNumberPosBelow() const { return styleItem(StyleId::measureNumberPosBelow); }
+StyleItem* MeasureNumbersPageModel::measureNumberPosBelow() const
+{
+    TextStyleType textStyleType = styleItem(StyleId::measureNumberTextStyle)->value().value<TextStyleType>();
+    return textStyleType == TextStyleType::MEASURE_NUMBER_ALTERNATE
+           ? styleItem(StyleId::measureNumberAlternatePosBelow)
+           : styleItem(StyleId::measureNumberPosBelow);
+}
+
 StyleItem* MeasureNumbersPageModel::measureNumberAlignToBarline() const { return styleItem(StyleId::measureNumberAlignToBarline); }
 
 StyleItem* MeasureNumbersPageModel::mmRestShowMeasureNumberRange() const { return styleItem(StyleId::mmRestShowMeasureNumberRange); }

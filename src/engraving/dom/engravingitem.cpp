@@ -1050,6 +1050,7 @@ void EngravingItem::add(EngravingItem* e)
     switch (e->type()) {
     case ElementType::PARENTHESIS: {
         Parenthesis* p = toParenthesis(e);
+        p->setVisible(visible());
         if (p->direction() == DirectionH::LEFT) {
             m_leftParenthesis = p;
         } else if (p->direction() == DirectionH::RIGHT) {

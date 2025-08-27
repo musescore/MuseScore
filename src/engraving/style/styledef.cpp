@@ -1230,6 +1230,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(measureNumberAlternateColor,                PropertyValue::fromValue(Color::BLACK)),
     styleDef(measureNumberAlternateAlign,                Align(AlignH::LEFT, AlignV::BASELINE)),
     styleDef(measureNumberAlternatePosAbove,             PointF(0.0, -4.0)),
+    styleDef(measureNumberAlternatePosBelow,             PointF(0.0, 4.0)),
     styleDef(measureNumberAlternateFrameType,            int(FrameType::SQUARE)),
     styleDef(measureNumberAlternateFramePadding,         0.3),
     styleDef(measureNumberAlternateFrameWidth,           0.1),

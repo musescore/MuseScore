@@ -3160,8 +3160,11 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::TPC1:
         return PropertyValue();
     case Pid::VISIBLE:
-        if (staffType() && staffType()->isTabStaff() && bendBack()) {
-            return false;
+        if (staffType() && staffType()->isTabStaff()) {
+            GuitarBend* bend = bendBack();
+            if (bend && !bend->isFullRelease()) {
+                return false;
+            }
         }
         return EngravingItem::propertyDefault(propertyId);
     case Pid::COLOR: {
