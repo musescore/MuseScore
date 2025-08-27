@@ -152,22 +152,39 @@ void NotationViewInputController::onNotationChanged()
         }
     });
 
-    currNotation->interaction()->textEditingChanged().onNotify(this, [this]() {
+    currNotation->interaction()->textEditingStarted().onNotify(this, [this] {
         const INotationPtr notation = currentNotation();
         if (!notation) {
             return;
         }
 
-        if (notation->interaction()->isTextEditingStarted()) {
-            const TextBase* item = notation->interaction()->editedText();
-            if (AbstractElementPopupModel::hasTextStylePopup(item)
-                && item->cursor()->hasSelection()) {
-                m_view->showElementPopup(item->type(), item->canvasBoundingRect());
-                return;
-            }
+        m_view->hideContextMenu();
+        m_view->hideElementPopup();
+
+        const TextBase* item = notation->interaction()->editedText();
+        if (AbstractElementPopupModel::hasTextStylePopup(item)
+            && (!item->isLyrics() || !item->empty())) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        }
+    });
+
+    currNotation->interaction()->textEditingChanged().onNotify(this, [this] {
+        const INotationPtr notation = currentNotation();
+        if (!notation) {
+            return;
         }
 
-        m_view->hideContextMenu();
+        if (!notation->interaction()->isTextEditingStarted()) {
+            return;
+        }
+
+        const TextBase* item = notation->interaction()->editedText();
+        if (AbstractElementPopupModel::hasTextStylePopup(item) && item->cursor()->hasSelection()) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        }
+    });
+
+    currNotation->interaction()->textEditingEnded().onReceive(this, [this](const TextBase*) {
         m_view->hideElementPopup();
     });
 }
@@ -798,7 +815,7 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
         return;
     }
 
-    m_hitElementWasAlreadySelected = ctx.hitElement->selected();
+    m_hitElementWasAlreadySingleSelected = ctx.hitElement == viewInteraction()->selection()->element();
 
     if (ctx.event->button() == Qt::LeftButton) {
         if (ctx.event->modifiers() & Qt::ControlModifier) {
@@ -899,11 +916,7 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     // If it is the only selected element, start editing if needed
     if (ctx.hitElement == viewInteraction()->selection()->element()
         && ctx.hitElement->needStartEditingAfterSelecting()) {
-        if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage()) {
-            viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->defaultGrip());
-        } else {
-            viewInteraction()->startEditElement(ctx.hitElement);
-        }
+        viewInteraction()->startEditElement(ctx.hitElement);
     }
 
     if (ctx.hitElement->isPlayable()) {
@@ -937,6 +950,13 @@ void NotationViewInputController::updateTextCursorPosition()
 {
     if (viewInteraction()->isTextEditingStarted()) {
         viewInteraction()->changeTextCursorPosition(m_mouseDownInfo.logicalBeginPoint);
+
+        // Show text style popup
+        const TextBase* item = viewInteraction()->editedText();
+        if (AbstractElementPopupModel::hasTextStylePopup(item)
+            && (!item->isLyrics() || !item->empty())) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+        }
     }
 }
 
@@ -1200,7 +1220,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         }
     }
 
-    if (!m_hitElementWasAlreadySelected) {
+    if (!m_hitElementWasAlreadySingleSelected) {
         return;
     }
 

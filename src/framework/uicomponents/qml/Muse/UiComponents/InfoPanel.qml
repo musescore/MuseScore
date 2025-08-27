@@ -29,8 +29,8 @@ PopupPanel {
     id: root
 
     property string title: ""
-    property var additionalInfoModel: undefined
     property string description: ""
+    property var additionalInfoModel: undefined
 
     property Component buttonsPanel: null
     property var mainButton: null
@@ -49,21 +49,24 @@ PopupPanel {
         }
     }
 
-    height: 360
+    implicitWidth: content.implicitWidth + content.anchors.leftMargin + content.anchors.rightMargin
+    implicitHeight: content.implicitHeight + content.anchors.topMargin + content.anchors.bottomMargin
+
+    height: Math.max(implicitHeight, 360)
 
     visible: false
 
     accessible.name: root.title
 
-    content: Column {
+    ColumnLayout {
         id: content
         anchors.fill: parent
         anchors.topMargin: 44
         anchors.leftMargin: 68
         anchors.rightMargin: 68
-        anchors.bottomMargin: 42
+        anchors.bottomMargin: 44
 
-        spacing: 42
+        spacing: 36
 
         property bool opened: root.visible
         onOpenedChanged: {
@@ -113,14 +116,14 @@ PopupPanel {
         }
 
         Column {
-            width: Math.min(585, parent.width)
+            Layout.fillWidth: true
             spacing: 8
 
             StyledTextLabel {
                 id: titleLabel
                 width: parent.width
                 horizontalAlignment: Text.AlignLeft
-                text: Boolean(root.title) ? root.title : ""
+                text: root.title ?? ""
                 font: ui.theme.headerBoldFont
             }
 
@@ -137,22 +140,22 @@ PopupPanel {
         }
 
         StyledTextLabel {
-            width: Math.min(585, parent.width)
-            height: 88
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.maximumWidth: 600
 
             opacity: 0.75
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignTop
             horizontalAlignment: Text.AlignLeft
 
-            text: Boolean(root.description) ? root.description : ""
-            visible: Boolean(root.description)
+            text: root.description ?? ""
         }
 
         Loader {
             id: buttonsPanelLoader
 
-            width: parent.width
+            Layout.fillWidth: true
 
             sourceComponent: root.buttonsPanel
         }

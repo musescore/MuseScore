@@ -81,7 +81,7 @@ QtObject {
     The default value depends on platform. If only one
     column is defined, the width expands to the viewport.
     */
-    property int width: (__view && __view.columnCount === 1) ? __view.viewport.width : 160
+    property int width: (__view && __view.columnCount === 1) ? __view.width : 160
 
     /*! The visible status of the column. */
     property bool visible: true

@@ -33,6 +33,7 @@
 
 #include "modularity/ioc.h"
 #include "../../ipaletteconfiguration.h"
+#include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 #include "ui/iuiconfiguration.h"
 #include "context/iglobalcontext.h"
@@ -75,6 +76,7 @@ class PaletteWidget : public QWidget, public muse::async::Asyncable
     INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
     INJECT(muse::IInteractive, interactive)
     INJECT(muse::ui::IUiConfiguration, uiConfiguration)
+    muse::Inject<muse::ui::IMainWindow> mainWindow;
 
 public:
     PaletteWidget(QWidget* parent = nullptr);

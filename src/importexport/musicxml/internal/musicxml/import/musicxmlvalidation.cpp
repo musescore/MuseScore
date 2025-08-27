@@ -105,7 +105,7 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
         break;
     }
 
-    QString errorStr = typeStr + " " + errorStringWithLocation(sourceLocation.line(), sourceLocation.column(), e.text());
+    QString errorStr = typeStr + " " + errorStringWithLocation(sourceLocation.byteOffset(), e.text());
 
     // append error, separated by newline if necessary
     if (!m_errors.isEmpty()) {

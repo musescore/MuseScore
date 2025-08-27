@@ -24,7 +24,8 @@ set(MODULE_INCLUDE_PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/internal/
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/
-    )
+    ${CMAKE_SOURCE_DIR}/src/framework/global/thirdparty/pugixml
+)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imeiconfiguration.h
@@ -43,9 +44,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/meiwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/meiwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/libmei.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml.hpp
 
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/att.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/att.h
@@ -89,8 +87,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/midi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/midi.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/shared.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/shared.h
-    )
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/shared.h   
+)
 
 set(MODULE_LINK
     engraving

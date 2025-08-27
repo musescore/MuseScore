@@ -33,6 +33,7 @@ set(qt_components
     QuickWidgets
     Xml
     Svg
+    ShaderTools
 
     Core5Compat
 )

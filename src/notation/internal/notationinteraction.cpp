@@ -4134,8 +4134,8 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
         score()->setPlayNote(true);
     }
 
-    if (toEl->hasGrips()) {
-        startEditGrip(toEl, toEl->defaultGrip());
+    if (toEl->needStartEditingAfterSelecting()) {
+        startEditElement(toEl);
     }
 }
 
@@ -4644,7 +4644,7 @@ bool NotationInteraction::isElementEditStarted() const
 
 void NotationInteraction::startEditElement(EngravingItem* element)
 {
-    if (!element) {
+    if (!element || !element->isEditable()) {
         return;
     }
 
@@ -4654,7 +4654,9 @@ void NotationInteraction::startEditElement(EngravingItem* element)
 
     if (element->isTextBase()) {
         startEditText(element);
-    } else if (element->isEditable()) {
+    } else if (element->hasGrips() && !element->isImage()) {
+        startEditGrip(element, element->defaultGrip());
+    } else {
         element->startEdit(m_editData);
         m_editData.element = element;
     }
