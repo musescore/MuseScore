@@ -4045,10 +4045,6 @@ void Score::cmdDeleteSelection()
             if (e->isHarmony()) {
                 Harmony* harmony = toHarmony(e);
                 if (harmony->parentItem()->isFretDiagram()) {
-                    if (muse::contains(el, harmony->parentItem())) {
-                        continue;
-                    }
-
                     elSelectedAfterDeletion = harmony->parentItem();
                 }
             }
