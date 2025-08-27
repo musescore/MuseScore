@@ -231,7 +231,7 @@ void Staff::undoSetShowMeasureNumbers(bool show)
 bool Staff::shouldShowMeasureNumbers() const
 {
     if (style().styleB(Sid::measureNumberAllStaves)) {
-        return true;
+        return show();
     }
 
     bool isTopStave = score()->staves().front() == this;
