@@ -290,11 +290,6 @@ endif()
 
 if (MUSE_MODULE_GLOBAL_MULTI_IOC)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_GLOBAL_MULTI_IOC)
-
-target_sources(muse_global
-  PRIVATE
-    types/secs.h
-)
 endif()
 
 setup_module()
