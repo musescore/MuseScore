@@ -1720,8 +1720,8 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
             _slurs[i] = SlurDesc();
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             _trills[i] = 0;
-      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
-            _glissandi[i][0] = _glissandi[i][1] = 0;
+      for (auto& i : _glissandi)
+            i[0] = i[1] = 0;
       _pedalContinue = 0;
       _harmony = 0;
       _tremStart = 0;
@@ -4283,9 +4283,9 @@ void MusicXMLInferredFingering::roundTick(Measure* measure)
       {
       measure->computeTicks();
       long gcdTicks = Fraction(1, 1).ticks();
-      for (auto s = measure->segments().begin(); s != measure->segments().end(); ++s) {
-            if ((*s).isChordRestType())
-                  gcdTicks = gcd(gcdTicks, (*s).ticks().ticks());
+      for (auto& s : measure->segments()) {
+            if (s.isChordRestType())
+                  gcdTicks = gcd(gcdTicks, s.ticks().ticks());
             }
       if (!gcdTicks || gcdTicks == Fraction(1, 1).ticks() || !(_tick.ticks() % gcdTicks)) return;
       int roundedTick = std::round(static_cast<double>(_tick.ticks())/static_cast<double>(gcdTicks)) * (gcdTicks);

@@ -5800,8 +5800,6 @@ static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const 
 
 static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
       {
-      bool instrChangeHandled  = false;
-
       // note: the instrument change details are handled in ExportMusicXml::writeMeasureTracks,
       // optionally writing the associated staff text is done below
       if (e->isTempoText())
@@ -5814,8 +5812,6 @@ static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
             exp->rehearsal(toRehearsalMark(e), sstaff);
       else if (e->isSystemText())
             exp->systemText(toStaffTextBase(e), sstaff);
-      else
-            return instrChangeHandled;
 
       return true;
       }
@@ -6255,13 +6251,16 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             //qDebug(" singleKey %d", singleKey);
             if (singleKey) {
                   // keysig applies to all staves
-                  keysig(keysigs.value(0), p->staff(0)->clef(m->tick()), 0, keysigs.value(0)->visible());
+                  if (!keysigs.value(0)->forInstrumentChange())
+                        keysig(keysigs.value(0), p->staff(0)->clef(m->tick()), 0, keysigs.value(0)->visible());
                   }
             else {
                   // staff-specific keysigs
                   const QList<int> ksigs = keysigs.keys();
-                  for (int st : ksigs)
-                        keysig(keysigs.value(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.value(st)->visible());
+                  for (int st : ksigs) {
+                        if (!keysigs.value(st)->forInstrumentChange())
+                              keysig(keysigs.value(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.value(st)->visible());
+                        }
                   }
             }
       else {
@@ -6412,7 +6411,7 @@ static void identification(XmlWriter& xml, Score const* const score)
 //  findPartGroupNumber
 //---------------------------------------------------------
 
-static int findPartGroupNumber(int* partGroupEnd)
+static int findPartGroupNumber(std::array<int, MAX_PART_GROUPS> partGroupEnd)
       {
       // find part group number
       for (int number = 0; number < MAX_PART_GROUPS; ++number)
@@ -6767,7 +6766,7 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
                   sstaff /= VOICES;
 
                   Clef* cle = static_cast<Clef*>(seg->element(st));
-                  if (cle) {
+                  if (cle && !cle->forInstrumentChange()) {
                         clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
                         // output only clef changes, not generated clefs at line beginning
                         // exception: at tick=0, export clef anyway
@@ -6851,9 +6850,8 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
       xml.stag("part-list");
       int staffCount = 0;                             // count sum of # staves in parts
       const auto& parts = score->parts();
-      int partGroupEnd[MAX_PART_GROUPS];              // staff where part group ends (bracketSpan is in staves, not parts)
-      for (int i = 0; i < MAX_PART_GROUPS; i++)
-            partGroupEnd[i] = -1;
+      std::array<int, MAX_PART_GROUPS> partGroupEnd;  // staff where part group ends (bracketSpan is in staves, not parts)
+      partGroupEnd.fill(-1);
       for (int idx = 0; idx < parts.size(); ++idx) {
             const Part* part = parts.at(idx);
             bool bracketFound = false;
@@ -7187,12 +7185,21 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
             }
       _xml.etag();
 
+      for (KeySig* keySig : instrChange->keySigs()) {
+            int st = _score->staffIdx(part);
+            keysig(keySig, part->staff(st)->clef(instrChange->tick()), _score->staffIdx(part), keySig->visible());
+            }
       writeInstrumentDetails(instr, _score->styleB(Sid::concertPitch));
 
       _xml.stag("sound");
-      _xml.stag("instrument-change");
-      scoreInstrument(_xml, partNr + 1, instNr + 1, instr->trackName(), instr);
-      _xml.etag();
+      if (!instr->instrumentId().isEmpty()) {
+            _xml.stag(QString("instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));
+            _xml.tag("instrument-sound", instr->instrumentId());
+            _xml.etag();
+            }
+      else
+          _xml.stag(QString("instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));
+
       _xml.etag();
       }
 
