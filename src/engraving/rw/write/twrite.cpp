@@ -532,11 +532,15 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
     writeProperty(item, xml, Pid::APPEARANCE_LINKED_TO_MASTER);
     writeProperty(item, xml, Pid::EXCLUDE_FROM_OTHER_PARTS);
 
-    writeProperty(item, xml, Pid::HAS_PARENTHESES);
-    if (item->leftParen()) {
+    bool leftGenerated = item->leftParen() && item->leftParen()->generated();
+    bool rightGenerated = item->rightParen() && item->rightParen()->generated();
+    if (!leftGenerated || !rightGenerated) {
+        writeProperty(item, xml, Pid::HAS_PARENTHESES);
+    }
+    if (item->leftParen() && !item->leftParen()->generated()) {
         writeItem(item->leftParen(), xml, ctx);
     }
-    if (item->rightParen()) {
+    if (item->rightParen() && !item->rightParen()->generated()) {
         writeItem(item->rightParen(), xml, ctx);
     }
 }
@@ -698,7 +702,15 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
         writeItem(e, xml, ctx);
     }
     writeProperty(item, xml, Pid::PLAY_COUNT_TEXT_SETTING);
-    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
+
+    const bool showText = item->style().styleB(Sid::repeatPlayCountShow);
+    const bool singleRepeats = item->style().styleB(Sid::repeatPlayCountShowSingleRepeats);
+    const int playCount = item->measure() ? item->measure()->repeatCount() : 2;
+    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true);
+    if (showPlayCount) {
+        writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
+    }
+
     if (item->playCountText()) {
         writeItem(item->playCountText(), xml, ctx);
     }
@@ -2293,6 +2305,7 @@ void TWrite::write(const Marker* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.tag("label", item->label());
+    writeProperty(item, xml, Pid::MARKER_TYPE);
     writeProperty(item, xml, Pid::MARKER_CENTER_ON_SYMBOL);
     writeProperty(item, xml, Pid::MARKER_SYMBOL_SIZE);
     xml.endElement();

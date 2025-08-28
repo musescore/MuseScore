@@ -37,11 +37,8 @@ class IAudioEngine : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioEngine() = default;
 
-    virtual sample_rate_t sampleRate() const = 0;
-
-    virtual void setSampleRate(const sample_rate_t sampleRate) = 0;
-    virtual void setReadBufferSize(const uint16_t readBufferSize) = 0;
-    virtual void setAudioChannelsCount(const audioch_t count) = 0;
+    virtual void setOutputSpec(const OutputSpec& outputSpec) = 0;
+    virtual OutputSpec outputSpec() const = 0;
 
     virtual RenderMode mode() const = 0;
     virtual void setMode(const RenderMode newMode) = 0;

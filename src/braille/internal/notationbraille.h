@@ -23,6 +23,7 @@
 #ifndef MU_BRAILLE_NOTATIONBRAILLE_H
 #define MU_BRAILLE_NOTATIONBRAILLE_H
 
+#include "accessibility/iaccessibilitycontroller.h"
 #include "async/asyncable.h"
 #include "async/notification.h"
 #include "context/iglobalcontext.h"
@@ -43,6 +44,7 @@ class Selection;
 
 class NotationBraille : public mu::braille::INotationBraille, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
     muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };

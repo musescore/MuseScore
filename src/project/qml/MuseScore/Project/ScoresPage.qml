@@ -344,7 +344,7 @@ FocusScope {
             anchors.rightMargin: prv.sideMargin
             anchors.verticalCenter: parent.verticalCenter
 
-            spacing: 22
+            spacing: 12
 
             FlatButton {
                 navigation.name: "NewScore"

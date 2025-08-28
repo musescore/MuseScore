@@ -30,7 +30,7 @@ class Equaliser : public IFxProcessor
 public:
     Equaliser();
 
-    void setSampleRate(unsigned int sampleRate) override;
+    void setOutputSpec(const OutputSpec& spec) override;
 
     bool active() const override;
     void setActive(bool active) override;
@@ -44,7 +44,7 @@ public:
 private:
     void calculate();
 
-    unsigned int m_sampleRate = 0;
+    OutputSpec m_outputSpec;
     bool m_active = true;
 
     float m_gain = 0, m_frequency = 1000.f, m_q = 1.f;

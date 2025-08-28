@@ -5526,7 +5526,8 @@ void Score::undoResetPlayCountTextSettings(BarLine* bl)
             continue;
         }
 
-        curBl->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::AUTO);
+        curBl->undoResetProperty(Pid::PLAY_COUNT_TEXT_SETTING);
+        curBl->undoResetProperty(Pid::PLAY_COUNT_TEXT);
     }
 }
 
@@ -5580,7 +5581,15 @@ void Score::undoUpdatePlayCountText(Measure* m)
                 }
             }
         } else if (playCountText) {
-            undoRemoveElement(playCountText);
+            Staff* staff = playCountText->staff();
+            // Remove this play count text and MMR links
+            for (EngravingObject* obj : playCountText->linkList()) {
+                PlayCountText* item = toPlayCountText(obj);
+                if (staff != item->staff() || item->barline()->playCountText() != item) {
+                    continue;
+                }
+                undoRemoveElement(item, false);
+            }
         }
     }
 }
@@ -6641,7 +6650,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             } else if (et == ElementType::PLAY_COUNT_TEXT) {
                 BarLine* bl = toBarLine(element->explicitParent());
                 Fraction tick = bl->tick();
-                Measure* m = score->tick2measureMM(tick - Fraction::eps());
+                Measure* m = score->tick2measure(tick - Fraction::eps());
                 Segment* blSeg = m->last(SegmentType::EndBarLine);
                 BarLine* linkedBl = toBarLine(blSeg->element(ntrack));
                 ne->setTrack(ntrack);
@@ -7449,25 +7458,6 @@ void Score::rebuildFretBox()
 
         FBox* box = toFBox(linkedObject);
         box->init();
-    }
-}
-
-void Score::relayoutFretBox()
-{
-    FBox* fretBox = findFretBox();
-    if (!fretBox) {
-        return;
-    }
-
-    fretBox->triggerLayout();
-
-    for (EngravingObject* linkedObject : fretBox->linkList()) {
-        if (!linkedObject || !linkedObject->isFBox() || linkedObject == fretBox) {
-            continue;
-        }
-
-        FBox* box = toFBox(linkedObject);
-        box->triggerLayout();
     }
 }
 

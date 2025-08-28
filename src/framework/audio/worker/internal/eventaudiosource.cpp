@@ -79,17 +79,16 @@ void EventAudioSource::setIsActive(const bool active)
     m_synth->flushSound();
 }
 
-void EventAudioSource::setSampleRate(unsigned int sampleRate)
+void EventAudioSource::setOutputSpec(const OutputSpec& spec)
 {
     ONLY_AUDIO_WORKER_THREAD;
-
-    m_sampleRate = sampleRate;
+    m_outputSpec = spec;
 
     if (!m_synth) {
         return;
     }
 
-    m_synth->setSampleRate(sampleRate);
+    m_synth->setOutputSpec(spec);
 }
 
 unsigned int EventAudioSource::audioChannelsCount() const
@@ -159,6 +158,10 @@ const AudioInputParams& EventAudioSource::inputParams() const
 
 void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
 {
+    IF_ASSERT_FAILED(m_outputSpec.isValid()) {
+        return;
+    }
+
     if (m_params.isValid() && m_params == requiredParams) {
         return;
     }
@@ -169,7 +172,7 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
         m_playbackData = m_synth->playbackData();
     }
 
-    m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams, m_playbackData.setupData);
+    m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams, m_outputSpec, m_playbackData.setupData);
 
     if (!m_synth) {
         m_synth = synthResolver()->resolveDefaultSynth(m_trackId);
@@ -267,6 +270,6 @@ void EventAudioSource::setupSource()
         return;
     }
 
-    m_synth->setSampleRate(m_sampleRate);
+    m_synth->setOutputSpec(m_outputSpec);
     m_synth->setup(m_playbackData);
 }

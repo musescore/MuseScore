@@ -62,12 +62,8 @@ Page {
                 source: "resources/VideoTutorials.png"
 
                 layer.enabled: ui.isEffectsAllowed
-                layer.effect: EffectOpacityMask {
-                    maskSource: Rectangle {
-                        width: image.width
-                        height: image.height
-                        radius: 3
-                    }
+                layer.effect: RoundedCornersEffect {
+                    radius: 3
                 }
             }
         }

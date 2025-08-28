@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_STYLE_H
-#define MU_ENGRAVING_STYLE_H
+#pragma once
 
 #include <array>
 #include <cassert>
@@ -86,10 +85,9 @@ public:
     static Sid styleIdx(const String& name);
 
 private:
-
     friend class compat::ReadStyleHook;
 
-    void read(XmlReader& e, compat::ReadChordListHook* readChordListHook);
+    void read(XmlReader& e, compat::ReadChordListHook* readChordListHook, int mscVersion);
 
     bool readProperties(XmlReader&);
     bool readStyleValCompat(XmlReader&);
@@ -97,10 +95,5 @@ private:
 
     std::array<PropertyValue, size_t(Sid::STYLES)> m_values;
     std::array<Millimetre, size_t(Sid::STYLES)> m_precomputedValues;
-
-    void readVersion(String versionTag);
-    int m_version = 0;
 };
-} // namespace mu::engraving
-
-#endif // MU_ENGRAVING_STYLE_H
+}

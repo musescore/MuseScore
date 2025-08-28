@@ -24,26 +24,19 @@
 
 #include "figuredbass.h"
 #include "hairpin.h"
-#include "lyrics.h"
 #include "ottava.h"
 #include "score.h"
 #include "spanner.h"
-#include "stafftype.h"
 #include "volta.h"
-
-using namespace mu;
 
 namespace mu::engraving {
 bool MScore::debugMode = false;
 bool MScore::testMode = false;
 bool MScore::testWriteStyleToScore = true;
-bool MScore::useRead302InTestMode = true;
 
-// #ifndef NDEBUG
 bool MScore::noHorizontalStretch = false;
 bool MScore::noVerticalStretch   = false;
 bool MScore::useFallbackFont     = true;
-// #endif
 
 bool MScore::saveTemplateMode = false;
 bool MScore::noGui = false;
@@ -63,7 +56,6 @@ double MScore::nudgeStep;
 double MScore::nudgeStep10;
 double MScore::nudgeStep50;
 
-bool MScore::noExcerpts = false;
 bool MScore::noImages = false;
 bool MScore::pdfPrinting = false;
 bool MScore::svgPrinting = false;

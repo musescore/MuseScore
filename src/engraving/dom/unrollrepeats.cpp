@@ -150,7 +150,7 @@ MasterScore* MasterScore::unrollRepeats()
     bool first = true;
     for (const RepeatSegment* rs: original->repeatList()) {
         Fraction startTick = Fraction::fromTicks(rs->tick);
-        Fraction endTick   = Fraction::fromTicks(rs->tick + rs->len());
+        Fraction endTick   = Fraction::fromTicks(rs->endTick());
 
         // first segment left from clone, everything past that removed
         if (first) {

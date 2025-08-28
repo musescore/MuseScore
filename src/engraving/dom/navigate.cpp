@@ -989,7 +989,7 @@ EngravingItem* Score::prevElement()
             if (previousElement->type() != ElementType::VBOX
                 && previousElement->type() != ElementType::HBOX
                 && previousElement->type() != ElementType::TBOX
-                && previousElement->type() == ElementType::FBOX) {
+                && previousElement->type() != ElementType::FBOX) {
                 return previousElement;
             }
 

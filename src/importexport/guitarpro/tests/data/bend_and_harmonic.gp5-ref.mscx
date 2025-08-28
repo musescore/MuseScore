@@ -112,14 +112,6 @@ Cowboys From Hell</text>
             <noStem>1</noStem>
             <Note>
               <eid>O_O</eid>
-              <parentheses>both</parentheses>
-              <Parenthesis>
-                <eid>P_P</eid>
-                </Parenthesis>
-              <Parenthesis>
-                <horizontalDirection>right</horizontalDirection>
-                <eid>Q_Q</eid>
-                </Parenthesis>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -129,7 +121,7 @@ Cowboys From Hell</text>
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>R_R</eid>
+                  <eid>P_P</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -140,10 +132,10 @@ Cowboys From Hell</text>
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>R_R</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>4</fret>
@@ -157,7 +149,7 @@ Cowboys From Hell</text>
                 </Spanner>
               </Note>
             <Note>
-              <eid>U_U</eid>
+              <eid>S_S</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <head>diamond</head>
@@ -174,7 +166,7 @@ Cowboys From Hell</text>
               </prev>
             </Spanner>
           <Rest>
-            <eid>V_V</eid>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

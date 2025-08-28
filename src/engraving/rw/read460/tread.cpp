@@ -460,6 +460,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), ParenthesesMode::NONE));
     case P_TYPE::AUTO_CUSTOM_HIDE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoCustomHide::AUTO));
+    case P_TYPE::MARKER_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), MarkerType::USER));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -578,7 +580,16 @@ void TRead::readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     DO_ASSERT(eid.isValid());
     EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
     EngravingObject* mainElement = eidRegister->itemFromEID(eid);
-    DO_ASSERT(mainElement && mainElement->type() == item->type());
+    IF_ASSERT_FAILED(mainElement) {
+        LOGE() << "Link failed: Main linked element not found for " << item->typeName() << " at " << ctx.tick().toString();
+        return;
+    }
+    IF_ASSERT_FAILED(mainElement->type() == item->type()) {
+        LOGE() << "Link failed: Main element type (" << mainElement->typeName() << ") does not match linked item type (" <<
+            item->typeName() << ") at " << ctx.tick().toString();
+        return;
+    }
+
     item->linkTo(mainElement);
 }
 
@@ -1697,21 +1708,18 @@ void TRead::read(Accidental* a, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Marker* m, XmlReader& e, ReadContext& ctx)
 {
-    MarkerType mt = MarkerType::SEGNO;
-
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "label") {
             AsciiStringView s(e.readAsciiText());
             m->setLabel(String::fromAscii(s.ascii()));
-            mt = TConv::fromXml(s, MarkerType::USER);
+        } else if (readProperty(m, tag, e, ctx, Pid::MARKER_TYPE)) {
         } else if (readProperty(m, tag, e, ctx, Pid::MARKER_CENTER_ON_SYMBOL)) {
         } else if (readProperty(m, tag, e, ctx, Pid::MARKER_SYMBOL_SIZE)) {
         } else if (!readProperties(static_cast<TextBase*>(m), e, ctx)) {
             e.unknown();
         }
     }
-    m->setMarkerType(mt);
 }
 
 void TRead::read(Jump* j, XmlReader& e, ReadContext& ctx)

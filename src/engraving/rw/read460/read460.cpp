@@ -50,6 +50,7 @@
 
 #include "engravingerrors.h"
 
+#include "../compat/readstyle.h"
 #include "../compat/tremolocompat.h"
 #include "../inoutdata.h"
 #include "staffread.h"
@@ -60,7 +61,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::read460;
 
-muse::Ret Read460::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
+muse::Ret Read460::readScoreFile(Score* score, XmlReader& e, rw::ReadInOutData* data)
 {
     ReadContext ctx(score);
     if (data) {
@@ -88,7 +89,7 @@ muse::Ret Read460::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data
         } else if (tag == "LastEID") {
             e.skipCurrentElement();
         } else if (tag == "Score") {
-            if (!readScore410(score, e, ctx)) {
+            if (!readScoreTag(score, e, ctx)) {
                 if (e.error() == muse::XmlStreamReader::CustomError) {
                     return make_ret(Err::FileCriticallyCorrupted, e.errorString());
                 }
@@ -115,7 +116,7 @@ muse::Ret Read460::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data
     return muse::make_ok();
 }
 
-bool Read460::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
+bool Read460::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 {
     std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
@@ -160,6 +161,11 @@ bool Read460::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
             score->m_showSoundFlags = e.readInt();
         } else if (tag == "markIrregularMeasures") {
             score->m_markIrregularMeasures = e.readInt();
+        } else if (tag == "Style") {
+            // Since version 400, the Style is usually stored in a separate file,
+            // but we also support reading it from the mscx file.
+            compat::ReadStyleHook::readStyleTag(score, e);
+            score->m_engravingFont = score->engravingFonts()->fontByName(score->style().styleSt(Sid::musicalSymbolFont).toStdString());
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
@@ -223,6 +229,30 @@ bool Read460::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
                 ctx.tracks().insert({ strack, dtrack });
             }
             e.skipCurrentElement();
+        } else if (tag == "Score") {
+            // Since version 400, Excerpts are usually stored in separate files,
+            // but we also support reading them from the main mscx file.
+
+            ctx.tracks().clear();             // ???
+            MasterScore* m = score->masterScore();
+            Score* s = m->createScore();
+
+            compat::ReadStyleHook::setupDefaultStyle(s);
+
+            Excerpt* ex = new Excerpt(m);
+            ex->setExcerptScore(s);
+            ctx.setLastMeasure(nullptr);
+
+            Score* curScore = ctx.score();
+            ctx.setScore(s);
+
+            readScoreTag(s, e, ctx);     // recursion
+
+            ctx.setScore(curScore);
+
+            s->linkMeasures(m);
+            ex->setTracksMapping(ctx.tracks());
+            m->addExcerpt(ex);
         } else if (tag == "name") {
             String n = e.readText();
             if (!score->isMaster()) {     //ignore the name if it's not a child score
@@ -725,7 +755,6 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         }
 
         if (score->cmdState().layoutRange()) {
-            score->cmdState().reset();
             score->setLayout(dstTick, dstTick + tickLen, dstStaff, endStaff, dst);
         }
 

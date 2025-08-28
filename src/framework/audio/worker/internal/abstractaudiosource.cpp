@@ -25,9 +25,9 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::worker;
 
-void AbstractAudioSource::setSampleRate(unsigned int sampleRate)
+void AbstractAudioSource::setOutputSpec(const OutputSpec& spec)
 {
-    m_sampleRate = sampleRate;
+    m_outputSpec = spec;
 }
 
 bool AbstractAudioSource::isActive() const

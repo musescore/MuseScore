@@ -2782,13 +2782,16 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     Harmony* harmony = item->harmony();
     if (harmony) {
         TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
-        double vertDist = ldata->bbox().top() - harmony->ldata()->bbox().translated(harmony->pos()).bottom();
-        double diff = vertDist - harmony->minDistance().val() * item->spatium();
-        if (diff < 0) {
-            harmony->mutldata()->moveY(diff);
+        if (item->visible()) {
+            double vertDist = ldata->bbox().top() - harmony->ldata()->bbox().translated(harmony->pos()).bottom();
+            double diff = vertDist - harmony->minDistance().val() * item->spatium();
+            if (diff < 0) {
+                harmony->mutldata()->moveY(diff);
+            }
         }
     }
 
+    ldata->slurPaths.clear();
     for (auto i : item->barres()) {
         FretItem::Barre barre = i.second;
         if (!barre.exists()) {
@@ -2824,8 +2827,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         slurPath.moveTo(startX, startEndY);
         slurPath.cubicTo(bezier1for, bezier2for, PointF(endX, startEndY));
         slurPath.cubicTo(bezier2back, bezier1back, PointF(startX, startEndY));
-        ldata->slurPath = slurPath;
-        break;
+        ldata->slurPaths.push_back(slurPath);
     }
 }
 
@@ -3313,7 +3315,7 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         bool above = hopoText->placeAbove();
 
         Align align;
-        align.vertical = above ? AlignV::BASELINE : AlignV::TOP;
+        align.vertical = AlignV::BASELINE;
         align.horizontal = AlignH::HCENTER;
         hopoText->setAlign(align);
         layoutItem(hopoText, ctx);
@@ -3355,7 +3357,7 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         hopoText->mutldata()->setPos(centerX, y);
 
         hopoTextShape.translateY(y);
-        skyline.add(hopoTextShape);
+        skl.add(hopoTextShape);
     }
 
     Shape hopoSegmentShape = item->mutldata()->shape();
@@ -4397,7 +4399,7 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
 
     // This method is also called from SingleLayout, where `part` may be nullptr
     Part* part = item->part();
-    if (part && part->instrument()->hasStrings() && !item->staffType()->isTabStaff()) {
+    if (part && part->instrument()->hasStrings()) {
         GuitarBend* bend = item->bendFor();
         if (bend && bend->addToSkyline() && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
             GuitarBendSegment* bendSeg = toGuitarBendSegment(bend->frontSegment());

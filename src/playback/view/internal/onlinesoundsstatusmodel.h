@@ -26,8 +26,10 @@
 
 #include "modularity/ioc.h"
 #include "playback/iplaybackcontroller.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
 #include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
+#include "tours/itoursservice.h"
 
 namespace mu::playback {
 class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, public muse::Injectable
@@ -35,11 +37,13 @@ class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, p
     Q_OBJECT
 
     Inject<IPlaybackController> playbackController = { this };
+    Inject<context::IGlobalContext> globalContext = { this };
     Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
     Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    Inject<muse::tours::IToursService> tours = { this };
 
     Q_PROPERTY(bool hasOnlineSounds READ hasOnlineSounds NOTIFY hasOnlineSoundsChanged)
-    Q_PROPERTY(bool canProcessOnlineSounds READ canProcessOnlineSounds NOTIFY canProcessOnlineSoundsChanged)
+    Q_PROPERTY(bool manualProcessingAllowed READ manualProcessingAllowed NOTIFY manualProcessingAllowedChanged)
 
     Q_PROPERTY(int status READ status NOTIFY statusChanged)
     Q_PROPERTY(QString errorTitle READ errorTitle NOTIFY statusChanged)
@@ -60,7 +64,7 @@ public:
     Q_INVOKABLE void processOnlineSounds();
 
     bool hasOnlineSounds() const;
-    bool canProcessOnlineSounds() const;
+    bool manualProcessingAllowed() const;
 
     int status() const;
     QString errorTitle() const;
@@ -68,16 +72,20 @@ public:
 
 signals:
     void hasOnlineSoundsChanged();
-    void canProcessOnlineSoundsChanged();
+    void manualProcessingAllowedChanged();
     void statusChanged();
 
 private:
-    void setHasOnlineSounds(bool value);
-    void setCanProcessOnlineSounds(bool canRun);
+    void updateHasOnlineSounds();
+    void updateManualProcessingAllowed();
+
+    void setManualProcessingAllowed(bool allowed);
     void setStatus(Status status);
 
-    bool m_hasOnlineSounds = false;
-    bool m_canProcessOnlineSounds = false;
+    notation::InstrumentTrackIdSet m_onlineTrackIdSet;
+    bool m_manualProcessingAllowed = false;
+    bool m_shouldNotifyToursThatManualProcessingAllowed = true;
     Status m_status = Status::Success;
+    muse::async::Channel<notation::InstrumentTrackIdSet> m_tracksDataChanged;
 };
 }

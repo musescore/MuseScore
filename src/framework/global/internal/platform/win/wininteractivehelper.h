@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,15 +23,14 @@
 
 #include "types/ret.h"
 
-#include "async/asyncable.h"
 #include "async/promise.h"
 
 namespace muse {
-class Uri;
+class UriQuery;
 
-class WinInteractiveHelper : public async::Asyncable
+class WinInteractiveHelper
 {
 public:
-    static async::Promise<Ret> openApp(const Uri& uri);
+    static async::Promise<Ret> openApp(const UriQuery& uri);
 };
 }

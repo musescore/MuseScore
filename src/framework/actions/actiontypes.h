@@ -27,6 +27,7 @@
 #include <memory>
 #include <QString>
 #include "global/types/uri.h"
+#include "global/logstream.h"
 
 namespace muse::actions {
 using ActionCode = std::string;
@@ -118,6 +119,19 @@ public:
 private:
     std::vector<std::shared_ptr<IArg> > m_args;
 };
+}
+
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::actions::ActionCodeList& list)
+{
+    s << "[";
+    for (size_t i = 0; i < list.size(); ++i) {
+        s << list.at(i);
+        if (list.size() > 1 && i < (list.size() - 2)) {
+            s << ", ";
+        }
+    }
+    s << "]";
+    return s;
 }
 
 #endif // MUSE_ACTIONS_ACTIONTYPES_H

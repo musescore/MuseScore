@@ -37,6 +37,8 @@ RadioButtonGroup {
         direction: NavigationPanel.Both
     }
 
+    property real columnWidth: -1
+
     orientation: Qt.Vertical
     spacing: 16
 
@@ -130,13 +132,13 @@ RadioButtonGroup {
 
             width: parent.width
             height: button.implicitHeight
-            spacing: 6
+            spacing: 12
 
             // "Every: %1 saves" needs to be one string for correct translatability. We then split the translated version.
 
             //: `%1` will be replaced with a number input field.
             //: Text before it will appear before that number field, text after will appear after the field.
-            readonly property string text: qsTrc("project/save", "Every: %1 saves")
+            readonly property string text: qsTrc("project/save", "Every %1 saves")
 
             readonly property var textSplit: text.split("%1")
 
@@ -158,7 +160,8 @@ RadioButtonGroup {
                 id: button
 
                 anchors.verticalCenter: parent.verticalCenter
-                width: Math.max(implicitWidth, 80)
+
+                width: root.columnWidth > 0 ? root.columnWidth : implicitWidth
 
                 text: numberOfSavesItem.textPart1.trim()
                 checked: settingsModel.timePeriodType === numberOfSavesItem.type

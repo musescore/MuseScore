@@ -5,24 +5,13 @@
     <Division>480</Division>
     <Style>
       <frameSystemDistance>21</frameSystemDistance>
-      <maskBarlinesForText>0</maskBarlinesForText>
       <clefLeftMargin>4</clefLeftMargin>
-      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
       <titleFontFace>Arial</titleFontFace>
       <titleFontSize>48</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
-      <pageNumberFontSize>9</pageNumberFontSize>
-      <pageNumberFontStyle>0</pageNumberFontStyle>
-      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
-      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
-      <showCourtesiesRepeats>0</showCourtesiesRepeats>
-      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
-      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
-      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
-      <repeatPlayCountShow>0</repeatPlayCountShow>
+      <defaultsVersion>301</defaultsVersion>
       <spatium>1.364</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -115,6 +104,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
@@ -126,16 +116,17 @@
       <Measure>
         <eid>G_G</eid>
         <voice>
-          <TimeSig>
-            <eid>H_H</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <eid>I_I</eid>
+            <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
+          <TimeSig>
+            <eid>I_I</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Chord>
             <eid>J_J</eid>
             <durationType>whole</durationType>
@@ -249,16 +240,17 @@
     <Staff id="2">
       <Measure>
         <voice>
-          <TimeSig>
-            <eid>g_g</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <eid>h_h</eid>
+            <isHeader>1</isHeader>
+            <eid>g_g</eid>
             </Clef>
+          <TimeSig>
+            <eid>h_h</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Rest>
             <eid>i_i</eid>
             <durationType>measure</durationType>
@@ -400,18 +392,19 @@
         <Measure>
           <eid>v_v</eid>
           <voice>
-            <TimeSig>
-              <eid>w_w</eid>
-              <linkedTo>H_H</linkedTo>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
+              <isHeader>1</isHeader>
+              <eid>w_w</eid>
+              <linkedTo>H_H</linkedTo>
+              </Clef>
+            <TimeSig>
               <eid>x_x</eid>
               <linkedTo>I_I</linkedTo>
-              </Clef>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
             <Chord>
               <eid>y_y</eid>
               <linkedTo>J_J</linkedTo>
@@ -610,18 +603,19 @@
         <Measure>
           <eid>OB_OB</eid>
           <voice>
-            <TimeSig>
-              <eid>PB_PB</eid>
-              <linkedTo>g_g</linkedTo>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
+              <isHeader>1</isHeader>
+              <eid>PB_PB</eid>
+              <linkedTo>g_g</linkedTo>
+              </Clef>
+            <TimeSig>
               <eid>QB_QB</eid>
               <linkedTo>h_h</linkedTo>
-              </Clef>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
             <Rest>
               <eid>RB_RB</eid>
               <linkedTo>i_i</linkedTo>

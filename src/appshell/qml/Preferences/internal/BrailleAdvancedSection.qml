@@ -38,7 +38,7 @@ BaseSection {
     signal intervalDirectionChangeRequested(int direction)
 
     ComboBoxWithTitle {
-        title: qsTrc("appshell/preferences", "Braille table for lyrics:")
+        title: qsTrc("appshell/preferences", "Braille table for lyrics")
         columnWidth: root.columnWidth
 
         currentIndex: control.indexOfValue(root.brailleTable)
@@ -54,7 +54,7 @@ BaseSection {
     }
 
     ComboBoxWithTitle {
-        title: qsTrc("appshell/preferences", "Interval direction:")
+        title: qsTrc("appshell/preferences", "Interval direction")
         columnWidth: root.columnWidth
 
         currentIndex: control.indexOfValue(root.intervalDirection)

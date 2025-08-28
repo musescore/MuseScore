@@ -109,10 +109,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>c_c</eid>
         <voice>
           <Rest>
-            <eid>M_M</eid>
+            <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

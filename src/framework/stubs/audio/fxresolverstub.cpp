@@ -24,12 +24,12 @@
 using namespace muse::audio;
 using namespace muse::audio::fx;
 
-std::vector<IFxProcessorPtr> FxResolverStub::resolveMasterFxList(const AudioFxChain&)
+std::vector<IFxProcessorPtr> FxResolverStub::resolveMasterFxList(const AudioFxChain&, const OutputSpec&)
 {
     return {};
 }
 
-std::vector<IFxProcessorPtr> FxResolverStub::resolveFxList(const TrackId, const AudioFxChain&)
+std::vector<IFxProcessorPtr> FxResolverStub::resolveFxList(const TrackId, const AudioFxChain&, const OutputSpec&)
 {
     return {};
 }

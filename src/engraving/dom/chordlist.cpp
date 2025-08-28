@@ -1570,7 +1570,8 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 //   position
 //---------------------------------------------------------
 
-double ChordList::position(const StringList& names, bool stackModifiers, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const
+double ChordList::position(const StringList& names, bool stackModifiers, bool superScript, ChordTokenClass ctc, size_t modifierIdx,
+                           size_t nmodifiers) const
 {
     String name = names.empty() ? u"" : names.front();
     switch (ctc) {
@@ -1578,7 +1579,10 @@ double ChordList::position(const StringList& names, bool stackModifiers, ChordTo
         return m_eadjust;
     case ChordTokenClass::MODIFIER: {
         double yAdj = 0.0;
-        if (stackModifiers && nmodifiers > 1) {
+        if (superScript) {
+            // Fake superscript by aligning with capheight
+            yAdj += 0.15;
+        } else if (stackModifiers && nmodifiers > 1) {
             static constexpr double LINE_SPACING = 0.4;             // Space between modifiers in units of modiferHeight
             const double modifierHeight = m_mmag * m_stackedmmag;   // Modifier height in units of root capheight
             const double stackHeight = (nmodifiers * modifierHeight) + ((nmodifiers - 1) * modifierHeight * LINE_SPACING); // Height of total modifier stack (bottom baseline to top capheight)
@@ -1620,13 +1624,14 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
     const double modListSize = m_modifierList.size();
     const size_t finalModIdx = modListSize - 1;
     const bool stackModifiersEnabled = m_modifierList.size() > 1 && stacked;
+    const bool superScriptEnabled = !stackModifiersEnabled && cl->chordPreset() == ChordStylePreset::JAZZ;
 
     // Special stack layout if there is a single 'add' or 'sus' with multiple degrees
     // Standard stack layout if there is only one
     static const std::wregex SUS_ADD_REGEX = std::wregex(L"sus|add");
     bool stackSusOrAdd = false;
     for (const String& mod : m_modifierList) {
-        if (!stackModifiersEnabled || !mod.contains(SUS_ADD_REGEX)) {
+        if (!(stackModifiersEnabled || superScriptEnabled) || !mod.contains(SUS_ADD_REGEX)) {
             continue;
         }
         if (!stackSusOrAdd) {
@@ -1649,6 +1654,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
 
         const bool tokIsSusOrAdd = std::regex_match(n.toStdWString(), SUS_ADD_REGEX);
         const bool stackModifier = stackModifiersEnabled && !(stackSusOrAdd && tokIsSusOrAdd);
+        const bool superScriptModifier = superScriptEnabled && !(stackSusOrAdd && tokIsSusOrAdd);
         String curMod = m_modifierList.size() > 1 ? m_modifierList.at(modIdx) : u"";
         if (stackSusOrAdd && stackModifier && modIdx == 0) {
             curMod.remove(SUS_ADD_REGEX);
@@ -1684,7 +1690,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
 
         // build render list
         // check for adjustments
-        double yAdjust = adjust ? cl->position(tok.names, stackModifier, ctc, finalModIdx - modIdx, modListSize) : 0.0;
+        double yAdjust = adjust ? cl->position(tok.names, stackModifier, superScriptModifier, ctc, finalModIdx - modIdx, modListSize) : 0.0;
 
         // Modifier behaviour
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
@@ -1696,6 +1702,16 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
             // This is the first modifier. Discount subsequent items from horizontal alignment
             if (cl->excludeModsHAlign() && modIdx == 0) {
                 m_renderList.emplace_back(new RenderActionStopHAlign());
+            }
+
+            // Jazz superscript
+            if (superScriptModifier) {
+                // Set scale
+                LOGI() << "SCALE: " << cl->stackedModifierMag();
+                m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
+                // Move to x-height
+                m_renderList.emplace_back(new RenderActionPush());
+                m_renderList.emplace_back(new RenderActionMoveXHeight(true));
             }
 
             // Stacked modifiers
@@ -1770,6 +1786,11 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
         // Reset adjust
         if (!RealIsNull(yAdjust)) {
             m_renderList.emplace_back(new RenderActionMove(0.0, -yAdjust));
+        }
+
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && superScriptModifier) {
+            m_renderList.emplace_back(new RenderActionPopY());
+            m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
         }
 
         // Stacked modifiers
@@ -1943,7 +1964,7 @@ int ChordList::privateID = -1000;
 //---------------------------------------------------------
 
 void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust, double stackedmmag, bool stackModifiers,
-                                    bool excludeModsHAlign, String symbolFont)
+                                    bool excludeModsHAlign, String symbolFont, const ChordStylePreset& preset)
 {
     m_stackModifiers = stackModifiers;
     m_excludeModsHAlign = excludeModsHAlign;
@@ -1953,6 +1974,7 @@ void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, do
     m_stackedmmag = stackedmmag;
     m_madjust = madjust;
     m_symbolTextFont = symbolFont;
+    m_chordPreset = preset;
 }
 
 //---------------------------------------------------------
@@ -2271,7 +2293,8 @@ void ChordList::checkChordList(const MStyle& style)
         bool stackModifiers = style.styleB(Sid::verticallyStackModifiers);
         bool excludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
         String symbolFont = style.styleSt(Sid::musicalTextFont);
-        configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, stackModifiers, excludeModsHAlign, symbolFont);
+        ChordStylePreset preset = style.styleV(Sid::chordStyle).value<ChordStylePreset>();
+        configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, stackModifiers, excludeModsHAlign, symbolFont, preset);
 
         if (style.value(Sid::chordsXmlFile).toBool()) {
             read(u"chords.xml");
@@ -2290,7 +2313,7 @@ void RenderAction::print(RenderActionType type, const String& info) const
 {
     static const char* names[] = {
         "SET", "MOVE", "MOVEXHEIGHT", "PUSH", "POP",
-        "NOTE", "ACCIDENTAL", "STOPHALIGN", "SCALE"
+        "NOTE", "ACCIDENTAL", "STOPHALIGN", "SCALE", "PAREN"
     };
     LOGD("%10s %s", names[int(type)], muPrintable(info));
 }

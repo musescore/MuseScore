@@ -570,7 +570,13 @@ StyledGridView {
                 if (!ui.isSystemDragSupported) {
                     draggedIcon.Drag.mimeData = model.mimeData
                     draggedIcon.Drag.active = dragActive
+                } else {
+                    Qt.callLater(paletteCell.updateDragActive)
                 }
+            }
+
+            function updateDragActive() {
+                paletteCell.Drag.active = mouseArea.drag.active
             }
 
             mouseArea.onPressed: function(e) {
@@ -595,7 +601,6 @@ StyledGridView {
                 removeSelectedCells()
             }
 
-            Drag.active: ui.isSystemDragSupported ? mouseArea.drag.active : false
             Drag.dragType: ui.isSystemDragSupported ? Drag.Automatic : Drag.Internal
             Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
             Drag.mimeData: Drag.active ? mimeData : {}

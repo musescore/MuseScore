@@ -60,7 +60,7 @@ void PauseMap::calculate(const Score* s)
 
     for (const RepeatSegment* rs : s->repeatList()) {
         int startTick  = rs->tick;
-        int endTick    = startTick + rs->len();
+        int endTick    = rs->endTick();
         int tickOffset = rs->utick - rs->tick;
 
         auto se = tempomap->lower_bound(startTick);

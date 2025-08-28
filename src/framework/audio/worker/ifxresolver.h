@@ -43,16 +43,18 @@ public:
     public:
         virtual ~IResolver() = default;
 
-        virtual std::vector<IFxProcessorPtr> resolveFxList(const audio::TrackId trackId, const AudioFxChain& fxChain) = 0;
-        virtual std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain) = 0;
+        virtual std::vector<IFxProcessorPtr> resolveFxList(const audio::TrackId trackId, const AudioFxChain& fxChain,
+                                                           const OutputSpec& outputSpec) = 0;
+        virtual std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain, const OutputSpec& outputSpec) = 0;
         virtual AudioResourceMetaList resolveResources() const = 0;
         virtual void refresh() = 0;
         virtual void clearAllFx() = 0;
     };
     using IResolverPtr = std::shared_ptr<IResolver>;
 
-    virtual std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain) = 0;
-    virtual std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxChain& fxChain) = 0;
+    virtual std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain, const OutputSpec& outputSpec) = 0;
+    virtual std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxChain& fxChain,
+                                                       const OutputSpec& outputSpec) = 0;
     virtual AudioResourceMetaList resolveAvailableResources() const = 0;
     virtual void registerResolver(const AudioFxType type, IResolverPtr resolver) = 0;
     virtual void clearAllFx() = 0;

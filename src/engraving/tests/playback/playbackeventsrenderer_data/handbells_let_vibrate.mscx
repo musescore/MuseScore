@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <programVersion>4.6.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>EpgbVjVsvRC_nf/MALqQDSC</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-08-25</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="hand-bells">
+        <family id="pitched-metal-percussion">Pitched Metal Percussion</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <Staff>
+        <eid>r+3CsR8C3YC_KYYC5upj85K</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultConcertClef>G8va</defaultConcertClef>
+        <defaultTransposingClef>G</defaultTransposingClef>
+        </Staff>
+      <trackName>Handbells</trackName>
+      <Instrument id="hand-bells">
+        <longName>Handbells</longName>
+        <shortName>H.B.</shortName>
+        <trackName>Handbells</trackName>
+        <minPitchP>36</minPitchP>
+        <maxPitchP>97</maxPitchP>
+        <minPitchA>36</minPitchA>
+        <maxPitchA>97</maxPitchA>
+        <transposeDiatonic>7</transposeDiatonic>
+        <transposeChromatic>12</transposeChromatic>
+        <instrumentId>pitched-percussion.handbells</instrumentId>
+        <concertClef>G8va</concertClef>
+        <transposingClef>G</transposingClef>
+        <concertClef staff="2">F8va</concertClef>
+        <transposingClef staff="2">F</transposingClef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <Channel>
+          <program value="112"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>RrCQoefyYDN_BoUMJ4OPmpL</eid>
+        <voice>
+          <KeySig>
+            <eid>FcMrQ2C6ih_qzZX4lJqsK</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>ufAzcfuUqmJ_CnlOLIN8T/I</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <PlayTechAnnotation>
+            <playTechType>handbells_lv</playTechType>
+            <eid>1oQrrWRsAxI_YclkCdYCcoJ</eid>
+            <text>LV</text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>7iSdvl5ozyO_a4VVsdTThYE</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>iCv6JJMZirI_dSC2Ppub/OM</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>JvGpeGrUU/J_HPXWhRXhWT</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>fxI9blS/cDG_baVpNwbWeZE</eid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>8t77bfNcsmH_aALuzgFtxLF</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>TwrFk3n5peH_uOgRu6FGR9B</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>TEyddLX4FkG_NYwFdLEITt</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>ButqrcYc1GO_BuydWlFLr7F</eid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>vKkC34qAffG_6XjupFRtegN</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_damp</playTechType>
+            <eid>qQv7HvzfbpL_RvcMy/rK/MI</eid>
+            <text><sym>handbellsDamp3</sym></text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>J6JAidTXIMI_n6Kr5BYuD5P</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>ym9QAwE2vgF_P3ULIkl0uZE</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>QEGEEShEuB_nCpC5VHaFLN</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>sbZFYOf2q5J_DF6fl35qFvO</eid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>kdRCB3DWZHF_rOuRSwH5HeC</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>nZdskQo/TFL_CQcSvp1YVIN</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>ot4dQUaY2TI_sTbx9pOuAE</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>/2rGtlsyZ2M_y0F50pTKEbI</eid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>hNNoTbKO+C_FUQI5sc+OYI</eid>
+        <voice>
+          <PlayTechAnnotation>
+            <playTechType>handbells_lv</playTechType>
+            <eid>sXCtpG2C9CP_tWrum5CnnoE</eid>
+            <text>LV</text>
+            </PlayTechAnnotation>
+          <Chord>
+            <eid>6GJKaCQQ4XP_1ceF13CzFCI</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>DYKnTTPNTrF_qVy5WafdAdG</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>g0vuWY/0WhF_UPLuEp6fbOF</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>TLhr6S9Y6RF_IJId4LtlqEB</eid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>5g2UwgvrFYC_r9y5kJsmkJM</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>efzytlPzbHN_R6stBkILFGI</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>fLTkBjEi/gN_3hLb+jYxCGK</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>uqoMee5LY7I_ZaROBKuensF</eid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>CEzDQPuP/2M_7FVZKcuCC6K</eid>
+        <voice>
+          <Chord>
+            <eid>03SGMmEIISO_245jf8/9+wF</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>No1OpTThvQH_YEd7z/BUksB</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>WYZDWN9Kv1H_ZDK6qym/LeL</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>xBlVmUgreDG_VpPlwIfehcM</eid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>7jYGHBBG1DM_yOtEFKv0bjG</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>53+2bmNhdf_PfAkXyN2ilJ</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>xS9HnCnOX3F_q4Bz8sdjyuL</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>rAW0B2dwURD_ADAO3x98QCP</eid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

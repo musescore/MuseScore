@@ -493,11 +493,6 @@ void Score::setUpTempoMap()
     m_needSetUpTempoMap = false;
 }
 
-void Score::setNeedLayoutFretBox(bool layout)
-{
-    m_needLayoutFretBox = layout;
-}
-
 //---------------------------------------------------------
 //    fixTicks
 ///    updates tempomap and time sig map for a measure
@@ -3392,7 +3387,7 @@ static void onFocusedItemChanged(EngravingItem* item)
     AccessibleRoot* accRoot = score->rootItem()->accessible()->accessibleRoot();
     AccessibleRoot* dummyAccRoot = score->dummy()->rootItem()->accessible()->accessibleRoot();
 
-    if (accRoot && currAccRoot == accRoot && accRoot->registered()) {
+    if (accRoot && currAccRoot == accRoot && accRoot->registered() && accRoot->enabled()) {
         accRoot->setFocusedElement(accessible);
 
         if (AccessibleItemPtr focusedElement = dummyAccRoot->focusedElement().lock()) {
@@ -3402,7 +3397,7 @@ static void onFocusedItemChanged(EngravingItem* item)
         dummyAccRoot->setFocusedElement(nullptr);
     }
 
-    if (dummyAccRoot && currAccRoot == dummyAccRoot && dummyAccRoot->registered()) {
+    if (dummyAccRoot && currAccRoot == dummyAccRoot && dummyAccRoot->registered() && dummyAccRoot->enabled()) {
         dummyAccRoot->setFocusedElement(accessible);
 
         if (AccessibleItemPtr focusedElement = accRoot->focusedElement().lock()) {
@@ -4471,15 +4466,9 @@ void Score::appendPart(const InstrumentTemplate* t)
     for (staff_idx_t i = 0; i < t->staffCount; ++i) {
         Staff* staff = Factory::createStaff(part);
         StaffType* stt = staff->staffType(Fraction(0, 1));
-        stt->setLines(t->staffLines[i]);
-        stt->setSmall(t->smallStaff[i]);
-        if (i == 0) {
-            staff->setBracketType(0, t->bracket[0]);
-            staff->setBracketSpan(0, t->staffCount);
-        }
+        staff->init(t, stt, int(i));
         undoInsertStaff(staff, i);
     }
-    part->staves().front()->setBarLineSpan(static_cast<int>(part->nstaves()));
     undoInsertPart(part, m_parts.size());
     setUpTempoMapLater();
     masterScore()->rebuildMidiMapping();
@@ -5108,7 +5097,7 @@ String Score::extractLyrics()
         const RepeatList& rlist = repeatList();
         for (const RepeatSegment* rs : rlist) {
             Fraction startTick  = Fraction::fromTicks(rs->tick);
-            Fraction endTick    = startTick + Fraction::fromTicks(rs->len());
+            Fraction endTick    = Fraction::fromTicks(rs->endTick());
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                 size_t playCount = m->playbackCount();
                 for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {

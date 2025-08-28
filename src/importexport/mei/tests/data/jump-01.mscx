@@ -140,6 +140,7 @@
           <style>repeat_left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
+          <markerType>segno</markerType>
           </Marker>
         <voice>
           <Chord>
@@ -174,6 +175,7 @@
           <style>repeat_right</style>
           <text>To Coda</text>
           <label>coda</label>
+          <markerType>coda</markerType>
           </Marker>
         <voice>
           <Chord>
@@ -244,6 +246,7 @@
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Chord>

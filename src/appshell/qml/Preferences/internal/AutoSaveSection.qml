@@ -46,7 +46,7 @@ BaseSection {
             width: root.columnWidth
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell/preferences", "Auto save every:")
+            text: qsTrc("appshell/preferences", "Auto save every")
 
             navigation.name: "AutoSaveCheckBox"
             navigation.panel: root.navigation

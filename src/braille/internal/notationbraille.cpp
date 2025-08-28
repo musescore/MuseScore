@@ -638,13 +638,8 @@ void NotationBraille::setKeys(const QString& sequence)
         }
         case BieSequencePatternType::Tuplet: case BieSequencePatternType::Tuplet3: {
             LOGD() << "tuplet";
-            std::string stateTuplet;
-            stateTuplet = "Tuplet " + std::to_string(brailleInput()->tupletNumber());
-            auto notationAccessibility = notation()->accessibility();
-            if (!notationAccessibility) {
-                return;
-            }
-            notationAccessibility->setTriggeredCommand(stateTuplet);
+            const QString stateTuplet = muse::qtrc("braille/notation", "Tuplet %1").arg(brailleInput()->tupletNumber());
+            accessibilityController()->announce(stateTuplet);
             break;
         }
         case BieSequencePatternType::Tie: {
@@ -868,8 +863,6 @@ void NotationBraille::setMode(const BrailleMode mode)
 
 void NotationBraille::toggleMode()
 {
-    std::string stateTitle;
-
     switch ((BrailleMode)mode().val) {
     case BrailleMode::Undefined:
     case BrailleMode::Navigation:
@@ -882,17 +875,13 @@ void NotationBraille::toggleMode()
 
     dispatcher()->dispatch("note-input");
 
-    if (interaction()->noteInput()->isNoteInputMode()) {
-        stateTitle = muse::trc("notation", "Note input mode");
-    } else {
-        stateTitle = muse::trc("notation", "Normal mode");
-    }
+    const QString stateTitle = interaction()->noteInput()->isNoteInputMode()
+                               //: Braille input with 6 keyboard keys (F,D,S & J,K,L) to represent the 6 dots in a braille cell.
+                               ? muse::qtrc("braille/notation", "Six-key input mode")
+                               //: Braille navigation.
+                               : muse::qtrc("braille/notation", "Navigation mode");
 
-    auto notationAccessibility = notation()->accessibility();
-    if (!notationAccessibility) {
-        return;
-    }
-    notationAccessibility->setTriggeredCommand(stateTitle);
+    accessibilityController()->announce(stateTitle);
 }
 
 bool NotationBraille::isNavigationMode()

@@ -587,7 +587,7 @@ std::vector<Note*> Note::compoundNotes() const
 }
 
 Note::Note(const Note& n, bool link)
-    : EngravingItem(n)
+    : EngravingItem(n, link)
 {
     if (link) {
         score()->undo(new Link(this, const_cast<Note*>(&n)));
@@ -2728,7 +2728,7 @@ void Note::verticalDrag(EditData& ed)
     int lineOffset      = lrint(ed.moveDelta.y() / step);
 
     if (tab) {
-        const StringData* strData = staff()->part()->stringData(_tick, stf->idx());
+        const StringData* strData = part()->stringData(_tick, stf->idx());
         const int pitchOffset = stf->pitchOffset(_tick);
         int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
         int nFret   = strData->fret(m_pitch + pitchOffset, nString, staff());
@@ -2744,10 +2744,7 @@ void Note::verticalDrag(EditData& ed)
             }
         }
     } else {
-        Key key = staff()->key(_tick);
-        Key cKey = staff()->concertKey(_tick);
         staff_idx_t idx = chord()->vStaffIdx();
-        Interval interval = staff()->part()->instrument(_tick)->transpose();
         bool error = false;
         AccidentalVal accOffs = firstTiedNote()->chord()->measure()->findAccidental(
             firstTiedNote()->chord()->segment(), idx, ned->line + lineOffset, error);
@@ -2760,15 +2757,15 @@ void Note::verticalDrag(EditData& ed)
         int newPitch = step2pitch(nStep) + octave * 12 + int(accOffs);
         newPitch = std::clamp(newPitch, 0, 127);
 
-        if (!concertPitch()) {
-            newPitch += interval.chromatic;
+        int newTpc1 = step2tpc(nStep % 7, accOffs);
+        int newTpc2 = newTpc1;
+        if (concertPitch()) {
+            newTpc2 = transposeTpc(newTpc1);
         } else {
-            interval.flip();
-            key = transposeKey(cKey, interval, staff()->part()->preferSharpFlat());
+            newPitch += staff()->transpose(_tick).chromatic;
+            newTpc1 = transposeTpc(newTpc2);
         }
 
-        int newTpc1 = pitch2tpc(newPitch, cKey, Prefer::NEAREST);
-        int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
         for (Note* nn : tiedNotes()) {
             nn->setAccidentalType(AccidentalType::NONE);
             nn->setPitch(newPitch, newTpc1, newTpc2);
@@ -3090,6 +3087,18 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FIXED_LINE:
         setFixedLine(v.toInt());
         break;
+    case Pid::HAS_PARENTHESES:
+        setParenthesesMode(v.value<ParenthesesMode>());
+        if (links()) {
+            for (EngravingObject* scoreElement : *links()) {
+                Note* note = toNote(scoreElement);
+                Staff* linkedStaff = note ? note->staff() : nullptr;
+                if (linkedStaff && linkedStaff->isTabStaff(tick())) {
+                    note->setGhost(v.toBool());
+                }
+            }
+        }
+        break;
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         if (v.toBool() == true && chord()) {
@@ -3149,8 +3158,11 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::TPC1:
         return PropertyValue();
     case Pid::VISIBLE:
-        if (staffType() && staffType()->isTabStaff() && bendBack()) {
-            return false;
+        if (staffType() && staffType()->isTabStaff()) {
+            GuitarBend* bend = bendBack();
+            if (bend && !bend->isFullRelease()) {
+                return false;
+            }
         }
         return EngravingItem::propertyDefault(propertyId);
     case Pid::COLOR: {

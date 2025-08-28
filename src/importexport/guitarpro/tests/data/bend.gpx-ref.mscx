@@ -321,14 +321,6 @@
             <noStem>1</noStem>
             <Note>
               <eid>n_n</eid>
-              <parentheses>both</parentheses>
-              <Parenthesis>
-                <eid>o_o</eid>
-                </Parenthesis>
-              <Parenthesis>
-                <horizontalDirection>right</horizontalDirection>
-                <eid>p_p</eid>
-                </Parenthesis>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -338,7 +330,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>q_q</eid>
+                  <eid>o_o</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -349,10 +341,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>r_r</eid>
+            <eid>p_p</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>s_s</eid>
+              <eid>q_q</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -367,13 +359,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>t_t</eid>
+            <eid>r_r</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
-              <eid>u_u</eid>
+              <eid>s_s</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>5</fret>
@@ -387,21 +379,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>v_v</eid>
+            <eid>t_t</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>w_w</eid>
-              <parentheses>both</parentheses>
-              <Parenthesis>
-                <eid>x_x</eid>
-                </Parenthesis>
-              <Parenthesis>
-                <horizontalDirection>right</horizontalDirection>
-                <eid>y_y</eid>
-                </Parenthesis>
+              <eid>u_u</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>2</fret>
@@ -411,7 +395,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>z_z</eid>
+                  <eid>v_v</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -422,10 +406,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>0_0</eid>
+            <eid>w_w</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>1_1</eid>
+              <eid>x_x</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -435,7 +419,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>2_2</eid>
+                  <eid>y_y</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>

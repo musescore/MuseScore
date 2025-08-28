@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_READ114_H
-#define MU_ENGRAVING_READ114_H
+#pragma once
 
 #include "../ireader.h"
 
@@ -33,7 +32,7 @@ public:
     //   read114
     //    import old version <= 1.3 files
     //---------------------------------------------------------
-    muse::Ret readScore(Score* masterScore, XmlReader& e, rw::ReadInOutData* out) override;
+    muse::Ret readScoreFile(Score* masterScore, XmlReader& e, rw::ReadInOutData* out) override;
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
@@ -44,5 +43,3 @@ private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;
 };
 }
-
-#endif // MU_ENGRAVING_READ114_H

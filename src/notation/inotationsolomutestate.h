@@ -19,13 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONSOLOMUTESTATE_H
-#define MU_NOTATION_INOTATIONSOLOMUTESTATE_H
+#pragma once
 
-#include "engraving/infrastructure/mscreader.h"
+#include "async/channel.h"
 #include "io/iodevice.h"
+#include "io/path.h"
+#include "types/ret.h"
 
-#include "notationtypes.h"
+#include "engraving/types/types.h"
+
+namespace mu::engraving {
+class MscReader;
+}
 
 namespace mu::notation {
 class INotationSoloMuteState
@@ -56,5 +61,3 @@ public:
 
 using INotationSoloMuteStatePtr = std::shared_ptr<INotationSoloMuteState>;
 }
-
-#endif // MU_NOTATION_INOTATIONSOLOMUTESTATE_H

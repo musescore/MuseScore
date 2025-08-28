@@ -586,20 +586,6 @@ DockPage {
 
     tours: [
         {
-            "eventCode": "project_opened",
-            "tour": {
-                "id": "input-by-duration",
-                "steps": [
-                    {
-                        "title": qsTrc("notation", "Note input modes"),
-                        "description": qsTrc("notation", "Discover different ways to input notes in MuseScore Studio."),
-                        "controlUri": "control://NoteInputSection/NoteInputBar/note-input-by-duration",
-                        "videoExplanationUrl": "https://youtu.be/xm1-XkS9VzA?utm_source=mss-yt&utm_medium=enter-by-duration&utm_campaign=mss-yt-enter-by-duration"
-                    }
-                ]
-            }
-        },
-        {
             "eventCode": "online_sounds_added",
             "tour": {
                 "id": "online-sounds-first-use",
@@ -615,7 +601,7 @@ DockPage {
             }
         },
         {
-            "eventCode": "online_sounds_auto_process_disabled",
+            "eventCode": "online_sounds_manual_processing_allowed",
             "tour": {
                 "id": "online-sounds-manual-process",
                 "steps": [

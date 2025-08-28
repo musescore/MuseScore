@@ -57,11 +57,8 @@ public:
     using OnReadBufferChanged = std::function<void (const samples_t, const sample_rate_t)>;
     void setOnReadBufferChanged(const OnReadBufferChanged func);
 
-    sample_rate_t sampleRate() const override;
-
-    void setSampleRate(const sample_rate_t sampleRate) override;
-    void setReadBufferSize(const uint16_t readBufferSize) override;
-    void setAudioChannelsCount(const audioch_t count) override;
+    void setOutputSpec(const OutputSpec& outputSpec) override;
+    OutputSpec outputSpec() const override;
 
     RenderMode mode() const override;
     void setMode(const RenderMode newMode) override;
@@ -75,8 +72,7 @@ private:
 
     bool m_inited = false;
 
-    sample_rate_t m_sampleRate = 0;
-    samples_t m_readBufferSize = 0;
+    OutputSpec m_outputSpec;
 
     MixerPtr m_mixer = nullptr;
     std::shared_ptr<AudioBuffer> m_buffer = nullptr;

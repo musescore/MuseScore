@@ -3634,14 +3634,23 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned Gongs", "tuned-gongs longName
 //: shortName for Tuned Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Td. Gon.", "tuned-gongs shortName"),
 
-//: description for Hand Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned hand bells.", "hand-bells description"),
-//: trackName for Hand Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Hand Bells", "hand-bells trackName"),
-//: longName for Hand Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Hand Bells", "hand-bells longName"),
-//: shortName for Hand Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Ha. Be.", "hand-bells shortName"),
+//: description for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned hand-held bells.", "hand-bells description"),
+//: trackName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Handbells", "hand-bells trackName"),
+//: longName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Handbells", "hand-bells longName"),
+//: shortName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "H.B.", "hand-bells shortName"),
+
+//: description for Handchimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tuned hand-held chimes.", "hand-chimes description"),
+//: trackName for Handchimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Handchimes", "hand-chimes trackName"),
+//: longName for Handchimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Handchimes", "hand-chimes longName"),
+//: shortName for Handchimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "H.C.", "hand-chimes shortName"),
 
 //: description for Orff Soprano Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Soprano glockenspiel for the Orff Schulwerk.", "orff-soprano-glockenspiel description"),

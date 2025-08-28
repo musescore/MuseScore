@@ -361,6 +361,10 @@ f26dot6_t FontFaceFT::xHeight() const
     }
 
     const glyph_idx_t glyph = glyphIndex('x');
+    if (glyph == 0) {
+        return 0;
+    }
+
     GlyphMetrics* gm = glyphMetrics(glyph);
     IF_ASSERT_FAILED(gm) {
         return 0;
@@ -376,7 +380,11 @@ f26dot6_t FontFaceFT::capHeight() const
         return result;
     }
 
-    const glyph_idx_t glyph = glyphIndex('x');
+    const glyph_idx_t glyph = glyphIndex('X');
+    if (glyph == 0) {
+        return 0;
+    }
+
     GlyphMetrics* gm = glyphMetrics(glyph);
     IF_ASSERT_FAILED(gm) {
         return 0;

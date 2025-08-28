@@ -206,7 +206,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::PLAY_UNTIL,              true,  "playUntil",             P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "play until") },
     { Pid::CONTINUE_AT,             true,  "continueAt",            P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "continue at") },
     { Pid::LABEL,                   true,  "label",                 P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "label") },
-    { Pid::MARKER_TYPE,             true,  "markerType",            P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker type") },
+    { Pid::MARKER_TYPE,             true,  "markerType",            P_TYPE::MARKER_TYPE,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker type") },
     { Pid::MARKER_SYMBOL_SIZE,      true,  "markerSymbolSize",      P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker symbol size") },
     { Pid::MARKER_CENTER_ON_SYMBOL, true,  "markerCenterOnSymbol",  P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker center on symbol") },
     { Pid::ARP_USER_LEN1,           false, "arpUserLen1",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length 1") },

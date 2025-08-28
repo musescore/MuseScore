@@ -31,6 +31,15 @@ void AccessibilityControllerStub::unreg(IAccessible*)
 {
 }
 
+void AccessibilityControllerStub::announce(const QString&)
+{
+}
+
+QString AccessibilityControllerStub::announcement() const
+{
+    return QString();
+}
+
 const IAccessible* AccessibilityControllerStub::accessibleRoot() const
 {
     return nullptr;

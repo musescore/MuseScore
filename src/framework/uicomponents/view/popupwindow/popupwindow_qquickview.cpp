@@ -87,16 +87,16 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     }
     // popup
     else {
-        Qt::WindowFlags flags(
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-            Qt::Popup // Popups can't be Qt::Tool on Linux Wayland, or they can't be relatvely positioned.
-#else
-            Qt::Tool
-#endif
-            | Qt::FramelessWindowHint            // Without border
-            | Qt::NoDropShadowWindowHint         // Without system shadow
-            | Qt::BypassWindowManagerHint        // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
-            );
+        Qt::WindowFlags flags;
+        if (qGuiApp->platformName().contains("wayland")) {
+            flags = Qt::Popup;
+        } else {
+            flags = Qt::Tool;
+        }
+
+        flags |= Qt::FramelessWindowHint           // Without border
+                 | Qt::NoDropShadowWindowHint      // Without system shadow
+                 | Qt::BypassWindowManagerHint;    // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
 
         m_view->setFlags(flags);
         m_view->setColor(QColor(Qt::transparent));
@@ -271,18 +271,27 @@ void PopupWindow_QQuickView::setTakeFocusOnClick(bool takeFocusOnClick)
 bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == m_view) {
-        if (event->type() == QEvent::Hide) {
+        switch (event->type()) {
+        case QEvent::Hide:
             if (m_onHidden) {
                 m_onHidden();
             }
-        }
-
-        if (event->type() == QEvent::FocusIn) {
+            break;
+        case QEvent::FocusIn:
             m_view->rootObject()->forceActiveFocus();
-        }
-
-        if (m_takeFocusOnClick && event->type() == QEvent::MouseButtonPress) {
-            forceActiveFocus();
+            break;
+        case QEvent::FocusOut:
+            if (!m_takeFocusOnClick) {
+                // Undo what's done in TextInput{Field,Area}.qml ensureActiveFocus
+                m_view->setFlag(Qt::WindowDoesNotAcceptFocus);
+            }
+            break;
+        case QEvent::MouseButtonPress:
+            if (m_takeFocusOnClick) {
+                forceActiveFocus();
+            }
+            break;
+        default: break;
         }
     }
 

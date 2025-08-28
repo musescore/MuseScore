@@ -428,7 +428,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 --braceSpan;
             }
 
-            if (prvSection.isEmpty() || (sg.section != prvSection)) {
+            if ((prvSection.isEmpty() || (sg.section != prvSection)) && score->parts().size() > 1) {
                 if (thkBracketStaff && (thkBracketSpan > 1)) {
                     score->undoAddBracket(thkBracketStaff, 0, BracketType::NORMAL, thkBracketSpan);
                 }

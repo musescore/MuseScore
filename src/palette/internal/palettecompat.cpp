@@ -33,6 +33,7 @@
 #include "engraving/dom/expression.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fret.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/pedal.h"
@@ -41,6 +42,7 @@
 #include "engraving/dom/stringtunings.h"
 #include "engraving/dom/capo.h"
 #include "engraving/dom/marker.h"
+#include "engraving/dom/tapping.h"
 #include "engraving/types/symid.h"
 #include "engraving/types/typesconv.h"
 
@@ -196,6 +198,8 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     bool containsStringTunings = false;
     bool containsGuitarBends = false;
     bool containsFFrame = false;
+    bool containsTapping = false;
+    bool containsHammerOnPullOff = false;
 
     for (const PaletteCellPtr& cell : guitarPalette.cells()) {
         const ElementPtr element = cell->element;
@@ -215,18 +219,22 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
             if (icon->actionType() == ActionIconType::FFRAME) {
                 containsFFrame = true;
             }
+        } else if (element->isTapping()) {
+            containsTapping = true;
+        } else if (element->isHammerOnPullOff()) {
+            containsHammerOnPullOff = true;
         }
     }
 
     if (!containsCapo) {
-        auto capo = std::make_shared<Capo>(paletteScore->dummy()->segment());
+        auto capo = Factory::makeCapo(paletteScore->dummy()->segment());
         capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
         int defaultPosition = std::min(7, guitarPalette.cellsCount());
         guitarPalette.insertElement(defaultPosition, capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
     }
 
     if (!containsStringTunings) {
-        auto stringTunings = std::make_shared<StringTunings>(paletteScore->dummy()->segment());
+        auto stringTunings = Factory::makeStringTunings(paletteScore->dummy()->segment());
         stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
         stringTunings->initTextStyleType(TextStyleType::STAFF);
         int defaultPosition = std::min(8, guitarPalette.cellsCount());
@@ -242,8 +250,26 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
     }
 
+    if (!containsTapping) {
+        int defaultPosition = std::min(30, guitarPalette.cellsCount());
+        auto lhTapping = Factory::makeTapping(paletteScore->dummy()->chord());
+        lhTapping->setHand(TappingHand::LEFT);
+        guitarPalette.insertElement(defaultPosition, lhTapping, QT_TRANSLATE_NOOP("palette", "Left-hand tapping"), 1.0);
+
+        auto rhTapping = Factory::makeTapping(paletteScore->dummy()->chord());
+        rhTapping->setHand(TappingHand::RIGHT);
+        guitarPalette.insertElement(defaultPosition + 1, rhTapping, QT_TRANSLATE_NOOP("palette", "Right-hand tapping"), 1.0);
+    }
+
+    if (!containsHammerOnPullOff) {
+        int defaultPosition = std::min(32, guitarPalette.cellsCount());
+        auto hopo = Factory::makeHammerOnPullOff(paletteScore->dummy());
+        guitarPalette.insertElement(defaultPosition, hopo, QT_TRANSLATE_NOOP("palette", "Hammer-on / pull-off"), 0.8);
+    }
+
     if (!containsFFrame) {
-        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
+        static const qreal FRAME_MAG = 1.25;
+        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
     }
 }
 

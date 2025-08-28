@@ -28,6 +28,7 @@
 #include "log.h"
 
 using namespace muse::actions;
+using namespace muse::async;
 
 ActionsDispatcher::~ActionsDispatcher()
 {
@@ -113,6 +114,10 @@ void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& act
                 continue;
             }
 
+            // Notify that we're about to perform an action.
+            m_preDispatch.send(actionCode);
+
+            // Perform the action.
             const ActionCallBackWithNameAndData& callback = cbit->second;
             LOGI() << "try call action: " << actionCode;
             callback(actionCode, data);
@@ -121,9 +126,25 @@ void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& act
 
     if (canReceiveCount == 0) {
         LOGI() << "no one can handle the action: " << actionCode;
-    } else if (canReceiveCount > 1) {
+        return;
+    }
+
+    if (canReceiveCount > 1) {
         LOGW() << "More than one client can handle the action, this is not a typical situation.";
     }
+
+    // Notify that we have performed an action.
+    m_postDispatch.send(actionCode);
+}
+
+Channel<ActionCode> ActionsDispatcher::preDispatch() const
+{
+    return m_preDispatch;
+}
+
+Channel<ActionCode> ActionsDispatcher::postDispatch() const
+{
+    return m_postDispatch;
 }
 
 void ActionsDispatcher::unReg(Actionable* client)

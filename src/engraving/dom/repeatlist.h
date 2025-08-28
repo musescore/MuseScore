@@ -61,6 +61,7 @@ public:
     bool startsWithMeasure(Measure const* const) const;
     bool isEmpty() const;
     int len() const;
+    int endTick() const;
     void popMeasure();
 
     Measure const* firstMeasure() const { return m_measureList.empty() ? nullptr : m_measureList.front(); }

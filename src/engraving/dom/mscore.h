@@ -212,12 +212,10 @@ public:
     static bool debugMode;
     static bool testMode;
     static bool testWriteStyleToScore;
-    static bool useRead302InTestMode;
 
     static bool saveTemplateMode;
     static bool noGui;
 
-    static bool noExcerpts;
     static bool noImages;
 
     static bool pdfPrinting;

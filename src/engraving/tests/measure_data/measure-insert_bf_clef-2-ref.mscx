@@ -138,10 +138,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>c_c</eid>
+        <eid>e_e</eid>
         <voice>
           <Rest>
-            <eid>d_d</eid>
+            <eid>f_f</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

@@ -27,6 +27,8 @@
 #include "dom/laissezvib.h"
 
 #include "playback/utils/arrangementutils.h"
+#include "playback/utils/expressionutils.h"
+
 #include "internal/spannersmetaparser.h"
 #include "internal/symbolsmetaparser.h"
 
@@ -67,7 +69,7 @@ void NoteArticulationsParser::doParse(const EngravingItem* item, const Rendering
         return;
     }
 
-    parsePersistentMeta(ctx, result);
+    parsePlayingTechnique(ctx, result);
     parseGhostNote(note, ctx, result);
     parseNoteHead(note, ctx, result);
     parseSymbols(note, ctx, result);
@@ -129,22 +131,33 @@ ArticulationType NoteArticulationsParser::articulationTypeByNoteheadGroup(const 
     }
 }
 
-void NoteArticulationsParser::parsePersistentMeta(const RenderingContext& ctx, mpe::ArticulationMap& result)
+void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    if (ctx.persistentArticulation == ArticulationType::Undefined
-        || ctx.persistentArticulation == ArticulationType::Standard) {
+    const std::pair<timestamp_t, PlayingTechniqueType> tech = ctx.playbackCtx->playingTechnique(ctx.score, ctx.nominalPositionStartTick);
+    const mpe::ArticulationType articulationType = articulationFromPlayTechType(tech.second);
+    if (articulationType == ArticulationType::Standard || articulationType == ArticulationType::Undefined) {
         return;
     }
 
-    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(ctx.persistentArticulation);
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(articulationType);
     if (pattern.empty()) {
         return;
     }
 
-    appendArticulationData({ ctx.persistentArticulation,
+    timestamp_t timestamp = ctx.nominalTimestamp;
+    duration_t duration = ctx.nominalDuration;
+
+    if (tech.second == PlayingTechniqueType::HandbellsLV) {
+        const timestamp_t dampTime = ctx.playbackCtx->findPlayingTechniqueTimestamp(ctx.score, PlayingTechniqueType::HandbellsDamp,
+                                                                                    ctx.nominalPositionStartTick);
+        timestamp = tech.first;
+        duration = dampTime > 0 ? dampTime - timestamp : mpe::INFINITE_DURATION;
+    }
+
+    appendArticulationData({ articulationType,
                              pattern,
-                             ctx.nominalTimestamp,
-                             ctx.nominalDuration,
+                             timestamp,
+                             duration,
                              0,
                              0 }, result);
 }

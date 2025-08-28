@@ -44,6 +44,7 @@
 #cmakedefine MUE_BUILD_IMPEXP_GUITARPRO_MODULE ${MUE_BUILD_IMPEXP_GUITARPRO_MODULE})
 #cmakedefine MUE_BUILD_IMPEXP_MEI_MODULE ${MUE_BUILD_IMPEXP_MEI_MODULE})
 #cmakedefine MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE ${MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_TABLEDIT_MODULE ${MUE_BUILD_IMPEXP_TABLEDIT_MODULE})
 
 /* ============================================== */
 /* Functions                                      */

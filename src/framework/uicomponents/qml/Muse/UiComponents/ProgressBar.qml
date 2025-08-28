@@ -86,30 +86,26 @@ FocusScope {
         border.color: ui.theme.strokeColor
         border.width: Math.max(ui.theme.borderWidth, 1)
 
-        layer.enabled: ui.isEffectsAllowed
-        layer.effect: EffectOpacityMask {
-            maskSource: Item {
-                width: backgroundRect.width
-                height: backgroundRect.height
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: backgroundRect.radius
-                }
-            }
-        }
-
-        Rectangle {
-            id: progressRect
-
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
+        Item {
+            anchors.fill: parent
             anchors.margins: backgroundRect.border.width
 
-            width: Math.min(parent.width * (root.value / root.to), parent.width - backgroundRect.border.width)
+            layer.enabled: ui.isEffectsAllowed
+            layer.effect: RoundedCornersEffect {
+                radius: backgroundRect.radius - anchors.margins
+            }
 
-            color: ui.theme.accentColor
+            Rectangle {
+                id: progressRect
+
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+
+                width: parent.width * Math.min(root.value / root.to, 1)
+
+                color: ui.theme.accentColor
+            }
         }
 
         StyledTextLabel {
@@ -119,8 +115,6 @@ FocusScope {
             anchors.verticalCenter: parent.verticalCenter
 
             horizontalAlignment: Text.AlignHCenter
-
-            z: progressRect.z + 1
         }
     }
 }

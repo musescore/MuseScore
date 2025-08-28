@@ -26,12 +26,14 @@
 using namespace muse::audio;
 using namespace muse::audio::synth;
 
-void SynthResolverStub::init(const AudioInputParams& defaultInputParams)
+void SynthResolverStub::init(const AudioInputParams& defaultInputParams, const OutputSpec& defaultOutputSpec)
 {
     m_defaultInputParams = defaultInputParams;
+    m_defaultOutputSpec = defaultOutputSpec;
 }
 
-ISynthesizerPtr SynthResolverStub::resolveSynth(const TrackId, const AudioInputParams& params, const PlaybackSetupData&) const
+ISynthesizerPtr SynthResolverStub::resolveSynth(const TrackId, const AudioInputParams& params, const audio::OutputSpec&,
+                                                const PlaybackSetupData&) const
 {
     return std::make_shared<SynthesizerStub>(params);
 }

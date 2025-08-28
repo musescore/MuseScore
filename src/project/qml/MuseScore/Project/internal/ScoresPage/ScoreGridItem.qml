@@ -109,12 +109,8 @@ FocusScope {
                     }
 
                     layer.enabled: ui.isEffectsAllowed
-                    layer.effect: EffectOpacityMask {
-                        maskSource: Rectangle {
-                            width: thumbnail.width
-                            height: thumbnail.height
-                            radius: thumbnail.radius
-                        }
+                    layer.effect: RoundedCornersEffect {
+                        radius: thumbnail.radius
                     }
                 }
 

@@ -71,16 +71,9 @@ Item {
             fillMode: Image.PreserveAspectCrop
 
             layer.enabled: ui.isEffectsAllowed
-            layer.effect: EffectOpacityMask {
-                maskSource: Rectangle {
-                    width: root.side
-                    height: root.side
-                    radius: width / 2
-                    visible: false
-                }
+            layer.effect: RoundedCornersEffect {
+                radius: width / 2
             }
         }
     }
 }
-
-

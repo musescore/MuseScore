@@ -36,7 +36,7 @@ BaseSection {
     IncrementalPropertyControlWithTitle {
         id: selectionProximityControl
 
-        title: qsTrc("appshell/preferences", "Proximity for selecting elements:")
+        title: qsTrc("appshell/preferences", "Proximity for selecting elements")
 
         columnWidth: root.columnWidth
         spacing: root.columnSpacing

@@ -725,6 +725,10 @@ void FBox::init()
                 continue;
             }
 
+            if (item->isHarmony() && toHarmony(item)->harmonyType() != HarmonyType::STANDARD) {
+                continue;
+            }
+
             FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(item);
             if (!fretDiagram) {
                 continue;
@@ -748,7 +752,6 @@ void FBox::init()
 
     DEFER {
         triggerLayout();
-        score()->setNeedLayoutFretBox(true);
     };
 
     clearElements();

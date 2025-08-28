@@ -219,7 +219,7 @@ void MuseSoundsCheckUpdateScenario::tryOpenMuseHub(ValList actions) const
         return;
     }
 
-    interactive()->openApp(muse::Uri(action)).onReject(this, [this, actions](int, const std::string&) {
+    interactive()->openApp(muse::UriQuery(action)).onReject(this, [this, actions](int, const std::string&) {
         tryOpenMuseHub(actions);
     });
 }

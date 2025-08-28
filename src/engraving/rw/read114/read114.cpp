@@ -2730,7 +2730,7 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 {
     IF_ASSERT_FAILED(score->isMaster()) {
         return make_ret(Err::FileUnknownError);
@@ -2905,13 +2905,9 @@ muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
                 masterScore->addSpanner(s);
             }
         } else if (tag == "Excerpt") {
-            if (MScore::noExcerpts) {
-                e.skipCurrentElement();
-            } else {
-                Excerpt* ex = new Excerpt(masterScore);
-                read400::TRead::read(ex, e, ctx);
-                masterScore->m_excerpts.push_back(ex);
-            }
+            Excerpt* ex = new Excerpt(masterScore);
+            read400::TRead::read(ex, e, ctx);
+            masterScore->m_excerpts.push_back(ex);
         } else if (tag == "Beam") {
             Beam* beam = Factory::createBeam(masterScore->dummy()->system());
             read400::TRead::read(beam, e, ctx);
@@ -3132,14 +3128,14 @@ muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     }
 
     // create excerpts
-
-    std::vector<Excerpt*> readExcerpts;
-    readExcerpts.swap(masterScore->m_excerpts);
-    for (Excerpt* excerpt : readExcerpts) {
-        if (excerpt->parts().empty()) {             // ignore empty parts
-            continue;
-        }
-        if (!excerpt->parts().empty()) {
+    {
+        std::vector<Excerpt*> readExcerpts;
+        readExcerpts.swap(masterScore->m_excerpts);
+        for (Excerpt* excerpt : readExcerpts) {
+            if (excerpt->parts().empty()) {         // ignore empty parts
+                delete excerpt;
+                continue;
+            }
             masterScore->m_excerpts.push_back(excerpt);
             Score* nscore = masterScore->createScore();
             ReadStyleHook::setupDefaultStyle(nscore);
@@ -3148,7 +3144,6 @@ muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             Excerpt::createExcerpt(excerpt);
         }
     }
-
     // volta offsets in older scores are hardcoded to be relative to a voltaY of -2.0sp
     // we'll force this and live with it for the score
     // but we wait until now to do it so parts don't have this issue

@@ -54,6 +54,7 @@
 #include "dom/utils.h"
 #include "types/typesconv.h"
 
+#include "autoplace.h"
 #include "tlayout.h"
 #include "layoutcontext.h"
 #include "arpeggiolayout.h"
@@ -257,8 +258,10 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     BarLine* lastMeasureEndBarline = toBarLine(e);
                     if (!generated && !mmrEndBarline->links()) {
                         ctx.mutDom().undo(new Link(mmrEndBarline, lastMeasureEndBarline));
-                        if (PlayCountText* playCount = mmrEndBarline->playCountText()) {
-                            ctx.mutDom().undo(new Link(playCount, lastMeasureEndBarline->playCountText()));
+                        PlayCountText* playCount = mmrEndBarline->playCountText();
+                        PlayCountText* lastMeasurePlayCount = lastMeasureEndBarline->playCountText();
+                        if (playCount && !playCount->isLinked(lastMeasurePlayCount)) {
+                            ctx.mutDom().undo(new Link(playCount, lastMeasurePlayCount));
                         }
                     }
                     if (mmrEndBarline->barLineType() != lastMeasureEndBarline->barLineType()) {
@@ -601,6 +604,11 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
                 if (s->element(track)) {
                     if (!s->element(track)->isRest()) {
                         return false;
+                    } else {
+                        bool isNonEmptyIrregular = m->isIrregular() && !toRest(s->element(track))->isFullMeasureRest();
+                        if (isNonEmptyIrregular) {
+                            return false;
+                        }
                     }
                     restFound = true;
                 }
@@ -868,7 +876,9 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
 void MeasureLayout::removeMMRestElements(Measure* mmRestMeasure)
 {
     // Removed linked clones that were created for the mmRest measure
-    for (EngravingItem* item : mmRestMeasure->el()) {
+    // copy because we're removing elements
+    const ElementList elements = mmRestMeasure->el();
+    for (EngravingItem* item : elements) {
         item->undoUnlink();
         mmRestMeasure->score()->doUndoRemoveElement(item);
     }

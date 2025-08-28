@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
-#define MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H
+
+#pragma once
 
 #include "io/path.h"
 #include "types/ret.h"
-#include "types/uri.h"
 
-#include "async/asyncable.h"
 #include "async/promise.h"
 
 namespace muse {
-class MacOSInteractiveHelper : public async::Asyncable
+class UriQuery;
+
+class MacOSInteractiveHelper
 {
 public:
     static bool revealInFinder(const io::path_t& filePath);
 
     static Ret isAppExists(const std::string& appIdentifier);
-    static Ret canOpenApp(const Uri& uri);
-    static async::Promise<Ret> openApp(const Uri& uri);
+    static Ret canOpenApp(const UriQuery& uri);
+    static async::Promise<Ret> openApp(const UriQuery& uri);
 };
 }
-
-#endif // MU_FRAMEWORK_MACOSINTERACTIVEHELPER_H

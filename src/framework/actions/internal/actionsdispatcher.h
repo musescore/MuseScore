@@ -25,9 +25,11 @@
 #include <map>
 
 #include "../iactionsdispatcher.h"
+#include "async/asyncable.h"
+#include "async/channel.h"
 
 namespace muse::actions {
-class ActionsDispatcher : public IActionsDispatcher
+class ActionsDispatcher : public IActionsDispatcher, public async::Asyncable
 {
 public:
     ActionsDispatcher() = default;
@@ -36,6 +38,9 @@ public:
     void dispatch(const ActionCode& actionCode) override;
     void dispatch(const ActionCode& actionCode, const ActionData& data) override;
     void dispatch(const ActionQuery& actionQuery) override;
+
+    async::Channel<ActionCode> preDispatch() const override;
+    async::Channel<ActionCode> postDispatch() const override;
 
     void unReg(Actionable* client) override;
     void reg(Actionable* client, const ActionCode& actionCode, const ActionCallBackWithNameAndData& call) override;
@@ -53,6 +58,9 @@ private:
     void dump() const; // for debug
 
     std::map<ActionCode, Clients > m_clients;
+
+    async::Channel<ActionCode> m_preDispatch;
+    async::Channel<ActionCode> m_postDispatch;
 };
 }
 

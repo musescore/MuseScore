@@ -26,6 +26,8 @@
 
 #include <Cocoa/Cocoa.h>
 
+#include "types/uri.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -47,7 +49,7 @@ Ret MacOSInteractiveHelper::isAppExists(const std::string& appIdentifier)
     return appURL != nil;
 }
 
-Ret MacOSInteractiveHelper::canOpenApp(const Uri& uri)
+Ret MacOSInteractiveHelper::canOpenApp(const UriQuery& uri)
 {
     if (__builtin_available(macOS 10.15, *)) {
         NSString* nsUrlString = [NSString stringWithUTF8String:uri.toString().c_str()];
@@ -67,9 +69,9 @@ Ret MacOSInteractiveHelper::canOpenApp(const Uri& uri)
     }
 }
 
-async::Promise<Ret> MacOSInteractiveHelper::openApp(const Uri& uri)
+async::Promise<Ret> MacOSInteractiveHelper::openApp(const UriQuery& uri)
 {
-    return Promise<Ret>([&uri](auto resolve, auto reject) {
+    return Promise<Ret>([uri](auto resolve, auto reject) {
         if (__builtin_available(macOS 10.15, *)) {
             NSString* nsUrlString = [NSString stringWithUTF8String:uri.toString().c_str()];
             if (nsUrlString == nil) {

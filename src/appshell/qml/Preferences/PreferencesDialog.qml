@@ -71,6 +71,10 @@ StyledDialogView {
             }
 
             var pageComponent = Qt.createComponent("../" + pageInfo.path)
+            if (pageComponent.status === Component.Error) {
+                console.error("Failed to load preferences page component:", pageComponent.errorString())
+                continue
+            }
 
             var properties = {
                 navigationSection: root.navigationSection,

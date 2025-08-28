@@ -35,7 +35,9 @@ HammerOnPullOffTappingPageModel::HammerOnPullOffTappingPageModel(QObject* parent
                                          StyleId::lhTappingShowItemsTab,
                                          StyleId::lhTappingSlurTopAndBottomNoteOnTab,
                                          StyleId::rhTappingSymbolNormalStave,
-                                         StyleId::rhTappingSymbolTab, })
+                                         StyleId::rhTappingSymbolTab,
+                                         StyleId::hopoAlignLettersStandardStaves,
+                                         StyleId::hopoAlignLettersTabStaves, })
 {
 }
 
@@ -92,4 +94,14 @@ StyleItem* HammerOnPullOffTappingPageModel::rhTappingSymbolNormalStave() const
 StyleItem* HammerOnPullOffTappingPageModel::rhTappingSymbolTab() const
 {
     return styleItem(StyleId::rhTappingSymbolTab);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::hopoAlignLettersStandardStaves() const
+{
+    return styleItem(StyleId::hopoAlignLettersStandardStaves);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::hopoAlignLettersTabStaves() const
+{
+    return styleItem(StyleId::hopoAlignLettersTabStaves);
 }

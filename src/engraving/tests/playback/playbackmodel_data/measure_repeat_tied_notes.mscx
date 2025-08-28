@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <programVersion>4.6.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>1MYwCpRD4LP_vkF1XHpbJZK</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-08-14</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestral">
+      <name>Orchestral</name>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+        </instrument>
+      <instrument id="piano">
+        <family id="keyboards">Keyboards</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      <unsorted/>
+      </Order>
+    <Part id="1">
+      <Staff>
+        <eid>xt34smPnlN_OQMx6Ap+KpG</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="2" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>78XJy2bckCH_YLIkikQc8oC</eid>
+        <startRepeat/>
+        <voice>
+          <KeySig>
+            <eid>JmYqyT4eZFK_nD6inbbtzsI</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>cTQmI4OmKh_ZZZ0va42miH</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>GuxNh5EQpsL_sxedH/5JEXF</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>McH1/u8dwXI_FmMzBFAJzPE</eid>
+        <voice>
+          <Chord>
+            <eid>v7goy3d1uVJ_P1tKHCDminJ</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>o1CDhlXLkiF_JeD9Y6a0y1L</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>KYoadImlnNB_Bd8te8WSQT</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/2</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>6XmsLOyOueF_vvtdN/3/AUK</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>Ql+g40j1i2F_cVL0t5KAh8G</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/2</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>fiMqp09qOqP_mNxD03gDTUH</eid>
+        <endRepeat>2</endRepeat>
+        <measureRepeatCount>1</measureRepeatCount>
+        <voice>
+          <MeasureRepeat>
+            <subtype>1</subtype>
+            <eid>rDpmZLMEFqP_VjJuiF05blL</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </MeasureRepeat>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

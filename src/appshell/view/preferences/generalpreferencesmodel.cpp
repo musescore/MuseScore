@@ -197,7 +197,7 @@ QVariantList GeneralPreferencesModel::startupModes() const
             { "value", static_cast<int>(StartupModeType::StartWithNewScore) },
         },
         QVariantMap {
-            { "title", muse::qtrc("appshell/preferences", "Start with score:") },
+            { "title", muse::qtrc("appshell/preferences", "Start with score") },
             { "value", static_cast<int>(StartupModeType::StartWithScore) },
             { "isStartWithScore", true },
         },

@@ -457,6 +457,7 @@ void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifie
     }
 
     notation->interaction()->applyPaletteElement(cell->element.get(), modifiers);
+    mainWindow()->qWindow()->requestActivate();
 }
 
 // ====================================================
@@ -1097,7 +1098,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         params.color = configuration()->elementsColor();
 
         params.useElementColors = m_paintOptions.useElementColors;
-        params.colorsInversionEnabled = m_paintOptions.colorsInverionsEnabled;
+        params.colorsInversionEnabled = m_paintOptions.colorsInversionEnabled;
 
         notation::EngravingItemPreviewPainter::paintItem(el.get(), params);
 

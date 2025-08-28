@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-Studio-CLA-applies
  *
@@ -115,22 +115,18 @@ inline bool notesInSameRepeat(const Score* score, const Note* note1, const Note*
     }
 
     const int firstNoteTick = note1->tick().ticks();
-    const int secondNoteTick = note2->tick().ticks();
-
-    for (const RepeatSegment* repeat : repeats) {
-        const int offset = repeat->utick - repeat->tick;
-        if (offset != tickPositionOffset) {
-            continue;
-        }
-
-        if (firstNoteTick >= repeat->tick && secondNoteTick >= repeat->tick) {
-            const int lastRepeatTick = repeat->tick + repeat->len();
-            if (firstNoteTick < lastRepeatTick && secondNoteTick < lastRepeatTick) {
-                return true;
-            }
-        }
+    auto repeatIt = repeats.findRepeatSegmentFromUTick(firstNoteTick + tickPositionOffset);
+    if (repeatIt == repeats.end()) {
+        return true;
     }
 
-    return false;
+    const RepeatSegment* repeat = (*repeatIt);
+    const int secondNoteTick = note2->tick().ticks();
+
+    if (repeat->tick > secondNoteTick || repeat->endTick() <= secondNoteTick) {
+        return false;
+    }
+
+    return true;
 }
 }

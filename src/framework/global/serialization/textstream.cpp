@@ -101,7 +101,11 @@ TextStream& TextStream::operator<<(double val)
     || (!defined(__APPLE__) && defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 14000) \
     || (defined(_GLIBCXX_RELEASE) && _GLIBCXX_RELEASE >= 11)
     std::array<char, 24> buf{};
-    const auto [last, ec] = std::to_chars(buf.data(), buf.data() + buf.size(), val);
+
+    // emulate std::stringstream default behavior
+    constexpr auto format = std::chars_format::general;
+    constexpr int precision = 6;
+    const auto [last, ec] = std::to_chars(buf.data(), buf.data() + buf.size(), val, format, precision);
     IF_ASSERT_FAILED(ec == std::errc {}) {
         return *this;
     }

@@ -580,6 +580,7 @@
           <style>repeat_right</style>
           <text>Da Coda</text>
           <label>coda</label>
+          <markerType>dacoda</markerType>
           </Marker>
         <voice>
           <Rest>
@@ -612,6 +613,7 @@
           <style>repeat_right</style>
           <text>Da Doppia Coda</text>
           <label>coda</label>
+          <markerType>dadblcoda</markerType>
           </Marker>
         <voice>
           <Rest>
@@ -644,6 +646,7 @@
           <style>repeat_left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
+          <markerType>segno</markerType>
           </Marker>
         <voice>
           <Rest>
@@ -676,6 +679,7 @@
           <style>repeat_left</style>
           <text><sym>segnoSerpent1</sym></text>
           <label>varsegno</label>
+          <markerType>varsegno</markerType>
           </Marker>
         <voice>
           <Rest>
@@ -695,6 +699,7 @@
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Rest>
@@ -714,6 +719,7 @@
           <style>repeat_right</style>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
+          <markerType>varcoda</markerType>
           </Marker>
         <voice>
           <Rest>

@@ -33,8 +33,8 @@
 
 #include "log.h"
 
-static const muse::Uri MUSEHUB_APP_URI("musehub://?from=musescore");
-static const muse::Uri MUSEHUB_APP_V1_URI("muse-hub://?from=musescore");
+static const muse::UriQuery MUSEHUB_APP_URI("musehub://?from=musescore");
+static const muse::UriQuery MUSEHUB_APP_V1_URI("muse-hub://?from=musescore");
 
 using namespace mu::musesounds;
 using namespace muse;

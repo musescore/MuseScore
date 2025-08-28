@@ -100,6 +100,10 @@ void AudioMidiPreferencesModel::init()
         emit muteHiddenInstrumentsChanged(mute);
     });
 
+    playbackConfiguration()->shouldShowOnlineSoundsProcessingErrorChanged().onNotify(this, [this]() {
+        emit shouldShowOnlineSoundsProcessingErrorChanged();
+    });
+
     playbackConfiguration()->onlineSoundsShowProgressBarModeChanged().onNotify(this, [this]() {
         emit onlineSoundsShowProgressBarModeChanged();
     });
@@ -203,6 +207,20 @@ void AudioMidiPreferencesModel::setMuteHiddenInstruments(bool mute)
     }
 
     playbackConfiguration()->setMuteHiddenInstruments(mute);
+}
+
+bool AudioMidiPreferencesModel::shouldShowOnlineSoundsProcessingError() const
+{
+    return playbackConfiguration()->shouldShowOnlineSoundsProcessingError();
+}
+
+void AudioMidiPreferencesModel::setShouldShowOnlineSoundsProcessingError(bool value)
+{
+    if (value == shouldShowOnlineSoundsProcessingError()) {
+        return;
+    }
+
+    playbackConfiguration()->setShouldShowOnlineSoundsProcessingError(value);
 }
 
 bool AudioMidiPreferencesModel::autoProcessOnlineSoundsInBackground() const

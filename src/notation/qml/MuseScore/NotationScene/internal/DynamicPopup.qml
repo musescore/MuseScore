@@ -123,7 +123,7 @@ StyledPopupView {
 
                 contentItem: modelData.type === DynamicPopupModel.Dynamic ? dynamicComp :
                                 modelData.type === DynamicPopupModel.Crescendo ? crescHairpinComp :
-                                modelData.type === DynamicPopupModel.Decrescendo ? dimHairpinComp : null
+                                modelData.type === DynamicPopupModel.Diminuendo ? dimHairpinComp : null
 
                 navigation.panel: dynamicsNavPanel
                 navigation.order: index

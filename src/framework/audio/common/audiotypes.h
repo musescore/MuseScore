@@ -72,12 +72,29 @@ static constexpr TrackId INVALID_TRACK_ID = -1;
 static constexpr char DEFAULT_DEVICE_ID[] = "default";
 
 #ifdef Q_OS_WIN
-static constexpr size_t MINIMUM_BUFFER_SIZE = 256;
+static constexpr samples_t MINIMUM_BUFFER_SIZE = 256;
 #else
-static constexpr size_t MINIMUM_BUFFER_SIZE = 128;
+static constexpr samples_t MINIMUM_BUFFER_SIZE = 128;
 #endif
 
-static constexpr size_t MAXIMUM_BUFFER_SIZE = 4096;
+static constexpr samples_t MAXIMUM_BUFFER_SIZE = 4096;
+
+struct OutputSpec {
+    sample_rate_t sampleRate = 0;
+    samples_t samplesPerChannel = 0;
+    audioch_t audioChannelCount = 0;
+
+    inline bool isValid() const { return sampleRate > 0 && samplesPerChannel > 0 && audioChannelCount > 0; }
+
+    inline bool operator==(const OutputSpec& other) const
+    {
+        return sampleRate == other.sampleRate
+               && samplesPerChannel == other.samplesPerChannel
+               && audioChannelCount == other.audioChannelCount;
+    }
+
+    inline bool operator!=(const OutputSpec& other) const { return !this->operator==(other); }
+};
 
 enum class SoundTrackType {
     Undefined = -1,
@@ -89,26 +106,19 @@ enum class SoundTrackType {
 
 struct SoundTrackFormat {
     SoundTrackType type = SoundTrackType::Undefined;
-    sample_rate_t sampleRate = 0;
-    samples_t samplesPerChannel = 0;
-    audioch_t audioChannelsNumber = 0;
+    OutputSpec outputSpec;
     int bitRate = 0;
 
     bool operator==(const SoundTrackFormat& other) const
     {
         return type == other.type
-               && sampleRate == other.sampleRate
-               && audioChannelsNumber == other.audioChannelsNumber
-               && samplesPerChannel == other.samplesPerChannel
+               && outputSpec == other.outputSpec
                && bitRate == other.bitRate;
     }
 
     bool isValid() const
     {
-        return type != SoundTrackType::Undefined
-               && sampleRate != 0
-               && samplesPerChannel != 0
-               && audioChannelsNumber != 0;
+        return type != SoundTrackType::Undefined && outputSpec.isValid();
     }
 };
 
@@ -466,7 +476,7 @@ struct InputProcessingProgress {
         int64_t total = 0;
     };
 
-    enum Status : uint8_t {
+    enum Status : unsigned int {
         Undefined = 0,
         Started,
         Processing,
@@ -475,24 +485,25 @@ struct InputProcessingProgress {
 
     struct StatusInfo {
         Status status = Status::Undefined;
-        int errcode = 0;
+        int errorCode = 0;
+        std::string errorText;
     };
 
     void start()
     {
         isStarted = true;
-        processedChannel.send({ Status::Started, 0 }, {}, {});
+        processedChannel.send({ Status::Started, 0, {} }, {}, {});
     }
 
     void process(const ChunkInfoList& chuncs, int64_t current, int64_t total)
     {
-        processedChannel.send({ Status::Processing, 0 }, chuncs, { current, total });
+        processedChannel.send({ Status::Processing, 0, {} }, chuncs, { current, total });
     }
 
-    void finish(int errcode)
+    void finish(int errcode, const std::string& err = {})
     {
         isStarted = false;
-        processedChannel.send({ Status::Finished, errcode }, {}, {});
+        processedChannel.send({ Status::Finished, errcode, err }, {}, {});
     }
 
     bool isStarted = false;

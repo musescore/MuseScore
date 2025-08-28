@@ -24,6 +24,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "engraving/infrastructure/mscreader.h"
+#include "engraving/infrastructure/mscwriter.h"
+
 #include "notation.h"
 
 using namespace mu;

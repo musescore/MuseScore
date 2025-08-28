@@ -28,9 +28,9 @@
 using namespace muse::audio;
 using namespace muse::audio::fx;
 
-void Equaliser::setSampleRate(unsigned int sampleRate)
+void Equaliser::setOutputSpec(const OutputSpec& spec)
 {
-    m_sampleRate = sampleRate;
+    m_outputSpec = spec;
     calculate();
 }
 
@@ -61,11 +61,11 @@ void Equaliser::process(float* buffer, unsigned int sampleCount)
 
 void Equaliser::calculate()
 {
-    if (!m_sampleRate) {
+    if (!m_outputSpec.sampleRate) {
         return;
     }
     float a = std::pow(10.f, m_gain / 40.f);
-    float w0 = 2 * M_PI * m_frequency / m_sampleRate;
+    float w0 = 2 * M_PI * m_frequency / m_outputSpec.sampleRate;
     float alpha = std::sin(w0) * a / (2 * m_q);
 
     m_b[0] = 1 + alpha * a;

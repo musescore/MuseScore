@@ -91,8 +91,8 @@ size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
     header.chunkSize = 18; // 18 is 2 bytes more to include cbsize field / extension size
     header.bitsPerSample = 32;
     header.code = 3; // IEEE_FLOAT = 3, PCM = 1
-    header.audioChannelsNumber = m_format.audioChannelsNumber;
-    header.sampleRate = m_format.sampleRate;
+    header.audioChannelsNumber = m_format.outputSpec.audioChannelCount;
+    header.sampleRate = m_format.outputSpec.sampleRate;
     header.samplesPerChannel = samplesPerChannel;
 
     header.write(m_fileStream);
@@ -106,8 +106,8 @@ size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
     }
 
     for (samples_t sampleIdx = 0; sampleIdx < header.samplesPerChannel; ++sampleIdx) {
-        for (audioch_t audioChNum = 0; audioChNum < m_format.audioChannelsNumber; ++audioChNum) {
-            int idx = sampleIdx * m_format.audioChannelsNumber + audioChNum;
+        for (audioch_t audioChNum = 0; audioChNum < m_format.outputSpec.audioChannelCount; ++audioChNum) {
+            int idx = sampleIdx * m_format.outputSpec.audioChannelCount + audioChNum;
             m_fileStream.write(reinterpret_cast<const char*>(input + idx), 4);
         }
 
@@ -116,7 +116,7 @@ size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
         }
     }
 
-    return samplesPerChannel * m_format.audioChannelsNumber;
+    return samplesPerChannel * m_format.outputSpec.audioChannelCount;
 }
 
 size_t WavEncoder::flush()

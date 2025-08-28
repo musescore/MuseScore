@@ -45,6 +45,7 @@ BaseSection {
 
     AudioGenerationSettings {
         width: parent.width
+        columnWidth: root.columnWidth
 
         navigationPanel: root.navigation
     }

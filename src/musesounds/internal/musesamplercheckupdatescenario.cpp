@@ -37,22 +37,20 @@ void MuseSamplerCheckUpdateScenario::checkAndShowUpdateIfNeed()
         return;
     }
 
+    m_alreadyChecked = true;
+
     if (service()->incompatibleLocalVersion()) {
-        m_alreadyChecked = true;
         showCriticalUpdateNotification();
         return;
     }
 
     if (configuration()->museSamplerUpdateAvailable()) {
-        m_alreadyChecked = true;
         showNewVersionNotification();
         return;
     }
 
     auto promise = service()->checkForUpdate();
     promise.onResolve(this, [this](const muse::RetVal<bool>& res) {
-        m_alreadyChecked = true;
-
         if (!res.ret) {
             LOGE() << res.ret.toString();
             return;
@@ -128,13 +126,14 @@ void MuseSamplerCheckUpdateScenario::showNewVersionNotification()
 void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
 {
 #ifdef Q_OS_LINUX
-    if (process()->startDetached("muse-sounds-manager")) {
+    if (process()->startDetached("muse-sounds-manager",
+                                 { "--show-sampler-update", "--show-hidden-statuses" })) {
         dispatcher()->dispatch("quit");
     } else {
         openMuseHubWebsiteAndQuit();
     }
 #else
-    static const muse::Uri MUSEHUB_URI("musehub://requestUpdateCheck?from=musescore-studio");
+    const muse::UriQuery MUSEHUB_URI("musehub://requestUpdateCheck?from=musescore-studio");
 
 #ifdef Q_OS_MACOS
     if (!interactive()->canOpenApp(MUSEHUB_URI)) {

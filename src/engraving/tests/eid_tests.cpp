@@ -49,9 +49,6 @@ static void checkRegister(void*, EngravingItem* item)
 
 TEST_F(Engraving_EIDTests, testRegisteredItems)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(DATA_DIR + u"random_elements.mscx");
     EXPECT_TRUE(score);
 
@@ -61,5 +58,4 @@ TEST_F(Engraving_EIDTests, testRegisteredItems)
     }
 
     delete score;
-    MScore::useRead302InTestMode = useRead302;
 }

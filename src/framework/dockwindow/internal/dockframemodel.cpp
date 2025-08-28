@@ -42,6 +42,7 @@ DockFrameModel::DockFrameModel(QObject* parent)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
     qApp->installEventFilter(this);
+    m_tabsModel = new DockTabsModel(this);
 }
 
 bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
@@ -55,13 +56,10 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
         return QObject::eventFilter(watched, event);
     }
 
-    if (propertyChangeEvent->propertyName() == CONTEXT_MENU_MODEL_PROPERTY
-        || propertyChangeEvent->propertyName() == TOOLBAR_COMPONENT_PROPERTY) {
-        emit tabsChanged();
-
-        if (watched == currentDockWidget()) {
-            emit currentDockChanged();
-        }
+    if (propertyChangeEvent->propertyName() == CONTEXT_MENU_MODEL_PROPERTY) {
+        onContextMenuChanged(watched);
+    } else if (propertyChangeEvent->propertyName() == TOOLBAR_COMPONENT_PROPERTY) {
+        onToolBarComponentChanged(watched);
     }
 
     if (propertyChangeEvent->propertyName() == "highlightingRect") {
@@ -71,29 +69,37 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
+void DockFrameModel::onContextMenuChanged(QObject* obj)
+{
+    const KDDockWidgets::DockWidgetBase* dwb = dynamic_cast<const KDDockWidgets::DockWidgetBase*>(obj);
+    if (!dwb) {
+        return;
+    }
+
+    m_tabsModel->contextMenuChanged(dwb);
+
+    if (dwb == currentDockWidget()) {
+        emit currentDockChanged();
+    }
+}
+
+void DockFrameModel::onToolBarComponentChanged(QObject* obj)
+{
+    const KDDockWidgets::DockWidgetBase* dwb = dynamic_cast<const KDDockWidgets::DockWidgetBase*>(obj);
+    if (!dwb) {
+        return;
+    }
+
+    m_tabsModel->toolBarComponentChanged(dwb);
+
+    if (dwb == currentDockWidget()) {
+        emit currentDockChanged();
+    }
+}
+
 QQuickItem* DockFrameModel::frame() const
 {
     return m_frame;
-}
-
-QVariantList DockFrameModel::tabs() const
-{
-    QVariantList result;
-
-    if (!m_frame) {
-        return result;
-    }
-
-    for (const KDDockWidgets::DockWidgetBase* dock : m_frame->dockWidgets()) {
-        QVariantMap tab;
-        tab["title"] = dock->title();
-        tab[CONTEXT_MENU_MODEL_PROPERTY] = dock->property(CONTEXT_MENU_MODEL_PROPERTY);
-        tab[TOOLBAR_COMPONENT_PROPERTY] = dock->property(TOOLBAR_COMPONENT_PROPERTY);
-
-        result << tab;
-    }
-
-    return result;
 }
 
 QQmlComponent* DockFrameModel::titleBar() const
@@ -130,7 +136,7 @@ void DockFrameModel::listenChangesInFrame()
     }
 
     connect(m_frame, &KDDockWidgets::Frame::numDockWidgetsChanged, this, [this]() {
-        emit tabsChanged();
+        m_tabsModel->init(m_frame->dockWidgets());
 
         if (!currentDockWidget()) {
             m_frame->setCurrentTabIndex(0);

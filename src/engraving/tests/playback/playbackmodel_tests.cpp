@@ -46,16 +46,14 @@ using namespace muse;
 
 static const String PLAYBACK_MODEL_TEST_FILES_DIR("playback/playbackmodel_data/");
 static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
+static constexpr duration_t HALF_NOTE_DURATION = QUARTER_NOTE_DURATION * 2; // duration in microseconds for 1/2 120BPM
+static constexpr duration_t WHOLE_NOTE_DURATION = QUARTER_NOTE_DURATION * 4; // duration in microseconds for 4/4 120BPM
 
 class Engraving_PlaybackModelTests : public ::testing::Test, public muse::async::Asyncable
 {
 protected:
     void SetUp() override
     {
-        //! NOTE: allows to read test files using their version readers
-        //! instead of using 302 (see mscloader.cpp, makeReader)
-        MScore::useRead302InTestMode = false;
-
         m_dummyPatternSegment.arrangementPattern
             = tests::createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_dummyPatternSegment.pitchPattern = tests::createSimplePitchPattern(0 /*increment_pitch_diff*/);
@@ -65,11 +63,6 @@ protected:
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
 
         m_repositoryMock = std::make_shared<NiceMock<ArticulationProfilesRepositoryMock> >();
-    }
-
-    void TearDown() override
-    {
-        MScore::useRead302InTestMode = true;
     }
 
     ArticulationPattern buildTestArticulationPattern() const
@@ -811,6 +804,70 @@ TEST_F(Engraving_PlaybackModelTests, Multi_Measure_Repeat)
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
+}
+
+//! See: https://github.com/musescore/MuseScore/issues/29051
+TEST_F(Engraving_PlaybackModelTests, MeasureRepeat_TiedNotes)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "measure_repeat_tied_notes.mscx");
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const Part* part = score->parts().at(0);
+    ASSERT_TRUE(part);
+    ASSERT_EQ(part->instruments().size(), 1);
+
+    // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model(modularity::globalCtx());
+    model.profilesRepository.set(m_repositoryMock);
+    model.setPlayRepeats(true);
+    model.load(score);
+
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
+
+    // [THEN] Expected timestamps & durations
+    constexpr duration_t expectedDuration = HALF_NOTE_DURATION + HALF_NOTE_DURATION; // 2 tied half notes
+
+    const std::vector<TimestampAndDuration> expectedTnDList {
+        // 2nd measure
+        { WHOLE_NOTE_DURATION, expectedDuration },
+
+        // 3nd measure: measure repeat
+        { WHOLE_NOTE_DURATION* 2, expectedDuration },
+
+        // 2nd measure (repeated)
+        { WHOLE_NOTE_DURATION* 4, expectedDuration },
+
+        // 3nd measure (repeated): measure repeat
+        { WHOLE_NOTE_DURATION* 5, expectedDuration },
+    };
+
+    size_t noteEventNum = 0;
+
+    for (const auto& pair : result) {
+        for (const PlaybackEvent& event : pair.second) {
+            if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+                continue;
+            }
+
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+            const TimestampAndDuration& expectedTnD = expectedTnDList.at(noteEventNum);
+
+            EXPECT_EQ(arrangementCtx.actualTimestamp, expectedTnD.timestamp);
+            EXPECT_EQ(arrangementCtx.actualDuration, expectedTnD.duration);
+
+            ++noteEventNum;
+        }
+    }
+
+    EXPECT_EQ(expectedTnDList.size(), noteEventNum);
+
+    delete score;
 }
 
 /**

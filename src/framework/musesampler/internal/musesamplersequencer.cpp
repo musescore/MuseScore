@@ -108,6 +108,8 @@ static const std::unordered_map<ArticulationType, ms_NoteArticulation2> ARTICULA
     { ArticulationType::Pluck, ms_NoteArticulation2_Pluck },
     { ArticulationType::SingingBell, ms_NoteArticulation2_SingingBell },
     { ArticulationType::SingingVibrate, ms_NoteArticulation2_SingingVibrate },
+    { ArticulationType::Swing, ms_NoteArticulation2_HandbellSwing },
+    { ArticulationType::Echo, ms_NoteArticulation2_Echo },
 };
 
 static const std::unordered_map<ArticulationType, ms_NoteHead> NOTEHEAD_TYPES {
@@ -165,6 +167,7 @@ void MuseSamplerSequencer::setAutoRenderInterval(double secs)
         return;
     }
 
+    m_autoRenderInterval = secs;
     m_samplerLib->setAutoRenderInterval(m_sampler, secs);
 }
 
@@ -174,6 +177,7 @@ void MuseSamplerSequencer::triggerRender()
         return;
     }
 
+    updateMainStream();
     m_samplerLib->triggerRender(m_sampler);
     pollRenderingProgress();
 }
@@ -209,7 +213,11 @@ void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& event
     loadDynamicEvents(dynamics);
 
     finalizeAllTracks();
-    pollRenderingProgress();
+
+    // Poll only if background rendering is enabled
+    if (m_autoRenderInterval >= 0.0) {
+        pollRenderingProgress();
+    }
 }
 
 void MuseSamplerSequencer::pollRenderingProgress()
@@ -238,6 +246,7 @@ void MuseSamplerSequencer::doPollProgress()
     ms_RenderingRangeList ranges = m_samplerLib->getRenderInfo(m_sampler, &rangeCount);
 
     audio::InputProcessingProgress::ChunkInfoList chunks;
+    chunks.reserve(rangeCount);
     long long chunksDurationUs = 0;
 
     for (int i = 0; i < rangeCount; ++i) {
@@ -245,18 +254,22 @@ void MuseSamplerSequencer::doPollProgress()
 
         switch (info._state) {
         case ms_RenderingState_ErrorNetwork:
-            m_renderingInfo.errorCode = static_cast<int>(muse::audio::Err::OnlineSoundsNetworkError);
+            m_renderingInfo.error = "Network error";
             break;
         case ms_RenderingState_ErrorRendering:
+            m_renderingInfo.error = "Rendering error";
+            break;
         case ms_RenderingState_ErrorFileIO:
+            m_renderingInfo.error = "File IO error";
+            break;
         case ms_RenderingState_ErrorTimeOut:
-            m_renderingInfo.errorCode = static_cast<int>(muse::audio::Err::UnknownError);
+            m_renderingInfo.error = "Timeout";
             break;
         case ms_RenderingState_Rendering:
             break;
         }
 
-        if (progressStarted && m_renderingInfo.errorCode != 0) {
+        if (progressStarted && !m_renderingInfo.error.empty()) {
             continue;
         }
 
@@ -266,12 +279,7 @@ void MuseSamplerSequencer::doPollProgress()
 
     // Start progress
     if (!progressStarted) {
-        if (chunksDurationUs <= 0) {
-            if (m_pollRenderingProgressTimer->secondsSinceStart() >= 10.f) { // timeout
-                m_pollRenderingProgressTimer->stop();
-                m_renderingInfo.clear();
-            }
-
+        if (chunksDurationUs <= 0 && m_pollRenderingProgressTimer->secondsSinceStart() < m_autoRenderInterval * 2) {
             return;
         }
 
@@ -290,7 +298,11 @@ void MuseSamplerSequencer::doPollProgress()
     }
 
     // Update percentage
-    const int64_t percentage = std::lround(100.f - (float)chunksDurationUs / (float)m_renderingInfo.initialChunksDurationUs * 100.f);
+    int64_t percentage = 0;
+    if (m_renderingInfo.initialChunksDurationUs != 0) {
+        percentage = std::lround(100.f - (float)chunksDurationUs / (float)m_renderingInfo.initialChunksDurationUs * 100.f);
+    }
+
     if (percentage != m_renderingInfo.percentage) {
         m_renderingInfo.percentage = percentage;
         isChanged = true;
@@ -302,8 +314,9 @@ void MuseSamplerSequencer::doPollProgress()
 
     // Finish progress
     if (chunksDurationUs <= 0) {
+        const int errcode = !m_renderingInfo.error.empty() ? (int)muse::audio::Err::OnlineSoundsProcessingError : 0;
         m_pollRenderingProgressTimer->stop();
-        m_renderingProgress->finish(m_renderingInfo.errorCode);
+        m_renderingProgress->finish(errcode, m_renderingInfo.error);
         m_renderingInfo.clear();
     }
 }
@@ -433,6 +446,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     }
 
     const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    const mpe::ArticulationMap& articulations = noteEvent.expressionCtx().articulations;
     const voice_layer_idx_t voiceIdx = arrangementCtx.voiceLayerIndex;
     const layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, voiceIdx);
 
@@ -441,12 +455,10 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         return;
     }
 
-    for (const auto& art : noteEvent.expressionCtx().articulations) {
-        if (art.first == ArticulationType::Pedal || art.first == ArticulationType::LetRing) {
-            // Pedal on:
-            m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { art.second.meta.timestamp, 1.0 });
-            // Pedal off:
-            m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { art.second.meta.timestamp + art.second.meta.overallDuration, 0.0 });
+    for (const auto& art : articulations) {
+        if (art.first == ArticulationType::Pedal) {
+            addPedalEvent(art.second.meta, track);
+            continue;
         }
 
         const ms_NoteArticulation ms_art = muse::value(ARTICULATION_TYPES_PART1, art.first, ms_NoteArticulation_None);
@@ -467,14 +479,14 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     event._tempo = arrangementCtx.bps * 60.0; // API expects BPM
 
     pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, event._pitch, event._offset_cents);
-    parseArticulations(noteEvent.expressionCtx().articulations, event._articulation, event._articulation_2, event._notehead);
+    parseArticulations(articulations, event._articulation, event._articulation_2, event._notehead);
 
     long long noteEventId = 0;
     if (!m_samplerLib->addNoteEvent(m_sampler, track, event, noteEventId)) {
-        LOGE() << "Unable to add event for track";
+        LOGE() << "Unable to add event for track, timestamp: " << event._location_us;
     }
 
-    for (auto& art : noteEvent.expressionCtx().articulations) {
+    for (auto& art : articulations) {
         const ms_NoteArticulation ms_art = muse::value(ARTICULATION_TYPES_PART1, art.first, ms_NoteArticulation_None);
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this ends an articulation range, indicate the end
@@ -486,12 +498,23 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         }
     }
 
-    if (noteEvent.expressionCtx().articulations.contains(ArticulationType::Multibend)) {
+    if (articulations.contains(ArticulationType::Multibend)) {
         addPitchBends(noteEvent, noteEventId, track);
     }
 
-    if (noteEvent.expressionCtx().articulations.contains(ArticulationType::Vibrato)) {
+    if (articulations.contains(ArticulationType::Vibrato)) {
         addVibrato(noteEvent, noteEventId, track);
+    }
+}
+
+void MuseSamplerSequencer::addPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track)
+{
+    if (meta.hasStart()) {
+        m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { meta.timestamp, 1.0 });
+    }
+
+    if (meta.hasEnd()) {
+        m_samplerLib->addPedalEvent(m_sampler, track, PedalEvent { meta.timestamp + meta.overallDuration, 0.0 });
     }
 }
 
@@ -619,6 +642,7 @@ void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long
 void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
 {
     const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    const mpe::ArticulationMap& articulations = noteEvent.expressionCtx().articulations;
 
     layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, arrangementCtx.voiceLayerIndex);
     ms_Track track = findOrCreateTrack(layerIdx);
@@ -637,7 +661,7 @@ void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
         msEvent._pitch = pitch;
         msEvent._offset_cents = offsetCents;
 
-        parseArticulations(noteEvent.expressionCtx().articulations, msEvent._articulation, msEvent._articulation_2, msEvent._notehead);
+        parseArticulations(articulations, msEvent._articulation, msEvent._articulation_2, msEvent._notehead);
 
         if (noteEvent.expressionCtx().velocityOverride.has_value()) {
             msEvent._dynamics = noteEvent.expressionCtx().velocityOverride.value();
@@ -663,11 +687,33 @@ void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
         timestamp_t timestampTo = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration;
         m_offStreamEvents[timestampTo].emplace(std::move(noteOff));
     }
+
+    auto pedalIt = articulations.find(mpe::ArticulationType::Pedal);
+    if (pedalIt != articulations.end()) {
+        addAuditionPedalEvent(pedalIt->second.meta, track);
+    }
+}
+
+void MuseSamplerSequencer::addAuditionPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track)
+{
+    AuditionCCEvent event;
+    event.cc = 64;
+    event.msTrack = track;
+
+    if (meta.hasStart()) {
+        event.value = 1;
+        m_offStreamEvents[meta.timestamp].emplace(event);
+    }
+
+    if (meta.hasEnd()) {
+        event.value = 0;
+        m_offStreamEvents[meta.timestamp + meta.overallDuration].emplace(event);
+    }
 }
 
 void MuseSamplerSequencer::addAuditionCCEvent(const mpe::ControllerChangeEvent& event, long long positionUs)
 {
-    const std::map<mpe::ControllerChangeEvent::Type, int> TYPE_TO_CC {
+    static const std::unordered_map<mpe::ControllerChangeEvent::Type, int> TYPE_TO_CC {
         { mpe::ControllerChangeEvent::Modulation, 1 },
         { mpe::ControllerChangeEvent::SustainPedalOnOff, 64 },
         { mpe::ControllerChangeEvent::PitchBend, 128 },

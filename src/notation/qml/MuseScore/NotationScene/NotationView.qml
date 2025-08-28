@@ -159,11 +159,14 @@ FocusScope {
                     }
 
                     onShowElementPopupRequested: function (popupType, elementRect) {
-                        Qt.callLater(popUpLoader.show, popupType, elementRect)
+                        popUpLoader.openProperties = {
+                            popupType: popupType,
+                            elementRect: elementRect
+                        };
                     }
 
                     onHideElementPopupRequested: {
-                        Qt.callLater(popUpLoader.close)
+                        popUpLoader.openProperties = null;
                     }
 
                     onViewportChanged: {
@@ -186,6 +189,26 @@ FocusScope {
 
                         notationViewNavigationSection: navSec
                         navigationOrderStart: notationView.navigationPanel.order + 1
+
+                        property var openProperties: null
+                        property bool updateShowScheduled: false
+
+                        onOpenPropertiesChanged: {
+                            if (!updateShowScheduled) {
+                                Qt.callLater(updateShow)
+                                updateShowScheduled = true;
+                            }
+                        }
+
+                        function updateShow() {
+                            if (openProperties) {
+                                show(openProperties.popupType, openProperties.elementRect);
+                            } else {
+                                close();
+                            }
+
+                            popUpLoader.updateShowScheduled = false;
+                        }
 
                         onOpened: function(popupType) {
                             paintView.onElementPopupIsOpenChanged(popupType)

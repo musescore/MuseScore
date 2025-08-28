@@ -220,7 +220,7 @@
       <attributes>
         <divisions>1</divisions>
         <key>
-          <fifths>0</fifths>
+          <fifths>2</fifths>
           </key>
         <time>
           <beats>4</beats>
@@ -316,7 +316,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
-        <accidental>sharp</accidental>
         </note>
       </measure>
     <measure number="6">
@@ -348,7 +347,6 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
-        <accidental>sharp</accidental>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

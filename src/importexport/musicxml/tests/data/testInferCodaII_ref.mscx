@@ -299,6 +299,7 @@
           <style>repeat_left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
+          <markerType>segno</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -409,6 +410,7 @@
           <text>To coda II
 <sym>coda</sym><sym>coda</sym></text>
           <label>codaii</label>
+          <markerType>coda</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -634,6 +636,7 @@
           <text>To coda I
 <sym>coda</sym></text>
           <label>coda</label>
+          <markerType>coda</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -1215,6 +1218,7 @@
           <text>CODA I
 <sym>coda</sym></text>
           <label>codab</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -1741,6 +1745,7 @@
           <text>Coda II
 <sym>coda</sym><sym>coda</sym></text>
           <label>codabii</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Beam>

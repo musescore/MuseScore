@@ -84,7 +84,7 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
     TimeSigMap* sigmap = m_score->sigmap();
     for (const RepeatSegment* rs : m_score->repeatList()) {
         int startTick  = rs->tick;
-        int endTick    = startTick + rs->len();
+        int endTick    = rs->endTick();
         int tickOffset = rs->utick - rs->tick;
 
         auto bs = sigmap->lower_bound(startTick);
@@ -361,8 +361,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
 
         // Export lyrics and RehearsalMarks as Meta events
         for (const RepeatSegment* rs : m_score->repeatList()) {
-            int startTick  = rs->tick;
-            int endTick    = startTick + rs->len();
+            int endTick    = rs->endTick();
             int tickOffset = rs->utick - rs->tick;
 
             // export Lyrics

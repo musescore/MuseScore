@@ -3017,6 +3017,8 @@ Sid TextBase::offsetSid() const
         return above ? Sid::tempoPosAbove : Sid::tempoPosBelow;
     case TextStyleType::MEASURE_NUMBER:
         return above ? Sid::measureNumberPosAbove : Sid::measureNumberPosBelow;
+    case TextStyleType::MEASURE_NUMBER_ALTERNATE:
+        return above ? Sid::measureNumberAlternatePosAbove : Sid::measureNumberAlternatePosBelow;
     case TextStyleType::MMREST_RANGE:
         return above ? Sid::mmRestRangePosAbove : Sid::mmRestRangePosBelow;
     default:

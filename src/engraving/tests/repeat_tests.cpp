@@ -52,7 +52,7 @@ void Engraving_RepeatTests::repeat(const char* path, const String& ref)
 
     for (const RepeatSegment* rs : score->repeatList()) {
         int startTick = rs->tick;
-        int endTick   = startTick + rs->len();
+        int endTick   = rs->endTick();
 
         for (const Measure* m = score->tick2measure(Fraction::fromTicks(startTick)); m; m = m->nextMeasure()) {
             sl.append(String::number(m->no() + 1));

@@ -25,7 +25,7 @@
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
-#include "iaudioconfiguration.h"
+#include "../iaudioconfiguration.h"
 #include "iaudiodriver.h"
 #include "audio/common/rpc/irpcchannel.h"
 

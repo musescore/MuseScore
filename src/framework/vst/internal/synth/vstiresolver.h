@@ -40,8 +40,8 @@ public:
     VstiResolver(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    muse::audio::synth::ISynthesizerPtr resolveSynth(const muse::audio::TrackId trackId,
-                                                     const muse::audio::AudioInputParams& params) const override;
+    muse::audio::synth::ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params,
+                                                     const audio::OutputSpec& outputSpec) const override;
     bool hasCompatibleResources(const muse::audio::PlaybackSetupData& setup) const override;
     muse::audio::AudioResourceMetaList resolveResources() const override;
     muse::audio::SoundPresetList resolveSoundPresets(const muse::audio::AudioResourceMeta& resourceMeta) const override;
@@ -49,7 +49,7 @@ public:
     void clearSources() override;
 
 private:
-    VstSynthPtr createSynth(const muse::audio::TrackId trackId, const muse::audio::AudioInputParams& params) const;
+    VstSynthPtr createSynth(const audio::TrackId trackId, const audio::AudioInputParams& params, const audio::OutputSpec& outputSpec) const;
 };
 }
 

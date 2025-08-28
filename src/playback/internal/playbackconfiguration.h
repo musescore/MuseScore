@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "musesampler/imusesamplerinfo.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
 
 namespace mu::playback {
 class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async::Asyncable
@@ -91,12 +91,15 @@ public:
     bool needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const override;
     void setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show) override;
 
-    bool needToShowOnlineSoundsConnectionWarning() const override;
-    void setNeedToShowOnlineSoundsConnectionWarning(bool show) override;
+    bool shouldShowOnlineSoundsProcessingError() const override;
+    void setShouldShowOnlineSoundsProcessingError(bool show) override;
+    muse::async::Notification shouldShowOnlineSoundsProcessingErrorChanged() const override;
 
     OnlineSoundsShowProgressBarMode onlineSoundsShowProgressBarMode() const override;
     void setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode mode) override;
     muse::async::Notification onlineSoundsShowProgressBarModeChanged() const override;
+
+    muse::String onlineSoundsHandbookUrl() const override;
 
     bool shouldMeasureInputLag() const override;
 
@@ -104,6 +107,7 @@ private:
     const SoundProfileName& fallbackSoundProfileStr() const;
 
     muse::async::Notification m_playNotesWhenEditingChanged;
+    muse::async::Notification m_shouldShowOnlineSoundsProcessingErrorChanged;
     muse::async::Notification m_onlineSoundsShowProgressBarModeChanged;
     muse::async::Channel<bool> m_playChordWhenEditingChanged;
     muse::async::Channel<bool> m_playHarmonyWhenEditingChanged;

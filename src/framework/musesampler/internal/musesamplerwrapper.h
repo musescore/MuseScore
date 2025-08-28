@@ -43,7 +43,7 @@ public:
                        async::Notification processOnlineSoundsRequested, const modularity::ContextPtr& iocCtx);
     ~MuseSamplerWrapper() override;
 
-    void setSampleRate(unsigned int sampleRate) override;
+    void setOutputSpec(const audio::OutputSpec& spec) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
     muse::audio::samples_t process(float* buffer, muse::audio::samples_t samplesPerChannel) override;
@@ -98,6 +98,8 @@ private:
 
     muse::audio::samples_t m_currentPosition = 0;
     muse::audio::sample_rate_t m_samplerSampleRate = 0;
+
+    audio::OutputSpec m_outputSpec;
 
     std::vector<float> m_leftChannel;
     std::vector<float> m_rightChannel;

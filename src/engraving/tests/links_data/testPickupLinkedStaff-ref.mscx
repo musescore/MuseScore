@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
   <Score>
-    <eid>B_B</eid>
+    <eid>gY8R+JIYuhL_buEc7F+kvMG</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -10,6 +10,7 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <open>1</open>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
@@ -71,15 +72,15 @@
       </Order>
     <Part id="1">
       <Staff>
-        <eid>C_C</eid>
+        <eid>aWS2zjx+axP_aWS2zjx+axP</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>bWS2zjx+axP_bWS2zjx+axP</eid>
+        <linkedTo>aWS2zjx+axP_aWS2zjx+axP</linkedTo>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -122,46 +123,45 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>E_E</eid>
+        <eid>YRewe+1wtBJ_B/s5bHeD0yG</eid>
         <Text>
-          <eid>F_F</eid>
+          <eid>mtumnv/Rk/J_MQ5AaeMX/QE</eid>
           <style>title</style>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>0Ki/39rH30G_a3j9vhraDbM</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
+          <eid>DCv1Hr68jl_lU3VTe3ZRdM</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure len="7/16">
-        <eid>I_I</eid>
+        <eid>Ggj1CbyB6DC_i4qW5TIBQXF</eid>
         <voice>
           <KeySig>
-            <eid>J_J</eid>
+            <eid>6NTQCl7CkfI_ZWS2zjx+axP</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>KU3nBgIs0h_d5Xl/tJ2HfF</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>L_L</eid>
+            <eid>iCr/8Pt0YE_swjjY8sRZaF</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>M_M</eid>
+            <eid>Vc6rwaUeGHP_SNYobkeQygG</eid>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <eid>N_N</eid>
+            <eid>gkJXQxtZNIF_agCRGi8Q9gK</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -171,28 +171,28 @@
       <Measure len="7/16">
         <voice>
           <KeySig>
-            <eid>O_O</eid>
-            <linkedTo>J_J</linkedTo>
+            <eid>cWS2zjx+axP_cWS2zjx+axP</eid>
+            <linkedTo>6NTQCl7CkfI_ZWS2zjx+axP</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>P_P</eid>
+            <eid>dWS2zjx+axP_dWS2zjx+axP</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>Q_Q</eid>
-            <linkedTo>L_L</linkedTo>
+            <eid>eWS2zjx+axP_eWS2zjx+axP</eid>
+            <linkedTo>iCr/8Pt0YE_swjjY8sRZaF</linkedTo>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>R_R</eid>
-            <linkedTo>M_M</linkedTo>
+            <eid>fWS2zjx+axP_fWS2zjx+axP</eid>
+            <linkedTo>Vc6rwaUeGHP_SNYobkeQygG</linkedTo>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <eid>S_S</eid>
-            <linkedTo>N_N</linkedTo>
+            <eid>gWS2zjx+axP_gWS2zjx+axP</eid>
+            <linkedTo>gkJXQxtZNIF_agCRGi8Q9gK</linkedTo>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

@@ -112,13 +112,7 @@ QVariantMap AbstractMenuModel::get(int index)
 
 void AbstractMenuModel::load()
 {
-    uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
-        onActionsStateChanges(codes);
-    });
-
-    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
-        updateShortcutsAll();
-    });
+    subscribeOnChanges();
 }
 
 QVariantList AbstractMenuModel::itemsProperty() const
@@ -255,6 +249,17 @@ MenuItem* AbstractMenuModel::makeSeparator()
     item->setAction(action);
 
     return item;
+}
+
+void AbstractMenuModel::subscribeOnChanges()
+{
+    uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
+        onActionsStateChanges(codes);
+    });
+
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        updateShortcutsAll();
+    });
 }
 
 void AbstractMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)

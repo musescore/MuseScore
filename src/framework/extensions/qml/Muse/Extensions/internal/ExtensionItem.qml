@@ -68,12 +68,8 @@ Item {
             sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
 
             layer.enabled: ui.isEffectsAllowed
-            layer.effect: EffectOpacityMask {
-                maskSource: Rectangle {
-                    width: thumbnail.width
-                    height: thumbnail.height
-                    radius: thumbnail.radius
-                }
+            layer.effect: RoundedCornersEffect {
+                radius: thumbnail.radius
             }
         }
 

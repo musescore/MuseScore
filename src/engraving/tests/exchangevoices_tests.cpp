@@ -82,9 +82,6 @@ TEST_F(Engraving_ExchangevoicesTests, glissandi)
 TEST_F(Engraving_ExchangevoicesTests, rangeSelection)
 {
     // Change voice of range selection including lyrics, lyrics lines, partial ties, slur, glissando, note anchored line, dynamics
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + u"exchangevoices-range.mscx");
     EXPECT_TRUE(score);
     score->doLayout();
@@ -105,8 +102,6 @@ TEST_F(Engraving_ExchangevoicesTests, rangeSelection)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-range.mscx",
                                             EXCHVOICES_DATA_DIR + u"exchangevoices-range.mscx"));
-
-    MScore::useRead302InTestMode = use302;
 }
 
 TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)

@@ -98,16 +98,12 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
         layoutModifierParentheses(item);
         RectF bb;
         RectF hAlignBox;
-        double segBl = 0.0;
         for (HarmonyRenderItem* renderItem : item->ldata()->renderItemList()) {
             RectF tsBbox = renderItem->tightBoundingRect().translated(renderItem->x(), renderItem->y());
             bb.unite(tsBbox);
 
             if (renderItem->align()) {
                 hAlignBox.unite(tsBbox);
-            }
-            if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
-                segBl = ts->bboxBaseLine();
             }
         }
 
@@ -199,14 +195,17 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
 
 void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
 {
+    const double spatium = item->spatium();
     const std::vector<HarmonyRenderItem*>& itemList = item->ldata()->renderItemList();
     // Layout parentheses
     std::vector<ChordSymbolParen*> openingParenStack;
+    double lastTextSegHeight = 0.0;
+    double lastTextSegTop = 0.0;
     for (HarmonyRenderItem* renderItem : itemList) {
-        if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
-            if (paren->paren->direction() == DirectionH::LEFT) {
+        if (ChordSymbolParen* curParen = dynamic_cast<ChordSymbolParen*>(renderItem)) {
+            if (curParen->parenItem->direction() == DirectionH::LEFT) {
                 // Opening paren
-                openingParenStack.push_back(paren);
+                openingParenStack.push_back(curParen);
             } else {
                 // Closing paren
                 ChordSymbolParen* openingParen = openingParenStack.empty() ? nullptr : openingParenStack.back();
@@ -214,29 +213,40 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                     continue;
                 }
                 openingParenStack.pop_back();
-                paren->top = openingParen->top;
-                paren->bottom = openingParen->bottom;
+                curParen->top = openingParen->top;
+                curParen->bottom = openingParen->bottom;
 
                 // Layout parenthesis pair
-                double startY = openingParen->top;
-                double height = openingParen->bottom - openingParen->top;
-                double midPointThickness = height / 30 * openingParen->paren->ldata()->mag();
+                double extension = 0.1 * spatium * (item->size() / 10.0);
+                double startY = openingParen->top - extension;
+                double height = (openingParen->bottom - openingParen->top) + 2 * extension;
+                if (std::isinf(height)) {
+                    height = lastTextSegHeight;
+                }
+                if (muse::RealIsEqual(DBL_MAX, startY)) {
+                    startY = lastTextSegTop;
+                }
+                double midPointThickness = height / 30 * openingParen->parenItem->ldata()->mag();
                 double endPointThickness = 0.05;
-                openingParen->paren->mutldata()->startY = startY;
+                openingParen->parenItem->mutldata()->startY = startY;
                 openingParen->sety(startY);
-                openingParen->paren->mutldata()->height = height;
-                openingParen->paren->mutldata()->midPointThickness.set_value(midPointThickness);
-                openingParen->paren->mutldata()->endPointThickness.set_value(endPointThickness);
+                openingParen->parenItem->mutldata()->height = height;
+                openingParen->parenItem->mutldata()->midPointThickness.set_value(midPointThickness);
+                openingParen->parenItem->mutldata()->endPointThickness.set_value(endPointThickness);
 
-                paren->paren->mutldata()->startY = startY;
-                paren->sety(startY);
-                paren->paren->mutldata()->height = height;
-                paren->paren->mutldata()->midPointThickness.set_value(midPointThickness);
-                paren->paren->mutldata()->endPointThickness.set_value(endPointThickness);
-                paren->setx(openingParen->closingParenPos);
+                curParen->parenItem->mutldata()->startY = startY;
+                curParen->sety(startY);
+                curParen->parenItem->mutldata()->height = height;
+                curParen->parenItem->mutldata()->midPointThickness.set_value(midPointThickness);
+                curParen->parenItem->mutldata()->endPointThickness.set_value(endPointThickness);
+                double closingPos = openingParen->closingParenPos;
+                if (muse::RealIsEqual(-DBL_MAX, closingPos)) {
+                    closingPos = openingParen->x() + openingParen->boundingRect().width();
+                }
+                curParen->setx(closingPos);
 
-                ParenthesisLayout::createPathAndShape(openingParen->paren, openingParen->paren->mutldata());
-                ParenthesisLayout::createPathAndShape(paren->paren, paren->paren->mutldata());
+                ParenthesisLayout::createPathAndShape(openingParen->parenItem, openingParen->parenItem->mutldata());
+                ParenthesisLayout::createPathAndShape(curParen->parenItem, curParen->parenItem->mutldata());
 
                 // Outer parens must always be the same length or longer than inner parens
                 for (ChordSymbolParen* outerParen : openingParenStack) {
@@ -244,13 +254,15 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
                     outerParen->bottom = std::max(openingParen->bottom, outerParen->bottom);
                 }
             }
-        } else if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
+        } else if (TextSegment* textSeg = dynamic_cast<TextSegment*>(renderItem)) {
             // Set top paren height
+            lastTextSegHeight = textSeg->height();
+            lastTextSegTop = textSeg->tightBoundingRect().translated(textSeg->pos()).y();
             if (!openingParenStack.empty()) {
                 ChordSymbolParen* topParen = openingParenStack.back();
-                topParen->top = std::min(topParen->top, ts->boundingRect().translated(ts->pos()).y());
-                topParen->bottom = std::max(topParen->bottom, ts->boundingRect().translated(ts->pos()).y() + ts->boundingRect().height());
-                topParen->closingParenPos = std::max(topParen->closingParenPos, ts->x() + ts->width());
+                topParen->top = std::min(topParen->top, textSeg->tightBoundingRect().translated(textSeg->pos()).y());
+                topParen->bottom = std::max(topParen->bottom, textSeg->bboxBaseLine() + textSeg->pos().y());
+                topParen->closingParenPos = std::max(topParen->closingParenPos, textSeg->x() + textSeg->width());
                 continue;
             }
         }
@@ -282,13 +294,13 @@ void HarmonyLayout::layoutModifierParentheses(const Harmony* item)
         double padding = i != 0 ? computePadding(itemList.at(i - 1), renderItem) : 0.0;
 
         if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(renderItem)) {
-            if (paren->paren->direction() == DirectionH::LEFT) {
-                additionalSpace += paren->paren->width() + padding;
+            if (paren->parenItem->direction() == DirectionH::LEFT) {
+                additionalSpace += paren->parenItem->width() + padding;
                 paren->movex(additionalSpace);
             }
-            if (paren->paren->direction() == DirectionH::RIGHT) {
+            if (paren->parenItem->direction() == DirectionH::RIGHT) {
                 paren->movex(additionalSpace + padding);
-                additionalSpace += paren->paren->width() + padding;
+                additionalSpace += paren->parenItem->width() + padding;
             }
         } else if (TextSegment* ts = dynamic_cast<TextSegment*>(renderItem)) {
             additionalSpace += padding;

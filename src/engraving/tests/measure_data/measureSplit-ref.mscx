@@ -10,6 +10,7 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <open>1</open>
     <metaTag name="arranger"></metaTag>
     <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer">Composer / arranger</metaTag>
@@ -123,7 +124,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>E_E</eid>
         <Text>
           <eid>F_F</eid>
@@ -1363,7 +1363,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>kD_kD</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
@@ -2102,7 +2101,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <eid>mF_mF</eid>
           <linkedTo>E_E</linkedTo>
           <Text>

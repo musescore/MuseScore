@@ -96,6 +96,17 @@ inline bool isOnlineAudioResource(const AudioResourceMeta& meta)
 
     return val == 1;
 }
+
+inline samples_t minSamplesToReserve(RenderMode mode)
+{
+    // Idle: render as little as possible for lower latency
+    if (mode == RenderMode::IdleMode) {
+        return 128;
+    }
+
+    // Active: render more for better quality (rendering is usually much heavier in this scenario)
+    return 1024;
+}
 }
 
 #endif // MUSE_AUDIO_AUDIOUTILS_H

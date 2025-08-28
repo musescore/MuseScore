@@ -702,8 +702,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                    mpe::SoundSubCategory::Bowl } }, { midi::Program(0, 11) } },
         { { mpe::SoundId::Chain,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
 
-        { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Metal,
-                                   mpe::SoundSubCategory::Hand } }, { midi::Program(0, 112) } },
+        { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Hand } }, { midi::Program(0, 112) } },
+        { { mpe::SoundId::Chimes, { mpe::SoundSubCategory::Hand } }, { midi::Program(0, 112) } },
         { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Plate,
                                    mpe::SoundSubCategory::Metal } }, { midi::Program(0, 11) } },
         { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
@@ -1059,11 +1059,11 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     return empty;
 }
 
-static const mpe::ArticulationTypeSet SUSTAIN_PEDAL_CC_SUPPORTED_TYPES = {
-    mpe::ArticulationType::Pedal, mpe::ArticulationType::LetRing,
+static const mpe::ArticulationTypeSet SUSTAIN_PEDAL_CC_SUPPORTED_TYPES {
+    mpe::ArticulationType::Pedal
 };
 
-static const mpe::ArticulationTypeSet SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES = {
+static const mpe::ArticulationTypeSet SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES {
     mpe::ArticulationType::LaissezVibrer,
 };
 

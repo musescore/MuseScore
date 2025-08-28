@@ -1411,7 +1411,9 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             pen.setJoinStyle(PenJoinStyle::RoundJoin);
             painter->setPen(pen);
             painter->setBrush(Brush(pen.color()));
-            painter->drawPath(ldata->slurPath);
+            for (const PainterPath& path : ldata->slurPaths) {
+                painter->drawPath(path);
+            }
         } else {
             pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
             pen.setCapStyle(PenCapStyle::RoundCap);
@@ -1851,7 +1853,7 @@ void TDraw::draw(const Harmony* item, Painter* painter)
             painter->drawText(ts->pos(), ts->text());
 #endif
         } else if (const ChordSymbolParen* parenItem = dynamic_cast<const ChordSymbolParen*>(renderItem)) {
-            Parenthesis* p = parenItem->paren;
+            Parenthesis* p = parenItem->parenItem;
             painter->translate(parenItem->pos());
             draw(p, painter);
             painter->translate(-parenItem->pos());

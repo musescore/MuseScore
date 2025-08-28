@@ -60,7 +60,7 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    muse::Ret readScore(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
+    muse::Ret readScoreFile(Score* score, XmlReader& e, rw::ReadInOutData* out) override;
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
@@ -90,7 +90,7 @@ public:
 private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;
 
-    static bool readScore206(Score* score, XmlReader& e, read400::ReadContext& ctx);
+    static bool readScoreTag(Score* score, XmlReader& e, read400::ReadContext& ctx);
     static void readPart206(Part* part, XmlReader& e, read400::ReadContext& ctx);
 };
 }

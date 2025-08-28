@@ -81,6 +81,7 @@
           <style>repeat_left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
+          <markerType>segno</markerType>
           </Marker>
         <voice>
           <Clef>
@@ -112,6 +113,7 @@
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Rest>
@@ -128,6 +130,7 @@
           <style>repeat_left</style>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
+          <markerType>varcoda</markerType>
           </Marker>
         <voice>
           <Rest>
@@ -148,6 +151,7 @@
           <style>repeat_left</style>
           <text><sym>coda</sym><sym>coda</sym></text>
           <label>codetta</label>
+          <markerType>codetta</markerType>
           </Marker>
         <voice>
           <Rest>
@@ -292,6 +296,7 @@
           <style>repeat_right</style>
           <text>To Coda</text>
           <label>coda</label>
+          <markerType>coda</markerType>
           </Marker>
         <voice>
           <Rest>

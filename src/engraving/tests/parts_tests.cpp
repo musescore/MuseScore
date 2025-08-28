@@ -184,9 +184,6 @@ void Engraving_PartsTests::testPartCreation(const String& test)
 
 TEST_F(Engraving_PartsTests, appendMeasure)
 {
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
     ASSERT_TRUE(score);
 
@@ -202,7 +199,6 @@ TEST_F(Engraving_PartsTests, appendMeasure)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-all-uappendmeasures.mscx", PARTS_DATA_DIR + u"part-all-uappendmeasures.mscx"));
     delete score;
-    MScore::useRead302InTestMode = use302;
 }
 
 //---------------------------------------------------------
@@ -211,9 +207,6 @@ TEST_F(Engraving_PartsTests, appendMeasure)
 
 TEST_F(Engraving_PartsTests, insertMeasure)
 {
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
     ASSERT_TRUE(score);
 
@@ -230,8 +223,6 @@ TEST_F(Engraving_PartsTests, insertMeasure)
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-all-uinsertmeasures.mscx", PARTS_DATA_DIR + u"part-all-uinsertmeasures.mscx"));
     delete score;
-
-    MScore::useRead302InTestMode = use302;
 }
 
 //---------------------------------------------------------
@@ -313,10 +304,7 @@ TEST_F(Engraving_PartsTests, createPart1)
 
 TEST_F(Engraving_PartsTests, createPart2)
 {
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     testPartCreation(u"part-all");
-    MScore::useRead302InTestMode = use302;
 }
 
 TEST_F(Engraving_PartsTests, createPart3)
@@ -1228,12 +1216,7 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
 
 TEST_F(Engraving_PartsTests, partSpanners)
 {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     testPartCreation(u"part-spanners");
-
-    MScore::useRead302InTestMode = useRead302;
 }
 
 TEST_F(Engraving_PartsTests, partTies) {
@@ -1279,9 +1262,6 @@ TEST_F(Engraving_PartsTests, partVisibleTracks) {
 }
 
 TEST_F(Engraving_PartsTests, inputFromParts) {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
-
     // Enter notes *in parts* and check that they are correctly cloned to the score.
 
     Score* score = ScoreRW::readScore(PARTS_DATA_DIR + u"input-from-parts.mscz");
@@ -1345,8 +1325,6 @@ TEST_F(Engraving_PartsTests, inputFromParts) {
     EXPECT_TRUE(scoreSegment);
     chord = toChord(scoreSegment->elementAt(staff2track(bassoonStaff) + voice));
     EXPECT_TRUE(chord);
-
-    MScore::useRead302InTestMode = useRead302;
 }
 
 //---------------------------------------------------------

@@ -232,7 +232,7 @@ struct ReverbProcessor::impl
     int modCounter = 0;
 };
 
-ReverbProcessor::ReverbProcessor(const AudioFxParams& params, audioch_t audioChannelsCount)
+ReverbProcessor::ReverbProcessor(const AudioFxParams& params)
     : m_params(params)
 {
     d = simd::aligned_new<impl>(64);
@@ -286,8 +286,11 @@ ReverbProcessor::ReverbProcessor(const AudioFxParams& params, audioch_t audioCha
     setParameter(Params::Quality, getParameter(Params::Quality));
     setParameter(Params::PreDelayMs, getParameter(Params::PreDelayMs));
     setParameter(Params::FeedbackTop, getParameter(Params::FeedbackTop));
+}
 
-    setFormat(audioChannelsCount, 44100.0 /*sampleRate*/, 512 /*maximumBlockSize*/);
+void ReverbProcessor::init(const OutputSpec& spec)
+{
+    setOutputSpec(spec);
 }
 
 ReverbProcessor::~ReverbProcessor()
@@ -311,13 +314,13 @@ async::Channel<audio::AudioFxParams> ReverbProcessor::paramsChanged() const
     return m_paramsChanged;
 }
 
-void ReverbProcessor::setSampleRate(unsigned int sampleRate)
+void ReverbProcessor::setOutputSpec(const OutputSpec& spec)
 {
-    if (m_processor._sampleRate == sampleRate) {
+    IF_ASSERT_FAILED(spec.isValid()) {
         return;
     }
 
-    setFormat(m_processor._audioChannelsCount, sampleRate, m_processor._blockSize);
+    setFormat(spec.audioChannelCount, spec.sampleRate, spec.samplesPerChannel);
 }
 
 bool ReverbProcessor::active() const

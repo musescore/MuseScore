@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE museScore [
-
+  <!-- superscript adjust -->
+  <!ENTITY super "0.36">
+  ]>
 <!--
 =====================================================================
     SPDX-License-Identifier: GPL-3.0-only
@@ -21,7 +23,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =====================================================================
     This file describes how chord symbols are parsed and rendered
@@ -29,15 +31,7 @@
 =====================================================================
 -->
 
-<!-- MuseJazz Text extensions are already superscripted; this is how much to move them back down -->
-  <!ENTITY ext "2.5">
-<!-- MuseJazz Text modifier digits are already superscripted; this is how much to move everything else up to match -->
-  <!ENTITY mod "4.5">
-<!-- this is additional superscripting to apply to modifier digits -->
-  <!ENTITY modn "1">
-  ]>
-
-<museScore version="1.24">
+<museScore version="4.60">
 
 <!--
       Part I: font list
@@ -50,25 +44,9 @@
   <autoAdjust>1</autoAdjust>
 
   <font family="MuseJazz Text">
-
-    <sym code="0xe180" name="ma"/>
-    <sym code="0xe181" name="mi"/>
-    <sym code="0xe185" name="sus"/>
-    <sym code="0xe186" name="+"/>
-    <sym code="0xe187" name="degree"/>
-    <sym code="0xe18a" name="triangle"/>
-    <sym code="0xe18d" name="sus4"/>
-    <sym code="0xe18e" name="circle"/>
-    <sym code="0xe18f" name="oslash"/>
-
-    <sym code="0x266d" name="b"/>
-    <sym code="0x266e" name="natural"/>
-    <sym code="0x266f" name="#"/>
-
-    <sym code="0x1d12a" name="##"/>
-    <sym code="0x1d12b" name="bb"/>
-
-    <sym code="0xE87C" name="dslash"/>
+<!-- this allows "b" to render as a literal when encountered as a note name -->
+    <sym value="b" class="note" name="b"/>
+    <sym class="note" name="mi"/>
 
 <!-- add "code" attributes (as for "b" and "#" above) to get these to render as flat and sharp signs -->
     <sym class="accidental" name="es"/>
@@ -78,92 +56,127 @@
 <!-- change value of "code" attribute to "0x200b" (zero width space) to force Bb to render as B in German -->
     <sym class="german_B" code="0x266d" name="b"/>
 
-<!-- these enable "b" and "mi" to render as literals when encountered as note names -->
-    <sym class="note" name="b"/>
-    <sym class="note" name="mi"/>
+    <sym code="0xe180" name="ma"/>
+    <sym code="0xe181" name="mi"/>
 
     </font>
 
+
+<!-- Symbols we want to take from the musical text font -->
+<font family="MuseJazz Text">
+    <sym code="0xe187" name="degree"/>
+    <sym code="0xE18A" name="triangle"/>
+    <sym code="0xe18e" name="circle"/>
+    <sym code="0xE18F" name="oslash"/>
+
+    <sym code="0x266d" name="b"/>
+    <sym code="0x266e" name="natural"/>
+    <sym code="0x266f" name="#"/>
+    <sym code="0x1d12a" name="##"/>
+    <sym code="0x1d12b" name="bb"/>
+
+    <sym code="0xE87C" name="dslash"/>
+    <sym code="0xE874" name="-"/>
+    <sym code="0xe186" name="+"/>
+    </font>
+
+<!-- Extensions -->
+  <font class="extension" family="MuseJazz Text">
+    <sym value="0" name="e0"/>
+    <sym value="1" name="e1"/>
+    <sym value="2" name="e2"/>
+    <sym value="3" name="e3"/>
+    <sym value="4" name="e4"/>
+    <sym value="5" name="e5"/>
+    <sym value="6" name="e6"/>
+    <sym value="7" name="e7"/>
+    <sym value="8" name="e8"/>
+    <sym value="9" name="e9"/>
+    <sym value="10" name="e10"/>
+    <sym value="11" name="e11"/>
+    <sym value="12" name="e12"/>
+    <sym value="13" name="e13"/>
+    <sym value="," name="e,"/>
+    <sym value="/" name="e/"/>
+    </font>
+
+<!-- Musical text font -->
+<font class="extension" family="MuseJazz Text">
+    <sym code="0xE875" name="e("/>
+    <sym code="0xE876" name="e)"/>
+    </font>
+
+<!-- Modifiers -->
   <font class="modifier" family="MuseJazz Text">
+    <sym value="0" name="s0"/>
+    <sym value="1" name="s1"/>
+    <sym value="2" name="s2"/>
+    <sym value="3" name="s3"/>
+    <sym value="4" name="s4"/>
+    <sym value="5" name="s5"/>
+    <sym value="6" name="s6"/>
+    <sym value="7" name="s7"/>
+    <sym value="8" name="s8"/>
+    <sym value="9" name="s9"/>
+    <sym value="10" name="s10"/>
+    <sym value="11" name="s11"/>
+    <sym value="12" name="s12"/>
+    <sym value="13" name="s13"/>
+    <sym value="," name="s,"/>
+    <sym value="/" name="s/"/>
+    <sym value="M" name="sM"/>
+    <sym value="Ma" name="sMa"/>
+    <sym value="Maj" name="sMaj"/>
+    <sym code="0xe180" name="sma"/>
+    <sym value="maj" name="smaj"/>
+    <sym code="0xe181" name="smi"/>
 
-    <sym code="0xe188" name="sb"/>
-    <sym code="0xe189" name="s#"/>
-    <sym code="0xe18b" name="sadd"/>
-    <sym code="0xe18c" name="sadd11"/>
-    <sym code="0xe182" name="s11"/>
-    <sym code="0xe183" name="s13"/>
-    <sym code="0xe184" name="sdim"/>
-    <sym code="0xe190" name="s0"/>
-    <sym code="0xe191" name="s1"/>
-    <sym code="0xe192" name="s2"/>
-    <sym code="0xe193" name="s3"/>
-    <sym code="0xe194" name="s4"/>
-    <sym code="0xe195" name="s5"/>
-    <sym code="0xe196" name="s6"/>
-    <sym code="0xe197" name="s7"/>
-    <sym code="0xe198" name="s8"/>
-    <sym code="0xe199" name="s9"/>
+    <sym code="0xE18B" name="sadd"/>
+    <sym code="0xE185" name="ssus"/>
+    <sym code="no" name="sno"/>
 
+    <sym code="st" name="sst"/>
+    <sym code="nd" name="snd"/>
+    <sym code="rd" name="srd"/>
+    <sym code="th" name="sth"/>
+    </font>
+
+<!-- Musical text font -->
+<font class="modifier" family="MuseJazz Text">
+    <sym code="0xE10D" name="sb"/>
+    <sym code="0xE10C" name="s#"/>
+    <sym code="0xE263" name="s##"/>
+    <sym code="0xE264" name="sbb"/>
+    <sym code="0xE18A" name="striangle"/>
+    <sym code="0xE875" name="s("/>
+    <sym code="0xE876" name="s)"/>
     </font>
 
   <font family="MuseJazz Text">
-    <mag>0.85</mag>
-
-    <sym name="("/>
-    <sym name=")"/>
-    <sym name="M"/>
-    <sym name="Ma"/>
-    <sym name="Maj"/>
-    <sym name="maj"/>
-    <sym name="m"/>
-    <sym name="min"/>
-    <sym name="Mi"/>
-    <sym name="Min"/>
-    <sym name="aug"/>
-    <sym name="Aug"/>
-    <sym name="dim"/>
-    <sym name="Dim"/>
-    <sym name="alt"/>
-    <sym name="Alt"/>
-    <sym name="bass"/>
-    <sym name="Bass"/>
-    <sym name="pedal"/>
-    <sym name="Pedal"/>
-
-    </font>
-
-  <font class="extension" family="MuseJazz Text">
-    <mag>1.3</mag>
-    <sym code="0xe190" name="e0"/>
-    <sym code="0xe191" name="e1"/>
-    <sym code="0xe192" name="e2"/>
-    <sym code="0xe193" name="e3"/>
-    <sym code="0xe194" name="e4"/>
-    <sym code="0xe195" name="e5"/>
-    <sym code="0xe196" name="e6"/>
-    <sym code="0xe197" name="e7"/>
-    <sym code="0xe198" name="e8"/>
-    <sym code="0xe199" name="e9"/>
-
-    <sym code="0xe18b" name="add"/>
-    <sym code="0xe18c" name="add11"/>
-
-    </font>
-
-  <font class="modifier" family="MuseJazz Text">
     <mag>0.75</mag>
-
-    <sym value="(" name="s("/>
-    <sym value=")" name="s)"/>
-    <sym value="," name="s,"/>
-    <sym value="/" name="s/"/>
-
-    <sym name="no"/>
-    <sym name="omit"/>
-
-    <sym code="0xe18a" name="striangle"/>
-
+    <sym value="6" name="696"/>
+    <sym value="9" name="699"/>
     </font>
+
+<!-- Type/superscripts -->
+<font class="type" family="MuseJazz Text">
+    <mag>0.75</mag>
+    <sym value="0" name="t0"/>
+    <sym value="1" name="t1"/>
+    <sym value="2" name="t2"/>
+    <sym value="3" name="t3"/>
+    <sym value="4" name="t4"/>
+    <sym value="5" name="t5"/>
+    <sym value="6" name="t6"/>
+    <sym value="7" name="t7"/>
+    <sym value="8" name="t8"/>
+    <sym value="9" name="t9"/>
+
+    <sym value="I" name="tI"/>
+    <sym value="V" name="tV"/>
+    <sym value="X" name="tX"/>
+    <sym code="type" name="ttype"/>
+</font>
 
 <!--
       Part II: token list
@@ -175,236 +188,171 @@
                   see Part III for details
 -->
 
+<!-- Musical text font symbols need extra padding either side -->
+  <token class="accidental">
+    <name>b</name>
+    <render>ms:0.1:0 b ms:0.1:0</render>
+    </token>
+
+  <token class="accidental">
+    <name>natural</name>
+    <render>ms:0.1:0 natural ms:0.1:0</render>
+    </token>
+
+  <token class="accidental">
+    <name>#</name>
+    <render>ms:0.1:0 # ms:0.1:0</render>
+    </token>
+
+    <token class="accidental">
+    <name>##</name>
+    <render>ms:0.1:0 ## ms:0.1:0</render>
+    </token>
+
+    <token class="accidental">
+    <name>bb</name>
+    <render>ms:0.1:0 bb ms:0.1:0</render>
+    </token>
+
   <token>
     <name>t</name>
     <name>^</name>
     <render>triangle</render>
     </token>
 
-  <token class="modifier">
-    <name>t</name>
-    <name>^</name>
-    <render>m:0:-&mod; striangle m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>M</name>
-    <render>m:0:-&mod; M m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>Ma</name>
-    <render>m:0:-&mod; Ma m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>ma</name>
-    <render>m:0:-&mod; ma m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>Maj</name>
-    <render>m:0:-&mod; Maj m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>maj</name>
-    <render>m:0:-&mod; maj m:0:&mod;</render>
-    </token>
-
   <token>
     <name>o</name>
-    <render>degree</render>
+    <render>sc:0.5 :push :mx circle :popy sc:2</render>
     </token>
 
   <token>
     <name>0</name>
-    <render>m:0:-2.87 oslash m:0:2.87</render>
-    </token>
-
-  <token class="modifier">
-    <name>dim</name>
-    <render>sdim</render>
+    <render>sc:0.5 :push :mx oslash :popy sc:2</render>
     </token>
 
   <token>
     <name>69</name>
-    <render>m:1:-2 s6 m:-4:7 s9 m:0:-5</render>
+    <render>:push m:0:-0.5 696 :pop m:0:0.4 699 m:0:-0.4</render>
     </token>
 
   <token class="extension">
     <name>6,9</name>
-    <render>s6 m:0:-&mod; s, m:0:&mod; s9</render>
+    <render>e6 e, e9</render>
     </token>
 
   <token class="extension">
     <name>6/9</name>
-    <render>m:1:-1.8 s6 m:-1.8:0 s/ m:-1.8:6.8 s9 m:0:-5</render>
-    </token>
-
-  <token class="quality">
-    <name>add</name>
-    <render>m:0:1.08 sadd m:0:-1.08</render>
-    </token>
-
-  <token class="modifier">
-    <name>add</name>
-    <render>m:0:-0.36 sadd m:0:0.36</render>
-    </token>
-
-  <token class="modifier">
-    <name>alt</name>
-    <render>m:-0.72:0 alt</render>
-    </token>
-
-  <token class="modifier">
-    <name>no</name>
-    <render>m:0:-&mod; no m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>omit</name>
-    <render>m:0:-&mod; omit m:0:&mod;</render>
-    </token>
-
-  <token class="extension">
-    <name>(</name>
-    <render>m:0.72:-&ext; m:0:-1.44 ( m:0:1.44 m:-0:&ext;</render>
-    </token>
-
-  <token class="extension">
-    <name>)</name>
-    <render>m:0:-&ext; m:0:-1.44 ) m:0:1.44 m:0:&ext;</render>
-    </token>
-
-  <token class="extension">
-    <name>,</name>
-    <render>m:0:-&ext; m:0:-0.72 , m:0:0.72 m:0:&ext;</render>
-    </token>
-
-  <token class="extension">
-    <name>/</name>
-    <render>m:0:-&ext; m:0:-0.72 / m:0:0.72 m:0:&ext;</render>
-    </token>
-
-  <token class="modifier">
-    <name>(</name>
-    <render>m:1:-&mod; s( m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>)</name>
-    <render>m:0:-&mod; s) m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>,</name>
-    <render>m:0:-&mod; s, m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>/</name>
-    <render>m:0:-&mod; s/ m:0:&mod;</render>
-    </token>
-
-  <token class="modifier">
-    <name>b</name>
-    <render>m:0.36:0 sb</render>
-    </token>
-
-  <token class="modifier">
-    <name>#</name>
-    <render>s#</render>
+    <render>e6 e/ e9</render>
     </token>
 
   <token class="extension">
     <name>0</name>
-    <render>m:0:&ext; e0 m:0:-&ext;</render>
+    <render>e0</render>
     </token>
 
   <token class="extension">
     <name>1</name>
-    <render>m:0:&ext; e1 m:0:-&ext;</render>
+    <render>e1</render>
     </token>
 
   <token class="extension">
     <name>2</name>
-    <render>m:0:&ext; e2 m:0:-&ext;</render>
+    <render>e2</render>
     </token>
 
   <token class="extension">
     <name>3</name>
-    <render>m:0:&ext; e3 m:0:-&ext;</render>
+    <render>e3</render>
     </token>
 
   <token class="extension">
     <name>4</name>
-    <render>m:0:&ext; e4 m:0:-&ext;</render>
+    <render>e4</render>
     </token>
 
   <token class="extension">
     <name>5</name>
-    <render>m:0:&ext; e5 m:0:-&ext;</render>
+    <render>e5</render>
     </token>
 
   <token class="extension">
     <name>6</name>
-    <render>m:0:&ext; e6 m:0:-&ext;</render>
+    <render>e6</render>
     </token>
 
   <token class="extension">
     <name>7</name>
-    <render>m:0:&ext; e7 m:0:-&ext;</render>
+    <render>e7</render>
     </token>
 
   <token class="extension">
     <name>8</name>
-    <render>m:0:&ext; e8 m:0:-&ext;</render>
+    <render>e8</render>
     </token>
 
   <token class="extension">
     <name>9</name>
-    <render>m:0:&ext; e9 m:0:-&ext;</render>
+    <render>e9</render>
     </token>
 
   <token class="extension">
     <name>10</name>
-    <render>m:0:&ext; e1 e0 m:0:-&ext;</render>
+    <render>e10</render>
     </token>
 
   <token class="extension">
     <name>11</name>
-    <render>m:0:&ext; e1 e1 m:0:-&ext;</render>
+    <render>e11</render>
     </token>
 
   <token class="extension">
     <name>12</name>
-    <render>m:0:&ext; e1 e2 m:0:-&ext;</render>
+    <render>e12</render>
     </token>
 
   <token class="extension">
     <name>13</name>
-    <render>m:0:&ext; e1 e3 m:0:-&ext;</render>
+    <render>e13</render>
+    </token>
+
+  <token class="extension">
+    <name>(</name>
+    <render>e(</render>
+    </token>
+
+  <token class="extension">
+    <name>)</name>
+    <render>e)</render>
+    </token>
+
+  <token class="extension">
+    <name>,</name>
+    <render>e,</render>
+    </token>
+
+  <token class="extension">
+    <name>/</name>
+    <render>e/</render>
     </token>
 
   <token class="modifier">
     <name>0</name>
-    <render>m:0:-&modn; s0 m:0:&modn;</render>
+    <render>s0</render>
     </token>
 
   <token class="modifier">
     <name>1</name>
-    <render>m:0:-&modn; s1 m:0:&modn; </render>
+    <render>s1</render>
     </token>
 
   <token class="modifier">
     <name>2</name>
-    <render>m:0:-&modn; s2 m:0:&modn;</render>
+    <render>s2</render>
     </token>
 
   <token class="modifier">
     <name>3</name>
-    <render>m:0:-&modn; s3 m:0:&modn;</render>
+    <render>s3</render>
     </token>
 
   <token class="modifier">
@@ -414,52 +362,239 @@
 
   <token class="modifier">
     <name>5</name>
-    <render>m:0:-&modn; s5 m:0:&modn;</render>
+    <render>s5</render>
     </token>
 
   <token class="modifier">
     <name>6</name>
-    <render>m:0:-&modn; s6 m:0:&modn;</render>
+    <render>s6</render>
     </token>
 
   <token class="modifier">
     <name>7</name>
-    <render>m:0:-&modn; s7 m:0:&modn;</render>
+    <render>s7</render>
     </token>
 
   <token class="modifier">
     <name>8</name>
-    <render>m:0:-&modn; s8 m:0:&modn;</render>
+    <render>s8</render>
     </token>
 
   <token class="modifier">
     <name>9</name>
-    <render>m:0:-&modn; s9 m:0:&modn;</render>
+    <render>s9</render>
     </token>
 
   <token class="modifier">
     <name>10</name>
-    <render>m:0:-&modn; s1 s0 m:0:&modn;</render>
+    <render>s10</render>
     </token>
 
   <token class="modifier">
     <name>11</name>
-    <render>m:0:-&modn; s1 s1 m:0:&modn;</render>
+    <render>s11</render>
     </token>
 
   <token class="modifier">
     <name>12</name>
-    <render>m:0:-&modn; s1 s2 m:0:&modn;</render>
+    <render>s12</render>
     </token>
 
   <token class="modifier">
     <name>13</name>
-    <render>m:0:-&modn; s1 s3 m:0:&modn;</render>
+    <render>s13</render>
     </token>
 
-  <renderRoot>:n :a </renderRoot>
-  <renderFunction>:a :n</renderFunction>
-  <renderBase>/ m:0:0.72 :n :a m:0:-0.72</renderBase>
+  <token class="modifier">
+    <name>(</name>
+    <render>:pl</render>
+    </token>
+
+  <token class="modifier">
+    <name>)</name>
+    <render>:pr</render>
+    </token>
+
+  <token class="modifier">
+    <name>,</name>
+    <render>s,</render>
+    </token>
+
+  <token class="modifier">
+    <name>/</name>
+    <render>s/</render>
+    </token>
+
+  <token class="modifier">
+    <name>M</name>
+    <render>sM</render>
+    </token>
+
+  <token class="modifier">
+    <name>Ma</name>
+    <render>sMa</render>
+    </token>
+
+  <token class="modifier">
+    <name>Maj</name>
+    <render>sMaj</render>
+    </token>
+
+  <token class="modifier">
+    <name>mi</name>
+    <render>smi</render>
+    </token>
+
+  <token class="modifier">
+    <name>ma</name>
+    <render>sma</render>
+    </token>
+
+  <token class="modifier">
+    <name>maj</name>
+    <render>maj</render>
+    </token>
+
+  <token class="modifier">
+    <name>b</name>
+    <render>ms:0.1:0 sb ms:0.1:0</render>
+    </token>
+
+  <token class="modifier">
+    <name>#</name>
+    <render>ms:0.1:0 s# ms:0.1:0</render>
+    </token>
+
+<token class="modifier">
+    <name>bb</name>
+    <render>ms:0.1:0 sbb ms:0.1:0</render>
+    </token>
+
+<token class="modifier">
+    <name>##</name>
+    <render>ms:0.1:0 s## ms:0.1:0</render>
+    </token>
+
+  <token class="modifier">
+    <name>t</name>
+    <name>^</name>
+    <render>ms:0.1:0 striangle ms:0.1:0</render>
+    </token>
+
+  <token class="modifier">
+    <name>add</name>
+    <render>sadd</render>
+    </token>
+
+  <token class="modifier">
+    <name>sus</name>
+    <render>ssus</render>
+    </token>
+
+  <token class="modifier">
+    <name>no</name>
+    <render>sno</render>
+    </token>
+
+  <token class="modifier">
+    <name>omit</name>
+    <render>somit</render>
+    </token>
+
+<token class="modifier">
+    <name>st</name>
+    <render>sst</render>
+    </token>
+
+<token class="modifier">
+    <name>nd</name>
+    <render>snd</render>
+    </token>
+
+<token class="modifier">
+    <name>rd</name>
+    <render>srd</render>
+    </token>
+
+<token class="modifier">
+    <name>th</name>
+    <render>sth</render>
+    </token>
+
+  <token class="type">
+    <name>type</name>
+    <render>m:0:-&super; ttype m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>0</name>
+    <render>m:0:-&super; t0 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>1</name>
+    <render>m:0:-&super; t1 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>2</name>
+    <render>m:0:-&super; t2 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>3</name>
+    <render>m:0:-&super; t3 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>4</name>
+    <render>m:0:-&super; t4 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>5</name>
+    <render>m:0:-&super; t5 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>6</name>
+    <render>m:0:-&super; t6 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>7</name>
+    <render>m:0:-&super; t7 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>8</name>
+    <render>m:0:-&super; t8 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>9</name>
+    <render>m:0:-&super; t9 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>I</name>
+    <render>m:0:-&super; tI m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>V</name>
+    <render>m:0:-&super; tV m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>X</name>
+    <render>m:0:-&super; tX m:0:&super;</render>
+    </token>
+
+  <renderRoot>:n :a m:0.036:0</renderRoot>
+  <renderFunction>:a m:0.036:0 :n</renderFunction>
+  <renderBass>m:-0.014:0 / m:0.014:0 :n :a</renderBass>
+  <renderBassOffset>ms:-0.4:0.5 dslash :mxs ms:-0.4:1.5 :n :a</renderBassOffset>
 
 <!--
       Part III: chord list
@@ -481,7 +616,11 @@
          render   this is a script which contains render commands
                   commands:
                         xxx         draw symbol name xxx
-                        m:x:y       add x:y to current position (units are capheight of root)
+                        m:x:y       add x:y to current position (1 unit is the cap-height of the main font)
+                        ms:x:y      add x:y to current position (1 unit is the cap-height of the main font with scaling applied)
+                        :mx         move to the x-height of the main font
+                        :mxs        move to the x-height of the main font with scaling applied
+                        sc:x        apply x to the current scaling
                         :push
                         :pop
                         :n          root or base note

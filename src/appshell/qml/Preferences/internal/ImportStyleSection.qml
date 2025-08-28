@@ -77,7 +77,7 @@ BaseSection {
             width: root.columnWidth
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell/preferences", "Use style file:")
+            text: qsTrc("appshell/preferences", "Use style file")
             checked: prv.useStyleFile
 
             navigation.name: "UseStyleButton"

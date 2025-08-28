@@ -28,7 +28,7 @@
 
 #include "global/modularity/ioc.h"
 #include "../../iaudioengine.h"
-#include "audio/iaudioconfiguration.h"
+#include "../../iaudioworkerconfiguration.h"
 
 #include "audio/common/audiotypes.h"
 #include "../../isynthesizer.h"
@@ -37,7 +37,7 @@ namespace muse::audio::synth {
 class AbstractSynthesizer : public ISynthesizer, public Injectable, public async::Asyncable
 {
 public:
-    muse::Inject<IAudioConfiguration> config = { this };
+    muse::Inject<worker::IAudioWorkerConfiguration> config = { this };
     muse::Inject<worker::IAudioEngine> audioEngine = { this };
 
 public:
@@ -73,8 +73,6 @@ protected:
     async::Channel<audio::AudioInputParams> m_paramsChanges;
 
     async::Notification m_readyToPlayChanged;
-
-    samples_t m_sampleRate = 0;
 
     InputProcessingProgress m_inputProcessingProgress;
 };

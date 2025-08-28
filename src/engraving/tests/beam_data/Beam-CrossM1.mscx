@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="3.01">
   <Score>
     <Division>480</Division>
     <Style>
@@ -56,11 +56,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>subtitle</style>
+          <style>Subtitle</style>
           <text>Recreation of beam</text>
           </Text>
         <Text>
-          <style>title</style>
+          <style>Title</style>
           <text>Beam Test-Cross Measure</text>
           </Text>
         </VBox>

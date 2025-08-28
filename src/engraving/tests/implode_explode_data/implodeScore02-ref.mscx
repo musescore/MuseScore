@@ -257,7 +257,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <eid>G_G</eid>
         <Text>
           <eid>H_H</eid>

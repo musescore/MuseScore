@@ -36,7 +36,7 @@ BaseSection {
 
     StyledTextLabel {
         width: parent.width
-        text: qsTrc("appshell/preferences", "When entered, dynamics and hairpins should affect:")
+        text: qsTrc("appshell/preferences", "When entered, dynamics and hairpins should affect")
         horizontalAlignment: Text.AlignLeft
     }
 

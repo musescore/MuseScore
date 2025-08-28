@@ -93,7 +93,7 @@ public:
     MOCK_METHOD(void, setNotation, (notation::INotationPtr), (override));
     MOCK_METHOD(void, setIsExportingAudio, (bool), (override));
 
-    MOCK_METHOD(const std::set<muse::audio::TrackId>&, onlineSounds, (), (const, override));
+    MOCK_METHOD((const std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta>&), onlineSounds, (), (const, override));
     MOCK_METHOD(muse::async::Notification, onlineSoundsChanged, (), (const, override));
     MOCK_METHOD(muse::Progress, onlineSoundsProcessingProgress, (), (const, override));
 };

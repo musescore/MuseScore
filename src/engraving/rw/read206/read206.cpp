@@ -3349,7 +3349,7 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, ReadChor
     readChordListHook.validate();
 }
 
-bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
+bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         ctx.setTrack(muse::nidx);
@@ -3446,40 +3446,22 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 readPedal(e, ctx, toPedal(s));
             }
             score->addSpanner(s);
-        } else if (tag == "Excerpt") {
-            if (MScore::noExcerpts) {
-                e.skipCurrentElement();
-            } else {
-                if (score->isMaster()) {
-                    MasterScore* mScore = static_cast<MasterScore*>(score);
-                    Excerpt* ex = new Excerpt(mScore);
-                    read400::TRead::read(ex, e, ctx);
-                    mScore->excerpts().push_back(ex);
-                } else {
-                    LOGD("read206: readScore(): part cannot have parts");
-                    e.skipCurrentElement();
-                }
-            }
         } else if (tag == "Score") {            // recursion
-            if (MScore::noExcerpts) {
-                e.skipCurrentElement();
-            } else {
-                ctx.tracks().clear();
-                ctx.clearUserTextStyles();
-                MasterScore* m = score->masterScore();
-                Score* s = m->createScore();
-                ReadStyleHook::setupDefaultStyle(s);
-                Excerpt* ex = new Excerpt(m);
+            ctx.tracks().clear();
+            ctx.clearUserTextStyles();
+            MasterScore* m = score->masterScore();
+            Score* s = m->createScore();
+            ReadStyleHook::setupDefaultStyle(s);
+            Excerpt* ex = new Excerpt(m);
 
-                ex->setExcerptScore(s);
-                ctx.setLastMeasure(nullptr);
-                ReadContext exCtx(s);
+            ex->setExcerptScore(s);
+            ctx.setLastMeasure(nullptr);
+            ReadContext exCtx(s);
 
-                readScore206(s, e, exCtx);
+            readScoreTag(s, e, exCtx);
 
-                ex->setTracksMapping(ctx.tracks());
-                m->addExcerpt(ex);
-            }
+            ex->setTracksMapping(ctx.tracks());
+            m->addExcerpt(ex);
         } else if (tag == "PageList") {
             e.skipCurrentElement();
         } else if (tag == "name") {
@@ -3529,7 +3511,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Ret Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+Ret Read206::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
     if (out) {
@@ -3553,7 +3535,7 @@ Ret Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         } else if (tag == "programRevision") {
             score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
-            if (!readScore206(score, e, ctx)) {
+            if (!readScoreTag(score, e, ctx)) {
                 if (e.error() == muse::XmlStreamReader::CustomError) {
                     return make_ret(Err::FileCriticallyCorrupted, e.errorString());
                 }

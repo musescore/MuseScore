@@ -36,7 +36,7 @@ using namespace muse::audio::encode;
 size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
 {
     m_progress.progress(0, 100);
-    int code = ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel + m_format.sampleRate * 2);
+    int code = ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel + m_format.outputSpec.sampleRate * 2);
     m_progress.progress(100, 100);
 
     return code == OPE_OK ? samplesPerChannel : 0;
@@ -57,8 +57,8 @@ bool OggEncoder::openDestination(const io::path_t& path)
     OggOpusComments* comments = ope_comments_create();
     int error = 0;
 
-    m_opusEncoder = ope_encoder_create_file(path.c_str(), comments, m_format.sampleRate,
-                                            m_format.audioChannelsNumber, 0, &error);
+    m_opusEncoder = ope_encoder_create_file(path.c_str(), comments, m_format.outputSpec.sampleRate,
+                                            m_format.outputSpec.audioChannelCount, 0, &error);
 
     if (error != OPE_OK && m_opusEncoder) {
         ope_encoder_destroy(m_opusEncoder);

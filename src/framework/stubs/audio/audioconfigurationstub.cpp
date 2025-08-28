@@ -71,16 +71,6 @@ async::Notification AudioConfigurationStub::driverBufferSizeChanged() const
     return async::Notification();
 }
 
-msecs_t AudioConfigurationStub::audioWorkerInterval(const samples_t, const sample_rate_t) const
-{
-    return 0;
-}
-
-samples_t AudioConfigurationStub::minSamplesToReserve(RenderMode) const
-{
-    return 0;
-}
-
 samples_t AudioConfigurationStub::samplesToPreallocate() const
 {
     return 0;
@@ -105,22 +95,7 @@ async::Notification AudioConfigurationStub::sampleRateChanged() const
     return async::Notification();
 }
 
-size_t AudioConfigurationStub::desiredAudioThreadNumber() const
-{
-    return 0;
-}
-
-size_t AudioConfigurationStub::minTrackCountForMultithreading() const
-{
-    return 0;
-}
-
 // synthesizers
-AudioInputParams AudioConfigurationStub::defaultAudioInputParams() const
-{
-    return {};
-}
-
 io::paths_t AudioConfigurationStub::soundFontDirectories() const
 {
     return {};

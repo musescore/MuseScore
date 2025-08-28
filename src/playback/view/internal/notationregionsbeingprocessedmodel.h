@@ -139,7 +139,7 @@ private:
                                        const std::vector<TickRange>& ranges) const;
 
     QVariant m_notationViewMatrix;
-    std::set<muse::audio::TrackId> m_onlineSounds;
+    std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> m_onlineSounds;
     TracksBeingProcessed m_tracksBeingProcessed;
     QList<RegionInfo> m_regions; // main model
     bool m_shouldShowRegions = true;

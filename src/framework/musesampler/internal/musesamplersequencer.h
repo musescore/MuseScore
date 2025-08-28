@@ -104,6 +104,7 @@ private:
     void loadDynamicEvents(const mpe::DynamicLevelLayers& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
+    void addPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track);
     void addTextArticulationEvent(const mpe::TextArticulationEvent& event, long long startUs);
     void addSoundPresetEvent(const mpe::SoundPresetChangeEvent& event, long long positionUs);
     void addSyllableEvent(const mpe::SyllableEvent& event, long long positionUs);
@@ -111,6 +112,7 @@ private:
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 
     void addAuditionNoteEvent(const mpe::NoteEvent& noteEvent);
+    void addAuditionPedalEvent(const mpe::ArticulationMeta& meta, ms_Track track);
     void addAuditionCCEvent(const mpe::ControllerChangeEvent& event, long long positionUs);
 
     void pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const;
@@ -137,16 +139,13 @@ private:
 
     struct RenderingInfo {
         long long initialChunksDurationUs = 0;
-        int errorCode = 0;
+        std::string error;
         int64_t percentage = 0;
         audio::InputProcessingProgress::ChunkInfoList lastReceivedChunks;
 
         void clear()
         {
-            initialChunksDurationUs = 0;
-            errorCode = 0;
-            percentage = 0;
-            lastReceivedChunks.clear();
+            *this = RenderingInfo();
         }
     };
 
@@ -160,6 +159,7 @@ private:
     std::string m_defaultPresetCode;
     AuditionParams m_auditionParamsCache;
 
+    double m_autoRenderInterval = 0.0;
     std::unique_ptr<Timer> m_pollRenderingProgressTimer;
     audio::InputProcessingProgress* m_renderingProgress = nullptr;
     RenderingInfo m_renderingInfo;

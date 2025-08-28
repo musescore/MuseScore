@@ -95,11 +95,15 @@ void PlaybackModel::load(Score* score)
 
     update(0, m_score->lastMeasure()->endTick().ticks(), 0, m_score->ntracks());
 
+    InstrumentTrackIdSet trackIdSet;
+    trackIdSet.reserve(m_playbackDataMap.size());
+
     for (const auto& pair : m_playbackDataMap) {
         m_trackAdded.send(pair.first);
+        trackIdSet.insert(pair.first);
     }
 
-    m_dataChanged.notify();
+    m_tracksDataChanged.send(trackIdSet);
 }
 
 void PlaybackModel::reload()
@@ -127,16 +131,20 @@ void PlaybackModel::reload()
 
     update(tickFrom, tickTo, trackFrom, trackTo);
 
+    InstrumentTrackIdSet trackIdSet;
+    trackIdSet.reserve(m_playbackDataMap.size());
+
     for (auto& pair : m_playbackDataMap) {
         pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamics);
+        trackIdSet.insert(pair.first);
     }
 
-    m_dataChanged.notify();
+    m_tracksDataChanged.send(trackIdSet);
 }
 
-Notification PlaybackModel::dataChanged() const
+muse::async::Channel<InstrumentTrackIdSet> PlaybackModel::tracksDataChanged() const
 {
-    return m_dataChanged;
+    return m_tracksDataChanged;
 }
 
 bool PlaybackModel::isPlayRepeatsEnabled() const
@@ -302,8 +310,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
             continue;
         }
 
-        m_renderer.render(item, timestamp, duration, dynamicLevel, ctx->persistentArticulationType(utick), profile,
-                          result);
+        m_renderer.render(item, timestamp, duration, dynamicLevel, ctx, profile, result);
     }
 
     trackPlaybackData.offStream.send(std::move(result), std::move(dynamics), flushSound);
@@ -580,7 +587,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
-        int repeatEndTick = repeatStartTick + repeatSegment->len();
+        int repeatEndTick = repeatSegment->endTick();
 
         if (repeatStartTick > tickTo || repeatEndTick <= tickFrom) {
             continue;
@@ -830,7 +837,7 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
-        int repeatEndTick = repeatStartTick + repeatSegment->len();
+        int repeatEndTick = repeatSegment->endTick();
 
         if (repeatStartTick > tickTo || repeatEndTick <= tickFrom) {
             continue;
@@ -876,7 +883,7 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
     }
 
     if (!changedTracks.empty()) {
-        m_dataChanged.notify();
+        m_tracksDataChanged.send(changedTracks);
     }
 }
 

@@ -1673,6 +1673,8 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
         return computeStemSlashKerningType(toStemSlash(item1), item2);
     case ElementType::PARENTHESIS:
         return item2->isBarLine() ? KerningType::NON_KERNING : KerningType::KERNING;
+    case ElementType::GUITAR_BEND_SEGMENT:
+        return item2->isNote() || item2->isRest() ? KerningType::NON_KERNING : KerningType::KERNING;
     default:
         return KerningType::KERNING;
     }

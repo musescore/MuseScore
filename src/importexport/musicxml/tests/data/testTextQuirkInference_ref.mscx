@@ -392,6 +392,7 @@
           <style>repeat_left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
+          <markerType>segno</markerType>
           </Marker>
         <voice>
           <Harmony>
@@ -744,6 +745,7 @@
           <style>repeat_right</style>
           <text><b>To Coda <sym>coda</sym></b></text>
           <label>coda</label>
+          <markerType>coda</markerType>
           </Marker>
         <voice>
           <Beam>
@@ -828,6 +830,7 @@
           <style>repeat_left</style>
           <text><b><sym>coda</sym> Coda</b></text>
           <label>codab</label>
+          <markerType>codab</markerType>
           </Marker>
         <voice>
           <Chord>

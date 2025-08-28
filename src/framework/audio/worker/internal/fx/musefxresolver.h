@@ -32,8 +32,8 @@ public:
     AudioResourceMetaList resolveResources() const override;
 
 private:
-    IFxProcessorPtr createMasterFx(const AudioFxParams& fxParams) const override;
-    IFxProcessorPtr createTrackFx(const TrackId trackId, const AudioFxParams& fxParams) const override;
+    IFxProcessorPtr createMasterFx(const AudioFxParams& fxParams, const OutputSpec& outputSpec) const override;
+    IFxProcessorPtr createTrackFx(const TrackId trackId, const AudioFxParams& fxParams, const OutputSpec& outputSpec) const override;
 };
 }
 

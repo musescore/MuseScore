@@ -30,20 +30,6 @@ using namespace mu;
 using namespace mu::engraving;
 class MidiRendererBend_Tests : public ::testing::Test
 {
-protected:
-    void SetUp() override
-    {
-        m_useRead302 = MScore::useRead302InTestMode;
-        MScore::useRead302InTestMode = false;
-    }
-
-    void TearDown() override
-    {
-        MScore::useRead302InTestMode = m_useRead302;
-    }
-
-private:
-    bool m_useRead302 = false;
 };
 
 static const String MIDIRENDERER_BEND_TESTS_DIR = u"midi/midirenderer_bend_data/";

@@ -6648,11 +6648,38 @@
             </Instrument>
             <Instrument id="hand-bells">
                   <family>pitched-metal-percussion</family>
-                  <trackName>Hand Bells</trackName>
-                  <longName>Hand Bells</longName>
-                  <shortName>Ha. Be.</shortName>
-                  <description>Tuned hand bells.</description>
+                  <trackName>Handbells</trackName>
+                  <longName>Handbells</longName>
+                  <shortName>H.B.</shortName>
+                  <description>Tuned hand-held bells.</description>
                   <musicXMLid>pitched-percussion.handbells</musicXMLid>
+                  <staves>2</staves>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8va</concertClef>
+                  <bracket>1</bracket>
+                  <bracketSpan>2</bracketSpan>
+                  <barlineSpan>2</barlineSpan>
+                  <transposingClef staff="2">F</transposingClef>
+                  <concertClef staff="2">F8va</concertClef>
+                  <aPitchRange>36-97</aPitchRange>
+                  <pPitchRange>36-97</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <transposeDiatonic>7</transposeDiatonic>
+                  <transposeChromatic>12</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 112; MS General: Tinker Bell-->
+                        <program value="112"/> <!--Tinkle Bell-->
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>choral</genre>
+            </Instrument>
+            <Instrument id="hand-chimes">
+                  <family>pitched-metal-percussion</family>
+                  <trackName>Handchimes</trackName>
+                  <longName>Handchimes</longName>
+                  <shortName>H.C.</shortName>
+                  <description>Tuned hand-held chimes.</description>
+                  <musicXMLid>pitched-percussion.handchimes</musicXMLid>
                   <staves>2</staves>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8va</concertClef>

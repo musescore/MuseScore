@@ -677,16 +677,10 @@ TEST_F(MusicXml_Tests, graceFermata) {
     musicXmlIoTest("testGraceFermata");
 }
 TEST_F(MusicXml_Tests, guitarBends) {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     musicXmlMscxExportTestRef("testGuitarBends");
-    MScore::useRead302InTestMode = useRead302;
 }
 TEST_F(MusicXml_Tests, hammerPull) {
-    bool useRead302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     musicXmlIoTest("testHammerPull");
-    MScore::useRead302InTestMode = useRead302;
 }
 TEST_F(MusicXml_Tests, harpPedals) {
     musicXmlMscxExportTestRef("testHarpPedals");
@@ -1255,10 +1249,7 @@ TEST_F(MusicXml_Tests, timeTick) {
     musicXmlImportTestRef("testTimeTick");
 }
 TEST_F(MusicXml_Tests, timeTickExport) {
-    bool use302 = MScore::useRead302InTestMode;
-    MScore::useRead302InTestMode = false;
     musicXmlMscxExportTestRef("testTimeTickExport");
-    MScore::useRead302InTestMode = use302;
 }
 TEST_F(MusicXml_Tests, titleSwapMu) {
     musicXmlImportTestRef("testTitleSwapMu");

@@ -78,10 +78,7 @@ TEST_F(Engraving_KeySigTests, keysig)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     // remove key signature in measure 2
-    Segment* s = m2->first();
-    while (!(s->isKeySigType())) {
-        s = s->next();
-    }
+    Segment* s = m2->first(SegmentType::KeySig);
     EngravingItem* e = s->element(0);
     score->startCmd(TranslatableString::untranslatable("Key signature tests"));
     score->undoRemoveElement(e);

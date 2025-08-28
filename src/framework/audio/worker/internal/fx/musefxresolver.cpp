@@ -30,10 +30,11 @@ using namespace muse::audio;
 using namespace muse::audio::fx;
 
 namespace muse::audio::fx {
-IFxProcessorPtr createFxProcessor(const AudioFxParams& fxParams)
+IFxProcessorPtr createFxProcessor(const AudioFxParams& fxParams, const OutputSpec& outputSpec)
 {
     if (fxParams.resourceMeta.id == MUSE_REVERB_ID) {
-        return std::make_shared<ReverbProcessor>(fxParams);
+        std::shared_ptr<ReverbProcessor> p = std::make_shared<ReverbProcessor>(fxParams);
+        p->init(outputSpec);
     }
 
     return nullptr;
@@ -48,12 +49,12 @@ AudioResourceMetaList MuseFxResolver::resolveResources() const
     return result;
 }
 
-IFxProcessorPtr MuseFxResolver::createMasterFx(const AudioFxParams& fxParams) const
+IFxProcessorPtr MuseFxResolver::createMasterFx(const AudioFxParams& fxParams, const OutputSpec& outputSpec) const
 {
-    return createFxProcessor(fxParams);
+    return createFxProcessor(fxParams, outputSpec);
 }
 
-IFxProcessorPtr MuseFxResolver::createTrackFx(const TrackId, const AudioFxParams& fxParams) const
+IFxProcessorPtr MuseFxResolver::createTrackFx(const TrackId, const AudioFxParams& fxParams, const OutputSpec& outputSpec) const
 {
-    return createFxProcessor(fxParams);
+    return createFxProcessor(fxParams, outputSpec);
 }

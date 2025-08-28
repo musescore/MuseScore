@@ -30,7 +30,7 @@ class AbstractAudioSource : public IAudioSource
 public:
     virtual ~AbstractAudioSource() = default;
 
-    virtual void setSampleRate(unsigned int sampleRate) override;
+    virtual void setOutputSpec(const OutputSpec& spec) override;
 
     bool isActive() const override;
     void setIsActive(bool arg) override;
@@ -38,7 +38,7 @@ public:
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
 
 protected:
-    unsigned int m_sampleRate = 1;
+    OutputSpec m_outputSpec;
     async::Channel<unsigned int> m_streamsCountChanged;
     bool m_isActive = false;
 };

@@ -46,27 +46,8 @@ Column {
 
     StyledTextLabel {
         width: parent.width
-        text: qsTrc("inspector", "Marker type:") + " " + markerTypeToString(root.model ? root.model.type : null)
+        text: qsTrc("inspector", "Marker type:") + " " + (root.model ? root.model.markerTypeName() : "--")
         horizontalAlignment: Text.AlignLeft
-
-        function markerTypeToString(type) {
-            if (!type)
-                return ""
-
-            if (type.isUndefined)
-                return "--"
-
-            switch (type.value) {
-            case MarkerTypes.TYPE_SEGNO: return qsTrc("inspector", "Segno");
-            case MarkerTypes.TYPE_VARSEGNO: return qsTrc("inspector", "Segno variation")
-            case MarkerTypes.TYPE_CODA: return qsTrc("inspector", "Coda")
-            case MarkerTypes.TYPE_VARCODA: return qsTrc("inspector", "Varied coda")
-            case MarkerTypes.TYPE_CODETTA: return qsTrc("inspector", "Codetta")
-            case MarkerTypes.TYPE_FINE: return qsTrc("inspector", "Fine")
-            case MarkerTypes.TYPE_TOCODA: return qsTrc("inspector", "To Coda")
-            case MarkerTypes.TYPE_USER: return qsTrc("inspector", "Custom")
-            }
-        }
     }
 
     TextSection {

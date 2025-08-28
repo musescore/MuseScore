@@ -72,9 +72,7 @@ Item {
 
         PlaybackLoadingInfo {
             id: playbackLoadingInfo
-            Layout.alignment: Qt.AlignVCenter
-            Layout.preferredHeight: 28
-            Layout.preferredWidth: 312
+            Layout.fillWidth: false
 
             onStarted: {
                 visible = true
@@ -85,7 +83,12 @@ Item {
             }
         }
 
-        SeparatorLine { orientation: Qt.Vertical; visible: playbackLoadingInfo.visible }
+        SeparatorLine { 
+            Layout.leftMargin: 2
+            Layout.rightMargin: 2
+            orientation: Qt.Vertical
+            visible: playbackLoadingInfo.visible 
+        }
 
         StyledTextLabel {
             id: accessibiityInfo

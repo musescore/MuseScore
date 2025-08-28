@@ -982,6 +982,8 @@ enum class Sid {
     hopoShowOnTabStaves,
     hopoUpperCase,
     hopoShowAll,
+    hopoAlignLettersStandardStaves,
+    hopoAlignLettersTabStaves,
 
     lhTappingSymbolNormalStave,
     lhTappingSymbolTab,
@@ -1243,6 +1245,7 @@ enum class Sid {
     measureNumberAlternateColor,
     measureNumberAlternateAlign,
     measureNumberAlternatePosAbove,
+    measureNumberAlternatePosBelow,
     measureNumberAlternateFrameType,
     measureNumberAlternateFramePadding,
     measureNumberAlternateFrameWidth,

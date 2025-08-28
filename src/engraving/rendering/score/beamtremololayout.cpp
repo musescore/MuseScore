@@ -974,6 +974,8 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
             // Get the direction of groups of notes on top and bottom staves and the direction of switches between sides of the beam and switches between staves
             // Directions are up, down or neutral
             bool forceHoriz = false;
+            bool singleNoteTop = false;
+            bool singleNoteBottom = false;
 
             int topSlant = topFirstLine - topLastLine;
             if (constrainTopToQuarter && topSlant != 0) {
@@ -982,6 +984,7 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
             if (!topLast) {
                 // If there's only one note, set direction to neutral
                 topSlant = 0;
+                singleNoteTop = true;
             }
             int bottomSlant = bottomFirstLine - bottomLastLine;
             if (constrainBottomToQuarter && bottomSlant != 0) {
@@ -990,6 +993,7 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
             if (!bottomLast) {
                 // If there's only one note, set direction to neutral
                 bottomSlant = 0;
+                singleNoteBottom = true;
             }
             if ((maxMiddleTopLine >= std::max(topFirstLine, topLastLine)
                  || (minMiddleBottomLine <= std::min(bottomFirstLine, bottomLastLine)))) {
@@ -1008,17 +1012,17 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
                     break;
                 }
             }
-            const bool overallSlantFlat = overallDirection == 0;
-            const bool topSlantMatchesDirection = (topSlantDir != 0 && topSlantDir != overallDirection);
-            const bool bottomSlantMatchesDirection = (bottomSlantDir != 0 && bottomSlantDir != overallDirection);
-            const bool beamSideSwitchMatchesDirection = (beamSideSwitchDirection != 0 && beamSideSwitchDirection != overallDirection);
-            const bool staffSwitchMatchesDirection = (staffSwitchDirection != 0 && staffSwitchDirection != overallDirection);
 
-            forceHoriz = forceHoriz || overallSlantFlat
-                         || (topSlantMatchesDirection
-                             || bottomSlantMatchesDirection
-                             || beamSideSwitchMatchesDirection
-                             || staffSwitchMatchesDirection);
+            const bool overallSlantFlat = overallDirection == 0;
+            const bool topSlantOverallDiff = (topSlantDir != 0 && topSlantDir != overallDirection);
+            const bool bottomSlantOverallDiff = (bottomSlantDir != 0 && bottomSlantDir != overallDirection);
+            const bool beamSideSwitchOverallDiff = (beamSideSwitchDirection != 0 && beamSideSwitchDirection != overallDirection);
+            const bool staffSwitchOverallDiff = (staffSwitchDirection != 0 && staffSwitchDirection != overallDirection);
+            const bool flattenNeutralBeamSideSwitch = beamSideSwitchDirection == 0 && (topSlantDir != bottomSlantDir)
+                                                      && !(singleNoteTop || singleNoteBottom);
+
+            forceHoriz = forceHoriz || overallSlantFlat || flattenNeutralBeamSideSwitch
+                         || (topSlantOverallDiff || bottomSlantOverallDiff || beamSideSwitchOverallDiff || staffSwitchOverallDiff);
 
             if (!forceHoriz) {
                 int slant = 0;

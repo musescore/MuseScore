@@ -38,9 +38,9 @@ Rectangle {
     property int titleBarNavigationPanelOrder: 1
     //! ---
 
-    readonly property bool hasTitleBar: frameModel.titleBarAllowed && !(frameModel.tabs.length > 1 || frameModel.isHorizontalPanel)
-    readonly property bool hasSingleTab: frameModel.titleBarAllowed && frameModel.tabs.length === 1 && frameModel.isHorizontalPanel
-    readonly property bool hasTabBar: frameModel.titleBarAllowed && (frameModel.tabs.length > 1 || frameModel.isHorizontalPanel)
+    readonly property bool hasTitleBar: frameModel.titleBarAllowed && !(prv.tabsModel.numTabs > 1 || frameModel.isHorizontalPanel)
+    readonly property bool hasSingleTab: frameModel.titleBarAllowed && prv.tabsModel.numTabs === 1 && frameModel.isHorizontalPanel
+    readonly property bool hasTabBar: frameModel.titleBarAllowed && (prv.tabsModel.numTabs > 1 || frameModel.isHorizontalPanel)
 
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
@@ -59,8 +59,13 @@ Rectangle {
 
     DockFrameModel {
         id: frameModel
-
         frame: root.frameCpp
+    }
+
+    QtObject {
+        id: prv
+        readonly property alias tabsModel: frameModel.tabsModel
+        readonly property int currentIndex: Boolean(root.frameCpp) && root.frameCpp.currentIndex >= 0 ? root.frameCpp.currentIndex : 0
     }
 
     NavigationPanel {
@@ -90,8 +95,6 @@ Rectangle {
 
         titleBarCpp: root.titleBarCpp
 
-        contextMenuModel: frameModel.currentDockContextMenuModel
-
         navigationPanel: navPanel
         navigationOrder: 1
 
@@ -100,6 +103,18 @@ Rectangle {
         }
 
         titleBarItem: frameModel.titleBar
+
+        function updateContextMenu() {
+            const idx = prv.tabsModel.index(prv.currentIndex, 0);
+            const menuModel = prv.tabsModel.data(idx, DockTabsModel.ContextMenu)
+            titleBar.contextMenuModel = menuModel
+        }
+
+        Connections {
+            target: prv.tabsModel
+            function onDataChanged() { titleBar.updateContextMenu() }
+            function onModelReset() { titleBar.updateContextMenu() }
+        }
     }
 
     DockTabBar {
@@ -113,10 +128,8 @@ Rectangle {
         draggingTabsAllowed: root.hasTabBar && !root.hasSingleTab
 
         tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
-        tabsModel: frameModel.tabs
-        currentIndex: Boolean(root.frameCpp) && root.frameCpp.currentIndex >= 0 ? root.frameCpp.currentIndex : 0
-
-        currentToolbarComponent: frameModel.currentDockToolbarComponent
+        tabsModel: prv.tabsModel
+        currentIndex: prv.currentIndex
 
         navigationPanel: navPanel
 

@@ -4,18 +4,7 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <maskBarlinesForText>0</maskBarlinesForText>
-      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
-      <pageNumberFontSize>9</pageNumberFontSize>
-      <pageNumberFontStyle>0</pageNumberFontStyle>
-      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
-      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
-      <showCourtesiesRepeats>0</showCourtesiesRepeats>
-      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
-      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
-      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
-      <repeatPlayCountShow>0</repeatPlayCountShow>
+      <defaultsVersion>301</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -341,8 +330,8 @@
             </Chord>
           <Beam>
             <eid>J_J</eid>
-            <l1>42</l1>
-            <l2>42</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>K_K</eid>
@@ -382,8 +371,8 @@
             </Chord>
           <Beam>
             <eid>R_R</eid>
-            <l1>42</l1>
-            <l2>42</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>S_S</eid>
@@ -450,8 +439,8 @@
             </Chord>
           <Beam>
             <eid>e_e</eid>
-            <l1>42</l1>
-            <l2>42</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>f_f</eid>
@@ -483,8 +472,8 @@
             </Chord>
           <Beam>
             <eid>k_k</eid>
-            <l1>42</l1>
-            <l2>42</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>l_l</eid>
@@ -539,8 +528,8 @@
             </Rest>
           <Beam>
             <eid>u_u</eid>
-            <l1>-26</l1>
-            <l2>-26</l2>
+            <l1>-24</l1>
+            <l2>-24</l2>
             </Beam>
           <Chord>
             <eid>v_v</eid>
@@ -572,8 +561,8 @@
             </Chord>
           <Beam>
             <eid>0_0</eid>
-            <l1>-26</l1>
-            <l2>-26</l2>
+            <l1>-24</l1>
+            <l2>-24</l2>
             </Beam>
           <Chord>
             <eid>1_1</eid>
@@ -643,8 +632,8 @@
             </Chord>
           <Beam>
             <eid>BB_BB</eid>
-            <l1>58</l1>
-            <l2>58</l2>
+            <l1>56</l1>
+            <l2>56</l2>
             </Beam>
           <Chord>
             <eid>CB_CB</eid>
@@ -676,8 +665,8 @@
             </Chord>
           <Beam>
             <eid>HB_HB</eid>
-            <l1>58</l1>
-            <l2>58</l2>
+            <l1>56</l1>
+            <l2>56</l2>
             </Beam>
           <Chord>
             <eid>IB_IB</eid>
@@ -736,8 +725,8 @@
             </Chord>
           <Beam>
             <eid>RB_RB</eid>
-            <l1>42</l1>
-            <l2>42</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>SB_SB</eid>
@@ -771,8 +760,8 @@
             </Chord>
           <Beam>
             <eid>XB_XB</eid>
-            <l1>42</l1>
-            <l2>42</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>YB_YB</eid>
@@ -834,8 +823,8 @@
             </Chord>
           <Beam>
             <eid>hB_hB</eid>
-            <l1>42</l1>
-            <l2>42</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>iB_iB</eid>
@@ -869,8 +858,8 @@
             </Chord>
           <Beam>
             <eid>nB_nB</eid>
-            <l1>42</l1>
-            <l2>42</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>oB_oB</eid>

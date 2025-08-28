@@ -19,15 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
 
-import Muse.Ui 1.0
-import Muse.GraphicalEffects 1.0
+import Muse.Ui
+import Muse.GraphicalEffects
 
 Rectangle {
     id: root
 
-    property alias content: contentLoader.sourceComponent
     property alias background: effectSource.sourceItem
     property alias canClose: closeButton.visible
 
@@ -43,13 +42,14 @@ Rectangle {
     border.width: 1
     border.color: ui.theme.strokeColor
 
-    radius: 20
+    topLeftRadius: 20
+    topRightRadius: 20
+
     clip: true
 
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.bottom: parent.bottom
-    anchors.bottomMargin: -radius
 
     function setContentData(data) {
         if (contentLoader.status === Loader.Ready) {
@@ -101,7 +101,7 @@ Rectangle {
 
     NavigationPanel {
         id: navPanel
-        name: root.objectName != "" ? root.objectName : "PopupPanel"
+        name: root.objectName || "PopupPanel"
 
         enabled: root.visible
         section: root.navigationSection
@@ -122,14 +122,6 @@ Rectangle {
         z: -1
 
         sourceRect: root.parent.mapToItem(sourceItem, root.x, root.y, root.width, root.height)
-
-        Rectangle {
-            anchors.fill: parent
-
-            color: ui.theme.popupBackgroundColor
-            opacity: 0.75
-            radius: root.radius
-        }
     }
 
     EffectFastBlur {
@@ -140,10 +132,15 @@ Rectangle {
         transparentBorder: true
     }
 
-    Loader {
-        id: contentLoader
+    Rectangle {
         anchors.fill: parent
-        anchors.bottomMargin: -root.anchors.bottomMargin
+
+        color: Utils.colorWithAlpha(ui.theme.popupBackgroundColor, 0.75)
+        border.width: 1
+        border.color: ui.theme.strokeColor
+
+        topLeftRadius: root.topLeftRadius
+        topRightRadius: root.topRightRadius
     }
 
     FlatButton {
@@ -153,9 +150,6 @@ Rectangle {
         anchors.topMargin: 20
         anchors.right: parent.right
         anchors.rightMargin: 20
-
-        width: 30
-        height: width
 
         icon: IconCode.CLOSE_X_ROUNDED
         transparent: true

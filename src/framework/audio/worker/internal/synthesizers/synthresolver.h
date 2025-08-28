@@ -32,9 +32,10 @@ namespace muse::audio::synth {
 class SynthResolver : public ISynthResolver
 {
 public:
-    void init(const AudioInputParams& defaultInputParams) override;
+    void init(const AudioInputParams& defaultInputParams, const audio::OutputSpec& defaultOutputSpec) override;
 
-    ISynthesizerPtr resolveSynth(const TrackId trackId, const AudioInputParams& params, const PlaybackSetupData& setupData) const override;
+    ISynthesizerPtr resolveSynth(const TrackId trackId, const AudioInputParams& params, const OutputSpec& spec,
+                                 const PlaybackSetupData& setupData) const override;
     ISynthesizerPtr resolveDefaultSynth(const TrackId trackId) const override;
     AudioInputParams resolveDefaultInputParams() const override;
     AudioResourceMetaList resolveAvailableResources() const override;
@@ -51,6 +52,7 @@ private:
 
     std::map<AudioSourceType, IResolverPtr> m_resolvers;
     AudioInputParams m_defaultInputParams;
+    OutputSpec m_defaultOutputSpec;
 };
 }
 

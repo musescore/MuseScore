@@ -34,14 +34,14 @@ using namespace muse::actions;
 const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("play",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_FOCUSED,
+             mu::context::CTX_NOTATION_OPENED_PRIORITY,
              TranslatableString("action", "Play"),
              TranslatableString("action", "Play"),
              IconCode::Code::PLAY
              ),
     UiAction("stop",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
+             mu::context::CTX_NOTATION_OPENED_PRIORITY,
              TranslatableString("action", "Stop"),
              TranslatableString("action", "Stop playback"),
              IconCode::Code::STOP

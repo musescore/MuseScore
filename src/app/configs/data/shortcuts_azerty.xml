@@ -552,6 +552,10 @@
     <seq>S</seq>
     </SC>
   <SC>
+    <key>hammer-on-pull-off</key>
+    <seq>Alt+H</seq>
+    </SC>
+  <SC>
     <key>add-dynamic</key>
     <seq>Ctrl+D</seq>
     </SC>

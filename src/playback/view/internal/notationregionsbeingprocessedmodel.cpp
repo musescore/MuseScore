@@ -209,17 +209,18 @@ void NotationRegionsBeingProcessedModel::clear()
 
 void NotationRegionsBeingProcessedModel::onOnlineSoundsChanged()
 {
-    const std::set<TrackId>& newSounds = playbackController()->onlineSounds();
+    const std::map<TrackId, AudioResourceMeta>& newSounds = playbackController()->onlineSounds();
 
-    for (const TrackId& trackId : newSounds) {
-        if (!muse::contains(m_onlineSounds, trackId)) {
-            startListeningToProgress(trackId);
+    for (const auto& pair : newSounds) {
+        auto it = m_onlineSounds.find(pair.first);
+        if (it == m_onlineSounds.end() || it->second != pair.second) {
+            startListeningToProgress(pair.first);
         }
     }
 
-    for (const TrackId trackId : m_onlineSounds) {
-        if (!muse::contains(newSounds, trackId)) {
-            stopListeningToProgress(trackId);
+    for (const auto& pair : m_onlineSounds) {
+        if (!muse::contains(newSounds, pair.first)) {
+            stopListeningToProgress(pair.first);
         }
     }
 

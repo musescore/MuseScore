@@ -38,6 +38,9 @@ static const std::string CTX_PROJECT_FOCUSED("project-focused");
 //! NOTE special context for navigation shortcuts because the project has its own navigation system
 static const std::string CTX_NOT_PROJECT_FOCUSED("not-project-focused");
 
+//! NOTE special context action play should be more priority than navigation control
+static const std::string CTX_PROJECT_OPENED_PRIORITY("project-opened-priority");
+
 class IShortcutContextPriority : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IShortcutContextPriority);

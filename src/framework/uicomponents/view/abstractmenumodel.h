@@ -70,6 +70,7 @@ protected:
         UserRole
     };
 
+    virtual void subscribeOnChanges();
     virtual void onActionsStateChanges(const muse::actions::ActionCodeList& codes);
 
     void setItem(int index, MenuItem* item);

@@ -29,7 +29,7 @@
 #include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "extensions/iextensionsconfiguration.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
 #include "vst/ivstconfiguration.h"
 #include "iappshellconfiguration.h"
 

@@ -30,7 +30,7 @@ SynthesizerStub::SynthesizerStub(const AudioSourceParams& params)
 {
 }
 
-void SynthesizerStub::setSampleRate(unsigned int)
+void SynthesizerStub::setOutputSpec(const OutputSpec&)
 {
 }
 

@@ -2202,16 +2202,6 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     XmlReader e(data);
     score()->pasteStaff(e, segment, staffIdx);
 
-    if (deleteSourceMaterial) {
-        // pasteStaff limits the layout range to just the destination region,
-        // but if the source material was deleted we must also layout the source region.
-        CmdState& cmdState = score()->cmdState();
-        cmdState.setTick(rdd.sourceTick);
-        cmdState.setTick(rdd.sourceTick + rdd.tickLength);
-        cmdState.setStaff(rdd.sourceStaffIdx);
-        cmdState.setStaff(rdd.sourceStaffIdx + rdd.numStaves);
-    }
-
     endDrop();
     apply();
 
@@ -2441,7 +2431,7 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, bool
         return;
     }
 
-    if (element->isSlur() && addSingle) {
+    if (element->isSlur()) {
         doAddSlur(toSlur(element));
         return;
     }
@@ -4093,6 +4083,10 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
 
     // VBoxes are not included in horizontal layouts - skip over them (and their contents) when moving selections...
     const auto nextNonVBox = [this, isLeftDirection](EngravingItem* currElem) -> EngravingItem* {
+        IF_ASSERT_FAILED(currElem) {
+            return nullptr;
+        }
+
         while (const EngravingItem* vBox = currElem->findAncestor(ElementType::VBOX)) {
             currElem = isLeftDirection ? toVBox(vBox)->prevMM() : toVBox(vBox)->nextMM();
             if (currElem && currElem->isMeasure()) {
@@ -4101,7 +4095,12 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
                 Measure* mb = toMeasure(currElem);
                 currElem = isLeftDirection ? mb->prevElementStaff(si, currElem) : mb->nextElementStaff(si, currElem);
             }
+
+            if (!currElem) {
+                break;
+            }
         }
+
         return currElem;
     };
 
@@ -6311,7 +6310,7 @@ void NotationInteraction::changeEnharmonicSpelling(bool both)
 
 void NotationInteraction::spellPitches()
 {
-    startEdit(TranslatableString("undoableAction", "Respell pitches"));
+    startEdit(TranslatableString("undoableAction", "Optimize enharmonic spelling"));
     score()->spell();
     apply();
 }

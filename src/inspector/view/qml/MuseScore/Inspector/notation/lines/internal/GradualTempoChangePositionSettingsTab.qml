@@ -53,7 +53,7 @@ FocusableItem {
             enabled: root.model ? !root.model.isSystemObjectBelowBottomStaff : false
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: lineStyleSection.navigationRowEnd + 1
+            navigationRowStart: root.navigationRowStart
         }
 
         SeparatorLine {
@@ -61,7 +61,9 @@ FocusableItem {
         }
 
         StyledTextLabel {
+            width: parent.width
             text: qsTrc("inspector", "Alignment with adjacent tempo text")
+            horizontalAlignment: Text.AlignLeft
         }
 
         PropertyCheckBox {
@@ -70,7 +72,7 @@ FocusableItem {
             propertyItem: root.model ? root.model.snapAfter : null
 
             navigation.panel: root.navigationPanel
-            navigation.row: snapBefore.navigation.row + 1
+            navigation.row: placementSection.navigationRowEnd + 1
         }
     }
 }

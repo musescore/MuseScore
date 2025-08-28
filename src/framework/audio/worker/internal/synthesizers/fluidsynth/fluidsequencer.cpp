@@ -167,6 +167,10 @@ void FluidSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::Note
     }
 
     for (const auto& artPair : noteEvent.expressionCtx().articulations) {
+        if (artPair.first == ArticulationType::Standard) {
+            continue;
+        }
+
         const mpe::ArticulationMeta& meta = artPair.second.meta;
 
         if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
@@ -175,9 +179,7 @@ void FluidSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::Note
         }
 
         if (muse::contains(SUSTAIN_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
-            addControlChange(destination, meta.timestamp, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx, CTRL_ON);
-            addControlChange(destination, meta.timestamp + meta.overallDuration,
-                             midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx, CTRL_OFF);
+            addPedalEvent(destination, meta, channelIdx);
             continue;
         }
 
@@ -186,6 +188,25 @@ void FluidSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::Note
             sostenutoTimeAndDurations[channelIdx].push_back(TimestampAndDuration { timestamp, meta.overallDuration });
             continue;
         }
+    }
+}
+
+void FluidSequencer::addPedalEvent(EventSequenceMap& destination, const mpe::ArticulationMeta& meta,
+                                   const channel_t channelIdx)
+{
+    //! NOTE: Endless pedals are not currently supported by SND instrument
+    //! Otherwise, we will get infinite sustain
+    if (m_useDynamicEvents && meta.hasStart() && !meta.hasEnd()) {
+        return;
+    }
+
+    if (meta.hasStart()) {
+        addControlChange(destination, meta.timestamp, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx, CTRL_ON);
+    }
+
+    if (meta.hasEnd()) {
+        addControlChange(destination, meta.timestamp + meta.overallDuration,
+                         midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx, CTRL_OFF);
     }
 }
 

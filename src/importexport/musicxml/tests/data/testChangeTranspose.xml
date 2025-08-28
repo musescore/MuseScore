@@ -115,10 +115,8 @@
           </transpose>
         </attributes>
       <sound>
-        <instrument-change>
-          <score-instrument id="P1-I2">
-            <instrument-name>B♭ Clarinet</instrument-name>
-            </score-instrument>
+        <instrument-change id="P1-I2">
+          <instrument-sound>wind.reed.clarinet.bflat</instrument-sound>
           </instrument-change>
         </sound>
       <direction placement="above">

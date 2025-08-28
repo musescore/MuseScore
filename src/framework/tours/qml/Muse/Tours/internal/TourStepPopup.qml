@@ -118,12 +118,8 @@ StyledPopupView {
                 source: root.previewImageOrGifUrl
 
                 layer.enabled: ui.isEffectsAllowed
-                layer.effect: EffectOpacityMask {
-                    maskSource: Rectangle {
-                        width: previewRect.width
-                        height: previewRect.height
-                        radius: previewRect.radius
-                    }
+                layer.effect: RoundedCornersEffect {
+                    radius: previewRect.radius
                 }
             }
         }

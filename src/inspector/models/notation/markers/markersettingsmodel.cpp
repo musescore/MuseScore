@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "markersettingsmodel.h"
+#include "engraving/types/typesconv.h"
 
 #include "translation.h"
 
@@ -89,4 +90,17 @@ PropertyItem* MarkerSettingsModel::position() const
 PropertyItem* MarkerSettingsModel::centerOnSymbol() const
 {
     return m_centerOnSymbol;
+}
+
+QString MarkerSettingsModel::markerTypeName() const
+{
+    if (!type()) {
+        return "";
+    }
+
+    if (type()->isUndefined()) {
+        return "--";
+    }
+
+    return engraving::TConv::translatedUserName(type()->value().value<engraving::MarkerType>());
 }

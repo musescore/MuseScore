@@ -477,9 +477,12 @@ public:
     bool stackModifiers() const { return m_stackModifiers; }
     bool excludeModsHAlign() const { return m_excludeModsHAlign; }
     double stackedModifierMag() const { return m_stackedmmag; }
+    const ChordStylePreset& chordPreset() const { return m_chordPreset; }
     void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, double stackedmmag = 0.0,
-                             bool stackModifiers = false, bool excludeModsHAlign = false, String symbolFont = u"");
-    double position(const StringList& names, bool stackModifiers, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const;
+                             bool stackModifiers = false, bool excludeModsHAlign = false, String symbolFont = u"",
+                             const ChordStylePreset& preset = ChordStylePreset::STANDARD);
+    double position(const StringList& names, bool stackModifiers, bool superScript, ChordTokenClass ctc, size_t modifierIdx,
+                    size_t nmodifiers) const;
 
     void checkChordList(const MStyle& style);
     bool read(const String& name);
@@ -507,6 +510,7 @@ private:
     bool m_autoAdjust = false;
     bool m_stackModifiers = false;
     bool m_excludeModsHAlign = false;
+    ChordStylePreset m_chordPreset = ChordStylePreset::STANDARD;
     double m_nmag = 1.0, m_nadjust = 0.0;   // adjust values are measured in percentage
     double m_emag = 1.0, m_eadjust = 0.0;   // (which is then applied to the height of the font)
     double m_mmag = 1.0, m_madjust = 0.0, m_stackedmmag = 0.0;

@@ -40,9 +40,11 @@ public:
 
 private:
     bool event(QEvent* event) override;
+    void onMousePressRelease(const QMouseEvent* mouseEvent);
     bool isPositionDraggable(QPoint localPos) const override;
 
     QQuickItem* m_draggableMouseArea = nullptr;
+    int m_indexOfPressedTab = -1;
 };
 }
 

@@ -39,7 +39,7 @@ samples_t SineSource::process(float* buffer, samples_t samplesPerChannel)
 {
     auto streams = audioChannelsCount();
     for (unsigned int i = 0; i < samplesPerChannel; ++i) {
-        m_phase += m_frequency / m_sampleRate * 2 * M_PI;
+        m_phase += m_frequency / m_outputSpec.sampleRate * 2 * M_PI;
         if (m_phase > 2 * M_PI) {
             m_phase -= 2 * float(M_PI);
         }

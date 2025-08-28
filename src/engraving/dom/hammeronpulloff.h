@@ -80,6 +80,7 @@ public:
     EngravingObjectList scanChildren() const override;
 
     void setTrack(track_idx_t idx) override;
+    void setSelected(bool f) override;
 
     void updateHopoText();
     void addHopoText(HammerOnPullOffText* t) { m_hopoText.push_back(t); }

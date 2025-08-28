@@ -4,13 +4,13 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <defaultsVersion>410</defaultsVersion>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <open>1</open>
     <metaTag name="arranger"></metaTag>
     <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer">Componist / arrangeur</metaTag>
@@ -112,6 +112,7 @@
           <KeySig>
             <eid>F_F</eid>
             <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
             </KeySig>
           <TimeSig>
             <eid>G_G</eid>
@@ -123,10 +124,6 @@
             <durationType>whole</durationType>
             <Note>
               <eid>I_I</eid>
-              <Accidental>
-                <subtype>accidentalSharp</subtype>
-                <eid>J_J</eid>
-                </Accidental>
               <pitch>83</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
@@ -135,14 +132,10 @@
           </voice>
         <voice>
           <Chord>
-            <eid>K_K</eid>
+            <eid>J_J</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>L_L</eid>
-              <Accidental>
-                <subtype>accidentalSharp</subtype>
-                <eid>M_M</eid>
-                </Accidental>
+              <eid>K_K</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
@@ -155,21 +148,22 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>N_N</eid>
+            <eid>L_L</eid>
             <linkedTo>F_F</linkedTo>
             <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
             </KeySig>
           <TimeSig>
-            <eid>O_O</eid>
+            <eid>M_M</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>P_P</eid>
+            <eid>N_N</eid>
             <linkedTo>H_H</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>O_O</eid>
               <linkedTo>I_I</linkedTo>
               <pitch>83</pitch>
               <tpc>19</tpc>
@@ -179,16 +173,12 @@
           </voice>
         <voice>
           <Chord>
-            <eid>R_R</eid>
-            <linkedTo>K_K</linkedTo>
+            <eid>P_P</eid>
+            <linkedTo>J_J</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>S_S</eid>
-              <linkedTo>L_L</linkedTo>
-              <Accidental>
-                <subtype>accidentalSharp</subtype>
-                <eid>T_T</eid>
-                </Accidental>
+              <eid>Q_Q</eid>
+              <linkedTo>K_K</linkedTo>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <tpc2>21</tpc2>
@@ -198,7 +188,7 @@
         </Measure>
       </Staff>
     <Score>
-      <eid>U_U</eid>
+      <eid>R_R</eid>
       <name>Klarinet in B♭</name>
       <Tracklist sTrack="0" dstTrack="0"/>
       <Tracklist sTrack="2" dstTrack="1"/>
@@ -258,17 +248,18 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <open>1</open>
       <metaTag name="partName">Klarinet in B♭</metaTag>
       <Part id="1">
         <Staff>
-          <eid>V_V</eid>
+          <eid>S_S</eid>
           <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
           </Staff>
         <Staff>
-          <eid>W_W</eid>
+          <eid>T_T</eid>
           <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
@@ -293,30 +284,27 @@
         </Part>
       <Staff id="1">
         <Measure>
-          <eid>X_X</eid>
+          <eid>U_U</eid>
           <voice>
             <KeySig>
-              <eid>Y_Y</eid>
+              <eid>V_V</eid>
               <linkedTo>F_F</linkedTo>
               <concertKey>0</concertKey>
+              <actualKey>2</actualKey>
               </KeySig>
             <TimeSig>
-              <eid>Z_Z</eid>
+              <eid>W_W</eid>
               <linkedTo>G_G</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Chord>
-              <eid>a_a</eid>
+              <eid>X_X</eid>
               <linkedTo>H_H</linkedTo>
               <durationType>whole</durationType>
               <Note>
-                <eid>b_b</eid>
+                <eid>Y_Y</eid>
                 <linkedTo>I_I</linkedTo>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  <eid>c_c</eid>
-                  </Accidental>
                 <pitch>83</pitch>
                 <tpc>19</tpc>
                 <tpc2>21</tpc2>
@@ -329,27 +317,24 @@
         <Measure>
           <voice>
             <KeySig>
-              <eid>d_d</eid>
+              <eid>Z_Z</eid>
               <linkedTo>F_F</linkedTo>
               <concertKey>0</concertKey>
+              <actualKey>2</actualKey>
               </KeySig>
             <TimeSig>
-              <eid>e_e</eid>
-              <linkedTo>O_O</linkedTo>
+              <eid>a_a</eid>
+              <linkedTo>M_M</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Chord>
-              <eid>f_f</eid>
-              <linkedTo>K_K</linkedTo>
+              <eid>b_b</eid>
+              <linkedTo>J_J</linkedTo>
               <durationType>whole</durationType>
               <Note>
-                <eid>g_g</eid>
-                <linkedTo>L_L</linkedTo>
-                <Accidental>
-                  <subtype>accidentalSharp</subtype>
-                  <eid>h_h</eid>
-                  </Accidental>
+                <eid>c_c</eid>
+                <linkedTo>K_K</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 <tpc2>21</tpc2>

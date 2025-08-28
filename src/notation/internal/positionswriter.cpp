@@ -238,7 +238,7 @@ void PositionsWriter::writeEventsPositions(deprecated::XmlWriter& writer, const 
 
     for (const mu::engraving::RepeatSegment* repeatSegment : score->repeatList()) {
         int startTick = repeatSegment->tick;
-        int endTick = startTick + repeatSegment->len();
+        int endTick = repeatSegment->endTick();
         int tickOffset = repeatSegment->utick - repeatSegment->tick;
         for (Measure* measure = score->tick2measureMM(Fraction::fromTicks(startTick)); measure; measure = measure->nextMeasureMM()) {
             if (m_elementType == ElementType::SEGMENT) {

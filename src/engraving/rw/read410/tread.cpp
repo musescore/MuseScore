@@ -446,6 +446,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
     case P_TYPE::PARTIAL_SPANNER_DIRECTION:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PartialSpannerDirection::OUTGOING));
+    case P_TYPE::MARKER_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), MarkerType::USER));
     default:
         ASSERT_X("unhandled PID type");
         break;
