@@ -214,6 +214,9 @@ public:
 
     ElementList orderedElements(bool includeInvisible = false) const;
 
+    bool needsRebuild() const { return m_needsRebuild; }
+    void setNeedsRebuild(bool v) { m_needsRebuild = v; }
+
 private:
 
     void updateDiagramsOrder(const StringList& currentDiagrams);
@@ -224,6 +227,8 @@ private:
     Spatium m_columnGap;
     Spatium m_rowGap;
     int m_chordsPerRow = 0;
+
+    bool m_needsRebuild = false;
 
     AlignH m_contentAlignmentH = AlignH::HCENTER;
 
