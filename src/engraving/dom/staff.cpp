@@ -1055,12 +1055,10 @@ void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
                  && oldParams.ignoredStrings == newParams.ignoredStrings);
     };
 
-    const static CapoParams initialParams{
-        .ignoredStrings = {},
-        .fretPosition = 1,
-        .transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY,
-        .active = true,
-    };
+    CapoParams initialParams;
+    initialParams.fretPosition = 1;
+    initialParams.active = true;
+
     int startTick = tick.ticks();
     int endTick = -1;
 
@@ -1102,12 +1100,8 @@ void Staff::removeCapoParams(const mu::engraving::Fraction& tick)
     const auto nextCapoIt = std::next(it);
     const int endTick = nextCapoIt == m_capoMap.end() ? -1 : nextCapoIt->first;
 
-    CapoParams revertParams{
-        .ignoredStrings = {},
-        .fretPosition = it->second.fretPosition,
-        .transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY,
-        .active = false,
-    };
+    CapoParams revertParams;
+    revertParams.fretPosition = it->second.fretPosition;
 
     CapoParams oldParams = it->second;
 

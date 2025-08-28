@@ -88,12 +88,7 @@ void EditCapo::applyCapoTranspose(int startTick, int endTick, UpdateCtx& ctx)
 void EditCapo::updateNotationForCapoChange(const CapoParams& oldParams, const CapoParams& newParams, const Staff* staff,
                                            int startTick, int endTick)
 {
-    UpdateCtx ctx{
-        .staff = staff,
-        .stringData = nullptr,             // NOTE: This must be set for every chord later
-        .params = newParams,
-        .possibleFretConflict = false,             // NOTE: This one also must be set for every chord
-    };
+    UpdateCtx ctx;
 
     const bool modeChanged = oldParams.transposeMode != newParams.transposeMode;
     const bool fretChanged = oldParams.fretPosition != newParams.fretPosition;

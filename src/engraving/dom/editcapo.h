@@ -41,7 +41,7 @@ private:
     struct UpdateCtx {
         const Staff* staff = nullptr;
         const StringData* stringData = nullptr;
-        const CapoParams& params = {};
+        CapoParams params = {};
         int noteOffset = 0;
         int fretOffset = 0;
         bool updateFrets = false;
