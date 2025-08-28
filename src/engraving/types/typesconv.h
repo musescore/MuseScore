@@ -283,5 +283,8 @@ public:
 
     static AsciiStringView toXml(AutoCustomHide autoOnOff);
     static AutoCustomHide fromXml(const AsciiStringView& str, AutoCustomHide def);
+
+    static AsciiStringView toXml(MeasureNumberPlacement v);
+    static MeasureNumberPlacement fromXml(const AsciiStringView& str, MeasureNumberPlacement def);
 };
 }

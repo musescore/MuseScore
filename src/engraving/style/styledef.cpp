@@ -464,7 +464,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(showMeasureNumberOne,                       false),
     styleDef(measureNumberInterval,                      PropertyValue(5)),
     styleDef(measureNumberSystem,                        true),
-    styleDef(measureNumberAllStaves,                     false),
+    styleDef(measureNumberPlacementMode,                 MeasureNumberPlacement::ABOVE_SYSTEM),
     styleDef(smallNoteMag,                               PropertyValue(.7)),
     styleDef(scaleRythmicSpacingForSmallNotes,           true),
     styleDef(graceNoteMag,                               PropertyValue(0.7)),

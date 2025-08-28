@@ -35,7 +35,7 @@ MeasureNumbersPageModel::MeasureNumbersPageModel(QObject* parent)
                                          StyleId::measureNumberSystem,
                                          StyleId::measureNumberVPlacement,
                                          StyleId::measureNumberHPlacement,
-                                         StyleId::measureNumberAllStaves,
+                                         StyleId::measureNumberPlacementMode,
                                          StyleId::measureNumberPosAbove,
                                          StyleId::measureNumberPosBelow,
                                          StyleId::measureNumberAlternatePosBelow,
@@ -65,7 +65,7 @@ StyleItem* MeasureNumbersPageModel::measureNumberInterval() const { return style
 StyleItem* MeasureNumbersPageModel::measureNumberSystem() const { return styleItem(StyleId::measureNumberSystem); }
 StyleItem* MeasureNumbersPageModel::measureNumberVPlacement() const { return styleItem(StyleId::measureNumberVPlacement); }
 StyleItem* MeasureNumbersPageModel::measureNumberHPlacement() const { return styleItem(StyleId::measureNumberHPlacement); }
-StyleItem* MeasureNumbersPageModel::measureNumberAllStaves() const { return styleItem(StyleId::measureNumberAllStaves); }
+StyleItem* MeasureNumbersPageModel::measureNumberPlacementMode() const { return styleItem(StyleId::measureNumberPlacementMode); }
 
 StyleItem* MeasureNumbersPageModel::measureNumberPosAbove() const
 {

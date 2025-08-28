@@ -232,6 +232,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::PLAY_COUNT_PRESET:
                 set(idx, TConv::fromXml(e.readAsciiText(), RepeatPlayCountPreset::X_N));
                 break;
+            case P_TYPE::MEASURE_NUMBER_PLACEMENT:
+                set(idx, TConv::fromXml(e.readAsciiText(), MeasureNumberPlacement::ABOVE_SYSTEM));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -393,8 +396,6 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
             set(Sid::chordSymbolAPosAbove, e.readPoint());
         } else if (tag == "chordSymbolPosBelow") { // pre-4.4 typo
             set(Sid::chordSymbolAPosBelow, e.readPoint());
-        } else if (tag == "measureNumberAllStaffs") { // pre-4.4 typo
-            set(Sid::measureNumberAllStaves, e.readBool());
         } else if (tag == "dontHidStavesInFirstSystm") { // pre-3.6.3/4.0 typo
             set(Sid::dontHideStavesInFirstSystem, e.readBool());
         } else if (tag == "firstSystemInsNameVisibility") { // pre-4.4 typo
@@ -616,6 +617,9 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
             AlignH hAlign = hPlacement == PlacementH::LEFT ? AlignH::LEFT
                             : hPlacement == PlacementH::CENTER ? AlignH::HCENTER : AlignH::RIGHT;
             set(Sid::mmRestRangeHPlacement, hAlign);
+        } else if (tag == "measureNumberAllStaves" || tag == "measureNumberAllStaffs" /*old typo*/) {
+            bool allStaves = e.readBool();
+            set(Sid::measureNumberPlacementMode, allStaves ? MeasureNumberPlacement::ON_ALL_STAVES : MeasureNumberPlacement::ABOVE_SYSTEM);
         } else if (!readProperties(e)) {
             e.unknown();
         }
@@ -741,6 +745,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<ParenthesesMode>()));
         } else if (P_TYPE::PLAY_COUNT_PRESET == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<RepeatPlayCountPreset>()));
+        } else if (P_TYPE::MEASURE_NUMBER_PLACEMENT == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<MeasureNumberPlacement>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
