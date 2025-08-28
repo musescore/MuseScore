@@ -7494,8 +7494,7 @@ void Score::rebuildFretBox()
         return;
     }
 
-    // The actual rebuild will be done during the next layout. This just
-    // makes sure that the FBox is included in the layout range.
+    fretBox->setNeedsRebuild(true);
     fretBox->triggerLayout();
 }
 
