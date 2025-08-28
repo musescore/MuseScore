@@ -10,9 +10,11 @@ declare_muse_module_opt(ACCESSIBILITY ON)
 option(MUSE_MODULE_ACCESSIBILITY_TRACE "Enable accessibility logging" OFF)
 
 declare_muse_module_opt(ACTIONS ON)
+
 declare_muse_module_opt(AUDIO ON)
 option(MUSE_MODULE_AUDIO_JACK "Enable jack support" OFF)
 option(MUSE_MODULE_AUDIO_EXPORT "Enable audio export" ON)
+option(MUSE_MODULE_AUDIO_WEBWORKER "Audio web worker configuration" OFF)
 
 declare_muse_module_opt(AUDIOPLUGINS ON)
 
@@ -65,6 +67,8 @@ declare_muse_module_opt(VST OFF)
 set(MUSE_MODULE_VST_VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
 
 declare_muse_module_opt(WORKSPACE ON)
+
+option(MUSE_ENABLE_STUBS "Enable stubs" ON)
 
 # === Enviropment ===
 option(MUSE_COMPILE_BUILD_64 "Build 64 bit version" ON)

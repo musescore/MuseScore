@@ -1,0 +1,2 @@
+
+set(EXPORTED_FUNCTIONS "SHELL:-s EXPORTED_FUNCTIONS=[_malloc,_free,_init]")

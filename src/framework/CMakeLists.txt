@@ -128,7 +128,9 @@ if (MUSE_ENABLE_UNIT_TESTS)
 endif()
 
 # Stubs
-add_subdirectory(stubs)
+if (MUSE_ENABLE_STUBS)
+    add_subdirectory(stubs)
+endif()
 
 
 

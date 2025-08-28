@@ -22,7 +22,11 @@
 add_subdirectory(framework)
 
 # App (main)
-add_subdirectory(app)
+if (MUE_CONFIGURATION_IS_APPWEB_WORKER)
+    add_subdirectory(appworker_web)
+else()
+    add_subdirectory(app)
+endif()
 
 # Modules
 if (MUE_BUILD_APPSHELL_MODULE)
@@ -39,14 +43,21 @@ if (MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)
 endif()
 
-add_subdirectory(commonscene)
-add_subdirectory(context)
+if (MUE_BUILD_COMMONSCENE_MODULE)
+    add_subdirectory(commonscene)
+endif()
+
+if (MUE_BUILD_CONTEXT_MODULE)
+    add_subdirectory(context)
+endif()
 
 if (MUE_BUILD_CONVERTER_MODULE)
     add_subdirectory(converter)
 endif()
 
-add_subdirectory(engraving)
+if (MUE_BUILD_ENGRAVING_MODULE)
+    add_subdirectory(engraving)
+endif()
 
 add_subdirectory(importexport)
 
@@ -87,6 +98,8 @@ if (MUE_CONFIGURATION_IS_APPWEB)
 endif()
 
 # Stubs
-add_subdirectory(stubs)
+if (NOT MUE_CONFIGURATION_IS_APPWEB_WORKER)
+    add_subdirectory(stubs)
+endif()
 
 

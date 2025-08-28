@@ -24,9 +24,12 @@ set(MODULE_ALIAS muse::audio)
 include(GetPlatformInfo)
 
 include(common/audio_common.cmake)
-include(main/audio_main.cmake)
 include(worker/audio_worker.cmake)
-include(driver/audio_driver.cmake)
+
+if (NOT MUSE_MODULE_AUDIO_WEBWORKER)
+    include(main/audio_main.cmake)
+    include(driver/audio_driver.cmake)
+endif()
 
 set(MODULE_SRC
 
@@ -40,8 +43,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
     )
 
-# fluidsynth dependency
-include(SetupSndFile)
+if (MUSE_MODULE_AUDIO_WEBWORKER)
+    set(FLUIDSYNTH_EXTERNAL_DEF -DNO_LIBSNDFILE_SUPPORT)
+else()
+    # fluidsynth dependency
+    include(SetupSndFile)
+endif()
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
 
@@ -53,6 +60,8 @@ set(MODULE_LINK
 if (QT_ADD_CONCURRENT)
     list(APPEND MODULE_LINK Qt::Concurrent)
 endif()
+
+if (NOT MUSE_MODULE_AUDIO_WEBWORKER)
 
 if (MUSE_MODULE_AUDIO_JACK)
     find_package(Jack REQUIRED)
@@ -91,16 +100,19 @@ else ()
     endif()
 endif()
 
+endif() # NOT MUSE_MODULE_AUDIO_WEBWORKER
+
 # Adding driver source
 set(MODULE_SRC
     ${MODULE_SRC}
     ${DRIVER_SRC}
 )
 
-set(MODULE_QRC main/audio.qrc)
-
-set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+if (NOT MUSE_MODULE_AUDIO_WEBWORKER)
+    set(MODULE_QRC main/audio.qrc)
+    set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
+    set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+endif()
 
 setup_module()
 

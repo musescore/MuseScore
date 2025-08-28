@@ -94,8 +94,6 @@ endif()
 # Wasm-specific
 if(CC_IS_EMCC)
 
-    # set(EMCC_COMPILE_FLAGS "--bind -o .html --preload-file ../../files")
-
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/public_html)
 
     set(EMCC_COMPILE_FLAGS "-s USE_ZLIB=1 -O2")
@@ -106,7 +104,6 @@ if(CC_IS_EMCC)
     else()
         set(EMCC_LINKER_FLAGS -Os)
     endif()
-
 
 endif(CC_IS_EMCC)
 
