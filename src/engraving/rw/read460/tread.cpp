@@ -2710,12 +2710,13 @@ void TRead::read(Capo* c, XmlReader& xml, ReadContext& ctx)
             }
         } else if (tag == "generateText") {
             c->setProperty(Pid::CAPO_GENERATE_TEXT, xml.readBool());
-        } else if (tag == "transposeMode") {
-            params.transposeMode = (CapoParams::TransposeMode)xml.readInt();
+        } else if (!TRead::readProperty(c, tag, xml, ctx, Pid::CAPO_TRANSPOSE_MODE)) {
+            xml.unknown();
         } else if (!readProperties(static_cast<StaffTextBase*>(c), xml, ctx)) {
             xml.unknown();
         }
     }
+    params.transposeMode = c->params().transposeMode;
 
     c->setParams(params);
 }

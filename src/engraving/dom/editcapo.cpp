@@ -64,18 +64,18 @@ void EditCapo::applyCapoTranspose(int startTick, int endTick, UpdateCtx& ctx)
 
                 for (auto note: chord->notes()) {
                     if (ctx.updateIgnoredStrings) {
-                        EditCapo::updateString(note, ctx);
+                        updateString(note, ctx);
                     } else {
-                        EditCapo::update(note, ctx);
+                        update(note, ctx);
                     }
                 }
 
                 for (Chord* g: chord->graceNotes()) {
                     for (Note* n: g->notes()) {
                         if (ctx.updateIgnoredStrings) {
-                            EditCapo::updateString(n, ctx);
+                            updateString(n, ctx);
                         } else {
-                            EditCapo::update(n, ctx);
+                            update(n, ctx);
                         }
                     }
                 }
@@ -85,12 +85,15 @@ void EditCapo::applyCapoTranspose(int startTick, int endTick, UpdateCtx& ctx)
 }
 
 // static
-void EditCapo::updateNotationForCapoChange(const CapoParams& oldParams, const CapoParams& newParams, const Staff* staff,
-                                           int startTick, int endTick)
+void EditCapo::updateNotationForCapoChange(const CapoParams& oldParams, const CapoParams& newParams, const Staff* staff, int startTick,
+                                           int endTick)
 {
     UpdateCtx ctx;
     ctx.staff = staff;
     ctx.params = newParams;
+    // These two have to be set in applyCapoTranspose for every chord!
+    // ctx.stringData = nullptr;
+    // ctx.possibleFretConflict = false;
 
     const bool modeChanged = oldParams.transposeMode != newParams.transposeMode;
     const bool fretChanged = oldParams.fretPosition != newParams.fretPosition;
@@ -98,23 +101,24 @@ void EditCapo::updateNotationForCapoChange(const CapoParams& oldParams, const Ca
     const bool activeChanged = oldParams.active != newParams.active;
 
     if (modeChanged) {
-        EditCapo::handleModeChange(oldParams, newParams, startTick, endTick, ctx);
+        handleModeChange(oldParams, newParams, startTick, endTick, ctx);
         return;
     }
     if (fretChanged) {
-        EditCapo::handleFretChange(oldParams, newParams, startTick, endTick, ctx);
+        handleFretChange(oldParams, newParams, startTick, endTick, ctx);
         return;
     }
     if (stringsChanged) {
-        EditCapo::handleStringChanged(newParams, startTick, endTick, ctx);
+        handleStringChanged(newParams, startTick, endTick, ctx);
         return;
     }
     if (activeChanged) {
-        EditCapo::handleActiveChanged(newParams, startTick, endTick, ctx);
+        handleActiveChanged(newParams, startTick, endTick, ctx);
         return;
     }
 }
 
+// static
 void EditCapo::update(Note* note, const UpdateCtx& ctx)
 {
     if (muse::contains(ctx.params.ignoredStrings, (string_idx_t)note->string())) {
@@ -154,7 +158,8 @@ void EditCapo::update(Note* note, const UpdateCtx& ctx)
     note->setTpcFromPitch();
 }
 
-void EditCapo::updateString(mu::engraving::Note* note, const mu::engraving::EditCapo::UpdateCtx& ctx)
+// static
+void EditCapo::updateString(Note* note, const UpdateCtx& ctx)
 {
     const int pitch = note->pitch();
     int string = note->string();
@@ -189,9 +194,8 @@ void EditCapo::updateString(mu::engraving::Note* note, const mu::engraving::Edit
     note->setTpcFromPitch();
 }
 
-void
-EditCapo::handleModeChange(const CapoParams& oldParams, const CapoParams& newParams, int startTick, int endTick,
-                           UpdateCtx& ctx)
+// static
+void EditCapo::handleModeChange(const CapoParams& oldParams, const CapoParams& newParams, int startTick, int endTick, UpdateCtx& ctx)
 {
     switch (oldParams.transposeMode) {
     case CapoParams::TransposeMode::PLAYBACK_ONLY:
@@ -221,24 +225,24 @@ EditCapo::handleModeChange(const CapoParams& oldParams, const CapoParams& newPar
         }
         break;
     }
-    EditCapo::applyCapoTranspose(startTick, endTick, ctx);
+    applyCapoTranspose(startTick, endTick, ctx);
 }
 
-void
-EditCapo::handleFretChange(const CapoParams& oldParams, const CapoParams& newParams, int startTick, int endTick,
-                           EditCapo::UpdateCtx& ctx)
+// static
+void EditCapo::handleFretChange(const CapoParams& oldParams, const CapoParams& newParams, int startTick, int endTick, UpdateCtx& ctx)
 {
     if (CapoParams::TransposeMode::TAB_ONLY == newParams.transposeMode) {
         ctx.fretOffset = -newParams.fretPosition;
         ctx.updateFrets = true;
-        EditCapo::applyCapoTranspose(startTick, endTick, ctx);
+        applyCapoTranspose(startTick, endTick, ctx);
     } else if (CapoParams::TransposeMode::STANDARD_ONLY == newParams.transposeMode) {
         ctx.noteOffset = newParams.fretPosition - oldParams.fretPosition;
-        EditCapo::applyCapoTranspose(startTick, endTick, ctx);
+        applyCapoTranspose(startTick, endTick, ctx);
     }
 }
 
-void EditCapo::handleStringChanged(const CapoParams& newParams, int startTick, int endTick, EditCapo::UpdateCtx& ctx)
+// static
+void EditCapo::handleStringChanged(const CapoParams& newParams, int startTick, int endTick, UpdateCtx& ctx)
 {
     ctx.updateIgnoredStrings = true;
 
@@ -253,22 +257,22 @@ void EditCapo::handleStringChanged(const CapoParams& newParams, int startTick, i
     case CapoParams::TransposeMode::PLAYBACK_ONLY:
         break;
     }
-    EditCapo::applyCapoTranspose(startTick, endTick, ctx);
+    applyCapoTranspose(startTick, endTick, ctx);
 }
 
-void EditCapo::handleActiveChanged(const CapoParams& newParams, int startTick, int endTick,
-                                   UpdateCtx& ctx)
+// static
+void EditCapo::handleActiveChanged(const CapoParams& newParams, int startTick, int endTick, UpdateCtx& ctx)
 {
     if (!newParams.active) {
         // Treat as whatever mode to playback-only transition
         switch (newParams.transposeMode) {
         case CapoParams::TransposeMode::STANDARD_ONLY:
             ctx.noteOffset = -newParams.fretPosition;
-            EditCapo::applyCapoTranspose(startTick, endTick, ctx);
+            applyCapoTranspose(startTick, endTick, ctx);
             break;
         case CapoParams::TransposeMode::TAB_ONLY:
             ctx.updateFrets = true;
-            EditCapo::applyCapoTranspose(startTick, endTick, ctx);
+            applyCapoTranspose(startTick, endTick, ctx);
             break;
         case CapoParams::TransposeMode::PLAYBACK_ONLY:
             break;
@@ -278,12 +282,12 @@ void EditCapo::handleActiveChanged(const CapoParams& newParams, int startTick, i
         switch (newParams.transposeMode) {
         case CapoParams::TransposeMode::STANDARD_ONLY:
             ctx.noteOffset = newParams.fretPosition;
-            EditCapo::applyCapoTranspose(startTick, endTick, ctx);
+            applyCapoTranspose(startTick, endTick, ctx);
             break;
         case CapoParams::TransposeMode::TAB_ONLY:
             ctx.fretOffset = -newParams.fretPosition;
             ctx.updateFrets = true;
-            EditCapo::applyCapoTranspose(startTick, endTick, ctx);
+            applyCapoTranspose(startTick, endTick, ctx);
             break;
         case CapoParams::TransposeMode::PLAYBACK_ONLY:
             break;

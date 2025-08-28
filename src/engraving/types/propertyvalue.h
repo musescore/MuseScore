@@ -124,6 +124,7 @@ enum class P_TYPE : unsigned char {
     AUTO_ON_OFF,
 
     AUTO_CUSTOM_HIDE,
+    CAPO_TRANSPOSE_MODE,
 
     // Other
     GROUPS,
@@ -348,6 +349,8 @@ public:
     PropertyValue(const AutoCustomHide& v)
         : m_type(P_TYPE::AUTO_CUSTOM_HIDE), m_data(make_data<AutoCustomHide>(v)) {}
 
+    PropertyValue(const CapoParams::TransposeMode& v)
+            : m_type(P_TYPE::CAPO_TRANSPOSE_MODE), m_data(make_data<CapoParams::TransposeMode>(v)) {}
     bool isValid() const;
 
     P_TYPE type() const;

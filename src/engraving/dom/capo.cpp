@@ -61,7 +61,7 @@ PropertyValue Capo::getProperty(Pid id) const
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return m_shouldAutomaticallyGenerateText;
     } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
-        return static_cast<int>(m_params.transposeMode);
+        return m_params.transposeMode;
     }
 
     return StaffTextBase::getProperty(id);
@@ -78,7 +78,7 @@ PropertyValue Capo::propertyDefault(Pid id) const
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return true;
     } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
-        return (int)CapoParams::TransposeMode::PLAYBACK_ONLY;
+        return CapoParams::TransposeMode::PLAYBACK_ONLY;
     }
 
     return StaffTextBase::propertyDefault(id);
@@ -87,8 +87,7 @@ PropertyValue Capo::propertyDefault(Pid id) const
 bool Capo::setProperty(Pid id, const PropertyValue& val)
 {
     if (id == Pid::ACTIVE) {
-        bool active = val.toBool();
-        m_params.active = active;
+        m_params.active = val.toBool();;
     } else if (id == Pid::CAPO_FRET_POSITION) {
         m_params.fretPosition = val.toInt();
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
@@ -104,7 +103,7 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
             setXmlText(m_customText);
         }
     } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
-        m_params.transposeMode = (CapoParams::TransposeMode)val.toInt();
+        m_params.transposeMode = val.value<CapoParams::TransposeMode>();
     } else {
         return StaffTextBase::setProperty(id, val);
     }

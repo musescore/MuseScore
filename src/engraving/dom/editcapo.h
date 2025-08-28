@@ -34,8 +34,8 @@ class StringData;
 class EditCapo
 {
 public:
-    static void
-    updateNotationForCapoChange(const CapoParams& oldParams, const CapoParams& newParams, const Staff* staff, int startTick, int endTick);
+    static void updateNotationForCapoChange(const CapoParams& oldParams, const CapoParams& newParams, const Staff* staff, int startTick,
+                                            int endTick);
 
 private:
     struct UpdateCtx {
