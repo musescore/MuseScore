@@ -34,6 +34,11 @@ using namespace mu::engraving::rendering::score;
 
 void MeasureNumberLayout::layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::LayoutData* ldata, const LayoutContext& ctx)
 {
+    MeasureNumberPlacement placementMode = ctx.conf().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>();
+    if (placementMode != MeasureNumberPlacement::ON_ALL_STAVES) {
+        const_cast<MeasureNumber*>(item)->setPlacement(PlacementV::ABOVE);
+    }
+
     layoutMeasureNumberBase(item, ldata);
 
     const RectF& itemBBox = ldata->bbox();
