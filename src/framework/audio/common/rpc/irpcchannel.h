@@ -37,6 +37,12 @@ using CallId = uint64_t;
 enum class Method {
     Undefined = 0,
 
+    // Config
+    WorkerConfigChanged,
+
+    // AudioEngine
+    SetOutputSpec,
+
     // Sequences
     AddSequence,
     RemoveSequence,
@@ -101,15 +107,18 @@ enum class Method {
     // SoundFont
     LoadSoundFonts,
     AddSoundFont,
-
-    // AudioEngine
-    SetOutputSpec,
 };
 
 inline std::string to_string(Method m)
 {
     switch (m) {
     case Method::Undefined: return "Undefined";
+
+    // Config
+    case Method::WorkerConfigChanged: return "WorkerConfigChanged";
+
+    // AudioEngine
+    case Method::SetOutputSpec: return "SetOutputSpec";
 
     // Sequences
     case Method::AddSequence: return "AddSequence";
@@ -172,9 +181,6 @@ inline std::string to_string(Method m)
     // SoundFont
     case Method::LoadSoundFonts: return "LoadSoundFonts";
     case Method::AddSoundFont: return "AddSoundFont";
-
-    // AudioEngine
-    case Method::SetOutputSpec: return "SetOutputSpec";
     }
 
     assert(false && "unknown enum value");

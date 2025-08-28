@@ -22,23 +22,28 @@
 #ifndef MUSE_AUDIO_AUDIOCONFIGURATION_H
 #define MUSE_AUDIO_AUDIOCONFIGURATION_H
 
+#include "../iaudioconfiguration.h"
+
 #include "global/modularity/ioc.h"
 #include "global/io/ifilesystem.h"
 #include "global/iglobalconfiguration.h"
-
-#include "../iaudioconfiguration.h"
+#include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
 class AudioConfiguration : public IAudioConfiguration, public Injectable
 {
     Inject<IGlobalConfiguration> globalConfiguration = { this };
     Inject<io::IFileSystem> fileSystem = { this };
+    Inject<rpc::IRpcChannel> rpcChannel = { this };
 
 public:
     AudioConfiguration(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
     void init();
+
+    AudioWorkerConfig workerConfig() const;
+    void onWorkerConfigChanged();
 
     std::vector<std::string> availableAudioApiList() const override;
 

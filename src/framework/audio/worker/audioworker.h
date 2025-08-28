@@ -58,7 +58,7 @@ public:
     static std::thread::id ID;
 
     void registerExports();
-    void run(const OutputSpec& outputSpec);
+    void run(const OutputSpec& outputSpec, const AudioWorkerConfig& conf);
     void setInterval(const msecs_t interval);
     void stop();
     bool isRunning() const;
@@ -66,7 +66,7 @@ public:
     const std::shared_ptr<AudioBuffer>& audioBuffer() const { return m_audioBuffer; }
 
 private:
-    void th_main(const OutputSpec& outputSpec);
+    void th_main(const OutputSpec& outputSpec, const AudioWorkerConfig& conf);
 
     // services
     std::shared_ptr<rpc::GeneralRpcChannel> m_rpcChannel;

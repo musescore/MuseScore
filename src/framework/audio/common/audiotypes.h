@@ -122,6 +122,10 @@ struct SoundTrackFormat {
     }
 };
 
+struct AudioWorkerConfig {
+    bool autoProcessOnlineSoundsInBackground = false;
+};
+
 using AudioSourceName = std::string;
 using AudioResourceId = std::string;
 using AudioResourceIdList = std::vector<AudioResourceId>;

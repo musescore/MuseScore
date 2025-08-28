@@ -21,11 +21,16 @@
  */
 #include "audioworkerconfiguration.h"
 
+#include "audio/common/audiosanitizer.h"
 #include "audio/common/soundfonttypes.h"
+#include "audio/common/rpc/rpcpacker.h"
+
+#include "log.h"
 
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::worker;
+using namespace muse::audio::rpc;
 
 static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";
 static const AudioResourceAttributes DEFAULT_AUDIO_RESOURCE_ATTRIBUTES = {
@@ -39,14 +44,33 @@ static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META = {
     AudioResourceType::FluidSoundfont,
     false /*hasNativeEditor*/ };
 
+void AudioWorkerConfiguration::init(const AudioWorkerConfig& conf)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_conf = conf;
+
+    rpcChannel()->onMethod(rpc::Method::WorkerConfigChanged, [this](const Msg& msg) {
+        AudioWorkerConfig conf;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, conf)) {
+            return;
+        }
+
+        if (conf.autoProcessOnlineSoundsInBackground != m_conf.autoProcessOnlineSoundsInBackground) {
+            m_conf.autoProcessOnlineSoundsInBackground = conf.autoProcessOnlineSoundsInBackground;
+            m_autoProcessOnlineSoundsInBackgroundChanged.send(m_conf.autoProcessOnlineSoundsInBackground);
+        }
+    });
+}
+
 bool AudioWorkerConfiguration::autoProcessOnlineSoundsInBackground() const
 {
-    return configuration()->autoProcessOnlineSoundsInBackground();
+    return m_conf.autoProcessOnlineSoundsInBackground;
 }
 
 async::Channel<bool> AudioWorkerConfiguration::autoProcessOnlineSoundsInBackgroundChanged() const
 {
-    return configuration()->autoProcessOnlineSoundsInBackgroundChanged();
+    return m_autoProcessOnlineSoundsInBackgroundChanged;
 }
 
 AudioInputParams AudioWorkerConfiguration::defaultAudioInputParams() const
