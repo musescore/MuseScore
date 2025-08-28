@@ -408,6 +408,14 @@ async::Channel<TrackSequenceId, TrackId, AudioInputParams> Playback::inputParams
     return m_inputParamsChanged;
 }
 
+void Playback::processInput(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    ONLY_AUDIO_MAIN_THREAD;
+
+    Msg msg = rpc::make_request(Method::ProcessInput, RpcPacker::pack(sequenceId, trackId));
+    channel()->send(msg);
+}
+
 muse::async::Promise<InputProcessingProgress> Playback::inputProcessingProgress(const TrackSequenceId sequenceId,
                                                                                 const TrackId trackId) const
 {
@@ -435,6 +443,14 @@ muse::async::Promise<InputProcessingProgress> Playback::inputProcessingProgress(
         });
         return Promise<InputProcessingProgress>::dummy_result();
     }, PromiseType::AsyncByBody);
+}
+
+void Playback::clearCache(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    ONLY_AUDIO_MAIN_THREAD;
+
+    Msg msg = rpc::make_request(Method::ClearCache, RpcPacker::pack(sequenceId, trackId));
+    channel()->send(msg);
 }
 
 void Playback::clearSources()

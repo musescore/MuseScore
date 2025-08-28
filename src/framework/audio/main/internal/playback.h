@@ -75,8 +75,10 @@ public:
     void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;
     async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const override;
 
+    void processInput(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     async::Promise<InputProcessingProgress> inputProcessingProgress(const TrackSequenceId sequenceId, const TrackId id) const override;
 
+    void clearCache(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     void clearSources() override;
 
     // 3. Play Sequence

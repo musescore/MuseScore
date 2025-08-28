@@ -161,6 +161,22 @@ AudioSignalChanges SequenceIO::audioSignalChanges(const TrackId id) const
     return track->outputHandler->audioSignalChanges();
 }
 
+void SequenceIO::processInput(const TrackId id) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_getTracks) {
+        return;
+    }
+
+    TrackPtr track = m_getTracks->track(id);
+    IF_ASSERT_FAILED(track) {
+        return;
+    }
+
+    track->inputHandler->processInput();
+}
+
 InputProcessingProgress SequenceIO::inputProcessingProgress(const TrackId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -175,4 +191,20 @@ InputProcessingProgress SequenceIO::inputProcessingProgress(const TrackId id) co
     }
 
     return track->inputHandler->inputProcessingProgress();
+}
+
+void SequenceIO::clearCache(const TrackId id) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_getTracks) {
+        return;
+    }
+
+    TrackPtr track = m_getTracks->track(id);
+    IF_ASSERT_FAILED(track) {
+        return;
+    }
+
+    track->inputHandler->clearCache();
 }

@@ -411,6 +411,7 @@ typedef ms_RenderRangeInfo (* ms_RenderProgressInfo_get_next)(ms_RenderingRangeL
 
 typedef void (* ms_MuseSampler_set_auto_render_interval)(ms_MuseSampler ms, double interval_seconds);
 typedef void (* ms_MuseSampler_trigger_render)(ms_MuseSampler ms);
+typedef void (* ms_MuseSampler_clear_online_cache)(ms_MuseSampler ms);
 
 typedef ms_Result (* ms_MuseSampler_add_audition_cc_event)(ms_MuseSampler ms, ms_Track track, int cc, float value);
 
@@ -425,6 +426,7 @@ using TrackList = std::vector<ms_Track>;
 struct InstrumentInfo {
     int instrumentId = -1;
     ms_InstrumentInfo msInstrument = nullptr;
+    bool isOnline = false;
 
     bool isValid() const
     {

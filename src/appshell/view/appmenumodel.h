@@ -80,6 +80,8 @@ private:
 
     void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
 
+    bool isMuseSamplerModuleAdded() const;
+
     using muse::uicomponents::AbstractMenuModel::makeMenuItem;
     muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode, muse::uicomponents::MenuItemRole role);
 

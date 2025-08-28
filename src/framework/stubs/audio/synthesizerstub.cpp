@@ -125,7 +125,15 @@ void SynthesizerStub::setIsActive(bool)
 {
 }
 
+void SynthesizerStub::processInput()
+{
+}
+
 InputProcessingProgress SynthesizerStub::inputProcessingProgress() const
 {
     return InputProcessingProgress();
+}
+
+void SynthesizerStub::clearCache()
+{
 }

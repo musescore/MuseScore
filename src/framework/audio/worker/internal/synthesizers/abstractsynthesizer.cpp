@@ -92,11 +92,21 @@ void AbstractSynthesizer::updateRenderingMode(const RenderMode /*mode*/)
     ONLY_AUDIO_WORKER_THREAD;
 }
 
+void AbstractSynthesizer::processInput()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+}
+
 InputProcessingProgress AbstractSynthesizer::inputProcessingProgress() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     return m_inputProcessingProgress;
+}
+
+void AbstractSynthesizer::clearCache()
+{
+    ONLY_AUDIO_WORKER_THREAD;
 }
 
 RenderMode AbstractSynthesizer::currentRenderMode() const
