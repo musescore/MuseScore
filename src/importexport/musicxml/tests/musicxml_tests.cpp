@@ -688,8 +688,11 @@ TEST_F(MusicXml_Tests, harpPedals) {
 TEST_F(MusicXml_Tests, hairpinDynamics) {
     musicXmlMscxExportTestRef("testHairpinDynamics");
 }
-TEST_F(MusicXml_Tests, handbells) {
-    musicXmlIoTest("testHandbells");
+TEST_F(MusicXml_Tests, handbells1) {
+    musicXmlIoTest("testHandbells1");
+}
+TEST_F(MusicXml_Tests, handbells2) {
+    musicXmlIoTest("testHandbells2");
 }
 TEST_F(MusicXml_Tests, harmony1) {
     musicXmlIoTest("testHarmony1");
