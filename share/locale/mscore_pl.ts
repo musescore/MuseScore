@@ -26644,22 +26644,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2968"/>
         <source>Change enharmonic spelling (both modes)</source>
-        <translation>Zmień pisownię enharmonicznie (oba tryby)</translation>
+        <translation>Zmień pisownię enharmoniczną (oba tryby)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2969"/>
         <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation>Zmień nutę enharmonicznie (zmienia pisownię w trybie &quot;Bez transpozycji&quot; i z transpozycją)</translation>
+        <translation>Zmień nutę enharmoniczną (zmienia pisownię w trybie bez i z transpozycją)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2976"/>
         <source>Change enharmonic spelling (current mode)</source>
-        <translation>Zmień pisownię enharmonicznie (bieżący tryb)</translation>
+        <translation>Zmień pisownię enharmoniczną (bieżący tryb)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2977"/>
         <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation>Zmień nutę enharmonicznie (zmienia tylko pisownię w bieżącym trybie)</translation>
+        <translation>Zmień nutę enharmoniczną (zmienia pisownię tylko w bieżącym trybie)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2991"/>
