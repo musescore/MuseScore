@@ -32,6 +32,31 @@ InspectorSectionView {
 
     implicitHeight: contentColumn.implicitHeight
 
+    FlatButton {
+        // Hack: position it on the expandable section header
+        x: root.width - width
+        y: -38 + (38 - height) / 2
+
+        width: 20
+        height: width
+
+        navigation.name: "ResetEmptyStavesVisibility"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + 3
+
+        icon: IconCode.UNDO
+        toolTipTitle: qsTrc("inspector", "Reset to default")
+        transparent: true
+
+        enabled: root.model?.canResetEmptyStavesVisibility
+
+        onClicked: {
+            if (root.model) {
+                root.model.resetEmptyStavesVisibility()
+            }
+        }
+    }
+
     Column {
         id: contentColumn
 
@@ -72,25 +97,6 @@ InspectorSectionView {
             onClicked: {
                 if (root.model) {
                     root.model.showAllEmptyStaves()
-                }
-            }
-        }
-
-        FlatButton {
-            width: parent.width
-
-            navigation.name: "ResetEmptyStavesVisibility"
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart + 3
-
-            icon: IconCode.UNDO
-            text: qsTrc("inspector", "Reset to default")
-            orientation: Qt.Horizontal
-            enabled: root.model?.canResetEmptyStavesVisibility
-
-            onClicked: {
-                if (root.model) {
-                    root.model.resetEmptyStavesVisibility()
                 }
             }
         }
