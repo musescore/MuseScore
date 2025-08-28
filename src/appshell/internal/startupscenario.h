@@ -91,7 +91,9 @@ private:
     project::ProjectFile m_startupScoreFile;
     bool m_startupCompleted = false;
 
-    bool m_updateCheckInProgress = false;
+    bool m_updateChecksInProgress = false;
+    size_t m_totalChecksExpected = 0;
+    size_t m_totalChecksReceived = 0;
 };
 }
 
