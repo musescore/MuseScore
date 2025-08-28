@@ -37,6 +37,8 @@ RadioButtonGroup {
         direction: NavigationPanel.Both
     }
 
+    property real columnWidth: -1
+
     orientation: Qt.Vertical
     spacing: 16
 
@@ -130,7 +132,7 @@ RadioButtonGroup {
 
             width: parent.width
             height: button.implicitHeight
-            spacing: 6
+            spacing: 12
 
             // "Every: %1 saves" needs to be one string for correct translatability. We then split the translated version.
 
@@ -159,8 +161,7 @@ RadioButtonGroup {
 
                 anchors.verticalCenter: parent.verticalCenter
 
-                // align spinbox with Autosave spinbox
-                width: 214
+                width: root.columnWidth > 0 ? root.columnWidth : implicitWidth
 
                 text: numberOfSavesItem.textPart1.trim()
                 checked: settingsModel.timePeriodType === numberOfSavesItem.type
