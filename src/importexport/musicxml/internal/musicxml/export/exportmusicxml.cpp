@@ -3356,6 +3356,8 @@ static String symIdToTechn(const SymId sid)
         return u"hand martellato";
     case SymId::handbellsMalletLft:
         return u"mallet lift";
+    case SymId::handbellsMalletBellSuspended:
+        return String(u"stopped smufl=\"%1\"").arg(String::fromAscii(SymNames::nameForSymId(sid).ascii()));
     case SymId::handbellsMalletBellOnTable:
         return u"mallet table";
     case SymId::handbellsMartellato:
@@ -3614,6 +3616,9 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 m_xml.startElementRaw(mxmlTechn);
                 m_xml.tag("natural");
                 m_xml.endElement();
+            } else if (sid == SymId::handbellsMalletBellSuspended) {
+                // special case for mallet bell suspended
+                m_xml.tagRaw(mxmlTechn);
             } else if (String::fromAscii(SymNames::nameForSymId(sid).ascii()).startsWith(u"handbells")) {
                 String handbell = u"handbell";
                 handbell += color2xml(a);
@@ -3684,9 +3689,10 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             continue;
         }
 
-        SymId sid = a->symId();
+        const SymId sid = a->symId();
+        const AsciiStringView articText = TConv::toXml(a->textType());
         if (symIdToArtic(sid).empty()
-            && symIdToTechn(sid) == ""
+            && symIdToTechn(sid).empty()
             && !a->isOrnament() && !a->isTapping()
             && !isLaissezVibrer(sid)) {
             String otherArtic = u"other-articulation";
@@ -3699,11 +3705,16 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                     otherArtic += u" placement=\"below\"";
                 }
             }
-            notations.tag(m_xml, a);
-            articulations.tag(m_xml);
-            AsciiStringView noteheadName = SymNames::nameForSymId(sid);
-            otherArtic += String(u" smufl=\"%1\"").arg(String::fromAscii(noteheadName.ascii()));
-            m_xml.tagRaw(otherArtic);
+            AsciiStringView articGlyph = SymNames::nameForSymId(sid);
+            if (!articGlyph.empty()) {
+                otherArtic += String(u" smufl=\"%1\"").arg(String::fromAscii(articGlyph.ascii()));
+            }
+            if (!articGlyph.empty() || !articText.empty()) {
+                notations.tag(m_xml, a);
+                articulations.tag(m_xml);
+                m_xml.tagRaw(otherArtic, articText);
+                articulations.etag(m_xml);
+            }
         }
     }
 }
@@ -7948,11 +7959,11 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
 
     m_xml.startElement("sound");
     if (!instr->musicXmlId().empty()) {
-        m_xml.startElementRaw(String(u"instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));
+        m_xml.startElementRaw(String(u"instrument-change %1").arg(instrId(static_cast<int>(partNr) + 1, instNr + 1)));
         m_xml.tag("instrument-sound", instr->musicXmlId());
         m_xml.endElement();
     } else {
-        m_xml.tagRaw(String(u"instrument-change %1").arg(instrId(partNr + 1, instNr + 1)));
+        m_xml.tagRaw(String(u"instrument-change %1").arg(instrId(static_cast<int>(partNr) + 1, instNr + 1)));
     }
     m_xml.endElement();
 }
