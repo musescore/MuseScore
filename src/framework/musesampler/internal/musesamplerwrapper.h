@@ -40,7 +40,7 @@ class MuseSamplerWrapper : public audio::synth::AbstractSynthesizer, public IMus
 {
 public:
     MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params,
-                       async::Notification processOnlineSoundsRequested, const modularity::ContextPtr& iocCtx);
+                       const modularity::ContextPtr& iocCtx);
     ~MuseSamplerWrapper() override;
 
     void setSampleRate(unsigned int sampleRate) override;
@@ -57,6 +57,9 @@ public:
     bool readyToPlay() const override;
 
     void revokePlayingNotes() override;
+
+    void processInput() override;
+    void clearCache() override;
 
 private:
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
@@ -93,8 +96,6 @@ private:
     InstrumentInfo m_instrument;
     TrackList m_tracks;
     ms_OutputBuffer m_bus;
-
-    async::Notification m_processOnlineSoundsRequested;
 
     muse::audio::samples_t m_currentPosition = 0;
     muse::audio::sample_rate_t m_samplerSampleRate = 0;

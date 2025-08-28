@@ -117,7 +117,7 @@ void AppMenuModel::setupConnections()
     });
 
 #ifdef MUSE_MODULE_WORKSPACE
-    connect(m_workspacesMenuModel.get(), &WorkspacesMenuModel::itemsChanged, this, [this](){
+    connect(m_workspacesMenuModel.get(), &WorkspacesMenuModel::itemsChanged, this, [this]() {
         MenuItem& workspacesItem = findMenu("menu-workspaces");
         workspacesItem.setSubitems(m_workspacesMenuModel->items());
     });
@@ -157,6 +157,15 @@ void AppMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& co
             item.setState(uiActionsRegister()->actionState(TOGGLE_UNDO_HISTORY_PANEL_CODE));
         }
     }
+}
+
+bool AppMenuModel::isMuseSamplerModuleAdded() const
+{
+#ifdef MUSE_MODULE_MUSESAMPLER
+    return museSamplerInfo() != nullptr;
+#else
+    return false;
+#endif
 }
 
 MenuItemList AppMenuModel::makeChordAndFretboardDiagramsItems()
@@ -452,8 +461,15 @@ MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
     helpItems << makeMenuItem("about-musescore", MenuItemRole::AboutRole);
     helpItems << makeMenuItem("about-qt", MenuItemRole::AboutQtRole);
     helpItems << makeMenuItem("about-musicxml");
-
     helpItems << makeSeparator();
+
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+    if (isMuseSamplerModuleAdded()) {
+        helpItems << makeMenuItem("clear-online-sounds-cache");
+        helpItems << makeSeparator();
+    }
+#endif
+
     helpItems << makeMenuItem("revert-factory");
 
     return makeMenu(TranslatableString("appshell/menu/help", "&Help"), helpItems, "menu-help");
@@ -473,9 +489,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
         makeMenu(TranslatableString("appshell/menu/diagnostics", "&System"), systemItems, "menu-system")
     };
 
-#ifdef MUSE_MODULE_MUSESAMPLER
-    bool isMuseSamplerModuleAdded = museSamplerInfo() != nullptr;
-    if (isMuseSamplerModuleAdded) {
+    if (isMuseSamplerModuleAdded()) {
         MenuItemList museSamplerItems {
             makeMenuItem("musesampler-check"),
         };
@@ -486,7 +500,6 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 
         items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&MuseSampler"), museSamplerItems, "menu-musesampler");
     }
-#endif
 
     if (globalConfiguration()->devModeEnabled()) {
         MenuItemList actionsItems {

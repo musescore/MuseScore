@@ -63,6 +63,9 @@ enum class Method {
     // notification
     InputParamsChanged,
 
+    ProcessInput,
+
+    ClearCache,
     ClearSources,
 
     // Play
@@ -136,6 +139,9 @@ inline std::string to_string(Method m)
     case Method::GetInputProcessingProgress: return "GetInputProcessingProgress";
     case Method::InputParamsChanged: return "InputParamsChanged";
 
+    case Method::ProcessInput: return "ProcessInput";
+
+    case Method::ClearCache: return "ClearCache";
     case Method::ClearSources: return "ClearSources";
 
     // Play

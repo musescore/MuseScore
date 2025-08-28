@@ -308,6 +308,18 @@ async::Channel<TrackSequenceId, TrackId, AudioInputParams> WorkerPlayback::input
     return m_inputParamsChanged;
 }
 
+void WorkerPlayback::processInput(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    const ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+
+    s->audioIO()->processInput(trackId);
+}
+
 RetVal<InputProcessingProgress> WorkerPlayback::inputProcessingProgress(const TrackSequenceId sequenceId,
                                                                         const TrackId trackId) const
 {
@@ -323,6 +335,18 @@ RetVal<InputProcessingProgress> WorkerPlayback::inputProcessingProgress(const Tr
     }
 
     return RetVal<InputProcessingProgress>::make_ok(s->audioIO()->inputProcessingProgress(trackId));
+}
+
+void WorkerPlayback::clearCache(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    const ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+
+    s->audioIO()->clearCache(trackId);
 }
 
 void WorkerPlayback::clearSources()

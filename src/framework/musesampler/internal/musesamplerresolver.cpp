@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,13 +22,11 @@
 
 #include "musesamplerresolver.h"
 
-#include "global/io/fileinfo.h"
-
-#include "types/version.h"
-
 #include "musesamplerwrapper.h"
 
-#include "serialization/json.h"
+#include "global/io/fileinfo.h"
+#include "global/types/version.h"
+#include "global/serialization/json.h"
 
 #include "log.h"
 
@@ -69,10 +67,11 @@ InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const AudioRe
     auto instrumentList = libHandler->getInstrumentList();
 
     while (auto instrument = libHandler->getNextInstrument(instrumentList)) {
-        int instrumentId = libHandler->getInstrumentId(instrument);
+        const int instrumentId = libHandler->getInstrumentId(instrument);
 
         if (resourceMeta.attributeVal(u"museUID") == String::number(instrumentId)) {
-            return { instrumentId, instrument };
+            const bool isOnline = libHandler->isOnlineInstrument(instrument);
+            return { instrumentId, instrument, isOnline };
         }
     }
 
@@ -140,11 +139,6 @@ bool MuseSamplerResolver::reloadAllInstruments()
     return m_libHandler->reloadAllInstruments() == ms_Result_OK;
 }
 
-void MuseSamplerResolver::processOnlineSounds()
-{
-    m_processOnlineSoundsRequested.notify();
-}
-
 int MuseSamplerResolver::buildNumber() const
 {
     return m_samplerBuildNumber;
@@ -152,9 +146,9 @@ int MuseSamplerResolver::buildNumber() const
 
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const
 {
-    InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
+    const InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
     if (instrument.isValid()) {
-        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params, m_processOnlineSoundsRequested, iocContext());
+        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params, iocContext());
     }
 
     return nullptr;

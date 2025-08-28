@@ -55,7 +55,10 @@ public:
 
     void revokePlayingNotes() override;
 
+    void processInput() override;
     InputProcessingProgress inputProcessingProgress() const override;
+
+    void clearCache() override;
 
 protected:
     virtual void setupSound(const mpe::PlaybackSetupData& setupData) = 0;
