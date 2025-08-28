@@ -301,5 +301,5 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
 void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 {
-    m_audioWorker->run(activeSpec.output);
+    m_audioWorker->run(activeSpec.output, m_configuration->workerConfig());
 }

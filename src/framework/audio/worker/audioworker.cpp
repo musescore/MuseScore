@@ -110,11 +110,11 @@ void AudioWorker::registerExports()
     ioc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
 }
 
-void AudioWorker::run(const OutputSpec& outputSpec)
+void AudioWorker::run(const OutputSpec& outputSpec, const AudioWorkerConfig& conf)
 {
     m_running = true;
-    m_thread = std::make_unique<std::thread>([this, outputSpec]() {
-        th_main(outputSpec);
+    m_thread = std::make_unique<std::thread>([this, outputSpec, conf]() {
+        th_main(outputSpec, conf);
     });
 
     if (!muse::setThreadPriority(*m_thread, ThreadPriority::High)) {
@@ -154,7 +154,7 @@ static msecs_t audioWorkerInterval(const samples_t samples, const sample_rate_t 
     return interval;
 }
 
-void AudioWorker::th_main(const OutputSpec& outputSpec)
+void AudioWorker::th_main(const OutputSpec& outputSpec, const AudioWorkerConfig& conf)
 {
     runtime::setThreadName("audio_worker");
     AudioSanitizer::setupWorkerThread();
@@ -164,6 +164,8 @@ void AudioWorker::th_main(const OutputSpec& outputSpec)
 
     //! NOTE It should be as early as possible
     m_rpcChannel->initOnWorker();
+
+    m_configuration->init(conf);
 
     m_fxResolver->registerResolver(AudioFxType::MuseFx, std::make_shared<MuseFxResolver>());
     m_synthResolver->registerResolver(AudioSourceType::Fluid, std::make_shared<FluidResolver>());

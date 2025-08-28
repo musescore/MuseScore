@@ -28,6 +28,7 @@
 
 #include "audio/common/soundfonttypes.h"
 #include "audio/common/audioutils.h"
+#include "audio/common/rpc/rpcpacker.h"
 
 #include "log.h"
 
@@ -92,6 +93,18 @@ void AudioConfiguration::init()
     });
 
     updateSamplesToPreallocate();
+}
+
+AudioWorkerConfig AudioConfiguration::workerConfig() const
+{
+    AudioWorkerConfig conf;
+    conf.autoProcessOnlineSoundsInBackground = this->autoProcessOnlineSoundsInBackground();
+    return conf;
+}
+
+void AudioConfiguration::onWorkerConfigChanged()
+{
+    rpcChannel()->send(rpc::make_notification(rpc::Method::WorkerConfigChanged, rpc::RpcPacker::pack(workerConfig())));
 }
 
 std::vector<std::string> AudioConfiguration::availableAudioApiList() const
@@ -208,6 +221,8 @@ bool AudioConfiguration::autoProcessOnlineSoundsInBackground() const
 void AudioConfiguration::setAutoProcessOnlineSoundsInBackground(bool value)
 {
     settings()->setSharedValue(ONLINE_SOUNDS_PROCESS_IN_BACKGROUND, Val(value));
+
+    onWorkerConfigChanged();
 }
 
 async::Channel<bool> AudioConfiguration::autoProcessOnlineSoundsInBackgroundChanged() const
