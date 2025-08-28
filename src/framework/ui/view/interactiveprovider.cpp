@@ -632,8 +632,12 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
     }
 
     if (ContainerType::PrimaryPage == containerType) {
-        m_stack.clear();
-        m_stack.push(m_openingObject);
+        // Replace bottom item of the stack, because that always reflects the current PrimaryPage
+        if (m_stack.empty()) {
+            m_stack.push(m_openingObject);
+        } else {
+            m_stack[0] = m_openingObject;
+        }
     } else if (ContainerType::QmlDialog == containerType) {
         m_stack.push(m_openingObject);
     } else if (ContainerType::QWidgetDialog == containerType) {
