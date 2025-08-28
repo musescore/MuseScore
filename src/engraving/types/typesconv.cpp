@@ -1018,9 +1018,9 @@ AutoOnOff TConv::fromXml(const AsciiStringView& str, AutoOnOff def)
 }
 
 static const std::vector<Item<CapoParams::TransposeMode> > CAPO_TRANSPOSE_MODE = {
-        { CapoParams::TransposeMode::PLAYBACK_ONLY, "playback" },
-        { CapoParams::TransposeMode::STANDARD_ONLY, "standard" },
-        { CapoParams::TransposeMode::TAB_ONLY,      "tab" },
+    { CapoParams::TransposeMode::PLAYBACK_ONLY, "playback" },
+    { CapoParams::TransposeMode::STANDARD_ONLY, "standard" },
+    { CapoParams::TransposeMode::TAB_ONLY,      "tab" },
 };
 
 AsciiStringView TConv::toXml(CapoParams::TransposeMode mode)

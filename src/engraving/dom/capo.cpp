@@ -87,7 +87,7 @@ PropertyValue Capo::propertyDefault(Pid id) const
 bool Capo::setProperty(Pid id, const PropertyValue& val)
 {
     if (id == Pid::ACTIVE) {
-        m_params.active = val.toBool();;
+        m_params.active = val.toBool();
     } else if (id == Pid::CAPO_FRET_POSITION) {
         m_params.fretPosition = val.toInt();
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {

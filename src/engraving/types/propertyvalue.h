@@ -351,7 +351,7 @@ public:
         : m_type(P_TYPE::AUTO_CUSTOM_HIDE), m_data(make_data<AutoCustomHide>(v)) {}
 
     PropertyValue(const CapoParams::TransposeMode& v)
-            : m_type(P_TYPE::CAPO_TRANSPOSE_MODE), m_data(make_data<CapoParams::TransposeMode>(v)) {}
+        : m_type(P_TYPE::CAPO_TRANSPOSE_MODE), m_data(make_data<CapoParams::TransposeMode>(v)) {}
 
     PropertyValue(const MarkerType& v)
         : m_type(P_TYPE::MARKER_TYPE), m_data(make_data<MarkerType>(v)) {}
