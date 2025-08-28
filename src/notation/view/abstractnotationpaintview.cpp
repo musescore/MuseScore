@@ -25,7 +25,7 @@
 #include <QMimeData>
 
 #include "actions/actiontypes.h"
-
+#include "engraving/dom/shadownote.h"
 #include "log.h"
 
 using namespace mu;
@@ -242,10 +242,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     }
 
     m_notation->notationChanged().onNotify(this, [this]() {
-        if (INotationInteractionPtr interaction = notationInteraction()) {
-            interaction->hideShadowNote();
-        }
-        m_shadowNoteRect = RectF();
+        updateShadowNoteVisibility();
         scheduleRedraw();
     });
 
@@ -431,6 +428,27 @@ void AbstractNotationPaintView::updateLoopMarkers()
     scheduleRedraw();
 }
 
+void AbstractNotationPaintView::updateShadowNoteVisibility()
+{
+    INotationInteractionPtr interaction = notationInteraction();
+    const engraving::ShadowNote* shadowNote = interaction ? interaction->shadowNote() : nullptr;
+    if (!shadowNote || !shadowNote->visible()) {
+        m_shadowNoteRect = RectF();
+        return;
+    }
+
+    if (isNoteEnterMode()) {
+        //! NOTE: The following may actually hide the shadow note
+        //! if cursorPos is no longer valid...
+        const QPointF cursorPos = mapFromGlobal(QCursor::pos());
+        showShadowNote(toLogical(cursorPos));
+    } else {
+        interaction->hideShadowNote();
+        m_shadowNoteRect = RectF();
+        return;
+    }
+}
+
 NotationViewInputController* AbstractNotationPaintView::inputController() const
 {
     return m_inputController.get();
@@ -481,12 +499,8 @@ void AbstractNotationPaintView::onNoteInputStateChanged()
     TRACEFUNC;
 
     setAcceptHoverEvents(isNoteEnterMode());
-
-    if (INotationInteractionPtr interaction = notationInteraction()) {
-        interaction->hideShadowNote();
-        m_shadowNoteRect = RectF();
-        scheduleRedraw();
-    }
+    updateShadowNoteVisibility();
+    scheduleRedraw();
 }
 
 void AbstractNotationPaintView::onShowItemRequested(const INotationInteraction::ShowItemRequest& request)
@@ -522,7 +536,12 @@ void AbstractNotationPaintView::showShadowNote(const PointF& pos)
 {
     TRACEFUNC;
 
-    bool visible = notationInteraction()->showShadowNote(pos);
+    INotationInteractionPtr interaction = notationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    const bool visible = interaction->showShadowNote(pos);
 
     if (m_shadowNoteRect.isValid()) {
         scheduleRedraw(m_shadowNoteRect);
@@ -533,7 +552,7 @@ void AbstractNotationPaintView::showShadowNote(const PointF& pos)
         }
     }
 
-    RectF shadowNoteRect = fromLogical(notationInteraction()->shadowNoteRect());
+    RectF shadowNoteRect = fromLogical(interaction->shadowNoteRect());
 
     if (shadowNoteRect.isValid()) {
         compensateFloatPart(shadowNoteRect);
