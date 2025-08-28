@@ -86,7 +86,7 @@ BaseSection {
     IncrementalPropertyControlWithTitle {
         id: notePlayDurationControl
 
-        title: qsTrc("appshell/preferences", "Playback duration:")
+        title: qsTrc("appshell/preferences", "Playback duration")
 
         enabled: root.playNotesWhenEditing
 

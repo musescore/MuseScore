@@ -59,7 +59,7 @@ BaseSection {
             implicitWidth: root.columnWidth
 
             checked: root.useColor
-            text: qsTrc("appshell/preferences", "Color:")
+            text: qsTrc("appshell/preferences", "Color")
 
             navigation.name: "ColorBox"
             navigation.panel: root.navigation
@@ -92,7 +92,7 @@ BaseSection {
             implicitWidth: root.columnWidth
 
             checked: !root.useColor
-            text: qsTrc("appshell/preferences", "Wallpaper:")
+            text: qsTrc("appshell/preferences", "Wallpaper")
 
             navigation.name: "WallpaperBox"
             navigation.panel: root.navigation

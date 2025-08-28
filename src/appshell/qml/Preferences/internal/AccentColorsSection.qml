@@ -60,7 +60,7 @@ Row {
         anchors.verticalCenter: parent.verticalCenter
         horizontalAlignment: Qt.AlignLeft
 
-        text: qsTrc("appshell/preferences", "Accent color:")
+        text: qsTrc("appshell/preferences", "Accent color")
     }
 
     AccentColorsList {

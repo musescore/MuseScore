@@ -52,7 +52,7 @@ BaseSection {
             StyledTextLabel {
                 id: titleLabel
                 Layout.preferredWidth: root.columnWidth
-                text: model.title + ":"
+                text: model.title
                 horizontalAlignment: Text.AlignLeft
             }
 

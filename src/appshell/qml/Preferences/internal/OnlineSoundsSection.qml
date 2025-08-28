@@ -112,7 +112,7 @@ BaseSection {
         control.width: showProcessingVisualizationComboBox.isOpened && root.autoProcessOnlineSoundsInBackground ?
                            378 : showProcessingVisualizationComboBox.columnWidth
 
-        title: qsTrc("appshell/preferences", "Show processing visualization:")
+        title: qsTrc("appshell/preferences", "Show processing visualization")
 
         columnWidth: root.columnWidth
         currentIndex: showProcessingVisualizationComboBox.indexOfValue(root.progressBarMode)
