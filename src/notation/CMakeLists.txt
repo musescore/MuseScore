@@ -179,6 +179,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/dynamicpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/partialtiepopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/partialtiepopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/emptystavesvisibilitymodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/emptystavesvisibilitymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/staffvisibilitypopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/staffvisibilitypopupmodel.h
 
