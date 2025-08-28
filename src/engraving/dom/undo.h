@@ -851,8 +851,9 @@ public:
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
 
+    std::vector<EngravingObject*> objectItems() const override;
+
     UNDO_TYPE(CommandType::RemoveElement)
-    UNDO_CHANGED_OBJECTS({ element })
 };
 
 class AddSystemLock : public UndoCommand
