@@ -275,13 +275,8 @@ void NotationMidiInput::addNoteEventsToInputState()
         playbackController()->playNotes(notesOff, staffIdx, state.segment(), makeNoteOffParams());
     }
 
-    if (!notesOn.empty()) {
+    if (!notesOn.empty() && notesOn != state.notes()) {
         noteInput->setRestMode(false);
-
-        if (!m_holdingNotesInInputByDuration && notesOn == state.notes()) {
-            return;
-        }
-
         noteInput->setInputNotes(notesOn);
 
         if (playPreviewNotes) {
