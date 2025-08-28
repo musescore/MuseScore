@@ -876,7 +876,9 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
 void MeasureLayout::removeMMRestElements(Measure* mmRestMeasure)
 {
     // Removed linked clones that were created for the mmRest measure
-    for (EngravingItem* item : mmRestMeasure->el()) {
+    // copy because we're removing elements
+    const ElementList elements = mmRestMeasure->el();
+    for (EngravingItem* item : elements) {
         item->undoUnlink();
         mmRestMeasure->score()->doUndoRemoveElement(item);
     }
