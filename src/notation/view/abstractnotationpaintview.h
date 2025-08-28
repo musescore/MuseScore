@@ -258,6 +258,7 @@ private:
     void onPlaybackCursorRectChanged();
 
     void updateLoopMarkers();
+    void updateShadowNoteVisibility();
 
     const Page* pageByPoint(const muse::PointF& point) const;
     muse::PointF alignToCurrentPageBorder(const muse::RectF& showRect, const muse::PointF& pos) const;
