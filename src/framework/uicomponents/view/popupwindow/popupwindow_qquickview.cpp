@@ -271,18 +271,27 @@ void PopupWindow_QQuickView::setTakeFocusOnClick(bool takeFocusOnClick)
 bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == m_view) {
-        if (event->type() == QEvent::Hide) {
+        switch (event->type()) {
+        case QEvent::Hide:
             if (m_onHidden) {
                 m_onHidden();
             }
-        }
-
-        if (event->type() == QEvent::FocusIn) {
+            break;
+        case QEvent::FocusIn:
             m_view->rootObject()->forceActiveFocus();
-        }
-
-        if (m_takeFocusOnClick && event->type() == QEvent::MouseButtonPress) {
-            forceActiveFocus();
+            break;
+        case QEvent::FocusOut:
+            if (!m_takeFocusOnClick) {
+                // Undo what's done in TextInput{Field,Area}.qml ensureActiveFocus
+                m_view->setFlag(Qt::WindowDoesNotAcceptFocus);
+            }
+            break;
+        case QEvent::MouseButtonPress:
+            if (m_takeFocusOnClick) {
+                forceActiveFocus();
+            }
+            break;
+        default: break;
         }
     }
 
