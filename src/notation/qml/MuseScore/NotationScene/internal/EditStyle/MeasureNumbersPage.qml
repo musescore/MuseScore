@@ -241,6 +241,7 @@ StyledFlickable {
                 ColumnLayout {
                     width: parent.width
                     spacing: 8
+                    visible: barNumbersModel.measureNumberPlacementMode.value === 3
 
                     StyledTextLabel {
                         text: qsTrc("notation/editstyle/voltas", "Position")
