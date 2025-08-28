@@ -84,9 +84,9 @@ InspectorSectionView {
             navigation.row: root.navigationRowStart + 3
 
             icon: IconCode.UNDO
-            text: qsTrc("inspector", "Reset empty staves visibility")
+            text: qsTrc("inspector", "Reset to default")
             orientation: Qt.Horizontal
-            enabled: root.model && root.model.canResetEmptyStavesVisibility
+            enabled: root.model?.canResetEmptyStavesVisibility
 
             onClicked: {
                 if (root.model) {
