@@ -51,7 +51,8 @@ void StaffVisibilityPopupModel::init()
         return;
     }
 
-    m_emptyStavesVisibilityModel->load(currentNotation(), system);
+    std::vector<engraving::System*> systems = { system };
+    m_emptyStavesVisibilityModel->load(currentNotation(), systems);
 
     m_systemIndex = muse::indexOf(system->score()->systems(), system);
     emit systemIndexChanged();

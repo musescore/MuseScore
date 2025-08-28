@@ -26,6 +26,8 @@
 #include <iterator>
 #include <memory>
 
+#include "containers.h"
+
 #include "engraving/dom/measure.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
@@ -62,23 +64,28 @@ EmptyStavesVisibilityModel::EmptyStavesVisibilityModel(QObject* parent)
 
 EmptyStavesVisibilityModel::~EmptyStavesVisibilityModel() = default;
 
-void EmptyStavesVisibilityModel::load(INotationPtr notation, engraving::System* system)
+void EmptyStavesVisibilityModel::load(INotationPtr notation, const std::vector<engraving::System*>& systems)
 {
     m_notation = notation;
-    m_system = system;
+    m_systems = systems;
 
     reload();
 }
 
 void EmptyStavesVisibilityModel::reload()
 {
-    engraving::Fraction tick = m_system->tick();
+    if (m_systems.empty()) {
+        return;
+    }
+
+    // Use the first system's tick for instrument name retrieval
+    engraving::Fraction tick = m_systems.front()->tick();
 
     beginResetModel();
     m_parts.clear();
 
     staff_idx_t staffIdx = 0;
-    for (const Part* part : m_system->score()->parts()) {
+    for (const Part* part : m_systems.front()->score()->parts()) {
         auto partItem = std::make_unique<PartItem>();
         partItem->id = part->id();
         partItem->name = part->instrument(tick)->nameAsPlainText();
@@ -90,28 +97,51 @@ void EmptyStavesVisibilityModel::reload()
             staffItem->part = partItem.get();
             staffItem->staffIndex = staffIdx;
 
-            staffItem->isVisible = m_system->staff(staffIdx)->show();
+            // Check visibility across all systems - staff is visible if visible in any system
+            staffItem->isVisible = false;
+            for (engraving::System* system : m_systems) {
+                if (system->staff(staffIdx)->show()) {
+                    staffItem->isVisible = true;
+                    break;
+                }
+            }
+
             if (staffItem->isVisible) {
                 // Part is visible if any of its staves is visible
                 partItem->isVisible = true;
             }
 
-            staffItem->canChangeVisibility = SystemLayout::canChangeSysStaffVisibility(m_system, staffItem->staffIndex);
+            // Check if visibility can be changed in any system
+            staffItem->canChangeVisibility = false;
+            for (engraving::System* system : m_systems) {
+                if (SystemLayout::canChangeSysStaffVisibility(system, staffItem->staffIndex)) {
+                    staffItem->canChangeVisibility = true;
+                    break;
+                }
+            }
+
             if (staffItem->canChangeVisibility) {
                 // Part visibility can be changed if any of its staves can change visibility
                 partItem->canChangeVisibility = true;
             }
 
-            // Staff can reset visibility if any measure in the range contains an override
-            for (const engraving::MeasureBase* mb : m_system->measures()) {
-                if (!mb->isMeasure()) {
-                    continue;
+            // Staff can reset visibility if any measure in any system contains an override
+            staffItem->canReset = false;
+            for (engraving::System* system : m_systems) {
+                for (const engraving::MeasureBase* mb : system->measures()) {
+                    if (!mb->isMeasure()) {
+                        continue;
+                    }
+                    if (engraving::toMeasure(mb)->hideStaffIfEmpty(staffIdx) != engraving::AutoOnOff::AUTO) {
+                        staffItem->canReset = true;
+                        break;
+                    }
                 }
-                if (engraving::toMeasure(mb)->hideStaffIfEmpty(staffIdx) != engraving::AutoOnOff::AUTO) {
-                    staffItem->canReset = true;
+                if (staffItem->canReset) {
                     break;
                 }
             }
+
             if (staffItem->canReset) {
                 // Part can reset visibility if any of its staves can reset
                 partItem->canReset = true;
@@ -254,7 +284,9 @@ void EmptyStavesVisibilityModel::resetAllVisibility()
     assert(score);
 
     for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-        score->cmdSetHideStaffIfEmptyOverride(staffIdx, m_system, engraving::AutoOnOff::AUTO);
+        for (engraving::System* system : m_systems) {
+            score->cmdSetHideStaffIfEmptyOverride(staffIdx, system, engraving::AutoOnOff::AUTO);
+        }
     }
 
     m_notation->undoStack()->commitChanges();
@@ -288,8 +320,12 @@ QHash<int, QByteArray> EmptyStavesVisibilityModel::roleNames() const
 
 int EmptyStavesVisibilityModel::startSystemIndex() const
 {
-    // Implementation might be needed if this method is used
-    return 0;
+    if (!m_notation || m_systems.empty()) {
+        return 0;
+    }
+
+    System* system = m_systems.front();
+    return muse::indexOf(system->score()->systems(), system);
 }
 
 void EmptyStavesVisibilityModel::setPartVisibility(PartItem* partItem, engraving::AutoOnOff value)
@@ -301,7 +337,9 @@ void EmptyStavesVisibilityModel::setPartVisibility(PartItem* partItem, engraving
     assert(score);
 
     for (const auto& staffItem : partItem->staves) {
-        score->cmdSetHideStaffIfEmptyOverride(staffItem->staffIndex, m_system, value);
+        for (engraving::System* system : m_systems) {
+            score->cmdSetHideStaffIfEmptyOverride(staffItem->staffIndex, system, value);
+        }
     }
 
     m_notation->undoStack()->commitChanges();
@@ -317,7 +355,9 @@ void EmptyStavesVisibilityModel::setStaffVisibility(StaffItem* staffItem, engrav
     engraving::Score* score = m_notation->elements()->msScore();
     assert(score);
 
-    score->cmdSetHideStaffIfEmptyOverride(staffItem->staffIndex, m_system, value);
+    for (engraving::System* system : m_systems) {
+        score->cmdSetHideStaffIfEmptyOverride(staffItem->staffIndex, system, value);
+    }
 
     m_notation->undoStack()->commitChanges();
 
@@ -331,29 +371,51 @@ void EmptyStavesVisibilityModel::updateData(PartItem* partItem)
     partItem->canReset = false;
 
     for (const auto& staffItem : partItem->staves) {
-        staffItem->isVisible = m_system->staff(staffItem->staffIndex)->show();
+        // Check visibility across all systems - staff is visible if visible in any system
+        staffItem->isVisible = false;
+        for (engraving::System* system : m_systems) {
+            if (system->staff(staffItem->staffIndex)->show()) {
+                staffItem->isVisible = true;
+                break;
+            }
+        }
+
         if (staffItem->isVisible) {
             // Part is visible if any of its staves is visible
             partItem->isVisible = true;
         }
 
-        staffItem->canChangeVisibility = SystemLayout::canChangeSysStaffVisibility(m_system, staffItem->staffIndex);
+        // Check if visibility can be changed in any system
+        staffItem->canChangeVisibility = false;
+        for (engraving::System* system : m_systems) {
+            if (SystemLayout::canChangeSysStaffVisibility(system, staffItem->staffIndex)) {
+                staffItem->canChangeVisibility = true;
+                break;
+            }
+        }
+
         if (staffItem->canChangeVisibility) {
             // Part visibility can be changed if any of its staves can change visibility
             partItem->canChangeVisibility = true;
         }
 
-        // Staff can reset visibility if any measure in the range contains an override
+        // Staff can reset visibility if any measure in any system contains an override
         staffItem->canReset = false;
-        for (const engraving::MeasureBase* mb : m_system->measures()) {
-            if (!mb->isMeasure()) {
-                continue;
+        for (engraving::System* system : m_systems) {
+            for (const engraving::MeasureBase* mb : system->measures()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+                if (engraving::toMeasure(mb)->hideStaffIfEmpty(staffItem->staffIndex) != engraving::AutoOnOff::AUTO) {
+                    staffItem->canReset = true;
+                    break;
+                }
             }
-            if (engraving::toMeasure(mb)->hideStaffIfEmpty(staffItem->staffIndex) != engraving::AutoOnOff::AUTO) {
-                staffItem->canReset = true;
+            if (staffItem->canReset) {
                 break;
             }
         }
+
         if (staffItem->canReset) {
             // Part can reset visibility if any of its staves can reset
             partItem->canReset = true;

@@ -27,9 +27,9 @@
 #include <vector>
 
 #include "context/iglobalcontext.h"
-#include "inotation.h"
+#include "engraving/types/types.h"
 #include "modularity/ioc.h"
-#include "types/types.h"
+#include "notation/inotation.h"
 
 namespace mu::engraving {
 class System;
@@ -48,7 +48,7 @@ public:
     explicit EmptyStavesVisibilityModel(QObject* parent = nullptr);
     ~EmptyStavesVisibilityModel() override;
 
-    void load(INotationPtr notation, engraving::System* system);
+    void load(INotationPtr notation, const std::vector<engraving::System*>& systems);
 
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex& child) const override;
@@ -61,6 +61,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     int startSystemIndex() const;
+    int systemCount() const { return static_cast<int>(m_systems.size()); }
+    const std::vector<engraving::System*>& systems() const { return m_systems; }
 
 signals:
     void canResetAllChanged();
@@ -89,7 +91,7 @@ private:
     int partIndex(const PartItem* partItem) const;
 
     INotationPtr m_notation;
-    engraving::System* m_system = nullptr;
+    std::vector<engraving::System*> m_systems;
 
     std::vector<std::unique_ptr<PartItem> > m_parts;
 };

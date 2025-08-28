@@ -22,12 +22,13 @@
 
 #pragma once
 
-#include <QAbstractItemModel>
-#include <QQmlParserStatus>
 #include <memory>
 
-#include "emptystavesvisibilitymodel.h"
+#include <QAbstractItemModel>
+#include <QQmlParserStatus>
+
 #include "view/abstractelementpopupmodel.h"
+#include "view/emptystavesvisibilitymodel.h"
 
 namespace mu::engraving {
 class Measure;

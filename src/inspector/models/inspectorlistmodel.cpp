@@ -29,7 +29,6 @@
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
-#include "notation/inotationinteraction.h"
 
 #include "internal/services/elementrepositoryservice.h"
 
