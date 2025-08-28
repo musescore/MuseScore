@@ -441,6 +441,8 @@ void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode ad
 {
     TRACEFUNC;
 
+    m_interaction->hideShadowNote();
+
     bool addToUpOnCurrentChord = addingMode == NoteAddingMode::CurrentChord;
     bool insertNewChord = addingMode == NoteAddingMode::InsertChord;
 
@@ -470,6 +472,8 @@ void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode ad
 void NotationNoteInput::padNote(const Pad& pad)
 {
     TRACEFUNC;
+
+    m_interaction->hideShadowNote();
 
     startEdit(TranslatableString("undoableAction", "Pad note"));
     score()->padToggle(pad);

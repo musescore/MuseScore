@@ -1352,6 +1352,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
     } else if (key == Qt::Key_Shift) {
         viewInteraction()->updateTimeTickAnchors(event);
         updateShadowNotePopupVisibility();
+        return;
     } else if (isAnchorEditingEvent(event)) {
         viewInteraction()->moveElementAnchors(event);
     }
