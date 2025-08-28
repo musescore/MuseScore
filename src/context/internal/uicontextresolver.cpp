@@ -104,7 +104,6 @@ UiContext UiContextResolver::currentUiContext() const
 {
     TRACEFUNC;
     Uri currentUri = interactive()->currentUri().val;
-    LOGD() << "currentUri: " << currentUri.toString();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
     currentUri = diagnostics::diagnosticCurrentUri(interactive()->stack());
