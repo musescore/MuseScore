@@ -32,22 +32,12 @@ InspectorSectionView {
 
     implicitHeight: contentColumn.implicitHeight
 
-    FlatButton {
-        // Hack: position it on the expandable section header
-        x: root.width - width
-        y: -38 + (38 - height) / 2
-
-        width: 20
-        height: width
-
+    headerAccessory: PropertyResetButton {
         navigation.name: "ResetEmptyStavesVisibility"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 3
 
-        icon: IconCode.UNDO
         toolTipTitle: qsTrc("inspector", "Reset to default")
-        transparent: true
-
         enabled: root.model?.canResetEmptyStavesVisibility
 
         onClicked: {

@@ -29,7 +29,7 @@ FocusScope {
 
     property alias contentItem: contentLoader.item
     property alias contentItemComponent: contentLoader.sourceComponent
-    property alias menuItemComponent: expandableSection.menuItemComponent
+    property alias headerAccessory: expandableSection.accessory
 
     property alias title: expandableSection.title
     property alias titleFont: expandableSection.titleFont
