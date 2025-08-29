@@ -23,6 +23,7 @@
 #include "startupscenario.h"
 
 #include <QCoreApplication>
+#include <QTimer>
 
 #include "async/async.h"
 #include "network/networkerrors.h"
