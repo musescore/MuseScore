@@ -1486,12 +1486,18 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 {
     LAYOUT_CALL_ITEM(item);
 
+    if (item->needsRebuild()) {
+        const_cast<FBox*>(item)->init();
+        const_cast<FBox*>(item)->setNeedsRebuild(false);
+    }
+
     const System* parentSystem = item->system();
     LD_CONDITION(parentSystem->ldata()->isSetBbox());
 
     ldata->setPos(PointF());
 
-    const ElementList& elements = item->orderedElements();
+    const ElementList& elements = item->orderedElements(true /*includeInvisible*/);
+    const StringList& invisibleDiagrams = item->invisibleDiagrams();
 
     std::vector<FretDiagram*> fretDiagrams;
     for (EngravingItem* element : elements) {
@@ -1499,7 +1505,18 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
             continue;
         }
 
-        fretDiagrams.emplace_back(toFretDiagram(element));
+        FretDiagram* diagram = toFretDiagram(element);
+        if (muse::contains(invisibleDiagrams, diagram->harmony()->harmonyName().toLower())) {
+            //! NOTE: We need to layout the diagrams to get the harmony names to show in the UI
+            layoutItem(diagram, const_cast<LayoutContext&>(ctx));
+
+            //! but we don't need to draw them, so let's add a skip
+            diagram->mutldata()->setIsSkipDraw(true);
+            diagram->harmony()->mutldata()->setIsSkipDraw(true);
+            continue;
+        }
+
+        fretDiagrams.emplace_back(diagram);
     }
 
     //! NOTE: layout fret diagrams and calculate sizes
@@ -1515,6 +1532,10 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
         harmony->mutldata()->setMag(item->textScale());
 
         layoutItem(fretDiagram, const_cast<LayoutContext&>(ctx));
+
+        //! reset the skip wich was added above
+        fretDiagram->mutldata()->setIsSkipDraw(false);
+        harmony->mutldata()->setIsSkipDraw(false);
 
         double width = fretDiagram->ldata()->bbox().width();
         maxFretDiagramWidth = std::max(maxFretDiagramWidth, width);

@@ -831,6 +831,11 @@ void FretDiagram::clear()
     m_fretOffset = 0;
 }
 
+bool FretDiagram::isClear() const
+{
+    return m_barres.empty() && m_dots.empty() && m_markers.empty();
+}
+
 //---------------------------------------------------------
 //   undoFretClear
 //---------------------------------------------------------
@@ -964,8 +969,6 @@ void FretDiagram::unlinkHarmony()
     resetHarmonyAlignment();
 
     segment()->add(m_harmony);
-
-    score()->rebuildFretBox();
 
     m_harmony = nullptr;
 }
@@ -1336,6 +1339,7 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
         fretDiagram = toFretDiagram(harmonyOrFretDiagram->parentItem())->clone();
     } else if (harmonyOrFretDiagram->isFretDiagram()) {
         fretDiagram = toFretDiagram(harmonyOrFretDiagram)->clone();
+        fretDiagram->setOffset(PointF());
         if (!fretDiagram->harmony()) {
             //! generate from diagram and add harmony
             fretDiagram->add(Factory::createHarmony(harmonyOrFretDiagram->score()->dummy()->segment()));
