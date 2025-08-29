@@ -2158,8 +2158,10 @@ void Score::toggleOrnament(SymId attr)
 
 void Score::toggleAccidental(AccidentalType at)
 {
-    if (m_is.accidentalType() == at) {
-        at = AccidentalType::NONE;
+    bool applyNaturalToInputNotes = false;
+    if (m_is.accidentalType() == at && at != AccidentalType::NONE) {
+        at = AccidentalType::NONE; // NONE also means "search for previous accidental and use it if found"
+        applyNaturalToInputNotes = true;
     }
 
     if (noteEntryMode()) {
@@ -2167,7 +2169,7 @@ void Score::toggleAccidental(AccidentalType at)
         m_is.setRest(false);
 
         if (!m_is.notes().empty()) {
-            applyAccidentalToInputNotes(at);
+            applyAccidentalToInputNotes(applyNaturalToInputNotes ? AccidentalType::NATURAL : at);
         }
     } else {
         if (selection().isNone()) {
@@ -2183,6 +2185,7 @@ void Score::toggleAccidental(AccidentalType at)
 void Score::applyAccidentalToInputNotes(AccidentalType accidentalType)
 {
     NoteValList notes;
+    notes.reserve(m_is.notes().size());
 
     Position pos;
     pos.segment = m_is.segment();
