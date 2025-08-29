@@ -803,10 +803,6 @@ void FBox::addAtIdx(FretDiagram* fretDiagram, size_t idx)
     harmony->setFlag(ElementFlag::MOVABLE, false);
     harmony->setFlag(ElementFlag::ON_STAFF, false);
 
-    if (!fretDiagram->eid().isValid()) {
-        fretDiagram->assignNewEID();
-    }
-
     if (idx < m_el.size()) {
         m_el.insert(m_el.begin() + idx, fretDiagram);
     } else {
