@@ -58,4 +58,10 @@ MeasureNumber::MeasureNumber(const MeasureNumber& other)
 {
     initElementStyle(&measureNumberStyle);
 }
+
+bool MeasureNumber::isSystemObjectBelowBottomStaff() const
+{
+    return style().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>() == MeasureNumberPlacement::BELOW_SYSTEM
+           || EngravingItem::isSystemObjectBelowBottomStaff();
+}
 } // namespace MS

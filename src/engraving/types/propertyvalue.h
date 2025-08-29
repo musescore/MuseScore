@@ -126,6 +126,8 @@ enum class P_TYPE : unsigned char {
 
     AUTO_CUSTOM_HIDE,
 
+    MEASURE_NUMBER_PLACEMENT,
+
     // Other
     GROUPS,
 };
@@ -351,6 +353,9 @@ public:
 
     PropertyValue(const MarkerType& v)
         : m_type(P_TYPE::MARKER_TYPE), m_data(make_data<MarkerType>(v)) {}
+
+    PropertyValue(const MeasureNumberPlacement& v)
+        : m_type(P_TYPE::MEASURE_NUMBER_PLACEMENT), m_data(make_data<MeasureNumberPlacement>(v)) {}
 
     bool isValid() const;
 

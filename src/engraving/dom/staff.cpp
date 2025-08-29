@@ -230,13 +230,23 @@ void Staff::undoSetShowMeasureNumbers(bool show)
 
 bool Staff::shouldShowMeasureNumbers() const
 {
-    if (style().styleB(Sid::measureNumberAllStaves)) {
+    MeasureNumberPlacement placementMode = style().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>();
+    switch (placementMode) {
+    case MeasureNumberPlacement::ABOVE_SYSTEM:
+        return score()->staves().front() == this;
+    case MeasureNumberPlacement::BELOW_SYSTEM:
+        return score()->staves().back() == this;
+    case MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES:
+    {
+        bool isTopStave = score()->staves().front() == this;
+        bool isSystemObjectStaff = muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
+        return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff && m_showMeasureNumbers == AutoOnOff::ON);
+    }
+    case MeasureNumberPlacement::ON_ALL_STAVES:
         return show();
     }
 
-    bool isTopStave = score()->staves().front() == this;
-    bool isSystemObjectStaff = muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
-    return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff && m_showMeasureNumbers == AutoOnOff::ON);
+    return false;
 }
 
 bool Staff::shouldShowPlayCount() const
