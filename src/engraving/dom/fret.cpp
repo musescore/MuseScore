@@ -1346,10 +1346,6 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
         }
     }
 
-    if (fretDiagram) {
-        fretDiagram->setTrack(muse::nidx);
-    }
-
     return fretDiagram;
 }
 

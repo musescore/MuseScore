@@ -1842,6 +1842,24 @@ public:
     UNDO_CHANGED_OBJECTS({ m_fretDiagram })
 };
 
+class AddFretDiagramToFretBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveFretDiagramFromFretBox)
+
+    FretDiagram* m_fretDiagram = nullptr;
+    size_t m_idx = muse::nidx;
+
+    void redo(EditData*) override;
+    void undo(EditData*) override;
+
+public:
+    AddFretDiagramToFretBox(FretDiagram* f, size_t idx);
+
+    UNDO_TYPE(CommandType::RemoveFretDiagramFromFretBox)
+    UNDO_NAME("RemoveFretDiagramFromFretBox")
+    UNDO_CHANGED_OBJECTS({ m_fretDiagram })
+};
+
 class MoveTremolo : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, MoveTremolo)
