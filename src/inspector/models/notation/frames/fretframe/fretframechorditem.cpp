@@ -43,6 +43,16 @@ void FretFrameChordItem::setTitle(const QString& title)
     emit titleChanged();
 }
 
+QString FretFrameChordItem::plainText() const
+{
+    return m_plainText;
+}
+
+void FretFrameChordItem::setPlainText(const QString& plainText)
+{
+    m_plainText = plainText;
+}
+
 bool FretFrameChordItem::isVisible() const
 {
     return m_isVisible;

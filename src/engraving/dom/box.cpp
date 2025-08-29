@@ -769,7 +769,7 @@ void FBox::init()
 
     StringList currentDiagrams;
     for (EngravingItem* item : el()) {
-        currentDiagrams.push_back(toFretDiagram(item)->harmony()->harmonyName().toLower());
+        currentDiagrams.push_back(toFretDiagram(item)->harmonyText().toLower());
     }
 
     if (!m_invisibleDiagrams.empty()) {
@@ -950,13 +950,16 @@ ElementList FBox::orderedElements(bool includeInvisible) const
 {
     ElementList elements = el();
     const StringList& diagramsOrder = this->diagramsOrder();
+    if (diagramsOrder.empty()) {
+        return elements;
+    }
 
     std::sort(elements.begin(), elements.end(), [&diagramsOrder](const EngravingItem* a, const EngravingItem* b) {
         const FretDiagram* diagramA = toFretDiagram(a);
-        const String diagramAHarmonyName = diagramA->harmony()->harmonyName().toLower();
+        const String diagramAHarmonyName = diagramA->harmonyText().toLower();
 
         const FretDiagram* diagramB = toFretDiagram(b);
-        const String diagramBHarmonyName = diagramB->harmony()->harmonyName().toLower();
+        const String diagramBHarmonyName = diagramB->harmonyText().toLower();
 
         auto itA = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramAHarmonyName);
         auto itB = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramBHarmonyName);
@@ -969,7 +972,7 @@ ElementList FBox::orderedElements(bool includeInvisible) const
 
         muse::remove_if(elements, [&invisibleDiagrams](const EngravingItem* element){
             const FretDiagram* diagram = toFretDiagram(element);
-            const String diagramHarmonyName = diagram->harmony()->harmonyName().toLower();
+            const String diagramHarmonyName = diagram->harmonyText().toLower();
             return muse::contains(invisibleDiagrams, diagramHarmonyName);
         });
     }
