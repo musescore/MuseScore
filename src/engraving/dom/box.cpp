@@ -761,7 +761,9 @@ void FBox::init()
         if (!muse::contains(oldDiagramsNames, newName)) {
             FretDiagram* newDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(harmonyOrDiagramsInScore[i]);
             newDiagram->setParent(this);
-            score()->undoAddElement(newDiagram);
+            String nameOfDiagramBeforeThis = i > 0 ? diagramsNamesInScore[i - 1] : String();
+            size_t idx = computeInsertionIdx(nameOfDiagramBeforeThis);
+            score()->undo(new AddFretDiagramToFretBox(newDiagram, idx));
         }
     }
 
@@ -783,28 +785,28 @@ void FBox::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isFretDiagram()) {
-        FretDiagram* fretDiagram = toFretDiagram(e);
-        fretDiagram->setFlag(ElementFlag::MOVABLE, false);
-        fretDiagram->setFlag(ElementFlag::ON_STAFF, false);
-
-        Harmony* harmony = fretDiagram->harmony();
-        harmony->setFlag(ElementFlag::MOVABLE, false);
-        harmony->setFlag(ElementFlag::ON_STAFF, false);
-
-        if (!e->eid().isValid()) {
-            e->assignNewEID();
-        }
-
-        VBox::add(e);
+        addAtIdx(toFretDiagram(e), muse::nidx);
     } else {
         LOGD("FBox::add: element not allowed");
         return;
     }
-    e->added();
 }
 
 void FBox::addAtIdx(FretDiagram* fretDiagram, size_t idx)
 {
+    fretDiagram->setTrack(muse::nidx);
+    fretDiagram->setFlag(ElementFlag::MOVABLE, false);
+    fretDiagram->setFlag(ElementFlag::ON_STAFF, false);
+
+    Harmony* harmony = fretDiagram->harmony();
+    harmony->setTrack(muse::nidx);
+    harmony->setFlag(ElementFlag::MOVABLE, false);
+    harmony->setFlag(ElementFlag::ON_STAFF, false);
+
+    if (!fretDiagram->eid().isValid()) {
+        fretDiagram->assignNewEID();
+    }
+
     if (idx < m_el.size()) {
         m_el.insert(m_el.begin() + idx, fretDiagram);
     } else {
@@ -812,6 +814,22 @@ void FBox::addAtIdx(FretDiagram* fretDiagram, size_t idx)
     }
 
     fretDiagram->added();
+}
+
+size_t FBox::computeInsertionIdx(const String& nameOfDiagramBeforeThis)
+{
+    if (nameOfDiagramBeforeThis.empty()) {
+        return 0;
+    }
+
+    for (size_t i = 0; i < m_el.size(); ++i) {
+        FretDiagram* fretDiagram = toFretDiagram(m_el[i]);
+        if (fretDiagram->harmonyText().toLower() == nameOfDiagramBeforeThis.toLower()) {
+            return i + 1;
+        }
+    }
+
+    return muse::nidx;
 }
 
 PropertyValue FBox::getProperty(Pid propertyId) const

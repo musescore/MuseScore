@@ -222,6 +222,7 @@ private:
 
     void updateDiagramsOrder(const StringList& currentDiagrams);
     void updateInvisibleDiagrams(const StringList& currentDiagrams);
+    size_t computeInsertionIdx(const String& nameOfDiagramBeforeThis);
 
     double m_textScale = 0.0;
     double m_diagramScale = 0.0;

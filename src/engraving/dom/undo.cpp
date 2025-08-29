@@ -3591,3 +3591,20 @@ void RemoveFretDiagramFromFretBox::undo(EditData*)
     FBox* fbox = toFBox(m_fretDiagram->parent());
     fbox->addAtIdx(m_fretDiagram, m_idx);
 }
+
+AddFretDiagramToFretBox::AddFretDiagramToFretBox(FretDiagram* f, size_t idx)
+    : m_fretDiagram(f), m_idx(idx)
+{
+}
+
+void AddFretDiagramToFretBox::redo(EditData*)
+{
+    FBox* fbox = toFBox(m_fretDiagram->parent());
+    fbox->addAtIdx(m_fretDiagram, m_idx);
+}
+
+void AddFretDiagramToFretBox::undo(EditData*)
+{
+    FBox* fbox = toFBox(m_fretDiagram->parent());
+    fbox->remove(m_fretDiagram);
+}
