@@ -1964,7 +1964,7 @@ Spanner* Segment::firstSpanner(staff_idx_t activeStaff) const
                 continue;
             }
             if (s->startSegment() == this) {
-                if (e->staffIdx() == activeStaff || (e->isMeasure() && activeStaff == 0)) {
+                if (e->staffIdx() == activeStaff || (e->isMeasure() && activeStaff == 0) || (e->isSegment() && s->isGradualTempoChange())) {
                     return s;
                 }
             }
@@ -1993,7 +1993,7 @@ Spanner* Segment::lastSpanner(staff_idx_t activeStaff) const
                 continue;
             }
             if (s->startSegment() == this) {
-                if (e->staffIdx() == activeStaff || (e->isMeasure() && activeStaff == 0)) {
+                if (e->staffIdx() == activeStaff || (e->isMeasure() && activeStaff == 0) || (e->isSegment() && s->isGradualTempoChange())) {
                     return s;
                 }
             }
