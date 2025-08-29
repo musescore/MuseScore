@@ -969,7 +969,6 @@ void Slur::write(XmlWriter& xml) const
 
 bool Slur::readProperties(XmlReader& e)
       {
-      const QStringRef& tag(e.name());
       return SlurTie::readProperties(e);
       }
 
