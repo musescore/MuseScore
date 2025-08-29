@@ -1486,6 +1486,11 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 {
     LAYOUT_CALL_ITEM(item);
 
+    if (item->needsRebuild()) {
+        const_cast<FBox*>(item)->init();
+        const_cast<FBox*>(item)->setNeedsRebuild(false);
+    }
+
     const System* parentSystem = item->system();
     LD_CONDITION(parentSystem->ldata()->isSetBbox());
 
