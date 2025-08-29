@@ -806,6 +806,8 @@ void AbstractInspectorModel::endCommand()
     if (undoStack()) {
         undoStack()->commitChanges();
     }
+
+    m_shouldUpdateOnScoreChange = true;
 }
 
 INotationPtr AbstractInspectorModel::currentNotation() const
