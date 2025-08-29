@@ -60,6 +60,7 @@ void FretFrameChordsSettingsModel::requestElements()
 void FretFrameChordsSettingsModel::loadProperties()
 {
     loadProperties({ Pid::FRET_FRAME_DIAGRAMS_ORDER });
+    m_chordListModel->load();
 }
 
 void FretFrameChordsSettingsModel::resetProperties()
