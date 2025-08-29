@@ -3571,3 +3571,40 @@ void FretLinkHarmony::redo(EditData*)
         m_fretDiagram->linkHarmony(m_harmony);
     }
 }
+
+RemoveFretDiagramFromFretBox::RemoveFretDiagramFromFretBox(FretDiagram* f)
+    : m_fretDiagram(f)
+{
+    FBox* fbox = toFBox(f->parent());
+    const ElementList& el = fbox->el();
+    m_idx = muse::indexOf(el, m_fretDiagram);
+}
+
+void RemoveFretDiagramFromFretBox::redo(EditData*)
+{
+    FBox* fbox = toFBox(m_fretDiagram->parent());
+    fbox->remove(m_fretDiagram);
+}
+
+void RemoveFretDiagramFromFretBox::undo(EditData*)
+{
+    FBox* fbox = toFBox(m_fretDiagram->parent());
+    fbox->addAtIdx(m_fretDiagram, m_idx);
+}
+
+AddFretDiagramToFretBox::AddFretDiagramToFretBox(FretDiagram* f, size_t idx)
+    : m_fretDiagram(f), m_idx(idx)
+{
+}
+
+void AddFretDiagramToFretBox::redo(EditData*)
+{
+    FBox* fbox = toFBox(m_fretDiagram->parent());
+    fbox->addAtIdx(m_fretDiagram, m_idx);
+}
+
+void AddFretDiagramToFretBox::undo(EditData*)
+{
+    FBox* fbox = toFBox(m_fretDiagram->parent());
+    fbox->remove(m_fretDiagram);
+}
