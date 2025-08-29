@@ -752,7 +752,7 @@ void FBox::init()
     for (size_t i = 0; i < oldDiagramsNames.size(); ++i) {
         String oldName = oldDiagramsNames[i];
         if (!muse::contains(diagramsNamesInScore, oldName)) {
-            score()->undoRemoveElement(oldDiagrams[i]);
+            score()->undo(new RemoveFretDiagramFromFretBox(oldDiagrams[i]));
         }
     }
 
@@ -761,13 +761,15 @@ void FBox::init()
         if (!muse::contains(oldDiagramsNames, newName)) {
             FretDiagram* newDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(harmonyOrDiagramsInScore[i]);
             newDiagram->setParent(this);
-            score()->undoAddElement(newDiagram);
+            String nameOfDiagramBeforeThis = i > 0 ? diagramsNamesInScore[i - 1] : String();
+            size_t idx = computeInsertionIdx(nameOfDiagramBeforeThis);
+            score()->undo(new AddFretDiagramToFretBox(newDiagram, idx));
         }
     }
 
     StringList currentDiagrams;
     for (EngravingItem* item : el()) {
-        currentDiagrams.push_back(toFretDiagram(item)->harmony()->harmonyName().toLower());
+        currentDiagrams.push_back(toFretDiagram(item)->harmonyText().toLower());
     }
 
     if (!m_invisibleDiagrams.empty()) {
@@ -783,24 +785,47 @@ void FBox::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isFretDiagram()) {
-        FretDiagram* fretDiagram = toFretDiagram(e);
-        fretDiagram->setFlag(ElementFlag::MOVABLE, false);
-        fretDiagram->setFlag(ElementFlag::ON_STAFF, false);
-
-        Harmony* harmony = fretDiagram->harmony();
-        harmony->setFlag(ElementFlag::MOVABLE, false);
-        harmony->setFlag(ElementFlag::ON_STAFF, false);
-
-        if (!e->eid().isValid()) {
-            e->assignNewEID();
-        }
-
-        VBox::add(e);
+        addAtIdx(toFretDiagram(e), muse::nidx);
     } else {
         LOGD("FBox::add: element not allowed");
         return;
     }
-    e->added();
+}
+
+void FBox::addAtIdx(FretDiagram* fretDiagram, size_t idx)
+{
+    fretDiagram->setTrack(muse::nidx);
+    fretDiagram->setFlag(ElementFlag::MOVABLE, false);
+    fretDiagram->setFlag(ElementFlag::ON_STAFF, false);
+
+    Harmony* harmony = fretDiagram->harmony();
+    harmony->setTrack(muse::nidx);
+    harmony->setFlag(ElementFlag::MOVABLE, false);
+    harmony->setFlag(ElementFlag::ON_STAFF, false);
+
+    if (idx < m_el.size()) {
+        m_el.insert(m_el.begin() + idx, fretDiagram);
+    } else {
+        m_el.push_back(fretDiagram);
+    }
+
+    fretDiagram->added();
+}
+
+size_t FBox::computeInsertionIdx(const String& nameOfDiagramBeforeThis)
+{
+    if (nameOfDiagramBeforeThis.empty()) {
+        return 0;
+    }
+
+    for (size_t i = 0; i < m_el.size(); ++i) {
+        FretDiagram* fretDiagram = toFretDiagram(m_el[i]);
+        if (fretDiagram->harmonyText().toLower() == nameOfDiagramBeforeThis.toLower()) {
+            return i + 1;
+        }
+    }
+
+    return muse::nidx;
 }
 
 PropertyValue FBox::getProperty(Pid propertyId) const
@@ -925,13 +950,16 @@ ElementList FBox::orderedElements(bool includeInvisible) const
 {
     ElementList elements = el();
     const StringList& diagramsOrder = this->diagramsOrder();
+    if (diagramsOrder.empty()) {
+        return elements;
+    }
 
     std::sort(elements.begin(), elements.end(), [&diagramsOrder](const EngravingItem* a, const EngravingItem* b) {
         const FretDiagram* diagramA = toFretDiagram(a);
-        const String diagramAHarmonyName = diagramA->harmony()->harmonyName().toLower();
+        const String diagramAHarmonyName = diagramA->harmonyText().toLower();
 
         const FretDiagram* diagramB = toFretDiagram(b);
-        const String diagramBHarmonyName = diagramB->harmony()->harmonyName().toLower();
+        const String diagramBHarmonyName = diagramB->harmonyText().toLower();
 
         auto itA = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramAHarmonyName);
         auto itB = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramBHarmonyName);
@@ -944,7 +972,7 @@ ElementList FBox::orderedElements(bool includeInvisible) const
 
         muse::remove_if(elements, [&invisibleDiagrams](const EngravingItem* element){
             const FretDiagram* diagram = toFretDiagram(element);
-            const String diagramHarmonyName = diagram->harmony()->harmonyName().toLower();
+            const String diagramHarmonyName = diagram->harmonyText().toLower();
             return muse::contains(invisibleDiagrams, diagramHarmonyName);
         });
     }
