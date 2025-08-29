@@ -161,14 +161,20 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
 
         const TextBase* item = notation->interaction()->editedText();
-        if (AbstractElementPopupModel::hasTextStylePopup(item)
-            && (!item->isLyrics() || !item->empty())) {
-            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
-        } else if (item->isDynamic()) {
-            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
-        } else {
-            m_view->hideElementPopup();
+        if (AbstractElementPopupModel::hasTextStylePopup(item)) {
+            bool needToSeeStaffWhileEnteringText = item->isLyrics() || item->isFingering() || item->isSticking() || item->isHarmony();
+            if (!needToSeeStaffWhileEnteringText || !item->empty()) {
+                m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+                return;
+            }
         }
+
+        if (item->isDynamic()) {
+            m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+            return;
+        }
+
+        m_view->hideElementPopup();
     });
 
     currNotation->interaction()->textEditingChanged().onNotify(this, [this] {
