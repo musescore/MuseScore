@@ -2093,7 +2093,7 @@ static void changeChordStyle(Score* score)
     double eadjust = style.styleD(Sid::chordExtensionAdjust);
     double mmag = style.styleD(Sid::chordModifierMag);
     double madjust = style.styleD(Sid::chordModifierAdjust);
-    double stackedmmag = style.styleD(Sid::chordStackedModiferMag);
+    double stackedmmag = style.styleD(Sid::chordStackedModifierMag);
     bool mstackModifiers = style.styleB(Sid::verticallyStackModifiers);
     bool mexcludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
     String msymbolFont = style.styleSt(Sid::musicalTextFont);
