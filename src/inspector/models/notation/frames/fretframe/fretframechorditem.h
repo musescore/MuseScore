@@ -38,6 +38,9 @@ public:
     QString title() const;
     void setTitle(const QString& title);
 
+    QString plainText() const; // same as title but without special characters
+    void setPlainText(const QString& plainText);
+
     bool isVisible() const;
     void setIsVisible(bool visible);
 
@@ -49,6 +52,7 @@ signals:
 private:
     QString m_id;
     QString m_title;
+    QString m_plainText;
     bool m_isVisible = false;
 };
 }

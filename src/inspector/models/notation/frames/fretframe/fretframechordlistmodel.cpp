@@ -63,6 +63,7 @@ void FretFrameChordListModel::load()
         FretDiagram* diagram = toFretDiagram(element);
         auto chordItem = new FretFrameChordItem(this);
         chordItem->setTitle(harmonyName(diagram->harmony()));
+        chordItem->setPlainText(diagram->harmonyText());
 
         chordItem->setIsVisible(!muse::contains(invisibleDiagrams, diagram->harmony()->harmonyName().toLower()));
 
@@ -201,7 +202,7 @@ void FretFrameChordListModel::saveOrder()
 
     for (const Item* item: items()) {
         const FretFrameChordItem* chordItem = dynamic_cast<const FretFrameChordItem*>(item);
-        newOrder.push_back(String::fromQString(chordItem->title()));
+        newOrder.push_back(String::fromQString(chordItem->plainText()));
     }
 
     m_fretBox->undoReorderElements(newOrder);
