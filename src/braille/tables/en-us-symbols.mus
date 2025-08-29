@@ -196,7 +196,7 @@ punctuation ~ 45
 #SMULF symbols definitions
 include smufl-symbols.mus
 
-#SM LibMuiscBraille sending following indicators for stand-alone or in-text SMuFL symbols.
+#SM LibMusicBraille sending following indicators for stand-alone or in-text SMuFL symbols.
 #SmuflOnly: words containing only SMuFL symbols
 #SmuflIntextBegin
 
