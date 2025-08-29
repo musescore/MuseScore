@@ -189,6 +189,7 @@ public:
     void init();
 
     void add(EngravingItem*) override;
+    void addAtIdx(FretDiagram* fretDiagram, size_t idx);
 
     double textScale() const { return m_textScale; }
     double diagramScale() const { return m_diagramScale; }
