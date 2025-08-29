@@ -245,6 +245,8 @@ bool Staff::shouldShowMeasureNumbers() const
     case MeasureNumberPlacement::ON_ALL_STAVES:
         return show();
     }
+
+    return false;
 }
 
 bool Staff::shouldShowPlayCount() const
