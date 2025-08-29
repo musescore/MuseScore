@@ -283,8 +283,11 @@ public:
 
     const InputState& undoInputState() const;
     const InputState& redoInputState() const;
+
     const SelectionInfo& undoSelectionInfo() const;
     const SelectionInfo& redoSelectionInfo() const;
+
+    void excludeElementFromSelectionInfo(EngravingItem* element);
 
     struct ChangesInfo {
         ElementTypeSet changedObjectTypes;

@@ -3886,6 +3886,37 @@ void Score::cmdDeleteSelection()
         // so we don't try to delete them twice if they are also in selection
         std::set<Spanner*> deletedSpanners;
 
+        // diagrams in the fret box must be processed first than diagrams outside the box,
+        // which causes the fret box to be rebuilt and all elements inside to be deleted
+        std::sort(el.begin(), el.end(), [&](const EngravingItem* item1, const EngravingItem* item2) {
+            bool inBox1 = isElementInFretBox(item1);
+            bool inBox2 = isElementInFretBox(item2);
+
+            return inBox1 == inBox2 ? false : inBox1;
+        });
+
+        // if there is harmony or fret diagram outside the fret box
+        // then the fret box will be rebuilt and we should exclude fret box's elements
+        bool hasHarmonyOrFretDiagramsInFretBox = false;
+        bool hasHarmonyOrFretDiagramsOutFretBox = false;
+        for (const EngravingItem* element : el) {
+            if (!element->isFretDiagram() && !element->isHarmony()) {
+                continue;
+            }
+
+            if (isElementInFretBox(element)) {
+                hasHarmonyOrFretDiagramsInFretBox = true;
+            } else {
+                hasHarmonyOrFretDiagramsOutFretBox = true;
+            }
+
+            if (hasHarmonyOrFretDiagramsInFretBox && hasHarmonyOrFretDiagramsOutFretBox) {
+                break;
+            }
+        }
+
+        bool willFretBoxBeRebuilded = hasHarmonyOrFretDiagramsInFretBox && hasHarmonyOrFretDiagramsOutFretBox;
+
         auto selectCRAtTickAndTrack = [this, &crsSelectedAfterDeletion](Fraction tick, track_idx_t track) {
             ChordRest* cr = findCR(tick, track);
             if (cr) {
@@ -3959,16 +3990,42 @@ void Score::cmdDeleteSelection()
 
             // We can't delete elements inside fret box, instead we hide them
             if (e->isFretDiagram() || e->isHarmony()) {
+                auto excludeElementFromSelectionInfo = [this](EngravingItem* element) {
+                    // we need to exclude elements ftom undo stack selection info,
+                    // so that when trying to return the selection there is no crash
+                    UndoMacro* activeCommand = undoStack()->activeCommand();
+                    activeCommand->excludeElementFromSelectionInfo(element);
+                };
+
+                if (willFretBoxBeRebuilded && isElementInFretBox(e)) {
+                    excludeElementFromSelectionInfo(e);
+                    continue;
+                }
+
+                auto hideDiagramInFretBox = [&excludeElementFromSelectionInfo](FBox* fbox, EngravingItem* element){
+                    StringList invisibleDiagrams = fbox->invisibleDiagrams();
+                    const String harmonyName = element->isFretDiagram() ? toFretDiagram(element)->harmony()->harmonyName().toLower()
+                                               : toHarmony(element)->harmonyName().toLower();
+
+                    invisibleDiagrams.push_back(harmonyName);
+                    fbox->undoSetInvisibleDiagrams(invisibleDiagrams);
+
+                    excludeElementFromSelectionInfo(element);
+                };
+
                 if (e->isFretDiagram() && toFretDiagram(e)->isInFretBox()) {
-                    undoChangeVisible(e, false);
-                    elSelectedAfterDeletion = toFBox(e->explicitParent());
+                    FBox* fbox = toFBox(e->explicitParent());
+                    hideDiagramInFretBox(fbox, toFretDiagram(e));
+                    elSelectedAfterDeletion = fbox;
                     continue;
                 } else if (e->isHarmony()) {
                     EngravingObject* parent = toHarmony(e)->explicitParent();
                     FretDiagram* fretDiagram = parent->isFretDiagram() ? toFretDiagram(parent) : nullptr;
+
                     if (fretDiagram && fretDiagram->isInFretBox()) {
-                        undoChangeVisible(fretDiagram, false);
-                        elSelectedAfterDeletion = toFBox(fretDiagram->explicitParent());
+                        FBox* fbox = toFBox(fretDiagram->explicitParent());
+                        hideDiagramInFretBox(fbox, fretDiagram);
+                        elSelectedAfterDeletion = fbox;
                         continue;
                     }
                 }

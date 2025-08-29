@@ -133,4 +133,6 @@ extern std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure);
 extern bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
 extern bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment* secondSeg);
 extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg);
+
+extern bool isElementInFretBox(const EngravingItem* item);
 } // namespace mu::engraving
