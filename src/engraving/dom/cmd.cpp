@@ -2595,7 +2595,7 @@ void Score::cmdResetToDefaultLayout()
         Sid::showMeasureNumberOne,
         Sid::measureNumberInterval,
         Sid::measureNumberSystem,
-        Sid::measureNumberAllStaves,
+        Sid::measureNumberPlacementMode,
         Sid::genClef,
         Sid::hideTabClefAfterFirst,
         Sid::genKeysig,

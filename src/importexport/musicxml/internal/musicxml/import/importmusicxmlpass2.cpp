@@ -1195,7 +1195,12 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
     const String dir = notation.attribute(u"type");
     const String place = notation.attribute(u"placement");
     Articulation* na = Factory::createArticulation(cr);
-    na->setSymId(articSym);
+    if (articSym != SymId::noSym) {
+        na->setSymId(articSym);
+    }
+    if (!notation.text().empty()) {
+        na->setTextType(TConv::fromXml(notation.text().toAscii().constChar(), ArticulationTextType::NO_TEXT));
+    }
     colorItem(na, Color::fromString(notation.attribute(u"color")));
 
     if (dir == "up" || dir == "down") {
@@ -1782,8 +1787,8 @@ void MusicXmlParserPass2::initPartState(const String& partId)
     for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
         m_trills[i] = 0;
     }
-    for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-        m_glissandi[i][0] = m_glissandi[i][1] = 0;
+    for (auto& i : m_glissandi) {
+        i[0] = i[1] = 0;
     }
     m_pedalContinue = 0;
     m_harmony = 0;
@@ -4350,9 +4355,9 @@ void MusicXmlInferredFingering::roundTick(Measure* measure)
 {
     measure->computeTicks();
     int gcdTicks = Fraction(1, 1).ticks();
-    for (auto s = measure->segments().begin(); s != measure->segments().end(); ++s) {
-        if ((*s).isChordRestType()) {
-            gcdTicks = std::gcd(gcdTicks, (*s).ticks().ticks());
+    for (auto& s : measure->segments()) {
+        if (s.isChordRestType()) {
+            gcdTicks = std::gcd(gcdTicks, s.ticks().ticks());
         }
     }
     if (!gcdTicks || gcdTicks == Fraction(1, 1).ticks() || !(m_tick.ticks() % gcdTicks)) {
@@ -8360,14 +8365,15 @@ void MusicXmlParserNotations::articulations()
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "other-articulation") {
             const String smufl = m_e.attribute("smufl");
+            SymId sid = SymNames::symIdByName(smufl, SymId::noSym);
+            Notation artic = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                              m_e.attributes(), u"articulations", sid);
+            const String articText = m_e.readText();
+            artic.setText(articText);
 
-            if (!smufl.empty()) {
-                SymId sid = SymNames::symIdByName(smufl, SymId::noSym);
-                Notation artic = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
-                                                                  m_e.attributes(), u"articulations", sid);
+            if (!smufl.empty() || !articText.empty()) {
                 m_notations.push_back(artic);
             }
-            m_e.skipCurrentElement();  // skip but don't log
         } else {
             skipLogCurrElem();
         }

@@ -651,6 +651,9 @@ void Convert::breathFromMEI(engraving::Breath* breath, const libmei::Breath& mei
         }
     }
 
+    // breath doesn't support @place, so we set default placement
+    breath->setPlacement(breath->track() & 1 ? engraving::PlacementV::BELOW : engraving::PlacementV::ABOVE);
+
     // @color
     Convert::colorFromMEI(breath, meiBreath);
 
@@ -705,6 +708,9 @@ void Convert::caesuraFromMEI(engraving::Breath* breath, const libmei::Caesura& m
             warning = true;
         }
     }
+
+    // caesura doesn't support @place, so we set default placement
+    breath->setPlacement(breath->track() & 1 ? engraving::PlacementV::BELOW : engraving::PlacementV::ABOVE);
 
     // @color
     Convert::colorFromMEI(breath, meiCeasura);

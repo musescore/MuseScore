@@ -876,7 +876,9 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
 void MeasureLayout::removeMMRestElements(Measure* mmRestMeasure)
 {
     // Removed linked clones that were created for the mmRest measure
-    for (EngravingItem* item : mmRestMeasure->el()) {
+    // copy because we're removing elements
+    const ElementList elements = mmRestMeasure->el();
+    for (EngravingItem* item : elements) {
         item->undoUnlink();
         mmRestMeasure->score()->doUndoRemoveElement(item);
     }
@@ -1282,6 +1284,7 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
 void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
 {
     bool showMeasureNumber = m->showsMeasureNumber();
+    MeasureNumberPlacement placementMode = ctx.conf().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>();
 
     String stringNum = String::number(m->no() + 1);
 
@@ -1308,7 +1311,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
             }
 
             measureNumber->setXmlText(stringNum);
-            measureNumber->setSystemFlag(!score->style().styleB(Sid::measureNumberAllStaves));
+            measureNumber->setSystemFlag(placementMode != MeasureNumberPlacement::ON_ALL_STAVES);
             TLayout::layoutMeasureNumber(measureNumber, measureNumber->mutldata(), ctx);
         } else if (measureNumber) {
             measureNumber->setTrack(staff2track(staffIdx));

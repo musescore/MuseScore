@@ -66,7 +66,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4 
       with:
-        version: '6.9.1'
+        version: '6.9.2'
         host: all_os
         target: 'wasm'
         arch: wasm_singlethread

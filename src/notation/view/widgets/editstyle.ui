@@ -544,7 +544,7 @@
                <item>
                 <widget class="QGroupBox" name="hideEmptyStaves">
                  <property name="title">
-                  <string>Hide empty staves within systems</string>
+                  <string>Automatically hide all empty staves</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>

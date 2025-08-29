@@ -32,8 +32,13 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void MeasureNumberLayout::layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::LayoutData* ldata, const LayoutContext& ctx)
+void MeasureNumberLayout::layoutMeasureNumber(MeasureNumber* item, MeasureNumber::LayoutData* ldata, const LayoutContext& ctx)
 {
+    MeasureNumberPlacement placementMode = ctx.conf().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>();
+    if (placementMode != MeasureNumberPlacement::ON_ALL_STAVES) {
+        item->setPlacement(PlacementV::ABOVE);
+    }
+
     layoutMeasureNumberBase(item, ldata);
 
     const RectF& itemBBox = ldata->bbox();
@@ -88,7 +93,7 @@ void MeasureNumberLayout::layoutMeasureNumber(const MeasureNumber* item, Measure
     checkBarlineCollisions(item, barlineSeg, hPlacement, ldata);
 }
 
-void MeasureNumberLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData* ldata, const LayoutContext& ctx)
+void MeasureNumberLayout::layoutMMRestRange(MMRestRange* item, MMRestRange::LayoutData* ldata, const LayoutContext& ctx)
 {
     layoutMeasureNumberBase(item, ldata);
 
@@ -110,7 +115,7 @@ void MeasureNumberLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange
     }
 }
 
-void MeasureNumberLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata)
+void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata)
 {
     ldata->setPos(PointF());
 
@@ -140,7 +145,7 @@ void MeasureNumberLayout::layoutMeasureNumberBase(const MeasureNumberBase* item,
 
     if (item->isStyled(Pid::OFFSET)) {
         PointF offset = item->propertyDefault(Pid::OFFSET).value<PointF>() * item->staff()->staffMag(item->tick());
-        const_cast<MeasureNumberBase*>(item)->setOffset(offset);
+        item->setOffset(offset);
     }
 }
 

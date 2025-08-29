@@ -36,6 +36,9 @@ FocusScope {
     property var anchorItem: null
     signal ensureContentVisibleRequested(int invisibleContentHeight)
 
+    // Set by inheriting components
+    property Component headerAccessory: null
+
     anchors.left: parent.left
     anchors.right: parent.right
 

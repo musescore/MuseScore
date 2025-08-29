@@ -143,7 +143,8 @@ bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
 
 void SystemObjectsLayerTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& changes)
 {
-    if (muse::contains(changes.changedStyleIdSet, Sid::timeSigPlacement)) {
+    if (muse::contains(changes.changedStyleIdSet, Sid::timeSigPlacement)
+        || muse::contains(changes.changedStyleIdSet, Sid::measureNumberPlacementMode)) {
         m_systemObjectGroups = collectSystemObjectGroups(m_staff);
         updateState();
         return;

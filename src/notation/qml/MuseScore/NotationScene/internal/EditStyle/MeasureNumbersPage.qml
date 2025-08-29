@@ -219,22 +219,29 @@ StyledFlickable {
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    RoundedRadioButton {
-                        checked: barNumbersModel.measureNumberAllStaves.value === false
-                        onClicked: barNumbersModel.measureNumberAllStaves.value = false
-                        text: qsTrc("notation/editstyle/voltas", "At system marking positions")
-                    }
+                    RadioButtonGroup {
+                        orientation: ListView.Vertical
+                        spacing: 8
 
-                    RoundedRadioButton {
-                        checked: barNumbersModel.measureNumberAllStaves.value === true
-                        onClicked: barNumbersModel.measureNumberAllStaves.value = true
-                        text: qsTrc("notation/editstyle/voltas", "On all staves")
+                        model:[
+                            { text: qsTrc("notation/editstyle/voltas", "Above system"), value: 0 },
+                            { text: qsTrc("notation/editstyle/voltas", "Below system"), value: 1 },
+                            { text: qsTrc("notation/editstyle/voltas", "At system marking positions"), value: 2 },
+                            { text: qsTrc("notation/editstyle/voltas", "On all staves"), value: 3 },
+                        ]
+
+                        delegate: RoundedRadioButton {
+                            text: modelData.text
+                            checked: barNumbersModel.measureNumberPlacementMode.value === modelData.value
+                            onClicked: barNumbersModel.measureNumberPlacementMode.value = modelData.value
+                        }
                     }
                 }
 
                 ColumnLayout {
                     width: parent.width
                     spacing: 8
+                    visible: barNumbersModel.measureNumberPlacementMode.value === 3
 
                     StyledTextLabel {
                         text: qsTrc("notation/editstyle/voltas", "Position")
