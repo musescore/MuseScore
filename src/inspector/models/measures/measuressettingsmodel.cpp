@@ -45,20 +45,9 @@ void MeasuresSettingsModel::loadProperties()
     updateSystemCount();
 }
 
-void MeasuresSettingsModel::onCurrentNotationChanged()
+bool MeasuresSettingsModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
 {
-    INotationPtr notation = currentNotation();
-    if (!notation) {
-        return;
-    }
-
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
-        if (changes.isTextEditing) {
-            return;
-        }
-
-        onNotationChanged({}, {});
-    });
+    return true;
 }
 
 void MeasuresSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet&)

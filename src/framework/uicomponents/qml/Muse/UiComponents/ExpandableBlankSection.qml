@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Layouts
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
@@ -30,7 +31,7 @@ FocusScope {
     property alias title: titleLabel.text
     property alias titleFont: titleLabel.font
 
-    property alias menuItemComponent: menuLoader.sourceComponent
+    property alias accessory: accessoryLoader.sourceComponent
 
     property bool isExpanded: true
 
@@ -40,7 +41,8 @@ FocusScope {
     anchors.leftMargin: -expandButtonIcon.width / 3
     anchors.right: parent.right
 
-    implicitHeight: expandSectionRow.height
+    implicitWidth: expandSectionRow.implicitWidth
+    implicitHeight: expandSectionRow.implicitHeight
 
     NavigationControl {
         id: navCtrl
@@ -54,27 +56,38 @@ FocusScope {
         }
     }
 
-    NavigationFocusBorder{
+    NavigationFocusBorder {
         navigationCtrl: navCtrl
-        anchors.margins: 0
+        drawOutsideParent: false
     }
 
-    Row {
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+
+        enabled: root.enabled
+        hoverEnabled: true
+
+        onClicked: {
+            navigation.requestActiveByInteraction()
+
+            root.isExpanded = !root.isExpanded
+        }
+    }
+
+    RowLayout {
         id: expandSectionRow
+        anchors.fill: parent
 
         spacing: 4
 
-        height: titleLabel.implicitHeight
-
-        Rectangle {
+        Item {
             id: expandButton
 
             anchors.verticalCenter: parent.verticalCenter
 
-            height: expandButtonIcon.height * 1.2
-            width: expandButtonIcon.width * 1.2
-
-            color: "transparent"
+            Layout.preferredWidth: expandButtonIcon.font.pixelSize
+            Layout.preferredHeight: expandButtonIcon.font.pixelSize
 
             StyledIconLabel {
                 id: expandButtonIcon
@@ -96,40 +109,17 @@ FocusScope {
 
         StyledTextLabel {
             id: titleLabel
-
-            anchors.verticalCenter: expandButton.verticalCenter
-
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignLeft
             font: ui.theme.bodyBoldFont
-        }
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: expandSectionRow
-
-        enabled: root.enabled
-        hoverEnabled: true
-
-        onClicked: {
-            navigation.requestActiveByInteraction()
-
-            root.isExpanded = !root.isExpanded
-        }
-    }
-
-    Loader {
-        id: menuLoader
-
-        property bool isMenuButtonVisible: root.isExpanded || mouseArea.containsMouse
-
-        anchors {
-            right: root.right
-            rightMargin: 48
-            top: expandSectionRow.top
+            wrapMode: Text.Wrap
         }
 
-        height: childrenRect.height
-        width: childrenRect.width
+        Loader {
+            id: accessoryLoader
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            visible: root.isExpanded
+        }
     }
 
     states: [

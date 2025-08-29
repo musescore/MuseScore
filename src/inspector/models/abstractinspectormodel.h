@@ -181,6 +181,7 @@ public:
 
     bool isSystemObjectBelowBottomStaff() const;
     bool shouldUpdateOnScoreChange() const;
+    virtual bool shouldUpdateOnEmptyPropertyAndStyleIdSets() const;
 
     mu::engraving::PropertyIdSet propertyIdSetFromStyleIdSet(const mu::engraving::StyleIdSet& styleIdSet) const;
 

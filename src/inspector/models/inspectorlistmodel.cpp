@@ -377,10 +377,6 @@ void InspectorListModel::listenScoreChanges()
             return;
         }
 
-        if (changes.changedPropertyIdSet.empty() && changes.changedStyleIdSet.empty()) {
-            return;
-        }
-
         if (!m_inspectorVisible) {
             m_changedPropertyIdSet.insert(changes.changedPropertyIdSet.cbegin(), changes.changedPropertyIdSet.cend());
             m_changedStyleIdSet.insert(changes.changedStyleIdSet.cbegin(), changes.changedStyleIdSet.cend());
@@ -402,6 +398,12 @@ void InspectorListModel::onScoreChanged(const mu::engraving::PropertyIdSet& chan
     for (AbstractInspectorModel* model : m_modelList) {
         if (!model->shouldUpdateOnScoreChange() || model->isEmpty()) {
             continue;
+        }
+
+        if (!model->shouldUpdateOnEmptyPropertyAndStyleIdSets()) {
+            if (changedPropertyIdSet.empty() && changedStyleIdSet.empty()) {
+                continue;
+            }
         }
 
         mu::engraving::PropertyIdSet expandedPropertyIdSet = model->propertyIdSetFromStyleIdSet(changedStyleIdSet);
