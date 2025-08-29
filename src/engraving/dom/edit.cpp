@@ -6216,7 +6216,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
                     return ch;
                 }
             }
-            return 0;
+            return nullptr;
         }
         for (track_idx_t i : l) {
             if (nstaff->idx() * VOICES <= i && (nstaff->idx() + 1) * VOICES > i) {
@@ -6227,14 +6227,11 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     }
 
     Segment* s = c->segment();
-    if (!s) {
-        s = c->segment();
-    }
     Measure* nm = nstaff->score()->tick2measure(s->tick());
     Segment* ns = nm->findSegment(s->segmentType(), s->tick());
     EngravingItem* ne = ns->element(dtrack);
     if (!ne || !ne->isChord()) {
-        return 0;
+        return nullptr;
     }
     Chord* nc = toChord(ne);
     if (c->isGrace()) {
