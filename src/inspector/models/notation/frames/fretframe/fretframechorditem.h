@@ -35,9 +35,6 @@ class FretFrameChordItem : public muse::uicomponents::SelectableItemListModel::I
 public:
     explicit FretFrameChordItem(QObject* parent = nullptr);
 
-    QString id() const;
-    void setId(const QString& id);
-
     QString title() const;
     void setTitle(const QString& title);
 

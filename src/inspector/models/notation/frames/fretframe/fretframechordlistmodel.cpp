@@ -62,7 +62,6 @@ void FretFrameChordListModel::load()
     for (EngravingItem* element : m_fretBox->orderedElements(true /*includeInvisible*/)) {
         FretDiagram* diagram = toFretDiagram(element);
         auto chordItem = new FretFrameChordItem(this);
-        chordItem->setId(QString::fromStdString(diagram->eid().toStdString()));
         chordItem->setTitle(harmonyName(diagram->harmony()));
 
         chordItem->setIsVisible(!muse::contains(invisibleDiagrams, diagram->harmony()->harmonyName().toLower()));
