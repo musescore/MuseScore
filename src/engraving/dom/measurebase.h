@@ -206,12 +206,12 @@ protected:
 
     Fraction m_len  { Fraction(0, 1) };    // actual length of measure
 
+    ElementList m_el;                     // Measure(/tick) relative -elements: with defined start time
+                                          // but outside the staff
 private:
     MeasureBase* m_next = nullptr;
     MeasureBase* m_prev = nullptr;
 
-    ElementList m_el;                     // Measure(/tick) relative -elements: with defined start time
-                                          // but outside the staff
     Fraction m_tick = Fraction(0, 1);
     int m_no = 0;                         // Measure number, counting from zero
     int m_noOffset = 0;                   // Offset to measure number

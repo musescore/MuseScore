@@ -57,12 +57,15 @@ void FretFrameChordListModel::load()
         return name;
     };
 
-    for (EngravingItem* element : m_fretBox->orderedElements()) {
+    const StringList& invisibleDiagrams = m_fretBox->invisibleDiagrams();
+
+    for (EngravingItem* element : m_fretBox->orderedElements(true /*includeInvisible*/)) {
         FretDiagram* diagram = toFretDiagram(element);
         auto chordItem = new FretFrameChordItem(this);
-        chordItem->setId(QString::fromStdString(diagram->eid().toStdString()));
         chordItem->setTitle(harmonyName(diagram->harmony()));
-        chordItem->setIsVisible(diagram->visible());
+        chordItem->setPlainText(diagram->harmonyText());
+
+        chordItem->setIsVisible(!muse::contains(invisibleDiagrams, diagram->harmony()->harmonyName().toLower()));
 
         items << chordItem;
     }
@@ -104,7 +107,7 @@ void FretFrameChordListModel::setChordVisible(int index, bool visible)
         return;
     }
 
-    ElementList diagrams = m_fretBox->orderedElements();
+    ElementList diagrams = m_fretBox->orderedElements(true /*includeInvisible*/);
     if (index < 0 || index >= static_cast<int>(diagrams.size())) {
         return;
     }
@@ -120,7 +123,17 @@ void FretFrameChordListModel::setChordVisible(int index, bool visible)
 
     notation->undoStack()->prepareChanges(actionName);
 
-    m_fretBox->score()->undoChangeVisible(diagrams[index], visible);
+    FretDiagram* diagram = toFretDiagram(diagrams[index]);
+    String harmonyName = diagram->harmony()->harmonyName().toLower();
+
+    StringList invisibleDiagrams = m_fretBox->invisibleDiagrams();
+    if (visible) {
+        invisibleDiagrams.erase(std::remove(invisibleDiagrams.begin(), invisibleDiagrams.end(), harmonyName));
+    } else {
+        invisibleDiagrams.push_back(harmonyName);
+    }
+
+    m_fretBox->undoSetInvisibleDiagrams(invisibleDiagrams);
 
     FretFrameChordItem* item = modelIndexToItem(this->index(index));
     item->setIsVisible(visible);
@@ -189,7 +202,7 @@ void FretFrameChordListModel::saveOrder()
 
     for (const Item* item: items()) {
         const FretFrameChordItem* chordItem = dynamic_cast<const FretFrameChordItem*>(item);
-        newOrder.push_back(String::fromQString(chordItem->title()));
+        newOrder.push_back(String::fromQString(chordItem->plainText()));
     }
 
     m_fretBox->undoReorderElements(newOrder);

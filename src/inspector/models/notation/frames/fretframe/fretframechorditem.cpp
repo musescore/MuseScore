@@ -28,21 +28,6 @@ FretFrameChordItem::FretFrameChordItem(QObject* parent)
 {
 }
 
-QString FretFrameChordItem::id() const
-{
-    return m_id;
-}
-
-void FretFrameChordItem::setId(const QString& id)
-{
-    if (m_id == id) {
-        return;
-    }
-
-    m_id = id;
-    emit idChanged();
-}
-
 QString FretFrameChordItem::title() const
 {
     return m_title;
@@ -56,6 +41,16 @@ void FretFrameChordItem::setTitle(const QString& title)
 
     m_title = title;
     emit titleChanged();
+}
+
+QString FretFrameChordItem::plainText() const
+{
+    return m_plainText;
+}
+
+void FretFrameChordItem::setPlainText(const QString& plainText)
+{
+    m_plainText = plainText;
 }
 
 bool FretFrameChordItem::isVisible() const
