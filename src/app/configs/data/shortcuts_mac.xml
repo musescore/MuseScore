@@ -852,15 +852,18 @@
     </SC>
   <SC>
     <key>zoomin</key>
-    <seq>Ctrl++</seq>
+    <seq>Ctrl+=</seq>
+    <seq>Ctrl+Shift+=</seq>
     </SC>
   <SC>
     <key>zoomout</key>
     <seq>Ctrl+-</seq>
+    <seq>Ctrl+Shift+-</seq>
     </SC>
   <SC>
     <key>zoom100</key>
     <seq>Ctrl+0</seq>
+    <seq>Ctrl+Shift+0</seq>
     </SC>
   <SC>
     <key>mirror-note</key>
