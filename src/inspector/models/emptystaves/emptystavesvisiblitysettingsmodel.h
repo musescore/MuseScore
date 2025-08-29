@@ -28,18 +28,43 @@ class EmptyStavesVisibilitySettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool canHideEmptyStavesInSelection READ canHideEmptyStavesInSelection NOTIFY canHideEmptyStavesInSelectionChanged)
+    Q_PROPERTY(bool canShowAllEmptyStaves READ canShowAllEmptyStaves NOTIFY canShowAllEmptyStavesChanged)
+    Q_PROPERTY(bool canResetEmptyStavesVisibility READ canResetEmptyStavesVisibility NOTIFY canResetEmptyStavesVisibilityChanged)
+
 public:
     explicit EmptyStavesVisibilitySettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     void createProperties() override {}
-    void loadProperties() override {}
+    void loadProperties() override;
     void resetProperties() override {}
     void requestElements() override {}
 
     bool isEmpty() const override;
+    bool shouldUpdateOnEmptyPropertyAndStyleIdSets() const override;
+
+    bool canHideEmptyStavesInSelection() const { return m_canHideEmptyStavesInSelection; }
+    bool canShowAllEmptyStaves() const { return m_canShowAllEmptyStaves; }
+    bool canResetEmptyStavesVisibility() const { return m_canResetEmptyStavesVisibility; }
 
     Q_INVOKABLE void hideEmptyStavesInSelection();
     Q_INVOKABLE void showAllEmptyStaves();
     Q_INVOKABLE void resetEmptyStavesVisibility();
+
+signals:
+    void canHideEmptyStavesInSelectionChanged();
+    void canShowAllEmptyStavesChanged();
+    void canResetEmptyStavesVisibilityChanged();
+
+private:
+    void onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&) override;
+
+    void updateCanHideEmptyStavesInSelection();
+    void updateCanShowAllEmptyStaves();
+    void updateCanResetEmptyStavesVisibility();
+
+    bool m_canHideEmptyStavesInSelection = false;
+    bool m_canShowAllEmptyStaves = false;
+    bool m_canResetEmptyStavesVisibility = false;
 };
 }

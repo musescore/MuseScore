@@ -32,6 +32,21 @@ InspectorSectionView {
 
     implicitHeight: contentColumn.implicitHeight
 
+    headerAccessory: PropertyResetButton {
+        navigation.name: "ResetEmptyStavesVisibility"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + 3
+
+        toolTipTitle: qsTrc("inspector", "Reset to default")
+        enabled: root.model?.canResetEmptyStavesVisibility
+
+        onClicked: {
+            if (root.model) {
+                root.model.resetEmptyStavesVisibility()
+            }
+        }
+    }
+
     Column {
         id: contentColumn
 
@@ -45,7 +60,10 @@ InspectorSectionView {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
 
+            icon: IconCode.HIDE_EMPTY_STAVES
             text: qsTrc("inspector", "Hide empty staves")
+            orientation: Qt.Horizontal
+            enabled: root.model && root.model.canHideEmptyStavesInSelection
 
             onClicked: {
                 if (root.model) {
@@ -61,27 +79,14 @@ InspectorSectionView {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 2
 
-            text: qsTrc("inspector", "Show all empty staves")
+            icon: IconCode.SHOW_EMPTY_STAVES
+            text: qsTrc("inspector", "Show empty staves")
+            orientation: Qt.Horizontal
+            enabled: root.model && root.model.canShowAllEmptyStaves
 
             onClicked: {
                 if (root.model) {
                     root.model.showAllEmptyStaves()
-                }
-            }
-        }
-
-        FlatButton {
-            width: parent.width
-
-            navigation.name: "ResetEmptyStavesVisibility"
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart + 3
-
-            text: qsTrc("inspector", "Reset empty staves visibility")
-
-            onClicked: {
-                if (root.model) {
-                    root.model.resetEmptyStavesVisibility()
                 }
             }
         }
