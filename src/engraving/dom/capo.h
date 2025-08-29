@@ -54,6 +54,6 @@ private:
     bool m_shouldAutomaticallyGenerateText = true;
     String m_customText;
 };
-}
+} // namespace mu::engraving
 
 #endif // MU_ENGRAVING_CAPO_H

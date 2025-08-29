@@ -45,6 +45,9 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "timesig.h"
+#include "utils.h"
+#include "capo.h"
+#include "editcapo.h"
 
 // #define DEBUG_CLEFS
 
@@ -1045,12 +1048,69 @@ const CapoParams& Staff::capo(const Fraction& tick) const
 
 void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
 {
-    m_capoMap.insert_or_assign(tick.ticks(), params);
+    auto isNeedUpdate = [](const CapoParams& oldParams, const CapoParams& newParams) -> bool {
+        return !(oldParams.active == newParams.active
+                 && oldParams.transposeMode == newParams.transposeMode
+                 && oldParams.fretPosition == newParams.fretPosition
+                 && oldParams.ignoredStrings == newParams.ignoredStrings);
+    };
+
+    CapoParams initialParams;
+    initialParams.fretPosition = 1;
+    initialParams.active = true;
+
+    int startTick = tick.ticks();
+    int endTick = -1;
+
+    if (auto it = m_capoMap.find(startTick); it == m_capoMap.end()) {
+        auto result = m_capoMap.insert({ startTick, params });
+        if (const auto nextIt = std::next(result.first); nextIt != m_capoMap.end()) {
+            endTick = nextIt->first;
+        }
+        if (result.first != m_capoMap.begin()) {
+            const auto prevIt = std::prev(result.first);
+            const CapoParams oldParams = prevIt->second;
+            EditCapo::updateNotationForCapoChange(oldParams, params, this, startTick, endTick);
+        } else {
+            EditCapo::updateNotationForCapoChange(initialParams, params, this, startTick, endTick);
+        }
+    } else {
+        CapoParams oldParams = it->second;
+        if (!isNeedUpdate(oldParams, params)) {
+            return;
+        }
+        auto result = m_capoMap.insert_or_assign(startTick, params);
+        if (const auto nextIt = std::next(result.first); nextIt != m_capoMap.end()) {
+            endTick = nextIt->first;
+        }
+        EditCapo::updateNotationForCapoChange(oldParams, params, this, startTick, endTick);
+    }
 }
 
-void Staff::clearCapoParams()
+void Staff::removeCapoParams(const mu::engraving::Fraction& tick)
 {
-    m_capoMap.clear();
+    const int startTick = tick.ticks();
+
+    const auto it = m_capoMap.find(startTick);
+    IF_ASSERT_FAILED(it != m_capoMap.end()) {
+        LOGE() << "Key must exist in capo map!";
+        return;
+    }
+
+    const auto nextCapoIt = std::next(it);
+    const int endTick = nextCapoIt == m_capoMap.end() ? -1 : nextCapoIt->first;
+
+    CapoParams revertParams;
+    revertParams.fretPosition = it->second.fretPosition;
+
+    CapoParams oldParams = it->second;
+
+    if (it != m_capoMap.begin()) {
+        revertParams = std::prev(it)->second;
+    }
+    EditCapo::updateNotationForCapoChange(oldParams, revertParams, this, startTick, endTick);
+
+    m_capoMap.erase(startTick);
 }
 
 bool Staff::shouldMergeMatchingRests() const
