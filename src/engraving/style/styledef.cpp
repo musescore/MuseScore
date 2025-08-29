@@ -1526,6 +1526,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(guitarBendArrowWidth,                       Spatium(1.0)),
     styleDef(guitarBendArrowHeight,                      Spatium(1.0)),
     styleDef(useCueSizeFretForGraceBends,                false),
+    styleDef(showFretOnFullBendRelease,                  true),
 
     styleDef(headerFontFace,                             "Edwin"),
     styleDef(headerFontSize,                             9.0),
