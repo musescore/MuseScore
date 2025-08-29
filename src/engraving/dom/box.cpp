@@ -749,6 +749,8 @@ void FBox::init()
         }
     }
 
+    m_diagramsOrderInScore = diagramsNamesInScore;
+
     for (size_t i = 0; i < oldDiagramsNames.size(); ++i) {
         String oldName = oldDiagramsNames[i];
         if (!muse::contains(diagramsNamesInScore, oldName)) {
@@ -774,10 +776,6 @@ void FBox::init()
 
     if (!m_invisibleDiagrams.empty()) {
         updateInvisibleDiagrams(currentDiagrams);
-    }
-
-    if (!m_diagramsOrder.empty()) {
-        updateDiagramsOrder(currentDiagrams);
     }
 }
 
@@ -848,7 +846,7 @@ PropertyValue FBox::getProperty(Pid propertyId) const
     case Pid::RIGHT_MARGIN:
         return m_contentAlignmentH == AlignH::RIGHT ? VBox::getProperty(propertyId) : PropertyValue();
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
-        return !m_diagramsOrder.empty() ? m_diagramsOrder.join(FRET_BOX_DIAGRAMS_SEPARATOR) : PropertyValue();
+        return diagramsOrder().join(FRET_BOX_DIAGRAMS_SEPARATOR);
     case Pid::FRET_FRAME_INVISIBLE_DIAGRAMS:
         return !m_invisibleDiagrams.empty() ? m_invisibleDiagrams.join(FRET_BOX_DIAGRAMS_SEPARATOR) : PropertyValue();
     default:
@@ -880,7 +878,7 @@ bool FBox::setProperty(Pid propertyId, const PropertyValue& val)
         resetProperty(Pid::RIGHT_MARGIN);
         break;
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
-        m_diagramsOrder = val.value<String>().split(FRET_BOX_DIAGRAMS_SEPARATOR);
+        reorderElements(val.value<String>().split(FRET_BOX_DIAGRAMS_SEPARATOR));
         break;
     case Pid::FRET_FRAME_INVISIBLE_DIAGRAMS:
         m_invisibleDiagrams = val.value<String>().split(FRET_BOX_DIAGRAMS_SEPARATOR);
@@ -907,7 +905,7 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
     case Pid::FRET_FRAME_H_ALIGN:
         return static_cast<int>(AlignH::HCENTER);
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
-        return PropertyValue();
+        return m_diagramsOrderInScore.join(FRET_BOX_DIAGRAMS_SEPARATOR);
     case Pid::FRET_FRAME_INVISIBLE_DIAGRAMS:
         return PropertyValue();
     default:
@@ -944,6 +942,27 @@ void FBox::undoReorderElements(const StringList& newOrder)
 
     undoChangeProperty(Pid::FRET_FRAME_DIAGRAMS_ORDER, order.join(FRET_BOX_DIAGRAMS_SEPARATOR));
     triggerLayout();
+}
+
+void FBox::reorderElements(const StringList& newOrder)
+{
+    std::sort(m_el.begin(), m_el.end(), [&](EngravingItem* a, EngravingItem* b) {
+        String nameA = toFretDiagram(a)->harmonyText().toLower();
+        String nameB = toFretDiagram(b)->harmonyText().toLower();
+        auto iterA = std::find(newOrder.begin(), newOrder.end(), nameA);
+        auto iterB = std::find(newOrder.begin(), newOrder.end(), nameB);
+        return iterA < iterB;
+    });
+}
+
+StringList FBox::diagramsOrder() const
+{
+    StringList result;
+    for (EngravingItem* item : m_el) {
+        result.push_back(toFretDiagram(item)->harmonyText().toLower());
+    }
+
+    return result;
 }
 
 ElementList FBox::orderedElements(bool includeInvisible) const
@@ -989,31 +1008,6 @@ void FBox::undoSetInvisibleDiagrams(const StringList& invisibleDiagrams)
 
     undoChangeProperty(Pid::FRET_FRAME_INVISIBLE_DIAGRAMS, diagrams.join(FRET_BOX_DIAGRAMS_SEPARATOR));
     triggerLayout();
-}
-
-void FBox::updateDiagramsOrder(const StringList& currentDiagrams)
-{
-    if (currentDiagrams == m_diagramsOrder) {
-        return;
-    }
-
-    m_diagramsOrder.erase(std::remove_if(m_diagramsOrder.begin(), m_diagramsOrder.end(),
-                                         [&](const String& harmonyName) { return !muse::contains(currentDiagrams, harmonyName); }),
-                          m_diagramsOrder.end());
-
-    String previousHarmonyName;
-    for (const String& harmonyName : currentDiagrams) {
-        if (!muse::contains(m_diagramsOrder, harmonyName)) {
-            size_t index = 0;
-            if (!previousHarmonyName.empty()) {
-                index = std::find(m_diagramsOrder.begin(), m_diagramsOrder.end(), previousHarmonyName) - m_diagramsOrder.begin() + 1;
-            }
-
-            m_diagramsOrder.insert(m_diagramsOrder.begin() + index, harmonyName);
-        }
-
-        previousHarmonyName = harmonyName;
-    }
 }
 
 void FBox::updateInvisibleDiagrams(const StringList& currentDiagrams)

@@ -208,7 +208,8 @@ public:
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
     void undoReorderElements(const StringList& newOrder);
-    const StringList& diagramsOrder() const { return m_diagramsOrder; }
+    void reorderElements(const StringList& newOrder);
+    StringList diagramsOrder() const;
 
     void undoSetInvisibleDiagrams(const StringList& invisibleDiagrams);
     const StringList& invisibleDiagrams() const { return m_invisibleDiagrams; }
@@ -220,7 +221,6 @@ public:
 
 private:
 
-    void updateDiagramsOrder(const StringList& currentDiagrams);
     void updateInvisibleDiagrams(const StringList& currentDiagrams);
     size_t computeInsertionIdx(const String& nameOfDiagramBeforeThis);
 
@@ -234,7 +234,7 @@ private:
 
     AlignH m_contentAlignmentH = AlignH::HCENTER;
 
-    StringList /*harmonyNames*/ m_diagramsOrder;
+    StringList m_diagramsOrderInScore;
     StringList /*harmonyNames*/ m_invisibleDiagrams;
 };
 
