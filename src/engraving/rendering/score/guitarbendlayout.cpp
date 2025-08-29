@@ -465,7 +465,7 @@ void GuitarBendLayout::layoutTabStaff(GuitarBendSegment* item, LayoutContext& ct
         TLayout::layoutChord(endNote->chord(), ctx);
     }
 
-    if (bend->type() != GuitarBendType::SLIGHT_BEND && !bend->isFullRelease()) {
+    if (bend->type() != GuitarBendType::SLIGHT_BEND && (!style.styleB(Sid::showFretOnFullBendRelease) || !bend->isFullRelease())) {
         endNote->setVisible(false);
     }
 
