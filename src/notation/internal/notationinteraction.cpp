@@ -3359,7 +3359,6 @@ void NotationInteraction::setDropRect(const RectF& rect)
     if (edd.dropTarget) {
         edd.dropTarget->setDropTarget(false);
         score()->addRefresh(edd.dropTarget->canvasBoundingRect());
-        edd.dropTarget = nullptr;
     } else if (!m_anchorLines.empty()) {
         RectF rf;
         rf.setTopLeft(m_anchorLines.front().p1());
