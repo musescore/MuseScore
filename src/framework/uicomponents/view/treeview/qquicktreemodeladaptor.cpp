@@ -44,8 +44,7 @@
 
 QT_BEGIN_NAMESPACE
 
-//#define QQUICKTREEMODELADAPTOR_DEBUG
-#if defined(QQUICKTREEMODELADAPTOR_DEBUG) && !defined(QT_TESTLIB_LIB)
+#ifndef NDEBUG
 #   define ASSERT_CONSISTENCY() Q_ASSERT_X(testConsistency(true /* dumpOnFail */), Q_FUNC_INFO, "Consistency test failed")
 #else
 #   define ASSERT_CONSISTENCY qt_noop
@@ -491,7 +490,7 @@ void QQuickTreeModelAdaptor1::collapseRow(int n)
     if (!m_model || !isExpanded(n))
         return;
 
-    SignalFreezer aggregator(this);
+    // SignalFreezer aggregator(this);
 
     TreeItem &item = m_items[n];
     item.expanded = false;
@@ -668,7 +667,7 @@ void QQuickTreeModelAdaptor1::modelRowsInserted(const QModelIndex & parent, int 
 void QQuickTreeModelAdaptor1::modelRowsAboutToBeRemoved(const QModelIndex & parent, int start, int end)
 {
     ASSERT_CONSISTENCY();
-    enableSignalAggregation();
+    // enableSignalAggregation();
     if (parent == m_rootIndex || childrenVisible(parent)) {
         const QModelIndex &smi = m_model->index(start, 0, parent);
         int startIndex = itemIndex(smi);
@@ -703,14 +702,14 @@ void QQuickTreeModelAdaptor1::modelRowsRemoved(const QModelIndex & parent, int s
         QVector<int> changedRole(1, HasChildrenRole);
         queueDataChanged(parentIndex, parentIndex, changedRole);
     }
-    disableSignalAggregation();
+    // disableSignalAggregation();
     ASSERT_CONSISTENCY();
 }
 
 void QQuickTreeModelAdaptor1::modelRowsAboutToBeMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationRow)
 {
     ASSERT_CONSISTENCY();
-    enableSignalAggregation();
+    // enableSignalAggregation();
     m_visibleRowsMoved = false;
     if (!childrenVisible(sourceParent))
         return; // Do nothing now. See modelRowsMoved() below.
@@ -838,7 +837,7 @@ void QQuickTreeModelAdaptor1::modelRowsMoved(const QModelIndex & sourceParent, i
         queueDataChanged(topLeft, bottomRight, changedRole);
     }
 
-    disableSignalAggregation();
+    // disableSignalAggregation();
 
     ASSERT_CONSISTENCY();
 }
@@ -928,70 +927,70 @@ bool QQuickTreeModelAdaptor1::testConsistency(bool dumpOnFail) const
     return true;
 }
 
-void QQuickTreeModelAdaptor1::enableSignalAggregation() {
-    m_signalAggregatorStack++;
-}
+// void QQuickTreeModelAdaptor1::enableSignalAggregation() {
+//     m_signalAggregatorStack++;
+// }
 
-void QQuickTreeModelAdaptor1::disableSignalAggregation() {
-    m_signalAggregatorStack--;
-    Q_ASSERT(m_signalAggregatorStack >= 0);
-    if (m_signalAggregatorStack == 0) {
-        emitQueuedSignals();
-    }
-}
+// void QQuickTreeModelAdaptor1::disableSignalAggregation() {
+//     m_signalAggregatorStack--;
+//     Q_ASSERT(m_signalAggregatorStack >= 0);
+//     if (m_signalAggregatorStack == 0) {
+//         emitQueuedSignals();
+//     }
+// }
 
 void QQuickTreeModelAdaptor1::queueDataChanged(const QModelIndex &topLeft,
                                                const QModelIndex &bottomRight,
                                                const QVector<int> &roles)
 {
-    if (isAggregatingSignals()) {
-        m_queuedDataChanged.append(DataChangedParams { topLeft, bottomRight, roles });
-    } else {
+    // if (isAggregatingSignals()) {
+    //     m_queuedDataChanged.append(DataChangedParams { topLeft, bottomRight, roles });
+    // } else {
         emit dataChanged(topLeft, bottomRight, roles);
-    }
+    // }
 }
 
-void QQuickTreeModelAdaptor1::emitQueuedSignals()
-{
-    QVector<DataChangedParams> combinedUpdates;
-    /* First, iterate through the queued updates and merge the overlapping ones
-     * to reduce the number of updates.
-     * We don't merge adjacent updates, because they are typically filed with a
-     * different role (a parent row is next to its children).
-     */
-    for (const DataChangedParams &dataChange : m_queuedDataChanged) {
-        int startRow = dataChange.topLeft.row();
-        int endRow = dataChange.bottomRight.row();
-        bool merged = false;
-        for (DataChangedParams &combined : combinedUpdates) {
-            int combinedStartRow = combined.topLeft.row();
-            int combinedEndRow = combined.bottomRight.row();
-            if ((startRow <= combinedStartRow && endRow >= combinedStartRow) ||
-                (startRow <= combinedEndRow && endRow >= combinedEndRow)) {
-                if (startRow < combinedStartRow) {
-                    combined.topLeft = dataChange.topLeft;
-                }
-                if (endRow > combinedEndRow) {
-                    combined.bottomRight = dataChange.bottomRight;
-                }
-                for (int role : dataChange.roles) {
-                    if (!combined.roles.contains(role))
-                        combined.roles.append(role);
-                }
-                merged = true;
-                break;
-            }
-        }
-        if (!merged) {
-            combinedUpdates.append(dataChange);
-        }
-    }
+// void QQuickTreeModelAdaptor1::emitQueuedSignals()
+// {
+//     QVector<DataChangedParams> combinedUpdates;
+//     /* First, iterate through the queued updates and merge the overlapping ones
+//      * to reduce the number of updates.
+//      * We don't merge adjacent updates, because they are typically filed with a
+//      * different role (a parent row is next to its children).
+//      */
+//     for (const DataChangedParams &dataChange : std::as_const(m_queuedDataChanged)) {
+//         int startRow = dataChange.topLeft.row();
+//         int endRow = dataChange.bottomRight.row();
+//         bool merged = false;
+//         for (DataChangedParams &combined : combinedUpdates) {
+//             int combinedStartRow = combined.topLeft.row();
+//             int combinedEndRow = combined.bottomRight.row();
+//             if ((startRow <= combinedStartRow && endRow >= combinedStartRow) ||
+//                 (startRow <= combinedEndRow && endRow >= combinedEndRow)) {
+//                 if (startRow < combinedStartRow) {
+//                     combined.topLeft = dataChange.topLeft;
+//                 }
+//                 if (endRow > combinedEndRow) {
+//                     combined.bottomRight = dataChange.bottomRight;
+//                 }
+//                 for (int role : dataChange.roles) {
+//                     if (!combined.roles.contains(role))
+//                         combined.roles.append(role);
+//                 }
+//                 merged = true;
+//                 break;
+//             }
+//         }
+//         if (!merged) {
+//             combinedUpdates.append(dataChange);
+//         }
+//     }
 
-    /* Finally, emit the dataChanged signals */
-    for (const DataChangedParams &dataChange : combinedUpdates) {
-        emit dataChanged(dataChange.topLeft, dataChange.bottomRight, dataChange.roles);
-    }
-    m_queuedDataChanged.clear();
-}
+//     /* Finally, emit the dataChanged signals */
+//     for (const DataChangedParams &dataChange : combinedUpdates) {
+//         emit dataChanged(dataChange.topLeft, dataChange.bottomRight, dataChange.roles);
+//     }
+//     m_queuedDataChanged.clear();
+// }
 
 QT_END_NAMESPACE
