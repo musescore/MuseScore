@@ -19,14 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
-import QtQml.Models 2.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
-import MuseScore.InstrumentsScene 1.0
+import Muse.Ui
+import Muse.UiComponents
+import MuseScore.InstrumentsScene
 
 import "internal"
 
@@ -146,7 +145,7 @@ Item {
             wrapMode: Text.WordWrap
         }
 
-        LegacyTreeView {
+        StyledTreeView {
             id: layoutPanelTreeView
 
             readonly property real delegateHeight: 38
@@ -160,35 +159,28 @@ Item {
                 id: treeModel
             }
 
-            selection: treeModel ? treeModel.selectionModel() : null
-
-            alternatingRowColors: false
-            headerVisible: false
-
-            function expandCollapseAll(expand) {
-                for (let row = 0; row < layoutPanelTreeView.model.rowCount(); row++) {
-                    const instrumentIndex = layoutPanelTreeView.model.index(row, 0);
-                    const itemDelegate = layoutPanelTreeView.model.data(instrumentIndex);
-                    if (itemDelegate.isExpandable){
-                        if (expand) {
-                            layoutPanelTreeView.expand(instrumentIndex)
-                        } else {
-                            layoutPanelTreeView.collapse(instrumentIndex)
-                        }
-                    }
-                }
-                flickableItem.returnToBounds();
+            columnWidthProvider: function (column) {
+                return width
             }
 
-            function scrollToFocusedItem(focusedIndex) {
-                let targetScrollPosition = focusedIndex * layoutPanelTreeView.delegateHeight
-                let visibleAreaEnd = flickableItem.contentY + flickableItem.height
+            // Sad for performance, but doesn't work well with drag & drop
+            reuseItems: false
 
-                if (targetScrollPosition + layoutPanelTreeView.delegateHeight > visibleAreaEnd) {
-                    flickableItem.contentY = Math.min(targetScrollPosition + layoutPanelTreeView.delegateHeight - flickableItem.height, flickableItem.contentHeight - flickableItem.height)
-                } else if (targetScrollPosition < flickableItem.contentY) {
-                    flickableItem.contentY = Math.max(targetScrollPosition, 0)
+            function expandCollapseAll(expand) {
+                for (let modelRow = 0; modelRow < layoutPanelTreeView.model.rowCount(); ++modelRow) {
+                    const modelIndex = layoutPanelTreeView.model.index(modelRow, 0);
+                    const isExpandable = layoutPanelTreeView.model.data(modelIndex).isExpandable;
+                    if (!isExpandable) {
+                        continue;
+                    }
+                    const viewRow = layoutPanelTreeView.rowAtIndex(modelRow);
+                    if (expand) {
+                        layoutPanelTreeView.expand(viewRow)
+                    } else {
+                        layoutPanelTreeView.collapse(viewRow)
+                    }
                 }
+                returnToBounds();
             }
 
             property NavigationPanel navigationTreePanel : NavigationPanel {
@@ -205,39 +197,42 @@ Item {
                 }
             }
 
-            TableViewColumn {
-                role: "itemRole"
-            }
-
-            function isControl(itemType) {
-                return itemType === LayoutPanelItemType.CONTROL_ADD_STAFF ||
-                        itemType === LayoutPanelItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
-            }
-
-            style: LegacyTreeViewStyle {
-                indentation: 0
-                branchDelegate: null
-                backgroundColor: "transparent"
-
-                rowDelegate: Item {
-                    height: layoutPanelTreeView.delegateHeight
-                    width: parent.width
-                }
-            }
-
-            itemDelegate: DropArea {
+            delegate: DropArea {
                 id: dropArea
+
+                // Assigned to by TreeView:
+                required property TreeView treeView
+                required property bool isTreeNode
+                required property bool expanded
+                required property bool hasChildren
+                required property int depth
+                required property int row
+                required property int column
+                required property bool current
+
+                readonly property var modelIndex: treeView.index(row, column)
+
+                required property QtObject item
+
+                implicitWidth: parent.width
+                implicitHeight: layoutPanelTreeView.delegateHeight
 
                 Loader {
                     id: treeItemDelegateLoader
 
-                    property int delegateType: model ? model.itemRole.type : LayoutPanelItemType.UNDEFINED
+                    property int delegateType: dropArea.item.type
 
-                    height: parent.height
-                    width: parent.width
+                    anchors.fill: parent
 
-                    sourceComponent: layoutPanelTreeView.isControl(delegateType) ?
-                                         controlItemDelegateComponent : treeItemDelegateComponent
+                    sourceComponent: {
+                        switch (dropArea.item.type) {
+                        case LayoutPanelItemType.CONTROL_ADD_STAFF:
+                        case LayoutPanelItemType.CONTROL_ADD_DOUBLE_INSTRUMENT:
+                            return controlItemDelegateComponent;
+                        default:
+                            return treeItemDelegateComponent;
+                        }
+                    }
 
                     Component {
                         id: treeItemDelegateComponent
@@ -245,25 +240,33 @@ Item {
                         LayoutPanelItemDelegate {
                             id: itemDelegate
 
-                            treeView: layoutPanelTreeView
-                            item: model ? model.itemRole : null
+                            treeView: dropArea.treeView
+                            isTreeNode: dropArea.isTreeNode
+                            expanded: dropArea.expanded
+                            hasChildren: dropArea.hasChildren
+                            depth: dropArea.depth
+                            row: dropArea.row
+                            column: dropArea.column
+                            current: dropArea.current
+                            modelIndex: dropArea.modelIndex
+                            item: dropArea.item
 
                             sideMargin: contentColumn.sideMargin
                             popupAnchorItem: root
 
-                            navigation.name: model ? model.itemRole.title : "LayoutPanelItemDelegate"
+                            navigation.name: item.title
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
-                            navigation.row: model ? model.index : 0
+                            navigation.row: row
                             navigation.onActiveChanged: {
                                 if (navigation.active) {
                                     prv.currentItemNavigationName = navigation.name
-                                    layoutPanelTreeView.scrollToFocusedItem(model.index)
+                                    treeView.positionViewAtRow(row)
                                 }
                             }
 
                             onClicked: {
-                                if (itemDelegate.isSelectable) {
-                                    treeModel.selectRow(styleData.index)
+                                if (isSelectable) {
+                                    treeModel.selectRow(modelIndex)
                                 }
                             }
 
@@ -272,11 +275,7 @@ Item {
                                     return
                                 }
 
-                                if (!styleData.isExpanded) {
-                                    layoutPanelTreeView.expand(styleData.index)
-                                } else {
-                                    layoutPanelTreeView.collapse(styleData.index)
-                                }
+                                treeView.toggleExpanded(row)
                             }
 
                             onRemoveSelectionRequested: {
@@ -286,27 +285,27 @@ Item {
                             property real contentYBackup: 0
 
                             onPopupOpened: function(popupX, popupY, popupHeight) {
-                                contentYBackup = layoutPanelTreeView.flickableItem.contentY
-                                var mappedPopupY = mapToItem(layoutPanelTreeView.flickableItem, popupX, popupY).y
+                                contentYBackup = layoutPanelTreeView.contentY
+                                var mappedPopupY = mapToItem(layoutPanelTreeView, popupX, popupY).y
 
-                                if (mappedPopupY + popupHeight < layoutPanelTreeView.flickableItem.height - contentColumn.sideMargin) {
+                                if (mappedPopupY + popupHeight < layoutPanelTreeView.height - contentColumn.sideMargin) {
                                     return
                                 }
 
-                                var hiddenPopupPartHeight = Math.abs(layoutPanelTreeView.flickableItem.height - (mappedPopupY + popupHeight))
-                                layoutPanelTreeView.flickableItem.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
+                                var hiddenPopupPartHeight = Math.abs(layoutPanelTreeView.height - (mappedPopupY + popupHeight))
+                                layoutPanelTreeView.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
                             }
 
                             onPopupClosed: {
-                                layoutPanelTreeView.flickableItem.contentY = contentYBackup
+                                layoutPanelTreeView.contentY = contentYBackup
                             }
 
                             onChangeVisibilityOfSelectedRowsRequested: function(visible) {
                                 treeModel.changeVisibilityOfSelectedRows(visible);
                             }
 
-                            onChangeVisibilityRequested: function(index, visible) {
-                                treeModel.changeVisibility(index, visible)
+                            onChangeVisibilityRequested: function(visible) {
+                                treeModel.changeVisibility(modelIndex, visible)
                             }
 
                             onDragStarted: {
@@ -323,35 +322,46 @@ Item {
                         id: controlItemDelegateComponent
 
                         LayoutPanelItemControl {
-                            isSelected: model ? model.itemRole.isSelected : false
+                            treeView: dropArea.treeView
+                            isTreeNode: dropArea.isTreeNode
+                            expanded: dropArea.expanded
+                            hasChildren: dropArea.hasChildren
+                            depth: dropArea.depth
+                            row: dropArea.row
+                            column: dropArea.column
+                            current: dropArea.current
+                            modelIndex: dropArea.modelIndex
+                            item: dropArea.item
+
+                            isSelected: item.isSelected
 
                             navigation.panel: layoutPanelTreeView.navigationTreePanel
-                            navigation.row: model ? model.index : 0
+                            navigation.row: row
 
                             sideMargin: contentColumn.sideMargin
 
                             onClicked: {
-                                styleData.value.appendNewItem()
+                                item.appendNewItem()
                             }
                         }
                     }
                 }
 
                 onEntered: function(drag) {
-                    if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.item)) {
+                    // drag.source is the `LayoutPanelItemDelegate`
+                    if (row === drag.source.row || !item.canAcceptDrop(drag.source.item)) {
                         return
                     }
 
-                    if (drag.source.index.row < 0 || styleData.index.row < 0) {
+                    if (drag.source.modelIndex.row < 0 || modelIndex.row < 0) {
                         return;
                     }
 
-                    Qt.callLater(treeModel.moveRows,
-                                 drag.source.index.parent,
-                                 drag.source.index.row,
-                                 1,
-                                 styleData.index.parent,
-                                 styleData.index.row)
+                    treeModel.moveRows(drag.source.modelIndex.parent,
+                                       drag.source.modelIndex.row,
+                                       1,
+                                       modelIndex.parent,
+                                       modelIndex.row)
                 }
             }
         }
