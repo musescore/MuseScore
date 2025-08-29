@@ -710,18 +710,14 @@ FBox::FBox(System* parent)
 
 void FBox::init()
 {
-    LOGDA() << "============= init";
+    std::vector<FretDiagram*> newDiagrams;
+    StringList newDiagramsNames;
 
     StringList oldDiagramsNames;
-    std::vector<FretDiagram*> oldDiagrams;
     for (EngravingItem* element : el()) {
-        FretDiagram* diagram = toFretDiagram(element);
-        oldDiagrams.push_back(diagram);
-        oldDiagramsNames.push_back(diagram->harmonyText().toLower());
+        oldDiagramsNames.push_back(toFretDiagram(element)->harmonyText().toLower());
     }
 
-    StringList diagramsNamesInScore;
-    std::vector<EngravingItem*> harmonyOrDiagramsInScore;
     for (mu::engraving::Segment* segment = masterScore()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
          segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
         for (EngravingItem* item : segment->annotations()) {
@@ -733,36 +729,35 @@ void FBox::init()
                 continue;
             }
 
-            if (!(item->isHarmony() || item->isFretDiagram())) {
+            FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(item);
+            if (!fretDiagram) {
                 continue;
             }
 
-            String harmonyName = item->isHarmony() ? toHarmony(item)->plainText().toLower()
-                                 : item->isFretDiagram() ? toFretDiagram(item)->harmonyText().toLower()
-                                 : String();
-            if (harmonyName.empty() || muse::contains(diagramsNamesInScore, harmonyName)) {
+            String harmonyName = fretDiagram->harmonyText().toLower();
+            if (muse::contains(newDiagramsNames, harmonyName) || harmonyName.empty()) {
+                delete fretDiagram;
                 continue;
             }
 
-            harmonyOrDiagramsInScore.push_back(item);
-            diagramsNamesInScore.push_back(harmonyName);
+            newDiagrams.emplace_back(fretDiagram);
+            newDiagramsNames.push_back(harmonyName);
         }
     }
 
-    for (size_t i = 0; i < oldDiagramsNames.size(); ++i) {
-        String oldName = oldDiagramsNames[i];
-        if (!muse::contains(diagramsNamesInScore, oldName)) {
-            score()->undoRemoveElement(oldDiagrams[i]);
-        }
+    if (newDiagramsNames == oldDiagramsNames) {
+        muse::DeleteAll(newDiagrams);
+        return;
     }
 
-    for (size_t i = 0; i < diagramsNamesInScore.size(); ++i) {
-        String newName = diagramsNamesInScore[i];
-        if (!muse::contains(oldDiagramsNames, newName)) {
-            FretDiagram* newDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(harmonyOrDiagramsInScore[i]);
-            newDiagram->setParent(this);
-            score()->undoAddElement(newDiagram);
-        }
+    DEFER {
+        triggerLayout();
+    };
+
+    clearElements();
+
+    for (FretDiagram* diagram : newDiagrams) {
+        add(diagram);
     }
 
     if (m_diagramsOrder.empty()) {

@@ -733,14 +733,12 @@ void Segment::add(EngravingItem* el)
         setEmpty(false);
         break;
 
-    case ElementType::HARMONY:
-    case ElementType::FRET_DIAGRAM:
-        score()->rebuildFretBox();
-    //fallthrough
     case ElementType::TEMPO_TEXT:
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
+    case ElementType::HARMONY:
     case ElementType::SYMBOL:
+    case ElementType::FRET_DIAGRAM:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
@@ -927,13 +925,11 @@ void Segment::remove(EngravingItem* el)
         m_elist[track] = 0;
         break;
 
-    case ElementType::HARMONY:
-    case ElementType::FRET_DIAGRAM:
-        score()->rebuildFretBox();
-    //fallthrough
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
     case ElementType::FIGURED_BASS:
+    case ElementType::FRET_DIAGRAM:
+    case ElementType::HARMONY:
     case ElementType::IMAGE:
     case ElementType::MARKER:
     case ElementType::REHEARSAL_MARK:

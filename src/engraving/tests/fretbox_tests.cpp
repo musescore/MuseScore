@@ -234,7 +234,7 @@ TEST_F(Engraving_FretBoxTests, ReorderChords)
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_AddChords)
+TEST_F(Engraving_FretBoxTests, AddChords)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -286,7 +286,7 @@ TEST_F(Engraving_FretBoxTests, AddChords_SameChordAfterPreviousOne) {
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_AddChords_SameChordBeforePreviousOne)
+TEST_F(Engraving_FretBoxTests, AddChords_SameChordBeforePreviousOne)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -313,7 +313,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_AddChords_SameChordBeforePreviousOne)
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_RemoveChords)
+TEST_F(Engraving_FretBoxTests, RemoveChords)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -340,7 +340,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RemoveChords)
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_RemoveChords_SameChord_RemoveFirst)
+TEST_F(Engraving_FretBoxTests, RemoveChords_SameChord_RemoveFirst)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -400,7 +400,7 @@ TEST_F(Engraving_FretBoxTests, RemoveChords_SameChord_RemoveSecond)
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords)
+TEST_F(Engraving_FretBoxTests, RenameChords)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -426,7 +426,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords)
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordBefore)
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordBefore)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -453,7 +453,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordBefore)
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordAfter)
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordAfter)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -480,7 +480,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordAfter)
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordBefore_NoDuplicates)
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordBefore_NoDuplicates)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -508,7 +508,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordBefore_NoDuplicate
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordAfter_NoDuplicates)
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordAfter_NoDuplicates)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -536,7 +536,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordAfter_NoDuplicates
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordAfter_NoDuplicates_2)
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordAfter_NoDuplicates_2)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();
@@ -563,7 +563,7 @@ TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_SameChordAfter_NoDuplicates
     delete score;
 }
 
-TEST_F(Engraving_FretBoxTests, DISABLED_RenameChords_AfterMoving)
+TEST_F(Engraving_FretBoxTests, RenameChords_AfterMoving)
 {
     // [GIVEN] Empty score
     MasterScore* score = createEmptyScore();

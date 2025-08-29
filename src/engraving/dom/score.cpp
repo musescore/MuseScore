@@ -1591,9 +1591,7 @@ void Score::addElement(EngravingItem* element)
     }
     case ElementType::HARMONY:
     case ElementType::FRET_DIAGRAM:
-        if (element->part()) {
-            element->part()->updateHarmonyChannels(true);
-        }
+        element->part()->updateHarmonyChannels(true);
         break;
     case ElementType::GUITAR_BEND:
     {
@@ -1792,9 +1790,7 @@ void Score::removeElement(EngravingItem* element)
 
     case ElementType::HARMONY:
     case ElementType::FRET_DIAGRAM:
-        if (element->part()) {
-            element->part()->updateHarmonyChannels(true, true);
-        }
+        element->part()->updateHarmonyChannels(true, true);
         break;
 
     default:
