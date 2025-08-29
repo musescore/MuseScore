@@ -19,6 +19,8 @@
 #ifndef KD_DOCKWIDGET_BASE_H
 #define KD_DOCKWIDGET_BASE_H
 
+#include "private/Position_p.h"
+
 #include "docks_export.h"
 #include "KDDockWidgets.h"
 #include "QWidgetAdapter.h"
@@ -411,6 +413,12 @@ public:
     ///
     /// When you call dockWidget->setFloating(false) it will only dock if it knows where to.
     bool hasPreviousDockedLocation() const;
+
+    /// @brief Returns the last position of the dock widget
+    LastPositions lastPositions() const;
+
+    /// @brief Restores the dock widget to its previous position
+    void restoreToPreviousPosition();
 
     /// @brief returns the last size the widget has when overlayed
     /// Empty otherwise
