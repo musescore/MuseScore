@@ -25,6 +25,7 @@
 #include "types/symnames.h"
 #include "types/translatablestring.h"
 
+#include "beam.h"
 #include "chord.h"
 #include "chordrest.h"
 #include "measure.h"
@@ -256,6 +257,20 @@ double Fermata::mag() const
         m *= toChordRest(segment()->element(track()))->mag();
     }
     return m;
+}
+
+staff_idx_t Fermata::vStaffIdx() const
+{
+    if (segment() && segment()->element(track())) {
+        if (segment()->isChordRestType()) {
+            const ChordRest* cr = toChordRest(segment()->element(track()));
+            if (cr->beam() && cr->beam()->cross() && (placeAbove() == cr->isBelowCrossBeam(cr->beam()))) {
+                return cr->staffIdx() + cr->beam()->crossStaffIdx() - placeAbove() ? 0 : 1;
+            }
+        }
+        return segment()->element(track())->vStaffIdx();
+    }
+    return staffIdx();
 }
 
 void Fermata::setSymIdAndTimeStretch(SymId id)

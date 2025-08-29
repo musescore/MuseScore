@@ -52,6 +52,7 @@ public:
     Fermata* clone() const override { return new Fermata(*this); }
 
     double mag() const override;
+    staff_idx_t vStaffIdx() const override;
 
     SymId symId() const { return m_symId; }
     void setSymId(SymId id) { m_symId = id; }
