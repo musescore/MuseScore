@@ -154,6 +154,12 @@ void AbstractInspectorProxyModel::onNotationChanged(const engraving::PropertyIdS
             continue;
         }
 
+        if (!model->shouldUpdateOnEmptyPropertyAndStyleIdSets()) {
+            if (changedPropertyIdSet.empty() && changedStyleIdSet.empty()) {
+                continue;
+            }
+        }
+
         mu::engraving::PropertyIdSet expandedPropertyIdSet = model->propertyIdSetFromStyleIdSet(changedStyleIdSet);
         expandedPropertyIdSet.insert(changedPropertyIdSet.cbegin(), changedPropertyIdSet.cend());
         model->onNotationChanged(expandedPropertyIdSet, changedStyleIdSet);
@@ -185,6 +191,16 @@ void AbstractInspectorProxyModel::updateModels(const ElementKeySet& newElementKe
     }
 
     setModels(models);
+}
+
+bool AbstractInspectorProxyModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
+{
+    for (const AbstractInspectorModel* model : modelList()) {
+        if (model->shouldUpdateOnEmptyPropertyAndStyleIdSets()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 QList<AbstractInspectorModel*> AbstractInspectorProxyModel::modelList() const

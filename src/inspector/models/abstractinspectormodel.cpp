@@ -180,6 +180,11 @@ bool AbstractInspectorModel::shouldUpdateOnScoreChange() const
     return m_shouldUpdateOnScoreChange;
 }
 
+bool AbstractInspectorModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
+{
+    return false;
+}
+
 void AbstractInspectorModel::updateIsSystemObjectBelowBottomStaff()
 {
     bool soBelowBottomStaff = false;

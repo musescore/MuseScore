@@ -63,6 +63,7 @@ public:
     bool isEmpty() const override;
 
     void updateModels(const ElementKeySet& newElementKeySet);
+    bool shouldUpdateOnEmptyPropertyAndStyleIdSets() const override;
 
     void onCurrentNotationChanged() override;
 

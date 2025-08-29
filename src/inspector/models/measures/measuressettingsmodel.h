@@ -48,9 +48,9 @@ public:
     void loadProperties() override;
     void resetProperties() override { }
     void requestElements() override { }
-    void onCurrentNotationChanged() override;
 
     bool isEmpty() const override;
+    bool shouldUpdateOnEmptyPropertyAndStyleIdSets() const override;
 
     enum class InsertMeasuresTarget {
         AfterSelection,

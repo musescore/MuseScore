@@ -41,6 +41,7 @@ public:
     void requestElements() override {}
 
     bool isEmpty() const override;
+    bool shouldUpdateOnEmptyPropertyAndStyleIdSets() const override;
 
     bool canHideEmptyStavesInSelection() const { return m_canHideEmptyStavesInSelection; }
     bool canShowAllEmptyStaves() const { return m_canShowAllEmptyStaves; }
@@ -56,7 +57,6 @@ signals:
     void canResetEmptyStavesVisibilityChanged();
 
 private:
-    void onCurrentNotationChanged() override;
     void onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&) override;
 
     void updateCanHideEmptyStavesInSelection();

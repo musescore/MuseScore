@@ -45,30 +45,16 @@ bool EmptyStavesVisibilitySettingsModel::isEmpty() const
     return !selection || !selection->isRange();
 }
 
+bool EmptyStavesVisibilitySettingsModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
+{
+    return true;
+}
+
 void EmptyStavesVisibilitySettingsModel::loadProperties()
 {
     updateCanHideEmptyStavesInSelection();
     updateCanShowAllEmptyStaves();
     updateCanResetEmptyStavesVisibility();
-}
-
-void EmptyStavesVisibilitySettingsModel::onCurrentNotationChanged()
-{
-    INotationPtr notation = currentNotation();
-    if (!notation) {
-        return;
-    }
-
-    notation->undoStack()->changesChannel().onReceive(this, [this](const ScoreChanges& changes) {
-        if (changes.isTextEditing) {
-            return;
-        }
-
-        if (changes.changedPropertyIdSet.empty() && changes.changedStyleIdSet.empty()) {
-            // In this specific case, it's not done by InspectorListModel::listenScoreChanges()
-            onNotationChanged({}, {});
-        }
-    });
 }
 
 void EmptyStavesVisibilitySettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&)
@@ -91,7 +77,11 @@ void EmptyStavesVisibilitySettingsModel::hideEmptyStavesInSelection()
     const staff_idx_t staffStart = range->startStaffIndex();
     const staff_idx_t staffEnd = range->endStaffIndex();
 
-    beginCommand(muse::TranslatableString("undoableAction", "Hide empty staves"));
+    // avoid `beginCommand` because it sets `m_shouldUpdateOnScoreChange`,
+    // expecting that we'll update the model ourselves, but we prefer to rely
+    // on the automatic updates, so that we follow the same path when a change
+    // occurs from inside this model or outside this model
+    undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Hide empty staves"));
 
     for (System* system : systems) {
         for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
@@ -99,7 +89,7 @@ void EmptyStavesVisibilitySettingsModel::hideEmptyStavesInSelection()
         }
     }
 
-    endCommand();
+    undoStack()->commitChanges();
 }
 
 void EmptyStavesVisibilitySettingsModel::showAllEmptyStaves()
@@ -113,7 +103,8 @@ void EmptyStavesVisibilitySettingsModel::showAllEmptyStaves()
     const INotationSelectionPtr sel = selection();
     const std::vector<System*> systems = sel->selectedSystems();
 
-    beginCommand(muse::TranslatableString("undoableAction", "Show empty staves"));
+    // avoid `beginCommand` because it sets `m_shouldUpdateOnScoreChange`
+    undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Show empty staves"));
 
     for (System* system : systems) {
         for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
@@ -121,7 +112,7 @@ void EmptyStavesVisibilitySettingsModel::showAllEmptyStaves()
         }
     }
 
-    endCommand();
+    undoStack()->commitChanges();
 }
 
 void EmptyStavesVisibilitySettingsModel::resetEmptyStavesVisibility()
@@ -135,7 +126,8 @@ void EmptyStavesVisibilitySettingsModel::resetEmptyStavesVisibility()
     const INotationSelectionPtr sel = selection();
     const std::vector<System*> systems = sel->selectedSystems();
 
-    beginCommand(muse::TranslatableString("undoableAction", "Reset empty staves visibility"));
+    // avoid `beginCommand` because it sets `m_shouldUpdateOnScoreChange`
+    undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Reset empty staves visibility"));
 
     for (System* system : systems) {
         // Apply to all staves in the score, not just selected ones
@@ -144,7 +136,7 @@ void EmptyStavesVisibilitySettingsModel::resetEmptyStavesVisibility()
         }
     }
 
-    endCommand();
+    undoStack()->commitChanges();
 }
 
 void EmptyStavesVisibilitySettingsModel::updateCanHideEmptyStavesInSelection()
