@@ -411,7 +411,7 @@ public:
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
     void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v); }
 
-    bool isSystemObjectBelowBottomStaff() const;
+    virtual bool isSystemObjectBelowBottomStaff() const;
 
     bool header() const { return flag(ElementFlag::HEADER); }
     void setHeader(bool v) { setFlag(ElementFlag::HEADER, v); }

@@ -3335,3 +3335,20 @@ String TConv::translatedUserName(Key v, bool isAtonal, bool isCustom)
 {
     return userName(v, isAtonal, isCustom).translated();
 }
+
+const std::array<Item<MeasureNumberPlacement>, 4> MEASURE_NUMBER_MODES = { {
+    { MeasureNumberPlacement::ABOVE_SYSTEM,   "above-system" },
+    { MeasureNumberPlacement::BELOW_SYSTEM,   "below-system" },
+    { MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES,   "on-so-staves" },
+    { MeasureNumberPlacement::ON_ALL_STAVES,   "on-all-staves" },
+} };
+
+AsciiStringView TConv::toXml(MeasureNumberPlacement v)
+{
+    return findXmlTagByType<MeasureNumberPlacement>(MEASURE_NUMBER_MODES, v);
+}
+
+MeasureNumberPlacement TConv::fromXml(const AsciiStringView& tag, MeasureNumberPlacement def)
+{
+    return findTypeByXmlTag<MeasureNumberPlacement>(MEASURE_NUMBER_MODES, tag, def);
+}

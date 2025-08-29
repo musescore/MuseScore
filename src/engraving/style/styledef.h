@@ -475,7 +475,7 @@ enum class Sid {
     showMeasureNumberOne,
     measureNumberInterval,
     measureNumberSystem,
-    measureNumberAllStaves,
+    measureNumberPlacementMode,
 
     smallNoteMag,
     scaleRythmicSpacingForSmallNotes,

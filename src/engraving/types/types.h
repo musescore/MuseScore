@@ -431,6 +431,13 @@ constexpr bool operator&(BarLineType t1, BarLineType t2)
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
 
+enum class MeasureNumberPlacement {
+    ABOVE_SYSTEM,
+    BELOW_SYSTEM,
+    ON_SYSTEM_OBJECT_STAVES,
+    ON_ALL_STAVES
+};
+
 // P_TYPE::NOTEHEAD_TYPE
 enum class NoteHeadType : signed char {
     HEAD_AUTO    = -1,

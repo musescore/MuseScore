@@ -22,6 +22,7 @@
 #pragma once
 
 #include "engraving/dom/staff.h"
+#include "engraving/style/style.h"
 #include "engraving/dom/utils.h"
 #include "engraving/types/typesconv.h"
 
@@ -58,9 +59,14 @@ inline SystemObjectGroupsByStaff collectSystemObjectGroups(const std::vector<mu:
         }
     }
 
-    for (mu::engraving::Staff* staff : staves) {
-        SystemObjectGroups& systemObjectGroups = result[staff];
-        systemObjectGroups.push_back(SystemObjectsGroup { mu::engraving::ElementType::MEASURE_NUMBER, {}, staff });
+    const engraving::MStyle& style = staves.front()->style();
+    bool collectMeasureNumbers = style.styleV(engraving::Sid::measureNumberPlacementMode).value<engraving::MeasureNumberPlacement>()
+                                 == engraving::MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES;
+    if (collectMeasureNumbers) {
+        for (mu::engraving::Staff* staff : staves) {
+            SystemObjectGroups& systemObjectGroups = result[staff];
+            systemObjectGroups.push_back(SystemObjectsGroup { mu::engraving::ElementType::MEASURE_NUMBER, {}, staff });
+        }
     }
 
     return result;
