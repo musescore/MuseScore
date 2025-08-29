@@ -752,7 +752,7 @@ void FBox::init()
     for (size_t i = 0; i < oldDiagramsNames.size(); ++i) {
         String oldName = oldDiagramsNames[i];
         if (!muse::contains(diagramsNamesInScore, oldName)) {
-            score()->undoRemoveElement(oldDiagrams[i]);
+            score()->undo(new RemoveFretDiagramFromFretBox(oldDiagrams[i]));
         }
     }
 
@@ -801,6 +801,17 @@ void FBox::add(EngravingItem* e)
         return;
     }
     e->added();
+}
+
+void FBox::addAtIdx(FretDiagram* fretDiagram, size_t idx)
+{
+    if (idx < m_el.size()) {
+        m_el.insert(m_el.begin() + idx, fretDiagram);
+    } else {
+        m_el.push_back(fretDiagram);
+    }
+
+    fretDiagram->added();
 }
 
 PropertyValue FBox::getProperty(Pid propertyId) const
