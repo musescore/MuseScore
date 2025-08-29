@@ -52,7 +52,6 @@ Column {
 
     AccessibleItem {
         id: accessibleInfo
-        accessibleParent: root.navigationPanel.accessible
         visualItem: root
         role: MUAccessible.ListItem
         name: descriptionLabel.text + " " + root.firstWorkspaceTitle
