@@ -1543,6 +1543,7 @@ enum class Sid {
     guitarBendArrowWidth,
     guitarBendArrowHeight,
     useCueSizeFretForGraceBends,
+    showFretOnFullBendRelease,
 
     headerFontFace,
     headerFontSize,
