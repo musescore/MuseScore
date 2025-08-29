@@ -22,6 +22,7 @@
 #include "widgetdialogadapter.h"
 
 #include <QGuiApplication>
+#include <QKeyEvent>
 
 #include "log.h"
 
