@@ -63,7 +63,7 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <dynamics>
+          <dynamics color="#FF0000">
             <f/>
             </dynamics>
           </direction-type>
@@ -81,7 +81,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <dynamics>
+          <dynamics color="#00FF00">
             <p/>
             </dynamics>
           </direction-type>
@@ -158,7 +158,7 @@
     <measure number="2">
       <direction placement="above">
         <direction-type>
-          <dynamics>
+          <dynamics color="#0000FF">
             <ff/>
             </dynamics>
           </direction-type>
