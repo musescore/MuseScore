@@ -8882,6 +8882,10 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 if (harmonyXmlParens(info) == u"yes") {
                     s += u" parentheses-degrees=\"yes\"";
                 }
+                if (m_score->style().styleB(Sid::verticallyStackModifiers)) {
+                    s += h->getProperty(Pid::HARMONY_DO_NOT_STACK_MODIFIERS).toBool()
+                         ? u" stack-degrees=\"no\"" : u" stack-degrees=\"yes\"";
+                }
                 m_xml.tagRaw(s, xmlKind);
 
                 if (tpcIsValid(bassTpc)) {
