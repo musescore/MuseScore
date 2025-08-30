@@ -22,16 +22,18 @@
 
 #include "readcontext.h"
 
-#include "dom/beam.h"
-#include "dom/linkedobjects.h"
-#include "dom/score.h"
-#include "dom/tuplet.h"
-#include "dom/undo.h"
+#include "global/containers.h"
+
+#include "engraving/dom/beam.h"
+#include "engraving/dom/linkedobjects.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/tuplet.h"
+#include "engraving/dom/undo.h"
+#include "engraving/types/types.h"
 
 #include "connectorinforeader.h"
 
 #include "log.h"
-#include "types/types.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -287,6 +289,32 @@ void ReadContext::setLocation(const Location& l)
         assert(l.measure() == currentMeasureIndex());
         incTick(currentMeasure()->tick());
     }
+}
+
+size_t ReadContext::getStaffBarLineSpan(const staff_idx_t staffIdx) const
+{
+    return muse::value(m_staffBarLineSpanValues, staffIdx, 0);
+}
+
+void ReadContext::setStaffBarLineSpan(const staff_idx_t staffIdx, const size_t barLineSpan)
+{
+    const auto [it, didInsert] = m_staffBarLineSpanValues.emplace(staffIdx, barLineSpan);
+    DO_ASSERT(didInsert)
+}
+
+std::optional<size_t> ReadContext::getBarLineSpan(const BarLine* barLine)
+{
+    if (!muse::contains(m_barLineSpanValues, barLine)) {
+        return std::nullopt;
+    }
+
+    return muse::value(m_barLineSpanValues, barLine);
+}
+
+void ReadContext::setBarLineSpan(const BarLine* barLine, const size_t barLineSpan)
+{
+    const auto [it, didInsert] = m_barLineSpanValues.emplace(barLine, barLineSpan);
+    DO_ASSERT(didInsert)
 }
 
 void ReadContext::addBeam(Beam* s)
