@@ -2006,6 +2006,10 @@ bool Measure::visible(staff_idx_t staffIdx) const
 bool Measure::stemless(staff_idx_t staffIdx) const
 {
     const Staff* staff = score()->staff(staffIdx);
+    if (!staff) {
+        return false;
+    }
+
     return staff->stemless(tick()) || m_mstaves[staffIdx]->stemless() || staff->staffType(tick())->stemless();
 }
 
