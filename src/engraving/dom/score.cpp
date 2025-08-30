@@ -1708,6 +1708,13 @@ void Score::removeElement(EngravingItem* element)
     }
 }
 
+void Score::removeTuplet(Tuplet* destinationTuplet, ChordRest* keptChordRest)
+{
+    // TODO: implement this function
+    
+    return;
+}
+
 void Score::doUndoRemoveElement(EngravingItem* element)
 {
     if (element->generated()) {
