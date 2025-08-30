@@ -1630,7 +1630,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         setPlaybackVoice(3, v.toBool());
         break;
     case Pid::STAFF_BARLINE_SPAN: {
-        setBarLineSpan(v.toInt());
+        setBarLineSpan(v.toBool());
         // update non-generated barlines
         track_idx_t track = idx() * VOICES;
         std::vector<EngravingItem*> blList;
@@ -1648,7 +1648,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         }
         for (EngravingItem* e : blList) {
             if (e && e->isBarLine() && !e->generated()) {
-                toBarLine(e)->setSpanStaff(v.toInt());
+                toBarLine(e)->setSpanStaff(barLineSpan());
             }
         }
     }
