@@ -148,8 +148,8 @@ void ScoreVerticalViewLayout::layoutVerticalView(Score* score, LayoutContext& ct
     ctx.mutState().setCurSystem(SystemLayout::collectSystem(ctx));
 
     if (ctx.state().isLayoutAll()) {
-        PassLayoutIndependentItems independedPass;
-        independedPass.run(score, ctx);
+        PassLayoutIndependentItems independentPass;
+        independentPass.run(score, ctx);
     }
 
     doLayout(ctx);

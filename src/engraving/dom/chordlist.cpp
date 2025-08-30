@@ -2289,7 +2289,7 @@ void ChordList::checkChordList(const MStyle& style)
         double eadjust = style.styleD(Sid::chordExtensionAdjust);
         double mmag = style.styleD(Sid::chordModifierMag);
         double madjust = style.styleD(Sid::chordModifierAdjust);
-        double stackedmmag = style.styleD(Sid::chordStackedModiferMag);
+        double stackedmmag = style.styleD(Sid::chordStackedModifierMag);
         bool stackModifiers = style.styleB(Sid::verticallyStackModifiers);
         bool excludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
         String symbolFont = style.styleSt(Sid::musicalTextFont);
