@@ -137,7 +137,7 @@ void MasterNotation::initAfterSettingScore(const MasterScore* score)
         }
     });
 
-    m_notationPlayback->init();
+//    m_notationPlayback->init();
     initExcerptNotations(score->excerpts());
 }
 
