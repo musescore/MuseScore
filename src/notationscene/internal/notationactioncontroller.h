@@ -103,6 +103,7 @@ private:
     void putTuplet(const muse::actions::ActionData& data);
     void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
+    void removeTuplet();
 
     bool moveSelectionAvailable(MoveSelectionType type) const;
     void moveSelection(MoveSelectionType type, MoveDirection direction);
