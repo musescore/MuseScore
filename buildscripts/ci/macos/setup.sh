@@ -26,7 +26,10 @@ export MACOSX_DEPLOYMENT_TARGET=10.15
 
 # Install build tools
 echo "Install build tools"
-brew install cmake ninja --formula --quiet
+if ! command -v cmake >/dev/null 2>&1
+then
+    brew install cmake ninja --formula --quiet
+fi
 
 # Download dependencies
 echo "Download dependencies"
