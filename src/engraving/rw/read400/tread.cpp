@@ -1889,6 +1889,7 @@ void TRead::read(BagpipeEmbellishment* b, XmlReader& e, ReadContext&)
 
 void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
 {
+    // initialize span properties with staff values
     b->resetProperty(Pid::BARLINE_SPAN);
     b->resetProperty(Pid::BARLINE_SPAN_FROM);
     b->resetProperty(Pid::BARLINE_SPAN_TO);
@@ -3853,7 +3854,16 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
         s->setBracketVisible(col, static_cast<bool>(e.intAttribute("visible", 1)));
         e.readNext();
     } else if (tag == "barLineSpan") {
-        s->setBarLineSpan(e.readInt());
+        const int barLineSpan = e.readInt();
+        if (barLineSpan < 0) {
+            LOGW() << "barLineSpan is negative: " << barLineSpan;
+            s->setBarLineSpan(false);
+        } else if (barLineSpan > 1) {
+            LOGW() << "barLineSpan is > 1: " << barLineSpan;
+            s->setBarLineSpan(true);
+        } else {
+            s->setBarLineSpan(static_cast<bool>(barLineSpan));
+        }
     } else if (tag == "barLineSpanFrom") {
         s->setBarLineFrom(e.readInt());
     } else if (tag == "barLineSpanTo") {
