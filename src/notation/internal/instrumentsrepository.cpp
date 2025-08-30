@@ -290,7 +290,7 @@ void InstrumentsRepository::loadMuseInstruments(const InstrumentTemplateMap& sta
 
         if (instrument.staffType == musesampler::StaffType::Grand) {
             templ->bracketSpan[0] = static_cast<int>(templ->staffCount);
-            templ->barlineSpan[0] = static_cast<int>(templ->staffCount);
+            templ->barlineSpan[0] = true;
 
             for (size_t i = 0; i < templ->staffCount; ++i) {
                 templ->bracket[i] = mu::engraving::BracketType::BRACE;

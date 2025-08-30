@@ -4043,9 +4043,7 @@ void Score::updateBracesAndBarlines(Part* part, size_t newIndex)
     auto updateBracketSpan = [this, part](size_t modIndex, size_t refIndex) {
         Staff* modStaff = staff(part->staves()[modIndex]->idx());
         Staff* refStaff = staff(part->staves()[refIndex]->idx());
-        if (modStaff->getProperty(Pid::STAFF_BARLINE_SPAN) != refStaff->getProperty(Pid::STAFF_BARLINE_SPAN)) {
-            modStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, refStaff->getProperty(Pid::STAFF_BARLINE_SPAN));
-        }
+        modStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, refStaff->getProperty(Pid::STAFF_BARLINE_SPAN));
     };
 
     if (newIndex >= 2) {
@@ -4055,8 +4053,9 @@ void Score::updateBracesAndBarlines(Part* part, size_t newIndex)
     if (part->nstaves() == 2) {
         const InstrumentTemplate* tp = searchTemplate(part->instrumentId());
         if (tp) {
-            if (tp->barlineSpan[0] > 0) {
-                staff(part->staves()[0]->idx())->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, tp->barlineSpan[0]);
+            const bool firstStaffBarLineSpan = tp->barlineSpan[0];
+            if (firstStaffBarLineSpan) {
+                staff(part->staff(0)->idx())->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, firstStaffBarLineSpan);
             }
             if (noBracesFound && (tp->bracket[0] != BracketType::NO_BRACKET)) {
                 undoAddBracket(part->staves()[0], 0, tp->bracket[0], part->nstaves());
@@ -4145,8 +4144,8 @@ void Score::remapBracketsAndBarlines()
         // Look in the masterScore for all the staves spanned by a common barline.
         // If at least one of them is also in this score, then connect it through.
         bool extendBarline = false;
-        int span = masterStaff->barLineSpan();
-        while (!extendBarline && span > 0 && masterStaff->idx() + 1 < master->nstaves()) {
+        bool span = masterStaff->barLineSpan();
+        while (!extendBarline && span && masterStaff->idx() + 1 < master->nstaves()) {
             masterStaff = masterScore()->staff(masterStaff->idx() + 1);
             span = masterStaff->barLineSpan();
             if (masterStaff->findLinkedInScore(this)) {
@@ -4155,7 +4154,7 @@ void Score::remapBracketsAndBarlines()
             }
         }
         if (extendBarline) {
-            staff->setBarLineSpan(1);
+            staff->setBarLineSpan(true);
         }
     }
 }

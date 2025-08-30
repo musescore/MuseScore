@@ -123,10 +123,10 @@ void XmlWriter::tagProperty(Pid id, const PropertyValue& val, const PropertyValu
             propType = P_TYPE::SPATIUM;
         }
 
-        //! HACK Temporary hack. We have some kind of property with property type BOOL,
+        //! HACK Temporary hack. We used to have some kind of property with property type BOOL,
         //! but the used value type is INT (not just 1 and 0)
-        //! see STAFF_BARLINE_SPAN
-        if (propType == P_TYPE::BOOL && valType == P_TYPE::INT) {
+        //! TODO: remove if deemed safe
+        IF_ASSERT_FAILED(!(propType == P_TYPE::BOOL && valType == P_TYPE::INT)) {
             propType = P_TYPE::INT;
         }
 

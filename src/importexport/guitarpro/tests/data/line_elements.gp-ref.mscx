@@ -90,7 +90,7 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2" col="0" visible="1"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
         <eid>F_F</eid>
@@ -714,7 +714,6 @@
               </Note>
             </Chord>
           <BarLine>
-            <span>1</span>
             <eid>QB_QB</eid>
             </BarLine>
           </voice>
@@ -826,7 +825,6 @@
             <durationType>half</durationType>
             </Rest>
           <BarLine>
-            <span>1</span>
             <eid>cB_cB</eid>
             </BarLine>
           </voice>

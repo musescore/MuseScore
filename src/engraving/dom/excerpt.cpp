@@ -22,8 +22,6 @@
 
 #include "excerpt.h"
 
-#include <list>
-
 #include "containers.h"
 
 #include "dom/partialtie.h"
@@ -36,7 +34,6 @@
 #include "factory.h"
 #include "guitarbend.h"
 #include "harmony.h"
-#include "laissezvib.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
@@ -49,7 +46,6 @@
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
-#include "sig.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
@@ -991,38 +987,6 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                     }
 
                     EngravingItem* oe = oseg->element(srcTrack);
-                    int adjustedBarlineSpan = 0;
-                    if (srcTrack % VOICES == 0 && oseg->segmentType() == SegmentType::BarLine) {
-                        // mid-measure barline segment
-                        // may need to clone barline from a previous staff and/or adjust span
-                        int oIdx = static_cast<int>(srcTrack / VOICES);
-                        if (!oe) {
-                            // no barline on this staff in original score,
-                            // but check previous staves
-                            for (int i = oIdx - 1; i >= 0; --i) {
-                                oe = oseg->element(i * VOICES);
-                                if (oe) {
-                                    break;
-                                }
-                            }
-                        }
-                        if (oe) {
-                            // barline found, now check span
-                            BarLine* bl = toBarLine(oe);
-                            int oSpan1 = static_cast<int>(bl->staff()->idx());
-                            int oSpan2 = static_cast<int>(oSpan1 + bl->spanStaff());
-                            if (oSpan1 <= oIdx && oIdx <= oSpan2) {
-                                // this staff is within span
-                                // calculate adjusted span for excerpt
-                                int oSpan = oSpan2 - oIdx;
-                                adjustedBarlineSpan = std::min(oSpan, static_cast<int>(score->nstaves()));
-                            } else {
-                                // this staff is not within span
-                                oe = nullptr;
-                            }
-                        }
-                    }
-
                     bool clone = oe && !oe->generated() && !oe->excludeFromOtherParts();
 
                     if (clone) {
@@ -1036,12 +1000,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         }
 
                         ne->setScore(score);
-                        if (oe->isBarLine()) {
-                            BarLine* nbl = toBarLine(ne);
-                            if (adjustedBarlineSpan) {
-                                nbl->setSpanStaff(adjustedBarlineSpan);
-                            }
-                        } else if (oe->isChordRest()) {
+                        if (oe->isChordRest()) {
                             ChordRest* ocr = toChordRest(oe);
                             ChordRest* ncr = toChordRest(ne);
 

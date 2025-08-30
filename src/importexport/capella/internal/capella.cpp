@@ -1255,7 +1255,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
         // ClefType clefType = CapClef::clefType(cl->form, cl->line, cl->oct);
         // s->setClef(0, clefType);
-        s->setBarLineSpan(0);
+        s->setBarLineSpan(false);
         if (bstaff == 0) {
             bstaff = s;
             span = 0;

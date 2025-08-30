@@ -145,10 +145,10 @@ public:
     void setMergeMatchingRests(AutoOnOff val) { m_mergeMatchingRests = val; }
     bool shouldMergeMatchingRests() const;
 
-    int barLineSpan() const { return m_barLineSpan; }
+    bool barLineSpan() const { return m_barLineSpan; }
     int barLineFrom() const { return m_barLineFrom; }
     int barLineTo() const { return m_barLineTo; }
-    void setBarLineSpan(int val) { m_barLineSpan = val; }
+    void setBarLineSpan(const bool val) { m_barLineSpan = val; }
     void setBarLineFrom(int val) { m_barLineFrom = val; }
     void setBarLineTo(int val) { m_barLineTo = val; }
     double staffHeight() const;
@@ -293,7 +293,7 @@ private:
     std::map<int, TimeSig*> m_timesigs;
 
     std::vector<BracketItem*> m_brackets;
-    int m_barLineSpan = false;          // true - span barline to next staff
+    bool m_barLineSpan = false;          // true - span barline to next staff
     int m_barLineFrom = 0;              // line of start staff to draw the barline from (0 = staff top line, ...)
     int m_barLineTo = 0;                // line of end staff to draw the bar line to (0= staff bottom line, ...)
 

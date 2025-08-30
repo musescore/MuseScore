@@ -105,7 +105,8 @@
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
 
-#include "../read400/tread.h"
+#include "engraving/rw/read114/read114.h"
+#include "engraving/rw/read400/tread.h"
 
 #include "log.h"
 
@@ -797,8 +798,15 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "barLineSpan") {
             staff->setBarLineFrom(e.intAttribute("from", 0));
             staff->setBarLineTo(e.intAttribute("to", 0));
-            int span     = e.readInt();
-            staff->setBarLineSpan(span - 1);
+            const int barLineSpan = e.readInt();
+            if (barLineSpan > 0) {
+                ctx.setStaffBarLineSpan(staff->idx(), static_cast<size_t>(barLineSpan - 1));
+            } else {
+                if (barLineSpan < 0) {
+                    LOGW() << "barLineSpan is negative: " << barLineSpan;
+                }
+                ctx.setStaffBarLineSpan(staff->idx(), 0);
+            }
         } else if (tag == "distOffset") {
             staff->setUserDist(Spatium(e.readDouble()));
         } else if (tag == "mag") {
@@ -2625,11 +2633,16 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 } else if (t == "customSubtype") {                          // obsolete
                     e.readInt();
                 } else if (t == "span") {
-                    int span = e.readInt();
-                    if (span) {
-                        span--;
+                    const int span = e.readInt();
+                    if (span > 0) {
+                        ctx.setBarLineSpan(bl, static_cast<size_t>(span - 1));
+                    } else {
+                        if (span < 0) {
+                            LOGW() << "bar line span is negative: " << span;
+                        }
+
+                        ctx.setBarLineSpan(bl, 0);
                     }
-                    bl->setSpanStaff(span);
                 } else if (t == "spanFromOffset") {
                     bl->setSpanFrom(e.readInt());
                 } else if (t == "spanToOffset") {
@@ -2641,7 +2654,12 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                             fermataAbove = toFermata(el);
                         } else {
                             fermataBelow = toFermata(el);
-                            fermataBelow->setTrack((bl->staffIdx() + bl->spanStaff()) * VOICES);
+                            const std::optional<size_t> barLineSpan = ctx.getBarLineSpan(bl);
+                            if (barLineSpan) {
+                                fermataBelow->setTrack(staff2track(bl->staffIdx() + *barLineSpan));
+                            } else {
+                                fermataBelow->setTrack(staff2track(bl->staffIdx() + ctx.getStaffBarLineSpan(staffIdx)));
+                            }
                         }
                     } else {
                         bl->add(el);
@@ -3556,41 +3574,60 @@ Ret Read206::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         s->updateOttava();
     }
 
-    // fix segment span
-    SegmentType st = SegmentType::BarLineType;
+    // convert int bar line span to bool
+
+    // also sets Pid::BARLINE_SPAN to non-generated and affected bar lines
+    read114::Read114::setBarLineSpanToStaves(score, ctx);
+
+    // set local overrides to bar lines
+    constexpr auto st = SegmentType::BarLineType;
+    const size_t numStaves = score->nstaves();
     for (Segment* s = score->firstSegment(st); s; s = s->next1(st)) {
-        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            BarLine* b = toBarLine(s->element(staffIdx * VOICES));
-            if (!b) {
-                continue;
-            }
-            int sp = b->spanStaff();
-            if (sp <= 0) {
-                continue;
-            }
-            for (int span = 1; span <= sp; ++span) {
-                BarLine* nb = toBarLine(s->element((staffIdx + span) * VOICES));
-                if (!nb) {
-                    nb = b->clone();
-                    nb->setTrack((staffIdx + span) * VOICES);
-                    s->add(nb);
+        // optional local bar line span override of this segment
+        std::optional<size_t> barLineSpan = std::nullopt;
+        for (staff_idx_t staffIdx = 0; staffIdx < numStaves; ++staffIdx) {
+            const size_t maxSpan = numStaves - staffIdx - 1;
+            const track_idx_t trackIdx = staff2track(staffIdx);
+            BarLine* barLine = toBarLine(s->element(trackIdx));
+            if (barLine) {
+                if (const std::optional<size_t> span = ctx.getBarLineSpan(barLine)) {
+                    if (*span > maxSpan) {
+                        LOGW() << "invalid bar line span " << *span << " (max " << maxSpan << ")";
+                        barLineSpan = maxSpan;
+                    } else {
+                        barLineSpan = std::max(barLineSpan.value_or(0), *span);
+                    }
                 }
-                nb->setSpanStaff(sp - span);
             }
-            staffIdx += sp;
+
+            if (!barLineSpan) {
+                // we don't have a local override. Keep the value from staff
+                continue;
+            }
+
+            const bool shouldBarLineSpan = *barLineSpan != 0;
+            const bool staffBarLineSpan = score->staff(staffIdx)->barLineSpan();
+            if (shouldBarLineSpan != staffBarLineSpan) {
+                // bar line should have local override
+                if (!barLine) {
+                    // clone previous bar line. This is safe because we always have a previous barline when
+                    // barLineSpan != std::nullopt because it's either the one that was read or the one cloned
+                    // in the previous iteration
+                    barLine = toBarLine(s->element(staff2track(staffIdx - 1)))
+                              ->clone();
+                    barLine->setTrack(trackIdx);
+                    s->add(barLine);
+                }
+
+                barLine->setSpanStaff(shouldBarLineSpan);
+            }
+            if (*barLineSpan == 0) {
+                // we're done applying the local override
+                barLineSpan.reset();
+            } else {
+                --(*barLineSpan);
+            }
         }
-    }
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-        Staff* s = score->staff(staffIdx);
-        int sp = s->barLineSpan();
-        if (sp <= 0) {
-            continue;
-        }
-        for (int span = 1; span <= sp; ++span) {
-            Staff* ns = score->staff(staffIdx + span);
-            ns->setBarLineSpan(sp - span);
-        }
-        staffIdx += sp;
     }
 
     compat::CompatUtils::doCompatibilityConversions(score->masterScore());

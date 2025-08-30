@@ -155,7 +155,7 @@ TEST_F(Engraving_BarlineTests, barline03)
     EXPECT_TRUE(score);
 
     score->startCmd(TranslatableString::untranslatable("Engraving barline tests"));
-    score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN, 1));
+    score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN, true));
     score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN_FROM, 2));
     score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN_TO, -2));
     score->endCmd();
@@ -202,12 +202,12 @@ TEST_F(Engraving_BarlineTests, barline04)
     BarLine* bar = static_cast<BarLine*>(seg->element(0));
     EXPECT_TRUE(bar);
 
-    bar->undoChangeProperty(Pid::BARLINE_SPAN, 2);
+    bar->undoChangeProperty(Pid::BARLINE_SPAN, true);
     bar->undoChangeProperty(Pid::BARLINE_SPAN_FROM, 2);
     bar->undoChangeProperty(Pid::BARLINE_SPAN_TO, 6);
     score->endCmd();
 
-    EXPECT_GT(bar->spanStaff(), 0);
+    EXPECT_TRUE(bar->spanStaff());
     EXPECT_EQ(bar->spanFrom(), 2);
     EXPECT_EQ(bar->spanTo(), 6);
 

@@ -298,7 +298,7 @@ public:
     static libmei::StaffDef staffToMEI(const engraving::Staff* staff);
 
     static BracketStruct staffGrpFromMEI(const libmei::StaffGrp& meiStaffGrp);
-    static libmei::StaffGrp staffGrpToMEI(const engraving::BracketType, int barLineSpan);
+    static libmei::StaffGrp staffGrpToMEI(const engraving::BracketType, bool barLineSpan);
 
     static void staffIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
 

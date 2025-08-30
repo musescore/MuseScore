@@ -210,7 +210,6 @@ InstrumentTemplate::InstrumentTemplate()
         smallStaff[i]  = false;
         bracket[i]     = BracketType::NO_BRACKET;
         bracketSpan[i] = 0;
-        barlineSpan[i] = false;
     }
     transpose.diatonic   = 0;
     transpose.chromatic  = 0;
@@ -255,6 +254,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     trait = t.trait;
     groupId = t.groupId;
     glissandoStyle = t.glissandoStyle;
+    barlineSpan = t.barlineSpan;
 
     for (int i = 0; i < MAX_STAVES; ++i) {
         clefTypes[i]   = t.clefTypes[i];
@@ -262,7 +262,6 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
         smallStaff[i]  = t.smallStaff[i];
         bracket[i]     = t.bracket[i];
         bracketSpan[i] = t.bracketSpan[i];
-        barlineSpan[i] = t.barlineSpan[i];
     }
 }
 
@@ -356,10 +355,10 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             }
         }
         if (barlineSpan[i]) {
-            if (i) {
-                xml.tag("barlineSpan", { { "staff", i + 1 } }, barlineSpan[i]);
+            if (i > 0) {
+                xml.tag("barlineSpan", { { "staff", i + 1 } }, int { barlineSpan[i] });
             } else {
-                xml.tag("barlineSpan", barlineSpan[i]);
+                xml.tag("barlineSpan", int { barlineSpan[i] });
             }
         }
     }
