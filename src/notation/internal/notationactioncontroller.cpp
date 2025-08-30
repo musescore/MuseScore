@@ -1010,7 +1010,14 @@ void NotationActionController::removeTuplet()
 {
     TRACEFUNC;
 
-    // TODO:  Implement this function
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    // tuplet removal not implemented for note input mode
+    interaction->removeTupletFromSelectedChordRests();
+
     return;
 }
 
