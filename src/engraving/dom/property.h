@@ -69,7 +69,7 @@ enum class PropertyFlags : char {
 //------------------------------------------------------------------------
 
 enum class Pid {
-    SUBTYPE,
+    SUBTYPE, // FIXME: Unused
     SELECTED,
     GENERATED,
     COLOR,
@@ -253,6 +253,7 @@ enum class Pid {
     MMREST_NUMBER_POS,
     MMREST_NUMBER_OFFSET,
     MMREST_NUMBER_VISIBLE,
+    MEASURE_REPEAT_NUMBER,
     MEASURE_REPEAT_NUMBER_POS,
     REPEAT_COUNT,
 
