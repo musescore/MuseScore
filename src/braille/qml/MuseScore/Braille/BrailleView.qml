@@ -235,6 +235,7 @@ StyledFlickable {
                 if (event.modifiers === Qt.AltModifier) {
                     keys = keys === "" ? "Alt" : keys += "+Alt";
                 }
+
                 if (event.modifiers === Qt.ControlModifier) {
                     keys = keys === "" ? "Ctrl" : keys += "+Ctrl";
                 }
