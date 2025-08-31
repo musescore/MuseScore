@@ -924,9 +924,9 @@ String FinaleTConv::instrTemplateIdfromUuid(std::string uuid)
     return muse::value(uuidTable, uuid, u"piano");
 }
 
-BracketType FinaleTConv::toMuseScoreBracketType(details::StaffGroup::BracketStyle style)
+BracketType FinaleTConv::toMuseScoreBracketType(details::Bracket::BracketStyle style)
 {
-    using MusxBracketStyle = details::StaffGroup::BracketStyle;
+    using MusxBracketStyle = details::Bracket::BracketStyle;
     static const std::unordered_map<MusxBracketStyle, BracketType> bracketTypeTable = {
         { MusxBracketStyle::None,                 BracketType::NO_BRACKET },
         { MusxBracketStyle::ThickLine,            BracketType::LINE },
