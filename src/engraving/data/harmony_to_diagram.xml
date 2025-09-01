@@ -33782,14 +33782,14 @@
                     <marker>circle</marker>
                 </string>
                 <string no="4">
-                    <marker>circle</marker>
+                    <dot fret="2">normal</dot>
                 </string>
                 <string no="5">
                     <marker>circle</marker>
                 </string>
             </fretDiagram>
         </FretDiagram>
-        <pattern>O[2-O][2-O]OOO</pattern>
+        <pattern>O[2-O][2-O]O[2-O]O</pattern>
         <Harmony>
             <name>c#m7b5/e</name>
         </Harmony>
