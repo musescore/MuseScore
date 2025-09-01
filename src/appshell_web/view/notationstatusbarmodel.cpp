@@ -252,8 +252,8 @@ void NotationStatusBarModel::onCurrentNotationChanged()
         return;
     }
 
-    notation()->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChangesRange& range) {
-        if (muse::contains(range.changedStyleIdSet, mu::engraving::Sid::concertPitch)) {
+    notation()->undoStack()->changesChannel().onReceive(this, [this](const mu::engraving::ScoreChanges& changes) {
+        if (muse::contains(changes.changedStyleIdSet, mu::engraving::Sid::concertPitch)) {
             updateConcertPitchItem();
         }
     });

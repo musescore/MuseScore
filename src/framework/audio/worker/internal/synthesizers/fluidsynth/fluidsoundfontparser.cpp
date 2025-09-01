@@ -22,9 +22,9 @@
 
 #include "fluidsoundfontparser.h"
 
-#include <fluidsynth.h>
-#include <sfloader/fluid_sfont.h>
-#include <sfloader/fluid_defsfont.h>
+#include "fluidsynth.h"
+#include "sfloader/fluid_sfont.h"
+#include "sfloader/fluid_defsfont.h"
 
 #include "defer.h"
 
