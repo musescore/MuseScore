@@ -204,8 +204,6 @@ void FluidSynth::allNotesOff()
             m_midiOutPort->sendEvent(e);
         }
     }
-
-    m_allNotesOffRequested = false;
 }
 
 bool FluidSynth::handleEvent(const midi::Event& event)
@@ -416,6 +414,7 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 
     if (m_allNotesOffRequested) {
         allNotesOff();
+        m_allNotesOffRequested = false;
     }
 
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_outputSpec.sampleRate);
