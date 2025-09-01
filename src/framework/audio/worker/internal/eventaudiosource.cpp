@@ -124,7 +124,7 @@ samples_t EventAudioSource::process(float* buffer, samples_t samplesPerChannel)
     return m_synth->process(buffer, samplesPerChannel);
 }
 
-void EventAudioSource::seek(const msecs_t newPositionMsecs)
+void EventAudioSource::seek(const msecs_t newPositionMsecs, const bool flushSound)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -137,7 +137,10 @@ void EventAudioSource::seek(const msecs_t newPositionMsecs)
     }
 
     m_synth->setPlaybackPosition(newPositionMsecs);
-    m_synth->revokePlayingNotes();
+
+    if (flushSound) {
+        m_synth->revokePlayingNotes();
+    }
 }
 
 void EventAudioSource::flush()

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_IPLAYER_H
-#define MUSE_AUDIO_IPLAYER_H
+#pragma once
 
 #include <memory>
 
@@ -39,7 +38,7 @@ public:
     virtual TrackSequenceId sequenceId() const = 0;
 
     virtual void play(const secs_t delay = 0) = 0;
-    virtual void seek(const secs_t newPosition) = 0;
+    virtual void seek(const secs_t newPosition, const bool flushSound = true) = 0;
     virtual void stop() = 0;
     virtual void pause() = 0;
     virtual void resume(const secs_t delay = 0) = 0;
@@ -57,5 +56,3 @@ public:
 
 using IPlayerPtr = std::shared_ptr<IPlayer>;
 }
-
-#endif // MUSE_AUDIO_IPLAYER_H

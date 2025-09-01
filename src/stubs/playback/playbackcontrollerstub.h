@@ -65,8 +65,8 @@ public:
 
     void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
 
-    void seekElement(const notation::EngravingItem* element) override;
-    void seekBeat(int measureIndex, int beatIndex) override;
+    void seekElement(const notation::EngravingItem* element, bool flushSound = true) override;
+    void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) override;
 
     bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
     muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;

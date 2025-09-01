@@ -268,10 +268,11 @@ void WorkerChannelController::init(std::shared_ptr<IWorkerPlayback> playback)
         ONLY_AUDIO_WORKER_THREAD;
         TrackSequenceId seqId = 0;
         secs_t newPosition = 0;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, newPosition)) {
+        bool flushSound = false;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, newPosition, flushSound)) {
             return;
         }
-        m_playback->seek(seqId, newPosition);
+        m_playback->seek(seqId, newPosition, flushSound);
     });
 
     channel()->onMethod(Method::Stop, [this](const Msg& msg) {

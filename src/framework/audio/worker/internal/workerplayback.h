@@ -88,7 +88,7 @@ public:
 
     // 3. Play Sequence
     void play(TrackSequenceId sequenceId, const secs_t delay = 0.0) override;
-    void seek(TrackSequenceId sequenceId, const secs_t newPosition) override;
+    void seek(TrackSequenceId sequenceId, const secs_t newPosition, const bool flushSound = true) override;
     void stop(TrackSequenceId sequenceId) override;
     void pause(TrackSequenceId sequenceId) override;
     void resume(TrackSequenceId sequenceId, const secs_t delay = 0.0) override;
