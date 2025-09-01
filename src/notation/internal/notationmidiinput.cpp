@@ -222,8 +222,14 @@ void NotationMidiInput::startNoteInputIfNeed()
         return;
     }
 
+    const auto containsNoteOn = [this]() -> bool {
+        return std::any_of(m_eventsQueue.begin(), m_eventsQueue.end(), [](const muse::midi::Event& e) {
+            return e.opcode() == muse::midi::Event::Opcode::NoteOn;
+        });
+    };
+
     if (configuration()->startNoteInputAtSelectedNoteRestWhenPressingMidiKey()) {
-        if (m_notationInteraction->selection()->elementsSelected(NOTE_REST_TYPES)) {
+        if (m_notationInteraction->selection()->elementsSelected(NOTE_REST_TYPES) && containsNoteOn()) {
             dispatcher()->dispatch("note-input");
         }
     }
