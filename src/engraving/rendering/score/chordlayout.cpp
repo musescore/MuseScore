@@ -1259,10 +1259,10 @@ void ChordLayout::layoutStem(Chord* item, const LayoutContext& ctx)
 
 void ChordLayout::computeUpBeamCase(Chord* item, Beam* beam)
 {
-    if (beam->userModified()) {
-        item->setUp(isChordPosBelowBeam(item, beam));
-    } else if (beam->cross()) {
+    if (beam->cross()) {
         item->setUp(item->isBelowCrossBeam(beam));
+    } else if (beam->userModified()) {
+        item->setUp(isChordPosBelowBeam(item, beam));
     } else {
         item->setUp(beam->up());
     }
