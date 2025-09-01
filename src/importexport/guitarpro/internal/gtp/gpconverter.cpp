@@ -47,6 +47,7 @@
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
+#include "engraving/dom/capo.h"
 #include "engraving/types/symid.h"
 
 #include "../utils.h"
