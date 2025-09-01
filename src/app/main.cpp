@@ -95,7 +95,7 @@ int main(int argc, char** argv)
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
     // HACK: Workaround for crash #28840. This disables the incremental GC
-    if (!qEnvironmentVariableIsSet("QV4_GC_TIMELIMIT")) {
+    if (!qEnvironmentVariableIsSet("MU_QV4_GC_TIMELIMIT")) {
         qputenv("QV4_GC_TIMELIMIT", "0");
     }
 
@@ -106,12 +106,12 @@ int main(int argc, char** argv)
 #endif
 
 #ifdef Q_OS_LINUX
-    if (qEnvironmentVariable("QT_QPA_PLATFORM") != "offscreen") {
+    if (qEnvironmentVariable("MU_QT_QPA_PLATFORM") != "offscreen") {
         qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
     }
 
     //! NOTE Forced X11, with Wayland there are a number of problems now
-    if (qEnvironmentVariable("QT_QPA_PLATFORM") == "") {
+    if (qEnvironmentVariable("MU_QT_QPA_PLATFORM") == "") {
         qputenv("QT_QPA_PLATFORM", "xcb");
     }
 #endif
