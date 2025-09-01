@@ -23,6 +23,7 @@ trap 'echo Generate PNGs failed; exit 1' ERR
 
 sudo apt-get install libegl1 libfuse2 -y
 export QT_QPA_PLATFORM=offscreen
+export MU_QT_QPA_PLATFORM=offscreen
 
 REF_BIN=./musescore_reference/MuseScore-Studio-vtest.AppImage
 chmod +x $REF_BIN

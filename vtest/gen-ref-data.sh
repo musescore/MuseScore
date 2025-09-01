@@ -32,6 +32,7 @@ done
 
 export XDG_RUNTIME_DIR=/tmp/runtime-root
 export QT_QPA_PLATFORM=offscreen
+export MU_QT_QPA_PLATFORM=offscreen
 
 $MSCORE_BIN \
     --test-case $HERE/vtest.js \
