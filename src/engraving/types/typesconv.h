@@ -251,6 +251,9 @@ public:
     static AsciiStringView toXml(AutoOnOff autoOnOff);
     static AutoOnOff fromXml(const AsciiStringView& str, AutoOnOff def);
 
+    static AsciiStringView toXml(CapoParams::TransposeMode autoOnOff);
+    static CapoParams::TransposeMode fromXml(const AsciiStringView& str, CapoParams::TransposeMode def);
+
     static AsciiStringView toXml(PartialSpannerDirection v);
     static PartialSpannerDirection fromXml(const AsciiStringView& str, PartialSpannerDirection def);
 

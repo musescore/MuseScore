@@ -1018,6 +1018,22 @@ AutoOnOff TConv::fromXml(const AsciiStringView& str, AutoOnOff def)
     return findTypeByXmlTag<AutoOnOff>(AUTO_ON_OFF, str, def);
 }
 
+static const std::vector<Item<CapoParams::TransposeMode> > CAPO_TRANSPOSE_MODE = {
+    { CapoParams::TransposeMode::PLAYBACK_ONLY, "playback" },
+    { CapoParams::TransposeMode::STANDARD_ONLY, "standard" },
+    { CapoParams::TransposeMode::TAB_ONLY,      "tab" },
+};
+
+AsciiStringView TConv::toXml(CapoParams::TransposeMode mode)
+{
+    return findXmlTagByType<CapoParams::TransposeMode>(CAPO_TRANSPOSE_MODE, mode);
+}
+
+CapoParams::TransposeMode TConv::fromXml(const AsciiStringView& str, CapoParams::TransposeMode def)
+{
+    return findTypeByXmlTag<CapoParams::TransposeMode>(CAPO_TRANSPOSE_MODE, str, def);
+}
+
 static const std::vector<Item<PartialSpannerDirection> > PARTIAL_SPANNER_DIRECTION = {
     { PartialSpannerDirection::NONE,     "none" },
     { PartialSpannerDirection::OUTGOING, "outgoing" },

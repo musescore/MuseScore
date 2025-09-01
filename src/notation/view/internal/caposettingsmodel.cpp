@@ -31,6 +31,11 @@ CapoSettingsModel::CapoSettingsModel(QObject* parent)
 {
 }
 
+uint8_t CapoSettingsModel::transposeMode() const
+{
+    return m_transposeMode;
+}
+
 bool CapoSettingsModel::capoIsOn() const
 {
     return params().active;
@@ -96,12 +101,15 @@ void CapoSettingsModel::init()
         m_strings.push_back(item);
     }
 
+    m_transposeMode = static_cast<int>(params().transposeMode);
+
     emit capoIsOnChanged(capoIsOn());
     emit fretPositionChanged(fretPosition());
     emit stringsChanged(m_strings);
     emit capoPlacementChanged(capoPlacement());
     emit capoTextSpecifiedByUserChanged(capoTextSpecifiedByUser());
     emit userCapoTextChanged(userCapoText());
+    emit transposeModeChanged(m_transposeMode);
 }
 
 void CapoSettingsModel::toggleCapoForString(int stringIndex)
@@ -141,6 +149,17 @@ QVariantList CapoSettingsModel::possibleCapoPlacements() const
         above,
         below
     };
+}
+
+void CapoSettingsModel::setTransposeMode(int mode)
+{
+    if (transposeMode() == mode) {
+        return;
+    }
+    changeItemProperty(mu::engraving::Pid::CAPO_TRANSPOSE_MODE, mode);
+    m_transposeMode = mode;
+
+    emit transposeModeChanged(mode);
 }
 
 void CapoSettingsModel::setCapoIsOn(bool isOn)

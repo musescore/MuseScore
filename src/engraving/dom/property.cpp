@@ -449,6 +449,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CAPO_FRET_POSITION,                  P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "fretPosition",                    QT_TRANSLATE_NOOP("engraving/propertyName", "fret position") },
     { Pid::CAPO_IGNORED_STRINGS,                P_TYPE::INT_VEC,                   PropertyGroup::APPEARANCE, true,  "ignoredStrings",                  QT_TRANSLATE_NOOP("engraving/propertyName", "ignored strings") },
     { Pid::CAPO_GENERATE_TEXT,                  P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "generateText",                    QT_TRANSLATE_NOOP("engraving/propertyName", "automatically generate text") },
+    { Pid::CAPO_TRANSPOSE_MODE,                 P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "transposeMode",                   QT_TRANSLATE_NOOP("propertyName", "transpose behaviour") },
 
     { Pid::TIE_PLACEMENT,                       P_TYPE::TIE_PLACEMENT,             PropertyGroup::APPEARANCE, true,  "tiePlacement",                    QT_TRANSLATE_NOOP("engraving/propertyName", "tie placement") },
     { Pid::MIN_LENGTH,                          P_TYPE::SPATIUM,                   PropertyGroup::APPEARANCE, true,  "minLength",                       QT_TRANSLATE_NOOP("engraving/propertyName", "minimum length") },
