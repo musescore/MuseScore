@@ -41,6 +41,9 @@ Item {
     property alias filter: filePickerModel.filter
     property alias dir: filePickerModel.dir
 
+    property int buttonType: FlatButton.IconOnly
+    property int orientation: Qt.Vertical
+
     property NavigationPanel navigation: null
     property int navigationRowOrderStart: 0
     property int navigationColumnOrderStart: 0
@@ -88,6 +91,10 @@ Item {
             id: button
             Layout.alignment: Qt.AlignVCenter
             icon: IconCode.OPEN_FILE
+
+            text: qsTrc("ui", "Browse")
+            buttonType: root.buttonType
+            orientation: root.orientation
 
             navigation.name: "FilePickerButton"
             navigation.panel: root.navigation
