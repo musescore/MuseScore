@@ -1880,6 +1880,48 @@ bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment
     return false;
 }
 
+bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* secondSeg)
+{
+    if (!firstSeg || !secondSeg) {
+        return false;
+    }
+    if (!firstSeg->isType(SegmentType::BarLineType)) {
+        return false;
+    }
+
+    const MasterScore* master = firstSeg->masterScore();
+
+    Measure* firstMeasure = firstSeg->measure();
+    Measure* secondMeasure = secondSeg->measure();
+
+    const Measure* firstMasterMeasure = master->tick2measure(firstMeasure->tick());
+    const Measure* secondMasterMeasure = master->tick2measure(secondMeasure->tick());
+    const Measure* adjacentMasterMeasure = firstMasterMeasure->nextMeasure();
+
+    Score* score = firstSeg->score();
+
+    const RepeatList& repeatList = score->repeatList(true, false);
+
+    std::vector<const Measure*> measures;
+
+    bool segEndsWithBl = false;
+    bool adjacentAndSecondShareSegment = false;
+
+    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
+        const RepeatSegment* rs = *it;
+
+        if (rs->endsWithMeasure(firstMasterMeasure)) {
+            segEndsWithBl = true;
+        }
+
+        if (rs->startsWithMeasure(adjacentMasterMeasure) && rs->containsMeasure(secondMasterMeasure)) {
+            adjacentAndSecondShareSegment = true;
+        }
+    }
+
+    return segEndsWithBl && adjacentAndSecondShareSegment;
+}
+
 EngravingItem* findNewSystemMarkingParent(const EngravingItem* item, const Staff* staff)
 {
     EngravingItem* newParent = nullptr;
