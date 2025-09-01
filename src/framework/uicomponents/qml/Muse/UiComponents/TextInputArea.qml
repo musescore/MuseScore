@@ -177,9 +177,16 @@ FocusScope {
                         return
                     }
 
-                    if (event.key === Qt.Key_Escape) {
+                    switch (event.key) {
+                    case Qt.Key_Escape:
+                    case Qt.Key_Space:
+                    case Qt.Key_Return:
+                    case Qt.Key_Enter: {
                         event.accepted = true
                         return
+                    }
+                    default:
+                        break
                     }
 
                     if (textInputModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
