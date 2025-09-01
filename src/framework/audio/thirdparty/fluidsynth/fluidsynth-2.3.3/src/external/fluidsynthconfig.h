@@ -155,7 +155,9 @@
 /* #undef LIBSNDFILE_HASVORBIS */
 
 /* Define to enable libsndfile support */
+#ifndef NO_LIBSNDFILE_SUPPORT
 #define LIBSNDFILE_SUPPORT 1
+#endif
 
 /* Define to enable MidiShare driver */
 /* #undef MIDISHARE_SUPPORT */
@@ -226,7 +228,7 @@
 /* Define to use the readline library for line editing */
 /* #undef READLINE_SUPPORT */
 
-/* Define if the compiler supports VLA */ 
+/* Define if the compiler supports VLA */
 /* #undef SUPPORTS_VLA */
 
 /* Define to 1 if your processor stores words with the most significant byte

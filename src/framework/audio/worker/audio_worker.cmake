@@ -130,15 +130,15 @@ set(AUDIO_WORKER_SRC
 )
 
 if (ARCH_IS_X86_64)
-    set(MODULE_SRC ${MODULE_SRC}
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_sse2.h
         )
 elseif (ARCH_IS_AARCH64)
-    set(MODULE_SRC ${MODULE_SRC}
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_neon.h
         )
 else ()
-    set(MODULE_SRC ${MODULE_SRC}
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
         )
 endif()

@@ -127,8 +127,10 @@ void AudioModule::registerExports()
     m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
     m_soundFontController = std::make_shared<SoundFontController>();
 
+#ifndef Q_OS_WASM
     m_audioWorker = std::make_shared<worker::AudioWorker>(m_rpcChannel);
     m_audioWorker->registerExports();
+#endif
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
@@ -253,11 +255,13 @@ void AudioModule::onDeinit()
 
 void AudioModule::onDestroy()
 {
+#ifndef Q_OS_WASM
     //! NOTE During deinitialization, objects that process events are destroyed,
     //! it is better to destroy them on onDestroy, when no events should come anymore
     if (m_audioWorker->isRunning()) {
         m_audioWorker->stop();
     }
+#endif
 }
 
 void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
@@ -268,6 +272,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
     requiredSpec.output.audioChannelCount = m_configuration->audioChannelsCount();
     requiredSpec.output.samplesPerChannel = m_configuration->driverBufferSize();
 
+#ifndef Q_OS_WASM
     if (m_configuration->shouldMeasureInputLag()) {
         requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
             auto samplesPerChannel = byteCount / (2 * sizeof(float));  // 2 == m_configuration->audioChannelsCount()
@@ -283,6 +288,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
             audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
         };
     }
+#endif
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_audioDriver->init();
@@ -301,5 +307,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
 void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 {
+#ifndef Q_OS_WASM
     m_audioWorker->run(activeSpec.output, m_configuration->workerConfig());
+#endif
 }
