@@ -471,7 +471,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::SHOW_MEASURE_NUMBERS,              false, "showMeasureNumbers",            P_TYPE::AUTO_ON_OFF, PropertyGroup::NONE, DUMMY_QT_TR_NOOP("propertyName", "show bar numbers")},
     { Pid::PLAY_COUNT_TEXT_SETTING, false, "playCountTextSetting",  P_TYPE::AUTO_CUSTOM_HIDE,   PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "play count text setting") },
-    { Pid::PLAY_COUNT_TEXT,         false, "playCountText",         P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "play count text") },
+    { Pid::PLAY_COUNT_TEXT,         false, "playCountCustomText",   P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "play count text") },
 
     { Pid::ALIGN_WITH_OTHER_RESTS,  false, "alignWithOtherRests",   P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "align with other rests") },
 

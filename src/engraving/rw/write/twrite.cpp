@@ -706,13 +706,11 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     const bool showText = item->style().styleB(Sid::repeatPlayCountShow);
     const bool singleRepeats = item->style().styleB(Sid::repeatPlayCountShowSingleRepeats);
     const int playCount = item->measure() ? item->measure()->repeatCount() : 2;
-    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true);
+    const bool autoShowPlayCount = showText && (playCount == 2 ? singleRepeats : true);
+    bool showPlayCount = (autoShowPlayCount && item->playCountTextSetting() == AutoCustomHide::AUTO)
+                         || item->playCountTextSetting() == AutoCustomHide::CUSTOM;
     if (showPlayCount) {
         writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
-    }
-
-    if (item->playCountText()) {
-        writeItem(item->playCountText(), xml, ctx);
     }
 
     if (ctx.clipboardmode() && item->measure()) {

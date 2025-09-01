@@ -807,13 +807,8 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
                 obj->triggerLayout();
                 continue;
             }
-            bool shouldLink = !obj->isPlayCountText();
-            EngravingItem* copy = shouldLink ? obj->linkedClone() : obj->clone();
+            EngravingItem* copy = obj->linkedClone();
             copy->setStaffIdx(staffIdx);
-
-            if (!obj->parent()->isSegment() && !obj->parent()->isMeasure()) {
-                copy->setParent(engraving::findNewSystemMarkingParent(obj, staff));
-            }
 
             score->undoAddElement(copy, false /*addToLinkedStaves*/);
         }
@@ -906,10 +901,6 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
         }
 
         if (item->staff() == srcStaff) {
-            if (!item->parent()->isSegment() && !item->parent()->isMeasure()) {
-                score()->undoChangeParent(item, engraving::findNewSystemMarkingParent(item, dstStaff), dstStaffIdx);
-                item->triggerLayout();
-            }
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         }
     }

@@ -33,7 +33,8 @@ class PlayCountText final : public TextBase
 public:
     PlayCountText* clone() const override { return new PlayCountText(*this); }
 
-    BarLine* barline() const { return toBarLine(parent()); }
+    Segment* segment() const { return toSegment(parent()); }
+    BarLine* barline() const;
 
     bool isEditable() const override { return true; }
     void endEdit(EditData&) override;
@@ -45,6 +46,6 @@ public:
 
 private:
     friend class Factory;
-    PlayCountText(BarLine* parent, TextStyleType tid = TextStyleType::REPEAT_PLAY_COUNT);
+    PlayCountText(Segment* parent, TextStyleType tid = TextStyleType::REPEAT_PLAY_COUNT);
 };
 } // namespace mu::engraving

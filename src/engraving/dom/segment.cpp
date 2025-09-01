@@ -764,6 +764,11 @@ void Segment::add(EngravingItem* el)
         break;
     }
 
+    case ElementType::PLAY_COUNT_TEXT:
+        assert(isType(SegmentType::BarLineType));
+        m_annotations.push_back(el);
+        break;
+
     case ElementType::STAFF_STATE:
         if (toStaffState(el)->staffStateType() == StaffStateType::INSTRUMENT) {
             StaffState* ss = toStaffState(el);
@@ -949,6 +954,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TREMOLOBAR:
     case ElementType::FERMATA:
     case ElementType::STICKING:
+    case ElementType::PLAY_COUNT_TEXT:
         removeAnnotation(el);
         break;
 
