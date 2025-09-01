@@ -200,15 +200,12 @@ bool PlaybackController::isLoaded() const
 
 bool PlaybackController::isLoopEnabled() const
 {
-    if (!notationPlayback()) {
-        return false;
-    }
-    return loopBoundariesSet() && notationPlayback()->loopBoundaries().enabled;
+    return notationPlayback() && notationPlayback()->isLoopEnabled();
 }
 
 bool PlaybackController::loopBoundariesSet() const
 {
-    return notationPlayback() ? !notationPlayback()->loopBoundaries().isNull() : false;
+    return notationPlayback() && !notationPlayback()->loopBoundaries().isNull();
 }
 
 Notification PlaybackController::isPlayingChanged() const
@@ -419,16 +416,6 @@ void PlaybackController::seekBeat(int measureIndex, int beatIndex)
     seek(targetSecs);
 }
 
-void PlaybackController::seekListSelection()
-{
-    const std::vector<EngravingItem*>& elements = selection()->elements();
-    if (elements.empty()) {
-        return;
-    }
-
-    seekElement(elements.back());
-}
-
 void PlaybackController::seekRangeSelection()
 {
     if (!selection()->isRange()) {
@@ -609,12 +596,7 @@ void PlaybackController::onSelectionChanged()
             updateSoloMuteStates();
         }
 
-        if (!isLoopEnabled()) {
-            seekListSelection();
-        }
-
         addSoundFlagsIfNeed(selection->elements());
-
         return;
     }
 

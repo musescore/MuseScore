@@ -154,7 +154,6 @@ private:
     void onPartChanged(const engraving::Part* part);
 
     void onSelectionChanged();
-    void seekListSelection();
     void seekRangeSelection();
 
     void onAudioResourceChanged(const muse::audio::TrackId trackId, const mu::engraving::InstrumentTrackId& instrumentTrackId,
