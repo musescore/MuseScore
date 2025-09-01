@@ -6113,10 +6113,6 @@ void Score::updateSwing()
 
 void Score::updateCapo()
 {
-    for (Staff* s : m_staves) {
-        s->clearCapoParams();
-    }
-
     Measure* fm = firstMeasure();
     if (!fm) {
         return;

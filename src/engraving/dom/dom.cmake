@@ -93,6 +93,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.cpp
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.h
     ${CMAKE_CURRENT_LIST_DIR}/edit.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editcapo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/editcapo.h
     ${CMAKE_CURRENT_LIST_DIR}/editdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/editdata.h
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.cpp
