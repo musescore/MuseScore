@@ -79,6 +79,17 @@ void VstAudioClient::loadSupportedParams()
     }
 }
 
+void VstAudioClient::setIsActive(const bool isActive)
+{
+    flushSound();
+
+    if (isActive) {
+        ensureActivity();
+    } else {
+        disableActivity();
+    }
+}
+
 bool VstAudioClient::handleEvent(const VstEvent& event)
 {
     ensureActivity();
@@ -103,7 +114,7 @@ bool VstAudioClient::handleParamChange(const ParamChangeEvent& param)
     ensureActivity();
     addParamChange(param);
 
-    m_playingParams.insert(param.paramId);
+    m_playingParams.push_back(param.paramId);
 
     return true;
 }
@@ -160,14 +171,7 @@ muse::audio::samples_t VstAudioClient::process(float* output, muse::audio::sampl
     return samplesPerChannel;
 }
 
-void VstAudioClient::flush()
-{
-    allNotesOff();
-
-    disableActivity();
-}
-
-void VstAudioClient::allNotesOff()
+void VstAudioClient::flushSound()
 {
     if (m_playingNotes.empty() && m_playingParams.empty()) {
         return;

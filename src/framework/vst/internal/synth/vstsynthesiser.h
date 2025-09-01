@@ -52,7 +52,6 @@ public:
     muse::audio::AudioSourceType type() const override;
     std::string name() const override;
 
-    void revokePlayingNotes() override;
     void flushSound() override;
 
     void setupSound(const mpe::PlaybackSetupData& setupData) override;

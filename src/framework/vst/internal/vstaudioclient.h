@@ -35,8 +35,9 @@ public:
     ~VstAudioClient();
 
     void init(audioplugins::AudioPluginType type, IVstPluginInstancePtr instance, muse::audio::audioch_t audioChannelsCount = 2);
-
     void loadSupportedParams();
+
+    void setIsActive(const bool isActive);
 
     bool handleEvent(const VstEvent& event);
     bool handleParamChange(const ParamChangeEvent& param);
@@ -44,8 +45,7 @@ public:
 
     muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel, muse::audio::msecs_t playbackPosition = 0);
 
-    void flush();
-    void allNotesOff();
+    void flushSound();
 
     audio::samples_t maxSamplesPerBlock() const;
     void setMaxSamplesPerBlock(audio::samples_t samples);
@@ -99,7 +99,7 @@ private:
     VstProcessContext m_processContext;
 
     std::unordered_map<size_t, VstEvent> m_playingNotes;
-    std::unordered_set<PluginParamId> m_playingParams;
+    std::vector<PluginParamId> m_playingParams;
 
     std::unordered_map<PluginParamId, PluginParamInfo> m_pluginParamInfoMap;
 

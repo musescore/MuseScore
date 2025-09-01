@@ -140,7 +140,7 @@ void EventAudioSource::seek(const msecs_t newPositionMsecs, const bool flushSoun
     m_synth->setPlaybackPosition(newPositionMsecs);
 
     if (flushSound) {
-        m_synth->revokePlayingNotes();
+        m_synth->flushSound();
     }
 }
 

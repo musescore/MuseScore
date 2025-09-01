@@ -52,15 +52,13 @@ public:
     void setupEvents(const mpe::PlaybackData& playbackData) override;
     const mpe::PlaybackData& playbackData() const override;
 
-    void flushSound() override;
+    void flushSound() override; // all channels
 
     bool isActive() const override;
     void setIsActive(const bool isActive) override;
 
     msecs_t playbackPosition() const override;
     void setPlaybackPosition(const msecs_t newPosition) override;
-
-    void revokePlayingNotes() override; // all channels
 
     unsigned int audioChannelsCount() const override;
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
@@ -100,7 +98,7 @@ private:
     Ret init();
     void createFluidInstance();
 
-    void allNotesOff();
+    void doFlushSound();
 
     bool processSequence(const FluidSequencer::EventSequence& sequence, const samples_t samples, float* buffer);
     bool handleEvent(const midi::Event& event);
@@ -121,7 +119,7 @@ private:
 
     KeyTuning m_tuning;
 
-    bool m_allNotesOffRequested = false;
+    bool m_flushSoundRequested = false;
 };
 
 using FluidSynthPtr = std::shared_ptr<FluidSynth>;
