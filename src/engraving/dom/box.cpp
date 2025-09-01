@@ -768,15 +768,6 @@ void FBox::init()
             score()->undo(new AddFretDiagramToFretBox(newDiagram, idx));
         }
     }
-
-    StringList currentDiagrams;
-    for (EngravingItem* item : el()) {
-        currentDiagrams.push_back(toFretDiagram(item)->harmonyText().toLower());
-    }
-
-    if (!m_invisibleDiagrams.empty()) {
-        updateInvisibleDiagrams(currentDiagrams);
-    }
 }
 
 void FBox::add(EngravingItem* e)
@@ -847,8 +838,6 @@ PropertyValue FBox::getProperty(Pid propertyId) const
         return m_contentAlignmentH == AlignH::RIGHT ? VBox::getProperty(propertyId) : PropertyValue();
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
         return diagramsOrder().join(FRET_BOX_DIAGRAMS_SEPARATOR);
-    case Pid::FRET_FRAME_INVISIBLE_DIAGRAMS:
-        return !m_invisibleDiagrams.empty() ? m_invisibleDiagrams.join(FRET_BOX_DIAGRAMS_SEPARATOR) : PropertyValue();
     default:
         return VBox::getProperty(propertyId);
     }
@@ -880,9 +869,6 @@ bool FBox::setProperty(Pid propertyId, const PropertyValue& val)
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
         reorderElements(val.value<String>().split(FRET_BOX_DIAGRAMS_SEPARATOR));
         break;
-    case Pid::FRET_FRAME_INVISIBLE_DIAGRAMS:
-        m_invisibleDiagrams = val.value<String>().split(FRET_BOX_DIAGRAMS_SEPARATOR);
-        break;
     default:
         return VBox::setProperty(propertyId, val);
     }
@@ -906,8 +892,6 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
         return static_cast<int>(AlignH::HCENTER);
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
         return m_diagramsOrderInScore.join(FRET_BOX_DIAGRAMS_SEPARATOR);
-    case Pid::FRET_FRAME_INVISIBLE_DIAGRAMS:
-        return PropertyValue();
     default:
         return VBox::propertyDefault(propertyId);
     }
@@ -963,58 +947,6 @@ StringList FBox::diagramsOrder() const
     }
 
     return result;
-}
-
-ElementList FBox::orderedElements(bool includeInvisible) const
-{
-    ElementList elements = el();
-    const StringList& diagramsOrder = this->diagramsOrder();
-    if (diagramsOrder.empty()) {
-        return elements;
-    }
-
-    std::sort(elements.begin(), elements.end(), [&diagramsOrder](const EngravingItem* a, const EngravingItem* b) {
-        const FretDiagram* diagramA = toFretDiagram(a);
-        const String diagramAHarmonyName = diagramA->harmonyText().toLower();
-
-        const FretDiagram* diagramB = toFretDiagram(b);
-        const String diagramBHarmonyName = diagramB->harmonyText().toLower();
-
-        auto itA = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramAHarmonyName);
-        auto itB = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramBHarmonyName);
-
-        return itA < itB;
-    });
-
-    if (!includeInvisible) {
-        const StringList& invisibleDiagrams = this->invisibleDiagrams();
-
-        muse::remove_if(elements, [&invisibleDiagrams](const EngravingItem* element){
-            const FretDiagram* diagram = toFretDiagram(element);
-            const String diagramHarmonyName = diagram->harmonyText().toLower();
-            return muse::contains(invisibleDiagrams, diagramHarmonyName);
-        });
-    }
-
-    return elements;
-}
-
-void FBox::undoSetInvisibleDiagrams(const StringList& invisibleDiagrams)
-{
-    StringList diagrams;
-    for (const String& harmonyName : invisibleDiagrams) {
-        diagrams.push_back(harmonyName.toLower());
-    }
-
-    undoChangeProperty(Pid::FRET_FRAME_INVISIBLE_DIAGRAMS, diagrams.join(FRET_BOX_DIAGRAMS_SEPARATOR));
-    triggerLayout();
-}
-
-void FBox::updateInvisibleDiagrams(const StringList& currentDiagrams)
-{
-    m_invisibleDiagrams.erase(std::remove_if(m_invisibleDiagrams.begin(), m_invisibleDiagrams.end(),
-                                             [&](const String& harmonyName) { return !muse::contains(currentDiagrams, harmonyName); }),
-                              m_invisibleDiagrams.end());
 }
 
 //---------------------------------------------------------

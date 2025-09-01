@@ -211,11 +211,6 @@ public:
     void reorderElements(const StringList& newOrder);
     StringList diagramsOrder() const;
 
-    void undoSetInvisibleDiagrams(const StringList& invisibleDiagrams);
-    const StringList& invisibleDiagrams() const { return m_invisibleDiagrams; }
-
-    ElementList orderedElements(bool includeInvisible = false) const;
-
     bool needsRebuild() const { return m_needsRebuild; }
     void setNeedsRebuild(bool v) { m_needsRebuild = v; }
 
@@ -235,7 +230,6 @@ private:
     AlignH m_contentAlignmentH = AlignH::HCENTER;
 
     StringList m_diagramsOrderInScore;
-    StringList /*harmonyNames*/ m_invisibleDiagrams;
 };
 
 //---------------------------------------------------------

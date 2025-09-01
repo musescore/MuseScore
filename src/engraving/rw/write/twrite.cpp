@@ -835,7 +835,6 @@ void TWrite::write(const FBox* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::FRET_FRAME_ROW_GAP);
     writeProperty(item, xml, Pid::FRET_FRAME_CHORDS_PER_ROW);
     writeProperty(item, xml, Pid::FRET_FRAME_H_ALIGN);
-    writeProperty(item, xml, Pid::FRET_FRAME_INVISIBLE_DIAGRAMS);
 
     writeProperties(static_cast<const Box*>(item), xml, ctx);
 
