@@ -217,7 +217,7 @@ void PlaybackController::reset()
     stop();
 }
 
-void PlaybackController::seekRawTick(const midi::tick_t tick)
+void PlaybackController::seekRawTick(const midi::tick_t tick, const bool flushSound)
 {
     if (m_currentTick == tick) {
         return;
@@ -228,16 +228,16 @@ void PlaybackController::seekRawTick(const midi::tick_t tick)
         return;
     }
 
-    seek(playedTickToSecs(playedTick.val));
+    seek(playedTickToSecs(playedTick.val), flushSound);
 }
 
-void PlaybackController::seek(const audio::secs_t secs)
+void PlaybackController::seek(const audio::secs_t secs, const bool flushSound)
 {
     IF_ASSERT_FAILED(currentPlayer()) {
         return;
     }
 
-    currentPlayer()->seek(secs);
+    currentPlayer()->seek(secs, flushSound);
 }
 
 muse::async::Channel<secs_t, tick_t> PlaybackController::currentPlaybackPositionChanged() const
@@ -391,7 +391,7 @@ void PlaybackController::triggerControllers(const muse::mpe::ControllerChangeEve
     notationPlayback()->triggerControllers(list, staffIdx, tick);
 }
 
-void PlaybackController::seekElement(const notation::EngravingItem* element)
+void PlaybackController::seekElement(const notation::EngravingItem* element, bool flushSound)
 {
     IF_ASSERT_FAILED(element) {
         return;
@@ -406,13 +406,13 @@ void PlaybackController::seekElement(const notation::EngravingItem* element)
         return;
     }
 
-    seek(playedTickToSecs(tick.val));
+    seek(playedTickToSecs(tick.val), flushSound);
 }
 
-void PlaybackController::seekBeat(int measureIndex, int beatIndex)
+void PlaybackController::seekBeat(int measureIndex, int beatIndex, bool flushSound)
 {
     secs_t targetSecs = beatToSecs(measureIndex, beatIndex);
-    seek(targetSecs);
+    seek(targetSecs, flushSound);
 }
 
 void PlaybackController::seekRangeSelection()
