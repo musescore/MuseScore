@@ -635,10 +635,6 @@ EngravingObjectList BarLine::scanChildren() const
         children.push_back(element);
     }
 
-    if (m_playCountText) {
-        children.push_back(m_playCountText);
-    }
-
     return children;
 }
 

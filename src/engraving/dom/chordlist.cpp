@@ -1707,7 +1707,6 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
             // Jazz superscript
             if (superScriptModifier) {
                 // Set scale
-                LOGI() << "SCALE: " << cl->stackedModifierMag();
                 m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
                 // Move to x-height
                 m_renderList.emplace_back(new RenderActionPush());

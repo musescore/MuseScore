@@ -1024,14 +1024,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         }
                     }
 
-                    bool cloneBarLine = false;
-                    if (oseg->isEndBarLineType()) {
-                        BarLine* topBarLine = toBarLine(oseg->element(0));
-                        PlayCountText* topPlayCount = topBarLine ? topBarLine->playCountText() : nullptr;
-                        cloneBarLine = oe && oe->isBarLine() && toBarLine(oe)->barLineType() == BarLineType::END_REPEAT && topPlayCount;
-                    }
-
-                    bool clone = oe && (!oe->generated() || cloneBarLine) && !oe->excludeFromOtherParts();
+                    bool clone = oe && !oe->generated() && !oe->excludeFromOtherParts();
 
                     if (clone) {
                         EngravingItem* ne;
@@ -1048,28 +1041,6 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                             BarLine* nbl = toBarLine(ne);
                             if (adjustedBarlineSpan) {
                                 nbl->setSpanStaff(adjustedBarlineSpan);
-                            }
-                            PlayCountText* newText = nbl->playCountText();
-                            Staff* dstStaff = score->staff(track2staff(track));
-                            if (dstStaff->shouldShowPlayCount()) {
-                                if (newText) {
-                                    newText->setTrack(track);
-                                    PlayCountText* oldText = toBarLine(oe)->playCountText();
-                                    score->undo(new Link(newText, oldText));
-                                } else {
-                                    BarLine* topBarLine = toBarLine(oseg->element(0));
-                                    PlayCountText* oldText = topBarLine ? topBarLine->playCountText() : nullptr;
-                                    if (oldText) {
-                                        EngravingItem* npc = oldText->linkedClone();
-                                        npc->setTrack(track);
-                                        npc->setParent(ne);
-                                        npc->setScore(score);
-                                        npc->styleChanged();
-                                        score->doUndoAddElement(npc);
-                                    }
-                                }
-                            } else if (newText) {
-                                score->doUndoRemoveElement(newText);
                             }
                         } else if (oe->isChordRest()) {
                             ChordRest* ocr = toChordRest(oe);
@@ -1631,16 +1602,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
 
                 EngravingItem* oe = oseg->element(srcTrack);
-                bool cloneBarLine = false;
-                if (oseg->isEndBarLineType()) {
-                    BarLine* topBarLine = toBarLine(oseg->element(0));
-                    PlayCountText* topPlayCount = topBarLine ? topBarLine->playCountText() : nullptr;
-                    cloneBarLine = oe && oe->isBarLine() && toBarLine(oe)->barLineType() == BarLineType::END_REPEAT && topPlayCount;
-                    if (oe) {
-                        LOGI() << "oe: " << oe->score()->name() << " generated: " << oe->generated() << " clone: " << cloneBarLine;
-                    }
-                }
-                if (oe == 0 || (oe->generated() && !cloneBarLine) || oe->excludeFromOtherParts()) {
+                if (oe == 0 || oe->generated() || oe->excludeFromOtherParts()) {
                     continue;
                 }
 
@@ -1698,37 +1660,6 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                         addTremoloTwoChord(och, nch, prevTremolo);
                     }
-                }
-
-                if (oe->isBarLine() && toBarLine(oe)->barLineType() == BarLineType::END_REPEAT) {
-                    // clone barline
-                    BarLine* nbl = toBarLine(ne);
-                    PlayCountText* newText = nbl->playCountText();
-                    if (dstStaff->shouldShowPlayCount()) {
-                        if (newText) {
-                            // has pc text + should have pc text
-                            newText->setTrack(dstTrack);
-                            PlayCountText* oldText = toBarLine(oe)->playCountText();
-                            score->undo(new Link(newText, oldText));
-                        } else {
-                            // no pc text + should have pc text
-                            BarLine* topBarLine = toBarLine(oseg->element(0));
-                            PlayCountText* oldText = topBarLine ? topBarLine->playCountText() : nullptr;
-                            if (oldText) {
-                                EngravingItem* npc = oldText->linkedClone();
-                                npc->setTrack(dstTrack);
-                                npc->setParent(ne);
-                                npc->setScore(score);
-                                npc->styleChanged();
-                                score->doUndoAddElement(npc);
-                            }
-                        }
-                    } else if (newText) {
-                        // has pc text + shouldn't have pc text
-                        // Remove
-                        score->doUndoRemoveElement(newText);
-                    }
-                    // no pc text + shouldn't have pc text
                 }
             }
         }

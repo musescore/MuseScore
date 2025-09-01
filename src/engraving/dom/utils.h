@@ -112,8 +112,6 @@ extern std::unordered_set<EngravingItem*> collectElementsAnchoredToChordRest(con
 extern std::unordered_set<EngravingItem*> collectElementsAnchoredToNote(const Note* cr, bool includeForwardTiesSpanners,
                                                                         bool includeBackwardTiesSpanners);
 
-extern EngravingItem* findNewSystemMarkingParent(const EngravingItem* item, const Staff* staff);
-
 extern MeasureBeat findBeat(const Score* score, int tick);
 
 extern bool noteAnchoredSpannerIsInRange(const Spanner*, const Fraction& rangeStart, const Fraction& rangeEnd);

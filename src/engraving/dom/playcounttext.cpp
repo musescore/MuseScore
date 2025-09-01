@@ -35,8 +35,8 @@ static ElementStyle playCountStyle {
     { Sid::repeatPlayCountMinDistance, Pid::MIN_DISTANCE },
 };
 
-PlayCountText::PlayCountText(BarLine* parent, TextStyleType tid)
-    : TextBase(ElementType::PLAY_COUNT_TEXT, parent, tid, ElementFlag::NOTHING)
+PlayCountText::PlayCountText(Segment* parent, TextStyleType tid)
+    : TextBase(ElementType::PLAY_COUNT_TEXT, parent, tid, ElementFlag::SYSTEM | ElementFlag::ON_STAFF)
 {
     initElementStyle(&playCountStyle);
 }
@@ -89,4 +89,12 @@ PropertyValue PlayCountText::propertyDefault(Pid propertyId) const
     }
 
     return TextBase::propertyDefault(propertyId);
+}
+
+mu::engraving::BarLine* mu::engraving::PlayCountText::barline() const
+{
+    Segment* seg = segment();
+    EngravingItem* el = seg ? seg->element(track()) : nullptr;
+
+    return toBarLine(el);
 }
