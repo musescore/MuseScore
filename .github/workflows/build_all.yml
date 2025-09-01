@@ -21,7 +21,7 @@ on:
         default: 'off'
         required: false
       sentry_project:
-        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         required: false
       use_qt69:
@@ -51,7 +51,7 @@ on:
         type: string
         required: false
       sentry_project:
-        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), mu4-sandbox'
         default: ''
         type: string
         required: false
