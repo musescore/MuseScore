@@ -39,7 +39,8 @@ void GraphicsInfoModel::init()
     QString gApi = uiengine()->graphicsApiName();
 
     m_info = "\n";
-    m_info += "Graphics Api: " + gApi;
+    m_info += "Gui platform:  " + QGuiApplication::platformName() + "\n";
+    m_info += "Graphics Api:  " + gApi + "\n";
 
     emit infoChanged();
 }
