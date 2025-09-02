@@ -84,6 +84,22 @@ QString FilePickerModel::selectMultipleDirectories(const QString& selectedDirect
     return result.join(";");
 }
 
+QString FilePickerModel::selectAny()
+{
+    std::vector<std::string> filter;
+    for (const QString& nameFilter : m_filter) {
+        filter.push_back(nameFilter.toStdString());
+    }
+
+    io::path_t file = interactive()->selectSavingFileSync(m_title.toStdString(), m_dir, filter);
+
+    if (!file.empty()) {
+        m_dir = io::dirpath(file).toQString();
+    }
+
+    return file.toQString();
+}
+
 void FilePickerModel::setTitle(const QString& title)
 {
     if (title == m_title) {

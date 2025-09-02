@@ -31,7 +31,8 @@ Item {
     enum PickerType {
         File,
         Directory,
-        MultipleDirectories
+        MultipleDirectories,
+        Any
     }
     property int pickerType: FilePicker.PickerType.File
 
@@ -118,6 +119,14 @@ Item {
                 case FilePicker.PickerType.MultipleDirectories:{
                     var selectedDirectories = filePickerModel.selectMultipleDirectories(root.path)
                     root.pathEdited(selectedDirectories)
+                    break
+                }
+                case FilePicker.PickerType.Any:{
+                    var selectedAny = filePickerModel.selectAny()
+                    if (Boolean(selectedAny)) {
+                        root.pathEdited(selectedAny)
+                    }
+
                     break
                 }
                 }
