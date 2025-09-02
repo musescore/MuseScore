@@ -3004,7 +3004,10 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
         Segment* seg1 = toSegment(firstItem->findAncestor(ElementType::SEGMENT));
         Segment* seg2 = toSegment(secondItem->findAncestor(ElementType::SEGMENT));
 
-        if (!cr || (!header && segmentsAreInDifferentRepeatSegments(seg1, seg2))) {
+        bool differentRepeatSegments = segmentsAreInDifferentRepeatSegments(seg1, seg2);
+        bool validBarline = isValidBarLineForRepeatSection(seg1, seg2);
+
+        if (!cr || (!header && (differentRepeatSegments && !validBarline))) {
             return;
         }
 
@@ -3019,6 +3022,11 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
             partialSlur->undoSetIncoming(true);
             secondChordRest = toChordRest(cr);
             const Measure* startMeas = otherElement->findMeasure();
+            if (otherElement->isBarLine()) {
+                if (toBarLine(otherElement)->barLineType() == BarLineType::END_REPEAT) {
+                    startMeas = startMeas->nextMeasure();
+                }
+            }
             ChordRest* startCr = startMeas->firstChordRest(0);
             firstChordRest = startCr;
         }
