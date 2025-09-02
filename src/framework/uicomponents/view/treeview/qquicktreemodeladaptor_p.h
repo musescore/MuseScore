@@ -94,7 +94,7 @@ public:
     bool isVisible(const QModelIndex &index);
     bool childrenVisible(const QModelIndex &index);
 
-    QModelIndex mapToModel(const QModelIndex &index) const;
+    QPersistentModelIndex mapToModel(const QModelIndex &index) const;
     Q_INVOKABLE QPersistentModelIndex mapRowToModelIndex(int row) const;
 
     Q_INVOKABLE QItemSelection selectionForRowRange(const QModelIndex &fromIndex, const QModelIndex &toIndex) const;
@@ -158,8 +158,8 @@ private:
     };
 
     struct DataChangedParams {
-        QModelIndex topLeft;
-        QModelIndex bottomRight;
+        QPersistentModelIndex topLeft;
+        QPersistentModelIndex bottomRight;
         QVector<int> roles;
     };
 
