@@ -171,7 +171,7 @@ QVariant QQuickTreeModelAdaptor1::data(const QModelIndex &index, int role) const
     if (!m_model)
         return QVariant();
 
-    const QModelIndex &modelIndex = mapToModel(index);
+    const QPersistentModelIndex &modelIndex = mapToModel(index);
 
     switch (role) {
     case DepthRole:
@@ -261,7 +261,7 @@ bool QQuickTreeModelAdaptor1::childrenVisible(const QModelIndex &index)
            || (m_expandedItems.contains(index) && isVisible(index));
 }
 
-QModelIndex QQuickTreeModelAdaptor1::mapToModel(const QModelIndex &index) const
+QPersistentModelIndex QQuickTreeModelAdaptor1::mapToModel(const QModelIndex &index) const
 {
     return m_items.at(index.row()).index;
 }
