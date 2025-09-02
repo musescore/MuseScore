@@ -37,15 +37,19 @@
 
 using namespace muse::audio::rpc;
 
-void GeneralRpcChannel::initOnWorker()
+void GeneralRpcChannel::setupOnMain()
 {
-    ONLY_AUDIO_WORKER_THREAD;
-    m_workerThreadID = std::this_thread::get_id();
+    ONLY_AUDIO_MAIN_THREAD;
+    m_mainThreadID = std::this_thread::get_id();
+}
+
+void GeneralRpcChannel::setupOnWorker()
+{
 }
 
 bool GeneralRpcChannel::isWorkerThread() const
 {
-    return std::this_thread::get_id() == m_workerThreadID;
+    return std::this_thread::get_id() != m_mainThreadID;
 }
 
 void GeneralRpcChannel::process()

@@ -35,9 +35,15 @@ let MuseAudio = {
 
 function initialize(data)
 {
+  // Rpc
   MuseAudio.mainPort = data.port;
+  MuseAudio.rpcSend = function(data) {
+      MuseAudio.mainPort.postMessage(data)
+  }
+
+  MuseAudio.rpcListen = function(data) {} // will be overridden
   MuseAudio.mainPort.onmessage = function(event) {
-    console.log("From Main:", event.data);
+    MuseAudio.rpcListen(event.data)
   }
 
   try {

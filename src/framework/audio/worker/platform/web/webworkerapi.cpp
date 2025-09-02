@@ -21,12 +21,16 @@
  */
 #include "webworkerapi.h"
 
+#include "global/modularity/ioc.h"
 #include "global/globalmodule.h"
+
+#include "audio/common/rpc/platform/web/webrpcchannel.h"
 
 #include "log.h"
 
 using namespace muse;
 using namespace web::worker;
+using namespace muse::audio;
 
 WebWorkerApi* WebWorkerApi::instance()
 {
@@ -34,12 +38,27 @@ WebWorkerApi* WebWorkerApi::instance()
     return &w;
 }
 
+static std::string moduleName()
+{
+    return "audio_worker";
+}
+
+static modularity::ModulesIoC* ioc()
+{
+    return modularity::globalIoc();
+}
+
 void WebWorkerApi::init()
 {
     static GlobalModule globalModule;
 
     globalModule.registerExports();
-    globalModule.registerApi();
+
+    std::shared_ptr<rpc::IRpcChannel> rpcChannel = std::make_shared<rpc::WebRpcChannel>();
+    ioc()->registerExport<rpc::IRpcChannel>(moduleName(), rpcChannel);
+
+    rpcChannel->setupOnWorker();
+
     globalModule.onPreInit(IApplication::RunMode::ConsoleApp);
     globalModule.onInit(IApplication::RunMode::ConsoleApp);
 

@@ -63,7 +63,7 @@ static uint64_t toWinTime(const msecs_t msecs)
 
 std::thread::id AudioWorker::ID;
 
-AudioWorker::AudioWorker(std::shared_ptr<rpc::GeneralRpcChannel> rpcChannel)
+AudioWorker::AudioWorker(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
     : m_rpcChannel(rpcChannel)
 {
 }
@@ -163,7 +163,7 @@ void AudioWorker::th_main(const OutputSpec& outputSpec, const AudioWorkerConfig&
     AudioWorker::ID = std::this_thread::get_id();
 
     //! NOTE It should be as early as possible
-    m_rpcChannel->initOnWorker();
+    m_rpcChannel->setupOnWorker();
 
     m_configuration->init(conf);
 
