@@ -44,8 +44,7 @@
 
 QT_BEGIN_NAMESPACE
 
-//#define QQUICKTREEMODELADAPTOR_DEBUG
-#if defined(QQUICKTREEMODELADAPTOR_DEBUG) && !defined(QT_TESTLIB_LIB)
+#ifndef NDEBUG
 #   define ASSERT_CONSISTENCY() Q_ASSERT_X(testConsistency(true /* dumpOnFail */), Q_FUNC_INFO, "Consistency test failed")
 #else
 #   define ASSERT_CONSISTENCY qt_noop
