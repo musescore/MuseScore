@@ -26,6 +26,8 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../thirdparty/fluidsynth fluids
 qt_add_executable(MuseAudio
     ${AUDIO_WORKER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/workerapi_export.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/webworkerapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/webworkerapi.h
 )
 
 target_include_directories(MuseAudio PRIVATE
@@ -54,5 +56,5 @@ target_link_libraries(MuseAudio
 )
 
 target_link_options(MuseAudio PRIVATE ${EMCC_LINKER_FLAGS})
-target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_FUNCTIONS=[_malloc,_free,_init]")
+target_link_options(MuseAudio PRIVATE "SHELL:-s EXPORTED_FUNCTIONS=[_main,_malloc,_free,_Init]")
 target_link_options(MuseAudio PRIVATE "SHELL:-s ENVIRONMENT=worker")

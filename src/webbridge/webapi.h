@@ -36,7 +36,6 @@ class WebApi : public muse::async::Asyncable
     inline static muse::GlobalInject<mu::context::IGlobalContext> globalContext;
 
 public:
-    WebApi() = default;
 
     static WebApi* instance();
 
@@ -48,6 +47,8 @@ public:
     void load(const void* source, unsigned int len);
 
 private:
+
+    WebApi() = default;
 
     void onProjectSaved(const muse::io::path_t& path, mu::project::SaveMode mode);
 

@@ -44,6 +44,7 @@ static void callJsWithBytes(const char* fnname, const uint8_t* data, size_t size
 }
 
 #else
+
 static void callJsWithBytes(const char*, const uint8_t*, size_t)
 {
     NOT_SUPPORTED;
@@ -54,6 +55,7 @@ static void callJsWithBytes(const char*, const uint8_t*, size_t)
 WebApi* WebApi::instance()
 {
     static WebApi a;
+
     return &a;
 }
 

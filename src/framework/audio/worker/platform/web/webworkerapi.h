@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-Studio-CLA-applies
+ * MuseScore-CLA-applies
  *
- * MuseScore Studio
+ * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,20 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#include "webworkerapi.h"
-
-using namespace web::worker;
-
-extern "C" {
-int main()
+namespace web::worker {
+class WebWorkerApi
 {
-    // noop
-    return 0;
-}
+public:
 
-void Init(unsigned int)
-{
-    WebWorkerApi::instance()->init();
-}
+    static WebWorkerApi* instance();
+
+    void init();
+
+private:
+    WebWorkerApi() = default;
+};
 }

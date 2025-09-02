@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-Studio-CLA-applies
+ * MuseScore-CLA-applies
  *
- * MuseScore Studio
+ * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,20 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #include "webworkerapi.h"
 
+#include "global/globalmodule.h"
+
+#include "log.h"
+
+using namespace muse;
 using namespace web::worker;
 
-extern "C" {
-int main()
+WebWorkerApi* WebWorkerApi::instance()
 {
-    // noop
-    return 0;
+    static WebWorkerApi w;
+    return &w;
 }
 
-void Init(unsigned int)
+void WebWorkerApi::init()
 {
-    WebWorkerApi::instance()->init();
-}
+    static GlobalModule globalModule;
+
+    globalModule.registerExports();
+    globalModule.registerApi();
+    globalModule.onPreInit(IApplication::RunMode::ConsoleApp);
+    globalModule.onInit(IApplication::RunMode::ConsoleApp);
+
+    LOGI() << "Inited";
 }
