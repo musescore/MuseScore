@@ -958,7 +958,7 @@ void QQuickTreeModelAdaptor1::emitQueuedSignals()
      * We don't merge adjacent updates, because they are typically filed with a
      * different role (a parent row is next to its children).
      */
-    for (const DataChangedParams &dataChange : m_queuedDataChanged) {
+    for (const DataChangedParams &dataChange : std::as_const(m_queuedDataChanged)) {
         int startRow = dataChange.topLeft.row();
         int endRow = dataChange.bottomRight.row();
         bool merged = false;
