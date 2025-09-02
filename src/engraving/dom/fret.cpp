@@ -953,6 +953,9 @@ void FretDiagram::linkHarmony(Harmony* harmony)
     setParent(harmony->explicitParent());
     harmony->setParent(this);
 
+    //! on the same lavel as diagram
+    m_harmony->setZ(z());
+
     if (Segment* segment = this->segment()) {
         segment->removeAnnotation(harmony);
     }
@@ -967,6 +970,8 @@ void FretDiagram::unlinkHarmony()
     m_harmony->setTrack(track());
 
     resetHarmonyAlignment();
+
+    m_harmony->setZ(-1);
 
     segment()->add(m_harmony);
 
@@ -984,6 +989,9 @@ void FretDiagram::add(EngravingItem* e)
         m_harmony = toHarmony(e);
 
         m_harmony->setTrack(track());
+
+        //! on the same lavel as diagram
+        m_harmony->setZ(z());
 
         if (m_harmony->harmonyName().empty()) {
             if (s_diagramPatternToHarmoniesMap.empty()) {
