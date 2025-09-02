@@ -81,8 +81,7 @@ static void onFileSelected(emscripten::val fileName, emscripten::val fileData)
     g_fileOpenData.callback(fn, data);
 }
 
-EMSCRIPTEN_BINDINGS(MuseScoreStudio) {
-    function("openFileDialog", &openFileDialog);
+EMSCRIPTEN_BINDINGS(WebInteractive) {
     function("onFileSelected", &onFileSelected);
 }
 #endif

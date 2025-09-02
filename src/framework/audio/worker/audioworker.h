@@ -26,12 +26,11 @@
 #include <memory>
 #include <thread>
 #include <atomic>
-#include <functional>
 
 #include "audio/common/audiotypes.h"
 
 namespace muse::audio::rpc {
-class GeneralRpcChannel;
+class IRpcChannel;
 }
 
 namespace muse::audio::fx {
@@ -52,7 +51,7 @@ class WorkerChannelController;
 class AudioWorker
 {
 public:
-    AudioWorker(std::shared_ptr<rpc::GeneralRpcChannel> rpcChannel);
+    AudioWorker(std::shared_ptr<muse::audio::rpc::IRpcChannel> rpcChannel);
     ~AudioWorker();
 
     static std::thread::id ID;
@@ -69,7 +68,7 @@ private:
     void th_main(const OutputSpec& outputSpec, const AudioWorkerConfig& conf);
 
     // services
-    std::shared_ptr<rpc::GeneralRpcChannel> m_rpcChannel;
+    std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
     std::shared_ptr<AudioWorkerConfiguration> m_configuration;
     std::shared_ptr<AudioEngine> m_audioEngine;
     std::shared_ptr<AudioBuffer> m_audioBuffer;

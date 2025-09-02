@@ -29,7 +29,12 @@
 #include "audio/common/audiothreadsecurer.h"
 #include "internal/audiooutputdevicecontroller.h"
 
+#ifdef Q_OS_WASM
+#include "audio/common/rpc/platform/web/webrpcchannel.h"
+#else
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
+#endif
+
 #include "internal/playback.h"
 #include "internal/soundfontcontroller.h"
 
@@ -124,10 +129,13 @@ void AudioModule::registerExports()
     m_configuration = std::make_shared<AudioConfiguration>(iocContext());
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
-    m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
+
     m_soundFontController = std::make_shared<SoundFontController>();
 
-#ifndef Q_OS_WASM
+#ifdef Q_OS_WASM
+    m_rpcChannel = std::make_shared<rpc::WebRpcChannel>();
+#else
+    m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
     m_audioWorker = std::make_shared<worker::AudioWorker>(m_rpcChannel);
     m_audioWorker->registerExports();
 #endif
@@ -217,16 +225,19 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
-    m_audioOutputController->init();
-
-    m_soundFontController->init();
-
     // rpc
+    m_rpcChannel->setupOnMain();
+#ifndef Q_OS_WASM
     m_rpcTimer.setInterval(16); // corresponding to 60 fps
     QObject::connect(&m_rpcTimer, &QTimer::timeout, [this]() {
         m_rpcChannel->process();
     });
     m_rpcTimer.start();
+#endif
+
+    m_audioOutputController->init();
+
+    m_soundFontController->init();
 
     m_mainPlayback->init();
 

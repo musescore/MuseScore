@@ -35,7 +35,7 @@ class AudioWorker;
 }
 
 namespace muse::audio::rpc  {
-class GeneralRpcChannel;
+class IRpcChannel;
 }
 
 namespace muse::audio {
@@ -72,7 +72,7 @@ private:
     std::shared_ptr<worker::AudioWorker> m_audioWorker;
 
     QTimer m_rpcTimer;
-    std::shared_ptr<rpc::GeneralRpcChannel> m_rpcChannel;
+    std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
 
     std::shared_ptr<IAudioDriver> m_audioDriver;
 };

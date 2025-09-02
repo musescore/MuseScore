@@ -18,6 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+include(GetPlatformInfo)
+
 set(AUDIO_COMMON_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
@@ -33,6 +35,18 @@ set(AUDIO_COMMON_SRC
     # Rpc
     ${CMAKE_CURRENT_LIST_DIR}/rpc/irpcchannel.h
     ${CMAKE_CURRENT_LIST_DIR}/rpc/rpcpacker.h
-    ${CMAKE_CURRENT_LIST_DIR}/rpc/platform/general/generalrpcchannel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rpc/platform/general/generalrpcchannel.h
 )
+
+if(OS_IS_WASM)
+    set(AUDIO_COMMON_SRC
+        ${AUDIO_COMMON_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/rpc/platform/web/webrpcchannel.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/rpc/platform/web/webrpcchannel.h
+    )
+else()
+    set(AUDIO_COMMON_SRC
+        ${AUDIO_COMMON_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/rpc/platform/general/generalrpcchannel.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/rpc/platform/general/generalrpcchannel.h
+    )
+endif()

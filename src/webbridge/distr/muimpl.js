@@ -25,40 +25,50 @@ function setupInternalCallbacks(Module) {
 
 function setupWorker(Module)
 {
+    // Rpc
     Module.rpcChannel = new MessageChannel();
-    const { port1, port2 } = Module.rpcChannel;
-    port1.onmessage = function(event) {
-      console.log("From worker:", event.data);
+
+    Module.rpcSend = function(data) {
+        Module.rpcChannel.port1.postMessage(data)
+    }
+
+    Module.rpcListen = function(data) {} // will be overridden
+
+    Module.rpcChannel.port1.onmessage = function(event) {
+        Module.rpcListen(event.data)
     };
 
+    // Initialize the worker.
     Module.worker = new Worker("distr/muworker.js")
 
-    // Initialize the worker.
     var museAudioUrl = new URL("MuseAudio.js", window.location) + "";
 
     Module.worker.postMessage({
     type: 'INITIALIZE_WORKER',
-    port: port2,
+    port: Module.rpcChannel.port2,
     options: {
         museAudioUrl: museAudioUrl
     }
-    }, [port2]);
+    }, [Module.rpcChannel.port2]);
 }
 
 const MuImpl = {
 
     loadModule: async function(config) {
-        const instance = await qtLoad({
+
+        let Module = {
             qt: {
                 onLoaded: config.onLoaded,
                 onExit: config.onExit,
                 entryFunction: window.MuseScoreStudio_entry, // from MuseScoreStudio.js
                 containerElements: [config.screen],
             }
-        });
+        }
 
-        setupInternalCallbacks(instance)
-        setupWorker(instance)
+        setupWorker(Module)
+        setupInternalCallbacks(Module)
+
+        const instance = await qtLoad(Module);
 
         return instance;
     },

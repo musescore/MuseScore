@@ -21,30 +21,23 @@
  */
 #pragma once
 
-#include <queue>
-#include <mutex>
-#include <thread>
-
 #include "../../irpcchannel.h"
 
 namespace muse::audio::rpc {
-class GeneralRpcChannel : public IRpcChannel
+class WebRpcChannel : public IRpcChannel
 {
 public:
-    GeneralRpcChannel() = default;
+    WebRpcChannel() = default;
 
     void setupOnMain() override;
     void setupOnWorker() override;
 
     void process() override;
 
-    // IRpcChannel
-    // msgs
     void send(const Msg& msg, const Handler& onResponse = nullptr) override;
     void onMethod(Method method, Handler h) override;
     void listenAll(Handler h) override;
 
-    // stream
     void addStream(std::shared_ptr<IRpcStream> s) override;
     void removeStream(StreamId id) override;
     void sendStream(const StreamMsg& msg) override;
@@ -52,29 +45,21 @@ public:
 
 private:
 
-    using MsgQueue = std::queue<Msg>;
-    using StreamMsgQueue = std::queue<StreamMsg>;
+    void receive(const ByteArray& data);
+    void receive(const Msg& msg);
+    void receive(const StreamMsg& msg);
 
     struct RpcData {
-        std::mutex mutex;
-
         // msgs
-        MsgQueue queue;
         Handler listenerAll;
         std::map<Method, Handler> onMethods;
         std::map<CallId, Handler> onResponses;
 
         // stream
         std::map<StreamId, std::shared_ptr<IRpcStream> > streams;
-        StreamMsgQueue streamQueue;
         std::map<StreamId, StreamHandler> onStreams;
     };
 
-    bool isWorkerThread() const;
-    void receive(RpcData& from, RpcData& to) const;
-
-    std::thread::id m_mainThreadID;
-    RpcData m_workerRpcData;
-    RpcData m_mainRpcData;
+    RpcData m_data;
 };
 }
