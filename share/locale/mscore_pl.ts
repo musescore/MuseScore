@@ -12889,7 +12889,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="854"/>
         <source>Special symbols in header/footer</source>
-        <translation>Symbole specjalne w nagłówku/stopce:</translation>
+        <translation>Symbole specjalne w nagłówku/stopce</translation>
     </message>
 </context>
 <context>
@@ -20454,12 +20454,12 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3384"/>
         <source>Shortest note:</source>
-        <translation>Wartość najkrótsza:</translation>
+        <translation>Najkrótsza nuta:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3391"/>
         <source>Shortest note</source>
-        <translation>Wartość najkrótsza</translation>
+        <translation>Najkrótsza nuta</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3394"/>
