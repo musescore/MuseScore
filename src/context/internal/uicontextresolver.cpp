@@ -201,8 +201,6 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
 
     if (CTX_NOTATION_OPENED == scContext) {
         return matchWithCurrent(context::UiCtxProjectOpened);
-    } else if (CTX_NOTATION_OPENED_PRIORITY == scContext) {
-        return matchWithCurrent(context::UiCtxProjectOpened);
     } else if (CTX_NOTATION_FOCUSED == scContext) {
         return matchWithCurrent(context::UiCtxProjectFocused);
     } else if (CTX_NOT_NOTATION_FOCUSED == scContext) {
