@@ -659,8 +659,6 @@ void LayoutPanelTreeModel::endActiveDrag()
 
     updateSystemObjectLayers();
     initPartOrders();
-
-    emit layoutChanged();
 }
 
 void LayoutPanelTreeModel::changeVisibilityOfSelectedRows(bool visible)
