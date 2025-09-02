@@ -5903,6 +5903,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                         if (muse::contains(validMusicXmlDynamics, text)) {
                             m_xml.tagRaw(text);
                         } else {
+                            // TODO: this is wrong, should be <words>
                             m_xml.tag("other-dynamics", text);
                         }
                         text.clear();
