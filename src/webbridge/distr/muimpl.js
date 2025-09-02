@@ -23,6 +23,28 @@ function setupInternalCallbacks(Module) {
     }
 }
 
+function setupWorker(Module)
+{
+    Module.rpcChannel = new MessageChannel();
+    const { port1, port2 } = Module.rpcChannel;
+    port1.onmessage = function(event) {
+      console.log("From worker:", event.data);
+    };
+
+    Module.worker = new Worker("distr/muworker.js")
+
+    // Initialize the worker.
+    var museAudioUrl = new URL("MuseAudio.js", window.location) + "";
+
+    Module.worker.postMessage({
+    type: 'INITIALIZE_WORKER',
+    port: port2,
+    options: {
+        museAudioUrl: museAudioUrl
+    }
+    }, [port2]);
+}
+
 const MuImpl = {
 
     loadModule: async function(config) {
@@ -36,6 +58,7 @@ const MuImpl = {
         });
 
         setupInternalCallbacks(instance)
+        setupWorker(instance)
 
         return instance;
     },
