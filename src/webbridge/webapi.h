@@ -42,9 +42,8 @@ public:
     void init();
     void deinit();
 
-    void onclickTest1(int num);
-
     void load(const void* source, unsigned int len);
+    void startAudioProcessing();
 
 private:
 

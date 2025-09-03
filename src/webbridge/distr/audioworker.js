@@ -36,16 +36,17 @@ let MuseAudio = {
 function initialize(data)
 {
   // Rpc
-  MuseAudio.mainPort = data.port;
-  MuseAudio.rpcSend = function(data) {
+  MuseAudio.mainPort = data.mainPort;
+  MuseAudio.main_worker_rpcSend = function(data) {
       MuseAudio.mainPort.postMessage(data)
   }
 
-  MuseAudio.rpcListen = function(data) {} // will be overridden
+  MuseAudio.main_worker_rpcListen = function(data) {} // will be overridden
   MuseAudio.mainPort.onmessage = function(event) {
-    MuseAudio.rpcListen(event.data)
+    MuseAudio.main_worker_rpcListen(event.data)
   }
 
+  // Load wasm
   try {
     console.log("[worker]", "try importScripts:", data.options.museAudioUrl)
     importScripts(data.options.museAudioUrl);
@@ -53,7 +54,8 @@ function initialize(data)
     console.error("ERROR:", error)
   }
 
-    try {
+  // Init wasm
+  try {
     console.log("[worker]", "call entry: MuseAudio_entry")
     MuseAudio_entry(MuseAudio);
   } catch (error) {
