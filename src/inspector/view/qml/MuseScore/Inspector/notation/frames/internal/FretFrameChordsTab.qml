@@ -59,6 +59,8 @@ FocusableItem {
             isMovingUpAvailable: view.model ? view.model.isMovingUpAvailable : false
             isMovingDownAvailable: view.model ? view.model.isMovingDownAvailable : false
 
+            visible: !view.isEmpty
+
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart
 
@@ -75,6 +77,8 @@ FocusableItem {
 
         FretFrameChordsView {
             id: view
+
+            property bool isEmpty: count === 0
 
             width: parent.width
             height: Math.min(contentHeight, 400)
@@ -95,6 +99,19 @@ FocusableItem {
             onClearSelectionRequested: {
                 view.model.clearSelection()
             }
+        }
+
+        StyledTextLabel {
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            height: implicitHeight
+
+            text: qsTrc("inspector", "Add chord symbols to your score and they’ll automatically appear in the legend.")
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+
+            visible: view.isEmpty
         }
     }
 }
