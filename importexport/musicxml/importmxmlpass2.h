@@ -418,6 +418,8 @@ private:
 
       QColor _color;
       Hairpin* _inferredHairpinStart = nullptr;
+      QColor _dynamicsColor;
+      QString _dynamicsPlacement;
       QStringList _dynamicsList;
       QString _enclosure;
       QString _wordsText;

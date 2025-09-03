@@ -5330,7 +5330,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
                                     if (set.contains(text))
                                           _xml.tagE(text);
                                     else
-                                          _xml.tag("other-dynamics", text);
+                                          _xml.tag("other-dynamics", text); // TODO: this is wrong, should be <words>
                                     text.clear();
                                     }
                               inDynamicsSym = false;

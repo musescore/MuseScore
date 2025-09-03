@@ -3554,18 +3554,28 @@ void MusicXMLParserDirection::direction(const QString& partId,
       // do dynamics
       // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
       for (QStringList::Iterator it = _dynamicsList.begin(); it != _dynamicsList.end(); ++it ) {
-            Dynamic* dyn = new Dynamic(_score);
-            dyn->setDynamicType(*it);
+            Dynamic* dynamic = new Dynamic(_score);
+            dynamic->setDynamicType(*it);
+            colorItem(dynamic, _dynamicsColor);
+            if (_enclosure == "circle")
+                  dynamic->setFrameType(FrameType::CIRCLE);
+            else if (_enclosure == "none")
+                  dynamic->setFrameType(FrameType::NO_FRAME);
+            else if (_enclosure == "rectangle") {
+                  dynamic->setFrameType(FrameType::SQUARE);
+                  dynamic->setFrameRound(0);
+                  }
+
             if (!_dynaVelocity.isEmpty()) {
                   int dynaValue = round(_dynaVelocity.toDouble() * 0.9);
                   if (dynaValue > 127)
                         dynaValue = 127;
                   else if (dynaValue < 0)
                         dynaValue = 0;
-                  dyn->setVelocity(dynaValue);
+                  dynamic->setVelocity(dynaValue);
                   }
 
-            dyn->setVisible(_visible);
+            dynamic->setVisible(_visible);
 
             QString dynamicsPlacement = placement();
             // Case-based defaults
@@ -3589,7 +3599,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + _offset, _isBold);
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dynamic, track, dynamicsPlacement, measure, tick + _offset, _isBold);
             delayedDirections.push_back(delayedDirection);
             }
 
@@ -3873,6 +3883,9 @@ void MusicXMLParserDirection::swing()
 
 void MusicXMLParserDirection::dynamics()
       {
+      _dynamicsColor = _e.attributes().value("color").toString();
+      _dynamicsPlacement = _e.attributes().value("placement").toString();
+
       while (_e.readNextStartElement()) {
             if (_e.name() == "other-dynamics")
                   _dynamicsList.push_back(_e.readElementText());
@@ -8663,7 +8676,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
 
       // more than one dynamic ???
       // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
-      // TODO remove duplicate code (see MusicXml::direction)
+      // TODO: remove duplicate code (see MusicXml::direction)
       for (const QString& d : qAsConst(_dynamicsList)) {
             Dynamic* dynamic = new Dynamic(_score);
             dynamic->setDynamicType(d);
