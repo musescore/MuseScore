@@ -42,7 +42,7 @@ public:
 
     void init();
 
-    AudioWorkerConfig workerConfig() const;
+    AudioWorkerConfig workerConfig() const override;
     void onWorkerConfigChanged();
 
     std::vector<std::string> availableAudioApiList() const override;
