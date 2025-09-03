@@ -270,7 +270,8 @@ int main(int argc, char* argv[])
         int64_t val1_4 = -42;    // regular int64_t
         uint64_t val1_5 = 124;   // positive fixint
         uint64_t val1_6 = 348;   // regular uint64_t
-        Packer::pack(data, val1_1, val1_2, val1_3, val1_4, val1_5, val1_6);
+        uint64_t val1_7 = static_cast<uint64_t>(-1); //high-order bytes
+        Packer::pack(data, val1_1, val1_2, val1_3, val1_4, val1_5, val1_6, val1_7);
 
         int64_t val2_1 = 0;
         int64_t val2_2 = 0;
@@ -278,7 +279,8 @@ int main(int argc, char* argv[])
         int64_t val2_4 = 0;
         uint64_t val2_5 = 0;
         uint64_t val2_6 = 0;
-        bool ok = UnPacker::unpack(data, val2_1, val2_2, val2_3, val2_4, val2_5, val2_6);
+        uint64_t val2_7 = 0;
+        bool ok = UnPacker::unpack(data, val2_1, val2_2, val2_3, val2_4, val2_5, val2_6, val2_7);
 
         assert(ok);
         assert(val1_1 == val2_1);
@@ -287,6 +289,7 @@ int main(int argc, char* argv[])
         assert(val1_4 == val2_4);
         assert(val1_5 == val2_5);
         assert(val1_6 == val2_6);
+        assert(val1_7 == val2_7);
     }
 
     // float, double
