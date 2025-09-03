@@ -3516,7 +3516,8 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)
                         || (et == ElementType::VOLTA)
-                        || (et == ElementType::GRADUAL_TEMPO_CHANGE)) {
+                        || (et == ElementType::GRADUAL_TEMPO_CHANGE)
+                        || (et == ElementType::PLAY_COUNT_TEXT)) {
                         writeSystem = (e1->track() == track); // always show these on appropriate staves
                     }
                 }
