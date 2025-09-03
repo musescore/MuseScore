@@ -28,6 +28,8 @@ namespace muse::audio {
 class AudioConfigurationStub : public IAudioConfiguration
 {
 public:
+    AudioWorkerConfig workerConfig() const override;
+
     std::vector<std::string> availableAudioApiList() const override;
 
     std::string currentAudioApi() const override;

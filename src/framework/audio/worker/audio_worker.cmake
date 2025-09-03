@@ -21,8 +21,7 @@
 include(GetPlatformInfo)
 
 set(AUDIO_WORKER_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/audioworker.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/audioworker.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudioworker.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioworkerconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
@@ -141,6 +140,20 @@ else ()
     set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/fx/reverb/simdtypes_scalar.h
         )
+endif()
+
+if(OS_IS_WASM)
+    set(AUDIO_COMMON_SRC
+        ${AUDIO_COMMON_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.h
+    )
+else()
+    set(AUDIO_COMMON_SRC
+        ${AUDIO_COMMON_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.h
+    )
 endif()
 
 set(AUDIO_WORKER_LINK )

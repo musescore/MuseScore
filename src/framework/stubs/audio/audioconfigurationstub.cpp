@@ -24,6 +24,11 @@
 using namespace muse::audio;
 using namespace muse;
 
+AudioWorkerConfig AudioConfigurationStub::workerConfig() const
+{
+    return {};
+}
+
 std::vector<std::string> AudioConfigurationStub::availableAudioApiList() const
 {
     return {};

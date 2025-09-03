@@ -13,18 +13,16 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
     }
 
     process(inputs, outputs, parameters) {
-        // inputs — массив буферов входящего аудиопотока
-        // outputs — массив буферов выходящего аудиопотока
+
         const input = inputs[0];
         const output = outputs[0];
 
         for (let channel = 0; channel < input.length; ++channel) {
             for (let i = 0; i < input[channel].length; ++i) {
-            // Например, простая амплитудная обработка
-            output[channel][i] = input[channel][i] * 0.8; // Уменьшаем громкость на 20%
+                output[channel][i] = input[channel][i] * 0.8; 
             }
         }
-        return true; // Возвращаем true, чтобы продолжить обработку
+        return true; 
     }
 
     onMessageFromMain(event) {
