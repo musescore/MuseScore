@@ -2743,7 +2743,8 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isHarpPedalDiagram()
                    && !e->isPlayTechAnnotation()
                    && !e->isCapo()
-                   && !e->isStringTunings()) {
+                   && !e->isStringTunings()
+                   && !e->isPlayCountText()) {
             // annotations added here are candidates for collision detection
             s.add(e->shape().translate(e->pos() + e->staffOffset()));
         }
