@@ -18,6 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+include(GetPlatformInfo)
+
 set(AUDIO_MAIN_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiomodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audiomodule.h

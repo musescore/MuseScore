@@ -100,6 +100,8 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
             console.log("[html] onProjectSaved len: ", data.length)
           }   
         })
+
+        document.addEventListener('click', window.muapi.startAudioProcessing, { once: true });
     } catch (e) {
         console.error(e);
         console.error(e.stack);

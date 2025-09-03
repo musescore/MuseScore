@@ -5,6 +5,9 @@ const MuApi = {
     // Load score
     loadScoreFile: MuImpl.loadScoreFile,
     loadScoreData: MuImpl.loadScoreData,
+
+    // Start audio
+    startAudioProcessing: MuImpl.startAudioProcessing.bind(MuImpl),
 }
 
 async function createMuApi(config) {

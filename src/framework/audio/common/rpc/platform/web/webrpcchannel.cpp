@@ -52,7 +52,7 @@ static void rpcSend(const uint8_t* data, size_t size)
         emscripten::typed_memory_view(size, data)
         );
 
-    emscripten::val::module_property("rpcSend")(jsArray);
+    emscripten::val::module_property("main_worker_rpcSend")(jsArray);
 }
 
 static void rpcListen(const emscripten::val& data)
@@ -78,7 +78,7 @@ static void rpcListen(const emscripten::val& data)
 }
 
 EMSCRIPTEN_BINDINGS(RpcChannel) {
-    function("rpcListen", &rpcListen);
+    function("main_worker_rpcListen", &rpcListen);
 }
 
 void WebRpcChannel::setupOnMain()
