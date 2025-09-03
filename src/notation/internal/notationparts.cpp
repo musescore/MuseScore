@@ -283,8 +283,6 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
 
     if (visible) {
         score()->removeSystemLocksContainingMMRests();
-    } else if (score()->visibleStavesCount() == 0) {
-        score()->undoRemoveAllLocks();
     }
 
     apply();
@@ -536,8 +534,6 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 
     if (visible) {
         score()->removeSystemLocksContainingMMRests();
-    } else if (score()->visibleStavesCount() == 0) {
-        score()->undoRemoveAllLocks();
     }
 
     apply();
