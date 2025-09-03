@@ -44,6 +44,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
+    bool allowTimeAnchor() const override { return false; }
+    RectF drag(EditData& ed) override;
+
 private:
     friend class Factory;
     PlayCountText(Segment* parent, TextStyleType tid = TextStyleType::REPEAT_PLAY_COUNT);
