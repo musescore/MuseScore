@@ -148,6 +148,8 @@ public:
     void setPlayCount(int playCount) { m_playCount = playCount; }
     int playCount() const { return m_playCount; }
 
+    PlayCountText* playCountText() const;
+
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
