@@ -266,7 +266,7 @@ $SUDO apt-get install -y --no-install-recommends automake
 echo "download gcc g++"
 case "$PACKARCH" in
   x86_64)
-    gcc_version="9"
+    gcc_version="10"
     $SUDO apt-get install -y --no-install-recommends "g++-${gcc_version}"
     $SUDO update-alternatives \
       --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
