@@ -704,11 +704,6 @@ void BarLine::endEditDrag(EditData& ed)
     bed->yoff2 = 0.0;
 }
 
-void BarLine::undoUnlink()
-{
-    EngravingItem::undoUnlink();
-}
-
 //---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
@@ -753,10 +748,6 @@ void BarLine::add(EngravingItem* e)
         setGenerated(false);
         e->added();
         break;
-    case ElementType::PLAY_COUNT_TEXT: {
-        setGenerated(false);
-    }
-    break;
     default:
         LOGD("BarLine::add() not impl. %s", e->typeName());
         delete e;

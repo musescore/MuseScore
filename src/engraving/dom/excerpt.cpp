@@ -27,7 +27,6 @@
 #include "containers.h"
 
 #include "dom/partialtie.h"
-#include "dom/playcounttext.h"
 #include "style/style.h"
 
 #include "barline.h"
