@@ -1053,8 +1053,12 @@ const CapoParams& Staff::capo(const Fraction& tick) const
     return m_capoMap.at(*it);
 }
 
-void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
+void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params, bool ignoreNotationUpdate)
 {
+    if (ignoreNotationUpdate) {
+        m_capoMap.insert_or_assign(tick.ticks(), params);
+        return;
+    }
     auto isNeedUpdate = [](const CapoParams& oldParams, const CapoParams& newParams) -> bool {
         return !(oldParams.active == newParams.active
                  && oldParams.transposeMode == newParams.transposeMode
@@ -1073,9 +1077,13 @@ void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
         if (result.first != m_capoMap.begin()) {
             const auto prevIt = std::prev(result.first);
             CapoParams oldParams = prevIt->second;
-            EditCapo::updateNotationForCapoChange(oldParams, params, this, startTick, endTick);
+            // We don't need to apply any changes if the previous capo is inactive
+            if (oldParams.active) {
+                EditCapo::updateNotationForCapoChange(oldParams, params, this, startTick, endTick);
+            }
             // This is an undo action
-        } else if (CapoParams::TransposeMode::PLAYBACK_ONLY != params.transposeMode) {
+        } else if (CapoParams::TransposeMode::PLAYBACK_ONLY != params.transposeMode
+                   && params.active) {
             CapoParams oldParams;
             oldParams.transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY;
             oldParams.fretPosition = params.fretPosition;
@@ -1120,6 +1128,10 @@ void Staff::removeCapoParams(const mu::engraving::Fraction& tick)
 
     if (it != m_capoMap.begin()) {
         revertParams = std::prev(it)->second;
+        // If not active, treat as PLAYBACK_ONLY
+        if (!revertParams.active) {
+            revertParams.transposeMode = CapoParams::TransposeMode::PLAYBACK_ONLY;
+        }
     }
     EditCapo::updateNotationForCapoChange(oldParams, revertParams, this, startTick, endTick);
 

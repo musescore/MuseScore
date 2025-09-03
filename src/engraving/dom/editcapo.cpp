@@ -68,6 +68,11 @@ void EditCapo::applyCapoTranspose(int startTick, int endTick, UpdateCtx& ctx)
                     } else {
                         update(note, ctx);
                     }
+                    if (const GuitarBend* bend = note->bendFor(); bend) {
+                        if (GuitarBendType::BEND == bend->type()) {
+                            GuitarBend::fixNotesFrettingForStandardBend(bend->startNote(), bend->endNote());
+                        }
+                    }
                 }
 
                 for (Chord* g: chord->graceNotes()) {

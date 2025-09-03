@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <programVersion>4.7.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>GJK8qQF2Sm_hl2l4E4ICsM</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-08-06</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="electric-guitar">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <Staff>
+        <eid>QvWxEiYMJ_ZYDFMKu66VL</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>G8vb</defaultClef>
+        </Staff>
+      <Staff>
+        <eid>cmTjwD1Q0OB_L7TJ0F3v7MG</eid>
+        <linkedTo>QvWxEiYMJ_ZYDFMKu66VL</linkedTo>
+        <StaffType group="tablature">
+          <name>tab6StrSimple</name>
+          <lines>6</lines>
+          <lineDistance>1.5</lineDistance>
+          <stemless>1</stemless>
+          <timesig>0</timesig>
+          <durations>0</durations>
+          <durationFontName>MuseScore Tab Modern</durationFontName>
+          <durationFontSize>15</durationFontSize>
+          <durationFontY>0</durationFontY>
+          <fretUseTextStyle>1</fretUseTextStyle>
+          <fretTextStyle>tab_fret_number</fretTextStyle>
+          <linesThrough>0</linesThrough>
+          <minimStyle>0</minimStyle>
+          <onLines>1</onLines>
+          <showRests>0</showRests>
+          <stemsDown>1</stemsDown>
+          <stemsThrough>0</stemsThrough>
+          <upsideDown>0</upsideDown>
+          <useNumbers>1</useNumbers>
+          </StaffType>
+        <defaultClef>G8vb</defaultClef>
+        </Staff>
+      <trackName>Electric Guitar</trackName>
+      <Instrument id="electric-guitar">
+        <longName>Electric Guitar</longName>
+        <shortName>El. Guit.</shortName>
+        <trackName>Electric Guitar</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>88</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>86</maxPitchA>
+        <instrumentId>pluck.guitar.electric</instrumentId>
+        <clef>G8vb</clef>
+        <clef staff="2">G8vb</clef>
+        <StringData>
+          <frets>24</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Channel name="open">
+          <program value="27"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="harmonics">
+          <program value="31"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="distortion">
+          <program value="30"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="overdriven">
+          <program value="29"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <eid>IZ6CYTzua1C_t0MU2MN0Q8B</eid>
+        <Text>
+          <eid>PoMlrvqi61I_1+K6Ms14RSD</eid>
+          <style>title</style>
+          <text>Untitled score</text>
+          </Text>
+        <Text>
+          <eid>4ndnNUj6iPM_EOHbmK4adaO</eid>
+          <style>subtitle</style>
+          <text>Subtitle</text>
+          </Text>
+        <Text>
+          <eid>zSSZdXV23EL_l5GlPY7NdGB</eid>
+          <style>composer</style>
+          <text>Composer / arranger</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <eid>MU71kQ6RTFH_sZF3UOi3zbN</eid>
+        <voice>
+          <KeySig>
+            <eid>LhpyAsW7/+F_Hz+AJc+QtDE</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>icNxSrPEdKD_QkM0aA1JEkF</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Capo>
+            <transposeMode>1</transposeMode>
+            <eid>YHeenkRwnVF_nMF212ZArRM</eid>
+            <style>staff</style>
+            <text>Capo 1</text>
+            </Capo>
+          <Chord>
+            <eid>RK6LIwVeapI_RO6UhhKXLHH</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>cFM7EvBTd3B_aJQr0qUN5HP</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>PmFghdqN1VF_mE/sDy5iWjK</eid>
+                </Accidental>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>vdD/eSVxaq_oQfp8+sX1yG</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>bCxlkCAb0JK_WMVl7yJrcZM</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>Q9p6b8PUqxO_04Q4GAopGCG</eid>
+            <linkedTo>LhpyAsW7/+F_Hz+AJc+QtDE</linkedTo>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>OIufXBedlOH_h3g2LmbBYXF</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>3ixwMK0tonG_0ds1kSeRPKE</eid>
+            <linkedTo>RK6LIwVeapI_RO6UhhKXLHH</linkedTo>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>/zTAR9xd7mG_6ljaHeRSRGI</eid>
+              <linkedTo>cFM7EvBTd3B_aJQr0qUN5HP</linkedTo>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>/2P6OCfhU/G_D648RJLMaJ</eid>
+            <linkedTo>vdD/eSVxaq_oQfp8+sX1yG</linkedTo>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>6FtZOEra0UB_iQU3ihAoQoC</eid>
+            <linkedTo>bCxlkCAb0JK_WMVl7yJrcZM</linkedTo>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

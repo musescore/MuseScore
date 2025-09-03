@@ -6131,7 +6131,7 @@ void Score::updateSwing()
 //   updateCapo
 //---------------------------------------------------------
 
-void Score::updateCapo()
+void Score::updateCapo(bool ignoreNotationUpdate /* = false */)
 {
     Measure* fm = firstMeasure();
     if (!fm) {
@@ -6151,7 +6151,7 @@ void Score::updateCapo()
             }
 
             for (Staff* staff : e->staff()->staffList()) {
-                staff->insertCapoParams(segmentTick, toCapo(e)->params());
+                staff->insertCapoParams(segmentTick, toCapo(e)->params(), ignoreNotationUpdate);
             }
         }
     }
