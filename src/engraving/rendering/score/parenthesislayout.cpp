@@ -417,18 +417,26 @@ void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutD
     double extension = 0.1 * spatium * (parent->size() / 10.0);
     double bottom = parent->baseLine() + extension;
 
+    double defaultCapHeight = muse::draw::FontMetrics::capHeight(parent->font());
+
     double topCapHeight = DBL_MAX;
     const TextSegment* rootTextSeg = nullptr;
-    for (const HarmonyRenderItem* renderItem : parent->ldata()->renderItemList.value()) {
-        if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
-            topCapHeight = std::min(topCapHeight, ts->pos().y() - ts->capHeight());
+    if (!parent->ldata()->renderItemList.value().empty()) {
+        for (const HarmonyRenderItem* renderItem : parent->ldata()->renderItemList.value()) {
+            if (const TextSegment* ts = dynamic_cast<const TextSegment*>(renderItem)) {
+                topCapHeight = std::min(topCapHeight, ts->pos().y() - ts->capHeight());
 
-            rootTextSeg = !rootTextSeg ? ts : rootTextSeg;
+                rootTextSeg = !rootTextSeg ? ts : rootTextSeg;
+            }
         }
+    } else {
+        topCapHeight = defaultCapHeight;
     }
+
     double top = topCapHeight - extension;
     double height = bottom - top;
-    double rootCapHeight = rootTextSeg->capHeight();
+
+    double rootCapHeight = rootTextSeg ? rootTextSeg->capHeight() : defaultCapHeight;
     double scale = (height - 2 * extension) / rootCapHeight;
 
     ldata->setMag(parent->mag());

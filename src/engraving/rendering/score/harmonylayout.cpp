@@ -68,7 +68,7 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
 
     ldata->setPos(positionPoint);
 
-    if (!item->cursor()->editing()) {
+    if (!item->cursor()->editing() && !ldata->renderItemList.value().empty()) {
         ParenthesisLayout::layoutParentheses(item, ctx);
     }
 }
