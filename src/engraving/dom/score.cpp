@@ -5798,6 +5798,18 @@ void Score::removeSystemObjectStaff(Staff* staff)
     muse::remove(m_systemObjectStaves, staff);
 }
 
+const std::vector<Staff*> Score::systemObjectStavesWithTopStaff() const
+{
+    std::vector<Staff*> result;
+    if (Staff* topStaff = staff(0)) {
+        result.push_back(topStaff);
+    }
+
+    muse::join(result, systemObjectStaves());
+
+    return result;
+}
+
 const std::vector<Part*>& Score::parts() const
 {
     return m_parts;

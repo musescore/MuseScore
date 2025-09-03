@@ -356,21 +356,10 @@ void NotationParts::listenUndoStackChanges()
 
 void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes)
 {
-    const auto systemObjectStavesWithTopStaff = [this]() {
-        std::vector<Staff*> result;
-        if (Staff* topStaff = score()->staff(0)) {
-            result.push_back(topStaff);
-        }
-
-        muse::join(result, score()->systemObjectStaves());
-
-        return result;
-    };
-
     const bool partsChanged = m_parts != score()->parts();
     m_parts = score()->parts();
 
-    std::vector<Staff*> newSystemObjectStaves = systemObjectStavesWithTopStaff();
+    std::vector<Staff*> newSystemObjectStaves = score()->systemObjectStavesWithTopStaff();
     const bool systemObjectStavesChanged = m_systemObjectStaves != newSystemObjectStaves;
     m_systemObjectStaves = std::move(newSystemObjectStaves);
 

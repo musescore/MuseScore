@@ -530,10 +530,9 @@ void BarLine::setSelected(bool f)
         return;
     }
 
-    // TODO select with barline
-    // if (playCountText()) {
-    // playCountText()->setSelected(f);
-    // }
+    if (playCountText()) {
+        playCountText()->setSelected(f);
+    }
     EngravingItem::setSelected(f);
 }
 
@@ -900,6 +899,17 @@ EngravingItem* BarLine::propertyDelegate(Pid pid)
     }
 
     return EngravingItem::propertyDelegate(pid);
+}
+
+PlayCountText* BarLine::playCountText() const
+{
+    Segment* endBarSeg = segment();
+    if (!endBarSeg) {
+        return nullptr;
+    }
+    PlayCountText* playCountText = toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, track(), track()));
+
+    return playCountText;
 }
 
 //---------------------------------------------------------
