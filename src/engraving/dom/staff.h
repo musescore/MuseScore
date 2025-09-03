@@ -167,7 +167,7 @@ public:
     void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { m_swingList.insert({ tick.ticks(), sp }); }
 
     const CapoParams& capo(const Fraction&) const;
-    void insertCapoParams(const Fraction& tick, const CapoParams& params);
+    void insertCapoParams(const Fraction& tick, const CapoParams& params, bool ignoreNotationUpdate);
     void removeCapoParams(const Fraction& tick);
 
     //==== staff type helper function
