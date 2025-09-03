@@ -35,6 +35,7 @@ Item {
     //  next(depending on the limitation) to the pressed position.
     width: 0
     height: 0
+    visible: false
 
     function show(position: point, items) {
         if (!items) {
