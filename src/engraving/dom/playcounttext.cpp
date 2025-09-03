@@ -91,6 +91,12 @@ PropertyValue PlayCountText::propertyDefault(Pid propertyId) const
     return TextBase::propertyDefault(propertyId);
 }
 
+RectF PlayCountText::drag(EditData& ed)
+{
+    // Not TextBase::drag because we don't allow reanchoring on drag
+    return EngravingItem::drag(ed);
+}
+
 mu::engraving::BarLine* mu::engraving::PlayCountText::barline() const
 {
     Segment* seg = segment();
