@@ -903,7 +903,15 @@ void TRead::read(SystemText* t, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(PlayCountText* t, XmlReader& xml, ReadContext& ctx)
 {
-    read(static_cast<TextBase*>(t), xml, ctx);
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (TRead::readProperty(t, tag, xml, ctx, Pid::PLAY_COUNT_TEXT_SETTING)) {
+        } else if (TRead::readProperty(t, tag, xml, ctx, Pid::PLAY_COUNT_TEXT)) {
+        } else if (!readProperties(static_cast<TextBase*>(t), xml, ctx)) {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)
@@ -2034,10 +2042,6 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
                 TRead::read(image, e, ctx);
                 b->add(image);
             }
-        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT_SETTING)) {
-        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT)) {
-        } else if (tag == "playCount") {
-            b->setPlayCount(e.readInt());
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
