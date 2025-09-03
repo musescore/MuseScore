@@ -521,7 +521,7 @@ void LayoutPanelTreeModel::moveSelectedRowsUp()
         return;
     }
 
-    std::sort(selectedIndexList.begin(), selectedIndexList.end(), [](QModelIndex f, QModelIndex s) -> bool {
+    std::sort(selectedIndexList.begin(), selectedIndexList.end(), [](const QModelIndex& f, const QModelIndex& s) -> bool {
         return f.row() < s.row();
     });
 
@@ -1112,38 +1112,74 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
 
     TRACEFUNC;
 
+    auto selectIfNeed = [this](SystemObjectsLayerTreeItem* item, const int row) {
+        if (row != 0 && m_systemStaffToSelect == item->staff()->id()) {
+            m_selectionModel->select(createIndex(row, 0, item));
+            m_systemStaffToSelect = ID();
+        }
+    };
+
     m_shouldUpdateSystemObjectLayers = false;
 
-    // Create copy, because we're going to modify them
-    const INotationPartsPtr notationParts = m_masterNotation->notation()->parts();
-    std::vector<Staff*> newSystemObjectStaves = notationParts->systemObjectStaves();
+    const INotationPartsPtr masterParts = m_masterNotation->notation()->parts();
+    const std::vector<Staff*>& newSystemObjectStaves = masterParts->systemObjectStaves();
+    SystemObjectGroupsByStaff systemObjects = collectSystemObjectGroups(newSystemObjectStaves);
+
+    std::vector<SystemObjectsLayerTreeItem*> existingSystemObjectLayers;
+
+    // Create new system object layers
+    for (const Staff* staff : newSystemObjectStaves) {
+        if (auto layer = findSystemObjectsLayerItemByStaff(staff)) {
+            existingSystemObjectLayers.push_back(layer);
+            continue;
+        }
+
+        const PartTreeItem* partItem = findPartItemByStaff(staff);
+        IF_ASSERT_FAILED(partItem) {
+            continue;
+        }
+
+        const int row = staff->hasSystemObjectsBelowBottomStaff() ? partItem->row() + 1 : partItem->row();
+
+        // Try to reuse already existing item
+        AbstractLayoutPanelTreeItem* existingItem = m_rootItem->childAtRow(row);
+        if (existingItem && existingItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            auto existingLayer = static_cast<SystemObjectsLayerTreeItem*>(existingItem);
+
+            if (!muse::contains(newSystemObjectStaves, const_cast<Staff*>(existingLayer->staff()))) {
+                existingLayer->init(staff, systemObjects[staff]);
+                selectIfNeed(existingLayer, row);
+                continue;
+            }
+        }
+
+        AbstractLayoutPanelTreeItem* newItem = buildSystemObjectsLayerItem(staff, systemObjects[staff]);
+        beginInsertRows(QModelIndex(), row, row);
+        m_rootItem->insertChild(newItem, row);
+        endInsertRows();
+
+        selectIfNeed(static_cast<SystemObjectsLayerTreeItem*>(newItem), row);
+    }
+
+    // Create copy, because we're going to modify it
     QList<AbstractLayoutPanelTreeItem*> children = m_rootItem->childItems();
 
     // Remove old system object layers
-    std::vector<const PartTreeItem*> partItems;
-    std::vector<SystemObjectsLayerTreeItem*> existingSystemObjectLayers;
-
     for (AbstractLayoutPanelTreeItem* item : children) {
         if (item->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-            if (item->type() == LayoutPanelItemType::PART) {
-                partItems.push_back(static_cast<const PartTreeItem*>(item));
-            }
             continue;
         }
 
-        auto layerItem = static_cast<SystemObjectsLayerTreeItem*>(item);
-        if (muse::remove(newSystemObjectStaves, const_cast<Staff*>(layerItem->staff()))) {
-            existingSystemObjectLayers.push_back(layerItem);
+        auto layerItem = static_cast<const SystemObjectsLayerTreeItem*>(item);
+        if (muse::contains(newSystemObjectStaves, const_cast<Staff*>(layerItem->staff()))) {
             continue;
         }
 
-        int row = layerItem->row();
+        const int row = item->row();
         beginRemoveRows(QModelIndex(), row, row);
         m_rootItem->removeChildren(row, 1, false);
         endRemoveRows();
     }
-
-    SystemObjectGroupsByStaff systemObjects = collectSystemObjectGroups(notationParts->systemObjectStaves());
 
     // Update position of existing layers if changed
     for (SystemObjectsLayerTreeItem* layerItem : existingSystemObjectLayers) {
@@ -1165,30 +1201,23 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
         layerItem->setSystemObjects(systemObjects[layerItem->staff()]);
     }
 
-    // Create new system object layers
-    for (const Staff* staff : newSystemObjectStaves) {
-        for (const PartTreeItem* partItem : partItems) {
-            if (staff->part() != partItem->part()) {
-                continue;
-            }
+    updateIsAddingSystemMarkingsAvailable();
+}
 
-            AbstractLayoutPanelTreeItem* newItem = buildSystemObjectsLayerItem(staff, systemObjects[staff]);
-            int row = staff->hasSystemObjectsBelowBottomStaff() ? partItem->row() + 1 : partItem->row();
+SystemObjectsLayerTreeItem* LayoutPanelTreeModel::findSystemObjectsLayerItemByStaff(const Staff* staff) const
+{
+    for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
+        if (item->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
+            continue;
+        }
 
-            beginInsertRows(QModelIndex(), row, row);
-            m_rootItem->insertChild(newItem, row);
-            endInsertRows();
-
-            if (row != 0 && m_systemStaffToSelect == staff->id()) {
-                m_selectionModel->select(createIndex(row, 0, newItem));
-                m_systemStaffToSelect = ID();
-            }
-
-            break;
+        auto layer = static_cast<SystemObjectsLayerTreeItem*>(item);
+        if (layer->staff() == staff) {
+            return layer;
         }
     }
 
-    updateIsAddingSystemMarkingsAvailable();
+    return nullptr;
 }
 
 const PartTreeItem* LayoutPanelTreeModel::findPartItemByStaff(const Staff* staff) const
