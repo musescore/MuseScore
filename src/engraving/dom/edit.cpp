@@ -5521,14 +5521,14 @@ void Score::undoResetPlayCountTextSettings(BarLine* bl)
 
 void Score::undoUpdatePlayCountText(Measure* m)
 {
-    if (!m || !m->repeatEnd()) {
+    if (!m) {
         return;
     }
     const MStyle& _style = style();
     const bool showText = _style.styleB(Sid::repeatPlayCountShow);
     const bool singleRepeats = _style.styleB(Sid::repeatPlayCountShowSingleRepeats);
     const int playCount = m->repeatCount();
-    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true);
+    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true) && m->repeatEnd();
 
     Segment* endBarSeg = m->last(SegmentType::BarLineType);
     BarLine* topBl = endBarSeg ? toBarLine(endBarSeg->element(0)) : nullptr;
@@ -5536,43 +5536,18 @@ void Score::undoUpdatePlayCountText(Measure* m)
         return;
     }
 
-    auto blShowPlayCount = [endBarSeg, showPlayCount](Staff* staff) {
-        const track_idx_t track = staff2track(staff->idx());
-        const BarLine* bl = endBarSeg ? toBarLine(endBarSeg->element(track)) : nullptr;
-        return (showPlayCount && bl->playCountTextSetting() == AutoCustomHide::AUTO)
-               || bl->playCountTextSetting() == AutoCustomHide::CUSTOM;
-    };
-
-    // Find out if any are visible
-    bool visiblePlayCount = false;
-    for (Staff* staff : systemObjectStavesWithTopStaff()) {
-        visiblePlayCount |= blShowPlayCount(staff);
-    }
-
-    // At least one visible play count, create for all staves
-    PlayCountText* playCountText = toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0));
-    if (visiblePlayCount) {
-        if (!playCountText) {
-            playCountText = Factory::createPlayCountText(endBarSeg);
-            playCountText->setTrack(0);
-            playCountText->setParent(endBarSeg);
-            playCountText->setSelected(topBl->selected());
-            undoAddElement(playCountText);
+    PlayCountText* topPlayCountText = toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0));
+    if (showPlayCount) {
+        if (!topPlayCountText) {
+            topPlayCountText = Factory::createPlayCountText(endBarSeg);
+            topPlayCountText->setTrack(0);
+            topPlayCountText->setParent(endBarSeg);
+            topPlayCountText->setSelected(topBl->selected());
+            undoAddElement(topPlayCountText);
         }
     } else {
-        undoRemoveElement(playCountText);
+        undoRemoveElement(topPlayCountText);
         return;
-    }
-
-    // Set play count visibility
-    for (Staff* staff : systemObjectStavesWithTopStaff()) {
-        track_idx_t track = staff2track(staff->idx());
-        PlayCountText* playCountText = toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, track, track));
-        if (!playCountText) {
-            continue;
-        }
-
-        playCountText->mutldata()->setIsSkipDraw(blShowPlayCount(staff));
     }
 }
 

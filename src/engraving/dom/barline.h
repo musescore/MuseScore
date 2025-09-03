@@ -129,9 +129,6 @@ public:
     bool isTop() const;
     bool isBottom() const;
 
-    void setPlayCountTextSetting(const AutoCustomHide& v) { m_playCountTextSetting = v; }
-    AutoCustomHide playCountTextSetting() const { return m_playCountTextSetting; }
-
     int subtype() const override { return int(m_barLineType); }
     TranslatableString subtypeUserName() const override;
 
@@ -141,9 +138,6 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
     EngravingItem* propertyDelegate(Pid) override;
-
-    String playCountCustomText() const { return m_playCountCustomText; }
-    void setPlayCountCustomText(const String& v) { m_playCountCustomText = v; }
 
     void setPlayCount(int playCount) { m_playCount = playCount; }
     int playCount() const { return m_playCount; }
@@ -189,8 +183,6 @@ private:
 
     ElementList m_el;          ///< fermata or other articulations
 
-    AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
-    String m_playCountCustomText = u"";
     int m_playCount = -1;                 // For use during copy & paste
 };
 } // namespace mu::engraving

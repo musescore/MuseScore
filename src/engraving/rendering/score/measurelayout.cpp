@@ -1265,21 +1265,27 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
         if (!playCount) {
             continue;
         }
-        BarLine* bl = toBarLine(endBarSeg->element(staff2track(staffIdx)));
 
         String text;
-        if (bl->playCountTextSetting() == AutoCustomHide::AUTO) {
-            const int repeatCount = m->repeatCount();
-            text = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
-                repeatCount);
-        } else if (bl->playCountTextSetting() == AutoCustomHide::CUSTOM) {
-            text = bl->playCountCustomText();
+        const int repeatCount = m->repeatCount();
+        String defaultText = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+            repeatCount);
+
+        switch (playCount->playCountTextSetting()) {
+        case AutoCustomHide::AUTO:
+            text = defaultText;
+            break;
+        case AutoCustomHide::CUSTOM:
+            text = playCount->playCountCustomText();
             if (text.empty()) {
-                const int repeatCount = m->repeatCount();
-                text = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
-                    repeatCount);
+                text = defaultText;
             }
+            break;
+        case AutoCustomHide::HIDE:
+            playCount->mutldata()->setIsSkipDraw(true);
+            break;
         }
+
         if (!playCount->cursor()->editing()) {
             playCount->setXmlText(text);
         }

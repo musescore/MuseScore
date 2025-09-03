@@ -38,17 +38,24 @@ public:
 
     bool isEditable() const override { return true; }
     void endEdit(EditData&) override;
+    bool allowTimeAnchor() const override { return false; }
+    RectF drag(EditData& ed) override;
 
-    EngravingItem* propertyDelegate(Pid) override;
+    String playCountCustomText() const { return m_playCountCustomText; }
+    void setPlayCountCustomText(const String& v) { m_playCountCustomText = v; }
+
+    void setPlayCountTextSetting(const AutoCustomHide& v) { m_playCountTextSetting = v; }
+    AutoCustomHide playCountTextSetting() const { return m_playCountTextSetting; }
+
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
-    bool allowTimeAnchor() const override { return false; }
-    RectF drag(EditData& ed) override;
-
 private:
     friend class Factory;
     PlayCountText(Segment* parent, TextStyleType tid = TextStyleType::REPEAT_PLAY_COUNT);
+
+    AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
+    String m_playCountCustomText = u"";
 };
 } // namespace mu::engraving

@@ -26,6 +26,7 @@
 #include "dom/score.h"
 #include "dom/textedit.h"
 #include "dom/undo.h"
+#include "types/typesconv.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -56,39 +57,56 @@ void PlayCountText::endEdit(EditData& ed)
     TextBase::endEdit(ed);
 }
 
-EngravingItem* PlayCountText::propertyDelegate(Pid pid)
-{
-    if (pid == Pid::PLAY_COUNT_TEXT || pid == Pid::PLAY_COUNT_TEXT_SETTING) {
-        return barline();
-    }
-    return nullptr;
-}
-
 PropertyValue PlayCountText::getProperty(Pid id) const
 {
-    if (EngravingItem* e = const_cast<PlayCountText*>(this)->propertyDelegate(id)) {
-        return e->getProperty(id);
+    switch (id) {
+    case Pid::PLAY_COUNT_TEXT_SETTING:
+        return m_playCountTextSetting;
+    case Pid::PLAY_COUNT_TEXT:
+        return m_playCountCustomText;
+    default:
+        return TextBase::getProperty(id);
     }
-
-    return TextBase::getProperty(id);
 }
 
 bool PlayCountText::setProperty(Pid id, const PropertyValue& v)
 {
-    if (EngravingItem* e = propertyDelegate(id)) {
-        return e->setProperty(id, v);
-    }
+    Measure* m = segment()->measure();
 
-    return TextBase::setProperty(id, v);
+    switch (id) {
+    case Pid::PLAY_COUNT_TEXT_SETTING:
+        m_playCountTextSetting = v.value<AutoCustomHide>();
+        if (playCountTextSetting() == AutoCustomHide::CUSTOM && playCountCustomText().isEmpty()) {
+            int repeatCount = m ? m->repeatCount() : 2;
+            String text = TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+                repeatCount);
+            undoChangeProperty(Pid::PLAY_COUNT_TEXT, text);
+        }
+        break;
+    case Pid::PLAY_COUNT_TEXT:
+        m_playCountCustomText = v.value<String>();
+        break;
+    default:
+        return TextBase::setProperty(id, v);
+    }
+    triggerLayout();
+    return true;
 }
 
 PropertyValue PlayCountText::propertyDefault(Pid propertyId) const
 {
-    if (EngravingItem* e = const_cast<PlayCountText*>(this)->propertyDelegate(propertyId)) {
-        return e->propertyDefault(propertyId);
-    }
+    Measure* m = segment()->measure();
 
-    return TextBase::propertyDefault(propertyId);
+    switch (propertyId) {
+    case Pid::PLAY_COUNT_TEXT_SETTING:
+        return AutoCustomHide::AUTO;
+    case Pid::PLAY_COUNT_TEXT: {
+        int repeatCount = m ? m->repeatCount() : 2;
+        return TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(repeatCount);
+    }
+    default:
+        return TextBase::propertyDefault(propertyId);
+    }
 }
 
 RectF PlayCountText::drag(EditData& ed)
