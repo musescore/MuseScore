@@ -26,6 +26,7 @@ Item {
 
     // Useful for static context menus
     property var items: []
+    property alias parentWindow: contextMenuLoader.parentWindow
 
     signal handleMenuItem(string itemId)
     signal opened()

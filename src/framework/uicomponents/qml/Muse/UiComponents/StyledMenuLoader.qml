@@ -37,6 +37,7 @@ Loader {
     property StyledMenu menu: loader.item as StyledMenu
     property Item menuAnchorItem: null
     property bool hasSiblingMenus: false
+    property var parentWindow: null
 
     property alias isMenuOpened: loader.active
 
@@ -64,6 +65,8 @@ Loader {
         focusPolicies: PopupView.NoFocus
 
         accessibleName: loader.accessibleName
+
+        parentWindow: loader.parentWindow
 
         onHandleMenuItem: function(itemId) {
             itemMenu.close()

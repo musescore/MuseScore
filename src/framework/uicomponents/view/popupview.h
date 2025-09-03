@@ -73,6 +73,7 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
     Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
 
     Q_PROPERTY(QWindow * window READ window NOTIFY windowChanged)
+    Q_PROPERTY(QWindow * parentWindow READ parentWindow WRITE setParentWindow NOTIFY parentWindowChanged FINAL)
 
     //! NOTE Local, related parent
     Q_PROPERTY(qreal x READ localX WRITE setLocalX NOTIFY xChanged)
@@ -273,6 +274,8 @@ signals:
 
     void isContentReadyChanged();
 
+    void parentWindowChanged();
+
 protected:
     virtual bool isDialog() const;
     void classBegin() override;
@@ -312,6 +315,7 @@ protected:
 
     QQmlEngine* engine() const;
 
+    QWindow* m_parentWindow = nullptr;
     IPopupWindow* m_window = nullptr;
 
     QQmlComponent* m_component = nullptr;
