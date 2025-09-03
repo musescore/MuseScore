@@ -7954,7 +7954,11 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
 
     for (KeySig* keySig : instrChange->keySigs()) {
         staff_idx_t st = m_score->staffIdx(part);
-        keysig(keySig, part->staff(st)->clef(instrChange->tick()), m_score->staffIdx(part), keySig->visible());
+        Staff* staff = part->staff(st);
+        if (!staff) {
+            continue;
+        }
+        keysig(keySig, staff->clef(instrChange->tick()), m_score->staffIdx(part), keySig->visible());
     }
     writeInstrumentDetails(instr, m_score->style().styleB(Sid::concertPitch));
 
