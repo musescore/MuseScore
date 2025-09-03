@@ -7074,7 +7074,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             // make harmony child of fret diagram if possible
             if (ne->isHarmony()) {
                 for (EngravingItem* segel : segment->annotations()) {
-                    if (segel && segel->isFretDiagram() && segel->track() == linkedTrack) {
+                    if (segel && segel->isFretDiagram() && segel->track() == linkedTrack && !toFretDiagram(segel)->harmony()) {
                         segel->add(ne);
                         break;
                     }
