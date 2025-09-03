@@ -249,14 +249,6 @@ bool Staff::shouldShowMeasureNumbers() const
     return false;
 }
 
-bool Staff::shouldShowPlayCount() const
-{
-    bool isTopStave = score()->staves().front() == this;
-    bool isSystemObjectStaff = muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
-
-    return isTopStave || isSystemObjectStaff;
-}
-
 bool Staff::isLastOfScore() const
 {
     return score()->staves().empty() ? false : score()->staves().back() == this;
