@@ -6,8 +6,15 @@
 
 #include <ctype.h>
 
+#include <ostream>
+
+#include "base/check.h"
 #include "base/logging.h"
 #include "base/stl_util.h"
+
+#if defined(FILE_PATH_USES_WIDE_CHARACTERS)
+#include "base/strings/utf_string_conversions.h"
+#endif  // FILE_PATH_USES_WIDE_CHARACTERS
 
 namespace base {
 
@@ -287,6 +294,10 @@ void FilePath::StripTrailingSeparatorsInternal() {
 
 }  // namespace base
 
-void PrintTo(const base::FilePath& path, std::ostream* out) {
-  *out << path.value().c_str();
+std::ostream& operator<<(std::ostream& os, const base::FilePath& file_path) {
+#ifdef FILE_PATH_USES_WIDE_CHARACTERS
+  return os << base::WideToUTF8(file_path.value());
+#else
+  return os << file_path.value();
+#endif
 }
