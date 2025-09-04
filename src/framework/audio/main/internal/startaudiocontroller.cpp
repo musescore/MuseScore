@@ -71,14 +71,17 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 
         IAudioDriver::Spec activeSpec;
         if (audioDriver()->open(requiredSpec, &activeSpec)) {
+#ifndef Q_OS_WASM
             audioWorker()->run(activeSpec.output, configuration()->workerConfig());
+#endif
             return;
         }
 
         LOGE() << "audio output open failed";
     }
-
+#ifndef Q_OS_WASM
     audioWorker()->run(requiredSpec.output, configuration()->workerConfig());
+#endif
 }
 
 void StartAudioController::stopAudioProcessing()

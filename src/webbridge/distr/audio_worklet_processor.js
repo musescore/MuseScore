@@ -4,8 +4,6 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
     constructor(options) {
         super(options);
 
-        console.log("[processor] constructor MuseDriverProcessor")
-
         this.port.onmessage = this.onMessageFromMain.bind(this);
 
         this.port.postMessage("end of constructor MuseDriverProcessor")
@@ -26,11 +24,9 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
     }
 
     onMessageFromMain(event) {
-        console.log("[processor]", "onMessageFromMain:", event.data);
         this.port.postMessage("pong from processor: " + JSON.stringify(event.data))
     }
 
 }
 
 registerProcessor('musedriver-processor', MuseDriverProcessor);
-console.log("[processor] registerProcessor musedriver-processor")

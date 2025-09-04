@@ -27,6 +27,7 @@
 #include "global/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
+#include "audio/main/istartaudiocontroller.h"
 
 namespace mu::webbridge {
 class WebApi : public muse::async::Asyncable
@@ -34,6 +35,7 @@ class WebApi : public muse::async::Asyncable
     inline static muse::GlobalInject<muse::IInteractive> interactive;
     inline static muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
     inline static muse::GlobalInject<mu::context::IGlobalContext> globalContext;
+    inline static muse::GlobalInject<muse::audio::IStartAudioController> startAudioController;
 
 public:
 

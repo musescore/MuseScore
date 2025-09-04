@@ -152,10 +152,13 @@ void AudioModule::registerExports()
     ioc()->registerExport<IStartAudioController>(moduleName(), m_startAudioController);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), m_rpcChannel);
-    ioc()->registerExport<worker::IAudioWorker>(moduleName(), m_audioWorker);
     ioc()->registerExport<IAudioDriver>(moduleName(), m_audioDriver);
     ioc()->registerExport<ISoundFontController>(moduleName(), m_soundFontController);
     ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);
+
+#ifndef Q_OS_WASM
+    ioc()->registerExport<worker::IAudioWorker>(moduleName(), m_audioWorker);
+#endif
 }
 
 void AudioModule::registerResources()
