@@ -4568,6 +4568,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
         localInsertMeasureBase = insertBox(type, beforeMeasure, options);
     }
 
+    if (localInsertMeasureBase && options.needDeselectAll) {
+        deselectAll();
+    }
+
     return localInsertMeasureBase;
 }
 
