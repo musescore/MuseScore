@@ -49,7 +49,6 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
     requiredSpec.output.audioChannelCount = configuration()->audioChannelsCount();
     requiredSpec.output.samplesPerChannel = configuration()->driverBufferSize();
 
-#ifndef Q_OS_WASM
     worker::IAudioWorker* worker = audioWorker().get();
     if (configuration()->shouldMeasureInputLag()) {
         requiredSpec.callback = [worker](void* /*userdata*/, uint8_t* stream, int byteCount) {
@@ -64,24 +63,20 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
             worker->popAudioData(reinterpret_cast<float*>(stream), samplesPerChannel);
         };
     }
-#endif
 
     if (mode == IApplication::RunMode::GuiApp) {
         audioDriver()->init();
 
         IAudioDriver::Spec activeSpec;
         if (audioDriver()->open(requiredSpec, &activeSpec)) {
-#ifndef Q_OS_WASM
             audioWorker()->run(activeSpec.output, configuration()->workerConfig());
-#endif
             return;
         }
 
         LOGE() << "audio output open failed";
     }
-#ifndef Q_OS_WASM
+
     audioWorker()->run(requiredSpec.output, configuration()->workerConfig());
-#endif
 }
 
 void StartAudioController::stopAudioProcessing()

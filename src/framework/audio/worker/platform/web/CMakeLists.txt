@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+set(WEBWORKER_FACADE_MODE OFF)
 include(${CMAKE_CURRENT_LIST_DIR}/../../audio_worker.cmake)
 
 set(FLUIDSYNTH_DEF_EXTERNAL -DNO_LIBSNDFILE_SUPPORT)

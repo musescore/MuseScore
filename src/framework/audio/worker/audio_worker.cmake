@@ -20,6 +20,15 @@
 
 include(GetPlatformInfo)
 
+if (WEBWORKER_FACADE_MODE)
+# Web Facade
+set(AUDIO_WORKER_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.h
+)
+
+else()
+# Real worker
 set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudioworker.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioworkerconfiguration.h
@@ -36,6 +45,10 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
+
+    # platform
+    ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.h
 
     # internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioworkerconfiguration.cpp
@@ -142,19 +155,7 @@ else ()
         )
 endif()
 
-if(OS_IS_WASM)
-    set(AUDIO_COMMON_SRC
-        ${AUDIO_COMMON_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudioworker.h
-    )
-else()
-    set(AUDIO_COMMON_SRC
-        ${AUDIO_COMMON_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.h
-    )
-endif()
+endif() # End of Real worker
 
 set(AUDIO_WORKER_LINK )
 if (MUSE_MODULE_AUDIO_EXPORT)
