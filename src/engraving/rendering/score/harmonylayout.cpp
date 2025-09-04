@@ -500,7 +500,7 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
 
     // render bass
     if (tpcIsValid(info->bassTpc())) {
-        std::list<RenderActionPtr >& bassNoteChordList
+        std::list<RenderActionPtr > bassNoteChordList
             = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
 
         static const std::wregex PATTERN_69 = std::wregex(L"6[,/]?9");
