@@ -37,6 +37,9 @@ using CallId = uint64_t;
 enum class Method {
     Undefined = 0,
 
+    // Init
+    WorkerInit,
+
     // Config
     WorkerConfigChanged,
 
@@ -116,6 +119,9 @@ inline std::string to_string(Method m)
 {
     switch (m) {
     case Method::Undefined: return "Undefined";
+
+    // Init
+    case Method::WorkerInit: return "WorkerInit";
 
     // Config
     case Method::WorkerConfigChanged: return "WorkerConfigChanged";

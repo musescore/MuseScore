@@ -21,9 +21,13 @@
  */
 #include "webaudioworker.h"
 
+#include "audio/common/rpc/irpcchannel.h"
+#include "audio/common/rpc/rpcpacker.h"
+
 #include "log.h"
 
 using namespace muse::audio::worker;
+using namespace muse::audio::rpc;
 
 WebAudioWorker::WebAudioWorker(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
     : m_rpcChannel(rpcChannel)
@@ -44,6 +48,7 @@ void WebAudioWorker::registerExports()
 
 void WebAudioWorker::run(const OutputSpec& outputSpec, const AudioWorkerConfig& conf)
 {
+    m_rpcChannel->send(rpc::make_request(Method::WorkerInit, RpcPacker::pack(outputSpec, conf)));
     m_running = true;
 }
 
@@ -59,4 +64,5 @@ bool WebAudioWorker::isRunning() const
 
 void WebAudioWorker::popAudioData(float* dest, size_t sampleCount)
 {
+    // not implemented yet
 }

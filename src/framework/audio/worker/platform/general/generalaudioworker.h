@@ -26,33 +26,24 @@
 #include <thread>
 #include <atomic>
 
+#include "global/async/asyncable.h"
+
+#include "global/modularity/ioc.h"
+#include "audio/common/rpc/irpcchannel.h"
+#include "../../iaudioengine.h"
+
 #include "../../iaudioworker.h"
-#include "audio/common/audiotypes.h"
-
-namespace muse::audio::rpc {
-class IRpcChannel;
-}
-
-namespace muse::audio::fx {
-class FxResolver;
-}
-
-namespace muse::audio::synth  {
-class SynthResolver;
-class SoundFontRepository;
-}
 
 namespace muse::audio::worker {
-class AudioWorkerConfiguration;
-class AudioEngine;
-class AudioBuffer;
-class WorkerPlayback;
-class WorkerChannelController;
+class StartWorkerController;
 
-class GeneralAudioWorker : public IAudioWorker
+//! NOTE This is a thread for worker
+class GeneralAudioWorker : public IAudioWorker, public async::Asyncable
 {
+    Inject<IAudioEngine> audioEngine;
+
 public:
-    GeneralAudioWorker(std::shared_ptr<muse::audio::rpc::IRpcChannel> rpcChannel);
+    GeneralAudioWorker(std::shared_ptr<rpc::IRpcChannel> rpcChannel);
     ~GeneralAudioWorker();
 
     void registerExports() override;
@@ -67,16 +58,9 @@ public:
 private:
     void th_main(const OutputSpec& outputSpec, const AudioWorkerConfig& conf);
 
-    // services
+    // service
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
-    std::shared_ptr<AudioWorkerConfiguration> m_configuration;
-    std::shared_ptr<AudioEngine> m_audioEngine;
-    std::shared_ptr<AudioBuffer> m_audioBuffer;
-    std::shared_ptr<WorkerPlayback> m_workerPlayback;
-    std::shared_ptr<WorkerChannelController> m_workerChannelController;
-    std::shared_ptr<fx::FxResolver> m_fxResolver;
-    std::shared_ptr<synth::SynthResolver> m_synthResolver;
-    std::shared_ptr<synth::SoundFontRepository> m_soundFontRepository;
+    std::shared_ptr<StartWorkerController> m_startWorkerController;
 
     // thread
     msecs_t m_intervalMsecs = 0;

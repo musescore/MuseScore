@@ -47,7 +47,7 @@ TrackSequence::TrackSequence(const TrackSequenceId id, const modularity::Context
     m_player = std::make_shared<SequencePlayer>(this, m_clock, iocCtx);
     m_audioIO = std::make_shared<SequenceIO>(this);
 
-    audioEngine()->modeChanged().onNotify(this, [this]() {
+    audioEngine()->modeChanged().onReceive(this, [this](RenderMode) {
         m_prevActiveTrackId = INVALID_TRACK_ID;
     });
 
