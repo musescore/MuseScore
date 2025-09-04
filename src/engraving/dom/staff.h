@@ -265,6 +265,7 @@ public:
     bool shouldShowMeasureNumbers() const;
     bool shouldShowPlayCount() const;
 
+    bool isLastOfScore() const;
     bool isSystemObjectStaff() const;
     bool hasSystemObjectsBelowBottomStaff() const;
 

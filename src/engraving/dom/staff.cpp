@@ -257,6 +257,11 @@ bool Staff::shouldShowPlayCount() const
     return isTopStave || isSystemObjectStaff;
 }
 
+bool Staff::isLastOfScore() const
+{
+    return score()->staves().empty() ? false : score()->staves().back() == this;
+}
+
 bool Staff::isSystemObjectStaff() const
 {
     return score() && muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
@@ -264,7 +269,7 @@ bool Staff::isSystemObjectStaff() const
 
 bool Staff::hasSystemObjectsBelowBottomStaff() const
 {
-    return isSystemObjectStaff() && score()->staves().back() == this && style().styleB(Sid::systemObjectsBelowBottomStaff);
+    return isSystemObjectStaff() && isLastOfScore() && style().styleB(Sid::systemObjectsBelowBottomStaff);
 }
 
 //---------------------------------------------------------
