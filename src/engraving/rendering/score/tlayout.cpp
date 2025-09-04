@@ -2823,8 +2823,8 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         int endString = barre.endString != -1 ? barre.endString : item->strings() - 1;
         int fret = i.first;
         bool slurStyleBarre = ctx.conf().styleB(Sid::barreAppearanceSlur);
-        for (int string = 0; string < item->strings(); ++string) {
-            if (slurStyleBarre && string >= startString && string <= endString) {
+        for (int string = startString; string <= endString; ++string) {
+            if (slurStyleBarre) {
                 const_cast<FretDiagram*>(item)->addDotForDotStyleBarre(string, fret);
             } else {
                 const_cast<FretDiagram*>(item)->removeDotForDotStyleBarre(string, fret);
