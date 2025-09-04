@@ -125,6 +125,11 @@ static std::vector<EngravingObject*> compoundObjects(EngravingObject* object)
         for (Note* compoundNote : note->compoundNotes()) {
             objects.push_back(compoundNote);
         }
+    } else if (object->isFretDiagram()) {
+        const FretDiagram* fret = toFretDiagram(object);
+        if (fret->harmony()) {
+            objects.push_back(fret->harmony());
+        }
     }
 
     objects.push_back(object);
@@ -1225,6 +1230,11 @@ bool RemoveElement::isFiltered(UndoCommand::Filter f, const EngravingItem* targe
         break;
     }
     return false;
+}
+
+std::vector<EngravingObject*> RemoveElement::objectItems() const
+{
+    return compoundObjects(element);
 }
 
 //---------------------------------------------------------
