@@ -63,9 +63,9 @@ Column {
             { text: qsTrc("inspector", "Reverse final barline"), value: BarlineTypes.TYPE_REVERSE_END },
             { text: qsTrc("inspector", "Heavy barline"), value: BarlineTypes.TYPE_HEAVY },
             { text: qsTrc("inspector", "Heavy double barline"), value: BarlineTypes.TYPE_DOUBLE_HEAVY },
-            { text: qsTrc("inspector", "Left (start) barline"), value: BarlineTypes.TYPE_START_REPEAT },
+            { text: qsTrc("inspector", "Left (start) repeat barline"), value: BarlineTypes.TYPE_START_REPEAT },
             { text: qsTrc("inspector", "Right (end) repeat barline"), value: BarlineTypes.TYPE_END_REPEAT },
-            { text: qsTrc("inspector", "Right and left repeat barline"), value: BarlineTypes.TYPE_END_START_REPEAT },
+            { text: qsTrc("inspector", "Right and left (end/start) repeat barline"), value: BarlineTypes.TYPE_END_START_REPEAT },
         ]
     }
 
