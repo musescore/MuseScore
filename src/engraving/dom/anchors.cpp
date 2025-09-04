@@ -158,18 +158,17 @@ void MoveElementAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey 
         return;
     }
 
-    bool leftRightKey = key == Key_Left || key == Key_Right;
     bool altMod = mod & AltModifier;
-    bool shiftMod = mod & ShiftModifier;
 
-    bool changeAnchorType = shiftMod && altMod && leftRightKey && canAnchorToEndOfPrevious(element);
     bool anchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
-    if (changeAnchorType) {
+    bool changeAnchorType = altMod && canAnchorToEndOfPrevious(element);
+    bool resetAnchorType = !altMod && anchorToEndOfPrevious;
+    if (changeAnchorType || resetAnchorType) {
         element->undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious,
                                     element->propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
 
-        bool doesntNeedMoveSeg = ((key == Key_Left && anchorToEndOfPrevious) || (key == Key_Right && !anchorToEndOfPrevious));
-        if (doesntNeedMoveSeg) {
+        bool needMoveSeg = (key == Key_Left && anchorToEndOfPrevious) || (key == Key_Right && !anchorToEndOfPrevious);
+        if (!needMoveSeg) {
             checkMeasureBoundariesAndMoveIfNeed(element);
             return;
         }
@@ -199,7 +198,7 @@ void MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* elem
     Measure* curMeasure = curSeg->measure();
     Measure* prevMeasure = curMeasure->prevMeasure();
     bool anchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
-    bool needMoveToNext = curTick == curMeasure->endTick() && anchorToEndOfPrevious;
+    bool needMoveToNext = curTick == curMeasure->endTick() && !anchorToEndOfPrevious;
     bool needMoveToPrevious = curSeg->rtick().isZero() && anchorToEndOfPrevious && prevMeasure;
 
     if (!needMoveToPrevious && !needMoveToNext) {
@@ -251,14 +250,6 @@ void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditDa
 
 void MoveElementAnchors::moveSegment(EngravingItem* element, bool forward)
 {
-    if (canAnchorToEndOfPrevious(element)) {
-        bool cachedAnchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
-        element->undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
-        if (cachedAnchorToEndOfPrevious && forward) {
-            return;
-        }
-    }
-
     Segment* curSeg = toSegment(element->parentItem());
     Segment* newSeg = getNewSegment(element, curSeg, forward);
 
