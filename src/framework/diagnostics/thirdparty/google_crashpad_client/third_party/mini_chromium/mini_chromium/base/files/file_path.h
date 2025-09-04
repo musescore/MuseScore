@@ -117,6 +117,7 @@
 #if defined(OS_WIN)
 #define FILE_PATH_USES_DRIVE_LETTERS
 #define FILE_PATH_USES_WIN_SEPARATORS
+#define FILE_PATH_USES_WIDE_CHARACTERS
 #endif  // OS_WIN
 
 namespace base {
@@ -226,8 +227,11 @@ class FilePath {
 
 }  // namespace base
 
-// This is required by googletest to print a readable output on test failures.
-extern void PrintTo(const base::FilePath& path, std::ostream* out);
+// Streams `file_path`'s value to a byte stream, converting from wide
+// characters if called for. (also lets googletest print a readable output on
+// test failures)
+extern std::ostream& operator<<(std::ostream& os,
+                                const base::FilePath& file_path);
 
 // Macros for string literal initialization of FilePath::CharType[], and for
 // using a FilePath::CharType[] in a printf-style format string.
