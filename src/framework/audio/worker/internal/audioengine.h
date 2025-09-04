@@ -23,10 +23,10 @@
 #define MUSE_AUDIO_AUDIOENGINE_H
 
 #include <memory>
+#include <atomic>
 
 #include "../iaudioengine.h"
 
-#include "global/async/notification.h"
 #include "global/types/ret.h"
 
 #include "global/modularity/ioc.h"
@@ -51,37 +51,37 @@ public:
         size_t minTrackCountForMultithreading = 0;
     };
 
-    Ret init(std::shared_ptr<AudioBuffer> bufferPtr, const RenderConstraints& consts);
+    Ret init(const OutputSpec& outputSpec, const RenderConstraints& consts);
     void deinit();
-
-    using OnReadBufferChanged = std::function<void (const samples_t, const sample_rate_t)>;
-    void setOnReadBufferChanged(const OnReadBufferChanged func);
 
     void setOutputSpec(const OutputSpec& outputSpec) override;
     OutputSpec outputSpec() const override;
+    async::Channel<OutputSpec> outputSpecChanged() const override;
 
     RenderMode mode() const override;
     void setMode(const RenderMode newMode) override;
-    async::Notification modeChanged() const override;
+    async::Channel<RenderMode> modeChanged() const override;
 
     MixerPtr mixer() const override;
+
+    void processAudioData() override;
+    void popAudioData(float* dest, size_t sampleCount) override;
 
 private:
 
     void updateBufferConstraints();
 
-    bool m_inited = false;
+    std::atomic<bool> m_inited = false;
 
     OutputSpec m_outputSpec;
+    async::Channel<OutputSpec> m_outputSpecChanged;
+
+    RenderMode m_mode = RenderMode::Undefined;
+    async::Channel<RenderMode> m_modeChanged;
 
     MixerPtr m_mixer = nullptr;
     std::shared_ptr<AudioBuffer> m_buffer = nullptr;
     RenderConstraints m_renderConsts;
-
-    RenderMode m_currentMode = RenderMode::Undefined;
-    async::Notification m_modeChanges;
-
-    OnReadBufferChanged m_onReadBufferChanged;
 };
 }
 

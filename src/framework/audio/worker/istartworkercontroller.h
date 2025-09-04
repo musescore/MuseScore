@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,36 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include <memory>
-
-#include "audio/worker/iaudioworker.h"
+#include "global/modularity/imoduleinterface.h"
 
 #include "audio/common/audiotypes.h"
 
-namespace muse::audio::rpc {
-class IRpcChannel;
-}
-
 namespace muse::audio::worker {
-//! NOTE This is a wrapper for Web Worker, communicates via RPC
-class WebAudioWorker : public IAudioWorker
+class IStartWorkerController : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IStartWorkerController)
 public:
-    WebAudioWorker(std::shared_ptr<muse::audio::rpc::IRpcChannel> rpcChannel);
-    ~WebAudioWorker();
+    virtual ~IStartWorkerController() = default;
 
-    void registerExports() override;
-    void run(const OutputSpec& outputSpec, const AudioWorkerConfig& conf) override;
-    void stop() override;
-    bool isRunning() const override;
-
-    void popAudioData(float* dest, size_t sampleCount) override;
-
-private:
-    std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
-    bool m_running = false;
+    virtual void registerExports() = 0;
+    virtual void init(const OutputSpec& outputSpec, const AudioWorkerConfig& conf) = 0;
+    virtual void deinit() = 0;
 };
 }

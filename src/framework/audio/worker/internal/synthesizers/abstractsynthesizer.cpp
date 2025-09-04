@@ -34,8 +34,8 @@ AbstractSynthesizer::AbstractSynthesizer(const AudioInputParams& params, const m
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    audioEngine()->modeChanged().onNotify(this, [this]() {
-        updateRenderingMode(audioEngine()->mode());
+    audioEngine()->modeChanged().onReceive(this, [this](RenderMode mode) {
+        updateRenderingMode(mode);
     });
 }
 
