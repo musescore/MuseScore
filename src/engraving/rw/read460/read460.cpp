@@ -647,7 +647,9 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
 
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
                     Measure* m = score->tick2measure(tick);
-                    Segment* seg = m->undoGetChordRestOrTimeTickSegment(tick);
+                    Segment* seg = el->isFretDiagram()
+                                   ? m->undoGetSegment(SegmentType::ChordRest, tick)
+                                   : m->undoGetChordRestOrTimeTickSegment(tick);
                     el->setParent(seg);
 
                     // be sure to paste the element in the destination track;
