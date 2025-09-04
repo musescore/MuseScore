@@ -21,7 +21,6 @@
  */
 #include "webaudiodriver.h"
 
-#include <emscripten/bind.h>
 #include <emscripten/val.h>
 
 #include "log.h"

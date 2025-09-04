@@ -20,12 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_AUDIOTHREAD_H
-#define MUSE_AUDIO_AUDIOTHREAD_H
+#pragma once
 
 #include <memory>
-#include <thread>
-#include <atomic>
+
+#include "audio/worker/iaudioworker.h"
 
 #include "audio/common/audiotypes.h"
 
@@ -33,59 +32,22 @@ namespace muse::audio::rpc {
 class IRpcChannel;
 }
 
-namespace muse::audio::fx {
-class FxResolver;
-}
-
-namespace muse::audio::synth  {
-class SynthResolver;
-class SoundFontRepository;
-}
-
 namespace muse::audio::worker {
-class AudioWorkerConfiguration;
-class AudioEngine;
-class AudioBuffer;
-class WorkerPlayback;
-class WorkerChannelController;
-class AudioWorker
+class WebAudioWorker : public IAudioWorker
 {
 public:
-    AudioWorker(std::shared_ptr<muse::audio::rpc::IRpcChannel> rpcChannel);
-    ~AudioWorker();
+    WebAudioWorker(std::shared_ptr<muse::audio::rpc::IRpcChannel> rpcChannel);
+    ~WebAudioWorker();
 
-    static std::thread::id ID;
+    void registerExports() override;
+    void run(const OutputSpec& outputSpec, const AudioWorkerConfig& conf) override;
+    void stop() override;
+    bool isRunning() const override;
 
-    void registerExports();
-    void run(const OutputSpec& outputSpec, const AudioWorkerConfig& conf);
-    void setInterval(const msecs_t interval);
-    void stop();
-    bool isRunning() const;
-
-    const std::shared_ptr<AudioBuffer>& audioBuffer() const { return m_audioBuffer; }
+    void popAudioData(float* dest, size_t sampleCount) override;
 
 private:
-    void th_main(const OutputSpec& outputSpec, const AudioWorkerConfig& conf);
-
-    // services
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
-    std::shared_ptr<AudioWorkerConfiguration> m_configuration;
-    std::shared_ptr<AudioEngine> m_audioEngine;
-    std::shared_ptr<AudioBuffer> m_audioBuffer;
-    std::shared_ptr<WorkerPlayback> m_workerPlayback;
-    std::shared_ptr<WorkerChannelController> m_workerChannelController;
-    std::shared_ptr<fx::FxResolver> m_fxResolver;
-    std::shared_ptr<synth::SynthResolver> m_synthResolver;
-    std::shared_ptr<synth::SoundFontRepository> m_soundFontRepository;
-
-    // thread
-    msecs_t m_intervalMsecs = 0;
-    uint64_t m_intervalInWinTime = 0;
-
-    std::unique_ptr<std::thread> m_thread = nullptr;
-    std::atomic<bool> m_running = false;
+    bool m_running = false;
 };
-using AudioThreadPtr = std::shared_ptr<AudioWorker>;
 }
-
-#endif // MUSE_AUDIO_AUDIOTHREAD_H
