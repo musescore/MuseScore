@@ -54,6 +54,7 @@ void ChordSymbolSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HARMONY);
     updateHasLinkedFretboardDiagram();
+    updateInsideFretBox();
     updateIsDurationAvailable();
 }
 
@@ -108,6 +109,11 @@ bool ChordSymbolSettingsModel::hasLinkedFretboardDiagram() const
     return m_hasLinkedFretboardDiagram;
 }
 
+bool ChordSymbolSettingsModel::insideFretBox() const
+{
+    return m_insideFretBox;
+}
+
 void ChordSymbolSettingsModel::setHasLinkedFretboardDiagram(bool has)
 {
     if (m_hasLinkedFretboardDiagram == has) {
@@ -133,18 +139,32 @@ void ChordSymbolSettingsModel::updateHasLinkedFretboardDiagram()
     setHasLinkedFretboardDiagram(!hasHarmonyWhithoutFretboardDiagram);
 }
 
-void ChordSymbolSettingsModel::updateIsDurationAvailable()
+void ChordSymbolSettingsModel::setInsideFretBox(bool has)
 {
-    bool available = true;
+    if (m_insideFretBox == has) {
+        return;
+    }
 
+    m_insideFretBox = has;
+    emit insideFretBoxChanged();
+}
+
+void ChordSymbolSettingsModel::updateInsideFretBox()
+{
+    bool insideFretBox = false;
     for (engraving::EngravingItem* item : m_elementList) {
         if (engraving::toHarmony(item)->isInFretBox()) {
-            available = false;
+            insideFretBox = true;
             break;
         }
     }
 
-    m_durationType->setIsVisible(available);
+    setInsideFretBox(insideFretBox);
+}
+
+void ChordSymbolSettingsModel::updateIsDurationAvailable()
+{
+    m_durationType->setIsVisible(!m_insideFretBox);
 }
 
 PropertyItem* ChordSymbolSettingsModel::verticalAlign() const

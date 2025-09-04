@@ -49,6 +49,8 @@ Column {
         titleText: qsTrc("inspector", "Interpretation")
         propertyItem: root.model ? root.model.isLiteral : null
 
+        visible: root.model ? !root.model.insideFretBox : true
+
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
 
@@ -62,6 +64,8 @@ Column {
         id: voicingSection
         titleText: qsTrc("inspector", "Voicing")
         propertyItem: root.model ? root.model.voicingType : null
+
+        visible: root.model ? !root.model.insideFretBox : true
 
         navigationPanel: root.navigationPanel
         navigationRowStart: interpretationSection.navigationRowEnd + 1
@@ -97,6 +101,8 @@ Column {
 
         text: qsTrc("inspector", "Exclude from vertical alignment")
         propertyItem: root.model ? root.model.verticalAlign : null
+
+        visible: root.model ? !root.model.insideFretBox : true
 
         navigation.name: "Exclude from vertical alignment"
         navigation.panel: root.navigationPanel
@@ -147,6 +153,8 @@ Column {
             anchors.right: parent.right
 
             transparent: true
+
+            visible: root.model ? !root.model.insideFretBox : true
 
             titleText: qsTrc("inspector", "Alignment to notehead")
             propertyItem: root.model ? root.model.position : null
