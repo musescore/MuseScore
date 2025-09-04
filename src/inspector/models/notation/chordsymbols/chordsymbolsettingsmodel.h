@@ -39,6 +39,7 @@ class ChordSymbolSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(bool hasLinkedFretboardDiagram READ hasLinkedFretboardDiagram NOTIFY hasLinkedFretboardDiagramChanged FINAL)
     Q_PROPERTY(bool insideFretBox READ insideFretBox NOTIFY insideFretBoxChanged FINAL)
+    Q_PROPERTY(bool showStackModifiers READ showStackModifiers NOTIFY showStackModifiersChanged FINAL)
 
 public:
     explicit ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -58,18 +59,22 @@ public:
 
     bool hasLinkedFretboardDiagram() const;
     bool insideFretBox() const;
+    bool showStackModifiers() const;
 
     Q_INVOKABLE void addFretboardDiagram();
 
 signals:
     void hasLinkedFretboardDiagramChanged();
     void insideFretBoxChanged();
+    void showStackModifiersChanged();
 
 private:
     void setHasLinkedFretboardDiagram(bool has);
     void updateHasLinkedFretboardDiagram();
     void setInsideFretBox(bool has);
     void updateInsideFretBox();
+    void setShowStackModifiers(bool val);
+    void updateShowStackModifiers();
 
     void updateIsDurationAvailable();
 
@@ -78,6 +83,7 @@ private:
     PropertyItem* m_durationType = nullptr;
     bool m_hasLinkedFretboardDiagram = false;
     bool m_insideFretBox = false;
+    bool m_showStackModifiers = false;
     PropertyItem* m_verticalAlign = nullptr;
     PropertyItem* m_position = nullptr;
     PropertyItem* m_bassScale = nullptr;

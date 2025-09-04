@@ -115,6 +115,8 @@ Column {
         text: qsTrc("inspector", "Do not stack modifiers")
         propertyItem: root.model ? root.model.doNotStackModifiers : null
 
+        visible: root.model ? root.model.showStackModifiers : true
+
         navigation.name: "Do not stack modifiers"
         navigation.panel: root.navigationPanel
         navigation.row: verticalAlignCheckBox.navigationRowEnd + 1
