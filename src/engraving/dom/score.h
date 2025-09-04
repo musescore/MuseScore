@@ -549,7 +549,7 @@ public:
 
     ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
     Rest* setRest(const Fraction& tick, track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
-    std::vector<Rest*> setRests(const Fraction& tick, track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet,
+    std::vector<Rest*> setRests(const Fraction& tick, track_idx_t track, const Fraction& l, bool useDots, Tuplet* tuplet,
                                 bool useFullMeasureRest = true);
 
     void upDown(bool up, UpDownMode);
