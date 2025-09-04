@@ -48,6 +48,7 @@ public:
     Q_INVOKABLE QString selectFile();
     Q_INVOKABLE QString selectDirectory();
     Q_INVOKABLE QString selectMultipleDirectories(const QString& selectedDirectoriesStr);
+    Q_INVOKABLE QString selectAny();
 
 public slots:
     void setTitle(const QString& title);
