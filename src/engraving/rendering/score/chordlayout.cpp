@@ -1463,9 +1463,19 @@ bool ChordLayout::isChordPosBelowTrem(const Chord* item, TremoloTwoChord* trem)
     }
     Note* baseNote = item->up() ? item->downNote() : item->upNote();
     double noteY = baseNote->pagePos().y();
-    double tremY = trem->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
 
-    return noteY > tremY;
+    PointF startAnchor = trem->startAnchor();
+    PointF endAnchor = trem->endAnchor();
+
+    if (startAnchor.isNull() || endAnchor.isNull()) {
+        return trem->crossStaffBeamBetween() ? item->isBelowCrossBeam(trem) : trem->up();
+    }
+
+    if (item == trem->chord1()) {
+        return noteY > startAnchor.y();
+    }
+
+    return noteY > endAnchor.y();
 }
 
 bool ChordLayout::computeUpTremoloCase(const Chord* item, TremoloTwoChord* tremolo, const LayoutContext& ctx)
@@ -1496,21 +1506,15 @@ bool ChordLayout::computeUpTremoloCase(const Chord* item, TremoloTwoChord* tremo
 
     if (tremolo->userModified()) {
         return ChordLayout::isChordPosBelowTrem(item, tremolo);
-    } else if (cross) {
-        // unmodified cross-staff trem, should be one note per staff
-        if (item->staffMove() != 0) {
-            return item->staffMove() > 0;
-        } else {
-            int otherStaffMove = item->staffMove() == c1->staffMove() ? c2->staffMove() : c1->staffMove();
-            return otherStaffMove < 0;
-        }
     }
 
-    if (!cross && !tremolo->userModified()) {
-        return tremolo->up();
+    // unmodified cross-staff trem, should be one note per staff
+    if (item->staffMove() != 0) {
+        return item->staffMove() > 0;
     }
 
-    return item->ldata()->up;
+    int otherStaffMove = item->staffMove() == c1->staffMove() ? c2->staffMove() : c1->staffMove();
+    return otherStaffMove < 0;
 }
 
 void ChordLayout::computeUp(const Chord* item, Chord::LayoutData* ldata, const LayoutContext& ctx)
