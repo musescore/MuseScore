@@ -539,16 +539,15 @@ struct ScoreCreateOptions
     bool withTempo = false;
     Tempo tempo;
 
-    int timesigNumerator = 0;
-    int timesigDenominator = 1;
+    Fraction globalTimesig;
     TimeSigType timesigType = TimeSigType::NORMAL;
 
     Key key = Key::C;
 
+    int totalMeasures = 0;
+
     bool withPickupMeasure = false;
-    int measures = 0;
-    int measureTimesigNumerator = 0;
-    int measureTimesigDenominator = 0;
+    Fraction pickupTimesig;
 
     PartInstrumentList parts;
     ScoreOrder order;
