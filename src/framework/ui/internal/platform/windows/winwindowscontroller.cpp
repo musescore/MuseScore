@@ -255,6 +255,10 @@ bool WinWindowsController::initWindowBackgroundColor(HWND hWnd)
 
 bool WinWindowsController::processMouseMove(HWND hWnd, LPARAM lParam, qintptr* result) const
 {
+    if (mainWindow()->isFullScreen()) {
+        return false;
+    }
+
     const LONG borderWidth = this->borderWidth();
     RECT windowRect;
     if (!GetWindowRect(hWnd, &windowRect)) {
@@ -271,11 +275,15 @@ bool WinWindowsController::processMouseMove(HWND hWnd, LPARAM lParam, qintptr* r
     int moveAreaX = windowRect.left + static_cast<int>(moveAreaRect.x() * scaleFactor);
     int moveAreaY = windowRect.top + borderWidth + static_cast<int>(moveAreaRect.y() * scaleFactor);
 
-    /// NOTE: titlebar`s move area
+    /// NOTE: titlebar's move area
     if (x >= moveAreaX && x < moveAreaX + moveAreaWidth
         && y > moveAreaY && y < moveAreaY + moveAreaHeight) {
         *result = HTCAPTION;
         return true;
+    }
+
+    if (isWindowMaximized(hWnd)) {
+        return false;
     }
 
     /// NOTE: bottom left corner
