@@ -36,10 +36,33 @@ let AudioDriver = (function () {
             }, [workerPort]); 
         },
 
+        outputSpec: function() {
+            return {
+                sampleRate: audioContext.sampleRate,
+                samplesPerChannel: Math.round(audioContext.baseLatency * audioContext.sampleRate),
+                audioChannelCount: audioContext.destination.channelCount
+            }
+        },
+
         open: function() {
             console.log("[driver]", "open")
             processor.connect(audioContext.destination)
             audioContext.resume()
+        },
+
+        resume: function() {
+            console.log("[driver]", "resume")
+            audioContext.resume()
+        },
+
+        suspend: function() {
+            console.log("[driver]", "suspend")
+            audioContext.suspend();
+        },
+
+        close: function() {
+            console.log("[driver]", "close")
+            processor.disconnect()
         }
     }
 

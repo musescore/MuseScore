@@ -103,6 +103,7 @@ void WebApi::load(const void* source, unsigned int len)
 
 void WebApi::startAudioProcessing()
 {
+    startAudioController()->startAudioProcessing(IApplication::RunMode::GuiApp);
 }
 
 void WebApi::onProjectSaved(const muse::io::path_t& path, mu::project::SaveMode)

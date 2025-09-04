@@ -47,13 +47,13 @@ function setupRpc(Module)
     Module.driver_worker_rpcChannel = new MessageChannel();
 }
 
-function setupDriver(Module)
+async function setupDriver(Module) 
 {
     Module.driver = AudioDriver;
-    AudioDriver.setup(Module.driver_worker_rpcChannel.port1);
+    await AudioDriver.setup(Module.driver_worker_rpcChannel.port1);
 }
 
-function setupWorker(Module)
+async function setupWorker(Module)
 {
     // Initialize the worker.
     Module.worker = new Worker("distr/audioworker.js")
@@ -109,9 +109,10 @@ const MuImpl = {
         this.Module._free(ptr);
     },
 
-    startAudioProcessing: function() {
-        setupDriver(this.Module);
-        setupWorker(this.Module);
+    startAudioProcessing: async function() {
+        await setupDriver(this.Module);
+        await setupWorker(this.Module);
+        this.Module._startAudioProcessing()
     }
 }
 
