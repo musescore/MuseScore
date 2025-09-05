@@ -602,7 +602,7 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
             }
             measureShape.remove_if([fullMeasureRest] (const ShapeElement& shapeEl) {
                 const EngravingItem* shapeItem = shapeEl.item();
-                return shapeItem && (shapeItem == fullMeasureRest || shapeItem->isBarLine());
+                return shapeItem && (shapeItem == fullMeasureRest || shapeItem->isBarLine() || shapeItem->isAccidental());
             });
 
             const double spatium = fullMeasureRest->spatium();
