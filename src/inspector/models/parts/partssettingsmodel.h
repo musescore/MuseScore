@@ -36,6 +36,7 @@ class PartsSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool showPartLinkingOption READ showPartLinkingOption NOTIFY showPartLinkingOptionChanged)
     Q_PROPERTY(bool showExcludeOption READ showExcludeOption NOTIFY showExcludeOptionChanged)
     Q_PROPERTY(bool showTextLinkingOption READ showTextLinkingOption NOTIFY showTextLinkingOptionChanged)
+    Q_PROPERTY(bool isMasterScore READ isMasterScore NOTIFY isMasterScoreChanged)
 
 public:
     explicit PartsSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -48,11 +49,13 @@ public:
     bool showPartLinkingOption() const;
     bool showExcludeOption() const;
     bool showTextLinkingOption() const;
+    bool isMasterScore() const;
 
 signals:
     void showPartLinkingOptionChanged(bool showPartsOption);
     void showExcludeOptionChanged(bool excludeOption);
     void showTextLinkingOptionChanged(bool showTextLink);
+    void isMasterScoreChanged(bool isMasterScore);
 
 private:
     void createProperties() override;
@@ -64,6 +67,7 @@ private:
     void updateShowPartLinkingOption();
     void updateShowExcludeOption();
     void updateShowTextLinkingOption();
+    void updateIsMasterScore();
 
 private:
     PropertyItem* m_positionLinkedToMaster;
@@ -78,5 +82,6 @@ private:
     bool m_showPartLinkingOption = false;
     bool m_showExcludeOption = false;
     bool m_showTextLinkingOption = false;
+    bool m_isMasterScore = false;
 };
 }
