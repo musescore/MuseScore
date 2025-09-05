@@ -166,6 +166,8 @@ private:
     void toggleScoreConfig(ScoreConfigType configType);
     void toggleConcertPitch();
 
+    void seekAndPlaySelectedElement(bool playChord = true);
+    void seekSelectedElement();
     void playSelectedElement(bool playChord = true);
 
     bool isEditingText() const;

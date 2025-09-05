@@ -75,6 +75,7 @@ public:
 
     virtual void addLoopBoundary(LoopBoundaryType boundaryType, muse::midi::tick_t tick) = 0;
     virtual void setLoopBoundariesEnabled(bool enabled) = 0;
+    virtual bool isLoopEnabled() const = 0;
     virtual const LoopBoundaries& loopBoundaries() const = 0;
     virtual muse::async::Notification loopBoundariesChanged() const = 0;
 

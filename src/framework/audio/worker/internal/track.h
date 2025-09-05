@@ -44,7 +44,7 @@ class ITrackAudioInput : public IAudioSource
 public:
     virtual ~ITrackAudioInput() = default;
 
-    virtual void seek(const msecs_t newPositionMsecs) = 0;
+    virtual void seek(const msecs_t newPositionMsecs, const bool flushSound = true) = 0;
     virtual void flush() = 0;
 
     virtual const AudioInputParams& inputParams() const = 0;

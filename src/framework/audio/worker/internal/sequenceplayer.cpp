@@ -68,13 +68,13 @@ void SequencePlayer::play(const secs_t delay)
     prepareAllTracksToPlay(doPlay);
 }
 
-void SequencePlayer::seek(const secs_t newPosition)
+void SequencePlayer::seek(const secs_t newPosition, const bool flushSound)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    msecs_t newPos = secsToMicrosecs(newPosition);
-    m_clock->seek(newPos);
-    seekAllTracks(newPos);
+    m_flushSoundOnSeek = flushSound;
+    m_clock->seek(secsToMicrosecs(newPosition));
+    m_flushSoundOnSeek = true;
 }
 
 void SequencePlayer::stop()
@@ -177,7 +177,7 @@ void SequencePlayer::seekAllTracks(const msecs_t newPositionMsecs)
 
     for (const auto& pair : m_getTracks->allTracks()) {
         if (pair.second->inputHandler) {
-            pair.second->inputHandler->seek(newPositionMsecs);
+            pair.second->inputHandler->seek(newPositionMsecs, m_flushSoundOnSeek);
         }
     }
 }

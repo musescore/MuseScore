@@ -63,11 +63,6 @@ void AbstractSynthesizer::setup(const mpe::PlaybackData& playbackData)
     setupEvents(playbackData);
 }
 
-void AbstractSynthesizer::revokePlayingNotes()
-{
-    ONLY_AUDIO_WORKER_THREAD;
-}
-
 void AbstractSynthesizer::prepareToPlay()
 {
     ONLY_AUDIO_WORKER_THREAD;

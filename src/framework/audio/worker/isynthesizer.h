@@ -49,7 +49,6 @@ public:
     virtual bool readyToPlay() const = 0;
     virtual async::Notification readyToPlayChanged() const = 0;
 
-    virtual void revokePlayingNotes() = 0;
     virtual void flushSound() = 0;
 
     virtual void processInput() = 0;

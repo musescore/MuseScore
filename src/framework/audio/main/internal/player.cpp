@@ -96,10 +96,15 @@ void Player::play(const secs_t delay)
     channel()->send(msg);
 }
 
-void Player::seek(const secs_t newPosition)
+void Player::seek(const secs_t newPosition, const bool flushSound)
 {
     ONLY_AUDIO_MAIN_THREAD;
-    Msg msg = rpc::make_request(Method::Seek, RpcPacker::pack(m_sequenceId, newPosition));
+
+    if (m_playbackPosition == newPosition) {
+        return;
+    }
+
+    Msg msg = rpc::make_request(Method::Seek, RpcPacker::pack(m_sequenceId, newPosition, flushSound));
     channel()->send(msg);
 }
 

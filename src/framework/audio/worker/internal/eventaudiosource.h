@@ -51,7 +51,7 @@ public:
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
-    void seek(const msecs_t newPositionMsecs) override;
+    void seek(const msecs_t newPositionMsecs, const bool flushSound = true) override;
     void flush() override;
 
     const AudioInputParams& inputParams() const override;

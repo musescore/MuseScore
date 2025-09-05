@@ -53,8 +53,6 @@ public:
     bool readyToPlay() const override;
     async::Notification readyToPlayChanged() const override;
 
-    void revokePlayingNotes() override;
-
     void processInput() override;
     InputProcessingProgress inputProcessingProgress() const override;
 

@@ -90,8 +90,8 @@ public:
 
     virtual void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) = 0;
 
-    virtual void seekElement(const notation::EngravingItem* element) = 0;
-    virtual void seekBeat(int measureIndex, int beatIndex) = 0;
+    virtual void seekElement(const notation::EngravingItem* element, bool flushSound = true) = 0;
+    virtual void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) = 0;
 
     virtual bool actionChecked(const muse::actions::ActionCode& actionCode) const = 0;
     virtual muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const = 0;

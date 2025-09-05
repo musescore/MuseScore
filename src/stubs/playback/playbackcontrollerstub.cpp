@@ -129,11 +129,11 @@ void PlaybackControllerStub::triggerControllers(const muse::mpe::ControllerChang
 {
 }
 
-void PlaybackControllerStub::seekElement(const notation::EngravingItem*)
+void PlaybackControllerStub::seekElement(const notation::EngravingItem*, bool)
 {
 }
 
-void PlaybackControllerStub::seekBeat(int, int)
+void PlaybackControllerStub::seekBeat(int, int, bool)
 {
 }
 

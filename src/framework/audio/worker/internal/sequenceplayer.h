@@ -42,7 +42,7 @@ public:
     explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx);
 
     void play(const secs_t delay = 0) override;
-    void seek(const secs_t newPosition) override;
+    void seek(const secs_t newPosition, const bool flushSound = true) override;
     void stop() override;
     void pause() override;
     void resume(const secs_t delay = 0) override;
@@ -69,6 +69,7 @@ private:
     IClockPtr m_clock = nullptr;
 
     bool m_countDownIsSet = false;
+    bool m_flushSoundOnSeek = true;
     std::set<TrackId> m_notYetReadyToPlayTrackIdSet;
 };
 }

@@ -103,10 +103,6 @@ async::Notification SynthesizerStub::readyToPlayChanged() const
     return async::Notification();
 }
 
-void SynthesizerStub::revokePlayingNotes()
-{
-}
-
 void SynthesizerStub::flushSound()
 {
 }

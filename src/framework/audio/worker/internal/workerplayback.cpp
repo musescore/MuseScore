@@ -366,14 +366,14 @@ void WorkerPlayback::play(TrackSequenceId sequenceId, const secs_t delay)
     s->player()->play(delay);
 }
 
-void WorkerPlayback::seek(TrackSequenceId sequenceId, const secs_t newPosition)
+void WorkerPlayback::seek(TrackSequenceId sequenceId, const secs_t newPosition, const bool flushSound)
 {
     ONLY_AUDIO_WORKER_THREAD;
     ITrackSequencePtr s = sequence(sequenceId);
     IF_ASSERT_FAILED(s) {
         return;
     }
-    s->player()->seek(newPosition);
+    s->player()->seek(newPosition, flushSound);
 }
 
 void WorkerPlayback::stop(TrackSequenceId sequenceId)
