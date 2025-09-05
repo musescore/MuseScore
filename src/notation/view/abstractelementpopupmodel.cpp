@@ -47,10 +47,10 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::LYRICS, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::FIGURED_BASS, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::TEMPO_TEXT, PopupModelType::TYPE_TEXT },
+    { mu::engraving::ElementType::PLAY_COUNT_TEXT, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
     { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
     { mu::engraving::ElementType::SHADOW_NOTE, PopupModelType::TYPE_SHADOW_NOTE },
-    { mu::engraving::ElementType::PLAY_COUNT_TEXT, PopupModelType::TYPE_TEXT }
 };
 
 static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDENT_ELEMENT_TYPES = {
@@ -62,6 +62,7 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
     { PopupModelType::TYPE_DYNAMIC, { mu::engraving::ElementType::DYNAMIC } },
     { PopupModelType::TYPE_TEXT,
       { mu::engraving::ElementType::TEXT,
+        mu::engraving::ElementType::STAFF_TEXT,
         mu::engraving::ElementType::SYSTEM_TEXT,
         mu::engraving::ElementType::EXPRESSION,
         mu::engraving::ElementType::REHEARSAL_MARK,
