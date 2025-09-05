@@ -37,6 +37,8 @@ Item {
 
     property int currentIndex: -1
 
+    property alias parentWindow: dropdownLoader.parentWindow
+
     property alias background: backgroundItem
     property alias itemColor: dropdownLoader.itemColor
 

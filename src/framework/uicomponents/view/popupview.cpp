@@ -135,6 +135,7 @@ void PopupView::init()
     m_window = new PopupWindow_QQuickView(muse::iocCtxForQmlEngine(engine), this);
     m_window->init(engine, isDialog(), frameless());
     m_window->setOnHidden([this]() { onHidden(); });
+    m_window->setParentWindow(m_parentWindow);
     m_window->setContent(m_component, m_contentItem);
     m_window->setTakeFocusOnClick(m_focusPolicies & FocusPolicy::ClickFocus);
 
@@ -744,16 +745,29 @@ void PopupView::setErrCode(Ret::Code code)
 
 QWindow* PopupView::parentWindow() const
 {
-    return m_window->parentWindow();
+    return m_parentWindow;
 }
 
 void PopupView::setParentWindow(QWindow* window)
 {
-    m_window->setParentWindow(window);
+    if (m_parentWindow == window) {
+        return;
+    }
+
+    if (m_window) {
+        m_window->setParentWindow(window);
+    }
+    m_parentWindow = window;
+
+    emit parentWindowChanged();
 }
 
 void PopupView::resolveParentWindow()
 {
+    if (m_parentWindow) {
+        return;
+    }
+
     if (QQuickItem* parent = parentItem()) {
         if (QWindow* window = parent->window()) {
             setParentWindow(window);
