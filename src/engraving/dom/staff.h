@@ -167,8 +167,8 @@ public:
     void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { m_swingList.insert({ tick.ticks(), sp }); }
 
     const CapoParams& capo(const Fraction&) const;
-    void insertCapoParams(const Fraction& tick, const CapoParams& params);
-    void clearCapoParams();
+    void insertCapoParams(const Fraction& tick, const CapoParams& params, bool ignoreNotationUpdate);
+    void removeCapoParams(const Fraction& tick);
 
     //==== staff type helper function
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
@@ -311,6 +311,7 @@ private:
 
     std::map<int, int> m_channelList[VOICES];
     std::map<int, SwingParameters> m_swingList;
+
     std::map<int, CapoParams> m_capoMap;
     bool m_playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> m_visibilityVoices { true, true, true, true };
