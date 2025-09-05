@@ -41,6 +41,7 @@ class SoundFontRepository;
 namespace muse::audio::worker {
 class AudioWorkerConfiguration;
 class AudioEngine;
+class WebAudioChannel;
 class WorkerPlayback;
 class WorkerChannelController;
 
@@ -62,5 +63,6 @@ private:
     std::shared_ptr<fx::FxResolver> m_fxResolver;
     std::shared_ptr<synth::SynthResolver> m_synthResolver;
     std::shared_ptr<synth::SoundFontRepository> m_soundFontRepository;
+    std::shared_ptr<WebAudioChannel> m_webAudioChannel;
 };
 }

@@ -49,6 +49,8 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
     requiredSpec.output.audioChannelCount = configuration()->audioChannelsCount();
     requiredSpec.output.samplesPerChannel = configuration()->driverBufferSize();
 
+    //! NOTE In the web, callback works via messages and is configured in the worker
+#ifndef Q_OS_WASM
     worker::IAudioWorker* worker = audioWorker().get();
     if (configuration()->shouldMeasureInputLag()) {
         requiredSpec.callback = [worker](void* /*userdata*/, uint8_t* stream, int byteCount) {
@@ -63,6 +65,7 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
             worker->popAudioData(reinterpret_cast<float*>(stream), samplesPerChannel);
         };
     }
+#endif
 
     if (mode == IApplication::RunMode::GuiApp) {
         audioDriver()->init();

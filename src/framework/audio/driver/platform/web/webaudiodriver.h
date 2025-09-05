@@ -24,6 +24,9 @@
 #include "../../../iaudiodriver.h"
 
 namespace muse::audio {
+//! NOTE Used in the main thread to control the driver.
+//! The callback from the Spec is not used and is not called.
+//! WebAudioChannel is used to transfer audio data
 class WebAudioDriver : public IAudioDriver
 {
 public:
