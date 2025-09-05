@@ -72,5 +72,7 @@ elseif(OS_IS_WASM)
     set(AUDIO_DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudiochannel.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/webaudiochannel.h
     )
 endif()
