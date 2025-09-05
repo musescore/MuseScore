@@ -2171,6 +2171,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     bool ignoreDot = start && (isOuterTieOfChord || dotsPlacement == TieDotsPlacement::BEFORE_DOTS);
     const bool ignoreAccidental = !start && isOuterTieOfChord;
     bool ignoreLvSeg = tieSegment->isLaissezVibSegment();
+    bool ignoreArpeggio = note == chord->downNote() && !tie->up();
     static const std::set<ElementType> IGNORED_TYPES = {
         ElementType::HOOK,
         ElementType::STEM_SLASH,
@@ -2183,7 +2184,9 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         bool remove =  !s.item() || s.item() == note || muse::contains(IGNORED_TYPES, s.item()->type())
                       || (s.item()->isNoteDot() && ignoreDot)
                       || (s.item()->isAccidental() && ignoreAccidental && s.item()->track() == chord->track())
-                      || (s.item()->isLaissezVibSegment() && ignoreLvSeg) || !s.item()->addToSkyline();
+                      || (s.item()->isLaissezVibSegment() && ignoreLvSeg)
+                      || (s.item()->isArpeggio() && ignoreArpeggio)
+                      || !s.item()->addToSkyline();
         return remove;
     });
 
