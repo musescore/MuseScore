@@ -61,7 +61,7 @@ private:
     // service
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
     std::shared_ptr<StartWorkerController> m_startWorkerController;
-    std::shared_ptr<IAudioEngine> m_engine = nullptr;
+    std::shared_ptr<IAudioEngine> m_engine;
 
     // thread
     msecs_t m_intervalMsecs = 0;
