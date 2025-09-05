@@ -4348,9 +4348,6 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
     for (Pid i : TextBasePropertyId) {
-        if (i == Pid::POSITION && tag == propertyName(i)) {
-            LOGI() << "read pos";
-        }
         if (TRead::readProperty(t, tag, e, ctx, i)) {
             return true;
         }
