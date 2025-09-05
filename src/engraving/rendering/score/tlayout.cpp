@@ -5604,8 +5604,8 @@ void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
         Font font(item->font());
 
         RectF rect;
-        rect.setTopLeft({ 0, item->ldata()->bbox().y() - font.weight() - spatium * .15 });
-        rect.setSize({ font.weight() - spatium, (font.weight() - spatium * .35) * 1.5 });
+        rect.setTopLeft({ 0, item->ldata()->bbox().y() - static_cast<double>(font.weight()) - spatium * .15 });
+        rect.setSize({ static_cast<double>(font.weight()) - spatium, (static_cast<double>(font.weight()) - spatium * .35) * 1.5 });
 
         item->setbbox(rect);
     }

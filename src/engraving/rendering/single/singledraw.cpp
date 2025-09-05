@@ -1119,7 +1119,9 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     Pen pen(item->figuredBass()->curColor(), FiguredBass::FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
+    painter->drawText(ldata->bbox(),
+                      static_cast<int>(muse::draw::TextDontClip) | static_cast<int>(muse::draw::AlignLeft | muse::draw::AlignTop),
+                      ldata->displayText);
 
     // continuation line
     double lineEndX = 0.0;
@@ -1323,7 +1325,7 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
             painter->rotate(90);
             if (item->numPos() == 0) {
                 painter->drawText(RectF(.0, ldata->stringDist * (item->strings() - 1), .0, .0),
-                                  muse::draw::AlignLeft | muse::draw::TextDontClip,
+                                  static_cast<int>(muse::draw::AlignLeft) | static_cast<int>(muse::draw::TextDontClip),
                                   text);
             } else {
                 painter->drawText(RectF(.0, .0, .0, .0),
