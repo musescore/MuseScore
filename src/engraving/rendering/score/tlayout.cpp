@@ -2855,6 +2855,15 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
 void TLayout::layoutGlissando(Glissando* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
+
+    if (item->startElement()) {
+        item->setTick(item->startElement()->tick());
+    }
+
+    if (item->endElement()) {
+        item->setTick2(item->endElement()->tick());
+    }
+
     TLayout::layoutLine(const_cast<Glissando*>(item), ctx);
 
     if (item->spannerSegments().empty()) {
@@ -5187,6 +5196,15 @@ void TLayout::layoutNoteAnchoredLine(SLine* item, EngravingItem::LayoutData* lda
 void TLayout::layoutNoteLine(NoteLine* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
+
+    if (item->startElement()) {
+        item->setTick(item->startElement()->tick());
+    }
+
+    if (item->endElement()) {
+        item->setTick2(item->endElement()->tick());
+    }
+
     TLayout::layoutLine(item, ctx);
 
     if (item->lineEndPlacement() == NoteLineEndPlacement::OFFSET_ENDS) {
