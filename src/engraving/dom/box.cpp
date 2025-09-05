@@ -723,7 +723,7 @@ void FBox::init()
 
     StringList diagramsNamesInScore;
     std::vector<EngravingItem*> harmonyOrDiagramsInScore;
-    for (mu::engraving::Segment* segment = masterScore()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
+    for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
          segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
         for (EngravingItem* item : segment->annotations()) {
             if (!item || !item->part()) {
