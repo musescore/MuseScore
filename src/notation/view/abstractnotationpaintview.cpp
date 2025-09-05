@@ -583,7 +583,7 @@ void AbstractNotationPaintView::hideContextMenu()
     }
 }
 
-void AbstractNotationPaintView::showElementPopup(const ElementType& elementType, const RectF& elementRect)
+void AbstractNotationPaintView::showElementPopup(const ElementType& elementType)
 {
     TRACEFUNC;
 
@@ -594,7 +594,7 @@ void AbstractNotationPaintView::showElementPopup(const ElementType& elementType,
     }
 
     m_currentElementPopupType = modelType;
-    emit showElementPopupRequested(modelType, fromLogical(elementRect).toQRectF());
+    emit showElementPopupRequested(modelType);
 }
 
 void AbstractNotationPaintView::hideElementPopup(const ElementType& elementType)
@@ -614,14 +614,14 @@ void AbstractNotationPaintView::hideElementPopup(const ElementType& elementType)
     }
 }
 
-void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType, const RectF& elementRect)
+void AbstractNotationPaintView::toggleElementPopup(const ElementType& elementType)
 {
     if (m_currentElementPopupType != PopupModelType::TYPE_UNDEFINED) {
         hideElementPopup(elementType);
         return;
     }
 
-    showElementPopup(elementType, elementRect);
+    showElementPopup(elementType);
 }
 
 bool AbstractNotationPaintView::elementPopupIsOpen(const ElementType& elementType) const
