@@ -21,12 +21,16 @@
  */
 #include "mixer.h"
 
-#include "concurrency/taskscheduler.h"
-
 #include "audio/common/audiosanitizer.h"
 #include "audio/common/audioerrors.h"
 
 #include "dsp/audiomathutils.h"
+
+#include "muse_framework_config.h"
+
+#ifdef MUSE_THREADS_SUPPORT
+#include "concurrency/taskscheduler.h"
+#endif
 
 #include "log.h"
 
@@ -50,6 +54,7 @@ void Mixer::init(size_t desiredAudioThreadNumber, size_t minTrackCountForMultith
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+#ifdef MUSE_THREADS_SUPPORT
     m_taskScheduler = std::make_unique<TaskScheduler>(static_cast<thread_pool_size_t>(desiredAudioThreadNumber));
 
     if (!m_taskScheduler->setThreadsPriority(ThreadPriority::High)) {
@@ -59,6 +64,11 @@ void Mixer::init(size_t desiredAudioThreadNumber, size_t minTrackCountForMultith
     AudioSanitizer::setMixerThreads(m_taskScheduler->threadIdSet());
 
     m_minTrackCountForMultithreading = minTrackCountForMultithreading;
+
+#else
+    UNUSED(desiredAudioThreadNumber);
+    UNUSED(minTrackCountForMultithreading);
+#endif
 }
 
 IAudioSourcePtr Mixer::mixedSource()
@@ -275,6 +285,7 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
     bool filterTracks = m_isIdle && !m_tracksToProcessWhenIdle.empty();
 
     if (useMultithreading()) {
+#ifdef MUSE_THREADS_SUPPORT
         std::map<TrackId, std::future<std::vector<float> > > futures;
 
         for (const auto& pair : m_trackChannels) {
@@ -294,6 +305,9 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
         for (auto& pair : futures) {
             outTracksData.emplace(pair.first, pair.second.get());
         }
+#else
+        UNREACHABLE;
+#endif
     } else {
         for (const auto& pair : m_trackChannels) {
             if (filterTracks && !muse::contains(m_tracksToProcessWhenIdle, pair.second->trackId())) {
@@ -312,6 +326,7 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
 
 bool Mixer::useMultithreading() const
 {
+#ifdef MUSE_THREADS_SUPPORT
     if (m_nonMutedTrackCount < m_minTrackCountForMultithreading) {
         return false;
     }
@@ -323,6 +338,9 @@ bool Mixer::useMultithreading() const
     }
 
     return true;
+#else
+    return false;
+#endif
 }
 
 void Mixer::setIsActive(bool arg)

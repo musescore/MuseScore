@@ -47,10 +47,6 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontrepository.h
 
-    # platform
-    ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.h
-
     # internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioworkerconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioworkerconfiguration.h
@@ -143,6 +139,13 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.cpp
 )
+
+if (NOT OS_IS_WASM)
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.h
+    )
+endif()
 
 if (ARCH_IS_X86_64)
     set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}

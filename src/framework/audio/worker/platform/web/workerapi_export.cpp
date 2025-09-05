@@ -22,7 +22,7 @@
 
 #include "webworkerapi.h"
 
-using namespace web::worker;
+using namespace muse::web::worker;
 
 extern "C" {
 int main()

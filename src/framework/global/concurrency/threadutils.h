@@ -22,6 +22,10 @@
 
 #pragma once
 
+#include "muse_framework_config.h"
+
+#ifdef MUSE_THREADS_SUPPORT
+
 #include <thread>
 
 #ifdef Q_OS_WIN
@@ -88,3 +92,5 @@ static bool setThreadPriority(std::thread& thread, ThreadPriority priority)
     return true;
 }
 }
+
+#endif // MUSE_THREADS_SUPPORT

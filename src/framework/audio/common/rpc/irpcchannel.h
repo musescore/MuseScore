@@ -38,6 +38,7 @@ enum class Method {
     Undefined = 0,
 
     // Init
+    WorkerStarted, // notification
     WorkerInit,
 
     // Config
@@ -121,6 +122,7 @@ inline std::string to_string(Method m)
     case Method::Undefined: return "Undefined";
 
     // Init
+    case Method::WorkerStarted: return "WorkerStarted";
     case Method::WorkerInit: return "WorkerInit";
 
     // Config

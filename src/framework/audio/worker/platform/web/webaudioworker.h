@@ -48,7 +48,17 @@ public:
     void popAudioData(float* dest, size_t sampleCount) override;
 
 private:
+
+    void init(const OutputSpec& outputSpec, const AudioWorkerConfig& conf);
+
+    struct InitPending {
+        OutputSpec outputSpec;
+        AudioWorkerConfig conf;
+        bool pending = false;
+    };
+
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
     bool m_running = false;
+    InitPending m_initPending;
 };
 }

@@ -22,7 +22,7 @@
 #include "generalaudioworker.h"
 
 #include "global/runtime.h"
-#include "global/threadutils.h"
+#include "global/concurrency/threadutils.h"
 #include "global/async/processevents.h"
 
 #ifdef Q_OS_WIN
@@ -30,7 +30,6 @@
 #endif
 
 #include "audio/common/audiosanitizer.h"
-#include "audio/common/audioutils.h"
 
 #include "../../internal/startworkercontroller.h"
 

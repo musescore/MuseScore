@@ -26,11 +26,15 @@
 
 #include "audio/common/rpc/platform/web/webrpcchannel.h"
 
+#include "audio/worker/internal/startworkercontroller.h"
+
 #include "log.h"
 
 using namespace muse;
-using namespace web::worker;
+using namespace muse::web::worker;
 using namespace muse::audio;
+using namespace muse::audio::worker;
+using namespace muse::audio::rpc;
 
 WebWorkerApi* WebWorkerApi::instance()
 {
@@ -50,17 +54,20 @@ static modularity::ModulesIoC* ioc()
 
 void WebWorkerApi::init()
 {
-    static GlobalModule globalModule;
+    m_globalModule = std::make_shared<GlobalModule>();
+    m_rpcChannel = std::make_shared<WebRpcChannel>();
+    m_startWorkerController = std::make_shared<StartWorkerController>(m_rpcChannel);
 
-    globalModule.registerExports();
+    m_globalModule->registerExports();
+    ioc()->registerExport<IRpcChannel>(moduleName(), m_rpcChannel);
+    m_startWorkerController->registerExports();
 
-    std::shared_ptr<rpc::IRpcChannel> rpcChannel = std::make_shared<rpc::WebRpcChannel>();
-    ioc()->registerExport<rpc::IRpcChannel>(moduleName(), rpcChannel);
+    m_rpcChannel->setupOnWorker();
 
-    rpcChannel->setupOnWorker();
+    m_globalModule->onPreInit(IApplication::RunMode::ConsoleApp);
+    m_globalModule->onInit(IApplication::RunMode::ConsoleApp);
 
-    globalModule.onPreInit(IApplication::RunMode::ConsoleApp);
-    globalModule.onInit(IApplication::RunMode::ConsoleApp);
+    m_rpcChannel->send(rpc::make_notification(Method::WorkerStarted));
 
     LOGI() << "Inited";
 }

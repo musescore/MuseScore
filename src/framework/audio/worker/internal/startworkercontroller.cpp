@@ -27,11 +27,10 @@
 #include "global/platform/win/waitabletimer.h"
 #endif
 
-#include "audio/common/audiosanitizer.h"
 #include "audio/common/audioutils.h"
+#include "audio/common/rpc/rpcpacker.h"
 
 #include "audioworkerconfiguration.h"
-#include "audiobuffer.h"
 #include "audioengine.h"
 #include "workerplayback.h"
 #include "workerchannelcontroller.h"
@@ -65,6 +64,16 @@ static muse::modularity::ModulesIoC* ioc()
 StartWorkerController::StartWorkerController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
     : m_rpcChannel(rpcChannel)
 {
+    m_rpcChannel->onMethod(rpc::Method::WorkerInit, [this](const rpc::Msg& msg) {
+        OutputSpec spec;
+        AudioWorkerConfig conf;
+
+        IF_ASSERT_FAILED(rpc::RpcPacker::unpack(msg.data, spec, conf)) {
+            return;
+        }
+
+        init(spec, conf);
+    });
 }
 
 void StartWorkerController::registerExports()
