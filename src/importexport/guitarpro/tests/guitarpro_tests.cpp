@@ -31,7 +31,6 @@
 #include "engraving/dom/excerpt.h"
 
 #include "modularity/ioc.h"
-#include "importexport/guitarpro/iguitarproconfiguration.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -757,5 +756,13 @@ TEST_F(GuitarPro_Tests, gpTupletEmptyMeasure) {
 }
 TEST_F(GuitarPro_Tests, gpSkippedTiedNotes) {
     gpReadTest("skipped_tied_notes", "gp5");
+}
+
+TEST_F(GuitarPro_Tests, gpBendAndGlissando) {
+    gpReadTest("bend_and_glissando", "gp");
+}
+
+TEST_F(GuitarPro_Tests, gp5BendAndGlissando) {
+    gpReadTest("bend_and_glissando", "gp5");
 }
 }
