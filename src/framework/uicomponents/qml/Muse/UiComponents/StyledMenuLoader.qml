@@ -75,7 +75,7 @@ Loader {
 
         onOpenPrevMenu: {
            Qt.callLater(loader.openPrevMenu)
-        }  
+        }
 
         onOpenNextMenu: {
             Qt.callLater(loader.openNextMenu)
@@ -147,7 +147,7 @@ Loader {
 
         menu.model = model
 
-        menu.calculateSize()
+        Qt.callLater(menu.calculateSize)
     }
 
     Timer {
