@@ -22618,19 +22618,19 @@ pickup measure</translation>
         <translation type="unfinished">Heavy double barline</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="66"/>
-        <source>Left (start) barline</source>
-        <translation type="unfinished">Left (start) barline</translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="67"/>
         <source>Right (end) repeat barline</source>
         <translation type="unfinished">Right (end) repeat barline</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="66"/>
+        <source>Left (start) repeat barline</source>
+        <translation type="unfinished">Left (start) repeat barline</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="68"/>
-        <source>Right and left repeat barline</source>
-        <translation type="unfinished">Right and left repeat barline</translation>
+        <source>Right and left (end/start) repeat barline</source>
+        <translation type="unfinished">Right and left (end/start) repeat barline</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="74"/>
@@ -26824,13 +26824,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="69"/>
-        <source>No note or rest or harmony selected</source>
-        <translation type="unfinished">No note or rest or harmony selected</translation>
+        <source>No note or rest or chord symbol selected</source>
+        <translation type="unfinished">No note or rest or chord symbol selected</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="70"/>
-        <source>Please select a note or rest or harmony and retry</source>
-        <translation type="unfinished">Please select a note or rest or harmony and retry</translation>
+        <source>Please select a note or rest or chord symbol and retry</source>
+        <translation type="unfinished">Please select a note or rest or chord symbol and retry</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="73"/>
