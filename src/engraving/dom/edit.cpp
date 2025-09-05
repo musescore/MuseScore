@@ -4035,7 +4035,11 @@ void Score::cmdDeleteSelection()
                 FretDiagram* fretDiagram = toFretDiagram(e);
                 Harmony* harmony = fretDiagram->harmony();
                 if (harmony) {
-                    undo(new FretLinkHarmony(fretDiagram, harmony, true /* unlink */));
+                    for (EngravingObject* o: fretDiagram->linkList()) {
+                        FretDiagram* linkedDiagram = toFretDiagram(o);
+                        Harmony* linkedHarmony = linkedDiagram->harmony();
+                        undo(new FretLinkHarmony(linkedDiagram, linkedHarmony, true /* unlink */));
+                    }
                     elSelectedAfterDeletion = fretDiagram->segment()->findAnnotation(ElementType::HARMONY,
                                                                                      fretDiagram->track(),
                                                                                      fretDiagram->track());
