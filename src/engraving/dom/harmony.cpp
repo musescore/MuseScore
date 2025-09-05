@@ -168,6 +168,11 @@ ParsedChord* HarmonyInfo::getParsedChord()
     return m_parsedChord;
 }
 
+bool HarmonyInfo::hasModifiers() const
+{
+    return m_parsedChord ? m_parsedChord->modifiers().size() > 0 : false;
+}
+
 //---------------------------------------------------------
 //   harmonyName
 //---------------------------------------------------------
@@ -414,6 +419,17 @@ void Harmony::afterRead()
 
     // render chord from description (or _textName)
     setPlainText(harmonyName());
+}
+
+bool Harmony::hasModifiers() const
+{
+    for (const HarmonyInfo* info : m_chords) {
+        if (info->hasModifiers()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------

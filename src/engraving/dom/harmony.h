@@ -190,6 +190,8 @@ public:
     ParsedChord* parsedChord() const { return m_parsedChord; }
     ParsedChord* getParsedChord();
 
+    bool hasModifiers() const;
+
 private:
     int m_id = -1;                          // >0 = id of matched chord from chord list, if applicable
                                             // -1 = invalid chord
@@ -266,6 +268,8 @@ public:
     bool isPolychord() const { return m_chords.size() > 1; }
     const std::vector<HarmonyInfo*> chords() const { return m_chords; }
     void addChord(HarmonyInfo* info) { m_chords.push_back(info); }
+
+    bool hasModifiers() const;
 
     String harmonyName() const;
 
