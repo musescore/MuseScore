@@ -213,7 +213,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<PianoKeyboardView>("MuseScore.NotationScene", 1, 0, "PianoKeyboardView");
     qmlRegisterType<PianoKeyboardPanelContextMenuModel>("MuseScore.NotationScene", 1, 0, "PianoKeyboardPanelContextMenuModel");
 
-    qmlRegisterUncreatableType<AbstractElementPopupModel>("MuseScore.NotationScene", 1, 0, "Notation",
+    qmlRegisterUncreatableType<AbstractElementPopupModel>("MuseScore.NotationScene", 1, 0, "AbstractElementPopupModel",
                                                           "Not creatable as it is an enum type");
     qmlRegisterType<HarpPedalPopupModel>("MuseScore.NotationScene", 1, 0, "HarpPedalPopupModel");
     qmlRegisterType<CapoSettingsModel>("MuseScore.NotationScene", 1, 0, "CapoSettingsModel");
