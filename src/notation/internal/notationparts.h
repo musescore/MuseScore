@@ -66,6 +66,7 @@ public:
     void moveStaves(const muse::IDList& sourceStavesIds, const muse::ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
     bool appendStaff(Staff* staff, const muse::ID& destinationPartId) override;
+    bool appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceStaff, const muse::ID& destinationPartId) override;
     bool appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId) override;
 
     void insertPart(Part* part, size_t index) override;

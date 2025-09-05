@@ -607,6 +607,29 @@ bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     return true;
 }
 
+bool NotationParts::appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceStaff, const muse::ID& destinationPartId)
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(staff && masterSourceStaff) {
+        return false;
+    }
+
+    Part* destinationPart = partModifiable(destinationPartId);
+    if (!destinationPart) {
+        return false;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Add staff"));
+
+    doAppendStaff(staff, destinationPart, /*createRests*/ false);
+    score()->undo(new mu::engraving::Link(staff, masterSourceStaff));
+
+    mu::engraving::Excerpt::cloneStaff2(masterSourceStaff, staff, Fraction(0, 1), score()->endTick());
+
+    return true;
+}
+
 bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId)
 {
     TRACEFUNC;
