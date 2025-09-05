@@ -36,6 +36,12 @@ using namespace muse::audio::rpc;
 
 static constexpr int MAX_SUPPORTED_AUDIO_CHANNELS = 2;
 
+AudioEngine::AudioEngine()
+{
+    m_buffer = std::make_shared<AudioBuffer>();
+    m_mixer = std::make_shared<Mixer>(nullptr);
+}
+
 AudioEngine::~AudioEngine()
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
@@ -64,9 +70,6 @@ Ret AudioEngine::init(const OutputSpec& outputSpec, const RenderConstraints& con
 
     m_outputSpec = outputSpec;
     m_renderConsts = consts;
-
-    m_buffer = std::make_shared<AudioBuffer>();
-    m_mixer = std::make_shared<Mixer>(nullptr);
 
     m_buffer->init(outputSpec.audioChannelCount);
     updateBufferConstraints();
@@ -196,16 +199,14 @@ MixerPtr AudioEngine::mixer() const
 
 void AudioEngine::processAudioData()
 {
-    if (m_inited) {
-        m_buffer->forward();
-    }
+    ONLY_AUDIO_WORKER_THREAD;
+    m_buffer->forward();
 }
 
 void AudioEngine::popAudioData(float* dest, size_t sampleCount)
 {
-    if (m_inited) {
-        m_buffer->pop(dest, sampleCount);
-    }
+    // driver thread
+    m_buffer->pop(dest, sampleCount);
 }
 
 void AudioEngine::updateBufferConstraints()

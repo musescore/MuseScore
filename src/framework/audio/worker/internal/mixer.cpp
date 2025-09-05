@@ -42,7 +42,6 @@ using namespace muse::audio::worker;
 Mixer::Mixer(const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx)
 {
-    ONLY_AUDIO_WORKER_THREAD;
 }
 
 Mixer::~Mixer()

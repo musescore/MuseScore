@@ -39,7 +39,7 @@ class AudioEngine : public IAudioEngine
     Inject<rpc::IRpcChannel> rpcChannel;
 
 public:
-    AudioEngine() = default;
+    AudioEngine();
     ~AudioEngine();
 
     struct RenderConstraints {
@@ -71,7 +71,7 @@ private:
 
     void updateBufferConstraints();
 
-    std::atomic<bool> m_inited = false;
+    bool m_inited = false;
 
     OutputSpec m_outputSpec;
     async::Channel<OutputSpec> m_outputSpecChanged;

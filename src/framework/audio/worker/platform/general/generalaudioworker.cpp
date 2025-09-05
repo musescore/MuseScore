@@ -61,6 +61,8 @@ GeneralAudioWorker::~GeneralAudioWorker()
 void GeneralAudioWorker::registerExports()
 {
     m_startWorkerController->registerExports();
+    // optimization
+    m_engine = audioEngine();
 }
 
 void GeneralAudioWorker::run(const OutputSpec& outputSpec, const AudioWorkerConfig& conf)
@@ -98,7 +100,7 @@ bool GeneralAudioWorker::isRunning() const
 
 void GeneralAudioWorker::popAudioData(float* dest, size_t sampleCount)
 {
-    audioEngine()->popAudioData(dest, sampleCount);
+    m_engine->popAudioData(dest, sampleCount);
 }
 
 static msecs_t audioWorkerInterval(const samples_t samples, const sample_rate_t sampleRate)
@@ -120,7 +122,7 @@ void GeneralAudioWorker::th_main(const OutputSpec& outputSpec, const AudioWorker
 
     m_startWorkerController->init(outputSpec, conf);
 
-    audioEngine()->outputSpecChanged().onReceive(this, [this](const OutputSpec& spec) {
+    m_engine->outputSpecChanged().onReceive(this, [this](const OutputSpec& spec) {
         msecs_t interval = audioWorkerInterval(spec.samplesPerChannel, spec.sampleRate);
         setInterval(interval);
     });
@@ -136,12 +138,10 @@ void GeneralAudioWorker::th_main(const OutputSpec& outputSpec, const AudioWorker
     }
 #endif
 
-    IAudioEngine* engine = audioEngine().get();
-
     while (m_running) {
         async::processEvents();
         m_rpcChannel->process();
-        engine->processAudioData();
+        m_engine->processAudioData();
 
 #ifdef Q_OS_WIN
         if (!timerValid || !timer.setAndWait(m_intervalInWinTime)) {
