@@ -706,6 +706,7 @@ FBox::FBox(System* parent)
     resetProperty(Pid::BOTTOM_MARGIN);
     resetProperty(Pid::TOP_GAP);
     resetProperty(Pid::BOTTOM_GAP);
+    resetProperty(Pid::EXCLUDE_FROM_OTHER_PARTS);
 }
 
 void FBox::init()
@@ -910,6 +911,8 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
         return PropertyValue();
     case Pid::FRET_FRAME_INVISIBLE_DIAGRAMS:
         return PropertyValue();
+    case Pid::EXCLUDE_FROM_OTHER_PARTS:
+        return true;
     default:
         return VBox::propertyDefault(propertyId);
     }
