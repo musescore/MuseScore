@@ -49,7 +49,7 @@ void RegisterAudioPluginsScenario::init()
     }
 }
 
-Ret RegisterAudioPluginsScenario::registerNewPlugins()
+io::paths_t RegisterAudioPluginsScenario::scanForNewPluginPaths() const
 {
     TRACEFUNC;
 
@@ -63,6 +63,17 @@ Ret RegisterAudioPluginsScenario::registerNewPlugins()
                 newPluginPaths.push_back(path);
             }
         }
+    }
+
+    return newPluginPaths;
+}
+
+Ret RegisterAudioPluginsScenario::registerNewPlugins(io::paths_t newPluginPaths)
+{
+    TRACEFUNC;
+
+    if (newPluginPaths.empty()) {
+        newPluginPaths = scanForNewPluginPaths();
     }
 
     if (newPluginPaths.empty()) {

@@ -35,7 +35,8 @@ class IRegisterAudioPluginsScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IRegisterAudioPluginsScenario() = default;
 
-    virtual Ret registerNewPlugins() = 0;
+    virtual io::paths_t scanForNewPluginPaths() const = 0;
+    virtual Ret registerNewPlugins(io::paths_t newPluginPaths = {}) = 0;
     virtual Ret registerPlugin(const io::path_t& pluginPath) = 0;
     virtual Ret registerFailedPlugin(const io::path_t& pluginPath, int failCode) = 0;
 };

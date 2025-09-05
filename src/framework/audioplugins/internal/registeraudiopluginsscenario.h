@@ -50,7 +50,8 @@ public:
 
     void init();
 
-    Ret registerNewPlugins() override;
+    io::paths_t scanForNewPluginPaths() const override;
+    Ret registerNewPlugins(io::paths_t newPluginPaths = {}) override;
     Ret registerPlugin(const io::path_t& pluginPath) override;
     Ret registerFailedPlugin(const io::path_t& pluginPath, int failCode) override;
 
