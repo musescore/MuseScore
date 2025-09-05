@@ -21,6 +21,10 @@
  */
 #pragma once
 
+#include "muse_framework_config.h"
+
+#ifdef MUSE_THREADS_SUPPORT
+
 #include <condition_variable>
 #include <functional>
 #include <future>
@@ -197,3 +201,5 @@ private:
     std::unique_ptr<std::thread[]> m_threadPool = nullptr;
 };
 }
+
+#endif // MUSE_THREADS_SUPPORT

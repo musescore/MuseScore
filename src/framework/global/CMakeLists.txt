@@ -55,7 +55,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/translation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/translation.h
     ${CMAKE_CURRENT_LIST_DIR}/timer.h
-    ${CMAKE_CURRENT_LIST_DIR}/threadutils.h
     ${CMAKE_CURRENT_LIST_DIR}/progress.h
     ${CMAKE_CURRENT_LIST_DIR}/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils.h
@@ -153,10 +152,15 @@ set(MODULE_SRC
     
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.hpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
-    ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
 )
+
+if (MUSE_THREADS_SUPPORT)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
+        ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
+        ${CMAKE_CURRENT_LIST_DIR}/concurrency/threadutils.h
+    )
+endif()
 
 if (GLOBAL_NO_INTERNAL)
     set(MODULE_DEF ${MODULE_DEF} -DGLOBAL_NO_INTERNAL)

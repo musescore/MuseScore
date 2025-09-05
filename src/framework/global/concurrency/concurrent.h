@@ -20,8 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_GLOBAL_CONCURRENT_H
-#define MUSE_GLOBAL_CONCURRENT_H
+#pragma once
+
+#include "muse_framework_config.h"
+
+#ifdef MUSE_THREADS_SUPPORT
 
 #include <QtConcurrent>
 
@@ -78,4 +81,4 @@ public:
 };
 }
 
-#endif // MUSE_GLOBAL_CONCURRENT_H
+#endif // MUSE_THREADS_SUPPORT

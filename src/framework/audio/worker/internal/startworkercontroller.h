@@ -44,7 +44,7 @@ class AudioEngine;
 class WorkerPlayback;
 class WorkerChannelController;
 
-class StartWorkerController : IStartWorkerController
+class StartWorkerController : public IStartWorkerController
 {
 public:
     StartWorkerController(std::shared_ptr<rpc::IRpcChannel> rpcChannel);

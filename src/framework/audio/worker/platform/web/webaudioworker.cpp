@@ -32,6 +32,15 @@ using namespace muse::audio::rpc;
 WebAudioWorker::WebAudioWorker(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
     : m_rpcChannel(rpcChannel)
 {
+    m_rpcChannel->onMethod(Method::WorkerStarted, [this](const Msg&) {
+        LOGI() << "recieved message from worker about WorkerStarted";
+        m_running = true;
+
+        if (m_initPending.pending) {
+            init(m_initPending.outputSpec, m_initPending.conf);
+            m_initPending = {};
+        }
+    });
 }
 
 WebAudioWorker::~WebAudioWorker()
@@ -46,10 +55,20 @@ void WebAudioWorker::registerExports()
     // noop
 }
 
-void WebAudioWorker::run(const OutputSpec& outputSpec, const AudioWorkerConfig& conf)
+void WebAudioWorker::init(const OutputSpec& outputSpec, const AudioWorkerConfig& conf)
 {
     m_rpcChannel->send(rpc::make_request(Method::WorkerInit, RpcPacker::pack(outputSpec, conf)));
-    m_running = true;
+}
+
+void WebAudioWorker::run(const OutputSpec& outputSpec, const AudioWorkerConfig& conf)
+{
+    if (m_running) {
+        init(outputSpec, conf);
+    } else {
+        m_initPending.outputSpec = outputSpec;
+        m_initPending.conf = conf;
+        m_initPending.pending = true;
+    }
 }
 
 void WebAudioWorker::stop()
