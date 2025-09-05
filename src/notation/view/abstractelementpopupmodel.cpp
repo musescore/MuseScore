@@ -251,7 +251,7 @@ void AbstractElementPopupModel::init()
     m_item = selection->element();
 
     undoStack->changesChannel().onReceive(this, [this] (const ScoreChanges& changes) {
-        if (changes.isTextEditing) {
+        if (ignoreTextEditingChanges() && changes.isTextEditing) {
             return;
         }
 
