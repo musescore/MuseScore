@@ -1496,6 +1496,15 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         if (fd && fd->excludeVerticalAlign() != val) {
             fd->setExcludeVerticalAlign(val);
         }
+        Segment* parentSeg = getParentSeg();
+        if (!parentSeg) {
+            break;
+        }
+        staff_idx_t staff = staffIdx();
+        for (EngravingItem* item : parentSeg->findAnnotations(ElementType::HARMONY, staff2track(staff), staff2track(staff + 1))) {
+            Harmony* harmony = toHarmony(item);
+            harmony->setExcludeVerticalAlign(val);
+        }
         break;
     }
     case Pid::HARMONY_DO_NOT_STACK_MODIFIERS:

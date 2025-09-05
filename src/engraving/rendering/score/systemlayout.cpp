@@ -994,14 +994,38 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
 
 void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx)
 {
-    for (Harmony* harmony : harmonies) {
-        TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
-        Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
+    if (!ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+        for (Harmony* harmony : harmonies) {
+            TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
+            Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
+        }
+        return;
     }
 
-    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
-        std::vector<EngravingItem*> harmonyItems(harmonies.begin(), harmonies.end());
-        AlignmentLayout::alignItemsForSystem(harmonyItems, system);
+    for (Harmony* harmony : harmonies) {
+        TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
+    }
+
+    // Only vertically align one chord symbol per tick & staff
+    std::map<Fraction, staff_idx_t> harmonyPositions;
+    std::vector<EngravingItem*> harmonyItemsAlign;
+    std::vector<EngravingItem*> harmonyItemsNoAlign;
+
+    for (Harmony* h : harmonies) {
+        if (muse::contains(harmonyPositions, h->tick())) {
+            harmonyItemsNoAlign.push_back(h);
+            continue;
+        }
+
+        Autoplace::autoplaceSegmentElement(h, h->mutldata());
+        harmonyItemsAlign.push_back(h);
+        harmonyPositions.insert({ h->tick(), h->staffIdx() });
+    }
+
+    AlignmentLayout::alignItemsForSystem(harmonyItemsAlign, system);
+
+    for (EngravingItem* harmony : harmonyItemsNoAlign) {
+        Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
     }
 }
 
