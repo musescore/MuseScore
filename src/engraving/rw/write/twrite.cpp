@@ -701,19 +701,6 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
     for (const EngravingItem* e : *item->el()) {
         writeItem(e, xml, ctx);
     }
-    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT_SETTING);
-
-    const bool showText = item->style().styleB(Sid::repeatPlayCountShow);
-    const bool singleRepeats = item->style().styleB(Sid::repeatPlayCountShowSingleRepeats);
-    const int playCount = item->measure() ? item->measure()->repeatCount() : 2;
-    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true);
-    if (showPlayCount) {
-        writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
-    }
-
-    if (item->playCountText()) {
-        writeItem(item->playCountText(), xml, ctx);
-    }
 
     if (ctx.clipboardmode() && item->measure()) {
         xml.tag("playCount", item->measure()->repeatCount());
@@ -2616,6 +2603,8 @@ void TWrite::write(const PickScrape* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const PlayCountText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
+    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT_SETTING);
+    writeProperty(item, xml, Pid::PLAY_COUNT_TEXT);
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
@@ -3520,7 +3509,8 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)
                         || (et == ElementType::VOLTA)
-                        || (et == ElementType::GRADUAL_TEMPO_CHANGE)) {
+                        || (et == ElementType::GRADUAL_TEMPO_CHANGE)
+                        || (et == ElementType::PLAY_COUNT_TEXT)) {
                         writeSystem = (e1->track() == track); // always show these on appropriate staves
                     }
                 }

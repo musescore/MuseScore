@@ -1482,7 +1482,7 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
         }
 
         for (const Segment& seg : measure->segments()) {
-            if (seg.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+            if (seg.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE | SegmentType::EndBarLine)) {
                 for (EngravingItem* annotation : seg.annotations()) {
                     if (!annotation || !annotation->systemFlag()) {
                         continue;
@@ -1510,21 +1510,6 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
                         }
                     } else if (item->staffIdx() == 0) {
                         result.push_back(item);
-                    }
-                }
-            }
-
-            if (measure->repeatEnd() && seg.isType(SegmentType::BarLineType)) {
-                for (EngravingItem* item : seg.elist()) {
-                    if (!item || !item->isBarLine()) {
-                        continue;
-                    }
-
-                    if ((!staves.empty() && muse::contains(staves, item->staff())) || (staves.empty() && (item->staffIdx() == 0))) {
-                        BarLine* bl = toBarLine(item);
-                        if (PlayCountText* playCount = bl->playCountText()) {
-                            result.push_back(playCount);
-                        }
                     }
                 }
             }
@@ -1920,20 +1905,6 @@ bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* seco
     }
 
     return segEndsWithBl && adjacentAndSecondShareSegment;
-}
-
-EngravingItem* findNewSystemMarkingParent(const EngravingItem* item, const Staff* staff)
-{
-    EngravingItem* newParent = nullptr;
-    if (item->isPlayCountText()) {
-        BarLine* oldParent = toBarLine(item->parent());
-        Segment* blSeg = oldParent->segment();
-        newParent = toBarLine(blSeg->element(staff2track(staff->idx())));
-    } else {
-        newParent = item->findLinkedInStaff(staff);
-    }
-
-    return newParent;
 }
 
 MeasureBeat findBeat(const Score* score, int tick)
