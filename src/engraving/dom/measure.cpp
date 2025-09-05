@@ -1771,8 +1771,12 @@ EngravingItem* Measure::drop(EditData& data)
             score()->insertBox(ElementType::TBOX, this);
             break;
         case ActionIconType::FFRAME:
-            score()->insertBox(ElementType::FBOX, this);
+        {
+            Score::InsertMeasureOptions options;
+            options.cloneBoxToAllParts = false;
+            score()->insertBox(ElementType::FBOX, this, options);
             break;
+        }
         case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
