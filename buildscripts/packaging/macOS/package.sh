@@ -120,10 +120,10 @@ mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 # Codesign
 echo "Codesign"
 # `codesign --deep` doesn't seem to search for code in Contents/Resources directory so sign libraries in it manually
-find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --force --options runtime --deep -s "Developer ID Application: MuseScore" '{}' ';'
+find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --force --options runtime --deep -s - '{}' ';'
 # Sign code in other (more conventional) locations
-codesign --force --timestamp=none --options runtime --entitlements "${WORKING_DIRECTORY}/../src/macos_integration/entitlements.plist" -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
-codesign --force --options runtime --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/macOS/entitlements.plist" --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+codesign --force --timestamp=none --options runtime --entitlements "${WORKING_DIRECTORY}/../src/macos_integration/entitlements.plist" -s - "${VOLUME}/${LONGER_NAME}.app/Contents/PlugIns/MuseScoreQuickLookPreviewExtension.appex"
+codesign --force --options runtime --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/macOS/entitlements.plist" --deep -s - "${VOLUME}/${LONGER_NAME}.app"
 echo "spctl"
 spctl --assess --type execute -vvv "${VOLUME}/${LONGER_NAME}.app"
 echo "Codesign verify"
