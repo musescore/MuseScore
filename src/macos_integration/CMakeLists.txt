@@ -24,6 +24,10 @@ endif()
 
 message(STATUS "Configuring macOS integration")
 
+set(CMAKE_OSX_ARCHITECTURES_BACKUP ${CMAKE_OSX_ARCHITECTURES})
+
+set(CMAKE_OSX_ARCHITECTURES "" CACHE STRING "" FORCE)
+
 enable_language(Swift)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
@@ -61,10 +65,10 @@ target_include_directories(MuseScoreQuickLookPreviewExtension PRIVATE
     # end compat
 )
 
-if(MUSE_COMPILE_USE_PCH)
-    target_precompile_headers_clang_ccache(MuseScoreQuickLookPreviewExtension REUSE_FROM muse_pch)
-    target_link_libraries(MuseScoreQuickLookPreviewExtension PRIVATE muse_pch)
-endif()
+# if(MUSE_COMPILE_USE_PCH)
+#     target_precompile_headers_clang_ccache(MuseScoreQuickLookPreviewExtension REUSE_FROM muse_pch)
+#     target_link_libraries(MuseScoreQuickLookPreviewExtension PRIVATE muse_pch)
+# endif()
 
 target_compile_options(MuseScoreQuickLookPreviewExtension PRIVATE
     $<$<COMPILE_LANGUAGE:Swift>:-application-extension>
@@ -88,6 +92,7 @@ set_target_properties(MuseScoreQuickLookPreviewExtension PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER "org.musescore.MuseScore.QuickLookPreviewExtension"
     MACOSX_BUNDLE_LONG_VERSION_STRING "${MUSE_APP_VERSION}"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${MUSE_APP_VERSION}"
+    OSX_ARCHITECTURES ""
 )
 
 set_target_properties(MuseScoreQuickLookPreviewExtension PROPERTIES
@@ -113,3 +118,5 @@ install(CODE "
     execute_process(COMMAND rm -f \"${the_appex_path}/Contents/MacOS/MuseScoreQuickLookPreviewExtension.d\")
     execute_process(COMMAND codesign --force --sign - --timestamp=none --options runtime --entitlements \"${CMAKE_CURRENT_SOURCE_DIR}/entitlements.plist\" \"${the_appex_path}\")
 ")
+
+set(CMAKE_OSX_ARCHITECTURES ${CMAKE_OSX_ARCHITECTURES_BACKUP} CACHE STRING "" FORCE)
