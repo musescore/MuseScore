@@ -5150,6 +5150,38 @@ Ret NotationInteraction::repeatSelection()
         return muse::make_ok();
     }
 
+    if (!score()->noteEntryMode() && selection.isList()) {
+        startEdit(TranslatableString("undoableAction", "Repeat selection"));
+        InputState& is = score()->inputState();
+        std::vector<Note*> nList;
+        Chord* c;
+        for (Note* n : selection.uniqueNotes()) {
+            if (n->chord() == c) {
+                continue;
+            }
+            c = n->chord();
+            is.setTrack(c->track());
+            is.setSegment(c->segment());
+            if (score()->inputState().endOfScore()) {
+                continue;
+            }
+            is.moveToNextInputPos();
+            is.setDuration(c->durationType());
+            Note* nn;
+            for (Note* note : c->notes()) {
+                NoteVal nval = note->noteVal();
+                nn = score()->addPitch(nval, note != c->notes()[0]);
+                nList.push_back(nn);
+            }
+            nn->chord()->updateArticulations(c->articulationSymbolIds());
+        }
+        for (Note* n : nList) {
+            score()->select(n, SelectType::ADD);
+        }
+        apply();
+        return muse::make_ok();
+    }
+
     if (!selection.isRange()) {
         ChordRest* cr = score()->getSelectedChordRest();
         if (!cr) {
