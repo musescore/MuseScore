@@ -6139,6 +6139,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Bou.", "bouzouki-4-course shortName
 //: traitName for Bouzouki; course: 4-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "4-course", "bouzouki-4-course traitName"),
 
+//: description for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese plucked half-tube zither.", "guzheng description"),
+//: trackName for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guzheng", "guzheng trackName"),
+//: longName for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guzheng", "guzheng longName"),
+//: shortName for Guzheng; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Gz.", "guzheng shortName"),
+
 //: description for Koto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Japanese plucked half-tube zither.", "koto description"),
 //: trackName for Koto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
