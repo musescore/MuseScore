@@ -68,7 +68,7 @@ static QFont capxReadFont(XmlReader& e)
         f.setWeight(QFont::Bold);
     }
     f.setItalic(e.asciiAttribute("italic", "false") == "true");
-    // LOGD("capxReadFont family '%s' ps %g w %d it '%s'", qPrintable(family), pointSize, weight, qPrintable(italic));
+    // CAPELLA_TRACE("capxReadFont family '%s' ps %g w %d it '%s'", qPrintable(family), pointSize, weight, qPrintable(italic));
     e.readNext();
     return f;
 }
@@ -117,7 +117,7 @@ static bool qstring2timestep(QString& str, TIMESTEP& tstp)
 void BasicDrawObj::readCapx(XmlReader& e)
 {
     nNotes = e.intAttribute("noteRange", 0);
-    LOGD("nNotes %d", nNotes);
+    CAPELLA_TRACE("nNotes %d", nNotes);
     e.readNext();
 }
 
@@ -176,9 +176,10 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
             e.unknown();
         }
     }
-    LOGD("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d den %d trp %d ispro %d fullm %d",
-         nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, tupletDenominator, tripartite, isProlonging, fullm
-         );
+    CAPELLA_TRACE("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d den %d trp %d ispro %d fullm %d",
+                  nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, tupletDenominator, tripartite,
+                  isProlonging, fullm
+                  );
 }
 
 //---------------------------------------------------------
@@ -250,7 +251,7 @@ void CapClef::readCapx(XmlReader& e)
         line = ClefLine::L2;
         oct = Oct::OCT_NULL;
     }
-    LOGD("Clef::read '%s' -> form %d line %d oct %d", qPrintable(clef), int(form), int(line), int(oct));
+    CAPELLA_TRACE("Clef::read '%s' -> form %d line %d oct %d", qPrintable(clef), int(form), int(line), int(oct));
     e.readNext();
 }
 
@@ -261,7 +262,7 @@ void CapClef::readCapx(XmlReader& e)
 void CapKey::readCapx(XmlReader& e)
 {
     signature = e.intAttribute("fifths", 0);
-    LOGD("Key %d", signature);
+    CAPELLA_TRACE("Key %d", signature);
     e.readNext();
 }
 
@@ -320,7 +321,7 @@ static void qstring2timesig(QString& time, uchar& numerator, int& log2Denom, boo
         }
     }
     // TODO: recovery required if decoding the timesig failed ?
-    LOGD("Meter '%s' res %d %d/%d allaBreve %d", qPrintable(time), res, numerator, log2Denom, allaBreve);
+    CAPELLA_TRACE("Meter '%s' res %d %d/%d allaBreve %d", qPrintable(time), res, numerator, log2Denom, allaBreve);
 }
 
 //---------------------------------------------------------
@@ -329,7 +330,7 @@ static void qstring2timesig(QString& time, uchar& numerator, int& log2Denom, boo
 
 void CapMeter::readCapx(XmlReader& e)
 {
-    LOGD("CapMeter::readCapx");
+    CAPELLA_TRACE("CapMeter::readCapx");
     QString time = e.attribute("time");
     qstring2timesig(time, numerator, log2Denom, allaBreve);
     e.readNext();
@@ -455,7 +456,7 @@ static signed char pitchStr2Char(QString& strPitch)
         pitch = -1;
     }
 
-    LOGD("pitchStr2Char: '%s' -> %d", qPrintable(strPitch), pitch);
+    CAPELLA_TRACE("pitchStr2Char: '%s' -> %d", qPrintable(strPitch), pitch);
 
     return static_cast<signed char>(pitch);
 }
@@ -505,8 +506,8 @@ void ChordObj::readCapxNotes(XmlReader& e)
                     e.unknown();
                 }
             }
-            LOGD("ChordObj::readCapxNotes: pitch '%s' altstep '%s' shape '%s'",
-                 qPrintable(pitch), qPrintable(sstep), qPrintable(shape));
+            CAPELLA_TRACE("ChordObj::readCapxNotes: pitch '%s' altstep '%s' shape '%s'",
+                          qPrintable(pitch), qPrintable(sstep), qPrintable(shape));
             int istep = sstep.toInt();
             CNote n;
             n.pitch = pitchStr2Char(pitch);
@@ -538,7 +539,7 @@ void ChordObj::readCapxNotes(XmlReader& e)
             tupletCount = o->nNotes;
             objects.removeOne(o);
             delete o;
-            LOG_TUPLETS("==> Tuplet start, plus %d notes till end", tupletCount);
+            CAPELLA_TRACE("==> Tuplet start, plus %d notes till end", tupletCount);
             return; // we are done, and we modified the iterator, so back out
         }
     }
@@ -583,7 +584,7 @@ void RestObj::readCapx(XmlReader& e)
             tupletCount = o->nNotes;
             objects.removeOne(o);
             delete o;
-            LOG_TUPLETS("      ==> Tuplet start, plus %d notes till end", tupletCount);
+            CAPELLA_TRACE("      ==> Tuplet start, plus %d notes till end", tupletCount);
             return; // we are done, and we modified the iterator, so back out
         }
     }
@@ -607,14 +608,14 @@ void SimpleTextObj::readCapx(XmlReader& e)
     }
     relPos = QPointF(x, y);
     relPos *= 32.0;
-    // LOGD("x %g y %g align %s", x, y, qPrintable(align));
+    // CAPELLA_TRACE("x %g y %g align %s", x, y, qPrintable(align));
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "font") {
             _font = capxReadFont(e);
         } else if (tag == "content") {
             _text = e.readText();
-            // LOGD("SimpleTextObj::readCapx: found content '%s'", qPrintable(_text));
+            // CAPELLA_TRACE("SimpleTextObj::readCapx: found content '%s'", qPrintable(_text));
         } else {
             e.unknown();
         }
@@ -676,9 +677,9 @@ void VoltaObj::readCapx(XmlReader& e)
         from = firstNumber;
         to   = (lastNumber == 0) ? firstNumber : lastNumber;
     }
-    LOGD("VoltaObj::read firstNumber %d lastNumber %d", firstNumber, lastNumber);
-    LOGD("VoltaObj::read x0 %d x1 %d y %d bLeft %d bRight %d bDotted %d allNumbers %d from %d to %d",
-         x0, x1, y, bLeft, bRight, bDotted, allNumbers, from, to);
+    CAPELLA_TRACE("VoltaObj::read firstNumber %d lastNumber %d", firstNumber, lastNumber);
+    CAPELLA_TRACE("VoltaObj::read x0 %d x1 %d y %d bLeft %d bRight %d bDotted %d allNumbers %d from %d to %d",
+                  x0, x1, y, bLeft, bRight, bDotted, allNumbers, from, to);
     e.readNext();
 }
 
@@ -696,7 +697,7 @@ void TrillObj::readCapx(XmlReader& e)
     x1 = (int)round(x1d * 32.0);
     y  = (int)round(yd * 32.0);
     // color       -> skipped
-    LOGD("TrillObj::read x0 %d x1 %d y %d trillSign %d", x0, x1, y, trillSign);
+    CAPELLA_TRACE("TrillObj::read x0 %d x1 %d y %d trillSign %d", x0, x1, y, trillSign);
     e.readNext();
 }
 
@@ -867,8 +868,8 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
                         tupletCounter = chord->tupletCount;
                         tupletTicks   = chord->ticks();
                         tupletObj     = chord;  // save the tuplet object for later
-                        LOG_TUPLETS("     ==| (C) start of tuplet with %d notes, ticks %d",
-                                    1 + tupletCounter, tupletTicks.ticks());
+                        CAPELLA_TRACE("     ==| (C) start of tuplet with %d notes, ticks %d",
+                                      1 + tupletCounter, tupletTicks.ticks());
                     } else if (tupletCounter > 0) {
                         if (!tupletObj) {
                             LOGE("     !!! chord with tupletCounter %d without tupletObj", tupletCounter);
@@ -883,10 +884,10 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
                                 chord->tupletEnd = true;
                                 tupletObj->tupletTicks = tupletTicks;      // set total ticks to the tuplet object
                                 tupletObj = nullptr;      // reset tuplet object
-                                LOG_TUPLETS("     ==| end of tuplet, total ticks %d", tupletTicks.ticks());
+                                CAPELLA_TRACE("     ==| end of tuplet, total ticks %d", tupletTicks.ticks());
                             } else {
-                                LOG_TUPLETS("     ==> chord with tupletCounter %d inside tuplet, ticks now %d",
-                                            tupletCounter, tupletTicks.ticks());
+                                CAPELLA_TRACE("     ==> chord with tupletCounter %d inside tuplet, ticks now %d",
+                                              tupletCounter, tupletTicks.ticks());
                             }
                         }
                     }
@@ -898,8 +899,8 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
                         tupletCounter = rest->tupletCount;
                         tupletTicks   = rest->ticks();
                         tupletObj     = rest;  // save the tuplet object for later
-                        LOG_TUPLETS("     ==| (R) start of tuplet with %d notes, ticks %d",
-                                    1 + tupletCounter, tupletTicks.ticks());
+                        CAPELLA_TRACE("     ==| (R) start of tuplet with %d notes, ticks %d",
+                                      1 + tupletCounter, tupletTicks.ticks());
                     } else if (tupletCounter > 0) {
                         if (!tupletObj) {
                             LOGE("     !!! rest with tupletCounter %d without tupletObj", tupletCounter);
@@ -915,10 +916,10 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
                                 rest->tupletEnd = true;
                                 tupletObj->tupletTicks = tupletTicks;      // set total ticks to the tuplet object
                                 tupletObj = nullptr;      // reset tuplet object
-                                LOG_TUPLETS("     ==| end of tuplet, total ticks %d", tupletTicks.ticks());
+                                CAPELLA_TRACE("     ==| end of tuplet, total ticks %d", tupletTicks.ticks());
                             } else {
-                                LOG_TUPLETS("     ==> rest with tupletCounter %d inside tuplet, ticks now %d",
-                                            tupletCounter, tupletTicks.ticks());
+                                CAPELLA_TRACE("     ==> rest with tupletCounter %d inside tuplet, ticks now %d",
+                                              tupletCounter, tupletTicks.ticks());
                             }
                         }
                     }
@@ -958,7 +959,7 @@ static int findStaffIndex(const QString& layout, const QList<CapStaffLayout*>& s
 
 void Capella::readCapxStaff(XmlReader& e, CapSystem* system)
 {
-    LOGD("Capella::readCapxStaff");
+    CAPELLA_TRACE("Capella::readCapxStaff");
     CapStaff* staff = new CapStaff;
     QString layout = e.attribute("layout");
     QString time = e.attribute("defaultTime");
@@ -1138,7 +1139,7 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
     sl->form = Form(clef & 7);
     sl->line = ClefLine((clef >> 3) & 7);
     sl->oct  = Oct((clef >> 6));
-    // LOGD("   clef %x  form %d, line %d, oct %d", clef, sl->form, sl->line, sl->oct);
+    // CAPELLA_TRACE("   clef %x  form %d, line %d, oct %d", clef, sl->form, sl->line, sl->oct);
 
     // Schlagzeuginformation
     unsigned char b   = 0;   // ?? TODO ?? sl->soundMapIn and sl->soundMapOut are not used
@@ -1166,7 +1167,7 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
     sl->volume = 0;
     sl->transp = 0;
 
-    LOGD("readCapxStaveLayout");
+    CAPELLA_TRACE("readCapxStaveLayout");
     sl->descr = e.attribute("description");
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -1198,10 +1199,10 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
             e.unknown();
         }
     }
-    LOGD("   descr '%s' name '%s' abbrev '%s'",
-         qPrintable(sl->descr), qPrintable(sl->name), qPrintable(sl->abbrev));
-    LOGD("   sound %d vol %d transp %d", sl->sound, sl->volume, sl->transp);
-    LOGD("readCapxStaveLayout done");
+    CAPELLA_TRACE("   descr '%s' name '%s' abbrev '%s'",
+                  qPrintable(sl->descr), qPrintable(sl->name), qPrintable(sl->abbrev));
+    CAPELLA_TRACE("   sound %d vol %d transp %d", sl->sound, sl->volume, sl->transp);
+    CAPELLA_TRACE("readCapxStaveLayout done");
 }
 
 //---------------------------------------------------------
@@ -1430,7 +1431,7 @@ Err importCapXml(MasterScore* score, const QString& name)
     while (e.readNextStartElement()) {
         if (e.name() == "score") {
             String xmlns = e.attribute("xmlns", u"<none>");       // doesn't work ???
-            LOGD("importCapXml: found score, namespace '%s'", xmlns.toUtf8().constChar());
+            CAPELLA_TRACE("importCapXml: found score, namespace '%s'", xmlns.toUtf8().constChar());
             cf.readCapx(e);
         } else {
             e.unknown();
