@@ -78,7 +78,7 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="241.49">
+    <measure number="1" width="241.5">
       <print>
         <system-layout>
           <system-margins>
@@ -155,7 +155,7 @@
         <stem>up</stem>
         <staff>2</staff>
         </note>
-      <note default-x="120.79" default-y="-110">
+      <note default-x="120.8" default-y="-110">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -166,7 +166,7 @@
         <stem>down</stem>
         <staff>2</staff>
         </note>
-      <note default-x="155.79" default-y="-135">
+      <note default-x="155.8" default-y="-135">
         <pitch>
           <step>B</step>
           <octave>3</octave>
@@ -183,7 +183,7 @@
           </direction-type>
         <staff>2</staff>
         </direction>
-      <note default-x="190.79" default-y="-125">
+      <note default-x="190.8" default-y="-125">
         <pitch>
           <step>D</step>
           <octave>3</octave>
