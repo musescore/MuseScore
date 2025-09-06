@@ -58,7 +58,7 @@ StyledPopupView {
 
             IncrementalPropertyControl {
                 Layout.preferredWidth: 76
-                currentValue: (root.playbackModel.tempoMultiplier * 100).toFixed(decimals)
+                currentValue: root.playbackModel.tempoMultiplier * 100
 
                 maxValue: 300
                 minValue: 10

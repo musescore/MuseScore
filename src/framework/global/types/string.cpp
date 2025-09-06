@@ -1397,13 +1397,17 @@ String String::number(double n, int prec)
     stream << std::fixed << std::setprecision(prec) << n;
     std::string s = stream.str();
 
-    // remove extra '0'
     size_t correctedIdx = s.size() - 1;
-    if (s.back() == '0') {
-        for (int i = static_cast<int>(s.size() - 1); i > 0; --i) {
-            if (s.at(i) != '0') {
-                correctedIdx = i;
-                break;
+
+    // remove extra '0'
+    auto pos = s.find('.');
+    if (pos != std::string::npos) {
+        if (s.back() == '0') {
+            for (int i = static_cast<int>(s.size() - 1); i > 0; --i) {
+                if (s.at(i) != '0') {
+                    correctedIdx = i;
+                    break;
+                }
             }
         }
     }

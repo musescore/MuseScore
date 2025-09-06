@@ -55,7 +55,7 @@ InspectorPropertyView {
         navigation.accessible.name: root.titleText
 
         isIndeterminate: root.propertyItem ? root.propertyItem.isUndefined : true
-        currentValue: root.propertyItem ? root.propertyItem.value : 0
+        currentValue: Boolean(root.propertyItem) && !Boolean(root.propertyItem.isUndefined) ? root.propertyItem.value : 0.0
 
         onValueEditingFinished: function(newValue) {
             if (root.propertyItem) {

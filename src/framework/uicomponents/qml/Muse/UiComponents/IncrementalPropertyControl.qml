@@ -33,7 +33,7 @@ Item {
     property alias prefixIcon: textInputField.hintIcon
 
     property alias isIndeterminate: textInputField.isIndeterminate
-    property alias currentValue: textInputField.currentText
+    property real currentValue: 0.0
 
     property real step: 0.5
     property int decimals: 2
@@ -81,7 +81,7 @@ Item {
                 return
             }
 
-            newValue = +newValue.toFixed(decimals)
+            newValue = ui.df.formatReal(newValue, decimals)
         }
 
         root.valueEdited(newValue)
@@ -104,7 +104,7 @@ Item {
                 return
             }
 
-            newValue = +newValue.toFixed(decimals)
+            newValue = ui.df.formatReal(newValue, decimals)
         }
 
         root.valueEdited(newValue)
@@ -149,6 +149,8 @@ Item {
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+
+        currentText: ui.df.formatReal(root.currentValue ? root.currentValue : 0.0, decimals)
 
         navigation.accessible.role: MUAccessible.SpinBox
         navigation.accessible.value: currentValue + (measureUnitsSymbol !== "" ? " " + measureUnitsSymbol : "")
