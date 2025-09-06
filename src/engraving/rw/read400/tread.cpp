@@ -1203,8 +1203,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
                 }
             }
             sig.customKeyDefs().push_back(cd);
-        } else if (tag == "showCourtesySig") {
-            s->setShowCourtesy(e.readInt());
+        } else if (TRead::readProperty(s, tag, e, ctx, Pid::SHOW_COURTESY)) {
         } else if (tag == "showNaturals") {           // obsolete
             e.readInt();
         } else if (tag == "accidental") {             // we need to guess proper concert key
@@ -1224,30 +1223,7 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
             e.readInt();
             sig.setCustom(true);
         } else if (tag == "mode") {
-            String m(e.readText());
-            if (m == "none") {
-                sig.setMode(KeyMode::NONE);
-            } else if (m == "major") {
-                sig.setMode(KeyMode::MAJOR);
-            } else if (m == "minor") {
-                sig.setMode(KeyMode::MINOR);
-            } else if (m == "dorian") {
-                sig.setMode(KeyMode::DORIAN);
-            } else if (m == "phrygian") {
-                sig.setMode(KeyMode::PHRYGIAN);
-            } else if (m == "lydian") {
-                sig.setMode(KeyMode::LYDIAN);
-            } else if (m == "mixolydian") {
-                sig.setMode(KeyMode::MIXOLYDIAN);
-            } else if (m == "aeolian") {
-                sig.setMode(KeyMode::AEOLIAN);
-            } else if (m == "ionian") {
-                sig.setMode(KeyMode::IONIAN);
-            } else if (m == "locrian") {
-                sig.setMode(KeyMode::LOCRIAN);
-            } else {
-                sig.setMode(KeyMode::UNKNOWN);
-            }
+            sig.setMode(TConv::fromXml(e.readAsciiText(), KeyMode::UNKNOWN));
         } else if (tag == "subtype") {
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {

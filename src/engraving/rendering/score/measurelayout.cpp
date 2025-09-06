@@ -2562,7 +2562,7 @@ Segment* MeasureLayout::addHeaderKeySig(Measure* m, bool isFirstKeysig, const St
     KeySigEvent keyIdx = staff->keySigEvent(m->tick());
     KeySig* ksAnnounce = 0;
     if ((isFirstKeysig || ctx.conf().styleB(Sid::genKeysig)) && (keyIdx.key() == Key::C)) {
-        Measure* pm = m->prevMeasure();
+        Measure* pm = m->prevMeasureMM();
         if (pm && pm->hasCourtesyKeySig()) {
             Segment* ks = pm->first(SegmentType::KeySigAnnounce);
             if (ks) {

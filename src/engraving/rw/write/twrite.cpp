@@ -2210,14 +2210,9 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("mode", TConv::toXml(item->mode()));
     }
 
-    if (item->isCourtesy()) {
-        xml.tag("isCourtesy", item->isCourtesy());
-    }
-
-    if (!item->showCourtesy()) {
-        xml.tag("showCourtesySig", item->showCourtesy());
-    }
+    writeProperty(item, xml, Pid::SHOW_COURTESY);
     writeProperty(item, xml, Pid::IS_COURTESY);
+
     if (item->forInstrumentChange()) {
         xml.tag("forInstrumentChange", true);
     }

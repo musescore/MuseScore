@@ -3567,7 +3567,7 @@ static void keySigAddLayout(const KeySig* item, const LayoutConfiguration& conf,
     KeySym ks;
     ks.sym = sym;
     double x = 0.0;
-    if (ldata->keySymbols.size() > 0) {
+    if (!ldata->keySymbols.empty()) {
         const KeySym& previous = ldata->keySymbols.back();
         double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
         if (previous.sym != sym) {
@@ -3589,7 +3589,7 @@ static void keySigAddLayout(const KeySig* item, const LayoutConfiguration& conf,
     }
     ks.xPos = x;
     ks.line = line;
-    ldata->keySymbols.push_back(ks);
+    ldata->keySymbols.emplace_back(ks);
 }
 
 void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -3602,6 +3602,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
 //        return;
 //    }
 
+    const Segment* s = item->segment();
     double spatium = item->spatium();
     double step = spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
 
@@ -3617,11 +3618,10 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
     if (item->staff()) {
         // Look for a clef before the key signature at the same tick
         Clef* c = nullptr;
-        if (item->segment()) {
-            for (Segment* seg = item->segment()->prev1(); !c && seg && seg->tick() == item->tick(); seg = seg->prev1()) {
-                const bool isClefSeg
-                    = (seg->isClefType() || seg->isHeaderClefType()
-                       || (seg->isClefRepeatAnnounceType() && item->segment()->isKeySigRepeatAnnounceType()));
+        if (s) {
+            for (Segment* seg = s->prev1(); !c && seg && seg->tick() == item->tick(); seg = seg->prev1()) {
+                const bool isClefSeg = seg->isClefType() || seg->isHeaderClefType()
+                                       || (seg->isClefRepeatAnnounceType() && s->isKeySigRepeatAnnounceType());
                 if (seg->enabled() && isClefSeg) {
                     c = toClef(seg->element(item->track()));
                 }
@@ -3631,7 +3631,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             clef = c->clefType();
         } else {
             // no clef found, so get the clef type from the clefs list, using the previous tick
-            clef = item->staff()->clef(item->tick() - Fraction::fromTicks(1));
+            clef = item->staff()->clef(item->tick() - Fraction::eps());
         }
     }
 
@@ -3655,7 +3655,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                 int lineIndexOffset = t1 > 0 ? -1 : 6;
                 ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
-                if (ldata->keySymbols.size() > 0) {
+                if (!ldata->keySymbols.empty()) {
                     const KeySym& previous = ldata->keySymbols.back();
                     double previousWidth = item->symWidth(previous.sym) / spatium;
                     ks.xPos = previous.xPos + previousWidth + accidentalGap;
@@ -3663,7 +3663,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                     ks.xPos = 0;
                 }
                 // TODO octave metters?
-                ldata->keySymbols.push_back(ks);
+                ldata->keySymbols.emplace_back(ks);
             }
         }
         for (const CustDef& cd : item->customKeyDefs()) {
@@ -3674,7 +3674,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
             double xpos = cd.xAlt;
-            if (ldata->keySymbols.size() > 0) {
+            if (!ldata->keySymbols.empty()) {
                 const KeySym& previous = ldata->keySymbols.back();
                 double previousWidth = item->symWidth(previous.sym) / spatium;
                 xpos += previous.xPos + previousWidth + accidentalGap;
@@ -3692,7 +3692,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                     ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                     sym = cd.sym;
                 }
-                ldata->keySymbols.push_back(ks);
+                ldata->keySymbols.emplace_back(ks);
                 xpos += t1 < 0 ? 0.7 : 1; // flats closer
             }
             // create symbol; natural only if is user defined
@@ -3701,66 +3701,45 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                 ks.sym = sym;
                 ks.line = line;
                 ks.xPos = xpos;
-                ldata->keySymbols.push_back(ks);
+                ldata->keySymbols.emplace_back(ks);
             }
         }
     } else {
-        int accidentals = 0, naturals = 0;
-        switch (std::abs(t1)) {
-        case 7: accidentals = 0x7f;
-            break;
-        case 6: accidentals = 0x3f;
-            break;
-        case 5: accidentals = 0x1f;
-            break;
-        case 4: accidentals = 0xf;
-            break;
-        case 3: accidentals = 0x7;
-            break;
-        case 2: accidentals = 0x3;
-            break;
-        case 1: accidentals = 0x1;
-            break;
-        case 0: accidentals = 0;
-            break;
-        default:
-            LOGD("illegal t1 key %d", t1);
-            break;
-        }
+        auto key2accidentals = [](int key) -> int {
+            switch (std::abs(key)) {
+            case 7: return 0x7f;
+            case 6: return 0x3f;
+            case 5: return 0x1f;
+            case 4: return 0xf;
+            case 3: return 0x7;
+            case 2: return 0x3;
+            case 1: return 0x1;
+            case 0: return 0;
+            default:
+                LOGD("illegal key %d", key);
+                return 0;
+            }
+        };
+        int accidentals = key2accidentals(t1);
+        int naturals = 0;
 
-        // manage display of naturals:
-        // naturals are shown if there is some natural AND prev. measure has no section break
-        // AND style says they are not off
-        // OR key sig is CMaj/Amin (in which case they are always shown)
-
-        bool naturalsOn = false;
-        Measure* prevMeasure = item->measure() ? item->measure()->prevMeasure() : 0;
-
-        // If we're not force hiding naturals (Continuous panel), use score style settings
-        if (!item->hideNaturals()) {
-            const bool newSection = (!item->segment()
-                                     || (item->segment()->rtick().isZero() && (!prevMeasure || prevMeasure->sectionBreak()))
-                                     );
-            naturalsOn = !newSection && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
-        }
-
-        // Don't repeat naturals if shown in courtesy
-        if (item->measure() && item->measure()->system() && item->measure()->isFirstInSystem()
-            && prevMeasure && prevMeasure->findSegment(SegmentType::KeySigAnnounce, item->tick())
-            && !item->segment()->isKeySigAnnounceType()) {
-            naturalsOn = false;
-        }
-        if (item->track() == muse::nidx) {
-            naturalsOn = false;
-        }
+        // Naturals are shown if:
+        // Key signature is courtesy, mid-measure or prev. measure has no section break and no courtesy keysig.
+        // AND we're not force hiding naturals (continuous mode)
+        // AND key sig is CMaj/Amin OR style says they are on
+        const Measure* prevMeasure = item->measure() ? item->measure()->prevMeasureMM() : nullptr;
+        bool naturalsOn = !item->hideNaturals() && item->track() != muse::nidx
+                          && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0))
+                          && ((s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero()))
+                              || (prevMeasure && !prevMeasure->sectionBreak() && !prevMeasure->hasCourtesyKeySig()));
 
         int coffset = 0;
-        Key t2      = Key::C;
+        Key t2 = Key::C;
         if (naturalsOn) {
             if (item->staff()) {
-                t2 = item->staff()->key(item->tick() - Fraction(1, 480 * 4));
+                t2 = item->staff()->key(item->tick() - Fraction::eps());
             }
-            if (item->segment() && item->segment()->isType(SegmentType::KeySigStartRepeatAnnounce)) {
+            if (s && s->isType(SegmentType::KeySigStartRepeatAnnounce)) {
                 // Handle naturals in continuation courtesy
                 Segment* prevCourtesySeg
                     = prevMeasure ? prevMeasure->findSegmentR(SegmentType::KeySigRepeatAnnounce, prevMeasure->ticks()) : nullptr;
@@ -3770,27 +3749,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             if (t2 == Key::C) {
                 naturalsOn = false;
             } else {
-                switch (std::abs(int(t2))) {
-                case 7: naturals = 0x7f;
-                    break;
-                case 6: naturals = 0x3f;
-                    break;
-                case 5: naturals = 0x1f;
-                    break;
-                case 4: naturals = 0xf;
-                    break;
-                case 3: naturals = 0x7;
-                    break;
-                case 2: naturals = 0x3;
-                    break;
-                case 1: naturals = 0x1;
-                    break;
-                case 0: naturals = 0;
-                    break;
-                default:
-                    LOGD("illegal t2 key %d", int(t2));
-                    break;
-                }
+                naturals = key2accidentals(int(t2));
                 // remove redundant naturals
                 if (!((t1 > 0) ^ (t2 > 0))) {
                     naturals &= ~accidentals;
@@ -3801,19 +3760,13 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             }
         }
 
-        // naturals should go BEFORE accidentals if style says so
-        // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
-
-        bool prefixNaturals = naturalsOn
-                              && (conf.styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE)
-                                  || t1 * int(t2) < 0);
-
-        // naturals should go AFTER accidentals if they should not go before!
-        bool suffixNaturals = naturalsOn && !prefixNaturals;
+        // Naturals should go BEFORE accidentals if style says so
+        // or going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
+        const bool natBefore = conf.styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE) || t1 * int(t2) < 0;
 
         const signed char* lines = ClefInfo::lines(clef);
 
-        if (prefixNaturals) {
+        if (naturalsOn && natBefore) {
             for (int i = 0; i < 7; ++i) {
                 if (naturals & (1 << i)) {
                     keySigAddLayout(item, conf, SymId::accidentalNatural, lines[i + coffset], ldata);
@@ -3829,9 +3782,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         } else {
             LOGD("illegal t1 key %d", t1);
         }
-
-        // add suffixed naturals, if any
-        if (suffixNaturals) {
+        if (naturalsOn && !natBefore) {
             for (int i = 0; i < 7; ++i) {
                 if (naturals & (1 << i)) {
                     keySigAddLayout(item, conf, SymId::accidentalNatural, lines[i + coffset], ldata);
