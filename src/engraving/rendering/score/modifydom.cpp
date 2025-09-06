@@ -273,7 +273,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         return ClefToBarlinePosition::AUTO;
     };
 
-    MeasureBase* nextMb = measure->nextMM();
+    MeasureBase* nextMb = measure ? measure->nextMM() : nullptr;
 
     if (!nextMb || !nextMb->isMeasure()) {
         return;
