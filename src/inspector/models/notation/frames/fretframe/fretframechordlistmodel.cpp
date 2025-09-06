@@ -57,15 +57,13 @@ void FretFrameChordListModel::load()
         return name;
     };
 
-    const StringList& invisibleDiagrams = m_fretBox->invisibleDiagrams();
-
-    for (EngravingItem* element : m_fretBox->orderedElements(true /*includeInvisible*/)) {
+    for (EngravingItem* element : m_fretBox->el()) {
         FretDiagram* diagram = toFretDiagram(element);
         auto chordItem = new FretFrameChordItem(this);
         chordItem->setTitle(harmonyName(diagram->harmony()));
         chordItem->setPlainText(diagram->harmonyText());
 
-        chordItem->setIsVisible(!muse::contains(invisibleDiagrams, diagram->harmony()->harmonyName().toLower()));
+        chordItem->setIsVisible(diagram->visible());
 
         items << chordItem;
     }
@@ -107,7 +105,7 @@ void FretFrameChordListModel::setChordVisible(int index, bool visible)
         return;
     }
 
-    ElementList diagrams = m_fretBox->orderedElements(true /*includeInvisible*/);
+    ElementList diagrams = m_fretBox->el();
     if (index < 0 || index >= static_cast<int>(diagrams.size())) {
         return;
     }
@@ -124,16 +122,8 @@ void FretFrameChordListModel::setChordVisible(int index, bool visible)
     notation->undoStack()->prepareChanges(actionName);
 
     FretDiagram* diagram = toFretDiagram(diagrams[index]);
-    String harmonyName = diagram->harmony()->harmonyName().toLower();
 
-    StringList invisibleDiagrams = m_fretBox->invisibleDiagrams();
-    if (visible) {
-        invisibleDiagrams.erase(std::remove(invisibleDiagrams.begin(), invisibleDiagrams.end(), harmonyName));
-    } else {
-        invisibleDiagrams.push_back(harmonyName);
-    }
-
-    m_fretBox->undoSetInvisibleDiagrams(invisibleDiagrams);
+    diagram->undoChangeProperty(Pid::VISIBLE, visible);
 
     FretFrameChordItem* item = modelIndexToItem(this->index(index));
     item->setIsVisible(visible);
