@@ -2375,7 +2375,7 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter)
         return;
     }
 
-    Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>());
+    Color penColor = item->curColor();
 
     Pen pen(penColor);
     double mag = item->staff() ? item->staff()->staffMag(item->tick()) : 1.0;

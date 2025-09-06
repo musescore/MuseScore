@@ -75,3 +75,23 @@ String Parenthesis::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), TConv::translatedUserName(direction()));
 }
+
+bool Parenthesis::followParentCurColor() const
+{
+    return m_followParentColor;
+}
+
+void Parenthesis::setFollowParentColor(bool val)
+{
+    m_followParentColor = val;
+}
+
+Color Parenthesis::curColor() const
+{
+    if (m_followParentColor) {
+        return parentItem()->curColor();
+    }
+
+    return EngravingItem::curColor(getProperty(Pid::VISIBLE).toBool(),
+                                   getProperty(Pid::COLOR).value<Color>());
+}
