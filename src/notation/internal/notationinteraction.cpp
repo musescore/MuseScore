@@ -5683,6 +5683,39 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
     apply();
 }
 
+void NotationInteraction::removeTupletFromSelectedChordRests()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Remove tuplet"));
+
+    // Retrieve tuplets, the first selected ChordRest in each (preference given to chords), and which tuplets are not bottom-layer
+    std::unordered_map<Tuplet*, ChordRest*> bottomTuplets;
+    std::unordered_set<Tuplet*> overlayTuplets;
+    for (ChordRest* chordRest : score()->getSelectedChordRests()) {
+        Tuplet* bottomTuplet = chordRest->tuplet();
+        if (bottomTuplet
+            && (bottomTuplets.find(bottomTuplet) == bottomTuplets.end() || bottomTuplets[bottomTuplet]->type() == ElementType::REST
+                || bottomTuplets[bottomTuplet]->tick() > chordRest->tick())) {
+            bottomTuplets[bottomTuplet] = chordRest;
+            while (bottomTuplet = bottomTuplet->tuplet()) {
+                overlayTuplets.insert(bottomTuplet);
+            }
+        }
+    }
+
+    // For those tuplets which are bottom-layer, remove them and replace with their first element
+    for (std::pair<Tuplet*, ChordRest*> tupletAndChordRest : bottomTuplets) {
+        if (overlayTuplets.find(tupletAndChordRest.first) == overlayTuplets.end()) {
+            score()->removeTuplet(tupletAndChordRest.first, tupletAndChordRest.second);
+        }
+    }
+
+    apply();
+}
+
 void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)
 {
     if (selection()->isNone()) {

@@ -1441,6 +1441,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "&Nonuplet"),
              TranslatableString("action", "Enter tuplet: nonuplet")
              ),
+    UiAction("remove-tuplet",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Remove t&uplet"),
+             TranslatableString("action", "Remove tuplet")
+             ),
     UiAction("tuplet-dialog",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
