@@ -27,11 +27,11 @@
 
 #include "engraving/types/types.h"
 
-//#define DEBUG_CAPELLA_TUPLETS
-#ifdef DEBUG_CAPELLA_TUPLETS
-#define LOG_TUPLETS LOGD
+#define CAPELLA_TRACE_ENABLED 0
+#if CAPELLA_TRACE_ENABLED
+#define CAPELLA_TRACE LOGD
 #else
-#define LOG_TUPLETS LOGN
+#define CAPELLA_TRACE LOGN
 #endif
 
 class QFile;
