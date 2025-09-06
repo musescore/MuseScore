@@ -423,7 +423,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 }
             }
             if (!braceSpan) {
-                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, 0);
+                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, false);
             } else {
                 --braceSpan;
             }
@@ -462,11 +462,8 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                     thnBracketSpan += static_cast<int>(part->nstaves());
                 }
                 if (prvStaff) {
-                    bool oldBarlineSpan = prvStaff->getProperty(Pid::STAFF_BARLINE_SPAN).toBool();
-                    bool newBarlineSpan = prvBarLineSpan && (!prvSection.isEmpty() && (sg.section == prvSection));
-                    if (oldBarlineSpan != newBarlineSpan) {
-                        prvStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, newBarlineSpan);
-                    }
+                    const bool newBarlineSpan = prvBarLineSpan && (!prvSection.isEmpty() && (sg.section == prvSection));
+                    prvStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, newBarlineSpan);
                 }
                 prvStaff = staff;
                 ++staffIdx;
