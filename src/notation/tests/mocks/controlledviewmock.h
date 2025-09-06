@@ -55,9 +55,9 @@ public:
     MOCK_METHOD(void, showContextMenu, (const ElementType&, const QPointF&), (override));
     MOCK_METHOD(void, hideContextMenu, (), (override));
 
-    MOCK_METHOD(void, showElementPopup, (const ElementType&, const muse::RectF&), (override));
-    MOCK_METHOD(void, hideElementPopup, (const ElementType& elementType), (override));
-    MOCK_METHOD(void, toggleElementPopup, (const ElementType&, const muse::RectF&), (override));
+    MOCK_METHOD(void, showElementPopup, (const ElementType&), (override));
+    MOCK_METHOD(void, hideElementPopup, (const ElementType&), (override));
+    MOCK_METHOD(void, toggleElementPopup, (const ElementType&), (override));
 
     MOCK_METHOD(bool, elementPopupIsOpen, (const ElementType&), (const, override));
 

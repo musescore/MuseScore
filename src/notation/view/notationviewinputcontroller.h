@@ -74,9 +74,9 @@ public:
     virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
     virtual void hideContextMenu() = 0;
 
-    virtual void showElementPopup(const ElementType& elementType, const muse::RectF& elementRect) = 0;
+    virtual void showElementPopup(const ElementType& elementType) = 0;
     virtual void hideElementPopup(const ElementType& elementType = ElementType::INVALID) = 0;
-    virtual void toggleElementPopup(const ElementType& elementType, const muse::RectF& elementRect) = 0;
+    virtual void toggleElementPopup(const ElementType& elementType) = 0;
 
     virtual bool elementPopupIsOpen(const ElementType& elementType) const = 0;
 

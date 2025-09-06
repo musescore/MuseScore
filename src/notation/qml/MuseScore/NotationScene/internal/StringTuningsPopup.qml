@@ -26,7 +26,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
-StyledPopupView {
+AbstractElementPopup {
     id: root
 
     property alias notationViewNavigationSection: navPanel.section
@@ -39,7 +39,9 @@ StyledPopupView {
     placementPolicies: PopupView.PreferRight
     showArrow: false
 
-    signal elementRectChanged(var elementRect)
+    model: StringTuningsSettingsModel {
+        id: stringTuningsModel
+    }
 
     function updatePosition() {
         var h = Math.max(root.contentHeight, 360)
@@ -53,18 +55,6 @@ StyledPopupView {
         width: 272
 
         spacing: 12
-
-        StringTuningsSettingsModel {
-            id: stringTuningsModel
-
-            onItemRectChanged: function(rect) {
-                root.elementRectChanged(rect)
-            }
-        }
-
-        Component.onCompleted: {
-            stringTuningsModel.init()
-        }
 
         NavigationPanel {
             id: navPanel

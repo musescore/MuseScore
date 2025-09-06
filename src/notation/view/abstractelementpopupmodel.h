@@ -75,6 +75,7 @@ signals:
 
 protected:
     virtual void updateItemRect();
+    virtual bool ignoreTextEditingChanges() const { return true; }
 
     muse::PointF fromLogical(muse::PointF point) const;
     muse::RectF fromLogical(muse::RectF rect) const;

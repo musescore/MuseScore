@@ -27,10 +27,11 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
 import MuseScore.Inspector 1.0
+import MuseScore.NotationScene 1.0
 
 import "../../common"
 
-StyledPopupView {
+AbstractElementPopup {
     id: root
 
     //! Note: the navigation order does not match the order of the components in the file
@@ -43,8 +44,8 @@ StyledPopupView {
     readonly property int controlSpacing: 12
     readonly property int rowSpacing: 8
 
-    contentWidth: contentRow.width
-    contentHeight: contentRow.height
+    contentWidth: contentRow.implicitWidth
+    contentHeight: contentRow.implicitHeight
 
     margins: root.controlSpacing
 
@@ -53,22 +54,12 @@ StyledPopupView {
     focusPolicies: PopupView.DefaultFocus & ~PopupView.ClickFocus
     placementPolicies: PopupView.PreferAbove
 
-    signal elementRectChanged(var elementRect)
+    model: TextStylePopupModel {
+        id: textStyleModel
+    }
 
     function updatePosition() {
         root.x = 0
-    }
-
-    TextStylePopupModel {
-        id: textStyleModel
-
-        onItemRectChanged: function (rect) {
-            root.elementRectChanged(rect);
-        }
-    }
-
-    Component.onCompleted: {
-        textStyleModel.init();
     }
 
     RowLayout {

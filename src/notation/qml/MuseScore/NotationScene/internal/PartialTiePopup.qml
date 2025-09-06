@@ -28,7 +28,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
-StyledPopupView {
+AbstractElementPopup {
     id: root
     margins: 0
 
@@ -46,7 +46,13 @@ StyledPopupView {
         partialTiePopupModel.onClosed()
     }
 
-    signal elementRectChanged(var elementRect)
+    model: PartialTiePopupModel {
+        id: partialTiePopupModel
+
+        onItemsChanged: function() {
+            tieMenuList.model = partialTiePopupModel.items
+        }
+    }
 
     function updatePosition() {
         const opensUp = partialTiePopupModel.tieDirection
@@ -59,27 +65,11 @@ StyledPopupView {
         tieMenuList.calculateWidth()
     }
 
-    Component.onCompleted: {
-        partialTiePopupModel.init()
-    }
-
     Column {
         id: content
         width: tieMenuList.width
         height: tieMenuList.height
         spacing: 0
-
-        PartialTiePopupModel {
-            id: partialTiePopupModel
-
-            onItemRectChanged: function(rect) {
-                root.elementRectChanged(rect)
-            }
-
-            onItemsChanged: function() {
-                tieMenuList.model = partialTiePopupModel.items
-            }
-        }
 
         StyledListView {
             id: tieMenuList

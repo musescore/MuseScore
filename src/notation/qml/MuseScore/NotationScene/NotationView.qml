@@ -158,15 +158,12 @@ FocusScope {
                         contextMenuLoader.close()
                     }
 
-                    onShowElementPopupRequested: function (popupType, elementRect) {
-                        popUpLoader.openProperties = {
-                            popupType: popupType,
-                            elementRect: elementRect
-                        };
+                    onShowElementPopupRequested: function (popupType) {
+                        popUpLoader.updateShow(popupType);
                     }
 
                     onHideElementPopupRequested: {
-                        popUpLoader.openProperties = null;
+                        popUpLoader.updateShow(AbstractElementPopupModel.TYPE_UNDEFINED);
                     }
 
                     onViewportChanged: {
@@ -190,31 +187,34 @@ FocusScope {
                         notationViewNavigationSection: navSec
                         navigationOrderStart: notationView.navigationPanel.order + 1
 
-                        property var openProperties: null
+                        property int popupType: AbstractElementPopupModel.TYPE_UNDEFINED
                         property bool updateShowScheduled: false
 
-                        onOpenPropertiesChanged: {
+                        function updateShow(popupType) {
+                            this.popupType = popupType;
                             if (!updateShowScheduled) {
-                                Qt.callLater(updateShow)
+                                Qt.callLater(doUpdateShow)
                                 updateShowScheduled = true;
                             }
                         }
 
-                        function updateShow() {
-                            if (openProperties) {
-                                show(openProperties.popupType, openProperties.elementRect);
+                        function doUpdateShow() {
+                            if (popupType !== AbstractElementPopupModel.TYPE_UNDEFINED) {
+                                show(popupType);
                             } else {
                                 close();
                             }
 
-                            popUpLoader.updateShowScheduled = false;
+                            updateShowScheduled = false;
                         }
 
                         onOpened: function(popupType) {
                             paintView.onElementPopupIsOpenChanged(popupType)
                         }
 
-                        onClosed: paintView.onElementPopupIsOpenChanged()
+                        onClosed: {
+                            paintView.onElementPopupIsOpenChanged(AbstractElementPopupModel.TYPE_UNDEFINED)
+                        }
                     }
 
                     NotationRegionsBeingProcessedView {

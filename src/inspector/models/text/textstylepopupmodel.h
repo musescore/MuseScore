@@ -43,6 +43,9 @@ public:
     Q_INVOKABLE void init() override;
 
 private:
+    void updateItemRect() override;
+    bool ignoreTextEditingChanges() const override { return false; }
+
     TextSettingsModel* m_textSettingsModel = nullptr;
 
     ElementRepositoryService* m_elementRepositoryService = nullptr;
