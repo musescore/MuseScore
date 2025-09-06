@@ -56,6 +56,7 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * DirectionH READ directionHEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * Orientation READ orientationEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * AutoOnOff READ autoOnOffEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * AutoCustomHide READ autoCustomHideEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * VoiceAssignment READ voiceAssignmentEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * SpacerType READ spacerTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * LayoutBreak READ layoutBreakTypeEnum CONSTANT)
@@ -118,7 +119,6 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * MarkerType READ markerTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * MeasureNumberMode READ measureNumberModeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * StaffGroup READ staffGroupEnum CONSTANT)
-    Q_PROPERTY(apiv1::Enum * HideMode READ hideModeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * OttavaType READ ottavaTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * HairpinType READ hairpinTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * TrillType READ trillTypeEnum CONSTANT)
@@ -138,6 +138,13 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * UpdateMode READ updateModeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * LayoutFlag READ layoutFlagEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * LayoutMode READ layoutModeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * TappingHand READ tappingHandEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * LHTappingSymbol READ lHTappingSymbolEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * RHTappingSymbol READ rHTappingSymbolEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * LHTappingShowItems READ lHTappingShowItemsEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * ParenthesesMode READ parenthesesModeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * RepeatPlayCountPreset READ repeatPlayCountPresetEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * MeasureNumberPlacement READ measureNumberPlacementEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * SymId READ symIdEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * Cursor READ cursorEnum CONSTANT)
 
@@ -172,6 +179,7 @@ public:
     apiv1::Enum* directionHEnum() const { return api()->get_directionHEnum(); }
     apiv1::Enum* orientationEnum() const { return api()->get_orientationEnum(); }
     apiv1::Enum* autoOnOffEnum() const { return api()->get_autoOnOffEnum(); }
+    apiv1::Enum* autoCustomHideEnum() const { return api()->get_autoCustomHideEnum(); }
     apiv1::Enum* voiceAssignmentEnum() const { return api()->get_voiceAssignmentEnum(); }
     apiv1::Enum* spacerTypeEnum() const { return api()->get_spacerTypeEnum(); }
     apiv1::Enum* layoutBreakTypeEnum() const { return api()->get_layoutBreakTypeEnum(); }
@@ -234,7 +242,6 @@ public:
     apiv1::Enum* markerTypeEnum() const { return api()->get_markerTypeEnum(); }
     apiv1::Enum* measureNumberModeEnum() const { return api()->get_measureNumberModeEnum(); }
     apiv1::Enum* staffGroupEnum() const { return api()->get_staffGroupEnum(); }
-    apiv1::Enum* hideModeEnum() const { return api()->get_hideModeEnum(); }
     apiv1::Enum* ottavaTypeEnum() const { return api()->get_ottavaTypeEnum(); }
     apiv1::Enum* hairpinTypeEnum() const { return api()->get_hairpinTypeEnum(); }
     apiv1::Enum* trillTypeEnum() const { return api()->get_trillTypeEnum(); }
@@ -254,6 +261,13 @@ public:
     apiv1::Enum* updateModeEnum() const { return api()->get_updateModeEnum(); }
     apiv1::Enum* layoutFlagEnum() const { return api()->get_layoutFlagEnum(); }
     apiv1::Enum* layoutModeEnum() const { return api()->get_layoutModeEnum(); }
+    apiv1::Enum* tappingHandEnum() const { return api()->get_tappingHandEnum(); }
+    apiv1::Enum* lHTappingSymbolEnum() const { return api()->get_lHTappingSymbolEnum(); }
+    apiv1::Enum* rHTappingSymbolEnum() const { return api()->get_rHTappingSymbolEnum(); }
+    apiv1::Enum* lHTappingShowItemsEnum() const { return api()->get_lHTappingShowItemsEnum(); }
+    apiv1::Enum* parenthesesModeEnum() const { return api()->get_parenthesesModeEnum(); }
+    apiv1::Enum* repeatPlayCountPresetEnum() const { return api()->get_repeatPlayCountPresetEnum(); }
+    apiv1::Enum* measureNumberPlacementEnum() const { return api()->get_measureNumberPlacementEnum(); }
     apiv1::Enum* symIdEnum() const { return api()->get_symIdEnum(); }
     apiv1::Enum* cursorEnum() const { return api()->get_cursorEnum(); }
 

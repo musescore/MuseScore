@@ -172,6 +172,9 @@ public:
     /// Contains mu::engraving::AutoOnOff enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(AutoOnOff, autoOnOffEnum, mu::engraving::apiv1::enums::AutoOnOff)
+    /// Contains mu::engraving::AutoCustomHide enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(AutoCustomHide, autoCustomHideEnum, mu::engraving::apiv1::enums::AutoCustomHide)
     /// Contains mu::engraving::VoiceAssignment enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(VoiceAssignment, voiceAssignmentEnum, mu::engraving::apiv1::enums::VoiceAssignment)
@@ -358,9 +361,6 @@ public:
     /// Contains mu::engraving::StaffGroup enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(StaffGroup, staffGroupEnum, mu::engraving::apiv1::enums::StaffGroup)
-    /// Contains mu::engraving::HideMode enumeration values
-    /// \since MuseScore 4.6
-    DECLARE_API_ENUM(HideMode, hideModeEnum, mu::engraving::apiv1::enums::HideMode)
     /// Contains mu::engraving::OttavaType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(OttavaType, ottavaTypeEnum, mu::engraving::apiv1::enums::OttavaType)
@@ -418,6 +418,27 @@ public:
     /// Contains mu::engraving::LayoutMode enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(LayoutMode, layoutModeEnum, mu::engraving::apiv1::enums::LayoutMode)
+    /// Contains mu::engraving::TappingHand enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(TappingHand, tappingHandEnum, mu::engraving::apiv1::enums::TappingHand)
+    /// Contains mu::engraving::LHTappingSymbol enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(LHTappingSymbol, lHTappingSymbolEnum, mu::engraving::apiv1::enums::LHTappingSymbol)
+    /// Contains mu::engraving::RHTappingSymbol enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(RHTappingSymbol, rHTappingSymbolEnum, mu::engraving::apiv1::enums::RHTappingSymbol)
+    /// Contains mu::engraving::LHTappingShowItems enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(LHTappingShowItems, lHTappingShowItemsEnum, mu::engraving::apiv1::enums::LHTappingShowItems)
+    /// Contains mu::engraving::ParenthesesMode enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(ParenthesesMode, parenthesesModeEnum, mu::engraving::apiv1::enums::ParenthesesMode)
+    /// Contains mu::engraving::RepeatPlayCountPreset enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(RepeatPlayCountPreset, repeatPlayCountPresetEnum, mu::engraving::apiv1::enums::RepeatPlayCountPreset)
+    /// Contains mu::engraving::MeasureNumberPlacement enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(MeasureNumberPlacement, measureNumberPlacementEnum, mu::engraving::apiv1::enums::MeasureNumberPlacement)
     /// Contains mu::engraving::SymId enumeration values
     /// \since MuseScore 3.5
     DECLARE_API_ENUM(SymId, symIdEnum, mu::engraving::apiv1::enums::SymId)

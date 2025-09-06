@@ -322,6 +322,8 @@ enum class ElementType {
     PARTIAL_LYRICSLINE_SEGMENT = int(mu::engraving::ElementType::PARTIAL_LYRICSLINE_SEGMENT),
     GLISSANDO_SEGMENT     = int(mu::engraving::ElementType::GLISSANDO_SEGMENT),
     NOTELINE_SEGMENT      = int(mu::engraving::ElementType::NOTELINE_SEGMENT),
+    STAFF_VISIBILITY_INDICATOR = int(mu::engraving::ElementType::STAFF_VISIBILITY_INDICATOR),
+    SYSTEM_LOCK_INDICATOR = int(mu::engraving::ElementType::SYSTEM_LOCK_INDICATOR),
     SPACER                = int(mu::engraving::ElementType::SPACER),
     STAFF_STATE           = int(mu::engraving::ElementType::STAFF_STATE),
     NOTEHEAD              = int(mu::engraving::ElementType::NOTEHEAD),
@@ -376,6 +378,10 @@ enum class ElementType {
     HAMMER_ON_PULL_OFF    = int(mu::engraving::ElementType::HAMMER_ON_PULL_OFF),
     HAMMER_ON_PULL_OFF_SEGMENT = int(mu::engraving::ElementType::HAMMER_ON_PULL_OFF_SEGMENT),
     HAMMER_ON_PULL_OFF_TEXT = int(mu::engraving::ElementType::HAMMER_ON_PULL_OFF_TEXT),
+    TAPPING               = int(mu::engraving::ElementType::TAPPING),
+    TAPPING_HALF_SLUR     = int(mu::engraving::ElementType::TAPPING_HALF_SLUR),
+    TAPPING_HALF_SLUR_SEGMENT = int(mu::engraving::ElementType::TAPPING_HALF_SLUR_SEGMENT),
+    TAPPING_TEXT          = int(mu::engraving::ElementType::TAPPING_TEXT),
 
     ROOT_ITEM             = int(mu::engraving::ElementType::ROOT_ITEM),
     DUMMY                 = int(mu::engraving::ElementType::DUMMY),
@@ -466,6 +472,13 @@ enum class AutoOnOff {
     OFF  = int(mu::engraving::AutoOnOff::OFF),
 };
 Q_ENUM_NS(AutoOnOff);
+
+enum class AutoCustomHide {
+    AUTO   = int(mu::engraving::AutoCustomHide::AUTO),
+    CUSTOM = int(mu::engraving::AutoCustomHide::CUSTOM),
+    HIDE   = int(mu::engraving::AutoCustomHide::HIDE),
+};
+Q_ENUM_NS(AutoCustomHide);
 
 enum class VoiceAssignment {
     ALL_VOICE_IN_INSTRUMENT = int(mu::engraving::VoiceAssignment::ALL_VOICE_IN_INSTRUMENT),
@@ -776,17 +789,19 @@ enum class Tid {
     PAGE_NUMBER        = int(mu::engraving::TextStyleType::PAGE_NUMBER),
 
     /// Measure-oriented styles
-    MEASURE_NUMBER = int(mu::engraving::TextStyleType::MEASURE_NUMBER),
-    MMREST_RANGE   = int(mu::engraving::TextStyleType::MMREST_RANGE),
+    MEASURE_NUMBER           = int(mu::engraving::TextStyleType::MEASURE_NUMBER),
+    MEASURE_NUMBER_ALTERNATE = int(mu::engraving::TextStyleType::MEASURE_NUMBER_ALTERNATE),
+    MMREST_RANGE             = int(mu::engraving::TextStyleType::MMREST_RANGE),
 
     /// System-level styles
-    TEMPO          = int(mu::engraving::TextStyleType::TEMPO),
-    TEMPO_CHANGE   = int(mu::engraving::TextStyleType::TEMPO_CHANGE),
-    METRONOME      = int(mu::engraving::TextStyleType::METRONOME),
-    REPEAT_LEFT    = int(mu::engraving::TextStyleType::REPEAT_LEFT),       // align to start of measure
-    REPEAT_RIGHT   = int(mu::engraving::TextStyleType::REPEAT_RIGHT),      // align to end of measure
-    REHEARSAL_MARK = int(mu::engraving::TextStyleType::REHEARSAL_MARK),
-    SYSTEM         = int(mu::engraving::TextStyleType::SYSTEM),
+    TEMPO             = int(mu::engraving::TextStyleType::TEMPO),
+    TEMPO_CHANGE      = int(mu::engraving::TextStyleType::TEMPO_CHANGE),
+    METRONOME         = int(mu::engraving::TextStyleType::METRONOME),
+    REPEAT_PLAY_COUNT = int(mu::engraving::TextStyleType::REPEAT_PLAY_COUNT),
+    REPEAT_LEFT       = int(mu::engraving::TextStyleType::REPEAT_LEFT),       // align to start of measure
+    REPEAT_RIGHT      = int(mu::engraving::TextStyleType::REPEAT_RIGHT),      // align to end of measure
+    REHEARSAL_MARK    = int(mu::engraving::TextStyleType::REHEARSAL_MARK),
+    SYSTEM            = int(mu::engraving::TextStyleType::SYSTEM),
 
     /// Staff oriented styles
     STAFF             = int(mu::engraving::TextStyleType::STAFF),
@@ -802,6 +817,7 @@ enum class Tid {
 
     /// Note oriented styles
     TUPLET                   = int(mu::engraving::TextStyleType::TUPLET),
+    ARTICULATION             = int(mu::engraving::TextStyleType::ARTICULATION),
     STICKING                 = int(mu::engraving::TextStyleType::STICKING),
     FINGERING                = int(mu::engraving::TextStyleType::FINGERING),
     LH_GUITAR_FINGERING      = int(mu::engraving::TextStyleType::LH_GUITAR_FINGERING),
@@ -1104,23 +1120,31 @@ enum class AnnotationCategory {
 Q_ENUM_NS(AnnotationCategory);
 
 enum class PlayingTechniqueType {
-    Undefined     = int(mu::engraving::PlayingTechniqueType::Undefined),
-    Natural       = int(mu::engraving::PlayingTechniqueType::Natural),
-    Pizzicato     = int(mu::engraving::PlayingTechniqueType::Pizzicato),
-    Open          = int(mu::engraving::PlayingTechniqueType::Open),
-    Mute          = int(mu::engraving::PlayingTechniqueType::Mute),
-    Tremolo       = int(mu::engraving::PlayingTechniqueType::Tremolo),
-    Detache       = int(mu::engraving::PlayingTechniqueType::Detache),
-    Martele       = int(mu::engraving::PlayingTechniqueType::Martele),
-    ColLegno      = int(mu::engraving::PlayingTechniqueType::ColLegno),
-    SulPonticello = int(mu::engraving::PlayingTechniqueType::SulPonticello),
-    SulTasto      = int(mu::engraving::PlayingTechniqueType::SulTasto),
-    Vibrato       = int(mu::engraving::PlayingTechniqueType::Vibrato),
-    Legato        = int(mu::engraving::PlayingTechniqueType::Legato),
-    Distortion    = int(mu::engraving::PlayingTechniqueType::Distortion),
-    Overdrive     = int(mu::engraving::PlayingTechniqueType::Overdrive),
-    Harmonics     = int(mu::engraving::PlayingTechniqueType::Harmonics),
-    JazzTone      = int(mu::engraving::PlayingTechniqueType::JazzTone),
+    Undefined          = int(mu::engraving::PlayingTechniqueType::Undefined),
+    Natural            = int(mu::engraving::PlayingTechniqueType::Natural),
+    Pizzicato          = int(mu::engraving::PlayingTechniqueType::Pizzicato),
+    Open               = int(mu::engraving::PlayingTechniqueType::Open),
+    Mute               = int(mu::engraving::PlayingTechniqueType::Mute),
+    Tremolo            = int(mu::engraving::PlayingTechniqueType::Tremolo),
+    Detache            = int(mu::engraving::PlayingTechniqueType::Detache),
+    Martele            = int(mu::engraving::PlayingTechniqueType::Martele),
+    ColLegno           = int(mu::engraving::PlayingTechniqueType::ColLegno),
+    SulPonticello      = int(mu::engraving::PlayingTechniqueType::SulPonticello),
+    SulTasto           = int(mu::engraving::PlayingTechniqueType::SulTasto),
+    Vibrato            = int(mu::engraving::PlayingTechniqueType::Vibrato),
+    Legato             = int(mu::engraving::PlayingTechniqueType::Legato),
+    Distortion         = int(mu::engraving::PlayingTechniqueType::Distortion),
+    Overdrive          = int(mu::engraving::PlayingTechniqueType::Overdrive),
+    Harmonics          = int(mu::engraving::PlayingTechniqueType::Harmonics),
+    JazzTone           = int(mu::engraving::PlayingTechniqueType::JazzTone),
+    HandbellsSwing     = int(mu::engraving::PlayingTechniqueType::HandbellsSwing),
+    HandbellsSwingUp   = int(mu::engraving::PlayingTechniqueType::HandbellsSwingUp),
+    HandbellsSwingDown = int(mu::engraving::PlayingTechniqueType::HandbellsSwingDown),
+    HandbellsEcho1     = int(mu::engraving::PlayingTechniqueType::HandbellsEcho1),
+    HandbellsEcho2     = int(mu::engraving::PlayingTechniqueType::HandbellsEcho2),
+    HandbellsDamp      = int(mu::engraving::PlayingTechniqueType::HandbellsDamp),
+    HandbellsLV        = int(mu::engraving::PlayingTechniqueType::HandbellsLV),
+    HandbellsR         = int(mu::engraving::PlayingTechniqueType::HandbellsR),
 };
 Q_ENUM_NS(PlayingTechniqueType);
 
@@ -1293,14 +1317,6 @@ enum class StaffGroup {
 };
 Q_ENUM_NS(StaffGroup);
 
-enum class HideMode {
-    AUTO       = int(mu::engraving::AutoOnOff::AUTO),
-    ALWAYS     = int(mu::engraving::AutoOnOff::ON),
-    NEVER      = int(mu::engraving::AutoOnOff::OFF),
-    INSTRUMENT = int(mu::engraving::AutoOnOff::AUTO),
-};
-Q_ENUM_NS(HideMode);
-
 enum class OttavaType {
     OTTAVA_8VA  = int(mu::engraving::OttavaType::OTTAVA_8VA),
     OTTAVA_8VB  = int(mu::engraving::OttavaType::OTTAVA_8VB),
@@ -1344,6 +1360,12 @@ enum class ArticulationTextType {
     NO_TEXT = int(mu::engraving::ArticulationTextType::NO_TEXT),
     SLAP    = int(mu::engraving::ArticulationTextType::SLAP),
     POP     = int(mu::engraving::ArticulationTextType::POP),
+    TD      = int(mu::engraving::ArticulationTextType::TD),
+    BD      = int(mu::engraving::ArticulationTextType::BD),
+    RT      = int(mu::engraving::ArticulationTextType::RT),
+    PL      = int(mu::engraving::ArticulationTextType::PL),
+    SB      = int(mu::engraving::ArticulationTextType::SB),
+    VIB     = int(mu::engraving::ArticulationTextType::VIB),
 };
 Q_ENUM_NS(ArticulationTextType);
 
@@ -1468,6 +1490,56 @@ enum class LayoutMode {
     HORIZONTAL_FIXED = int(mu::engraving::LayoutMode::HORIZONTAL_FIXED),
 };
 Q_ENUM_NS(LayoutMode);
+
+enum class TappingHand {
+    INVALID = int(mu::engraving::TappingHand::INVALID),
+    LEFT    = int(mu::engraving::TappingHand::LEFT),
+    RIGHT   = int(mu::engraving::TappingHand::RIGHT),
+};
+Q_ENUM_NS(TappingHand);
+
+enum class LHTappingSymbol {
+    DOT       = int(mu::engraving::LHTappingSymbol::DOT),
+    CIRCLED_T = int(mu::engraving::LHTappingSymbol::CIRCLED_T),
+};
+Q_ENUM_NS(LHTappingSymbol);
+
+enum class RHTappingSymbol {
+    T    = int(mu::engraving::RHTappingSymbol::T),
+    PLUS = int(mu::engraving::RHTappingSymbol::PLUS),
+};
+Q_ENUM_NS(RHTappingSymbol);
+
+enum class LHTappingShowItems {
+    HALF_SLUR = int(mu::engraving::LHTappingShowItems::HALF_SLUR),
+    SYMBOL    = int(mu::engraving::LHTappingShowItems::SYMBOL),
+    BOTH      = int(mu::engraving::LHTappingShowItems::BOTH),
+};
+Q_ENUM_NS(LHTappingShowItems);
+
+enum class ParenthesesMode {
+    NONE  = int(mu::engraving::ParenthesesMode::NONE),
+    LEFT  = int(mu::engraving::ParenthesesMode::LEFT),
+    RIGHT = int(mu::engraving::ParenthesesMode::RIGHT),
+    BOTH  = int(mu::engraving::ParenthesesMode::BOTH),
+};
+Q_ENUM_NS(ParenthesesMode);
+
+enum class RepeatPlayCountPreset {
+    X_N          = int(mu::engraving::RepeatPlayCountPreset::X_N),
+    N_X          = int(mu::engraving::RepeatPlayCountPreset::N_X),
+    PLAY_N_TIMES = int(mu::engraving::RepeatPlayCountPreset::PLAY_N_TIMES),
+    N_REPEATS    = int(mu::engraving::RepeatPlayCountPreset::N_REPEATS),
+};
+Q_ENUM_NS(RepeatPlayCountPreset);
+
+enum class MeasureNumberPlacement {
+    ABOVE_SYSTEM            = int(mu::engraving::MeasureNumberPlacement::ABOVE_SYSTEM),
+    BELOW_SYSTEM            = int(mu::engraving::MeasureNumberPlacement::BELOW_SYSTEM),
+    ON_SYSTEM_OBJECT_STAVES = int(mu::engraving::MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES),
+    ON_ALL_STAVES           = int(mu::engraving::MeasureNumberPlacement::ON_ALL_STAVES),
+};
+Q_ENUM_NS(MeasureNumberPlacement);
 
 enum class SymId {
     noSym = int(mu::engraving::SymId::noSym),
@@ -4481,6 +4553,7 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Direction);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::DirectionH);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Orientation);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::AutoOnOff);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::AutoCustomHide);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::VoiceAssignment);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SpacerType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LayoutBreakType);
@@ -4543,7 +4616,6 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::JumpType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MarkerType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MeasureNumberMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::StaffGroup);
-Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::HideMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TrillType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::VibratoType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ArticulationTextType);
@@ -4560,4 +4632,11 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Key);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::UpdateMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LayoutFlag);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LayoutMode);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TappingHand);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LHTappingSymbol);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::RHTappingSymbol);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LHTappingShowItems);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ParenthesesMode);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::RepeatPlayCountPreset);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MeasureNumberPlacement);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SymId);

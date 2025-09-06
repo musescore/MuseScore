@@ -211,6 +211,13 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(int,    z,             Z)
     /// Whether this element is cue size.
     API_PROPERTY_T(bool,   small,         SMALL)
+    /// For staves and parts: Whether to hide systems when they are empty.
+    /// One of PluginAPI::PluginAPI::AutoOnOff values.
+    /// \since MuseScore 4.6
+    API_PROPERTY(hideWhenEmpty,           HIDE_WHEN_EMPTY)
+    /// For parts: Whether to only hide staves on a system if the entire instrument is empty.
+    /// \since MuseScore 4.6
+    API_PROPERTY_T(bool, hideStavesWhenIndividuallyEmpty, HIDE_STAVES_WHEN_INDIVIDUALLY_EMPTY)
     /// For clefs, key signatures, time signatures and
     /// system breaks: Whether to generate courtesy objects.
     API_PROPERTY(showCourtesy,            SHOW_COURTESY)
@@ -245,6 +252,8 @@ class EngravingItem : public apiv1::ScoreElement
     /// One of PluginAPI::PluginAPI::DirectionH values.
     ///\since MuseScore 4.6
     API_PROPERTY(mirrorHead,              MIRROR_HEAD)
+    ///\since MuseScore 4.6
+    API_PROPERTY(hasParentheses, HAS_PARENTHESES)
     /// For breath marks and section breaks: The amount to
     /// pause playback by, in seconds.
     API_PROPERTY_T(qreal,  pause,         PAUSE)
@@ -273,9 +282,9 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(bool, ghost,           GHOST)
     API_PROPERTY_T(bool, play,            PLAY)
     /// For beams: The feathering on its left side.
-    API_PROPERTY(growLeft,                GROW_LEFT)
+    API_PROPERTY_T(qreal, growLeft,       GROW_LEFT)
     /// For beams: The feathering on its right side.
-    API_PROPERTY(growRight,               GROW_RIGHT)
+    API_PROPERTY_T(qreal, growRight,      GROW_RIGHT)
 
     /// For vertical frames and text frames: Their height.
     API_PROPERTY(boxHeight,               BOX_HEIGHT)
@@ -292,14 +301,20 @@ class EngravingItem : public apiv1::ScoreElement
     /// The bottom padding for a given frame.
     API_PROPERTY(bottomGap,               BOTTOM_GAP)
     /// The left padding for a given frame.
-    API_PROPERTY(leftMargin,              LEFT_MARGIN)
+    API_PROPERTY_T(qreal, leftMargin,     LEFT_MARGIN)
     /// The right padding for a given frame.
-    API_PROPERTY(rightMargin,             RIGHT_MARGIN)
+    API_PROPERTY_T(qreal, rightMargin,    RIGHT_MARGIN)
     /// The top gap for a given frame. Affects the positioning
     /// of the frame relative to surrounding elements.
-    API_PROPERTY(topMargin,               TOP_MARGIN)
+    API_PROPERTY_T(qreal, topMargin,      TOP_MARGIN)
     /// The bottom gap for a given frame.
-    API_PROPERTY(bottomMargin,            BOTTOM_MARGIN)
+    API_PROPERTY_T(qreal, bottomMargin,   BOTTOM_MARGIN)
+    /// For vertical-type frames: The clearance for notation above the frame.
+    /// \since MuseScore 4.6
+    API_PROPERTY(paddingToNotationAbove,  PADDING_TO_NOTATION_ABOVE)
+    /// For vertical-type frames: The clearance for notation below the frame.
+    /// \since MuseScore 4.6
+    API_PROPERTY(paddingToNotationBelow,  PADDING_TO_NOTATION_BELOW)
     /// For layout breaks: The layout break type.
     /// One of PluginAPI::PluginAPI::LayoutBreakType values
     API_PROPERTY(layoutBreakType,         LAYOUT_BREAK)
@@ -318,23 +333,21 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(bool, imageFramed,     IMAGE_FRAMED)
 
     /// For fretboard diagram legends: The text (chord symbols) scale.
-    ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, fretFrameTextScale, FRET_FRAME_TEXT_SCALE)
     /// For fretboard diagram legends: The fretboard diagram scale.
-    ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, fretFrameDiagramScale, FRET_FRAME_DIAGRAM_SCALE)
     /// For fretboard diagram legends: The gap between columns, in spatiums.
-    ///\since MuseScore 4.6
     API_PROPERTY(fretFrameColumnGap,      FRET_FRAME_COLUMN_GAP)
     /// For fretboard diagram legends: The gap between rows, in spatiums.
-    ///\since MuseScore 4.6
     API_PROPERTY(fretFrameRowGap,         FRET_FRAME_ROW_GAP)
     /// For fretboard diagram legends: The number of chords per row.
-    ///\since MuseScore 4.6
     API_PROPERTY_T(int, fretFrameChordPerRow, FRET_FRAME_CHORDS_PER_ROW)
     /// For fretboard diagram legends: The horizontal alignment of its contents.
-    ///\since MuseScore 4.6
     API_PROPERTY_T(int, fretFrameHAlign,  FRET_FRAME_H_ALIGN)
+    /// For fretboard diagram legends: The order the diagrams are displayed in
+    API_PROPERTY(fretFrameDiagramsOrder,  FRET_FRAME_DIAGRAMS_ORDER)
+    /// For fretboard diagram legends: Which diagrams are invisible.
+    API_PROPERTY(fretFrameInvisibleDiagrams, FRET_FRAME_INVISIBLE_DIAGRAMS)
 
     /// For time signatures: Their scale.
     API_PROPERTY(scale,                   SCALE)
@@ -457,6 +470,13 @@ class EngravingItem : public apiv1::ScoreElement
     /// For markers: The marker type,
     /// one of PluginAPI::PluginAPI::MarkerType values.
     API_PROPERTY_T(int, markerType,       MARKER_TYPE)
+    /// For markers: The size of musical symbols used.
+    /// Value is relative to the default size of 20pt.
+    /// \since MuseScore 4.6
+    API_PROPERTY_T(qreal, markerSymbolSize, MARKER_SYMBOL_SIZE)
+    /// For markers: Whether the symbol is aligned with the barline.
+    /// \since MuseScore 4.6
+    API_PROPERTY_T(bool, markerCenterOnSymbol, MARKER_CENTER_ON_SYMBOL)
     /// For arpeggios: The position of the top handle.
     API_PROPERTY_T(qreal, arpUserLen1,    ARP_USER_LEN1)
     /// For arpeggios: The position of the bottom handle.
@@ -544,7 +564,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(int, syllabic,         SYLLABIC)
     /// The tick length of a lyrics object.
     API_PROPERTY(lyricTicks,              LYRIC_TICKS)
-    /// For voltas: The list of passes to play the underlying measures.
+    /// For voltas: The list of passes on which to play the underlying measures.
     API_PROPERTY(volta_ending,            VOLTA_ENDING)
     /// For line elements: Controls the visibility of the line.
     API_PROPERTY_T(bool, lineVisible,     LINE_VISIBLE)
@@ -595,6 +615,9 @@ class EngravingItem : public apiv1::ScoreElement
     /// The scale of the bass component of a chord symbol.
     ///\since MuseScore 4.6
     API_PROPERTY(harmonyBassScale,        HARMONY_BASS_SCALE)
+    /// Whether to stack modifiers in chord symbols.
+    ///\since MuseScore 4.6
+    API_PROPERTY_T(bool, harmonyDoNotStackModifiers, HARMONY_DO_NOT_STACK_MODIFIERS)
 
     /// For brackets: The bracket type, one of
     /// PluginAPI::PluginAPI::BracketType values.
@@ -1016,8 +1039,16 @@ class EngravingItem : public apiv1::ScoreElement
     /// Whether this fretboard diagram is excluded from vertical alignnment.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, excludeVerticalAlign, EXCLUDE_VERTICAL_ALIGN)
-    ///\since MuseScore 4.6
-    API_PROPERTY(hasParentheses, HAS_PARENTHESES)
+
+    /// For barlines & play count text: Controls how to display the play count text.
+    /// One of PluginAPI::PluginAPI::AutoCustomHide values.
+    API_PROPERTY(playCountTextSetting,    PLAY_COUNT_TEXT_SETTING)
+    /// For barlines & play count text: Controls the text of the play count text.
+    API_PROPERTY(playCountText,           PLAY_COUNT_TEXT)
+
+    /// For rests: Whether to vertically align them with other rests in the same voice.
+    /// \since MuseScore 4.6
+    API_PROPERTY_T(bool, alignWithOtherRests, ALIGN_WITH_OTHER_RESTS)
 
     //  API_PROPERTY(end,                     END)
 
@@ -1959,6 +1990,15 @@ class Staff : public ScoreElement
     /// Whether voice 4 participates in playback.
     API_PROPERTY_T(bool, playbackVoice4,  PLAYBACK_VOICE4)
 
+    /// Whether a staff should display measure numbers.
+    /// One of PluginAPI::PluginAPI::AutoOnOff values.
+    /// \since MuseScore 4.6
+    API_PROPERTY(showMeasureNumbers,      SHOW_MEASURE_NUMBERS)
+
+    /// Whether to show this staff if the entire system is empty.
+    /// \since MuseScore 4.6
+    API_PROPERTY_T(bool, showIfEntireSystemEmpty, SHOW_IF_ENTIRE_SYSTEM_EMPTY)
+
     API_PROPERTY_T(int, staffBarlineSpan,     STAFF_BARLINE_SPAN)
     API_PROPERTY_T(int, staffBarlineSpanFrom, STAFF_BARLINE_SPAN_FROM)
     API_PROPERTY_T(int, staffBarlineSpanTo,   STAFF_BARLINE_SPAN_TO)
@@ -1988,16 +2028,9 @@ class Staff : public ScoreElement
     /// mid-system when measures are empty.
     /// \since MuseScore 4.6
     Q_PROPERTY(bool cutaway READ cutaway)
-    /// Whether to not hide this staff if an entire system is empty.
-    /// \since MuseScore 4.6
-    Q_PROPERTY(bool showIfEntireSystemEmpty READ showIfEntireSystemEmpty)
     /// Whether to display the system barline (leftmost barline).
     /// \since MuseScore 4.6
     Q_PROPERTY(bool hideSystemBarLine READ hideSystemBarLine)
-    /// Whether to hide this staff when empty (on a per-system basis).
-    /// One of PluginAPI::PluginAPI::HideMode values.
-    /// \since MuseScore 4.6
-    Q_PROPERTY(int hideWhenEmpty READ hideWhenEmpty)
     /// Whether to merge matching rests across voices.
     /// One of PluginAPI::PluginAPI::AutoOnOff values.
     /// If Auto, determined by the global style setting \p mergeMatchingRests .
@@ -2026,9 +2059,7 @@ public:
     int idx() { return int(staff()->idx()); }
     bool show() { return staff()->show(); }
     bool cutaway() { return staff()->cutaway(); }
-    bool showIfEntireSystemEmpty() { return staff()->showIfEntireSystemEmpty(); }
     bool hideSystemBarLine() { return staff()->hideSystemBarLine(); }
-    int hideWhenEmpty() { return int(staff()->hideWhenEmpty()); }
     int mergeMatchingRests() { return int(staff()->mergeMatchingRests()); }
     bool shouldMergeMatchingRests() { return staff()->shouldMergeMatchingRests(); }
     Staff* primaryStaff() { return wrap<Staff>(staff()->primaryStaff()); }
