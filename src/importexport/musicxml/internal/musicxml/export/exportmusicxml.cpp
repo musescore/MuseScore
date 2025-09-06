@@ -7580,7 +7580,6 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
 
     xml.startElement("part-list");
     size_t staffCount = 0;                          // count sum of # staves in parts
-    const auto& parts = score->parts();
     std::array<int, MAX_PART_GROUPS> partGroupEnd;  // staff where part group ends (bracketSpan is in staves, not parts)
     partGroupEnd.fill(-1);
     for (size_t idx = 0; idx < parts.size(); ++idx) {
