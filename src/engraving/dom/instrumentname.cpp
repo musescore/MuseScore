@@ -122,24 +122,6 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
 }
 
 //---------------------------------------------------------
-//   playTick
-//---------------------------------------------------------
-
-Fraction InstrumentName::playTick() const
-{
-    // Instrument names always have a tick value of zero, so play from the start of the first measure in the system that the instrument name belongs to.
-    const auto sys = system();
-    if (sys) {
-        const auto firstMeasure = sys->firstMeasure();
-        if (firstMeasure) {
-            return firstMeasure->tick();
-        }
-    }
-
-    return tick();
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

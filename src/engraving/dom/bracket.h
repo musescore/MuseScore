@@ -69,8 +69,6 @@ public:
     Measure* measure() const { return m_measure; }
     void setMeasure(Measure* measure) { m_measure = measure; }
 
-    Fraction playTick() const override;
-
     const BracketItem* bi() const { return m_bi; }
 
     bool isEditable() const override;

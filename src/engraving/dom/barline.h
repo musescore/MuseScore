@@ -79,8 +79,7 @@ class BarLine final : public EngravingItem
     DECLARE_CLASSOF(ElementType::BAR_LINE)
 
 public:
-
-    virtual ~BarLine();
+    ~BarLine() override;
 
     BarLine& operator=(const BarLine&) = delete;
 
@@ -91,7 +90,6 @@ public:
     EngravingObjectList scanChildren() const override;
 
     BarLine* clone() const override { return new BarLine(*this); }
-    Fraction playTick() const override;
     PointF canvasPos() const override;      ///< position in canvas coordinates
     PointF pagePos() const override;        ///< position in page coordinates
 
