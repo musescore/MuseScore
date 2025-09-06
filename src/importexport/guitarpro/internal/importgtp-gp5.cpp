@@ -1002,6 +1002,7 @@ bool GuitarPro5::read(IODevice* io)
                         s->setParent(n);
                         s->setGlissandoType(GlissandoType::STRAIGHT);
                         s->setGlissandoShift(true);
+                        s->setGlissandoStyle(n->part()->instrument(n->tick())->glissandoStyle());
                         s->setEndElement(nt);
                         s->setTick2(nt->chord()->segment()->tick());
                         s->setTrack2(n->track());

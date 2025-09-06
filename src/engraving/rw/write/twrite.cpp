@@ -2013,9 +2013,14 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         xml.tag("singleNoteDynamics", item->singleNoteDynamics());
     }
 
+    if (item->glissandoStyle() != GlissandoStyle::CHROMATIC) {
+        xml.tag("glissandoStyle", TConv::toXml(item->glissandoStyle()));
+    }
+
     if (!item->stringData()->isNull()) {
         write(item->stringData(), xml);
     }
+
     for (const NamedEventList& a : item->midiActions()) {
         write(&a, xml, "MidiAction");
     }

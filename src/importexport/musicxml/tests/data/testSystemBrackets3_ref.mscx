@@ -40,6 +40,7 @@ Vocals</longName>
         <minPitchA>41</minPitchA>
         <maxPitchA>79</maxPitchA>
         <instrumentId>voice.vocals</instrumentId>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -136,6 +137,7 @@ Gtr. 1</shortName>
         <maxPitchA>86</maxPitchA>
         <instrumentId>pluck.guitar.electric</instrumentId>
         <clef>G8vb</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <StringData>
           <frets>24</frets>
           <string>40</string>
@@ -265,6 +267,7 @@ Gtr. 2</shortName>
         <maxPitchA>86</maxPitchA>
         <instrumentId>pluck.guitar.electric</instrumentId>
         <clef>G8vb</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <StringData>
           <frets>24</frets>
           <string>40</string>
@@ -394,6 +397,7 @@ Gtr.</shortName>
         <instrumentId>pluck.guitar.acoustic</instrumentId>
         <clef>G8vb</clef>
         <singleNoteDynamics>0</singleNoteDynamics>
+        <glissandoStyle>portamento</glissandoStyle>
         <StringData>
           <frets>20</frets>
           <string>40</string>

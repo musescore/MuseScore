@@ -1978,6 +1978,7 @@ EngravingItem* Note::drop(EditData& data)
                 gliss->setShowText(false);
             }
             gliss->setParent(this);
+            gliss->setGlissandoStyle(part()->instrument(gliss->tick())->glissandoStyle());
             score()->undoAddElement(e);
         } else {
             LOGD("no segment for second note of glissando found");
