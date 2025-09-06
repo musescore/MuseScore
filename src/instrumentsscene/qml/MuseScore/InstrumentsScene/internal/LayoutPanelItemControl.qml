@@ -19,26 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+import Muse.Ui
+import Muse.UiComponents
 
 ListItemBlank {
     id: root
+
+    required property TreeView treeView
+    required property bool isTreeNode
+    required property bool expanded
+    required property bool hasChildren
+    required property int depth
+    required property int row
+    required property int column
+    required property bool current
+
+    required property var modelIndex
+
+    required property var item
 
     property int sideMargin: 12
 
     normalColor: ui.theme.textFieldColor
     navigation.column: 0
     navigation.accessible.name: titleLabel.text
-
-    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-    anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
-
-    height: parent ? parent.height : implicitHeight
-    width: parent ? parent.width : implicitWidth
 
     implicitHeight: 38
     implicitWidth: 248
@@ -50,7 +57,7 @@ ListItemBlank {
 
         // 70 = 32+2+32+4 for the buttons and spacing in LayoutPanelItemDelegate
         // to make sure that the Add button aligns vertically with the text of the item above it
-        anchors.leftMargin: sideMargin + 70 + 12 * styleData.depth
+        anchors.leftMargin: sideMargin + 70 + 12 * root.depth
         spacing: 4
 
         FlatButton {
@@ -67,7 +74,7 @@ ListItemBlank {
             id: titleLabel
             Layout.fillWidth: true
 
-            text: model ? model.itemRole.title : ""
+            text: root.item.title
             horizontalAlignment: Text.AlignLeft
         }
     }
