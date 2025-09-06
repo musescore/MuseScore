@@ -93,7 +93,7 @@ private:
 
     msecs_t currentTime() const;
 
-    std::shared_ptr<TaskScheduler> m_taskScheduler;
+    TaskScheduler* m_taskScheduler = nullptr;
 
     size_t m_minTrackCountForMultithreading = 0;
     size_t m_nonMutedTrackCount = 0;

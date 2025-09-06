@@ -25,6 +25,7 @@ let AudioDriver = (function () {
                 console.error(error)
             }
 
+            // driver (processor) -> main
             processor.port.onmessage = function(event) {
                 console.log("[processor]", event.data)
             }
