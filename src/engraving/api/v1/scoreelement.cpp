@@ -74,6 +74,11 @@ qreal ScoreElement::spatium() const
     return e->isEngravingItem() ? toEngravingItem(e)->spatium() : e->score()->style().spatium();
 }
 
+QQmlListProperty<ScoreElement> ScoreElement::children()
+{
+    return wrapContainerProperty<ScoreElement>(this, e->children());
+}
+
 //---------------------------------------------------------
 //   ScoreElement::get
 //---------------------------------------------------------
