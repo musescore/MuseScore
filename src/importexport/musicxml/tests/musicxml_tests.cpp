@@ -1079,6 +1079,9 @@ TEST_F(MusicXml_Tests, sound2) {
 TEST_F(MusicXml_Tests, specialCharacters) {
     musicXmlIoTest("testSpecialCharacters");
 }
+TEST_F(MusicXml_Tests, stackedHarm) {
+    musicXmlMscxExportTestRef("testStackedHarm");
+}
 TEST_F(MusicXml_Tests, staffEmptiness) {
     musicXmlImportTestRef("testStaffEmptiness");
 }
