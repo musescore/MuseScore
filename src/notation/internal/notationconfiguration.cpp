@@ -141,9 +141,10 @@ void NotationConfiguration::init()
         m_backgroundChanged.notify();
     });
 
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-        m_backgroundChanged.notify();
-    });
+//    if (uiConfiguration())
+//    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+//        m_backgroundChanged.notify();
+//    });
 
     settings()->setDefaultValue(LIGHT_SCORE_BACKGROUND_COLOR, Val(QColor("#BCC1CC")));
     settings()->valueChanged(LIGHT_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
@@ -408,9 +409,10 @@ void NotationConfiguration::init()
     mu::engraving::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
     mu::engraving::MScore::setVRaster(DEFAULT_GRID_SIZE_SPATIUM);
 
-    context()->currentProjectChanged().onNotify(this, [this]() {
-        resetStyleDialogPageIndices();
-    });
+//    if (context())
+//    context()->currentProjectChanged().onNotify(this, [this]() {
+//        resetStyleDialogPageIndices();
+//    });
 }
 
 QColor NotationConfiguration::notationColor() const
