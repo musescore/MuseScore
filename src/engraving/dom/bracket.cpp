@@ -57,24 +57,6 @@ Bracket::~Bracket()
 }
 
 //---------------------------------------------------------
-//   playTick
-//---------------------------------------------------------
-
-Fraction Bracket::playTick() const
-{
-    // Brackets always have a tick value of zero, so play from the start of the first measure in the system that the bracket belongs to.
-    const auto sys = system();
-    if (sys) {
-        const auto firstMeasure = sys->firstMeasure();
-        if (firstMeasure) {
-            return firstMeasure->tick();
-        }
-    }
-
-    return tick();
-}
-
-//---------------------------------------------------------
 //   setStaffSpan
 //---------------------------------------------------------
 

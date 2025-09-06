@@ -573,16 +573,6 @@ Fraction EngravingItem::rtick() const
 }
 
 //---------------------------------------------------------
-//   playTick
-//---------------------------------------------------------
-
-Fraction EngravingItem::playTick() const
-{
-    // Play from the element's tick position by default.
-    return tick();
-}
-
-//---------------------------------------------------------
 //   beat
 //---------------------------------------------------------
 
