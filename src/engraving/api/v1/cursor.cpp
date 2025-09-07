@@ -364,7 +364,8 @@ void Cursor::add(EngravingItem* wrapped)
             s->setParent(curElement);
             m_score->undoAddElement(s);
         }
-    } // FALLTHROUGH
+        [[fallthrough]];
+    }
     case ElementType::FINGERING:
     case ElementType::BEND:
     case ElementType::NOTEHEAD: {

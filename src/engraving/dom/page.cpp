@@ -394,12 +394,12 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                     if (!m_no) {
                         break;
                     }
-                // FALLTHROUGH
+                    [[fallthrough]];
                 case 'N': // on page 1 only if there are multiple pages
                     if ((score()->npages() + score()->pageNumberOffset()) <= 1) {
                         break;
                     }
-                // FALLTHROUGH
+                    [[fallthrough]];
                 case 'P': // on all pages
                 {
                     int no = static_cast<int>(m_no) + 1 + score()->pageNumberOffset();
@@ -426,7 +426,7 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                     if (!m_no) {
                         break;
                     }
-                // FALLTHROUGH
+                    [[fallthrough]];
                 case 'I':
                     newFragments.back().text += score()->metaTag(u"partName");
                     break;
@@ -471,7 +471,7 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                     if (m_no) {
                         break;
                     }
-                // FALLTHROUGH
+                    [[fallthrough]];
                 case 'c':
                 {
                     const String copyrightString = score()->metaTag(u"copyright");
