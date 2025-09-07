@@ -45,48 +45,80 @@ Loader {
 
     property bool needReadChannelName: false
 
+    property var flickableArea
+
     default property Component delegateComponent
 
     signal navigateControlIndexChanged(var index)
 
     active: visible
 
-    sourceComponent: Row {
-        width: implicitWidth
-        height: root.spacingAbove + sectionContentList.contentHeight + root.spacingBelow
-        spacing: 1 // for separator (will be rendered in MixerPanel.qml)
+    sourceComponent: MixerRow {
+        flickableArea: root.flickableArea
+        spacingAbove: root.spacingAbove
+        spacingBelow: root.spacingBelow
 
-        StyledTextLabel {
-            visible: root.headerVisible
 
-            anchors.top: parent.top
-            anchors.topMargin: root.spacingAbove
+        header: Component {
+            Item {
+                anchors.top: parent.top
+                width: textLabel.width
+                height: textLabel.height + root.spacingAbove + root.spacingBelow
 
-            width: root.headerWidth
-            height: root.headerHeight
+                StyledTextLabel {
+                    id: textLabel
+                    visible: root.headerVisible
 
-            leftPadding: 12
-            rightPadding: 12
+                    anchors.top: parent.top
+                    anchors.topMargin: root.spacingAbove
 
-            horizontalAlignment: Qt.AlignRight
-            text: root.headerTitle
+                    width: root.headerWidth
+                    height: root.headerHeight
+
+                    leftPadding: 12
+                    rightPadding: 12
+
+                    horizontalAlignment: Qt.AlignRight
+                    text: root.headerTitle
+                    z: 2
+                }
+
+                Rectangle {
+                    id: backgroundRect
+                    anchors.fill: parent
+
+
+                    color: ui.theme.backgroundSecondaryColor
+                    // color: "red"
+                    z: 1
+
+                    MouseArea {
+                        id: mouseBlocker
+                        anchors.fill: parent
+                        propagateComposedEvents: false
+                        hoverEnabled: true
+                    }
+                }
+
+            }
         }
+        body: Component {
+            ListView {
+                id: sectionContentList
 
-        ListView {
-            id: sectionContentList
+                anchors.top: parent.top
+                anchors.topMargin: root.spacingAbove
+                width: contentItem.childrenRect.width
+                height: Math.max(1, contentHeight) // HACK: if the height is 0, the listview won't create any delegates
+                contentHeight: contentItem.childrenRect.height
 
-            anchors.top: parent.top
-            anchors.topMargin: root.spacingAbove
-            width: contentItem.childrenRect.width
-            height: Math.max(1, contentHeight) // HACK: if the height is 0, the listview won't create any delegates
-            contentHeight: contentItem.childrenRect.height
+                interactive: false
+                orientation: Qt.Horizontal
+                spacing: 1 // for separators (will be rendered in MixerPanel.qml)
 
-            interactive: false
-            orientation: Qt.Horizontal
-            spacing: 1 // for separators (will be rendered in MixerPanel.qml)
-
-            model: root.model
-            delegate: delegateComponent
+                model: root.model
+                delegate: delegateComponent
+            }
         }
     }
 }
