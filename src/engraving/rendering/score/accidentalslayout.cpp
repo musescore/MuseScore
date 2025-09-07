@@ -627,10 +627,10 @@ void AccidentalsLayout::computeCompactOrdering(std::vector<Accidental*>& acciden
             }
         }
 
-        const auto fitOthersIntoColumn = [&](const auto startIter, const auto endIter) {
+        const auto fitOthersIntoColumn = [&](const auto startIter, auto endIter) {
             auto iter = startIter;
             while (iter != endIter) {
-                Accidental* acc2 = *iter;
+                Accidental* const acc2 = *iter;
                 if ((pickFromTop && acc2->line() < acc->line()) || (!pickFromTop && acc2->line() > acc->line())) {
                     ++iter;
                     continue;
@@ -646,8 +646,15 @@ void AccidentalsLayout::computeCompactOrdering(std::vector<Accidental*>& acciden
                     if (acc2 == bottomAcc) {
                         hitBottom = true;
                     }
-                    ++iter;
-                    accidentalsToPlace.remove(acc2);
+                    if constexpr (std::is_same_v<decltype(iter), decltype(accidentalsToPlace.begin())>) {
+                        iter = accidentalsToPlace.erase(iter);
+                        endIter = accidentalsToPlace.end();
+                    } else if constexpr (std::is_same_v<decltype(iter), decltype(accidentalsToPlace.rbegin())>) {
+                        iter = std::reverse_iterator(accidentalsToPlace.erase(std::next(iter).base()));
+                        endIter = accidentalsToPlace.rend();
+                    } else {
+                        static_assert(false);
+                    }
                     continue;
                 }
                 ++iter;
