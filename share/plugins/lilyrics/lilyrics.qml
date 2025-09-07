@@ -8,7 +8,8 @@ import Muse.UiComponents
 // Inspired by roblyric, by Robbie Matthews
 
 MuseScore {
-    version: "1.2" // 06 - September - 2025 // Save lirics if the plugin is closed
+    // 06 - September - 2025 // Save lirics if the plugin is closed
+    version: "1.2"
     description: qsTr("Apply lyrics in lilypond format.")
     title: "Lilypond Lyrics"
     categoryCode: "lyrics"
