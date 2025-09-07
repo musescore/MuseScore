@@ -1487,6 +1487,7 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
             }
             score()->rebuildFretBox();
         }
+        [[fallthrough]];
     }
     default:
         return TextBase::setProperty(pid, v);
