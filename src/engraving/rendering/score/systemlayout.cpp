@@ -992,18 +992,22 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
     }
 }
 
+static void autoplaceHarmony(EngravingItem* harmony)
+{
+    FretDiagram* fdParent = harmony->parent()->isFretDiagram() ? toFretDiagram(harmony->parent()) : nullptr;
+    if (fdParent && !fdParent->visible()) {
+        harmony->mutldata()->moveY(-fdParent->pos().y());
+    }
+    Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
+}
+
 void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx)
 {
     if (!ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
         for (Harmony* harmony : harmonies) {
-            TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
-            Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
+            autoplaceHarmony(harmony);
         }
         return;
-    }
-
-    for (Harmony* harmony : harmonies) {
-        TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
     }
 
     // Only vertically align one chord symbol per tick & staff
@@ -1017,7 +1021,7 @@ void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System
             continue;
         }
 
-        Autoplace::autoplaceSegmentElement(h, h->mutldata());
+        autoplaceHarmony(h);
         harmonyItemsAlign.push_back(h);
         harmonyPositions.insert({ h->tick(), h->staffIdx() });
     }
@@ -1025,42 +1029,99 @@ void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System
     AlignmentLayout::alignItemsForSystem(harmonyItemsAlign, system);
 
     for (EngravingItem* harmony : harmonyItemsNoAlign) {
-        Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
+        autoplaceHarmony(harmony);
     }
 }
 
 void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* system, LayoutContext& ctx)
 {
-    for (FretDiagram* fretDiag : elements.fretDiagrams) {
-        Autoplace::autoplaceSegmentElement(fretDiag, fretDiag->mutldata());
-    }
-
-    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
-        std::vector<EngravingItem*> fretItems(elements.fretDiagrams.begin(), elements.fretDiagrams.end());
-        AlignmentLayout::alignItemsForSystem(fretItems, system);
-    }
-
-    for (Harmony* harmony : elements.harmonies) {
-        FretDiagram* fdParent = harmony->parent()->isFretDiagram() ? toFretDiagram(harmony->parent()) : nullptr;
-        if (fdParent && !fdParent->visible()) {
-            harmony->mutldata()->moveY(-fdParent->pos().y());
+    auto addHarmonyToSkyline = [system](std::vector<EngravingItem*> fretDiagrams) -> void {
+        for (EngravingItem* item : fretDiagrams) {
+            FretDiagram* fretDiag = toFretDiagram(item);
+            if (Harmony* harmony = fretDiag->harmony()) {
+                SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
+                Segment* s = fretDiag->segment();
+                Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
+                skl.add(harmShape);
+            }
         }
-        Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
-    }
+    };
 
-    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
-        std::vector<EngravingItem*> harmonyItems(elements.harmonies.begin(), elements.harmonies.end());
-        AlignmentLayout::alignItemsForSystem(harmonyItems, system);
-    }
-
-    for (FretDiagram* fretDiag : elements.fretDiagrams) {
-        if (Harmony* harmony = fretDiag->harmony()) {
-            SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
-            Segment* s = fretDiag->segment();
-            Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
-            skl.add(harmShape);
+    if (!ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+        for (FretDiagram* fretDiag : elements.fretDiagrams) {
+            Autoplace::autoplaceSegmentElement(fretDiag, fretDiag->mutldata());
         }
+
+        for (Harmony* harmony : elements.harmonies) {
+            autoplaceHarmony(harmony);
+        }
+
+        for (FretDiagram* fretDiag : elements.fretDiagrams) {
+            if (Harmony* harmony = fretDiag->harmony()) {
+                SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
+                Segment* s = fretDiag->segment();
+                Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
+                skl.add(harmShape);
+            }
+        }
+
+        return;
     }
+
+    // Only vertically align one fd per tick & staff
+    std::map<Fraction, staff_idx_t> fdHarmonyPositions;
+    std::vector<EngravingItem*> fdItemsAlign;
+    std::vector<EngravingItem*> fdItemsNoAlign;
+    std::vector<Harmony*> harmonyItemsAlign(elements.harmonies.begin(), elements.harmonies.end());
+    std::vector<EngravingItem*> harmonyItemsNoAlign;
+
+    for (FretDiagram* fd : elements.fretDiagrams) {
+        if (muse::contains(fdHarmonyPositions, fd->tick())) {
+            fdItemsNoAlign.push_back(fd);
+            if (fd->harmony()) {
+                harmonyItemsAlign.erase(std::remove(harmonyItemsAlign.begin(), harmonyItemsAlign.end(), fd->harmony()));
+                harmonyItemsNoAlign.push_back(fd->harmony());
+            }
+            continue;
+        }
+
+        Autoplace::autoplaceSegmentElement(fd, fd->mutldata());
+        fdItemsAlign.push_back(fd);
+        fdHarmonyPositions.insert({ fd->tick(), fd->staffIdx() });
+    }
+
+    // Find harmony with no fret diagram at the same tick as a fret diagram
+    for (Harmony* h : elements.harmonies) {
+        if (h->getParentFretDiagram()) {
+            continue;
+        }
+        if (muse::contains(fdHarmonyPositions, h->tick())) {
+            harmonyItemsAlign.erase(std::remove(harmonyItemsAlign.begin(), harmonyItemsAlign.end(), h));
+            harmonyItemsNoAlign.push_back(h);
+            continue;
+        }
+
+        Autoplace::autoplaceSegmentElement(h, h->mutldata());
+        fdHarmonyPositions.insert({ h->tick(), h->staffIdx() });
+    }
+
+    // align 1 fret diagram per tick & staff
+    AlignmentLayout::alignItemsForSystem(fdItemsAlign, system);
+
+    layoutHarmonies(harmonyItemsAlign, system, ctx);
+
+    addHarmonyToSkyline(fdItemsAlign);
+
+    // autoplace everything else
+    for (EngravingItem* fd : fdItemsNoAlign) {
+        Autoplace::autoplaceSegmentElement(fd, fd->mutldata());
+    }
+
+    for (EngravingItem* harmony : harmonyItemsNoAlign) {
+        autoplaceHarmony(harmony);
+    }
+
+    addHarmonyToSkyline(fdItemsNoAlign);
 }
 
 void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
