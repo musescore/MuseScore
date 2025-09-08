@@ -702,6 +702,9 @@ static int calculateTieLength(const Note* note)
             n = tieFor->endNote();
         } else if (bendFor && bendFor->endNote() != n) {
             n = bendFor->endNote();
+            if (n->chord()->isGrace()) {
+                return tieLen;
+            }
         } else {
             break;
         }
