@@ -864,6 +864,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeBreath(dynamic_cast<const Breath*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isExpression() || controlEvent.first->isPlayTechAnnotation() || controlEvent.first->isStaffText()) {
             success = success && this->writeDir(dynamic_cast<const TextBase*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isSystemText()) {
+            success = success && this->writeDir(dynamic_cast<const TextBase*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isDynamic()) {
             success = success && this->writeDynam(dynamic_cast<const Dynamic*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFermata()) {
