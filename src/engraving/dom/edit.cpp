@@ -2670,9 +2670,9 @@ void Score::deleteItem(EngravingItem* el)
         Part* part = el->part();
         InstrumentName* in = toInstrumentName(el);
         if (in->instrumentNameType() == InstrumentNameType::LONG) {
-            undo(new ChangeInstrumentLong(Fraction(0, 1), part, std::list<StaffName>()));
+            undo(new ChangeInstrumentLong(Fraction(0, 1), part, StaffNameList()));
         } else if (in->instrumentNameType() == InstrumentNameType::SHORT) {
-            undo(new ChangeInstrumentShort(Fraction(0, 1), part, std::list<StaffName>()));
+            undo(new ChangeInstrumentShort(Fraction(0, 1), part, StaffNameList()));
         }
     }
     break;

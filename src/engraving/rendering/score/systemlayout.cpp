@@ -2828,7 +2828,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
             continue;
         }
 
-        const std::list<StaffName>& names = longName ? part->longNames(tick) : part->shortNames(tick);
+        const StaffNameList& names = longName ? part->longNames(tick) : part->shortNames(tick);
 
         size_t idx = 0;
         for (const StaffName& sn : names) {

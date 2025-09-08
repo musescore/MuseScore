@@ -69,20 +69,7 @@ private:
     int m_pos = 0;       // even number -> between staves
 };
 
-//---------------------------------------------------------
-//   StaffNameList
-//---------------------------------------------------------
-
-class StaffNameList : public std::list<StaffName>
-{
-    OBJECT_ALLOCATOR(engraving, StaffNameList)
-public:
-    StaffNameList() = default;
-    StaffNameList(const std::list<StaffName>& l)
-        : std::list<StaffName>(l) {}
-
-    std::list<String> toStringList() const;
-};
+using StaffNameList = std::vector<StaffName>;
 
 //---------------------------------------------------------
 //   NamedEventList

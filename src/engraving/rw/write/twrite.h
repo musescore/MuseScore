@@ -130,7 +130,6 @@ class Spanner;
 class Spacer;
 class Staff;
 class StaffName;
-class StaffNameList;
 class StaffState;
 class StaffText;
 class StaffTextBase;
@@ -274,8 +273,8 @@ public:
     static void write(const Slur* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Spacer* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Staff* item, XmlWriter& xml, WriteContext& ctx);
-    static void write(const StaffName* item, XmlWriter& xml, const char* tag);
-    static void write(const StaffNameList* item, XmlWriter& xml, const char* name);
+    static void write(const StaffName& item, XmlWriter& xml, const char* tag);
+    static void write(const std::vector<StaffName>& item, XmlWriter& xml, const char* name);
     static void write(const StaffState* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffText* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffType* item, XmlWriter& xml, WriteContext& ctx);
