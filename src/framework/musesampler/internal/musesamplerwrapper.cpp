@@ -267,6 +267,10 @@ void MuseSamplerWrapper::setIsActive(bool active)
         return;
     }
 
+    if (active && m_pendingSetPosition) {
+        doCurrentSetPosition();
+    }
+
     m_sequencer.setActive(active);
     m_samplerLib->setPlaying(m_sampler, active);
 }
@@ -437,10 +441,18 @@ void MuseSamplerWrapper::setCurrentPosition(const samples_t samples)
     }
 
     m_currentPosition = samples;
+    m_pendingSetPosition = true;
 
     if (isActive()) {
-        m_samplerLib->setPosition(m_sampler, m_currentPosition);
+        doCurrentSetPosition();
     }
+}
+
+void MuseSamplerWrapper::doCurrentSetPosition()
+{
+    //! NOTE: very CPU-intensive operation; should be called as infrequently as possible
+    m_samplerLib->setPosition(m_sampler, m_currentPosition);
+    m_pendingSetPosition = false;
 }
 
 void MuseSamplerWrapper::extractOutputSamples(samples_t samples, float* output)
@@ -462,7 +474,7 @@ void MuseSamplerWrapper::prepareToPlay()
     }
 
     m_sequencer.updateMainStream();
-    m_samplerLib->setPosition(m_sampler, m_currentPosition);
+    doCurrentSetPosition();
 
     if (readyToPlay()) {
         return;
