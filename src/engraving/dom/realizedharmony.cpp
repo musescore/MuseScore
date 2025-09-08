@@ -124,7 +124,7 @@ const RealizedHarmony::PitchMap RealizedHarmony::generateNotes(int rootTpc, int 
         if (!m_harmony->parsedForm()->understandable()) {
             break;
         }
-    // FALLTHROUGH
+        [[fallthrough]];
     case Voicing::CLOSE:        //Voices notes in close position in the first octave above middle C
     {
         notes.insert({ rootPitch + DEFAULT_OCTAVE * PITCH_DELTA_OCTAVE, rootTpc });
@@ -439,7 +439,7 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
             ret.insert({ 9 + RANK_MULT * RANK_ADD, tpcInterval(rootTpc, 13, 0) });               //maj13
             omit |= 1 << 13;
         }
-    // FALLTHROUGH
+        [[fallthrough]];
     case 11:
         if (!(omit & (1 << 11))) {
             if (quality == "minor") {
@@ -449,13 +449,13 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
             }
             omit |= 1 << 11;
         }
-    // FALLTHROUGH
+        [[fallthrough]];
     case 9:
         if (!(omit & (1 << 9))) {
             ret.insert({ 2 + RANK_MULT * RANK_9TH, tpcInterval(rootTpc, 9, 0) });               //maj9
             omit |= 1 << 9;
         }
-    // FALLTHROUGH
+        [[fallthrough]];
     case 7:
         if (!(omit & (1 << 7))) {
             if (quality == "major") {
