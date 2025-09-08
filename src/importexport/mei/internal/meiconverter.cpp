@@ -1127,6 +1127,9 @@ void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList
         warning = (warning || lformWarning);
     }
 
+    // @color
+    Convert::colorlineFromMEI(textLineBase, meiDir);
+
     // text
     textLineBase->setBeginText(meiLines.join(u"\n"));
     textLineBase->setPropertyFlags(engraving::Pid::BEGIN_TEXT, engraving::PropertyFlags::UNSTYLED);
@@ -1195,6 +1198,9 @@ libmei::Dir Convert::dirToMEI(const engraving::TextLineBase* textLineBase, Strin
     if (textLineBase->propertyFlags(engraving::Pid::LINE_STYLE) == engraving::PropertyFlags::UNSTYLED) {
         meiDir.SetLform(Convert::lineToMEI(textLineBase->lineStyle()));
     }
+
+    // @color
+    Convert::colorlineToMEI(textLineBase, meiDir);
 
     // text content - only split lines
     meiLines = String(textLineBase->beginText()).split(u"\n");
