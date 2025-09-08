@@ -786,12 +786,12 @@ class ChangeInstrumentShort : public UndoCommand
 
     Part* part = nullptr;
     Fraction tick;
-    std::list<StaffName> text;
+    StaffNameList text;
 
     void flip(EditData*) override;
 
 public:
-    ChangeInstrumentShort(const Fraction&, Part*, std::list<StaffName>);
+    ChangeInstrumentShort(const Fraction&, Part*, const StaffNameList&);
 
     UNDO_TYPE(CommandType::ChangeInstrumentShort)
     UNDO_NAME("ChangeInstrumentShort")
@@ -804,12 +804,12 @@ class ChangeInstrumentLong : public UndoCommand
 
     Part* part = nullptr;
     Fraction tick;
-    std::list<StaffName> text;
+    StaffNameList text;
 
     void flip(EditData*) override;
 
 public:
-    ChangeInstrumentLong(const Fraction&, Part*, std::list<StaffName>);
+    ChangeInstrumentLong(const Fraction&, Part*, const StaffNameList&);
 
     UNDO_TYPE(CommandType::ChangeInstrumentLong)
     UNDO_NAME("ChangeInstrumentLong")
