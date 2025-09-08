@@ -4393,7 +4393,7 @@ static int vorbis_search_for_page_pushdata(vorb *f, uint8 *data, int data_len)
                // if the last frame on a page is continued to the next, then
                // we can't recover the sample_loc immediately
                if (data[i+27+data[i+26]-1] == 255)
-                  f->scan[n].sample_loc = ~0;
+                  f->scan[n].sample_loc = (uint32) ~0;
                else
                   f->scan[n].sample_loc = data[i+6] + (data[i+7] << 8) + (data[i+ 8]<<16) + (data[i+ 9]<<24);
                f->scan[n].bytes_done = i+j;
