@@ -2113,8 +2113,6 @@ void TRead::read(FBox* b, XmlReader& xml, ReadContext& ctx)
         } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_ROW_GAP)) {
         } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_CHORDS_PER_ROW)) {
         } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_H_ALIGN)) {
-        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_DIAGRAMS_ORDER)) {
-        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_INVISIBLE_DIAGRAMS)) {
         } else if (TRead::readProperties(static_cast<Box*>(b), xml, ctx)) {
         } else {
             xml.unknown();
