@@ -8,7 +8,8 @@ import Muse.UiComponents
 // Inspired by roblyric, by Robbie Matthews
 
 MuseScore {
-    version: "1.2" // 21 - June - 2022
+    // 06 - September - 2025 // Save lirics if the plugin is closed
+    version: "1.2"
     description: qsTr("Apply lyrics in lilypond format.")
     title: "Lilypond Lyrics"
     categoryCode: "lyrics"
@@ -32,6 +33,13 @@ MuseScore {
     property var onScreenStaves: []
     property var onScreenVoice: null
     property var onScreenVerse: null
+
+    // Use Settings from MuseScore (Qt6 compatible)
+    Settings {
+        id: lyricsSettings
+        // The lyrics are saved for each score
+        // The key is the path of the file (curScore.filePath)
+    }
 
     onRun: {}
 
@@ -89,7 +97,19 @@ MuseScore {
                     wrapMode: TextEdit.WrapAnywhere
                     textFormat: TextEdit.PlainText
                     selectByMouse: true
-                    text: ""
+
+                    // Restore the lyrics for the current opened score
+                    Component.onCompleted: {
+                        if (curScore && curScore.filePath)
+                            textLily.text = lyricsSettings.value(curScore.filePath, "")
+                        else
+                            textLily.text = ""
+                    }
+
+                    onTextChanged: {
+                        if (curScore && curScore.filePath)
+                            lyricsSettings.setValue(curScore.filePath, text)
+                    }
                 }
             }
         }
@@ -246,7 +266,6 @@ MuseScore {
             }
         }
 
-
         // CANCEL
         FlatButton {
             id : buttonCancel
@@ -260,7 +279,6 @@ MuseScore {
                 quit()
             }
         }
-
 
         /******************************************
         *********** Bottom bar controls ***********
@@ -494,7 +512,6 @@ MuseScore {
         textLily.forceActiveFocus();
     }
 
-
     /***************************************
     ************* Big functions ************
     ****************************************/
@@ -602,7 +619,6 @@ MuseScore {
         onScreenVerse=spinVerse.value;
     }
 
-
     function deleteLyrics() {
         var track=(spinStaff.value-1)*4+spinVoice.value-1;
         var verse=spinVerse.value-1;
@@ -641,7 +657,6 @@ MuseScore {
             cursor.next();
         }
     }
-
 
     function pasteLyrics(s) {
         var skipTies=checkTie.checked;
@@ -793,8 +808,6 @@ MuseScore {
         curScore.selection.clear();
     }
 
-
-
     /********** Functions on condensed format **********/
 
     function condenseLyrics(s) {
@@ -868,5 +881,8 @@ MuseScore {
         return s;
     }
 
+    Component.onCompleted: {
+        // Restore last lyrics
+        textLily.text = lyricsSettings.lastLyrics
+    }
 }
-
