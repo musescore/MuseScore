@@ -1878,6 +1878,18 @@ void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos&
 
     adjustYforLedgerLines(segment, sPos);
 
+    Parenthesis* paren = lv->parentItem()->leftParen();
+    Chord* chord = lv->startNote()->chord();
+    const bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == lv->up();
+    if (paren && (!lv->isOuterTieOfChord(Grip::START) || avoidStem)) {
+        RectF parenBbox = paren->ldata()->bbox().translated(paren->systemPos());
+        double adj = sPos.p1.y() - (lv->up() ? parenBbox.top() : parenBbox.bottom());
+        const double PAREN_LV_PADDING = 0.1 * segment->spatium();
+        adj += PAREN_LV_PADDING * (lv->up() ? 1.0 : -1.0);
+        sPos.p1.ry() -= adj;
+        sPos.p2.ry() -= adj;
+    }
+
     segment->ups(Grip::START).p = sPos.p1;
     segment->ups(Grip::END).p = sPos.p2;
 
@@ -2172,6 +2184,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     const bool ignoreAccidental = !start && isOuterTieOfChord;
     bool ignoreLvSeg = tieSegment->isLaissezVibSegment();
     bool ignoreArpeggio = note == chord->downNote() && !tie->up();
+    bool ignoreParen = tieSegment->isLaissezVibSegment() && start;
     static const std::set<ElementType> IGNORED_TYPES = {
         ElementType::HOOK,
         ElementType::STEM_SLASH,
@@ -2186,6 +2199,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
                       || (s.item()->isAccidental() && ignoreAccidental && s.item()->track() == chord->track())
                       || (s.item()->isLaissezVibSegment() && ignoreLvSeg)
                       || (s.item()->isArpeggio() && ignoreArpeggio)
+                      || (s.item()->isParenthesis() && ignoreParen)
                       || !s.item()->addToSkyline();
         return remove;
     });
