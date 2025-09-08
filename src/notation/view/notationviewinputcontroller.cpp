@@ -21,6 +21,8 @@
  */
 #include "notationviewinputcontroller.h"
 
+#include <set>
+
 #include <QApplication>
 #include <QMimeData>
 #include <QQuickItem>
@@ -162,7 +164,14 @@ void NotationViewInputController::onNotationChanged()
 
         const TextBase* item = notation->interaction()->editedText();
         if (AbstractElementPopupModel::hasTextStylePopup(item)) {
-            bool needToSeeStaffWhileEnteringText = item->isLyrics() || item->isFingering() || item->isSticking() || item->isHarmony();
+            static const std::set<ElementType> TYPES_NEEDING_STAFF {
+                ElementType::LYRICS,
+                ElementType::FINGERING,
+                ElementType::STICKING,
+                ElementType::HARMONY,
+                ElementType::FIGURED_BASS
+            };
+            const bool needToSeeStaffWhileEnteringText = muse::contains(TYPES_NEEDING_STAFF, item->type());
             if (!needToSeeStaffWhileEnteringText || !item->empty()) {
                 m_view->showElementPopup(item->type(), item->canvasBoundingRect());
                 return;
