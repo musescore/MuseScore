@@ -1720,9 +1720,9 @@ static int codebook_decode_scalar_raw(vorb *f, Codebook *c)
    var = f->acc & FAST_HUFFMAN_TABLE_MASK;                    \
    var = c->fast_huffman[var];                                \
    if (var >= 0) {                                            \
-      int n = c->codeword_lengths[var];                       \
-      f->acc >>= n;                                           \
-      f->valid_bits -= n;                                     \
+      int nn = c->codeword_lengths[var];                       \
+      f->acc >>= nn;                                           \
+      f->valid_bits -= nn;                                     \
       if (f->valid_bits < 0) { f->valid_bits = 0; var = -1; } \
    } else {                                                   \
       var = codebook_decode_scalar_raw(f,c);                  \
@@ -2260,9 +2260,9 @@ static void decode_residue(vorb *f, float *residue_buffers[], int ch, int n, int
                   if (b >= 0) {
                      float *target = residue_buffers[j];
                      int offset = r->begin + pcount * r->part_size;
-                     int n = r->part_size;
+                     int partSize = r->part_size;
                      Codebook *book = f->codebooks + b;
-                     if (!residue_decode(f, book, target, offset, n, rtype))
+                     if (!residue_decode(f, book, target, offset, partSize, rtype))
                         goto done;
                   }
                }
@@ -3177,7 +3177,7 @@ static int vorbis_decode_initial(vorb *f, int *p_left_start, int *p_left_end, in
    return TRUE;
 }
 
-static int vorbis_decode_packet_rest(vorb *f, int *len, Mode *m, int left_start, int left_end, int right_start, int right_end, int *p_left)
+static int vorbis_decode_packet_rest(vorb *f, int *len, Mode *mode, int left_start, int left_end, int right_start, int right_end, int *p_left)
 {
    Mapping *map;
    int i,j,k,n,n2;
@@ -3187,8 +3187,8 @@ static int vorbis_decode_packet_rest(vorb *f, int *len, Mode *m, int left_start,
 // WINDOWING
 
    STBV_NOTUSED(left_end);
-   n = f->blocksize[m->blockflag];
-   map = &f->mapping[m->mapping];
+   n = f->blocksize[mode->blockflag];
+   map = &f->mapping[mode->mapping];
 
 // FLOORS
    n2 = n >> 1;
@@ -3372,7 +3372,7 @@ static int vorbis_decode_packet_rest(vorb *f, int *len, Mode *m, int left_start,
 // INVERSE MDCT
    CHECK(f);
    for (i=0; i < f->channels; ++i)
-      inverse_mdct(f->channel_buffers[i], n, f, m->blockflag);
+      inverse_mdct(f->channel_buffers[i], n, f, mode->blockflag);
    CHECK(f);
 
    // this shouldn't be necessary, unless we exited on an error
