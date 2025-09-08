@@ -3444,7 +3444,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
         if (fm && fm->isMMRest()) {
             fm = fm->mmRestFirst();
             if (fm) {
-                sseg = fm->first();
+                sseg = fm->first(SegmentType::ChordRest);
             }
         }
     }
