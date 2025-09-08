@@ -53,6 +53,7 @@ class ThemeApi : public api::ApiObject, public async::Asyncable
     Q_PROPERTY(QColor fontSecondaryColor READ fontSecondaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChanged)
     Q_PROPERTY(QColor focusColor READ focusColor NOTIFY themeChanged)
+    Q_PROPERTY(QVariantMap extra READ extra NOTIFY themeChanged FINAL)
 
     Q_PROPERTY(qreal borderWidth READ borderWidth NOTIFY themeChanged)
     Q_PROPERTY(qreal navCtrlBorderWidth READ navCtrlBorderWidth NOTIFY themeChanged)
@@ -152,6 +153,8 @@ public:
 
     int tooltipDelay() const;
 
+    QVariantMap extra() const;
+
 signals:
     void themeChanged();
 
@@ -203,6 +206,8 @@ private:
     QColor m_fontSecondaryColor;
     QColor m_linkColor;
     QColor m_focusColor;
+
+    QVariantMap m_extra;
 
     qreal m_defaultButtonSize = 0;
     qreal m_borderWidth = 0;

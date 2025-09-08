@@ -121,6 +121,7 @@ struct ThemeInfo
     ThemeCode codeKey;
     std::string title;
     QMap<ThemeStyleKey, QVariant> values;
+    QMap<QString, QVariant> extra;
 };
 
 using ThemeList = std::vector<ThemeInfo>;

@@ -45,6 +45,15 @@ struct Config {
         m_data[key] = val;
     }
 
+    auto begin() { return m_data.begin(); }
+    auto end() { return m_data.end(); }
+    auto begin() const { return m_data.begin(); }
+    auto end() const { return m_data.end(); }
+    auto cbegin() const { return m_data.cbegin(); }
+    auto cend() const { return m_data.cend(); }
+
+    const ValMap& data() const { return m_data; }
+
 private:
     ValMap m_data;
 };
