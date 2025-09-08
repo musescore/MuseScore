@@ -41,6 +41,12 @@ inline bool contains(const std::vector<T>& vec, const T& v)
     return std::find(vec.cbegin(), vec.cend(), v) != vec.cend();
 }
 
+template<typename T, typename Predicate>
+inline bool contains_if(const std::vector<T>& vec, Predicate pred)
+{
+    return std::find_if(vec.cbegin(), vec.cend(), pred) != vec.cend();
+}
+
 template<typename T>
 inline T value(const std::vector<T>& vec, size_t idx)
 {
