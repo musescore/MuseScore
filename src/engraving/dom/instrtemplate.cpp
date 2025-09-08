@@ -866,15 +866,18 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<Strin
     const InstrumentTemplate* bestMatch = nullptr; // default if no matches
     int bestMatchStrength = 0; // higher for better matches
 
-    for (String name : nameList) {
+    for (const String& name : nameList) {
         if (name.isEmpty()) {
             continue;
         }
 
-        if (!caseSensitive) {
-            name = name.toLower();
-        }
-        StaffName instrName(name);
+        auto stringEqualsName = caseSensitive
+                                ? std::function([&name](const String& s) { return s == name; })
+                                : std::function([&name](const String& s) { return s.isEqualIgnoreCase(name); });
+
+        auto staffNameEqualsName = caseSensitive
+                                   ? std::function([&name](const StaffName& sn) { return sn.name() == name; })
+                                   : std::function([&name](const StaffName& sn) { return sn.name().isEqualIgnoreCase(name); });
 
         for (const InstrumentGroup* g : instrumentGroups) {
             for (const InstrumentTemplate* it : g->instrumentTemplates) {
@@ -886,20 +889,10 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<Strin
                 StaffNameList longNames = it->longNames;
                 StaffNameList shortNames = it->shortNames;
 
-                if (!caseSensitive) {
-                    trackName = trackName.toLower();
-                    for (StaffName& n : longNames) {
-                        n.setName(n.name().toLower());
-                    }
-                    for (StaffName& n : shortNames) {
-                        n.setName(n.name().toLower());
-                    }
-                }
-
                 int matchStrength = 0
-                                    + (4 * (trackName == name ? 1 : 0)) // most weight to track name since there are fewer duplicates
-                                    + (2 * (muse::contains(longNames, instrName) ? 1 : 0))
-                                    + (1 * (muse::contains(shortNames, instrName) ? 1 : 0)); // least weight to short name
+                                    + (4 * (stringEqualsName(trackName) ? 1 : 0)) // most weight to track name since there are fewer duplicates
+                                    + (2 * (muse::contains_if(longNames, staffNameEqualsName) ? 1 : 0))
+                                    + (1 * (muse::contains_if(shortNames, staffNameEqualsName) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
                 assert(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {
