@@ -23,13 +23,12 @@
 
 #include "general/generalsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"
-#include "emptystaves/emptystavesvisiblitysettingsmodel.h"
+#include "emptystaves/emptystavesvisibilitysettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
 #include "parts/partssettingsmodel.h"
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
-#include "notation/inotationinteraction.h"
 
 #include "internal/services/elementrepositoryservice.h"
 

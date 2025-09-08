@@ -29,9 +29,10 @@ import MuseScore.Inspector 1.0
 FlatButton {
     id: root
 
-    property bool isOpened: popup.isOpened
+    readonly property alias popup: thePopup
+    property bool isOpened: thePopup.isOpened
 
-    property alias popupNavigationPanel: popup.navigationPanel
+    property alias popupNavigationPanel: thePopup.navigationPanel
 
     property Component popupContent
 
@@ -45,7 +46,7 @@ FlatButton {
     Layout.minimumWidth: (popupAvailableWidth - 4) / 2
 
     function closePopup() {
-        popup.close()
+        thePopup.close()
     }
 
     QtObject {
@@ -57,16 +58,16 @@ FlatButton {
     onClicked: {
         prv.needActiveFirstItem = root.navigation.highlight
         contentLoader.active = !contentLoader.active
-        popup.toggleOpened()
+        thePopup.toggleOpened()
     }
 
     StyledPopupView {
-        id: popup
+        id: thePopup
 
         anchorItem: root.anchorItem
 
-        contentWidth: contentLoader.width
-        contentHeight: contentLoader.height
+        contentWidth: root.popupAvailableWidth - 2 * thePopup.margins
+        contentHeight: contentLoader.implicitHeight
 
         placementPolicies: PopupView.PreferBelow | PopupView.IgnoreFit
 
@@ -80,14 +81,13 @@ FlatButton {
 
             active: false
 
-            width: root.popupAvailableWidth - 2 * popup.margins
-            height: implicitHeight
+            anchors.fill: parent
 
             sourceComponent: root.popupContent
 
             onStatusChanged: {
                 if (contentLoader.status == Loader.Ready) {
-                    Qt.callLater(popup.markContentIsReady)
+                    Qt.callLater(thePopup.markContentIsReady)
                 }
             }
         }
@@ -107,12 +107,12 @@ FlatButton {
                 forceFocusIn()
             }
 
-            root.popupOpened(popup, root)
+            root.popupOpened(thePopup, root)
         }
 
         onClosed: {
             contentLoader.active = false
-            popup.isContentReady = false
+            thePopup.isContentReady = false
         }
 
         function forceFocusIn() {
@@ -137,12 +137,12 @@ FlatButton {
         }
 
         function markContentIsReady() {
-            popup.isContentReady = true
+            thePopup.isContentReady = true
         }
 
         property NavigationPanel navigationPanel: NavigationPanel {
             name: root.navigation.name + " Popup"
-            section: popup.navigationSection
+            section: thePopup.navigationSection
             order: 1
             direction: NavigationPanel.Vertical
         }

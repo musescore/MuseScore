@@ -24,6 +24,7 @@ import QtQuick 2.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.Inspector 1.0
+import MuseScore.NotationScene 1.0
 
 import "../common"
 
@@ -32,62 +33,40 @@ InspectorSectionView {
 
     implicitHeight: contentColumn.implicitHeight
 
-    headerAccessory: PropertyResetButton {
-        navigation.name: "ResetEmptyStavesVisibility"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart + 3
-
-        toolTipTitle: qsTrc("inspector", "Reset to default")
-        enabled: root.model?.canResetEmptyStavesVisibility
-
-        onClicked: {
-            if (root.model) {
-                root.model.resetEmptyStavesVisibility()
-            }
-        }
-    }
-
     Column {
         id: contentColumn
 
         width: parent.width
         spacing: 12
 
-        FlatButton {
+        PopupViewButton {
             width: parent.width
 
-            navigation.name: "HideEmptyStaves"
+            popupAvailableWidth: parent ? parent.width : 0
+            anchorItem: root.anchorItem
+
+            navigation.name: "EmptyStavesVisibility"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
 
-            icon: IconCode.HIDE_EMPTY_STAVES
-            text: qsTrc("inspector", "Hide empty staves")
+            icon: IconCode.STAFF_TYPE_CHANGE
+            text: qsTrc("inspector", "Show/hide empty staves")
             orientation: Qt.Horizontal
-            enabled: root.model && root.model.canHideEmptyStavesInSelection
 
-            onClicked: {
-                if (root.model) {
-                    root.model.hideEmptyStavesInSelection()
-                }
+            popup.contentHeight: Math.min(popup.contentData[0].implicitHeight, 600)
+            popup.margins: 0
+
+            popupContent: EmptyStavesVisibilityView {
+                emptyStavesVisibilityModel: root.model?.emptyStavesVisibilityModel
+                navigationPanel: root.navigationPanel
             }
-        }
 
-        FlatButton {
-            width: parent.width
+            onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                root.ensureContentVisibleRequested(invisibleContentHeight)
+            }
 
-            navigation.name: "ShowAllEmptyStaves"
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart + 2
-
-            icon: IconCode.SHOW_EMPTY_STAVES
-            text: qsTrc("inspector", "Show empty staves")
-            orientation: Qt.Horizontal
-            enabled: root.model && root.model.canShowAllEmptyStaves
-
-            onClicked: {
-                if (root.model) {
-                    root.model.showAllEmptyStaves()
-                }
+            onPopupOpened: function(popup, control) {
+                root.popupOpened(popup, control)
             }
         }
     }
