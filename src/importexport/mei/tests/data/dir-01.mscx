@@ -130,14 +130,19 @@
       <Measure>
         <eid>S_S</eid>
         <voice>
-          <Rest>
+          <SystemText>
             <eid>T_T</eid>
+            <color r="170" g="121" b="66" a="255"/>
+            <text>colored system text</text>
+            </SystemText>
+          <Rest>
+            <eid>U_U</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -149,26 +154,17 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             </Clef>
           <TimeSig>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Expression>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <text>expression</text>
             </Expression>
-          <Rest>
-            <eid>Y_Y</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Rest>
             <eid>Z_Z</eid>
             <durationType>measure</durationType>
@@ -178,12 +174,21 @@
         </Measure>
       <Measure>
         <voice>
-          <PlayTechAnnotation>
+          <Rest>
             <eid>a_a</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <PlayTechAnnotation>
+            <eid>b_b</eid>
             <text>legato</text>
             </PlayTechAnnotation>
           <Rest>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -192,13 +197,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             </BarLine>
           </voice>
         </Measure>
