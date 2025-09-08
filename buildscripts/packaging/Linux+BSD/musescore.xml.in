@@ -165,6 +165,7 @@
 
     <mime-type type="audio/x-gtp"><!-- See https://sourceforge.net/p/tuxguitar/bugs/117/ -->
         <comment>Guitar Pro tablature</comment>
+        <glob pattern="*.gp"/><!-- Versions 7 and 8 -->
         <glob pattern="*.gpx"/><!-- Version 6 -->
         <glob pattern="*.gp5"/>
         <glob pattern="*.gp4"/>
@@ -209,6 +210,11 @@
     <mime-type type="audio/x-ptb"><!-- See https://sourceforge.net/p/tuxguitar/bugs/117/ -->
         <comment>Power Tab Editor tablature</comment>
         <glob pattern="*.ptb"/>
+    </mime-type>
+
+    <mime-type type="application/x-tef"><!-- invented -->
+        <comment>TablEdit file</comment>
+        <glob pattern="*.tef"/>
     </mime-type>
 
     <mime-type type="application/x-sf2"><!-- invented -->

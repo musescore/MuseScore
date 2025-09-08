@@ -21,6 +21,8 @@
 echo "Notarize macOS .dmg"
 trap 'echo Notarize failed; exit 1' ERR
 
+set -o pipefail
+
 ARTIFACTS_DIR="build.artifacts"
 APPLE_USERNAME=""
 APPLE_PASSWORD=""
@@ -52,7 +54,19 @@ for i in 1 2 3; do
         --team-id $APPLE_TEAM_ID \
         --password $APPLE_PASSWORD \
         --wait $ARTIFACTS_DIR/$ARTIFACT_NAME \
+        2>&1 | tee $ARTIFACTS_DIR/notarytool_submit_output.${i}.txt \
         || c=$?
+
+    # Show log
+    submission_id=$(cat $ARTIFACTS_DIR/notarytool_submit_output.${i}.txt | awk '/id: / { print $2;exit; }')
+    xcrun notarytool log $submission_id \
+        --apple-id $APPLE_USERNAME \
+        --team-id $APPLE_TEAM_ID \
+        --password $APPLE_PASSWORD \
+        notarytool_log_output.${i}.json \
+        && cat notarytool_log_output.${i}.json \
+        || echo "Failed to get notarytool log"
+
     if [ $c -eq 0 ]; then break; fi
     if [ $i -eq 3 ]; then
         echo "notarytool failed; exiting after 3 retries."
