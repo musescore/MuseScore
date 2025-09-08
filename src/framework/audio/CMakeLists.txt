@@ -32,8 +32,6 @@ if (OS_IS_WASM)
 
 else()
 
-# fluidsynth dependency
-include(SetupSndFile)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
 list(APPEND MODULE_LINK fluidsynth)
 

@@ -21,7 +21,6 @@
 set(WEBWORKER_FACADE_MODE OFF)
 include(${CMAKE_CURRENT_LIST_DIR}/../../audio_worker.cmake)
 
-set(FLUIDSYNTH_DEF_EXTERNAL -DNO_LIBSNDFILE_SUPPORT)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../thirdparty/fluidsynth fluidsynth)
 
 qt_add_executable(MuseAudio
