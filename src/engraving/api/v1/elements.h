@@ -346,8 +346,6 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(int, fretFrameHAlign,  FRET_FRAME_H_ALIGN)
     /// For fretboard diagram legends: The order the diagrams are displayed in
     API_PROPERTY(fretFrameDiagramsOrder,  FRET_FRAME_DIAGRAMS_ORDER)
-    /// For fretboard diagram legends: Which diagrams are invisible.
-    API_PROPERTY(fretFrameInvisibleDiagrams, FRET_FRAME_INVISIBLE_DIAGRAMS)
 
     /// For time signatures: Their scale.
     API_PROPERTY(scale,                   SCALE)
