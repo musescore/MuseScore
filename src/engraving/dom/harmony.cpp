@@ -1502,8 +1502,19 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         }
         staff_idx_t staff = staffIdx();
         for (EngravingItem* item : parentSeg->findAnnotations(ElementType::HARMONY, staff2track(staff), staff2track(staff + 1))) {
+            if (item == this) {
+                continue;
+            }
             Harmony* harmony = toHarmony(item);
-            harmony->setExcludeVerticalAlign(val);
+            if (harmony->excludeVerticalAlign() != val) {
+                harmony->setProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val);
+            }
+        }
+        for (EngravingItem* item : parentSeg->findAnnotations(ElementType::FRET_DIAGRAM, staff2track(staff), staff2track(staff + 1))) {
+            FretDiagram* fret = toFretDiagram(item);
+            if (fret->excludeVerticalAlign() != val) {
+                fret->setProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val);
+            }
         }
         break;
     }
