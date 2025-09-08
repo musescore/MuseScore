@@ -1035,8 +1035,11 @@ void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System
 
 void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* system, LayoutContext& ctx)
 {
-    auto addHarmonyToSkyline = [system](std::vector<EngravingItem*> fretDiagrams) -> void {
-        for (EngravingItem* item : fretDiagrams) {
+    auto addFretHarmonyToSkyline = [system](std::vector<EngravingItem*> fretDiagramsOrHarmony) -> void {
+        for (EngravingItem* item : fretDiagramsOrHarmony) {
+            if (!item->isFretDiagram()) {
+                continue;
+            }
             FretDiagram* fretDiag = toFretDiagram(item);
             if (Harmony* harmony = fretDiag->harmony()) {
                 SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
@@ -1069,25 +1072,24 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
     }
 
     // Only vertically align one fd per tick & staff
-    std::map<Fraction, staff_idx_t> fdHarmonyPositions;
-    std::vector<EngravingItem*> fdItemsAlign;
-    std::vector<EngravingItem*> fdItemsNoAlign;
+    std::map<Fraction, staff_idx_t> fretHarmonyPositions;
+    std::vector<EngravingItem*> fretItemsAlign;
+    std::vector<EngravingItem*> fretOrHarmonyItemsNoAlign;
     std::vector<Harmony*> harmonyItemsAlign(elements.harmonies.begin(), elements.harmonies.end());
-    std::vector<EngravingItem*> harmonyItemsNoAlign;
 
     for (FretDiagram* fd : elements.fretDiagrams) {
-        if (muse::contains(fdHarmonyPositions, fd->tick())) {
-            fdItemsNoAlign.push_back(fd);
+        if (muse::contains(fretHarmonyPositions, fd->tick())) {
+            fretOrHarmonyItemsNoAlign.push_back(fd);
             if (fd->harmony()) {
                 harmonyItemsAlign.erase(std::remove(harmonyItemsAlign.begin(), harmonyItemsAlign.end(), fd->harmony()));
-                harmonyItemsNoAlign.push_back(fd->harmony());
+                fretOrHarmonyItemsNoAlign.push_back(fd->harmony());
             }
             continue;
         }
 
         Autoplace::autoplaceSegmentElement(fd, fd->mutldata());
-        fdItemsAlign.push_back(fd);
-        fdHarmonyPositions.insert({ fd->tick(), fd->staffIdx() });
+        fretItemsAlign.push_back(fd);
+        fretHarmonyPositions.insert({ fd->tick(), fd->staffIdx() });
     }
 
     // Find harmony with no fret diagram at the same tick as a fret diagram
@@ -1095,33 +1097,37 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
         if (h->getParentFretDiagram()) {
             continue;
         }
-        if (muse::contains(fdHarmonyPositions, h->tick())) {
+        if (muse::contains(fretHarmonyPositions, h->tick())) {
             harmonyItemsAlign.erase(std::remove(harmonyItemsAlign.begin(), harmonyItemsAlign.end(), h));
-            harmonyItemsNoAlign.push_back(h);
+            fretOrHarmonyItemsNoAlign.push_back(h);
             continue;
         }
 
         Autoplace::autoplaceSegmentElement(h, h->mutldata());
-        fdHarmonyPositions.insert({ h->tick(), h->staffIdx() });
+        fretHarmonyPositions.insert({ h->tick(), h->staffIdx() });
     }
 
     // align 1 fret diagram per tick & staff
-    AlignmentLayout::alignItemsForSystem(fdItemsAlign, system);
+    AlignmentLayout::alignItemsForSystem(fretItemsAlign, system);
 
     layoutHarmonies(harmonyItemsAlign, system, ctx);
 
-    addHarmonyToSkyline(fdItemsAlign);
+    addFretHarmonyToSkyline(fretItemsAlign);
 
     // autoplace everything else
-    for (EngravingItem* fd : fdItemsNoAlign) {
-        Autoplace::autoplaceSegmentElement(fd, fd->mutldata());
+    for (EngravingItem* item : fretOrHarmonyItemsNoAlign) {
+        if (item->isFretDiagram()) {
+            Autoplace::autoplaceSegmentElement(item, item->mutldata());
+            Harmony* harmony = toFretDiagram(item)->harmony();
+            if (harmony) {
+                autoplaceHarmony(item);
+            }
+        } else if (item->isHarmony()) {
+            autoplaceHarmony(item);
+        }
     }
 
-    for (EngravingItem* harmony : harmonyItemsNoAlign) {
-        autoplaceHarmony(harmony);
-    }
-
-    addHarmonyToSkyline(fdItemsNoAlign);
+    addFretHarmonyToSkyline(fretOrHarmonyItemsNoAlign);
 }
 
 void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
