@@ -707,6 +707,8 @@ FBox::FBox(System* parent)
     resetProperty(Pid::TOP_GAP);
     resetProperty(Pid::BOTTOM_GAP);
     resetProperty(Pid::EXCLUDE_FROM_OTHER_PARTS);
+    resetProperty(Pid::APPEARANCE_LINKED_TO_MASTER);
+    resetProperty(Pid::POSITION_LINKED_TO_MASTER);
 }
 
 void FBox::init()
@@ -895,6 +897,9 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
         return m_diagramsOrderInScore.join(FRET_BOX_DIAGRAMS_SEPARATOR);
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
         return true;
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+    case Pid::POSITION_LINKED_TO_MASTER:
+        return false;
     default:
         return VBox::propertyDefault(propertyId);
     }
