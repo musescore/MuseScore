@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger nightly builds
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             let ref;
