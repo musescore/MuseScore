@@ -97,6 +97,7 @@
                            <mRest xml:id="m1bii3jk" />
                         </layer>
                      </staff>
+                     <dir xml:id="d11l0mgt" type="mscore-system-text" startid="#m1uxv1xq" color="#AA7942">colored system text</dir>
                   </measure>
                </section>
             </score>
