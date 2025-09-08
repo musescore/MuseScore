@@ -26320,7 +26320,7 @@ Remarque : Maitriser MuseScore est disponible principalement en anglais (Certain
     <message>
         <location filename="../../src/notation/view/selectionfilter/elementsselectionfiltermodel.cpp" line="91"/>
         <source>Grace notes</source>
-        <translation>Fioritures</translation>
+        <translation>Appoggiatures</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfilter/notesinchordselectionfiltermodel.cpp" line="149"/>
@@ -28369,7 +28369,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1103"/>
         <source>Grace notes</source>
-        <translation>Fioritures</translation>
+        <translation>Appogiatures</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1124"/>
@@ -28884,7 +28884,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1892"/>
         <source>Keyboard</source>
-        <translation>Clavier</translation>
+        <translation>Pédalier</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1957"/>
