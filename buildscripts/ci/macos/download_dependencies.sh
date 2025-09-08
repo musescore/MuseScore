@@ -5,7 +5,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2025 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -18,25 +18,13 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-echo "Setup macOS build environment"
 
-trap 'echo Setup failed; exit 1' ERR
-
-export MACOSX_DEPLOYMENT_TARGET=10.15
-
-# Install build tools
-echo "Install build tools"
-if ! command -v cmake >/dev/null 2>&1
-then
-    brew install cmake ninja --formula --quiet
-fi
-
-# Download dependencies
 echo "Download dependencies"
+trap 'code=$?; echo "error: Download dependencies: command \`$BASH_COMMAND\` exited with code $code." >&2; exit 1' ERR
 
 wget -q --show-progress -O musescore_deps_macos.tar.gz https://raw.githubusercontent.com/cbjeukendrup/musescore_deps/main/musescore_deps_macos.tar.gz
 mkdir -p $HOME/musescore_deps_macos
 tar xf musescore_deps_macos.tar.gz -C $HOME/musescore_deps_macos
 rm musescore_deps_macos.tar.gz
 
-echo "Setup script done"
+echo "Download dependencies done"
