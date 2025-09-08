@@ -2562,7 +2562,7 @@ void SystemLayout::setMeasureHeight(System* system, double height, const LayoutC
             // system distance in MusicXML (issue #24733)
             mldata->setBbox(0.0, -spatium, m->width(), height + 2.0 * spatium);
         } else if (m->isHBox()) {
-            mldata->setBbox(0.0, 0.0, m->width(), height);
+            mldata->setBbox(m->absoluteFromSpatium(toHBox(m)->topGap()), 0.0, m->width(), height);
             TLayout::layoutHBox2(toHBox(m), ctx);
         } else if (m->isTBox()) {
             TLayout::layoutTBox(toTBox(m), toTBox(m)->mutldata(), ctx);
