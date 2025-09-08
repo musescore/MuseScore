@@ -155,9 +155,11 @@
 /* #undef LIBSNDFILE_HASVORBIS */
 
 /* Define to enable libsndfile support */
-#ifndef NO_LIBSNDFILE_SUPPORT
-#define LIBSNDFILE_SUPPORT 1
-#endif
+// #ifndef NO_LIBSNDFILE_SUPPORT
+//#define LIBSNDFILE_SUPPORT 1
+// #endif
+
+#define STBVORBIS_SUPPORT 1
 
 /* Define to enable MidiShare driver */
 /* #undef MIDISHARE_SUPPORT */
