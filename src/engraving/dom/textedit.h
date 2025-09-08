@@ -73,6 +73,7 @@ class TextEditUndoCommand : public UndoCommand
 public:
     UNDO_TYPE(CommandType::TextEdit)
     UNDO_NAME("TextEdit")
+    UNDO_CHANGED_OBJECTS({ m_cursor.text() })
 
     TextEditUndoCommand(const TextCursor& tc)
         : m_cursor(tc) {}
