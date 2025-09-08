@@ -189,14 +189,14 @@ void Part::clearStaves()
 //   setLongNames
 //---------------------------------------------------------
 
-void Part::setLongNames(std::list<StaffName>& name, const Fraction& tick)
+void Part::setLongNames(const StaffNameList& name, const Fraction& tick)
 {
-    instrument(tick)->setLongNames(StaffNameList(name));
+    instrument(tick)->setLongNames(name);
 }
 
-void Part::setShortNames(std::list<StaffName>& name, const Fraction& tick)
+void Part::setShortNames(const StaffNameList& name, const Fraction& tick)
 {
-    instrument(tick)->setShortNames(StaffNameList(name));
+    instrument(tick)->setShortNames(name);
 }
 
 //---------------------------------------------------------
@@ -494,8 +494,8 @@ String Part::instrumentId(const Fraction& tick) const
 
 String Part::longName(const Fraction& tick) const
 {
-    const std::list<StaffName>& nl = longNames(tick);
-    return nl.empty() ? u"" : nl.front().name();
+    const StaffNameList& nl = longNames(tick);
+    return nl.empty() ? String() : nl.front().name();
 }
 
 //---------------------------------------------------------
@@ -513,8 +513,8 @@ String Part::instrumentName(const Fraction& tick) const
 
 String Part::shortName(const Fraction& tick) const
 {
-    const std::list<StaffName>& nl = shortNames(tick);
-    return nl.empty() ? u"" : nl.front().name();
+    const StaffNameList& nl = shortNames(tick);
+    return nl.empty() ? String() : nl.front().name();
 }
 
 //---------------------------------------------------------

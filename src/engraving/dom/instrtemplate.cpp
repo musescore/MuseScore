@@ -294,8 +294,8 @@ void InstrumentTemplate::write(XmlWriter& xml) const
         xml.tag("soundId", soundId);
     }
 
-    write::TWrite::write(&longNames, xml, "longName");
-    write::TWrite::write(&shortNames, xml, "shortName");
+    write::TWrite::write(longNames, xml, "longName");
+    write::TWrite::write(shortNames, xml, "shortName");
 
     if (longNames.size() > 1) {
         xml.tag("trackName", trackName);
@@ -433,7 +433,7 @@ void InstrumentTemplate::read(XmlReader& e)
             soundId = e.readText();
         } else if (tag == "longName" || tag == "name") {                   // "name" is obsolete
             int pos = e.intAttribute("pos", 0);
-            for (std::list<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
+            for (StaffNameList::iterator i = longNames.begin(); i != longNames.end(); ++i) {
                 if ((*i).pos() == pos) {
                     longNames.erase(i);
                     break;
@@ -442,7 +442,7 @@ void InstrumentTemplate::read(XmlReader& e)
             longNames.push_back(StaffName(translateInstrumentName(id, u"longName", e.readText()), pos));
         } else if (tag == "shortName" || tag == "short-name") {     // "short-name" is obsolete
             int pos = e.intAttribute("pos", 0);
-            for (std::list<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
+            for (StaffNameList::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
                 if ((*i).pos() == pos) {
                     shortNames.erase(i);
                     break;
@@ -825,10 +825,11 @@ const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const Str
                         StaffName(name).toString().toStdString(), it->trackName.toStdString());
 
                     // ... and longNames
-                    for (const muse::String& instLongName : it->longNames.toStringList()) {
+                    for (const StaffName& instLongName : it->longNames) {
                         levenshteinDistance = std::min(levenshteinDistance,
                                                        muse::strings::levenshteinDistance(
-                                                           StaffName(name).toString().toStdString(), instLongName.toStdString()));
+                                                           StaffName(name).toString().toStdString(),
+                                                           instLongName.toString().toStdString()));
                     }
                     // If we have a shortest distance we keep this element
                     if (levenshteinDistance < minLevenshteinDistance) {
@@ -860,7 +861,7 @@ const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId)
     return 0;
 }
 
-const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList, bool useDrumset, bool caseSensitive)
+const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<String>& nameList, bool useDrumset, bool caseSensitive)
 {
     const InstrumentTemplate* bestMatch = nullptr; // default if no matches
     int bestMatchStrength = 0; // higher for better matches
