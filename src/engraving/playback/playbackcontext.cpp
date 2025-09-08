@@ -714,10 +714,6 @@ void PlaybackContext::handleSegmentElements(const Segment* segment, const int se
             }
 
             const Lyrics* lyrics = chordRest->lyrics(verseNum);
-            if (!lyrics) {
-                lyrics = lyricsList.back();
-            }
-
             if (lyrics) {
                 updateSyllableMap(lyrics, segmentPositionTick);
             }
