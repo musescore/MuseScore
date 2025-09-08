@@ -40,6 +40,7 @@ public:
     void removeStaves(const muse::IDList& stavesIds) override;
 
     bool appendStaff(Staff* staff, const muse::ID& destinationPartId) override;
+    bool appendStaffLinkedToMaster(Staff*, Staff*, const muse::ID&) override { return false; }
     bool appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId) override;
 
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,
