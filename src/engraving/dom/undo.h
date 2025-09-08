@@ -1806,25 +1806,6 @@ public:
     UNDO_CHANGED_OBJECTS({ diagram })
 };
 
-class FretLinkHarmony : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, FretLinkHarmony)
-
-    FretDiagram* m_fretDiagram = nullptr;
-    Harmony* m_harmony = nullptr;
-    bool m_unlink = false;
-
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-
-public:
-    FretLinkHarmony(FretDiagram*, Harmony*, bool unlink = false);
-
-    UNDO_TYPE(CommandType::FretLinkHarmony)
-    UNDO_NAME("FretLinkHarmony")
-    UNDO_CHANGED_OBJECTS({ m_fretDiagram })
-};
-
 class RemoveFretDiagramFromFretBox : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveFretDiagramFromFretBox)

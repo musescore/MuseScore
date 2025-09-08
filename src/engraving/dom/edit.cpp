@@ -3980,11 +3980,7 @@ void Score::cmdDeleteSelection()
                     FretDiagram* fretDiagram = toFretDiagram(e);
                     Harmony* harmony = fretDiagram->harmony();
                     if (harmony) {
-                        for (EngravingObject* o: fretDiagram->linkList()) {
-                            FretDiagram* linkedDiagram = toFretDiagram(o);
-                            Harmony* linkedHarmony = linkedDiagram->harmony();
-                            undo(new FretLinkHarmony(linkedDiagram, linkedHarmony, true /* unlink */));
-                        }
+                        undoChangeParent(harmony, fretDiagram->segment(), track2staff(fretDiagram->track()));
                         elSelectedAfterDeletion = harmony;
                     }
                 } else if (e->isHarmony()) {
@@ -6987,21 +6983,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ne->setTrack(linkedTrack);
             ne->setParent(seg);
 
-            // make harmony child of fret diagram if possible
-            if (ne->isHarmony()) {
-                for (EngravingItem* segel : segment->annotations()) {
-                    if (segel && segel->isFretDiagram() && segel->track() == linkedTrack && !toFretDiagram(segel)->harmony()) {
-                        segel->add(ne);
-                        break;
-                    }
-                }
-            } else if (ne->isFretDiagram()) {
-                // update track of child harmony
-                FretDiagram* fd = toFretDiagram(ne);
-                if (fd->harmony()) {
-                    fd->harmony()->setTrack(linkedTrack);
-                }
-            } else if (ne->isStringTunings()) {
+            if (ne->isStringTunings()) {
                 StringTunings* stringTunings = toStringTunings(ne);
                 if (stringTunings->stringData()->isNull()) {
                     const StringData* stringData = stringTunings->part()->stringData(tick, staff->idx());
