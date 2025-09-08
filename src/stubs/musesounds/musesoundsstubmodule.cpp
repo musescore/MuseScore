@@ -26,6 +26,9 @@
 #include "musesoundscheckupdatescenariostub.h"
 #include "musesoundscheckupdateservicestub.h"
 
+#include "musesamplercheckupdatescenariostub.h"
+#include "musesamplercheckupdateservicestub.h"
+
 using namespace mu::musesounds;
 using namespace muse;
 using namespace muse::modularity;
@@ -34,6 +37,11 @@ static std::shared_ptr<MuseSoundsCheckUpdateScenarioStub> s_museSoundsCheckUpdat
     = std::make_shared<MuseSoundsCheckUpdateScenarioStub>();
 static std::shared_ptr<MuseSoundsCheckUpdateServiceStub> s_museSoundsCheckUpdateService
     = std::make_shared<MuseSoundsCheckUpdateServiceStub>();
+
+static std::shared_ptr<MuseSamplerCheckUpdateScenarioStub> s_museSamplerCheckUpdateScenario
+    = std::make_shared<MuseSamplerCheckUpdateScenarioStub>();
+static std::shared_ptr<MuseSamplerCheckUpdateServiceStub> s_museSamplerCheckUpdateService
+    = std::make_shared<MuseSamplerCheckUpdateServiceStub>();
 
 static void musesounds_init_qrc()
 {
@@ -49,6 +57,8 @@ void MuseSoundsModule::registerExports()
 {
     ioc()->registerExport<IMuseSoundsCheckUpdateScenario>(moduleName(), s_museSoundsCheckUpdateScenario);
     ioc()->registerExport<IMuseSoundsCheckUpdateService>(moduleName(), s_museSoundsCheckUpdateService);
+    ioc()->registerExport<IMuseSamplerCheckUpdateScenario>(moduleName(), s_museSamplerCheckUpdateScenario);
+    ioc()->registerExport<IMuseSamplerCheckUpdateService>(moduleName(), s_museSamplerCheckUpdateService);
 }
 
 void MuseSoundsModule::registerResources()
