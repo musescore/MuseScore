@@ -649,11 +649,10 @@ void AccidentalsLayout::computeCompactOrdering(std::vector<Accidental*>& acciden
                     if constexpr (std::is_same_v<decltype(iter), decltype(accidentalsToPlace.begin())>) {
                         iter = accidentalsToPlace.erase(iter);
                         endIter = accidentalsToPlace.end();
-                    } else if constexpr (std::is_same_v<decltype(iter), decltype(accidentalsToPlace.rbegin())>) {
+                    } else {
+                        static_assert(std::is_same_v<decltype(iter), decltype(accidentalsToPlace.rbegin())>);
                         iter = std::reverse_iterator(accidentalsToPlace.erase(std::next(iter).base()));
                         endIter = accidentalsToPlace.rend();
-                    } else {
-                        static_assert(false);
                     }
                     continue;
                 }
