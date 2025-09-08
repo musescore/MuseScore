@@ -2231,7 +2231,7 @@ void NotationActionController::playSelectedElement(bool playChord)
 
 bool NotationActionController::startNoteInputAllowed() const
 {
-    if (isEditingElement() || QGuiApplication::applicationState() != Qt::ApplicationActive) {
+    if (isEditingElement() || playbackController()->isPlaying() || qApp->applicationState() != Qt::ApplicationActive) {
         return false;
     }
 
