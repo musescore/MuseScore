@@ -87,6 +87,7 @@ private:
     void prepareOutputBuffer(const muse::audio::samples_t samples);
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
     void setCurrentPosition(const muse::audio::samples_t samples);
+    void doCurrentSetPosition();
     void extractOutputSamples(muse::audio::samples_t samples, float* output);
 
     async::Channel<unsigned int> m_audioChannelsCountChanged;
@@ -107,6 +108,7 @@ private:
 
     bool m_offlineModeStarted = false;
     bool m_allNotesOffRequested = false;
+    bool m_pendingSetPosition = false;
 
     MuseSamplerSequencer m_sequencer;
 
