@@ -285,41 +285,46 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
     Config config = ConfigReader::read(themeFilePath);
 
     theme.values = {
-        { BACKGROUND_PRIMARY_COLOR, colorFromHex(config.value("background_primary_color").toQString()) },
-        { BACKGROUND_SECONDARY_COLOR, colorFromHex(config.value("background_secondary_color").toQString()) },
-        { BACKGROUND_TERTIARY_COLOR, colorFromHex(config.value("background_tertiary_color").toQString()) },
-        { BACKGROUND_QUARTERNARY_COLOR, colorFromHex(config.value("background_quarternary_color").toQString()) },
-        { POPUP_BACKGROUND_COLOR, colorFromHex(config.value("popup_background_color").toQString()) },
-        { PROJECT_TAB_COLOR, colorFromHex(config.value("project_tab_color").toQString()) },
-        { TEXT_FIELD_COLOR, colorFromHex(config.value("text_field_color").toQString()) },
-        { ACCENT_COLOR, colorFromHex(config.value("accent_color").toQString()) },
-        { STROKE_COLOR, colorFromHex(config.value("stroke_color").toQString()) },
-        { STROKE_SECONDARY_COLOR, colorFromHex(config.value("stroke_secondary_color").toQString()) },
-        { BUTTON_COLOR, colorFromHex(config.value("button_color").toQString()) },
-        { FONT_PRIMARY_COLOR, colorFromHex(config.value("font_primary_color").toQString()) },
-        { FONT_SECONDARY_COLOR, colorFromHex(config.value("font_secondary_color").toQString()) },
-        { LINK_COLOR, colorFromHex(config.value("link_color").toQString()) },
-        { FOCUS_COLOR, colorFromHex(config.value("focus_color").toQString()) },
-        { WHITE_COLOR, colorFromHex(config.value("white_color").toQString()) },
-        { BLACK_COLOR, colorFromHex(config.value("black_color").toQString()) },
-        { PLAY_COLOR, colorFromHex(config.value("play_color").toQString()) },
-        { RECORD_COLOR, colorFromHex(config.value("record_color").toQString()) },
+        { BACKGROUND_PRIMARY_COLOR, colorFromHex(config.value(ThemeKeys::BACKGROUND_PRIMARY_COLOR).toQString()) },
+        { BACKGROUND_SECONDARY_COLOR, colorFromHex(config.value(ThemeKeys::BACKGROUND_SECONDARY_COLOR).toQString()) },
+        { BACKGROUND_TERTIARY_COLOR, colorFromHex(config.value(ThemeKeys::BACKGROUND_TERTIARY_COLOR).toQString()) },
+        { BACKGROUND_QUARTERNARY_COLOR, colorFromHex(config.value(ThemeKeys::BACKGROUND_QUARTERNARY_COLOR).toQString()) },
+        { POPUP_BACKGROUND_COLOR, colorFromHex(config.value(ThemeKeys::POPUP_BACKGROUND_COLOR).toQString()) },
+        { PROJECT_TAB_COLOR, colorFromHex(config.value(ThemeKeys::PROJECT_TAB_COLOR).toQString()) },
+        { TEXT_FIELD_COLOR, colorFromHex(config.value(ThemeKeys::TEXT_FIELD_COLOR).toQString()) },
+        { ACCENT_COLOR, colorFromHex(config.value(ThemeKeys::ACCENT_COLOR).toQString()) },
+        { STROKE_COLOR, colorFromHex(config.value(ThemeKeys::STROKE_COLOR).toQString()) },
+        { STROKE_SECONDARY_COLOR, colorFromHex(config.value(ThemeKeys::STROKE_SECONDARY_COLOR).toQString()) },
+        { BUTTON_COLOR, colorFromHex(config.value(ThemeKeys::BUTTON_COLOR).toQString()) },
+        { FONT_PRIMARY_COLOR, colorFromHex(config.value(ThemeKeys::FONT_PRIMARY_COLOR).toQString()) },
+        { FONT_SECONDARY_COLOR, colorFromHex(config.value(ThemeKeys::FONT_SECONDARY_COLOR).toQString()) },
+        { LINK_COLOR, colorFromHex(config.value(ThemeKeys::LINK_COLOR).toQString()) },
+        { FOCUS_COLOR, colorFromHex(config.value(ThemeKeys::FOCUS_COLOR).toQString()) },
+        { WHITE_COLOR, colorFromHex(config.value(ThemeKeys::WHITE_COLOR).toQString()) },
+        { BLACK_COLOR, colorFromHex(config.value(ThemeKeys::BLACK_COLOR).toQString()) },
+        { PLAY_COLOR, colorFromHex(config.value(ThemeKeys::PLAY_COLOR).toQString()) },
+        { RECORD_COLOR, colorFromHex(config.value(ThemeKeys::RECORD_COLOR).toQString()) },
 
-        { BORDER_WIDTH, config.value("border_width").toDouble() },
-        { NAVIGATION_CONTROL_BORDER_WIDTH, config.value("navigation_control_border_width").toDouble() },
+        { BORDER_WIDTH, config.value(ThemeKeys::BORDER_WIDTH).toDouble() },
+        { NAVIGATION_CONTROL_BORDER_WIDTH, config.value(ThemeKeys::NAVIGATION_CONTROL_BORDER_WIDTH).toDouble() },
 
-        { ACCENT_OPACITY_NORMAL, config.value("accent_opacity_normal").toDouble() },
-        { ACCENT_OPACITY_HOVER, config.value("accent_opacity_hover").toDouble() },
-        { ACCENT_OPACITY_HIT, config.value("accent_opacity_hit").toDouble() },
+        { ACCENT_OPACITY_NORMAL, config.value(ThemeKeys::ACCENT_OPACITY_NORMAL).toDouble() },
+        { ACCENT_OPACITY_HOVER, config.value(ThemeKeys::ACCENT_OPACITY_HOVER).toDouble() },
+        { ACCENT_OPACITY_HIT, config.value(ThemeKeys::ACCENT_OPACITY_HIT).toDouble() },
 
-        { BUTTON_OPACITY_NORMAL, config.value("button_opacity_normal").toDouble() },
-        { BUTTON_OPACITY_HOVER, config.value("button_opacity_hover").toDouble() },
-        { BUTTON_OPACITY_HIT, config.value("button_opacity_hit").toDouble() },
+        { BUTTON_OPACITY_NORMAL, config.value(ThemeKeys::BUTTON_OPACITY_NORMAL).toDouble() },
+        { BUTTON_OPACITY_HOVER, config.value(ThemeKeys::BUTTON_OPACITY_HOVER).toDouble() },
+        { BUTTON_OPACITY_HIT, config.value(ThemeKeys::BUTTON_OPACITY_HIT).toDouble() },
 
-        { ITEM_OPACITY_DISABLED, config.value("item_opacity_disabled").toDouble() }
+        { ITEM_OPACITY_DISABLED, config.value(ThemeKeys::ITEM_OPACITY_DISABLED).toDouble() }
     };
 
     for (const auto& [key, val] : config) {
+        // Skip keys that are already handled in theme.values
+        if (ThemeKeys::isValidThemeKey(key)) {
+            continue;
+        }
+
         if (val.type() == Val::Type::String) {
             QColor color = colorFromHex(val.toQString());
             if (color.isValid()) {
@@ -591,7 +596,7 @@ muse::async::Notification UiConfiguration::iconsFontChanged() const
 
 io::path_t UiConfiguration::appIconPath() const
 {
-    return m_config.value("appIconPath").toPath();
+    return m_config.value(ConfigKeys::APP_ICON_PATH).toPath();
 }
 
 std::string UiConfiguration::musicalFontFamily() const

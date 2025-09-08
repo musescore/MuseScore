@@ -23,6 +23,8 @@
 #define MUSE_UI_UITYPES_H
 
 #include <vector>
+#include <array>
+#include <algorithm>
 #include <QString>
 #include <QMetaType>
 #include <QMap>
@@ -114,6 +116,70 @@ enum ThemeStyleKey
     BUTTON_OPACITY_HIT,
 
     ITEM_OPACITY_DISABLED
+};
+
+// Theme configuration string keys
+struct ThemeKeys {
+    // Color keys
+    static constexpr const char* BACKGROUND_PRIMARY_COLOR = "background_primary_color";
+    static constexpr const char* BACKGROUND_SECONDARY_COLOR = "background_secondary_color";
+    static constexpr const char* BACKGROUND_TERTIARY_COLOR = "background_tertiary_color";
+    static constexpr const char* BACKGROUND_QUARTERNARY_COLOR = "background_quarternary_color";
+    static constexpr const char* POPUP_BACKGROUND_COLOR = "popup_background_color";
+    static constexpr const char* PROJECT_TAB_COLOR = "project_tab_color";
+    static constexpr const char* TEXT_FIELD_COLOR = "text_field_color";
+    static constexpr const char* ACCENT_COLOR = "accent_color";
+    static constexpr const char* STROKE_COLOR = "stroke_color";
+    static constexpr const char* STROKE_SECONDARY_COLOR = "stroke_secondary_color";
+    static constexpr const char* BUTTON_COLOR = "button_color";
+    static constexpr const char* FONT_PRIMARY_COLOR = "font_primary_color";
+    static constexpr const char* FONT_SECONDARY_COLOR = "font_secondary_color";
+    static constexpr const char* LINK_COLOR = "link_color";
+    static constexpr const char* FOCUS_COLOR = "focus_color";
+    static constexpr const char* WHITE_COLOR = "white_color";
+    static constexpr const char* BLACK_COLOR = "black_color";
+    static constexpr const char* PLAY_COLOR = "play_color";
+    static constexpr const char* RECORD_COLOR = "record_color";
+
+    // Dimension keys
+    static constexpr const char* BORDER_WIDTH = "border_width";
+    static constexpr const char* NAVIGATION_CONTROL_BORDER_WIDTH = "navigation_control_border_width";
+
+    // Opacity keys
+    static constexpr const char* ACCENT_OPACITY_NORMAL = "accent_opacity_normal";
+    static constexpr const char* ACCENT_OPACITY_HOVER = "accent_opacity_hover";
+    static constexpr const char* ACCENT_OPACITY_HIT = "accent_opacity_hit";
+    static constexpr const char* BUTTON_OPACITY_NORMAL = "button_opacity_normal";
+    static constexpr const char* BUTTON_OPACITY_HOVER = "button_opacity_hover";
+    static constexpr const char* BUTTON_OPACITY_HIT = "button_opacity_hit";
+    static constexpr const char* ITEM_OPACITY_DISABLED = "item_opacity_disabled";
+
+    // All theme keys grouped for validation
+    static constexpr std::array<const char*, 31> ALL_THEME_KEYS = {
+        BACKGROUND_PRIMARY_COLOR, BACKGROUND_SECONDARY_COLOR, BACKGROUND_TERTIARY_COLOR,
+        BACKGROUND_QUARTERNARY_COLOR, POPUP_BACKGROUND_COLOR, PROJECT_TAB_COLOR,
+        TEXT_FIELD_COLOR, ACCENT_COLOR, STROKE_COLOR, STROKE_SECONDARY_COLOR,
+        BUTTON_COLOR, FONT_PRIMARY_COLOR, FONT_SECONDARY_COLOR, LINK_COLOR,
+        FOCUS_COLOR, WHITE_COLOR, BLACK_COLOR, PLAY_COLOR, RECORD_COLOR,
+        BORDER_WIDTH, NAVIGATION_CONTROL_BORDER_WIDTH,
+        ACCENT_OPACITY_NORMAL, ACCENT_OPACITY_HOVER, ACCENT_OPACITY_HIT,
+        BUTTON_OPACITY_NORMAL, BUTTON_OPACITY_HOVER, BUTTON_OPACITY_HIT,
+        ITEM_OPACITY_DISABLED
+    };
+
+    // Check if a key is a valid theme key
+    static bool isValidThemeKey(const std::string& key)
+    {
+        return std::find_if(ALL_THEME_KEYS.begin(), ALL_THEME_KEYS.end(),
+                            [&key](const char* themeKey) {
+            return key == themeKey;
+        }) != ALL_THEME_KEYS.end();
+    }
+};
+
+// Other configuration string keys
+struct ConfigKeys {
+    static constexpr const char* APP_ICON_PATH = "appIconPath";
 };
 
 struct ThemeInfo
