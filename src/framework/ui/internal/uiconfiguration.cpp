@@ -23,6 +23,9 @@
 #include "global/configreader.h"
 
 #include "async/async.h"
+#include "internal/baseapplication.h"
+#include "io/path.h"
+#include "io/fileinfo.h"
 #include "settings.h"
 #include "themeconverter.h"
 
@@ -119,6 +122,11 @@ void UiConfiguration::init()
         m_windowGeometryChanged.notify();
     });
 
+    m_themeWatcher.fileChanged().onReceive(this, [this](const std::string&){
+        initThemes();
+        notifyAboutCurrentThemeChanged();
+    });
+
     correctUserFontIfNeeded();
 
     initThemes();
@@ -132,6 +140,7 @@ void UiConfiguration::load()
 void UiConfiguration::deinit()
 {
     platformTheme()->stopListening();
+    m_themeWatcher.stopWatching();
 }
 
 void UiConfiguration::initThemes()
@@ -264,7 +273,16 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
     ThemeInfo theme;
     theme.codeKey = codeKey;
 
-    Config config = ConfigReader::read(QString(":/configs/%1.cfg").arg(QString::fromStdString(codeKey)));
+    io::path_t themeFilePath = globalConfiguration()->appDataPath() + codeKey + ".cfg";
+
+    // Hot reload is disabled in stable builds
+    if (muse::BaseApplication::appUnstable() && io::FileInfo::exists(themeFilePath)) {
+        m_themeWatcher.startWatching(themeFilePath.toStdString());
+    } else {
+        themeFilePath = ":/configs/" + codeKey + ".cfg";
+    }
+
+    Config config = ConfigReader::read(themeFilePath);
 
     theme.values = {
         { BACKGROUND_PRIMARY_COLOR, colorFromHex(config.value("background_primary_color").toQString()) },

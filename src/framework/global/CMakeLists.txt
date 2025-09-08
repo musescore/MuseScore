@@ -117,6 +117,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/iodevice.h
     ${CMAKE_CURRENT_LIST_DIR}/io/file.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/file.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/filewatcher.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/filewatcher.h
     ${CMAKE_CURRENT_LIST_DIR}/io/buffer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/buffer.h
     ${CMAKE_CURRENT_LIST_DIR}/io/ifilesystem.h
@@ -149,7 +151,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack_forward.h
-    
+
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.hpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.cpp
 )
