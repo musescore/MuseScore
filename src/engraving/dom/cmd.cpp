@@ -1127,6 +1127,12 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                 chord->setTicks(d.fraction());
                 chord->setStemDirection(stemDirection);
                 chord->add(note);
+                if (cr && cr->isChord()) {
+                    std::vector<Chord*> graceNotes = toChord(cr)->graceNotes();
+                    for (Chord* grace : graceNotes) {
+                        undoChangeParent(grace, chord, chord->staffIdx());
+                    }
+                }
                 note->setNval(nval, tick);
                 if (forceAccidental) {
                     int tpc = style().styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
