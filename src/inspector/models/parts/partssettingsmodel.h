@@ -63,11 +63,11 @@ private:
     void loadProperties() override;
     void resetProperties() override;
     void onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&) override;
+    void onCurrentNotationChanged() override;
 
     void updateShowPartLinkingOption();
     void updateShowExcludeOption();
     void updateShowTextLinkingOption();
-    void updateIsMasterScore();
 
 private:
     PropertyItem* m_positionLinkedToMaster;
@@ -82,6 +82,5 @@ private:
     bool m_showPartLinkingOption = false;
     bool m_showExcludeOption = false;
     bool m_showTextLinkingOption = false;
-    bool m_isMasterScore = false;
 };
 }

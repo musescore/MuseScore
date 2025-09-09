@@ -54,7 +54,6 @@ void PartsSettingsModel::createProperties()
     updateShowPartLinkingOption();
     updateShowExcludeOption();
     updateShowTextLinkingOption();
-    updateIsMasterScore();
 }
 
 void PartsSettingsModel::requestElements()
@@ -80,7 +79,6 @@ void PartsSettingsModel::requestElements()
     updateShowPartLinkingOption();
     updateShowExcludeOption();
     updateShowTextLinkingOption();
-    updateIsMasterScore();
 }
 
 void PartsSettingsModel::loadProperties()
@@ -101,6 +99,13 @@ void PartsSettingsModel::resetProperties()
 void PartsSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
 {
     loadProperties();
+}
+
+void PartsSettingsModel::onCurrentNotationChanged()
+{
+    emit isMasterScoreChanged(isMasterNotation());
+
+    AbstractInspectorModel::onCurrentNotationChanged();
 }
 
 PropertyItem* PartsSettingsModel::positionLinkedToMaster() const
@@ -140,7 +145,7 @@ bool PartsSettingsModel::showTextLinkingOption() const
 
 bool PartsSettingsModel::isMasterScore() const
 {
-    return m_isMasterScore;
+    return isMasterNotation();
 }
 
 void PartsSettingsModel::updateShowPartLinkingOption()
@@ -170,21 +175,5 @@ void PartsSettingsModel::updateShowTextLinkingOption()
     if (m_showTextLinkingOption != showTextLink) {
         m_showTextLinkingOption = showTextLink;
         emit showTextLinkingOptionChanged(m_showTextLinkingOption);
-    }
-}
-
-void PartsSettingsModel::updateIsMasterScore()
-{
-    bool isMaster = false;
-    for (EngravingItem* item : m_elementList) {
-        if (item->score()) {
-            isMaster = item->score()->isMaster();
-            break;
-        }
-    }
-
-    if (m_isMasterScore != isMaster) {
-        m_isMasterScore = isMaster;
-        emit isMasterScoreChanged(m_isMasterScore);
     }
 }
