@@ -8,16 +8,11 @@ def extract_fret_harmony_pairs(mscx_path):
 
     elements = []
 
-    for parent in root.iter():
-        children = list(parent)
-        for i in range(len(children) - 1):
-            first = children[i]
-            second = children[i + 1]
-
-            if (first.tag == "FretDiagram" and second.tag == "Harmony") or \
-               (first.tag == "Harmony" and second.tag == "FretDiagram"):
-                elements.append(first)
-                elements.append(second)
+    for fret in root.iter("FretDiagram"):
+        harmony = fret.find("Harmony")
+        if harmony is not None:
+            elements.append(fret)
+            elements.append(harmony)
 
     pairs = []
     i = 0
@@ -151,7 +146,7 @@ def build_output_xml(pairs):
         fret_diagram_elem = ET.SubElement(htd, "FretDiagram")
 
         for child in fret_elem:
-            if child.tag == "eid":
+            if child.tag == "eid" or child.tag == "Harmony":
                 continue
             elif child.tag == "fretDiagram":
                 fret = copy.deepcopy(child)
