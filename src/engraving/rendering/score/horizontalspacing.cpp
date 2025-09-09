@@ -309,7 +309,7 @@ std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments
     }
 
     if (ctx.systemIsFull) {
-        checkLyricsAgainstRightMargin(placedSegments);
+        checkLyricsAgainstRightMargin(placedSegments, ctx);
         checkLargeTimeSigAgainstRightMargin(placedSegments);
     }
 
@@ -473,13 +473,20 @@ void HorizontalSpacing::checkLyricsAgainstLeftMargin(Segment* segment, double& x
     }
 }
 
-void HorizontalSpacing::checkLyricsAgainstRightMargin(std::vector<SegmentPosition>& segPositions)
+void HorizontalSpacing::checkLyricsAgainstRightMargin(std::vector<SegmentPosition>& segPositions, const HorizontalSpacingContext& ctx)
 {
+    const double systemEdge = segPositions.back().xPosInSystemCoords + segPositions.back().segment->minRight();
+    const MStyle& style = ctx.system->style();
+    const bool lyricsDashForce = style.styleB(Sid::lyricsDashForce);
+    const bool lyricsMelismaForce = style.styleB(Sid::lyricsMelismaForce);
+    const double minSpaceForDash = lyricsDashForce ? style.styleMM(Sid::lyricsDashPad) + style.styleMM(Sid::lyricsDashMinLength)
+                                   + style.styleMM(Sid::lineEndToBarlineDistance) + segPositions.back().segment->minRight() : 0.0;
+    const double minSpaceForMelisma = lyricsMelismaForce ? style.styleMM(Sid::lyricsMelismaPad) + style.styleMM(Sid::lyricsMelismaMinLength)
+                                      + style.styleMM(Sid::lineEndToBarlineDistance) + segPositions.back().segment->minRight() : 0.0;
+
     int chordRestSegmentsCount = 0;
 
     for (size_t i = segPositions.size(); i > 1; --i) {
-        double systemEdge = segPositions.back().xPosInSystemCoords + segPositions.back().segment->minRight();
-
         SegmentPosition& segPos = segPositions[i - 1];
         double x = segPos.xPosInSystemCoords;
         Segment* seg = segPos.segment;
@@ -495,7 +502,16 @@ void HorizontalSpacing::checkLyricsAgainstRightMargin(std::vector<SegmentPositio
         for (const Shape& shape : seg->shapes()) {
             for (const ShapeElement& shapeEl : shape.elements()) {
                 if (shapeEl.item() && shapeEl.item()->isLyrics()) {
-                    xMaxLyrics = std::max(xMaxLyrics, x + shapeEl.right());
+                    const Lyrics* lyrics = toLyrics(shapeEl.item());
+                    bool hasMelisma = lyrics->separator() && lyrics->separator()->isEndMelisma();
+                    bool hasDash = lyrics->syllabic() == LyricsSyllabic::BEGIN || lyrics->syllabic() == LyricsSyllabic::MIDDLE;
+                    double rightEdge = x + shapeEl.right();
+                    if (hasDash) {
+                        rightEdge += minSpaceForDash;
+                    } else if (hasMelisma) {
+                        rightEdge += minSpaceForMelisma;
+                    }
+                    xMaxLyrics = std::max(xMaxLyrics, rightEdge);
                 }
             }
         }
