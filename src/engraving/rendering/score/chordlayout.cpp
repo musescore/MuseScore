@@ -1182,17 +1182,22 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
     }
     Segment* s = item->segment();
     Measure* m = item->measure();
-    SysStaff* sstaff = m->system() ? m->system()->staff(item->vStaffIdx()) : nullptr;
+    SysStaff* itemStaff = m->system() ? m->system()->staff(item->vStaffIdx()) : nullptr;
+    SysStaff* slurStaff = m->system() ? m->system()->staff(ss->vStaffIdx()) : nullptr;
+    PointF itemStaffPos = itemStaff ? PointF(0.0, itemStaff->y()) : PointF();
+    PointF slurStaffPos = itemStaff ? PointF(0.0, slurStaff->y()) : PointF();
     for (auto iter = item->articulations().begin(); iter != item->articulations().end(); ++iter) {
         Articulation* a = *iter;
         if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline()) {
             continue;
         }
-        Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset());
-        Shape sShape = ss->shape().translate(ss->pos());
+        Shape aShape
+            = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset() + itemStaffPos);
+        Shape sShape = ss->shape().translate(ss->pos() + slurStaffPos);
         sShape.removeTypes({ ElementType::HAMMER_ON_PULL_OFF_TEXT });
         double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
-        double vertClearance = a->up() ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
+        bool slurBelowArticulation = a->up() && !(ss->vStaffIdx() < item->vStaffIdx());
+        double vertClearance = slurBelowArticulation ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
         if (vertClearance < minDist) {
             minDist += slur->up()
                        ? std::max(aShape.minVerticalDistance(sShape), 0.0)
@@ -1201,9 +1206,9 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
             for (auto iter2 = iter; iter2 != item->articulations().end(); ++iter2) {
                 Articulation* aa = *iter2;
                 aa->mutldata()->moveY(minDist);
-                if (sstaff && aa->addToSkyline()) {
+                if (itemStaff && aa->addToSkyline()) {
                     SystemLayout::updateSkylineForElement(aa, m->system(), minDist);
-                    for (ShapeElement& sh : s->staffShape(item->staffIdx()).elements()) {
+                    for (ShapeElement& sh : s->staffShape(item->vStaffIdx()).elements()) {
                         if (sh.item() == aa) {
                             sh.translate(0.0, minDist);
                         }
