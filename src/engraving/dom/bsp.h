@@ -20,10 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_BSP_H
-#define MU_ENGRAVING_BSP_H
+#pragma once
 
-#include <list>
+#include <vector>
 
 #include "global/allocator.h"
 #include "types/string.h"
@@ -61,16 +60,13 @@ private:
     void climbTree(BspTreeVisitor* visitor, const PointF& pos, int index = 0);
     void climbTree(BspTreeVisitor* visitor, const RectF& rect, int index = 0);
 
-    void findItems(std::list<EngravingItem*>* foundItems, const RectF& rect, int index);
-    void findItems(std::list<EngravingItem*>* foundItems, const PointF& pos, int index);
-
     void nearestNeighbor(const PointF& pos, EngravingItem** bestItem, double& bestDistance, int nodeIndex = 0);
 
     RectF rectForIndex(int index) const;
 
     unsigned int m_depth = 0;
     std::vector<Node> m_nodes;
-    std::vector<std::list<EngravingItem*> > m_leaves;
+    std::vector<std::vector<EngravingItem*> > m_leaves;
     int m_leafCnt = 0;
     RectF m_rect;
 
@@ -110,7 +106,6 @@ class BspTreeVisitor
     OBJECT_ALLOCATOR(engraving, BspTreeVisitor)
 public:
     virtual ~BspTreeVisitor() {}
-    virtual void visit(std::list<EngravingItem*>* items) = 0;
+    virtual void visit(std::vector<EngravingItem*>* items) = 0;
 };
-} // namespace mu::engraving
-#endif
+}
