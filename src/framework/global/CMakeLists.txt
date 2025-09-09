@@ -205,9 +205,6 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.h
 
-        ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h
-
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.cpp
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlreader.h
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/xmlwriter.cpp
@@ -221,6 +218,18 @@ else()
         set(MODULE_SRC ${MODULE_SRC}
             ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
+        )
+    endif()
+
+    if (MUSE_CONFIGURATION_IS_WEB)
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/io/internal/memfilesystem.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/io/internal/memfilesystem.h
+        )
+    else()
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h
         )
     endif()
 

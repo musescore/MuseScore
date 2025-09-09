@@ -140,7 +140,12 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.cpp
 )
 
-if (NOT OS_IS_WASM)
+if (OS_IS_WASM)
+    set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/networksfloader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/platform/web/networksfloader.h
+    )
+else()
     set(AUDIO_WORKER_SRC ${AUDIO_WORKER_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.cpp
         ${CMAKE_CURRENT_LIST_DIR}/platform/general/generalaudioworker.h

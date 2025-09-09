@@ -21,10 +21,6 @@
  */
 #include "webbridgemodule.h"
 
-#ifdef Q_OS_WASM
-#include "internal/memfilesystem.h"
-#endif
-
 #include "internal/webinteractive.h"
 
 #include "webapi.h"
@@ -44,11 +40,6 @@ std::string WebBridgeModule::moduleName() const
 
 void WebBridgeModule::registerExports()
 {
-#ifdef Q_OS_WASM
-    ioc()->unregister<muse::io::IFileSystem>(moduleName());
-    ioc()->registerExport<muse::io::IFileSystem>(moduleName(), new MemFileSystem());
-#endif
-
     auto originInteractive = ioc()->resolve<muse::IInteractive>(moduleName());
     ioc()->unregister<muse::IInteractive>(moduleName());
     ioc()->registerExport<muse::IInteractive>(moduleName(), new WebInteractive(originInteractive));
