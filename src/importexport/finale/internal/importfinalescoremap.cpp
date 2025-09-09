@@ -62,7 +62,7 @@ using namespace mu::iex::finale;
 
 namespace mu::iex::finale {
 
-Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> musxStaff, Staff::HideMode defaultHideMode, const InstrumentTemplate* it)
+Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> musxStaff, const InstrumentTemplate* it)
 {
     auto clefTypeListFromMusxStaff = [&](const MusxInstance<others::Staff> musxStaff) -> std::optional<ClefTypeList>
     {
@@ -103,9 +103,7 @@ Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> m
 
     // hide when empty
     if (musxStaff->noOptimize) {
-        s->setHideWhenEmpty(Staff::HideMode::NEVER);
-    } else {
-        s->setHideWhenEmpty(defaultHideMode);
+        s->setHideWhenEmpty(AutoOnOff::OFF);
     }
 
     // clefs
@@ -235,17 +233,20 @@ void FinaleParser::importParts()
         part->setId(partId);
 
         const auto& [topStaffId, instInfo] = *instIt;
-        Staff::HideMode defaultHideModeForInst = Staff::HideMode::AUTO;
         if (instInfo.staffGroupId != 0) {
             if (MusxInstance<details::StaffGroup> group = m_doc->getDetails()->get<details::StaffGroup>(m_currentMusxPartId, BASE_SYSTEM_ID, instInfo.staffGroupId)) {
                 switch (group->hideStaves) {
                 case details::StaffGroup::HideStaves::None:
-                    defaultHideModeForInst = Staff::HideMode::NEVER;
+                    part->setHideWhenEmpty(AutoOnOff::OFF);
                     break;
                 case details::StaffGroup::HideStaves::AsGroup:
-                    defaultHideModeForInst = Staff::HideMode::INSTRUMENT;
+                    part->setHideWhenEmpty(AutoOnOff::ON);
+                    // [[fallthrough]]; incorrect, see lower line?
+                    part->setHideStavesWhenIndividuallyEmpty(false);
                     break;
                 case details::StaffGroup::HideStaves::Normally:
+                    part->setHideStavesWhenIndividuallyEmpty(true);
+                    break;
                 default:
                     break;
                 }
@@ -253,7 +254,7 @@ void FinaleParser::importParts()
         }
         for (const StaffCmper inst : instInfo.getSequentialStaves()) {
             if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
-                createStaff(part, instStaff, defaultHideModeForInst, it);
+                createStaff(part, instStaff, it);
                 inst2Part.emplace(inst, partId);
             }
         }

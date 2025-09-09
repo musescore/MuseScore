@@ -220,8 +220,7 @@ private:
     void importStaffItems();
     void importTextExpressions();
 
-    engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff, engraving::Staff::HideMode defaultHideMode,
-                                  const engraving::InstrumentTemplate* it = nullptr);
+    engraving::Staff* createStaff(engraving::Part* part, const musx::dom::MusxInstance<musx::dom::others::Staff> musxStaff, const engraving::InstrumentTemplate* it = nullptr);
     engraving::ClefType toMuseScoreClefType(const musx::dom::MusxInstance<musx::dom::options::ClefOptions::ClefDef>& clefDef,
                                             const musx::dom::MusxInstance<musx::dom::others::Staff>& musxStaff);
     engraving::Clef* createClef(engraving::Score* score,
