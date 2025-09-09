@@ -1082,6 +1082,13 @@ void NotationInteraction::selectLastElement()
     }
 }
 
+void NotationInteraction::selectPage(const size_t num)
+{
+    score()->cmdSelectPage(num);
+
+    notifyAboutSelectionChangedIfNeed();
+}
+
 INotationSelectionPtr NotationInteraction::selection() const
 {
     return m_selection;

@@ -4377,6 +4377,8 @@ BeatsPerSecond Score::multipliedTempo(const Fraction& tick) const
 
 void Score::cmdSelectAll()
 {
+    TRACEFUNC;
+
     if (m_measures.size() == 0) {
         return;
     }
@@ -4398,6 +4400,8 @@ void Score::cmdSelectAll()
 
 void Score::cmdSelectSection()
 {
+    TRACEFUNC;
+
     Segment* s = m_selection.startSegment();
     if (s == 0) {
         return;
@@ -4429,6 +4433,29 @@ void Score::cmdSelectSection()
     m_selection.setRange(toMeasure(sm)->first(), toMeasure(em)->last(), 0, nstaves());
     setUpdateAll();
     update();
+}
+
+void Score::cmdSelectPage(const size_t num)
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(num < m_pages.size()) {
+        return;
+    }
+
+    const Page* page = m_pages.at(num);
+    const std::vector<System*>& systems = page->systems();
+    if (systems.empty()) {
+        return;
+    }
+
+    MeasureBase* first = systems.front()->first();
+    MeasureBase* last = systems.back()->last();
+
+    if (first && last) {
+        selectRange(first, 0);
+        selectRange(last, nstaves() - 1);
+    }
 }
 
 //---------------------------------------------------------

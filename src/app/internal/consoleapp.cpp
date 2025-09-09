@@ -283,14 +283,18 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
     openParams.stylePath = task.params[CmdOptions::ParamKey::StylePath].toString();
     openParams.forceMode = task.params[CmdOptions::ParamKey::ForceMode].toBool();
 
+    bool isPageNumValid = false;
+    size_t pageNum = task.params[CmdOptions::ParamKey::PageNumber].toULongLong(&isPageNumValid);
+    pageNum = isPageNumValid ? pageNum - 1 : muse::nidx;
+
     switch (task.type) {
     case ConvertType::Batch:
-        ret = converter()->batchConvert(task.inputFile, openParams, soundProfile, extensionUri);
+        ret = converter()->batchConvert(task.inputFile, openParams, soundProfile, extensionUri, pageNum);
         break;
     case ConvertType::File: {
         std::string transposeOptionsJson = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
         ret = converter()->fileConvert(task.inputFile, task.outputFile, openParams, soundProfile, extensionUri,
-                                       transposeOptionsJson);
+                                       transposeOptionsJson, pageNum);
     } break;
     case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, openParams);

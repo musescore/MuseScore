@@ -43,11 +43,13 @@ public:
 
     virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
                                   const muse::String& soundProfile = muse::String(),
-                                  const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {}) = 0;
+                                  const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {},
+                                  const size_t pageNum = muse::nidx) = 0;
 
     virtual muse::Ret batchConvert(const muse::io::path_t& batchJobFile, const OpenParams& openParams = {},
                                    const muse::String& soundProfile = muse::String(),
-                                   const muse::UriQuery& extensionUri = muse::UriQuery(), muse::ProgressPtr progress = nullptr) = 0;
+                                   const muse::UriQuery& extensionUri = muse::UriQuery(), const size_t pageNum = muse::nidx,
+                                   muse::ProgressPtr progress = nullptr) = 0;
 
     virtual muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
 

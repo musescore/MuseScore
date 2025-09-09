@@ -52,6 +52,7 @@ public:
     MOCK_METHOD(void, selectSection, (), (override));
     MOCK_METHOD(void, selectFirstElement, (bool), (override));
     MOCK_METHOD(void, selectLastElement, (), (override));
+    MOCK_METHOD(void, selectPage, (const size_t), (override));
     MOCK_METHOD(INotationSelectionPtr, selection, (), (const, override));
     MOCK_METHOD(void, clearSelection, (), (override));
     MOCK_METHOD(muse::async::Notification, selectionChanged, (), (const, override));
