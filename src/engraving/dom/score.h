@@ -540,7 +540,7 @@ public:
 
     Fraction makeGap(Segment*, track_idx_t track, const Fraction&, Tuplet*, bool keepChord = false);
     bool makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES]);
-    bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick);
+    bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick, Tuplet* tuplet = nullptr);
 
     Rest* addRest(const Fraction& tick, track_idx_t track, TDuration, Tuplet*);
     Rest* addRest(Segment* seg, track_idx_t track, TDuration d, Tuplet*);
@@ -1036,6 +1036,7 @@ public:
     void cmdExchangeVoice(voice_idx_t, voice_idx_t);
     void cmdRemoveEmptyTrailingMeasures();
     void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing(-1), HDuration durationType = HDuration(-1));
+    Segment* setChord(Segment* segment, track_idx_t track, const Chord* chordTemplate, Fraction dur);
 
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
