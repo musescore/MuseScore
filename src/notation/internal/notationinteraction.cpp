@@ -5089,6 +5089,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     options.createEmptyMeasures = false;
     options.moveSignaturesClef = moveSignaturesClef;
     options.needDeselectAll = false;
+    options.cloneBoxToAllParts = boxType != BoxType::Fret;
 
     for (int i = 0; i < count; ++i) {
         score()->insertMeasure(elementType, beforeBox, options);

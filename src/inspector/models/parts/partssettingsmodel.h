@@ -36,6 +36,7 @@ class PartsSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool showPartLinkingOption READ showPartLinkingOption NOTIFY showPartLinkingOptionChanged)
     Q_PROPERTY(bool showExcludeOption READ showExcludeOption NOTIFY showExcludeOptionChanged)
     Q_PROPERTY(bool showTextLinkingOption READ showTextLinkingOption NOTIFY showTextLinkingOptionChanged)
+    Q_PROPERTY(bool isMasterScore READ isMasterScore NOTIFY isMasterScoreChanged)
 
 public:
     explicit PartsSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -48,11 +49,13 @@ public:
     bool showPartLinkingOption() const;
     bool showExcludeOption() const;
     bool showTextLinkingOption() const;
+    bool isMasterScore() const;
 
 signals:
     void showPartLinkingOptionChanged(bool showPartsOption);
     void showExcludeOptionChanged(bool excludeOption);
     void showTextLinkingOptionChanged(bool showTextLink);
+    void isMasterScoreChanged(bool isMasterScore);
 
 private:
     void createProperties() override;
@@ -60,6 +63,7 @@ private:
     void loadProperties() override;
     void resetProperties() override;
     void onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&) override;
+    void onCurrentNotationChanged() override;
 
     void updateShowPartLinkingOption();
     void updateShowExcludeOption();

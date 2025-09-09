@@ -65,7 +65,7 @@ void PartsSettingsModel::requestElements()
     m_elementsForTextLinkingOption.clear();
 
     for (EngravingItem* item : m_elementList) {
-        if (!item->score()->isMaster() && !item->isLayoutBreak()) {
+        if (!item->score()->isMaster() && !item->isLayoutBreak() && !item->isFBox()) {
             m_elementsForPartLinkingOption.push_back(item);
         }
         if (item->canBeExcludedFromOtherParts()) {
@@ -101,6 +101,13 @@ void PartsSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSe
     loadProperties();
 }
 
+void PartsSettingsModel::onCurrentNotationChanged()
+{
+    emit isMasterScoreChanged(isMasterNotation());
+
+    AbstractInspectorModel::onCurrentNotationChanged();
+}
+
 PropertyItem* PartsSettingsModel::positionLinkedToMaster() const
 {
     return m_positionLinkedToMaster;
@@ -134,6 +141,11 @@ bool PartsSettingsModel::showExcludeOption() const
 bool PartsSettingsModel::showTextLinkingOption() const
 {
     return m_showTextLinkingOption;
+}
+
+bool PartsSettingsModel::isMasterScore() const
+{
+    return isMasterNotation();
 }
 
 void PartsSettingsModel::updateShowPartLinkingOption()
