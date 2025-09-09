@@ -638,7 +638,7 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
                 logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
             }
             auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
-            StaffType* staffType = targetStaff->staffType(rest->tick());
+            StaffType* staffType = targetStaff->staffTypeForElement(rest);
             // following code copied from TLayout::layoutRest:
             Rest::LayoutData layoutData;
             const int naturalLine = rest->computeNaturalLine(staffType->lines()); // Measured in 1sp steps
@@ -651,6 +651,7 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
             if (rest->isWholeRest()) {
                 staffPosition += 2; // account for a whole rest's staff line discrepancy between Finale and MuseScore
             }
+            rest->setAlignWithOtherRests(false); // override as much automatic positioning as possible
             rest->ryoffset() = double(-staffPosition - staffPositionOffset) * targetStaff->spatium(rest->tick()) * lineSpacing / 2.0;
             /// @todo Account for additional default positioning around collision avoidance (when the rest is on the "wrong" side for the voice.)
             /// Unfortunately, we can't set `autoplace` to false because that also suppresses horizontal spacing.
