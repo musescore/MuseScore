@@ -28,6 +28,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/musesoundscheckupdatescenariostub.h
     ${CMAKE_CURRENT_LIST_DIR}/musesoundscheckupdateservicestub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/musesoundscheckupdateservicestub.h
+    ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckupdatescenariostub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckupdatescenariostub.h
+    ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckupdateservicestub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/musesamplercheckupdateservicestub.h
     )
 
 set(MODULE_IS_STUB ON)
