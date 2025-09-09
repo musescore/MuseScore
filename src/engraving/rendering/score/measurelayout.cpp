@@ -819,7 +819,7 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
 {
     LAYOUT_CALL() << LAYOUT_ITEM_INFO(currentMB);
 
-    if (!currentMB->isMeasure()) {
+    if (!currentMB->isMeasure() || ctx.dom().nstaves() == 0) {
         return;
     }
 
