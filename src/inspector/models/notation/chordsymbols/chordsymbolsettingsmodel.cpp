@@ -54,6 +54,8 @@ void ChordSymbolSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HARMONY);
     updateHasLinkedFretboardDiagram();
+    updateInsideFretBox();
+    updateShowStackModifiers();
     updateIsDurationAvailable();
 }
 
@@ -108,6 +110,16 @@ bool ChordSymbolSettingsModel::hasLinkedFretboardDiagram() const
     return m_hasLinkedFretboardDiagram;
 }
 
+bool ChordSymbolSettingsModel::insideFretBox() const
+{
+    return m_insideFretBox;
+}
+
+bool ChordSymbolSettingsModel::showStackModifiers() const
+{
+    return m_showStackModifiers;
+}
+
 void ChordSymbolSettingsModel::setHasLinkedFretboardDiagram(bool has)
 {
     if (m_hasLinkedFretboardDiagram == has) {
@@ -133,18 +145,60 @@ void ChordSymbolSettingsModel::updateHasLinkedFretboardDiagram()
     setHasLinkedFretboardDiagram(!hasHarmonyWhithoutFretboardDiagram);
 }
 
-void ChordSymbolSettingsModel::updateIsDurationAvailable()
+void ChordSymbolSettingsModel::setShowStackModifiers(bool val)
 {
-    bool available = true;
+    if (m_showStackModifiers == val) {
+        return;
+    }
 
+    m_showStackModifiers = val;
+    emit showStackModifiersChanged();
+}
+
+void ChordSymbolSettingsModel::updateShowStackModifiers()
+{
+    if (!style()->styleValue(notation::StyleId::verticallyStackModifiers).toBool()) {
+        setShowStackModifiers(false);
+        return;
+    }
+
+    bool available = false;
     for (engraving::EngravingItem* item : m_elementList) {
-        if (engraving::toHarmony(item)->isInFretBox()) {
-            available = false;
+        if (engraving::toHarmony(item)->hasModifiers()) {
+            available = true;
             break;
         }
     }
 
-    m_durationType->setIsVisible(available);
+    setShowStackModifiers(available);
+}
+
+void ChordSymbolSettingsModel::setInsideFretBox(bool has)
+{
+    if (m_insideFretBox == has) {
+        return;
+    }
+
+    m_insideFretBox = has;
+    emit insideFretBoxChanged();
+}
+
+void ChordSymbolSettingsModel::updateInsideFretBox()
+{
+    bool insideFretBox = false;
+    for (engraving::EngravingItem* item : m_elementList) {
+        if (engraving::toHarmony(item)->isInFretBox()) {
+            insideFretBox = true;
+            break;
+        }
+    }
+
+    setInsideFretBox(insideFretBox);
+}
+
+void ChordSymbolSettingsModel::updateIsDurationAvailable()
+{
+    m_durationType->setIsVisible(!m_insideFretBox);
 }
 
 PropertyItem* ChordSymbolSettingsModel::verticalAlign() const

@@ -68,7 +68,7 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
 
     ldata->setPos(positionPoint);
 
-    if (!item->cursor()->editing()) {
+    if (!item->cursor()->editing() && !ldata->renderItemList.value().empty()) {
         ParenthesisLayout::layoutParentheses(item, ctx);
     }
 }
@@ -764,7 +764,11 @@ void HarmonyLayout::renderActionScale(const RenderActionScalePtr& a, HarmonyRend
 void HarmonyLayout::renderActionParen(Harmony* item, const RenderActionParenPtr& a, HarmonyRenderCtx& harmonyCtx)
 {
     Parenthesis* p = Factory::createParenthesis(item);
+    p->setParent(item);
     p->setDirection(a->direction());
+    p->setColor(item->color());
+    p->setFollowParentColor(true);
+    p->setGenerated(true);
 
     ChordSymbolParen* parenItem = new ChordSymbolParen(p, harmonyCtx.hAlign, harmonyCtx.x(), harmonyCtx.y());
     harmonyCtx.renderItemList.push_back(parenItem);

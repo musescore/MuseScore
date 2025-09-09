@@ -263,7 +263,6 @@ public:
 
     void undoSetShowMeasureNumbers(bool show);
     bool shouldShowMeasureNumbers() const;
-    bool shouldShowPlayCount() const;
 
     bool isSystemObjectStaff() const;
     bool hasSystemObjectsBelowBottomStaff() const;

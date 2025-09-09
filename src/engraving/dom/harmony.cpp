@@ -168,6 +168,11 @@ ParsedChord* HarmonyInfo::getParsedChord()
     return m_parsedChord;
 }
 
+bool HarmonyInfo::hasModifiers() const
+{
+    return m_parsedChord ? m_parsedChord->modifiers().size() > 0 : false;
+}
+
 //---------------------------------------------------------
 //   harmonyName
 //---------------------------------------------------------
@@ -414,6 +419,17 @@ void Harmony::afterRead()
 
     // render chord from description (or _textName)
     setPlainText(harmonyName());
+}
+
+bool Harmony::hasModifiers() const
+{
+    for (const HarmonyInfo* info : m_chords) {
+        if (info->hasModifiers()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------
@@ -1109,6 +1125,17 @@ Color Harmony::curColor() const
     return EngravingItem::curColor();
 }
 
+void Harmony::setColor(const Color& color)
+{
+    EngravingItem::setColor(color);
+
+    for (HarmonyRenderItem* item : ldata()->renderItemList()) {
+        if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(item)) {
+            paren->parenItem->setColor(color);
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   width
 //---------------------------------------------------------
@@ -1468,6 +1495,19 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         FretDiagram* fd = getParentFretDiagram();
         if (fd && fd->excludeVerticalAlign() != val) {
             fd->setExcludeVerticalAlign(val);
+        }
+        Segment* parentSeg = getParentSeg();
+        if (!parentSeg) {
+            break;
+        }
+        for (EngravingItem* item : parentSeg->annotations()) {
+            if (!item->isFretDiagram() || !item->isHarmony() || item == this || track2staff(item->track()) != staffIdx()) {
+                continue;
+            }
+
+            if (item->excludeVerticalAlign() != val) {
+                item->setProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val);
+            }
         }
         break;
     }

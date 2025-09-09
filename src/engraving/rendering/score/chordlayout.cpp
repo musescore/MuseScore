@@ -1182,17 +1182,22 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
     }
     Segment* s = item->segment();
     Measure* m = item->measure();
-    SysStaff* sstaff = m->system() ? m->system()->staff(item->vStaffIdx()) : nullptr;
+    SysStaff* itemStaff = m->system() ? m->system()->staff(item->vStaffIdx()) : nullptr;
+    SysStaff* slurStaff = m->system() ? m->system()->staff(ss->vStaffIdx()) : nullptr;
+    PointF itemStaffPos = itemStaff ? PointF(0.0, itemStaff->y()) : PointF();
+    PointF slurStaffPos = itemStaff ? PointF(0.0, slurStaff->y()) : PointF();
     for (auto iter = item->articulations().begin(); iter != item->articulations().end(); ++iter) {
         Articulation* a = *iter;
         if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline()) {
             continue;
         }
-        Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset());
-        Shape sShape = ss->shape().translate(ss->pos());
+        Shape aShape
+            = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos() + item->staffOffset() + itemStaffPos);
+        Shape sShape = ss->shape().translate(ss->pos() + slurStaffPos);
         sShape.removeTypes({ ElementType::HAMMER_ON_PULL_OFF_TEXT });
         double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
-        double vertClearance = a->up() ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
+        bool slurBelowArticulation = a->up() && !(ss->vStaffIdx() < item->vStaffIdx());
+        double vertClearance = slurBelowArticulation ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
         if (vertClearance < minDist) {
             minDist += slur->up()
                        ? std::max(aShape.minVerticalDistance(sShape), 0.0)
@@ -1201,9 +1206,9 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
             for (auto iter2 = iter; iter2 != item->articulations().end(); ++iter2) {
                 Articulation* aa = *iter2;
                 aa->mutldata()->moveY(minDist);
-                if (sstaff && aa->addToSkyline()) {
+                if (itemStaff && aa->addToSkyline()) {
                     SystemLayout::updateSkylineForElement(aa, m->system(), minDist);
-                    for (ShapeElement& sh : s->staffShape(item->staffIdx()).elements()) {
+                    for (ShapeElement& sh : s->staffShape(item->vStaffIdx()).elements()) {
                         if (sh.item() == aa) {
                             sh.translate(0.0, minDist);
                         }
@@ -1257,15 +1262,15 @@ void ChordLayout::layoutStem(Chord* item, const LayoutContext& ctx)
     }
 }
 
-void ChordLayout::computeUpBeamCase(Chord* item, Beam* beam)
+bool ChordLayout::computeUpBeamCase(const Chord* item, Beam* beam)
 {
-    if (beam->userModified()) {
-        item->setUp(isChordPosBelowBeam(item, beam));
-    } else if (beam->cross()) {
-        item->setUp(item->isBelowCrossBeam(beam));
-    } else {
-        item->setUp(beam->up());
+    if (beam->cross()) {
+        return item->isBelowCrossBeam(beam);
+    } else if (beam->userModified()) {
+        return isChordPosBelowBeam(item, beam);
     }
+
+    return beam->up();
 }
 
 void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
@@ -1425,7 +1430,7 @@ void ChordLayout::updateLedgerLines(Chord* item, LayoutContext& ctx)
     }
 }
 
-bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
+bool ChordLayout::isChordPosBelowBeam(const Chord* item, Beam* beam)
 {
     assert(!beam->beamFragments().empty());
 
@@ -1463,12 +1468,22 @@ bool ChordLayout::isChordPosBelowTrem(const Chord* item, TremoloTwoChord* trem)
     }
     Note* baseNote = item->up() ? item->downNote() : item->upNote();
     double noteY = baseNote->pagePos().y();
-    double tremY = trem->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
 
-    return noteY > tremY;
+    PointF startAnchor = trem->startAnchor();
+    PointF endAnchor = trem->endAnchor();
+
+    if (startAnchor.isNull() || endAnchor.isNull()) {
+        return trem->crossStaffBeamBetween() ? item->isBelowCrossBeam(trem) : trem->up();
+    }
+
+    if (item == trem->chord1()) {
+        return noteY > startAnchor.y();
+    }
+
+    return noteY > endAnchor.y();
 }
 
-static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tremolo, const LayoutContext& ctx)
+bool ChordLayout::computeUpTremoloCase(const Chord* item, TremoloTwoChord* tremolo, const LayoutContext& ctx)
 {
     const Chord* c1 = tremolo->chord1();
     const Chord* c2 = tremolo->chord2();
@@ -1496,21 +1511,15 @@ static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tr
 
     if (tremolo->userModified()) {
         return ChordLayout::isChordPosBelowTrem(item, tremolo);
-    } else if (cross) {
-        // unmodified cross-staff trem, should be one note per staff
-        if (item->staffMove() != 0) {
-            return item->staffMove() > 0;
-        } else {
-            int otherStaffMove = item->staffMove() == c1->staffMove() ? c2->staffMove() : c1->staffMove();
-            return otherStaffMove < 0;
-        }
     }
 
-    if (!cross && !tremolo->userModified()) {
-        return tremolo->up();
+    // unmodified cross-staff trem, should be one note per staff
+    if (item->staffMove() != 0) {
+        return item->staffMove() > 0;
     }
 
-    return item->ldata()->up;
+    int otherStaffMove = item->staffMove() == c1->staffMove() ? c2->staffMove() : c1->staffMove();
+    return otherStaffMove < 0;
 }
 
 void ChordLayout::computeUp(const Chord* item, Chord::LayoutData* ldata, const LayoutContext& ctx)
@@ -1554,10 +1563,10 @@ void ChordLayout::computeUp(const Chord* item, Chord::LayoutData* ldata, const L
     }
 
     if (hasBeam) {
-        computeUpBeamCase(const_cast<Chord*>(item), item->beam());
+        ldata->up = computeUpBeamCase(item, item->beam());
         return;
     } else if (item->tremoloTwoChord()) {
-        ldata->up = computeUp_TremoloTwoNotesCase(item, item->tremoloTwoChord(), ctx);
+        ldata->up = computeUpTremoloCase(item, item->tremoloTwoChord(), ctx);
         return;
     }
 

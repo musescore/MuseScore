@@ -121,8 +121,6 @@ public:
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
 
-    void undoUnlink() override;
-
     const ElementList* el() const { return &m_el; }
 
     static String translatedUserTypeName(BarLineType);
@@ -132,9 +130,6 @@ public:
 
     bool isTop() const;
     bool isBottom() const;
-
-    void setPlayCountTextSetting(const AutoCustomHide& v) { m_playCountTextSetting = v; }
-    AutoCustomHide playCountTextSetting() const { return m_playCountTextSetting; }
 
     int subtype() const override { return int(m_barLineType); }
     TranslatableString subtypeUserName() const override;
@@ -146,13 +141,10 @@ public:
     using EngravingObject::undoChangeProperty;
     EngravingItem* propertyDelegate(Pid) override;
 
-    PlayCountText* playCountText() const { return m_playCountText; }
-    void setPlayCountText(PlayCountText* text);
-    String playCountCustomText() const { return m_playCountCustomText; }
-    void setPlayCountCustomText(const String& v) { m_playCountCustomText = v; }
-
     void setPlayCount(int playCount) { m_playCount = playCount; }
     int playCount() const { return m_playCount; }
+
+    PlayCountText* playCountText() const;
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
@@ -193,9 +185,6 @@ private:
 
     ElementList m_el;          ///< fermata or other articulations
 
-    PlayCountText* m_playCountText = nullptr;     // Play count text for barlines on system object staves
-    AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
-    String m_playCountCustomText = u"";
     int m_playCount = -1;                 // For use during copy & paste
 };
 } // namespace mu::engraving

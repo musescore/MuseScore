@@ -304,7 +304,10 @@ static bool barlineWithPlayText(const QList<mu::engraving::EngravingItem*>& sele
             continue;
         }
 
-        if (toBarLine(item)->playCountText()) {
+        Segment* seg = toBarLine(item)->segment();
+        PlayCountText* playCountText = toPlayCountText(seg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0));
+
+        if (playCountText) {
             return true;
         }
     }
