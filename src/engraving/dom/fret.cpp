@@ -1142,13 +1142,26 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FRET_FINGERING:
         setFingering(v.value<std::vector<int> >());
         break;
-    case Pid::EXCLUDE_VERTICAL_ALIGN:
-    {
+    case Pid::EXCLUDE_VERTICAL_ALIGN: {
         bool val = v.toBool();
         setExcludeVerticalAlign(val);
         Harmony* h = harmony();
         if (h && h->excludeVerticalAlign() != val) {
             h->setExcludeVerticalAlign(val);
+        }
+        Segment* parentSeg = segment();
+        if (!parentSeg) {
+            break;
+        }
+
+        for (EngravingItem* item : parentSeg->annotations()) {
+            if (!item->isFretDiagram() || !item->isHarmony() || item == this || track2staff(item->track()) != staffIdx()) {
+                continue;
+            }
+
+            if (item->excludeVerticalAlign() != val) {
+                item->setProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val);
+            }
         }
         break;
     }
