@@ -56,6 +56,8 @@ public:
     bool snapToItemAfter() const { return m_snapToItemAfter; }
     void setSnapToItemAfter(bool v) { m_snapToItemAfter = v; }
 
+    PointF linePos(Grip grip, System** system) const override;
+
 protected:
     void added() override;
     void removed() override;
@@ -68,6 +70,8 @@ private:
     std::optional<float> m_tempoChangeFactor;
 
     bool m_snapToItemAfter = true;
+
+    bool m_alignRightOfRehearsalMark = true;
 
     friend class GradualTempoChangeSegment;
 };

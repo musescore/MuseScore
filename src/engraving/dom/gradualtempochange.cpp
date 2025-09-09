@@ -22,6 +22,8 @@
 
 #include "gradualtempochange.h"
 
+#include "dom/rehearsalmark.h"
+#include "dom/text.h"
 #include "measure.h"
 #include "score.h"
 #include "segment.h"
@@ -147,6 +149,8 @@ PropertyValue GradualTempoChange::getProperty(Pid id) const
         return tempoChangeFactor();
     case Pid::SNAP_AFTER:
         return snapToItemAfter();
+    case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
+        return m_alignRightOfRehearsalMark;
     default:
         return TextLineBase::getProperty(id);
     }
@@ -166,6 +170,9 @@ bool GradualTempoChange::setProperty(Pid id, const PropertyValue& val)
         break;
     case Pid::SNAP_AFTER:
         setSnapToItemAfter(val.toBool());
+        break;
+    case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
+        m_alignRightOfRehearsalMark = val.toBool();
         break;
     default:
         if (!TextLineBase::setProperty(id, val)) {
@@ -221,6 +228,9 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
     case Pid::SNAP_AFTER:
         return true;
 
+    case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
+        return true;
+
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
@@ -259,6 +269,38 @@ Sid GradualTempoChange::getPropertyStyle(Pid id) const
         break;
     }
     return TextLineBase::getPropertyStyle(id);
+}
+
+PointF GradualTempoChange::linePos(Grip grip, System** system) const
+{
+    bool start = grip == Grip::START;
+    Segment* segment = start ? startSegment() : endSegment();
+    if (!m_alignRightOfRehearsalMark || !segment) {
+        return TextLineBase::linePos(grip, system);
+    }
+
+    RehearsalMark* rehearsalMark = toRehearsalMark(segment->findAnnotation(ElementType::REHEARSAL_MARK, track(), track()));
+    if (!rehearsalMark) {
+        return TextLineBase::linePos(grip, system);
+    }
+    RectF thisBbox = ldata()->bbox().translated(pos());
+    RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
+
+    if (muse::RealIsEqualOrLess(rehearsalMarkBbox.bottom(), thisBbox.top())) {
+        return TextLineBase::linePos(grip, system);
+    }
+
+    PointF rehearsalMarkPos = segment->pos() + segment->measure()->pos();
+    rehearsalMarkBbox.translate(rehearsalMarkPos);
+
+    Text* text = start ? toGradualTempoChangeSegment(frontSegment())->text() : toGradualTempoChangeSegment(backSegment())->endText();
+
+    double padding = text ? 0.5 * text->fontMetrics().xHeight() : spatium();
+    padding *= start ? 1.0 : -1.0;
+    double x = (start ? rehearsalMarkBbox.right() : rehearsalMarkBbox.left()) + padding;
+
+    *system = segment->measure()->system();
+    return PointF(x, 0.0);
 }
 
 void GradualTempoChange::added()
