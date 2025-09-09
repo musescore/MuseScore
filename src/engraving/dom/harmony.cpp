@@ -1125,6 +1125,17 @@ Color Harmony::curColor() const
     return EngravingItem::curColor();
 }
 
+void Harmony::setColor(const Color& color)
+{
+    EngravingItem::setColor(color);
+
+    for (HarmonyRenderItem* item : ldata()->renderItemList()) {
+        if (ChordSymbolParen* paren = dynamic_cast<ChordSymbolParen*>(item)) {
+            paren->parenItem->setColor(color);
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   width
 //---------------------------------------------------------
