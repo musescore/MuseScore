@@ -3359,7 +3359,6 @@ void NotationInteraction::setDropRect(const RectF& rect)
     if (edd.dropTarget) {
         edd.dropTarget->setDropTarget(false);
         score()->addRefresh(edd.dropTarget->canvasBoundingRect());
-        edd.dropTarget = nullptr;
     } else if (!m_anchorLines.empty()) {
         RectF rf;
         rf.setTopLeft(m_anchorLines.front().p1());
@@ -5191,8 +5190,6 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit(TranslatableString("undoableAction", "Paste"));
 
-    EngravingItem* pastedElement = nullptr;
-
     if (isTextEditingStarted()) {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
@@ -5223,20 +5220,12 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
-
-        std::vector<EngravingItem*> pastedElements = score()->cmdPaste(&ma, nullptr, scale);
-        if (!pastedElements.empty()) {
-            pastedElement = pastedElements.back();
-        }
+        score()->cmdPaste(&ma, nullptr, scale);
     }
 
     apply();
 
-    if (pastedElement == nullptr) {
-        pastedElement = selection()->element();
-    }
-
-    if (pastedElement) {
+    if (EngravingItem* pastedElement = selection()->element()) {
         selectAndStartEditIfNeeded(pastedElement);
     }
 

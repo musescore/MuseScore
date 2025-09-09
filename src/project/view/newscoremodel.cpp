@@ -88,17 +88,21 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
 
     QVariantMap timeSignature = info["timeSignature"].toMap();
     scoreOptions.timesigType = static_cast<TimeSigType>(info["timeSignatureType"].toInt());
-    scoreOptions.timesigNumerator = timeSignature["numerator"].toInt();
-    scoreOptions.timesigDenominator = timeSignature["denominator"].toInt();
+
+    const int timesigNumerator = timeSignature["numerator"].toInt();
+    const int timesigDenominator = timeSignature["denominator"].toInt();
+    scoreOptions.globalTimesig = Fraction(timesigNumerator, timesigDenominator);
 
     QVariantMap keySignature = info["keySignature"].toMap();
     scoreOptions.key = static_cast<Key>(keySignature["key"].toInt());
 
     QVariantMap measuresPickup = info["pickupTimeSignature"].toMap();
+    scoreOptions.totalMeasures = info["measureCount"].toInt();
+
     scoreOptions.withPickupMeasure = info["withPickupMeasure"].toBool();
-    scoreOptions.measures = info["measureCount"].toInt();
-    scoreOptions.measureTimesigNumerator = measuresPickup["numerator"].toInt();
-    scoreOptions.measureTimesigDenominator = measuresPickup["denominator"].toInt();
+    const int pickupNumerator = measuresPickup["numerator"].toInt();
+    const int pickupDenominator = measuresPickup["denominator"].toInt();
+    scoreOptions.pickupTimesig = Fraction(pickupNumerator, pickupDenominator);
 
     QVariantList instruments = info["instruments"].toList();
 
