@@ -706,6 +706,9 @@ FBox::FBox(System* parent)
     resetProperty(Pid::BOTTOM_MARGIN);
     resetProperty(Pid::TOP_GAP);
     resetProperty(Pid::BOTTOM_GAP);
+    resetProperty(Pid::EXCLUDE_FROM_OTHER_PARTS);
+    resetProperty(Pid::APPEARANCE_LINKED_TO_MASTER);
+    resetProperty(Pid::POSITION_LINKED_TO_MASTER);
 }
 
 void FBox::init()
@@ -722,7 +725,7 @@ void FBox::init()
 
     StringList diagramsNamesInScore;
     std::vector<EngravingItem*> harmonyOrDiagramsInScore;
-    for (mu::engraving::Segment* segment = masterScore()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
+    for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
          segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
         for (EngravingItem* item : segment->annotations()) {
             if (!item || !item->part()) {
@@ -892,6 +895,11 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
         return static_cast<int>(AlignH::HCENTER);
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
         return m_diagramsOrderInScore.join(FRET_BOX_DIAGRAMS_SEPARATOR);
+    case Pid::EXCLUDE_FROM_OTHER_PARTS:
+        return true;
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+    case Pid::POSITION_LINKED_TO_MASTER:
+        return false;
     default:
         return VBox::propertyDefault(propertyId);
     }
