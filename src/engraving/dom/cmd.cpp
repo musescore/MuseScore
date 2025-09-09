@@ -1081,7 +1081,9 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             segment = addRest(segment, track, cr->ticks(), cr->tuplet())->segment();
         }
         // the returned gap ends at the measure boundary or at tuplet end
-        Fraction dd = makeGap(segment, track, sd, tuplet);
+        Fraction totalTupletRatio = cr->totalTupletRatio();
+        Fraction dd = makeGap(segment, track, sd / totalTupletRatio, tuplet);
+        Fraction naturalDD = dd * totalTupletRatio;
 
         if (dd.isZero()) {
             LOGD("cannot get gap at %d type: %d/%d", tick.ticks(), sd.numerator(),
@@ -1092,9 +1094,9 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
         measure = segment->measure();
         std::vector<TDuration> dl;
         if (rhythmic) {
-            dl = toRhythmicDurationList(dd, isRest, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
+            dl = toRhythmicDurationList(naturalDD, isRest, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
         } else {
-            dl = toDurationList(dd, true);
+            dl = toDurationList(naturalDD, true);
         }
         size_t n = dl.size();
         for (size_t i = 0; i < n; ++i) {
@@ -1167,7 +1169,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             }
         }
 
-        sd -= dd;
+        sd -= naturalDD;
         if (sd.isZero()) {
             break;
         }
@@ -1249,16 +1251,19 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 //
 //    gap does not exceed measure or scope of tuplet
 //
+//    _desiredDuration should be in global ticks
+//
 //    return size of actual gap
 //---------------------------------------------------------
 
-Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
+Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _desiredDuration, Tuplet* tuplet, bool keepChord)
 {
-    assert(_sd.numerator());
+    assert(_desiredDuration.numerator());
 
     Measure* measure = segment->measure();
-    Fraction accumulated;
-    Fraction sd = _sd;
+    Fraction accRemovedTicks;
+    Fraction desiredDurationCopy = _desiredDuration;
+    Fraction totalTupletRatio = tuplet ? tuplet->totalRatio() : Fraction(1, 1);
 
     //
     // remember first segment which should
@@ -1266,51 +1271,53 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
     //
     Segment* firstSegment = segment;
     const Fraction firstSegmentEnd = firstSegment->tick() + firstSegment->ticks();
-    Fraction nextTick = segment->tick();
+    Fraction lastTick = segment->tick();
 
-    for (Segment* seg = firstSegment; seg; seg = seg->next(SegmentType::ChordRest)) {
+    for (Segment* currSegment = firstSegment; currSegment; currSegment = currSegment->next(SegmentType::ChordRest)) {
         //
         // voices != 0 may have gaps:
         //
-        ChordRest* cr = toChordRest(seg->element(track));
-        if (!cr) {
-            if (seg->tick() < nextTick) {
+        ChordRest* currCR = toChordRest(currSegment->element(track));
+        if (!currCR) {
+            if (currSegment->tick() < lastTick) {
                 continue;
             }
-            Segment* seg1 = seg->next(SegmentType::ChordRest);
-            Fraction tick2 = seg1 ? seg1->tick() : seg->measure()->tick() + seg->measure()->ticks();
-            Fraction td(tick2 - seg->tick());
-            if (td > sd) {
-                td = sd;
+            Segment* nextSegment = currSegment->next(SegmentType::ChordRest);
+            // If there is no nextSegment - count until end of measure
+            Fraction nextTick = nextSegment ? nextSegment->tick() : currSegment->measure()->tick() + currSegment->measure()->ticks();
+            Fraction ticksToRemove(nextTick - currSegment->tick());
+            if (ticksToRemove > desiredDurationCopy) {
+                ticksToRemove = desiredDurationCopy;
             }
-            accumulated += td;
-            sd -= td;
-            if (sd.isZero()) {
+            accRemovedTicks += ticksToRemove;
+            desiredDurationCopy -= ticksToRemove;
+            if (desiredDurationCopy.isZero()) {
                 break;
             }
-            nextTick = tick2;
+            lastTick = nextTick;
             continue;
         }
-        if (seg->tick() > nextTick) {
+        if (currSegment->tick() > lastTick) {
             // there was a gap
-            Fraction td(seg->tick() - nextTick);
-            if (td > sd) {
-                td = sd;
+            Fraction ticksToRemove(currSegment->tick() - lastTick);
+            if (ticksToRemove > desiredDurationCopy) {
+                ticksToRemove = desiredDurationCopy;
             }
-            accumulated += td;
-            sd -= td;
-            if (sd.isZero()) {
+            accRemovedTicks += ticksToRemove;
+            desiredDurationCopy -= ticksToRemove;
+            if (desiredDurationCopy.isZero()) {
                 break;
             }
         }
         //
         // limit to tuplet level
         //
+        // Does this do anything? :hmm:
         if (tuplet) {
             bool tupletEnd = true;
-            Tuplet* t = cr->tuplet();
+            Tuplet* t = currCR->tuplet();
             while (t) {
-                if (cr->tuplet() == tuplet) {
+                if (currCR->tuplet() == tuplet) {
                     tupletEnd = false;
                     break;
                 }
@@ -1320,16 +1327,18 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
                 break;
             }
         }
-        Fraction td(cr->ticks());
+
+        Fraction removedTicks(currCR->globalTicks());
 
         // remove tremolo between 2 notes, if present
-        if (cr->isChord()) {
-            Chord* c = toChord(cr);
+        if (currCR->isChord()) {
+            Chord* c = toChord(currCR);
             if (c->tremoloTwoChord()) {
                 undoRemoveElement(c->tremoloTwoChord());
             }
         }
-        Tuplet* ltuplet = cr->tuplet();
+
+        Tuplet* ltuplet = currCR->tuplet();
         if (ltuplet != tuplet) {
             //
             // Current location points to the start of a (nested)tuplet.
@@ -1345,58 +1354,88 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             while (t->elements().back()->isTuplet()) {
                 t = toTuplet(t->elements().back());
             }
-            seg = toChordRest(t->elements().back())->segment();
+            currSegment = toChordRest(t->elements().back())->segment();
 
             // now delete the full tuplet
-            td = ltuplet->ticks();
+            removedTicks = ltuplet->globalTicks();
             cmdDeleteTuplet(ltuplet, false);
             tuplet = 0;
         } else {
-            if (seg != firstSegment || !keepChord) {
-                undoRemoveElement(cr);
+            if (currSegment != firstSegment || !keepChord) {
+                LOGI("Removing element at %d/%d with duration %d/%d",
+                     currCR->tick().numerator(), currCR->tick().denominator(),
+                     currCR->globalTicks().numerator(), currCR->globalTicks().denominator()
+                     );
+                undoRemoveElement(currCR);
             }
             // even if there was a tuplet, we didn't remove it
             ltuplet = 0;
         }
-        Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
-        nextTick += actualTicks(td, tuplet, timeStretch);
-        if (sd < td) {
+
+        Fraction timeStretch = currCR->staff()->timeStretch(currCR->tick());
+        lastTick += removedTicks / timeStretch;
+        if (desiredDurationCopy < removedTicks) {
             //
-            // we removed too much
+            // we removed too much, restore
             //
-            accumulated = _sd;
-            Fraction rd = td - sd;
-            Fraction tick = cr->tick() + actualTicks(sd, tuplet, timeStretch);
+            // Say that we need to remove exactly desired duration
+            accRemovedTicks = _desiredDuration;
+            Fraction overdeletedTicks = removedTicks - desiredDurationCopy;
+            Fraction lastTickOfGap = currCR->tick() + desiredDurationCopy;
+            LOGI("Need to remove %d/%d,\t gonna remove %d/%d,\t last tick %d/%d",
+                 desiredDurationCopy.numerator(), desiredDurationCopy.denominator(),
+                 removedTicks.numerator(), removedTicks.denominator(),
+                 lastTickOfGap.numerator(), lastTickOfGap.denominator()
+                 );
 
             std::vector<TDuration> dList;
             if (tuplet) {
-                dList = toDurationList(rd, false);
+                // We need to normalize it to tuplet's internal durations
+                dList = toDurationList(overdeletedTicks * totalTupletRatio, false);
                 std::reverse(dList.begin(), dList.end());
             } else {
                 Staff* stf = staff(track2staff(track));
-                TimeSig* timeSig = stf->timeSig(tick);
-                TimeSigFrac refTimeSig = timeSig ? timeSig->sig() : sigmap()->timesig(tick).nominal();
-                Fraction rTickStart = (tick - measure->tick()) * stf->timeStretch(tick);
-                dList = toRhythmicDurationList(rd, true, rTickStart, refTimeSig, measure, 0);
+                TimeSig* timeSig = stf->timeSig(lastTickOfGap);
+                TimeSigFrac refTimeSig = timeSig ? timeSig->sig() : sigmap()->timesig(lastTickOfGap).nominal();
+                Fraction rTickStart = (lastTickOfGap - measure->tick()) * stf->timeStretch(lastTickOfGap);
+                dList = toRhythmicDurationList(overdeletedTicks, true, rTickStart, refTimeSig, measure, 0);
             }
             if (dList.empty()) {
                 break;
             }
 
-            for (TDuration d : dList) {
+            // going backwards from lastTickOfGap
+            LOGI("Will recreate rests starting from %d/%d backwards. Durations:",
+                 lastTickOfGap.numerator(), lastTickOfGap.denominator()
+                 );
+            Fraction restoredTicks = Fraction(0, 1);
+            for (TDuration duration : dList) {
+                restoredTicks += duration.ticks() / totalTupletRatio;
+                LOGI("Restoring %d/%d (global %d/%d)", duration.ticks().numerator(), duration.ticks().denominator(),
+                     (duration.ticks() / totalTupletRatio).numerator(), (duration.ticks() / totalTupletRatio).denominator()
+                     );
                 if (ltuplet) {
                     // take care not to recreate tuplet we just deleted
-                    Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
-                    tick += r->actualTicks();
+                    Rest* r = setRest(lastTickOfGap, track, duration.fraction(), false, 0, false);
+                    lastTickOfGap += r->actualTicks();
                 } else {
-                    tick += addClone(cr, tick, d)->actualTicks();
+                    lastTickOfGap += addClone(currCR, lastTickOfGap, duration)->actualTicks();
                 }
             }
+            LOGI("Actually restored %d/%d (expected %d/%d)",
+                 restoredTicks.numerator(), restoredTicks.denominator(),
+                 overdeletedTicks.numerator(), overdeletedTicks.denominator()
+                 );
+            accRemovedTicks += overdeletedTicks - restoredTicks;
+            LOGI("Actually totally removed %d/%d (expected %d/%d)",
+                 accRemovedTicks.numerator(), accRemovedTicks.denominator(),
+                 _desiredDuration.numerator(), _desiredDuration.denominator()
+                 );
             break;
         }
-        accumulated += td;
-        sd          -= td;
-        if (sd.isZero()) {
+        accRemovedTicks += removedTicks;
+        desiredDurationCopy          -= removedTicks;
+        if (desiredDurationCopy.isZero()) {
             break;
         }
     }
@@ -1412,7 +1451,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
 //      accumulated += td;
 
     const Fraction t1 = firstSegmentEnd;
-    const Fraction t2 = firstSegment->tick() + accumulated;
+    const Fraction t2 = firstSegment->tick() + accRemovedTicks;
     if (t1 < t2) {
         Segment* s1 = tick2rightSegment(t1);
         Segment* s2 = tick2rightSegment(t2);
@@ -1425,7 +1464,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         deleteSlursFromRange(t1, t2, track, track + 1, filter);
     }
 
-    return accumulated;
+    return accRemovedTicks;
 }
 
 //---------------------------------------------------------
@@ -1480,11 +1519,24 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
     return true;
 }
 
-bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick)
+bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick, Tuplet* tuplet)
 {
     ChordRest* cr = 0;
     cr = toChordRest(seg->element(track));
+    LOGI("makeGapVoice: need to remove %d/%d starting from %d/%d",
+         len.numerator(), len.denominator(),
+         tick.numerator(), tick.denominator()
+         );
+    if (tuplet) {
+        LOGI("makeGapVoice: tuplet has ratio %d/%d, starts at %d/%d, ends at %d/%d",
+             tuplet->ratio().numerator(), tuplet->ratio().denominator(),
+             tuplet->tick().numerator(), tuplet->tick().denominator(),
+             (tuplet->tick() + tuplet->globalTicks()).numerator(),
+             (tuplet->tick() + tuplet->globalTicks()).denominator()
+             );
+    }
     if (!cr) {
+        LOGI("cr was null");
         // check if we are in the middle of a chord/rest
         Segment* seg1 = seg->prev(SegmentType::ChordRest);
         for (;;) {
@@ -1502,11 +1554,21 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
             seg1 = seg1->prev(SegmentType::ChordRest);
         }
         ChordRest* cr1 = toChordRest(seg1->element(track));
-        Fraction srcF = cr1->ticks();
+        Fraction srcF = cr1->globalTicks();
         Fraction dstF = tick - cr1->tick();
-        std::vector<TDuration> dList = toDurationList(dstF, true);
+        LOGI("Need to resize rest at %d/%d from %d/%d to %d/%d",
+             cr1->tick().numerator(), cr1->tick().denominator(),
+             srcF.numerator(), srcF.denominator(),
+             dstF.numerator(), dstF.denominator()
+             );
+        Fraction totalTupletRatio = cr1->totalTupletRatio();
+        std::vector<TDuration> dList = toDurationList(dstF * totalTupletRatio, true);
         size_t n = dList.size();
+        LOGI("Changing rest len (normal) to %d/%d", dList[0].ticks().numerator(), dList[0].ticks().denominator());
         undoChangeChordRestLen(cr1, TDuration(dList[0]));
+        LOGI("Now rest global size is %d/%d",
+             cr1->globalTicks().numerator(), cr1->globalTicks().denominator()
+             );
         if (n > 1) {
             Fraction crtick = cr1->tick() + cr1->actualTicks();
             Measure* measure = tick2measure(crtick);
@@ -1534,7 +1596,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
                 }
             }
         }
-        setRest(tick, track, srcF - dstF, true, 0);
+        setRest(tick, track, srcF - dstF, true, cr1->tuplet());
         for (;;) {
             seg1 = seg1->next1(SegmentType::ChordRest);
             if (seg1 == 0) {
@@ -1546,6 +1608,8 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
                 break;
             }
         }
+    } else {
+        LOGI("cr was not null");
     }
 
     for (;;) {
@@ -1553,12 +1617,23 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
             LOGD("cannot make gap");
             return false;
         }
-        Fraction l = makeGap(cr->segment(), cr->track(), len, 0);
+        LOGI("trying to make gap at %d/%d of len %d/%d",
+             cr->segment()->tick().numerator(), cr->segment()->tick().denominator(),
+             len.numerator(), len.denominator()
+             );
+        Fraction l = makeGap(cr->segment(), cr->track(), len, cr->tuplet());
         if (l.isZero()) {
             LOGD("returns zero gap");
             return false;
         }
         len -= l;
+        LOGI("Made gap %d/%d, %d/%d left", l.numerator(), l.denominator(),
+             len.numerator(), len.denominator()
+             );
+        if (len.absValue() < TDuration(DurationType::V_1024TH).ticks()) {
+            // It will never become zero, abort
+            break;
+        }
         if (len.isZero()) {
             break;
         }
@@ -1656,6 +1731,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
         // operation mean for measure repeats.
         return;
     }
+    Fraction totalTupletRatio = cr->totalTupletRatio();
     Fraction srcF(cr->ticks());
     if (srcF == dstF) {
         if (cr->isFullMeasureRest()) {
@@ -1707,7 +1783,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             setRest(tick2, track, d.fraction(), (d.dots() > 0), tuplet);
         }
         if (fillWithRest) {
-            setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
+            setRest(cr->tick() + cr->actualTicks(), track, (srcF - dstF) / totalTupletRatio, false, tuplet);
         }
 
         if (selElement) {
@@ -1720,6 +1796,8 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     // make longer
     //
     // split required len into Measures
+    // If it's in tuplet - we won't pass its boundary, flist will contain tuplet-local durations
+    // If it's not in tuplet - it'll have normal durations
     std::list<Fraction> flist = splitGapToMeasureBoundaries(cr, dstF);
     if (flist.empty()) {
         return;
@@ -1736,27 +1814,32 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
 
     bool first = true;
     for (const Fraction& f2 : flist) {
+        // f2 is in global ticks
         if (!cr1) {
             expandVoice(s, track);
             cr1 = toChordRest(s->element(track));
         }
 
         f  -= f2;
-        makeGap(cr1->segment(), cr1->track(), f2, tuplet, first);
+        // makeGap accepts global ticks
+        makeGap(cr1->segment(), cr1->track(), f2 / totalTupletRatio, tuplet, first);
 
         if (cr->isRest()) {
             Fraction timeStretch = cr1->staff()->timeStretch(cr1->tick());
             Rest* r = toRest(cr);
             if (first) {
                 std::vector<TDuration> dList = toDurationList(f2, true);
+                // f2 is in global, so dList is also global ticks
                 undoChangeChordRestLen(cr, dList[0]);
                 Fraction tick2 = cr->tick();
                 for (unsigned i = 1; i < dList.size(); ++i) {
                     tick2 += actualTicks(dList[i - 1].ticks(), tuplet, timeStretch);
                     TDuration d = dList[i];
+                    // d is global ticks
                     setRest(tick2, track, d.fraction(), (d.dots() > 0), tuplet);
                 }
             } else {
+                // setRest accepts global ticks, f2 is global
                 r = setRest(tick, track, f2, false, tuplet);
             }
             if (first) {
@@ -4094,14 +4177,17 @@ void Score::cmdSlashRhythm()
 //   setChord
 //    return segment of last created chord
 //---------------------------------------------------------
-static Segment* setChord(Score* score, Segment* segment, track_idx_t track, const Chord* chordTemplate, Fraction dur)
+Segment* Score::setChord(Segment* segment, track_idx_t track, const Chord* chordTemplate, Fraction dur)
 {
+    Score* score = this;
     assert(segment->segmentType() == SegmentType::ChordRest);
 
+    // Segment, tick, tie, cr etc. are modified along this function.
     Fraction tick = segment->tick();
     Chord* nr     = nullptr;   //current added chord used so we can select the last added chord and so we can apply ties
     std::vector<Tie*> tie(chordTemplate->notes().size());   //keep pointer to a tie for each note in the chord in case we need to tie notes
     ChordRest* cr = toChordRest(segment->element(track));   //chord rest under the segment for the specified track
+    Fraction totalTupletRatio = cr->totalTupletRatio();
 
     bool addTie = false;
 
@@ -4116,8 +4202,9 @@ static Segment* setChord(Score* score, Segment* segment, track_idx_t track, cons
         Fraction tDur = segment->ticks();
         Segment* seg = segment->next();
 
-        //we need to get a correct subduration so that makeGap can function properly
-        //since makeGap() takes "normal" duration rather than actual length
+        // makeGap now takes global ticks
+        // //we need to get a correct subduration so that makeGap can function properly
+        // //since makeGap() takes "normal" duration rather than actual length
         while (seg) {
             if (seg->segmentType() == SegmentType::ChordRest) {
                 //design choice made to keep multiple notes across a tuplet as tied single notes rather than combining them
@@ -4128,6 +4215,8 @@ static Segment* setChord(Score* score, Segment* segment, track_idx_t track, cons
                 //if (!!t ^ (testCr && testCr->tuplet())) //stop if we started with a tuplet and reach something that's not a tuplet,
                 //      break;                          //or start with not a tuplet and reach a tuplet
 
+                // If we started in tuplet and came to its end
+                // Or if we started somewhere and came to start of another tuplet
                 if (testCr && testCr->tuplet()) {       //stop on tuplet
                     break;
                 }
@@ -4139,11 +4228,13 @@ static Segment* setChord(Score* score, Segment* segment, track_idx_t track, cons
             }
             seg = seg->next();       //iterate only across measure (hence usage of next() rather than next1())
         }
-        if (t) {
-            tDur *= t->ratio();       //scale by tuplet ratio to get "normal" length rather than actual length when dealing with tuplets
-        }
+        // if (t) {
+        //     tDur *= t->ratio();       //scale by tuplet ratio to get "normal" length rather than actual length when dealing with tuplets
+        // }
         // the returned gap ends at the measure boundary or at tuplet end
+        // tDur is in global ticks because we were adding segments' ticks, not chords'
         Fraction dd = score->makeGap(segment, track, tDur, t);
+        Fraction naturalDD = dd * totalTupletRatio;
 
         if (dd.isZero()) {
             LOGD("cannot get gap at %d type: %d/%d", tick.ticks(), dur.numerator(),
@@ -4152,7 +4243,7 @@ static Segment* setChord(Score* score, Segment* segment, track_idx_t track, cons
         }
 
         measure = segment->measure();
-        std::vector<TDuration> dl = toDurationList(dd, true);
+        std::vector<TDuration> dl = toDurationList(naturalDD, true);
         size_t n = dl.size();
         //add chord, tieing when necessary within measure
         for (size_t i = 0; i < n; ++i) {
@@ -4196,11 +4287,8 @@ static Segment* setChord(Score* score, Segment* segment, track_idx_t track, cons
         }
 
         //subtract the duration already realized and move on
-        if (t) {
-            dur -= dd / t->ratio();
-        } else {
-            dur -= dd;
-        }
+        // dd and dur are both in global ticks;
+        dur -= dd;
         //we are done when there is no duration left to realize
         if (dur.isZero()) {
             break;
@@ -4230,6 +4318,8 @@ static Segment* setChord(Score* score, Segment* segment, track_idx_t track, cons
                 break;
             }
         }
+
+        totalTupletRatio = cr->totalTupletRatio();
         //
         //  Note does not fit on current measure, create Tie to
         //  next part of note
@@ -4318,7 +4408,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             seg = newCrSeg;
         }
 
-        setChord(this, seg, h->track(), chord, duration);     //add chord using template
+        setChord(seg, h->track(), chord, duration);     //add chord using template
         delete chord;
     }
 }

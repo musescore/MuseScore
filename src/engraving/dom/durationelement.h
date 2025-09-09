@@ -51,6 +51,7 @@ public:
     void setTuplet(Tuplet* t);
     Tuplet* tuplet() const { return m_tuplet; }
     Tuplet* topTuplet() const;
+    Fraction totalTupletRatio() const;
     virtual Beam* beam() const { return nullptr; }
 
     Fraction actualTicksAt(const Fraction& tick) const;
