@@ -21,10 +21,6 @@
  */
 #include "slur.h"
 
-#include <cmath>
-
-#include "draw/types/transform.h"
-
 #include "arpeggio.h"
 #include "beam.h"
 #include "chord.h"
@@ -35,7 +31,6 @@
 #include "score.h"
 #include "stem.h"
 #include "system.h"
-#include "tie.h"
 #include "tremolotwochord.h"
 #include "undo.h"
 
@@ -268,17 +263,11 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 void SlurSegment::editDrag(EditData& ed)
 {
     Grip g = ed.curGrip;
-    if (g == Grip::NO_GRIP) {
-        return;
-    }
-
-    ups(g).off += ed.delta;
-
-    PointF delta;
 
     switch (g) {
     case Grip::START:
     case Grip::END:
+        ups(g).off += ed.delta;
         //
         // move anchor for slurs/ties
         //
@@ -302,25 +291,23 @@ void SlurSegment::editDrag(EditData& ed)
                 ed.view()->setDropTarget(0);
             }
         }
+        renderer()->computeBezier(this);
         break;
     case Grip::BEZIER1:
-        break;
     case Grip::BEZIER2:
+        ups(g).off += ed.delta;
+        renderer()->computeBezier(this);
         break;
     case Grip::SHOULDER:
         ups(g).off = PointF();
-        delta = ed.delta;
+        renderer()->computeBezier(this, ed.delta);
         break;
-    case Grip::DRAG:
-        ups(g).off = PointF();
-        setOffset(offset() + ed.delta);
-        break;
-    case Grip::NO_GRIP:
-    case Grip::GRIPS:
+    default:
+        ups(Grip::DRAG).off = PointF();
+        roffset() += ed.delta;
         break;
     }
 
-    renderer()->computeBezier(this, delta);
     triggerLayout();
 }
 
