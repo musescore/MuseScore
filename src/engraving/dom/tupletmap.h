@@ -48,10 +48,10 @@ class TupletMap
 public:
     TupletMap() {}
     Tuplet* findNew(Tuplet* o);
-    void add(Tuplet* _o, Tuplet* _n) { m_map.push_back(Tuplet2(_o, _n)); }
+    void add(Tuplet* _o, Tuplet* _n) { m_map.emplace_back(_o, _n); }
 
 private:
-    std::list<Tuplet2> m_map;
+    std::vector<Tuplet2> m_map;
 };
 } // namespace mu::engraving
 #endif

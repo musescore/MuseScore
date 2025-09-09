@@ -3243,7 +3243,7 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
     }
 
     std::vector<ChordRest*> crs;
-    std::list<EngravingItem*> elementsToSelect;
+    std::vector<EngravingItem*> elementsToSelect;
 
     if (selection().isSingle()) {
         EngravingItem* e = selection().element();
@@ -4587,9 +4587,9 @@ void Score::removeUnmanagedSpanner(Spanner* s)
 //   uniqueStaves
 //---------------------------------------------------------
 
-std::list<staff_idx_t> Score::uniqueStaves() const
+std::vector<staff_idx_t> Score::uniqueStaves() const
 {
-    std::list<staff_idx_t> sl;
+    std::vector<staff_idx_t> sl;
 
     for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         Staff* s = staff(staffIdx);

@@ -390,7 +390,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     // process range selection
     //--------------------------
 
-    std::list<Staff*> sl;
+    std::vector<Staff*> sl;
     for (staff_idx_t staffIdx = m_selection.staffStart(); staffIdx < m_selection.staffEnd(); ++staffIdx) {
         Staff* s = staff(staffIdx);
         if (s->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {        // ignore percussion staff
@@ -413,7 +413,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             sl.push_back(s);
         }
     }
-    std::list<track_idx_t> tracks;
+    std::vector<track_idx_t> tracks;
     for (Staff* s : sl) {
         track_idx_t idx = s->idx() * VOICES;
         for (voice_idx_t i = 0; i < VOICES; ++i) {

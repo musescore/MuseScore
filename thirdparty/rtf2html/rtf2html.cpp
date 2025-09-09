@@ -70,8 +70,8 @@ QString rtf2html(const QString& iString)
 
    /* CellDefs in rtf are really queer. We'll keep a list of them in main()
       and will give an iterator into this list to a row */
-   table_cell_defs_list CellDefsList;
-   table_cell_defs_list::iterator CurCellDefs;
+   table_cell_defs_vector CellDefsList;
+   table_cell_defs_vector::iterator CurCellDefs;
    table_cell_def *tcdCurCellDef=new table_cell_def;
    table_cell *tcCurCell=new table_cell;
    table_row *trCurRow=new table_row;
@@ -587,4 +587,3 @@ QString rtf2html(const QString& iString)
             }
       return "";
       }
-

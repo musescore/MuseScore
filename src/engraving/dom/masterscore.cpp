@@ -572,7 +572,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         std::vector<KeySig*> keySigList;
         std::vector<Clef*> initClefList;
         std::vector<Clef*> previousClefList;
-        std::list<Clef*> specialCaseClefs;
+        std::vector<Clef*> specialCaseClefs;
         std::vector<Clef*> afterBarlineClefs;
         std::vector<BarLine*> previousBarLinesList;
 

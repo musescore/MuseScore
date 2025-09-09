@@ -1598,9 +1598,9 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
 //    gap - gap len
 //---------------------------------------------------------
 
-std::list<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
+std::vector<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
 {
-    std::list<Fraction> flist;
+    std::vector<Fraction> flist;
 
     Tuplet* tuplet = cr->tuplet();
     if (tuplet) {
@@ -1725,7 +1725,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     // make longer
     //
     // split required len into Measures
-    std::list<Fraction> flist = splitGapToMeasureBoundaries(cr, dstF);
+    std::vector<Fraction> flist = splitGapToMeasureBoundaries(cr, dstF);
     if (flist.empty()) {
         return;
     }
@@ -4597,7 +4597,7 @@ void Score::cmdPadNoteDecreaseTAB()
 void Score::cmdToggleLayoutBreak(LayoutBreakType type)
 {
     // find measure(s)
-    std::list<MeasureBase*> mbl;
+    std::vector<MeasureBase*> mbl;
     bool allNoBreaks = true; // NOBREAK is not removed unless every measure in selection already has one
     if (selection().isRange()) {
         Measure* startMeasure = nullptr;
@@ -4616,11 +4616,10 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
                 allNoBreaks = startMeasure->noBreak();
             } else {
                 for (Measure* m = startMeasure; m; m = m->nextMeasureMM()) {
-                    mbl.push_back(m);
                     if (m == endMeasure) {
-                        mbl.pop_back();
                         break;
                     }
+                    mbl.push_back(m);
                     if (!toMeasureBase(m)->noBreak()) {
                         allNoBreaks = false;
                     }
