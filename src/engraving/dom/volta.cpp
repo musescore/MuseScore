@@ -331,12 +331,15 @@ PointF Volta::linePos(Grip grip, System** system) const
     bool isAtSystemStart = segment->rtick().isZero() && measure && measure->system() && measure->isFirstInSystem();
     bool searchForPrevBarline = start ? segment->rtick().isZero() && (measure->repeatStart() || !isAtSystemStart) : true;
 
+    SegmentType barlineType = start ? (SegmentType::StartRepeatBarLine | SegmentType::EndBarLine) : SegmentType::EndBarLine;
+
     if (searchForPrevBarline) {
         Segment* prev = segment;
-        while (prev && !prev->isType(SegmentType::BarLineType) && prev->tick() == segment->tick()) {
+        while (prev && !prev->isType(barlineType) && prev->tick() == segment->tick()) {
             prev = prev->prev1MMenabled();
         }
-        if (prev && prev->isType(SegmentType::BarLineType)) {
+
+        if (prev && prev->isType(barlineType)) {
             segment = prev;
         }
     }
