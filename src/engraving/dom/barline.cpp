@@ -40,7 +40,6 @@
 #include "stafftype.h"
 #include "system.h"
 #include "undo.h"
-#include "types/typesconv.h"
 
 #include "log.h"
 
@@ -100,15 +99,9 @@ BarLine::BarLine(const BarLine& bl)
     m_spanTo      = bl.m_spanTo;
     m_barLineType = bl.m_barLineType;
     m_playCount   = bl.m_playCount;
-    m_playCountTextSetting = bl.m_playCountTextSetting;
-    m_playCountCustomText = bl.m_playCountCustomText;
 
     for (EngravingItem* e : bl.m_el) {
         add(e->clone());
-    }
-
-    if (bl.m_playCountText) {
-        add(bl.m_playCountText->clone());
     }
 }
 
@@ -412,17 +405,6 @@ EngravingItem* BarLine::drop(EditData& data)
         if (bl->playCount() != -1) {
             m->undoChangeProperty(Pid::REPEAT_COUNT, bl->playCount());
         }
-        if (bl->playCountTextSetting() != playCountTextSetting()) {
-            score()->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, bl->playCountTextSetting());
-            if (playCountTextSetting() == AutoCustomHide::CUSTOM && playCountCustomText().isEmpty()) {
-                String text = TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
-                    getProperty(Pid::REPEAT_COUNT).toInt());
-                undoChangeProperty(Pid::PLAY_COUNT_TEXT, text);
-            }
-        }
-        if (bl->playCountCustomText() != playCountCustomText()) {
-            undoChangeProperty(Pid::PLAY_COUNT_TEXT, bl->playCountCustomText());
-        }
 
         // if ctrl was used and repeats are not involved,
         // or if drop refers to span rather than subtype =>
@@ -707,15 +689,6 @@ void BarLine::endEditDrag(EditData& ed)
     bed->yoff2 = 0.0;
 }
 
-void BarLine::undoUnlink()
-{
-    EngravingItem::undoUnlink();
-
-    if (m_playCountText) {
-        m_playCountText->undoUnlink();
-    }
-}
-
 //---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
@@ -730,10 +703,6 @@ void BarLine::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     func(data, this);
     for (EngravingItem* e : m_el) {
         e->scanElements(data, func, all);
-    }
-
-    if (m_playCountText) {
-        m_playCountText->scanElements(data, func, all);
     }
 }
 
@@ -764,11 +733,6 @@ void BarLine::add(EngravingItem* e)
         setGenerated(false);
         e->added();
         break;
-    case ElementType::PLAY_COUNT_TEXT: {
-        setPlayCountText(toPlayCountText(e));
-        setGenerated(false);
-    }
-    break;
     default:
         LOGD("BarLine::add() not impl. %s", e->typeName());
         delete e;
@@ -790,13 +754,6 @@ void BarLine::remove(EngravingItem* e)
             LOGD("BarLine::remove(): cannot find %s", e->typeName());
         } else {
             e->removed();
-        }
-        break;
-    case ElementType::PLAY_COUNT_TEXT:
-        if (e != m_playCountText) {
-            LOGD("BarLine::remove(): cannot find %s", e->typeName());
-        } else {
-            setPlayCountText(nullptr);
         }
         break;
     default:
@@ -826,10 +783,6 @@ PropertyValue BarLine::getProperty(Pid id) const
         return int(spanTo());
     case Pid::BARLINE_SHOW_TIPS:
         return showTips();
-    case Pid::PLAY_COUNT_TEXT_SETTING:
-        return m_playCountTextSetting;
-    case Pid::PLAY_COUNT_TEXT:
-        return m_playCountCustomText;
     default:
         break;
     }
@@ -862,19 +815,6 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
     case Pid::BARLINE_SHOW_TIPS:
         setShowTips(v.toBool());
         break;
-    case Pid::PLAY_COUNT_TEXT_SETTING:
-        m_playCountTextSetting = v.value<AutoCustomHide>();
-        if (playCountTextSetting() == AutoCustomHide::CUSTOM && playCountCustomText().isEmpty()) {
-            String text = TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
-                getProperty(Pid::REPEAT_COUNT).toInt());
-            undoChangeProperty(Pid::PLAY_COUNT_TEXT, text);
-        }
-        score()->undoUpdatePlayCountText(measure());
-        break;
-    case Pid::PLAY_COUNT_TEXT:
-        m_playCountCustomText = v.value<String>();
-        score()->undoUpdatePlayCountText(measure());
-        break;
     default:
         return EngravingItem::setProperty(id, v);
     }
@@ -905,17 +845,22 @@ EngravingItem* BarLine::propertyDelegate(Pid pid)
 {
     if (pid == Pid::REPEAT_COUNT) {
         return measure();
+    } else if (pid == Pid::PLAY_COUNT_TEXT || pid == Pid::PLAY_COUNT_TEXT_SETTING) {
+        return playCountText();
     }
 
     return EngravingItem::propertyDelegate(pid);
 }
 
-void BarLine::setPlayCountText(PlayCountText* text)
+PlayCountText* BarLine::playCountText() const
 {
-    m_playCountText = text;
-    if (m_playCountText != nullptr) {
-        setGenerated(false);
+    Segment* endBarSeg = segment();
+    if (!endBarSeg) {
+        return nullptr;
     }
+    PlayCountText* playCountText = toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, track(), track()));
+
+    return playCountText;
 }
 
 //---------------------------------------------------------
@@ -947,17 +892,6 @@ PropertyValue BarLine::propertyDefault(Pid propertyId) const
 
     case Pid::BARLINE_SHOW_TIPS:
         return false;
-
-    case Pid::PLAY_COUNT_TEXT_SETTING:
-        return AutoCustomHide::AUTO;
-
-    case Pid::PLAY_COUNT_TEXT: {
-        if (m_barLineType == BarLineType::END_REPEAT) {
-            int repeatCount = measure() ? measure()->repeatCount() : 2;
-            return TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(repeatCount);
-        }
-        return String();
-    }
 
     default:
         break;
