@@ -6995,7 +6995,9 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                       element->explicitParent());
             Fraction tick    = segment->tick();
             Measure* m       = score->tick2measure(tick);
-            if ((segment->segmentType() & (SegmentType::EndBarLine | SegmentType::Clef)) && (m->tick() == tick)) {
+            bool addClefToPrevMeasure = segment->isType(SegmentType::Clef) && element->isClef() && !toClef(element)->isHeader();
+            bool addBlToPrevMeasure = segment->isType(SegmentType::EndBarLine);
+            if (m->tick() == tick && (addClefToPrevMeasure || addBlToPrevMeasure)) {
                 m = m->prevMeasure();
             }
             Segment* seg     = m->undoGetSegment(segment->segmentType(), tick);
