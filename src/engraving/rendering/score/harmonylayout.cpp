@@ -506,7 +506,7 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
 
     // render bass
     if (tpcIsValid(info->bassTpc())) {
-        std::list<RenderActionPtr > bassNoteChordList
+        const std::vector<RenderActionPtr>& bassNoteChordList
             = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
 
         static const std::wregex PATTERN_69 = std::wregex(L"6[,/]?9");
@@ -514,7 +514,8 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
         const bool hasModifierStack = stackModifiers && (info->parsedChord() ? info->parsedChord()->modifierList().size() > 1 : false);
 
         if (hasModifierStack || is69) {
-            bassNoteChordList.emplace_front(new RenderActionMove(0.05, 0.0));
+            render(item, ldata, { std::make_shared<RenderActionMove>(0.05, 0.0) }, harmonyCtx, ctx,
+                   info->bassTpc(), spelling, bassCase, item->bassScale());
         }
         render(item, ldata, bassNoteChordList, harmonyCtx, ctx, info->bassTpc(), spelling, bassCase, item->bassScale());
     }
@@ -553,7 +554,7 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
         }
 
         if (tpcIsValid(capoBassTpc)) {
-            std::list<RenderActionPtr >& bassNoteChordList
+            const std::vector<RenderActionPtr>& bassNoteChordList
                 = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
             render(item, ldata, bassNoteChordList, harmonyCtx, ctx, capoBassTpc, spelling, bassCase, item->bassScale());
         }
@@ -593,7 +594,7 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, SymId sym,
     harmonyCtx.movex(ts->width());
 }
 
-void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const std::list<RenderActionPtr>& renderList,
+void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const std::vector<RenderActionPtr>& renderList,
                            HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx,
                            int tpc,
                            NoteSpellingType noteSpelling,
