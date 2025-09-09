@@ -98,7 +98,7 @@ public:
     static void computeUp(const Chord* item, ChordRest::LayoutData* ldata, const LayoutContext& ctx);
     static void computeUp(ChordRest* item, const LayoutContext& ctx);
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
-    static bool isChordPosBelowBeam(Chord* item, Beam* beam);
+    static bool isChordPosBelowBeam(const Chord* item, Beam* beam);
     static bool isChordPosBelowTrem(const Chord* item, TremoloTwoChord* trem);
 
     static void layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);
@@ -149,7 +149,8 @@ private:
 
     static bool leaveSpaceForTie(const Articulation* item);
 
-    static void computeUpBeamCase(Chord* item, Beam* beam);
+    static bool computeUpBeamCase(const Chord* item, Beam* beam);
+    static bool computeUpTremoloCase(const Chord* item, TremoloTwoChord* tremolo, const LayoutContext& ctx);
 
     static void updateLedgerLines(Chord* item, LayoutContext& ctx);
 
