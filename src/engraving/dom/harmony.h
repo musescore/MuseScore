@@ -296,6 +296,7 @@ public:
     void setBassScale(double v) { m_bassScale = v; }
 
     Color curColor() const override;
+    void setColor(const Color& color) override;
 
     bool doNotStackModifiers() const { return m_doNotStackModifiers; }
 
