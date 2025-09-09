@@ -64,6 +64,7 @@ FluidSynth::FluidSynth(const AudioSourceParams& params, const modularity::Contex
     : AbstractSynthesizer(params, iocCtx)
 {
     m_fluid = std::make_shared<Fluid>();
+    m_midiOutPort = midiOutPort();
 }
 
 bool FluidSynth::isValid() const
@@ -165,8 +166,7 @@ void FluidSynth::allNotesOff()
         setPitchBend(i, 8192);
     }
 
-    auto port = midiOutPort();
-    if (port->isConnected()) {
+    if (m_midiOutPort && m_midiOutPort->isConnected()) {
         // Send all notes off to connected midi ports.
         // Room for improvement:
         // - We could record which groups/channels we sent something or which channels were scheduled in the sequencer.
@@ -188,20 +188,20 @@ void FluidSynth::allNotesOff()
             muse::midi::Event e(muse::midi::Event::Opcode::ControlChange, muse::midi::Event::MessageType::ChannelVoice20);
             e.setChannel(i);
             e.setIndex(123); // CC#123 = All notes off
-            port->sendEvent(e);
+            m_midiOutPort->sendEvent(e);
         }
         for (int i = lowerBound; i < upperBound; i++) {
             muse::midi::Event e(muse::midi::Event::Opcode::ControlChange, muse::midi::Event::MessageType::ChannelVoice20);
             e.setChannel(i);
             e.setIndex(midi::SUSTAIN_PEDAL_CONTROLLER);
             e.setData(0);
-            port->sendEvent(e);
+            m_midiOutPort->sendEvent(e);
         }
         for (int i = lowerBound; i < upperBound; i++) {
             muse::midi::Event e(muse::midi::Event::Opcode::PitchBend, muse::midi::Event::MessageType::ChannelVoice20);
             e.setChannel(i);
             e.setData(0x80000000);
-            port->sendEvent(e);
+            m_midiOutPort->sendEvent(e);
         }
     }
 
@@ -240,16 +240,18 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     }
     }
 
-    if (STAFF_TO_MIDIOUT_CHANNEL && event.isChannelVoice()) {
-        int staff = m_sequencer.lastStaff();
-        if (staff >= 0) {
-            int channel = staff % 16;
-            midi::Event me(event);
-            me.setChannel(channel);
-            midiOutPort()->sendEvent(me);
+    if (m_midiOutPort) {
+        if (STAFF_TO_MIDIOUT_CHANNEL && event.isChannelVoice()) {
+            int staff = m_sequencer.lastStaff();
+            if (staff >= 0) {
+                int channel = staff % 16;
+                midi::Event me(event);
+                me.setChannel(channel);
+                m_midiOutPort->sendEvent(me);
+            }
+        } else {
+            m_midiOutPort->sendEvent(event);
         }
-    } else {
-        midiOutPort()->sendEvent(event);
     }
 
     return ret == FLUID_OK;

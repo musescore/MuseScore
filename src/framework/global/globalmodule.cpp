@@ -58,7 +58,7 @@
 
 #include "muse_framework_config.h"
 
-#ifdef MUSE_CONFIGURATION_IS_WEB
+#ifdef Q_OS_WASM
 #include "io/internal/memfilesystem.h"
 #else
 #include "io/internal/filesystem.h"
@@ -113,7 +113,7 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IProcess>(moduleName(), new Process());
     ioc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
 
-#ifdef MUSE_CONFIGURATION_IS_WEB
+#ifdef Q_OS_WASM
     ioc()->registerExport<IFileSystem>(moduleName(), new MemFileSystem());
 #else
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());

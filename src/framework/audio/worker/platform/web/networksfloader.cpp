@@ -21,6 +21,8 @@
  */
 #include "networksfloader.h"
 
+#include <fstream>
+
 #include <emscripten/fetch.h>
 
 #include "global/io/file.h"
@@ -28,8 +30,8 @@
 using namespace muse;
 using namespace muse::audio::worker;
 
-static const char* SF_UR = "https://s3.us-east-1.amazonaws.com/new.musescore.org/MS_Basic.sf3";
-static const io::path_t SF_PATH = "/sf/MS_Basic.sf3";
+static const char* SF_URL = "https://s3.us-east-1.amazonaws.com/new.musescore.org/MS_Basic.sf3";
+static const io::path_t SF_PATH = "MS Basic.sf3";
 
 async::Promise<RetVal<io::path_t> > NetworkSFLoader::load()
 {
@@ -44,8 +46,24 @@ async::Promise<RetVal<io::path_t> > NetworkSFLoader::load()
             async::Promise<RetVal<io::path_t> >::Resolve resolve;
 
             void onSuccess(const char* data, uint64_t numBytes) {
-                ByteArray ba(data, numBytes);
-                io::File::writeFile(SF_PATH, ba);
+                // ByteArray ba(data, numBytes);
+                // io::File::writeFile(SF_PATH, ba);
+
+                LOGDA() << "data size: " << numBytes;
+
+                {
+                    FILE* file = fopen(SF_PATH.c_str(), "wb");
+                    IF_ASSERT_FAILED(file) {
+                        (void)resolve(RetVal<io::path_t>::make_ret(10, "failed load sound font"));
+                        return;
+                    }
+                    size_t wsize = fwrite(data, sizeof(char), numBytes, file);
+                    IF_ASSERT_FAILED(wsize == numBytes) {
+                        (void)resolve(RetVal<io::path_t>::make_ret(10, "failed load sound font"));
+                        return;
+                    }
+                    fclose(file);
+                }
                 (void)resolve(RetVal<io::path_t>::make_ok(SF_PATH));
             }
 
@@ -56,9 +74,11 @@ async::Promise<RetVal<io::path_t> > NetworkSFLoader::load()
         };
 
         Holder* h = new Holder();
+        h->resolve = resolve;
 
         attr.userData = h;
         attr.onsuccess = [](emscripten_fetch_t* fetch) {
+            LOGDA() << "success download sf: " << SF_URL;
             Holder* h = static_cast<Holder*>(fetch->userData);
             h->onSuccess(fetch->data, fetch->numBytes);
             emscripten_fetch_close(fetch);  // Free data associated with the fetch.
@@ -66,14 +86,16 @@ async::Promise<RetVal<io::path_t> > NetworkSFLoader::load()
         };
 
         attr.onerror = [](emscripten_fetch_t* fetch) {
+            LOGDA() << "failed download sf: " << SF_URL;
             Holder* h = static_cast<Holder*>(fetch->userData);
             h->onFailed(fetch->status);
             emscripten_fetch_close(fetch);  // Also free data on failure.
             delete h;
         };
 
-        emscripten_fetch(&attr, SF_UR);
+        emscripten_fetch(&attr, SF_URL);
+        LOGDA() << "start download sf: " << SF_URL;
 
         return async::Promise<RetVal<io::path_t> >::dummy_result();
-    });
+    }, async::PromiseType::AsyncByBody);
 }
