@@ -54,7 +54,6 @@ public:
     bool readyToPlay() const override;
     async::Notification readyToPlayChanged() const override;
 
-    void revokePlayingNotes() override;
     void flushSound() override;
 
     bool isValid() const override;

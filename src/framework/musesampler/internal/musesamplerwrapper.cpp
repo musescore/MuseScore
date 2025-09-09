@@ -509,11 +509,6 @@ bool MuseSamplerWrapper::readyToPlay() const
     return m_samplerLib->readyToPlay(m_sampler);
 }
 
-void MuseSamplerWrapper::revokePlayingNotes()
-{
-    m_allNotesOffRequested = true;
-}
-
 void MuseSamplerWrapper::processInput()
 {
     m_sequencer.triggerRender();

@@ -56,8 +56,6 @@ public:
     void prepareToPlay() override;
     bool readyToPlay() const override;
 
-    void revokePlayingNotes() override;
-
     void processInput() override;
     void clearCache() override;
 
