@@ -38,7 +38,7 @@ class InsertItemBspTreeVisitor : public BspTreeVisitor
 public:
     EngravingItem* item;
 
-    inline void visit(std::list<EngravingItem*>* items) { items->push_front(item); }
+    inline void visit(std::vector<EngravingItem*>* items) { items->push_back(item); }
 };
 
 //---------------------------------------------------------
@@ -51,7 +51,7 @@ class RemoveItemBspTreeVisitor : public BspTreeVisitor
 public:
     EngravingItem* item;
 
-    inline void visit(std::list<EngravingItem*>* items) { items->remove(item); }
+    inline void visit(std::vector<EngravingItem*>* items) { muse::remove(*items, item); }
 };
 
 //---------------------------------------------------------
@@ -62,15 +62,14 @@ class FindItemBspTreeVisitor : public BspTreeVisitor
 {
     OBJECT_ALLOCATOR(engraving, FindItemBspTreeVisitor)
 public:
-    std::list<EngravingItem*> foundItems;
+    std::vector<EngravingItem*> foundItems;
 
-    void visit(std::list<EngravingItem*>* items)
+    void visit(std::vector<EngravingItem*>* items)
     {
-        for (auto it = items->begin(); it != items->end(); ++it) {
-            EngravingItem* item = *it;
+        for (auto item : *items) {
             if (!item->itemDiscovered) {
                 item->itemDiscovered = true;
-                foundItems.push_front(item);
+                foundItems.push_back(item);
             }
         }
     }
@@ -107,7 +106,6 @@ void BspTree::initialize(const RectF& rec, int n)
 
     m_nodes.resize((1 << (m_depth + 1)) - 1);
     m_leaves.resize(1LL << m_depth);
-    std::fill(m_leaves.begin(), m_leaves.end(), std::list<EngravingItem*>());
     initialize(rec, m_depth, 0);
 }
 
