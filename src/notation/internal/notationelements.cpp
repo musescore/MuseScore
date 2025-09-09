@@ -123,14 +123,9 @@ mu::engraving::Measure* NotationElements::measure(const int measureIndex) const
     return score()->crMeasure(measureIndex);
 }
 
-PageList NotationElements::pages() const
+const PageList& NotationElements::pages() const
 {
-    PageList result;
-    for (const Page* page : score()->pages()) {
-        result.push_back(page);
-    }
-
-    return result;
+    return score()->pages();
 }
 
 const Page* NotationElements::pageByPoint(const PointF& point) const
