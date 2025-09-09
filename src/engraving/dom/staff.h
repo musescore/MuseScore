@@ -264,6 +264,7 @@ public:
     void undoSetShowMeasureNumbers(bool show);
     bool shouldShowMeasureNumbers() const;
 
+    bool isLastOfScore() const;
     bool isSystemObjectStaff() const;
     bool hasSystemObjectsBelowBottomStaff() const;
 

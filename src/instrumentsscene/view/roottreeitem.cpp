@@ -218,7 +218,7 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
         if ((sourceIsSystemObjectLayer && moveUp) || (sourceIsPartLayer && moveDown)) {
             moveParams.moveSysObjAboveBottomStaff = true;
         }
-    } else if (sourceIsPartLayer && moveUp) {
+    } else if (sourceIsPartLayer && srcStaff->isLastOfScore() && moveUp) {
         moveParams.moveSysObjBelowBottomStaff = true;
     }
 
