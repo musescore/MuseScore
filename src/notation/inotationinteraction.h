@@ -79,6 +79,7 @@ public:
     virtual void selectSection() = 0;
     virtual void selectFirstElement(bool frame = true) = 0;
     virtual void selectLastElement() = 0;
+    virtual void selectPage(const size_t num) = 0;
     virtual INotationSelectionPtr selection() const = 0;
     virtual void clearSelection() = 0;
     virtual muse::async::Notification selectionChanged() const = 0;

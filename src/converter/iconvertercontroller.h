@@ -43,7 +43,8 @@ public:
 
     virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
                                   const muse::String& soundProfile = muse::String(),
-                                  const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {}) = 0;
+                                  const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {},
+                                  const std::optional<size_t>& pageNum = std::nullopt) = 0;
 
     virtual muse::Ret batchConvert(const muse::io::path_t& batchJobFile, const OpenParams& openParams = {},
                                    const muse::String& soundProfile = muse::String(),
