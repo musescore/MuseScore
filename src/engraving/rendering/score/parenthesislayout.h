@@ -50,6 +50,8 @@ private:
     static void setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
     static void setDefaultValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
 
+    static Shape getParentShape(const EngravingItem* parent);
+
     static bool isInternalParenPadding(const EngravingItem* item1, const EngravingItem* item2);
     static double computeExternalParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2);
 };

@@ -32,9 +32,9 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 struct SlurTiePos {
-    PointF p1;               // start point of slur
+    PointF p1;               // start point of slur in system coordinates
     System* system1 = nullptr;          // start system of slur
-    PointF p2;               // end point of slur
+    PointF p2;               // end point of slur in system coordinates
     System* system2 = nullptr;           // end system of slur
 };
 
