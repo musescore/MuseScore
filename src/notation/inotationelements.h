@@ -40,7 +40,7 @@ public:
 
     virtual Measure* measure(const int measureIndex) const = 0;
 
-    virtual PageList pages() const = 0;
+    virtual const PageList& pages() const = 0;
     virtual const Page* pageByPoint(const muse::PointF& point) const = 0;
 };
 

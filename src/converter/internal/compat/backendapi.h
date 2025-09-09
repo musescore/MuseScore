@@ -67,8 +67,6 @@ private:
     static muse::RetVal<project::INotationProjectPtr> openProject(const muse::io::path_t& path,
                                                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false);
 
-    static notation::PageList pages(const notation::INotationPtr notation);
-
     static QVariantMap readBeatsColors(const muse::io::path_t& filePath);
 
     static muse::Ret exportScorePngs(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);

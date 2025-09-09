@@ -37,7 +37,7 @@ public:
     std::vector<EngravingItem*> elements(const FilterElementsOptions& elementsOptions) const override;
 
     Measure* measure(const int measureIndex) const override;
-    PageList pages() const override;
+    const PageList& pages() const override;
     const Page* pageByPoint(const muse::PointF& point) const override;
 
 private:
