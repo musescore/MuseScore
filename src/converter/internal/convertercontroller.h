@@ -47,30 +47,23 @@ public:
     ConverterController(const muse::modularity::ContextPtr& iocCtx)
         : muse::Injectable(iocCtx) {}
 
-    muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
-                          const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+    muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
                           const muse::String& soundProfile = muse::String(),
                           const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {}) override;
 
-    muse::Ret batchConvert(const muse::io::path_t& batchJobFile,
-                           const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+    muse::Ret batchConvert(const muse::io::path_t& batchJobFile, const OpenParams& openParams = {},
                            const muse::String& soundProfile = muse::String(),
                            const muse::UriQuery& extensionUri = muse::UriQuery(), muse::ProgressPtr progress = nullptr) override;
 
-    muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
-                                const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+    muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
 
-    muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out,
-                               const muse::io::path_t& highlightConfigPath = muse::io::path_t(),
-                               const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
-    muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out,
-                              const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
-    muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
-                               const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
-    muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out,
-                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+    muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out,  const OpenParams& openParams = {},
+                               const muse::io::path_t& highlightConfigPath = muse::io::path_t()) override;
+    muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
+    muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
+    muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
     muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+                                   const OpenParams& openParams = {}) override;
 
     muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out) override;
 
@@ -89,7 +82,7 @@ private:
     muse::RetVal<BatchJob> parseBatchJob(const muse::io::path_t& batchJobFile) const;
 
     muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
-                          const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+                          const OpenParams& openParams,
                           const muse::String& soundProfile = muse::String(),
                           const muse::UriQuery& extensionUri = muse::UriQuery(), const std::optional<notation::TransposeOptions>& transposeOptions = std::nullopt);
 
