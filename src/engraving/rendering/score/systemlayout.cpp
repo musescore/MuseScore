@@ -1376,9 +1376,6 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
             if (s->isType(SegmentType::BarLineType)) {
                 if (BarLine* bl = toBarLine(s->element(track))) {
                     elements.barlines.push_back(bl);
-                    if (PlayCountText* pt = bl->playCountText()) {
-                        elements.playCountText.push_back(pt);
-                    }
                 }
                 track += VOICES;
                 continue;
@@ -1455,6 +1452,9 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 break;
             case ElementType::HARMONY:
                 elements.harmonies.push_back(toHarmony(item));
+                break;
+            case ElementType::PLAY_COUNT_TEXT:
+                elements.playCountText.push_back(toPlayCountText(item));
                 break;
             default:
                 break;

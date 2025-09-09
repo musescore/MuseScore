@@ -1292,11 +1292,6 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
                 barline->setParent(bs);
                 barline->setGenerated(false);
                 score()->undoAddElement(barline);
-
-                if (PlayCountText* pct = barline->playCountText()) {
-                    barline->remove(pct);
-                    pct->unlink();
-                }
             }
         }
     }

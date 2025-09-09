@@ -4645,7 +4645,7 @@ void TLayout::layoutPlayCountText(PlayCountText* item, TextBase::LayoutData* lda
 {
     LAYOUT_CALL_ITEM(item);
     BarLine* bl = item->barline();
-    Segment* seg = bl->segment();
+    Segment* seg = item->segment();
 
     layoutBaseTextBase(item, ldata);
 
