@@ -53,7 +53,7 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
 
     process(inputs, outputs, parameters) {
 
-        this.requestAudio()
+       // this.requestAudio()
 
         const input = inputs[0];
         const output = outputs[0];

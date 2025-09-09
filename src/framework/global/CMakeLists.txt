@@ -221,7 +221,9 @@ else()
         )
     endif()
 
-    if (MUSE_CONFIGURATION_IS_WEB)
+    include(GetPlatformInfo)
+
+    if (OS_IS_WASM)
         set(MODULE_SRC ${MODULE_SRC}
             ${CMAKE_CURRENT_LIST_DIR}/io/internal/memfilesystem.cpp
             ${CMAKE_CURRENT_LIST_DIR}/io/internal/memfilesystem.h
@@ -232,8 +234,6 @@ else()
             ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h
         )
     endif()
-
-    include(GetPlatformInfo)
 
     if (OS_IS_MAC)
         set(MODULE_SRC ${MODULE_SRC}
