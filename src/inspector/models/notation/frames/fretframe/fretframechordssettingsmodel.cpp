@@ -55,12 +55,15 @@ void FretFrameChordsSettingsModel::requestElements()
 
     m_chordListModel->setFBox(fretBox());
     m_chordListModel->load();
+
+    updateHasInvisibleChords();
 }
 
 void FretFrameChordsSettingsModel::loadProperties()
 {
     loadProperties({ Pid::FRET_FRAME_DIAGRAMS_ORDER });
     m_chordListModel->load();
+    updateHasInvisibleChords();
 }
 
 void FretFrameChordsSettingsModel::resetProperties()
@@ -81,12 +84,33 @@ void FretFrameChordsSettingsModel::onNotationChanged(const engraving::PropertyId
                                                      const engraving::StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);
+    updateHasInvisibleChords();
 }
 
 void FretFrameChordsSettingsModel::loadProperties(const engraving::PropertyIdSet& propertyIdSet)
 {
     if (muse::contains(propertyIdSet, Pid::FRET_FRAME_DIAGRAMS_ORDER)) {
         loadPropertyItem(m_listOrder);
+    }
+}
+
+void FretFrameChordsSettingsModel::updateHasInvisibleChords()
+{
+    bool hasInvisibleChords = false;
+
+    const FBox* fbox = fretBox();
+    if (fbox) {
+        for (EngravingItem* item : fbox->el()) {
+            if (!item->visible()) {
+                hasInvisibleChords = true;
+                break;
+            }
+        }
+    }
+
+    if (hasInvisibleChords != m_hasInvisibleChords) {
+        m_hasInvisibleChords = hasInvisibleChords;
+        emit hasInvisibleChordsChanged(m_hasInvisibleChords);
     }
 }
 
@@ -98,4 +122,28 @@ FretFrameChordListModel* FretFrameChordsSettingsModel::chordListModel() const
 PropertyItem* FretFrameChordsSettingsModel::listOrder() const
 {
     return m_listOrder;
+}
+
+bool FretFrameChordsSettingsModel::hasInvisibleChords() const
+{
+    return m_hasInvisibleChords;
+}
+
+void FretFrameChordsSettingsModel::resetList()
+{
+    beginCommand(TranslatableString("undoableAction", "Reset Fret Diagram Legend chords list"));
+
+    FBox* fbox = fretBox();
+    if (fbox) {
+        fbox->undoResetProperty(Pid::FRET_FRAME_DIAGRAMS_ORDER);
+
+        for (EngravingItem* item : fbox->el()) {
+            item->undoResetProperty(Pid::VISIBLE);
+        }
+    }
+
+    updateNotation();
+    endCommand();
+
+    loadProperties();
 }

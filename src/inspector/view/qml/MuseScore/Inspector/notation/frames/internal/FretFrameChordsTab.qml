@@ -55,6 +55,7 @@ FocusableItem {
             anchors.rightMargin: root.sideMargin
 
             listOrderItem: root.model ? root.model.listOrder : null
+            hasInvisibleChords: root.model ? root.model.hasInvisibleChords : null
 
             isMovingUpAvailable: view.model ? view.model.isMovingUpAvailable : false
             isMovingDownAvailable: view.model ? view.model.isMovingDownAvailable : false
@@ -72,6 +73,10 @@ FocusableItem {
             onMoveSelectionDownRequested: {
                 view.model.moveSelectionDown()
                 Qt.callLater(view.positionViewAtSelectedItems)
+            }
+
+            onResetListRequested: {
+                root.model.resetList()
             }
         }
 

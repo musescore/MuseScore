@@ -43,6 +43,8 @@ class FretFrameChordsSettingsModel : public AbstractInspectorModel, public muse:
 
     Q_PROPERTY(PropertyItem * listOrder READ listOrder CONSTANT)
 
+    Q_PROPERTY(bool hasInvisibleChords READ hasInvisibleChords NOTIFY hasInvisibleChordsChanged)
+
     muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
@@ -51,6 +53,12 @@ public:
     FretFrameChordListModel* chordListModel() const;
 
     PropertyItem* listOrder() const;
+    bool hasInvisibleChords() const;
+
+    Q_INVOKABLE void resetList();
+
+signals:
+    void hasInvisibleChordsChanged(bool hasInvisible);
 
 private:
     engraving::FBox* fretBox() const;
@@ -64,8 +72,11 @@ private:
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
+    void updateHasInvisibleChords();
+
     std::shared_ptr<FretFrameChordListModel> m_chordListModel;
 
     PropertyItem* m_listOrder = nullptr;
+    bool m_hasInvisibleChords = false;
 };
 }
