@@ -109,10 +109,10 @@ public:
 
     StringData stringData;
 
-    std::list<NamedEventList> midiActions;
+    std::vector<NamedEventList> midiActions;
     std::vector<MidiArticulation> midiArticulations;
     std::vector<InstrChannel> channel;
-    std::list<const InstrumentGenre*> genres;       //; list of genres this instrument belongs to
+    std::vector<const InstrumentGenre*> genres; //; list of genres this instrument belongs to
     const InstrumentFamily* family = nullptr;   //; family the instrument belongs to
 
     ClefTypeList clefTypes[MAX_STAVES];
@@ -150,8 +150,8 @@ private:
 struct InstrumentGroup {
     String id;
     String name;
-    bool extended;            // belongs to extended instruments set if true
-    std::list<const InstrumentTemplate*> instrumentTemplates;
+    bool extended; // belongs to extended instruments set if true
+    std::vector<const InstrumentTemplate*> instrumentTemplates;
     void read(XmlReader&);
     void clear();
 

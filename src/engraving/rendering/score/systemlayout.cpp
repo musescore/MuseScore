@@ -2435,7 +2435,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     }
 
     system->setPos(0.0, 0.0);
-    std::list<std::pair<size_t, SysStaff*> > visibleStaves;
+    std::vector<std::pair<size_t, SysStaff*> > visibleStaves;
 
     for (size_t i = 0; i < system->staves().size(); ++i) {
         const Staff* s  = ctx.dom().staff(i);

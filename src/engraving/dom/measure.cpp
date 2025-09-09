@@ -1221,9 +1221,9 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
         return;
     }
 
-    // create list of unique staves (only one instance for linked staves):
+    // collect unique staves (only one instance for linked staves):
 
-    std::list<staff_idx_t> sl;
+    std::vector<staff_idx_t> sl;
     for (staff_idx_t staffIdx = sStaff; staffIdx < eStaff; ++staffIdx) {
         Staff* s = score()->staff(staffIdx);
         if (s->links()) {
@@ -1843,7 +1843,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
     }
     Score* s      = score()->masterScore();
     Measure* m    = s->tick2measure(tick());
-    std::list<staff_idx_t> sl = s->uniqueStaves();
+    std::vector<staff_idx_t> sl = s->uniqueStaves();
 
     for (staff_idx_t staffIdx : sl) {
         int rests  = 0;

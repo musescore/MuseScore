@@ -62,7 +62,7 @@ TEST_F(PitchWheelRender_Tests, generateRanges)
     func4.mEndTick = 200;
     func5.mStartTick = 10;
     func5.mEndTick = 50;
-    using FuncList = std::list<PitchWheelRenderer::PitchWheelFunction>;
+    using FuncList = std::vector<PitchWheelRenderer::PitchWheelFunction>;
     std::map<int, int, std::greater<> > ranges;
     PitchWheelRenderer::generateRanges(FuncList { func1 }, ranges);
     EXPECT_EQ(ranges.at(30), 60);

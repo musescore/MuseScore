@@ -766,7 +766,7 @@ Note* MeiImporter::findEndNote(pugi::xml_node controlNode)
  * Do a lookup in the m_plistValueChordRests map with the @plist values to retrieve all the ChordRests to which the plist refers to.
  */
 
-const std::list<ChordRest*> MeiImporter::findPlistChordRests(pugi::xml_node controlNode)
+const std::vector<ChordRest*> MeiImporter::findPlistChordRests(pugi::xml_node controlNode)
 {
     libmei::InstPlist plistAtt;
     plistAtt.ReadPlist(controlNode);
@@ -776,7 +776,7 @@ const std::list<ChordRest*> MeiImporter::findPlistChordRests(pugi::xml_node cont
         return {};
     }
 
-    std::list<ChordRest*> plistChordRests;
+    std::vector<ChordRest*> plistChordRests;
     for (auto& id : plistAtt.GetPlist()) {
         std::string plistValue = this->xmlIdFrom(id);
         // The plist corresponding Note should have been added to the m_plistValueChordRests previously
@@ -3498,7 +3498,7 @@ void MeiImporter::addSpannerEnds()
         }
     }
     for (auto arpegMapEntry : m_openArpegMap) {
-        std::list plistChordRests = findPlistChordRests(arpegMapEntry.second);
+        std::vector plistChordRests = findPlistChordRests(arpegMapEntry.second);
         // Go through the list of chord rest and check if they are on a staff below
         for (auto chordRest : plistChordRests) {
             Arpeggio* arpeggio = arpegMapEntry.first;
