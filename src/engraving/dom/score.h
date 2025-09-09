@@ -945,6 +945,7 @@ public:
 
     void cmdSelectAll();
     void cmdSelectSection();
+    void cmdSelectPage(const size_t num);
     void transposeSemitone(int semitone);
     void transposeDiatonicAlterations(TransposeDirection direction);
 

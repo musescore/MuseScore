@@ -38,6 +38,24 @@ using namespace muse;
 using namespace mu::app;
 using namespace mu::appshell;
 
+static std::optional<size_t> parsePageNum(const QMap<CmdOptions::ParamKey, QVariant>& params)
+{
+    auto it = params.find(CmdOptions::ParamKey::PageNumber);
+    if (it == params.end()) {
+        return std::nullopt;
+    }
+
+    bool ok = true;
+    size_t num = it.value().toULongLong(&ok) - 1;
+
+    if (!ok) {
+        LOGE() << "Invalid page, ignoring...";
+        return std::nullopt;
+    }
+
+    return num;
+}
+
 ConsoleApp::ConsoleApp(const CmdOptions& options, const modularity::ContextPtr& ctx)
     : muse::BaseApplication(ctx), m_options(options)
 {
@@ -289,8 +307,9 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
         break;
     case ConvertType::File: {
         std::string transposeOptionsJson = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
+        std::optional<size_t> pageNum = parsePageNum(task.params);
         ret = converter()->fileConvert(task.inputFile, task.outputFile, openParams, soundProfile, extensionUri,
-                                       transposeOptionsJson);
+                                       transposeOptionsJson, pageNum);
     } break;
     case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, openParams);

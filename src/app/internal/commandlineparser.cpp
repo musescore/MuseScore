@@ -121,6 +121,11 @@ void CommandLineParser::init()
                                           "Transpose the given score before executing the '-o' options",
                                           "options"));
 
+    m_parser.addOption(QCommandLineOption("page",
+                                          "Use with '-o <file>', export only the specified page. "
+                                          "Supported output formats: SVG, PNG, PDF, MSCZ",
+                                          "options"));
+
     // MusicXML
     m_parser.addOption(QCommandLineOption("musicxml-use-default-font",
                                           "Apply default typeface (Edwin) to imported scores"));
@@ -305,6 +310,10 @@ void CommandLineParser::parse(int argc, char** argv)
             // Only if "-o" is set "transpose" has some meaning
             if (m_parser.isSet("transpose")) {
                 m_options.converterTask.params[CmdOptions::ParamKey::ScoreTransposeOptions] = m_parser.value("transpose");
+            }
+
+            if (m_parser.isSet("page")) {
+                m_options.converterTask.params[CmdOptions::ParamKey::PageNumber] = m_parser.value("page");
             }
         }
     }
