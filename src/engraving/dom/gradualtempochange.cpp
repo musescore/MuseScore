@@ -271,24 +271,37 @@ Sid GradualTempoChange::getPropertyStyle(Pid id) const
     return TextLineBase::getPropertyStyle(id);
 }
 
-PointF GradualTempoChange::linePos(Grip grip, System** system) const
+bool GradualTempoChange::adjustForRehearsalMark(bool start) const
 {
-    bool start = grip == Grip::START;
-    Segment* segment = start ? startSegment() : endSegment();
+    const Segment* segment = start ? startSegment() : endSegment();
     if (!m_alignRightOfRehearsalMark || !segment) {
-        return TextLineBase::linePos(grip, system);
+        return false;
     }
 
-    RehearsalMark* rehearsalMark = toRehearsalMark(segment->findAnnotation(ElementType::REHEARSAL_MARK, track(), track()));
-    if (!rehearsalMark) {
-        return TextLineBase::linePos(grip, system);
+    const RehearsalMark* rehearsalMark = toRehearsalMark(segment->findAnnotation(ElementType::REHEARSAL_MARK, track(), track()));
+    if (!rehearsalMark || !m_alignRightOfRehearsalMark) {
+        return false;
     }
     RectF thisBbox = ldata()->bbox().translated(pos());
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
 
     if (muse::RealIsEqualOrLess(rehearsalMarkBbox.bottom(), thisBbox.top())) {
+        return false;
+    }
+
+    return true;
+}
+
+PointF GradualTempoChange::linePos(Grip grip, System** system) const
+{
+    bool start = grip == Grip::START;
+    if (!adjustForRehearsalMark(start)) {
         return TextLineBase::linePos(grip, system);
     }
+
+    const Segment* segment = start ? startSegment() : endSegment();
+    const RehearsalMark* rehearsalMark = toRehearsalMark(segment->findAnnotation(ElementType::REHEARSAL_MARK, track(), track()));
+    RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
 
     PointF rehearsalMarkPos = segment->pos() + segment->measure()->pos();
     rehearsalMarkBbox.translate(rehearsalMarkPos);

@@ -56,6 +56,7 @@ public:
     bool snapToItemAfter() const { return m_snapToItemAfter; }
     void setSnapToItemAfter(bool v) { m_snapToItemAfter = v; }
 
+    bool adjustForRehearsalMark(bool start) const;
     PointF linePos(Grip grip, System** system) const override;
 
 protected:

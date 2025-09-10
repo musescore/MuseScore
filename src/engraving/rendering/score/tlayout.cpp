@@ -3011,8 +3011,6 @@ void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, L
 
     ldata->disconnectSnappedItems();
 
-    layoutTextLineBaseSegment(item, ctx);
-
     GradualTempoChangeSegment* tempoChangeSegmentSnappedBefore = item->findElementToSnapBefore();
     if (tempoChangeSegmentSnappedBefore) {
         ldata->connectItemSnappedBefore(tempoChangeSegmentSnappedBefore);
@@ -3021,7 +3019,20 @@ void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, L
     TempoText* tempoTextSnappedAfter = item->findElementToSnapAfter();
     if (tempoTextSnappedAfter) {
         ldata->connectItemSnappedAfter(tempoTextSnappedAfter);
+
+        if (!item->tempoChange()->adjustForRehearsalMark(false)
+            && tempoTextSnappedAfter->findAncestor(ElementType::SYSTEM) == item->system()) {
+            double xItemPos = tempoTextSnappedAfter->pageX() - item->system()->pageX();
+            double itemLeftEdge = xItemPos + tempoTextSnappedAfter->ldata()->bbox().left();
+            double padding = tempoTextSnappedAfter->fontMetrics().xHeight();
+            double maxTempoLineEnd = itemLeftEdge - padding;
+
+            double xEndDiff = maxTempoLineEnd - (item->pos().x() + item->pos2().x());
+            item->rxpos2() += xEndDiff;
+        }
     }
+
+    layoutTextLineBaseSegment(item, ctx);
 
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
