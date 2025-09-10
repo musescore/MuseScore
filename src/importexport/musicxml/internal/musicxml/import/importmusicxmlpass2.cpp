@@ -2327,7 +2327,7 @@ void MusicXmlParserPass2::part()
                 continue;
             }
             const Chord* endChord = endNote->chord();
-            if (startNote->pitch() == endNote->pitch()
+            if (startNote->pitch() == endNote->pitch() && startChord->tick() < endChord->tick()
                 && (startMeasure == endChord->measure() || startChord->tick() + startChord->actualTicks() == endChord->tick())) {
                 unendedTie->setEndNote(endNote);
                 endNote->setTieBack(unendedTie);
