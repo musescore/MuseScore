@@ -1497,17 +1497,14 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     ldata->setPos(PointF());
 
-    const ElementList& elements = item->orderedElements(true /*includeInvisible*/);
-    const StringList& invisibleDiagrams = item->invisibleDiagrams();
-
     std::vector<FretDiagram*> fretDiagrams;
-    for (EngravingItem* element : elements) {
+    for (EngravingItem* element : item->el()) {
         if (!element || !element->isFretDiagram() || !element->visible()) {
             continue;
         }
 
         FretDiagram* diagram = toFretDiagram(element);
-        if (muse::contains(invisibleDiagrams, diagram->harmony()->harmonyName().toLower())) {
+        if (!diagram->visible()) {
             //! NOTE: We need to layout the diagrams to get the harmony names to show in the UI
             layoutItem(diagram, const_cast<LayoutContext&>(ctx));
 
@@ -2823,8 +2820,8 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         int endString = barre.endString != -1 ? barre.endString : item->strings() - 1;
         int fret = i.first;
         bool slurStyleBarre = ctx.conf().styleB(Sid::barreAppearanceSlur);
-        for (int string = 0; string < item->strings(); ++string) {
-            if (slurStyleBarre && string >= startString && string <= endString) {
+        for (int string = startString; string <= endString; ++string) {
+            if (slurStyleBarre) {
                 const_cast<FretDiagram*>(item)->addDotForDotStyleBarre(string, fret);
             } else {
                 const_cast<FretDiagram*>(item)->removeDotForDotStyleBarre(string, fret);
