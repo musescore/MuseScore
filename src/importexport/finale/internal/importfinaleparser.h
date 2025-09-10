@@ -126,6 +126,12 @@ struct EnigmaParsingOptions
     std::optional<FontTracker> musicSymbolFont;     ///< This is the default font for musical `<sym>` tags
 };
 
+struct MusxEmbeddedGraphic {
+    engraving::String fileName;        // <cmper-value>.ext
+    muse::ByteArray fileData;
+};
+using MusxEmbeddedGraphicsMap = std::unordered_map<musx::dom::Cmper, MusxEmbeddedGraphic>;
+
 struct ReadableCustomLine
 {
     ReadableCustomLine() = default;
@@ -190,7 +196,7 @@ class FinaleParser : public muse::Injectable
 public:
     muse::Inject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
 
-    FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, FinaleLoggerPtr& logger);
+    FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics, FinaleLoggerPtr& logger);
 
     void parse();
 
@@ -270,6 +276,7 @@ private:
     bool m_smallNoteMagFound = false;
     std::unordered_map<std::string, const engraving::IEngravingFontPtr> m_engravingFonts;
 
+    MusxEmbeddedGraphicsMap m_embeddedGraphics;
     std::unordered_map<engraving::staff_idx_t, musx::dom::StaffCmper> m_staff2Inst;
     std::unordered_map<musx::dom::StaffCmper, engraving::staff_idx_t> m_inst2Staff;
     std::unordered_map<musx::dom::MeasCmper, engraving::Fraction> m_meas2Tick;

@@ -99,7 +99,7 @@ static bool gunzipBuffer(const ByteArray& gzDataInput, ByteArray& output)
     return true;
 }
 
-Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
+Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data, MusxEmbeddedGraphicsMap&& graphics)
 {
     FinaleLoggerPtr logger = std::make_shared<FinaleLogger>();
     logger->setLoggingLevel(FinaleLogger::Level::MUSX_TRACE); // for now
@@ -109,7 +109,7 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
 
         data.clear(); // free up data now that it isn't needed
 
-        FinaleParser parser(score, doc, logger);
+        FinaleParser parser(score, doc, std::move(graphics), logger);
         parser.parse();
 
         score->setUpTempoMap(); //??
@@ -120,11 +120,12 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
     return Err::FileBadFormat;
 }
 
-static bool extractScoreFile(const String& name, ByteArray& data)
+static bool extractFilesFromMusx(const String& name, ByteArray& data, MusxEmbeddedGraphicsMap& graphics)
 {
     // Extract EnigmaXml from compressed musx file \a name, return true if OK and false on error.
     ZipReader zip(name);
     data.clear();
+    graphics.clear();
 
     ByteArray gzipData = zip.fileData("score.dat");
     if (gzipData.empty()) {
@@ -139,23 +140,37 @@ static bool extractScoreFile(const String& name, ByteArray& data)
         return false;
     }
 
+    for (const auto& fileInfo : zip.fileInfoList()) {
+        if (fileInfo.isFile && muse::io::dirpath(fileInfo.filePath).toString() == u"graphics") {
+            String fname = muse::io::filename(fileInfo.filePath).toString();
+            String stem = muse::io::filename(fileInfo.filePath, false).toString();
+            bool ok = false;
+            Cmper cmper = static_cast<Cmper>(stem.toInt(&ok));
+            if (ok) {
+                graphics.emplace(cmper, MusxEmbeddedGraphic{std::move(fname), zip.fileData(fileInfo.filePath.toStdString())});
+            } else {
+                LOGE() << "graphics filename not numeric: " << fname;
+            }
+        }
+    }
+
     return true;
 }
 
 Err importMusx(MasterScore* score, const QString& name)
 {
-
     if (!io::File::exists(name)) {
         return Err::FileNotFound;
     }
 
     // extract the root file
     ByteArray data;
-    if (!extractScoreFile(name, data)) {
+    MusxEmbeddedGraphicsMap graphics;
+    if (!extractFilesFromMusx(name, data, graphics)) {
         return Err::FileBadFormat;      // appropriate error message has been printed by extractScoreFile
     }
 
-    return importEnigmaXmlfromBuffer(score, std::move(data));
+    return importEnigmaXmlfromBuffer(score, std::move(data), std::move(graphics));
 }
 
 Err importEnigmaXml(MasterScore* score, const QString& name)
@@ -173,7 +188,7 @@ Err importEnigmaXml(MasterScore* score, const QString& name)
     ByteArray data = xmlFile.readAll();
     xmlFile.close();
 
-    return importEnigmaXmlfromBuffer(score, std::move(data));
+    return importEnigmaXmlfromBuffer(score, std::move(data), {});
 }
 
 }
