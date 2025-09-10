@@ -95,6 +95,8 @@ static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Sc
                 }
 
                 Note* note = chord->notes()[noteIndex];
+                // NOTE: addGuitarBend will create grace note and transpose it down. We need the pitch of current note instead to properly fret the note.
+                note->transposeDiatonic(1, true, false);
                 const auto& noteBendData = tickInfo.at(noteIndex);
                 GuitarBend* bend = chord->score()->addGuitarBend(GuitarBendType::PRE_BEND, note);
                 IF_ASSERT_FAILED(bend) {
@@ -102,6 +104,8 @@ static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Sc
                     return;
                 }
 
+                // NOTE: returning pitch.
+                note->transposeDiatonic(-1, true, false);
                 bend->setStartTimeFactor(noteBendData.startFactor);
                 bend->setEndTimeFactor(noteBendData.endFactor);
 

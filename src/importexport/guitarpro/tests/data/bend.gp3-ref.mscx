@@ -359,8 +359,8 @@
               <eid>q_q</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>5</fret>
-              <string>3</string>
+              <fret>2</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -383,8 +383,8 @@
               <eid>t_t</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
-              <fret>7</fret>
-              <string>3</string>
+              <fret>2</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -424,7 +424,7 @@
               <eid>x_x</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
-              <fret>2</fret>
+              <fret>3</fret>
               <string>3</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>

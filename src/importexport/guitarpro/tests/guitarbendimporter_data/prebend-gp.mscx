@@ -82,8 +82,8 @@
               <eid>J_J</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>4</fret>
-              <string>2</string>
+              <fret>1</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -106,8 +106,8 @@
               <eid>M_M</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>1</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -127,8 +127,8 @@
               <eid>O_O</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>4</fret>
-              <string>2</string>
+              <fret>1</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -156,8 +156,8 @@
                 </Accidental>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              <fret>5</fret>
-              <string>2</string>
+              <fret>1</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
