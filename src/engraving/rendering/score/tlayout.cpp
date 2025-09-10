@@ -5890,13 +5890,7 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
     RectF rehearsMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
     RectF thisBbox = ldata->bbox().translated(item->pos());
 
-    if (rehearsalMark && rehearsMarkBbox.bottom() > thisBbox.top()
-        && item->getProperty(Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK).toBool()) {
-        double rightEdge = rehearsMarkBbox.right();
-        const double padding = 0.5 * item->fontMetrics().xHeight();
-        double curX = ldata->pos().x();
-        ldata->setPosX(std::max(curX, rightEdge + padding));
-    } else if (s->rtick().isZero()) {
+    if (s->rtick().isZero()) {
         Segment* p = item->segment()->prev(SegmentType::TimeSig);
         if (p && !p->allElementsInvisible()) {
             ldata->moveX(-(s->x() - p->x()));
@@ -5905,6 +5899,14 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
                 ldata->moveX(p->hasTimeSigAboveStaves() ? e->x() + e->width() + e->spatium() : e->x());
             }
         }
+    }
+
+    if (rehearsalMark && rehearsMarkBbox.bottom() > thisBbox.top()
+        && item->getProperty(Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK).toBool()) {
+        double rightEdge = rehearsMarkBbox.right();
+        const double padding = 0.5 * item->fontMetrics().xHeight();
+        double curX = ldata->pos().x();
+        ldata->setPosX(std::max(curX, rightEdge + padding));
     }
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
