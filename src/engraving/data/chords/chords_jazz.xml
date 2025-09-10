@@ -76,7 +76,7 @@
     <sym code="0x1d12b" name="bb"/>
 
     <sym code="0xE87C" name="dslash"/>
-    <sym code="0xE874" name="-"/>
+    <sym value="-" name="-"/>
     <sym code="0xe186" name="+"/>
     </font>
 
@@ -222,12 +222,12 @@
 
   <token>
     <name>o</name>
-    <render>sc:0.5 :push :mx circle :popy sc:2</render>
+    <render>sc:0.8 :push :mx circle :popy sc:1.25</render>
     </token>
 
   <token>
     <name>0</name>
-    <render>sc:0.5 :push :mx oslash :popy sc:2</render>
+    <render>sc:0.8 :push :mx oslash :popy sc:1.25</render>
     </token>
 
   <token>
