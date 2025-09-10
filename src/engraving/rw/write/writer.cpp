@@ -44,7 +44,7 @@ Writer::Writer(const muse::modularity::ContextPtr& iocCtx)
 {
 }
 
-bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, rw::WriteInOutData* inout)
+bool Writer::writeScore(Score* score, io::IODevice* device, rw::WriteInOutData* inout)
 {
     TRACEFUNC;
 
@@ -64,11 +64,11 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
     }
 
     compat::WriteScoreHook hook;
-    write(score, xml, ctx, onlySelection, hook);
+    write(score, xml, ctx, hook);
 
     xml.endElement();
 
-    if (!onlySelection) {
+    if (!inout || !inout->ctx.shouldWriteRange()) {
         //update version values for i.e. plugin access
         score->m_mscoreVersion = application()->version().toString();
         score->m_mscoreRevision = application()->revision().toInt(nullptr, 16);
@@ -82,7 +82,7 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
     return true;
 }
 
-void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook)
+void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::WriteScoreHook& hook)
 {
     TRACEFUNC;
 
@@ -205,41 +205,27 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     }
 
     ctx.setCurTrack(0);
-    staff_idx_t staffStart;
-    staff_idx_t staffEnd;
-    MeasureBase* measureStart;
-    MeasureBase* measureEnd;
 
-    if (selectionOnly) {
-        staffStart   = score->m_selection.staffStart();
-        staffEnd     = score->m_selection.staffEnd();
-        // make sure we select full parts
-        Staff* sStaff = score->staff(staffStart);
-        Part* sPart = sStaff->part();
-        Staff* eStaff = score->staff(staffEnd - 1);
-        Part* ePart = eStaff->part();
-        staffStart = score->staffIdx(sPart);
-        staffEnd = score->staffIdx(ePart) + ePart->nstaves();
-        measureStart = score->m_selection.startSegment()->measure();
-        if (measureStart->isMeasure() && toMeasure(measureStart)->isMMRest()) {
-            measureStart = toMeasure(measureStart)->mmRestFirst();
-        }
-        if (score->m_selection.endSegment()) {
-            measureEnd   = score->m_selection.endSegment()->measure()->next();
-        } else {
-            measureEnd   = 0;
-        }
+    staff_idx_t staffStart = 0;
+    staff_idx_t staffEnd = 0;
+    MeasureBase* measureStart = nullptr;
+    MeasureBase* measureEnd = nullptr;
+
+    if (ctx.shouldWriteRange()) {
+        const WriteRange& r = ctx.range().value();
+        staffStart = r.startStaffIdx;
+        staffEnd = r.endStaffIdx;
+        measureStart = r.startMeasure;
+        measureEnd = r.endMeasure;
     } else {
-        staffStart   = 0;
         staffEnd     = score->nstaves();
         measureStart = score->first();
-        measureEnd   = 0;
     }
 
     // Let's decide: write midi mapping to a file or not
     score->masterScore()->checkMidiMapping();
     for (const Part* part : score->m_parts) {
-        if (!selectionOnly || ((score->staffIdx(part) >= staffStart) && (staffEnd >= score->staffIdx(part) + part->nstaves()))) {
+        if (!ctx.shouldWriteRange() || ((score->staffIdx(part) >= staffStart) && (staffEnd >= score->staffIdx(part) + part->nstaves()))) {
             TWrite::write(part, xml, ctx);
         }
     }
@@ -249,12 +235,12 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     if (measureStart) {
         for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             const Staff* st = score->staff(staffIdx);
-            StaffWrite::writeStaff(st, xml, ctx, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
+            StaffWrite::writeStaff(st, xml, ctx, measureStart, measureEnd, staffStart, staffIdx);
         }
     }
     ctx.setCurTrack(muse::nidx);
 
-    hook.onWriteExcerpts302(score, xml, ctx, selectionOnly);
+    hook.onWriteExcerpts302(score, xml, ctx);
 
     TWrite::writeSystemLocks(score, xml);
 

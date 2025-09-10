@@ -185,7 +185,7 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
 
         if (suffix == engraving::MSCZ || suffix == engraving::MSCX || suffix == engraving::MSCS) {
             if (pageNumValid) {
-                return savePage(notationProject, pageNum, out);
+                return notationProject->savePage(out, pageNum);
             }
 
             return notationProject->save(out);
@@ -316,19 +316,6 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
 
     rv.ret = make_ret(Ret::Code::Ok);
     return rv;
-}
-
-muse::Ret ConverterController::savePage(project::INotationProjectPtr notationProject, const size_t pageNum,
-                                        const muse::io::path_t& out) const
-{
-    INotationPtr notation = notationProject->masterNotation()->notation();
-    INotationInteractionPtr interaction = notation->interaction();
-
-    interaction->selectPage(pageNum);
-    muse::Ret ret = notationProject->save(out, SaveMode::SaveSelection);
-    interaction->clearSelection();
-
-    return ret;
 }
 
 Ret ConverterController::convertByExtension(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,

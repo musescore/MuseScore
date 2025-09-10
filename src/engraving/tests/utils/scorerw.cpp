@@ -102,7 +102,7 @@ bool ScoreRW::saveScore(Score* score, const String& name)
         return false;
     }
 
-    return rw::RWRegister::writer(score->iocContext())->writeScore(score, &file, false);
+    return rw::RWRegister::writer(score->iocContext())->writeScore(score, &file);
 }
 
 bool ScoreRW::saveScore(Score* score, const String& name, ExportFunc exportFunc)

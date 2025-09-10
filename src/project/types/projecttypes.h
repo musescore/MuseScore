@@ -72,7 +72,8 @@ enum class SaveMode
     SaveAs,
     SaveCopy,
     SaveSelection,
-    AutoSave
+    AutoSave,
+    SavePage,
 };
 
 enum class SaveLocationType
