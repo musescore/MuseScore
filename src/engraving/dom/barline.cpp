@@ -571,43 +571,44 @@ bool BarLine::edit(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void BarLine::editDrag(EditData& ed)
+void BarLine::dragGrip(EditData& ed)
 {
+    IF_ASSERT_FAILED(ed.curGrip == Grip::START) {
+        return;
+    }
+
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
 
     double lineDist = staff()->lineDistance(tick()) * spatium();
     calcY();
-    if (ed.curGrip != Grip::START) {
-        return;
-    } else {
-        // min for bottom grip is 1 line below top grip
-        const double min = ldata()->y1 - ldata()->y2 + lineDist;
-        // max is the bottom of the system
-        const System* system = segment() ? segment()->system() : nullptr;
-        const staff_idx_t st = staffIdx();
-        const double max = (system && st != muse::nidx)
-                           ? (system->height() - ldata()->y2 - system->staff(st)->y())
-                           : std::numeric_limits<double>::max();
-        // update yoff2 and bring it within limit
-        bed->yoff2 += ed.delta.y();
-        if (bed->yoff2 < min) {
-            bed->yoff2 = min;
-        }
-        if (bed->yoff2 > max) {
-            bed->yoff2 = max;
-        }
+
+    // min for bottom grip is 1 line below top grip
+    const double min = ldata()->y1 - ldata()->y2 + lineDist;
+    // max is the bottom of the system
+    const System* system = segment() ? segment()->system() : nullptr;
+    const staff_idx_t st = staffIdx();
+    const double max = (system && st != muse::nidx)
+                       ? (system->height() - ldata()->y2 - system->staff(st)->y())
+                       : std::numeric_limits<double>::max();
+    // update yoff2 and bring it within limit
+    bed->yoff2 += ed.delta.y();
+    if (bed->yoff2 < min) {
+        bed->yoff2 = min;
+    }
+    if (bed->yoff2 > max) {
+        bed->yoff2 = max;
     }
 }
 
 //---------------------------------------------------------
-//   endEditDrag
+//   endDragGrip
 //    snap to nearest staff / staff line
 //---------------------------------------------------------
 
-void BarLine::endEditDrag(EditData& ed)
+void BarLine::endDragGrip(EditData& ed)
 {
     calcY();
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());

@@ -300,9 +300,9 @@ public:
     virtual void startEdit(EditData&);
     virtual bool isEditAllowed(EditData&) const;
     virtual bool edit(EditData&);
-    virtual void startEditDrag(EditData&);
-    virtual void editDrag(EditData&);
-    virtual void endEditDrag(EditData&);
+    virtual void startDragGrip(EditData&);
+    virtual void dragGrip(EditData&);
+    virtual void endDragGrip(EditData&);
     virtual void endEdit(EditData&);
 
     virtual void editCut(EditData&) {}
@@ -388,12 +388,6 @@ public:
  Reimplemented by elements that accept drops.
 */
     virtual EngravingItem* drop(EditData&) { return 0; }
-
-/**
- delivers mouseEvent to element in edit mode
- returns true if mouse event is accepted by element
- */
-    virtual bool mousePress(EditData&) { return false; }
 
     mutable bool itemDiscovered = false;       // helper flag for bsp
 
@@ -767,9 +761,9 @@ using ElementPtr = std::shared_ptr<EngravingItem>;
 //   ElementEditData
 //    holds element specific data during element editing:
 //
-//    startEditDrag(EditData&)    creates data and attaches it to EditData
-//       editDrag(EditData&)
-//    endEditDrag(EditData&)      use data to create undo records
+//    startDragGrip(EditData&)    creates data and attaches it to EditData
+//         dragGrip(EditData&)
+//      endDragGrip(EditData&)    use data to create undo records
 //-----------------------------------------------------------------------------
 
 enum class EditDataType : signed char {
@@ -791,12 +785,12 @@ class ElementEditData
     OBJECT_ALLOCATOR(engraving, ElementEditData)
 public:
     EngravingItem* e = nullptr;
-    std::list<PropertyData> propertyData;
+    std::vector<PropertyData> propertyData;
 
     virtual ~ElementEditData() = default;
     void pushProperty(Pid pid)
     {
-        propertyData.push_back(PropertyData({ pid, e->getProperty(pid), e->propertyFlags(pid) }));
+        propertyData.emplace_back(PropertyData { pid, e->getProperty(pid), e->propertyFlags(pid) });
     }
 
     virtual EditDataType type() { return EditDataType::ElementEditData; }

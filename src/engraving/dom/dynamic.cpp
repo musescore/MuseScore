@@ -376,7 +376,7 @@ TranslatableString Dynamic::subtypeUserName() const
     }
 }
 
-void Dynamic::editDrag(EditData& ed)
+void Dynamic::dragGrip(EditData& ed)
 {
     const bool hasLeftGrip = this->hasLeftGrip();
     const bool hasRightGrip = this->hasRightGrip();
@@ -399,14 +399,14 @@ void Dynamic::editDrag(EditData& ed)
         return;
     }
 
-    TextBase::editDrag(ed);
+    UNREACHABLE;
 }
 
-void Dynamic::endEditDrag(EditData& ed)
+void Dynamic::endDragGrip(EditData& ed)
 {
     m_leftDragOffset = m_rightDragOffset = 0.0;
 
-    TextBase::endEditDrag(ed);
+    TextBase::endDragGrip(ed);
 }
 
 //---------------------------------------------------------

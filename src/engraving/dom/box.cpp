@@ -85,10 +85,10 @@ bool Box::edit(EditData&)
 }
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDragGrip
 //---------------------------------------------------------
 
-void Box::startEditDrag(EditData& ed)
+void Box::startDragGrip(EditData& ed)
 {
     ElementEditDataPtr eed = ed.getData(this);
     if (isHBox()) {
@@ -98,7 +98,7 @@ void Box::startEditDrag(EditData& ed)
     }
 }
 
-void Box::editDrag(EditData& ed)
+void Box::dragGrip(EditData& ed)
 {
     const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isVBox()) {
@@ -672,17 +672,17 @@ bool VBox::setProperty(Pid propertyId, const PropertyValue& v)
 }
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDragGrip
 //---------------------------------------------------------
 
-void VBox::startEditDrag(EditData& ed)
+void VBox::startDragGrip(EditData& ed)
 {
     const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isAutoSizeEnabled()) {
         setAutoSizeEnabled(false);
         setBoxHeight(Spatium(height() / sp));
     }
-    Box::startEditDrag(ed);
+    Box::startDragGrip(ed);
 }
 
 //---------------------------------------------------------

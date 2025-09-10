@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_REST_H
-#define MU_ENGRAVING_REST_H
+#pragma once
 
 #include "containers.h"
 
@@ -127,7 +126,6 @@ public:
     EngravingItem* prevElement() override;
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
-    void editDrag(EditData& editData) override;
 
     bool shouldNotBeDrawn() const;
 
@@ -172,5 +170,4 @@ private:
 
     bool m_alignWithOtherRests = true;
 };
-} // namespace mu::engraving
-#endif
+}

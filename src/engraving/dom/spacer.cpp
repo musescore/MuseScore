@@ -60,20 +60,20 @@ void Spacer::setGap(Spatium sp)
 }
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDragGrip
 //---------------------------------------------------------
 
-void Spacer::startEditDrag(EditData& ed)
+void Spacer::startDragGrip(EditData& ed)
 {
     ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::SPACE);
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void Spacer::editDrag(EditData& ed)
+void Spacer::dragGrip(EditData& ed)
 {
     double s = ed.delta.y();
 

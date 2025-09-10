@@ -303,8 +303,6 @@ public:
 
     ~TextBase();
 
-    virtual bool mousePress(EditData&) override;
-
     Text& operator=(const Text&) = delete;
 
     Align align() const { return m_align; }
@@ -355,6 +353,9 @@ public:
     virtual void endDrag(EditData&) override;
     void movePosition(EditData&, TextCursor::MoveOperation);
 
+    bool mousePress(EditData& ed);
+    void dragTo(EditData& ed);
+
     bool deleteSelectedText(EditData&);
 
     void selectAll(TextCursor*);
@@ -367,8 +368,6 @@ public:
     RectF pageRectangle() const;
 
     const Shape& highResShape() const { return ldata()->highResShape.value(); }
-
-    void dragTo(EditData&);
 
     std::vector<LineF> dragAnchorLines() const override;
 

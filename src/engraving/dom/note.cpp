@@ -601,7 +601,6 @@ Note::Note(const Note& n, bool link)
     m_fretConflict      = n.m_fretConflict;
     m_ghost             = n.m_ghost;
     m_deadNote          = n.m_deadNote;
-    m_dragMode           = n.m_dragMode;
     m_pitch             = n.m_pitch;
     m_tpc[0]            = n.m_tpc[0];
     m_tpc[1]            = n.m_tpc[1];
@@ -2255,7 +2254,7 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
         sp->scanElements(data, func, all);
     }
 
-    if (!m_dragMode && m_accidental) {
+    if (m_accidental) {
         func(data, m_accidental);
     }
     for (NoteDot* dot : m_dots) {
@@ -2645,6 +2644,11 @@ RectF Note::drag(EditData& ed)
         return RectF();
     }
 
+    if (ed.isEditMode) {
+        dragInEditMode(ed);
+        return RectF();
+    }
+
     PointF delta = ed.evtDelta;
     noteEditData->delta = delta;
 
@@ -2681,10 +2685,10 @@ void Note::endDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragInEditMode
 //---------------------------------------------------------
 
-void Note::editDrag(EditData& editData)
+void Note::dragInEditMode(EditData& editData)
 {
     Chord* ch = chord();
     Segment* seg = ch->segment();

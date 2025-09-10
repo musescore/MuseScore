@@ -205,10 +205,10 @@ std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void Arpeggio::editDrag(EditData& ed)
+void Arpeggio::dragGrip(EditData& ed)
 {
     Part* p = part();
     double d = ed.delta.y();
@@ -244,6 +244,9 @@ void Arpeggio::editDrag(EditData& ed)
                 m_userLen2 = 0.0;
             }
         }
+    } else {
+        UNREACHABLE;
+        return;
     }
 
     triggerLayout();
@@ -318,9 +321,9 @@ void Arpeggio::startEdit(EditData& ed)
     eed->pushProperty(Pid::ARP_USER_LEN2);
 }
 
-void Arpeggio::startEditDrag(EditData& ed)
+void Arpeggio::startDragGrip(EditData& ed)
 {
-    EngravingItem::startEditDrag(ed);
+    EngravingItem::startDragGrip(ed);
     ElementEditDataPtr eed = ed.getData(this);
     if (!eed) {
         return;

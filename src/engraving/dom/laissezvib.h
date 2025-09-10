@@ -39,7 +39,6 @@ public:
     LaissezVib* laissezVib() const { return (LaissezVib*)spanner(); }
 
     int gripsCount() const override { return 0; }
-    void editDrag(EditData&) override;
 
     struct LayoutData : public TieSegment::LayoutData {
         SymId symbol = SymId::noSym;

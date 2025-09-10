@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_STEM_H
-#define MU_ENGRAVING_STEM_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -44,8 +43,8 @@ public:
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
-    void startEditDrag(EditData&) override;
-    void editDrag(EditData&) override;
+    void startDragGrip(EditData&) override;
+    void dragGrip(EditData&) override;
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -95,4 +94,3 @@ private:
     Spatium m_lineWidth = Spatium(0.0);
 };
 }
-#endif

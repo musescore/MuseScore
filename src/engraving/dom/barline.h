@@ -62,8 +62,8 @@ class BarLineEditData : public ElementEditData
 {
     OBJECT_ALLOCATOR(engraving, BarLineEditData)
 public:
-    double yoff1;
-    double yoff2;
+    double yoff1 = 0.0;
+    double yoff2 = 0.0;
     virtual EditDataType type() override { return EditDataType::BarLineEditData; }
 };
 
@@ -116,8 +116,8 @@ public:
     void startEdit(EditData& ed) override;
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData& ed) override;
-    void editDrag(EditData&) override;
-    void endEditDrag(EditData&) override;
+    void dragGrip(EditData&) override;
+    void endDragGrip(EditData&) override;
 
     const ElementList* el() const { return &m_el; }
 

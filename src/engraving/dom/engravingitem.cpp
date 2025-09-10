@@ -2277,10 +2277,10 @@ bool EngravingItem::edit(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDragGrip
 //---------------------------------------------------------
 
-void EngravingItem::startEditDrag(EditData& ed)
+void EngravingItem::startDragGrip(EditData& ed)
 {
     ElementEditDataPtr eed = ed.getData(this);
     if (!eed) {
@@ -2296,11 +2296,15 @@ void EngravingItem::startEditDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void EngravingItem::editDrag(EditData& ed)
+void EngravingItem::dragGrip(EditData& ed)
 {
+    IF_ASSERT_FAILED(ed.curGrip != Grip::NO_GRIP) {
+        return;
+    }
+
     score()->addRefresh(canvasBoundingRect());
     setOffset(offset() + ed.delta);
     setOffsetChanged(true);
@@ -2308,10 +2312,10 @@ void EngravingItem::editDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   endEditDrag
+//   endDragGrip
 //---------------------------------------------------------
 
-void EngravingItem::endEditDrag(EditData& ed)
+void EngravingItem::endDragGrip(EditData& ed)
 {
     ElementEditDataPtr eed = ed.getData(this);
     bool changed = false;

@@ -36,7 +36,7 @@ public:
     bool isEmpty() const { return ldata()->bbox().isEmpty(); }
 
     bool isEditable() const override { return true; }
-    void editDrag(EditData&) override;
+    void dragGrip(EditData&) override;
     void endDrag(EditData&) override {}
 
     int gripsCount() const override { return 8; }

@@ -88,14 +88,14 @@ void Stem::startEdit(EditData& ed)
     eed->pushProperty(Pid::USER_LEN);
 }
 
-void Stem::startEditDrag(EditData& ed)
+void Stem::startDragGrip(EditData& ed)
 {
-    EngravingItem::startEditDrag(ed);
+    EngravingItem::startDragGrip(ed);
     ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::USER_LEN);
 }
 
-void Stem::editDrag(EditData& ed)
+void Stem::dragGrip(EditData& ed)
 {
     double yDelta = up() ? -ed.delta.y() : ed.delta.y();
     m_userLength += Spatium::fromMM(yDelta, spatium());

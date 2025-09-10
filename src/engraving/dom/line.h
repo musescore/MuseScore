@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_LINE_H
-#define MU_ENGRAVING_LINE_H
+#pragma once
 
 #include "draw/types/color.h"
 #include "spanner.h"
@@ -44,11 +43,11 @@ class LineSegment : public SpannerSegment
 {
     OBJECT_ALLOCATOR(engraving, LineSegment)
 protected:
-    virtual void editDrag(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
     std::vector<LineF> gripAnchorLines(Grip) const override;
-    virtual void startEditDrag(EditData&) override;
+    virtual void startDragGrip(EditData&) override;
+    virtual void dragGrip(EditData&) override;
     void startDrag(EditData&) override;
 
     LineSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f = ElementFlag::NOTHING);
@@ -156,5 +155,4 @@ private:
     double m_dashGapLen = 5.0;
     bool m_diagonal = false;
 };
-} // namespace mu::engraving
-#endif
+}

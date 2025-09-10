@@ -335,15 +335,11 @@ public:
 };
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void Beam::editDrag(EditData& ed)
+void Beam::dragGrip(EditData& ed)
 {
-    if (ed.curGrip == Grip::NO_GRIP) {
-        return;
-    }
-
     int idx = directionIdx();
     double dy = ed.delta.y();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
@@ -358,6 +354,9 @@ void Beam::editDrag(EditData& ed)
         y1 += dy;
     } else if (ed.curGrip == Grip::END) {
         y2 += dy;
+    } else {
+        UNREACHABLE;
+        return;
     }
 
     double _spatium = spatium();
@@ -800,19 +799,6 @@ void Beam::initBeamEditData(EditData& ed)
     bed->e    = this;
     bed->editFragment = 0;
     ed.addData(bed);
-
-    PointF pt(ed.normalizedStartMove - pagePos());
-    double ydiff = 100000000.0;
-    int idx = directionIdx();
-    int i = 0;
-    for (BeamFragment* f : m_fragments) {
-        double d = std::fabs(f->py1[idx] - pt.y());
-        if (d < ydiff) {
-            ydiff = d;
-            bed->editFragment = i;
-        }
-        ++i;
-    }
 }
 
 //---------------------------------------------------------
