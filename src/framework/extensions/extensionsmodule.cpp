@@ -123,11 +123,7 @@ void ExtensionsModule::onInit(const IApplication::RunMode& mode)
 
     m_configuration->init();
     m_actionController->init();
-
-    if (mode == IApplication::RunMode::ConsoleApp) {
-        m_provider->reloadExtensions();
-        m_extensionsLoaded = true;
-    }
+    m_provider->reloadExtensions();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
@@ -138,12 +134,4 @@ void ExtensionsModule::onInit(const IApplication::RunMode& mode)
         pr->reg("plugins (legacy): userPath", m_configuration->pluginsUserPath());
     }
 #endif
-}
-
-void ExtensionsModule::onDelayedInit()
-{
-    if (!m_extensionsLoaded) {
-        m_provider->reloadExtensions();
-        m_extensionsLoaded = true;
-    }
 }
