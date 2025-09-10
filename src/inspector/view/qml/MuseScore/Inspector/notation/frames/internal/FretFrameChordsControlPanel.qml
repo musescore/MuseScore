@@ -40,6 +40,7 @@ RowLayout {
 
     property bool isMovingUpAvailable: false
     property bool isMovingDownAvailable: false
+    property bool hasInvisibleChords: false
 
     height: childrenRect.height
 
@@ -47,6 +48,7 @@ RowLayout {
 
     signal moveSelectionUpRequested()
     signal moveSelectionDownRequested()
+    signal resetListRequested();
 
     FlatButton {
         id: upBotton
@@ -92,10 +94,10 @@ RowLayout {
         navigation.row: downButton.navigation.row + 1
         navigation.accessible.name: qsTrc("inspector", "Reset chord list")
 
-        enabled: root.listOrderItem.isModified
+        enabled: root.listOrderItem.isModified || root.hasInvisibleChords
 
         onClicked: {
-            root.listOrderItem.resetToDefault()
+            root.resetListRequested()
         }
     }
 }
