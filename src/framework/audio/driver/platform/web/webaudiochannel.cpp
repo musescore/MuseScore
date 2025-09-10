@@ -30,6 +30,7 @@ using namespace muse::audio::worker;
 
 static std::function<void(const emscripten::val& msg)> g_rpcListen = nullptr;
 
+static const std::string NOTIFY_INITED_TYPE = "channel_inited";
 static const std::string REQUEST_AUDIO_TYPE = "request_audio";
 static const std::string RESPONSE_AUDIO_TYPE = "response_audio";
 
@@ -90,6 +91,8 @@ void WebAudioChannel::open(Callback callback)
             rpcSend(RESPONSE_AUDIO_TYPE, m_buffer);
         }
     };
+
+    rpcSend(NOTIFY_INITED_TYPE, {});
 }
 
 void WebAudioChannel::close()

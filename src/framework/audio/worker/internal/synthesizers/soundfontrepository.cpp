@@ -47,6 +47,7 @@ void SoundFontRepository::init()
 
 #ifdef Q_OS_WASM
 
+    //! NOTE Temporary solution
     m_netSFLoader = std::make_shared<worker::NetworkSFLoader>();
 
     auto promise = m_netSFLoader->load();

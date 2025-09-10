@@ -55,7 +55,6 @@ static void callJsWithBytes(const char*, const uint8_t*, size_t)
 WebApi* WebApi::instance()
 {
     static WebApi a;
-
     return &a;
 }
 

@@ -31,7 +31,6 @@ class NetworkSFLoader
 {
 public:
 
-    static async::Promise<RetVal<io::path_t>> load();
+    static async::Promise<RetVal<io::path_t> > load();
 };
 }
-
