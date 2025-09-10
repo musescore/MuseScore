@@ -114,12 +114,16 @@ StyledDialogView {
                         CloudsModel {
                             id: cloudsModel
 
+                            property bool loaded: false
+
                             Component.onCompleted: {
                                 load()
 
                                 contentItem.cloudInfo = cloudsModel.cloudInfo(root.cloudCode)
                                 contentItem.dialogText = cloudsModel.dialogText(root.cloudCode, existingScoreOrAudioUrl)
                                 contentItem.visibilityModel = cloudsModel.visibilityModel(root.cloudCode)
+
+                                loaded = true
                             }
                         }
                     }
@@ -208,12 +212,12 @@ StyledDialogView {
 
                     visible: root.isPublishShare && Boolean(root.existingScoreOrAudioUrl)
 
-                    model: [
+                    model: cloudsModel.loaded ? [
                         { text: Boolean(contentItem.dialogText) ? contentItem.dialogText.replaceButtonText
                                                                 : qsTrc("project/save", "Replace existing"), value: true },
                         { text: Boolean(contentItem.dialogText) ? contentItem.dialogText.newButtonText
                                                                 : qsTrc("project/save", "Create new"), value: false }
-                    ]
+                    ] : null
 
                     delegate: RoundedRadioButton {
                         checked: modelData.value === root.replaceExisting
@@ -278,4 +282,3 @@ StyledDialogView {
         }
     }
 }
-
