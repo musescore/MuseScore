@@ -43,8 +43,8 @@ using namespace mu::iex::finale;
 
 namespace mu::iex::finale {
 
-FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, FinaleLoggerPtr& logger)
-    : m_score(score), m_doc(doc), m_logger(logger)
+FinaleParser::FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, MusxEmbeddedGraphicsMap&& graphics, FinaleLoggerPtr& logger)
+    : m_score(score), m_doc(doc), m_logger(logger), m_embeddedGraphics(std::move(graphics))
 {
     m_finaleOptions.init(*this);
     const std::vector<IEngravingFontPtr> fonts = engravingFonts()->fonts();
@@ -59,7 +59,7 @@ void FinaleParser::parse()
     muse::Date creationDate(m_doc->getHeader()->created.year, m_doc->getHeader()->created.month, m_doc->getHeader()->created.day);
     m_score->setMetaTag(u"creationDate", creationDate.toString(muse::DateFormat::ISODate));
     MusxInstanceList<texts::FileInfoText> fileInfoTexts = m_doc->getTexts()->getArray<texts::FileInfoText>();
-    for (MusxInstance<texts::FileInfoText> fileInfoText : fileInfoTexts) {
+    for (const MusxInstance<texts::FileInfoText>& fileInfoText : fileInfoTexts) {
         String metaTag = FinaleTConv::metaTagFromFileInfo(fileInfoText->getTextType());
         std::string fileInfoValue = musx::util::EnigmaString::trimTags(fileInfoText->text);
         if (!metaTag.empty() && !fileInfoValue.empty()) {
