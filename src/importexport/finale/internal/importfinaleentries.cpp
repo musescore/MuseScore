@@ -638,11 +638,11 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
                 logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
             }
             auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
-            StaffType* staffType = targetStaff->staffTypeForElement(rest);
+            const StaffType* staffType = targetStaff->staffTypeForElement(rest);
             // following code copied from TLayout::layoutRest:
             Rest::LayoutData layoutData;
-            const int naturalLine = rest->computeNaturalLine(staffType->lines()); // Measured in 1sp steps
-            const int voiceOffset = rest->computeVoiceOffset(staffType->lines(), &layoutData); // Measured in 1sp steps
+            const int naturalLine = RestLayout::computeNaturalLine(staffType->lines()); // Measured in 1sp steps
+            const int voiceOffset = RestLayout::computeVoiceOffset(rest, &layoutData); // Measured in 1sp steps
             // omit call to computeWholeOrBreveRestOffset because it requires layout rectangles to have been created
             int finalLine = naturalLine + voiceOffset;
             // convert finalLine to staff position offset for Finale rest. This value is measured in 0.5sp steps.
