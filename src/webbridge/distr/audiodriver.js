@@ -18,7 +18,11 @@ let AudioDriver = (function () {
             try {
 
                 await audioContext.audioWorklet.addModule('./distr/audio_worklet_processor.js')
-                processor = new AudioWorkletNode(audioContext, 'musedriver-processor');
+                processor = new AudioWorkletNode(audioContext, 'musedriver-processor', {
+                                numberOfInputs: 0,
+                                numberOfOutputs: 1,
+                                outputChannelCount: [2],
+                                });
                 console.log("[processor-main] create AudioWorkletNode for audio_worklet_processor")
 
             } catch (error) {

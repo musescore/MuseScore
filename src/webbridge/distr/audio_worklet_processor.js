@@ -7,6 +7,8 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
         this.port.onmessage = this.onMessageFromMain.bind(this);
 
         this.buffer = [];
+        this.channel_inited = false;
+        this.audio_requested = false;
 
         this.debugLog("end of constructor MuseDriverProcessor")
     }
@@ -41,35 +43,37 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
 
         if (event.data.type == "response_audio") {
             this.onResponseAudio(event.data)
+        } else if (event.data.type == "channel_inited") {
+            this.channel_inited = true;
         }
     }
 
     requestAudio() {
+        if (!this.channel_inited) {
+            return;
+        }
+
+        if (this.audio_requested) {
+            return;
+        }
+
         this.sendToWorker({type: "request_audio", samplesPerChannel: 1024})
+        this.audio_requested = true;
     }
 
     onResponseAudio(msg) {
-        //this.debugLog("received data: " + msg.data.length)
-        try {
         this.buffer.push(...msg.data);
-          } catch (e) {
-       this.debugLog("process error: " + e.toString())
-   }
+        this.audio_requested = false;
     }
 
     process(inputs, outputs, parameters) {
 
         const output = outputs[0];
 
-       // this.debugLog("process")
-
-      //  try {
-
-            let totalWriten = 0;
+        let totalWriten = 0;
         for (let ci = 0; ci < output.length; ++ci) {
             let channel = output[ci];
             const samplesToWrite = Math.min(this.buffer.length, channel.length);
-    
             for (let i = 0; i < samplesToWrite; i++) {
                 channel[i] = this.buffer[i * 2 + ci];
             }
@@ -79,13 +83,9 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
 
         this.buffer = this.buffer.slice(totalWriten);
 
-       // if (this.buffer.length < output[0].length * 2) {
+        if (this.buffer.length <= (totalWriten * 10)) {
             this.requestAudio()
-        //}
-
-   // } catch (e) {
-   //     this.debugLog("process error: " + e.toString())
-   // }
+        }
 
         return true; 
     }
