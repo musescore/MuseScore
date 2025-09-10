@@ -120,7 +120,6 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
 
     m_configuration->init();
     m_shortcutsController->init();
-    m_shortcutsRegister->init();
     m_midiRemote->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
@@ -131,4 +130,13 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
         pr->reg("midiMappingUserAppDataPath", m_configuration->midiMappingUserAppDataPath());
     }
 #endif
+}
+
+void ShortcutsModule::onAllInited(const IApplication::RunMode& mode)
+{
+    if (mode != IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    m_shortcutsRegister->init();
 }
