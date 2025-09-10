@@ -38,9 +38,9 @@ public:
 
     Writer(const muse::modularity::ContextPtr& iocCtx);
 
-    bool writeScore(Score* score, muse::io::IODevice* device, bool onlySelection, rw::WriteInOutData* out) override;
+    bool writeScore(Score* score, muse::io::IODevice* device, rw::WriteInOutData* out) override;
 
-    static void write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook);
+    static void write(Score* score, XmlWriter& xml, WriteContext& ctx, compat::WriteScoreHook& hook);
 
     void writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool, bool,
                        Fraction& curTick) override;

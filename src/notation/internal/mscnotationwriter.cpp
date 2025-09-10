@@ -85,7 +85,7 @@ Ret MscNotationWriter::write(INotationPtr notation, io::IODevice& device, const 
         return Ret(Ret::Code::UnknownError);
     }
 
-    notation->elements()->msScore()->masterScore()->project().lock()->writeMscz(msczWriter, false, true);
+    notation->elements()->msScore()->masterScore()->project().lock()->writeMscz(msczWriter, true);
 
     msczWriter.close();
 

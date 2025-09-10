@@ -90,8 +90,6 @@ private:
     muse::Ret convertScoreParts(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
                                 const muse::io::path_t& out);
 
-    muse::Ret savePage(project::INotationProjectPtr notationProject, const size_t pageNum, const muse::io::path_t& out) const;
-
     muse::Ret convertByExtension(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out,
                                  const muse::UriQuery& extensionUri);
     bool isConvertPageByPage(const std::string& suffix) const;

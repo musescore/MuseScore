@@ -91,7 +91,6 @@ public:
     void selectSection() override;
     void selectFirstElement(bool frame = false) override;
     void selectLastElement() override;
-    void selectPage(const size_t num) override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
     muse::async::Notification selectionChanged() const override;
