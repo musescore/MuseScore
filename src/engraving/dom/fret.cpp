@@ -804,21 +804,6 @@ std::vector<String> FretDiagram::patternHarmonies(const String& pattern)
     return muse::value(s_diagramPatternToHarmoniesMap, pattern);
 }
 
-void FretDiagram::applyAlignmentToHarmony()
-{
-    if (m_harmony->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
-        m_harmony->resetProperty(Pid::OFFSET);
-    }
-
-    m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
-    m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
-}
-
-void FretDiagram::resetHarmonyAlignment()
-{
-    m_harmony->resetProperty(Pid::ALIGN);
-}
-
 //---------------------------------------------------------
 //   clear
 //---------------------------------------------------------
@@ -946,38 +931,6 @@ void FretDiagram::setHarmony(String harmonyText)
     triggerLayout();
 }
 
-void FretDiagram::linkHarmony(Harmony* harmony)
-{
-    m_harmony = harmony;
-
-    setParent(harmony->explicitParent());
-    harmony->setParent(this);
-
-    //! on the same lavel as diagram
-    m_harmony->setZ(z());
-
-    if (Segment* segment = this->segment()) {
-        segment->removeAnnotation(harmony);
-    }
-
-    m_harmony->setTrack(track());
-
-    applyAlignmentToHarmony();
-}
-
-void FretDiagram::unlinkHarmony()
-{
-    m_harmony->setTrack(track());
-
-    resetHarmonyAlignment();
-
-    m_harmony->setZ(-1);
-
-    segment()->add(m_harmony);
-
-    m_harmony = nullptr;
-}
-
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------
@@ -989,9 +942,6 @@ void FretDiagram::add(EngravingItem* e)
         m_harmony = toHarmony(e);
 
         m_harmony->setTrack(track());
-
-        //! on the same lavel as diagram
-        m_harmony->setZ(z());
 
         if (m_harmony->harmonyName().empty()) {
             if (s_diagramPatternToHarmoniesMap.empty()) {
@@ -1007,7 +957,9 @@ void FretDiagram::add(EngravingItem* e)
             }
         }
 
-        applyAlignmentToHarmony();
+        m_harmony->resetProperty(Pid::OFFSET);
+        m_harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::BASELINE));
+        m_harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
 
         e->added();
     } else {
@@ -1355,7 +1307,7 @@ FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harm
 
         fretDiagram->updateDiagram(harmony->plainText());
 
-        fretDiagram->linkHarmony(harmony);
+        fretDiagram->add(harmony);
     } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->parentItem()->isFretDiagram()) {
         fretDiagram = toFretDiagram(harmonyOrFretDiagram->parentItem())->clone();
     } else if (harmonyOrFretDiagram->isFretDiagram()) {

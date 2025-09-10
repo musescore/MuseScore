@@ -159,7 +159,6 @@ enum class CommandType : signed char {
     FretMarker,
     FretBarre,
     FretClear,
-    FretLinkHarmony,
     RemoveFretDiagramFromFretBox,
 
     // Harmony
