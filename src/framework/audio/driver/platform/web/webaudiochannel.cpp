@@ -69,7 +69,7 @@ void WebAudioChannel::open(Callback callback)
 
     g_rpcListen = [this](const emscripten::val& msg) {
         std::string type = msg["type"].as<std::string>();
-        LOGDA() << "recived msg type: " << type;
+        // LOGDA() << "recived msg type: " << type;
         if (type == REQUEST_AUDIO_TYPE) {
             int samplesPerChannel = msg["samplesPerChannel"].as<int>();
 
