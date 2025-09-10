@@ -25,6 +25,7 @@
 #include "global/io/fileinfo.h"
 
 #include "draw/bufferedpaintprovider.h"
+#include "draw/painter.h"
 #include "draw/utils/drawdatarw.h"
 
 #include "engraving/compat/scoreaccess.h"

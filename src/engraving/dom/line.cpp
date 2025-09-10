@@ -30,7 +30,6 @@
 #include "barline.h"
 #include "chord.h"
 #include "dynamic.h"
-#include "lyrics.h"
 #include "measure.h"
 #include "mscoreview.h"
 #include "note.h"

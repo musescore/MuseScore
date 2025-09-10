@@ -22,10 +22,6 @@
 
 #include "arpeggio.h"
 
-#include <cmath>
-
-#include "containers.h"
-
 #include "types/typesconv.h"
 
 #include "accidental.h"

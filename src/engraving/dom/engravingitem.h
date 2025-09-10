@@ -20,14 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_ELEMENT_H
-#define MU_ENGRAVING_ELEMENT_H
-
-#include <optional>
+#pragma once
 
 #include "draw/types/color.h"
 #include "draw/types/geometry.h"
-#include "draw/painter.h"
 
 #include "modularity/ioc.h"
 #include "../iengravingconfiguration.h"
@@ -44,6 +40,10 @@
 #include "engravingobject.h"
 #include "elementgroup.h"
 #include "editdata.h"
+
+namespace muse::draw {
+class Painter;
+}
 
 #define DECLARE_LAYOUTDATA_METHODS(Class) \
     const LayoutData* ldata() const { return static_cast<const Class::LayoutData*>(EngravingItem::ldata()); } \
@@ -815,30 +815,6 @@ public:
     void replace(EngravingItem* old, EngravingItem* n);
 };
 
-//---------------------------------------------------------
-//   @@ Compound
-//---------------------------------------------------------
-
-class Compound : public EngravingItem
-{
-    OBJECT_ALLOCATOR(engraving, Compound)
-
-public:
-    Compound(const ElementType& type, Score*);
-    Compound(const Compound&);
-
-    virtual void addElement(EngravingItem*, double x, double y);
-    void clear();
-    virtual void setSelected(bool f);
-    virtual void setVisible(bool);
-
-protected:
-    const std::list<EngravingItem*>& getElements() const { return m_elements; }
-
-private:
-    std::list<EngravingItem*> m_elements;
-};
-
 extern bool elementLessThan(const EngravingItem* const, const EngravingItem* const);
 extern void collectElements(void* data, EngravingItem* e);
 } // mu::engraving
@@ -846,6 +822,4 @@ extern void collectElements(void* data, EngravingItem* e);
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::ElementPtr)
 Q_DECLARE_METATYPE(mu::engraving::ElementType)
-#endif
-
 #endif

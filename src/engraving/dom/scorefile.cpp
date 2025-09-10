@@ -25,6 +25,8 @@
 #include "io/file.h"
 #include "io/fileinfo.h"
 
+#include "draw/painter.h"
+
 #include "style/style.h"
 
 #include "engravingitem.h"

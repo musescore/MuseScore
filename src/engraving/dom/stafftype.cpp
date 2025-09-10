@@ -22,17 +22,17 @@
 
 #include "stafftype.h"
 
-#include "translation.h"
-#include "io/file.h"
 #include "draw/fontmetrics.h"
-#include "draw/types/pen.h"
-#include "rw/xmlreader.h"
-#include "types/typesconv.h"
-#include "style/style.h"
-#include "style/defaultstyle.h"
-#include "engraving/style/textstyle.h"
+#include "draw/painter.h"
+#include "io/file.h"
+#include "translation.h"
 
-#include "chord.h"
+#include "rw/xmlreader.h"
+#include "style/defaultstyle.h"
+#include "style/style.h"
+#include "style/textstyle.h"
+#include "types/typesconv.h"
+
 #include "mscore.h"
 #include "navigate.h"
 #include "score.h"

@@ -22,12 +22,8 @@
 
 #include "spacer.h"
 
-#include "draw/types/pen.h"
-
 #include "measure.h"
 #include "score.h"
-
-#include "log.h"
 
 using namespace mu;
 using namespace muse::draw;

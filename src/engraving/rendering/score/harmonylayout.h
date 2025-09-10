@@ -21,6 +21,9 @@
  */
 #pragma once
 
+#include <stack>
+#include <vector>
+
 #include "layoutcontext.h"
 #include "dom/harmony.h"
 
