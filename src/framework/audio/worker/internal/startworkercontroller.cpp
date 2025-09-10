@@ -68,6 +68,8 @@ static muse::modularity::ModulesIoC* ioc()
 StartWorkerController::StartWorkerController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
     : m_rpcChannel(rpcChannel)
 {
+    rpc::set_last_stream_id(100000);
+
     m_rpcChannel->onMethod(rpc::Method::WorkerInit, [this](const rpc::Msg& msg) {
         OutputSpec spec;
         AudioWorkerConfig conf;
@@ -132,6 +134,8 @@ void StartWorkerController::init(const OutputSpec& outputSpec, const AudioWorker
 #ifdef Q_OS_WASM
     m_webAudioChannel = std::make_shared<WebAudioChannel>();
     m_webAudioChannel->open([this](float* stream, size_t samples) {
+        //LOGDA() << "processAudioData";
+        m_audioEngine->processAudioData();
         auto samplesPerChannel = samples / 2; // 2 channels
         m_audioEngine->popAudioData(stream, samplesPerChannel);
     });

@@ -6,6 +6,8 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
 
         this.port.onmessage = this.onMessageFromMain.bind(this);
 
+        this.buffer = [];
+
         this.debugLog("end of constructor MuseDriverProcessor")
     }
 
@@ -47,27 +49,46 @@ class MuseDriverProcessor extends AudioWorkletProcessor {
     }
 
     onResponseAudio(msg) {
-        let data = msg.data;
-        this.debugLog("received data: " + data.length)
+        //this.debugLog("received data: " + msg.data.length)
+        try {
+        this.buffer.push(...msg.data);
+          } catch (e) {
+       this.debugLog("process error: " + e.toString())
+   }
     }
 
     process(inputs, outputs, parameters) {
 
-       // this.requestAudio()
-
-        const input = inputs[0];
         const output = outputs[0];
 
-        for (let channel = 0; channel < input.length; ++channel) {
-            for (let i = 0; i < input[channel].length; ++i) {
-                output[channel][i] = input[channel][i] * 0.8; 
+       // this.debugLog("process")
+
+      //  try {
+
+            let totalWriten = 0;
+        for (let ci = 0; ci < output.length; ++ci) {
+            let channel = output[ci];
+            const samplesToWrite = Math.min(this.buffer.length, channel.length);
+    
+            for (let i = 0; i < samplesToWrite; i++) {
+                channel[i] = this.buffer[i * 2 + ci];
             }
+
+            totalWriten += samplesToWrite;
         }
+
+        this.buffer = this.buffer.slice(totalWriten);
+
+       // if (this.buffer.length < output[0].length * 2) {
+            this.requestAudio()
+        //}
+
+   // } catch (e) {
+   //     this.debugLog("process error: " + e.toString())
+   // }
+
         return true; 
     }
-
-
-
 }
 
 registerProcessor('musedriver-processor', MuseDriverProcessor);
