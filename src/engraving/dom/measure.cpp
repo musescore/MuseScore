@@ -2800,6 +2800,9 @@ Segment* Measure::searchSegment(double x, SegmentType st, track_idx_t strack, tr
         if (!segment->hasElements(strack, lastTrack)) {
             continue;
         }
+        if (segment->isTimeTickType() && segment->rtick() == ticks()) {
+            continue;
+        }
         Segment* ns = segment->next(st);
         for (; ns; ns = ns->next(st)) {
             if (ns->hasElements(strack, lastTrack)) {

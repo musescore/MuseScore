@@ -1132,7 +1132,7 @@ Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, do
     for (System* system : systems) {
         double x = p.x() - system->canvasPos().x();
         for (MeasureBase* mb : system->measures()) {
-            if (mb->isMeasure() && (x < (mb->x() + mb->ldata()->bbox().width()))) {
+            if (mb->isMeasure() && !toMeasure(mb)->isMMRest() && (x < (mb->x() + mb->ldata()->bbox().width()))) {
                 return toMeasure(mb);
             }
         }
