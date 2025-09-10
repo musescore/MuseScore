@@ -207,6 +207,7 @@ public:
     const std::vector<Chord*>& graceNotes() const { return m_graceNotes; }
     std::vector<Chord*>& graceNotes() { return m_graceNotes; }
     std::vector<Chord*> allGraceChordsOfMainChord();
+    void removeAllGraceNotes() { m_graceNotes.clear(); }
 
     GraceNotesGroup& graceNotesBefore(bool filterUnplayable = false) const;
     GraceNotesGroup& graceNotesAfter(bool filterUnplayable = false) const;

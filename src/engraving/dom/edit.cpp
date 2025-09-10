@@ -433,6 +433,10 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
     newcr->setTicks(d.isMeasure() ? cr->measure()->ticks() : d.fraction());
     newcr->setTuplet(cr->tuplet());
     newcr->setSelected(false);
+    if (newcr->isChord()) {
+        muse::DeleteAll(toChord(newcr)->graceNotes());
+        toChord(newcr)->removeAllGraceNotes();
+    }
 
     undoAddCR(newcr, cr->measure(), tick);
     return newcr;
