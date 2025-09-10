@@ -1616,6 +1616,13 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     if (rs) {
         rScore->undoRemoveElement(rs);
     }
+    // Measure can contain mmRest that can have its own timesig. We need to delete it too
+    if (rm->mmRest()) {
+        Segment* mmRestTimesig = rm->mmRest()->findSegment(SegmentType::TimeSig, s->tick());
+        if (mmRestTimesig) {
+            rScore->undoRemoveElement(mmRestTimesig);
+        }
+    }
 
     Measure* pm = m->prevMeasure();
     Fraction ns(pm ? pm->timesig() : Fraction(4, 4));
