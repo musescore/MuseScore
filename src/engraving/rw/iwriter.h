@@ -42,7 +42,7 @@ class IWriter
 public:
     virtual ~IWriter() = default;
 
-    virtual bool writeScore(Score* score, muse::io::IODevice* device, bool onlySelection, WriteInOutData* out = nullptr) = 0;
+    virtual bool writeScore(Score* score, muse::io::IODevice* device, WriteInOutData* out = nullptr) = 0;
 
     using Supported = std::variant<std::monostate
                                    >;

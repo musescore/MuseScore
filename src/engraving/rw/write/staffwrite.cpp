@@ -56,8 +56,7 @@ static void writeMeasure(XmlWriter& xml, WriteContext& ctx, MeasureBase* m,
 
 void StaffWrite::writeStaff(const Staff* staff, XmlWriter& xml, write::WriteContext& ctx,
                             MeasureBase* measureStart, MeasureBase* measureEnd,
-                            staff_idx_t staffStart, staff_idx_t staffIdx,
-                            bool selectionOnly)
+                            staff_idx_t staffStart, staff_idx_t staffIdx)
 {
     xml.startElement(staff, { { "id", static_cast<int>(staffIdx + 1 - staffStart) } });
 
@@ -68,8 +67,8 @@ void StaffWrite::writeStaff(const Staff* staff, XmlWriter& xml, write::WriteCont
     bool firstMeasureWritten = false;
     bool forceTimeSig = false;
     for (MeasureBase* m = measureStart; m != measureEnd; m = m->next()) {
-        // force timesig if first measure and selectionOnly
-        if (selectionOnly && m->isMeasure()) {
+        // force timesig if first measure and range is set
+        if (ctx.shouldWriteRange() && m->isMeasure()) {
             if (!firstMeasureWritten) {
                 forceTimeSig = true;
                 firstMeasureWritten = true;

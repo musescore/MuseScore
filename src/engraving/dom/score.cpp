@@ -4443,29 +4443,6 @@ void Score::cmdSelectSection()
     update();
 }
 
-void Score::cmdSelectPage(const size_t num)
-{
-    TRACEFUNC;
-
-    IF_ASSERT_FAILED(num < m_pages.size()) {
-        return;
-    }
-
-    const Page* page = m_pages.at(num);
-    const std::vector<System*>& systems = page->systems();
-    if (systems.empty()) {
-        return;
-    }
-
-    MeasureBase* first = systems.front()->first();
-    MeasureBase* last = systems.back()->last();
-
-    if (first && last) {
-        selectRange(first, 0);
-        selectRange(last, nstaves() - 1);
-    }
-}
-
 //---------------------------------------------------------
 //   undo
 //---------------------------------------------------------
