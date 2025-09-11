@@ -52,7 +52,7 @@ AbstractElementPopup {
     showArrow: false
 
     focusPolicies: PopupView.DefaultFocus & ~PopupView.ClickFocus
-    placementPolicies: PopupView.PreferAbove
+    placementPolicies: textStyleModel.placeAbove ? PopupView.PreferAbove : PopupView.PreferBelow
 
     model: TextStylePopupModel {
         id: textStyleModel
