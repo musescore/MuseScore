@@ -215,12 +215,12 @@
 
   <token>
     <name>o</name>
-    <render>sc:0.5 :push :mx circle :popy sc:2</render>
+    <render>sc:0.5 :push :mx circle :popy sc:2 m:0.1:0</render>
     </token>
 
   <token>
     <name>0</name>
-    <render>sc:0.5 :push :mx oslash :popy sc:2</render>
+    <render>sc:0.5 :push :mx oslash :popy sc:2 m:0.1:0</render>
     </token>
 
   <token>
