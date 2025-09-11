@@ -45,8 +45,6 @@
 
 #include "settings.h"
 
-#include "io/internal/filesystem.h"
-
 #include "api/internal/apiregister.h"
 #include "api/iapiregister.h"
 #include "api/logapi.h"
@@ -56,6 +54,14 @@
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
 #include "diagnostics/idiagnosticspathsregister.h"
+#endif
+
+#include "muse_framework_config.h"
+
+#ifdef Q_OS_WASM
+#include "io/internal/memfilesystem.h"
+#else
+#include "io/internal/filesystem.h"
 #endif
 
 #ifdef Q_OS_WIN
@@ -103,10 +109,15 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IApplication>(moduleName(), m_application);
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<ISystemInfo>(moduleName(), m_systemInfo);
-    ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
     ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
     ioc()->registerExport<IProcess>(moduleName(), new Process());
     ioc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
+
+#ifdef Q_OS_WASM
+    ioc()->registerExport<IFileSystem>(moduleName(), new MemFileSystem());
+#else
+    ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
+#endif
 
 #ifdef MUSE_MODULE_UI
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive(iocContext()));
@@ -147,7 +158,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     //! Log file
     io::path_t logFilePath = "none";
-#ifndef Q_OS_WASM
+#ifndef MUSE_CONFIGURATION_IS_WEB
     io::path_t logPath = m_configuration->userAppDataPath() + "/logs";
     fileSystem()->makePath(logPath);
 
@@ -178,7 +189,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     logger->addDest(logFile);
     LOGI() << "log path: " << logFilePath;
-#endif
+#endif // end of not MUSE_CONFIGURATION_IS_WEB
 
     if (m_loggerLevel) {
         logger->setLevel(m_loggerLevel.value());

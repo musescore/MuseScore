@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-#define RPC_LOGGING_ENABLED
+//#define RPC_LOGGING_ENABLED
 
 #ifdef RPC_LOGGING_ENABLED
 #define RPCLOG() LOGDA()
@@ -209,6 +209,8 @@ void WebRpcChannel::listenAll(Handler h)
 
 void WebRpcChannel::addStream(std::shared_ptr<IRpcStream> s)
 {
+    s->init();
+
     m_data.streams.insert({ s->streamId(), s });
 }
 

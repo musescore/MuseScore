@@ -562,8 +562,8 @@ inline const ScoreOrder& customOrder()
     return order;
 }
 
-static constexpr int MIN_NOTES_INTERVAL = -9;
-static constexpr int MAX_NOTES_INTERVAL = 9;
+static constexpr int MIN_NOTES_INTERVAL = -10;
+static constexpr int MAX_NOTES_INTERVAL = 10;
 
 static constexpr int MAX_FRET = 14;
 

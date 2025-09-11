@@ -21,10 +21,17 @@
  */
 #include "soundfontrepository.h"
 
-#include "audio/common/rpc/rpcpacker.h"
 #include "audio/common/audiosanitizer.h"
 
 #include "fluidsynth/fluidsoundfontparser.h"
+
+#include "muse_framework_config.h"
+
+#ifdef Q_OS_WASM
+#include "audio/worker/platform/web/networksfloader.h"
+#else
+#include "audio/common/rpc/rpcpacker.h"
+#endif
 
 #include "log.h"
 
@@ -37,6 +44,20 @@ using namespace muse::async;
 void SoundFontRepository::init()
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+#ifdef Q_OS_WASM
+
+    //! NOTE Temporary solution
+    m_netSFLoader = std::make_shared<worker::NetworkSFLoader>();
+
+    auto promise = m_netSFLoader->load();
+    promise.onResolve(this, [this](const RetVal<io::path_t>& path) {
+        if (path.ret) {
+            this->loadSoundFonts({ path.val });
+        }
+    });
+
+#else
 
     channel()->onMethod(Method::LoadSoundFonts, [this](const Msg& msg) {
         synth::SoundFontPaths paths;
@@ -55,6 +76,7 @@ void SoundFontRepository::init()
 
         this->addSoundFont(path);
     });
+#endif
 }
 
 const SoundFontPaths& SoundFontRepository::soundFontPaths() const
@@ -96,6 +118,8 @@ void SoundFontRepository::addSoundFont(const SoundFontPath& path)
 void SoundFontRepository::loadSoundFonts(const SoundFontPaths& paths)
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    LOGI() << "paths: " << paths;
 
     m_soundFontPaths.clear();
 

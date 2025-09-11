@@ -145,9 +145,8 @@ bool MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
     for (const INotationPartsPtr& parts : excerptsParts()) {
         Staff* excerptStaff = staff->clone();
-        if (parts->appendStaff(excerptStaff, destinationPartId)) {
-            excerptStaff->linkTo(staff);
-        } else {
+        if (!parts->appendStaffLinkedToMaster(excerptStaff, staff, destinationPartId)) {
+            excerptStaff->undoUnlink();
             delete excerptStaff;
         }
     }

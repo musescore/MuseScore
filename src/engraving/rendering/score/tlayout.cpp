@@ -1408,7 +1408,8 @@ void TLayout::layoutHBox(const HBox* item, HBox::LayoutData* ldata, const Layout
         if (!ldata->isSetPos()) {
             ldata->setPos(PointF());
         }
-        ldata->setBbox(0.0, 0.0, item->absoluteFromSpatium(item->boxWidth()), parentSystem->ldata()->bbox().height());
+        ldata->setBbox(item->absoluteFromSpatium(item->topGap()), 0.0, item->absoluteFromSpatium(item->boxWidth()),
+                       parentSystem->ldata()->bbox().height());
     } else {
         ldata->setPos(PointF());
         ldata->setBbox(0.0, 0.0, 50, 50);
@@ -1496,17 +1497,14 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     ldata->setPos(PointF());
 
-    const ElementList& elements = item->orderedElements(true /*includeInvisible*/);
-    const StringList& invisibleDiagrams = item->invisibleDiagrams();
-
     std::vector<FretDiagram*> fretDiagrams;
-    for (EngravingItem* element : elements) {
+    for (EngravingItem* element : item->el()) {
         if (!element || !element->isFretDiagram() || !element->visible()) {
             continue;
         }
 
         FretDiagram* diagram = toFretDiagram(element);
-        if (muse::contains(invisibleDiagrams, diagram->harmony()->harmonyName().toLower())) {
+        if (!diagram->visible()) {
             //! NOTE: We need to layout the diagrams to get the harmony names to show in the UI
             layoutItem(diagram, const_cast<LayoutContext&>(ctx));
 
@@ -4635,7 +4633,7 @@ void TLayout::layoutPlayCountText(PlayCountText* item, TextBase::LayoutData* lda
 {
     LAYOUT_CALL_ITEM(item);
     BarLine* bl = item->barline();
-    Segment* seg = bl->segment();
+    Segment* seg = item->segment();
 
     layoutBaseTextBase(item, ldata);
 

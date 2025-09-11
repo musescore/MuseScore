@@ -25,8 +25,9 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
 import MuseScore.Playback 1.0
+import MuseScore.NotationScene 1.0
 
-StyledPopupView {
+AbstractElementPopup {
     id: root
 
     property NavigationSection notationViewNavigationSection
@@ -36,10 +37,8 @@ StyledPopupView {
     contentWidth: content.width
     contentHeight: content.height
 
-    function updatePosition(elementRect) {
-        var h = Math.max(root.contentHeight, 360)
-        root.x = elementRect.x + elementRect.width + 12
-        root.y = elementRect.y - h / 2
+    function updatePosition() {
+        root.x = (root.parent.width / 2) - (root.width / 2) + root.margins
     }
 
     Rectangle {

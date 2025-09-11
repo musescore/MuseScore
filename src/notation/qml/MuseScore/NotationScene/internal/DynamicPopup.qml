@@ -5,7 +5,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
-StyledPopupView {
+AbstractElementPopup {
     id: root
 
     property NavigationSection notationViewNavigationSection: null
@@ -26,9 +26,8 @@ StyledPopupView {
     focusPolicies: PopupView.DefaultFocus & ~PopupView.ClickFocus
     placementPolicies: PopupView.PreferBelow
 
-    signal elementRectChanged(var elementRect)
-
-    function updatePosition() {
+    model: DynamicPopupModel {
+        id: dynamicModel
     }
 
     RowLayout {
@@ -36,18 +35,6 @@ StyledPopupView {
 
         width: 208
         spacing: 1
-
-        DynamicPopupModel {
-            id: dynamicModel
-
-            onItemRectChanged: function(rect) {
-                root.elementRectChanged(rect)
-            }
-        }
-
-        Component.onCompleted: {
-            dynamicModel.init()
-        }
 
         NavigationPanel {
             id: dynamicsNavPanel

@@ -165,7 +165,7 @@ void GuitarBend::setEndNotePitch(int pitch, QuarterOffset quarterOff)
 
 bool GuitarBend::isReleaseBend() const
 {
-    return endNote()->pitch() < startNote()->pitch();
+    return bendAmountInQuarterTones() < 0;
 }
 
 bool GuitarBend::isFullRelease() const

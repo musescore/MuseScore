@@ -2093,7 +2093,7 @@ static void changeChordStyle(Score* score)
     double eadjust = style.styleD(Sid::chordExtensionAdjust);
     double mmag = style.styleD(Sid::chordModifierMag);
     double madjust = style.styleD(Sid::chordModifierAdjust);
-    double stackedmmag = style.styleD(Sid::chordStackedModiferMag);
+    double stackedmmag = style.styleD(Sid::chordStackedModifierMag);
     bool mstackModifiers = style.styleB(Sid::verticallyStackModifiers);
     bool mexcludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
     String msymbolFont = style.styleSt(Sid::musicalTextFont);
@@ -3555,31 +3555,6 @@ void ChangeTieJumpPointActive::flip(EditData*)
 
     jumpPoint->setActive(m_active);
     m_active = oldActive;
-}
-
-FretLinkHarmony::FretLinkHarmony(FretDiagram* diagram, Harmony* harmony, bool unlink)
-{
-    m_fretDiagram = diagram;
-    m_harmony = harmony;
-    m_unlink = unlink;
-}
-
-void FretLinkHarmony::undo(EditData*)
-{
-    if (m_unlink) {
-        m_fretDiagram->linkHarmony(m_harmony);
-    } else {
-        m_fretDiagram->unlinkHarmony();
-    }
-}
-
-void FretLinkHarmony::redo(EditData*)
-{
-    if (m_unlink) {
-        m_fretDiagram->unlinkHarmony();
-    } else {
-        m_fretDiagram->linkHarmony(m_harmony);
-    }
 }
 
 RemoveFretDiagramFromFretBox::RemoveFretDiagramFromFretBox(FretDiagram* f)

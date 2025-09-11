@@ -147,8 +147,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::FRET_FRAME_ROW_GAP,                  false, "fretFrameRowGap",               P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "row gap") },
     { Pid::FRET_FRAME_CHORDS_PER_ROW,           false, "fretFrameChordsPerRow",         P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "chords per row") },
     { Pid::FRET_FRAME_H_ALIGN,                  false, "fretFrameHorizontalAlign",      P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "horizontal alignment") },
-    { Pid::FRET_FRAME_DIAGRAMS_ORDER,           false, "fretFrameDiagramsOrder",        P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "diagrams order") },
-    { Pid::FRET_FRAME_INVISIBLE_DIAGRAMS,       false, "fretFrameInvisibleDiagrams",    P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "invisible diagrams") },
+    { Pid::FRET_FRAME_DIAGRAMS_ORDER,           false, "fretFrameDiagramsOrder",        P_TYPE::STRING,             PropertyGroup::NONE,      DUMMY_QT_TR_NOOP("propertyName", "diagrams order") },
 
     { Pid::SCALE,                   false, "scale",                 P_TYPE::SCALE,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "scale") },
     { Pid::LOCK_ASPECT_RATIO,       false, "lockAspectRatio",       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "aspect ratio locked") },
@@ -470,9 +469,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::IS_COURTESY,             false, "isCourtesy",            P_TYPE::BOOL,               PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "is courtesy") },
     { Pid::EXCLUDE_VERTICAL_ALIGN,  false, "excludeVerticalAlign",  P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "exclude vertical align") },
 
-    { Pid::SHOW_MEASURE_NUMBERS,              false, "showMeasureNumbers",            P_TYPE::AUTO_ON_OFF, PropertyGroup::NONE, DUMMY_QT_TR_NOOP("propertyName", "show bar numbers")},
+    { Pid::SHOW_MEASURE_NUMBERS,    false, "showMeasureNumbers",    P_TYPE::AUTO_ON_OFF,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "show bar numbers")},
     { Pid::PLAY_COUNT_TEXT_SETTING, false, "playCountTextSetting",  P_TYPE::AUTO_CUSTOM_HIDE,   PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "play count text setting") },
-    { Pid::PLAY_COUNT_TEXT,         false, "playCountText",         P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "play count text") },
+    { Pid::PLAY_COUNT_TEXT,         false, "playCountCustomText",   P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "play count text") },
 
     { Pid::ALIGN_WITH_OTHER_RESTS,  false, "alignWithOtherRests",   P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "align with other rests") },
 

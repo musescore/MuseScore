@@ -1245,7 +1245,7 @@
         <source>Soprano ocarina in C.</source>
         <comment>c-soprano-ocarina description</comment>
         <extracomment>description for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina i C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="603"/>
@@ -1266,7 +1266,7 @@
         <source>S. Oc.</source>
         <comment>c-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>S-ok.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="609"/>
@@ -1280,7 +1280,7 @@
         <source>Soprano ocarina in C.</source>
         <comment>ocarina description</comment>
         <extracomment>description for Ocarina; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina i C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="614"/>
@@ -1308,7 +1308,7 @@
         <source>Soprano ocarina in B♭.</source>
         <comment>bb-soprano-ocarina description</comment>
         <extracomment>description for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina i B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="623"/>
@@ -1329,7 +1329,7 @@
         <source>S. Oc.</source>
         <comment>bb-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>S-ok.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="629"/>
@@ -1343,7 +1343,7 @@
         <source>Soprano ocarina in G.</source>
         <comment>g-soprano-ocarina description</comment>
         <extracomment>description for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina i G.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="634"/>
@@ -1364,7 +1364,7 @@
         <source>S. Oc.</source>
         <comment>g-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>S-ok.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="640"/>
@@ -1378,7 +1378,7 @@
         <source>Soprano ocarina in F.</source>
         <comment>f-soprano-ocarina description</comment>
         <extracomment>description for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sopranokarina i F.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="645"/>
@@ -1399,7 +1399,7 @@
         <source>S. Oc.</source>
         <comment>f-soprano-ocarina shortName</comment>
         <extracomment>shortName for Soprano Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>S-ok.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="651"/>
@@ -1413,7 +1413,7 @@
         <source>Alto (sometimes called tenor) ocarina in C.</source>
         <comment>c-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alt- (ibland kallad tenor-) okarina i C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="656"/>
@@ -1434,7 +1434,7 @@
         <source>A. Oc.</source>
         <comment>c-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>A-ok.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="662"/>
@@ -1448,7 +1448,7 @@
         <source>Alto (sometimes called tenor) ocarina in B♭.</source>
         <comment>bb-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alt- (ibland kallad tenor-) okarina i B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="667"/>
@@ -1469,7 +1469,7 @@
         <source>A. Oc.</source>
         <comment>bb-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>A-ok.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="673"/>
@@ -1483,7 +1483,7 @@
         <source>Alto (sometimes called tenor) ocarina in G.</source>
         <comment>g-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alt- (ibland kallad tenor-) okarina i G.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="678"/>
@@ -1504,7 +1504,7 @@
         <source>A. Oc.</source>
         <comment>g-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>A-ok.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="684"/>
@@ -1518,7 +1518,7 @@
         <source>Alto (sometimes called tenor) ocarina in F.</source>
         <comment>f-alto-ocarina description</comment>
         <extracomment>description for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alt- (ibland kallad tenor-) okarina i F.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="689"/>
@@ -1539,7 +1539,7 @@
         <source>A. Oc.</source>
         <comment>f-alto-ocarina shortName</comment>
         <extracomment>shortName for Alto Ocarina; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>A-ok.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="695"/>
@@ -1553,7 +1553,7 @@
         <source>Bass ocarina in C.</source>
         <comment>c-bass-ocarina description</comment>
         <extracomment>description for Bass Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basokarina i C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="700"/>
@@ -1574,7 +1574,7 @@
         <source>B. Oc.</source>
         <comment>c-bass-ocarina shortName</comment>
         <extracomment>shortName for Bass Ocarina; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B-ok.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="706"/>
@@ -10835,56 +10835,56 @@
         <source>Tuned hand-held bells.</source>
         <comment>hand-bells description</comment>
         <extracomment>description for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handklockor.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3640"/>
         <source>Handbells</source>
         <comment>hand-bells trackName</comment>
         <extracomment>trackName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handklockor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3642"/>
         <source>Handbells</source>
         <comment>hand-bells longName</comment>
         <extracomment>longName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handklockor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3644"/>
         <source>H.B.</source>
         <comment>hand-bells shortName</comment>
         <extracomment>shortName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hklo.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3647"/>
         <source>Tuned hand-held chimes.</source>
         <comment>hand-chimes description</comment>
         <extracomment>description for Handchimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handrörklockor.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3649"/>
         <source>Handchimes</source>
         <comment>hand-chimes trackName</comment>
         <extracomment>trackName for Handchimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handrörklockor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3651"/>
         <source>Handchimes</source>
         <comment>hand-chimes longName</comment>
         <extracomment>longName for Handchimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Handrörklockor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3653"/>
         <source>H.C.</source>
         <comment>hand-chimes shortName</comment>
         <extracomment>shortName for Handchimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hrkl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3656"/>
@@ -11423,21 +11423,21 @@
         <source>Korean hourglass-shaped drum.</source>
         <comment>janggu description</comment>
         <extracomment>description for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Koreansk timglastrumma.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
         <source>Janggu</source>
         <comment>janggu trackName</comment>
         <extracomment>trackName for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3834"/>
         <source>Janggu</source>
         <comment>janggu longName</comment>
         <extracomment>longName for Janggu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Janggu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3836"/>
@@ -12536,7 +12536,7 @@
         <source>Ch. Cym.</source>
         <comment>china-cymbal shortName</comment>
         <extracomment>shortName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>K. cym.</translation>
+        <translation>K.-cym.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4190"/>

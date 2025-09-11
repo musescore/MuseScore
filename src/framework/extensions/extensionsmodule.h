@@ -42,7 +42,6 @@ public:
     void resolveImports() override;
     void registerApi() override;
     void onInit(const IApplication::RunMode& mode) override;
-    void onDelayedInit() override;
 
 private:
 
@@ -50,6 +49,5 @@ private:
     std::shared_ptr<ExtensionsProvider> m_provider;
     std::shared_ptr<ExtensionsActionController> m_actionController;
     std::shared_ptr<ExtensionsExecPointsRegister> m_execPointsRegister;
-    bool m_extensionsLoaded = false;
 };
 }

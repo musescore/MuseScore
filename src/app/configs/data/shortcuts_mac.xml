@@ -221,6 +221,46 @@
     <seq>Alt+9</seq>
     </SC>
   <SC>
+    <key>interval10</key>
+    <seq>Alt+0</seq>
+    </SC>
+  <SC>
+    <key>interval-2</key>
+    <seq>Alt+Shift+2</seq>
+    </SC>
+  <SC>
+    <key>interval-3</key>
+    <seq>Alt+Shift+3</seq>
+    </SC>
+  <SC>
+    <key>interval-4</key>
+    <seq>Alt+Shift+4</seq>
+    </SC>
+  <SC>
+    <key>interval-5</key>
+    <seq>Alt+Shift+5</seq>
+    </SC>
+  <SC>
+    <key>interval-6</key>
+    <seq>Alt+Shift+6</seq>
+    </SC>
+  <SC>
+    <key>interval-7</key>
+    <seq>Alt+Shift+7</seq>
+    </SC>
+  <SC>
+    <key>interval-8</key>
+    <seq>Alt+Shift+8</seq>
+    </SC>
+  <SC>
+    <key>interval-9</key>
+    <seq>Alt+Shift+9</seq>
+    </SC>
+  <SC>
+    <key>interval-10</key>
+    <seq>Alt+Shift+0</seq>
+    </SC>
+  <SC>
     <key>note-a</key>
     <seq>A</seq>
     </SC>

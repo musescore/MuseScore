@@ -75,6 +75,8 @@ engraving::ElementType Convert::elementTypeForDir(const libmei::Element& meiElem
             dirType = engraving::ElementType::PLAYTECH_ANNOTATION;
         } else if (Convert::hasTypeValue(typedAtt->GetType(), std::string(DIR_TYPE) + "staff-text")) {
             dirType = engraving::ElementType::STAFF_TEXT;
+        } else if (Convert::hasTypeValue(typedAtt->GetType(), std::string(DIR_TYPE) + "system-text")) {
+            dirType = engraving::ElementType::SYSTEM_TEXT;
         }
     }
     return dirType;
@@ -1127,6 +1129,9 @@ void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList
         warning = (warning || lformWarning);
     }
 
+    // @color
+    Convert::colorlineFromMEI(textLineBase, meiDir);
+
     // text
     textLineBase->setBeginText(meiLines.join(u"\n"));
     textLineBase->setPropertyFlags(engraving::Pid::BEGIN_TEXT, engraving::PropertyFlags::UNSTYLED);
@@ -1150,6 +1155,9 @@ libmei::Dir Convert::dirToMEI(const engraving::TextBase* textBase, StringList& m
             break;
         case (engraving::ElementType::STAFF_TEXT):
             dirType = std::string(DIR_TYPE) + "staff-text";
+            break;
+        case (engraving::ElementType::SYSTEM_TEXT):
+            dirType = std::string(DIR_TYPE) + "system-text";
             break;
         default: break;
         }
@@ -1195,6 +1203,9 @@ libmei::Dir Convert::dirToMEI(const engraving::TextLineBase* textLineBase, Strin
     if (textLineBase->propertyFlags(engraving::Pid::LINE_STYLE) == engraving::PropertyFlags::UNSTYLED) {
         meiDir.SetLform(Convert::lineToMEI(textLineBase->lineStyle()));
     }
+
+    // @color
+    Convert::colorlineToMEI(textLineBase, meiDir);
 
     // text content - only split lines
     meiLines = String(textLineBase->beginText()).split(u"\n");

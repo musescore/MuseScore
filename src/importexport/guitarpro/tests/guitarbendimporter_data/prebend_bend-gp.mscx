@@ -102,7 +102,7 @@
               <eid>L_L</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>1</fret>
+              <fret>3</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
@@ -186,7 +186,7 @@
               <eid>U_U</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>1</fret>
+              <fret>3</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
@@ -275,7 +275,7 @@
               <eid>e_e</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>1</fret>
+              <fret>3</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
@@ -363,7 +363,7 @@
               <eid>o_o</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>1</fret>
+              <fret>3</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>

@@ -256,7 +256,6 @@ public:
 
     virtual Fraction tick() const;
     virtual Fraction rtick() const;
-    virtual Fraction playTick() const;   ///< muse::Returns the tick at which playback should begin when this element is selected. Defaults to the element's own tick position.
 
     Fraction beat() const;
 

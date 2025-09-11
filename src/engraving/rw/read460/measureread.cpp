@@ -536,6 +536,16 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 TRead::read(el, e, ctx);
                 segment->add(el);
             }
+        } else if (tag == "PlayCountText") {
+            segment = measure->getSegment(SegmentType::EndBarLine, ctx.tick());
+            EngravingItem* el = Factory::createItemByName(tag, segment);
+
+            el->setTrack(ctx.track());
+            TRead::readItem(el, e, ctx);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
+            segment->add(el);
         }
         //----------------------------------------------------
         else if (tag == "Tuplet") {

@@ -107,8 +107,8 @@
               <eid>M_M</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
-              <fret>5</fret>
-              <string>3</string>
+              <fret>2</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -169,8 +169,8 @@
               <eid>T_T</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
-              <fret>7</fret>
-              <string>3</string>
+              <fret>2</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>0</guitarBendType>
@@ -233,8 +233,8 @@
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
-              <fret>8</fret>
-              <string>5</string>
+              <fret>3</fret>
+              <string>4</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -286,8 +286,8 @@
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
-              <fret>4</fret>
-              <string>5</string>
+              <fret>1</fret>
+              <string>4</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
@@ -310,8 +310,8 @@
               <eid>h_h</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
-              <fret>6</fret>
-              <string>5</string>
+              <fret>1</fret>
+              <string>4</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>0</guitarBendType>
@@ -369,8 +369,8 @@
                 </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>9</fret>
-              <string>3</string>
+              <fret>2</fret>
+              <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>0</guitarBendType>

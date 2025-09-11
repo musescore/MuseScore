@@ -903,7 +903,15 @@ void TRead::read(SystemText* t, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(PlayCountText* t, XmlReader& xml, ReadContext& ctx)
 {
-    read(static_cast<TextBase*>(t), xml, ctx);
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (TRead::readProperty(t, tag, xml, ctx, Pid::PLAY_COUNT_TEXT_SETTING)) {
+        } else if (TRead::readProperty(t, tag, xml, ctx, Pid::PLAY_COUNT_TEXT)) {
+        } else if (!readProperties(static_cast<TextBase*>(t), xml, ctx)) {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)
@@ -2034,16 +2042,6 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
                 TRead::read(image, e, ctx);
                 b->add(image);
             }
-        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT_SETTING)) {
-        } else if (readProperty(b, tag, e, ctx, Pid::PLAY_COUNT_TEXT)) {
-        } else if (tag == "PlayCountText") {
-            PlayCountText* p = Factory::createPlayCountText(b);
-            TRead::read(p, e, ctx);
-            p->setParent(b);
-            p->setTrack(ctx.track());
-            b->add(p);
-        } else if (tag == "playCount") {
-            b->setPlayCount(e.readInt());
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
@@ -2115,8 +2113,6 @@ void TRead::read(FBox* b, XmlReader& xml, ReadContext& ctx)
         } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_ROW_GAP)) {
         } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_CHORDS_PER_ROW)) {
         } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_H_ALIGN)) {
-        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_DIAGRAMS_ORDER)) {
-        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_INVISIBLE_DIAGRAMS)) {
         } else if (TRead::readProperties(static_cast<Box*>(b), xml, ctx)) {
         } else {
             xml.unknown();
@@ -2977,6 +2973,7 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICING)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_DURATION)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_BASS_SCALE)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_DO_NOT_STACK_MODIFIERS)) {
         } else if (!readProperties(static_cast<TextBase*>(h), e, ctx)) {
             e.unknown();

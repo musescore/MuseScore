@@ -83,7 +83,7 @@ void DynamicsLayout::doLayoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, 
         return;
     }
 
-    // Use Smufl optical center for dynamic if available
+    // Use SMuFL optical center for dynamic if available
     SymId symId = TConv::symId(item->dynamicType());
     double opticalCenter = item->symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x();
     if (symId != SymId::noSym && opticalCenter) {

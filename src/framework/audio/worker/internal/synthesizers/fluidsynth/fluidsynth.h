@@ -115,7 +115,8 @@ private:
 
     OutputSpec m_outputSpec;
 
-    std::shared_ptr<Fluid> m_fluid = nullptr;
+    std::shared_ptr<Fluid> m_fluid;
+    std::shared_ptr<midi::IMidiOutPort> m_midiOutPort;
 
     async::Channel<unsigned int> m_streamsCountChanged;
 

@@ -27,7 +27,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
-StyledPopupView {
+AbstractElementPopup {
     id: root
     property variant pedalState: harpModel.pedalState
 
@@ -43,7 +43,9 @@ StyledPopupView {
     placementPolicies: PopupView.PreferAbove
     showArrow: false
 
-    signal elementRectChanged(var elementRect)
+    model: HarpPedalPopupModel {
+        id: harpModel
+    }
 
     function updatePosition() {
         const marginFromElement = 12
@@ -101,18 +103,6 @@ StyledPopupView {
         flow: GridLayout.TopToBottom
         columnSpacing: 10
         rowSpacing: 10
-
-        HarpPedalPopupModel {
-            id: harpModel
-
-            onItemRectChanged: function(rect) {
-                root.elementRectChanged(rect)
-            }
-        }
-
-        Component.onCompleted: {
-            harpModel.init()
-        }
 
         NavigationPanel {
             id: pedalSettingsNavPanel

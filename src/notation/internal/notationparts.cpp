@@ -356,21 +356,10 @@ void NotationParts::listenUndoStackChanges()
 
 void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes)
 {
-    const auto systemObjectStavesWithTopStaff = [this]() {
-        std::vector<Staff*> result;
-        if (Staff* topStaff = score()->staff(0)) {
-            result.push_back(topStaff);
-        }
-
-        muse::join(result, score()->systemObjectStaves());
-
-        return result;
-    };
-
     const bool partsChanged = m_parts != score()->parts();
     m_parts = score()->parts();
 
-    std::vector<Staff*> newSystemObjectStaves = systemObjectStavesWithTopStaff();
+    std::vector<Staff*> newSystemObjectStaves = score()->systemObjectStavesWithTopStaff();
     const bool systemObjectStavesChanged = m_systemObjectStaves != newSystemObjectStaves;
     m_systemObjectStaves = std::move(newSystemObjectStaves);
 
@@ -607,6 +596,29 @@ bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     return true;
 }
 
+bool NotationParts::appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceStaff, const muse::ID& destinationPartId)
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(staff && masterSourceStaff) {
+        return false;
+    }
+
+    Part* destinationPart = partModifiable(destinationPartId);
+    if (!destinationPart) {
+        return false;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Add staff"));
+
+    doAppendStaff(staff, destinationPart, /*createRests*/ false);
+    score()->undo(new mu::engraving::Link(staff, masterSourceStaff));
+
+    mu::engraving::Excerpt::cloneStaff2(masterSourceStaff, staff, Fraction(0, 1), score()->endTick());
+
+    return true;
+}
+
 bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId)
 {
     TRACEFUNC;
@@ -784,13 +796,8 @@ void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
                 obj->triggerLayout();
                 continue;
             }
-            bool shouldLink = !obj->isPlayCountText();
-            EngravingItem* copy = shouldLink ? obj->linkedClone() : obj->clone();
+            EngravingItem* copy = obj->linkedClone();
             copy->setStaffIdx(staffIdx);
-
-            if (!obj->parent()->isSegment() && !obj->parent()->isMeasure()) {
-                copy->setParent(engraving::findNewSystemMarkingParent(obj, staff));
-            }
 
             score->undoAddElement(copy, false /*addToLinkedStaves*/);
         }
@@ -883,10 +890,6 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
         }
 
         if (item->staff() == srcStaff) {
-            if (!item->parent()->isSegment() && !item->parent()->isMeasure()) {
-                score()->undoChangeParent(item, engraving::findNewSystemMarkingParent(item, dstStaff), dstStaffIdx);
-                item->triggerLayout();
-            }
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         }
     }

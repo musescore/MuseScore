@@ -5089,6 +5089,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     options.createEmptyMeasures = false;
     options.moveSignaturesClef = moveSignaturesClef;
     options.needDeselectAll = false;
+    options.cloneBoxToAllParts = boxType != BoxType::Fret;
 
     for (int i = 0; i < count; ++i) {
         score()->insertMeasure(elementType, beforeBox, options);
@@ -5198,8 +5199,6 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit(TranslatableString("undoableAction", "Paste"));
 
-    EngravingItem* pastedElement = nullptr;
-
     if (isTextEditingStarted()) {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
@@ -5230,20 +5229,12 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
-
-        std::vector<EngravingItem*> pastedElements = score()->cmdPaste(&ma, nullptr, scale);
-        if (!pastedElements.empty()) {
-            pastedElement = pastedElements.back();
-        }
+        score()->cmdPaste(&ma, nullptr, scale);
     }
 
     apply();
 
-    if (pastedElement == nullptr) {
-        pastedElement = selection()->element();
-    }
-
-    if (pastedElement) {
+    if (EngravingItem* pastedElement = selection()->element()) {
         selectAndStartEditIfNeeded(pastedElement);
     }
 
@@ -7865,11 +7856,11 @@ void NotationInteraction::addFretboardDiagram()
         diagram->setTrack(element->track());
 
         Harmony* harmony = toHarmony(element);
-
         diagram->updateDiagram(harmony->harmonyName());
-        score->undo(new FretLinkHarmony(diagram, harmony));
 
+        diagram->setParent(harmony->parent());
         score->undoAddElement(diagram);
+        score->undoChangeParent(harmony, diagram, track2staff(element->track()));
 
         lastAddedDiagram = diagram;
     }

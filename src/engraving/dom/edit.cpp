@@ -433,6 +433,10 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
     newcr->setTicks(d.isMeasure() ? cr->measure()->ticks() : d.fraction());
     newcr->setTuplet(cr->tuplet());
     newcr->setSelected(false);
+    if (newcr->isChord()) {
+        muse::DeleteAll(toChord(newcr)->graceNotes());
+        toChord(newcr)->removeAllGraceNotes();
+    }
 
     undoAddCR(newcr, cr->measure(), tick);
     return newcr;
@@ -1611,6 +1615,13 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     Segment* rs = rm->findSegment(SegmentType::TimeSig, s->tick());
     if (rs) {
         rScore->undoRemoveElement(rs);
+    }
+    // Measure can contain mmRest that can have its own timesig. We need to delete it too
+    if (rm->mmRest()) {
+        Segment* mmRestTimesig = rm->mmRest()->findSegment(SegmentType::TimeSig, s->tick());
+        if (mmRestTimesig) {
+            rScore->undoRemoveElement(mmRestTimesig);
+        }
     }
 
     Measure* pm = m->prevMeasure();
@@ -3138,8 +3149,8 @@ void Score::deleteItem(EngravingItem* el)
         }
         break;
     case ElementType::PLAY_COUNT_TEXT: {
-        BarLine* bl = toBarLine(el->explicitParent());
-        bl->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::HIDE);
+        PlayCountText* pct = toPlayCountText(el);
+        pct->barline()->undoChangeProperty(Pid::PLAY_COUNT_TEXT_SETTING, AutoCustomHide::HIDE);
     } break;
     case ElementType::INSTRUMENT_CHANGE:
     {
@@ -3886,37 +3897,6 @@ void Score::cmdDeleteSelection()
         // so we don't try to delete them twice if they are also in selection
         std::set<Spanner*> deletedSpanners;
 
-        // diagrams in the fret box must be processed first than diagrams outside the box,
-        // which causes the fret box to be rebuilt and all elements inside to be deleted
-        std::sort(el.begin(), el.end(), [&](const EngravingItem* item1, const EngravingItem* item2) {
-            bool inBox1 = isElementInFretBox(item1);
-            bool inBox2 = isElementInFretBox(item2);
-
-            return inBox1 == inBox2 ? false : inBox1;
-        });
-
-        // if there is harmony or fret diagram outside the fret box
-        // then the fret box will be rebuilt and we should exclude fret box's elements
-        bool hasHarmonyOrFretDiagramsInFretBox = false;
-        bool hasHarmonyOrFretDiagramsOutFretBox = false;
-        for (const EngravingItem* element : el) {
-            if (!element->isFretDiagram() && !element->isHarmony()) {
-                continue;
-            }
-
-            if (isElementInFretBox(element)) {
-                hasHarmonyOrFretDiagramsInFretBox = true;
-            } else {
-                hasHarmonyOrFretDiagramsOutFretBox = true;
-            }
-
-            if (hasHarmonyOrFretDiagramsInFretBox && hasHarmonyOrFretDiagramsOutFretBox) {
-                break;
-            }
-        }
-
-        bool willFretBoxBeRebuilded = hasHarmonyOrFretDiagramsInFretBox && hasHarmonyOrFretDiagramsOutFretBox;
-
         auto selectCRAtTickAndTrack = [this, &crsSelectedAfterDeletion](Fraction tick, track_idx_t track) {
             ChordRest* cr = findCR(tick, track);
             if (cr) {
@@ -3988,64 +3968,26 @@ void Score::cmdDeleteSelection()
                 continue;
             }
 
-            // We can't delete elements inside fret box, instead we hide them
             if (e->isFretDiagram() || e->isHarmony()) {
-                auto excludeElementFromSelectionInfo = [this](EngravingItem* element) {
-                    // we need to exclude elements ftom undo stack selection info,
-                    // so that when trying to return the selection there is no crash
-                    UndoMacro* activeCommand = undoStack()->activeCommand();
-                    activeCommand->excludeElementFromSelectionInfo(element);
-                };
-
-                if (willFretBoxBeRebuilded && isElementInFretBox(e)) {
-                    excludeElementFromSelectionInfo(e);
-                    continue;
-                }
-
-                auto hideDiagramInFretBox = [&excludeElementFromSelectionInfo](FBox* fbox, EngravingItem* element){
-                    StringList invisibleDiagrams = fbox->invisibleDiagrams();
-                    const String harmonyName = element->isFretDiagram() ? toFretDiagram(element)->harmony()->harmonyName().toLower()
-                                               : toHarmony(element)->harmonyName().toLower();
-
-                    invisibleDiagrams.push_back(harmonyName);
-                    fbox->undoSetInvisibleDiagrams(invisibleDiagrams);
-
-                    excludeElementFromSelectionInfo(element);
-                };
-
-                if (e->isFretDiagram() && toFretDiagram(e)->isInFretBox()) {
-                    FBox* fbox = toFBox(e->explicitParent());
-                    hideDiagramInFretBox(fbox, toFretDiagram(e));
-                    elSelectedAfterDeletion = fbox;
-                    continue;
-                } else if (e->isHarmony()) {
-                    EngravingObject* parent = toHarmony(e)->explicitParent();
-                    FretDiagram* fretDiagram = parent->isFretDiagram() ? toFretDiagram(parent) : nullptr;
-
-                    if (fretDiagram && fretDiagram->isInFretBox()) {
-                        FBox* fbox = toFBox(fretDiagram->explicitParent());
-                        hideDiagramInFretBox(fbox, fretDiagram);
-                        elSelectedAfterDeletion = fbox;
+                FBox* fbox = toFBox(e->findAncestor(ElementType::FBOX));
+                if (fbox) {
+                    // We can't delete elements inside fret box, instead we hide them
+                    if (FretDiagram* fretDiagram = e->isFretDiagram() ? toFretDiagram(e) : toFretDiagram(e->parent())) {
+                        fretDiagram->undoChangeProperty(Pid::VISIBLE, false);
                         continue;
                     }
-                }
-            }
-
-            if (e->isFretDiagram()) {
-                FretDiagram* fretDiagram = toFretDiagram(e);
-                Harmony* harmony = fretDiagram->harmony();
-                if (harmony) {
-                    undo(new FretLinkHarmony(fretDiagram, harmony, true /* unlink */));
-                    elSelectedAfterDeletion = fretDiagram->segment()->findAnnotation(ElementType::HARMONY,
-                                                                                     fretDiagram->track(),
-                                                                                     fretDiagram->track());
-                }
-            }
-
-            if (e->isHarmony()) {
-                Harmony* harmony = toHarmony(e);
-                if (harmony->parentItem()->isFretDiagram()) {
-                    elSelectedAfterDeletion = harmony->parentItem();
+                } else if (e->isFretDiagram()) {
+                    FretDiagram* fretDiagram = toFretDiagram(e);
+                    Harmony* harmony = fretDiagram->harmony();
+                    if (harmony) {
+                        undoChangeParent(harmony, fretDiagram->segment(), track2staff(fretDiagram->track()));
+                        elSelectedAfterDeletion = harmony;
+                    }
+                } else if (e->isHarmony()) {
+                    Harmony* harmony = toHarmony(e);
+                    if (harmony->parentItem()->isFretDiagram()) {
+                        elSelectedAfterDeletion = harmony->parentItem();
+                    }
                 }
             }
 
@@ -5590,64 +5532,33 @@ void Score::undoResetPlayCountTextSettings(BarLine* bl)
 
 void Score::undoUpdatePlayCountText(Measure* m)
 {
-    if (!m || !m->repeatEnd()) {
+    if (!m) {
         return;
     }
     const MStyle& _style = style();
     const bool showText = _style.styleB(Sid::repeatPlayCountShow);
     const bool singleRepeats = _style.styleB(Sid::repeatPlayCountShowSingleRepeats);
     const int playCount = m->repeatCount();
-    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true);
+    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true) && m->repeatEnd();
 
-    const std::vector<MStaff*>& measureStaves = m->mstaves();
+    Segment* endBarSeg = m->last(SegmentType::BarLineType);
+    BarLine* topBl = endBarSeg ? toBarLine(endBarSeg->element(0)) : nullptr;
+    if (!topBl) {
+        return;
+    }
 
-    for (staff_idx_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-        if (staffIdx >= measureStaves.size()) {
-            break;
+    PlayCountText* topPlayCountText = toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, 0, 0));
+    if (showPlayCount) {
+        if (!topPlayCountText) {
+            topPlayCountText = Factory::createPlayCountText(endBarSeg);
+            topPlayCountText->setTrack(0);
+            topPlayCountText->setParent(endBarSeg);
+            topPlayCountText->setSelected(topBl->selected());
+            undoAddElement(topPlayCountText);
         }
-
-        Staff* curStaff = staff(staffIdx);
-
-        Segment* endBarSeg = m->last(SegmentType::BarLineType);
-        BarLine* bl = endBarSeg ? toBarLine(endBarSeg->element(staff2track(staffIdx))) : nullptr;
-        if (!bl) {
-            continue;
-        }
-        PlayCountText* playCountText = bl->playCountText();
-
-        bool blShowPlayCount = (showPlayCount && bl->playCountTextSetting() == AutoCustomHide::AUTO)
-                               || bl->playCountTextSetting() == AutoCustomHide::CUSTOM;
-
-        if (blShowPlayCount && curStaff->shouldShowPlayCount()) {
-            if (!playCountText) {
-                playCountText = Factory::createPlayCountText(bl);
-                playCountText->setTrack(staff2track(staffIdx));
-                playCountText->setParent(bl);
-                playCountText->setSystemFlag(true);
-                playCountText->setSelected(bl->selected());
-                bl->undoChangeProperty(Pid::GENERATED, false, PropertyFlags::NOSTYLE);
-                undoAddElement(playCountText);
-                // set generated flag before and after so it sticks on type change and also works on undo/redo
-                bl->undoChangeProperty(Pid::GENERATED, false, PropertyFlags::NOSTYLE);
-            } else {
-                if (playCountText->parent() != bl) {
-                    undoRemoveElement(playCountText);
-
-                    playCountText->setParent(bl);
-                    undoAddElement(playCountText);
-                }
-            }
-        } else if (playCountText) {
-            Staff* staff = playCountText->staff();
-            // Remove this play count text and MMR links
-            for (EngravingObject* obj : playCountText->linkList()) {
-                PlayCountText* item = toPlayCountText(obj);
-                if (staff != item->staff() || item->barline()->playCountText() != item) {
-                    continue;
-                }
-                undoRemoveElement(item, false);
-            }
-        }
+    } else {
+        undoRemoveElement(topPlayCountText);
+        return;
     }
 }
 
@@ -6702,13 +6613,12 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 toMeasure(element->explicitParent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE,
                                                                          static_cast<int>(MeasureNumberMode::SHOW));
             } else if (et == ElementType::PLAY_COUNT_TEXT) {
-                BarLine* bl = toBarLine(element->explicitParent());
-                Fraction tick = bl->tick();
-                Measure* m = score->tick2measure(tick - Fraction::eps());
-                Segment* blSeg = m->last(SegmentType::EndBarLine);
-                BarLine* linkedBl = toBarLine(blSeg->element(ntrack));
+                Segment* segment  = toSegment(element->explicitParent());
+                Fraction tick     = segment->tick();
+                Measure* m        = score->tick2measure(tick - Fraction::eps());
+                Segment* seg      = m->undoGetSegment(SegmentType::EndBarLine, tick);
                 ne->setTrack(ntrack);
-                ne->setParent(linkedBl);
+                ne->setParent(seg);
                 doUndoAddElement(ne);
             } else {
                 Segment* segment  = toSegment(element->explicitParent());
@@ -7064,28 +6974,16 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                       element->explicitParent());
             Fraction tick    = segment->tick();
             Measure* m       = score->tick2measure(tick);
-            if ((segment->segmentType() & (SegmentType::EndBarLine | SegmentType::Clef)) && (m->tick() == tick)) {
+            bool addClefToPrevMeasure = segment->isType(SegmentType::Clef) && element->isClef() && !toClef(element)->isHeader();
+            bool addBlToPrevMeasure = segment->isType(SegmentType::EndBarLine);
+            if (m->tick() == tick && (addClefToPrevMeasure || addBlToPrevMeasure)) {
                 m = m->prevMeasure();
             }
             Segment* seg     = m->undoGetSegment(segment->segmentType(), tick);
             ne->setTrack(linkedTrack);
             ne->setParent(seg);
 
-            // make harmony child of fret diagram if possible
-            if (ne->isHarmony()) {
-                for (EngravingItem* segel : segment->annotations()) {
-                    if (segel && segel->isFretDiagram() && segel->track() == linkedTrack && !toFretDiagram(segel)->harmony()) {
-                        segel->add(ne);
-                        break;
-                    }
-                }
-            } else if (ne->isFretDiagram()) {
-                // update track of child harmony
-                FretDiagram* fd = toFretDiagram(ne);
-                if (fd->harmony()) {
-                    fd->harmony()->setTrack(linkedTrack);
-                }
-            } else if (ne->isStringTunings()) {
+            if (ne->isStringTunings()) {
                 StringTunings* stringTunings = toStringTunings(ne);
                 if (stringTunings->stringData()->isNull()) {
                     const StringData* stringData = stringTunings->part()->stringData(tick, staff->idx());

@@ -23,9 +23,9 @@
 
 #include <map>
 
-#include "global/io/ifilesystem.h"
+#include "../ifilesystem.h"
 
-namespace mu::webbridge {
+namespace muse::io {
 class MemFileSystem : public muse::io::IFileSystem
 {
 public:

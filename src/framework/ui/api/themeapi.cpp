@@ -145,6 +145,8 @@ void ThemeApi::initThemeValues()
     m_buttonOpacityHover = themeValues[BUTTON_OPACITY_HOVER].toReal();
     m_buttonOpacityHit = themeValues[BUTTON_OPACITY_HIT].toReal();
     m_itemOpacityDisabled = themeValues[ITEM_OPACITY_DISABLED].toReal();
+
+    m_extra = configuration()->currentTheme().extra;
 }
 
 void ThemeApi::update()
@@ -517,6 +519,11 @@ void ThemeApi::setupWidgetTheme()
 void ThemeApi::notifyAboutThemeChanged()
 {
     emit themeChanged();
+}
+
+QVariantMap ThemeApi::extra() const
+{
+    return m_extra;
 }
 
 // ====================================================

@@ -132,12 +132,19 @@ ToolConfig UiArrangement::toolConfig(const QString& toolName) const
     ToolConfig config;
 
     config.items.reserve(itemsArr.size());
+
+    bool lastWasSeparator = false;
     for (const QJsonValue v : itemsArr) {
         QJsonObject itemObj = v.toObject();
 
         ToolConfig::Item item;
         item.action = itemObj.value("action").toString().toStdString();
         item.show = itemObj.value("show").toInt(1);
+
+        if (item.isSeparator() && lastWasSeparator) {
+            continue;
+        }
+        lastWasSeparator = item.isSeparator();
 
         config.items.push_back(std::move(item));
     }

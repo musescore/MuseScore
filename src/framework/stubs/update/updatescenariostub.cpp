@@ -30,7 +30,7 @@ bool UpdateScenarioStub::needCheckForUpdate() const
 
 muse::async::Promise<muse::Ret> UpdateScenarioStub::checkForUpdate(bool)
 {
-    return muse::async::make_promise<Ret>([this](auto, auto) {
+    return muse::async::make_promise<Ret>([](auto, auto) {
         return muse::async::Promise<muse::Ret>::dummy_result();
     });
 }

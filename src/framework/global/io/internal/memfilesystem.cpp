@@ -29,7 +29,7 @@
 
 #include "log.h"
 
-using namespace mu::webbridge;
+using namespace muse::io;
 
 //! NOTE Very simple implementation without directory support
 
