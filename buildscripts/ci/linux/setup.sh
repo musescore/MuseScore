@@ -191,7 +191,7 @@ fi
 # MESON
 # Get recent version of Meson (to build pipewire)
 meson_version="1.1.1"
-sudo python3 -m pip install meson==${meson_version}
+$SUDO python3 -m pip install meson==${meson_version}
 
 ##########################################################################
 # BUILD PIPWIRE
