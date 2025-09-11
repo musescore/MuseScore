@@ -295,8 +295,9 @@ bool GradualTempoChange::adjustForRehearsalMark(bool start) const
 PointF GradualTempoChange::linePos(Grip grip, System** system) const
 {
     bool start = grip == Grip::START;
+    PointF defaultPos = TextLineBase::linePos(grip, system);
     if (!adjustForRehearsalMark(start)) {
-        return TextLineBase::linePos(grip, system);
+        return defaultPos;
     }
 
     const Segment* segment = start ? startSegment() : endSegment();
@@ -313,6 +314,9 @@ PointF GradualTempoChange::linePos(Grip grip, System** system) const
     double x = (start ? rehearsalMarkBbox.right() : rehearsalMarkBbox.left()) + padding;
 
     *system = segment->measure()->system();
+
+    x = start ? std::max(x, defaultPos.x()) : x;
+
     return PointF(x, 0.0);
 }
 

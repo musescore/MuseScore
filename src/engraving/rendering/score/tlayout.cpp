@@ -3003,36 +3003,59 @@ void TLayout::layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGrou
     ldata->setShape(shape);
 }
 
-void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
+void TLayout::manageTempoChangeSnapping(GradualTempoChangeSegment* item, LayoutContext& ctx)
 {
-    LAYOUT_CALL_ITEM(item);
-
     GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
 
     ldata->disconnectSnappedItems();
-
     GradualTempoChangeSegment* tempoChangeSegmentSnappedBefore = item->findElementToSnapBefore();
     if (tempoChangeSegmentSnappedBefore) {
         ldata->connectItemSnappedBefore(tempoChangeSegmentSnappedBefore);
+        doLayoutGradualTempoChangeSegment(tempoChangeSegmentSnappedBefore, ctx);
     }
 
     TempoText* tempoTextSnappedAfter = item->findElementToSnapAfter();
     if (tempoTextSnappedAfter) {
         ldata->connectItemSnappedAfter(tempoTextSnappedAfter);
+    }
+}
 
-        if (!item->tempoChange()->adjustForRehearsalMark(false)
-            && tempoTextSnappedAfter->findAncestor(ElementType::SYSTEM) == item->system()) {
-            double xItemPos = tempoTextSnappedAfter->pageX() - item->system()->pageX();
-            double itemLeftEdge = xItemPos + tempoTextSnappedAfter->ldata()->bbox().left();
-            double padding = tempoTextSnappedAfter->fontMetrics().xHeight();
-            double maxTempoLineEnd = itemLeftEdge - padding;
+void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
+{
+    GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
 
-            double xEndDiff = maxTempoLineEnd - (item->pos().x() + item->pos2().x());
-            item->rxpos2() += xEndDiff;
+    auto extendLineToSnappedItemAfter = [item](EngravingItem* itemAfter) {
+        assert(itemAfter->isGradualTempoChangeSegment() || itemAfter->isTempoText());
+        if (item->tempoChange()->adjustForRehearsalMark(false)
+            || itemAfter->findAncestor(ElementType::SYSTEM) != item->system()) {
+            return;
         }
+
+        double xItemPos = itemAfter->pageX() - item->system()->pageX();
+        double itemLeftEdge = xItemPos + itemAfter->ldata()->bbox().left();
+
+        double padding = 0.0;
+        if (itemAfter->isTempoText()) {
+            padding = toTempoText(itemAfter)->fontMetrics().xHeight();
+        } else if (itemAfter->isGradualTempoChangeSegment()) {
+            Text* startText = toGradualTempoChangeSegment(itemAfter)->text();
+            padding = startText ? startText->fontMetrics().xHeight() : item->spatium();
+        }
+
+        double maxTempoLineEnd = itemLeftEdge - padding;
+        double xEndDiff = maxTempoLineEnd - (item->pos().x() + item->pos2().x());
+        item->rxpos2() += xEndDiff;
+    };
+
+    if (ldata->itemSnappedAfter() && ldata->itemSnappedAfter()->isTempoText()) {
+        TempoText* tempoTextSnappedAfter = toTempoText(ldata->itemSnappedAfter());
+        extendLineToSnappedItemAfter(tempoTextSnappedAfter);
+    } else if (ldata->itemSnappedAfter() && ldata->itemSnappedAfter()->isGradualTempoChangeSegment()) {
+        GradualTempoChangeSegment* tempoChangeSegmentSnappedAfter = toGradualTempoChangeSegment(ldata->itemSnappedAfter());
+        extendLineToSnappedItemAfter(tempoChangeSegmentSnappedAfter);
     }
 
-    layoutTextLineBaseSegment(item, ctx);
+    mu::engraving::rendering::score::TLayout::layoutTextLineBaseSegment(item, ctx);
 
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
@@ -3042,6 +3065,15 @@ void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, L
     ldata->setShape(sh);
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+}
+
+void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
+{
+    LAYOUT_CALL_ITEM(item);
+
+    manageTempoChangeSnapping(item, ctx);
+
+    doLayoutGradualTempoChangeSegment(item, ctx);
 }
 
 void TLayout::layoutGradualTempoChange(GradualTempoChange* item, LayoutContext& ctx)
