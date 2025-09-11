@@ -86,5 +86,7 @@ private:
     static void renderActionAlign(HarmonyRenderCtx& harmonyCtx);
     static void renderActionScale(const RenderActionScalePtr& a, HarmonyRenderCtx& harmonyCtx);
     static void renderActionParen(Harmony* item, const RenderActionParenPtr& a, HarmonyRenderCtx& harmonyCtx);
+
+    static void kernCharacters(const Harmony* item, const String& text, HarmonyRenderCtx& harmonyCtx);
 };
 }
