@@ -8186,6 +8186,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, N
             newSlur->setTick2(newSlur->endElement()->tick());
             if (newSlur->ticks().negative()) {
                 logger->logError(String(u"slur end is before slur start"), xmlreader);
+                slurs[slurNo] = SlurDesc();
                 delete newSlur;
                 return;
             }
