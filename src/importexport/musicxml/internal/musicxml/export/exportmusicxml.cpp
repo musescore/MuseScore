@@ -8840,6 +8840,9 @@ static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
 
 void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd, const Fraction& offset)
 {
+    if (h->chords().empty()) {
+        return;
+    }
     XmlWriter::Attributes harmonyAttrs;
     if (h->isPolychord()) {
         harmonyAttrs.emplace_back(std::make_pair("arrangement", "vertical"));
@@ -8973,7 +8976,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         // which may contain arbitrary text
         //
         // No supprt for polychords at the moment. Export the first chord from the list.
-        const HarmonyInfo* info = h->chords().empty() ? nullptr : h->chords().front();
+        const HarmonyInfo* info = h->chords().front();
         const String xmlKind = harmonyXmlKind(info);
         const String textName = info->textName();
         switch (h->harmonyType()) {
