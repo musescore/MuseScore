@@ -302,10 +302,12 @@ void SlurSegment::editDrag(EditData& ed)
         ups(g).off = PointF();
         renderer()->computeBezier(this, ed.delta);
         break;
-    default:
+    case Grip::DRAG:
         ups(Grip::DRAG).off = PointF();
         roffset() += ed.delta;
         break;
+    default:
+        return;
     }
 
     triggerLayout();

@@ -106,12 +106,9 @@ LaissezVibSegment::LaissezVibSegment(const LaissezVibSegment& s)
 {
 }
 
-void LaissezVibSegment::editDrag(EditData& ed)
+void LaissezVibSegment::editDrag(EditData&)
 {
-    consolidateAdjustmentOffsetIntoUserOffset();
-
-    ups(Grip::DRAG).off = PointF();
-    roffset() += ed.delta;
+    // do nothing: dragging is already done by the `drag` method
 }
 
 String LaissezVibSegment::formatBarsAndBeats() const

@@ -107,6 +107,12 @@ void TieSegment::changeAnchor(EditData& ed, EngravingItem* element)
     }
 }
 
+RectF TieSegment::drag(EditData& ed)
+{
+    consolidateAdjustmentOffsetIntoUserOffset();
+    return SlurTieSegment::drag(ed);
+}
+
 void TieSegment::editDrag(EditData& ed)
 {
     consolidateAdjustmentOffsetIntoUserOffset();
@@ -155,10 +161,12 @@ void TieSegment::editDrag(EditData& ed)
         ups(Grip::BEZIER2).off += ed.delta;
         renderer()->computeBezier(this);
         break;
-    default:
+    case Grip::DRAG:
         ups(Grip::DRAG).off = PointF();
         roffset() += ed.delta;
         break;
+    default:
+        return;
     }
 
     triggerLayout();
