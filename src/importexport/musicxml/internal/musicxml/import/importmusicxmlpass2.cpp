@@ -2327,7 +2327,7 @@ void MusicXmlParserPass2::part()
                 continue;
             }
             const Chord* endChord = endNote->chord();
-            if (startNote->pitch() == endNote->pitch()
+            if (startNote->pitch() == endNote->pitch() && startChord->tick() < endChord->tick()
                 && (startMeasure == endChord->measure() || startChord->tick() + startChord->actualTicks() == endChord->tick())) {
                 unendedTie->setEndNote(endNote);
                 endNote->setTieBack(unendedTie);
@@ -8159,7 +8159,7 @@ void MusicXmlParserNotations::slur()
 //   addSlur
 //---------------------------------------------------------
 
-static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, const int tick,
+static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, Note* note, const int tick,
                     MusicXmlLogger* logger, const XmlStreamReader* const xmlreader)
 {
     int slurNo = notation.attribute(u"number").toInt();
@@ -8184,13 +8184,23 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
         } else if (slurs[slurNo].isStop()) {
             // slur start when slur already stopped: wrap up
             Slur* newSlur = slurs[slurNo].slur();
+            if (newSlur->endElement() == cr && note) {
+                slurs[slurNo] = SlurDesc();
+                delete newSlur;
+
+                // Slur starts & ends on same chord - add lv instead
+                LaissezVib* lvTie = Factory::createLaissezVib(note);
+                lvTie->setParent(note);
+                note->score()->undoAddElement(lvTie);
+                return;
+            }
             newSlur->setTrack(track);
             newSlur->setTick(Fraction::fromTicks(tick));
             newSlur->setStartElement(cr);
             newSlur->setTick2(newSlur->endElement()->tick());
-            slurs[slurNo] = SlurDesc();
             if (newSlur->ticks().negative()) {
                 logger->logError(String(u"slur end is before slur start"), xmlreader);
+                slurs[slurNo] = SlurDesc();
                 delete newSlur;
                 return;
             }
@@ -8235,6 +8245,18 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
         if (slurs[slurNo].isStart()) {
             // slur stop when slur already started: wrap up
             Slur* newSlur = slurs[slurNo].slur();
+
+            if (newSlur->startElement() == cr && note) {
+                slurs[slurNo] = SlurDesc();
+                delete newSlur;
+
+                // Slur starts & ends on same chord - add lv instead
+                LaissezVib* lvTie = Factory::createLaissezVib(note);
+                lvTie->setParent(note);
+                note->score()->undoAddElement(lvTie);
+                return;
+            }
+
             if (!(cr->isGrace())) {
                 newSlur->setTick2(Fraction::fromTicks(tick));
                 newSlur->setTrack2(track);
@@ -9264,7 +9286,7 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
         if (notation.symId() != SymId::noSym) {
             addNotation(notation, cr, note);
         } else if (notation.name() == "slur" || notation.name() == "hammer-on" || notation.name() == "pull-off") {
-            addSlur(notation, slurs, cr, tick, m_logger, &m_e);
+            addSlur(notation, slurs, cr, note, tick, m_logger, &m_e);
         } else if (note && (notation.name() == "glissando" || notation.name() == "slide")) {
             addGlissandoSlide(notation, note, glissandi, spanners, m_logger, &m_e);
         } else if (note && notation.name() == "tied") {
