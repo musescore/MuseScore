@@ -194,6 +194,11 @@ if [[ "$PACKARCH" == "wasm" ]]; then
   cd $origin_dir
 fi
 
+# Python3-pip
+if [[ "$PACKARCH" == "armv7l" ]]; then
+  $SUDO apt-get install -y --no-install-recommends python3-pip
+fi
+
 # MESON
 # Get recent version of Meson (to build pipewire)
 meson_version="1.1.1"
