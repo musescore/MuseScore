@@ -2522,7 +2522,7 @@ error_exit:
 
 #elif STBVORBIS_SUPPORT
 
-extern int stb_vorbis_decode_memory(const unsigned char *mem, int len, int *channels, int *sample_rate, short **output);
+extern int vorbis_decode_memory(const unsigned char *mem, unsigned int len, short **output, unsigned int *channels, unsigned int *sample_rate);
 
 static int fluid_sffile_read_vorbis(SFData *sf, unsigned int start_byte, unsigned int end_byte, short **data)
 {
@@ -2532,11 +2532,9 @@ static int fluid_sffile_read_vorbis(SFData *sf, unsigned int start_byte, unsigne
     size_t size = end_byte - start_byte;
     uint8_t* mem = (uint8_t*)malloc(size);
     fread(mem, 1, size, f);
-    int channels = 0;
-    int sampleRate = 0;
     fseek(f, sf->samplepos + start_byte, SEEK_SET);
 
-    int sampleSize = stb_vorbis_decode_memory(mem, size, &channels, &sampleRate, data);
+    int sampleSize = vorbis_decode_memory(mem, size, data, NULL, NULL);
     free(mem);
 
     return sampleSize;
