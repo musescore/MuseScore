@@ -222,12 +222,12 @@
 
   <token>
     <name>o</name>
-    <render>sc:0.8 :push :mx circle :popy sc:1.25</render>
+    <render>sc:0.8 :push :mx circle :popy sc:1.25  m:0.1:0</render>
     </token>
 
   <token>
     <name>0</name>
-    <render>sc:0.8 :push :mx oslash :popy sc:1.25</render>
+    <render>sc:0.8 :push :mx oslash :popy sc:1.25  m:0.1:0</render>
     </token>
 
   <token>
