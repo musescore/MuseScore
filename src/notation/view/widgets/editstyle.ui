@@ -4552,13 +4552,13 @@
             <item>
              <widget class="QGroupBox" name="keySigNaturalsGroup">
               <property name="title">
-               <string>♮ on key signature changes</string>
+               <string>♮ in key signature changes</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_35">
                <item>
                 <widget class="QRadioButton" name="radioKeySigNatNone">
                  <property name="text">
-                  <string>Only on a change to C major / A minor</string>
+                  <string>Only for a change to C major / A minor</string>
                  </property>
                 </widget>
                </item>
