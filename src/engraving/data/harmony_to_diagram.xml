@@ -61994,19 +61994,17 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretDiagram>
-                <string no="0">
-                    <marker>cross</marker>
-                </string>
                 <string no="1">
-                    <marker>cross</marker>
+                    <dot fret="3">normal</dot>
                 </string>
                 <string no="2">
                     <dot fret="3">normal</dot>
                 </string>
-                <barre start="3" end="5">1</barre>
+                <barre start="0" end="-1">1</barre>
             </fretDiagram>
+            <barre>1</barre>
         </FretDiagram>
-        <pattern>XX[3-O]---;B1[3-5]</pattern>
+        <pattern>-[3-O][3-O]---;B1[0-5]</pattern>
         <Harmony>
             <name>fm</name>
         </Harmony>
