@@ -838,8 +838,14 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, c
         return ret;
     }
 
-    // Write view settings and excerpt solo-mute states
+    // Write master view settings
     m_masterNotation->notation()->viewState()->write(msczWriter);
+
+    if (range) {
+        return make_ret(Ret::Code::Ok);
+    }
+
+    // Write excerpt view settings and solo-mute state
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         muse::io::path_t path = u"Excerpts/" + excerpt->fileName() + u"/";
         excerpt->notation()->viewState()->write(msczWriter, path);
