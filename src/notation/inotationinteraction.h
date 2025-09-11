@@ -171,7 +171,8 @@ public:
     virtual void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) = 0;
     virtual void endEditGrip() = 0;
 
-    virtual bool isElementEditStarted() const = 0;
+    virtual bool isEditingElement() const = 0;
+    virtual muse::async::Notification isEditingElementChanged() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
     virtual void changeEditElement(EngravingItem* newElement) = 0;
     virtual bool isEditAllowed(QKeyEvent* event) = 0;

@@ -180,7 +180,8 @@ public:
     void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) override;
     void endEditGrip() override;
 
-    bool isElementEditStarted() const override;
+    bool isEditingElement() const override;
+    muse::async::Notification isEditingElementChanged() const override;
     void startEditElement(EngravingItem* element) override;
     void changeEditElement(EngravingItem* newElement) override;
     bool isEditAllowed(QKeyEvent* event) override;
@@ -533,6 +534,8 @@ private:
     QDrag* m_outgoingDrag = nullptr;
 
     mu::engraving::EditData m_editData;
+
+    muse::async::Notification m_isEditingElementChanged;
 
     muse::async::Notification m_textEditingStarted;
     muse::async::Notification m_textEditingChanged;

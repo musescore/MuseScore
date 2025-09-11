@@ -132,7 +132,8 @@ public:
     MOCK_METHOD(void, startEditGrip, (EngravingItem*, mu::engraving::Grip), (override));
     MOCK_METHOD(void, endEditGrip, (), (override));
 
-    MOCK_METHOD(bool, isElementEditStarted, (), (const, override));
+    MOCK_METHOD(bool, isEditingElement, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, isEditingElementChanged, (), (const, override));
     MOCK_METHOD(void, startEditElement, (EngravingItem*), (override));
     MOCK_METHOD(void, changeEditElement, (EngravingItem*), (override));
     MOCK_METHOD(bool, isEditAllowed, (QKeyEvent*), (override));

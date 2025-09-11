@@ -44,6 +44,7 @@ using namespace mu::notation;
 using namespace mu::playback;
 
 static const ActionCode PLAY_CODE("play");
+static const ActionCode PLAY_FROM_SELECTION("play-from-selection");
 static const ActionCode STOP_CODE("stop");
 static const ActionCode PAUSE_AND_SELECT_CODE("pause-and-select");
 static const ActionCode REWIND_CODE("rewind");
@@ -91,6 +92,7 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
+    dispatcher()->reg(this, PLAY_FROM_SELECTION, this, &PlaybackController::playFromSelection);
     dispatcher()->reg(this, STOP_CODE, [this]() { PlaybackController::pause(/*select*/ false); });
     dispatcher()->reg(this, PAUSE_AND_SELECT_CODE, [this]() { PlaybackController::pause(/*select*/ true); });
     dispatcher()->reg(this, REWIND_CODE, this, &PlaybackController::rewind);
@@ -665,6 +667,38 @@ void PlaybackController::play()
     }
 
     currentPlayer()->play(delay);
+}
+
+void PlaybackController::playFromSelection()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    int startTick = INT_MAX;
+    for (const EngravingItem* item : selection()->elements()) {
+        startTick = std::min(startTick, item->tick().ticks());
+    }
+
+    const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
+    if (loop.enabled) {
+        if (startTick < loop.loopInTick.ticks() || startTick > loop.loopOutTick.ticks()) {
+            startTick = loop.loopInTick.ticks();
+        }
+    }
+
+    const RetVal<midi::tick_t> retval = notationPlayback()->playPositionTickByRawTick(startTick);
+    if (!retval.ret) {
+        return;
+    }
+
+    seek(playedTickToSecs(retval.val));
+
+    if (isPaused()) {
+        resume();
+    } else if (!isPlaying()) {
+        play();
+    }
 }
 
 void PlaybackController::rewind(const ActionData& args)

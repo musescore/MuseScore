@@ -1130,10 +1130,8 @@ void NotationInteraction::clearSelection()
 {
     TRACEFUNC;
 
-    if (isElementEditStarted()) {
+    if (isEditingElement()) {
         endEditElement();
-    } else if (m_editData.element) {
-        m_editData.element = nullptr;
     }
 
     if (isDragStarted()) {
@@ -1295,7 +1293,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.ed.pos = toPos;
     m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
 
-    m_dragData.ed.isEditMode = isElementEditStarted();
+    m_dragData.ed.isEditMode = isEditingElement();
 
     if (isTextEditingStarted()) {
         m_editData.pos = toPos;
@@ -3767,7 +3765,7 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
 bool NotationInteraction::moveSelectionAvailable(MoveSelectionType type) const
 {
     if (type != MoveSelectionType::EngravingItem) {
-        return !isElementEditStarted();
+        return !isEditingElement();
     }
 
     EngravingItem* el = score()->selection().element();
@@ -3785,7 +3783,7 @@ bool NotationInteraction::moveSelectionAvailable(MoveSelectionType type) const
         return true;
     }
 
-    return m_editData.element && m_editData.element->isTextBase() ? !isTextEditingStarted() : !isElementEditStarted();
+    return m_editData.element && m_editData.element->isTextBase() ? !isTextEditingStarted() : !isEditingElement();
 }
 
 void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
@@ -4099,7 +4097,7 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
         return;
     }
 
-    if (isElementEditStarted()) {
+    if (isEditingElement()) {
         endEditElement();
     }
 
@@ -4308,6 +4306,7 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
 
     m_editData.element->startEdit(m_editData);
 
+    m_isEditingElementChanged.notify();
     notifyAboutTextEditingStarted();
     notifyAboutTextEditingChanged();
 }
@@ -4448,6 +4447,8 @@ void NotationInteraction::endEditText()
 
     TextBase* editedElement = toTextBase(m_editData.element);
     doEndEditElement();
+
+    m_isEditingElementChanged.notify();
     notifyAboutTextEditingEnded(editedElement);
 
     notifyAboutTextEditingChanged();
@@ -4622,7 +4623,7 @@ void NotationInteraction::updateDragAnchorLines()
     setAnchorLines(anchorLines);
 }
 
-bool NotationInteraction::isElementEditStarted() const
+bool NotationInteraction::isEditingElement() const
 {
     return m_editData.element != nullptr;
 }
@@ -4633,7 +4634,7 @@ void NotationInteraction::startEditElement(EngravingItem* element)
         return;
     }
 
-    if (isElementEditStarted()) {
+    if (isEditingElement()) {
         return;
     }
 
@@ -4645,6 +4646,8 @@ void NotationInteraction::startEditElement(EngravingItem* element)
         element->startEdit(m_editData);
         m_editData.element = element;
     }
+
+    m_isEditingElementChanged.notify();
 }
 
 void NotationInteraction::changeEditElement(EngravingItem* newElement)
@@ -4794,7 +4797,13 @@ void NotationInteraction::endEditElement()
     doEndEditElement();
     resetAnchorLines();
 
+    m_isEditingElementChanged.notify();
     notifyAboutNotationChanged();
+}
+
+muse::async::Notification NotationInteraction::isEditingElementChanged() const
+{
+    return m_isEditingElementChanged;
 }
 
 void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
@@ -6414,7 +6423,7 @@ bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& 
 
 bool NotationInteraction::needEndElementEditing(const std::vector<EngravingItem*>& newSelectedElements) const
 {
-    if (!isElementEditStarted()) {
+    if (!isEditingElement()) {
         return false;
     }
 

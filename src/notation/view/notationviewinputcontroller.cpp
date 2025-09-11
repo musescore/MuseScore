@@ -1084,7 +1084,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         const EngravingItem* hitElement = hitElementContext().element;
 
         // drag element
-        if ((hitElement && (hitElement->isMovable() || viewInteraction()->isElementEditStarted()))
+        if ((hitElement && (hitElement->isMovable() || viewInteraction()->isEditingElement()))
             || viewInteraction()->isGripEditStarted()) {
             if (hitElement && !viewInteraction()->isDragStarted()) {
                 startDragElements(hitElement->type(), hitElement->offset());
@@ -1364,7 +1364,7 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
         return true;
     }
 
-    if (viewInteraction()->isElementEditStarted()) {
+    if (viewInteraction()->isEditingElement()) {
         return viewInteraction()->isEditAllowed(event);
     }
 
@@ -1388,7 +1388,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
         m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
         m_view->asItem()->setCursor({});
         event->accept();
-    } else if (viewInteraction()->isElementEditStarted()) {
+    } else if (viewInteraction()->isEditingElement()) {
         viewInteraction()->editElement(event);
         if (key == Qt::Key_Shift) {
             viewInteraction()->updateTimeTickAnchors(event);
