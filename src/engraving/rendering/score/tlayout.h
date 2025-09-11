@@ -402,6 +402,9 @@ private:
     static void manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx);
 
     static void checkRehearsalMarkVSBigTimeSig(const RehearsalMark* item, RehearsalMark::LayoutData* ldata);
+
+    static void manageTempoChangeSnapping(GradualTempoChangeSegment* item, LayoutContext& ctx);
+    static void doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx);
 };
 }
 
