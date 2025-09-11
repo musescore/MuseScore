@@ -134,7 +134,7 @@ Ret FluidSynth::init(const OutputSpec& spec)
     createFluidInstance();
 
     m_sequencer.setOnOffStreamFlushed([this]() {
-        m_allNotesOffRequested = true;
+        m_flushSoundRequested = true;
     });
 
     LOGD() << "synth inited\n";
@@ -151,7 +151,7 @@ void FluidSynth::createFluidInstance()
     fluid_synth_add_sfloader(m_fluid->synth, sfloader);
 }
 
-void FluidSynth::allNotesOff()
+void FluidSynth::doFlushSound()
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -204,8 +204,6 @@ void FluidSynth::allNotesOff()
             m_midiOutPort->sendEvent(e);
         }
     }
-
-    m_allNotesOffRequested = false;
 }
 
 bool FluidSynth::handleEvent(const midi::Event& event)
@@ -359,23 +357,10 @@ const mpe::PlaybackData& FluidSynth::playbackData() const
     return m_sequencer.playbackData();
 }
 
-void FluidSynth::revokePlayingNotes()
-{
-    m_allNotesOffRequested = true;
-}
-
 void FluidSynth::flushSound()
 {
-    IF_ASSERT_FAILED(m_fluid->synth) {
-        return;
-    }
-
     m_sequencer.flushOffstream();
-
-    allNotesOff();
-
-    fluid_synth_all_sounds_off(m_fluid->synth, -1);
-    fluid_synth_cc(m_fluid->synth, -1, 121, 127);
+    m_flushSoundRequested = true;
 }
 
 bool FluidSynth::isActive() const
@@ -414,8 +399,9 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
         return 0;
     }
 
-    if (m_allNotesOffRequested) {
-        allNotesOff();
+    if (m_flushSoundRequested) {
+        doFlushSound();
+        m_flushSoundRequested = false;
     }
 
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_outputSpec.sampleRate);

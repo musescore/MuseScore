@@ -35,7 +35,7 @@ public:
     virtual ~ISequencePlayer() = default;
 
     virtual void play(const secs_t delay = 0) = 0;
-    virtual void seek(const secs_t newPosition) = 0;
+    virtual void seek(const secs_t newPosition, const bool flushSound = true) = 0;
     virtual void stop() = 0;
     virtual void pause() = 0;
     virtual void resume(const secs_t delay = 0) = 0;
