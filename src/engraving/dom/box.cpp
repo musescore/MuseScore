@@ -713,8 +713,6 @@ FBox::FBox(System* parent)
 
 void FBox::init()
 {
-    LOGDA() << "============= init";
-
     StringList oldDiagramsNames;
     std::vector<FretDiagram*> oldDiagrams;
     for (EngravingItem* element : el()) {
