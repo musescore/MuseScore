@@ -652,7 +652,11 @@ void HorizontalSpacing::moveRightAlignedSegments(std::vector<SegmentPosition>& p
 
         if (x != DBL_MAX) {
             placedSegments[i].xPosInSystemCoords = x;
-            double nextSegX = placedSegments[i + 1].xPosInSystemCoords;
+            SegmentPosition& nextSegPos = placedSegments[i + 1];
+            for (size_t j = i + 2; nextSegPos.ignoreForSpacing && j < placedSegments.size(); ++j) {
+                nextSegPos = placedSegments[j];
+            }
+            double nextSegX = nextSegPos.xPosInSystemCoords;
             Segment* prevCRSeg = segment->prev(SegmentType::ChordRest);
             if (prevCRSeg) {
                 prevCRSeg->addWidthOffset(-nextSegX + x);
