@@ -36,6 +36,7 @@ apt_packages_qt6=(
     libqt6quickcontrols2-6
     libqt6quicktemplates2-6
     libqt6quickwidgets6
+    libqt6shadertools6-dev
     libqt6svg6-dev
     libqt6websockets6-dev
     libqt6xml6
