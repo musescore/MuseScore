@@ -169,10 +169,16 @@ else
 fi
 
 # CMake
+if [[ "$PACKARCH" == "armv7l" ]]; then
+  $SUDO apt-get install -y --no-install-recommends cmake
+fi
 echo "cmake version"
 cmake --version
 
 # Ninja
+if [[ "$PACKARCH" == "armv7l" ]]; then
+  $SUDO apt-get install -y --no-install-recommends ninja-build
+fi
 echo "ninja version"
 ninja --version
 
