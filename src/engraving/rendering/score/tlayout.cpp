@@ -3043,12 +3043,16 @@ void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item,
         double xItemPos = itemAfter->pageX() - item->system()->pageX();
         double itemLeftEdge = xItemPos + itemAfter->ldata()->bbox().left();
 
-        double padding = 0.0;
+        double padding = item->spatium();
         if (itemAfter->isTempoText()) {
-            padding = toTempoText(itemAfter)->fontMetrics().xHeight();
+            const double fontSizeScaleFactor = toTempoText(itemAfter)->size() / 10.0;
+            padding = 0.5 * item->spatium() * fontSizeScaleFactor;
         } else if (itemAfter->isGradualTempoChangeSegment()) {
             Text* startText = toGradualTempoChangeSegment(itemAfter)->text();
-            padding = startText ? startText->fontMetrics().xHeight() : item->spatium();
+            if (startText) {
+                const double fontSizeScaleFactor = startText->size() / 10.0;
+                padding = 0.5 * item->spatium() * fontSizeScaleFactor;
+            }
         }
 
         double maxTempoLineEnd = itemLeftEdge - padding;
@@ -5919,7 +5923,7 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
     Segment* s = item->segment();
 
     RehearsalMark* rehearsalMark = toRehearsalMark(s->findAnnotation(ElementType::REHEARSAL_MARK, item->track(), item->track()));
-    RectF rehearsMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
+    RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
     RectF thisBbox = ldata->bbox().translated(item->pos());
 
     if (s->rtick().isZero()) {
@@ -5933,12 +5937,19 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
         }
     }
 
-    if (rehearsalMark && rehearsMarkBbox.bottom() > thisBbox.top()
-        && item->getProperty(Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK).toBool()) {
-        double rightEdge = rehearsMarkBbox.right();
-        const double padding = 0.5 * item->fontMetrics().xHeight();
-        double curX = ldata->pos().x();
-        ldata->setPosX(std::max(curX, rightEdge + padding));
+    if (rehearsalMark) {
+        const bool sameSide = item->placeAbove() == rehearsalMark->placeAbove();
+        const bool collision
+            = item->placeAbove() ? muse::RealIsEqualOrMore(rehearsalMarkBbox.bottom(), thisBbox.top()) : muse::RealIsEqualOrLess(
+                  rehearsalMarkBbox.top(), thisBbox.bottom());
+
+        if (sameSide && collision && item->getProperty(Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK).toBool()) {
+            double rightEdge = rehearsalMarkBbox.right();
+            const double fontSizeScaleFactor = item->size() / 10.0;
+            const double padding = 0.5 * item->spatium() * fontSizeScaleFactor;
+            double curX = ldata->pos().x();
+            ldata->setPosX(std::max(curX, rightEdge + padding));
+        }
     }
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
