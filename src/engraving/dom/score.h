@@ -30,6 +30,7 @@
 #include <set>
 #include <memory>
 #include <optional>
+#include <utility>
 
 #include "global/async/channel.h"
 #include "global/types/ret.h"
@@ -596,6 +597,7 @@ public:
     void cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, const Fraction& lTick, bool link = true, bool spanner = true);
 
     muse::Ret repitchNote(const Position& pos, bool replace);
+    std::pair<Note*, Note*> repitchReplaceNote(Chord*, const NoteVal&, bool forceAccidental = false);   // returns new note and last tied note
     void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
 
     void startCmd(const TranslatableString& actionName);             // start undoable command
@@ -1183,7 +1185,7 @@ private:
 
     void applyAccidentalToInputNotes(AccidentalType accidentalType);
 
-    Note* addPitchToChord(NoteVal&, Chord* chord, InputState* externalInputState = nullptr);
+    Note* addPitchToChord(NoteVal&, Chord* chord, InputState* externalInputState = nullptr, bool forceAccidental = false);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
     Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
