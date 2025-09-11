@@ -279,17 +279,17 @@ bool GradualTempoChange::adjustForRehearsalMark(bool start) const
     }
 
     const RehearsalMark* rehearsalMark = toRehearsalMark(segment->findAnnotation(ElementType::REHEARSAL_MARK, track(), track()));
-    if (!rehearsalMark || !m_alignRightOfRehearsalMark) {
+    if (!rehearsalMark) {
         return false;
     }
     RectF thisBbox = ldata()->bbox().translated(pos());
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
 
-    if (muse::RealIsEqualOrLess(rehearsalMarkBbox.bottom(), thisBbox.top())) {
-        return false;
-    }
+    const bool sameSide = placeAbove() == rehearsalMark->placeAbove();
+    const bool collision = placeAbove() ? muse::RealIsEqualOrMore(rehearsalMarkBbox.bottom(), thisBbox.top()) : muse::RealIsEqualOrLess(
+        rehearsalMarkBbox.top(), thisBbox.bottom());
 
-    return true;
+    return sameSide && collision;
 }
 
 PointF GradualTempoChange::linePos(Grip grip, System** system) const
@@ -309,7 +309,14 @@ PointF GradualTempoChange::linePos(Grip grip, System** system) const
 
     Text* text = start ? toGradualTempoChangeSegment(frontSegment())->text() : toGradualTempoChangeSegment(backSegment())->endText();
 
-    double padding = text ? 0.5 * text->fontMetrics().xHeight() : spatium();
+    const double sp = spatium();
+
+    double padding = sp;
+    if (text) {
+        const double fontSizeScaleFactor = text->size() / 10.0;
+        padding = 0.5 * sp * fontSizeScaleFactor;
+    }
+
     padding *= start ? 1.0 : -1.0;
     double x = (start ? rehearsalMarkBbox.right() : rehearsalMarkBbox.left()) + padding;
 
