@@ -67,7 +67,7 @@ void MeasureNumberLayout::layoutMeasureNumber(MeasureNumber* item, MeasureNumber
             if (measure->header()) {
                 ldata->setPosX(measure->firstNoteRestSegmentX(true) - measure->systemPos().x());
             } else {
-                double xRef = refBarline->pageX() - measure->pageX();
+                double xRef = refBarline ? refBarline->pageX() - measure->pageX() : 0.0;
                 ldata->setPosX(xRef);
             }
         } else if (hPlacement == AlignH::HCENTER) {
