@@ -63,6 +63,7 @@ public:
     void addExcerptFile(const muse::String& excerptFileName, const muse::ByteArray& data);
     void writeChordListFile(const muse::ByteArray& data);
     void writeThumbnailFile(const muse::ByteArray& data);
+    void writePdfFile(const muse::ByteArray& data);
     void addImageFile(const muse::String& fileName, const muse::ByteArray& data);
     void writeAudioFile(const muse::ByteArray& data);
     void writeAudioSettingsJsonFile(const muse::ByteArray& data, const muse::io::path_t& pathPrefix = "");
