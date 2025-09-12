@@ -6496,9 +6496,9 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
                     child->undoChangeProperty(Pid::VISIBLE, chordHasVisibleNote_);
                 }
             }
-            bool visible = chordHasVisibleChild(linkedChord);
-            if (!visible) {
-                linkedChord->undoChangeProperty(Pid::VISIBLE, visible);
+            bool visibleChild = chordHasVisibleChild(linkedChord);
+            if (!visibleChild) {
+                linkedChord->undoChangeProperty(Pid::VISIBLE, visibleChild);
             }
         }
     }
