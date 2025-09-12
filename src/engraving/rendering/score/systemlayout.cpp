@@ -334,6 +334,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
                     MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
 
+                    MeasureLayout::updateGraceNotes(m, ctx);
+
                     prevMeasureState.restoreMeasure();
                     MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m, ctx);
