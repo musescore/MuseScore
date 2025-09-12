@@ -22,6 +22,8 @@
 
 #include "docktabbar.h"
 
+#include "log.h"
+
 using namespace muse::dock;
 
 DockTabBar::DockTabBar(KDDockWidgets::TabWidget* parent)

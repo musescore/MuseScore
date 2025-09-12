@@ -21,7 +21,8 @@
  */
 
 #include "docktabsmodel.h"
-#include "log.h"
+
+#include "docktypes.h"
 
 using namespace muse::dock;
 
