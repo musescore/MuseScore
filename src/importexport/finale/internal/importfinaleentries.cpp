@@ -631,7 +631,6 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
             logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
             return false;
         }
-        Staff* targetStaff = rest->staff();
         if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
             /// @todo correctly calculate default rest position in multi-voice situation. rest->setAutoPlace is problematic because it also affects spacing
             /// (and does not cover all vertical placement situations either).
@@ -640,13 +639,14 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
                 logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
             }
             auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
-            const StaffType* staffType = targetStaff->staffTypeForElement(rest);
+            const StaffType* staffType = rest->staffType();
             // following code copied from TLayout::layoutRest:
-            Rest::LayoutData layoutData;
-            const int naturalLine = RestLayout::computeNaturalLine(staffType->lines()); // Measured in 1sp steps
-            const int voiceOffset = RestLayout::computeVoiceOffset(rest, &layoutData); // Measured in 1sp steps
+            /// @todo this code is now private to the layout module, so we will need a new method.
+            // Rest::LayoutData layoutData;
+            // const int naturalLine = rendering::score::RestLayout::computeNaturalLine(staffType->lines()); // Measured in 1sp steps
+            // const int voiceOffset = rendering::score::RestLayout::computeVoiceOffset(rest, &layoutData); // Measured in 1sp steps
             // omit call to computeWholeOrBreveRestOffset because it requires layout rectangles to have been created
-            int finalLine = naturalLine + voiceOffset;
+            int finalLine = 0; //naturalLine + voiceOffset;
             // convert finalLine to staff position offset for Finale rest. This value is measured in 0.5sp steps.
             const int staffPositionOffset = 2 * finalLine - currMusxStaff->calcToplinePosition();
             const double lineSpacing = staffType->lineDistance().val();
@@ -654,7 +654,7 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
                 staffPosition += 2; // account for a whole rest's staff line discrepancy between Finale and MuseScore
             }
             rest->setAlignWithOtherRests(false); // override as much automatic positioning as possible
-            rest->ryoffset() = double(-staffPosition - staffPositionOffset) * targetStaff->spatium(rest->tick()) * lineSpacing / 2.0;
+            rest->ryoffset() = double(-staffPosition - staffPositionOffset) * rest->staff()->spatium(rest->tick()) * lineSpacing / 2.0;
             /// @todo Account for additional default positioning around collision avoidance (when the rest is on the "wrong" side for the voice.)
             /// Unfortunately, we can't set `autoplace` to false because that also suppresses horizontal spacing.
             /// The test file `beamsAndRest.musx` includes an example of this issue in the first 32nd rest in the top staff.
