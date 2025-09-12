@@ -5267,7 +5267,7 @@ void NotationInteraction::swapSelection()
         if (tickLen > mu::engraving::Fraction(0, 1)) { // attempt to extend selection to match clipboard size
             mu::engraving::Segment* segment = selection.startSegment();
             mu::engraving::Fraction startTick = selection.tickStart() + tickLen;
-            mu::engraving::Segment* segmentAfter = score()->tick2leftSegment(startTick);
+            mu::engraving::Segment* segmentAfter = score()->tick2leftSegmentMM(startTick);
 
             size_t staffIndex = selection.staffStart() + stavesCount - 1;
             if (staffIndex >= score()->nstaves()) {
