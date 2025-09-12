@@ -7856,11 +7856,11 @@ void NotationInteraction::addFretboardDiagram()
         diagram->setTrack(element->track());
 
         Harmony* harmony = toHarmony(element);
-
         diagram->updateDiagram(harmony->harmonyName());
-        score->undo(new FretLinkHarmony(diagram, harmony));
 
+        diagram->setParent(harmony->parent());
         score->undoAddElement(diagram);
+        score->undoChangeParent(harmony, diagram, track2staff(element->track()));
 
         lastAddedDiagram = diagram;
     }

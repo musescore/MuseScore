@@ -67,7 +67,7 @@ void MeasureNumberLayout::layoutMeasureNumber(MeasureNumber* item, MeasureNumber
             if (measure->header()) {
                 ldata->setPosX(measure->firstNoteRestSegmentX(true) - measure->systemPos().x());
             } else {
-                double xRef = refBarline->pageX() - measure->pageX();
+                double xRef = refBarline ? refBarline->pageX() - measure->pageX() : 0.0;
                 ldata->setPosX(xRef);
             }
         } else if (hPlacement == AlignH::HCENTER) {
@@ -155,7 +155,7 @@ const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item,
     Measure* measure = item->measure();
     if (alignToBarline || hPlacement == AlignH::LEFT) {
         for (Segment* seg = measure->first(); seg && seg->tick() == measure->tick() && seg->system() == measure->system();
-             seg = seg->prev1enabled()) {
+             seg = seg->prev1MMenabled()) {
             if (seg->isType(SegmentType::BarLineType) && seg->isActive()) {
                 barlineSeg = seg;
                 break;
