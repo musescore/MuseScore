@@ -2726,7 +2726,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
                     noteX = -note->headBodyWidth() + overlapMirror;
                 }
             } else if (_up) {
-                noteX = StemLayout::stemPosX(chord) - note->headBodyWidth();
+                noteX = chord->noteHeadWidth() - note->headBodyWidth();
             }
 
             double ny = (note->line() + stepOffset) * stepDistance;

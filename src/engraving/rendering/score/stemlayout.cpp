@@ -187,7 +187,14 @@ double StemLayout::stemPosX(const Chord* item)
 {
     const StaffType* staffType = item->staffType();
     if (!staffType || !staffType->isTabStaff()) {
-        return item->ldata()->up ? item->noteHeadWidth() : 0.0;
+        bool up = item->ldata()->up;
+        const Note* refNote = up ? item->upNote() : item->downNote();
+        PointF stemAttach = up ? refNote->stemUpSE() : refNote->stemDownNW();
+        if (stemAttach.isNull()) {
+            return up ? item->noteHeadWidth() : 0.0;
+        }
+        double noteWidthOffset = up ? (refNote->headBodyWidth() - item->noteHeadWidth()) : 0.0;
+        return stemAttach.x() - noteWidthOffset;
     }
 
     double xPos = rendering::score::StemLayout::tabStemPosX() * item->spatium();

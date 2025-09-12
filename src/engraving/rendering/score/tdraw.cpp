@@ -2517,7 +2517,8 @@ void TDraw::draw(const ShadowNote* item, Painter* painter)
 
     // Draw stem and flag
     if (item->hasStem()) {
-        double x = up ? (noteheadWidth - (lw / 2)) : lw / 2;
+        double x = item->symSmuflAnchor(item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).x();
+        x += up ? -0.5 * lw : 0.5 * lw;
         double y1 = item->symSmuflAnchor(item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
         double y2 = (up ? -3.5 : 3.5) * sp;
 
