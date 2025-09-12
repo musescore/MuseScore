@@ -6401,6 +6401,23 @@ static bool chordHasVisibleNote(const Chord* chord)
     return false;
 }
 
+static bool chordHasVisibleChild(const Chord* chord)
+{
+    for (EngravingObject* child : chord->scanChildren()) {
+        if (toEngravingItem(child)->visible()) {
+            return true;
+        }
+    }
+
+    for (const Chord* graceNote : chord->graceNotes()) {
+        if (chordHasVisibleChild(graceNote)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static void undoChangeOrnamentVisibility(Ornament* ornament, bool visible);
 
 static void undoChangeNoteVisibility(Note* note, bool visible)
@@ -6452,9 +6469,9 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
         ElementType::LEDGER_LINE, // temporary objects, impossible to change visibility
     };
 
-    for (const Chord* chord : chords) {
-        for (const EngravingObject* obj : chord->linkList()) {
-            const Chord* linkedChord = toChord(obj);
+    for (Chord* chord : chords) {
+        for (EngravingObject* obj : chord->linkList()) {
+            Chord* linkedChord = toChord(obj);
             chordHasVisibleNote_ = chordHasVisibleNote(linkedChord);
             for (EngravingObject* child : linkedChord->scanChildren()) {
                 const ElementType type = child->type();
@@ -6474,6 +6491,10 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
                 } else {
                     child->undoChangeProperty(Pid::VISIBLE, chordHasVisibleNote_);
                 }
+            }
+            bool visible = chordHasVisibleChild(linkedChord);
+            if (!visible) {
+                linkedChord->undoChangeProperty(Pid::VISIBLE, visible);
             }
         }
     }

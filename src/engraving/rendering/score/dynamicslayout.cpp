@@ -75,7 +75,8 @@ void DynamicsLayout::doLayoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, 
     }
 
     bool centerOnNote = item->centerOnNotehead() || (!item->centerOnNotehead() && item->align().horizontal == AlignH::HCENTER);
-    double noteHeadWidth = item->score()->noteHeadWidth();
+    double mag = item->staff()->staffMag(item);
+    double noteHeadWidth = item->score()->noteHeadWidth() * mag;
 
     ldata->moveX(noteHeadWidth * (centerOnNote ? 0.5 : 1));
 

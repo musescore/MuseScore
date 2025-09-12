@@ -3012,25 +3012,63 @@ void TLayout::layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGrou
     ldata->setShape(shape);
 }
 
-void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
+void TLayout::manageTempoChangeSnapping(GradualTempoChangeSegment* item, LayoutContext& ctx)
 {
-    LAYOUT_CALL_ITEM(item);
-
     GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
 
     ldata->disconnectSnappedItems();
-
-    layoutTextLineBaseSegment(item, ctx);
-
     GradualTempoChangeSegment* tempoChangeSegmentSnappedBefore = item->findElementToSnapBefore();
     if (tempoChangeSegmentSnappedBefore) {
         ldata->connectItemSnappedBefore(tempoChangeSegmentSnappedBefore);
+        doLayoutGradualTempoChangeSegment(tempoChangeSegmentSnappedBefore, ctx);
     }
 
     TempoText* tempoTextSnappedAfter = item->findElementToSnapAfter();
     if (tempoTextSnappedAfter) {
         ldata->connectItemSnappedAfter(tempoTextSnappedAfter);
     }
+}
+
+void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
+{
+    GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
+
+    auto extendLineToSnappedItemAfter = [item](EngravingItem* itemAfter) {
+        assert(itemAfter->isGradualTempoChangeSegment() || itemAfter->isTempoText());
+        if (item->tempoChange()->adjustForRehearsalMark(false)
+            || itemAfter->findAncestor(ElementType::SYSTEM) != item->system()) {
+            return;
+        }
+
+        double xItemPos = itemAfter->pageX() - item->system()->pageX();
+        double itemLeftEdge = xItemPos + itemAfter->ldata()->bbox().left();
+
+        double padding = item->spatium();
+        if (itemAfter->isTempoText()) {
+            const double fontSizeScaleFactor = toTempoText(itemAfter)->size() / 10.0;
+            padding = 0.5 * item->spatium() * fontSizeScaleFactor;
+        } else if (itemAfter->isGradualTempoChangeSegment()) {
+            Text* startText = toGradualTempoChangeSegment(itemAfter)->text();
+            if (startText) {
+                const double fontSizeScaleFactor = startText->size() / 10.0;
+                padding = 0.5 * item->spatium() * fontSizeScaleFactor;
+            }
+        }
+
+        double maxTempoLineEnd = itemLeftEdge - padding;
+        double xEndDiff = maxTempoLineEnd - (item->pos().x() + item->pos2().x());
+        item->rxpos2() += xEndDiff;
+    };
+
+    if (ldata->itemSnappedAfter() && ldata->itemSnappedAfter()->isTempoText()) {
+        TempoText* tempoTextSnappedAfter = toTempoText(ldata->itemSnappedAfter());
+        extendLineToSnappedItemAfter(tempoTextSnappedAfter);
+    } else if (ldata->itemSnappedAfter() && ldata->itemSnappedAfter()->isGradualTempoChangeSegment()) {
+        GradualTempoChangeSegment* tempoChangeSegmentSnappedAfter = toGradualTempoChangeSegment(ldata->itemSnappedAfter());
+        extendLineToSnappedItemAfter(tempoChangeSegmentSnappedAfter);
+    }
+
+    mu::engraving::rendering::score::TLayout::layoutTextLineBaseSegment(item, ctx);
 
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
@@ -3040,6 +3078,15 @@ void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, L
     ldata->setShape(sh);
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
+}
+
+void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
+{
+    LAYOUT_CALL_ITEM(item);
+
+    manageTempoChangeSnapping(item, ctx);
+
+    doLayoutGradualTempoChangeSegment(item, ctx);
 }
 
 void TLayout::layoutGradualTempoChange(GradualTempoChange* item, LayoutContext& ctx)
@@ -3285,7 +3332,8 @@ void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
     }
 
     // In case of dynamics/expressions before or after, make space for them horizontally
-    double hairpinDistToDynOrExpr = ctx.conf().style().styleMM(Sid::autoplaceHairpinDynamicsDistance);
+    double mag = item->staff()->staffMag(item);
+    double hairpinDistToDynOrExpr = ctx.conf().style().styleMM(Sid::autoplaceHairpinDynamicsDistance) * mag;
 
     bool makeSpaceBefore = (doSnapBefore && possibleSnapBeforeElement->isTextBase())
                            || (possibleSnapBeforeElement && possibleSnapBeforeElement->isDynamic());
@@ -5876,16 +5924,10 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
     Segment* s = item->segment();
 
     RehearsalMark* rehearsalMark = toRehearsalMark(s->findAnnotation(ElementType::REHEARSAL_MARK, item->track(), item->track()));
-    RectF rehearsMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
+    RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
     RectF thisBbox = ldata->bbox().translated(item->pos());
 
-    if (rehearsalMark && rehearsMarkBbox.bottom() > thisBbox.top()
-        && item->getProperty(Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK).toBool()) {
-        double rightEdge = rehearsMarkBbox.right();
-        const double padding = 0.5 * item->fontMetrics().xHeight();
-        double curX = ldata->pos().x();
-        ldata->setPosX(std::max(curX, rightEdge + padding));
-    } else if (s->rtick().isZero()) {
+    if (s->rtick().isZero()) {
         Segment* p = item->segment()->prev(SegmentType::TimeSig);
         if (p && !p->allElementsInvisible()) {
             ldata->moveX(-(s->x() - p->x()));
@@ -5893,6 +5935,21 @@ void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldat
             if (e) {
                 ldata->moveX(p->hasTimeSigAboveStaves() ? e->x() + e->width() + e->spatium() : e->x());
             }
+        }
+    }
+
+    if (rehearsalMark) {
+        const bool sameSide = item->placeAbove() == rehearsalMark->placeAbove();
+        const bool collision
+            = item->placeAbove() ? muse::RealIsEqualOrMore(rehearsalMarkBbox.bottom(), thisBbox.top()) : muse::RealIsEqualOrLess(
+                  rehearsalMarkBbox.top(), thisBbox.bottom());
+
+        if (sameSide && collision && item->getProperty(Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK).toBool()) {
+            double rightEdge = rehearsalMarkBbox.right();
+            const double fontSizeScaleFactor = item->size() / 10.0;
+            const double padding = 0.5 * item->spatium() * fontSizeScaleFactor;
+            double curX = ldata->pos().x();
+            ldata->setPosX(std::max(curX, rightEdge + padding));
         }
     }
     Autoplace::autoplaceSegmentElement(item, ldata);
