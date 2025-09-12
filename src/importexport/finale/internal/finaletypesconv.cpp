@@ -33,6 +33,7 @@
 #include "engraving/dom/noteval.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/ottava.h"
+#include "engraving/dom/hairpin.h"
 
 #include "importfinalelogger.h"
 
@@ -1112,6 +1113,16 @@ OttavaType FinaleTConv::ottavaTypeFromShapeType(musx::dom::others::SmartShape::S
         { ShapeType::TwoOctaveUp,   OttavaType::OTTAVA_15MA },
     };
     return muse::value(ottavaTypeTable, shapeType, OttavaType::OTTAVA_8VA);
+}
+
+HairpinType FinaleTConv::hairpinTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
+{
+    using ShapeType = musx::dom::others::SmartShape::ShapeType;
+    static const std::unordered_map<ShapeType, HairpinType> ottavaTypeTable = {
+        { ShapeType::Crescendo,     HairpinType::CRESC_HAIRPIN },
+        { ShapeType::Decrescendo,   HairpinType::DIM_HAIRPIN }
+    };
+    return muse::value(ottavaTypeTable, shapeType, HairpinType::INVALID);
 }
 
 SlurStyleType FinaleTConv::slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType)
