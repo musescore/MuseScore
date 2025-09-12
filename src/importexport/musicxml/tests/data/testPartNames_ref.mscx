@@ -138,6 +138,7 @@
         <minPitchA>41</minPitchA>
         <maxPitchA>79</maxPitchA>
         <instrumentId>voice.vocals</instrumentId>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -200,6 +201,7 @@
         <maxPitchA>60</maxPitchA>
         <instrumentId>voice.bass</instrumentId>
         <clef>F</clef>
+        <glissandoStyle>portamento</glissandoStyle>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

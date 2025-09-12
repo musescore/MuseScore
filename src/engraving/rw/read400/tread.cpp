@@ -879,6 +879,8 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
     } else if (tag == "transposingClef") {
         int idx = e.intAttribute("staff", 1) - 1;
         item->setClefType(idx, ClefTypeList(item->clefType(idx).concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
+    } else if (tag == "glissandoStyle") {
+        item->setGlissandoStyle(TConv::fromXml(e.readAsciiText(), GlissandoStyle::CHROMATIC));
     } else {
         return false;
     }

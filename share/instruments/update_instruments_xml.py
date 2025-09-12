@@ -295,6 +295,7 @@ for group in groups.values():
         to_subelement(el, instrument, 'SND', 'singleNoteDynamics')
         to_subelement(el, instrument, 'transpDia', 'transposeDiatonic')
         to_subelement(el, instrument, 'transpChr', 'transposeChromatic')
+        to_subelement(el, instrument, 'glissandoStyle')
 
         if instrument['id'] != standard_drumset_id and instrument['id'] in drumsets:
             for drum in drumsets[instrument['id']].values():
