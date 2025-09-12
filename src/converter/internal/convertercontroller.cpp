@@ -533,6 +533,14 @@ Ret ConverterController::exportScoreTranspose(const muse::io::path_t& in, const 
     return BackendApi::exportScoreTranspose(in, out, optionsJson, stylePath, forceMode);
 }
 
+Ret ConverterController::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+                                             const muse::io::path_t& stylePath, bool forceMode)
+{
+    TRACEFUNC;
+
+    return BackendApi::exportScoreElements(in, out, optionsJson, stylePath, forceMode);
+}
+
 Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out)
 {
     TRACEFUNC;

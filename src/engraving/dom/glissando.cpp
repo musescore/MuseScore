@@ -138,11 +138,6 @@ Glissando::Glissando(const Glissando& g)
     m_isHarpGliss   = g.m_isHarpGliss;
 }
 
-const TranslatableString& Glissando::glissandoTypeName() const
-{
-    return TConv::userName(glissandoType());
-}
-
 //---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
@@ -464,5 +459,10 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
         break;
     }
     return SLine::propertyDefault(propertyId);
+}
+
+TranslatableString Glissando::subtypeUserName() const
+{
+    return TConv::userName(glissandoType());
 }
 }
