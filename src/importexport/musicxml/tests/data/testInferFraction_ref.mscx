@@ -15,6 +15,7 @@
       <pageOddBottomMargin>0.590551</pageOddBottomMargin>
       <romanNumeralFontFace>Edwin</romanNumeralFontFace>
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <tupletFontSize>10</tupletFontSize>
       <fingeringFontSize>10</fingeringFontSize>
       <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
