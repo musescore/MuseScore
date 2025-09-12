@@ -38,7 +38,7 @@
         <StaffType group="pitched">
           </StaffType>
         <bracket type="1" span="2" col="0" visible="1"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
         <eid>D_D</eid>
@@ -936,7 +936,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             <eid>WC_WC</eid>
             </BarLine>
           </voice>
