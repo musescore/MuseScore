@@ -1612,7 +1612,8 @@ void Score::addElement(EngravingItem* element)
         break;
     }
 
-    if (element->isTextBase() && toTextBase(element)->hasParentSegment()) {
+    if (element->isTextBase() && toTextBase(element)->hasParentSegment()
+        && toSegment(element->parent())->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
         MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(element);
     }
 
