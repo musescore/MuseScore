@@ -7006,15 +7006,11 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         //LOGD(" singleKey %d", singleKey);
         if (singleKey) {
             // keysig applies to all staves
-            if (!keysigs.at(0)->forInstrumentChange()) {
-                keysig(keysigs.at(0), p->staff(0)->clef(m->tick()), 0, keysigs.at(0)->visible());
-            }
+            keysig(keysigs.at(0), p->staff(0)->clef(m->tick()), 0, keysigs.at(0)->visible());
         } else {
             // staff-specific keysigs
             for (staff_idx_t st : muse::keys(keysigs)) {
-                if (!keysigs.at(st)->forInstrumentChange()) {
-                    keysig(keysigs.at(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.at(st)->visible());
-                }
+                keysig(keysigs.at(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.at(st)->visible());
             }
         }
     } else {
@@ -7516,7 +7512,7 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
             sstaff /= VOICES;
 
             Clef* cle = static_cast<Clef*>(seg->element(st));
-            if (cle && !cle->forInstrumentChange()) {
+            if (cle) {
                 clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
                 // output only clef changes, not generated clefs at line beginning
                 // exception: at tick=0, export clef anyway
@@ -7952,10 +7948,6 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
     }
     m_xml.endElement();
 
-    for (KeySig* keySig : instrChange->keySigs()) {
-        staff_idx_t st = m_score->staffIdx(part);
-        keysig(keySig, part->staff(st)->clef(instrChange->tick()), m_score->staffIdx(part), keySig->visible());
-    }
     writeInstrumentDetails(instr, m_score->style().styleB(Sid::concertPitch));
 
     m_xml.startElement("sound");
