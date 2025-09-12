@@ -155,7 +155,7 @@ const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item,
     Measure* measure = item->measure();
     if (alignToBarline || hPlacement == AlignH::LEFT) {
         for (Segment* seg = measure->first(); seg && seg->tick() == measure->tick() && seg->system() == measure->system();
-             seg = seg->prev1enabled()) {
+             seg = seg->prev1MMenabled()) {
             if (seg->isType(SegmentType::BarLineType) && seg->isActive()) {
                 barlineSeg = seg;
                 break;
