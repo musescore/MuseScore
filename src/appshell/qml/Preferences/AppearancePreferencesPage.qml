@@ -214,7 +214,7 @@ PreferencesPage {
         SeparatorLine {}
 
         ThemeAdditionalOptionsSection {
-            scoreInversionEnabled: appearanceModel.scoreInversionEnabled
+            scoreInversionMode: appearanceModel.scoreInversionMode
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 7
@@ -229,8 +229,8 @@ PreferencesPage {
                 }
             }
 
-            onScoreInversionEnableChangeRequested: function(enable) {
-                appearanceModel.scoreInversionEnabled = enable
+            onScoreInversionModeChangeRequested: function(mode) {
+                appearanceModel.scoreInversionMode = mode
             }
         }
     }
