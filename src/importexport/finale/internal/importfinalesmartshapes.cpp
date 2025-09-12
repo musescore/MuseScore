@@ -38,6 +38,7 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/ottava.h"
+#include "engraving/dom/hairpin.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/slurtie.h"
 #include "engraving/dom/segment.h"
@@ -209,7 +210,7 @@ void FinaleParser::importSmartShapes()
         if (!measure || staffIdx == muse::nidx) {
             return nullptr;
         }
-        Fraction tick = FinaleTConv::musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
+        Fraction tick = mTick + FinaleTConv::musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
         // TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, tick, staffIdx);
         // EditTimeTickAnchors::updateLayout(measure);
         EditTimeTickAnchors::updateAnchors(measure, staffIdx);
@@ -306,6 +307,8 @@ void FinaleParser::importSmartShapes()
         newSpanner->setVisible(!smartShape->hidden);
         if (type == ElementType::OTTAVA) {
             toOttava(newSpanner)->setOttavaType(FinaleTConv::ottavaTypeFromShapeType(smartShape->shapeType));
+        } else if (type == ElementType::HAIRPIN) {
+            toHairpin(newSpanner)->setHairpinType(FinaleTConv::hairpinTypeFromShapeType(smartShape->shapeType));
         } else if (type == ElementType::SLUR) {
             toSlur(newSpanner)->setStyleType(FinaleTConv::slurStyleTypeFromShapeType(smartShape->shapeType));
             /// @todo is there a way to read the calculated direction

@@ -28,6 +28,7 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/noteval.h"
 #include "engraving/dom/ottava.h"
+#include "engraving/dom/hairpin.h"
 #include "engraving/dom/tuplet.h"
 
 #include "importfinalelogger.h"
@@ -64,6 +65,7 @@ public:
     static engraving::String metaTagFromTextComponent(const std::string& component);
     static engraving::ElementType elementTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
     static engraving::OttavaType ottavaTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
+    static engraving::HairpinType hairpinTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
     static engraving::SlurStyleType slurStyleTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
     static engraving::DirectionV directionVFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
     static engraving::LineType lineTypeFromShapeType(musx::dom::others::SmartShape::ShapeType shapeType);
