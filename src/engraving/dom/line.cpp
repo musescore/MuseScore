@@ -30,7 +30,6 @@
 #include "barline.h"
 #include "chord.h"
 #include "dynamic.h"
-#include "lyrics.h"
 #include "measure.h"
 #include "mscoreview.h"
 #include "note.h"
@@ -198,10 +197,10 @@ void LineSegment::startDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDragGrip
 //---------------------------------------------------------
 
-void LineSegment::startEditDrag(EditData& ed)
+void LineSegment::startDragGrip(EditData& ed)
 {
     ElementEditDataPtr eed = ed.getData(this);
     if (!eed) {
@@ -740,10 +739,10 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void LineSegment::editDrag(EditData& ed)
+void LineSegment::dragGrip(EditData& ed)
 {
     // Only for resizing according to the diagonal properties
     const PointF deltaResize(ed.evtDelta.x(), line()->diagonal() ? ed.evtDelta.y() : 0.0);
@@ -775,7 +774,8 @@ void LineSegment::editDrag(EditData& ed)
     }
     break;
     default:
-        break;
+        UNREACHABLE;
+        return;
     }
     if (line()->anchor() == Spanner::Anchor::NOTE && ed.isStartEndGrip()) {
         //

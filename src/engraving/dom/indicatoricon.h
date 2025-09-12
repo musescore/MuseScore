@@ -24,6 +24,8 @@
 
 #include "engravingitem.h"
 
+#include "draw/types/font.h"
+
 namespace mu::engraving {
 class IndicatorIcon : public EngravingItem
 {

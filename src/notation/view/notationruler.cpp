@@ -26,6 +26,7 @@
 #include "engraving/dom/sig.h"
 
 #include "ui/view/iconcodes.h"
+#include "draw/painter.h"
 #include "draw/types/color.h"
 
 using namespace mu::notation;

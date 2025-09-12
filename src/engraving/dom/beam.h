@@ -63,7 +63,7 @@ public:
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
-    void editDrag(EditData&) override;
+    void dragGrip(EditData&) override;
 
     Fraction tick() const override;
     Fraction rtick() const override;

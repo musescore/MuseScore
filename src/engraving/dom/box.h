@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_BOX_H
-#define MU_ENGRAVING_BOX_H
+#pragma once
 
 #include "measurebase.h"
 #include "property.h"
@@ -43,8 +42,8 @@ public:
 
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
-    virtual void startEditDrag(EditData&) override;
-    virtual void editDrag(EditData&) override;
+    virtual void startDragGrip(EditData&) override;
+    virtual void dragGrip(EditData&) override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
@@ -160,7 +159,7 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
 
-    void startEditDrag(EditData&) override;
+    void startDragGrip(EditData&) override;
 
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
@@ -277,5 +276,4 @@ public:
 private:
     Text* m_text = nullptr;
 };
-} // namespace mu::engraving
-#endif
+}

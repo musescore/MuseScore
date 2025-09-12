@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_EDITDATA_H
-#define MU_ENGRAVING_EDITDATA_H
+#pragma once
 
 #include <memory>
 
@@ -222,7 +221,7 @@ enum class Grip : signed char {
 
 //---------------------------------------------------------
 //   EditData
-//    used in editDrag
+//    used in dragGrip
 //---------------------------------------------------------
 class ElementEditData;
 using ElementEditDataPtr = std::shared_ptr<ElementEditData>;
@@ -234,6 +233,8 @@ class EditData
 {
 public:
     MuseScoreView* view() const { return m_view; }
+
+    bool isEditMode = false; // refers to the legacy concept of "edit mode"
 
     std::vector<RectF> grip;
     int grips = 0;                 // number of grips
@@ -252,7 +253,7 @@ public:
     bool isHairpinDragCreatedFromDynamic = false;
 
     int key = 0;
-    KeyboardModifiers modifiers  { /*0*/ };   // '0' initialized via default constructor, doing it here too results in compiler warning with Qt 5.15
+    KeyboardModifiers modifiers;
     String s;
     String preeditString;
 
@@ -280,5 +281,3 @@ private:
     MuseScoreView* m_view = nullptr;
 };
 }
-
-#endif // MU_ENGRAVING_EDITDATA_H

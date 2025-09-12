@@ -24,8 +24,7 @@
 #include <stack>
 
 #include "draw/fontmetrics.h"
-#include "draw/types/pen.h"
-#include "draw/types/brush.h"
+#include "draw/painter.h"
 
 #include "iengravingfont.h"
 
@@ -35,7 +34,6 @@
 #include "rw/xmlwriter.h"
 
 #include "types/symnames.h"
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -52,7 +50,6 @@
 #include "page.h"
 #include "score.h"
 #include "textedit.h"
-#include "textline.h"
 #include "undo.h"
 
 #include "log.h"

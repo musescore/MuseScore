@@ -20,10 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_ACTIONICON_H
-#define MU_ENGRAVING_ACTIONICON_H
+#pragma once
 
 #include "engravingitem.h"
+
+#include "draw/types/font.h"
 
 namespace mu::engraving {
 enum class ActionIconType : signed char {
@@ -104,5 +105,3 @@ private:
     muse::draw::Font m_iconFont;
 };
 }
-
-#endif // MU_ENGRAVING_ACTIONICON_H

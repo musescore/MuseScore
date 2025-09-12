@@ -134,7 +134,7 @@ void Bracket::endEdit(EditData& ed)
     ed.clear(); // score layout invalidates element
 }
 
-void Bracket::editDrag(EditData& ed)
+void Bracket::dragGrip(EditData& ed)
 {
     double bracketHeight = ldata()->bracketHeight();
     bracketHeight += ed.delta.y();
@@ -142,11 +142,11 @@ void Bracket::editDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   endEditDrag
+//   endDragGrip
 //    snap to nearest staff
 //---------------------------------------------------------
 
-void Bracket::endEditDrag(EditData&)
+void Bracket::endDragGrip(EditData&)
 {
     double ay2 = m_ay1 + ldata()->bracketHeight();
 

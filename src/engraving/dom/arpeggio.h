@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_ARPEGGIO_H
-#define MU_ENGRAVING_ARPEGGIO_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -61,9 +60,9 @@ public:
     EngravingItem* drop(EditData&) override;
 
     bool isEditable() const override { return true; }
-    void editDrag(EditData&) override;
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
+    void dragGrip(EditData&) override;
 
     void reset() override;
 
@@ -125,7 +124,7 @@ private:
     std::vector<LineF> dragAnchorLines() const override;
     std::vector<LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
-    void startEditDrag(EditData&) override;
+    void startDragGrip(EditData&) override;
 
     ArpeggioType m_arpeggioType = ArpeggioType::NORMAL;
     double m_userLen1 = 0.0;
@@ -136,6 +135,4 @@ private:
 
     double m_stretch = 1.0;
 };
-} // namespace mu::engraving
-
-#endif
+}

@@ -260,17 +260,7 @@ Fraction TremoloSingleChord::tremoloLen() const
     return f;
 }
 
-void TremoloSingleChord::triggerLayout() const
-{
-    EngravingItem::triggerLayout();
-}
-
 void TremoloSingleChord::endEdit(EditData&)
-{
-    UNREACHABLE;
-}
-
-void TremoloSingleChord::editDrag(EditData&)
 {
     UNREACHABLE;
 }

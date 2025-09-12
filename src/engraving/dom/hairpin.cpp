@@ -193,12 +193,12 @@ std::unique_ptr<ElementGroup> HairpinSegment::getDragGroup(std::function<bool(co
 }
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDragGrip
 //---------------------------------------------------------
 
-void HairpinSegment::startEditDrag(EditData& ed)
+void HairpinSegment::startDragGrip(EditData& ed)
 {
-    TextLineBaseSegment::startEditDrag(ed);
+    TextLineBaseSegment::startDragGrip(ed);
     ElementEditDataPtr eed = ed.getData(this);
 
     eed->pushProperty(Pid::HAIRPIN_HEIGHT);
@@ -206,10 +206,10 @@ void HairpinSegment::startEditDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   editDrag
+//   dragGrip
 //---------------------------------------------------------
 
-void HairpinSegment::editDrag(EditData& ed)
+void HairpinSegment::dragGrip(EditData& ed)
 {
     if (ed.curGrip == Grip::APERTURE) {
         double newHeight = hairpin()->hairpinHeight().val() + ed.delta.y() / spatium() / .5;
@@ -219,7 +219,7 @@ void HairpinSegment::editDrag(EditData& ed)
         hairpin()->setHairpinHeight(Spatium(newHeight));
         triggerLayout();
     }
-    TextLineBaseSegment::editDrag(ed);
+    TextLineBaseSegment::dragGrip(ed);
 }
 
 //---------------------------------------------------------
@@ -326,14 +326,14 @@ EngravingItem* HairpinSegment::findElementToSnapAfter(bool ignoreInvisible) cons
     return findEndDynamicOrExpression(ignoreInvisible);
 }
 
-void HairpinSegment::endEditDrag(EditData& ed)
+void HairpinSegment::endDragGrip(EditData& ed)
 {
     if (ed.isHairpinDragCreatedFromDynamic) {
         undoResetProperty(Pid::OFFSET);
         undoResetProperty(Pid::OFFSET2);
     }
 
-    LineSegment::endEditDrag(ed);
+    LineSegment::endDragGrip(ed);
 }
 
 TextBase* HairpinSegment::findStartDynamicOrExpression(bool ignoreInvisible) const

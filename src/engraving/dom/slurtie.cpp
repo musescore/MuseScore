@@ -78,7 +78,7 @@ bool SlurTieSegment::edit(EditData& ed)
 
     if (ed.key == Key_Home && !(ed.modifiers & ~KeyboardModifier::KeypadModifier)) {
         if (ed.hasCurrentGrip()) {
-            startEditDrag(ed);
+            startDragGrip(ed);
             if (ed.curGrip == Grip::SHOULDER) {
                 ups(Grip::BEZIER1).off = PointF();
                 ups(Grip::BEZIER2).off = PointF();
@@ -86,7 +86,7 @@ bool SlurTieSegment::edit(EditData& ed)
                 ups(ed.curGrip).off = PointF();
             }
             renderer()->layoutItem(spanner());
-            endEditDrag(ed);
+            endDragGrip(ed);
         }
         return true;
     }
@@ -192,27 +192,27 @@ bool SlurTieSegment::isUserModified() const
 }
 
 //---------------------------------------------------------
-//   startEditDrag
+//   startDragGrip
 //---------------------------------------------------------
 
-void SlurTieSegment::startEditDrag(EditData& ed)
+void SlurTieSegment::startDragGrip(EditData& ed)
 {
     ElementEditDataPtr eed = ed.getData(this);
     IF_ASSERT_FAILED(eed) {
         return;
     }
-    for (auto i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::OFFSET }) {
+    for (Pid i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::OFFSET }) {
         eed->pushProperty(i);
     }
 }
 
 //---------------------------------------------------------
-//   endEditDrag
+//   endDragGrip
 //---------------------------------------------------------
 
-void SlurTieSegment::endEditDrag(EditData& ed)
+void SlurTieSegment::endDragGrip(EditData& ed)
 {
-    EngravingItem::endEditDrag(ed);
+    EngravingItem::endDragGrip(ed);
     triggerLayout();
 }
 

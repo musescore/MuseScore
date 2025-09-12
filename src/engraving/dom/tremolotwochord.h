@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TREMOLOTWOCHORD_H
-#define MU_ENGRAVING_TREMOLOTWOCHORD_H
+#pragma once
 
 #include "beambase.h"
 #include "engravingitem.h"
@@ -111,7 +110,7 @@ public:
     std::vector<PointF> gripsPositions(const EditData&) const override;
     bool isMovable() const override { return true; }
     bool isEditable() const override { return true; }
-    void editDrag(EditData&) override;
+    void dragGrip(EditData&) override;
 
     void clearBeamSegments() override;
 
@@ -150,5 +149,4 @@ private:
     //! NOTE for palette
     PainterPath m_path;
 };
-} // namespace mu::engraving
-#endif
+}

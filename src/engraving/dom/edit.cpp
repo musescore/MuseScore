@@ -7576,9 +7576,6 @@ void Score::undoRemoveHopoText(HammerOnPullOffText* hopoText)
     Fraction hopoTextEndTick = endChord->tick();
 
     bool shortenFromStart = (hopoTextStartTick - hopoStartTick) < (hopoEndTick - hopoTextEndTick);
-    EditData editData;
-    editData.curGrip = shortenFromStart ? Grip::START : Grip::END;
-
     if (shortenFromStart) {
         Fraction newStartTick = hopoTextEndTick;
         Fraction newTicks = hopoEndTick - newStartTick;

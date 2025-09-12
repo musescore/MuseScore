@@ -1179,7 +1179,7 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
     m_scoreCallbacks.setSelectionProximity(proximity);
 
     if (isGripEditStarted()) {
-        m_editData.element->startEditDrag(m_editData);
+        m_editData.element->startDragGrip(m_editData);
         return;
     }
 
@@ -1256,6 +1256,8 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     m_dragData.ed.pos = toPos;
     m_dragData.ed.modifiers = keyboardModifier(QGuiApplication::keyboardModifiers());
 
+    m_dragData.ed.isEditMode = isElementEditStarted();
+
     if (isTextEditingStarted()) {
         m_editData.pos = toPos;
         toTextBase(m_editData.element)->dragTo(m_editData);
@@ -1269,7 +1271,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.delta = evtDelta;
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
         m_dragData.ed.addData(m_editData.getData(m_editData.element));
-        m_editData.element->editDrag(m_dragData.ed);
+        m_editData.element->dragGrip(m_dragData.ed);
 
         if (m_editData.element->isDynamic()) {
             // When the dynamic has no left grip, the right grip will have index zero, a.k.a. Grip::LEFT.
@@ -1279,9 +1281,6 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
             addHairpinOnGripDrag(m_editData, isLeftGrip);
         }
     } else {
-        if (m_editData.element) {
-            m_editData.element->editDrag(m_dragData.ed);
-        }
         for (auto& group : m_dragData.dragGroups) {
             score()->addRefresh(group->drag(m_dragData.ed));
         }
@@ -1309,7 +1308,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 void NotationInteraction::doEndDrag()
 {
     if (isGripEditStarted()) {
-        m_editData.element->endEditDrag(m_editData);
+        m_editData.element->endDragGrip(m_editData);
         m_editData.element->endEdit(m_editData);
     } else {
         for (auto& group : m_dragData.dragGroups) {
@@ -4289,11 +4288,15 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
 
     if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
-    }
 
-    m_editData.element->startEditDrag(m_editData);
-    m_editData.element->editDrag(m_editData);
-    m_editData.element->endEditDrag(m_editData);
+        m_editData.element->startDragGrip(m_editData);
+        m_editData.element->dragGrip(m_editData);
+        m_editData.element->endDragGrip(m_editData);
+    } else {
+        m_editData.element->startDrag(m_editData);
+        m_editData.element->drag(m_editData);
+        m_editData.element->endDrag(m_editData);
+    }
 
     apply();
 }
@@ -4462,11 +4465,15 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 
     if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
-    }
 
-    m_editData.element->startEditDrag(m_editData);
-    m_editData.element->editDrag(m_editData);
-    m_editData.element->endEditDrag(m_editData);
+        m_editData.element->startDragGrip(m_editData);
+        m_editData.element->dragGrip(m_editData);
+        m_editData.element->endDragGrip(m_editData);
+    } else {
+        m_editData.element->startDrag(m_editData);
+        m_editData.element->drag(m_editData);
+        m_editData.element->endDrag(m_editData);
+    }
 
     return true;
 }

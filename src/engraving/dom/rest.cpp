@@ -141,25 +141,15 @@ void Rest::setOffset(const PointF& o)
 
 RectF Rest::drag(EditData& ed)
 {
-    // don't allow drag for Measure Rests, because they can't be easily laid out in correct position while dragging
-    if (measure() && durationType().type() == DurationType::V_MEASURE) {
-        return RectF();
+    if (ed.modifiers & ShiftModifier) {
+        Segment* seg = segment();
+        const Spatium deltaSp = Spatium(ed.evtDelta.x() / spatium());
+        seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+    } else {
+        setOffset(offset() + ed.evtDelta);
     }
-
-    PointF s(ed.delta);
-    RectF r(pageBoundingRect());
-
-    // Limit horizontal drag range
-    static const double xDragRange = spatium() * 5;
-    if (std::fabs(s.x()) > xDragRange) {
-        s.rx() = xDragRange * (s.x() < 0 ? -1.0 : 1.0);
-    }
-    setOffset(PointF(s.x(), s.y()));
-
-    renderer()->layoutItem(this);
-
-    score()->rebuildBspTree();
-    return pageBoundingRect().united(r);
+    triggerLayout();
+    return RectF();
 }
 
 //---------------------------------------------------------
@@ -729,23 +719,6 @@ EngravingItem* Rest::nextElement()
 EngravingItem* Rest::prevElement()
 {
     return ChordRest::prevElement();
-}
-
-//---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
-
-void Rest::editDrag(EditData& editData)
-{
-    Segment* seg = segment();
-
-    if (editData.modifiers & ShiftModifier) {
-        const Spatium deltaSp = Spatium(editData.delta.x() / spatium());
-        seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
-    } else {
-        setOffset(offset() + editData.evtDelta);
-    }
-    triggerLayout();
 }
 
 //---------------------------------------------------------
