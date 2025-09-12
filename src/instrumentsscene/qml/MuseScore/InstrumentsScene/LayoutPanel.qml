@@ -166,14 +166,14 @@ Item {
             headerVisible: false
 
             function expandCollapseAll(expand) {
-                for (let row = 0; row < layoutPanelTreeView.model.rowCount(); row++) {
-                    const instrumentIndex = layoutPanelTreeView.model.index(row, 0);
-                    const itemDelegate = layoutPanelTreeView.model.data(instrumentIndex);
-                    if (itemDelegate.isExpandable){
+                for (let row = 0; row < layoutPanelTreeView.model.rowCount(); ++row) {
+                    const modelIndex = layoutPanelTreeView.model.index(row, 0);
+                    const itemRole = layoutPanelTreeView.model.modelIndexToItem(modelIndex);
+                    if (itemRole.isExpandable){
                         if (expand) {
-                            layoutPanelTreeView.expand(instrumentIndex)
+                            layoutPanelTreeView.expand(modelIndex)
                         } else {
-                            layoutPanelTreeView.collapse(instrumentIndex)
+                            layoutPanelTreeView.collapse(modelIndex)
                         }
                     }
                 }
