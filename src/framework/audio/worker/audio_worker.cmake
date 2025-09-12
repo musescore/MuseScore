@@ -138,6 +138,10 @@ set(AUDIO_WORKER_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.cpp
+
+    # codecs
+    ${CMAKE_CURRENT_LIST_DIR}//internal/codecs/vorbisdecoder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}//internal/codecs/vorbisdecoder.h
 )
 
 if (OS_IS_WASM)

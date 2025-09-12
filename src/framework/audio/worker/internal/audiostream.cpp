@@ -33,14 +33,7 @@
 #include "thirdparty/dr_libs/dr_flac.h"
 */
 
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#pragma warning(push)
-#pragma warning(disable: 4456) // declaration hides previous local declaration
-#endif
-#include "thirdparty/stb/stb_vorbis.c"
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#pragma warning(pop)
-#endif
+#include "codecs/vorbisdecoder.h"
 
 using namespace muse::audio;
 using namespace muse::audio::worker;
@@ -164,26 +157,6 @@ bool AudioStream::loadMP3FromMemory(const void* pData, size_t dataSize)
 
 bool AudioStream::loadOGG(io::path_t path)
 {
-    int vorbis_error;
-    stb_vorbis* vorbisData = stb_vorbis_open_filename(path.c_str(), &vorbis_error, NULL);
-
-    if (!vorbisData) {
-        return false;
-    }
-
-    float predata[1000];
-    int total = 0;
-    m_channels = vorbisData->channels;
-    m_sampleRate = vorbisData->sample_rate;
-
-    while (auto readed = stb_vorbis_get_samples_float_interleaved(vorbisData, m_channels, predata, 1000)) {
-        m_data.resize(total + readed, 0.f);
-        auto start = m_data.begin() + total;
-        std::copy_n(predata, readed, start);
-
-        total += readed;
-    }
-
-    stb_vorbis_close(vorbisData);
-    return true;
+    int samples = codec::VorbisDecoder::decode_file(path.c_str(), m_data, &m_channels, &m_sampleRate);
+    return samples > 0;
 }
