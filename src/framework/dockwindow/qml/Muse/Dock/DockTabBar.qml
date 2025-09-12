@@ -47,7 +47,7 @@ Rectangle {
 
     function updateMouseArea() {
         if (tabBarCpp) {
-            tabBarCpp.setDraggableMouseArea(draggingTabsMouseArea)
+            tabBarCpp.setDraggableMouseArea(tabsMouseArea)
             tabBarCpp.tabBarQmlItem = this
         }
     }
@@ -74,6 +74,19 @@ Rectangle {
         target: root.tabsModel
         function onDataChanged() { updateToolBarComponent() }
         function onModelReset() { updateToolBarComponent() }
+    }
+
+    MouseArea {
+        id: tabsMouseArea
+
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: tabs.contentWidth
+        height: root.height - bottomSeparator.height
+
+        hoverEnabled: false
+        enabled: root.visible
+        cursorShape: Qt.SizeAllCursor
     }
 
     ListView {
@@ -110,6 +123,8 @@ Rectangle {
             isCurrent: root.currentIndex === model.index
             contextMenuModel: model.contextMenu
 
+            containmentMask: Item {} // Slight hack - force mouse event propagation to tabsMouseArea
+
             width: {
                 var w
                 if (isCurrent || tabs.implicitWidthOfAllTabsTogether <= tabs.availableWidth) {
@@ -130,28 +145,10 @@ Rectangle {
                 root.tabClicked(model.index)
             }
 
-            onClicked: {
-                root.tabClicked(model.index)
-            }
-
             onHandleContextMenuItemRequested: function(itemId) {
                 root.handleContextMenuItemRequested(itemId)
             }
         }
-    }
-
-    MouseArea {
-        id: draggingTabsMouseArea
-
-        anchors.top: parent.top
-        anchors.left: parent.left
-        width: tabs.contentWidth
-        height: root.height - bottomSeparator.height
-
-        hoverEnabled: false
-        propagateComposedEvents: true
-        enabled: root.visible && root.draggingTabsAllowed
-        cursorShape: Qt.SizeAllCursor
     }
 
     Loader {
