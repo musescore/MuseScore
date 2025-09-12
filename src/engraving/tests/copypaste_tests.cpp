@@ -33,6 +33,7 @@
 #include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/segment.h"
+#include "dom/tuplet.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -50,6 +51,7 @@ public:
     void copypastestaff(const char*);
     void copypastevoice(const char*, int);
     void copypastetuplet(const char*);
+    void copypasteontotuplet(const char*);
     void copypastenote(const String&, Fraction = Fraction(1, 1));
 };
 
@@ -491,9 +493,48 @@ void Engraving_CopyPasteTests::copypastetuplet(const char* idx)
     delete score;
 }
 
+void Engraving_CopyPasteTests::copypasteontotuplet(const char* idx)
+{
+    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_tuplet_%1.mscx").arg(String::fromUtf8(idx)));
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+
+    EXPECT_TRUE(m1);
+    EXPECT_TRUE(m2);
+
+    Segment* s = m1->first(SegmentType::ChordRest);
+    score->select(toChord(s->element(0))->notes().at(0));
+    s = s->next(SegmentType::ChordRest);
+    score->select(s->element(0), SelectType::RANGE);
+
+    EXPECT_TRUE(score->selection().canCopy());
+    String mimeType = score->selection().mimeType();
+    EXPECT_TRUE(!mimeType.isEmpty());
+    QMimeData* mimeData = new QMimeData;
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
+
+    Segment* s2 = m2->first(SegmentType::ChordRest);
+    EngravingItem* dest = s2->element(0);
+    while (!toChordRest(dest)->tuplet()) {
+        s2 = s2->next(SegmentType::ChordRest);
+        dest = s2->element(0);
+    }
+    score->select(toChordRest(dest)->tuplet());
+    score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_tuplet_%1.mscx").arg(String::fromUtf8(idx)),
+                                            COPYPASTE_DATA_DIR + String("copypaste_tuplet_%1-ref.mscx").arg(String::fromUtf8(idx))));
+    delete score;
+}
+
 TEST_F(Engraving_CopyPasteTests, copypasteTuplet01)
 {
-    copypastetuplet("01");
+    copypasteontotuplet("01");
 }
 
 TEST_F(Engraving_CopyPasteTests, copypasteTuplet02)
