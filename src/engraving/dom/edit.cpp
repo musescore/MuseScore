@@ -528,6 +528,22 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
             std::vector<TDuration> dList;
             if (tuplet || staff->isLocalTimeSignature(tick) || f == Fraction(0, 1)) {
                 dList = toDurationList(l * totalTupletRatio, useDots);
+                if (tuplet) {
+                    TDuration tupletBaseDuration = tuplet ? tuplet->baseLen() : Fraction(1, 1);
+                    for (auto it = dList.begin(); it != dList.end();) {
+                        const TDuration& d = *it;
+                        Fraction ratio = (d.fraction() / tupletBaseDuration.fraction()).reduced();
+                        if (d > tupletBaseDuration && ratio.denominator() == 1) {
+                            // replace current it with N base durations
+                            it = dList.erase(it);
+                            for (int i = 0; i < ratio.numerator(); i++) {
+                                it = dList.insert(it, tupletBaseDuration);
+                            }
+                        } else {
+                            ++it;
+                        }
+                    }
+                }
                 std::reverse(dList.begin(), dList.end());
             } else {
                 dList
