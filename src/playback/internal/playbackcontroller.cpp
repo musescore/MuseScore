@@ -1347,7 +1347,8 @@ void PlaybackController::showOnlineSoundsProcessingError()
 {
     const std::string text = muse::mtrc("playback", "This may be due to a poor internet connection or server issue. "
                                                     "Your score will still play, but some sounds may be missing. "
-                                                    "Please check your connection or <a href=\"%1\">learn more here</a>.")
+                                                    "Please check your connection, and make sure MuseHub is running and you are logged in. "
+                                                    "<a href=\"%1\">Learn more here</a>.")
                              .arg(configuration()->onlineSoundsHandbookUrl()).toStdString();
 
     auto promise = interactive()->warning(muse::trc("playback", "Some online sounds aren’t ready yet"), text,
