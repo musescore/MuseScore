@@ -3332,7 +3332,8 @@ void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
     }
 
     // In case of dynamics/expressions before or after, make space for them horizontally
-    double hairpinDistToDynOrExpr = ctx.conf().style().styleMM(Sid::autoplaceHairpinDynamicsDistance);
+    double mag = item->staff()->staffMag(item);
+    double hairpinDistToDynOrExpr = ctx.conf().style().styleMM(Sid::autoplaceHairpinDynamicsDistance) * mag;
 
     bool makeSpaceBefore = (doSnapBefore && possibleSnapBeforeElement->isTextBase())
                            || (possibleSnapBeforeElement && possibleSnapBeforeElement->isDynamic());
