@@ -3557,31 +3557,6 @@ void ChangeTieJumpPointActive::flip(EditData*)
     m_active = oldActive;
 }
 
-FretLinkHarmony::FretLinkHarmony(FretDiagram* diagram, Harmony* harmony, bool unlink)
-{
-    m_fretDiagram = diagram;
-    m_harmony = harmony;
-    m_unlink = unlink;
-}
-
-void FretLinkHarmony::undo(EditData*)
-{
-    if (m_unlink) {
-        m_fretDiagram->linkHarmony(m_harmony);
-    } else {
-        m_fretDiagram->unlinkHarmony();
-    }
-}
-
-void FretLinkHarmony::redo(EditData*)
-{
-    if (m_unlink) {
-        m_fretDiagram->unlinkHarmony();
-    } else {
-        m_fretDiagram->linkHarmony(m_harmony);
-    }
-}
-
 RemoveFretDiagramFromFretBox::RemoveFretDiagramFromFretBox(FretDiagram* f)
     : m_fretDiagram(f)
 {
