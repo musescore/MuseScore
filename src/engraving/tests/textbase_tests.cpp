@@ -72,6 +72,7 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextBefore)
     EditData ed;
     dynamic->startEdit(ed);
     score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
+    dynamic->cursor()->moveCursorToStart();
     score->undo(new InsertText(dynamic->cursor(), String(u"poco ")), &ed);
     score->endCmd();
     dynamic->endEdit(ed);
@@ -100,6 +101,7 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextNoItalic)
     EditData ed;
     dynamic->startEdit(ed);
     score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
+    dynamic->cursor()->moveCursorToStart();
     dynamic->setProperty(Pid::FONT_STYLE, PropertyValue::fromValue(0));
     score->undo(new InsertText(dynamic->cursor(), String(u"moderately ")), &ed);
     score->endCmd();
