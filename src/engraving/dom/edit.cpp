@@ -3783,7 +3783,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
 
         if (cr1->isRestFamily()) {
             if (cr1->selected()) {
-                restDuration += cr1->ticks();
+                restDuration += cr1->globalTicks();
                 removeChordRest(cr1, true);
             } else {
                 foundDeselected(cr1);
@@ -3821,7 +3821,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
         }
 
         if (notesToRemove.size() == allNotes.size()) {
-            restDuration += cr1->ticks();
+            restDuration += cr1->globalTicks();
             removeChordRest(cr1, true);
         } else {
             for (Note* note : notesToRemove) {
