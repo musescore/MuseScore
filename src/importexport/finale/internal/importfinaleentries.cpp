@@ -53,6 +53,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
+#include "engraving/rendering/score/restlayout.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
