@@ -1580,6 +1580,15 @@ void TextBlock::changeFormat(FormatId id, const FormatValue& data, int start, in
     }
 }
 
+void CharFormat::setFontSize(double val)
+{
+    if (muse::RealIsEqualOrLess(val, 0.0) && !muse::RealIsEqual(val, TextBase::UNDEFINED_FONT_SIZE)) {
+        m_fontSize = 1.0;
+        return;
+    }
+    m_fontSize = val;
+}
+
 //---------------------------------------------------------
 //   formatValue
 //---------------------------------------------------------
