@@ -50,7 +50,7 @@
           <root-alter>-1</root-alter>
           </root>
         <kind text="m" parentheses-degrees="yes">minor</kind>
-        <bass>
+        <bass arrangement="horizontal">
           <bass-step>F</bass-step>
           </bass>
         <degree>
