@@ -445,6 +445,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
 //---------------------------------------------------------
 //   setRest
 //    sets rests and returns the first one
+// _l is in global ticks
 //---------------------------------------------------------
 
 Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
@@ -455,7 +456,7 @@ Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _
 
 //---------------------------------------------------------
 //   setRests
-//    create one or more rests to fill "l"
+//    create one or more rests to fill "l" (global ticks)
 //---------------------------------------------------------
 
 std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet,
@@ -466,6 +467,7 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
     Measure* measure = tick2measure(tick);
     std::vector<Rest*> rests;
     Staff* staff     = Score::staff(track / VOICES);
+    Fraction totalTupletRatio = tuplet ? tuplet->totalRatio() : Fraction(1, 1);
 
     while (!l.isZero()) {
         //
@@ -525,7 +527,23 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
             //
             std::vector<TDuration> dList;
             if (tuplet || staff->isLocalTimeSignature(tick) || f == Fraction(0, 1)) {
-                dList = toDurationList(l, useDots);
+                dList = toDurationList(l * totalTupletRatio, useDots);
+                if (tuplet) {
+                    TDuration tupletBaseDuration = tuplet ? tuplet->baseLen() : Fraction(1, 1);
+                    for (auto it = dList.begin(); it != dList.end();) {
+                        const TDuration& d = *it;
+                        Fraction ratio = (d.fraction() / tupletBaseDuration.fraction()).reduced();
+                        if (d > tupletBaseDuration && ratio.denominator() == 1) {
+                            // replace current it with N base durations
+                            it = dList.erase(it);
+                            for (int i = 0; i < ratio.numerator(); i++) {
+                                it = dList.insert(it, tupletBaseDuration);
+                            }
+                        } else {
+                            ++it;
+                        }
+                    }
+                }
                 std::reverse(dList.begin(), dList.end());
             } else {
                 dList
@@ -1834,7 +1852,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             expandVoice(segment, tr);
                         }
                         // the returned gap ends at the measure boundary or at tuplet end
-                        Fraction dd = makeGap(segment, tr, sd, cr->tuplet());
+                        Fraction totalTupletRatio = cr->totalTupletRatio();
+                        Fraction dd = makeGap(segment, tr, sd / totalTupletRatio, cr->tuplet());
                         if (dd.isZero()) {
                             break;
                         }
@@ -3780,7 +3799,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
 
         if (cr1->isRestFamily()) {
             if (cr1->selected()) {
-                restDuration += cr1->ticks();
+                restDuration += cr1->globalTicks();
                 removeChordRest(cr1, true);
             } else {
                 foundDeselected(cr1);
@@ -3818,7 +3837,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
         }
 
         if (notesToRemove.size() == allNotes.size()) {
-            restDuration += cr1->ticks();
+            restDuration += cr1->globalTicks();
             removeChordRest(cr1, true);
         } else {
             for (Note* note : notesToRemove) {
