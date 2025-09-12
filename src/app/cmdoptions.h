@@ -38,9 +38,8 @@ struct CmdOptions {
         ScoreTransposeOptions,
         ForceMode,
         SoundProfile,
-        ExtensionUri
-
-        // Video
+        ExtensionUri,
+        PageNumber,
     };
 
     muse::IApplication::RunMode runMode = muse::IApplication::RunMode::GuiApp;

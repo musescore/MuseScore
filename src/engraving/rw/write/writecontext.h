@@ -23,10 +23,25 @@
 
 #include "containers.h"
 
-#include "dom/select.h"
-#include "dom/score.h"
+#include "engraving/dom/select.h"
+#include "engraving/dom/score.h"
 
 namespace mu::engraving::write {
+struct WriteRange {
+    MeasureBase* startMeasure = nullptr;
+    MeasureBase* endMeasure = nullptr;
+    staff_idx_t startStaffIdx = muse::nidx;
+    staff_idx_t endStaffIdx = muse::nidx;
+
+    bool operator==(const WriteRange& r) const
+    {
+        return startMeasure == r.startMeasure
+               && endMeasure == r.endMeasure
+               && startStaffIdx == r.startStaffIdx
+               && endStaffIdx == r.endStaffIdx;
+    }
+};
+
 class WriteContext
 {
 public:
@@ -60,6 +75,10 @@ public:
     bool canWriteNoteIdx(size_t noteIdx, size_t totalNotesInChord) const;
     bool canWriteVoice(track_idx_t track) const;
 
+    bool shouldWriteRange() const { return _range.has_value(); }
+    const std::optional<WriteRange>& range() const { return _range; }
+    void setRange(const WriteRange& v) { _range = v; }
+
     inline bool operator==(const WriteContext& c) const
     {
         return _curTick == c._curTick
@@ -67,7 +86,8 @@ public:
                && _curTrack == c._curTrack
                && _trackDiff == c._trackDiff
                && _clipboardmode == c._clipboardmode
-               && _filter == c._filter;
+               && _filter == c._filter
+               && _range == c._range;
     }
 
     inline bool operator!=(const WriteContext& c) const { return !this->operator==(c); }
@@ -82,6 +102,8 @@ private:
     int _trackDiff       { 0 };             // saved track is curTrack-trackDiff
 
     bool _clipboardmode  { false };     // used to modify write() behaviour
+
+    std::optional<WriteRange> _range;
 
     SelectionFilter _filter;
 };

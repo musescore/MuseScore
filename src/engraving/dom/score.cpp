@@ -4378,6 +4378,8 @@ BeatsPerSecond Score::multipliedTempo(const Fraction& tick) const
 
 void Score::cmdSelectAll()
 {
+    TRACEFUNC;
+
     if (m_measures.size() == 0) {
         return;
     }
@@ -4399,6 +4401,8 @@ void Score::cmdSelectAll()
 
 void Score::cmdSelectSection()
 {
+    TRACEFUNC;
+
     Segment* s = m_selection.startSegment();
     if (s == 0) {
         return;

@@ -37,6 +37,7 @@
 #include "engraving/compat/engravingcompat.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
+#include "engraving/rw/write/writecontext.h"
 
 #include "iprojectautosaver.h"
 #include "notation/notationerrors.h"
@@ -511,12 +512,43 @@ Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool 
 
         ret = saveScore(savePath, suffix, false /*generateBackup*/, false /*createThumbnail*/, true /*isAutosave*/);
     } break;
-    default:
+    case SaveMode::SavePage:
+        ASSERT_X("Use savePage(path, pageNum)");
         ret = muse::make_ret(Ret::Code::UnknownError);
+        break;
     }
 
     if (ret) {
         m_saved.send(savePath, saveMode);
+    }
+
+    return ret;
+}
+
+muse::Ret NotationProject::savePage(const muse::io::path_t& path, const size_t pageNum)
+{
+    TRACEFUNC;
+
+    const MasterScore* score = m_masterNotation->masterScore();
+    IF_ASSERT_FAILED(pageNum < score->npages()) {
+        return make_ret(notation::Err::UnknownError);
+    }
+
+    const Page* page = score->pages().at(pageNum);
+    const std::vector<System*>& systems = page->systems();
+    if (systems.empty()) {
+        return make_ret(notation::Err::UnknownError);
+    }
+
+    write::WriteRange range;
+    range.startStaffIdx = 0;
+    range.endStaffIdx = score->nstaves();
+    range.startMeasure = systems.front()->first();
+    range.endMeasure = systems.back()->last();
+
+    Ret ret = writeRange(path, range);
+    if (ret) {
+        m_saved.send(path, SaveMode::SavePage);
     }
 
     return ret;
@@ -624,7 +656,7 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         }
 
         MscWriter msczWriter(params);
-        Ret ret = writeProject(msczWriter, false /*onlySelection*/, createThumbnail);
+        Ret ret = writeProject(msczWriter, createThumbnail);
         msczWriter.close();
         if (params.device) {
             delete params.device;
@@ -747,7 +779,41 @@ Ret NotationProject::makeBackup(muse::io::path_t filePath)
     return ret;
 }
 
-Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection, bool createThumbnail)
+muse::Ret NotationProject::writeRange(const muse::io::path_t& path, const engraving::write::WriteRange& range)
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(path != m_path) {
+        return make_ret(notation::Err::UnknownError);
+    }
+
+    // Check writable
+    if (fileSystem()->exists(path) && !fileSystem()->isWritable(path)) {
+        LOGE() << "failed save, not writable path: " << path;
+        return make_ret(notation::Err::UnknownError);
+    }
+
+    // Write project
+    std::string suffix = io::suffix(path);
+    MscWriter::Params params;
+    params.filePath = path.toQString();
+    params.mode = mscIoModeBySuffix(suffix);
+    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    MscWriter msczWriter(params);
+    Ret ret = writeProject(msczWriter, true, &range);
+
+    if (ret) {
+        QFile::setPermissions(path.toQString(),
+                              QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+    }
+    LOGI() << "success save file: " << path;
+    return ret;
+}
+
+Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, const write::WriteRange* range)
 {
     TRACEFUNC;
 
@@ -759,7 +825,7 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection, boo
     }
 
     // Write engraving project
-    ret = m_engravingProject->writeMscz(msczWriter, onlySelection, createThumbnail);
+    ret = m_engravingProject->writeMscz(msczWriter, createThumbnail, range);
     if (!ret) {
         LOGE() << "failed write engraving project to mscz: " << ret.toString();
         return make_ret(notation::Err::UnknownError);
@@ -772,8 +838,14 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection, boo
         return ret;
     }
 
-    // Write view settings and excerpt solo-mute states
+    // Write master view settings
     m_masterNotation->notation()->viewState()->write(msczWriter);
+
+    if (range) {
+        return make_ret(Ret::Code::Ok);
+    }
+
+    // Write excerpt view settings and solo-mute state
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         muse::io::path_t path = u"Excerpts/" + excerpt->fileName() + u"/";
         excerpt->notation()->viewState()->write(msczWriter, path);
@@ -792,38 +864,38 @@ Ret NotationProject::saveSelectionOnScore(const muse::io::path_t& path)
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(path != m_path) {
-        return make_ret(notation::Err::UnknownError);
-    }
-
-    if (m_engravingProject->masterScore()->selectionEmpty()) {
+    const MasterScore* score = m_masterNotation->masterScore();
+    if (score->selectionEmpty()) {
         LOGE() << "failed save, empty selection";
         return make_ret(notation::Err::EmptySelection);
     }
-    // Check writable
-    if (fileSystem()->exists(path) && !fileSystem()->isWritable(path)) {
-        LOGE() << "failed save, not writable path: " << path;
-        return make_ret(notation::Err::UnknownError);
+
+    const Selection& selection = score->selection();
+
+    write::WriteRange range;
+    range.startStaffIdx = selection.staffStart();
+    range.endStaffIdx = selection.staffEnd();
+
+    // Make sure we select full parts
+    const Staff* sStaff = score->staff(range.startStaffIdx);
+    const Part* sPart = sStaff->part();
+    const Staff* eStaff = score->staff(range.endStaffIdx - 1);
+    const Part* ePart = eStaff->part();
+    range.startStaffIdx = score->staffIdx(sPart);
+    range.endStaffIdx = score->staffIdx(ePart) + ePart->nstaves();
+
+    range.startMeasure = selection.startSegment()->measure();
+    if (range.startMeasure && range.startMeasure->isMeasure() && toMeasure(range.startMeasure)->isMMRest()) {
+        range.startMeasure = toMeasure(range.startMeasure)->mmRestFirst();
     }
 
-    // Write project
-    std::string suffix = io::suffix(path);
-    MscWriter::Params params;
-    params.filePath = path.toQString();
-    params.mode = mscIoModeBySuffix(suffix);
-    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
-        return make_ret(Ret::Code::InternalError);
+    if (const Segment* endSeg = selection.endSegment()) {
+        range.endMeasure = endSeg->measure()->next();
+    } else {
+        range.endMeasure = nullptr;
     }
 
-    MscWriter msczWriter(params);
-    Ret ret = writeProject(msczWriter, true);
-
-    if (ret) {
-        QFile::setPermissions(path.toQString(),
-                              QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
-    }
-    LOGI() << "success save file: " << path;
-    return ret;
+    return writeRange(path, range);
 }
 
 Ret NotationProject::checkSavedFileForCorruption(MscIoMode ioMode, const muse::io::path_t& path,

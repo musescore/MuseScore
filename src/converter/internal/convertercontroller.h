@@ -47,30 +47,25 @@ public:
     ConverterController(const muse::modularity::ContextPtr& iocCtx)
         : muse::Injectable(iocCtx) {}
 
-    muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
-                          const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+    muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
                           const muse::String& soundProfile = muse::String(),
-                          const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {}) override;
+                          const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {},
+                          const size_t pageNum = muse::nidx) override;
 
-    muse::Ret batchConvert(const muse::io::path_t& batchJobFile,
-                           const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+    muse::Ret batchConvert(const muse::io::path_t& batchJobFile, const OpenParams& openParams = {},
                            const muse::String& soundProfile = muse::String(),
-                           const muse::UriQuery& extensionUri = muse::UriQuery(), muse::ProgressPtr progress = nullptr) override;
+                           const muse::UriQuery& extensionUri = muse::UriQuery(), const size_t pageNum = muse::nidx,
+                           muse::ProgressPtr progress = nullptr) override;
 
-    muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
-                                const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+    muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
 
-    muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out,
-                               const muse::io::path_t& highlightConfigPath = muse::io::path_t(),
-                               const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
-    muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out,
-                              const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
-    muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
-                               const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
-    muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out,
-                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+    muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out,  const OpenParams& openParams = {},
+                               const muse::io::path_t& highlightConfigPath = muse::io::path_t()) override;
+    muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
+    muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
+    muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
     muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+                                   const OpenParams& openParams = {}) override;
 
     muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out) override;
 
@@ -88,10 +83,9 @@ private:
 
     muse::RetVal<BatchJob> parseBatchJob(const muse::io::path_t& batchJobFile) const;
 
-    muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
-                          const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+    muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams,
                           const muse::String& soundProfile = muse::String(),
-                          const muse::UriQuery& extensionUri = muse::UriQuery(), const std::optional<notation::TransposeOptions>& transposeOptions = std::nullopt);
+                          const muse::UriQuery& extensionUri = muse::UriQuery(), const std::optional<notation::TransposeOptions>& transposeOptions = std::nullopt, const size_t pageNum = muse::nidx);
 
     muse::Ret convertScoreParts(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
                                 const muse::io::path_t& out);
@@ -100,6 +94,8 @@ private:
                                  const muse::UriQuery& extensionUri);
     bool isConvertPageByPage(const std::string& suffix) const;
     muse::Ret convertPageByPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;
+    muse::Ret convertPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const size_t pageNum,
+                          const muse::io::path_t& filePath, const muse::io::path_t& dirPath = {}) const;
     muse::Ret convertFullNotation(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;
 
     muse::Ret convertScorePartsToPdf(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,

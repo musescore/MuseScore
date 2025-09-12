@@ -39,7 +39,8 @@ using namespace muse::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySelection, bool doCreateThumbnail)
+bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createThumbnail,
+                         const write::WriteRange* range)
 {
     TRACEFUNC;
 
@@ -60,20 +61,24 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
 
     WriteInOutData masterWriteOutData(score);
 
+    if (range) {
+        masterWriteOutData.ctx.setRange(*range);
+    }
+
     // Write MasterScore
     {
         ByteArray scoreData;
         Buffer scoreBuf(&scoreData);
         scoreBuf.open(IODevice::ReadWrite);
 
-        RWRegister::writer(score->iocContext())->writeScore(score, &scoreBuf, onlySelection, &masterWriteOutData);
+        RWRegister::writer(score->iocContext())->writeScore(score, &scoreBuf, &masterWriteOutData);
 
         mscWriter.writeScoreFile(scoreData);
     }
 
     // Write Excerpts
     {
-        if (!onlySelection) {
+        if (!range) {
             const std::vector<Excerpt*>& excerpts = score->excerpts();
 
             for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
@@ -103,7 +108,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
                     excerptBuf.open(IODevice::ReadWrite);
 
                     RWRegister::writer(partScore->iocContext())->writeScore(
-                        excerpt->excerptScore(), &excerptBuf, onlySelection, &masterWriteOutData);
+                        excerpt->excerptScore(), &excerptBuf, &masterWriteOutData);
 
                     mscWriter.addExcerptFile(excerpt->fileName(), excerptData);
                 }
@@ -136,7 +141,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
 
     // Write thumbnail
     {
-        if (doCreateThumbnail && !score->pages().empty()) {
+        if (createThumbnail && !score->pages().empty()) {
             auto pixmap = score->createThumbnail();
 
             ByteArray ba;
@@ -175,7 +180,7 @@ bool MscSaver::exportPart(Score* partScore, MscWriter& mscWriter)
         Buffer excerptBuf(&excerptData);
         excerptBuf.open(IODevice::WriteOnly);
 
-        rw::RWRegister::writer(partScore->iocContext())->writeScore(partScore, &excerptBuf, false);
+        rw::RWRegister::writer(partScore->iocContext())->writeScore(partScore, &excerptBuf);
 
         mscWriter.writeScoreFile(excerptData);
     }
