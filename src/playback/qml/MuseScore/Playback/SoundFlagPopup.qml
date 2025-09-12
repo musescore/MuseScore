@@ -25,11 +25,12 @@ import QtQuick.Layouts 1.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
+import MuseScore.NotationScene 1.0
 import MuseScore.Playback 1.0
 
 import "internal/SoundFlag"
 
-StyledPopupView {
+AbstractElementPopup {
     id: root
 
     property alias notationViewNavigationSection: navPanel.section
@@ -48,7 +49,9 @@ StyledPopupView {
     placementPolicies: PopupView.PreferAbove
     isContentReady: soundFlagModel.inited
 
-    signal elementRectChanged(var elementRect)
+    model: SoundFlagSettingsModel {
+        id: soundFlagModel
+    }
 
     function updatePosition() {
         root.x = (root.parent.width / 2) - (root.width / 2) + root.margins
@@ -60,18 +63,6 @@ StyledPopupView {
         width: 294
 
         spacing: 12
-
-        SoundFlagSettingsModel {
-            id: soundFlagModel
-
-            onIconRectChanged: function(rect) {
-                root.elementRectChanged(rect)
-            }
-        }
-
-        Component.onCompleted: {
-            soundFlagModel.init()
-        }
 
         RowLayout {
             width: parent.width

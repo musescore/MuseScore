@@ -32,7 +32,7 @@ import MuseScore.Playback 1.0
 Item {
     id: container
 
-    property var popup: loader.item
+    property AbstractElementPopup popup: loader.item as AbstractElementPopup
     property bool isPopupOpened: Boolean(popup) && popup.isOpened
 
 
@@ -50,34 +50,40 @@ Item {
 
         function componentByType(type) {
             switch (type) {
-            case Notation.TYPE_HARP_DIAGRAM: return harpPedalComp
-            case Notation.TYPE_CAPO: return capoComp
-            case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
-            case Notation.TYPE_SOUND_FLAG: return soundFlagComp
-            case Notation.TYPE_STAFF_VISIBILITY: return staffVisibilityComp
-            case Notation.TYPE_DYNAMIC: return dynamicComp
-            case Notation.TYPE_TEXT: return textStyleComp
-            case Notation.TYPE_PARTIAL_TIE: return partialTieComp
-            case Notation.TYPE_SHADOW_NOTE: return shadowNoteComp
+            case AbstractElementPopupModel.TYPE_HARP_DIAGRAM: return harpPedalComp
+            case AbstractElementPopupModel.TYPE_CAPO: return capoComp
+            case AbstractElementPopupModel.TYPE_STRING_TUNINGS: return stringTuningsComp
+            case AbstractElementPopupModel.TYPE_SOUND_FLAG: return soundFlagComp
+            case AbstractElementPopupModel.TYPE_STAFF_VISIBILITY: return staffVisibilityComp
+            case AbstractElementPopupModel.TYPE_DYNAMIC: return dynamicComp
+            case AbstractElementPopupModel.TYPE_TEXT: return textStyleComp
+            case AbstractElementPopupModel.TYPE_PARTIAL_TIE: return partialTieComp
+            case AbstractElementPopupModel.TYPE_SHADOW_NOTE: return shadowNoteComp
             }
 
             return null
         }
 
-        function updateContainerPosition(elementRect) {
+        function updateContainerPosition() {
+            if (!Boolean(container.popup)) {
+                return
+            }
+
+            const elementRect = container.popup.elementRect
+
             container.x = elementRect.x
             container.y = elementRect.y
             container.height = elementRect.height
             container.width = elementRect.width
 
-            loader.item.updatePosition()
+            container.popup.updatePosition()
         }
     }
 
-    function show(popupType, elementRect) {
+    function show(popupType) {
         close()
 
-        var popup = loader.loadPopup(popupType, elementRect)
+        var popup = loader.loadPopup(popupType)
         popup.open()
     }
 
@@ -93,11 +99,11 @@ Item {
         anchors.fill: parent
         active: false
 
-        function loadPopup(popupType, elementRect) {
+        function loadPopup(popupType) {
             loader.sourceComponent = prv.componentByType(popupType)
             loader.active = true
 
-            const popup = loader.item
+            const popup = loader.item as AbstractElementPopup
             console.assert(popup)
 
             popup.parent = container
@@ -111,10 +117,8 @@ Item {
                 container.closed()
             })
 
-            prv.updateContainerPosition(elementRect)
-            popup.elementRectChanged.connect(function(elementRect) {
-                prv.updateContainerPosition(elementRect)
-            })
+            prv.updateContainerPosition()
+            popup.elementRectChanged.connect(prv.updateContainerPosition)
 
             //! NOTE: All navigation panels in popups must be in the notation view section.
             //        This is necessary so that popups do not activate navigation in the new section,

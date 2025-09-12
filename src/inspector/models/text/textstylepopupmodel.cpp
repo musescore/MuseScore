@@ -47,3 +47,32 @@ TextSettingsModel* TextStylePopupModel::textSettingsModel() const
 {
     return m_textSettingsModel;
 }
+
+void TextStylePopupModel::updateItemRect()
+{
+    QRect rect;
+    bool placeAbove = true;
+
+    if (m_item) {
+        // See also `EditModeRenderer::drawTextBase`
+        const double m = m_item->spatium();
+        rect = fromLogical(m_item->canvasBoundingRect().adjusted(-m, -m, m, m)).toQRect();
+
+        placeAbove = m_item->placeAbove() || !m_item->hasStaff();
+    }
+
+    if (m_itemRect != rect) {
+        m_itemRect = rect;
+        emit itemRectChanged(rect);
+    }
+
+    if (m_placeAbove != placeAbove) {
+        m_placeAbove = placeAbove;
+        emit placeAboveChanged();
+    }
+}
+
+bool TextStylePopupModel::placeAbove() const
+{
+    return m_placeAbove;
+}

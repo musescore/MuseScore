@@ -788,7 +788,7 @@ void TablEdit::readTefContents()
             note.dots = duration2dots(note.duration);
             note.triplet = duration2triplet(note.duration);
             note.voice = extractVoice(byte3);
-            note.tie = byte2 & 0x80;
+            note.tie = (byte2 / 0x20) == 7;
             if (byte1 & 0x40) {
                 note.graceEffect = byte4 / 0x20;
                 note.graceFret = byte4 & 0x1F;

@@ -66,6 +66,10 @@ TEST_F(TablEdit_Tests, tef_chord_C_D) {
     tefReadTest("chord_C_D");
 }
 
+TEST_F(TablEdit_Tests, tef_dynamic) {
+    tefReadTest("dynamic");
+}
+
 TEST_F(TablEdit_Tests, tef_grace_1) {
     tefReadTest("grace_1");
 }

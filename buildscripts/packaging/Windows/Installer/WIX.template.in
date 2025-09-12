@@ -137,6 +137,7 @@
                     <RegistryValue Name=".gpx" Value="" Type="string" />
                     <RegistryValue Name=".gp" Value="" Type="string" />
                     <RegistryValue Name=".ptb" Value="" Type="string" />
+                    <RegistryValue Name=".tef" Value="" Type="string" />
                     <RegistryValue Name=".sf2" Value="" Type="string" />
                     <RegistryValue Name=".sf3" Value="" Type="string" />
                 </RegistryKey>

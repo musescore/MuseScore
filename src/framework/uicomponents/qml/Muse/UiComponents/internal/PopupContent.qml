@@ -111,18 +111,18 @@ FocusScope {
 
             color: ui.theme.popupBackgroundColor
             radius: 4
-        }
 
-        Item {
-            id: contentBody
-            x: root.margins
-            y: root.margins
-            width: root.contentWidth
-            height: root.contentHeight
+            Item {
+                id: contentBody
+                x: root.margins
+                y: root.margins
+                width: root.contentWidth
+                height: root.contentHeight
 
-            implicitWidth: root.contentWidth
-            implicitHeight: root.contentHeight
-            
+                implicitWidth: root.contentWidth
+                implicitHeight: root.contentHeight
+            }
+
             layer.enabled: ui.isEffectsAllowed
             layer.effect: RoundedCornersEffect {
                 radius: contentBackground.radius

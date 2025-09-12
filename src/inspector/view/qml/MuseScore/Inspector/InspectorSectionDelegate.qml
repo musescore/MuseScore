@@ -54,7 +54,7 @@ ExpandableBlank {
     navigation.panel: root.navigationPanel
     navigation.row: 0
 
-    title: root.sectionModel?.title
+    title: root.sectionModel?.title ?? ""
 
     headerAccessory: contentItem?.headerAccessory
 

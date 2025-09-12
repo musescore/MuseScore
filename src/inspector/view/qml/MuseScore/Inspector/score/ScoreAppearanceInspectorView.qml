@@ -53,7 +53,7 @@ InspectorSectionView {
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRow(1)
 
-                checked: root.model?.hideEmptyStaves
+                checked: root.model?.hideEmptyStaves ?? false
                 onClicked: {
                     if (root.model) {
                         root.model.hideEmptyStaves = !checked

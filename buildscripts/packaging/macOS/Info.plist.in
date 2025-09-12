@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>NSPrincipalClass</key>
-    <string>NSApplication</string>
+	<string>NSApplication</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<!-- UTI declarations for OS X >= 10.4	-->
+	<string>en</string>
+
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<!-- MuseScore documents -->
@@ -15,6 +15,8 @@
 			<string>org.musescore.mscz</string>
 			<key>UTTypeDescription</key>
 			<string>MuseScore File</string>
+			<key>UTTypeIconFile</key>
+			<string>MsczIcon.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -37,6 +39,8 @@
 			<string>org.musescore.mscx</string>
 			<key>UTTypeDescription</key>
 			<string>MuseScore Uncompressed File</string>
+			<key>UTTypeIconFile</key>
+			<string>MscxIcon.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -58,7 +62,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.musescore.mscs</string>
 			<key>UTTypeDescription</key>
-			<string>MuseScore Uncompressed File</string>
+			<string>MuseScore Stand-alone File</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -78,31 +82,11 @@
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>org.musescore.mscx,</string>
-			<key>UTTypeDescription</key>
-			<string>MuseScore Backup File</string>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-				<string>public.content</string>
-			</array>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>mscx,</string>
-				</array>
-				<key>public.mime-type</key>
-				<array>
-					<string>application/x-musescore+xml</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeIdentifier</key>
 			<string>org.musescore.mscz,</string>
 			<key>UTTypeDescription</key>
-			<string>MuseScore Compressed Backup File</string>
+			<string>MuseScore Backup File</string>
+			<key>UTTypeIconFile</key>
+			<string>MsczIcon.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -120,96 +104,130 @@
 				</array>
 			</dict>
 		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.musescore.mscx,</string>
+			<key>UTTypeDescription</key>
+			<string>MuseScore Uncompressed Backup File</string>
+			<key>UTTypeIconFile</key>
+			<string>MscxIcon.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mscx,</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-musescore+xml</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
-		    <key>CFBundleTypeName</key>
-			<string>MuseScore File</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>mscx</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>MscxIcon.icns</string>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/x-musescore+xml</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSTypeIsPackage</key>
-			<false/>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
-			<key>LSHandlerRank</key>
-   			<string>Owner</string>
-		</dict>
-		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Compressed MuseScore File</string>
+			<string>MuseScore File</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>MsczIcon.icns</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.musescore.mscz</string>
+			</array>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>mscz</string>
 			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>MsczIcon.icns</string>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/x-musescore</string>
-			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSTypeIsPackage</key>
-			<true/>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
 			<key>LSHandlerRank</key>
-   			<string>Owner</string>
-		</dict>
-		<dict>
-		    <key>CFBundleTypeName</key>
-			<string>MuseScore Backup File</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>mscx,</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>MscxIcon.icns</string>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/x-musescore+xml</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Owner</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
-			<key>LSHandlerRank</key>
-   			<string>Owner</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Compressed MuseScore Backup File</string>
+			<string>MuseScore Uncompressed File</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>MscxIcon.icns</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.musescore.mscx</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mscx</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>MuseScore Stand-alone File</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.musescore.mscs</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mscs</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>MuseScore Backup File</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>MsczIcon.icns</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.musescore.mscz,</string>
+			</array>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>mscz,</string>
 			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>MuseScore Uncompressed Backup File</string>
 			<key>CFBundleTypeIconFile</key>
-			<string>MsczIcon.icns</string>
-			<key>CFBundleTypeMIMETypes</key>
+			<string>MscxIcon.icns</string>
+			<key>LSItemContentTypes</key>
 			<array>
-				<string>application/x-musescore</string>
+				<string>org.musescore.mscx,</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mscx,</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSTypeIsPackage</key>
-			<true/>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
 			<key>LSHandlerRank</key>
-   			<string>Owner</string>
+			<string>Owner</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -225,6 +243,8 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -243,6 +263,8 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -262,6 +284,8 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -270,6 +294,10 @@
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>MIDI File</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.midi-audio</string>
+			</array>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>mid</string>
@@ -282,6 +310,8 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 		</dict>
@@ -299,6 +329,8 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 		</dict>
@@ -311,6 +343,10 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -321,6 +357,10 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -331,6 +371,10 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -341,6 +385,10 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -351,6 +399,10 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -361,6 +413,10 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -371,6 +427,10 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -381,46 +441,118 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Guitar Pro 3 File</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.arobas-music.guitarpro3.document</string>
+			</array>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>gp3</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Guitar Pro 4 File</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.arobas-music.guitarpro4.document</string>
+			</array>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>gp4</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Guitar Pro 5 File</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.arobas-music.guitarpro5.document</string>
+			</array>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>gp5</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Guitar Pro 6 File</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.arobas-music.guitarpro6.document</string>
+			</array>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>gpx</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Guitar Pro File</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.arobas-music.guitarpro.document</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>gp</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>TablEdit File</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.tabledit.document</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>tef</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -431,6 +563,10 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
@@ -441,25 +577,26 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 		</dict>
 	</array>
 
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLName</key>
-            <string>org.musescore.musescore.musescoreurl</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>musescore</string>
-            </array>
-        </dict>
-    </array>
-
-    <key>ATSApplicationFontsPath</key>
-    <string>fonts</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>org.musescore.musescore.musescoreurl</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>musescore</string>
+			</array>
+		</dict>
+	</array>
 
 	<key>CFBundleExecutable</key>
 	<string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
@@ -477,14 +614,8 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
-	<key>CSResourcesFileMapped</key>
-	<true/>
-	<key>LSRequiresCarbon</key>
-	<true/>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSHumanReadableCopyright</key>
@@ -492,7 +623,7 @@
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.music</string>
 	<key>ATSApplicationFontsPath</key>
-	<string>fonts/</string>
+	<string>fonts</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>af</string>
@@ -500,30 +631,28 @@
 		<string>ar_DZ</string>
 		<string>ar_EG</string>
 		<string>ar_SD</string>
-                <string>ast</string>
-                <string>be</string>
+		<string>ast</string>
+		<string>be</string>
 		<string>bg</string>
 		<string>br</string>
 		<string>ca</string>
-		<string>ca@Valencia</string>
+		<string>ca@valencia</string>
 		<string>cs</string>
 		<string>cy</string>
 		<string>da</string>
 		<string>de</string>
 		<string>el</string>
-		<string>en</string>
 		<string>en_GB</string>
 		<string>en_US</string>
-                <string>eo</string>
-                <string>es</string>
+		<string>eo</string>
+		<string>es</string>
 		<string>et</string>
 		<string>eu</string>
-                <string>fa</string>
-                <string>fi</string>
+		<string>fa</string>
+		<string>fi</string>
 		<string>fil</string>
 		<string>fo</string>
 		<string>fr</string>
-		<string>fr_CA</string>
 		<string>ga</string>
 		<string>gd</string>
 		<string>gl</string>
@@ -533,14 +662,14 @@
 		<string>hu</string>
 		<string>hy</string>
 		<string>id</string>
-                <string>ig</string>
-                <string>it</string>
+		<string>ig</string>
+		<string>it</string>
 		<string>ja</string>
-                <string>ka</string>
-                <string>kab</string>
+		<string>ka</string>
+		<string>kab</string>
 		<string>ko</string>
-                <string>lt</string>
-                <string>lv</string>
+		<string>lt</string>
+		<string>lv</string>
 		<string>ml</string>
 		<string>mn_MN</string>
 		<string>mt</string>
@@ -558,10 +687,11 @@
 		<string>sr</string>
 		<string>sr_RS</string>
 		<string>sv</string>
+		<string>sv_SE</string>
 		<string>th</string>
 		<string>tr</string>
 		<string>uk</string>
-                <string>uz@Latn</string>
+		<string>uz@Latn</string>
 		<string>vi</string>
 		<string>zh_CN</string>
 		<string>zh_HK</string>

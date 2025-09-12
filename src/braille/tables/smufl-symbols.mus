@@ -8,7 +8,7 @@
 #+dots: 6
 #+direction: forward
 #+system: English
-#+description: This table is originally designed for Sao Mai Braille (SMB) software to get Braille output for music SMUFL  symbols parsed from MusicXML file. Braille definitions are based on Music Braille Code 2015 (MBC) and it might be useful to have more users to contribute more definitions. In addition, screen readers might use it to show correct Braille for music symbols in text  document.
+#+description: This table is originally designed for Sao Mai Braille (SMB) software to get Braille output for music SMuFL  symbols parsed from MusicXML file. Braille definitions are based on Music Braille Code 2015 (MBC) and it might be useful to have more users to contribute more definitions. In addition, screen readers might use it to show correct Braille for music symbols in text  document.
 #
 #-copyright: Sao Mai Center for the Blind <www.saomaicenter.org/en>
 #-license: LGPLv2.1
@@ -387,7 +387,7 @@ sign \xEA64 126
 sign \xEA65 16
 sign \xEA66 146
 
-# SMUFL alternate codes will be converted into standard codepoint before translated.
+# SMuFL alternate codes will be converted into standard codepoint before translated.
 noback correct "\x1D12B" "\xE264"
 noback correct "\x1D12A" "\xE263"
 noback correct "\x266D" "\xE260"
@@ -467,7 +467,7 @@ noback correct "\x1D15E" "\xE1D3"
 noback correct "\x1D15D" "\xE1D2"
 noback correct "\x1D15C" "\xE1D0"
 
-#Below are created specifically for SMB software to send SMUFL symbols based on different cases such as SMUFL symbols in phrase, in single and of different music types.
+#Below are created specifically for SMB software to send SMuFL symbols based on different cases such as SMuFL symbols in phrase, in single and of different music types.
 #define classes of different element types
 #attribute smuflAccidental \xE260\xE261\xE262
 attribute smuflAccidental \xE26C\xE26D\xE264\xE263\xE260\xE47D\xE261\xE26A\xE26B\xE47F\xE270\xE273\xE478\xE280\xE488\xE47E\xE275\xE472\xE272\xE282\xE475\xE262\xE269\xE271\xE278\xE489\xE486\xE487\xE281\xE277\xE274\xE474\xE283\xED5A\xE266\xE265
@@ -488,11 +488,11 @@ noback context %smuflDynamic["||)"] @3
 #for music text marked with dots 123456
 noback context ["(||"]%smuflText @123456
 noback context %smuflText["||)"] @123456
-#by default, all in-phrase SMUFL symbols are placed between music indicator 6-3. The rule should be placed at the end of this block.
+#by default, all in-phrase SMuFL symbols are placed between music indicator 6-3. The rule should be placed at the end of this block.
 noback context ["(||"] @6-3
 noback context ["||)"] @6-3
 
-#Stand-alone: only SMUFL symbol, punctuations and/or space; without any text separated with space between the symbol, in case of alternate codes.
+#Stand-alone: only SMuFL symbol, punctuations and/or space; without any text separated with space between the symbol, in case of alternate codes.
 #dynamic symbols: translated exactly as dynamics direction tag.
 #segno, coda, dacapo, dalsegno symbols: translated as <segno>, <coda>, <words> with d.c. and with d.s.
 #handle harp pedal diagram

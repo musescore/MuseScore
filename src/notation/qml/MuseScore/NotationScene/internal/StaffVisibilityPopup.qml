@@ -27,7 +27,7 @@ import Muse.Ui
 import Muse.UiComponents
 import MuseScore.NotationScene
 
-StyledPopupView {
+AbstractElementPopup {
     id: root
 
     property alias notationViewNavigationSection: staffVisibilityNavPanel.section
@@ -41,7 +41,9 @@ StyledPopupView {
 
     placementPolicies: PopupView.PreferBelow
 
-    signal elementRectChanged(var elementRect)
+    model: StaffVisibilityPopupModel {
+        id: popupModel
+    }
 
     function updatePosition() {
         root.y = root.parent.height + 4; // 4 for spacing
@@ -57,13 +59,6 @@ StyledPopupView {
             if (event.type === NavigationEvent.Escape) {
                 root.close();
             }
-        }
-    }
-
-    StaffVisibilityPopupModel {
-        id: popupModel
-        onItemRectChanged: function (rect) {
-            root.elementRectChanged(rect);
         }
     }
 

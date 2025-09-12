@@ -55,7 +55,11 @@ cp -Rp ${APP_PATH} ${VOLUME}/${APPNAME}.app
 echo "otool -L pre-macdeployqt"
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 
-macdeployqt ${VOLUME}/${APPNAME}.app -verbose=2 -qmldir=.
+echo "macdeployqt"
+macdeployqt ${VOLUME}/${APPNAME}.app \
+    -verbose=2 \
+    -qmldir=. \
+    -sign-for-notarization="Developer ID Application: MuseScore"
 
 echo "otool -L post-macdeployqt"
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
@@ -72,6 +76,21 @@ echo "Rename Resources/qml to Resources/qml_mu"
 mv ${VOLUME}/${APPNAME}.app/Contents/Resources/qml ${VOLUME}/${APPNAME}.app/Contents/Resources/qml_mu
 sed -i '' 's:Resources/qml:Resources/qml_mu:g' ${VOLUME}/${APPNAME}.app/Contents/Resources/qt.conf
 
+# Re-sign main app after renaming qml folder
+echo "Re-sign main app after renaming qml folder"
+codesign --force \
+    --options runtime \
+    --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/macOS/entitlements.plist" \
+    -s "Developer ID Application: MuseScore" \
+    "${VOLUME}/${APPNAME}.app"
+
+echo "Codesign verify"
+codesign --verify --deep --strict --verbose=2 "${VOLUME}/${APPNAME}.app"
+
+echo "spctl"
+spctl --assess --type execute -vvv "${VOLUME}/${APPNAME}.app"
+
+# Rename
 echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
 mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 
@@ -116,17 +135,6 @@ end tell
 EOF
 
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
-
-# Codesign
-echo "Codesign"
-# `codesign --deep` doesn't seem to search for code in Contents/Resources directory so sign libraries in it manually
-find "${VOLUME}/${LONGER_NAME}.app/Contents/Resources" -name '*.dylib' -exec codesign --force --options runtime --deep -s "Developer ID Application: MuseScore" '{}' ';'
-# Sign code in other (more conventional) locations
-codesign --force --options runtime --entitlements "${WORKING_DIRECTORY}/../buildscripts/packaging/macOS/entitlements.plist" --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
-echo "spctl"
-spctl --assess --type execute -vvv "${VOLUME}/${LONGER_NAME}.app"
-echo "Codesign verify"
-codesign --verify --deep --strict --verbose=2 "${VOLUME}/${LONGER_NAME}.app"
 
 echo "Unmount"
 for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
