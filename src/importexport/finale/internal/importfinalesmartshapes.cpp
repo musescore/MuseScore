@@ -169,8 +169,9 @@ static bool elementsValidForSpannerType(const ElementType type, const EngravingI
     case ElementType::NOTELINE:
         return startElement->isNote() && endElement->isNote();
     case ElementType::SLUR:
-    case ElementType::OTTAVA:
         return startElement->isChordRest() && endElement->isChordRest();
+    case ElementType::OTTAVA:
+        return startElement->isChordRest(); // the end may be the end of the piece.
     default:
         break;
     }
@@ -187,17 +188,31 @@ static ElementType spannerTypeFromElements(EngravingItem* startElement, Engravin
 
 void FinaleParser::importSmartShapes()
 {
-    auto elementFromTerminationSeg = [&](const MusxInstance<others::SmartShape>& smartShape, bool start) -> EngravingItem* {
+    auto elementFromTerminationSeg = [&](ElementType type, const MusxInstance<others::SmartShape>& smartShape, bool start) -> EngravingItem* {
+        bool findExactEntry = type != ElementType::OTTAVA && type != ElementType::SLUR;
+        bool useNextCr = !start && type == ElementType::OTTAVA;
         logger()->logInfo(String(u"Finding spanner element..."));
         const MusxInstance<others::SmartShape::TerminationSeg>& termSeg = start ? smartShape->startTermSeg : smartShape->endTermSeg;
-        EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(m_currentMusxPartId);
+        EntryInfoPtr entryInfoPtr = termSeg->endPoint->calcAssociatedEntry(m_currentMusxPartId, findExactEntry);
         if (entryInfoPtr) {
             NoteNumber nn = start ? smartShape->startNoteId : smartShape->endNoteId;
             if (nn) {
                 logger()->logInfo(String(u"Found note to anchor to"));
                 return toEngravingItem(noteFromEntryInfoAndNumber(entryInfoPtr, nn));
             }
-            EngravingItem* e = toEngravingItem(chordRestFromEntryInfoPtr(entryInfoPtr));
+            ChordRest* cr = chordRestFromEntryInfoPtr(entryInfoPtr);
+            if (useNextCr) {
+                if (Segment* nextSeg = cr->nextSegmentAfterCR(SegmentType::ChordRest)) {
+                    if (ChordRest* nextCr = nextSeg->nextChordRest(cr->track())) {
+                        cr = nextCr;
+                    } else {
+                        cr = nullptr;
+                    }
+                } else {
+                    cr = nullptr;
+                }
+            }
+            EngravingItem* e = toEngravingItem(cr);
             if (e) {
                 logger()->logInfo(String(u"Found CR to anchor to"));
                 return e;
@@ -211,6 +226,9 @@ void FinaleParser::importSmartShapes()
             return nullptr;
         }
         Fraction tick = mTick + FinaleTConv::musxFractionToFraction(termSeg->endPoint->calcGlobalPosition());
+        if (useNextCr && entryInfoPtr) {
+            tick += FinaleTConv::musxFractionToFraction(entryInfoPtr.calcGlobalActualDuration());
+        }
         // TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, tick, staffIdx);
         // EditTimeTickAnchors::updateLayout(measure);
         EditTimeTickAnchors::updateAnchors(measure, staffIdx);
@@ -258,8 +276,8 @@ void FinaleParser::importSmartShapes()
         }
 
         // Find start and end elements, and change element type if needed
-        EngravingItem* startElement = elementFromTerminationSeg(smartShape, true);
-        EngravingItem* endElement = elementFromTerminationSeg(smartShape, false);
+        EngravingItem* startElement = elementFromTerminationSeg(type, smartShape, true);
+        EngravingItem* endElement = elementFromTerminationSeg(type, smartShape, false);
         IF_ASSERT_FAILED(startElement && endElement) {
             continue;
         }
