@@ -212,6 +212,7 @@ public:
     virtual void addGraceNotesToSelectedNotes(GraceNoteType type) = 0;
     virtual bool canAddTupletToSelectedChordRests() const = 0;
     virtual void addTupletToSelectedChordRests(const TupletOptions& options) = 0;
+    virtual void removeTupletFromSelectedChordRests() = 0;
     virtual void addBeamToSelectedChordRests(BeamMode mode) = 0;
 
     virtual void increaseDecreaseDuration(int steps, bool stepByDots) = 0;
