@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,9 +23,6 @@
 #include "musesamplersequencer.h"
 
 #include "apitypes.h"
-
-#include "global/timer.h"
-#include "audio/audioerrors.h"
 
 using namespace muse;
 using namespace muse::musesampler;
@@ -143,45 +140,6 @@ void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSamp
     m_defaultPresetCode = std::move(defaultPresetCode);
 }
 
-void MuseSamplerSequencer::deinit()
-{
-    if (m_renderingProgress && m_renderingProgress->isStarted) {
-        m_renderingProgress->finish((int)Ret::Code::Cancel);
-    }
-
-    if (m_pollRenderingProgressTimer) {
-        m_pollRenderingProgressTimer->stop();
-    }
-
-    m_renderingProgress = nullptr;
-}
-
-void MuseSamplerSequencer::setRenderingProgress(audio::InputProcessingProgress* progress)
-{
-    m_renderingProgress = progress;
-}
-
-void MuseSamplerSequencer::setAutoRenderInterval(double secs)
-{
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
-        return;
-    }
-
-    m_autoRenderInterval = secs;
-    m_samplerLib->setAutoRenderInterval(m_sampler, secs);
-}
-
-void MuseSamplerSequencer::triggerRender()
-{
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
-        return;
-    }
-
-    updateMainStream();
-    m_samplerLib->triggerRender(m_sampler);
-    pollRenderingProgress();
-}
-
 void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const DynamicLevelLayers&)
 {
     m_auditionParamsCache.clear();
@@ -213,117 +171,6 @@ void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& event
     loadDynamicEvents(dynamics);
 
     finalizeAllTracks();
-
-    // Poll only if background rendering is enabled
-    if (RealIsEqualOrMore(m_autoRenderInterval, 0.0)) {
-        pollRenderingProgress();
-    }
-}
-
-void MuseSamplerSequencer::pollRenderingProgress()
-{
-    if (!m_renderingProgress) {
-        return;
-    }
-
-    m_renderingInfo.clear();
-
-    if (!m_pollRenderingProgressTimer) {
-        m_pollRenderingProgressTimer = std::make_unique<Timer>(std::chrono::microseconds(500000)); // poll every 500ms
-        m_pollRenderingProgressTimer->onTimeout(this, [this]() {
-            doPollProgress();
-        });
-    }
-
-    m_pollRenderingProgressTimer->start();
-}
-
-void MuseSamplerSequencer::doPollProgress()
-{
-    const bool progressStarted = m_renderingInfo.initialChunksDurationUs > 0;
-
-    int rangeCount = 0;
-    ms_RenderingRangeList ranges = m_samplerLib->getRenderInfo(m_sampler, &rangeCount);
-
-    audio::InputProcessingProgress::ChunkInfoList chunks;
-    chunks.reserve(rangeCount);
-
-    long long chunksDurationUs = 0;
-    bool isRendering = false;
-
-    for (int i = 0; i < rangeCount; ++i) {
-        const ms_RenderRangeInfo info = m_samplerLib->getNextRenderProgressInfo(ranges);
-
-        switch (info._state) {
-        case ms_RenderingState_Rendering:
-            isRendering = true;
-            break;
-        case ms_RenderingState_ErrorNetwork:
-            m_renderingInfo.error = "Network error";
-            break;
-        case ms_RenderingState_ErrorRendering:
-            m_renderingInfo.error = "Rendering error";
-            break;
-        case ms_RenderingState_ErrorFileIO:
-            m_renderingInfo.error = "File IO error";
-            break;
-        case ms_RenderingState_ErrorTimeOut:
-            m_renderingInfo.error = "Timeout";
-            break;
-        }
-
-        // Failed regions remain in the list, but should be excluded when
-        // calculating the total remaining rendering duration
-        if (progressStarted && !m_renderingInfo.error.empty()) {
-            continue;
-        }
-
-        chunksDurationUs += info._end_us - info._start_us;
-        chunks.push_back({ audio::microsecsToSecs(info._start_us), audio::microsecsToSecs(info._end_us) });
-    }
-
-    // Start progress
-    if (!progressStarted) {
-        // Rendering has started on the sampler side, but it is not yet ready to report progress
-        if (chunksDurationUs <= 0 && isRendering) {
-            return;
-        }
-
-        m_renderingInfo.initialChunksDurationUs = chunksDurationUs;
-
-        if (!m_renderingProgress->isStarted) {
-            m_renderingProgress->start();
-        }
-    }
-
-    bool isChanged = false;
-    if (m_renderingInfo.lastReceivedChunks != chunks) {
-        m_renderingInfo.lastReceivedChunks = chunks;
-        isChanged = true;
-    }
-
-    // Update percentage
-    int64_t percentage = 0;
-    if (m_renderingInfo.initialChunksDurationUs != 0) {
-        percentage = std::lround(100.f - (float)chunksDurationUs / (float)m_renderingInfo.initialChunksDurationUs * 100.f);
-    }
-
-    if (percentage != m_renderingInfo.percentage) {
-        m_renderingInfo.percentage = percentage;
-        isChanged = true;
-    }
-
-    if (isChanged) {
-        m_renderingProgress->process(chunks, std::lround(percentage), 100);
-    }
-
-    // Finish progress
-    if (chunksDurationUs <= 0) {
-        const int errcode = !m_renderingInfo.error.empty() ? (int)muse::audio::Err::OnlineSoundsProcessingError : 0;
-        m_pollRenderingProgressTimer->stop();
-        m_renderingProgress->finish(errcode, m_renderingInfo.error);
-        m_renderingInfo.clear();
-    }
 }
 
 void MuseSamplerSequencer::clearAllTracks()
