@@ -497,7 +497,11 @@ InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure,
     for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
         for (track_idx_t track = sTrack; track < eTrack; ++track) {
             EngravingItem* item = segment->element(track);
-            if (item && item->isRest() && toRest(item)->isGap()) {
+            if (!item) {
+                continue;
+            }
+            const bool gapRest = item->isRest() && toRest(item)->isGap();
+            if (gapRest || !item->visible()) {
                 for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                     interruptionPointSets[voice].insert(segment->rtick());
                     interruptionPointSets[voice].insert(segment->rtick() + segment->ticks());
