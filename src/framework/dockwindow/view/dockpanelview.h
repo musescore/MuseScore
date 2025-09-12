@@ -54,8 +54,8 @@ public:
     QQmlComponent* titleBar() const;
     QQmlComponent* toolbarComponent() const;
 
-    bool isTabAllowed(const DockPanelView* tab) const;
-    void addPanelAsTab(DockPanelView* tab);
+    bool isTabAllowed(const DockPanelView* tab, bool panelCanBeClosed = false) const;
+    void addPanelAsTab(DockPanelView* tab, bool addVisible = true, int tabIndex = -1);
     void setCurrentTabIndex(int index);
 
 public slots:
