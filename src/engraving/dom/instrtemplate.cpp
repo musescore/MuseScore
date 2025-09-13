@@ -885,14 +885,11 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<Strin
                     continue;
                 }
 
-                String trackName = it->trackName;
-                StaffNameList longNames = it->longNames;
-                StaffNameList shortNames = it->shortNames;
-
-                int matchStrength = 0
-                                    + (4 * (stringEqualsName(trackName) ? 1 : 0)) // most weight to track name since there are fewer duplicates
-                                    + (2 * (muse::contains_if(longNames, staffNameEqualsName) ? 1 : 0))
-                                    + (1 * (muse::contains_if(shortNames, staffNameEqualsName) ? 1 : 0)); // least weight to short name
+                int matchStrength
+                    = 0
+                      + (4 * (stringEqualsName(it->trackName) ? 1 : 0)) // most weight to track name since there are fewer duplicates
+                      + (2 * (muse::contains_if(it->longNames, staffNameEqualsName) ? 1 : 0))
+                      + (1 * (muse::contains_if(it->shortNames, staffNameEqualsName) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
                 assert(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {
