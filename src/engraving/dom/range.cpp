@@ -685,7 +685,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
     m_first        = first;
     m_last         = last;
     Score* score  = first->score();
-    std::list<track_idx_t> sl = score->uniqueStaves();
+    std::vector<track_idx_t> sl = score->uniqueStaves();
 
     track_idx_t startTrack = 0;
     track_idx_t endTrack   = score->nstaves() * VOICES;

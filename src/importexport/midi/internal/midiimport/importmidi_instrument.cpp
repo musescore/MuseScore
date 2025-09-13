@@ -521,7 +521,7 @@ static int findMaxPitchDiff(const std::pair<int, int>& minMaxPitch, const Instru
     return diff;
 }
 
-static bool hasCommonGenre(const std::list<const InstrumentGenre*>& genres)
+static bool hasCommonGenre(const std::vector<const InstrumentGenre*>& genres)
 {
     for (const InstrumentGenre* genre : genres) {
         if (genre->id == "common") {

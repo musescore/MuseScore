@@ -66,7 +66,7 @@ struct ElementPattern {
 //---------------------------------------------------------
 
 struct NotePattern : ElementPattern {
-    std::list<Note*> el;
+    std::vector<Note*> el;
     int pitch = -1;
     int string = INVALID_STRING_INDEX;
     int tpc = Tpc::TPC_INVALID;

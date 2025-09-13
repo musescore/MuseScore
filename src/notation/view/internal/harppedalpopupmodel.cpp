@@ -128,7 +128,7 @@ QRectF HarpPedalPopupModel::staffPos() const
     }
 
     auto harpIdxList = m_item->part()->staveIdxList();
-    std::list<engraving::StaffLines*> staves;
+    std::vector<engraving::StaffLines*> staves;
     for (auto idx : harpIdxList) {
         staves.push_back(measure->staffLines(idx));
     }
