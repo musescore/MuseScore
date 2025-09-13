@@ -328,6 +328,9 @@
       <Family id="bouzoukis">
             <name>Bouzoukis</name>
       </Family>
+      <Family id="guzhengs">
+            <name>Guzhengs</name>
+      </Family>
       <Family id="kotos">
             <name>Kotos</name>
       </Family>
@@ -15203,6 +15206,24 @@
                         <!--MIDI: Bank 8, Prog 25; MS General: 12-String Guitar-->
                         <controller ctrl="32" value="8"/> <!--Bank LSB-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="guzheng">
+                  <family>guzhengs</family>
+                  <trackName>Guzheng</trackName>
+                  <longName>Guzheng</longName>
+                  <shortName>Gz.</shortName>
+                  <description>Chinese plucked half-tube zither.</description>
+                  <musicXMLid>pluck.guzhen</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>38-86</aPitchRange>
+                  <pPitchRange>38-86</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 107; MS General: Koto-->
+                        <program value="107"/> <!--Koto-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
