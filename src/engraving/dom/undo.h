@@ -250,7 +250,7 @@ public:
 
 protected:
     virtual void flip(EditData*) {}
-    void appendChildren(UndoCommand&& other);
+    void appendChildren(UndoCommand& other);
 
 private:
     std::vector<UndoCommand*> m_childCommands;

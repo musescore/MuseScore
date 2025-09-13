@@ -242,11 +242,9 @@ void UndoCommand::redo(EditData* ed)
 ///   transferred to this UndoCommand.
 //---------------------------------------------------------
 
-void UndoCommand::appendChildren(UndoCommand&& other)
+void UndoCommand::appendChildren(UndoCommand& other)
 {
-    m_childCommands.insert(m_childCommands.end(),
-                           std::make_move_iterator(other.m_childCommands.begin()),
-                           std::make_move_iterator(other.m_childCommands.end()));
+    m_childCommands.insert(m_childCommands.end(), other.m_childCommands.cbegin(), other.m_childCommands.cend());
     other.m_childCommands.clear();
 }
 
@@ -653,7 +651,7 @@ bool UndoMacro::empty() const
 
 void UndoMacro::append(UndoMacro&& other)
 {
-    appendChildren(std::forward<UndoMacro>(other));
+    appendChildren(other);
     if (m_score == other.m_score) {
         m_redoInputState = std::move(other.m_redoInputState);
         m_redoSelectionInfo = std::move(other.m_redoSelectionInfo);

@@ -42,9 +42,9 @@ inline bool contains(const std::vector<T>& vec, const T& v)
 }
 
 template<typename T, typename Predicate>
-inline bool contains_if(const std::vector<T>& vec, Predicate pred)
+inline bool contains_if(const std::vector<T>& vec, Predicate&& pred)
 {
-    return std::find_if(vec.cbegin(), vec.cend(), pred) != vec.cend();
+    return std::find_if(vec.cbegin(), vec.cend(), std::forward<Predicate>(pred)) != vec.cend();
 }
 
 template<typename T>
