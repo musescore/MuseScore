@@ -542,22 +542,24 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
             std::vector<TDuration> dList;
             if (tuplet || staff->isLocalTimeSignature(tick) || willDelete == Fraction(0, 1)) {
                 dList = toDurationList(needToDelete * totalTupletRatio, useDots);
-                if (tuplet) {
-                    TDuration tupletBaseDuration = tuplet ? tuplet->baseLen() : Fraction(1, 1);
-                    for (auto it = dList.begin(); it != dList.end();) {
-                        const TDuration& d = *it;
-                        Fraction ratio = (d.fraction() / tupletBaseDuration.fraction()).reduced();
-                        if (d > tupletBaseDuration && ratio.denominator() == 1) {
-                            // replace current it with N base durations
-                            it = dList.erase(it);
-                            for (int i = 0; i < ratio.numerator(); i++) {
-                                it = dList.insert(it, tupletBaseDuration);
-                            }
-                        } else {
-                            ++it;
-                        }
-                    }
-                }
+                //// Currently reverting this because this change causes some tests to fail.
+                //// Mixing fixes and cosmetics changes doesnt' worth changing the tests
+                // if (tuplet) {
+                //     TDuration tupletBaseDuration = tuplet ? tuplet->baseLen() : Fraction(1, 1);
+                //     for (auto it = dList.begin(); it != dList.end();) {
+                //         const TDuration& d = *it;
+                //         Fraction ratio = (d.fraction() / tupletBaseDuration.fraction()).reduced();
+                //         if (d > tupletBaseDuration && ratio.denominator() == 1) {
+                //             // replace current it with N base durations
+                //             it = dList.erase(it);
+                //             for (int i = 0; i < ratio.numerator(); i++) {
+                //                 it = dList.insert(it, tupletBaseDuration);
+                //             }
+                //         } else {
+                //             ++it;
+                //         }
+                //     }
+                // }
                 std::reverse(dList.begin(), dList.end());
             } else {
                 dList
@@ -3781,7 +3783,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
             s = toChordRest(lastInTuplet)->segment();
 
             if (filter.canSelectTuplet(nextTuplet, cr1->tick(), endTick, selectionContainsMultiNoteChords)) {
-                restDuration += nextTuplet->ticks();
+                restDuration += nextTuplet->globalTicks();
                 cmdDeleteTuplet(nextTuplet, /*replaceWithRest*/ false);
             } else {
                 const Fraction recursionEnd = std::min(nextTuplet->tick() + nextTuplet->actualTicks(), endTick);
