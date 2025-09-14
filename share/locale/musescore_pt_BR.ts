@@ -2580,7 +2580,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2036"/>
         <source>Vertical frame bottom margin:</source>
-        <translation>Margem inferior da moldura vertical:</translation>
+        <translation>Margem inferior da quadro vertical:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2051"/>
@@ -3063,7 +3063,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4561"/>
         <source>Only for a change to C Maj / A min</source>
-        <translation>Somente se mudar para Dó maior / Lá menor</translation>
+        <translation>Somente se mudar para C maior / A menor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4568"/>
@@ -5787,7 +5787,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="93"/>
         <source>G major / E minor</source>
-        <translation>Sol maior / Mi menor</translation>
+        <translation>G maior / E menor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="98"/>
@@ -5807,7 +5807,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="113"/>
         <source>B major / G♯ minor</source>
-        <translation>Si maior / Sol♯ menor</translation>
+        <translation>B maior / G♯ menor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="118"/>
@@ -6306,13 +6306,13 @@ seguidas de traços</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="115"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="55"/>
         <source>&amp;Note input</source>
-        <translation>&amp;Inserir notas</translation>
+        <translation>&amp;Inserção de notas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="116"/>
         <location filename="../../src/appshell_web/internal/applicationuiactions.cpp" line="56"/>
         <source>Show/hide note input toolbar</source>
-        <translation>Exibir/ocultar barra de ferramentas de entrada de notas</translation>
+        <translation>Exibir/ocultar barra de ferramentas de inserção de notas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="124"/>
@@ -6690,7 +6690,7 @@ seguidas de traços</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="60"/>
         <source>G</source>
         <extracomment>Note</extracomment>
-        <translation>Sol</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="62"/>
@@ -9311,7 +9311,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2095"/>
         <source>Note input</source>
-        <translation>Inserir notas</translation>
+        <translation>Inserção de notas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2096"/>
@@ -9336,7 +9336,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2110"/>
         <source>Toggle note input mode: input by note name</source>
-        <translation>Alternar modo de entrada de nota: inserir por nome da nota</translation>
+        <translation>Alternar modo de inserção de nota: inserir por nome da nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2116"/>
@@ -9346,7 +9346,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2117"/>
         <source>Toggle note input mode: input by duration</source>
-        <translation>Alternar modo de entrada de nota: inserir por duração</translation>
+        <translation>Alternar modo de inserção de nota: inserir por duração</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2123"/>
@@ -9674,7 +9674,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2415"/>
         <source>Tie</source>
-        <translation>Ligadura de valor</translation>
+        <translation>Ligadura de polongamento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2416"/>
@@ -10435,7 +10435,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="217"/>
         <source>Note input</source>
-        <translation>Inserir notas</translation>
+        <translation>Inserção de notas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="249"/>
@@ -11332,7 +11332,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="81"/>
         <source>When pressing a key, begin note input at the selected measure, note, or rest</source>
-        <translation>Ao pressionar uma tecla, inicie a entrada de notas no compasso, nota ou pausa selecionada</translation>
+        <translation>Ao pressionar uma tecla, inicie a inserção de notas no compasso, nota ou pausa selecionada</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/MidiInputSection.qml" line="96"/>
@@ -11368,7 +11368,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="33"/>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="169"/>
         <source>Note input</source>
-        <translation>Inserir notas</translation>
+        <translation>Inserção de notas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteInputSection.qml" line="48"/>
@@ -15261,7 +15261,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3311"/>
         <source>G major / E minor</source>
-        <translation>Sol maior / Mi menor</translation>
+        <translation>G maior / E menor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3312"/>
@@ -15281,7 +15281,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3315"/>
         <source>B major / G♯ minor</source>
-        <translation>Si maior / Sol♯ menor</translation>
+        <translation>B maior / G♯ menor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3316"/>
@@ -15428,7 +15428,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2606"/>
         <source>Doubling on high G</source>
-        <translation>Dobrando em Sol agudo</translation>
+        <translation>Dobrando em G agudo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2607"/>
@@ -15885,7 +15885,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2750"/>
         <source>Pele on low A</source>
-        <translation>Pele em Lá</translation>
+        <translation>Pele em A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2751"/>
@@ -15895,13 +15895,13 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2752"/>
         <source>Pele on C</source>
-        <translation>Pele em Dó</translation>
+        <translation>Pele em C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2753"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2754"/>
         <source>Pele on D</source>
-        <translation>Pele em Ré</translation>
+        <translation>Pele em D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2755"/>
@@ -15911,7 +15911,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2756"/>
         <source>Pele on F</source>
-        <translation>Pele em Fá</translation>
+        <translation>Pele em F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2759"/>
@@ -25862,7 +25862,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="185"/>
         <source>Note input preview note color</source>
-        <translation>Pré-visualização da entrada de nota, cor da nota</translation>
+        <translation>Pré-visualização de inserção de nota, cor da nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="274"/>
@@ -27860,7 +27860,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="50"/>
         <source>Input by note name mode</source>
-        <translation>Modo de inserção por nome da nota</translation>
+        <translation>Inserir por nome da nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="51"/>
@@ -27895,7 +27895,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="61"/>
         <source>Unknown note input mode</source>
-        <translation>Modo de entrada de nota desconhecido</translation>
+        <translation>Modo de inserção de nota desconhecido</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="401"/>

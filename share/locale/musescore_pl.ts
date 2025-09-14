@@ -3058,12 +3058,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4555"/>
         <source>♮ in key signatures</source>
-        <translation>♮ w oznaczeniach tonacji</translation>
+        <translation>♮ w zmianach oznaczeń tonacji</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4561"/>
         <source>Only for a change to C Maj / A min</source>
-        <translation>Tylko dla zmiany C-dur/a-moll</translation>
+        <translation>Tylko dla zmiany na C-dur/a-moll</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4568"/>
@@ -3225,7 +3225,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5039"/>
         <source>Left (start) repeat signs</source>
-        <translation>Lewe (początkowe) znaki repetycji</translation>
+        <translation>Początkowe repetycje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5068"/>
@@ -21725,17 +21725,17 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="67"/>
         <source>Right (end) repeat barline</source>
-        <translation>Prawa (końcowa) kreska taktowa repetycji</translation>
+        <translation>Koniec repetycji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="66"/>
         <source>Left (start) repeat barline</source>
-        <translation>Lewa (początkowa) kreska taktowa repetycji</translation>
+        <translation>Początek repetycji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="68"/>
         <source>Right and left (end/start) repeat barline</source>
-        <translation>Prawa i lewa (końcowa/początkowa) kreska taktowa repetycji</translation>
+        <translation>Koniec i początek repetycji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="74"/>

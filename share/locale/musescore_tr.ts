@@ -3774,17 +3774,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7268"/>
         <source>Partial slurs across repeats and breaks:</source>
-        <translation>Tekrar ve aralarda kısmi bağlar:</translation>
+        <translation>Satır/sayfa sonlarında ve tekrarlarda öbür tarafa uzanan kısmi bağlar:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7278"/>
         <source>Follow contour of notes</source>
-        <translation>Notaların eğrisini takip et</translation>
+        <translation>Notaların eğrisini takip etsin</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7285"/>
         <source>Angle away from staff</source>
-        <translation>Dizekten uzağa açılı</translation>
+        <translation>Açısını dizekten dışarıya doğru eğsin</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7297"/>
@@ -9990,7 +9990,7 @@ asla sola hizalama</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2667"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2668"/>
         <source>Mark empty staff visibility overrides</source>
-        <translation>Boş dizek görünürlüğü işaretlerini iptal et</translation>
+        <translation>Geçersiz kılınmış boş dizek görünürlüğünü işaretle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2674"/>
@@ -13094,7 +13094,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="209"/>
         <source>multimeasure rest range(s)</source>
-        <translation><numerusform>Çok ölçülü sus aralığı</numerusform><numerusform>Çok ölçülü sus aralığı</numerusform></translation>
+        <translation><numerusform>çok ölçülü sus aralığı</numerusform><numerusform>çok ölçülü sus aralığı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="210"/>
@@ -13104,17 +13104,17 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="212"/>
         <source>instrument name(s)</source>
-        <translation><numerusform>çalgı adı</numerusform><numerusform>çalgı adı</numerusform></translation>
+        <translation><numerusform>çalgı adları</numerusform><numerusform>çalgı adı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="213"/>
         <source>Instrument name(s)</source>
-        <translation><numerusform>Çalgı adı</numerusform><numerusform>Çalgı adı</numerusform></translation>
+        <translation><numerusform>Çalgı adları</numerusform><numerusform>Çalgı adı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
         <source>slur segment(s)</source>
-        <translation><numerusform>hece bağı bölümü</numerusform><numerusform>Hece bağı bölümü</numerusform></translation>
+        <translation><numerusform>hece bağı bölümü</numerusform><numerusform>hece bağı bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
@@ -13124,7 +13124,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
         <source>tie segment(s)</source>
-        <translation><numerusform>Uzatma bağı bölümü</numerusform><numerusform>uzatma bağı bölümü</numerusform></translation>
+        <translation><numerusform>uzatma bağı bölümü</numerusform><numerusform>uzatma bağı bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
@@ -13224,7 +13224,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="248"/>
         <source>stem(s)</source>
-        <translation><numerusform>Nota sapları</numerusform><numerusform>nota sapı</numerusform></translation>
+        <translation><numerusform>nota sapları</numerusform><numerusform>nota sapı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
@@ -13284,7 +13284,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="266"/>
         <source>time signature(s)</source>
-        <translation><numerusform>ölçü geöstergeleri</numerusform><numerusform>ölçü göstergesi</numerusform></translation>
+        <translation><numerusform>ölçü göstergeleri</numerusform><numerusform>ölçü göstergesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="267"/>
@@ -13369,7 +13369,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
         <source>Partial tie(s)</source>
-        <translation><numerusform>Kısmi uzatma bağları</numerusform><numerusform>Kısmi bağ</numerusform></translation>
+        <translation><numerusform>Kısmi uzatma bağları</numerusform><numerusform>Kısmi uzatma bağı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
@@ -13449,7 +13449,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="315"/>
         <source>Lyrics</source>
-        <translation><numerusform>Sözler</numerusform><numerusform>Sözler</numerusform></translation>
+        <translation><numerusform>Sözler</numerusform><numerusform>Söz</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="317"/>
@@ -13529,7 +13529,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="339"/>
         <source>Staff text(s)</source>
-        <translation><numerusform>Dizek metinleri</numerusform><numerusform>Dizek metinleri</numerusform></translation>
+        <translation><numerusform>Dizek metinleri</numerusform><numerusform>Dizek metni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="341"/>
@@ -13554,7 +13554,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="347"/>
         <source>play count text(s)</source>
-        <translation><numerusform>çalm sayısı metinleri</numerusform><numerusform>çalma sayısı metni</numerusform></translation>
+        <translation><numerusform>çalma sayısı metni</numerusform><numerusform>çalma sayısı metni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="348"/>
@@ -13590,7 +13590,7 @@ Perde %1 teller %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="357"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1728"/>
         <source>String tunings</source>
-        <translation><numerusform>Tellerin akortu</numerusform><numerusform>Tellerin akortu</numerusform></translation>
+        <translation><numerusform>Tellerin akortu</numerusform><numerusform>Tel akortu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="359"/>
@@ -13675,12 +13675,12 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="383"/>
         <source>tremolo bar(s)</source>
-        <translation><numerusform>tremolo cubukları</numerusform><numerusform>tremolo çucuğu</numerusform></translation>
+        <translation><numerusform>tremolo çubuğu</numerusform><numerusform>tremolo çubuğu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="384"/>
         <source>Tremolo bar(s)</source>
-        <translation><numerusform>Tremolo çubukları</numerusform><numerusform>Tremolo çubuğu </numerusform></translation>
+        <translation><numerusform>Tremolo çubuğu</numerusform><numerusform>Tremolo çubuğu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="386"/>
@@ -13695,7 +13695,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="389"/>
         <source>hairpin segment(s)</source>
-        <translation><numerusform>takılar bölümü</numerusform><numerusform>takı bölümü</numerusform></translation>
+        <translation><numerusform>takı bölümü</numerusform><numerusform>takı bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="390"/>
@@ -13705,22 +13705,22 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="392"/>
         <source>ottava segment(s)</source>
-        <translation><numerusform>Takılar bölümü</numerusform><numerusform>Takı bölümü</numerusform></translation>
+        <translation><numerusform>oktav bölümü</numerusform><numerusform>oktav bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="393"/>
         <source>Ottava segment(s)</source>
-        <translation><numerusform>oktavlar bölümü</numerusform><numerusform>oktav bölümü</numerusform></translation>
+        <translation><numerusform>Oktav bölümü</numerusform><numerusform>Oktav bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="395"/>
         <source>trill segment(s)</source>
-        <translation><numerusform>triller bölümü</numerusform><numerusform>tril bölümü</numerusform></translation>
+        <translation><numerusform>trill bölümü</numerusform><numerusform>tril bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="396"/>
         <source>Trill segment(s)</source>
-        <translation><numerusform>Triller bölümü</numerusform><numerusform>Tril bölümü</numerusform></translation>
+        <translation><numerusform>Tril bölümü</numerusform><numerusform>Tril bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="398"/>
@@ -13745,7 +13745,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="404"/>
         <source>vibrato segment(s)</source>
-        <translation><numerusform>vibrato bölümü</numerusform><numerusform>vibrato bölmü</numerusform></translation>
+        <translation><numerusform>vibrato bölümü</numerusform><numerusform>vibrato bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="405"/>
@@ -13875,22 +13875,22 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="443"/>
         <source>layout break(s)</source>
-        <translation><numerusform>bölüm sonu</numerusform><numerusform>bölüm sonu</numerusform></translation>
+        <translation><numerusform>yerleşim sonu</numerusform><numerusform>yerleşim sonu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="444"/>
         <source>Layout break(s)</source>
-        <translation><numerusform>Bölüm sonu</numerusform><numerusform>Bölüm sonu</numerusform></translation>
+        <translation><numerusform>Yerleşim sonu</numerusform><numerusform>Yerleşim sonu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="446"/>
         <source>staff visibility icon(s)</source>
-        <translation><numerusform>dizek görünürlüğü simgeleri</numerusform><numerusform>dizek görünürlüğü simgesi</numerusform></translation>
+        <translation><numerusform>dizek görünürlüğü simgesi</numerusform><numerusform>dizek görünürlüğü simgesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="447"/>
         <source>Staff visibility icon(s)</source>
-        <translation><numerusform>Dizek görünürlüğü simgeleri</numerusform><numerusform>Dizek görünürlüğü simgesi</numerusform></translation>
+        <translation><numerusform>Dizek görünürlüğü simgesi</numerusform><numerusform>Dizek görünürlüğü simgesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="449"/>
@@ -13905,12 +13905,12 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="452"/>
         <source>spacer(s)</source>
-        <translation><numerusform>boşluk çubuğu</numerusform><numerusform>boşluk çubuğu</numerusform></translation>
+        <translation><numerusform>ayraç</numerusform><numerusform>ayraç</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="453"/>
         <source>Spacer(s)</source>
-        <translation><numerusform>Boşluk çubuğu</numerusform><numerusform>Boşluk çubuğu</numerusform></translation>
+        <translation><numerusform>Ayraç</numerusform><numerusform>Ayraç</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="455"/>
@@ -13925,22 +13925,22 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="458"/>
         <source>notehead(s)</source>
-        <translation><numerusform>notabaşları</numerusform><numerusform>notabaşları</numerusform></translation>
+        <translation><numerusform>notabaşı</numerusform><numerusform>notabaşı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="459"/>
         <source>Notehead(s)</source>
-        <translation><numerusform>Notabaşları</numerusform><numerusform>Notabaşları</numerusform></translation>
+        <translation><numerusform>Notabaşı</numerusform><numerusform>Notabaşı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="461"/>
         <source>note dot(s)</source>
-        <translation><numerusform>nota noktası</numerusform><numerusform>nota noktası</numerusform></translation>
+        <translation><numerusform>noktalı nota</numerusform><numerusform>noktalı nota</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="462"/>
         <source>Note dot(s)</source>
-        <translation><numerusform>Nota noktası</numerusform><numerusform>Nota noktası</numerusform></translation>
+        <translation><numerusform>Noktalı nota</numerusform><numerusform>Noktalı nota</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="464"/>
@@ -13975,12 +13975,12 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="473"/>
         <source>lasso(s)</source>
-        <translation><numerusform>seçim Çemberi</numerusform><numerusform>seçim Çemberi</numerusform></translation>
+        <translation><numerusform>serbest seçim</numerusform><numerusform>serbest seçim</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="474"/>
         <source>Lasso(s)</source>
-        <translation><numerusform>Seçim Çemberi</numerusform><numerusform>Seçim Çemberi</numerusform></translation>
+        <translation><numerusform>Serbest seçim</numerusform><numerusform>Serbest seçim</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="476"/>
@@ -14075,7 +14075,7 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="503"/>
         <source>let ring</source>
-        <translation><numerusform>susturma</numerusform><numerusform>susturma</numerusform></translation>
+        <translation><numerusform>let ring</numerusform><numerusform>let ring</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="504"/>
@@ -14166,12 +14166,12 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="530"/>
         <source>text line base(s)</source>
-        <translation><numerusform>metin Satırı Tabanı</numerusform><numerusform>metin Satırı Tabanı</numerusform></translation>
+        <translation><numerusform>metin satırı tabanı</numerusform><numerusform>metin satırı tabanı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="531"/>
         <source>Text line base(s)</source>
-        <translation><numerusform>Metin Satırı Tabanı</numerusform><numerusform>Metin Satırı Tabanı</numerusform></translation>
+        <translation><numerusform>Metin satırı tabanı</numerusform><numerusform>Metin satırı tabanı</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="533"/>
@@ -14226,12 +14226,12 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="551"/>
         <source>system(s)</source>
-        <translation><numerusform>sistem</numerusform><numerusform>sistem</numerusform></translation>
+        <translation><numerusform>satır</numerusform><numerusform>satır</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="552"/>
         <source>System(s)</source>
-        <translation><numerusform>Sistem</numerusform><numerusform>Sistem</numerusform></translation>
+        <translation><numerusform>Satır</numerusform><numerusform>Satır</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="554"/>
@@ -14286,17 +14286,17 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
         <source>fretboard diagram frame(s)</source>
-        <translation><numerusform>klavye Diyagramı Çerçevesi</numerusform><numerusform>klavye Diyagramı Çerçevesi</numerusform></translation>
+        <translation><numerusform>akor şeması çerçeveleri</numerusform><numerusform>akor şeması çerçevesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="570"/>
         <source>Fretboard diagram frame(s)</source>
-        <translation><numerusform>Klavye Diyagramı Çerçevesi</numerusform><numerusform>Klavye Diyagramı Çerçevesi</numerusform></translation>
+        <translation><numerusform>Akor şeması çerçeveleri</numerusform><numerusform>Akor şeması çerçevesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="575"/>
         <source>bagpipe embellishment(s)</source>
-        <translation><numerusform>gayda Süslemesi</numerusform><numerusform>gayda Süslemesi</numerusform></translation>
+        <translation><numerusform>gayda süslemesi</numerusform><numerusform>gayda süslemesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="576"/>
@@ -14306,75 +14306,74 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
         <source>sticking(s)</source>
-        <translation><numerusform>vuruş Düzeni</numerusform><numerusform>vuruş Düzeni</numerusform></translation>
+        <translation><numerusform>vuruş düzeni</numerusform><numerusform>vuruş düzeni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="579"/>
         <source>Sticking(s)</source>
-        <translation><numerusform>Vuruş Düzeni</numerusform><numerusform>Vuruş Düzeni</numerusform></translation>
+        <translation><numerusform>Vuruş düzeni</numerusform><numerusform>Vuruş düzeni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
         <source>guitar bend(s)</source>
-        <translation><numerusform>tel Bükme</numerusform><numerusform>tel bükme</numerusform></translation>
+        <translation><numerusform>gitar bend</numerusform><numerusform>gitar bend</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="585"/>
         <source>Guitar bend(s)</source>
-        <translation><numerusform>Tel Bükme</numerusform><numerusform>Tel bükme</numerusform></translation>
+        <translation><numerusform>Gitar bend</numerusform><numerusform>Gitar bend</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="587"/>
         <source>guitar bend segment(s)</source>
-        <translation><numerusform>tel bükme bölümü</numerusform><numerusform>tel bükme bölümü</numerusform></translation>
+        <translation><numerusform>gitar bend bölümü</numerusform><numerusform>gitar bend bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="588"/>
         <source>Guitar bend segment(s)</source>
-        <translation><numerusform>
-Tel bükme bölümü</numerusform><numerusform>Tel bükme bölümü</numerusform></translation>
+        <translation><numerusform>Gitar bend bölümü</numerusform><numerusform>Gitar bend bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="590"/>
         <source>guitar bend hold(s)</source>
-        <translation><numerusform>tel bükme Tutuşu</numerusform><numerusform>tel bükme tutuşu</numerusform></translation>
+        <translation><numerusform>gitar bend tutuşu</numerusform><numerusform>gitar bend tutuşu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="591"/>
         <source>Guitar bend hold(s)</source>
-        <translation><numerusform>Tel bükme Tutuşu</numerusform><numerusform>Tel bükme Tutuşu</numerusform></translation>
+        <translation><numerusform>Gitar bend tutuşu</numerusform><numerusform>Gitar bend tutuşu</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="593"/>
         <source>guitar bend hold segment(s)</source>
-        <translation><numerusform>tel bükme Tutuşu bölümü</numerusform><numerusform>tel bükme Tutuşu bölümü</numerusform></translation>
+        <translation><numerusform>gitar bend tutuşu bölümü</numerusform><numerusform>gitar bend tutuşu bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="594"/>
         <source>Guitar bend hold segment(s)</source>
-        <translation><numerusform>Tel bükme Tutuşu bölümü</numerusform><numerusform>Tel bükme Tutuşu bölümü</numerusform></translation>
+        <translation><numerusform>Gitar bend tutuşu bölümü</numerusform><numerusform>Gitar bend tutuşu bölümü</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
         <source>guitar bend text(s)</source>
-        <translation><numerusform>tel bükme metni</numerusform><numerusform>tel bükme metni</numerusform></translation>
+        <translation><numerusform>gitar bend metni</numerusform><numerusform>gitar bend metni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="597"/>
         <source>Guitar bend text(s)</source>
-        <translation><numerusform>Tel bükme metni</numerusform><numerusform>Tel bükme metni</numerusform></translation>
+        <translation><numerusform>Gitar bend metni</numerusform><numerusform>Gitar bend metni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="602"/>
         <source>tremolo(s)</source>
-        <translation><numerusform>tremolo</numerusform><numerusform>tremolo</numerusform></translation>
+        <translation><numerusform>tremololar</numerusform><numerusform>tremolo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="603"/>
         <source>Tremolo(s)</source>
-        <translation><numerusform>Tremolo</numerusform><numerusform>Tremolo</numerusform></translation>
+        <translation><numerusform>Tremololar</numerusform><numerusform>Tremolo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
@@ -14389,32 +14388,32 @@ Tel bükme bölümü</numerusform><numerusform>Tel bükme bölümü</numerusform
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="608"/>
         <source>hammer-on / pull-off(s)</source>
-        <translation><numerusform>hammer-on / pull-off&apos;lar</numerusform><numerusform>hammer-on / pull-off</numerusform></translation>
+        <translation><numerusform>hammer-on / pull-off</numerusform><numerusform>hammer-on / pull-off</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="609"/>
         <source>Hammer-on / pull-off(s)</source>
-        <translation><numerusform>Hammer-on / pull-off&apos;lar</numerusform><numerusform>Hammer-on / pull-off</numerusform></translation>
+        <translation><numerusform>Hammer-on / pull-off</numerusform><numerusform>Hammer-on / pull-off</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="611"/>
         <source>hammer-on / pull-off segment(s)</source>
-        <translation><numerusform>hammer-on / pull-off ögeleri</numerusform><numerusform>hammer-on / pull-off ögesi</numerusform></translation>
+        <translation><numerusform>hammer-on / pull-off ögesi</numerusform><numerusform>hammer-on / pull-off ögesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="612"/>
         <source>Hammer-on / pull-off segment(s)</source>
-        <translation><numerusform>Hammer-on / pull-off ögeleri</numerusform><numerusform>Hammer-on / pull-off ögesi</numerusform></translation>
+        <translation><numerusform>Hammer-on / pull-off ögesi</numerusform><numerusform>Hammer-on / pull-off ögesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="614"/>
         <source>hammer-on / pull-off text(s)</source>
-        <translation><numerusform>hammer-on / pull-off metinleri</numerusform><numerusform>hammer-on / pull-off metni</numerusform></translation>
+        <translation><numerusform>hammer-on / pull-off metni</numerusform><numerusform>hammer-on / pull-off metni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="615"/>
         <source>Hammer-on / pull-off text(s)</source>
-        <translation><numerusform>Hammer-on / pull-off metinleri</numerusform><numerusform>Hammer-on / pull-off metni</numerusform></translation>
+        <translation><numerusform>Hammer-on / pull-off metni</numerusform><numerusform>Hammer-on / pull-off metni</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="617"/>
@@ -14765,7 +14764,7 @@ Tel bükme bölümü</numerusform><numerusform>Tel bükme bölümü</numerusform
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1743"/>
         <source>Bend</source>
-        <translation>Bend (Germe)</translation>
+        <translation>Bend</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1745"/>
@@ -21947,7 +21946,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="109"/>
         <source>Do not stack modifiers</source>
-        <translation>Akor eklerini yığmayın</translation>
+        <translation>Akor niteleyicileri üst üste yığmayın</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="128"/>
@@ -22154,7 +22153,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="96"/>
         <source>Clearance for notation</source>
-        <translation>Nota yazımı için aralık</translation>
+        <translation>Notasyon aralığı</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
@@ -23437,7 +23436,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="352"/>
         <source>Subscript buttons</source>
-        <translation>Alt-simge düğmesi</translation>
+        <translation>Alt-indis düğmesi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="383"/>
@@ -23856,7 +23855,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/spacers/spacersettingsmodel.cpp" line="35"/>
         <source>Spacer</source>
-        <translation>Boşluk çubuğu</translation>
+        <translation>Ayraç</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/stafftype/stafftypesettingsmodel.cpp" line="34"/>
@@ -24511,12 +24510,12 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="102"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. You’ll need to restart MuseScore Studio when the update is complete.</source>
-        <translation>MuseSounds’un sorunsuz çalışmaya devam etmesi için, MuseSounds Yöneticisi güncellemeyi uygulayabilsin diye MuseScore Studio kısa bir süreliğine kapanacak. Güncelleme tamamlandığında MuseScore Studio’yu yeniden başlatmanız gerekecek.</translation>
+        <translation>MuseSounds’un sorunsuz çalışmaya devam etmesi için, MuseScore Studio’nun kısa süreliğine kapanması gerekiyor. Böylece MuseSounds Yöneticisi güncellemeyi uygulayabilecek. Güncelleme tamamlandığında MuseScore Studio’yu yeniden başlatmanız gerekecek.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="109"/>
         <source>To keep MuseSounds running smoothly, MuseScore Studio needs to close briefly so MuseHub can apply the update. You’ll be prompted to relaunch MuseScore Studio when it’s ready.</source>
-        <translation>MuseSounds’un sorunsuz çalışmaya devam etmesi için, MuseHub güncellemeyi uygulayabilsin diye MuseScore Studio kısa bir süreliğine kapanacak. Hazır olduğunda MuseScore Studio’yu yeniden başlatmanız istenecek.</translation>
+        <translation>MuseSounds’un sorunsuz çalışmaya devam etmesi için MuseScore Studio’nun kısa süreliğine kapanması gerekiyor. MuseHub güncellemeyi uyguladıktan sonra MuseScore Studio’yu yeniden başlatmanız istenecek.</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="114"/>
@@ -26724,12 +26723,12 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="326"/>
         <source>Modifiers (e.g. sus4, no 3)</source>
-        <translation>Akor ekleri (örneğin sus4, no 3)</translation>
+        <translation>Akor niteleyiciler (örneğin sus4, no 3)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="400"/>
         <source>Vertically stack modifiers</source>
-        <translation>Akor eklerini dikey olarak yerleştir</translation>
+        <translation>Akor niteleyicileri dikey olarak yerleştir</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="409"/>
@@ -26754,7 +26753,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="648"/>
         <source>Exclude modifiers from horizontal alignment</source>
-        <translation>Yatay hizalamada değiştiricileri dahil etme</translation>
+        <translation>Yatay hizalamada niteleyicileri dahil etme</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml" line="658"/>
@@ -29136,7 +29135,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="106"/>
         <source>Spacing Modifier Letters</source>
-        <translation>Spacing Modifier Letters</translation>
+        <translation>Aralık Niteleyici Harfler</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="107"/>
@@ -29741,7 +29740,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="227"/>
         <source>Modifier Tone Letters</source>
-        <translation>Tamamlayıcı Ton Harfleri</translation>
+        <translation>Niteleyici Ton Harfleri</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="228"/>
@@ -33728,7 +33727,7 @@ başarısız: %2</translation>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="316"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="912"/>
         <source>Remove system object layer below the bottom staff</source>
-        <translation>Aşağıdaki dizeğin altındaki satır nesnesi katmanı kaldır</translation>
+        <translation>Aşağıdaki dizeğin altındaki satır nesnesi katmanını kaldır</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="478"/>
