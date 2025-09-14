@@ -500,6 +500,19 @@ std::vector<TDuration> toDurationList(Fraction l, bool useDots, int maxDots, boo
     return dList;
 }
 
+bool canBeRepresentedAsDurationList(Fraction l, bool useDots, int maxDots)
+{
+    std::vector<TDuration> dList = toDurationList(l, useDots, maxDots);
+    Fraction dListSum = std::accumulate(dList.begin(), dList.end(), Fraction(0, 1), [](auto sum, const TDuration& duration)
+    {
+        return sum + duration.ticks();
+    });
+    if (dListSum != l) {
+        return false;
+    }
+    return true;
+}
+
 //---------------------------------------------------------
 //   toRhythmicDurationList
 //---------------------------------------------------------

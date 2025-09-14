@@ -462,49 +462,63 @@ Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _
 std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet,
                                    bool useFullMeasureRest)
 {
-    Fraction l       = _l;
+    LOGI("setRests at track %lu tick %d/%d of length %d/%d",
+         track,
+         _tick.numerator(), _tick.denominator(),
+         _l.numerator(), _l.denominator()
+         );
+    Fraction needToDelete       = _l;
     Fraction tick    = _tick;
     Measure* measure = tick2measure(tick);
     std::vector<Rest*> rests;
     Staff* staff     = Score::staff(track / VOICES);
     Fraction totalTupletRatio = tuplet ? tuplet->totalRatio() : Fraction(1, 1);
 
-    while (!l.isZero()) {
+    while (!needToDelete.isZero()) {
         //
         // divide into measures
         //
-        Fraction f;
+        Fraction maxAllowedToDelete;
         if (tuplet) {
-            f = tuplet->baseLen().fraction() * tuplet->ratio().numerator();
+            // f = tuplet->baseLen().fraction() * tuplet->ratio().numerator() / tuplet->totalTupletRatio();
+            // We start with full tuplet length
+            maxAllowedToDelete = tuplet->globalTicks();
+            // Then we remove lengths of elements that preceed our tick
             for (DurationElement* de : tuplet->elements()) {
                 if (de->tick() >= tick) {
                     break;
                 }
-                f -= de->ticks();
+                maxAllowedToDelete -= de->globalTicks();
             }
+            // Here maxAllowedToDelete equals to maximum we will delete
+            // That is duration from our ticks to end of tuplet?
+            // Why wouldn't we just calculate that?
             //
             // restrict to tuplet len
             //
-            if (f < l) {
-                l = f;
+            // Decide that we won't delete as much as planned before
+            if (maxAllowedToDelete < needToDelete) {
+                needToDelete = maxAllowedToDelete;
             }
         } else {
             if (measure->tick() < tick) {
-                f = measure->tick() + measure->ticks() - tick;
+                maxAllowedToDelete = measure->tick() + measure->ticks() - tick;
             } else {
-                f = measure->ticks();
+                maxAllowedToDelete = measure->ticks();
             }
-            f *= staff->timeStretch(tick);
+            maxAllowedToDelete *= staff->timeStretch(tick);
         }
 
-        if (f > l) {
-            f = l;
+        // If
+        Fraction willDelete = maxAllowedToDelete;
+        if (maxAllowedToDelete > needToDelete) {
+            willDelete = needToDelete;
         }
 
         // Don't fill with rests a non-zero voice, *unless* it has links in voice zero
         bool emptyNonZeroVoice = track2voice(track) != 0 && !measure->hasVoice(track) && tick == measure->tick();
         if (emptyNonZeroVoice && !staff->trackHasLinksInVoiceZero(track)) {
-            l -= f;
+            needToDelete -= willDelete;
             measure = measure->nextMeasure();
             if (!measure) {
                 break;
@@ -515,7 +529,7 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
 
         if ((measure->timesig() == measure->ticks())       // not in pickup measure
             && (measure->tick() == tick)
-            && (measure->stretchedLen(staff) == f)
+            && (measure->stretchedLen(staff) == willDelete)
             && !tuplet
             && (useFullMeasureRest)) {
             Rest* rest = addRest(tick, track, TDuration(DurationType::V_MEASURE), tuplet);
@@ -526,8 +540,8 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
             // compute list of durations which will fit l
             //
             std::vector<TDuration> dList;
-            if (tuplet || staff->isLocalTimeSignature(tick) || f == Fraction(0, 1)) {
-                dList = toDurationList(l * totalTupletRatio, useDots);
+            if (tuplet || staff->isLocalTimeSignature(tick) || willDelete == Fraction(0, 1)) {
+                dList = toDurationList(needToDelete * totalTupletRatio, useDots);
                 if (tuplet) {
                     TDuration tupletBaseDuration = tuplet ? tuplet->baseLen() : Fraction(1, 1);
                     for (auto it = dList.begin(); it != dList.end();) {
@@ -547,7 +561,8 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
                 std::reverse(dList.begin(), dList.end());
             } else {
                 dList
-                    = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, useDots ? 1 : 0);
+                    = toRhythmicDurationList(willDelete, true, tick - measure->tick(), sigmap()->timesig(
+                                                 tick).nominal(), measure, useDots ? 1 : 0);
             }
             if (dList.empty()) {
                 return rests;
@@ -560,7 +575,7 @@ std::vector<Rest*> Score::setRests(const Fraction& _tick, track_idx_t track, con
                 tick += rest->actualTicks();
             }
         }
-        l -= f;
+        needToDelete -= willDelete;
 
         measure = measure->nextMeasure();
         if (!measure) {
@@ -3680,6 +3695,12 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t tra
 void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg, const Fraction& endTick,
                                Tuplet* currentTuplet, const SelectionFilter& filter, bool selectionContainsMultiNoteChords)
 {
+    LOGI("deleteRangeAtTrack, crsToSelect.size: %lu\ttrack:%lu\tstart:%d/%d\tend:%d/%d",
+         crsToSelect.size(),
+         track,
+         startSeg->tick().numerator(), startSeg->tick().denominator(),
+         endTick.numerator(), endTick.denominator()
+         );
     while (startSeg && !(startSeg->isChordRestType() && startSeg->cr(track))) {
         // Range should always start at a ChordRest segment - find the next one for this track...
         startSeg = startSeg->next1(SegmentType::ChordRest);
@@ -3727,6 +3748,13 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
         }
 
         ChordRest* cr1 = toChordRest(e);
+        // if (cr1) {
+        //         LOGI("cr1 is at %d/%d",
+        //             cr1->tick().numerator(), cr1->tick().denominator()
+        //         );
+        // } else {
+        //     LOGI("cr1 was null");
+        // }
 
         // currentTuplet refers to the tuplet that we're currently performing a delete range "inside". It is possible that currentTuplet contains nested
         // tuplets, in which case we should find the "top-most nested tuplet" (nextTuplet) and:
@@ -3757,7 +3785,12 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
                 cmdDeleteTuplet(nextTuplet, /*replaceWithRest*/ false);
             } else {
                 const Fraction recursionEnd = std::min(nextTuplet->tick() + nextTuplet->actualTicks(), endTick);
+                LOGI("Calling deleteRangeAtTrack for startSeg %d/%d, recursionEnd %d/%d ",
+                     cr1->tick().numerator(), cr1->tick().denominator(),
+                     recursionEnd.numerator(), recursionEnd.denominator()
+                     );
                 deleteRangeAtTrack(crsToSelect, track, cr1->segment(), recursionEnd, nextTuplet, filter, selectionContainsMultiNoteChords);
+                LOGI("Calling foundDeselected, nextTuplet = %p", nextTuplet);
                 foundDeselected(nextTuplet);
             }
 
@@ -4546,7 +4579,7 @@ void Score::cmdDeleteTuplet(Tuplet* tuplet, bool replaceWithRest)
         }
     }
     if (replaceWithRest) {
-        setRest(tuplet->tick(), tuplet->track(), tuplet->ticks(), true, tuplet->tuplet());
+        setRest(tuplet->tick(), tuplet->track(), tuplet->globalTicks(), true, tuplet->tuplet());
     }
 }
 

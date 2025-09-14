@@ -5508,27 +5508,21 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                          s->tick().numerator(), s->tick().denominator()
                          );
                     // big enough gap found
-                    dstChord = Factory::createChord(s);
-                    dstChord->setTrack(dstTrack);
 
                     ChordRest* crToMeasure = dstCR ? dstCR : nearestLeftRest;
                     Tuplet* dstTuplet = crToMeasure ? crToMeasure->tuplet() : nullptr;
                     Fraction dstTupletRatio = crToMeasure ? crToMeasure->ticks() / crToMeasure->globalTicks() : Fraction(1, 1);
                     newTicks = chord->globalTicks() * dstTupletRatio;
-                    dstChord->setDurationType(newTicks);
-                    dstChord->setTicks(newTicks);
-
-                    dstChord->setTuplet(dstTuplet);
-                    dstChord->setParent(s);
 
                     // sanity check - can we even display such note in new tuplet?
-                    std::vector<TDuration> dList = toDurationList(newTicks, true, 4);
-                    Fraction dListSum = std::accumulate(dList.begin(), dList.end(), Fraction(0, 1), [](auto sum, const TDuration& duration)
-                    {
-                        return sum + duration.ticks();
-                    });
-                    if (dListSum != newTicks) {
-                        // we cannot represent new note, so we'll have troubles displaying it. Abort!
+                    if (!canBeRepresentedAsDurationList(newTicks, true, 4)) {
+                        continue;
+                    }
+
+                    // Another sanity check - can the position of note be represented?
+                    Fraction startPos = dstTuplet ? dstTuplet->tick() : s->measure()->tick();
+                    Fraction pos = s->tick() - startPos;
+                    if (!canBeRepresentedAsDurationList(pos, true, 4)) {
                         continue;
                     }
 
@@ -5540,6 +5534,15 @@ void Score::changeSelectedElementsVoice(voice_idx_t voice)
                     if (!madeGap) {
                         continue;
                     }
+
+                    dstChord = Factory::createChord(s);
+                    dstChord->setTrack(dstTrack);
+
+                    dstChord->setDurationType(newTicks);
+                    dstChord->setTicks(newTicks);
+
+                    dstChord->setTuplet(dstTuplet);
+                    dstChord->setParent(s);
                 }
             }
 

@@ -1081,7 +1081,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             segment = addRest(segment, track, cr->ticks(), cr->tuplet())->segment();
         }
         // the returned gap ends at the measure boundary or at tuplet end
-        Fraction totalTupletRatio = cr->totalTupletRatio();
+        Fraction totalTupletRatio = cr ? cr->totalTupletRatio() : Fraction(1, 1);
         Fraction dd = makeGap(segment, track, sd / totalTupletRatio, tuplet);
         Fraction naturalDD = dd * totalTupletRatio;
 
