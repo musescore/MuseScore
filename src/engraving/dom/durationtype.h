@@ -93,6 +93,7 @@ private:
 };
 
 std::vector<TDuration> toDurationList(Fraction l, bool useDots, int maxDots = 4, bool printRestRemains = true);
+bool canBeRepresentedAsDurationList(Fraction l, bool useDots, int maxDots = 4);
 std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, Fraction rtickStart, const TimeSigFrac& nominal, Measure* msr,
                                               int maxDots);
 
