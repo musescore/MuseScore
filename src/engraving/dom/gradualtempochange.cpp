@@ -30,6 +30,8 @@
 #include "system.h"
 #include "tempotext.h"
 
+#include "types/typesconv.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -325,6 +327,11 @@ PointF GradualTempoChange::linePos(Grip grip, System** system) const
     x = start ? std::max(x, defaultPos.x()) : x;
 
     return PointF(x, 0.0);
+}
+
+TranslatableString GradualTempoChange::subtypeUserName() const
+{
+    return TConv::userName(m_tempoChangeType);
 }
 
 void GradualTempoChange::added()

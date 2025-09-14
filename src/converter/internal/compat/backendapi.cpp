@@ -35,11 +35,13 @@
 #include "engraving/infrastructure/mscwriter.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/rw/mscsaver.h"
+#include "engraving/types/typesconv.h"
 
 #include "internal/converterutils.h"
 
 #include "backendjsonwriter.h"
 #include "notationmeta.h"
+#include "scoreelementsscanner.h"
 
 #include "log.h"
 
@@ -66,6 +68,36 @@ static const std::string DEV_INFO_NAME = "devinfo";
 
 static constexpr bool ADD_SEPARATOR = true;
 static constexpr auto NO_STYLE = "";
+
+static ScoreElementScanner::Options parseScoreElementScannerOptions(const std::string& json)
+{
+    QJsonParseError parseError;
+    const QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(json), &parseError);
+    if (parseError.error != QJsonParseError::NoError) {
+        LOGE() << "JSON parse error:" << parseError.errorString();
+        return {};
+    }
+
+    const QJsonObject obj = doc.object();
+
+    ScoreElementScanner::Options options;
+    options.avoidDuplicates = obj.value("avoidDuplicates").toBool();
+
+    const QJsonArray typeArray = obj.value("types").toArray();
+    for (const auto typeObj : typeArray) {
+        if (!typeObj.isString()) {
+            continue;
+        }
+
+        const std::string typeStr = typeObj.toString().toStdString();
+        const ElementType type = TConv::fromXml(typeStr, ElementType::INVALID);
+        if (type != ElementType::INVALID) {
+            options.acceptedTypes.insert(type);
+        }
+    }
+
+    return options;
+}
 
 Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
                                  const muse::io::path_t& stylePath,
@@ -190,6 +222,26 @@ Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io:
     bool result = doExportScoreTranspose(notation, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+}
+
+Ret BackendApi::exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+                                    const muse::io::path_t& stylePath, bool forceMode)
+{
+    TRACEFUNC;
+
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
+    }
+
+    INotationPtr notation = prj.val->masterNotation()->notation();
+
+    QFile outputFile;
+    openOutputFile(outputFile, out);
+
+    BackendJsonWriter jsonWriter(&outputFile);
+
+    return doExportScoreElements(notation, jsonWriter, optionsJson);
 }
 
 Ret BackendApi::openOutputFile(QFile& file, const muse::io::path_t& out)
@@ -626,6 +678,72 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
 
     Ret ret = exportScorePdf(notation, jsonWriter, addSeparator);
     return ret;
+}
+
+muse::Ret BackendApi::doExportScoreElements(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter,
+                                            const std::string& optionsJson, bool addSeparator)
+{
+    mu::engraving::Score* score = notation->elements()->msScore();
+    ScoreElementScanner::Options options = parseScoreElementScannerOptions(optionsJson);
+    ScoreElementScanner::InstrumentElementMap elements = ScoreElementScanner::scanElements(score, options);
+
+    QJsonArray rootArray;
+
+    for (const auto& instrumentPair : elements) {
+        QJsonArray typeArray;
+
+        for (const auto& pair: instrumentPair.second) {
+            QJsonArray elementArray;
+
+            for (const ScoreElementScanner::ElementInfo& element : pair.second) {
+                QJsonObject obj;
+
+                if (!element.name.empty()) {
+                    obj["name"] = element.name.toQString();
+                }
+
+                if (!element.notes.empty()) {
+                    obj["notes"] = element.notes.toQString();
+                }
+
+                if (element.staffIdx != muse::nidx) {
+                    obj["staffIdx"] = static_cast<int>(element.staffIdx);
+                }
+
+                if (element.voiceIdx != muse::nidx) {
+                    obj["voiceIdx"] = static_cast<int>(element.voiceIdx);
+                }
+
+                if (element.measureIdx != muse::nidx) {
+                    obj["measureIdx"] = static_cast<int>(element.measureIdx);
+                }
+
+                if (RealIsEqualOrMore(element.beat, 0.f)) {
+                    obj["beat"] = element.beat;
+                }
+
+                if (!obj.empty()) {
+                    elementArray << obj;
+                }
+            }
+
+            QString type = mu::engraving::TConv::toXml(pair.first).ascii();
+            QJsonObject typeObj;
+            typeObj[type] = elementArray;
+            typeArray << typeObj;
+        }
+
+        QJsonObject instrumentObj;
+        instrumentObj["instrumentId"] = instrumentPair.first.instrumentId.toQString();
+        instrumentObj["partId"] = instrumentPair.first.partId.toQString();
+        instrumentObj["types"] = typeArray;
+        rootArray << instrumentObj;
+    }
+
+    jsonWriter.addKey("scoreElements");
+    jsonWriter.addValue(QJsonDocument(rootArray).toJson(QJsonDocument::Compact), addSeparator);
+
+    return make_ok();
 }
 
 RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const std::string& fileName)
