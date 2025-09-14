@@ -556,7 +556,7 @@ double HorizontalSpacing::spaceLyricsAgainstBarlines(Segment* firstSeg, Segment*
         }
 
         BarLine* barline = toBarLine(barlineSegment->element(staff2track(staffIdx)));
-        if (!barline || barline->spanStaff() == 0) {
+        if (!barline || !barline->spanStaff()) {
             continue;
         }
 

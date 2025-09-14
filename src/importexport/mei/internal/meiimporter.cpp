@@ -1309,7 +1309,7 @@ bool MeiImporter::readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int c
                 for (size_t staffIdx = staffIdxStart; staffIdx < staffIdxEnd; staffIdx++) {
                     Staff* currentStaff = m_score->staff(staffIdx);
                     if (currentStaff) {
-                        currentStaff->setBarLineSpan(1);
+                        currentStaff->setBarLineSpan(true);
                     }
                 }
             }

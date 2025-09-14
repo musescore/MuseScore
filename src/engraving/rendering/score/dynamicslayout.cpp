@@ -188,7 +188,7 @@ void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::Layo
         return;
     }
 
-    if (item->score()->staff(barLineStaff)->barLineSpan() < 1) {
+    if (!item->score()->staff(barLineStaff)->barLineSpan()) {
         return; // Barline doesn't extend through staves
     }
 
