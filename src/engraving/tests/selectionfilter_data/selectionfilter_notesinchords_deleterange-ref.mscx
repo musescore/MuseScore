@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.60">
-  <programVersion>4.7.0</programVersion>
-  <programRevision></programRevision>
   <Score>
     <eid>u3owA0tiskD_dyTHnBjo+sH</eid>
     <Division>480</Division>
+    <Style>
+      <spatium>1.74978</spatium>
+      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -14,11 +15,9 @@
     <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2025-09-14</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="platform">Apple Macintosh</metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="sourceRevisionId"></metaTag>
     <metaTag name="subtitle">Subtitle</metaTag>
@@ -132,7 +131,6 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -456,11 +454,7 @@
             </Chord>
           <Rest>
             <eid>o2V064tbo/P_o2V064tbo/P</eid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <eid>dMI4LXXLe4E_rheHqimDr5L</eid>
-            <durationType>eighth</durationType>
+            <durationType>quarter</durationType>
             </Rest>
           <endTuplet/>
           <Chord>
@@ -541,11 +535,7 @@
             </Chord>
           <Rest>
             <eid>s2V064tbo/P_s2V064tbo/P</eid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <eid>LL3n9Wz5B3M_tCxYfffaxrG</eid>
-            <durationType>eighth</durationType>
+            <durationType>quarter</durationType>
             </Rest>
           <endTuplet/>
           <Chord>
@@ -945,6 +935,8 @@
             </Rest>
           <Beam>
             <eid>D3V064tbo/P_D3V064tbo/P</eid>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <eid>kUuoqZGIjnE_ByvjW9viIyO</eid>
@@ -989,6 +981,8 @@
             </Rest>
           <Beam>
             <eid>H3V064tbo/P_H3V064tbo/P</eid>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <eid>bDnWbqxP3ZF_hyDwcQor4bL</eid>
@@ -1129,6 +1123,8 @@
             </Tuplet>
           <Beam>
             <eid>O3V064tbo/P_O3V064tbo/P</eid>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <eid>4+8JcMs4eWE_s8EY9VBToVB</eid>
@@ -1247,6 +1243,8 @@
             </Tuplet>
           <Beam>
             <eid>U3V064tbo/P_U3V064tbo/P</eid>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>QO5F3u1DhUK_2xCJeHXJAtG</eid>
@@ -1593,6 +1591,8 @@
             </Rest>
           <Beam>
             <eid>g3V064tbo/P_g3V064tbo/P</eid>
+            <l1>-32</l1>
+            <l2>-26</l2>
             </Beam>
           <Chord>
             <eid>I7UdZtCxViJ_BdodfzLIu5</eid>
@@ -1632,6 +1632,8 @@
             </Rest>
           <Beam>
             <eid>i3V064tbo/P_i3V064tbo/P</eid>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <eid>Dx92ilHJtAK_oh4Ydu9JDtC</eid>
@@ -1659,6 +1661,8 @@
             </Rest>
           <Beam>
             <eid>k3V064tbo/P_k3V064tbo/P</eid>
+            <l1>52</l1>
+            <l2>46</l2>
             </Beam>
           <Chord>
             <eid>dIDntKHlos_ZyLPU0BYqBK</eid>
@@ -1698,6 +1702,8 @@
             </Rest>
           <Beam>
             <eid>m3V064tbo/P_m3V064tbo/P</eid>
+            <l1>44</l1>
+            <l2>42</l2>
             </Beam>
           <Chord>
             <eid>KpzzeKv8YeH_sAIp4Ci1aME</eid>
@@ -1904,6 +1910,8 @@
             </Tuplet>
           <Beam>
             <eid>q3V064tbo/P_q3V064tbo/P</eid>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <eid>ymEaTX7pF5D_kcBErUoWh7</eid>
@@ -2037,6 +2045,8 @@
             </Tuplet>
           <Beam>
             <eid>t3V064tbo/P_t3V064tbo/P</eid>
+            <l1>46</l1>
+            <l2>44</l2>
             </Beam>
           <Chord>
             <eid>OKUPKUiwGBF_1LaAbMOuq9N</eid>
@@ -2338,6 +2348,8 @@
             </Rest>
           <Beam>
             <eid>63V064tbo/P_63V064tbo/P</eid>
+            <l1>-24</l1>
+            <l2>-20</l2>
             </Beam>
           <Chord>
             <eid>oKhDMCK9oQO_XqP9yJUUMbM</eid>
@@ -2391,6 +2403,8 @@
             </Rest>
           <Beam>
             <eid>+3V064tbo/P_+3V064tbo/P</eid>
+            <l1>44</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>NaoUUxCe0AD_0Fr4lP9bXTO</eid>
@@ -2593,6 +2607,8 @@
             </Tuplet>
           <Beam>
             <eid>G4V064tbo/P_G4V064tbo/P</eid>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <eid>PuX6w8ek0BD_gX/5I2WHRkJ</eid>
@@ -2711,6 +2727,8 @@
             </Tuplet>
           <Beam>
             <eid>M4V064tbo/P_M4V064tbo/P</eid>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>5rr0v1mbq4D_5m9FBsdHK4P</eid>
