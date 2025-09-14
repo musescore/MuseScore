@@ -177,7 +177,8 @@ void TextBase::endEdit(EditData& ed)
     const bool newlyAdded = ted->oldXmlText.isEmpty();
     if (newlyAdded) {
         UndoCommand* ucmd = textWasEdited ? undo->prev() : undo->last();
-        if (ucmd && ucmd->hasFilteredChildren(Filter::AddElement, this)) {
+        UndoCommand* lastCommand = (ucmd && ucmd->childCount() > 0) ? ucmd->commands().back() : nullptr;
+        if (lastCommand && lastCommand->isFiltered(Filter::AddElementLinked, this)) {
             // We have just added this element to a score.
             // Combine undo records of text creation with text editing.
             undo->mergeCommands(ted->startUndoIdx - 1);
