@@ -2735,7 +2735,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2636"/>
         <source>Note to note:</source>
-        <translation type="unfinished"/>
+        <translation>Note til note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2662"/>
@@ -2750,7 +2750,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2730"/>
         <source>System density:</source>
-        <translation type="unfinished"/>
+        <translation>Systemtetthet:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2737"/>
@@ -4350,7 +4350,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11552"/>
         <source>Align verse numbers</source>
-        <translation type="unfinished"/>
+        <translation>Versnummer rett over hverandre</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11625"/>
@@ -6623,12 +6623,12 @@ etterfulgt av bindestreker</translation>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="38"/>
         <source>Use old view</source>
-        <translation type="unfinished"/>
+        <translation>Bruk gamle visning</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="44"/>
         <source>Use new view</source>
-        <translation type="unfinished"/>
+        <translation>Bruk nye visning</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="37"/>
@@ -7684,7 +7684,7 @@ etterfulgt av bindestreker</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="754"/>
         <source>Insert horizontal frame at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Sett inn horisontal ramme på slutten av partituret</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="760"/>
@@ -7694,7 +7694,7 @@ etterfulgt av bindestreker</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="761"/>
         <source>Insert vertical frame at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Sett inn vertikal ramme på slutten av partituret</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="767"/>
@@ -7704,7 +7704,7 @@ etterfulgt av bindestreker</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="768"/>
         <source>Insert text frame at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Sett inn tekstramme på slutten av partituret</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="774"/>
@@ -7714,7 +7714,7 @@ etterfulgt av bindestreker</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="775"/>
         <source>Insert fretboard diagram legend at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Sett inn gripebrettdiagram-oversikt på slutten av partituret</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="781"/>
@@ -9033,12 +9033,12 @@ etterfulgt av bindestreker</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1921"/>
         <source>Toggle Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Haydn-ornament av/på</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1922"/>
         <source>Add ornament: Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Legg til ornament: Haydn-ornament</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1927"/>
@@ -10798,7 +10798,7 @@ Publisert under &lt;a href=&quot;%1&quot;&gt;GNU General Public License versjon 
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="114"/>
         <source>Visit MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Gå til MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="126"/>
@@ -11728,7 +11728,7 @@ Publisert under &lt;a href=&quot;%1&quot;&gt;GNU General Public License versjon 
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="112"/>
         <source>Musical symbol fonts</source>
-        <translation type="unfinished"/>
+        <translation>Skrifttyper for musikksymbol:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="118"/>
@@ -13009,13 +13009,13 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
         <source>invalid</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ugyldig</numerusform><numerusform>ugyldige</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="186"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2049"/>
         <source>Invalid</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ugyldig</numerusform><numerusform>Ugyldige</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="188"/>
@@ -13062,12 +13062,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>symbol</numerusform><numerusform>symboler</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Symbol</numerusform><numerusform>Symboler</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="203"/>
@@ -13082,12 +13082,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="206"/>
         <source>measure number(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>taktnummer</numerusform><numerusform>taktnummer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="207"/>
         <source>Measure number(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Taktnummer</numerusform><numerusform>Taktnummer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="209"/>
@@ -13152,22 +13152,22 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="227"/>
         <source>barline(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>taktstrek</numerusform><numerusform>taktstreker</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
         <source>Barline(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Taktstrek</numerusform><numerusform>Taktstreker</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
         <source>staff lines</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>notelinje</numerusform><numerusform>notelinjer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="231"/>
         <source>Staff lines</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Notelinje</numerusform><numerusform>Notelinjer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="233"/>
@@ -13222,12 +13222,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="248"/>
         <source>stem(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>notehals</numerusform><numerusform>notehalser</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
         <source>Stem(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Notehals</numerusform><numerusform>Notehalser</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
@@ -13322,12 +13322,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="278"/>
         <source>breath(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>pustetegn</numerusform><numerusform>pustetegn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="279"/>
         <source>Breath(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Pustetegn</numerusform><numerusform>Pustetegn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
@@ -13342,12 +13342,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
         <source>tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>bindebue</numerusform><numerusform>bindebuer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
         <source>Tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Bindebue</numerusform><numerusform>Bindebuer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
@@ -13362,42 +13362,42 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
         <source>partial tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>avbrutt bindebue</numerusform><numerusform>avbrutte bindebuer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
         <source>Partial tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Avbrutt bindebue</numerusform><numerusform>Avbrutte bindebuer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
         <source>articulation(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>artikulasjon</numerusform><numerusform>artikulasjoner</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="294"/>
         <source>Articulation(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Artikulasjon</numerusform><numerusform>Artikulasjoner</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
         <source>ornament(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ornament</numerusform><numerusform>ornament</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="297"/>
         <source>Ornament(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ornament</numerusform><numerusform>Ornament</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="299"/>
         <source>fermata(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>fermate</numerusform><numerusform>fermater</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="300"/>
         <source>Fermata(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Fermate</numerusform><numerusform>Fermater</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="302"/>
@@ -13422,22 +13422,22 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="308"/>
         <source>expression(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>uttrykk</numerusform><numerusform>uttrykk</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="309"/>
         <source>Expression(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Uttrykk</numerusform><numerusform>Uttrykk</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="311"/>
         <source>beam(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>notebjelke</numerusform><numerusform>notebjelker</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="312"/>
         <source>Beam(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Notebjelke</numerusform><numerusform>Notebjelker</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="314"/>
@@ -13512,12 +13512,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="335"/>
         <source>tempo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tempo</numerusform><numerusform>tempo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="336"/>
         <source>Tempo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tempo</numerusform><numerusform>Tempo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="338"/>
@@ -13572,12 +13572,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="353"/>
         <source>capo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>capo</numerusform><numerusform>capoer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="354"/>
         <source>Capo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Capo</numerusform><numerusform>Capoer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="356"/>
@@ -13923,22 +13923,22 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="458"/>
         <source>notehead(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>notehode</numerusform><numerusform>notehoder</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="459"/>
         <source>Notehead(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Notehode</numerusform><numerusform>Notehoder</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="461"/>
         <source>note dot(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>punktering</numerusform><numerusform>punkteringer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="462"/>
         <source>Note dot(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Punktering</numerusform><numerusform>Punkteringer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="464"/>
@@ -13953,22 +13953,22 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="467"/>
         <source>measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>takt</numerusform><numerusform>takter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="468"/>
         <source>Measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Takt</numerusform><numerusform>Takter</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="470"/>
         <source>selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>utvalg</numerusform><numerusform>utvalg</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="471"/>
         <source>Selection(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Utvalg</numerusform><numerusform>Utvalg</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="473"/>
@@ -14023,12 +14023,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="488"/>
         <source>parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>parentes</numerusform><numerusform>parenteser</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="489"/>
         <source>Parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Parentes</numerusform><numerusform>Parenteser</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="491"/>
@@ -14063,12 +14063,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
         <source>trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>trille</numerusform><numerusform>triller</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="501"/>
         <source>Trill(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Trille</numerusform><numerusform>Triller</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="503"/>
@@ -14244,12 +14244,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="557"/>
         <source>slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>bue</numerusform><numerusform>buer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="558"/>
         <source>Slur(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Bue</numerusform><numerusform>Buer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="560"/>
@@ -14304,12 +14304,12 @@ Bånd %1 på streng %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
         <source>sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>slagmønster</numerusform><numerusform>slagmønster</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="579"/>
         <source>Sticking(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Slagmønster</numerusform><numerusform>Slagmønster</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
@@ -14365,13 +14365,13 @@ Bånd %1 på streng %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="599"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="602"/>
         <source>tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tremolo</numerusform><numerusform>tremoloer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="603"/>
         <source>Tremolo(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tremolo</numerusform><numerusform>Tremoloer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="605"/>
@@ -19227,7 +19227,7 @@ Bånd %1 på streng %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5329"/>
         <source>Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Haydn-ornament</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5347"/>
@@ -22583,17 +22583,17 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="71"/>
         <source>Symbol size</source>
-        <translation type="unfinished"/>
+        <translation>Tegnstørrelse</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="83"/>
         <source>Align symbol with barline</source>
-        <translation type="unfinished"/>
+        <translation>Sentrer tegn over taktstrek</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="92"/>
         <source>Alignment to barline</source>
-        <translation type="unfinished"/>
+        <translation>Justering mot taktstrek</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="48"/>
@@ -23409,7 +23409,7 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="82"/>
         <source>Text style settings buttons</source>
-        <translation type="unfinished"/>
+        <translation>Knapper for tekststilinnstillinger</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="135"/>
@@ -23419,22 +23419,22 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="194"/>
         <source>Vertical alignment buttons</source>
-        <translation type="unfinished"/>
+        <translation>Knapper for vertikal justering</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="252"/>
         <source>Text style buttons</source>
-        <translation type="unfinished"/>
+        <translation>Knapper for tekststil</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="307"/>
         <source>Horizontal alignment buttons</source>
-        <translation type="unfinished"/>
+        <translation>Knapper for horisontal justering</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="352"/>
         <source>Subscript buttons</source>
-        <translation type="unfinished"/>
+        <translation>Knapper for hevet/senket tekst</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="383"/>
@@ -23444,7 +23444,7 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="427"/>
         <source>Add symbols</source>
-        <translation type="unfinished"/>
+        <translation>Legg til symboler</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml" line="51"/>
@@ -24281,7 +24281,7 @@ opptakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="173"/>
         <source>Only hide staves on a system if the entire instrument is empty</source>
-        <translation type="unfinished"/>
+        <translation>Skjul kun notesystem i systemet hvis hele instrumentet er tomt</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="194"/>
@@ -24478,7 +24478,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="68"/>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="96"/>
         <source>Not now</source>
-        <translation type="unfinished"/>
+        <translation>Ikke nå</translation>
     </message>
     <message>
         <location filename="../../src/musesounds/internal/musesamplercheckupdatescenario.cpp" line="72"/>
@@ -24525,7 +24525,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/musesounds/internal/musesoundsconfiguration.cpp" line="60"/>
         <source>Show occasional MuseHub promotions</source>
-        <translation type="unfinished"/>
+        <translation>Vis kampanjer fra MuseHub fra tid til annen</translation>
     </message>
 </context>
 <context>
@@ -25511,7 +25511,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="677"/>
         <location filename="../../src/appshell_web/view/appmenumodel.cpp" line="368"/>
         <source>Insert at &amp;start of score…</source>
-        <translation>Sett inn &amp;på starten av partituret</translation>
+        <translation>Sett inn &amp;på starten av partituret …</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="678"/>
@@ -26057,7 +26057,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="217"/>
         <source>Add c&amp;hord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Legg til besi&amp;fring</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="233"/>
@@ -26780,12 +26780,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="74"/>
         <source>Legacy MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Tidligere MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="77"/>
         <source>Load custom XML…</source>
-        <translation type="unfinished"/>
+        <translation>Last inn tilpasset XML …</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/styledialog/chordsymbolspagemodel.cpp" line="154"/>
@@ -27445,12 +27445,12 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="117"/>
         <source>Dash:</source>
-        <translation type="unfinished"/>
+        <translation>Strek:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="126"/>
         <source>Gap:</source>
-        <translation type="unfinished"/>
+        <translation>Glipe:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml" line="158"/>
@@ -27860,42 +27860,42 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="50"/>
         <source>Input by note name mode</source>
-        <translation type="unfinished"/>
+        <translation>Skrivemodus: med notenavn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="51"/>
         <source>Input by duration mode</source>
-        <translation type="unfinished"/>
+        <translation>Skrivemodus: med noteverdi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="52"/>
         <source>Re-pitch existing notes mode</source>
-        <translation type="unfinished"/>
+        <translation>Skrivemodus: endre tonehøyde på ekisisterende noter</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="53"/>
         <source>Rhythm-only input mode</source>
-        <translation type="unfinished"/>
+        <translation>Skrivemodus: kun rytme</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="54"/>
         <source>Metronome real-time input mode</source>
-        <translation type="unfinished"/>
+        <translation>Skrivemodus: sanntid med metronom</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="55"/>
         <source>Pedal real-time input mode</source>
-        <translation type="unfinished"/>
+        <translation>Skrivemodus: sanntid med pedal</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="56"/>
         <source>Insert mode (grow measures)</source>
-        <translation type="unfinished"/>
+        <translation>Skrivemodus: sett inn (øk taktlengde)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="61"/>
         <source>Unknown note input mode</source>
-        <translation type="unfinished"/>
+        <translation>Ukjent noteskrivingsmodus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="401"/>
@@ -31456,7 +31456,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1914"/>
         <source>TablEdit files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>TablEdit-filer (esperimentelt)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1915"/>
@@ -33495,7 +33495,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/engraving/dom/playcounttext.cpp" line="51"/>
         <source>Update play count text</source>
-        <translation type="unfinished"/>
+        <translation>Oppdater repetisjonstellingstekst</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/textedit.cpp" line="925"/>
@@ -33588,12 +33588,12 @@ før lukking?</translation>
     <message>
         <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="158"/>
         <source>Move chord(s) up</source>
-        <translation type="unfinished"/>
+        <translation>Flytt akkord(er) opp</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/fretframe/fretframechordlistmodel.cpp" line="180"/>
         <source>Move chord(s) down</source>
-        <translation type="unfinished"/>
+        <translation>Flytt akkord(er) ned</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/stems/stemsettingsmodel.cpp" line="114"/>
@@ -33624,13 +33624,13 @@ før lukking?</translation>
         <location filename="../../src/instrumentsscene/view/instrumentsettingsmodel.cpp" line="129"/>
         <location filename="../../src/instrumentsscene/view/instrumentsettingsmodel.cpp" line="151"/>
         <source>Change instrument settings</source>
-        <translation type="unfinished"/>
+        <translation>Endre instrumentinnstillinger</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/staffsettingsmodel.cpp" line="240"/>
         <location filename="../../src/instrumentsscene/view/staffsettingsmodel.cpp" line="275"/>
         <source>Change staff settings</source>
-        <translation type="unfinished"/>
+        <translation>Endre notesysteminnstillinger</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayersettingsmodel.cpp" line="99"/>

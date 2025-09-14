@@ -10842,14 +10842,14 @@
         <source>Handbells</source>
         <comment>hand-bells trackName</comment>
         <extracomment>trackName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>El çanları</translation>
+        <translation>El zilleri</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3642"/>
         <source>Handbells</source>
         <comment>hand-bells longName</comment>
         <extracomment>longName for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>El çanları</translation>
+        <translation>El zilleri</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3644"/>
@@ -10884,7 +10884,7 @@
         <source>H.C.</source>
         <comment>hand-chimes shortName</comment>
         <extracomment>shortName for Handchimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>El.Ça.</translation>
+        <translation>E.Ç.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3656"/>
@@ -14083,21 +14083,21 @@
         <source>Marching show-style tenor drum.</source>
         <comment>marching-show-tenors description</comment>
         <extracomment>description for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Yürüyüş şov tarzı tenor davul.</translation>
+        <translation>Gösteri tipi yürüyüş bandosu tenor davulu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4690"/>
         <source>Show-Style Tenors</source>
         <comment>marching-show-tenors trackName</comment>
         <extracomment>trackName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Gösteri Tarzı Tenorlar</translation>
+        <translation>Gösteri tipi tenor davul</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4692"/>
         <source>Show Tenors</source>
         <comment>marching-show-tenors longName</comment>
         <extracomment>longName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Gösteri Tenorları</translation>
+        <translation>Tenor gösteri davulu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4694"/>

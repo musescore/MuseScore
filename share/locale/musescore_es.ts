@@ -3628,7 +3628,7 @@ Antes si se cambia entre ♯ y ♭.</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6641"/>
         <source>Extend bracket to end of duration</source>
-        <translation type="unfinished"/>
+        <translation>Extender el corchete al final de la duración</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6651"/>

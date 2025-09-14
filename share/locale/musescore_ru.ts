@@ -8677,17 +8677,17 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
         <source>Change enharmonic spelling (concert and transposed pitch)</source>
-        <translation type="unfinished"/>
+        <translation>Изменение энгармонической записи (концертный и написанный строй)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1660"/>
         <source>Change enharmonic spelling (&amp;current pitch mode only)</source>
-        <translation type="unfinished"/>
+        <translation>Изменение энгармонической записи (только &amp;текущий строй)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1661"/>
         <source>Change enharmonic spelling (current pitch mode only)</source>
-        <translation type="unfinished"/>
+        <translation>Изменение энгармонической записи (только текущий строй)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1667"/>
@@ -8984,7 +8984,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1891"/>
         <source>Toggle vertical turn</source>
-        <translation type="unfinished"/>
+        <translation>Вкл./выкл. вертикальный поворот</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1892"/>
@@ -10940,12 +10940,12 @@ Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published 
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
         <source>Save o&amp;ther</source>
-        <translation type="unfinished"/>
+        <translation>Сохранить &amp;другой</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="209"/>
         <source>Pu&amp;blish online</source>
-        <translation type="unfinished"/>
+        <translation>Опу&amp;бликовать онлайн</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="222"/>

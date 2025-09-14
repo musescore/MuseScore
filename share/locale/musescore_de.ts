@@ -17578,12 +17578,12 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2090"/>
         <source>Swing up</source>
-        <translation type="unfinished"/>
+        <translation>Swing up</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
         <source>Swing down</source>
-        <translation type="unfinished"/>
+        <translation>Swing down</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
@@ -17594,17 +17594,17 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2095"/>
         <source>Damp</source>
-        <translation type="unfinished"/>
+        <translation>Damp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2096"/>
         <source>Let vibrate</source>
-        <translation type="unfinished"/>
+        <translation>Let vibrate</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
         <source>Ring</source>
-        <translation type="unfinished"/>
+        <translation>Ring</translation>
     </message>
 </context>
 <context>
@@ -19594,32 +19594,32 @@ Bund %1 auf Saiten %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3208"/>
         <source>Thumb damp</source>
-        <translation type="unfinished"/>
+        <translation>Thumb damp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3209"/>
         <source>Brush damp</source>
-        <translation type="unfinished"/>
+        <translation>Brush damp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3210"/>
         <source>Ring touch</source>
-        <translation type="unfinished"/>
+        <translation>Ring touch</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3211"/>
         <source>Pluck</source>
-        <translation type="unfinished"/>
+        <translation>Pluck</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3212"/>
         <source>Singing bell</source>
-        <translation type="unfinished"/>
+        <translation>Singing bell</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3213"/>
         <source>Vibrate</source>
-        <translation type="unfinished"/>
+        <translation>Vibrate</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="372"/>
