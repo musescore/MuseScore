@@ -1383,9 +1383,6 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             continue;
                         }
                         default:
-                            if (toTextLine(e)->systemFlag()) {
-                                continue;
-                            }
                             EngravingItem* ne1 = e->clone();
                             ne1->setTrack(dstTrack);
                             ne1->setParent(seg);
