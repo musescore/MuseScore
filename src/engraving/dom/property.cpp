@@ -166,6 +166,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::TEMPO,                   true,  "tempo",                 P_TYPE::TEMPO,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tempo") },
     { Pid::TEMPO_FOLLOW_TEXT,       true,  "followText",            P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "following text") },
     { Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK, false, "tempoAlignRightOfRehearsalMark", P_TYPE::BOOL, PropertyGroup::APPEARANCE, DUMMY_QT_TR_NOOP("propertyName", "tempo align right of rehearsal mark") },
+
     { Pid::ACCIDENTAL_BRACKET,      false, "bracket",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bracket") },
     { Pid::ACCIDENTAL_TYPE,         true,  "subtype",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "type") },
     { Pid::ACCIDENTAL_STACKING_ORDER_OFFSET, true, "stackingOrderOffset", P_TYPE::INT,          PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "stacking order offset") },
@@ -207,7 +208,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CONTINUE_AT,             true,  "continueAt",            P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "continue at") },
     { Pid::LABEL,                   true,  "label",                 P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "label") },
     { Pid::MARKER_TYPE,             true,  "markerType",            P_TYPE::MARKER_TYPE,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker type") },
-    { Pid::MARKER_SYMBOL_SIZE,      true,  "markerSymbolSize",      P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker symbol size") },
+    { Pid::MUSIC_SYMBOL_SIZE,       true,  "musicSymbolSize",       P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "music symbol size") },
     { Pid::MARKER_CENTER_ON_SYMBOL, true,  "markerCenterOnSymbol",  P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker center on symbol") },
     { Pid::ARP_USER_LEN1,           false, "arpUserLen1",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length 1") },
     { Pid::ARP_USER_LEN2,           false, "arpUserLen2",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length 2") },

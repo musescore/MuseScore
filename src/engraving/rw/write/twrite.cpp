@@ -1231,6 +1231,10 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
         writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
     }
 
+    if (item->hasSymbolSize()) {
+        writeProperty(item, xml, Pid::MUSIC_SYMBOL_SIZE);
+    }
+
     writeItemProperties(item, xml, ctx);
     writeProperty(item, xml, Pid::TEXT_STYLE);
 
@@ -2300,7 +2304,6 @@ void TWrite::write(const Marker* item, XmlWriter& xml, WriteContext& ctx)
     xml.tag("label", item->label());
     writeProperty(item, xml, Pid::MARKER_TYPE);
     writeProperty(item, xml, Pid::MARKER_CENTER_ON_SYMBOL);
-    writeProperty(item, xml, Pid::MARKER_SYMBOL_SIZE);
     xml.endElement();
 }
 

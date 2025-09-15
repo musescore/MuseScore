@@ -471,7 +471,7 @@ class EngravingItem : public apiv1::ScoreElement
     /// For markers: The size of musical symbols used.
     /// Value is relative to the default size of 20pt.
     /// \since MuseScore 4.6
-    API_PROPERTY_T(qreal, markerSymbolSize, MARKER_SYMBOL_SIZE)
+    API_PROPERTY_T(qreal, markerSymbolSize, MUSIC_SYMBOL_SIZE)
     /// For markers: Whether the symbol is aligned with the barline.
     /// \since MuseScore 4.6
     API_PROPERTY_T(bool, markerCenterOnSymbol, MARKER_CENTER_ON_SYMBOL)

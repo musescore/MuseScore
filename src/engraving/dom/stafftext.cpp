@@ -76,6 +76,8 @@ PropertyValue StaffText::propertyDefault(Pid id) const
     switch (id) {
     case Pid::TEXT_STYLE:
         return TextStyleType::STAFF;
+    case Pid::MUSIC_SYMBOL_SIZE:
+        return 18.0;
     default:
         return StaffTextBase::propertyDefault(id);
     }

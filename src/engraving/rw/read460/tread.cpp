@@ -1723,7 +1723,6 @@ void TRead::read(Marker* m, XmlReader& e, ReadContext& ctx)
             m->setLabel(String::fromAscii(s.ascii()));
         } else if (readProperty(m, tag, e, ctx, Pid::MARKER_TYPE)) {
         } else if (readProperty(m, tag, e, ctx, Pid::MARKER_CENTER_ON_SYMBOL)) {
-        } else if (readProperty(m, tag, e, ctx, Pid::MARKER_SYMBOL_SIZE)) {
         } else if (!readProperties(static_cast<TextBase*>(m), e, ctx)) {
             e.unknown();
         }
@@ -4398,6 +4397,7 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
     } else if (readProperty(t, tag, e, ctx, Pid::VOICE_ASSIGNMENT)) {
     } else if (readProperty(t, tag, e, ctx, Pid::DIRECTION)) {
     } else if (readProperty(t, tag, e, ctx, Pid::CENTER_BETWEEN_STAVES)) {
+    } else if (readProperty(t, tag, e, ctx, Pid::MUSIC_SYMBOL_SIZE)) {
     } else if (!readItemProperties(t, e, ctx)) {
         return false;
     }
