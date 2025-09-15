@@ -88,7 +88,7 @@ bool MTest::saveScore(Score* score, const QString& name) const
         return false;
     }
 
-    return rw::RWRegister::writer(score->iocContext())->writeScore(score, &file, false);
+    return rw::RWRegister::writer(score->iocContext())->writeScore(score, &file);
 }
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)

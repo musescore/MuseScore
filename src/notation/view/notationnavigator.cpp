@@ -74,16 +74,18 @@ bool NotationNavigator::isVerticalOrientation() const
     return configuration()->canvasOrientation().val == muse::Orientation::Vertical;
 }
 
-PageList NotationNavigator::pages() const
+const PageList& NotationNavigator::pages() const
 {
+    static const PageList dummyPages;
+
     auto notation = globalContext()->currentNotation();
     if (!notation) {
-        return {};
+        return dummyPages;
     }
 
     auto elements = notation->elements();
     if (!elements) {
-        return {};
+        return dummyPages;
     }
 
     return elements->pages();
@@ -93,7 +95,7 @@ void NotationNavigator::rescale()
 {
     TRACEFUNC;
 
-    PageList pages = this->pages();
+    const PageList& pages = this->pages();
     if (pages.empty()) {
         return;
     }

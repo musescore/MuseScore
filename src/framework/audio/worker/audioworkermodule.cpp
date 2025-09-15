@@ -89,7 +89,7 @@ void AudioWorkerModule::onDestroy()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_audioEngine->deinit();
     m_workerChannelController->deinit();
     m_workerPlayback->deinit();
+    m_audioEngine->deinit();
 }

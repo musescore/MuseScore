@@ -38,6 +38,24 @@ using namespace muse;
 using namespace mu::app;
 using namespace mu::appshell;
 
+static std::optional<size_t> parsePageNum(const QMap<CmdOptions::ParamKey, QVariant>& params)
+{
+    auto it = params.find(CmdOptions::ParamKey::PageNumber);
+    if (it == params.end()) {
+        return std::nullopt;
+    }
+
+    bool ok = true;
+    size_t num = it.value().toULongLong(&ok) - 1;
+
+    if (!ok) {
+        LOGE() << "Invalid page, ignoring...";
+        return std::nullopt;
+    }
+
+    return num;
+}
+
 ConsoleApp::ConsoleApp(const CmdOptions& options, const modularity::ContextPtr& ctx)
     : muse::BaseApplication(ctx), m_options(options)
 {
@@ -271,8 +289,6 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
 int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
-    muse::io::path_t stylePath = task.params[CmdOptions::ParamKey::StylePath].toString();
-    bool forceMode = task.params[CmdOptions::ParamKey::ForceMode].toBool();
     String soundProfile = task.params[CmdOptions::ParamKey::SoundProfile].toString();
     UriQuery extensionUri = UriQuery(task.params[CmdOptions::ParamKey::ExtensionUri].toString().toStdString());
 
@@ -281,41 +297,46 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
         soundProfile.clear();
     }
 
+    converter::IConverterController::OpenParams openParams;
+    openParams.stylePath = task.params[CmdOptions::ParamKey::StylePath].toString();
+    openParams.forceMode = task.params[CmdOptions::ParamKey::ForceMode].toBool();
+
     switch (task.type) {
     case ConvertType::Batch:
-        ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile, extensionUri);
+        ret = converter()->batchConvert(task.inputFile, openParams, soundProfile, extensionUri);
         break;
     case ConvertType::File: {
         std::string transposeOptionsJson = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile, extensionUri,
-                                       transposeOptionsJson);
+        std::optional<size_t> pageNum = parsePageNum(task.params);
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, openParams, soundProfile, extensionUri,
+                                       transposeOptionsJson, pageNum);
     } break;
     case ConvertType::ConvertScoreParts:
-        ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
+        ret = converter()->convertScoreParts(task.inputFile, task.outputFile, openParams);
         break;
     case ConvertType::ExportScoreMedia: {
         muse::io::path_t highlightConfigPath = task.params[CmdOptions::ParamKey::HighlightConfigPath].toString();
-        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath, forceMode);
+        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, openParams, highlightConfigPath);
     } break;
     case ConvertType::ExportScoreMeta:
-        ret = converter()->exportScoreMeta(task.inputFile, task.outputFile, stylePath, forceMode);
+        ret = converter()->exportScoreMeta(task.inputFile, task.outputFile, openParams);
         break;
     case ConvertType::ExportScoreParts:
-        ret = converter()->exportScoreParts(task.inputFile, task.outputFile, stylePath, forceMode);
+        ret = converter()->exportScoreParts(task.inputFile, task.outputFile, openParams);
         break;
     case ConvertType::ExportScorePartsPdf:
-        ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile, stylePath, forceMode);
+        ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile, openParams);
         break;
     case ConvertType::ExportScoreTranspose: {
         std::string scoreTranspose = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
-        ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, stylePath, forceMode);
+        ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, openParams);
     } break;
     case ConvertType::ExportScoreVideo: {
         ret = converter()->exportScoreVideo(task.inputFile, task.outputFile);
     } break;
     case ConvertType::SourceUpdate: {
         std::string scoreSource = task.params[CmdOptions::ParamKey::ScoreSource].toString().toStdString();
-        ret = converter()->updateSource(task.inputFile, scoreSource, forceMode);
+        ret = converter()->updateSource(task.inputFile, scoreSource, openParams.forceMode);
     } break;
     }
 

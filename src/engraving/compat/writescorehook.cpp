@@ -51,7 +51,7 @@ void WriteScoreHook::onWriteStyle302(Score* score, XmlWriter& xml)
     }
 }
 
-void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly)
+void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, WriteContext& ctx)
 {
     bool isWriteExcerpts = false;
 
@@ -60,11 +60,11 @@ void WriteScoreHook::onWriteExcerpts302(Score* score, XmlWriter& xml, WriteConte
         isWriteExcerpts = true;
     }
 
-    if (isWriteExcerpts && score->isMaster() && !selectionOnly) {
+    if (isWriteExcerpts && score->isMaster() && !ctx.shouldWriteRange()) {
         MasterScore* mScore = static_cast<MasterScore*>(score);
         for (const Excerpt* excerpt : mScore->excerpts()) {
             if (excerpt->excerptScore() != score) {
-                write::Writer::write(excerpt->excerptScore(), xml, ctx, selectionOnly, *this);         // recursion write
+                write::Writer::write(excerpt->excerptScore(), xml, ctx, *this); // recursion write
             }
         }
     }
