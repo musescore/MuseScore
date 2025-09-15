@@ -329,8 +329,6 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                 MeasureLayout::removeSystemTrailer(m);
             }
 
-            MeasureLayout::updateGraceNotes(m, ctx);
-
             if (m->tick() >= ctx.state().startTick() && m->tick() <= ctx.state().endTick()) {
                 // for measures in range, do full layout
                 if (ctx.conf().isMode(LayoutMode::HORIZONTAL_FIXED)) {
@@ -344,6 +342,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                     MeasureLayout::computePreSpacingItems(m, ctx);
                     MeasureLayout::createEndBarLines(m, false, ctx);
                     MeasureLayout::setRepeatCourtesiesAndParens(m, ctx);
+                    MeasureLayout::updateGraceNotes(m, ctx);
                     curSystemWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system, firstMeasureInLayout);
                     measuresToLayout.insert(m);
                     if (firstMeasureInLayout) {
