@@ -143,7 +143,7 @@ PropertyValue MeasureRepeat::propertyDefault(Pid propertyId) const
 PropertyValue MeasureRepeat::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::SUBTYPE:
+    case Pid::MEASURE_REPEAT_NUMBER:
         return numMeasures();
     case Pid::MEASURE_REPEAT_NUMBER_POS:
         return numberPos();
@@ -159,8 +159,8 @@ PropertyValue MeasureRepeat::getProperty(Pid propertyId) const
 bool MeasureRepeat::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
-    case Pid::SUBTYPE:
-        setNumMeasures(v.toInt());
+    case Pid::MEASURE_REPEAT_NUMBER:
+        setNumMeasures(v.value<int>());
         break;
     case Pid::MEASURE_REPEAT_NUMBER_POS:
         setNumberPos(v.toDouble());
