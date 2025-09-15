@@ -96,7 +96,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
 
         flags |= Qt::FramelessWindowHint           // Without border
                  | Qt::NoDropShadowWindowHint      // Without system shadow
-                 | Qt::BypassWindowManagerHint;    // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
+        ;
 
         m_view->setFlags(flags);
         m_view->setColor(QColor(Qt::transparent));
