@@ -88,15 +88,20 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     // popup
     else {
         Qt::WindowFlags flags;
-        if (qGuiApp->platformName().contains("wayland")) {
+
+        QString sessionType = qEnvironmentVariable("XDG_SESSION_TYPE");
+        if (sessionType.contains("wayland")) {
             flags = Qt::Popup;
         } else {
-            flags = Qt::Tool;
+            flags = Qt::Tool
+                    // needed for accessibility in spinboxes
+                    // see https://github.com/musescore/MuseScore/pull/29888#issuecomment-3302731855
+                    | Qt::BypassWindowManagerHint;
         }
 
         flags |= Qt::FramelessWindowHint           // Without border
                  | Qt::NoDropShadowWindowHint      // Without system shadow
-                 | Qt::BypassWindowManagerHint;    // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
+        ;
 
         m_view->setFlags(flags);
         m_view->setColor(QColor(Qt::transparent));
