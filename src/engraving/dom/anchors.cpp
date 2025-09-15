@@ -301,14 +301,17 @@ void MoveElementAnchors::doMoveSegment(EngravingItem* element, Segment* newSeg, 
     // change approach and *move* elements onto the mmRests, not clone them. [M.S.]
 
     Score* score = element->score();
+    Measure* parentMeasure = toMeasure(element->findAncestor(ElementType::MEASURE));
+    bool parentMeasureIsMMRest = parentMeasure && parentMeasure->isMMRest();
+
     std::list<EngravingObject*> linkedElements = element->linkList();
     for (EngravingObject* linkedElement : linkedElements) {
         if (linkedElement == element) {
             continue;
         }
-        Segment* curParent = toSegment(linkedElement->parent());
-        bool isOnMMRest = curParent->parent() && toMeasure(curParent->parent())->isMMRest();
-        if (isOnMMRest) {
+        Measure* linkedParentMeasure = toMeasure(toEngravingItem(linkedElement)->findAncestor(ElementType::MEASURE));
+        bool linkedParentMeasureIsMMrest = linkedParentMeasure && linkedParentMeasure->isMMRest();
+        if (linkedParentMeasureIsMMrest != parentMeasureIsMMRest) {
             linkedElement->undoUnlink();
             score->undoRemoveElement(static_cast<EngravingItem*>(linkedElement));
         }
