@@ -1118,6 +1118,8 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
     const std::vector<Staff*>& newSystemObjectStaves = masterParts->systemObjectStaves();
     SystemObjectGroupsByStaff systemObjects = collectSystemObjectGroups(newSystemObjectStaves);
 
+    bool notifyLayoutChanged = false;
+
     // Create new system object layers
     for (const Staff* staff : newSystemObjectStaves) {
         if (findSystemObjectsLayerItemByStaff(staff)) {
@@ -1146,6 +1148,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
         beginInsertRows(QModelIndex(), row, row);
         m_rootItem->insertChild(newItem, row);
         endInsertRows();
+        notifyLayoutChanged = true;
     }
 
     // Create copy, because we're going to modify it
@@ -1166,6 +1169,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
         beginRemoveRows(QModelIndex(), row, row);
         m_rootItem->removeChildren(row, 1, false);
         endRemoveRows();
+        notifyLayoutChanged = true;
     }
 
     // Update position of existing layers if changed
@@ -1188,9 +1192,14 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
             beginMoveRows(QModelIndex(), layerRow, layerRow, QModelIndex(), partRow);
             m_rootItem->moveChildren(layerRow, 1, m_rootItem, partRow, false /*updateNotation*/);
             endMoveRows();
+            notifyLayoutChanged = true;
         }
 
         layerItem->setSystemObjects(systemObjects[layerItem->staff()]);
+    }
+
+    if (notifyLayoutChanged) {
+        emit layoutChanged();
     }
 
     updateSystemObjectLayersSelection();
