@@ -169,6 +169,9 @@ private:
     AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
     void updateSystemObjectLayers();
+    void updateSystemObjectLayersSelection();
+
+    bool shouldRemoveSystemObjectsLayerItem(const SystemObjectsLayerTreeItem* layer) const;
 
     SystemObjectsLayerTreeItem* findSystemObjectsLayerItemByStaff(const notation::Staff* staff) const;
     const PartTreeItem* findPartItemByStaff(const notation::Staff* staff) const;
