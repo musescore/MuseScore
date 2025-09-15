@@ -887,14 +887,6 @@ void MeasureLayout::removeMMRestElements(Measure* mmRestMeasure)
     }
 
     for (Segment* seg = mmRestMeasure->first(); seg && seg->rtick().isZero(); seg = seg->next()) {
-        if (!seg->isChordRestType()) {
-            for (EngravingItem* item : seg->elist()) {
-                if (item) {
-                    item->undoUnlink();
-                    mmRestMeasure->score()->doUndoRemoveElement(item);
-                }
-            }
-        }
         for (EngravingItem* item : seg->annotations()) {
             item->undoUnlink();
             mmRestMeasure->score()->doUndoRemoveElement(item);
