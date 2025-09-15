@@ -34,17 +34,6 @@ static const muse::String CONVERTER_DATA_DIR("data/");
 class Converter_ScoreElementsTests : public ::testing::Test
 {
 public:
-    void SetUp() override
-    {
-        m_use302 = MScore::useRead302InTestMode;
-        MScore::useRead302InTestMode = false;
-    }
-
-    void TearDown() override
-    {
-        MScore::useRead302InTestMode = m_use302;
-    }
-
     ScoreElementScanner::ElementInfo makeInfo(const String& name, const String& notes = u"") const
     {
         ScoreElementScanner::ElementInfo info;
