@@ -248,6 +248,51 @@ void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditDa
     }
 }
 
+Segment* MoveElementAnchors::findNewAnchorSegmentForLine(LineSegment* lineSegment, const EditData& ed, const Segment* curSeg)
+{
+    SLine* line = lineSegment->line();
+    Score* score = lineSegment->score();
+    if (!line->allowTimeAnchor()) {
+        if (ed.key == Key_Left) {
+            return curSeg->prev1WithElemsOnStaff(lineSegment->staffIdx());
+        }
+        if (ed.key == Key_Right) {
+            Segment* lastCRSegInScore = score->lastSegment();
+            while (lastCRSegInScore && !lastCRSegInScore->isChordRestType()) {
+                lastCRSegInScore = lastCRSegInScore->prev1(SegmentType::ChordRest);
+            }
+            if (curSeg == lastCRSegInScore && curSeg == line->endSegment()) {
+                // If we reach this point, it means that the line in question does not accept time anchors
+                // and that the line's end segment is the last CR segment in the score. Trying to use
+                // next1WithElemsOnStaff won't do anything from here, but the last segment in the score is
+                // still a valid new anchor segment for this line (see also LineSegment::edit)...
+                return score->lastSegment();
+            }
+            return curSeg->next1WithElemsOnStaff(lineSegment->staffIdx());
+        }
+    }
+
+    if (ed.modifiers & ControlModifier) {
+        if (ed.key == Key_Left) {
+            Measure* measure = curSeg->rtick().isZero() ? curSeg->measure()->prevMeasure() : curSeg->measure();
+            return measure ? measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
+        }
+        if (ed.key == Key_Right) {
+            Measure* measure = curSeg->measure()->nextMeasure();
+            return measure ? measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
+        }
+    }
+
+    if (ed.key == Key_Left) {
+        return findNewAnchorableSegment(curSeg, /*forward*/ false);
+    }
+    if (ed.key == Key_Right) {
+        return findNewAnchorableSegment(curSeg, /*forward*/ true);
+    }
+
+    return nullptr;
+}
+
 void MoveElementAnchors::moveSegment(EngravingItem* element, bool forward)
 {
     Segment* curSeg = toSegment(element->parentItem());
@@ -268,8 +313,31 @@ Segment* MoveElementAnchors::getNewSegment(EngravingItem* element, Segment* curS
         return newMeasure ? newMeasure->first(SegmentType::ChordRest) : nullptr;
     }
     default:
-        return forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
+        return findNewAnchorableSegment(curSeg, forward);
     }
+}
+
+Segment* MoveElementAnchors::findNewAnchorableSegment(const Segment* curSeg, bool forward)
+{
+    Segment* newSeg = forward ? curSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE) : curSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+
+    // Continue until we get to a different tick than where we are
+    while (newSeg && newSeg->tick() == curSeg->tick()) {
+        newSeg = forward ? newSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE) : newSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+    }
+    if (!newSeg) {
+        return nullptr;
+    }
+
+    // Always prefer ChordRest segment if one exists at the same tick
+    if (newSeg->segmentType() != SegmentType::ChordRest) {
+        Segment* newChordRestSeg = forward ? newSeg->next1(SegmentType::ChordRest) : newSeg->prev1(SegmentType::ChordRest);
+        if (newChordRestSeg && newChordRestSeg->tick() == newSeg->tick()) {
+            newSeg = newChordRestSeg;
+        }
+    }
+
+    return newSeg;
 }
 
 void MoveElementAnchors::moveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff)

@@ -324,29 +324,6 @@ Segment* Segment::next1(SegmentType types) const
     return 0;
 }
 
-Segment* Segment::next1ChordRestOrTimeTick() const
-{
-    Segment* nextSeg = next1(CHORD_REST_OR_TIME_TICK_TYPE);
-
-    // Continue until we get to a different tick than where we are
-    while (nextSeg && nextSeg->tick() == this->tick()) {
-        nextSeg = nextSeg->next1(CHORD_REST_OR_TIME_TICK_TYPE);
-    }
-    if (!nextSeg) {
-        return nullptr;
-    }
-
-    // Always prefer ChordRest segment if one exists at the same tick
-    if (nextSeg->segmentType() != SegmentType::ChordRest) {
-        Segment* nextChordRestSeg = nextSeg->next1(SegmentType::ChordRest);
-        if (nextChordRestSeg && nextChordRestSeg->tick() == nextSeg->tick()) {
-            nextSeg = nextChordRestSeg;
-        }
-    }
-
-    return nextSeg;
-}
-
 Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType) const
 {
     Segment* next = next1(segType);
@@ -460,28 +437,6 @@ Segment* Segment::prev1() const
     }
     Measure* m = measure()->prevMeasure();
     return m ? m->last() : 0;
-}
-
-Segment* Segment::prev1ChordRestOrTimeTick() const
-{
-    Segment* prevSeg = prev1(CHORD_REST_OR_TIME_TICK_TYPE);
-
-    // Continue until we get to a different tick than where we are
-    while (prevSeg && prevSeg->tick() == this->tick()) {
-        prevSeg = prevSeg->prev1(CHORD_REST_OR_TIME_TICK_TYPE);
-    }
-    if (!prevSeg) {
-        return nullptr;
-    }
-
-    if (prevSeg->segmentType() != SegmentType::ChordRest) {
-        Segment* prevChordRestSeg = prevSeg->prev1(SegmentType::ChordRest);
-        if (prevChordRestSeg && prevChordRestSeg->tick() == prevSeg->tick()) {
-            prevSeg = prevChordRestSeg;
-        }
-    }
-
-    return prevSeg;
 }
 
 Segment* Segment::prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType) const
