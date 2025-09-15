@@ -34,6 +34,7 @@ class TextStylePopupModel : public notation::AbstractElementPopupModel
     Q_OBJECT
 
     Q_PROPERTY(TextSettingsModel * textSettingsModel READ textSettingsModel CONSTANT)
+    Q_PROPERTY(bool placeAbove READ placeAbove NOTIFY placeAboveChanged)
 
 public:
     explicit TextStylePopupModel(QObject* parent = nullptr);
@@ -42,9 +43,19 @@ public:
 
     Q_INVOKABLE void init() override;
 
+    bool placeAbove() const;
+
+signals:
+    void placeAboveChanged();
+
 private:
+    void updateItemRect() override;
+    bool ignoreTextEditingChanges() const override { return false; }
+
     TextSettingsModel* m_textSettingsModel = nullptr;
 
     ElementRepositoryService* m_elementRepositoryService = nullptr;
+
+    bool m_placeAbove = true;
 };
 }

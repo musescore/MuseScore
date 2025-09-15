@@ -84,15 +84,13 @@ FocusScope {
         Item {
             id: expandButton
 
-            anchors.verticalCenter: parent.verticalCenter
-
             Layout.preferredWidth: expandButtonIcon.font.pixelSize
             Layout.preferredHeight: expandButtonIcon.font.pixelSize
 
             StyledIconLabel {
                 id: expandButtonIcon
 
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.centerIn: parent
 
                 rotation: root.isExpanded ? 0 : -90
 
