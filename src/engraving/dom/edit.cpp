@@ -4186,6 +4186,10 @@ std::vector<Hairpin*> Score::addHairpins(HairpinType type)
         hairpins.push_back(addHairpin(type, cr1, cr2));
     }
 
+    for (Hairpin* hairpin : hairpins) {
+        hairpin->setInitialTrackAndVoiceAssignment(hairpin->track(), /*curVoiceOnlyOverride*/ false);
+    }
+
     return hairpins;
 }
 
