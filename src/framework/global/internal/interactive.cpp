@@ -278,7 +278,7 @@ static UriQuery makeSelectFileQuery(FileDialogMode mode, const std::string& titl
 
 #endif
 
-#ifndef Q_OS_LINUX
+#ifdef Q_OS_LINUX
 static QString filterToString(const std::vector<std::string>& filter)
 {
     QStringList result;
@@ -359,9 +359,10 @@ io::path_t Interactive::selectOpeningFileSync(const std::string& title, const io
 io::path_t Interactive::selectSavingFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
                                              bool confirmOverwrite)
 {
-#ifndef Q_OS_LINUX
+#ifdef Q_OS_LINUX
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
+    options.setFlag(QFileDialog::DontUseNativeDialog, true);
     QString result = QFileDialog::getSaveFileName(nullptr, QString::fromStdString(title), dir.toQString(), filterToString(
                                                       filter), nullptr, options);
     return result;
