@@ -49,15 +49,15 @@ class BackendApi
 
 public:
     static muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
-                                      const muse::io::path_t& stylePath = "", bool forceMode = false);
+                                      const muse::io::path_t& stylePath = "", bool forceMode = false, bool unrollRepeats = false);
     static muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                     bool forceMode = false);
+                                     bool forceMode = false, bool unrollRepeats = false);
     static muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                      bool forceMode = false);
+                                      bool forceMode = false, bool unrollRepeats = false);
     static muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                          bool forceMode = false);
+                                          bool forceMode = false, bool unrollRepeats = false);
     static muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
-                                          const muse::io::path_t& stylePath, bool forceMode = false);
+                                          const muse::io::path_t& stylePath, bool forceMode = false, bool unrollRepeats = false);
 
     static muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
                                          const muse::io::path_t& stylePath, bool forceMode = false);
@@ -68,7 +68,7 @@ private:
     static muse::Ret openOutputFile(QFile& file, const muse::io::path_t& out);
 
     static muse::RetVal<project::INotationProjectPtr> openProject(const muse::io::path_t& path,
-                                                                  const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false);
+                                                                  const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false, bool unrollRepeats = false);
 
     static QVariantMap readBeatsColors(const muse::io::path_t& filePath);
 
