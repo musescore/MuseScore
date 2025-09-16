@@ -3046,12 +3046,12 @@ void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item,
         double padding = item->spatium();
         if (itemAfter->isTempoText()) {
             const double fontSizeScaleFactor = toTempoText(itemAfter)->size() / 10.0;
-            padding = 0.5 * item->spatium() * fontSizeScaleFactor;
+            padding = item->spatium() * fontSizeScaleFactor;
         } else if (itemAfter->isGradualTempoChangeSegment()) {
             Text* startText = toGradualTempoChangeSegment(itemAfter)->text();
             if (startText) {
                 const double fontSizeScaleFactor = startText->size() / 10.0;
-                padding = 0.5 * item->spatium() * fontSizeScaleFactor;
+                padding = item->spatium() * fontSizeScaleFactor;
             }
         }
 
