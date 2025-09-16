@@ -3,16 +3,6 @@
     <HarmonyToDiagram>
         <FretDiagram>
             <fretDiagram>
-              </fretDiagram>
-        </FretDiagram>
-        <pattern>------</pattern>
-        <Harmony>
-            <name>n.c.</name>
-        </Harmony>
-    </HarmonyToDiagram>
-    <HarmonyToDiagram>
-        <FretDiagram>
-            <fretDiagram>
                 <string no="0">
                     <marker>cross</marker>
                 </string>
