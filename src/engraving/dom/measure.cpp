@@ -3465,6 +3465,11 @@ bool Measure::endBarLineVisible() const
 
 const BarLine* Measure::startBarLine() const
 {
+    return startBarLine(0, true);
+}
+
+const BarLine* Measure::startBarLine(staff_idx_t staffIdx, bool firstStaff) const
+{
     // search barline segment:
     Segment* s = first();
     while (s && !(s->isStartRepeatBarLineType() || s->isBeginBarLineType())) {
@@ -3473,7 +3478,7 @@ const BarLine* Measure::startBarLine() const
     // search first element
     if (s) {
         for (const EngravingItem* e : s->elist()) {
-            if (e) {
+            if (e && (e->staffIdx() == staffIdx || firstStaff)) {
                 return toBarLine(e);
             }
         }
