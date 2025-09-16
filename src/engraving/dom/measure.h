@@ -359,6 +359,7 @@ public:
     BarLineType endBarLineType() const;
     bool endBarLineVisible() const;
     const BarLine* startBarLine() const;
+    const BarLine* startBarLine(staff_idx_t staffIdx, bool first = false) const;
     void triggerLayout() const override;
     void triggerLayout(staff_idx_t staffIdx) const;
 
