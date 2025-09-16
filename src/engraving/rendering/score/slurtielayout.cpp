@@ -2891,6 +2891,10 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
 
 bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item)
 {
+    if (item->isHammerOnPullOffSegment()) {
+        return false;
+    }
+
     if (item->configuration()->specificSlursLayoutWorkaround()) {
         Slur* slur = item->slur();
         if (slur->connectedElement() == Slur::ConnectedElement::GLISSANDO) {
