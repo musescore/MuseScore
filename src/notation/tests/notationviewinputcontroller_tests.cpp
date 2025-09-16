@@ -452,9 +452,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     ON_CALL(*m_selection, elements())
     .WillByDefault(ReturnRef(selectedElements));
 
-    ON_CALL(*m_selection, element())
-    .WillByDefault(Return(selectedElements.front()));
-
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillOnce(Return(false));
@@ -680,9 +677,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
 
     EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
     .Times(1);
-
-    ON_CALL(*m_selection, element())
-    .WillByDefault(Return(oldContext.element));
 
     std::vector<EngravingItem*> selectedElements = { oldContext.element };
     ON_CALL(*m_selection, elements())

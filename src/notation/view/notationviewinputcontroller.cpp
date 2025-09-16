@@ -1666,14 +1666,16 @@ EngravingItem* NotationViewInputController::resolveStartPlayableElement() const
         return seekAllowed(hitElement) ? hitElement : nullptr;
     }
 
-    INotationSelectionPtr selection = viewInteraction()->selection();
-    if (!selection->isRange()) {
-        return selection->element();
+    const INotationSelectionPtr selection = viewInteraction()->selection();
+    const std::vector<EngravingItem*>& elements = selection->elements();
+
+    if (!selection->isRange() && !elements.empty()) {
+        return elements.back();
     }
 
     EngravingItem* playbackStartElement = hitElementContext().element;
 
-    for (EngravingItem* element: selection->elements()) {
+    for (EngravingItem* element: elements) {
         if (!element || element == playbackStartElement) {
             continue;
         }
