@@ -49,7 +49,7 @@ env:
 
 jobs:
   macos_universal:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
