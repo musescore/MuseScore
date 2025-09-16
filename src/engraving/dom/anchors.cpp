@@ -380,6 +380,11 @@ void MoveElementAnchors::doMoveSegment(EngravingItem* element, Segment* newSeg, 
         Measure* linkedParentMeasure = toMeasure(toEngravingItem(linkedElement)->findAncestor(ElementType::MEASURE));
         bool linkedParentMeasureIsMMrest = linkedParentMeasure && linkedParentMeasure->isMMRest();
         if (linkedParentMeasureIsMMrest != parentMeasureIsMMRest) {
+            for (EngravingObject* child : linkedElement->children()) {
+                // e.g. fret diagram should also remove the harmony
+                child->undoUnlink();
+                score->undoRemoveElement(toEngravingItem(child));
+            }
             linkedElement->undoUnlink();
             score->undoRemoveElement(static_cast<EngravingItem*>(linkedElement));
         }
