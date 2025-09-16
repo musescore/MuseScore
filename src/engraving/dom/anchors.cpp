@@ -241,7 +241,7 @@ void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditDa
     Segment* newSeg = nullptr;     // don't prefer any segment while dragging, just snap to the closest
     static constexpr double spacingFactor = 0.5;
     element->score()->dragPosition(element->canvasPos(), &si, &newSeg, spacingFactor, element->allowTimeAnchor());
-    if (newSeg && (newSeg != segment || element->staffIdx() != si)) {
+    if (newSeg && ((newSeg != segment && !newSeg->measure()->isMMRest()) || element->staffIdx() != si)) {
         PointF curOffset = element->offset();
         moveSegment(element, newSeg, newSeg->tick() - segment->tick());
         rebaseOffsetOnMoveSegment(element, curOffset, newSeg, segment);
