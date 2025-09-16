@@ -823,7 +823,13 @@ bool PaletteProvider::addPalette(const QPersistentModelIndex& index)
 
     if (index.model() == m_masterPaletteModel) {
         QMimeData* data = m_masterPaletteModel->mimeData({ QModelIndex(index) });
-        const bool success = m_userPaletteModel->dropMimeData(data, Qt::CopyAction, 0, 0, QModelIndex());
+        QModelIndex dropIndex = m_userPaletteModel->index(0, 0);
+
+        const bool success = m_userPaletteModel->dropMimeData(data, Qt::CopyAction, dropIndex.row(), dropIndex.column(), QModelIndex());
+        if (success) {
+            m_userPaletteModel->setData(dropIndex, true, PaletteTreeModel::VisibleRole);
+        }
+
         data->deleteLater();
         return success;
     }

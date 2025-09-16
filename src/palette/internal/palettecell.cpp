@@ -239,23 +239,26 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
                 e.unknown();
             } else {
                 rw::RWRegister::reader()->readItem(element.get(), e);
-                PaletteCompat::migrateOldPaletteItemIfNeeded(element, gpaletteScore);
-                element->styleChanged();
-
-                if (element->type() == ElementType::ACTION_ICON) {
-                    ActionIcon* icon = toActionIcon(element.get());
-                    const muse::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
-                    if (action.isValid()) {
-                        icon->setAction(icon->actionCode(), static_cast<char16_t>(action.iconCode));
-                    } else {
-                        add = false;
-                    }
-                }
             }
         }
     }
 
     setElementTranslated(translateElement);
+
+    if (element) {
+        PaletteCompat::migrateOldPaletteCellIfNeeded(this, gpaletteScore);
+        element->styleChanged();
+
+        if (element->type() == ElementType::ACTION_ICON) {
+            ActionIcon* icon = toActionIcon(element.get());
+            const muse::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
+            if (action.isValid()) {
+                icon->setAction(icon->actionCode(), static_cast<char16_t>(action.iconCode));
+            } else {
+                add = false;
+            }
+        }
+    }
 
     return add && element;
 }

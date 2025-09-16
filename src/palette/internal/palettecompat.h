@@ -21,14 +21,15 @@
  */
 #pragma once
 
-#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/score.h"
+#include "palettecell.h"
 
 namespace mu::palette {
 class Palette;
 class PaletteCompat
 {
 public:
-    static void migrateOldPaletteItemIfNeeded(engraving::ElementPtr& element, engraving::Score* paletteScore);
+    static void migrateOldPaletteCellIfNeeded(PaletteCell* cell, engraving::Score* paletteScore);
     static void addNewItemsIfNeeded(Palette& palette, engraving::Score* paletteScore);
     static void removeOldItemsIfNeeded(Palette& palette);
 
@@ -37,6 +38,7 @@ private:
     static void addNewLineItems(Palette& linesPalette);
     static void addNewFretboardDiagramItems(Palette& fretboardDiagramPalette, engraving::Score* paletteScore);
     static void addNewRepeatItems(Palette& repeatPalette, engraving::Score* paletteScore);
+    static void addNewLayoutItems(Palette& layoutPalette);
     static void removeOldItems(Palette& palette);
 };
 }
