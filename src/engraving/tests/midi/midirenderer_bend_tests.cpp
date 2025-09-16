@@ -764,3 +764,46 @@ TEST_F(MidiRendererBend_Tests, bendAfterHammer)
     EXPECT_EQ(events[0].size(), 0);
     EXPECT_EQ(events[1].size(), 1);
 }
+
+TEST_F(MidiRendererBend_Tests, bendOnHiddenStaff)
+{
+    constexpr int defVol = 80; // mf
+    constexpr int pwReset = 8192;
+
+    EventsHolder events = renderMidiEvents(u"bend_on_hidden_staff.mscx", true, true);
+
+    EXPECT_EQ(events.size(), 2);
+    EXPECT_EQ(events[0].size(), 3);
+    EXPECT_EQ(events[1].size(), 27);
+
+    checkEventInterval(events, 480, 599, 67, defVol);
+
+    checkEventInterval(events, 1440, 1679, 60, defVol, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1440, pwReset, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1450, 8220, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1460, 8305, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1470, 8448, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1480, 8647, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1490, 8903, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1500, 9216, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1510, 9585, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1520, 10012, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1530, 10496, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1540, 11036, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1550, 11633, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1560, 12288, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1570, 12259, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1580, 12174, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1590, 12032, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1600, 11832, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1610, 11576, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1620, 11264, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1630, 10894, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1640, 10467, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1650, 9984, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1660, 9443, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 1670, 8846, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+
+    EXPECT_EQ(events[0].size(), 1);
+    EXPECT_EQ(events[1].size(), 1);
+}
