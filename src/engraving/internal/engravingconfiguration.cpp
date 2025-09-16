@@ -239,9 +239,14 @@ SizeF EngravingConfiguration::defaultPageSize() const
     return size;
 }
 
+bool EngravingConfiguration::canLayoutIcons() const
+{
+    return uiConfiguration() != nullptr;
+}
+
 muse::String EngravingConfiguration::iconsFontFamily() const
 {
-    return String::fromStdString(uiConfiguration()->iconsFontFamily());
+    return uiConfiguration() ? String::fromStdString(uiConfiguration()->iconsFontFamily()) : String();
 }
 
 Color EngravingConfiguration::defaultColor() const
@@ -292,7 +297,9 @@ Color EngravingConfiguration::noteBackgroundColor() const
 
 Color EngravingConfiguration::fontPrimaryColor() const
 {
-    return Color(uiConfiguration()->currentTheme().values[muse::ui::ThemeStyleKey::FONT_PRIMARY_COLOR].toString());
+    return uiConfiguration()
+           ? Color(uiConfiguration()->currentTheme().values[muse::ui::ThemeStyleKey::FONT_PRIMARY_COLOR].toString())
+           : Color::BLACK;
 }
 
 Color EngravingConfiguration::voiceColor(voice_idx_t voiceIdx) const
@@ -302,7 +309,7 @@ Color EngravingConfiguration::voiceColor(voice_idx_t voiceIdx) const
 
 double EngravingConfiguration::guiScaling() const
 {
-    return uiConfiguration()->guiScaling();
+    return uiConfiguration() ? uiConfiguration()->guiScaling() : 1.0;
 }
 
 Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible, bool itemIsUnlinkedFromScore) const

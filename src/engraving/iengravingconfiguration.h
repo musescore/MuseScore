@@ -48,6 +48,7 @@ public:
 
     virtual SizeF defaultPageSize() const = 0;
 
+    virtual bool canLayoutIcons() const = 0;
     virtual String iconsFontFamily() const = 0;
 
     virtual Color defaultColor() const = 0;
