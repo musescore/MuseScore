@@ -24,7 +24,9 @@
 
 #include "dom/barline.h"
 #include "dom/chord.h"
+#include "dom/jump.h"
 #include "dom/lyrics.h"
+#include "dom/marker.h"
 #include "dom/measure.h"
 #include "dom/measurenumber.h"
 #include "dom/note.h"
@@ -196,6 +198,11 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
         for (const MStaff* mstaff : toMeasure(mb)->mstaves()) {
             if (MeasureNumber* measureNumber = mstaff->measureNumber()) {
                 allText.push_back(measureNumber);
+            }
+        }
+        for (EngravingItem* item : toMeasure(mb)->el()) {
+            if (item->isMarker() && item->visible() && system->staff(item->staffIdx())->show()) {
+                allText.push_back(toTextBase(item));
             }
         }
         for (const Segment& s : toMeasure(mb)->segments()) {

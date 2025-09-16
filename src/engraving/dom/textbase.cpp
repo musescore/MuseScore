@@ -1780,6 +1780,7 @@ TextBase::TextBase(const TextBase& st)
     m_frameWidth                  = st.m_frameWidth;
     m_paddingWidth                = st.m_paddingWidth;
     m_frameRound                  = st.m_frameRound;
+    m_position                    = st.m_position;
 
     m_voiceAssignment = st.m_voiceAssignment;
     m_direction = st.m_direction;
