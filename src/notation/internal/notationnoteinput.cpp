@@ -583,6 +583,8 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
         return;
     }
 
+    is.setAccidentalType(AccidentalType::NONE);
+
     const Staff* staff = is.staff();
     const Fraction tick = is.tick();
 
@@ -608,7 +610,7 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
             newVal.pitch = val.pitch + (up ? 1 : -1);
             break;
         case PitchMode::DIATONIC: {
-            const int oldLine = mu::engraving::noteValToLine(val, is.staff(), is.tick());
+            const int oldLine = mu::engraving::noteValToLine(val, staff, tick);
             const int newLine = oldLine + (up ? -1 : 1);
             newVal = noteValForLine(newLine);
         } break;
