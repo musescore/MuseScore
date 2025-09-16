@@ -740,15 +740,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
 
     int noteChannel = getChannel(instr, note, noteEffect, context);
     auto midiEffectFromEvent = [](const NoteEvent& event) {
-        if (event.slide()) {
-            return MidiInstrumentEffect::SLIDE;
-        }
-
-        if (event.hammerPull()) {
-            return MidiInstrumentEffect::HAMMER_PULL;
-        }
-
-        return MidiInstrumentEffect::NONE;
+        return event.slide() ? MidiInstrumentEffect::SLIDE : MidiInstrumentEffect::NONE;
     };
 
     int tieLen = calculateTieLength(note);
@@ -1502,10 +1494,6 @@ void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context
         fillArticulationsInfo();
     }
 
-    if (m_context.instrumentsHaveEffects) {
-        fillHammerOnPullOffsInfo();
-    }
-
     CompatMidiRender::createPlayEvents(score, score->firstMeasure(), nullptr, m_context);
 
     score->updateChannel();
@@ -1545,26 +1533,6 @@ void CompatMidiRendererInternal::fillArticulationsInfo()
                     m_context.articulationsWithoutValuesByInstrument[instrId].insert(articulationName);
                 }
             }
-        }
-    }
-}
-
-void CompatMidiRendererInternal::fillHammerOnPullOffsInfo()
-{
-    for (const auto& i : score->spanner()) {
-        const Spanner* s = i.second;
-        if (s->isHammerOnPullOff()) {
-            const EngravingItem* start = s->startElement();
-            const EngravingItem* end = s->endElement();
-            if (!start || !end || !start->isChord() || !end->isChord()) {
-                continue;
-            }
-
-            for (const Chord* ch = toChord(start)->next(); ch && ch != toChord(end); ch = ch->next()) {
-                m_context.chordsWithHammerOnPullOff.insert(ch);
-            }
-
-            m_context.chordsWithHammerOnPullOff.insert(toChord(end));
         }
     }
 }

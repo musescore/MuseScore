@@ -20,16 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_COMPAT_MIDIINSTRUMENTEFFECTS_H
-#define MU_ENGRAVING_COMPAT_MIDIINSTRUMENTEFFECTS_H
+#pragma once
 
 namespace mu::engraving {
 enum class MidiInstrumentEffect {
     NONE = 0,
     PALM_MUTE,
-    SLIDE,
-    HAMMER_PULL,
+    SLIDE
 };
 }
-
-#endif
