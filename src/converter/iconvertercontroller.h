@@ -39,6 +39,7 @@ public:
 
         muse::io::path_t stylePath;
         bool forceMode = false;
+        bool unrollRepeats = false;
     };
 
     virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
@@ -63,7 +64,7 @@ public:
     virtual muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
                                           const OpenParams& openParams = {}) = 0;
 
-    virtual muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out) = 0;
+    virtual muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
 
     virtual muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) = 0;
 };

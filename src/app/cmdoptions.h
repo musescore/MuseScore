@@ -39,6 +39,7 @@ struct CmdOptions {
         ScoreTransposeOptions,
         ScoreElementsOptions,
         ForceMode,
+        UnrollRepeats,
         SoundProfile,
         ExtensionUri,
         PageNumber,

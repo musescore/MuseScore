@@ -300,6 +300,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
     converter::IConverterController::OpenParams openParams;
     openParams.stylePath = task.params[CmdOptions::ParamKey::StylePath].toString();
     openParams.forceMode = task.params[CmdOptions::ParamKey::ForceMode].toBool();
+    openParams.unrollRepeats = task.params[CmdOptions::ParamKey::UnrollRepeats].toBool();
 
     switch (task.type) {
     case ConvertType::Batch:
@@ -336,7 +337,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
         ret = converter()->exportScoreElements(task.inputFile, task.outputFile, options, openParams);
     } break;
     case ConvertType::ExportScoreVideo: {
-        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile);
+        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile, openParams);
     } break;
     case ConvertType::SourceUpdate: {
         std::string scoreSource = task.params[CmdOptions::ParamKey::ScoreSource].toString().toStdString();
