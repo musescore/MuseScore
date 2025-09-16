@@ -25,7 +25,7 @@
 
 //---------------------------------------------------------
 //   SymId
-//    must be in sync with symNames
+//    must be in sync with s_symNames in symnames.cpp
 //---------------------------------------------------------
 enum class SymId {
     noSym,
