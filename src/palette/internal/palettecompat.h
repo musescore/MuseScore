@@ -38,6 +38,7 @@ private:
     static void addNewLineItems(Palette& linesPalette);
     static void addNewFretboardDiagramItems(Palette& fretboardDiagramPalette, engraving::Score* paletteScore);
     static void addNewRepeatItems(Palette& repeatPalette, engraving::Score* paletteScore);
+    static void addNewLayoutItems(Palette& layoutPalette);
     static void removeOldItems(Palette& palette);
 };
 }

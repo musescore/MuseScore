@@ -195,6 +195,11 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
         addNewRepeatItems(palette, paletteScore);
         return;
     }
+
+    if (palette.type() == Palette::Type::Layout) {
+        addNewLayoutItems(palette);
+        return;
+    }
 }
 
 void PaletteCompat::removeOldItemsIfNeeded(Palette& palette)
@@ -281,8 +286,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     }
 
     if (!containsFFrame) {
-        static const qreal FRAME_MAG = 1.25;
-        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", FRAME_MAG);
+        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
     }
 }
 
@@ -348,6 +352,26 @@ void PaletteCompat::addNewRepeatItems(Palette& repeatPalette, engraving::Score* 
         marker->setMarkerType(MarkerType::TOCODASYM);
         marker->styleChanged();
         repeatPalette.insertElement(5, marker, TConv::userName(MarkerType::TOCODASYM));
+    }
+}
+
+void PaletteCompat::addNewLayoutItems(Palette& layoutPalette)
+{
+    bool containsFFrame = false;
+    for (const PaletteCellPtr& cell : layoutPalette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
+        }
+
+        if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::FFRAME) {
+            containsFFrame = true;
+        }
+    }
+
+    if (!containsFFrame) {
+        int defaultPosition = std::min(10, layoutPalette.cellsCount());
+        layoutPalette.insertActionIcon(defaultPosition, ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
     }
 }
 
