@@ -371,44 +371,63 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
         return m_format;
     }
 
-    size_t startColumn = hasSelection() ? std::min(selectColumn(), m_column) : 0;
-    size_t startRow = hasSelection() ? std::min(selectLine(), m_row) : 0;
+    size_t startRow = hasSelection() ? m_selectLine : 0;
+    size_t endRow = hasSelection() ? m_row : ldata->blocks.size() - 1;
+    size_t selectionStartCol = hasSelection() ? m_selectColumn : 0;
+    size_t selectionEndCol = hasSelection() ? m_column : 1; // corrected below at `endColumn
 
-    size_t endSelectionRow = hasSelection() ? std::max(selectLine(), m_row) : ldata->blocks.size() - 1;
+    TextBase::sort(startRow, selectionStartCol, endRow, selectionEndCol);
 
-    const TextFragment* tf = ldata->textBlock(static_cast<int>(startRow)).fragment(static_cast<int>(startColumn));
+    const TextFragment* tf = ldata->textBlock(static_cast<int>(startRow)).fragment(static_cast<int>(selectionStartCol));
     CharFormat resultFormat = tf ? tf->format : CharFormat();
 
-    for (size_t row = startRow; row <= endSelectionRow; ++row) {
+    for (size_t row = startRow; row <= endRow; ++row) {
         const TextBlock& block = ldata->blocks.at(row);
 
         if (block.fragments().empty()) {
             continue;
         }
 
-        size_t endSelectionColumn = hasSelection() ? std::max(selectColumn(), m_column) : block.columns();
+        const size_t startColumn = (row == startRow) ? selectionStartCol : 0;
+        const size_t endColumn = (row == endRow && hasSelection()) ? selectionEndCol : block.columns();
 
-        for (size_t column = startColumn; column < endSelectionColumn; column++) {
-            const TextFragment* fragment = block.fragment(static_cast<int>(column));
-            CharFormat format = fragment ? fragment->format : CharFormat();
+        size_t column = 0;
+
+        bool isSingleFragment = block.fragments().size() == 1;
+
+        for (const TextFragment& fragment : block.fragments()) {
+            const size_t fragCols = fragment.columns();
+
+            if (!isSingleFragment) {
+                if (column + fragCols <= startColumn) {
+                    column += fragCols;
+                    continue;
+                }
+                if (column > 0 && column >= endColumn) {
+                    break;
+                }
+            }
 
             // proper bitwise 'and' to ensure Bold/Italic/Underline/Strike only true if true for all fragments
-            resultFormat.setStyle(static_cast<FontStyle>(static_cast<int>(resultFormat.style()) & static_cast<int>(format.style())));
+            resultFormat.setStyle(static_cast<FontStyle>(static_cast<int>(resultFormat.style())
+                                                         & static_cast<int>(fragment.format.style())));
 
             if (resultFormat.fontFamily() == "ScoreText") {
-                resultFormat.setFontFamily(format.fontFamily());
+                resultFormat.setFontFamily(fragment.format.fontFamily());
             }
-            if (format.fontFamily() != "ScoreText" && resultFormat.fontFamily() != format.fontFamily()) {
+            if (fragment.format.fontFamily() != "ScoreText" && resultFormat.fontFamily() != fragment.format.fontFamily()) {
                 resultFormat.setFontFamily(TextBase::UNDEFINED_FONT_FAMILY);
             }
 
-            if (resultFormat.fontSize() != format.fontSize()) {
+            if (resultFormat.fontSize() != fragment.format.fontSize()) {
                 resultFormat.setFontSize(TextBase::UNDEFINED_FONT_SIZE);
             }
 
-            if (resultFormat.valign() != format.valign()) {
+            if (resultFormat.valign() != fragment.format.valign()) {
                 resultFormat.setValign(VerticalAlignment::AlignUndefined);
             }
+
+            column += fragCols;
         }
     }
 
