@@ -93,6 +93,9 @@ DockPage {
     readonly property int horizontalPanelMinHeight: 100
     readonly property int horizontalPanelMaxHeight: 520
 
+    //! NOTE: Value found experimentally - see issue #27770
+    readonly property int maximumPanelDimension: 7500
+
     readonly property string verticalPanelsGroup: "VERTICAL_PANELS"
     readonly property string horizontalPanelsGroup: "HORIZONTAL_PANELS"
 
@@ -253,6 +256,7 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
+            maximumHeight: root.maximumPanelDimension
 
             groupName: root.verticalPanelsGroup
 
@@ -279,6 +283,7 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
+            maximumHeight: root.maximumPanelDimension
 
             groupName: root.verticalPanelsGroup
 
@@ -305,6 +310,7 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
+            maximumHeight: root.maximumPanelDimension
 
             groupName: root.verticalPanelsGroup
 
@@ -328,6 +334,7 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
+            maximumHeight: root.maximumPanelDimension
 
             groupName: root.verticalPanelsGroup
 
@@ -353,6 +360,7 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
+            maximumHeight: root.maximumPanelDimension
 
             groupName: root.verticalPanelsGroup
             location: Location.Right
@@ -381,6 +389,7 @@ DockPage {
             height: 368
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
+            maximumWidth: root.maximumPanelDimension
 
             groupName: root.horizontalPanelsGroup
 
@@ -431,6 +440,7 @@ DockPage {
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
+            maximumWidth: root.maximumPanelDimension
 
             groupName: root.horizontalPanelsGroup
 
@@ -462,6 +472,7 @@ DockPage {
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
+            maximumWidth: root.maximumPanelDimension
 
             groupName: root.horizontalPanelsGroup
 
@@ -489,6 +500,7 @@ DockPage {
             height: 64
             minimumHeight: 64
             maximumHeight: 64
+            maximumWidth: root.maximumPanelDimension
 
             //! NOTE: hidden by default
             visible: false
@@ -515,6 +527,7 @@ DockPage {
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
+            maximumWidth: root.maximumPanelDimension
 
             groupName: root.horizontalPanelsGroup
 
