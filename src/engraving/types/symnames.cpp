@@ -87,6 +87,9 @@ void SymNames::loadNameToSymIdHash()
     }
 }
 
+// must be in sync with SymId in symid_p.h
+// should be in sync with s_symUserNames further down
+
 constexpr const std::array<AsciiStringView, size_t(SymId::lastSym) + 1> SymNames::s_symNames { {
     "noSym",
 
@@ -3168,6 +3171,8 @@ constexpr const std::array<AsciiStringView, size_t(SymId::lastSym) + 1> SymNames
     "space"
 } };
 
+// should be in sync with s_symNames further up and SymID in symid_p.h
+
 const std::array<muse::TranslatableString, size_t(SymId::lastSym) + 1> SymNames::s_symUserNames { {
     muse::TranslatableString("engraving/sym", "No symbol"),
 
@@ -6144,6 +6149,89 @@ const std::array<muse::TranslatableString, size_t(SymId::lastSym) + 1> SymNames:
     muse::TranslatableString::untranslatable("Combining flag 4 (64th) above straight"),
     muse::TranslatableString::untranslatable("Combining flag 1 (8th) below straight"),
     muse::TranslatableString::untranslatable("Combining flag 1 (8th) above straight"),
+
+    muse::TranslatableString::untranslatable("Time signature 0 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 0 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 0 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature 1 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 1 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 1 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature 2 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 2 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 2 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature 3 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 3 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 3 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature 4 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 4 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 4 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature 5 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 5 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 5 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature 6 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 6 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 6 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature 7 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 7 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 7 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature 8 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 8 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 8 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature 9 (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature 9 (small staff)"),
+    muse::TranslatableString::untranslatable("Time signature 9 (large, narrow)"),
+    muse::TranslatableString::untranslatable("Left bracket for numerator only (outside staff)"),
+    muse::TranslatableString::untranslatable("Left bracket for numerator only (large, narrow)"),
+    muse::TranslatableString::untranslatable("Right bracket for numerator only (outside staff)"),
+    muse::TranslatableString::untranslatable("Right bracket for numerator only (large, narrow)"),
+    muse::TranslatableString::untranslatable("Left bracket for whole time signature (outside staff)"),
+    muse::TranslatableString::untranslatable("Left bracket for whole time signature (narrow, large)"),
+    muse::TranslatableString::untranslatable("Right bracket for whole time signature (outside staff)"),
+    muse::TranslatableString::untranslatable("Right bracket for whole time signature (large, narrow)"),
+    muse::TranslatableString::untranslatable("Common time (outside staff)"),
+    muse::TranslatableString::untranslatable("Common time (large, narrow)"),
+    muse::TranslatableString::untranslatable("Cut time (outside staff)"),
+    muse::TranslatableString::untranslatable("Cut time (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature + (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature + (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature + (for numerators) (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature + (for numerators) (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature fraction slash (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature fraction slash (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature equals (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature equals (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature minus (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature minus (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature multipy (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature multipy (large, narrow)"),
+    muse::TranslatableString::untranslatable("Left parenthesis for numerator only (outside staff)"),
+    muse::TranslatableString::untranslatable("Left parenthesis for numerator only (large, narrow)"),
+    muse::TranslatableString::untranslatable("Right parenthesis for numerator only (outside staff)"),
+    muse::TranslatableString::untranslatable("Right parenthesis for numerator only (large, narrow)"),
+    muse::TranslatableString::untranslatable("Left parenthesis for whole time signature (outside staff)"),
+    muse::TranslatableString::untranslatable("Left parenthesis for whole time signature (large, narrow)"),
+    muse::TranslatableString::untranslatable("Right parenthesis for whole time signature (outside staff)"),
+    muse::TranslatableString::untranslatable("Right parenthesis for whole time signature (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature comma (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature comma (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ¼ (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ¼ (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ½ (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ½ (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ¾ (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ¾ (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ⅓ (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ⅓ (large, narrow)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ⅔ (outside staff)"),
+    muse::TranslatableString::untranslatable("Time signature fraction ⅔ (large, narrow)"),
+    muse::TranslatableString::untranslatable("Open time signature (outside staff)"),
+    muse::TranslatableString::untranslatable("Open time signature (large, narrow)"),
+    muse::TranslatableString::untranslatable("Open time signature (Penderecki) (outside staff)"),
+    muse::TranslatableString::untranslatable("Open time signature (Penderecki) (large, narrow)"),
+    muse::TranslatableString::untranslatable("Cut time (Bach) (outside staff)"),
+    muse::TranslatableString::untranslatable("Cut time (Bach) (large, narrow)"),
+    muse::TranslatableString::untranslatable("Cut triple time (9/8) (outside staff)"),
+    muse::TranslatableString::untranslatable("Cut triple time (9/8) (large, narrow)"),
 
     //MuseScore-local symbols, precomposed symbols to mimic some Emmentaler glyphs
 
