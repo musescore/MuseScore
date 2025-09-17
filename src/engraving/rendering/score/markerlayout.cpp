@@ -67,32 +67,66 @@ void MarkerLayout::doLayoutMarker(const Marker* item, TextBase::LayoutData* ldat
     bool startRepeat = rightMarker ? measure->nextMeasure() && measure->nextMeasure()->repeatStart() : measure->repeatStart();
     bool endRepeat = rightMarker ? measure->repeatEnd() : measure->prevMeasure() && measure->prevMeasure()->repeatEnd();
 
-    if (startRepeat) {
-        blWidth = -ctx.conf().styleS(Sid::endBarWidth).toMM(item->spatium());
-    } else if (endRepeat) {
-        blWidth = ctx.conf().styleS(Sid::endBarWidth).toMM(item->spatium());
-    } else if ((measure->isFirstInSystem() || (measure->prev() && !measure->prev()->isMeasure())) && !rightMarker) {
-        // Start of score
-        const BarLine* bl =  measure->startBarLine();
-        blWidth = bl ? -bl->width() : 0.0;
-    } else {
-        Measure* blMeasure = rightMarker ? measure : measure->prevMeasure();
-        const BarLine* bl = blMeasure ? blMeasure->endBarLine() : nullptr;
-        blWidth = bl ? bl->width() : 0.0;
-    }
-
     AlignH hPos = item->centerOnSymbol()
                   && !item->symbolString().empty() ? AlignH::HCENTER : item->getProperty(Pid::POSITION).value<AlignH>();
-    switch (hPos) {
-    case AlignH::HCENTER:
-        xAdj -= (ldata->bbox().width() + blWidth) / 2;
-        break;
-    case AlignH::RIGHT:
-        xAdj -= ldata->bbox().width() + (startRepeat ? blWidth : 0.0);
-        break;
-    case AlignH::LEFT:
-        xAdj -= startRepeat ? 0.0 : blWidth;
-        break;
+    bool avoidBarline = item->staffIdx() != 0 && hPos != AlignH::HCENTER;
+
+    if (!avoidBarline) {
+        if (startRepeat) {
+            blWidth = -ctx.conf().styleS(Sid::endBarWidth).toMM(item->spatium());
+        } else if (endRepeat) {
+            blWidth = ctx.conf().styleS(Sid::endBarWidth).toMM(item->spatium());
+        } else if ((measure->isFirstInSystem() || (measure->prev() && !measure->prev()->isMeasure())) && !rightMarker) {
+            // Start of score
+            const BarLine* bl =  measure->startBarLine();
+            blWidth = bl ? -bl->width() : 0.0;
+        } else {
+            Measure* blMeasure = rightMarker ? measure : measure->prevMeasure();
+            const BarLine* bl = blMeasure ? blMeasure->endBarLine() : nullptr;
+            blWidth = bl ? bl->width() : 0.0;
+        }
+
+        switch (hPos) {
+        case AlignH::HCENTER:
+            xAdj -= (ldata->bbox().width() + blWidth) / 2;
+            break;
+        case AlignH::RIGHT:
+            xAdj -= ldata->bbox().width() + (startRepeat ? blWidth : 0.0);
+            break;
+        case AlignH::LEFT:
+            xAdj -= startRepeat ? 0.0 : blWidth;
+            break;
+        }
+    } else {
+        staff_idx_t blIdx = avoidBarline ? item->staffIdx() - 1 : item->staffIdx();
+        // right and start repoeat: next measure
+        // left and start repeat: measure
+        // right and anything else: measure
+        // left and anything else: prev measure
+        // start repeat - use beginbarline
+
+        const BarLine* bl = nullptr;
+        if (startRepeat) {
+            Measure* blMeasure = rightMarker ? measure->nextMeasure() : measure;
+            bl = blMeasure ? blMeasure->startBarLine(blIdx) : nullptr;
+        } else {
+            Measure* blMeasure = rightMarker ? measure : measure->prevMeasure();
+            bl = blMeasure ? blMeasure->endBarLine(blIdx) : nullptr;
+        }
+
+        double blPadding = 0.0;
+        if (avoidBarline && bl) {
+            const double fontSizeScaleFactor = item->size() / 10.0;
+            blPadding = 0.5 * item->spatium() * fontSizeScaleFactor;
+        }
+
+        if (hPos == AlignH::LEFT) {
+            double startRepeatAdjust = startRepeat ? bl->width() : 0.0;
+            xAdj += blPadding + startRepeatAdjust;
+        } else if (hPos == AlignH::RIGHT) {
+            double blWidth = startRepeat ? 0.0 : bl->width();
+            xAdj -= ldata->bbox().width() + blWidth + blPadding;
+        }
     }
 
     ldata->moveX(xAdj);
