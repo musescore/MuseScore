@@ -124,7 +124,7 @@ void MarkerLayout::doLayoutMarker(const Marker* item, TextBase::LayoutData* ldat
             double startRepeatAdjust = startRepeat ? bl->width() : 0.0;
             xAdj += blPadding + startRepeatAdjust;
         } else if (hPos == AlignH::RIGHT) {
-            double blWidth = startRepeat ? 0.0 : bl->width();
+            blWidth = startRepeat ? 0.0 : bl->width();
             xAdj -= ldata->bbox().width() + blWidth + blPadding;
         }
     }
