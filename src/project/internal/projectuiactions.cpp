@@ -100,7 +100,6 @@ const UiActionList ProjectUiActions::m_actions = {
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Export…"),
-             TranslatableString("action", "Export…"),
              IconCode::Code::SHARE_FILE
              ),
     UiAction("file-import-pdf",
@@ -120,7 +119,6 @@ const UiActionList ProjectUiActions::m_actions = {
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Print…"),
-             TranslatableString("action", "Print…"),
              IconCode::Code::PRINT
              ),
     UiAction("clear-recent",
