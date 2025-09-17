@@ -152,6 +152,15 @@ Rectangle {
         propagateComposedEvents: true
         enabled: root.visible && root.draggingTabsAllowed
         cursorShape: Qt.SizeAllCursor
+
+        onClicked: function(mouse) {
+            if (!root.tabBarCpp) {
+                return
+            }
+            // Hack - if the current tab changed on this click, do not propagate the click event
+            // to the tab's menu button. We don't want the menu to appear when changing tabs.
+            mouse.accepted = root.tabBarCpp.tabChangedOnClick
+        }
     }
 
     Loader {
