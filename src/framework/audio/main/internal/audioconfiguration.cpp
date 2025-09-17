@@ -189,9 +189,9 @@ async::Notification AudioConfiguration::sampleRateChanged() const
     return m_driverSampleRateChanged;
 }
 
-SoundFontPaths AudioConfiguration::soundFontDirectories() const
+io::paths_t AudioConfiguration::soundFontDirectories() const
 {
-    SoundFontPaths paths = userSoundFontDirectories();
+    io::paths_t paths = userSoundFontDirectories();
     paths.push_back(globalConfiguration()->appDataPath());
 
     return paths;

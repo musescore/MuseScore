@@ -29,10 +29,6 @@
 
 #include "../../isoundfontrepository.h"
 
-namespace muse::audio::worker {
-class NetworkSFLoader;
-}
-
 namespace muse::audio::synth {
 class SoundFontRepository : public ISoundFontRepository, public Injectable, public async::Asyncable
 {
@@ -44,18 +40,16 @@ public:
 
     void init();
 
-    const SoundFontPaths& soundFontPaths() const override;
     const SoundFontsMap& soundFonts() const override;
     async::Notification soundFontsChanged() const override;
 
 private:
 
-    void addSoundFont(const SoundFontPath& path);
-    void loadSoundFonts(const SoundFontPaths& paths);
+    void loadSoundFonts(const std::vector<SoundFontUri>& uris);
+    void addSoundFont(const SoundFontUri& uri);
 
-    std::shared_ptr<worker::NetworkSFLoader> m_netSFLoader;
+    void doAddSoundFont(const SoundFontUri& uri, const SoundFontsMap* cache = nullptr, std::function<void()> onFinished = nullptr);
 
-    SoundFontPaths m_soundFontPaths;
     SoundFontsMap m_soundFonts;
     async::Notification m_soundFontsChanged;
 };
